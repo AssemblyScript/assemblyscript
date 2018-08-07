@@ -253,7 +253,7 @@ declare class Array<T> {
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
   push(element: T): i32;
-  concat(elements: Array<T>): i32;
+  concat(items: T[]): T[];
   pop(): T;
   forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void;
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U>;

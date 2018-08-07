@@ -3,8 +3,8 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $iiv (func (param i32 i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $iiv (func (param i32 i32)))
  (type $iiif (func (param i32 i32 i32) (result f32)))
  (type $iif (func (param i32 i32) (result f32)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
@@ -26,7 +26,8 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $std/array/i (mut i32) (i32.const 0))
- (global $std/array/toAdd (mut i32) (i32.const 0))
+ (global $std/array/other (mut i32) (i32.const 0))
+ (global $std/array/out (mut i32) (i32.const 0))
  (global $std/array/includes (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/array/every (mut i32) (i32.const 0))
@@ -2576,7 +2577,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 181)
+     (i32.const 182)
      (i32.const 20)
     )
     (unreachable)
@@ -2606,137 +2607,81 @@
   )
   (get_local $2)
  )
- (func $~lib/array/Array<i32>#set:length (; 15 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (if
-   (i32.gt_u
-    (get_local $1)
-    (i32.shr_u
-     (i32.load
-      (tee_local $2
-       (i32.load
-        (get_local $0)
-       )
-      )
-     )
-     (i32.const 2)
-    )
-   )
-   (block
-    (if
-     (i32.gt_u
-      (get_local $1)
-      (i32.const 268435454)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 8)
-       (i32.const 45)
-       (i32.const 41)
-      )
-      (unreachable)
-     )
-    )
-    (i32.store
-     (get_local $0)
-     (call $~lib/internal/arraybuffer/reallocateUnsafe
-      (get_local $2)
-      (i32.shl
-       (get_local $1)
-       (i32.const 2)
-      )
-     )
-    )
-   )
-  )
-  (i32.store offset=4
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $~lib/array/Array<i32>#concat (; 16 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#concat (; 15 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (if
    (i32.eqz
-    (i32.load offset=4
-     (get_local $1)
-    )
+    (get_local $0)
    )
-   (return
-    (i32.load offset=4
-     (get_local $0)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 157)
+     (i32.const 4)
     )
-   )
-  )
-  (set_local $3
-   (i32.add
-    (tee_local $2
-     (i32.load offset=4
-      (get_local $0)
-     )
-    )
-    (i32.load offset=4
-     (get_local $1)
-    )
+    (unreachable)
    )
   )
   (if
-   (i32.ge_u
-    (get_local $2)
-    (i32.shr_u
-     (i32.load
-      (tee_local $4
-       (i32.load
-        (get_local $0)
-       )
-      )
-     )
-     (i32.const 2)
-    )
+   (i32.eqz
+    (get_local $1)
    )
-   (block
-    (if
-     (i32.ge_u
-      (get_local $2)
-      (i32.const 268435454)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 8)
-       (i32.const 167)
-       (i32.const 44)
-      )
-      (unreachable)
-     )
-    )
-    (i32.store
-     (get_local $0)
-     (tee_local $4
-      (call $~lib/internal/arraybuffer/reallocateUnsafe
-       (get_local $4)
-       (i32.shl
-        (get_local $3)
-        (i32.const 2)
-       )
-      )
-     )
+   (set_local $1
+    (call $~lib/array/Array<i32>#constructor
+     (i32.const 0)
+     (i32.const 0)
     )
    )
   )
   (call $~lib/internal/memory/memmove
    (i32.add
-    (i32.add
-     (get_local $4)
-     (i32.shl
-      (get_local $2)
-      (i32.const 2)
+    (i32.load
+     (tee_local $3
+      (call $~lib/array/Array<i32>#constructor
+       (i32.const 0)
+       (i32.add
+        (tee_local $2
+         (i32.load offset=4
+          (get_local $0)
+         )
+        )
+        (tee_local $4
+         (i32.load offset=4
+          (get_local $1)
+         )
+        )
+       )
+      )
      )
     )
     (i32.const 8)
+   )
+   (i32.add
+    (i32.load
+     (get_local $0)
+    )
+    (i32.const 8)
+   )
+   (i32.shl
+    (get_local $2)
+    (i32.const 2)
+   )
+  )
+  (call $~lib/internal/memory/memmove
+   (i32.add
+    (i32.add
+     (i32.load
+      (get_local $3)
+     )
+     (i32.const 8)
+    )
+    (i32.shl
+     (get_local $2)
+     (i32.const 2)
+    )
    )
    (i32.add
     (i32.load
@@ -2745,19 +2690,13 @@
     (i32.const 8)
    )
    (i32.shl
-    (i32.load offset=4
-     (get_local $1)
-    )
+    (get_local $4)
     (i32.const 2)
    )
   )
-  (call $~lib/array/Array<i32>#set:length
-   (get_local $0)
-   (get_local $3)
-  )
   (get_local $3)
  )
- (func $~lib/array/Array<i32>#unshift (; 17 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#unshift (; 16 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2798,7 +2737,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 271)
+       (i32.const 272)
        (i32.const 42)
       )
       (unreachable)
@@ -2853,7 +2792,7 @@
   )
   (get_local $3)
  )
- (func $~lib/array/Array<i32>#shift (; 18 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#shift (; 17 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2870,7 +2809,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 242)
+     (i32.const 243)
      (i32.const 20)
     )
     (unreachable)
@@ -2920,7 +2859,7 @@
   )
   (get_local $3)
  )
- (func $~lib/array/Array<i32>#reverse (; 19 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#reverse (; 18 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3002,7 +2941,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<i32>#indexOf (; 20 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#indexOf (; 19 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -3092,7 +3031,7 @@
   )
   (i32.const -1)
  )
- (func $~lib/array/Array<i32>#includes (; 21 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#includes (; 20 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -3182,7 +3121,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/array/Array<i32>#splice (; 22 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#splice (; 21 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -3280,7 +3219,7 @@
    )
   )
  )
- (func $~lib/array/Array<i32>#__set (; 23 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 22 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -3347,12 +3286,12 @@
    (get_local $2)
   )
  )
- (func $start~anonymous|0 (; 24 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|0 (; 23 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.eqz
    (get_local $0)
   )
  )
- (func $~lib/array/Array<i32>#findIndex (; 25 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#findIndex (; 24 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3428,19 +3367,19 @@
   )
   (i32.const -1)
  )
- (func $start~anonymous|1 (; 26 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|1 (; 25 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.eq
    (get_local $0)
    (i32.const 1)
   )
  )
- (func $start~anonymous|2 (; 27 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|2 (; 26 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.eq
    (get_local $0)
    (i32.const 100)
   )
  )
- (func $start~anonymous|3 (; 28 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|3 (; 27 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -3452,7 +3391,7 @@
    (i32.const 100)
   )
  )
- (func $start~anonymous|5 (; 29 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|5 (; 28 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -3463,13 +3402,13 @@
    (i32.const 100)
   )
  )
- (func $start~anonymous|6 (; 30 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|6 (; 29 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.ge_s
    (get_local $0)
    (i32.const 0)
   )
  )
- (func $~lib/array/Array<i32>#every (; 31 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#every (; 30 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3545,13 +3484,13 @@
   )
   (i32.const 1)
  )
- (func $start~anonymous|7 (; 32 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|7 (; 31 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.le_s
    (get_local $0)
    (i32.const 0)
   )
  )
- (func $start~anonymous|8 (; 33 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|8 (; 32 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -3563,13 +3502,13 @@
    (i32.const 10)
   )
  )
- (func $start~anonymous|9 (; 34 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|9 (; 33 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.lt_s
    (get_local $0)
    (i32.const 10)
   )
  )
- (func $start~anonymous|10 (; 35 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|10 (; 34 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -3580,13 +3519,13 @@
    (i32.const 3)
   )
  )
- (func $start~anonymous|11 (; 36 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|11 (; 35 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.ge_s
    (get_local $0)
    (i32.const 3)
   )
  )
- (func $~lib/array/Array<i32>#some (; 37 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#some (; 36 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3662,13 +3601,13 @@
   )
   (i32.const 0)
  )
- (func $start~anonymous|12 (; 38 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|12 (; 37 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.le_s
    (get_local $0)
    (i32.const -1)
   )
  )
- (func $start~anonymous|13 (; 39 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|13 (; 38 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -3680,13 +3619,13 @@
    (i32.const 10)
   )
  )
- (func $start~anonymous|14 (; 40 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|14 (; 39 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.gt_s
    (get_local $0)
    (i32.const 10)
   )
  )
- (func $start~anonymous|15 (; 41 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|15 (; 40 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -3697,7 +3636,7 @@
    (i32.const 3)
   )
  )
- (func $start~anonymous|16 (; 42 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|16 (; 41 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (set_global $std/array/i
    (i32.add
     (get_global $std/array/i)
@@ -3705,7 +3644,7 @@
    )
   )
  )
- (func $~lib/array/Array<i32>#forEach (; 43 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#forEach (; 42 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3770,7 +3709,7 @@
    )
   )
  )
- (func $start~anonymous|17 (; 44 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|17 (; 43 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -3784,7 +3723,7 @@
    )
   )
  )
- (func $start~anonymous|19 (; 45 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|19 (; 44 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -3797,12 +3736,12 @@
    )
   )
  )
- (func $start~anonymous|20 (; 46 ;) (; has Stack IR ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $start~anonymous|20 (; 45 ;) (; has Stack IR ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   (f32.convert_s/i32
    (get_local $0)
   )
  )
- (func $~lib/array/Array<i32>#map<f32> (; 47 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#map<f32> (; 46 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3888,7 +3827,7 @@
   )
   (get_local $6)
  )
- (func $~lib/array/Array<f32>#__get (; 48 ;) (; has Stack IR ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (; 47 ;) (; has Stack IR ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (if (result f32)
    (i32.lt_u
     (get_local $1)
@@ -3915,7 +3854,7 @@
    (unreachable)
   )
  )
- (func $start~anonymous|21 (; 49 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|21 (; 48 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -3930,7 +3869,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<i32>#map<i32> (; 50 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#map<i32> (; 49 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4016,7 +3955,7 @@
   )
   (get_local $6)
  )
- (func $start~anonymous|22 (; 51 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|22 (; 50 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (set_global $std/array/i
    (i32.add
     (get_global $std/array/i)
@@ -4025,7 +3964,7 @@
   )
   (get_local $0)
  )
- (func $start~anonymous|23 (; 52 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|23 (; 51 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -4039,13 +3978,13 @@
   )
   (get_local $0)
  )
- (func $start~anonymous|24 (; 53 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|24 (; 52 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.ge_s
    (get_local $0)
    (i32.const 2)
   )
  )
- (func $~lib/array/Array<i32>#filter (; 54 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#filter (; 53 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4132,7 +4071,7 @@
   )
   (get_local $4)
  )
- (func $start~anonymous|25 (; 55 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|25 (; 54 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -4150,7 +4089,7 @@
    (i32.const 2)
   )
  )
- (func $start~anonymous|26 (; 56 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|26 (; 55 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (set_global $std/array/i
    (i32.add
     (get_global $std/array/i)
@@ -4162,7 +4101,7 @@
    (i32.const 2)
   )
  )
- (func $start~anonymous|27 (; 57 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|27 (; 56 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -4179,13 +4118,13 @@
    (i32.const 2)
   )
  )
- (func $start~anonymous|28 (; 58 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|28 (; 57 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (i32.add
    (get_local $0)
    (get_local $1)
   )
  )
- (func $~lib/array/Array<i32>#reduce<i32> (; 59 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduce<i32> (; 58 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4254,7 +4193,7 @@
   )
   (get_local $2)
  )
- (func $start~anonymous|30 (; 60 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|30 (; 59 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (if (result i32)
    (i32.and
     (get_local $0)
@@ -4267,7 +4206,7 @@
    )
   )
  )
- (func $start~anonymous|31 (; 61 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|31 (; 60 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (if (result i32)
    (i32.and
     (get_local $0)
@@ -4280,7 +4219,7 @@
    )
   )
  )
- (func $start~anonymous|32 (; 62 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|32 (; 61 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $3)
@@ -4292,7 +4231,7 @@
    (get_local $1)
   )
  )
- (func $start~anonymous|34 (; 63 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|34 (; 62 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $3)
@@ -4303,7 +4242,7 @@
    (get_local $1)
   )
  )
- (func $~lib/array/Array<i32>#reduceRight<i32> (; 64 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduceRight<i32> (; 63 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $4
@@ -4358,7 +4297,7 @@
   )
   (get_local $2)
  )
- (func $~lib/math/murmurHash3 (; 65 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (; 64 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
   (i64.xor
    (tee_local $0
     (i64.mul
@@ -4389,7 +4328,7 @@
    )
   )
  )
- (func $~lib/math/NativeMath.seedRandom (; 66 ;) (; has Stack IR ;) (type $Iv) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 65 ;) (; has Stack IR ;) (type $Iv) (param $0 i64)
   (if
    (i64.eqz
     (get_local $0)
@@ -4418,7 +4357,7 @@
    )
   )
  )
- (func $~lib/internal/array/insertionSort<f32> (; 67 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<f32> (; 66 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 f32)
@@ -4542,10 +4481,10 @@
    )
   )
  )
- (func $~lib/allocator/arena/__memory_free (; 68 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 67 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $~lib/internal/array/weakHeapSort<f32> (; 69 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/weakHeapSort<f32> (; 68 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -4985,7 +4924,7 @@
    (get_local $7)
   )
  )
- (func $~lib/array/Array<f32>#sort (; 70 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#sort (; 69 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f32)
@@ -4998,7 +4937,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 334)
+     (i32.const 335)
      (i32.const 4)
     )
     (unreachable)
@@ -5092,7 +5031,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<f32>#sort|trampoline~anonymous|42 (; 71 ;) (; has Stack IR ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
+ (func $~lib/array/Array<f32>#sort|trampoline~anonymous|42 (; 70 ;) (; has Stack IR ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (i32.sub
@@ -5136,7 +5075,7 @@
    )
   )
  )
- (func $~lib/array/Array<f32>#sort|trampoline (; 72 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#sort|trampoline (; 71 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -5155,13 +5094,13 @@
    (get_local $1)
   )
  )
- (func $~lib/builtins/isNaN<f32> (; 73 ;) (; has Stack IR ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/builtins/isNaN<f32> (; 72 ;) (; has Stack IR ;) (type $fi) (param $0 f32) (result i32)
   (f32.ne
    (get_local $0)
    (get_local $0)
   )
  )
- (func $std/array/isArraysEqual<f32> (; 74 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<f32> (; 73 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -5254,7 +5193,7 @@
   )
   (i32.const 1)
  )
- (func $~lib/internal/array/insertionSort<f64> (; 75 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<f64> (; 74 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 f64)
@@ -5378,7 +5317,7 @@
    )
   )
  )
- (func $~lib/internal/array/weakHeapSort<f64> (; 76 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/weakHeapSort<f64> (; 75 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -5818,7 +5757,7 @@
    (get_local $7)
   )
  )
- (func $~lib/array/Array<f64>#sort (; 77 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#sort (; 76 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f64)
@@ -5831,7 +5770,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 334)
+     (i32.const 335)
      (i32.const 4)
     )
     (unreachable)
@@ -5925,7 +5864,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<f64>#sort|trampoline~anonymous|43 (; 78 ;) (; has Stack IR ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/array/Array<f64>#sort|trampoline~anonymous|43 (; 77 ;) (; has Stack IR ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   (i32.sub
@@ -5969,7 +5908,7 @@
    )
   )
  )
- (func $~lib/array/Array<f64>#sort|trampoline (; 79 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#sort|trampoline (; 78 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -5988,7 +5927,7 @@
    (get_local $1)
   )
  )
- (func $~lib/array/Array<f64>#__get (; 80 ;) (; has Stack IR ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (; 79 ;) (; has Stack IR ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (if (result f64)
    (i32.lt_u
     (get_local $1)
@@ -6015,13 +5954,13 @@
    (unreachable)
   )
  )
- (func $~lib/builtins/isNaN<f64> (; 81 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 80 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
   (f64.ne
    (get_local $0)
    (get_local $0)
   )
  )
- (func $std/array/isArraysEqual<f64> (; 82 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<f64> (; 81 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -6114,7 +6053,7 @@
   )
   (i32.const 1)
  )
- (func $~lib/internal/array/insertionSort<i32> (; 83 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<i32> (; 82 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -6240,7 +6179,7 @@
    )
   )
  )
- (func $~lib/internal/array/weakHeapSort<i32> (; 84 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/weakHeapSort<i32> (; 83 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -6680,7 +6619,7 @@
    (get_local $2)
   )
  )
- (func $~lib/array/Array<i32>#sort (; 85 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort (; 84 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6692,7 +6631,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 334)
+     (i32.const 335)
      (i32.const 4)
     )
     (unreachable)
@@ -6786,13 +6725,13 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<i32>#sort|trampoline~anonymous|44 (; 86 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort|trampoline~anonymous|44 (; 85 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $0)
    (get_local $1)
   )
  )
- (func $~lib/array/Array<i32>#sort|trampoline (; 87 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort|trampoline (; 86 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -6811,7 +6750,7 @@
    (get_local $1)
   )
  )
- (func $std/array/isArraysEqual<i32> (; 88 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<i32> (; 87 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.eqz
@@ -6874,7 +6813,7 @@
   )
   (i32.const 1)
  )
- (func $~lib/array/Array<u32>#sort|trampoline~anonymous|45 (; 89 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort|trampoline~anonymous|45 (; 88 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (i32.gt_u
     (get_local $0)
@@ -6886,7 +6825,7 @@
    )
   )
  )
- (func $~lib/array/Array<u32>#sort|trampoline (; 90 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort|trampoline (; 89 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -6905,7 +6844,7 @@
    (get_local $1)
   )
  )
- (func $std/array/createReverseOrderedArray (; 91 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedArray (; 90 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $1
    (call $~lib/array/Array<i32>#constructor
@@ -6950,7 +6889,7 @@
   )
   (get_local $1)
  )
- (func $~lib/math/NativeMath.random (; 92 ;) (; has Stack IR ;) (type $F) (result f64)
+ (func $~lib/math/NativeMath.random (; 91 ;) (; has Stack IR ;) (type $F) (result f64)
   (local $0 i64)
   (local $1 i64)
   (if
@@ -7019,7 +6958,7 @@
    (f64.const 1)
   )
  )
- (func $std/array/createRandomOrderedArray (; 93 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomOrderedArray (; 92 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $0
    (call $~lib/array/Array<i32>#constructor
@@ -7062,7 +7001,7 @@
   )
   (get_local $0)
  )
- (func $std/array/isSorted<i32> (; 94 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<i32> (; 93 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (block $break|0
@@ -7119,7 +7058,7 @@
   )
   (i32.const 1)
  )
- (func $std/array/assertSorted<i32> (; 95 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<i32> (; 94 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (if
    (i32.eqz
     (call $std/array/isSorted<i32>
@@ -7134,26 +7073,26 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 634)
+     (i32.const 643)
      (i32.const 2)
     )
     (unreachable)
    )
   )
  )
- (func $std/array/assertSortedDefault<i32> (; 96 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $std/array/assertSortedDefault<i32> (; 95 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (call $std/array/assertSorted<i32>
    (get_local $0)
    (i32.const 46)
   )
  )
- (func $start~anonymous|48 (; 97 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|48 (; 96 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $1)
    (get_local $0)
   )
  )
- (func $std/array/createReverseOrderedNestedArray (; 98 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedNestedArray (; 97 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $1
    (call $~lib/array/Array<i32>#constructor
@@ -7209,7 +7148,7 @@
   )
   (get_local $1)
  )
- (func $start~anonymous|51 (; 99 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|51 (; 98 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (call $~lib/array/Array<i32>#__get
     (get_local $0)
@@ -7221,7 +7160,7 @@
    )
   )
  )
- (func $~lib/array/Array<Array<i32>>#sort (; 100 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#sort (; 99 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7233,7 +7172,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 334)
+     (i32.const 335)
      (i32.const 4)
     )
     (unreachable)
@@ -7315,7 +7254,7 @@
   )
   (get_local $0)
  )
- (func $std/array/assertSorted<Array<i32>> (; 101 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<Array<i32>> (; 100 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (if
    (i32.eqz
     (call $std/array/isSorted<i32>
@@ -7330,14 +7269,14 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 634)
+     (i32.const 643)
      (i32.const 2)
     )
     (unreachable)
    )
   )
  )
- (func $std/array/Proxy<i32>#constructor (; 102 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/Proxy<i32>#constructor (; 101 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -7353,7 +7292,7 @@
   )
   (get_local $0)
  )
- (func $std/array/createReverseOrderedElementsArray (; 103 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedElementsArray (; 102 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $1
    (call $~lib/array/Array<i32>#constructor
@@ -7401,7 +7340,7 @@
   )
   (get_local $1)
  )
- (func $start~anonymous|52 (; 104 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|52 (; 103 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (i32.load
     (get_local $0)
@@ -7411,7 +7350,7 @@
    )
   )
  )
- (func $~lib/internal/string/compareUnsafe (; 105 ;) (; has Stack IR ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 104 ;) (; has Stack IR ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (set_local $1
    (i32.add
@@ -7476,7 +7415,7 @@
   )
   (get_local $5)
  )
- (func $~lib/string/String.__gt (; 106 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gt (; 105 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -7553,7 +7492,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/string/String.__lt (; 107 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lt (; 106 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -7630,7 +7569,7 @@
    (i32.const 0)
   )
  )
- (func $start~anonymous|53 (; 108 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|53 (; 107 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (call $~lib/string/String.__gt
     (get_local $0)
@@ -7642,7 +7581,7 @@
    )
   )
  )
- (func $~lib/string/String.__eq (; 109 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 108 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eq
@@ -7698,7 +7637,7 @@
    )
   )
  )
- (func $~lib/string/String.__ne (; 110 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__ne (; 109 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.eqz
    (call $~lib/string/String.__eq
     (get_local $0)
@@ -7706,7 +7645,7 @@
    )
   )
  )
- (func $std/array/isArraysEqual<String> (; 111 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<String> (; 110 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.eqz
@@ -7769,7 +7708,7 @@
   )
   (i32.const 1)
  )
- (func $~lib/internal/string/allocateUnsafe (; 112 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 111 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (tee_local $1
@@ -7815,7 +7754,7 @@
   )
   (get_local $1)
  )
- (func $~lib/string/String#charAt (; 113 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#charAt (; 112 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eqz
@@ -7860,7 +7799,7 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/string/copyUnsafe (; 114 ;) (; has Stack IR ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 113 ;) (; has Stack IR ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (call $~lib/internal/memory/memmove
    (i32.add
     (i32.add
@@ -7888,7 +7827,7 @@
    )
   )
  )
- (func $~lib/string/String#concat (; 115 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 114 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7955,7 +7894,7 @@
   )
   (get_local $2)
  )
- (func $~lib/string/String.__concat (; 116 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 115 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -7969,7 +7908,7 @@
    (get_local $1)
   )
  )
- (func $std/array/createRandomString (; 117 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomString (; 116 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (set_local $1
@@ -8014,7 +7953,7 @@
   )
   (get_local $1)
  )
- (func $std/array/createRandomStringArray (; 118 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomStringArray (; 117 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $1
    (call $~lib/array/Array<i32>#constructor
@@ -8058,7 +7997,7 @@
   )
   (get_local $1)
  )
- (func $start (; 119 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 118 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 1400)
   )
@@ -8436,16 +8375,16 @@
     (unreachable)
    )
   )
-  (set_global $std/array/toAdd
+  (set_global $std/array/other
    (call $~lib/array/Array<i32>#constructor
     (i32.const 0)
     (i32.const 0)
    )
   )
-  (drop
+  (set_global $std/array/out
    (call $~lib/array/Array<i32>#concat
     (get_global $std/array/arr)
-    (get_global $std/array/toAdd)
+    (get_global $std/array/other)
    )
   )
   (if
@@ -8482,32 +8421,93 @@
     (unreachable)
    )
   )
-  (drop
-   (call $~lib/array/Array<i32>#pop
-    (get_global $std/array/arr)
+  (if
+   (i32.ne
+    (i32.load offset=4
+     (get_global $std/array/out)
+    )
+    (i32.const 3)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 61)
+     (i32.const 0)
+    )
+    (unreachable)
    )
   )
-  (drop
-   (call $~lib/array/Array<i32>#pop
-    (get_global $std/array/arr)
+  (if
+   (i32.ne
+    (call $~lib/array/Array<i32>#__get
+     (get_global $std/array/out)
+     (i32.const 0)
+    )
+    (i32.const 43)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 63)
+     (i32.const 0)
+    )
+    (unreachable)
    )
   )
-  (drop
-   (call $~lib/array/Array<i32>#push
-    (get_global $std/array/toAdd)
+  (if
+   (i32.ne
+    (call $~lib/array/Array<i32>#__get
+     (get_global $std/array/out)
+     (i32.const 1)
+    )
     (i32.const 44)
    )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 64)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
-  (drop
-   (call $~lib/array/Array<i32>#push
-    (get_global $std/array/toAdd)
+  (if
+   (i32.ne
+    (call $~lib/array/Array<i32>#__get
+     (get_global $std/array/out)
+     (i32.const 2)
+    )
     (i32.const 45)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 65)
+     (i32.const 0)
+    )
+    (unreachable)
    )
   )
   (drop
+   (call $~lib/array/Array<i32>#push
+    (get_global $std/array/other)
+    (i32.const 46)
+   )
+  )
+  (drop
+   (call $~lib/array/Array<i32>#push
+    (get_global $std/array/other)
+    (i32.const 47)
+   )
+  )
+  (set_global $std/array/out
    (call $~lib/array/Array<i32>#concat
     (get_global $std/array/arr)
-    (get_global $std/array/toAdd)
+    (get_global $std/array/other)
    )
   )
   (if
@@ -8521,42 +8521,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 70)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $~lib/array/Array<i32>#__get
-     (get_global $std/array/arr)
-     (i32.const 0)
-    )
-    (i32.const 43)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 104)
-     (i32.const 71)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $~lib/array/Array<i32>#__get
-     (get_global $std/array/arr)
-     (i32.const 1)
-    )
-    (i32.const 44)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 104)
      (i32.const 72)
      (i32.const 0)
     )
@@ -8565,11 +8529,10 @@
   )
   (if
    (i32.ne
-    (call $~lib/array/Array<i32>#__get
-     (get_global $std/array/arr)
-     (i32.const 2)
+    (i32.load offset=4
+     (get_global $std/array/other)
     )
-    (i32.const 45)
+    (i32.const 2)
    )
    (block
     (call $~lib/env/abort
@@ -8581,21 +8544,63 @@
     (unreachable)
    )
   )
-  (drop
-   (call $~lib/array/Array<i32>#pop
-    (get_global $std/array/toAdd)
+  (if
+   (i32.ne
+    (i32.load offset=4
+     (get_global $std/array/out)
+    )
+    (i32.const 5)
    )
-  )
-  (drop
-   (call $~lib/array/Array<i32>#push
-    (get_global $std/array/toAdd)
-    (i32.const 46)
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 74)
+     (i32.const 0)
+    )
+    (unreachable)
    )
   )
   (if
    (i32.ne
     (call $~lib/array/Array<i32>#__get
-     (get_global $std/array/arr)
+     (get_global $std/array/out)
+     (i32.const 0)
+    )
+    (i32.const 43)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 75)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/array/Array<i32>#__get
+     (get_global $std/array/out)
+     (i32.const 1)
+    )
+    (i32.const 44)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 76)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/array/Array<i32>#__get
+     (get_global $std/array/out)
      (i32.const 2)
     )
     (i32.const 45)
@@ -8610,41 +8615,19 @@
     (unreachable)
    )
   )
-  (drop
-   (call $~lib/array/Array<i32>#unshift
-    (get_global $std/array/arr)
-    (i32.const 42)
-   )
-  )
   (if
    (i32.ne
-    (i32.load offset=4
-     (get_global $std/array/arr)
+    (call $~lib/array/Array<i32>#__get
+     (get_global $std/array/out)
+     (i32.const 3)
     )
-    (i32.const 4)
+    (i32.const 46)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 83)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $std/array/internalCapacity<i32>
-     (get_global $std/array/arr)
-    )
-    (i32.const 4)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 104)
-     (i32.const 84)
+     (i32.const 78)
      (i32.const 0)
     )
     (unreachable)
@@ -8653,10 +8636,55 @@
   (if
    (i32.ne
     (call $~lib/array/Array<i32>#__get
-     (get_global $std/array/arr)
+     (get_global $std/array/out)
+     (i32.const 4)
+    )
+    (i32.const 47)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 79)
      (i32.const 0)
     )
-    (i32.const 42)
+    (unreachable)
+   )
+  )
+  (drop
+   (call $~lib/array/Array<i32>#pop
+    (get_global $std/array/out)
+   )
+  )
+  (if
+   (i32.ne
+    (i32.load offset=4
+     (get_global $std/array/out)
+    )
+    (i32.const 4)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 82)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array/out
+   (call $~lib/array/Array<i32>#concat
+    (get_global $std/array/arr)
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.ne
+    (i32.load offset=4
+     (get_global $std/array/out)
+    )
+    (i32.const 3)
    )
    (block
     (call $~lib/env/abort
@@ -8671,10 +8699,10 @@
   (if
    (i32.ne
     (call $~lib/array/Array<i32>#__get
-     (get_global $std/array/arr)
-     (i32.const 1)
+     (get_global $std/array/out)
+     (i32.const 2)
     )
-    (i32.const 43)
+    (i32.const 45)
    )
    (block
     (call $~lib/env/abort
@@ -8686,46 +8714,10 @@
     (unreachable)
    )
   )
-  (if
-   (i32.ne
-    (call $~lib/array/Array<i32>#__get
-     (get_global $std/array/arr)
-     (i32.const 2)
-    )
-    (i32.const 44)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 104)
-     (i32.const 87)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $~lib/array/Array<i32>#__get
-     (get_global $std/array/arr)
-     (i32.const 3)
-    )
-    (i32.const 45)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 104)
-     (i32.const 88)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
   (drop
    (call $~lib/array/Array<i32>#unshift
     (get_global $std/array/arr)
-    (i32.const 41)
+    (i32.const 42)
    )
   )
   (if
@@ -8733,7 +8725,7 @@
     (i32.load offset=4
      (get_global $std/array/arr)
     )
-    (i32.const 5)
+    (i32.const 4)
    )
    (block
     (call $~lib/env/abort
@@ -8750,7 +8742,7 @@
     (call $std/array/internalCapacity<i32>
      (get_global $std/array/arr)
     )
-    (i32.const 5)
+    (i32.const 4)
    )
    (block
     (call $~lib/env/abort
@@ -8768,7 +8760,7 @@
      (get_global $std/array/arr)
      (i32.const 0)
     )
-    (i32.const 41)
+    (i32.const 42)
    )
    (block
     (call $~lib/env/abort
@@ -8786,7 +8778,7 @@
      (get_global $std/array/arr)
      (i32.const 1)
     )
-    (i32.const 42)
+    (i32.const 43)
    )
    (block
     (call $~lib/env/abort
@@ -8804,7 +8796,7 @@
      (get_global $std/array/arr)
      (i32.const 2)
     )
-    (i32.const 43)
+    (i32.const 44)
    )
    (block
     (call $~lib/env/abort
@@ -8822,13 +8814,125 @@
      (get_global $std/array/arr)
      (i32.const 3)
     )
-    (i32.const 44)
+    (i32.const 45)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
      (i32.const 97)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (drop
+   (call $~lib/array/Array<i32>#unshift
+    (get_global $std/array/arr)
+    (i32.const 41)
+   )
+  )
+  (if
+   (i32.ne
+    (i32.load offset=4
+     (get_global $std/array/arr)
+    )
+    (i32.const 5)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 101)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $std/array/internalCapacity<i32>
+     (get_global $std/array/arr)
+    )
+    (i32.const 5)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 102)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/array/Array<i32>#__get
+     (get_global $std/array/arr)
+     (i32.const 0)
+    )
+    (i32.const 41)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 103)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/array/Array<i32>#__get
+     (get_global $std/array/arr)
+     (i32.const 1)
+    )
+    (i32.const 42)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 104)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/array/Array<i32>#__get
+     (get_global $std/array/arr)
+     (i32.const 2)
+    )
+    (i32.const 43)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 105)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/array/Array<i32>#__get
+     (get_global $std/array/arr)
+     (i32.const 3)
+    )
+    (i32.const 44)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 104)
+     (i32.const 106)
      (i32.const 0)
     )
     (unreachable)
@@ -8846,7 +8950,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 98)
+     (i32.const 107)
      (i32.const 0)
     )
     (unreachable)
@@ -8866,7 +8970,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 104)
+     (i32.const 113)
      (i32.const 0)
     )
     (unreachable)
@@ -8883,7 +8987,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 105)
+     (i32.const 114)
      (i32.const 0)
     )
     (unreachable)
@@ -8900,7 +9004,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 106)
+     (i32.const 115)
      (i32.const 0)
     )
     (unreachable)
@@ -8918,7 +9022,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 107)
+     (i32.const 116)
      (i32.const 0)
     )
     (unreachable)
@@ -8936,7 +9040,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 108)
+     (i32.const 117)
      (i32.const 0)
     )
     (unreachable)
@@ -8954,7 +9058,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 109)
+     (i32.const 118)
      (i32.const 0)
     )
     (unreachable)
@@ -8972,7 +9076,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 110)
+     (i32.const 119)
      (i32.const 0)
     )
     (unreachable)
@@ -8992,7 +9096,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 114)
+     (i32.const 123)
      (i32.const 0)
     )
     (unreachable)
@@ -9009,7 +9113,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 115)
+     (i32.const 124)
      (i32.const 0)
     )
     (unreachable)
@@ -9026,7 +9130,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 116)
+     (i32.const 125)
      (i32.const 0)
     )
     (unreachable)
@@ -9044,7 +9148,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 117)
+     (i32.const 126)
      (i32.const 0)
     )
     (unreachable)
@@ -9062,7 +9166,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 118)
+     (i32.const 127)
      (i32.const 0)
     )
     (unreachable)
@@ -9080,7 +9184,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 119)
+     (i32.const 128)
      (i32.const 0)
     )
     (unreachable)
@@ -9102,7 +9206,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 125)
+     (i32.const 134)
      (i32.const 0)
     )
     (unreachable)
@@ -9119,7 +9223,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 126)
+     (i32.const 135)
      (i32.const 0)
     )
     (unreachable)
@@ -9137,7 +9241,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 127)
+     (i32.const 136)
      (i32.const 0)
     )
     (unreachable)
@@ -9155,7 +9259,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 128)
+     (i32.const 137)
      (i32.const 0)
     )
     (unreachable)
@@ -9173,7 +9277,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 129)
+     (i32.const 138)
      (i32.const 0)
     )
     (unreachable)
@@ -9204,7 +9308,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 138)
+     (i32.const 147)
      (i32.const 0)
     )
     (unreachable)
@@ -9226,7 +9330,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 142)
+     (i32.const 151)
      (i32.const 0)
     )
     (unreachable)
@@ -9248,7 +9352,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 146)
+     (i32.const 155)
      (i32.const 0)
     )
     (unreachable)
@@ -9270,7 +9374,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 150)
+     (i32.const 159)
      (i32.const 0)
     )
     (unreachable)
@@ -9292,7 +9396,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 154)
+     (i32.const 163)
      (i32.const 0)
     )
     (unreachable)
@@ -9314,7 +9418,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 158)
+     (i32.const 167)
      (i32.const 0)
     )
     (unreachable)
@@ -9336,7 +9440,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 162)
+     (i32.const 171)
      (i32.const 0)
     )
     (unreachable)
@@ -9358,7 +9462,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 166)
+     (i32.const 175)
      (i32.const 0)
     )
     (unreachable)
@@ -9380,7 +9484,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 170)
+     (i32.const 179)
      (i32.const 0)
     )
     (unreachable)
@@ -9402,7 +9506,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 174)
+     (i32.const 183)
      (i32.const 0)
     )
     (unreachable)
@@ -9424,7 +9528,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 180)
+     (i32.const 189)
      (i32.const 0)
     )
     (unreachable)
@@ -9446,7 +9550,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 184)
+     (i32.const 193)
      (i32.const 0)
     )
     (unreachable)
@@ -9465,7 +9569,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 188)
+     (i32.const 197)
      (i32.const 0)
     )
     (unreachable)
@@ -9484,7 +9588,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 192)
+     (i32.const 201)
      (i32.const 0)
     )
     (unreachable)
@@ -9506,7 +9610,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 196)
+     (i32.const 205)
      (i32.const 0)
     )
     (unreachable)
@@ -9528,7 +9632,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 200)
+     (i32.const 209)
      (i32.const 0)
     )
     (unreachable)
@@ -9550,7 +9654,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 204)
+     (i32.const 213)
      (i32.const 0)
     )
     (unreachable)
@@ -9572,7 +9676,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 208)
+     (i32.const 217)
      (i32.const 0)
     )
     (unreachable)
@@ -9594,7 +9698,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 212)
+     (i32.const 221)
      (i32.const 0)
     )
     (unreachable)
@@ -9616,7 +9720,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 216)
+     (i32.const 225)
      (i32.const 0)
     )
     (unreachable)
@@ -9638,7 +9742,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 220)
+     (i32.const 229)
      (i32.const 0)
     )
     (unreachable)
@@ -9655,7 +9759,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 221)
+     (i32.const 230)
      (i32.const 0)
     )
     (unreachable)
@@ -9673,7 +9777,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 222)
+     (i32.const 231)
      (i32.const 0)
     )
     (unreachable)
@@ -9691,7 +9795,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 223)
+     (i32.const 232)
      (i32.const 0)
     )
     (unreachable)
@@ -9729,7 +9833,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 233)
+     (i32.const 242)
      (i32.const 0)
     )
     (unreachable)
@@ -9750,7 +9854,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 236)
+     (i32.const 245)
      (i32.const 0)
     )
     (unreachable)
@@ -9771,7 +9875,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 239)
+     (i32.const 248)
      (i32.const 0)
     )
     (unreachable)
@@ -9792,7 +9896,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 247)
+     (i32.const 256)
      (i32.const 0)
     )
     (unreachable)
@@ -9809,7 +9913,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 248)
+     (i32.const 257)
      (i32.const 0)
     )
     (unreachable)
@@ -9830,7 +9934,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 250)
+     (i32.const 259)
      (i32.const 0)
     )
     (unreachable)
@@ -9871,7 +9975,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 263)
+     (i32.const 272)
      (i32.const 0)
     )
     (unreachable)
@@ -9888,7 +9992,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 264)
+     (i32.const 273)
      (i32.const 0)
     )
     (unreachable)
@@ -9921,7 +10025,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 272)
+     (i32.const 281)
      (i32.const 0)
     )
     (unreachable)
@@ -9939,7 +10043,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 275)
+     (i32.const 284)
      (i32.const 0)
     )
     (unreachable)
@@ -9960,7 +10064,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 283)
+     (i32.const 292)
      (i32.const 0)
     )
     (unreachable)
@@ -9977,7 +10081,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 284)
+     (i32.const 293)
      (i32.const 0)
     )
     (unreachable)
@@ -9995,7 +10099,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 286)
+     (i32.const 295)
      (i32.const 0)
     )
     (unreachable)
@@ -10036,7 +10140,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 299)
+     (i32.const 308)
      (i32.const 0)
     )
     (unreachable)
@@ -10053,7 +10157,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 300)
+     (i32.const 309)
      (i32.const 0)
     )
     (unreachable)
@@ -10086,7 +10190,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 308)
+     (i32.const 317)
      (i32.const 0)
     )
     (unreachable)
@@ -10104,7 +10208,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 311)
+     (i32.const 320)
      (i32.const 0)
     )
     (unreachable)
@@ -10122,7 +10226,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 319)
+     (i32.const 328)
      (i32.const 0)
     )
     (unreachable)
@@ -10139,7 +10243,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 320)
+     (i32.const 329)
      (i32.const 0)
     )
     (unreachable)
@@ -10160,7 +10264,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 322)
+     (i32.const 331)
      (i32.const 0)
     )
     (unreachable)
@@ -10198,7 +10302,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 335)
+     (i32.const 344)
      (i32.const 0)
     )
     (unreachable)
@@ -10215,7 +10319,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 336)
+     (i32.const 345)
      (i32.const 0)
     )
     (unreachable)
@@ -10249,7 +10353,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 345)
+     (i32.const 354)
      (i32.const 0)
     )
     (unreachable)
@@ -10271,7 +10375,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 354)
+     (i32.const 363)
      (i32.const 0)
     )
     (unreachable)
@@ -10288,7 +10392,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 355)
+     (i32.const 364)
      (i32.const 0)
     )
     (unreachable)
@@ -10310,7 +10414,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 358)
+     (i32.const 367)
      (i32.const 0)
     )
     (unreachable)
@@ -10352,7 +10456,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 372)
+     (i32.const 381)
      (i32.const 0)
     )
     (unreachable)
@@ -10369,7 +10473,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 373)
+     (i32.const 382)
      (i32.const 0)
     )
     (unreachable)
@@ -10404,7 +10508,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 382)
+     (i32.const 391)
      (i32.const 0)
     )
     (unreachable)
@@ -10427,7 +10531,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 383)
+     (i32.const 392)
      (i32.const 0)
     )
     (unreachable)
@@ -10451,7 +10555,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 392)
+     (i32.const 401)
      (i32.const 0)
     )
     (unreachable)
@@ -10468,7 +10572,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 393)
+     (i32.const 402)
      (i32.const 0)
     )
     (unreachable)
@@ -10492,7 +10596,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 400)
+     (i32.const 409)
      (i32.const 0)
     )
     (unreachable)
@@ -10536,7 +10640,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 415)
+     (i32.const 424)
      (i32.const 0)
     )
     (unreachable)
@@ -10553,7 +10657,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 416)
+     (i32.const 425)
      (i32.const 0)
     )
     (unreachable)
@@ -10588,7 +10692,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 424)
+     (i32.const 433)
      (i32.const 0)
     )
     (unreachable)
@@ -10612,7 +10716,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 433)
+     (i32.const 442)
      (i32.const 0)
     )
     (unreachable)
@@ -10629,7 +10733,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 434)
+     (i32.const 443)
      (i32.const 0)
     )
     (unreachable)
@@ -10653,7 +10757,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 441)
+     (i32.const 450)
      (i32.const 0)
     )
     (unreachable)
@@ -10697,7 +10801,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 456)
+     (i32.const 465)
      (i32.const 0)
     )
     (unreachable)
@@ -10714,7 +10818,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 457)
+     (i32.const 466)
      (i32.const 0)
     )
     (unreachable)
@@ -10748,7 +10852,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 465)
+     (i32.const 474)
      (i32.const 0)
     )
     (unreachable)
@@ -10770,7 +10874,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 469)
+     (i32.const 478)
      (i32.const 0)
     )
     (unreachable)
@@ -10795,7 +10899,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 472)
+     (i32.const 481)
      (i32.const 0)
     )
     (unreachable)
@@ -10817,7 +10921,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 475)
+     (i32.const 484)
      (i32.const 0)
     )
     (unreachable)
@@ -10839,7 +10943,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 483)
+     (i32.const 492)
      (i32.const 0)
     )
     (unreachable)
@@ -10856,7 +10960,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 484)
+     (i32.const 493)
      (i32.const 0)
     )
     (unreachable)
@@ -10878,7 +10982,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 486)
+     (i32.const 495)
      (i32.const 0)
     )
     (unreachable)
@@ -10920,7 +11024,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 499)
+     (i32.const 508)
      (i32.const 0)
     )
     (unreachable)
@@ -10937,7 +11041,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 500)
+     (i32.const 509)
      (i32.const 0)
     )
     (unreachable)
@@ -10971,7 +11075,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 508)
+     (i32.const 517)
      (i32.const 0)
     )
     (unreachable)
@@ -10993,7 +11097,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 512)
+     (i32.const 521)
      (i32.const 0)
     )
     (unreachable)
@@ -11018,7 +11122,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 515)
+     (i32.const 524)
      (i32.const 0)
     )
     (unreachable)
@@ -11040,7 +11144,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 518)
+     (i32.const 527)
      (i32.const 0)
     )
     (unreachable)
@@ -11062,7 +11166,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 526)
+     (i32.const 535)
      (i32.const 0)
     )
     (unreachable)
@@ -11079,7 +11183,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 527)
+     (i32.const 536)
      (i32.const 0)
     )
     (unreachable)
@@ -11101,7 +11205,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 529)
+     (i32.const 538)
      (i32.const 0)
     )
     (unreachable)
@@ -11143,7 +11247,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 542)
+     (i32.const 551)
      (i32.const 0)
     )
     (unreachable)
@@ -11157,7 +11261,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 543)
+     (i32.const 552)
      (i32.const 0)
     )
     (unreachable)
@@ -11213,7 +11317,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 645)
+     (i32.const 654)
      (i32.const 0)
     )
     (unreachable)
@@ -11240,7 +11344,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 649)
+     (i32.const 658)
      (i32.const 0)
     )
     (unreachable)
@@ -11267,7 +11371,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 653)
+     (i32.const 662)
      (i32.const 0)
     )
     (unreachable)
@@ -11294,7 +11398,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 657)
+     (i32.const 666)
      (i32.const 0)
     )
     (unreachable)
@@ -11343,7 +11447,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 677)
+     (i32.const 686)
      (i32.const 0)
     )
     (unreachable)
@@ -11364,7 +11468,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 680)
+     (i32.const 689)
      (i32.const 0)
     )
     (unreachable)
@@ -11385,7 +11489,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 683)
+     (i32.const 692)
      (i32.const 0)
     )
     (unreachable)
@@ -11406,7 +11510,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 686)
+     (i32.const 695)
      (i32.const 0)
     )
     (unreachable)
@@ -11427,7 +11531,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 689)
+     (i32.const 698)
      (i32.const 0)
     )
     (unreachable)
@@ -11448,7 +11552,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 692)
+     (i32.const 701)
      (i32.const 0)
     )
     (unreachable)
@@ -11469,7 +11573,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 695)
+     (i32.const 704)
      (i32.const 0)
     )
     (unreachable)
@@ -11538,7 +11642,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 104)
-     (i32.const 724)
+     (i32.const 733)
      (i32.const 0)
     )
     (unreachable)

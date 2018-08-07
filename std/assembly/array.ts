@@ -153,27 +153,28 @@ export class Array<T> {
     return newLength;
   }
 
-  concat(elements: Array<T>): i32 {
-
-    if (elements.length_ == 0) return this.length_;
-
-    var length = this.length_;
-    var buffer = this.buffer_;
-    var capacity = buffer.byteLength >>> alignof<T>();
-    var newLength = length + elements.length;
-
-    if (<u32>length >= <u32>capacity) {
-        const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
-        if (<u32>length >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-        buffer = reallocateUnsafe(buffer, newLength << alignof<T>());
-        this.buffer_ = buffer;
+  concat(items: Array<T>): Array<T> {
+    assert(this != null);
+    if (items == null) {
+      items = new Array<T>();
     }
-    memory.copy(changetype<usize>(buffer) + (<usize>length << alignof<T>()) + HEADER_SIZE,
-     changetype<usize>(elements.buffer_) +  HEADER_SIZE,
-     elements.length_ << alignof<T>());
-    this.length = newLength;
-    if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(elements)); // tslint:disable-line
-    return newLength;
+
+    var thisLen: isize = this.length_;
+    var otherLen: isize = items.length_;
+    var outLen = thisLen + otherLen;
+
+    var out: Array<T> = new Array<T>(outLen);
+    memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE,
+      changetype<usize>(this.buffer_) + HEADER_SIZE,
+      <usize>(thisLen << alignof<T>()));
+    memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE + <usize>(thisLen << alignof<T>()),
+      changetype<usize>(items.buffer_) + HEADER_SIZE,
+      <usize>(otherLen << alignof<T>()));
+
+    if (isManaged<T>()) __gc_link(changetype<usize>(out), changetype<usize>(items)); // tslint:disable-line
+    if (isManaged<T>()) __gc_link(changetype<usize>(out), changetype<usize>(this)); // tslint:disable-line
+
+    return out;
   }
 
   pop(): T {

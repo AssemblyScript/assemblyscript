@@ -53,28 +53,37 @@ assert(arr[2] == 45);
 
 // Array#concat ///////////////////////////////////////////////////////////////////////////////////
 
-var toAdd = new Array<i32>();
+var other = new Array<i32>();
 
-arr.concat(toAdd);
+var out = arr.concat(other);
 assert(internalCapacity<i32>(arr) == 3);
 assert(arr.length == 3);
+assert(out.length == 3);
 
-arr.pop();
-arr.pop();
+assert(out[0] == 43);
+assert(out[1] == 44);
+assert(out[2] == 45);
 
-toAdd.push(44);
-toAdd.push(45);
+other.push(46);
+other.push(47);
 
-arr.concat(toAdd);
+out = arr.concat(other);
 
 assert(internalCapacity<i32>(arr) == 3);
-assert(arr[0] == 43);
-assert(arr[1] == 44);
-assert(arr[2] == 45);
+assert(other.length == 2);
+assert(out.length == 5);
+assert(out[0] == 43);
+assert(out[1] == 44);
+assert(out[2] == 45);
+assert(out[3] == 46);
+assert(out[4] == 47);
 
-toAdd.pop();
-toAdd.push(46);
-assert(arr[2] == 45);
+out.pop();
+assert(out.length == 4);
+
+out = arr.concat(null);
+assert(out.length == 3);
+assert(out[2] == 45);
 
 // Array#unshift ///////////////////////////////////////////////////////////////////////////////////
 
