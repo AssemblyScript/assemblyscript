@@ -48,8 +48,18 @@ import {
   Class,
   Field,
   OperatorKind,
-  FlowFlags
+  FlowFlags,
+  Global,
+  DecoratorFlags
 } from "./program";
+
+import {
+  ReportMode
+} from "./resolver";
+
+import {
+  CommonFlags
+} from "./common";
 
 /** Compiles a call to a built-in function. */
 export function compileCall(
@@ -68,7 +78,7 @@ export function compileCall(
       ret: ExpressionRef;
 
   // NOTE that some implementations below make use of the select expression where straight-forward.
-  // whether worth or not should probably be tested once/ it's known if/how embedders handle it.
+  // whether worth or not should probably be tested once it's known if/how embedders handle it.
   // search: createSelect
 
   switch (prototype.internalName) {
@@ -124,7 +134,57 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
-      return classType != null && classType.lookupOverload(OperatorKind.INDEXED_GET) != null
+      return classType !== null && classType.lookupOverload(OperatorKind.INDEXED_GET) !== null
+        ? module.createI32(1)
+        : module.createI32(0);
+    }
+    case "isDefined": { // isDefined(expression) -> bool
+      compiler.currentType = Type.bool;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let element = compiler.resolver.resolveExpression(operands[0], compiler.currentFunction, ReportMode.SWALLOW);
+      return module.createI32(element ? 1 : 0);
+    }
+    case "isConstant": { // isConstant(expression) -> bool
+      compiler.currentType = Type.bool;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let expr = compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
+      compiler.currentType = Type.bool;
+      return module.createI32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
+    }
+    case "isManaged": { // isManaged<T>() -> bool
+      if (!compiler.program.hasGC) {
+        compiler.currentType = Type.bool;
+        return module.createI32(0);
+      }
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
+      let classType = type.classReference;
+      return classType !== null && !classType.hasDecorator(DecoratorFlags.UNMANAGED)
         ? module.createI32(1)
         : module.createI32(0);
     }
@@ -1824,7 +1884,7 @@ export function compileCall(
 
     // host operations
 
-    case "current_memory": { // current_memory() -> i32
+    case "memory.size": { // memory.size() -> i32
       compiler.currentType = Type.i32;
       if (operands.length != 0) {
         compiler.error(
@@ -1840,7 +1900,7 @@ export function compileCall(
       }
       return module.createHost(HostOp.CurrentMemory);
     }
-    case "grow_memory": { // grow_memory(pages: i32) -> i32
+    case "memory.grow": { // memory.grow(pages: i32) -> i32
       compiler.currentType = Type.i32;
       if (operands.length != 1) {
         compiler.error(
@@ -1860,7 +1920,7 @@ export function compileCall(
       return module.createHost(HostOp.GrowMemory, null, [ arg0 ]);
     }
     // see: https://github.com/WebAssembly/bulk-memory-operations
-    case "move_memory": { // move_memory(dest: usize, src: usize: n: usize) -> void
+    case "memory.copy": { // memory.copy(dest: usize, src: usize: n: usize) -> void
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -1897,7 +1957,7 @@ export function compileCall(
       throw new Error("not implemented");
       // return module.createHost(HostOp.MoveMemory, null, [ arg0, arg1, arg2 ]);
     }
-    case "set_memory": { // set_memory(dest: usize, value: u8, n: usize) -> void
+    case "memory.fill": { // memory.fill(dest: usize, value: u8, n: usize) -> void
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -2263,6 +2323,30 @@ export function compileCall(
       return module.createCallIndirect(arg0, operandExprs, typeName);
     }
 
+    // user-defined diagnostic macros
+
+    case "ERROR": {
+      compiler.error(
+        DiagnosticCode.User_defined_0,
+        reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
+      );
+      return module.createUnreachable();
+    }
+    case "WARNING": {
+      compiler.warning(
+        DiagnosticCode.User_defined_0,
+        reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
+      );
+      return module.createNop();
+    }
+    case "INFO": {
+      compiler.info(
+        DiagnosticCode.User_defined_0,
+        reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
+      );
+      return module.createNop();
+    }
+
     // conversions
 
     case "i8": {
@@ -2555,6 +2639,45 @@ export function compileCall(
         WrapMode.NONE
       );
     }
+
+    // gc
+
+    case "iterateRoots": {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
+      let expr = compiler.compileExpressionRetainType(operands[0], Type.u32, WrapMode.NONE);
+      let type = compiler.currentType;
+      let signatureReference = type.signatureReference;
+      compiler.currentType = Type.void;
+      if (
+        !type.is(TypeFlags.REFERENCE) ||
+        !signatureReference ||
+        signatureReference.parameterTypes.length != 1 ||
+        signatureReference.parameterTypes[0] != compiler.options.usizeType
+       ) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+          reportNode.range, type.toString(), "(ref: usize) => void"
+        );
+        return module.createUnreachable();
+      }
+      compiler.currentType = Type.void;
+      // just emit a call even if the function doesn't yet exist
+      compiler.needsIterateRoots = true;
+      return module.createCall("~iterateRoots", [ expr ], NativeType.None);
+    }
   }
   var expr = deferASMCall(compiler, prototype, operands, contextualType, reportNode);
   if (expr) {
@@ -2761,8 +2884,6 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
   return value;
 }
 
-const allocateInternalName = "allocate_memory";
-
 /** Compiles a memory allocation for an instance of the specified class. */
 export function compileAllocate(
   compiler: Compiler,
@@ -2774,41 +2895,46 @@ export function compileAllocate(
   var module = compiler.module;
   var options = compiler.options;
 
-  var allocatePrototype = program.elementsLookup.get(allocateInternalName);
-  if (!allocatePrototype) {
-    program.error(
-      DiagnosticCode.Cannot_find_name_0,
-      reportNode.range, allocateInternalName
+  // __gc_allocate(size, markFn)
+  if (program.hasGC && classInstance.type.isManaged(program)) {
+    let allocateInstance = assert(program.gcAllocateInstance);
+    if (!compiler.compileFunction(allocateInstance)) return module.createUnreachable();
+    compiler.currentType = classInstance.type;
+    return module.createCall(
+      allocateInstance.internalName, [
+        options.isWasm64
+          ? module.createI64(classInstance.currentMemoryOffset)
+          : module.createI32(classInstance.currentMemoryOffset),
+        module.createI32(
+          ensureGCHook(compiler, classInstance)
+        )
+      ],
+      options.nativeSizeType
     );
-    program.info(
-      DiagnosticCode.An_allocator_must_be_declared_to_allocate_memory_Try_importing_allocator_arena_or_allocator_tlsf,
-      reportNode.range
-    );
-    return module.createUnreachable();
-  }
-  if (allocatePrototype.kind != ElementKind.FUNCTION_PROTOTYPE) {
-    program.error(
-      DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-      reportNode.range, allocatePrototype.internalName
-    );
-    return module.createUnreachable();
-  }
 
-  var allocateInstance = (<FunctionPrototype>allocatePrototype).resolve(); // reports
-  if (!(allocateInstance && compiler.compileFunction(allocateInstance))) return module.createUnreachable();
+  // memory.allocate(size)
+  } else {
+    let allocateInstance = program.memoryAllocateInstance;
+    if (!allocateInstance) {
+      program.error(
+        DiagnosticCode.Cannot_find_name_0,
+        reportNode.range, "memory.allocate"
+      );
+      return module.createUnreachable();
+    }
+    if (!compiler.compileFunction(allocateInstance)) return module.createUnreachable();
 
-  compiler.currentType = classInstance.type;
-  return module.createCall(
-    allocateInstance.internalName, [
-      options.isWasm64
-        ? module.createI64(classInstance.currentMemoryOffset)
-        : module.createI32(classInstance.currentMemoryOffset)
-    ],
-    options.nativeSizeType
-  );
+    compiler.currentType = classInstance.type;
+    return module.createCall(
+      allocateInstance.internalName, [
+        options.isWasm64
+          ? module.createI64(classInstance.currentMemoryOffset)
+          : module.createI32(classInstance.currentMemoryOffset)
+      ],
+      options.nativeSizeType
+    );
+  }
 }
-
-const abortInternalName = "abort";
 
 /** Compiles an abort wired to the conditionally imported 'abort' function. */
 export function compileAbort(
@@ -2819,20 +2945,17 @@ export function compileAbort(
   var program = compiler.program;
   var module = compiler.module;
 
-  var stringType = program.typesLookup.get("string"); // might be intended
+  var stringType = program.typesLookup.get("string");
   if (!stringType) return module.createUnreachable();
 
-  var abortPrototype = program.elementsLookup.get(abortInternalName); // might be intended
-  if (!abortPrototype || abortPrototype.kind != ElementKind.FUNCTION_PROTOTYPE) return module.createUnreachable();
-
-  var abortInstance = (<FunctionPrototype>abortPrototype).resolve(); // reports
+  var abortInstance = program.abortInstance;
   if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.createUnreachable();
 
   var messageArg = message != null
     ? compiler.compileExpression(message, stringType, ConversionKind.IMPLICIT, WrapMode.NONE)
     : stringType.toNativeZero(module);
 
-  var filenameArg = compiler.compileStaticString(reportNode.range.source.normalizedPath);
+  var filenameArg = compiler.ensureStaticString(reportNode.range.source.normalizedPath);
 
   compiler.currentType = Type.void;
   return module.createBlock(null, [
@@ -2847,4 +2970,174 @@ export function compileAbort(
     ),
     module.createUnreachable()
   ]);
+}
+
+/** Compiles the iterateRoots function if requires. */
+export function compileIterateRoots(compiler: Compiler): void {
+  var module = compiler.module;
+  var exprs = new Array<ExpressionRef>();
+
+  for (let element of compiler.program.elementsLookup.values()) {
+    if (element.kind != ElementKind.GLOBAL) continue;
+    let global = <Global>element;
+    let classReference = global.type.classReference;
+    if (
+      global.is(CommonFlags.COMPILED) &&
+      classReference !== null &&
+      !classReference.hasDecorator(DecoratorFlags.UNMANAGED)
+    ) {
+      if (global.is(CommonFlags.INLINED)) {
+        let value = global.constantIntegerValue;
+        exprs.push(
+          module.createCallIndirect(
+            module.createGetLocal(0, NativeType.I32),
+            [
+              compiler.options.isWasm64
+                ? module.createI64(i64_low(value), i64_high(value))
+                : module.createI32(i64_low(value))
+            ],
+            "iv"
+          )
+        );
+      } else {
+        exprs.push(
+          module.createCallIndirect(
+            module.createGetLocal(0, NativeType.I32),
+            [
+              module.createGetGlobal(
+                global.internalName,
+                compiler.options.nativeSizeType
+              )
+            ],
+            "iv"
+          )
+        );
+      }
+    }
+  }
+  var typeRef = compiler.ensureFunctionType([ Type.i32 ], Type.void);
+  module.addFunction("~iterateRoots", typeRef, [],
+    exprs.length
+      ? module.createBlock(null, exprs)
+      : module.createNop()
+  );
+}
+
+/** Ensures that the specified class's GC hook exists and returns its function table index. */
+export function ensureGCHook(
+  compiler: Compiler,
+  classInstance: Class
+): u32 {
+  var program = compiler.program;
+  assert(classInstance.type.isManaged(program));
+
+  // check if the GC hook has already been created
+  {
+    let existingIndex = classInstance.gcHookIndex;
+    if (existingIndex != <u32>-1) return existingIndex;
+  }
+
+  // check if the class implements a custom GC function (only valid for internals)
+  var members = classInstance.members;
+  if (classInstance.prototype.declaration.range.source.isLibrary) {
+    if (members !== null && members.has("__gc")) {
+      let gcPrototype = assert(members.get("__gc"));
+      assert(gcPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let gcInstance = assert(program.resolver.resolveFunction(<FunctionPrototype>gcPrototype, null));
+      assert(gcInstance.is(CommonFlags.PRIVATE | CommonFlags.INSTANCE));
+      assert(!gcInstance.isAny(CommonFlags.AMBIENT | CommonFlags.VIRTUAL));
+      assert(gcInstance.signature.parameterTypes.length == 0);
+      assert(gcInstance.signature.returnType == Type.void);
+      gcInstance.internalName = classInstance.internalName + "~gc";
+      assert(compiler.compileFunction(gcInstance));
+      let index = compiler.ensureFunctionTableEntry(gcInstance);
+      classInstance.gcHookIndex = index;
+      return index;
+    }
+  }
+
+  var module = compiler.module;
+  var options = compiler.options;
+  var nativeSizeType = options.nativeSizeType;
+  var nativeSizeSize = options.usizeType.byteSize;
+  var body = new Array<ExpressionRef>();
+
+  // nothing to mark if 'this' is null
+  body.push(
+    module.createIf(
+      module.createUnary(
+        options.isWasm64
+          ? UnaryOp.EqzI64
+          : UnaryOp.EqzI32,
+        module.createGetLocal(0, nativeSizeType)
+      ),
+      module.createReturn()
+    )
+  );
+
+  // remember the function index so we don't recurse infinitely
+  var functionTable = compiler.functionTable;
+  var gcHookIndex = functionTable.length;
+  functionTable.push(0);
+  classInstance.gcHookIndex = gcHookIndex;
+
+  // if the class extends a base class, call its hook first (calls mark)
+  var baseInstance = classInstance.base;
+  if (baseInstance) {
+    assert(baseInstance.type.isManaged(program));
+    body.push(
+      module.createCallIndirect(
+        module.createI32(
+          ensureGCHook(compiler, <Class>baseInstance.type.classReference)
+        ),
+        [
+          module.createGetLocal(0, nativeSizeType)
+        ],
+        nativeSizeType == NativeType.I64 ? "Iv" : "iv"
+      )
+    );
+
+  // if this class is the top-most base class, mark the instance
+  } else {
+    body.push(
+      module.createCall(assert(program.gcMarkInstance).internalName, [
+        module.createGetLocal(0, nativeSizeType)
+      ], NativeType.None)
+    );
+  }
+
+  // mark instances assigned to own fields that are again references
+  if (members) {
+    for (let member of members.values()) {
+      if (member.kind == ElementKind.FIELD) {
+        if ((<Field>member).parent === classInstance) {
+          let type = (<Field>member).type;
+          if (type.isManaged(program)) {
+            let offset = (<Field>member).memoryOffset;
+            assert(offset >= 0);
+            body.push(
+              module.createCall(assert(program.gcMarkInstance).internalName, [
+                module.createLoad(
+                  nativeSizeSize,
+                  false,
+                  module.createGetLocal(0, nativeSizeType),
+                  nativeSizeType,
+                  offset
+                )
+              ], NativeType.None)
+            );
+          }
+        }
+      }
+    }
+  }
+
+  // add the function to the module and return its table index
+  functionTable[gcHookIndex] = module.addFunction(
+    classInstance.internalName + "~gc",
+    compiler.ensureFunctionType(null, Type.void, options.usizeType),
+    null,
+    module.createBlock(null, body)
+  );
+  return gcHookIndex;
 }

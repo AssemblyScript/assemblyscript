@@ -1,7 +1,5 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $fi (func (param f32) (result i32)))
- (type $Fi (func (param f64) (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -18,48 +16,18 @@
  (elem (i32.const 0) $start~anonymous|0)
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
- (data (i32.const 36) "\01\00\00\001")
- (export "test" (func $builtins/test))
+ (data (i32.const 40) "\01\00\00\001")
  (export "memory" (memory $0))
  (export "table" (table $0))
+ (export "test" (func $builtins/test))
  (start $start)
- (func $isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
-  (f32.ne
-   (get_local $0)
-   (get_local $0)
-  )
- )
- (func $isFinite<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
-  (f32.eq
-   (f32.sub
-    (get_local $0)
-    (get_local $0)
-   )
-   (f32.const 0)
-  )
- )
- (func $isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
-  (f64.ne
-   (get_local $0)
-   (get_local $0)
-  )
- )
- (func $isFinite<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
-  (f64.eq
-   (f64.sub
-    (get_local $0)
-    (get_local $0)
-   )
-   (f64.const 0)
-  )
- )
- (func $start~anonymous|0 (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $start~anonymous|0 (; 1 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (nop)
  )
- (func $builtins/test (; 6 ;) (type $v)
+ (func $builtins/test (; 2 ;) (; has Stack IR ;) (type $v)
   (nop)
  )
- (func $start (; 7 ;) (type $v)
+ (func $start (; 3 ;) (; has Stack IR ;) (type $v)
   (set_global $builtins/i
    (i32.const 31)
   )
@@ -87,7 +55,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 43)
+     (i32.const 50)
      (i32.const 19)
     )
     (unreachable)
@@ -105,7 +73,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 44)
+     (i32.const 51)
      (i32.const 20)
     )
     (unreachable)
@@ -123,7 +91,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 45)
+     (i32.const 52)
      (i32.const 20)
     )
     (unreachable)
@@ -156,7 +124,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 61)
+     (i32.const 68)
      (i32.const 19)
     )
     (unreachable)
@@ -174,7 +142,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 62)
+     (i32.const 69)
      (i32.const 20)
     )
     (unreachable)
@@ -192,98 +160,8 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 63)
+     (i32.const 70)
      (i32.const 20)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isNaN<f32>
-    (f32.const 1.25)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 80)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $isNaN<f32>
-     (f32.const nan:0x400000)
-    )
-    (i32.const 1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 81)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $isFinite<f32>
-     (f32.const 1.25)
-    )
-    (i32.const 1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 82)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isFinite<f32>
-    (f32.const inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 83)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isFinite<f32>
-    (f32.const -inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 84)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isFinite<f32>
-    (f32.const nan:0x400000)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 85)
-     (i32.const 0)
     )
     (unreachable)
    )
@@ -322,104 +200,10 @@
    (f32.const 1)
   )
   (set_global $builtins/b
-   (call $isNaN<f32>
-    (f32.const 1.25)
-   )
+   (i32.const 0)
   )
   (set_global $builtins/b
-   (call $isFinite<f32>
-    (f32.const 1.25)
-   )
-  )
-  (if
-   (call $isNaN<f64>
-    (f64.const 1.25)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 116)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $isNaN<f64>
-     (f64.const nan:0x8000000000000)
-    )
-    (i32.const 1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 117)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (call $isFinite<f64>
-     (f64.const 1.25)
-    )
-    (i32.const 1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 118)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isFinite<f64>
-    (f64.const inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 119)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isFinite<f64>
-    (f64.const -inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 120)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isFinite<f64>
-    (f64.const nan:0x8000000000000)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 121)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
+   (i32.const 1)
   )
   (set_global $builtins/F
    (f64.const nan:0x8000000000000)
@@ -455,14 +239,10 @@
    (f64.const 1)
   )
   (set_global $builtins/b
-   (call $isNaN<f64>
-    (f64.const 1.25)
-   )
+   (i32.const 0)
   )
   (set_global $builtins/b
-   (call $isFinite<f64>
-    (f64.const 1.25)
-   )
+   (i32.const 1)
   )
   (set_global $builtins/i
    (i32.load
@@ -767,126 +547,6 @@
    (i32.const 2)
    (get_global $builtins/fn)
   )
-  (if
-   (i32.eqz
-    (call $isNaN<f32>
-     (f32.const nan:0x400000)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 264)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $isNaN<f64>
-     (f64.const nan:0x8000000000000)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 265)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isFinite<f32>
-    (f32.const nan:0x400000)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 266)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isFinite<f32>
-    (f32.const inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 267)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isFinite<f64>
-    (f64.const nan:0x8000000000000)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 268)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (call $isFinite<f64>
-    (f64.const inf)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 269)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $isFinite<f32>
-     (f32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 270)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $isFinite<f64>
-     (f64.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 271)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
   (drop
    (i32.load8_s
     (i32.const 8)
@@ -992,11 +652,6 @@
   (f64.store
    (i32.const 8)
    (f64.const 1)
-  )
-  (drop
-   (call $isNaN<f64>
-    (f64.const 1)
-   )
   )
  )
 )

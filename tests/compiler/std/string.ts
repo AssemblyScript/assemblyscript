@@ -1,5 +1,7 @@
 import "allocator/arena";
 
+import { utoa32, itoa32, utoa64, itoa64 } from "internal/itoa";
+
 // preliminary
 
 var str: string = "hi, I'm a string";
@@ -10,11 +12,57 @@ assert(changetype<usize>(str) == changetype<usize>("hi, I'm a string"));
 
 assert(str.length == 16);
 assert(str.charCodeAt(0) == 0x68);
+
+assert(String.fromCharCode(0) == "\0");
+assert(String.fromCharCode(54) == "6");
+assert(String.fromCharCode(0x10000 + 54) == "6");
+
+assert(String.fromCodePoint(0) == "\0");
+assert(String.fromCodePoint(54) == "6");
+assert(String.fromCodePoint(0x1D306), "\uD834\uDF06");
+
 assert(str.startsWith("hi"));
 assert(str.endsWith("string"));
 assert(str.includes("I'm"));
+
+assert(str.padStart(0) == str);
+assert(str.padStart(15) == str);
+assert("".padStart(3) == "   ");
+assert("".padStart(10, "") == "");
+assert("a".padStart(100, "") == "a");
+assert("abc".padStart(5) == "  abc");
+assert("abc".padStart(6, "123") == "123abc");
+assert("abc".padStart(8, "123") == "12312abc");
+
+assert(str.padEnd(0) == str);
+assert(str.padEnd(15) == str);
+assert("".padEnd(3) == "   ");
+assert("".padEnd(10, "") == "");
+assert("a".padEnd(100, "") == "a");
+assert("abc".padEnd(5) == "abc  ");
+assert("abc".padEnd(6, "abc") == "abcabc");
+assert("abc".padEnd(8, "abc") == "abcabcab");
+
+assert("".indexOf("") == 0);
+assert("".indexOf("hi") == -1);
+assert(str.indexOf("") == 0);
 assert(str.indexOf(",") == 2);
 assert(str.indexOf("x") == -1);
+assert(str.indexOf(",", 2) == 2);
+assert(str.indexOf(",", 3) == -1);
+assert(str.indexOf(", I", -1) == 2);
+
+assert("".lastIndexOf("") == 0);
+assert("".lastIndexOf("hi") == -1);
+assert(str.lastIndexOf("") == str.length);
+assert(str.lastIndexOf(",") == 2);
+assert(str.lastIndexOf("x") == -1);
+assert(str.lastIndexOf("g") == 15);
+assert(str.lastIndexOf(",", 2) == 2);
+assert(str.lastIndexOf(",", 3) == 2);
+assert(str.lastIndexOf(", I", -1) == -1);
+assert(str.lastIndexOf("i", 0) == -1);
+assert(str.lastIndexOf("hi", 0) == 0);
 
 export function getString(): string {
   return str;
@@ -61,6 +109,10 @@ assert(!("" > ""));
 assert("" >= "");
 assert("" <= "");
 
+var a = String.fromCodePoint(0xFF61);
+var b = String.fromCodePoint(0xD800) + String.fromCodePoint(0xDC02);
+assert(a > b);
+
 assert("123".length == 3);
 
 assert("".repeat(100) == "");
@@ -72,3 +124,48 @@ assert("ab".repeat(4) == "abababab");
 assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
+
+assert(itoa32(0) == "0");
+assert(itoa32(1) == "1");
+assert(itoa32(8) == "8");
+assert(itoa32(123) == "123");
+assert(itoa32(-1000) == "-1000");
+assert(itoa32(1234) == "1234");
+assert(itoa32(12345) == "12345");
+assert(itoa32(123456) == "123456");
+assert(itoa32(1111111) == "1111111");
+assert(itoa32(1234567) == "1234567");
+assert(itoa32(0x7ffffffe) == "2147483646");
+assert(itoa32(0x7fffffff) == "2147483647");
+assert(itoa32(0x80000000) == "-2147483648");
+assert(itoa32(0xffffffff) == "-1");
+
+assert(utoa32(0) == "0");
+assert(utoa32(1000) == "1000");
+assert(utoa32(0x7fffffff) == "2147483647");
+assert(utoa32(0x80000000) == "2147483648");
+assert(utoa32(u32.MAX_VALUE) == "4294967295");
+
+assert(utoa64(0) == "0");
+assert(utoa64(1234) == "1234");
+assert(utoa64(99999999) == "99999999");
+assert(utoa64(100000000) == "100000000");
+assert(utoa64(0xffffffff) == "4294967295");
+assert(utoa64(0xfffffffff) == "68719476735");
+assert(utoa64(868719476735) == "868719476735");
+assert(utoa64(999868719476735) == "999868719476735");
+assert(utoa64(9999868719476735) == "9999868719476735");
+assert(utoa64(19999868719476735) == "19999868719476735");
+assert(utoa64(u64.MAX_VALUE) == "18446744073709551615");
+
+assert(itoa64(0) == "0");
+assert(itoa64(-1234) == "-1234");
+assert(itoa64(0xffffffff)  == "4294967295");
+assert(itoa64(-0xffffffff)  == "-4294967295");
+assert(itoa64(68719476735) == "68719476735");
+assert(itoa64(-68719476735) == "-68719476735");
+assert(itoa64(-868719476735) == "-868719476735");
+assert(itoa64(-999868719476735) == "-999868719476735");
+assert(itoa64(-19999868719476735) == "-19999868719476735");
+assert(itoa64(i64.MAX_VALUE) == "9223372036854775807");
+assert(itoa64(i64.MIN_VALUE) == "-9223372036854775808");

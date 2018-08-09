@@ -1,8 +1,8 @@
 import {
   MAX_BLENGTH,
-  HEADER_SIZE as HEADER_SIZE_AB,
-  allocUnsafe,
-  reallocUnsafe,
+  HEADER_SIZE,
+  allocateUnsafe,
+  reallocateUnsafe,
   loadUnsafe,
   storeUnsafe
 } from "./internal/arraybuffer";
@@ -22,16 +22,17 @@ export class Array<T> {
     const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
     if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
     var byteLength = length << alignof<T>();
-    var buffer = allocUnsafe(byteLength);
+    var buffer = allocateUnsafe(byteLength);
     this.buffer_ = buffer;
     this.length_ = length;
-    set_memory(
-      changetype<usize>(buffer) + HEADER_SIZE_AB,
+    memory.fill(
+      changetype<usize>(buffer) + HEADER_SIZE,
       0,
       <usize>byteLength
     );
   }
 
+  @inline
   get length(): i32 {
     return this.length_;
   }
@@ -42,7 +43,7 @@ export class Array<T> {
     if (<u32>length > <u32>capacity) {
       const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
       if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
-      buffer = reallocUnsafe(buffer, length << alignof<T>());
+      buffer = reallocateUnsafe(buffer, length << alignof<T>());
       this.buffer_ = buffer;
     }
     this.length_ = length;
@@ -84,16 +85,18 @@ export class Array<T> {
     if (<u32>index >= <u32>capacity) {
       const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
       if (<u32>index >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-      buffer = reallocUnsafe(buffer, (index + 1) << alignof<T>());
+      buffer = reallocateUnsafe(buffer, (index + 1) << alignof<T>());
       this.buffer_ = buffer;
       this.length_ = index + 1;
     }
     storeUnsafe<T,T>(buffer, index, value);
+    if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
   }
 
   @operator("{}=")
   private __unchecked_set(index: i32, value: T): void {
     storeUnsafe<T,T>(this.buffer_, index, value);
+    if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
   }
 
   includes(searchElement: T, fromIndex: i32 = 0): bool {
@@ -141,11 +144,12 @@ export class Array<T> {
     if (<u32>length >= <u32>capacity) {
       const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
       if (<u32>length >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-      buffer = reallocUnsafe(buffer, newLength << alignof<T>());
+      buffer = reallocateUnsafe(buffer, newLength << alignof<T>());
       this.buffer_ = buffer;
     }
     this.length_ = newLength;
     storeUnsafe<T,T>(buffer, length, element);
+    if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(element)); // tslint:disable-line
     return newLength;
   }
 
@@ -216,9 +220,9 @@ export class Array<T> {
     var buffer = this.buffer_;
     var element = loadUnsafe<T,T>(buffer, 0);
     var lastIndex = length - 1;
-    move_memory(
-      changetype<usize>(buffer) + HEADER_SIZE_AB,
-      changetype<usize>(buffer) + HEADER_SIZE_AB + sizeof<T>(),
+    memory.copy(
+      changetype<usize>(buffer) + HEADER_SIZE,
+      changetype<usize>(buffer) + HEADER_SIZE + sizeof<T>(),
       <usize>lastIndex << alignof<T>()
     );
     storeUnsafe<T,T>(buffer, lastIndex, <T>null);
@@ -242,17 +246,18 @@ export class Array<T> {
     if (<u32>length >= <u32>capacity) {
       const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
       if (<u32>length >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-      buffer = reallocUnsafe(buffer, newLength << alignof<T>());
+      buffer = reallocateUnsafe(buffer, newLength << alignof<T>());
       capacity = buffer.byteLength >>> alignof<T>();
       this.buffer_ = buffer;
     }
-    move_memory(
-      changetype<usize>(buffer) + HEADER_SIZE_AB + sizeof<T>(),
-      changetype<usize>(buffer) + HEADER_SIZE_AB,
+    memory.copy(
+      changetype<usize>(buffer) + HEADER_SIZE + sizeof<T>(),
+      changetype<usize>(buffer) + HEADER_SIZE,
       <usize>(capacity - 1) << alignof<T>()
     );
     storeUnsafe<T,T>(buffer, 0, element);
     this.length_ = newLength;
+    if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(element)); // tslint:disable-line
     return newLength;
   }
 
@@ -267,9 +272,9 @@ export class Array<T> {
     assert(newLength >= 0);
     var sliced = new Array<T>(newLength);
     if (newLength) {
-      move_memory(
-        changetype<usize>(sliced.buffer_) + HEADER_SIZE_AB,
-        changetype<usize>(this.buffer_) + HEADER_SIZE_AB + (<usize>begin << alignof<T>()),
+      memory.copy(
+        changetype<usize>(sliced.buffer_) + HEADER_SIZE,
+        changetype<usize>(this.buffer_) + HEADER_SIZE + (<usize>begin << alignof<T>()),
         <usize>newLength << alignof<T>()
       );
     }
@@ -283,9 +288,9 @@ export class Array<T> {
     if (start >= length) return;
     deleteCount = min(deleteCount, length - start);
     var buffer = this.buffer_;
-    move_memory(
-      changetype<usize>(buffer) + HEADER_SIZE_AB + (<usize>start << alignof<T>()),
-      changetype<usize>(buffer) + HEADER_SIZE_AB + (<usize>(start + deleteCount) << alignof<T>()),
+    memory.copy(
+      changetype<usize>(buffer) + HEADER_SIZE + (<usize>start << alignof<T>()),
+      changetype<usize>(buffer) + HEADER_SIZE + (<usize>(start + deleteCount) << alignof<T>()),
       <usize>deleteCount << alignof<T>()
     );
     this.length_ = length - deleteCount;
@@ -302,6 +307,9 @@ export class Array<T> {
   }
 
   sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this {
+    // TODO remove this when flow will allow trackcing null
+    assert(comparator); // The comparison function must be a function
+
     var length = this.length_;
     if (length <= 1) return this;
     var buffer = this.buffer_;
@@ -316,13 +324,29 @@ export class Array<T> {
     }
 
     if (isReference<T>()) {
-      // TODO replace this to stable sort when it implemented
-      return changetype<this>(insertionSort<T>(this, comparator));
+      // TODO replace this to faster stable sort (TimSort) when it implemented
+      insertionSort<T>(buffer, 0, length, comparator);
+      return this;
     } else {
-      return changetype<this>(length < 256
-        ? insertionSort<T>(this, comparator)
-        : weakHeapSort<T>(this, comparator)
-      );
+      if (length < 256) {
+        insertionSort<T>(buffer, 0, length, comparator);
+      } else {
+        weakHeapSort<T>(buffer, 0, length, comparator);
+      }
+      return this;
+    }
+  }
+
+  private __gc(): void {
+    var buffer = this.buffer_;
+    __gc_mark(changetype<usize>(buffer)); // tslint:disable-line
+    if (isManaged<T>()) {
+      let offset: usize = 0;
+      let end = <usize>this.length_ << alignof<usize>();
+      while (offset < end) {
+        __gc_mark(load<usize>(changetype<usize>(buffer) + offset, HEADER_SIZE)); // tslint:disable-line
+        offset += sizeof<usize>();
+      }
     }
   }
 }

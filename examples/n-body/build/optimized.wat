@@ -10,19 +10,18 @@
  (type $iF (func (param i32) (result f64)))
  (type $iv (func (param i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (import "env" "memory" (memory $0 1))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $assembly/index/system (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 40))
- (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (export "memory" (memory $0))
  (export "init" (func $assembly/index/init))
- (export "getBody" (func $assembly/index/getBody))
  (export "step" (func $assembly/index/step))
  (export "bench" (func $assembly/index/bench))
- (export "memory" (memory $0))
+ (export "getBody" (func $assembly/index/getBody))
  (start $start)
- (func $~lib/allocator/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -116,7 +115,7 @@
    (block
     (f64.store
      (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/allocator/arena/__memory_allocate
        (i32.const 56)
       )
      )
@@ -150,7 +149,7 @@
   )
   (get_local $0)
  )
- (func $~lib/memory/set_memory (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memset (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (if
@@ -500,7 +499,7 @@
   )
   (i32.store
    (tee_local $3
-    (call $~lib/allocator/arena/allocate_memory
+    (call $~lib/allocator/arena/__memory_allocate
      (i32.shl
       (i32.const 1)
       (i32.sub
@@ -529,7 +528,7 @@
    (block
     (i32.store
      (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/allocator/arena/__memory_allocate
        (i32.const 8)
       )
      )
@@ -549,7 +548,7 @@
    (get_local $0)
    (get_local $1)
   )
-  (call $~lib/memory/set_memory
+  (call $~lib/memory/memset
    (i32.add
     (get_local $3)
     (i32.const 8)
@@ -693,7 +692,7 @@
    (block
     (i32.store
      (tee_local $2
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/allocator/arena/__memory_allocate
        (i32.const 4)
       )
      )
@@ -824,50 +823,7 @@
    )
   )
  )
- (func $assembly/index/getBody (; 7 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (tee_local $0
-   (if (result i32)
-    (i32.lt_u
-     (get_local $0)
-     (i32.load offset=4
-      (tee_local $1
-       (i32.load
-        (get_global $assembly/index/system)
-       )
-      )
-     )
-    )
-    (if (result i32)
-     (i32.lt_u
-      (get_local $0)
-      (i32.shr_u
-       (i32.load
-        (tee_local $1
-         (i32.load
-          (get_local $1)
-         )
-        )
-       )
-       (i32.const 2)
-      )
-     )
-     (i32.load offset=8
-      (i32.add
-       (get_local $1)
-       (i32.shl
-        (get_local $0)
-        (i32.const 2)
-       )
-      )
-     )
-     (unreachable)
-    )
-    (i32.const 0)
-   )
-  )
- )
- (func $assembly/index/NBodySystem#advance (; 8 ;) (type $iFv) (param $0 i32) (param $1 f64)
+ (func $assembly/index/NBodySystem#advance (; 7 ;) (type $iFv) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 f64)
   (local $4 i32)
@@ -1171,7 +1127,7 @@
    )
   )
  )
- (func $assembly/index/NBodySystem#energy (; 9 ;) (type $iF) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 8 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -1368,7 +1324,7 @@
   )
   (get_local $1)
  )
- (func $assembly/index/step (; 10 ;) (type $F) (result f64)
+ (func $assembly/index/step (; 9 ;) (type $F) (result f64)
   (call $assembly/index/NBodySystem#advance
    (get_global $assembly/index/system)
    (f64.const 0.01)
@@ -1377,7 +1333,7 @@
    (get_global $assembly/index/system)
   )
  )
- (func $assembly/index/bench (; 11 ;) (type $iv) (param $0 i32)
+ (func $assembly/index/bench (; 10 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (block $break|0
    (loop $repeat|0
@@ -1401,15 +1357,52 @@
    )
   )
  )
+ (func $assembly/index/getBody (; 11 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (tee_local $0
+   (if (result i32)
+    (i32.lt_u
+     (get_local $0)
+     (i32.load offset=4
+      (tee_local $1
+       (i32.load
+        (get_global $assembly/index/system)
+       )
+      )
+     )
+    )
+    (if (result i32)
+     (i32.lt_u
+      (get_local $0)
+      (i32.shr_u
+       (i32.load
+        (tee_local $1
+         (i32.load
+          (get_local $1)
+         )
+        )
+       )
+       (i32.const 2)
+      )
+     )
+     (i32.load offset=8
+      (i32.add
+       (get_local $1)
+       (i32.shl
+        (get_local $0)
+        (i32.const 2)
+       )
+      )
+     )
+     (unreachable)
+    )
+    (i32.const 0)
+   )
+  )
+ )
  (func $start (; 12 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.and
-    (i32.add
-     (get_global $HEAP_BASE)
-     (i32.const 7)
-    )
-    (i32.const -8)
-   )
+   (i32.const 40)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)

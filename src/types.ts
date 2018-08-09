@@ -5,7 +5,9 @@
 
 import {
   Class,
-  FunctionTarget
+  FunctionTarget,
+  Program,
+  DecoratorFlags
 } from "./program";
 
 import {
@@ -132,6 +134,15 @@ export class Type {
       case TypeKind.BOOL:
       default: return Type.i32;
     }
+  }
+
+  /** Tests if this is a managed type that needs GC hooks. */
+  isManaged(program: Program): bool {
+    if (program.hasGC) {
+      let classReference = this.classReference;
+      return classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
+    }
+    return false;
   }
 
   /** Computes the sign-extending shift in the target type. */

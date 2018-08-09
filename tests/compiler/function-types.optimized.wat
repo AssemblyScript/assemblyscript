@@ -17,34 +17,34 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $function-types/makeAdder<i32>~anonymous|0 (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-types/makeAdder<i32>~anonymous|0 (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.add
    (get_local $0)
    (get_local $1)
   )
  )
- (func $function-types/makeAdder<i32> (; 2 ;) (type $i) (result i32)
+ (func $function-types/makeAdder<i32> (; 2 ;) (; has Stack IR ;) (type $i) (result i32)
   (i32.const 0)
  )
- (func $function-types/makeAdder<i64>~anonymous|1 (; 3 ;) (type $III) (param $0 i64) (param $1 i64) (result i64)
+ (func $function-types/makeAdder<i64>~anonymous|1 (; 3 ;) (; has Stack IR ;) (type $III) (param $0 i64) (param $1 i64) (result i64)
   (i64.add
    (get_local $0)
    (get_local $1)
   )
  )
- (func $function-types/makeAdder<i64> (; 4 ;) (type $i) (result i32)
+ (func $function-types/makeAdder<i64> (; 4 ;) (; has Stack IR ;) (type $i) (result i32)
   (i32.const 1)
  )
- (func $function-types/makeAdder<f64>~anonymous|2 (; 5 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $function-types/makeAdder<f64>~anonymous|2 (; 5 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (f64.add
    (get_local $0)
    (get_local $1)
   )
  )
- (func $function-types/makeAdder<f64> (; 6 ;) (type $i) (result i32)
+ (func $function-types/makeAdder<f64> (; 6 ;) (; has Stack IR ;) (type $i) (result i32)
   (i32.const 2)
  )
- (func $function-types/doAddWithFn<i32> (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/doAddWithFn<i32> (; 7 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (set_global $~argc
    (i32.const 2)
   )
@@ -54,7 +54,7 @@
    (get_local $2)
   )
  )
- (func $function-types/doAdd<i32> (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-types/doAdd<i32> (; 8 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (set_global $~argc
    (i32.const 2)
   )
@@ -64,11 +64,11 @@
    (call $function-types/makeAdder<i32>)
   )
  )
- (func $function-types/makeAndAdd<i32>|trampoline (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/makeAndAdd<i32>|trampoline (; 9 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $1of1
    (block $0of1
-    (block $oob
-     (br_table $0of1 $1of1 $oob
+    (block $outOfRange
+     (br_table $0of1 $1of1 $outOfRange
       (i32.sub
        (get_global $~argc)
        (i32.const 2)
@@ -87,7 +87,7 @@
    (get_local $2)
   )
  )
- (func $start (; 10 ;) (type $v)
+ (func $start (; 10 ;) (; has Stack IR ;) (type $v)
   (set_global $function-types/i32Adder
    (call $function-types/makeAdder<i32>)
   )

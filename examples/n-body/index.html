@@ -39,7 +39,10 @@ ctx.imageSmoothingEnabled = false;
 fetch("build/optimized.wasm")
 .then(response => response.arrayBuffer())
 .then(buffer => WebAssembly.instantiate(buffer, {
-  env: { abort: function() {} }
+  env: {
+    memory: new WebAssembly.Memory({ initial: 1 }),
+    abort: function() { throw Error("abort called"); }
+  }
 }))
 .then(module => {
   var exports = module.instance.exports;

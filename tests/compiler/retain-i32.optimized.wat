@@ -9,10 +9,10 @@
  (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $retain-i32/test (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $retain-i32/test (; 1 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (nop)
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 2 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (call $retain-i32/test
    (i32.const 0)

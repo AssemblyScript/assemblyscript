@@ -42,6 +42,8 @@ import {
   Expression,
   AssertionKind,
   CallExpression,
+  ClassExpression,
+  FunctionExpression,
   IdentifierExpression,
   StringLiteralExpression,
 
@@ -60,7 +62,6 @@ import {
   ExportStatement,
   ExpressionStatement,
   ForStatement,
-  FunctionExpression,
   FunctionDeclaration,
   IfStatement,
   ImportDeclaration,
@@ -84,8 +85,6 @@ import {
   nodeIsCallable,
   nodeIsGenericCallable
 } from "./ast";
-
-const builtinsFile = LIBRARY_PREFIX + "builtins.ts";
 
 /** Parser interface. */
 export class Parser extends DiagnosticEmitter {
@@ -134,11 +133,6 @@ export class Parser extends DiagnosticEmitter {
     var program = this.program;
     program.sources.push(source);
 
-    // mark the special builtins library file
-    if (source.normalizedPath == builtinsFile) {
-      source.set(CommonFlags.BUILTIN);
-    }
-
     // tokenize and parse
     var tn = new Tokenizer(source, program.diagnostics);
     tn.onComment = this.onComment;
@@ -174,9 +168,6 @@ export class Parser extends DiagnosticEmitter {
       if (!decorators) decorators = [];
       decorators.push(decorator);
     }
-
-    // mark builtins
-    flags |= (tn.source.flags & CommonFlags.BUILTIN);
 
     // check modifiers
     var exportStart: i32 = 0;
@@ -1543,6 +1534,49 @@ export class Parser extends DiagnosticEmitter {
     return declaration;
   }
 
+  parseClassExpression(tn: Tokenizer): ClassExpression | null {
+
+    // at 'class': Identifier? '{' ... '}'
+
+    var startPos = tn.tokenPos;
+    var name: IdentifierExpression;
+
+    if (tn.skipIdentifier()) {
+      name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    } else {
+      name = Node.createEmptyIdentifierExpression(tn.range(tn.pos));
+    }
+
+    if (!tn.skip(Token.OPENBRACE)) {
+      this.error(
+        DiagnosticCode._0_expected,
+        tn.range(tn.pos), "{"
+      );
+      return null;
+    }
+
+    var members = new Array<DeclarationStatement>();
+    var declaration = Node.createClassDeclaration(
+      name,
+      [],
+      null,
+      null,
+      members,
+      null,
+      CommonFlags.NONE,
+      tn.range(startPos, tn.pos)
+    );
+    if (!tn.skip(Token.CLOSEBRACE)) {
+      do {
+        let member = this.parseClassMember(tn, declaration);
+        if (!member) return null;
+        member.parent = declaration;
+        members.push(<DeclarationStatement>member);
+      } while (!tn.skip(Token.CLOSEBRACE));
+    }
+    return Node.createClassExpression(declaration);
+  }
+
   parseClassMember(
     tn: Tokenizer,
     parent: ClassDeclaration
@@ -1556,21 +1590,50 @@ export class Parser extends DiagnosticEmitter {
     //   Identifier ...
 
     var startPos = tn.pos;
+    var isInterface = parent.kind == NodeKind.INTERFACEDECLARATION;
 
     var decorators = new Array<DecoratorNode>();
     while (tn.skip(Token.AT)) {
       let decorator = this.parseDecorator(tn);
       if (!decorator) break;
+      if (isInterface) {
+        this.error(
+          DiagnosticCode.Decorators_are_not_valid_here,
+          decorator.range
+        );
+      }
       decorators.push(<DecoratorNode>decorator);
     }
 
-    var flags = parent.flags & CommonFlags.AMBIENT; // inherit
+    // inherit ambient status
+    var flags = parent.flags & CommonFlags.AMBIENT;
+
+    // implemented methods are virtual
+    if (isInterface) flags |= CommonFlags.VIRTUAL;
 
     if (tn.skip(Token.PUBLIC)) {
+      if (isInterface) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "public"
+        );
+      }
       flags |= CommonFlags.PUBLIC;
     } else if (tn.skip(Token.PRIVATE)) {
+      if (isInterface) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "private"
+        );
+      }
       flags |= CommonFlags.PRIVATE;
     } else if (tn.skip(Token.PROTECTED)) {
+      if (isInterface) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "protected"
+        );
+      }
       flags |= CommonFlags.PROTECTED;
     }
 
@@ -1579,16 +1642,27 @@ export class Parser extends DiagnosticEmitter {
     var abstractStart: i32 = 0;
     var abstractEnd: i32 = 0;
     if (tn.skip(Token.STATIC)) {
+      if (isInterface) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "static"
+        );
+      }
       flags |= CommonFlags.STATIC;
       staticStart = tn.tokenPos;
       staticEnd = tn.pos;
     } else {
+      flags |= CommonFlags.INSTANCE;
       if (tn.skip(Token.ABSTRACT)) {
-        flags |= (CommonFlags.ABSTRACT | CommonFlags.INSTANCE);
+        if (isInterface) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(), "abstract"
+          );
+        }
+        flags |= CommonFlags.ABSTRACT;
         abstractStart = tn.tokenPos;
         abstractEnd = tn.pos;
-      } else {
-        flags |= CommonFlags.INSTANCE;
       }
       if (parent.flags & CommonFlags.GENERIC) {
         flags |= CommonFlags.GENERIC_CONTEXT;
@@ -1612,56 +1686,58 @@ export class Parser extends DiagnosticEmitter {
     var isSetter = false;
     var setStart: i32 = 0;
     var setEnd: i32 = 0;
-    if (tn.skip(Token.GET)) {
-      if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-        flags |= CommonFlags.GET;
-        isGetter = true;
-        setStart = tn.tokenPos;
-        setEnd = tn.pos;
+    if (!isInterface) {
+      if (tn.skip(Token.GET)) {
+        if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
+          flags |= CommonFlags.GET;
+          isGetter = true;
+          setStart = tn.tokenPos;
+          setEnd = tn.pos;
+          if (flags & CommonFlags.READONLY) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_be_used_here,
+              tn.range(readonlyStart, readonlyEnd), "readonly"
+            ); // recoverable
+          }
+        } else {
+          tn.reset(state);
+        }
+      } else if (tn.skip(Token.SET)) {
+        if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
+          flags |= CommonFlags.SET | CommonFlags.SET;
+          isSetter = true;
+          setStart = tn.tokenPos;
+          setEnd = tn.pos;
+          if (flags & CommonFlags.READONLY) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_be_used_here,
+              tn.range(readonlyStart, readonlyEnd), "readonly"
+            ); // recoverable
+          }
+        } else {
+          tn.reset(state);
+        }
+      } else if (tn.skip(Token.CONSTRUCTOR)) {
+        flags |= CommonFlags.CONSTRUCTOR;
+        isConstructor = true;
+        if (flags & CommonFlags.STATIC) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(staticStart, staticEnd), "static"
+          ); // recoverable
+        }
+        if (flags & CommonFlags.ABSTRACT) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(abstractStart, abstractEnd), "abstract"
+          ); // recoverable
+        }
         if (flags & CommonFlags.READONLY) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(readonlyStart, readonlyEnd), "readonly"
           ); // recoverable
         }
-      } else {
-        tn.reset(state);
-      }
-    } else if (tn.skip(Token.SET)) {
-      if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-        flags |= CommonFlags.SET | CommonFlags.SET;
-        isSetter = true;
-        setStart = tn.tokenPos;
-        setEnd = tn.pos;
-        if (flags & CommonFlags.READONLY) {
-          this.error(
-            DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(readonlyStart, readonlyEnd), "readonly"
-          ); // recoverable
-        }
-      } else {
-        tn.reset(state);
-      }
-    } else if (tn.skip(Token.CONSTRUCTOR)) {
-      flags |= CommonFlags.CONSTRUCTOR;
-      isConstructor = true;
-      if (flags & CommonFlags.STATIC) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(staticStart, staticEnd), "static"
-        ); // recoverable
-      }
-      if (flags & CommonFlags.ABSTRACT) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(abstractStart, abstractEnd), "abstract"
-        ); // recoverable
-      }
-      if (flags & CommonFlags.READONLY) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(readonlyStart, readonlyEnd), "readonly"
-        ); // recoverable
       }
     }
 
@@ -1787,10 +1863,15 @@ export class Parser extends DiagnosticEmitter {
             DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts,
             tn.range()
           ); // recoverable
+        } else if (flags & CommonFlags.ABSTRACT) {
+          this.error(
+            DiagnosticCode.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract,
+            tn.range(), name.text
+          ); // recoverable
         }
         body = this.parseBlockStatement(tn, false);
         if (!body) return null;
-      } else if (!(flags & CommonFlags.AMBIENT)) {
+      } else if (!(flags & CommonFlags.AMBIENT) && !isInterface) {
         this.error(
           DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
           tn.range()
@@ -2305,6 +2386,7 @@ export class Parser extends DiagnosticEmitter {
       let state = tn.mark();
       let statement = this.parseStatement(tn, topLevel);
       if (!statement) {
+        if (tn.token == Token.ENDOFFILE) return null;
         tn.reset(state);
         this.skipStatement(tn);
       } else {
@@ -2829,20 +2911,8 @@ export class Parser extends DiagnosticEmitter {
 
     var token = tn.next(IdentifierHandling.PREFER);
     var startPos = tn.tokenPos;
-    var expr: Expression | null = null;
-
-    if (token == Token.NULL) {
-      return Node.createNullExpression(tn.range());
-    }
-    if (token == Token.TRUE) {
-      return Node.createTrueExpression(tn.range());
-    }
-    if (token == Token.FALSE) {
-      return Node.createFalseExpression(tn.range());
-    }
-
     var precedence = determinePrecedenceStart(token);
-    if (precedence != Precedence.INVALID) {
+    if (precedence != Precedence.NONE) {
       let operand: Expression | null;
 
       // TODO: SpreadExpression, YieldExpression (currently become unsupported UnaryPrefixExpressions)
@@ -2886,7 +2956,12 @@ export class Parser extends DiagnosticEmitter {
       return Node.createUnaryPrefixExpression(token, operand, tn.range(startPos, tn.pos));
     }
 
+    var expr: Expression | null = null;
     switch (token) {
+
+      case Token.NULL: return Node.createNullExpression(tn.range());
+      case Token.TRUE: return Node.createTrueExpression(tn.range());
+      case Token.FALSE: return Node.createFalseExpression(tn.range());
 
       // ParenthesizedExpression
       // FunctionExpression
@@ -2989,6 +3064,54 @@ export class Parser extends DiagnosticEmitter {
         }
         return Node.createArrayLiteralExpression(elementExpressions, tn.range(startPos, tn.pos));
       }
+      // ObjectLiteralExpression
+      case Token.OPENBRACE: {
+        let startPos = tn.tokenPos;
+        let names = new Array<IdentifierExpression>();
+        let values = new Array<Expression>();
+        let name: IdentifierExpression;
+        while (!tn.skip(Token.CLOSEBRACE)) {
+          if (!tn.skipIdentifier()) {
+            if (!tn.skip(Token.STRINGLITERAL)) {
+              this.error(
+                DiagnosticCode.Identifier_expected,
+                tn.range(),
+              );
+              return null;
+            }
+            name = Node.createIdentifierExpression(tn.readString(), tn.range());
+            name.set(CommonFlags.QUOTED);
+          } else {
+            name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+          }
+          names.push(name);
+          if (tn.skip(Token.COLON)) {
+            let value = this.parseExpression(tn, Precedence.COMMA + 1);
+            if (!value) return null;
+            values.push(value);
+          } else if (!name.is(CommonFlags.QUOTED)) {
+            values.push(name);
+          } else {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), ":"
+            );
+            return null;
+          }
+          if (!tn.skip(Token.COMMA)) {
+            if (tn.skip(Token.CLOSEBRACE)) {
+              break;
+            } else {
+              this.error(
+                DiagnosticCode._0_expected,
+                tn.range(), "}"
+              );
+              return null;
+            }
+          }
+        }
+        return Node.createObjectLiteralExpression(names, values, tn.range(startPos, tn.pos));
+      }
       // AssertionExpression (unary prefix)
       case Token.LESSTHAN: {
         let toType = this.parseType(tn);
@@ -3050,11 +3173,21 @@ export class Parser extends DiagnosticEmitter {
       case Token.FUNCTION: {
         return this.parseFunctionExpression(tn);
       }
+      case Token.CLASS: {
+        return this.parseClassExpression(tn);
+      }
       default: {
-        this.error(
-          DiagnosticCode.Expression_expected,
-          tn.range()
-        );
+        if (token == Token.ENDOFFILE) {
+          this.error(
+            DiagnosticCode.Unexpected_end_of_text,
+            tn.range(startPos)
+          );
+        } else {
+          this.error(
+            DiagnosticCode.Expression_expected,
+            tn.range()
+          );
+        }
         return null;
       }
     }
@@ -3115,8 +3248,9 @@ export class Parser extends DiagnosticEmitter {
 
   parseExpression(
     tn: Tokenizer,
-    precedence: Precedence = 0
+    precedence: Precedence = Precedence.COMMA
   ): Expression | null {
+    assert(precedence != Precedence.NONE);
 
     var expr = this.parseExpressionStart(tn);
     if (!expr) return null;
@@ -3216,7 +3350,10 @@ export class Parser extends DiagnosticEmitter {
             );
             return null;
           }
-          let ifElse = this.parseExpression(tn, precedence > Precedence.COMMA ? Precedence.COMMA + 1 : 0);
+          let ifElse = this.parseExpression(tn, precedence > Precedence.COMMA
+            ? Precedence.COMMA + 1
+            : Precedence.COMMA
+          );
           if (!ifElse) return null;
           expr = Node.createTernaryExpression(
             expr,
@@ -3324,23 +3461,53 @@ export class Parser extends DiagnosticEmitter {
   }
 
   /** Skips over a block on errors in an attempt to reduce unnecessary diagnostic noise. */
-  // skipBlock(tn: Tokenizer): void {
-  //   var depth = 0;
-  //   var token: Token;
-  //   do {
-  //     token = tn.next();
-  //     if (token == Token.OPENBRACE) {
-  //       ++depth;
-  //     } else if (token == Token.CLOSEBRACE) {
-  //       if (depth) --depth;
-  //       if (!depth) break; // done
-  //     }
-  //   } while (token != Token.ENDOFFILE);
-  // }
+  skipBlock(tn: Tokenizer): void {
+    // at '{': ... '}'
+    var depth = 1;
+    var again = true;
+    do {
+      switch (tn.next()) {
+        case Token.ENDOFFILE: {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), "}"
+          );
+          again = false;
+          break;
+        }
+        case Token.OPENBRACE: {
+          ++depth;
+          break;
+        }
+        case Token.CLOSEBRACE: {
+          --depth;
+          if (!depth) again = false;
+          break;
+        }
+        case Token.IDENTIFIER: {
+          tn.readIdentifier();
+          break;
+        }
+        case Token.STRINGLITERAL: {
+          tn.readString();
+          break;
+        }
+        case Token.INTEGERLITERAL: {
+          tn.readInteger();
+          break;
+        }
+        case Token.FLOATLITERAL: {
+          tn.readFloat();
+          break;
+        }
+      }
+    } while (again);
+  }
 }
 
 /** Operator precedence from least to largest. */
 export const enum Precedence {
+  NONE,
   COMMA,
   SPREAD,
   YIELD,
@@ -3361,8 +3528,7 @@ export const enum Precedence {
   UNARY_POSTFIX,
   CALL,
   MEMBERACCESS,
-  GROUPING,
-  INVALID = -1
+  GROUPING
 }
 
 /** Determines the precedence of a starting token. */
@@ -3380,8 +3546,8 @@ function determinePrecedenceStart(kind: Token): Precedence {
     case Token.VOID:
     case Token.DELETE: return Precedence.UNARY_PREFIX;
     case Token.NEW: return Precedence.MEMBERACCESS;
-    default: return Precedence.INVALID;
   }
+  return Precedence.NONE;
 }
 
 /** Determines the precende of a non-starting token. */
@@ -3432,8 +3598,8 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.DOT:
     case Token.NEW:
     case Token.OPENBRACKET: return Precedence.MEMBERACCESS;
-    default: return Precedence.INVALID;
   }
+  return Precedence.NONE;
 }
 
 /** Determines whether a non-starting token is right associative. */

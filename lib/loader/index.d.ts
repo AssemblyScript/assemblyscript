@@ -44,8 +44,8 @@ export declare function instantiate<T extends {}>(module: WebAssembly.Module, im
 /** Instantiates an AssemblyScript module from a buffer using the specified imports. */
 export declare function instantiateBuffer<T extends {}>(buffer: Uint8Array, imports?: ImportsObject): ASUtil & T;
 
-/** Instantiates an AssemblyScript module from a response using the sspecified imports. */
-export declare function instantiateStreaming<T extends {}>(response: Response, imports?: ImportsObject): Promise<ASUtil & T>;
+/** Instantiates an AssemblyScript module from a response using the specified imports. */
+export declare function instantiateStreaming<T extends {}>(result: Promise<Response>, imports?: ImportsObject): Promise<ASUtil & T>;
 
 /** Demangles an AssemblyScript module's exports to a friendly object structure. */
 export declare function demangle<T extends {}>(exports: {}): T;

@@ -8,10 +8,10 @@
  (global $class/Animal.ONE (mut i32) (i32.const 1))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s")
- (export "test" (func $class/test))
  (export "memory" (memory $0))
+ (export "test" (func $class/test))
  (start $start)
- (func $class/Animal.add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $class/Animal.add (; 0 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.add
    (i32.add
     (get_local $0)
@@ -20,7 +20,7 @@
    (get_global $class/Animal.ONE)
   )
  )
- (func $class/Animal.sub<f32> (; 1 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $class/Animal.sub<f32> (; 1 ;) (; has Stack IR ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (f32.add
    (f32.sub
     (get_local $0)
@@ -31,7 +31,7 @@
    )
   )
  )
- (func $class/Animal<f64>#instanceAdd (; 2 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $class/Animal<f64>#instanceAdd (; 2 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.add
    (i32.add
     (get_local $1)
@@ -40,7 +40,7 @@
    (get_global $class/Animal.ONE)
   )
  )
- (func $class/Animal<f64>#instanceSub<f32> (; 3 ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
+ (func $class/Animal<f64>#instanceSub<f32> (; 3 ;) (; has Stack IR ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
   (f32.add
    (f32.sub
     (get_local $1)
@@ -51,7 +51,7 @@
    )
   )
  )
- (func $class/test (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $class/test (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (drop
    (call $class/Animal<f64>#instanceAdd
     (get_local $0)
@@ -95,7 +95,7 @@
   )
   (get_local $0)
  )
- (func $start (; 5 ;) (type $v)
+ (func $start (; 5 ;) (; has Stack IR ;) (type $v)
   (drop
    (call $class/Animal.add
     (i32.const 1)

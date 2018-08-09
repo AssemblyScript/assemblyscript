@@ -1,10 +1,16 @@
 import {
-  HEADER_SIZE as HEADER_SIZE_AB,
-  MAX_BLENGTH,
-  allocUnsafe,
+  HEADER_SIZE as AB_HEADER_SIZE,
+  MAX_BLENGTH as AB_MAX_BLENGTH,
+  allocateUnsafe,
   loadUnsafeWithOffset,
   storeUnsafeWithOffset
 } from "./arraybuffer";
+
+import {
+  insertionSort,
+  weakHeapSort,
+  defaultComparator
+} from "./array";
 
 /** Typed array base class. Not a global object. */
 export abstract class TypedArray<T,V> {
@@ -14,16 +20,17 @@ export abstract class TypedArray<T,V> {
   readonly byteLength: i32;
 
   constructor(length: i32) {
-    const MAX_LENGTH = <u32>MAX_BLENGTH / sizeof<T>();
+    const MAX_LENGTH = <u32>AB_MAX_BLENGTH / sizeof<T>();
     if (<u32>length > MAX_LENGTH) throw new RangeError("Invalid typed array length");
     var byteLength = length << alignof<T>();
-    var buffer = allocUnsafe(byteLength);
-    set_memory(changetype<usize>(buffer) + HEADER_SIZE_AB, 0, <usize>byteLength);
+    var buffer = allocateUnsafe(byteLength);
+    memory.fill(changetype<usize>(buffer) + AB_HEADER_SIZE, 0, <usize>byteLength);
     this.buffer = buffer;
     this.byteOffset = 0;
     this.byteLength = byteLength;
   }
 
+  @inline
   get length(): i32 {
     return (this.byteLength - this.byteOffset) >> alignof<T>();
   }
@@ -36,7 +43,7 @@ export abstract class TypedArray<T,V> {
     return loadUnsafeWithOffset<T,T>(this.buffer, index, byteOffset);
   }
 
-  @operator("{}")
+  @inline @operator("{}")
   protected __unchecked_get(index: i32): T {
     return loadUnsafeWithOffset<T,T>(this.buffer, index, this.byteOffset);
   }
@@ -49,7 +56,7 @@ export abstract class TypedArray<T,V> {
     storeUnsafeWithOffset<T,V>(this.buffer, index, value, byteOffset);
   }
 
-  @operator("{}=")
+  @inline @operator("{}=")
   protected __unchecked_set(index: i32, value: V): void {
     storeUnsafeWithOffset<T,V>(this.buffer, index, value, this.byteOffset);
   }
@@ -63,10 +70,39 @@ export abstract class TypedArray<T,V> {
     else begin = min(begin, length);
     if (end < 0) end = max(length + end, begin);
     else end = max(min(end, length), begin);
-    var slice = allocate_memory(offsetof<this>());
+    var slice = memory.allocate(offsetof<this>());
     store<usize>(slice, this.buffer, offsetof<this>("buffer"));
     store<i32>(slice, begin << alignof<T>(), offsetof<this>("byteOffset"));
     store<i32>(slice, end << alignof<T>(), offsetof<this>("byteLength"));
     return changetype<this>(slice);
+  }
+
+  sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this {
+    var byteOffset = this.byteOffset;
+    var length = this.length;
+    if (length <= 1) return this;
+    var buffer = this.buffer;
+    if (length == 2) {
+      let a = loadUnsafeWithOffset<T,T>(buffer, 1, byteOffset);
+      let b = loadUnsafeWithOffset<T,T>(buffer, 0, byteOffset);
+      if (comparator(a, b) < 0) {
+        storeUnsafeWithOffset<T,T>(buffer, 1, b, byteOffset);
+        storeUnsafeWithOffset<T,T>(buffer, 0, a, byteOffset);
+      }
+      return this;
+    }
+
+    if (isReference<T>()) {
+      // TODO replace this to faster stable sort (TimSort) when it implemented
+      insertionSort<T>(buffer, byteOffset, length, comparator);
+      return this;
+    } else {
+      if (length < 256) {
+        insertionSort<T>(buffer, byteOffset, length, comparator);
+      } else {
+        weakHeapSort<T>(buffer, byteOffset, length, comparator);
+      }
+      return this;
+    }
   }
 }

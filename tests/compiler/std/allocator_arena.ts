@@ -1,27 +1,25 @@
 import "allocator/arena";
 
 const size: usize = 42;
-let ptr1: usize = allocate_memory(size);
-let ptr2: usize = allocate_memory(size);
+var ptr1: usize = memory.allocate(size);
+var ptr2: usize = memory.allocate(size);
 
 assert(ptr1 != ptr2);
 
-set_memory(ptr1, 0x12, size);
+memory.fill(ptr1, 0x12, size);
 
-let i: usize;
-for (i = 0; i < size; ++i)
-  assert(load<u8>(ptr1 + i) == 0x12);
+var i: usize;
+for (i = 0; i < size; ++i) assert(load<u8>(ptr1 + i) == 0x12);
 
-move_memory(ptr2, ptr1, size);
+memory.copy(ptr2, ptr1, size);
 
-for (i = 0; i < size; ++i)
-  assert(load<u8>(ptr2 + i) == 0x12);
+for (i = 0; i < size; ++i) assert(load<u8>(ptr2 + i) == 0x12);
 
-assert(compare_memory(ptr1, ptr2, size) == 0);
+assert(memory.compare(ptr1, ptr2, size) == 0);
 
-free_memory(ptr1);
-free_memory(ptr2);
+memory.free(ptr1);
+memory.free(ptr2);
 
-reset_memory();
-ptr1 = allocate_memory(size);
+memory.reset();
+ptr1 = memory.allocate(size);
 assert(ptr1 == ((HEAP_BASE + 7) & ~7));

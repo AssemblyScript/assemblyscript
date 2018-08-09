@@ -1,5 +1,5 @@
 import {
-  HEADER_SIZE as HEADER_SIZE_STR
+  HEADER_SIZE as STRING_HEADER_SIZE
 } from "./string";
 
 /** Computes the 32-bit hash of a value of any type. */
@@ -66,7 +66,7 @@ function hash64(key: u64): u32 {
 function hashStr(key: string): u32 {
   var v = FNV_OFFSET;
   for (let i: usize = 0, k: usize = key.length << 1; i < k; ++i) {
-    v = (v ^ <u32>load<u8>(changetype<usize>(key) + i, HEADER_SIZE_STR)) * FNV_PRIME;
+    v = (v ^ <u32>load<u8>(changetype<usize>(key) + i, STRING_HEADER_SIZE)) * FNV_PRIME;
   }
   return v;
 }

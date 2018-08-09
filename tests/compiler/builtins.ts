@@ -22,6 +22,13 @@ assert(!isString(1));
 assert(isArray(changetype<i32[]>(null)));
 assert(!isArray(changetype<usize>(null)));
 
+// evaluation
+
+assert(isDefined(b));
+assert(!isDefined(c));
+assert(isConstant(1));
+assert(!isConstant(b));
+
 // integers
 
 var i: i32;
@@ -212,11 +219,11 @@ F = reinterpret<f64>(25);
 
 var s: usize;
 
-current_memory();
-grow_memory(1); // also necessary for load/store tests below
+memory.size();
+memory.grow(1); // also necessary for load/store tests below
 
-s = current_memory();
-s = grow_memory(1);
+s = memory.size();
+s = memory.grow(1);
 
 // other
 

@@ -12,7 +12,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $call-optional/opt (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $call-optional/opt (; 1 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.add
    (i32.add
     (get_local $0)
@@ -21,12 +21,12 @@
    (get_local $2)
   )
  )
- (func $call-optional/opt|trampoline (; 2 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $call-optional/opt|trampoline (; 2 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (block $2of2
    (block $1of2
     (block $0of2
-     (block $oob
-      (br_table $0of2 $1of2 $2of2 $oob
+     (block $outOfRange
+      (br_table $0of2 $1of2 $2of2 $outOfRange
        (i32.sub
         (get_global $~argc)
         (i32.const 1)
@@ -49,7 +49,7 @@
    (get_local $2)
   )
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (; has Stack IR ;) (type $v)
   (set_global $~argc
    (i32.const 1)
   )

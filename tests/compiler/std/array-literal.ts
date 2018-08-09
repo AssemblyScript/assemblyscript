@@ -1,17 +1,32 @@
 import "allocator/arena";
 
-const staticArray: i32[] = [0, 1, 2];
-assert(staticArray.length == 3);
-assert(staticArray[0] == 0);
-assert(staticArray[1] == 1);
-assert(staticArray[2] == 2);
+const staticArrayI8: i8[] = [0, 1, 2];
+assert(staticArrayI8.length == 3);
+assert(staticArrayI8[0] == 0);
+assert(staticArrayI8[1] == 1);
+assert(staticArrayI8[2] == 2);
 
-var emptyArray: i32[] = []; // not static atm
-assert(emptyArray.length == 0);
+const staticArrayI32: i32[] = [0, 1, 2];
+assert(staticArrayI32.length == 3);
+assert(staticArrayI32[0] == 0);
+assert(staticArrayI32[1] == 1);
+assert(staticArrayI32[2] == 2);
+
+var emptyArrayI32: i32[] = []; // static
+assert(emptyArrayI32.length == 0);
 
 var i = 0;
-var dynamicArray: i32[] = [i, ++i, ++i];
-assert(dynamicArray.length == 3);
-assert(dynamicArray[0] == 0);
-assert(dynamicArray[1] == 1);
-assert(dynamicArray[2] == 2);
+
+var dynamicArrayI8: i8[] = [<i8>i, <i8>++i, <i8>++i];
+assert(dynamicArrayI8.length == 3);
+assert(dynamicArrayI8[0] == 0);
+assert(dynamicArrayI8[1] == 1);
+assert(dynamicArrayI8[2] == 2);
+
+i = 0;
+
+var dynamicArrayI32: i32[] = [i, ++i, ++i];
+assert(dynamicArrayI32.length == 3);
+assert(dynamicArrayI32[0] == 0);
+assert(dynamicArrayI32[1] == 1);
+assert(dynamicArrayI32[2] == 2);

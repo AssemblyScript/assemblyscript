@@ -20,100 +20,103 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 136))
  (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 52) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 112) "\n\00\00\00s\00t\00d\00/\00m\00a\00p\00.\00t\00s")
+ (data (i32.const 56) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 120) "\n\00\00\00s\00t\00d\00/\00m\00a\00p\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/allocator/arena/allocate_memory (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (if
-   (get_local $0)
-   (block
+   (i32.gt_u
+    (get_local $0)
+    (i32.const 1073741824)
+   )
+   (unreachable)
+  )
+  (if
+   (i32.gt_u
+    (tee_local $2
+     (i32.and
+      (i32.add
+       (i32.add
+        (tee_local $1
+         (get_global $~lib/allocator/arena/offset)
+        )
+        (select
+         (get_local $0)
+         (i32.const 1)
+         (i32.gt_u
+          (get_local $0)
+          (i32.const 1)
+         )
+        )
+       )
+       (i32.const 7)
+      )
+      (i32.const -8)
+     )
+    )
+    (i32.shl
+     (tee_local $3
+      (current_memory)
+     )
+     (i32.const 16)
+    )
+   )
+   (if
+    (i32.lt_s
+     (grow_memory
+      (select
+       (get_local $3)
+       (tee_local $0
+        (i32.shr_u
+         (i32.and
+          (i32.add
+           (i32.sub
+            (get_local $2)
+            (get_local $1)
+           )
+           (i32.const 65535)
+          )
+          (i32.const -65536)
+         )
+         (i32.const 16)
+        )
+       )
+       (i32.gt_s
+        (get_local $3)
+        (get_local $0)
+       )
+      )
+     )
+     (i32.const 0)
+    )
     (if
-     (i32.gt_u
-      (get_local $0)
-      (i32.const 1073741824)
+     (i32.lt_s
+      (grow_memory
+       (get_local $0)
+      )
+      (i32.const 0)
      )
      (unreachable)
     )
-    (if
-     (i32.gt_u
-      (tee_local $0
-       (i32.and
-        (i32.add
-         (i32.add
-          (tee_local $1
-           (get_global $~lib/allocator/arena/offset)
-          )
-          (get_local $0)
-         )
-         (i32.const 7)
-        )
-        (i32.const -8)
-       )
-      )
-      (i32.shl
-       (tee_local $2
-        (current_memory)
-       )
-       (i32.const 16)
-      )
-     )
-     (if
-      (i32.lt_s
-       (grow_memory
-        (select
-         (get_local $2)
-         (tee_local $3
-          (i32.shr_u
-           (i32.and
-            (i32.add
-             (i32.sub
-              (get_local $0)
-              (get_local $1)
-             )
-             (i32.const 65535)
-            )
-            (i32.const -65536)
-           )
-           (i32.const 16)
-          )
-         )
-         (i32.gt_s
-          (get_local $2)
-          (get_local $3)
-         )
-        )
-       )
-       (i32.const 0)
-      )
-      (if
-       (i32.lt_s
-        (grow_memory
-         (get_local $3)
-        )
-        (i32.const 0)
-       )
-       (unreachable)
-      )
-     )
-    )
-    (set_global $~lib/allocator/arena/offset
-     (get_local $0)
-    )
-    (return
-     (get_local $1)
-    )
    )
   )
-  (i32.const 0)
+  (set_global $~lib/allocator/arena/offset
+   (get_local $2)
+  )
+  (get_local $1)
  )
- (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+  (call $~lib/allocator/arena/__memory_allocate
+   (get_local $0)
+  )
+ )
+ (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.shl
    (i32.const 1)
    (i32.sub
@@ -127,7 +130,7 @@
    )
   )
  )
- (func $~lib/internal/arraybuffer/allocUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.gt_u
@@ -137,8 +140,8 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 52)
-     (i32.const 22)
+     (i32.const 56)
+     (i32.const 23)
      (i32.const 2)
     )
     (unreachable)
@@ -146,7 +149,7 @@
   )
   (i32.store
    (tee_local $1
-    (call $~lib/allocator/arena/allocate_memory
+    (call $~lib/allocator/arena/__memory_allocate
      (call $~lib/internal/arraybuffer/computeSize
       (get_local $0)
      )
@@ -156,7 +159,7 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/set_memory (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 5 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (if
@@ -486,7 +489,7 @@
    )
   )
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 6 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (if
    (i32.gt_u
@@ -504,7 +507,7 @@
    )
   )
   (set_local $3
-   (call $~lib/internal/arraybuffer/allocUnsafe
+   (call $~lib/internal/arraybuffer/allocateUnsafe
     (get_local $1)
    )
   )
@@ -515,7 +518,7 @@
      (i32.const 1)
     )
    )
-   (call $~lib/memory/set_memory
+   (call $~lib/internal/memory/memset
     (i32.add
      (get_local $3)
      (i32.const 8)
@@ -526,7 +529,7 @@
   )
   (get_local $3)
  )
- (func $~lib/map/Map<i8,i32>#clear (; 6 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<i8,i32>#clear (; 7 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -560,7 +563,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i8,i32>#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#constructor (; 8 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -568,7 +571,7 @@
    (block
     (i32.store
      (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/memory/memory.allocate
        (i32.const 24)
       )
      )
@@ -601,7 +604,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/hash/hash8 (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash8 (; 9 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.mul
    (i32.xor
     (get_local $0)
@@ -610,7 +613,7 @@
    (i32.const 16777619)
   )
  )
- (func $~lib/map/Map<i8,i32>#find (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#find (; 10 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (set_local $2
    (i32.load offset=8
     (i32.add
@@ -676,7 +679,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<i8,i32>#has (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#has (; 11 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<i8,i32>#find
     (get_local $0)
@@ -694,7 +697,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i8,i32>#rehash (; 11 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>#rehash (; 12 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -857,7 +860,7 @@
    )
   )
  )
- (func $~lib/map/Map<i8,i32>#set (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i8,i32>#set (; 13 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1000,7 +1003,7 @@
    )
   )
  )
- (func $~lib/map/Map<i8,i32>#get (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#get (; 14 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
@@ -1025,12 +1028,12 @@
    )
   )
  )
- (func $~lib/map/Map<i8,i32>#get:size (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#get:size (; 15 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=20
    (get_local $0)
   )
  )
- (func $~lib/map/Map<i8,i32>#delete (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#delete (; 16 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eqz
@@ -1131,7 +1134,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<i8,i32> (; 16 ;) (type $v)
+ (func $std/map/test<i8,i32> (; 17 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
@@ -1155,7 +1158,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 8)
        (i32.const 4)
       )
@@ -1186,7 +1189,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 10)
        (i32.const 4)
       )
@@ -1213,7 +1216,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 11)
        (i32.const 4)
       )
@@ -1241,7 +1244,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 13)
      (i32.const 2)
     )
@@ -1269,7 +1272,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 17)
        (i32.const 4)
       )
@@ -1296,7 +1299,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 18)
        (i32.const 4)
       )
@@ -1327,7 +1330,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 20)
        (i32.const 4)
       )
@@ -1354,7 +1357,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 21)
        (i32.const 4)
       )
@@ -1382,7 +1385,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 23)
      (i32.const 2)
     )
@@ -1410,7 +1413,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 27)
        (i32.const 4)
       )
@@ -1437,7 +1440,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 28)
        (i32.const 4)
       )
@@ -1458,7 +1461,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 30)
        (i32.const 4)
       )
@@ -1486,7 +1489,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 32)
      (i32.const 2)
     )
@@ -1512,7 +1515,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 36)
        (i32.const 4)
       )
@@ -1543,7 +1546,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 38)
        (i32.const 4)
       )
@@ -1564,7 +1567,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 40)
        (i32.const 4)
       )
@@ -1592,7 +1595,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 42)
      (i32.const 2)
     )
@@ -1609,7 +1612,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 46)
      (i32.const 2)
     )
@@ -1617,7 +1620,7 @@
    )
   )
  )
- (func $~lib/map/Map<u8,i32>#has (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#has (; 18 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<i8,i32>#find
     (get_local $0)
@@ -1632,7 +1635,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<u8,i32>#rehash (; 18 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#rehash (; 19 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1795,7 +1798,7 @@
    )
   )
  )
- (func $~lib/map/Map<u8,i32>#set (; 19 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u8,i32>#set (; 20 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1935,7 +1938,7 @@
    )
   )
  )
- (func $~lib/map/Map<u8,i32>#get (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#get (; 21 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
@@ -1957,7 +1960,7 @@
    )
   )
  )
- (func $~lib/map/Map<u8,i32>#delete (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#delete (; 22 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eqz
@@ -2055,7 +2058,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<u8,i32> (; 22 ;) (type $v)
+ (func $std/map/test<u8,i32> (; 23 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
@@ -2079,7 +2082,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 8)
        (i32.const 4)
       )
@@ -2107,7 +2110,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 10)
        (i32.const 4)
       )
@@ -2131,7 +2134,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 11)
        (i32.const 4)
       )
@@ -2159,7 +2162,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 13)
      (i32.const 2)
     )
@@ -2187,7 +2190,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 17)
        (i32.const 4)
       )
@@ -2211,7 +2214,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 18)
        (i32.const 4)
       )
@@ -2239,7 +2242,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 20)
        (i32.const 4)
       )
@@ -2263,7 +2266,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 21)
        (i32.const 4)
       )
@@ -2291,7 +2294,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 23)
      (i32.const 2)
     )
@@ -2319,7 +2322,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 27)
        (i32.const 4)
       )
@@ -2343,7 +2346,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 28)
        (i32.const 4)
       )
@@ -2364,7 +2367,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 30)
        (i32.const 4)
       )
@@ -2392,7 +2395,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 32)
      (i32.const 2)
     )
@@ -2418,7 +2421,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 36)
        (i32.const 4)
       )
@@ -2446,7 +2449,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 38)
        (i32.const 4)
       )
@@ -2467,7 +2470,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 40)
        (i32.const 4)
       )
@@ -2495,7 +2498,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 42)
      (i32.const 2)
     )
@@ -2512,7 +2515,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 46)
      (i32.const 2)
     )
@@ -2520,7 +2523,7 @@
    )
   )
  )
- (func $~lib/internal/hash/hash16 (; 23 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash16 (; 24 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.mul
    (i32.xor
     (i32.mul
@@ -2541,7 +2544,7 @@
    (i32.const 16777619)
   )
  )
- (func $~lib/map/Map<i16,i32>#find (; 24 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#find (; 25 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (set_local $2
    (i32.load offset=8
     (i32.add
@@ -2607,7 +2610,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<i16,i32>#has (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#has (; 26 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<i16,i32>#find
     (get_local $0)
@@ -2625,7 +2628,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i16,i32>#rehash (; 26 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#rehash (; 27 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2788,7 +2791,7 @@
    )
   )
  )
- (func $~lib/map/Map<i16,i32>#set (; 27 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i16,i32>#set (; 28 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2931,7 +2934,7 @@
    )
   )
  )
- (func $~lib/map/Map<i16,i32>#get (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#get (; 29 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
@@ -2956,7 +2959,7 @@
    )
   )
  )
- (func $~lib/map/Map<i16,i32>#delete (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#delete (; 30 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eqz
@@ -3057,7 +3060,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<i16,i32> (; 30 ;) (type $v)
+ (func $std/map/test<i16,i32> (; 31 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
@@ -3081,7 +3084,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 8)
        (i32.const 4)
       )
@@ -3112,7 +3115,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 10)
        (i32.const 4)
       )
@@ -3139,7 +3142,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 11)
        (i32.const 4)
       )
@@ -3167,7 +3170,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 13)
      (i32.const 2)
     )
@@ -3195,7 +3198,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 17)
        (i32.const 4)
       )
@@ -3222,7 +3225,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 18)
        (i32.const 4)
       )
@@ -3253,7 +3256,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 20)
        (i32.const 4)
       )
@@ -3280,7 +3283,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 21)
        (i32.const 4)
       )
@@ -3308,7 +3311,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 23)
      (i32.const 2)
     )
@@ -3336,7 +3339,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 27)
        (i32.const 4)
       )
@@ -3363,7 +3366,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 28)
        (i32.const 4)
       )
@@ -3384,7 +3387,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 30)
        (i32.const 4)
       )
@@ -3412,7 +3415,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 32)
      (i32.const 2)
     )
@@ -3438,7 +3441,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 36)
        (i32.const 4)
       )
@@ -3469,7 +3472,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 38)
        (i32.const 4)
       )
@@ -3490,7 +3493,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 40)
        (i32.const 4)
       )
@@ -3518,7 +3521,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 42)
      (i32.const 2)
     )
@@ -3535,7 +3538,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 46)
      (i32.const 2)
     )
@@ -3543,7 +3546,7 @@
    )
   )
  )
- (func $~lib/map/Map<u16,i32>#has (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#has (; 32 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<i16,i32>#find
     (get_local $0)
@@ -3558,7 +3561,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<u16,i32>#rehash (; 32 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#rehash (; 33 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3721,7 +3724,7 @@
    )
   )
  )
- (func $~lib/map/Map<u16,i32>#set (; 33 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u16,i32>#set (; 34 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3861,7 +3864,7 @@
    )
   )
  )
- (func $~lib/map/Map<u16,i32>#get (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#get (; 35 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
@@ -3883,7 +3886,7 @@
    )
   )
  )
- (func $~lib/map/Map<u16,i32>#delete (; 35 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#delete (; 36 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eqz
@@ -3981,7 +3984,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<u16,i32> (; 36 ;) (type $v)
+ (func $std/map/test<u16,i32> (; 37 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
@@ -4005,7 +4008,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 8)
        (i32.const 4)
       )
@@ -4033,7 +4036,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 10)
        (i32.const 4)
       )
@@ -4057,7 +4060,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 11)
        (i32.const 4)
       )
@@ -4085,7 +4088,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 13)
      (i32.const 2)
     )
@@ -4113,7 +4116,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 17)
        (i32.const 4)
       )
@@ -4137,7 +4140,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 18)
        (i32.const 4)
       )
@@ -4165,7 +4168,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 20)
        (i32.const 4)
       )
@@ -4189,7 +4192,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 21)
        (i32.const 4)
       )
@@ -4217,7 +4220,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 23)
      (i32.const 2)
     )
@@ -4245,7 +4248,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 27)
        (i32.const 4)
       )
@@ -4269,7 +4272,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 28)
        (i32.const 4)
       )
@@ -4290,7 +4293,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 30)
        (i32.const 4)
       )
@@ -4318,7 +4321,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 32)
      (i32.const 2)
     )
@@ -4344,7 +4347,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 36)
        (i32.const 4)
       )
@@ -4372,7 +4375,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 38)
        (i32.const 4)
       )
@@ -4393,7 +4396,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 40)
        (i32.const 4)
       )
@@ -4421,7 +4424,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 42)
      (i32.const 2)
     )
@@ -4438,7 +4441,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 46)
      (i32.const 2)
     )
@@ -4446,7 +4449,7 @@
    )
   )
  )
- (func $~lib/internal/hash/hash32 (; 37 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 38 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.mul
    (i32.xor
     (i32.mul
@@ -4491,7 +4494,7 @@
    (i32.const 16777619)
   )
  )
- (func $~lib/map/Map<i32,i32>#find (; 38 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#find (; 39 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (set_local $2
    (i32.load offset=8
     (i32.add
@@ -4554,7 +4557,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<i32,i32>#has (; 39 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#has (; 40 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.ne
    (call $~lib/map/Map<i32,i32>#find
     (get_local $0)
@@ -4566,7 +4569,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i32,i32>#rehash (; 40 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i32,i32>#rehash (; 41 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4729,7 +4732,7 @@
    )
   )
  )
- (func $~lib/map/Map<i32,i32>#set (; 41 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i32,i32>#set (; 42 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4866,7 +4869,7 @@
    )
   )
  )
- (func $~lib/map/Map<i32,i32>#get (; 42 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#get (; 43 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
@@ -4885,7 +4888,7 @@
    )
   )
  )
- (func $~lib/map/Map<i32,i32>#delete (; 43 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#delete (; 44 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eqz
@@ -4980,7 +4983,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<i32,i32> (; 44 ;) (type $v)
+ (func $std/map/test<i32,i32> (; 45 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
@@ -5004,7 +5007,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 8)
        (i32.const 4)
       )
@@ -5029,7 +5032,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 10)
        (i32.const 4)
       )
@@ -5050,7 +5053,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 11)
        (i32.const 4)
       )
@@ -5078,7 +5081,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 13)
      (i32.const 2)
     )
@@ -5106,7 +5109,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 17)
        (i32.const 4)
       )
@@ -5127,7 +5130,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 18)
        (i32.const 4)
       )
@@ -5152,7 +5155,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 20)
        (i32.const 4)
       )
@@ -5173,7 +5176,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 21)
        (i32.const 4)
       )
@@ -5201,7 +5204,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 23)
      (i32.const 2)
     )
@@ -5229,7 +5232,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 27)
        (i32.const 4)
       )
@@ -5250,7 +5253,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 28)
        (i32.const 4)
       )
@@ -5271,7 +5274,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 30)
        (i32.const 4)
       )
@@ -5299,7 +5302,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 32)
      (i32.const 2)
     )
@@ -5325,7 +5328,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 36)
        (i32.const 4)
       )
@@ -5350,7 +5353,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 38)
        (i32.const 4)
       )
@@ -5371,7 +5374,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 40)
        (i32.const 4)
       )
@@ -5399,7 +5402,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 42)
      (i32.const 2)
     )
@@ -5416,7 +5419,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 46)
      (i32.const 2)
     )
@@ -5424,7 +5427,7 @@
    )
   )
  )
- (func $std/map/test<u32,i32> (; 45 ;) (type $v)
+ (func $std/map/test<u32,i32> (; 46 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
@@ -5448,7 +5451,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 8)
        (i32.const 4)
       )
@@ -5473,7 +5476,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 10)
        (i32.const 4)
       )
@@ -5494,7 +5497,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 11)
        (i32.const 4)
       )
@@ -5522,7 +5525,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 13)
      (i32.const 2)
     )
@@ -5550,7 +5553,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 17)
        (i32.const 4)
       )
@@ -5571,7 +5574,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 18)
        (i32.const 4)
       )
@@ -5596,7 +5599,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 20)
        (i32.const 4)
       )
@@ -5617,7 +5620,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 21)
        (i32.const 4)
       )
@@ -5645,7 +5648,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 23)
      (i32.const 2)
     )
@@ -5673,7 +5676,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 27)
        (i32.const 4)
       )
@@ -5694,7 +5697,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 28)
        (i32.const 4)
       )
@@ -5715,7 +5718,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 30)
        (i32.const 4)
       )
@@ -5743,7 +5746,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 32)
      (i32.const 2)
     )
@@ -5769,7 +5772,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 36)
        (i32.const 4)
       )
@@ -5794,7 +5797,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 38)
        (i32.const 4)
       )
@@ -5815,7 +5818,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 40)
        (i32.const 4)
       )
@@ -5843,7 +5846,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 42)
      (i32.const 2)
     )
@@ -5860,7 +5863,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 46)
      (i32.const 2)
     )
@@ -5868,7 +5871,7 @@
    )
   )
  )
- (func $~lib/map/Map<i64,i32>#clear (; 46 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<i64,i32>#clear (; 47 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (i32.store
    (get_local $0)
    (call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -5902,7 +5905,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i64,i32>#constructor (; 47 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#constructor (; 48 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -5910,7 +5913,7 @@
    (block
     (i32.store
      (tee_local $0
-      (call $~lib/allocator/arena/allocate_memory
+      (call $~lib/memory/memory.allocate
        (i32.const 24)
       )
      )
@@ -5943,7 +5946,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/hash/hash64 (; 48 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash64 (; 49 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (i32.mul
    (i32.xor
@@ -6042,7 +6045,7 @@
    (i32.const 16777619)
   )
  )
- (func $~lib/map/Map<i64,i32>#find (; 49 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#find (; 50 ;) (; has Stack IR ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (set_local $2
    (i32.load offset=8
     (i32.add
@@ -6105,7 +6108,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<i64,i32>#has (; 50 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#has (; 51 ;) (; has Stack IR ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (i32.ne
    (call $~lib/map/Map<i64,i32>#find
     (get_local $0)
@@ -6117,7 +6120,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<i64,i32>#rehash (; 51 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i32>#rehash (; 52 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6280,7 +6283,7 @@
    )
   )
  )
- (func $~lib/map/Map<i64,i32>#set (; 52 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/map/Map<i64,i32>#set (; 53 ;) (; has Stack IR ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6417,7 +6420,7 @@
    )
   )
  )
- (func $~lib/map/Map<i64,i32>#get (; 53 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#get (; 54 ;) (; has Stack IR ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
@@ -6436,7 +6439,7 @@
    )
   )
  )
- (func $~lib/map/Map<i64,i32>#delete (; 54 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#delete (; 55 ;) (; has Stack IR ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -6532,7 +6535,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<i64,i32> (; 55 ;) (type $v)
+ (func $std/map/test<i64,i32> (; 56 ;) (; has Stack IR ;) (type $v)
   (local $0 i64)
   (local $1 i32)
   (set_local $1
@@ -6556,7 +6559,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 8)
        (i32.const 4)
       )
@@ -6583,7 +6586,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 10)
        (i32.const 4)
       )
@@ -6606,7 +6609,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 11)
        (i32.const 4)
       )
@@ -6634,7 +6637,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 13)
      (i32.const 2)
     )
@@ -6662,7 +6665,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 17)
        (i32.const 4)
       )
@@ -6685,7 +6688,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 18)
        (i32.const 4)
       )
@@ -6712,7 +6715,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 20)
        (i32.const 4)
       )
@@ -6735,7 +6738,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 21)
        (i32.const 4)
       )
@@ -6763,7 +6766,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 23)
      (i32.const 2)
     )
@@ -6791,7 +6794,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 27)
        (i32.const 4)
       )
@@ -6814,7 +6817,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 28)
        (i32.const 4)
       )
@@ -6835,7 +6838,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 30)
        (i32.const 4)
       )
@@ -6863,7 +6866,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 32)
      (i32.const 2)
     )
@@ -6889,7 +6892,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 36)
        (i32.const 4)
       )
@@ -6916,7 +6919,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 38)
        (i32.const 4)
       )
@@ -6937,7 +6940,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 40)
        (i32.const 4)
       )
@@ -6965,7 +6968,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 42)
      (i32.const 2)
     )
@@ -6982,7 +6985,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 46)
      (i32.const 2)
     )
@@ -6990,7 +6993,7 @@
    )
   )
  )
- (func $std/map/test<u64,i32> (; 56 ;) (type $v)
+ (func $std/map/test<u64,i32> (; 57 ;) (; has Stack IR ;) (type $v)
   (local $0 i64)
   (local $1 i32)
   (set_local $1
@@ -7014,7 +7017,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 8)
        (i32.const 4)
       )
@@ -7041,7 +7044,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 10)
        (i32.const 4)
       )
@@ -7064,7 +7067,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 11)
        (i32.const 4)
       )
@@ -7092,7 +7095,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 13)
      (i32.const 2)
     )
@@ -7120,7 +7123,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 17)
        (i32.const 4)
       )
@@ -7143,7 +7146,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 18)
        (i32.const 4)
       )
@@ -7170,7 +7173,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 20)
        (i32.const 4)
       )
@@ -7193,7 +7196,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 21)
        (i32.const 4)
       )
@@ -7221,7 +7224,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 23)
      (i32.const 2)
     )
@@ -7249,7 +7252,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 27)
        (i32.const 4)
       )
@@ -7272,7 +7275,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 28)
        (i32.const 4)
       )
@@ -7293,7 +7296,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 30)
        (i32.const 4)
       )
@@ -7321,7 +7324,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 32)
      (i32.const 2)
     )
@@ -7347,7 +7350,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 36)
        (i32.const 4)
       )
@@ -7374,7 +7377,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 38)
        (i32.const 4)
       )
@@ -7395,7 +7398,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 40)
        (i32.const 4)
       )
@@ -7423,7 +7426,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 42)
      (i32.const 2)
     )
@@ -7440,7 +7443,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 46)
      (i32.const 2)
     )
@@ -7448,7 +7451,7 @@
    )
   )
  )
- (func $~lib/map/Map<f32,i32>#find (; 57 ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#find (; 58 ;) (; has Stack IR ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (set_local $2
    (i32.load offset=8
     (i32.add
@@ -7511,7 +7514,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<f32,i32>#has (; 58 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#has (; 59 ;) (; has Stack IR ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (i32.ne
    (call $~lib/map/Map<f32,i32>#find
     (get_local $0)
@@ -7525,7 +7528,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<f32,i32>#rehash (; 59 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f32,i32>#rehash (; 60 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7690,7 +7693,7 @@
    )
   )
  )
- (func $~lib/map/Map<f32,i32>#set (; 60 ;) (type $ifiv) (param $0 i32) (param $1 f32) (param $2 i32)
+ (func $~lib/map/Map<f32,i32>#set (; 61 ;) (; has Stack IR ;) (type $ifiv) (param $0 i32) (param $1 f32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -7829,7 +7832,7 @@
    )
   )
  )
- (func $~lib/map/Map<f32,i32>#get (; 61 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#get (; 62 ;) (; has Stack IR ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
@@ -7850,7 +7853,7 @@
    )
   )
  )
- (func $~lib/map/Map<f32,i32>#delete (; 62 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#delete (; 63 ;) (; has Stack IR ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -7948,7 +7951,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<f32,i32> (; 63 ;) (type $v)
+ (func $std/map/test<f32,i32> (; 64 ;) (; has Stack IR ;) (type $v)
   (local $0 f32)
   (local $1 i32)
   (set_local $1
@@ -7974,7 +7977,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 8)
        (i32.const 4)
       )
@@ -8001,7 +8004,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 10)
        (i32.const 4)
       )
@@ -8024,7 +8027,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 11)
        (i32.const 4)
       )
@@ -8052,7 +8055,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 13)
      (i32.const 2)
     )
@@ -8082,7 +8085,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 17)
        (i32.const 4)
       )
@@ -8105,7 +8108,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 18)
        (i32.const 4)
       )
@@ -8132,7 +8135,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 20)
        (i32.const 4)
       )
@@ -8155,7 +8158,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 21)
        (i32.const 4)
       )
@@ -8183,7 +8186,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 23)
      (i32.const 2)
     )
@@ -8213,7 +8216,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 27)
        (i32.const 4)
       )
@@ -8236,7 +8239,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 28)
        (i32.const 4)
       )
@@ -8257,7 +8260,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 30)
        (i32.const 4)
       )
@@ -8285,7 +8288,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 32)
      (i32.const 2)
     )
@@ -8313,7 +8316,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 36)
        (i32.const 4)
       )
@@ -8340,7 +8343,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 38)
        (i32.const 4)
       )
@@ -8361,7 +8364,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 40)
        (i32.const 4)
       )
@@ -8389,7 +8392,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 42)
      (i32.const 2)
     )
@@ -8406,7 +8409,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 46)
      (i32.const 2)
     )
@@ -8414,7 +8417,7 @@
    )
   )
  )
- (func $~lib/map/Map<f64,i32>#find (; 64 ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#find (; 65 ;) (; has Stack IR ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (set_local $2
    (i32.load offset=8
     (i32.add
@@ -8477,7 +8480,7 @@
   )
   (i32.const 0)
  )
- (func $~lib/map/Map<f64,i32>#has (; 65 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#has (; 66 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (i32.ne
    (call $~lib/map/Map<f64,i32>#find
     (get_local $0)
@@ -8491,7 +8494,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/map/Map<f64,i32>#rehash (; 66 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f64,i32>#rehash (; 67 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8656,7 +8659,7 @@
    )
   )
  )
- (func $~lib/map/Map<f64,i32>#set (; 67 ;) (type $iFiv) (param $0 i32) (param $1 f64) (param $2 i32)
+ (func $~lib/map/Map<f64,i32>#set (; 68 ;) (; has Stack IR ;) (type $iFiv) (param $0 i32) (param $1 f64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8795,7 +8798,7 @@
    )
   )
  )
- (func $~lib/map/Map<f64,i32>#get (; 68 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#get (; 69 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (tee_local $0
    (if (result i32)
     (tee_local $0
@@ -8816,7 +8819,7 @@
    )
   )
  )
- (func $~lib/map/Map<f64,i32>#delete (; 69 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#delete (; 70 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -8914,7 +8917,7 @@
   )
   (i32.const 1)
  )
- (func $std/map/test<f64,i32> (; 70 ;) (type $v)
+ (func $std/map/test<f64,i32> (; 71 ;) (; has Stack IR ;) (type $v)
   (local $0 f64)
   (local $1 i32)
   (set_local $1
@@ -8940,7 +8943,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 8)
        (i32.const 4)
       )
@@ -8967,7 +8970,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 10)
        (i32.const 4)
       )
@@ -8990,7 +8993,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 11)
        (i32.const 4)
       )
@@ -9018,7 +9021,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 13)
      (i32.const 2)
     )
@@ -9048,7 +9051,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 17)
        (i32.const 4)
       )
@@ -9071,7 +9074,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 18)
        (i32.const 4)
       )
@@ -9098,7 +9101,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 20)
        (i32.const 4)
       )
@@ -9121,7 +9124,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 21)
        (i32.const 4)
       )
@@ -9149,7 +9152,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 23)
      (i32.const 2)
     )
@@ -9179,7 +9182,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 27)
        (i32.const 4)
       )
@@ -9202,7 +9205,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 28)
        (i32.const 4)
       )
@@ -9223,7 +9226,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 30)
        (i32.const 4)
       )
@@ -9251,7 +9254,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 32)
      (i32.const 2)
     )
@@ -9279,7 +9282,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 36)
        (i32.const 4)
       )
@@ -9306,7 +9309,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 38)
        (i32.const 4)
       )
@@ -9327,7 +9330,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 112)
+       (i32.const 120)
        (i32.const 40)
        (i32.const 4)
       )
@@ -9355,7 +9358,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 42)
      (i32.const 2)
     )
@@ -9372,7 +9375,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 112)
+     (i32.const 120)
      (i32.const 46)
      (i32.const 2)
     )
@@ -9380,15 +9383,9 @@
    )
   )
  )
- (func $start (; 71 ;) (type $v)
+ (func $start (; 72 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.and
-    (i32.add
-     (get_global $HEAP_BASE)
-     (i32.const 7)
-    )
-    (i32.const -8)
-   )
+   (i32.const 144)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)

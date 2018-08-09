@@ -2,7 +2,6 @@
 =================
 
 [![Build Status](https://travis-ci.org/AssemblyScript/assemblyscript.svg?branch=master)](https://travis-ci.org/AssemblyScript/assemblyscript)
-[![Snap Status](https://build.snapcraft.io/badge/AssemblyScript/assemblyscript.svg)](https://build.snapcraft.io/user/AssemblyScript/assemblyscript)
 
 **AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) (basically JavaScript with types) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
 
@@ -70,6 +69,9 @@ Examples
 
 * **[WASM parser](./lib/parse)**<br />
   A WebAssembly binary parser in WebAssembly.
+
+* **[N-body system](./examples/n-body)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/n-body/index.html) ]<br />
+  An implementation of the N-body system from the [Computer Language Benchmarks Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/).
 
 Building
 --------

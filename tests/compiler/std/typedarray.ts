@@ -90,6 +90,22 @@ assert(arr.byteOffset == 1 * sizeof<i32>());
 assert(arr.byteLength == 2 * sizeof<i32>());
 assert(arr[0] == 2);
 
+var af64 = new Float64Array(8);
+af64[0] = 1;
+af64[1] = 2;
+
+af64[2] = 7;
+af64[3] = 6;
+af64[4] = 5;
+af64[5] = 4;
+
+af64[6] = 3;
+af64[7] = 8;
+af64 = af64.subarray(2, 6);
+assert(af64.length == 4);
+af64.sort();
+assert(af64[0] == 4 && af64[1] == 5 && af64[2] == 6 && af64[3] == 7);
+
 var clampedArr = new Uint8ClampedArray(3);
 clampedArr[0] = -32;
 clampedArr[1] = 2;

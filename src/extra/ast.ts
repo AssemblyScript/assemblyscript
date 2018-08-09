@@ -39,6 +39,8 @@ import {
   UnaryPostfixExpression,
   UnaryExpression,
   UnaryPrefixExpression,
+  ClassExpression,
+  ObjectLiteralExpression,
 
   Statement,
   BlockStatement,
@@ -145,6 +147,10 @@ export class ASTBuilder {
       }
       case NodeKind.CALL: {
         this.visitCallExpression(<CallExpression>node);
+        break;
+      }
+      case NodeKind.CLASS: {
+        this.visitClassExpression(<ClassExpression>node);
         break;
       }
       case NodeKind.COMMA: {
@@ -406,7 +412,8 @@ export class ASTBuilder {
   // expressions
 
   visitIdentifierExpression(node: IdentifierExpression): void {
-    this.sb.push(node.text);
+    if (node.is(CommonFlags.QUOTED)) this.visitStringLiteral(node.text);
+    else this.sb.push(node.text);
   }
 
   visitArrayLiteralExpression(node: ArrayLiteralExpression): void {
@@ -422,6 +429,39 @@ export class ASTBuilder {
       }
     }
     sb.push("]");
+  }
+
+  visitObjectLiteralExpression(node: ObjectLiteralExpression): void {
+    var sb = this.sb;
+    var names = node.names;
+    var values = node.values;
+    var numElements = names.length;
+    assert(numElements == values.length);
+    if (numElements) {
+      sb.push("{\n");
+      indent(sb, ++this.indentLevel);
+      this.visitNode(names[0]);
+      sb.push(": ");
+      this.visitNode(values[0]);
+      for (let i = 1; i < numElements; ++i) {
+        sb.push(",\n");
+        indent(sb, this.indentLevel);
+        let name = names[i];
+        let value = values[i];
+        if (name === value) {
+          this.visitNode(name);
+        } else {
+          this.visitNode(name);
+          sb.push(": ");
+          this.visitNode(value);
+        }
+      }
+      sb.push("\n");
+      indent(sb, --this.indentLevel);
+      sb.push("}");
+    } else {
+      sb.push("{}");
+    }
   }
 
   visitAssertionExpression(node: AssertionExpression): void {
@@ -475,6 +515,11 @@ export class ASTBuilder {
       }
     }
     sb.push(")");
+  }
+
+  visitClassExpression(node: ClassExpression): void {
+    var declaration = node.declaration;
+    this.visitClassDeclaration(declaration);
   }
 
   visitCommaExpression(node: CommaExpression): void {
@@ -532,10 +577,10 @@ export class ASTBuilder {
         this.visitArrayLiteralExpression(<ArrayLiteralExpression>node);
         break;
       }
-      // case LiteralKind.OBJECT: {
-      //   this.serializeObjectLiteralExpression(<ObjectLiteralExpression>node);
-      //   break;
-      // }
+      case LiteralKind.OBJECT: {
+        this.visitObjectLiteralExpression(<ObjectLiteralExpression>node);
+        break;
+      }
       default: {
         assert(false);
         break;
@@ -719,9 +764,10 @@ export class ASTBuilder {
       sb.push(";\n");
     } else {
       let last = sb[sb.length - 1];
-      if (last.length && (
-          last.charCodeAt(last.length - 1) == CharCode.CLOSEBRACE ||
-          last.charCodeAt(last.length - 1) == CharCode.SEMICOLON)
+      let lastCharPos = last.length - 1;
+      if (lastCharPos >= 0 && (
+        last.charCodeAt(lastCharPos) == CharCode.CLOSEBRACE ||
+        last.charCodeAt(lastCharPos) == CharCode.SEMICOLON)
       ) {
         sb.push("\n");
       } else {
@@ -778,8 +824,12 @@ export class ASTBuilder {
     this.serializeExternalModifiers(node);
     var sb = this.sb;
     if (node.is(CommonFlags.ABSTRACT)) sb.push("abstract ");
-    sb.push("class ");
-    this.visitIdentifierExpression(node.name);
+    if (node.name.text.length) {
+      sb.push("class ");
+      this.visitIdentifierExpression(node.name);
+    } else {
+      sb.push("class");
+    }
     var typeParameters = node.typeParameters;
     var numTypeParameters = typeParameters.length;
     if (numTypeParameters) {

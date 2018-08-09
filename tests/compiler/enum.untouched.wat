@@ -20,6 +20,7 @@
  (global $enum/enumType (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 0)
+ (export "memory" (memory $0))
  (export "Implicit.ZERO" (global $enum/Implicit.ZERO))
  (export "Implicit.ONE" (global $enum/Implicit.ONE))
  (export "Implicit.TWO" (global $enum/Implicit.TWO))
@@ -34,7 +35,6 @@
  (export "Mixed.FOUR" (global $enum/Mixed.FOUR))
  (export "SelfReference.ZERO" (global $enum/SelfReference.ZERO))
  (export "SelfReference.ONE" (global $enum/SelfReference.ONE))
- (export "memory" (memory $0))
  (start $start)
  (func $enum/getZero (; 0 ;) (type $i) (result i32)
   (i32.const 0)
@@ -45,9 +45,15 @@
   )
   (set_global $enum/NonConstant.ONE
    (i32.add
-    (get_global $enum/NonConstant.ZERO)
+    (call $enum/getZero)
     (i32.const 1)
    )
+  )
+  (drop
+   (get_global $enum/NonConstant.ZERO)
+  )
+  (drop
+   (get_global $enum/NonConstant.ONE)
   )
  )
 )

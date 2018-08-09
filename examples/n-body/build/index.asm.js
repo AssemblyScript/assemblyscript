@@ -24,9 +24,8 @@ function asmFunc(global, env, buffer) {
  var $lib_allocator_arena_startOffset = 0;
  var $lib_allocator_arena_offset = 0;
  var assembly_index_system = 0;
- var HEAP_BASE = 40;
  var i64toi32_i32$HIGH_BITS = 0;
- function $lib_allocator_arena_allocate_memory($0) {
+ function $lib_allocator_arena___memory_allocate($0) {
   $0 = $0 | 0;
   var $1 = 0, $2 = 0, $3 = 0, wasm2asm_i32$0 = 0, wasm2asm_i32$1 = 0, wasm2asm_i32$2 = 0;
   if ($0) {
@@ -55,7 +54,7 @@ function asmFunc(global, env, buffer) {
   $7 = +$7;
   var wasm2asm_i32$0 = 0, wasm2asm_f64$0 = 0.0;
   if (($0 | 0) == (0 | 0)) {
-   $0 = $lib_allocator_arena_allocate_memory(56 | 0) | 0;
+   $0 = $lib_allocator_arena___memory_allocate(56 | 0) | 0;
    wasm2asm_i32$0 = $0;
    wasm2asm_f64$0 = $1;
    HEAPF64[wasm2asm_i32$0 >> 3] = wasm2asm_f64$0;
@@ -81,7 +80,7 @@ function asmFunc(global, env, buffer) {
   return $0 | 0;
  }
  
- function $lib_memory_set_memory($0, $1, $2) {
+ function $lib_memory_memset($0, $1, $2) {
   $0 = $0 | 0;
   $1 = $1 | 0;
   $2 = $2 | 0;
@@ -253,12 +252,12 @@ function asmFunc(global, env, buffer) {
    abort();
   }
   $2 = $1 << 2 | 0;
-  $3 = $lib_allocator_arena_allocate_memory(1 << (32 - Math_clz32($2 + 7 | 0) | 0) | 0 | 0) | 0;
+  $3 = $lib_allocator_arena___memory_allocate(1 << (32 - Math_clz32($2 + 7 | 0) | 0) | 0 | 0) | 0;
   wasm2asm_i32$0 = $3;
   wasm2asm_i32$1 = $2;
   HEAP32[wasm2asm_i32$0 >> 2] = wasm2asm_i32$1;
   if (($0 | 0) == (0 | 0)) {
-   $0 = $lib_allocator_arena_allocate_memory(8 | 0) | 0;
+   $0 = $lib_allocator_arena___memory_allocate(8 | 0) | 0;
    wasm2asm_i32$0 = $0;
    wasm2asm_i32$1 = 0;
    HEAP32[wasm2asm_i32$0 >> 2] = wasm2asm_i32$1;
@@ -272,7 +271,7 @@ function asmFunc(global, env, buffer) {
   wasm2asm_i32$0 = $0;
   wasm2asm_i32$1 = $1;
   HEAP32[(wasm2asm_i32$0 + 4 | 0) >> 2] = wasm2asm_i32$1;
-  $lib_memory_set_memory($3 + 8 | 0 | 0, 0 | 0, $2 | 0);
+  $lib_memory_memset($3 + 8 | 0 | 0, 0 | 0, $2 | 0);
   return $0 | 0;
  }
  
@@ -307,7 +306,7 @@ function asmFunc(global, env, buffer) {
   wasm2asm_f64$0 = -$7 / 39.47841760435743;
   HEAPF64[(wasm2asm_i32$0 + 40 | 0) >> 3] = wasm2asm_f64$0;
   if (($0 | 0) == (0 | 0)) {
-   $2 = $lib_allocator_arena_allocate_memory(4 | 0) | 0;
+   $2 = $lib_allocator_arena___memory_allocate(4 | 0) | 0;
    wasm2asm_i32$0 = $2;
    wasm2asm_i32$1 = $1;
    HEAP32[wasm2asm_i32$0 >> 2] = wasm2asm_i32$1;
@@ -340,19 +339,6 @@ function asmFunc(global, env, buffer) {
   wasm2asm_i32$1 = $0;
   HEAP32[(wasm2asm_i32$0 + 8 | 0) >> 2] = wasm2asm_i32$1;
   assembly_index_system = assembly_index_NBodySystem_constructor(0 | 0, $1 | 0) | 0;
- }
- 
- function assembly_index_getBody($0) {
-  $0 = $0 | 0;
-  var $1 = 0, $22 = 0, $20 = 0;
-  $1 = HEAPU32[assembly_index_system >> 2] | 0;
-  if ($0 >>> 0 < (HEAP32[($1 + 4 | 0) >> 2] | 0) >>> 0) {
-   $1 = HEAPU32[$1 >> 2] | 0;
-   if ($0 >>> 0 < ((HEAP32[$1 >> 2] | 0) >>> 2 | 0) >>> 0) $20 = HEAPU32[(($1 + ($0 << 2 | 0) | 0) + 8 | 0) >> 2] | 0; else abort();
-   $22 = $20;
-  } else $22 = 0;
-  $0 = $22;
-  return $0 | 0;
  }
  
  function assembly_index_NBodySystem_advance($0, $1) {
@@ -491,8 +477,21 @@ function asmFunc(global, env, buffer) {
   };
  }
  
+ function assembly_index_getBody($0) {
+  $0 = $0 | 0;
+  var $1 = 0, $22 = 0, $20 = 0;
+  $1 = HEAPU32[assembly_index_system >> 2] | 0;
+  if ($0 >>> 0 < (HEAP32[($1 + 4 | 0) >> 2] | 0) >>> 0) {
+   $1 = HEAPU32[$1 >> 2] | 0;
+   if ($0 >>> 0 < ((HEAP32[$1 >> 2] | 0) >>> 2 | 0) >>> 0) $20 = HEAPU32[(($1 + ($0 << 2 | 0) | 0) + 8 | 0) >> 2] | 0; else abort();
+   $22 = $20;
+  } else $22 = 0;
+  $0 = $22;
+  return $0 | 0;
+ }
+ 
  function start() {
-  $lib_allocator_arena_startOffset = (HEAP_BASE + 7 | 0) & 4294967288 | 0;
+  $lib_allocator_arena_startOffset = 40;
   $lib_allocator_arena_offset = $lib_allocator_arena_startOffset;
  }
  
@@ -522,10 +521,6 @@ function asmFunc(global, env, buffer) {
  }
  
  return {
-  init: assembly_index_init, 
-  getBody: assembly_index_getBody, 
-  step: assembly_index_step, 
-  bench: assembly_index_bench, 
   memory: Object.create(Object.prototype, {
    grow: {
     value: __wasm_grow_memory
@@ -536,6 +531,10 @@ function asmFunc(global, env, buffer) {
     }
     
    }
-  })
+  }), 
+  init: assembly_index_init, 
+  step: assembly_index_step, 
+  bench: assembly_index_bench, 
+  getBody: assembly_index_getBody
  };
 }

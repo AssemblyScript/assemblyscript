@@ -5,7 +5,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
- (func $start (; 0 ;) (type $v)
+ (func $start (; 0 ;) (; has Stack IR ;) (type $v)
   (drop
    (i32.trunc_s/f32
     (get_global $portable-conversions/f)
