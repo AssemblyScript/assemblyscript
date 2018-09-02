@@ -490,18 +490,15 @@ export class Program extends DiagnosticEmitter {
     }
 
     // queued imports should be resolvable now through traversing exports and queued exports
-    for (let i = 0; i < queuedImports.length;) {
-      let queuedImport = queuedImports[i];
+    for (const queuedImport of queuedImports) {
       let declaration = queuedImport.declaration;
       if (declaration) { // named
         let element = this.tryLocateImport(queuedImport.externalName, queuedExports);
         if (element) {
           this.elementsLookup.set(queuedImport.localName, element);
-          queuedImports.splice(i, 1);
         } else {
           if (element = this.tryLocateImport(queuedImport.externalNameAlt, queuedExports)) {
             this.elementsLookup.set(queuedImport.localName, element);
-            queuedImports.splice(i, 1);
           } else {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
@@ -509,21 +506,17 @@ export class Program extends DiagnosticEmitter {
               (<ImportStatement>declaration.parent).path.value,
               declaration.externalName.text
             );
-            ++i;
           }
         }
       } else { // filespace
         let element = this.elementsLookup.get(queuedImport.externalName);
         if (element) {
           this.elementsLookup.set(queuedImport.localName, element);
-          queuedImports.splice(i, 1);
         } else {
           if (element = this.elementsLookup.get(queuedImport.externalNameAlt)) {
             this.elementsLookup.set(queuedImport.localName, element);
-            queuedImports.splice(i, 1);
           } else {
             assert(false); // already reported by the parser not finding the file
-            ++i;
           }
         }
       }
