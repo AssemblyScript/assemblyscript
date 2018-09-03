@@ -560,8 +560,10 @@ export class Resolver extends DiagnosticEmitter {
         }
         return null;
       }
-      case NodeKind.NON_NULL_ASSERTION:
-        return this.resolveExpression((<NonNullAssertionExpression> expression).expression, contextualFunction, reportMode);
+      case NodeKind.NON_NULL_ASSERTION: {
+        const inner = (<NonNullAssertionExpression> expression).expression;
+        return this.resolveExpression(inner, contextualFunction, reportMode);
+      }
       case NodeKind.BINARY: { // TODO: string concatenation, mostly
         throw new Error("not implemented");
       }

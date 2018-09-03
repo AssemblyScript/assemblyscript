@@ -118,7 +118,8 @@ export function nodeIsCallable(kind: NodeKind): bool {
     case NodeKind.IDENTIFIER:
     case NodeKind.CALL:
     case NodeKind.ELEMENTACCESS:
-    case NodeKind.PROPERTYACCESS: return true;
+    case NodeKind.PROPERTYACCESS:
+    case NodeKind.NON_NULL_ASSERTION: return true;
   }
   return false;
 }

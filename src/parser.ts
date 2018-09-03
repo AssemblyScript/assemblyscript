@@ -83,7 +83,8 @@ import {
 
   mangleInternalPath,
   nodeIsCallable,
-  nodeIsGenericCallable
+  nodeIsGenericCallable,
+  NonNullAssertionExpression
 } from "./ast";
 
 /** Parser interface. */
@@ -3256,6 +3257,12 @@ export class Parser extends DiagnosticEmitter {
     if (!expr) return null;
     var startPos = expr.range.start;
 
+    // Handle this here as well as in the loop to support `f!()` expressions (since we handle calls just ahead)
+    if (//determinePrecedence(Token.EXCLAMATION) >= precedence &&
+      tn.skip(Token.EXCLAMATION)) {
+      expr = Node.createNonNullAssertionExpression(expr, tn.range(startPos, tn.pos));
+    }
+
     // CallExpression?
     if (nodeIsCallable(expr.kind)) {
       let typeArguments: CommonTypeNode[] | null = null;
@@ -3385,48 +3392,79 @@ export class Parser extends DiagnosticEmitter {
               : nextPrecedence + 1
           );
           if (!next) return null;
-
-          // PropertyAccessExpression
-          if (token == Token.DOT) {
-            if (next.kind == NodeKind.IDENTIFIER) {
-              expr = Node.createPropertyAccessExpression(
-                expr,
-                <IdentifierExpression>next,
-                tn.range(startPos, tn.pos)
-              );
-            } else if (next.kind == NodeKind.CALL) { // join
-              let propertyCall = <CallExpression>next;
-              if (propertyCall.expression.kind == NodeKind.IDENTIFIER) {
-                propertyCall.expression = Node.createPropertyAccessExpression(
-                  expr,
-                  <IdentifierExpression>propertyCall.expression,
-                  tn.range(startPos, tn.pos)
-                );
-              } else {
-                this.error(
-                  DiagnosticCode.Identifier_expected,
-                  propertyCall.expression.range
-                );
-                return null;
-              }
-              expr = propertyCall;
-            } else {
-              this.error(
-                DiagnosticCode.Identifier_expected,
-                next.range
-              );
-              return null;
-            }
-
-          // BinaryExpression
-          } else {
-            expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
-          }
+          expr = this.attachExpression(tn, startPos, expr, token, next);
+          if (!expr) return null;
           break;
         }
       }
     }
     return expr;
+  }
+
+  // We just parsed `expr`, then `token`, then `next`. Graft these three together to a single expression.
+  private attachExpression(
+    tn: Tokenizer,
+    startPos: number,
+    expr: Expression,
+    token: Token,
+    next: Expression
+  ): Expression | null {
+    // PropertyAccessExpression
+    if (token == Token.DOT) {
+      if (next.kind === NodeKind.NON_NULL_ASSERTION) {
+        const inner = this.attachExpression(tn, startPos, expr, token, (<NonNullAssertionExpression> next).expression);
+        return inner && Node.createNonNullAssertionExpression(inner, tn.range(startPos, tn.pos));
+      } else if (next.kind == NodeKind.IDENTIFIER) {
+        return Node.createPropertyAccessExpression(
+          expr,
+          <IdentifierExpression>next,
+          tn.range(startPos, tn.pos)
+        );
+      } else if (next.kind == NodeKind.CALL) { // join
+        let propertyCall = <CallExpression>next;
+        let newExpr = this.attachExpressionToCallLHS(tn, startPos, expr, propertyCall.expression); //name
+        if (!newExpr) return null;
+        propertyCall.expression = newExpr;
+        return propertyCall;
+      } else {
+        this.error(
+          DiagnosticCode.Identifier_expected,
+          next.range
+        );
+        return null;
+      }
+
+    // BinaryExpression
+    } else {
+      return Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
+    }
+  }
+
+  // We parsed `expr`, then `.`, then a call expression `f()` whose expression is `f`.
+  // Graft `expr.x` into a single expression.
+  private attachExpressionToCallLHS(
+    tn: Tokenizer,
+    startPos: number,
+    expr: Expression,
+    calledExpression: Expression
+  ): Expression | null {
+    if (calledExpression.kind === NodeKind.NON_NULL_ASSERTION) {
+      const innerCalled = (<NonNullAssertionExpression> calledExpression).expression;
+      const inner = this.attachExpressionToCallLHS(tn, startPos, innerCalled, expr);
+      return inner && Node.createNonNullAssertionExpression(inner, tn.range(startPos, tn.pos));
+    } else if (calledExpression.kind == NodeKind.IDENTIFIER) {
+      return Node.createPropertyAccessExpression(
+        expr,
+        <IdentifierExpression>calledExpression,
+        tn.range(startPos, tn.pos)
+      );
+    } else {
+      this.error(
+        DiagnosticCode.Identifier_expected,
+        calledExpression.range
+      );
+      return null;
+    }
   }
 
   /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */
