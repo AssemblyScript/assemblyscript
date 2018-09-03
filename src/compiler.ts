@@ -132,6 +132,7 @@ import {
   LiteralExpression,
   LiteralKind,
   NewExpression,
+  NonNullAssertionExpression,
   ObjectLiteralExpression,
   ParenthesizedExpression,
   PropertyAccessExpression,
@@ -2422,6 +2423,10 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.compileNewExpression(<NewExpression>expression, contextualType);
         break;
       }
+      case NodeKind.NON_NULL_ASSERTION: {
+        expr = this.compileNonNullAssertionExpression(<NonNullAssertionExpression>expression, contextualType);
+        break;
+      }
       case NodeKind.PARENTHESIZED: {
         expr = this.compileParenthesizedExpression(<ParenthesizedExpression>expression, contextualType);
         break;
@@ -2672,6 +2677,12 @@ export class Compiler extends DiagnosticEmitter {
     );
     if (!toType) return this.module.createUnreachable();
     return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT, WrapMode.NONE);
+  }
+
+  compileNonNullAssertionExpression(expression: NonNullAssertionExpression, contextualType: Type): ExpressionRef {
+    const res = this.compileExpressionRetainType(expression.expression, contextualType.asNullable(), WrapMode.NONE);
+    this.currentType = this.currentType.nonNullableType;
+    return res;
   }
 
   private f32ModInstance: Function | null = null;

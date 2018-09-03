@@ -39,6 +39,7 @@ export enum NodeKind {
   // expressions
   IDENTIFIER,
   ASSERTION,
+  NON_NULL_ASSERTION,
   BINARY,
   CALL,
   CLASS,
@@ -421,6 +422,16 @@ export abstract class Node {
     expr.expression = expression; expression.parent = expr;
     expr.typeArguments = typeArgs; if (typeArgs) setParent(typeArgs, expr);
     expr.arguments = args; setParent(args, expr);
+    return expr;
+  }
+
+  static createNonNullAssertionExpression(
+    expression: Expression,
+    range: Range
+  ): NonNullAssertionExpression {
+    var expr = new NonNullAssertionExpression();
+    expr.range = range;
+    expr.expression = expression;
     return expr;
   }
 
@@ -1372,6 +1383,11 @@ export class IntegerLiteralExpression extends LiteralExpression {
 /** Represents a `new` expression. Like a call but with its own kind. */
 export class NewExpression extends CallExpression {
   kind = NodeKind.NEW;
+}
+
+export class NonNullAssertionExpression extends Expression {
+  kind = NodeKind.NON_NULL_ASSERTION;
+  expression: Expression;
 }
 
 /** Represents a `null` expression. */
