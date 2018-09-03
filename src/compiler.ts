@@ -2680,7 +2680,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileNonNullAssertionExpression(expression: NonNullAssertionExpression, contextualType: Type): ExpressionRef {
-    const res = this.compileExpressionRetainType(expression.expression, contextualType.asNullable(), WrapMode.NONE);
+    const res = this.compileExpressionRetainType(expression.expression, contextualType.asNullableIfPossible(), WrapMode.NONE);
     this.currentType = this.currentType.nonNullableType;
     return res;
   }

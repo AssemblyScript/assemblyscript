@@ -44,7 +44,8 @@ import {
   LiteralKind,
   ParenthesizedExpression,
   AssertionExpression,
-  Expression
+  Expression,
+  NonNullAssertionExpression
 } from "./ast";
 
 import {
@@ -559,6 +560,8 @@ export class Resolver extends DiagnosticEmitter {
         }
         return null;
       }
+      case NodeKind.NON_NULL_ASSERTION:
+        return this.resolveExpression((<NonNullAssertionExpression> expression).expression, contextualFunction, reportMode);
       case NodeKind.BINARY: { // TODO: string concatenation, mostly
         throw new Error("not implemented");
       }

@@ -190,6 +190,11 @@ export class Type {
     return this.cachedNullableType;
   }
 
+  // TODO: GH#233 support nullable primitives, then just use `asNullable()`
+  asNullableIfPossible(): Type {
+    return this.is(TypeFlags.REFERENCE) ? this.asNullable() : this;
+  }
+
   /** Tests if a value of this type is assignable to a target of the specified type. */
   isAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
     var currentClass: Class | null;
