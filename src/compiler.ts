@@ -408,7 +408,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up module exports
     for (let [name, moduleExport] of program.moduleLevelExports) {
-      this.makeModuleExport(name, moduleExport.element);
+      this.makeModuleExport(name, moduleExport);
     }
 
     // set up gc

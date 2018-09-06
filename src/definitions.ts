@@ -56,7 +56,7 @@ abstract class ExportsWalker {
   walk(): void {
     for (let moduleExport of this.program.moduleLevelExports.values()) {
       // FIXME: doesn't honor the actual externally visible name
-      this.visitElement(moduleExport.element);
+      this.visitElement(moduleExport);
     }
     var todo = this.todo;
     for (let i = 0; i < todo.length; ) this.visitElement(todo[i]);

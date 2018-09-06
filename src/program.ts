@@ -133,12 +133,6 @@ class TypeAlias {
   type: CommonTypeNode;
 }
 
-/** Represents a module-level export. */
-class ModuleExport {
-  element: Element;
-  identifier: IdentifierExpression;
-}
-
 /** Represents the kind of an operator overload. */
 export enum OperatorKind {
   INVALID,
@@ -325,8 +319,8 @@ export class Program extends DiagnosticEmitter {
   typeAliases: Map<string,TypeAlias> = new Map();
   /** File-level exports by exported name. */
   fileLevelExports: Map<string,Element> = new Map();
-  /** Module-level exports by exported name. */
-  moduleLevelExports: Map<string,ModuleExport> = new Map();
+  /** Module-level exports by exported name. (Not related to ES6 modules.) */
+  moduleLevelExports: Map<string, Element> = new Map();
 
   /** ArrayBuffer instance reference. */
   arrayBufferInstance: Class | null = null;
@@ -648,15 +642,13 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register 'main' if present
-    if (this.moduleLevelExports.has("main")) {
-      let element = (<ModuleExport>this.moduleLevelExports.get("main")).element;
-      if (
-        element.kind == ElementKind.FUNCTION_PROTOTYPE &&
-        !(<FunctionPrototype>element).isAny(CommonFlags.GENERIC | CommonFlags.AMBIENT)
-      ) {
-        (<FunctionPrototype>element).set(CommonFlags.MAIN);
-        this.mainFunction = <FunctionPrototype>element;
-      }
+    let mainElement = this.moduleLevelExports.get("main");
+    if (mainElement &&
+      mainElement.kind == ElementKind.FUNCTION_PROTOTYPE &&
+      !(<FunctionPrototype>mainElement).isAny(CommonFlags.GENERIC | CommonFlags.AMBIENT)
+    ) {
+      (<FunctionPrototype>mainElement).set(CommonFlags.MAIN);
+      this.mainFunction = <FunctionPrototype>mainElement;
     }
 
     // register 'abort' if present
@@ -932,18 +924,15 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, prototype);
       if (prototype.is(CommonFlags.EXPORT) && declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
-          let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
+          let existingExport = this.moduleLevelExports.get(simpleName)!;
           this.error(
             DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
-            declaration.name.range, existingExport.element.internalName
+            declaration.name.range, existingExport.internalName
           );
           return;
         }
         prototype.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(simpleName, <ModuleExport>{
-          element: prototype,
-          identifier: declaration.name
-        });
+        this.moduleLevelExports.set(simpleName, prototype);
       }
     }
 
@@ -1388,18 +1377,15 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, element);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
-          let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
+          let existingExport = this.moduleLevelExports.get(simpleName)!;
           this.error(
             DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
-            declaration.name.range, existingExport.element.internalName
+            declaration.name.range, existingExport.internalName
           );
           return;
         }
         element.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(simpleName, <ModuleExport>{
-          element,
-          identifier: declaration.name
-        });
+        this.moduleLevelExports.set(simpleName, element);
       }
     }
 
@@ -1484,10 +1470,7 @@ export class Program extends DiagnosticEmitter {
 
     // add module level export if a top-level export of an entry file
     } else if (source.isEntry) {
-      this.moduleLevelExports.set(externalIdentifier.text, <ModuleExport>{
-        element,
-        identifier: externalIdentifier
-      });
+      this.moduleLevelExports.set(externalIdentifier.text, element);
     }
   }
 
@@ -1657,18 +1640,15 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, prototype);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
-          let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
+          let existingExport = this.moduleLevelExports.get(simpleName)!;
           this.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range, existingExport.element.internalName
+            declaration.name.range, existingExport.internalName
           );
           return;
         }
         prototype.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(simpleName, <ModuleExport>{
-          element: prototype,
-          identifier: declaration.name
-        });
+        this.moduleLevelExports.set(simpleName, prototype);
       }
     }
 
@@ -1822,18 +1802,15 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, prototype);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
-          let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
+          let existingExport = this.moduleLevelExports.get(simpleName)!;
           this.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range, existingExport.element.internalName
+            declaration.name.range, existingExport.internalName
           );
           return;
         }
         prototype.set(CommonFlags.MODULE_EXPORT);
-        this.moduleLevelExports.set(simpleName, <ModuleExport>{
-          element: prototype,
-          identifier: declaration.name
-        });
+        this.moduleLevelExports.set(simpleName, prototype);
       }
     }
 
@@ -1911,19 +1888,16 @@ export class Program extends DiagnosticEmitter {
       this.currentFilespace.members.set(simpleName, namespace);
       if (declaration.range.source.isEntry) {
         if (this.moduleLevelExports.has(simpleName)) {
-          let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
-          if (existingExport.element !== namespace) { // not merged
+          let existingExport = this.moduleLevelExports.get(simpleName)!;
+          if (existingExport !== namespace) { // not merged
             this.error(
               DiagnosticCode.Duplicate_identifier_0,
-              declaration.name.range, existingExport.element.internalName
+              declaration.name.range, existingExport.internalName
             );
             return;
           }
         } else {
-          this.moduleLevelExports.set(simpleName, <ModuleExport>{
-            element: namespace,
-            identifier: declaration.name
-          });
+          this.moduleLevelExports.set(simpleName, namespace);
         }
         namespace.set(CommonFlags.MODULE_EXPORT);
       }
@@ -2055,18 +2029,15 @@ export class Program extends DiagnosticEmitter {
         this.currentFilespace.members.set(simpleName, global);
         if (declaration.range.source.isEntry) {
           if (this.moduleLevelExports.has(simpleName)) {
-            let existingExport = <ModuleExport>this.moduleLevelExports.get(simpleName);
+            let existingExport = this.moduleLevelExports.get(simpleName)!;
             this.error(
               DiagnosticCode.Duplicate_identifier_0,
-              declaration.name.range, existingExport.element.internalName
+              declaration.name.range, existingExport.internalName
             );
             continue;
           }
           global.set(CommonFlags.MODULE_EXPORT);
-          this.moduleLevelExports.set(simpleName, <ModuleExport>{
-            element: global,
-            identifier: declaration.name
-          });
+          this.moduleLevelExports.set(simpleName, global);
         }
       }
       this.checkGlobal(global, declaration);
