@@ -1520,7 +1520,7 @@ export class Source extends Node {
   /** Normalized path. */
   normalizedPath: string;
   /** Path used internally. */
-  internalPath: string;
+  internalPath: InternalName;
   /** Simple path (last part without extension). */
   simplePath: string;
   /** Contained statements. */
@@ -1562,11 +1562,11 @@ export abstract class DeclarationStatement extends Statement {
   /** Array of decorators. */
   decorators: DecoratorNode[] | null = null;
 
-  protected cachedProgramLevelInternalName: string | null = null;
-  protected cachedFileLevelInternalName: string | null = null;
+  protected cachedProgramLevelInternalName: InternalName | null = null;
+  protected cachedFileLevelInternalName: InternalName | null = null;
 
   /** Gets the mangled program-level internal name of this declaration. */
-  get programLevelInternalName(): string {
+  get programLevelInternalName(): InternalName {
     if (!this.cachedProgramLevelInternalName) {
       this.cachedProgramLevelInternalName = mangleInternalName(this, true);
     }
@@ -1574,7 +1574,7 @@ export abstract class DeclarationStatement extends Statement {
   }
 
   /** Gets the mangled file-level internal name of this declaration. */
-  get fileLevelInternalName(): string {
+  get fileLevelInternalName(): InternalName {
     if (!this.cachedFileLevelInternalName) {
       this.cachedFileLevelInternalName = mangleInternalName(this, false);
     }
@@ -1736,7 +1736,7 @@ export class ExportStatement extends Statement {
   /** Normalized path, if `path` is set. */
   normalizedPath: string | null;
   /** Mangled internal path being referenced, if `path` is set. */
-  internalPath: string | null;
+  internalPath: InternalName | null;
 }
 
 /** Represents an expression that is used as a statement. */
@@ -1822,7 +1822,7 @@ export class ImportStatement extends Statement {
   /** Normalized path. */
   normalizedPath: string;
   /** Mangled internal path being referenced. */
-  internalPath: string;
+  internalPath: InternalName;
 }
 
 /** Represents an `interfarce` declaration. */
@@ -1947,8 +1947,18 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
   return null;
 }
 
+export type InternalName = string;
+
+export function getInternalName(sourceInternalPath: string, name: string): InternalName {
+  return sourceInternalPath + PATH_DELIMITER + name;
+}
+
+export function getInternalNameFromSource(source: Source, name: string): InternalName {
+  return getInternalName(source.internalPath, name);
+}
+
 /** Mangles a declaration's name to an internal name. */
-export function mangleInternalName(declaration: DeclarationStatement, asGlobal: bool = false): string {
+export function mangleInternalName(declaration: DeclarationStatement, asGlobal: bool = false): InternalName {
   var name = declaration.name.text;
   var parent = declaration.parent;
   if (!parent) return name;
@@ -1974,11 +1984,11 @@ export function mangleInternalName(declaration: DeclarationStatement, asGlobal: 
   }
   return asGlobal
     ? name
-    : declaration.range.source.internalPath + PATH_DELIMITER + name;
+    : getInternalNameFromSource(declaration.range.source, name);
 }
 
 /** Mangles an external to an internal path. */
-export function mangleInternalPath(path: string): string {
+export function mangleInternalPath(path: string): InternalName {
   if (path.endsWith(".ts")) path = path.substring(0, path.length - 3);
   return path;
 }

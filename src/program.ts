@@ -41,6 +41,9 @@ import {
   TypeParameterNode,
   DecoratorNode,
   DecoratorKind,
+  InternalName,
+  getInternalName,
+  getInternalNameFromSource,
 
   Expression,
   IdentifierExpression,
@@ -114,15 +117,15 @@ import {
 
 /** Represents a yet unresolved import. */
 class QueuedImport {
-  localName: string;
-  externalName: string;
-  externalNameAlt: string;
+  localName: InternalName;
+  externalName: InternalName;
+  externalNameAlt: InternalName;
   declaration: ImportDeclaration | null; // not set if a filespace
 }
 
 /** Represents a yet unresolved export. */
 class QueuedExport {
-  externalName: string;
+  externalName: InternalName;
   isReExport: bool;
   member: ExportMember;
 }
@@ -301,7 +304,7 @@ function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): O
   return OperatorKind.INVALID;
 }
 
-const noTypesYet = new Map<string,Type>();
+const noTypesYet = new Map<InternalName,Type>();
 
 /** Represents an AssemblyScript program. */
 export class Program extends DiagnosticEmitter {
@@ -316,15 +319,15 @@ export class Program extends DiagnosticEmitter {
   options: Options;
 
   /** Elements by internal name. */
-  elementsLookup: Map<string,Element> = new Map();
+  elementsLookup: Map<InternalName,Element> = new Map();
   /** Class and function instances by internal name. */
-  instancesLookup: Map<string,Element> = new Map();
+  instancesLookup: Map<InternalName,Element> = new Map();
   /** Types by internal name. */
-  typesLookup: Map<string,Type> = noTypesYet;
+  typesLookup: Map<InternalName,Type> = noTypesYet;
   /** Declared type aliases. */
   typeAliases: Map<string,TypeAlias> = new Map();
   /** File-level exports by exported name. */
-  fileLevelExports: Map<string,Element> = new Map();
+  fileLevelExports: Map<InternalName,Element> = new Map();
   /** Module-level exports by exported name. */
   moduleLevelExports: Map<string,ModuleExport> = new Map();
 
@@ -431,7 +434,7 @@ export class Program extends DiagnosticEmitter {
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
-    var queuedExports = new Map<string,QueuedExport>();
+    var queuedExports = new Map<InternalName,QueuedExport>();
     var queuedExtends = new Array<ClassPrototype>();
     var queuedImplements = new Array<ClassPrototype>();
 
@@ -746,8 +749,8 @@ export class Program extends DiagnosticEmitter {
 
   /** Tries to locate an import by traversing exports and queued exports. */
   private tryLocateImport(
-    externalName: string,
-    queuedNamedExports: Map<string,QueuedExport>
+    externalName: InternalName,
+    queuedNamedExports: Map<InternalName,QueuedExport>
   ): Element | null {
     var element: Element | null;
     var fileLevelExports = this.fileLevelExports;
@@ -1437,7 +1440,7 @@ export class Program extends DiagnosticEmitter {
 
   private initializeExports(
     statement: ExportStatement,
-    queuedExports: Map<string,QueuedExport>
+    queuedExports: Map<InternalName,QueuedExport>
   ): void {
     var members = statement.members;
     if (members) { // named
@@ -1453,7 +1456,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private setExportAndCheckLibrary(
-    internalName: string,
+    internalName: InternalName,
     element: Element,
     externalIdentifier: IdentifierExpression
   ): void {
@@ -1464,7 +1467,7 @@ export class Program extends DiagnosticEmitter {
     var internalPath = externalIdentifier.range.source.internalPath;
     var prefix = FILESPACE_PREFIX + internalPath;
     var filespace = this.elementsLookup.get(prefix);
-    if (!filespace) filespace = assert(this.elementsLookup.get(prefix + PATH_DELIMITER + "index"));
+    if (!filespace) filespace = assert(this.elementsLookup.get(getInternalName(prefix, "index")));
     assert(filespace.kind == ElementKind.FILESPACE);
     var simpleName = externalIdentifier.text;
     (<Filespace>filespace).members.set(simpleName, element);
@@ -1493,10 +1496,10 @@ export class Program extends DiagnosticEmitter {
 
   private initializeExport(
     member: ExportMember,
-    internalPath: string | null,
-    queuedExports: Map<string,QueuedExport>
+    internalPath: InternalName | null,
+    queuedExports: Map<InternalName,QueuedExport>
   ): void {
-    var externalName = member.range.source.internalPath + PATH_DELIMITER + member.externalName.text;
+    var externalName = getInternalNameFromSource(member.range.source, member.externalName.text);
     if (this.fileLevelExports.has(externalName)) {
       this.error(
         DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
@@ -1504,13 +1507,13 @@ export class Program extends DiagnosticEmitter {
       );
       return;
     }
-    var referencedName: string;
+    var referencedName: InternalName;
     var referencedElement: Element | null;
     var queuedExport: QueuedExport | null;
 
     // export local element
     if (internalPath == null) {
-      referencedName = member.range.source.internalPath + PATH_DELIMITER + member.name.text;
+      referencedName = getInternalNameFromSource(member.range.source, member.name.text);
 
       // resolve right away if the element exists
       if (this.elementsLookup.has(referencedName)) {
@@ -1538,7 +1541,7 @@ export class Program extends DiagnosticEmitter {
 
     // export external element
     } else {
-      referencedName = internalPath + PATH_DELIMITER + member.name.text;
+      referencedName = getInternalName(internalPath, member.name.text);
 
       // resolve right away if the export exists
       referencedElement = this.elementsLookup.get(referencedName);
@@ -1677,7 +1680,7 @@ export class Program extends DiagnosticEmitter {
 
   private initializeImports(
     statement: ImportStatement,
-    queuedExports: Map<string,QueuedExport>,
+    queuedExports: Map<InternalName,QueuedExport>,
     queuedImports: QueuedImport[]
   ): void {
     var declarations = statement.declarations;
@@ -1691,11 +1694,7 @@ export class Program extends DiagnosticEmitter {
       }
     } else if (statement.namespaceName) { // import * as simpleName from "file"
       let simpleName = statement.namespaceName.text;
-      let internalName = (
-        statement.range.source.internalPath +
-        PATH_DELIMITER +
-        simpleName
-      );
+      let internalName = getInternalNameFromSource(statement.range.source, simpleName);
       if (this.elementsLookup.has(internalName)) {
         this.error(
           DiagnosticCode.Duplicate_identifier_0,
@@ -1717,7 +1716,7 @@ export class Program extends DiagnosticEmitter {
       queuedImport.localName = internalName;
       let externalName = FILESPACE_PREFIX + statement.internalPath;
       queuedImport.externalName = externalName;
-      queuedImport.externalNameAlt = externalName + PATH_DELIMITER + "index";
+      queuedImport.externalNameAlt = getInternalName(externalName, "index");
       queuedImport.declaration = null; // filespace
       queuedImports.push(queuedImport);
     }
@@ -1725,8 +1724,8 @@ export class Program extends DiagnosticEmitter {
 
   private initializeImport(
     declaration: ImportDeclaration,
-    internalPath: string,
-    queuedNamedExports: Map<string,QueuedExport>,
+    internalPath: InternalName,
+    queuedNamedExports: Map<InternalName,QueuedExport>,
     queuedImports: QueuedImport[]
   ): void {
     var localName = declaration.fileLevelInternalName;
@@ -1738,7 +1737,7 @@ export class Program extends DiagnosticEmitter {
       return;
     }
 
-    var externalName = internalPath + PATH_DELIMITER + declaration.externalName.text;
+    var externalName = getInternalName(internalPath, declaration.externalName.text);
 
     // resolve right away if the exact export exists
     var element: Element | null;
@@ -1759,12 +1758,7 @@ export class Program extends DiagnosticEmitter {
       );
     } else {
       queuedImport.externalName = externalName; // try exact first
-      queuedImport.externalNameAlt = (
-        internalPath +
-        indexPart +
-        PATH_DELIMITER +
-        declaration.externalName.text
-      );
+      queuedImport.externalNameAlt = getInternalName(internalPath + indexPart, declaration.externalName.text);
     }
     queuedImport.declaration = declaration; // named
     queuedImports.push(queuedImport);
@@ -2159,7 +2153,7 @@ export abstract class Element {
   /** Simple name. */
   simpleName: string;
   /** Internal name referring to this element. */
-  internalName: string;
+  internalName: InternalName;
   /** Common flags indicating specific traits. */
   flags: CommonFlags = CommonFlags.NONE;
   /** Decorator flags indicating annotated traits. */
@@ -2170,7 +2164,7 @@ export abstract class Element {
   parent: Element | null = null;
 
   /** Constructs a new element, linking it to its containing {@link Program}. */
-  protected constructor(program: Program, simpleName: string, internalName: string) {
+  protected constructor(program: Program, simpleName: string, internalName: InternalName) {
     this.program = program;
     this.simpleName = simpleName;
     this.internalName = internalName;
@@ -2217,7 +2211,7 @@ export class Namespace extends Element {
   constructor(
     program: Program,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     declaration: NamespaceDeclaration
   ) {
     super(program, simpleName, internalName);
@@ -2238,7 +2232,7 @@ export class Enum extends Element {
   constructor(
     program: Program,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     declaration: EnumDeclaration
   ) {
     super(program, simpleName, internalName);
@@ -2261,7 +2255,7 @@ export class EnumValue extends Element {
     enm: Enum,
     program: Program,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     declaration: EnumValueDeclaration
   ) {
     super(program, simpleName, internalName);
@@ -2294,7 +2288,7 @@ export class VariableLikeElement extends Element {
   protected constructor(
     program: Program,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     type: Type,
     declaration: VariableLikeDeclarationStatement | null
   ) {
@@ -2326,7 +2320,7 @@ export class Global extends VariableLikeElement {
   constructor(
     program: Program,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     type: Type,
     declaration: VariableLikeDeclarationStatement | null,
     decoratorFlags: DecoratorFlags
@@ -2400,7 +2394,7 @@ export class FunctionPrototype extends Element {
   constructor(
     program: Program,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     declaration: FunctionDeclaration,
     classPrototype: ClassPrototype | null = null,
     decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
@@ -2454,7 +2448,7 @@ export class Function extends Element {
   /** Constructs a new concrete function. */
   constructor(
     prototype: FunctionPrototype,
-    internalName: string,
+    internalName: InternalName,
     signature: Signature,
     parent: Element | null = null,
     contextualTypeArguments: Map<string,Type> | null = null
@@ -2720,7 +2714,7 @@ export class FieldPrototype extends Element {
   constructor(
     classPrototype: ClassPrototype,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     declaration: FieldDeclaration
   ) {
     super(classPrototype.program, simpleName, internalName);
@@ -2743,7 +2737,7 @@ export class Field extends VariableLikeElement {
   /** Constructs a new field. */
   constructor(
     prototype: FieldPrototype,
-    internalName: string,
+    internalName: InternalName,
     type: Type,
     declaration: FieldDeclaration,
     parent: Class
@@ -2772,7 +2766,7 @@ export class Property extends Element {
   constructor(
     program: Program,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     parent: ClassPrototype
   ) {
     super(program, simpleName, internalName);
@@ -2801,7 +2795,7 @@ export class ClassPrototype extends Element {
   constructor(
     program: Program,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     declaration: ClassDeclaration,
     decoratorFlags: DecoratorFlags
   ) {
@@ -2844,7 +2838,7 @@ export class Class extends Element {
   constructor(
     prototype: ClassPrototype,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     typeArguments: Type[] | null = null,
     base: Class | null = null
   ) {
@@ -2949,7 +2943,7 @@ export class InterfacePrototype extends ClassPrototype {
   constructor(
     program: Program,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     declaration: InterfaceDeclaration,
     decoratorFlags: DecoratorFlags
   ) {
@@ -2971,7 +2965,7 @@ export class Interface extends Class {
   constructor(
     prototype: InterfacePrototype,
     simpleName: string,
-    internalName: string,
+    internalName: InternalName,
     typeArguments: Type[] = [],
     base: Interface | null = null
   ) {

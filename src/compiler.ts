@@ -43,7 +43,6 @@ import {
 
 import {
   CommonFlags,
-  PATH_DELIMITER,
   INNER_DELIMITER,
   INSTANCE_DELIMITER,
   STATIC_DELIMITER,
@@ -144,7 +143,8 @@ import {
 
   nodeIsConstantValue,
   isLastStatement,
-  findDecorator
+  findDecorator,
+  getInternalNameFromSource
 } from "./ast";
 
 import {
@@ -1266,9 +1266,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!members) return; // filespace
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
-      let element = fileLevelExports.get(
-        statement.range.source.internalPath + PATH_DELIMITER + member.externalName.text
-      );
+      let element = fileLevelExports.get(getInternalNameFromSource(statement.range.source, member.externalName.text));
       if (!element) continue; // reported in Program#initialize
       switch (element.kind) {
         case ElementKind.CLASS_PROTOTYPE: {

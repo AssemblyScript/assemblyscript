@@ -44,7 +44,8 @@ import {
   LiteralKind,
   ParenthesizedExpression,
   AssertionExpression,
-  Expression
+  Expression,
+  getInternalNameFromSource
 } from "./ast";
 
 import {
@@ -54,7 +55,6 @@ import {
 } from "./types";
 
 import {
-  PATH_DELIMITER,
   INSTANCE_DELIMITER,
   CommonFlags
 } from "./common";
@@ -103,7 +103,7 @@ export class Resolver extends DiagnosticEmitter {
     var typeNode = <TypeNode>node;
     var simpleName = typeNode.name.text;
     var globalName = simpleName;
-    var localName = typeNode.range.source.internalPath + PATH_DELIMITER + simpleName; // TODO cache
+    var localName = getInternalNameFromSource(typeNode.range.source, simpleName); // TODO cache
 
     // check file-global / program-global enum or class
     {
@@ -336,7 +336,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // search current file
     var elementsLookup = this.program.elementsLookup;
-    if (element = elementsLookup.get(identifier.range.source.internalPath + PATH_DELIMITER + name)) {
+    if (element = elementsLookup.get(getInternalNameFromSource(identifier.range.source, name))) {
       this.currentThisExpression = null;
       this.currentElementExpression = null;
       return element; // GLOBAL, FUNCTION_PROTOTYPE, CLASS_PROTOTYPE
