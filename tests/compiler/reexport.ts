@@ -24,3 +24,5 @@ export {
 imported_add(1, 2) + imported_sub(3, 4);
 
 export { ns as renamed_ns } from "./export";
+
+export * from "./reexport2";

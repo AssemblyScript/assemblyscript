@@ -83,6 +83,7 @@ export enum DiagnosticCode {
   A_class_may_only_extend_another_class = 1311,
   A_parameter_property_cannot_be_declared_using_a_rest_parameter = 1317,
   Duplicate_identifier_0 = 2300,
+  Identifier_0_is_re_exported_from_modules_1_and_2 = 2301,
   Cannot_find_name_0 = 2304,
   Module_0_has_no_exported_member_1 = 2305,
   Generic_type_0_requires_1_type_argument_s = 2314,
@@ -202,6 +203,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1311: return "A class may only extend another class.";
     case 1317: return "A parameter property cannot be declared using a rest parameter.";
     case 2300: return "Duplicate identifier '{0}'.";
+    case 2301: return "Identifier '{0}' is re-exported from modules '{1}' and '{2}'.";
     case 2304: return "Cannot find name '{0}'.";
     case 2305: return "Module '{0}' has no exported member '{1}'.";
     case 2314: return "Generic type '{0}' requires {1} type argument(s).";

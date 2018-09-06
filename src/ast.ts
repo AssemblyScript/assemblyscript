@@ -1972,9 +1972,24 @@ export function mangleInternalName(declaration: DeclarationStatement, asGlobal: 
     return mangleInternalName(<DeclarationStatement>parent, asGlobal) +
            STATIC_DELIMITER + name;
   }
-  return asGlobal
-    ? name
-    : declaration.range.source.internalPath + PATH_DELIMITER + name;
+  return asGlobal ? name : getSourceLevelName(declaration.range.source, name);
+}
+
+export function getSourceLevelName({ internalPath }: Source, simpleName: string): string {
+  return getSourceLevelNameFromInternalPath(internalPath, simpleName);
+}
+
+export function getSourceLevelNameFromInternalPath(internalPath: string, simpleName: string): string {
+  return stripIndex(internalPath) + PATH_DELIMITER + simpleName;
+}
+
+// "foo/index" -> "foo"
+// "foo/bar" -> itself
+export function stripIndex(internalPath: string): string {
+  const indexPart = PATH_DELIMITER + "index";
+  return internalPath.endsWith(indexPart)
+    ? internalPath.substring(0, internalPath.length - indexPart.length)
+    : internalPath;
 }
 
 /** Mangles an external to an internal path. */

@@ -4,6 +4,7 @@
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
+ (global $reexport2/export2 i32 (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
  (memory $0 0)
  (export "memory" (memory $0))
@@ -18,6 +19,8 @@
  (export "renamed_add" (func $export/add))
  (export "rerenamed_sub" (func $export/mul))
  (export "renamed_ns.two" (func $export/ns.two))
+ (export "export2" (global $reexport2/export2))
+ (export "renamed_add_2" (func $export/add))
  (start $start)
  (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.add

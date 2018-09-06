@@ -5,7 +5,6 @@
 
 import {
   CommonFlags,
-  PATH_DELIMITER,
   STATIC_DELIMITER,
   INSTANCE_DELIMITER,
   LIBRARY_PREFIX,
@@ -67,7 +66,10 @@ import {
   VariableStatement,
 
   decoratorNameToKind,
-  findDecorator
+  findDecorator,
+  getSourceLevelNameFromInternalPath,
+  getSourceLevelName,
+  stripIndex
 } from "./ast";
 
 import {
@@ -105,7 +107,8 @@ import {
 } from "./module";
 
 import {
-  CharCode
+  CharCode,
+  MultiMap
 } from "./util";
 
 import {
@@ -115,15 +118,27 @@ import {
 /** Represents a yet unresolved import. */
 class QueuedImport {
   localName: string;
-  externalName: string;
-  externalNameAlt: string;
-  declaration: ImportDeclaration | null; // not set if a filespace
+  exportingSource: Source; // Source that should export (or re-export) exportName
+  externalName: string; // Internal name of the thing being imported
+  // Null for a filespace import. This is the simple name of the export.
+  exportName: string | null;
+  // Null for a filespace import.
+  declaration: ImportDeclaration | null;
 }
 
-/** Represents a yet unresolved export. */
+/**
+ * Represents a yet unresolved export.
+ *
+ * Note that only `export { x };` or `export { x } from "./foo";` may be unresolved;
+ * a direct export is always resolved immediately.
+ *
+ * `export *` is handled by an `exportStars` map, not by a QueuedExport.
+ */
 class QueuedExport {
+  // Internal name of the thing being reexported. NOT `member.externalName.text`.
   externalName: string;
-  isReExport: bool;
+  // Set if reexporting from a different Source.
+  reExportFromSource: Source | null;
   member: ExportMember;
 }
 
@@ -136,7 +151,7 @@ class TypeAlias {
 /** Represents a module-level export. */
 class ModuleExport {
   element: Element;
-  identifier: IdentifierExpression;
+  identifier: IdentifierExpression | null;
 }
 
 /** Represents the kind of an operator overload. */
@@ -325,6 +340,9 @@ export class Program extends DiagnosticEmitter {
   typeAliases: Map<string,TypeAlias> = new Map();
   /** File-level exports by exported name. */
   fileLevelExports: Map<string,Element> = new Map();
+  // Maps each re-export from an `export *` (internal path of the re-export location) to the Source that it came from.
+  // Used to report errors when two `export *`s conflict. (An `export *` does not conflict with an own export.)
+  exportsFromExportStar = new Map<string, Source>();
   /** Module-level exports by exported name. */
   moduleLevelExports: Map<string,ModuleExport> = new Map();
 
@@ -434,6 +452,8 @@ export class Program extends DiagnosticEmitter {
     var queuedExports = new Map<string,QueuedExport>();
     var queuedExtends = new Array<ClassPrototype>();
     var queuedImplements = new Array<ClassPrototype>();
+    // Map from a file to the files it re-exports via `export * from "./foo";`
+    var exportStars = new MultiMap<Source, Source>();
 
     // build initial lookup maps of internal names to declarations
     for (let i = 0, k = this.sources.length; i < k; ++i) {
@@ -458,7 +478,7 @@ export class Program extends DiagnosticEmitter {
             break;
           }
           case NodeKind.EXPORT: {
-            this.initializeExports(<ExportStatement>statement, queuedExports);
+            this.initializeExports(source, <ExportStatement>statement, queuedExports, exportStars);
             break;
           }
           case NodeKind.FUNCTIONDECLARATION: {
@@ -466,7 +486,7 @@ export class Program extends DiagnosticEmitter {
             break;
           }
           case NodeKind.IMPORT: {
-            this.initializeImports(<ImportStatement>statement, queuedExports, queuedImports);
+            this.initializeImports(<ImportStatement>statement, queuedImports);
             break;
           }
           case NodeKind.INTERFACEDECLARATION: {
@@ -490,90 +510,16 @@ export class Program extends DiagnosticEmitter {
     }
 
     // queued imports should be resolvable now through traversing exports and queued exports
-    for (let i = 0; i < queuedImports.length;) {
-      let queuedImport = queuedImports[i];
-      let declaration = queuedImport.declaration;
-      if (declaration) { // named
-        let element = this.tryLocateImport(queuedImport.externalName, queuedExports);
-        if (element) {
-          this.elementsLookup.set(queuedImport.localName, element);
-          queuedImports.splice(i, 1);
-        } else {
-          if (element = this.tryLocateImport(queuedImport.externalNameAlt, queuedExports)) {
-            this.elementsLookup.set(queuedImport.localName, element);
-            queuedImports.splice(i, 1);
-          } else {
-            this.error(
-              DiagnosticCode.Module_0_has_no_exported_member_1,
-              declaration.range,
-              (<ImportStatement>declaration.parent).path.value,
-              declaration.externalName.text
-            );
-            ++i;
-          }
-        }
-      } else { // filespace
-        let element = this.elementsLookup.get(queuedImport.externalName);
-        if (element) {
-          this.elementsLookup.set(queuedImport.localName, element);
-          queuedImports.splice(i, 1);
-        } else {
-          if (element = this.elementsLookup.get(queuedImport.externalNameAlt)) {
-            this.elementsLookup.set(queuedImport.localName, element);
-            queuedImports.splice(i, 1);
-          } else {
-            assert(false); // already reported by the parser not finding the file
-            ++i;
-          }
-        }
-      }
+    for (const queuedImport of queuedImports) {
+      this.resolveAndSetQueuedImport(queuedImport, queuedExports, exportStars);
     }
 
     // queued exports should be resolvable now that imports are finalized
-    for (let [exportName, queuedExport] of queuedExports) {
-      let currentExport: QueuedExport | null = queuedExport; // nullable below
-      let element: Element | null;
-      do {
-        if (currentExport.isReExport) {
-          if (element = this.fileLevelExports.get(currentExport.externalName)) {
-            this.setExportAndCheckLibrary(
-              exportName,
-              element,
-              currentExport.member.externalName
-            );
-            break;
-          }
-          currentExport = queuedExports.get(currentExport.externalName);
-          if (!currentExport) {
-            this.error(
-              DiagnosticCode.Module_0_has_no_exported_member_1,
-              queuedExport.member.externalName.range,
-              (<StringLiteralExpression>(<ExportStatement>queuedExport.member.parent).path).value,
-              queuedExport.member.externalName.text
-            );
-          }
-        } else {
-          if (
-            // normal export
-            (element = this.elementsLookup.get(currentExport.externalName)) ||
-            // library re-export
-            (element = this.elementsLookup.get(currentExport.member.name.text))
-          ) {
-            this.setExportAndCheckLibrary(
-              exportName,
-              element,
-              currentExport.member.externalName
-            );
-          } else {
-            this.error(
-              DiagnosticCode.Cannot_find_name_0,
-              queuedExport.member.range, queuedExport.member.name.text
-            );
-          }
-          break;
-        }
-      } while (currentExport);
+    for (let [exportInternalName, queuedExport] of queuedExports) {
+      this.resolveAndSetQueuedExport(exportInternalName, queuedExport, queuedExports, exportStars, new Set<Source>());
     }
+
+    this.resolveExportStars(exportStars);
 
     // resolve base prototypes of derived classes
     var resolver = this.resolver;
@@ -726,6 +672,164 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  private resolveAndSetQueuedImport(
+    { declaration, exportingSource, exportName, externalName, localName }: QueuedImport,
+    queuedReExports: Map<string, QueuedExport>,
+    exportStars: MultiMap<Source, Source>
+  ): void {
+    if (declaration) { // named
+      let element = this.resolveAndSetExport(
+        exportingSource, assert(exportName), externalName, queuedReExports, exportStars, new Set<Source>());
+      if (element) {
+        this.elementsLookup.set(localName, element);
+      } else {
+        this.error(
+          DiagnosticCode.Module_0_has_no_exported_member_1,
+          declaration.range,
+          (<ImportStatement>declaration.parent).path.value,
+          declaration.externalName.text
+        );
+      }
+    } else { // filespace
+      // Filespace lookup must succeed, because would have failed already in the parser if the file didn't exist.
+      this.elementsLookup.set(localName, this.elementsLookup.get(externalName)!);
+    }
+  }
+
+  private resolveExportStars(exportStars: MultiMap<Source, Source>): void {
+    // Source -> list of Sources we need to copy its exports to.
+    var reverse = new MultiMap<Source, Source>();
+    for (const [to, froms] of exportStars) {
+      for (const from of froms) {
+        reverse.add(from, to);
+      }
+    }
+
+    // For each original export, find all sources it needs to be (transitively) re-exported to.
+    for (const [originalSource, directReExportDestinations] of reverse) {
+      const originalFilespace = this.getFilespace(originalSource);
+      const destinations = directReExportDestinations.slice();
+      const seenDestinations = new Set<Source>();
+      seenDestinations.add(originalSource); // If A reexports all from B and vice-versa, don't want to loop back to A.
+      while (destinations.length) {
+        const destination = destinations.pop()!;
+        if (seenDestinations.has(destination)) continue;
+        seenDestinations.add(destination);
+
+        for (const transitiveDestination of reverse.get(destination)) {
+          destinations.push(transitiveDestination);
+        }
+
+        for (const [simpleName, element] of originalFilespace.members) {
+          const internalName = getSourceLevelName(destination, simpleName);
+          if (this.fileLevelExports.has(internalName)) {
+            // An own export overrides an `export *` re-export. Only another `export *` re-export is a problem.
+            const previousReExport = this.exportsFromExportStar.get(internalName);
+            if (previousReExport) {
+              this.error(
+                DiagnosticCode.Identifier_0_is_re_exported_from_modules_1_and_2,
+                destination.range,
+                simpleName,
+                previousReExport.normalizedPath,
+                originalSource.normalizedPath
+              );
+            }
+          } else {
+            this.setExportFromExportStar(internalName, element, destination, simpleName, originalSource);
+          }
+        }
+      }
+    }
+  }
+
+  private resolveAndSetQueuedExport(
+    // `exportInternalName` is the internal name of the alias, and `externalName` is the internal name of the original.
+    exportInternalName: string,
+    { reExportFromSource, externalName, member }: QueuedExport,
+    queuedExports: Map<string, QueuedExport>,
+    exportStars: MultiMap<Source, Source>,
+    seenSources: Set<Source>,
+  ): Element | null {
+    const originalSimpleName = member.name.text;
+    const element = reExportFromSource
+      // `export { x } from "./foo";`
+      ? this.resolveAndSetExport(
+        reExportFromSource, originalSimpleName, externalName, queuedExports, exportStars, seenSources)
+      // `export { x };`: normal export || library re-export
+      : this.elementsLookup.get(externalName) || this.elementsLookup.get(originalSimpleName);
+    if (element) {
+      // `resolveAndSetExport` sets the export on the original; this sets the export on the alias.
+      this.setExportAndCheckLibrary(
+        exportInternalName, element, member.range.source, member.externalName.text, member.range);
+    }
+    else {
+      this.error(
+        DiagnosticCode.Module_0_has_no_exported_member_1,
+        member.externalName.range,
+        (<ExportStatement>member.parent).path!.value,
+        originalSimpleName,
+      );
+    }
+    return element;
+  }
+
+  /**
+   * Does not report errors. Caller should report an error on null if needed.
+   * (If a file has two `export *`s, only one of them should have the export, so the other is not an error.)
+   */
+  private resolveAndSetExport(
+    exportingSource: Source,
+    exportSimpleName: string,
+    externalName: string,
+    queuedExports: Map<string, QueuedExport>,
+    exportStars: MultiMap<Source, Source>,
+    seenSources: Set<Source>,
+  ): Element | null {
+    const cached = this.fileLevelExports.get(externalName);
+    if (cached) return cached;
+
+    const queuedExport = queuedExports.get(externalName);
+    if (queuedExport) {
+      // This redirects to another queued export, so resolve that.
+      return this.resolveAndSetQueuedExport(exportSimpleName, queuedExport, queuedExports, exportStars, seenSources);
+    }
+
+    return this.resolveAndSetReExportFromExportStar(
+      exportingSource, exportSimpleName, externalName, queuedExports, exportStars, seenSources);
+  }
+
+  private resolveAndSetReExportFromExportStar(
+    exportingSource: Source,
+    exportSimpleName: string,
+    externalName: string,
+    queuedExports: Map<string, QueuedExport>,
+    exportStars: MultiMap<Source, Source>,
+    seenSources: Set<Source>,
+  ): Element | null {
+    // Avoid infinite loops -- don't look in the same source more than once.
+    if (seenSources.has(exportingSource)) {
+      return null;
+    }
+    seenSources.add(exportingSource);
+
+    for (const reExportedSource of exportStars.get(exportingSource)) {
+      const element = this.resolveAndSetExport(
+        reExportedSource,
+        exportSimpleName,
+        getSourceLevelName(reExportedSource, exportSimpleName),
+        queuedExports,
+        exportStars,
+        seenSources
+      );
+      if (element) {
+        this.setExportFromExportStar(externalName, element, exportingSource, exportSimpleName, reExportedSource);
+        return element;
+        // If there are two reexports with the same name, we will error in `resolveExportStars`.
+      }
+    }
+    return null;
+  }
+
   /** Sets a constant integer value. */
   setConstantInteger(globalName: string, type: Type, value: I64): void {
     assert(type.is(TypeFlags.INTEGER));
@@ -742,26 +846,6 @@ export class Program extends DiagnosticEmitter {
       new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
         .withConstantFloatValue(value)
     );
-  }
-
-  /** Tries to locate an import by traversing exports and queued exports. */
-  private tryLocateImport(
-    externalName: string,
-    queuedNamedExports: Map<string,QueuedExport>
-  ): Element | null {
-    var element: Element | null;
-    var fileLevelExports = this.fileLevelExports;
-    do {
-      if (element = fileLevelExports.get(externalName)) return element;
-      let queuedExport = queuedNamedExports.get(externalName);
-      if (!queuedExport) break;
-      if (queuedExport.isReExport) {
-        externalName = queuedExport.externalName;
-        continue;
-      }
-      return this.elementsLookup.get(queuedExport.externalName);
-    } while (true);
-    return null;
   }
 
   /** Checks that only supported decorators are present. */
@@ -1436,46 +1520,53 @@ export class Program extends DiagnosticEmitter {
   }
 
   private initializeExports(
+    currentSource: Source,
     statement: ExportStatement,
-    queuedExports: Map<string,QueuedExport>
+    queuedExports: Map<string,QueuedExport>,
+    exportStars: MultiMap<Source, Source>,
   ): void {
     var members = statement.members;
     if (members) { // named
       for (let i = 0, k = members.length; i < k; ++i) {
         this.initializeExport(members[i], statement.internalPath, queuedExports);
       }
-    } else { // TODO: filespace
-      this.error(
-        DiagnosticCode.Operation_not_supported,
-        statement.range
-      );
+    } else { // `export * from "./foo";`
+      const target = this.lookupSourceByPath(assert(statement.normalizedPath))!;
+      exportStars.add(currentSource, target);
     }
+  }
+
+  private setExportFromExportStar(
+    internalName: string,
+    element: Element,
+    reExportingSource: Source,
+    simpleName: string,
+    originalSource: Source,
+  ): void {
+    this.exportsFromExportStar.set(internalName, originalSource);
+    this.setExportAndCheckLibrary(internalName, element, reExportingSource, simpleName, /*range*/ null);
   }
 
   private setExportAndCheckLibrary(
     internalName: string,
     element: Element,
-    externalIdentifier: IdentifierExpression
+    exportingSource: Source,
+    simpleName: string,
+    range: Range | null,
   ): void {
     // add to file-level exports
     this.fileLevelExports.set(internalName, element);
 
     // add to filespace
-    var internalPath = externalIdentifier.range.source.internalPath;
-    var prefix = FILESPACE_PREFIX + internalPath;
-    var filespace = this.elementsLookup.get(prefix);
-    if (!filespace) filespace = assert(this.elementsLookup.get(prefix + PATH_DELIMITER + "index"));
-    assert(filespace.kind == ElementKind.FILESPACE);
-    var simpleName = externalIdentifier.text;
-    (<Filespace>filespace).members.set(simpleName, element);
+    this.getFilespace(exportingSource).members.set(simpleName, element);
 
     // add global alias if a top-level export of a library file
-    var source = externalIdentifier.range.source;
-    if (source.isLibrary) {
+    if (exportingSource.isLibrary) {
       if (this.elementsLookup.has(simpleName)) {
         this.error(
           DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
-          externalIdentifier.range, simpleName
+          range || exportingSource.range,
+          simpleName
         );
       } else {
         element.internalName = simpleName;
@@ -1483,20 +1574,26 @@ export class Program extends DiagnosticEmitter {
       }
 
     // add module level export if a top-level export of an entry file
-    } else if (source.isEntry) {
-      this.moduleLevelExports.set(externalIdentifier.text, <ModuleExport>{
+    } else if (exportingSource.isEntry) {
+      this.moduleLevelExports.set(simpleName, <ModuleExport>{
         element,
-        identifier: externalIdentifier
+        identifier: null
       });
     }
   }
 
+  private getFilespace(source: Source): Filespace {
+    const filespace = this.elementsLookup.get(FILESPACE_PREFIX + stripIndex(source.internalPath))!;
+    assert(filespace.kind == ElementKind.FILESPACE);
+    return <Filespace> filespace;
+  }
+
   private initializeExport(
     member: ExportMember,
-    internalPath: string | null,
+    internalPath: string | null, // internal path of original export for re-export
     queuedExports: Map<string,QueuedExport>
   ): void {
-    var externalName = member.range.source.internalPath + PATH_DELIMITER + member.externalName.text;
+    var externalName = getSourceLevelName(member.range.source, member.externalName.text);
     if (this.fileLevelExports.has(externalName)) {
       this.error(
         DiagnosticCode.Export_declaration_conflicts_with_exported_declaration_of_0,
@@ -1506,18 +1603,19 @@ export class Program extends DiagnosticEmitter {
     }
     var referencedName: string;
     var referencedElement: Element | null;
-    var queuedExport: QueuedExport | null;
 
     // export local element
     if (internalPath == null) {
-      referencedName = member.range.source.internalPath + PATH_DELIMITER + member.name.text;
+      referencedName = getSourceLevelName(member.range.source, member.name.text);
 
       // resolve right away if the element exists
       if (this.elementsLookup.has(referencedName)) {
         this.setExportAndCheckLibrary(
           externalName,
           <Element>this.elementsLookup.get(referencedName),
-          member.externalName
+          member.range.source,
+          member.externalName.text,
+          member.range,
         );
         return;
       }
@@ -1530,15 +1628,15 @@ export class Program extends DiagnosticEmitter {
         );
         return;
       }
-      queuedExport = new QueuedExport();
-      queuedExport.isReExport = false;
-      queuedExport.externalName = referencedName; // -> here: local name
+      const queuedExport = new QueuedExport();
+      queuedExport.externalName = referencedName;
+      queuedExport.reExportFromSource = null;
       queuedExport.member = member;
       queuedExports.set(externalName, queuedExport);
 
     // export external element
     } else {
-      referencedName = internalPath + PATH_DELIMITER + member.name.text;
+      referencedName = getSourceLevelNameFromInternalPath(internalPath, member.name.text);
 
       // resolve right away if the export exists
       referencedElement = this.elementsLookup.get(referencedName);
@@ -1546,39 +1644,11 @@ export class Program extends DiagnosticEmitter {
         this.setExportAndCheckLibrary(
           externalName,
           referencedElement,
-          member.externalName
+          member.range.source,
+          member.externalName.text,
+          member.range,
         );
         return;
-      }
-
-      // walk already known queued exports
-      let seen = new Set<QueuedExport>();
-      while (queuedExport = queuedExports.get(referencedName)) {
-        if (queuedExport.isReExport) {
-          referencedElement = this.fileLevelExports.get(queuedExport.externalName);
-          if (referencedElement) {
-            this.setExportAndCheckLibrary(
-              externalName,
-              referencedElement,
-              member.externalName
-            );
-            return;
-          }
-          referencedName = queuedExport.externalName;
-          if (seen.has(queuedExport)) break;
-          seen.add(queuedExport);
-        } else {
-          referencedElement = this.elementsLookup.get(queuedExport.externalName);
-          if (referencedElement) {
-            this.setExportAndCheckLibrary(
-              externalName,
-              referencedElement,
-              member.externalName
-            );
-            return;
-          }
-          break;
-        }
       }
 
       // otherwise queue it
@@ -1589,9 +1659,9 @@ export class Program extends DiagnosticEmitter {
         );
         return;
       }
-      queuedExport = new QueuedExport();
-      queuedExport.isReExport = true;
-      queuedExport.externalName = referencedName; // -> here: external name
+      const queuedExport = new QueuedExport();
+      queuedExport.externalName = referencedName;
+      queuedExport.reExportFromSource = this.lookupSourceByPath(internalPath)!;
       queuedExport.member = member;
       queuedExports.set(externalName, queuedExport);
     }
@@ -1677,7 +1747,6 @@ export class Program extends DiagnosticEmitter {
 
   private initializeImports(
     statement: ImportStatement,
-    queuedExports: Map<string,QueuedExport>,
     queuedImports: QueuedImport[]
   ): void {
     var declarations = statement.declarations;
@@ -1686,16 +1755,12 @@ export class Program extends DiagnosticEmitter {
         this.initializeImport(
           declarations[i],
           statement.internalPath,
-          queuedExports, queuedImports
+          queuedImports
         );
       }
     } else if (statement.namespaceName) { // import * as simpleName from "file"
       let simpleName = statement.namespaceName.text;
-      let internalName = (
-        statement.range.source.internalPath +
-        PATH_DELIMITER +
-        simpleName
-      );
+      let internalName = getSourceLevelName(statement.range.source, simpleName);
       if (this.elementsLookup.has(internalName)) {
         this.error(
           DiagnosticCode.Duplicate_identifier_0,
@@ -1715,10 +1780,10 @@ export class Program extends DiagnosticEmitter {
       // otherwise queue it
       let queuedImport = new QueuedImport();
       queuedImport.localName = internalName;
-      let externalName = FILESPACE_PREFIX + statement.internalPath;
-      queuedImport.externalName = externalName;
-      queuedImport.externalNameAlt = externalName + PATH_DELIMITER + "index";
-      queuedImport.declaration = null; // filespace
+      queuedImport.exportingSource = this.lookupSourceByPath(statement.internalPath)!;
+      queuedImport.externalName = FILESPACE_PREFIX + statement.internalPath;
+      queuedImport.exportName = null;
+      queuedImport.declaration = null;
       queuedImports.push(queuedImport);
     }
   }
@@ -1726,7 +1791,6 @@ export class Program extends DiagnosticEmitter {
   private initializeImport(
     declaration: ImportDeclaration,
     internalPath: string,
-    queuedNamedExports: Map<string,QueuedExport>,
     queuedImports: QueuedImport[]
   ): void {
     var localName = declaration.fileLevelInternalName;
@@ -1738,7 +1802,8 @@ export class Program extends DiagnosticEmitter {
       return;
     }
 
-    var externalName = internalPath + PATH_DELIMITER + declaration.externalName.text;
+    const exportName = declaration.externalName.text;
+    var externalName = getSourceLevelNameFromInternalPath(internalPath, exportName);
 
     // resolve right away if the exact export exists
     var element: Element | null;
@@ -1748,25 +1813,12 @@ export class Program extends DiagnosticEmitter {
     }
 
     // otherwise queue it
-    const indexPart = PATH_DELIMITER + "index";
-    var queuedImport = new QueuedImport();
+    const queuedImport = new QueuedImport();
     queuedImport.localName = localName;
-    if (internalPath.endsWith(indexPart)) {
-      queuedImport.externalName = externalName; // try exact first
-      queuedImport.externalNameAlt = (
-        internalPath.substring(0, internalPath.length - indexPart.length + 1) +
-        declaration.externalName.text
-      );
-    } else {
-      queuedImport.externalName = externalName; // try exact first
-      queuedImport.externalNameAlt = (
-        internalPath +
-        indexPart +
-        PATH_DELIMITER +
-        declaration.externalName.text
-      );
-    }
-    queuedImport.declaration = declaration; // named
+    queuedImport.exportingSource = this.lookupSourceByPath(internalPath)!;
+    queuedImport.externalName = externalName;
+    queuedImport.exportName = exportName;
+    queuedImport.declaration = declaration;
     queuedImports.push(queuedImport);
   }
 
@@ -2199,7 +2251,7 @@ export class Filespace extends Element {
     program: Program,
     source: Source
   ) {
-    super(program, source.internalPath, FILESPACE_PREFIX + source.internalPath);
+    super(program, source.internalPath, FILESPACE_PREFIX + stripIndex(source.internalPath));
     this.members = new Map();
   }
 }
