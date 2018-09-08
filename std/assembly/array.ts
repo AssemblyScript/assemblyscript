@@ -106,11 +106,14 @@ export class Array<T> {
     var buffer = this.buffer_;
 
     if (sizeof<T>() == 1) {
-      memory.fill(
-        changetype<usize>(buffer) + start + HEADER_SIZE,
-        <u8>value,
-        <usize>(end - start)
-      );
+      let byteLen: usize = end - start;
+      if (byteLen) {
+        memory.fill(
+          changetype<usize>(buffer) + start + HEADER_SIZE,
+          <u8>value,
+          byteLen
+        );
+      }
     } else {
       for (; start < end; ++start) {
         storeUnsafe<T,T>(buffer, start, value);
