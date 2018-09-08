@@ -12,6 +12,66 @@ function internalCapacity<T>(array: Array<T>): i32 {
 
 var arr = new Array<i32>();
 
+// Array#fill //////////////////////////////////////////////////////////////////////////////////////
+
+var arr8: u8[] = [1, 2, 3, 4, 5];
+arr8.fill(1, 1, 3);
+assert(arr8[0] == 1);
+assert(arr8[1] == 1);
+assert(arr8[2] == 1);
+assert(arr8[3] == 4);
+assert(arr8[4] == 5);
+
+arr8.fill(0);
+assert(arr8[0] == 0);
+assert(arr8[1] == 0);
+assert(arr8[2] == 0);
+assert(arr8[3] == 0);
+assert(arr8[4] == 0);
+
+arr8.fill(1, 0, -3);
+assert(arr8[0] == 1);
+assert(arr8[1] == 1);
+assert(arr8[2] == 0);
+assert(arr8[3] == 0);
+assert(arr8[4] == 0);
+
+arr8.fill(2, -2);
+assert(arr8[0] == 1);
+assert(arr8[1] == 1);
+assert(arr8[2] == 0);
+assert(arr8[3] == 2);
+assert(arr8[4] == 2);
+
+var arr32: u32[] = [1, 2, 3, 4, 5];
+arr32.fill(1, 1, 3);
+assert(arr32[0] == 1);
+assert(arr32[1] == 1);
+assert(arr32[2] == 1);
+assert(arr32[3] == 4);
+assert(arr32[4] == 5);
+
+arr32.fill(0);
+assert(arr32[0] == 0);
+assert(arr32[1] == 0);
+assert(arr32[2] == 0);
+assert(arr32[3] == 0);
+assert(arr32[4] == 0);
+
+arr32.fill(1, 0, -3);
+assert(arr32[0] == 1);
+assert(arr32[1] == 1);
+assert(arr32[2] == 0);
+assert(arr32[3] == 0);
+assert(arr32[4] == 0);
+
+arr32.fill(2, -2);
+assert(arr32[0] == 1);
+assert(arr32[1] == 1);
+assert(arr32[2] == 0);
+assert(arr32[3] == 2);
+assert(arr32[4] == 2);
+
 // Array#push/pop //////////////////////////////////////////////////////////////////////////////////
 
 assert(arr.length == 0);
