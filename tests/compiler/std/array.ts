@@ -13,13 +13,13 @@ function internalCapacity<T>(array: Array<T>): i32 {
 // Checks if two arrays are equal
 function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
   if (!len) {
-    if (a.length != b.length) return false;
-    if (a === b) return true;
     len = a.length;
+    if (len != b.length) return false;
+    if (a === b) return true;
   }
   for (let i = 0; i < len; i++) {
     if (isFloat<T>()) {
-      if (isNaN(a[i]) && isNaN(a[i]) == isNaN(b[i])) continue;
+      if (isNaN(a[i]) == isNaN(b[i])) continue;
     }
     if (a[i] != b[i]) return false;
   }

@@ -794,8 +794,10 @@
    (block
     (if
      (i32.ne
-      (i32.load offset=4
-       (get_local $0)
+      (tee_local $2
+       (i32.load offset=4
+        (get_local $0)
+       )
       )
       (i32.load offset=4
        (get_local $1)
@@ -812,11 +814,6 @@
      )
      (return
       (i32.const 1)
-     )
-    )
-    (set_local $2
-     (i32.load offset=4
-      (get_local $0)
      )
     )
    )
@@ -1035,8 +1032,10 @@
    (block
     (if
      (i32.ne
-      (i32.load offset=4
-       (get_local $0)
+      (tee_local $2
+       (i32.load offset=4
+        (get_local $0)
+       )
       )
       (i32.load offset=4
        (get_local $1)
@@ -1053,11 +1052,6 @@
      )
      (return
       (i32.const 1)
-     )
-    )
-    (set_local $2
-     (i32.load offset=4
-      (get_local $0)
      )
     )
    )
@@ -5465,7 +5459,6 @@
  )
  (func $std/array/isArraysEqual<f32> (; 79 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   (if
    (i32.eqz
     (get_local $2)
@@ -5473,8 +5466,10 @@
    (block
     (if
      (i32.ne
-      (i32.load offset=4
-       (get_local $0)
+      (tee_local $2
+       (i32.load offset=4
+        (get_local $0)
+       )
       )
       (i32.load offset=4
        (get_local $1)
@@ -5493,11 +5488,6 @@
       (i32.const 1)
      )
     )
-    (set_local $2
-     (i32.load offset=4
-      (get_local $0)
-     )
-    )
    )
   )
   (block $break|0
@@ -5509,34 +5499,21 @@
        (get_local $2)
       )
      )
-     (if
-      (tee_local $4
+     (br_if $continue|0
+      (i32.eq
        (call $~lib/builtins/isNaN<f32>
         (call $~lib/array/Array<f32>#__get
          (get_local $0)
          (get_local $3)
         )
        )
-      )
-      (set_local $4
-       (i32.eq
-        (call $~lib/builtins/isNaN<f32>
-         (call $~lib/array/Array<f32>#__get
-          (get_local $0)
-          (get_local $3)
-         )
-        )
-        (call $~lib/builtins/isNaN<f32>
-         (call $~lib/array/Array<f32>#__get
-          (get_local $1)
-          (get_local $3)
-         )
+       (call $~lib/builtins/isNaN<f32>
+        (call $~lib/array/Array<f32>#__get
+         (get_local $1)
+         (get_local $3)
         )
        )
       )
-     )
-     (br_if $continue|0
-      (get_local $4)
      )
      (if
       (f32.ne
@@ -6334,7 +6311,6 @@
  )
  (func $std/array/isArraysEqual<f64> (; 87 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   (if
    (i32.eqz
     (get_local $2)
@@ -6342,8 +6318,10 @@
    (block
     (if
      (i32.ne
-      (i32.load offset=4
-       (get_local $0)
+      (tee_local $2
+       (i32.load offset=4
+        (get_local $0)
+       )
       )
       (i32.load offset=4
        (get_local $1)
@@ -6362,11 +6340,6 @@
       (i32.const 1)
      )
     )
-    (set_local $2
-     (i32.load offset=4
-      (get_local $0)
-     )
-    )
    )
   )
   (block $break|0
@@ -6378,34 +6351,21 @@
        (get_local $2)
       )
      )
-     (if
-      (tee_local $4
+     (br_if $continue|0
+      (i32.eq
        (call $~lib/builtins/isNaN<f64>
         (call $~lib/array/Array<f64>#__get
          (get_local $0)
          (get_local $3)
         )
        )
-      )
-      (set_local $4
-       (i32.eq
-        (call $~lib/builtins/isNaN<f64>
-         (call $~lib/array/Array<f64>#__get
-          (get_local $0)
-          (get_local $3)
-         )
-        )
-        (call $~lib/builtins/isNaN<f64>
-         (call $~lib/array/Array<f64>#__get
-          (get_local $1)
-          (get_local $3)
-         )
+       (call $~lib/builtins/isNaN<f64>
+        (call $~lib/array/Array<f64>#__get
+         (get_local $1)
+         (get_local $3)
         )
        )
       )
-     )
-     (br_if $continue|0
-      (get_local $4)
      )
      (if
       (f64.ne
@@ -7972,8 +7932,10 @@
    (block
     (if
      (i32.ne
-      (i32.load offset=4
-       (get_local $0)
+      (tee_local $2
+       (i32.load offset=4
+        (get_local $0)
+       )
       )
       (i32.load offset=4
        (get_local $1)
@@ -7990,11 +7952,6 @@
      )
      (return
       (i32.const 1)
-     )
-    )
-    (set_local $2
-     (i32.load offset=4
-      (get_local $0)
      )
     )
    )

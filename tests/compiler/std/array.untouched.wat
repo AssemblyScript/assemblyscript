@@ -902,14 +902,17 @@
     (get_local $2)
    )
    (block
+    (set_local $2
+     (block $~lib/array/Array<u8>#get:length|inlined.0 (result i32)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+    )
     (if
      (i32.ne
+      (get_local $2)
       (block $~lib/array/Array<u8>#get:length|inlined.2 (result i32)
-       (i32.load offset=4
-        (get_local $0)
-       )
-      )
-      (block $~lib/array/Array<u8>#get:length|inlined.3 (result i32)
        (i32.load offset=4
         (get_local $1)
        )
@@ -926,13 +929,6 @@
      )
      (return
       (i32.const 1)
-     )
-    )
-    (set_local $2
-     (block $~lib/array/Array<u8>#get:length|inlined.4 (result i32)
-      (i32.load offset=4
-       (get_local $0)
-      )
      )
     )
    )
@@ -1167,14 +1163,17 @@
     (get_local $2)
    )
    (block
+    (set_local $2
+     (block $~lib/array/Array<u32>#get:length|inlined.0 (result i32)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+    )
     (if
      (i32.ne
+      (get_local $2)
       (block $~lib/array/Array<u32>#get:length|inlined.2 (result i32)
-       (i32.load offset=4
-        (get_local $0)
-       )
-      )
-      (block $~lib/array/Array<u32>#get:length|inlined.3 (result i32)
        (i32.load offset=4
         (get_local $1)
        )
@@ -1191,13 +1190,6 @@
      )
      (return
       (i32.const 1)
-     )
-    )
-    (set_local $2
-     (block $~lib/array/Array<u32>#get:length|inlined.4 (result i32)
-      (i32.load offset=4
-       (get_local $0)
-      )
      )
     )
    )
@@ -6930,20 +6922,22 @@
  )
  (func $std/array/isArraysEqual<f32> (; 94 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   (if
    (i32.eqz
     (get_local $2)
    )
    (block
+    (set_local $2
+     (block $~lib/array/Array<f32>#get:length|inlined.1 (result i32)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+    )
     (if
      (i32.ne
+      (get_local $2)
       (block $~lib/array/Array<f32>#get:length|inlined.3 (result i32)
-       (i32.load offset=4
-        (get_local $0)
-       )
-      )
-      (block $~lib/array/Array<f32>#get:length|inlined.4 (result i32)
        (i32.load offset=4
         (get_local $1)
        )
@@ -6960,13 +6954,6 @@
      )
      (return
       (i32.const 1)
-     )
-    )
-    (set_local $2
-     (block $~lib/array/Array<f32>#get:length|inlined.5 (result i32)
-      (i32.load offset=4
-       (get_local $0)
-      )
      )
     )
    )
@@ -6987,30 +6974,19 @@
      )
      (block
       (if
-       (if (result i32)
-        (tee_local $4
-         (call $~lib/builtins/isNaN<f32>
-          (call $~lib/array/Array<f32>#__get
-           (get_local $0)
-           (get_local $3)
-          )
+       (i32.eq
+        (call $~lib/builtins/isNaN<f32>
+         (call $~lib/array/Array<f32>#__get
+          (get_local $0)
+          (get_local $3)
          )
         )
-        (i32.eq
-         (call $~lib/builtins/isNaN<f32>
-          (call $~lib/array/Array<f32>#__get
-           (get_local $0)
-           (get_local $3)
-          )
-         )
-         (call $~lib/builtins/isNaN<f32>
-          (call $~lib/array/Array<f32>#__get
-           (get_local $1)
-           (get_local $3)
-          )
+        (call $~lib/builtins/isNaN<f32>
+         (call $~lib/array/Array<f32>#__get
+          (get_local $1)
+          (get_local $3)
          )
         )
-        (get_local $4)
        )
        (br $continue|0)
       )
@@ -8054,20 +8030,22 @@
  )
  (func $std/array/isArraysEqual<f64> (; 102 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   (if
    (i32.eqz
     (get_local $2)
    )
    (block
+    (set_local $2
+     (block $~lib/array/Array<f64>#get:length|inlined.0 (result i32)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+    )
     (if
      (i32.ne
+      (get_local $2)
       (block $~lib/array/Array<f64>#get:length|inlined.2 (result i32)
-       (i32.load offset=4
-        (get_local $0)
-       )
-      )
-      (block $~lib/array/Array<f64>#get:length|inlined.3 (result i32)
        (i32.load offset=4
         (get_local $1)
        )
@@ -8084,13 +8062,6 @@
      )
      (return
       (i32.const 1)
-     )
-    )
-    (set_local $2
-     (block $~lib/array/Array<f64>#get:length|inlined.4 (result i32)
-      (i32.load offset=4
-       (get_local $0)
-      )
      )
     )
    )
@@ -8111,30 +8082,19 @@
      )
      (block
       (if
-       (if (result i32)
-        (tee_local $4
-         (call $~lib/builtins/isNaN<f64>
-          (call $~lib/array/Array<f64>#__get
-           (get_local $0)
-           (get_local $3)
-          )
+       (i32.eq
+        (call $~lib/builtins/isNaN<f64>
+         (call $~lib/array/Array<f64>#__get
+          (get_local $0)
+          (get_local $3)
          )
         )
-        (i32.eq
-         (call $~lib/builtins/isNaN<f64>
-          (call $~lib/array/Array<f64>#__get
-           (get_local $0)
-           (get_local $3)
-          )
-         )
-         (call $~lib/builtins/isNaN<f64>
-          (call $~lib/array/Array<f64>#__get
-           (get_local $1)
-           (get_local $3)
-          )
+        (call $~lib/builtins/isNaN<f64>
+         (call $~lib/array/Array<f64>#__get
+          (get_local $1)
+          (get_local $3)
          )
         )
-        (get_local $4)
        )
        (br $continue|0)
       )
@@ -9104,14 +9064,17 @@
     (get_local $2)
    )
    (block
+    (set_local $2
+     (block $~lib/array/Array<i32>#get:length|inlined.29 (result i32)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+    )
     (if
      (i32.ne
+      (get_local $2)
       (block $~lib/array/Array<i32>#get:length|inlined.31 (result i32)
-       (i32.load offset=4
-        (get_local $0)
-       )
-      )
-      (block $~lib/array/Array<i32>#get:length|inlined.32 (result i32)
        (i32.load offset=4
         (get_local $1)
        )
@@ -9128,13 +9091,6 @@
      )
      (return
       (i32.const 1)
-     )
-    )
-    (set_local $2
-     (block $~lib/array/Array<i32>#get:length|inlined.33 (result i32)
-      (i32.load offset=4
-       (get_local $0)
-      )
      )
     )
    )
@@ -10133,7 +10089,7 @@
      (i32.eqz
       (i32.lt_s
        (get_local $2)
-       (block $~lib/array/Array<i32>#get:length|inlined.35 (result i32)
+       (block $~lib/array/Array<i32>#get:length|inlined.33 (result i32)
         (i32.load offset=4
          (get_local $1)
         )
@@ -10146,7 +10102,7 @@
      (get_local $2)
      (i32.sub
       (i32.sub
-       (block $~lib/array/Array<i32>#get:length|inlined.36 (result i32)
+       (block $~lib/array/Array<i32>#get:length|inlined.34 (result i32)
         (i32.load offset=4
          (get_local $1)
         )
@@ -10267,7 +10223,7 @@
      (i32.eqz
       (i32.lt_s
        (get_local $2)
-       (block $~lib/array/Array<i32>#get:length|inlined.38 (result i32)
+       (block $~lib/array/Array<i32>#get:length|inlined.36 (result i32)
         (i32.load offset=4
          (get_local $1)
         )
@@ -10282,7 +10238,7 @@
       (f64.mul
        (call $~lib/math/NativeMath.random)
        (f64.convert_s/i32
-        (block $~lib/array/Array<i32>#get:length|inlined.39 (result i32)
+        (block $~lib/array/Array<i32>#get:length|inlined.37 (result i32)
          (i32.load offset=4
           (get_local $1)
          )
@@ -10317,7 +10273,7 @@
      (i32.const 1)
     )
     (set_local $3
-     (block $~lib/array/Array<i32>#get:length|inlined.40 (result i32)
+     (block $~lib/array/Array<i32>#get:length|inlined.38 (result i32)
       (i32.load offset=4
        (get_local $0)
       )
@@ -12449,14 +12405,17 @@
     (get_local $2)
    )
    (block
+    (set_local $2
+     (block $~lib/array/Array<String>#get:length|inlined.1 (result i32)
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+    )
     (if
      (i32.ne
+      (get_local $2)
       (block $~lib/array/Array<String>#get:length|inlined.3 (result i32)
-       (i32.load offset=4
-        (get_local $0)
-       )
-      )
-      (block $~lib/array/Array<String>#get:length|inlined.4 (result i32)
        (i32.load offset=4
         (get_local $1)
        )
@@ -12473,13 +12432,6 @@
      )
      (return
       (i32.const 1)
-     )
-    )
-    (set_local $2
-     (block $~lib/array/Array<String>#get:length|inlined.5 (result i32)
-      (i32.load offset=4
-       (get_local $0)
-      )
      )
     )
    )
@@ -12987,7 +12939,7 @@
      (i32.eqz
       (i32.lt_s
        (get_local $2)
-       (block $~lib/array/Array<String>#get:length|inlined.7 (result i32)
+       (block $~lib/array/Array<String>#get:length|inlined.5 (result i32)
         (i32.load offset=4
          (get_local $1)
         )
