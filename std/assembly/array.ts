@@ -100,11 +100,10 @@ export class Array<T> {
   }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    var len = this.length_;
+    var buffer = this.buffer_;
+    var len    = this.length_;
     start = start < 0 ? max(len + start, 0) : min(start, len);
     end   = end   < 0 ? max(len + end,   0) : min(end,   len);
-    var buffer = this.buffer_;
-
     if (sizeof<T>() == 1) {
       let byteLen: usize = end - start;
       if (byteLen) {
