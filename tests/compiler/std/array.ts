@@ -14,6 +14,7 @@ function internalCapacity<T>(array: Array<T>): i32 {
 function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
   if (!len) {
     if (a.length != b.length) return false;
+    if (a === b) return true;
     len = a.length;
   }
   for (let i = 0; i < len; i++) {
