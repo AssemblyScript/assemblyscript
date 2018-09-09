@@ -6749,6 +6749,13 @@ export class Compiler extends DiagnosticEmitter {
           return module.createUnreachable();
         }
       }
+      case ElementKind.FUNCTION_PROTOTYPE: {
+        this.error(
+          DiagnosticCode.Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set,
+          propertyAccess.range, (<FunctionPrototype>target).simpleName
+        );
+        return module.createUnreachable();
+      }
     }
     this.error(
       DiagnosticCode.Operation_not_supported,
