@@ -669,95 +669,85 @@
  (func $~lib/array/Array<u8>#fill (; 8 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (set_local $6
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $5
+  (set_local $4
    (i32.load offset=4
     (get_local $0)
    )
   )
-  (set_local $2
-   (if (result i32)
-    (i32.lt_s
-     (get_local $2)
-     (i32.const 0)
-    )
-    (select
-     (tee_local $4
-      (i32.add
-       (get_local $5)
-       (get_local $2)
-      )
+  (call $~lib/internal/memory/memset
+   (i32.add
+    (i32.add
+     (i32.load
+      (get_local $0)
      )
-     (i32.const 0)
-     (i32.gt_s
-      (get_local $4)
-      (i32.const 0)
-     )
-    )
-    (select
-     (tee_local $4
-      (get_local $2)
-     )
-     (get_local $5)
-     (i32.lt_s
-      (get_local $2)
-      (get_local $5)
-     )
-    )
-   )
-  )
-  (if
-   (tee_local $4
-    (i32.sub
-     (tee_local $3
+     (tee_local $2
       (if (result i32)
        (i32.lt_s
-        (get_local $3)
+        (get_local $2)
         (i32.const 0)
        )
        (select
-        (tee_local $4
+        (tee_local $5
          (i32.add
-          (get_local $5)
-          (get_local $3)
+          (get_local $4)
+          (get_local $2)
          )
         )
         (i32.const 0)
         (i32.gt_s
-         (get_local $4)
+         (get_local $5)
          (i32.const 0)
         )
        )
        (select
-        (tee_local $4
-         (get_local $3)
+        (tee_local $5
+         (get_local $2)
         )
-        (get_local $5)
+        (get_local $4)
         (i32.lt_s
+         (get_local $2)
          (get_local $4)
-         (get_local $5)
         )
        )
       )
      )
-     (get_local $2)
     )
+    (i32.const 8)
    )
-   (call $~lib/internal/memory/memset
-    (i32.add
-     (i32.add
-      (get_local $6)
-      (get_local $2)
+   (get_local $1)
+   (i32.sub
+    (tee_local $3
+     (if (result i32)
+      (i32.lt_s
+       (get_local $3)
+       (i32.const 0)
+      )
+      (select
+       (tee_local $5
+        (i32.add
+         (get_local $4)
+         (get_local $3)
+        )
+       )
+       (i32.const 0)
+       (i32.gt_s
+        (get_local $5)
+        (i32.const 0)
+       )
+      )
+      (select
+       (tee_local $5
+        (get_local $3)
+       )
+       (get_local $4)
+       (i32.lt_s
+        (get_local $3)
+        (get_local $4)
+       )
+      )
      )
-     (i32.const 8)
     )
-    (get_local $1)
-    (get_local $4)
+    (get_local $2)
    )
   )
   (get_local $0)
@@ -2971,7 +2961,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 168)
+       (i32.const 165)
        (i32.const 42)
       )
       (unreachable)
@@ -3023,7 +3013,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 180)
+     (i32.const 177)
      (i32.const 20)
     )
     (unreachable)
@@ -3094,7 +3084,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 270)
+       (i32.const 267)
        (i32.const 42)
       )
       (unreachable)
@@ -3166,7 +3156,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 241)
+     (i32.const 238)
      (i32.const 20)
     )
     (unreachable)
@@ -5294,7 +5284,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 330)
      (i32.const 4)
     )
     (unreachable)
@@ -6119,7 +6109,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 330)
      (i32.const 4)
     )
     (unreachable)
@@ -6972,7 +6962,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 330)
      (i32.const 4)
     )
     (unreachable)
@@ -7450,7 +7440,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 330)
      (i32.const 4)
     )
     (unreachable)

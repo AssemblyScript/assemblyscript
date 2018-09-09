@@ -105,14 +105,11 @@ export class Array<T> {
     start = start < 0 ? max(len + start, 0) : min(start, len);
     end   = end   < 0 ? max(len + end,   0) : min(end,   len);
     if (sizeof<T>() == 1) {
-      let byteLen: usize = end - start;
-      if (byteLen) {
-        memory.fill(
-          changetype<usize>(buffer) + start + HEADER_SIZE,
-          <u8>value,
-          byteLen
-        );
-      }
+      memory.fill(
+        changetype<usize>(buffer) + start + HEADER_SIZE,
+        <u8>value,
+        <usize>(end - start)
+      );
     } else {
       for (; start < end; ++start) {
         storeUnsafe<T,T>(buffer, start, value);
