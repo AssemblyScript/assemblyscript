@@ -69,7 +69,6 @@ import {
   findDecorator,
   getSourceLevelNameFromInternalPath,
   getSourceLevelName,
-  stripIndex
 } from "./ast";
 
 import {
@@ -108,7 +107,7 @@ import {
 
 import {
   CharCode,
-  MultiMap
+  multiMapAdd
 } from "./util";
 
 import {
@@ -119,7 +118,6 @@ import {
 class QueuedImport {
   localName: string;
   exportingSource: Source; // Source that should export (or re-export) exportName
-  externalName: string; // Internal name of the thing being imported
   // Null for a filespace import. This is the simple name of the export.
   exportName: string | null;
   // Null for a filespace import.
@@ -135,9 +133,12 @@ class QueuedImport {
  * `export *` is handled by an `exportStars` map, not by a QueuedExport.
  */
 class QueuedExport {
-  // Internal name of the thing being reexported. NOT `member.externalName.text`.
-  externalName: string;
-  // Set if reexporting from a different Source.
+  /**
+   * Only set for a local re-export `export { x };`.
+   * Internal name of the thing being reexported. NOT `member.externalName.text`.
+   */
+  localInternalName: string | null;
+  /** Only set for a module re-export `export { x } from "./foo";`. */
   reExportFromSource: Source | null;
   member: ExportMember;
 }
@@ -342,7 +343,7 @@ export class Program extends DiagnosticEmitter {
   fileLevelExports: Map<string,Element> = new Map();
   // Maps each re-export from an `export *` (internal path of the re-export location) to the Source that it came from.
   // Used to report errors when two `export *`s conflict. (An `export *` does not conflict with an own export.)
-  exportsFromExportStar = new Map<string, Source>();
+  exportsFromExportStar = new Set<string>();
   /** Module-level exports by exported name. */
   moduleLevelExports: Map<string,ModuleExport> = new Map();
 
@@ -453,7 +454,7 @@ export class Program extends DiagnosticEmitter {
     var queuedExtends = new Array<ClassPrototype>();
     var queuedImplements = new Array<ClassPrototype>();
     // Map from a file to the files it re-exports via `export * from "./foo";`
-    var exportStars = new MultiMap<Source, Source>();
+    var exportStars = new Map<Source, Source[]>();
 
     // build initial lookup maps of internal names to declarations
     for (let i = 0, k = this.sources.length; i < k; ++i) {
@@ -673,13 +674,13 @@ export class Program extends DiagnosticEmitter {
   }
 
   private resolveAndSetQueuedImport(
-    { declaration, exportingSource, exportName, externalName, localName }: QueuedImport,
+    { declaration, exportingSource, exportName, localName }: QueuedImport,
     queuedReExports: Map<string, QueuedExport>,
-    exportStars: MultiMap<Source, Source>
+    exportStars: Map<Source, Source[]>
   ): void {
     if (declaration) { // named
       let element = this.resolveAndSetExport(
-        exportingSource, assert(exportName), externalName, queuedReExports, exportStars, new Set<Source>());
+        exportingSource, assert(exportName), queuedReExports, exportStars, new Set<Source>());
       if (element) {
         this.elementsLookup.set(localName, element);
       } else {
@@ -692,16 +693,16 @@ export class Program extends DiagnosticEmitter {
       }
     } else { // filespace
       // Filespace lookup must succeed, because would have failed already in the parser if the file didn't exist.
-      this.elementsLookup.set(localName, this.elementsLookup.get(externalName)!);
+      this.elementsLookup.set(localName, this.elementsLookup.get(FILESPACE_PREFIX + exportingSource.internalPath)!);
     }
   }
 
-  private resolveExportStars(exportStars: MultiMap<Source, Source>): void {
+  private resolveExportStars(exportStars: Map<Source, Source[]>): void {
     // Source -> list of Sources we need to copy its exports to.
-    var reverse = new MultiMap<Source, Source>();
+    var reverse = new Map<Source, Source[]>();
     for (const [to, froms] of exportStars) {
       for (const from of froms) {
-        reverse.add(from, to);
+        multiMapAdd(reverse, from, to);
       }
     }
 
@@ -716,7 +717,7 @@ export class Program extends DiagnosticEmitter {
         if (seenDestinations.has(destination)) continue;
         seenDestinations.add(destination);
 
-        for (const transitiveDestination of reverse.get(destination)) {
+        for (const transitiveDestination of reverse.get(destination) || []) {
           destinations.push(transitiveDestination);
         }
 
@@ -724,18 +725,16 @@ export class Program extends DiagnosticEmitter {
           const internalName = getSourceLevelName(destination, simpleName);
           if (this.fileLevelExports.has(internalName)) {
             // An own export overrides an `export *` re-export. Only another `export *` re-export is a problem.
-            const previousReExport = this.exportsFromExportStar.get(internalName);
-            if (previousReExport) {
+            if (this.exportsFromExportStar.has(internalName)) {
               this.error(
-                DiagnosticCode.Identifier_0_is_re_exported_from_modules_1_and_2,
+                DiagnosticCode.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
                 destination.range,
+                destination.normalizedPath,
                 simpleName,
-                previousReExport.normalizedPath,
-                originalSource.normalizedPath
               );
             }
           } else {
-            this.setExportFromExportStar(internalName, element, destination, simpleName, originalSource);
+            this.setExportFromExportStar(element, destination, simpleName);
           }
         }
       }
@@ -745,18 +744,18 @@ export class Program extends DiagnosticEmitter {
   private resolveAndSetQueuedExport(
     // `exportInternalName` is the internal name of the alias, and `externalName` is the internal name of the original.
     exportInternalName: string,
-    { reExportFromSource, externalName, member }: QueuedExport,
+    { localInternalName, reExportFromSource, member }: QueuedExport,
     queuedExports: Map<string, QueuedExport>,
-    exportStars: MultiMap<Source, Source>,
+    exportStars: Map<Source, Source[]>,
     seenSources: Set<Source>,
   ): Element | null {
     const originalSimpleName = member.name.text;
     const element = reExportFromSource
       // `export { x } from "./foo";`
       ? this.resolveAndSetExport(
-        reExportFromSource, originalSimpleName, externalName, queuedExports, exportStars, seenSources)
+        reExportFromSource, originalSimpleName, queuedExports, exportStars, seenSources)
       // `export { x };`: normal export || library re-export
-      : this.elementsLookup.get(externalName) || this.elementsLookup.get(originalSimpleName);
+      : this.elementsLookup.get(localInternalName!) || this.elementsLookup.get(originalSimpleName);
     if (element) {
       // `resolveAndSetExport` sets the export on the original; this sets the export on the alias.
       this.setExportAndCheckLibrary(
@@ -780,30 +779,29 @@ export class Program extends DiagnosticEmitter {
   private resolveAndSetExport(
     exportingSource: Source,
     exportSimpleName: string,
-    externalName: string,
     queuedExports: Map<string, QueuedExport>,
-    exportStars: MultiMap<Source, Source>,
+    exportStars: Map<Source, Source[]>,
     seenSources: Set<Source>,
   ): Element | null {
-    const cached = this.fileLevelExports.get(externalName);
+    const exportInternalPath = getSourceLevelName(exportingSource, exportSimpleName);
+    const cached = this.fileLevelExports.get(exportInternalPath);
     if (cached) return cached;
 
-    const queuedExport = queuedExports.get(externalName);
+    const queuedExport = queuedExports.get(exportInternalPath);
     if (queuedExport) {
       // This redirects to another queued export, so resolve that.
       return this.resolveAndSetQueuedExport(exportSimpleName, queuedExport, queuedExports, exportStars, seenSources);
     }
 
     return this.resolveAndSetReExportFromExportStar(
-      exportingSource, exportSimpleName, externalName, queuedExports, exportStars, seenSources);
+      exportingSource, exportSimpleName, queuedExports, exportStars, seenSources);
   }
 
   private resolveAndSetReExportFromExportStar(
     exportingSource: Source,
     exportSimpleName: string,
-    externalName: string,
     queuedExports: Map<string, QueuedExport>,
-    exportStars: MultiMap<Source, Source>,
+    exportStars: Map<Source, Source[]>,
     seenSources: Set<Source>,
   ): Element | null {
     // Avoid infinite loops -- don't look in the same source more than once.
@@ -812,17 +810,16 @@ export class Program extends DiagnosticEmitter {
     }
     seenSources.add(exportingSource);
 
-    for (const reExportedSource of exportStars.get(exportingSource)) {
+    for (const reExportedSource of exportStars.get(exportingSource) || []) {
       const element = this.resolveAndSetExport(
         reExportedSource,
         exportSimpleName,
-        getSourceLevelName(reExportedSource, exportSimpleName),
         queuedExports,
         exportStars,
         seenSources
       );
       if (element) {
-        this.setExportFromExportStar(externalName, element, exportingSource, exportSimpleName, reExportedSource);
+        this.setExportFromExportStar(element, exportingSource, exportSimpleName);
         return element;
         // If there are two reexports with the same name, we will error in `resolveExportStars`.
       }
@@ -1523,7 +1520,7 @@ export class Program extends DiagnosticEmitter {
     currentSource: Source,
     statement: ExportStatement,
     queuedExports: Map<string,QueuedExport>,
-    exportStars: MultiMap<Source, Source>,
+    exportStars: Map<Source, Source[]>,
   ): void {
     var members = statement.members;
     if (members) { // named
@@ -1532,18 +1529,17 @@ export class Program extends DiagnosticEmitter {
       }
     } else { // `export * from "./foo";`
       const target = this.lookupSourceByPath(assert(statement.normalizedPath))!;
-      exportStars.add(currentSource, target);
+      multiMapAdd(exportStars, currentSource, target);
     }
   }
 
   private setExportFromExportStar(
-    internalName: string,
     element: Element,
     reExportingSource: Source,
     simpleName: string,
-    originalSource: Source,
   ): void {
-    this.exportsFromExportStar.set(internalName, originalSource);
+    const internalName = getSourceLevelName(reExportingSource, simpleName);
+    this.exportsFromExportStar.add(internalName);
     this.setExportAndCheckLibrary(internalName, element, reExportingSource, simpleName, /*range*/ null);
   }
 
@@ -1583,7 +1579,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   private getFilespace(source: Source): Filespace {
-    const filespace = this.elementsLookup.get(FILESPACE_PREFIX + stripIndex(source.internalPath))!;
+    const filespace = this.elementsLookup.get(FILESPACE_PREFIX + source.internalPath)!;
     assert(filespace.kind == ElementKind.FILESPACE);
     return <Filespace> filespace;
   }
@@ -1629,7 +1625,7 @@ export class Program extends DiagnosticEmitter {
         return;
       }
       const queuedExport = new QueuedExport();
-      queuedExport.externalName = referencedName;
+      queuedExport.localInternalName = referencedName;
       queuedExport.reExportFromSource = null;
       queuedExport.member = member;
       queuedExports.set(externalName, queuedExport);
@@ -1660,7 +1656,7 @@ export class Program extends DiagnosticEmitter {
         return;
       }
       const queuedExport = new QueuedExport();
-      queuedExport.externalName = referencedName;
+      queuedExport.localInternalName = null;
       queuedExport.reExportFromSource = this.lookupSourceByPath(internalPath)!;
       queuedExport.member = member;
       queuedExports.set(externalName, queuedExport);
@@ -1781,7 +1777,6 @@ export class Program extends DiagnosticEmitter {
       let queuedImport = new QueuedImport();
       queuedImport.localName = internalName;
       queuedImport.exportingSource = this.lookupSourceByPath(statement.internalPath)!;
-      queuedImport.externalName = FILESPACE_PREFIX + statement.internalPath;
       queuedImport.exportName = null;
       queuedImport.declaration = null;
       queuedImports.push(queuedImport);
@@ -1816,7 +1811,6 @@ export class Program extends DiagnosticEmitter {
     const queuedImport = new QueuedImport();
     queuedImport.localName = localName;
     queuedImport.exportingSource = this.lookupSourceByPath(internalPath)!;
-    queuedImport.externalName = externalName;
     queuedImport.exportName = exportName;
     queuedImport.declaration = declaration;
     queuedImports.push(queuedImport);
@@ -2251,7 +2245,7 @@ export class Filespace extends Element {
     program: Program,
     source: Source
   ) {
-    super(program, source.internalPath, FILESPACE_PREFIX + stripIndex(source.internalPath));
+    super(program, source.internalPath, FILESPACE_PREFIX + source.internalPath);
     this.members = new Map();
   }
 }

@@ -1821,7 +1821,10 @@ export class ImportStatement extends Statement {
   path: StringLiteralExpression;
   /** Normalized path. */
   normalizedPath: string;
-  /** Mangled internal path being referenced. */
+  /**
+   * Mangled internal path being referenced.
+   * Note: actual referenced path may be this + "/index". See `lookupSourceByPath` in `program.ts`.
+   */
   internalPath: string;
 }
 
@@ -1980,16 +1983,7 @@ export function getSourceLevelName({ internalPath }: Source, simpleName: string)
 }
 
 export function getSourceLevelNameFromInternalPath(internalPath: string, simpleName: string): string {
-  return stripIndex(internalPath) + PATH_DELIMITER + simpleName;
-}
-
-// "foo/index" -> "foo"
-// "foo/bar" -> itself
-export function stripIndex(internalPath: string): string {
-  const indexPart = PATH_DELIMITER + "index";
-  return internalPath.endsWith(indexPart)
-    ? internalPath.substring(0, internalPath.length - indexPart.length)
-    : internalPath;
+  return internalPath + PATH_DELIMITER + simpleName;
 }
 
 /** Mangles an external to an internal path. */

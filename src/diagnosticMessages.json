@@ -77,9 +77,9 @@
   "A parameter property cannot be declared using a rest parameter.": 1317,
 
   "Duplicate identifier '{0}'.": 2300,
-  "Identifier '{0}' is re-exported from modules '{1}' and '{2}'.": 2301,
   "Cannot find name '{0}'.": 2304,
   "Module '{0}' has no exported member '{1}'.": 2305,
+  "Module {0} has already exported a member named '{1}'. Consider explicitly re-exporting to resolve the ambiguity.": 2308,
   "Generic type '{0}' requires {1} type argument(s).": 2314,
   "Type '{0}' is not generic.": 2315,
   "Type '{0}' is not assignable to type '{1}'.": 2322,
