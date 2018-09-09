@@ -642,7 +642,7 @@ export class Program extends DiagnosticEmitter {
 
     // register 'start'
     {
-      let element = assert(this.elementsLookup.get("start"));
+      let element = assert(this.elementsLookup.get("start"), "builtin \"start\" missing. Try adding: import \"builtins\"");
       assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
       this.startFunction = <FunctionPrototype>element;
     }
