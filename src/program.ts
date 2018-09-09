@@ -539,7 +539,7 @@ export class Program extends DiagnosticEmitter {
             this.setExportAndCheckLibrary(
               exportName,
               element,
-              currentExport.member.externalName
+              queuedExport.member.externalName
             );
             break;
           }
@@ -562,7 +562,7 @@ export class Program extends DiagnosticEmitter {
             this.setExportAndCheckLibrary(
               exportName,
               element,
-              currentExport.member.externalName
+              queuedExport.member.externalName
             );
           } else {
             this.error(

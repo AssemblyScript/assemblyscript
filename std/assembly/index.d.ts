@@ -525,6 +525,7 @@ declare class Map<K,V> {
   readonly size: i32;
   has(key: K): bool;
   set(key: K, value: V): void;
+  get(key: K): V;
   delete(key: K): bool;
   clear(): void;
 }
