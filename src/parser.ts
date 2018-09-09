@@ -2913,32 +2913,9 @@ export class Parser extends DiagnosticEmitter {
     var startPos = tn.tokenPos;
     var precedence = determinePrecedenceStart(token);
     if (precedence != Precedence.NONE) {
-      let operand: Expression | null;
-
       // TODO: SpreadExpression, YieldExpression (currently become unsupported UnaryPrefixExpressions)
-
-      // NewExpression
-      if (token == Token.NEW) {
-        operand = this.parseExpression(tn, Precedence.CALL);
-        if (!operand) return null;
-        if (operand.kind == NodeKind.CALL) {
-          return Node.createNewExpression(
-            (<CallExpression>operand).expression,
-            (<CallExpression>operand).typeArguments,
-            (<CallExpression>operand).arguments,
-            tn.range(startPos, tn.pos)
-          );
-        } else {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            tn.range()
-          );
-        }
-        return null;
-      } else {
-        operand = this.parseExpression(tn, precedence);
-        if (!operand) return null;
-      }
+      const operand = this.parseExpression(tn, precedence);
+      if (!operand) return null;
 
       // UnaryPrefixExpression
       if (token == Token.PLUS_PLUS || token == Token.MINUS_MINUS) {
@@ -3252,6 +3229,8 @@ export class Parser extends DiagnosticEmitter {
   ): Expression | null {
     assert(precedence != Precedence.NONE);
 
+    var newStartPos = tn.tokenPos;
+    var isNew = tn.skip(Token.NEW);
     var expr = this.parseExpressionStart(tn);
     if (!expr) return null;
     var startPos = expr.range.start;
@@ -3266,8 +3245,12 @@ export class Parser extends DiagnosticEmitter {
       ) {
         let args = this.parseArguments(tn);
         if (!args) return null;
-        expr = Node.createCallExpression(expr, typeArguments, args, tn.range(startPos, tn.pos)); // is again callable
+        expr = (isNew ? Node.createNewExpression : Node.createCallExpression)(
+          expr, typeArguments, args, tn.range(isNew ? newStartPos : startPos, tn.pos));
       }
+    }
+    if (isNew && expr.kind !== NodeKind.NEW) {
+      expr = Node.createNewExpression(expr, null, [], tn.range(newStartPos, tn.pos));
     }
 
     var token: Token;
