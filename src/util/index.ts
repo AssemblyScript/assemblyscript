@@ -8,4 +8,4 @@ export * from "./charcode";
 export * from "./path";
 export * from "./text";
 export * from "./binary";
-export * from "./MultiMap";
+export * from "./map";
