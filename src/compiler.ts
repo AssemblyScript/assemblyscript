@@ -2641,7 +2641,7 @@ export class Compiler extends DiagnosticEmitter {
       // i32 or smaller to i64
       } else if (toType.is(TypeFlags.LONG)) {
         expr = module.createUnary(
-          toType.is(TypeFlags.SIGNED) ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32,
+          fromType.is(TypeFlags.SIGNED) ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32,
           this.ensureSmallIntegerWrap(expr, fromType) // must clear garbage bits
         );
         wrapMode = WrapMode.NONE;
