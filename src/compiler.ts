@@ -1048,11 +1048,11 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFunction = instance;
       let flow = instance.flow;
       let stmt: ExpressionRef;
-      if (body.kind == NodeKind.EXPRESSION) { // () => expression
+      if (body.kind != NodeKind.BLOCK) { // () => expression
         assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET | CommonFlags.MAIN));
         assert(instance.is(CommonFlags.ARROW));
         stmt = this.compileExpression(
-          (<ExpressionStatement>body).expression,
+          body,
           returnType,
           ConversionKind.IMPLICIT,
           WrapMode.NONE
@@ -1061,7 +1061,6 @@ export class Compiler extends DiagnosticEmitter {
         if (!flow.canOverflow(stmt, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
         flow.finalize();
       } else {
-        assert(body.kind == NodeKind.BLOCK);
         let stmts = this.compileStatements((<BlockStatement>body).statements);
         if (instance.is(CommonFlags.MAIN)) {
           module.addGlobal("~started", NativeType.I32, true, module.createI32(0));
@@ -5445,7 +5444,9 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
     } else {
-      body.push(this.compileStatement(bodyStatement));
+      body.push(bodyStatement instanceof Expression
+        ? this.compileExpression(bodyStatement, instance.signature.returnType, ConversionKind.NONE, WrapMode.NONE)
+        : this.compileStatement(bodyStatement));
     }
 
     // Free any new scoped locals and reset to the original flow

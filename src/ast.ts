@@ -855,7 +855,7 @@ export abstract class Node {
     name: IdentifierExpression,
     typeParameters: TypeParameterNode[] | null,
     signature: SignatureNode,
-    body: Statement | null,
+    body: StatementOrExpression | null,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
     range: Range
@@ -1225,8 +1225,10 @@ export class CommentNode extends Node {
 
 // expressions
 
+export abstract class StatementOrExpression extends Node { }
+
 /** Base class of all expression nodes. */
-export abstract class Expression extends Node { }
+export abstract class Expression extends StatementOrExpression { }
 
 /** Represents an identifier expression. */
 export class IdentifierExpression extends Expression {
@@ -1499,7 +1501,7 @@ export function isLastStatement(statement: Statement): bool {
 }
 
 /** Base class of all statement nodes. */
-export abstract class Statement extends Node { }
+export abstract class Statement extends StatementOrExpression { }
 
 /** Indicates the specific kind of a source. */
 export enum SourceKind {
@@ -1707,7 +1709,7 @@ export class EnumValueDeclaration extends DeclarationStatement {
 }
 
 /** Represents an `export import` statement of an interface. */
-export class ExportImportStatement extends Node {
+export class ExportImportStatement extends Statement {
   kind = NodeKind.EXPORTIMPORT;
 
   /** Identifier being imported. */
@@ -1782,7 +1784,7 @@ export class FunctionDeclaration extends DeclarationStatement {
   /** Function signature. */
   signature: SignatureNode;
   /** Body statement. Usually a block. */
-  body: Statement | null;
+  body: StatementOrExpression | null;
 
   get isGeneric(): bool {
     var typeParameters = this.typeParameters;

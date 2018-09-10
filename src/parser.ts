@@ -70,6 +70,7 @@ import {
   ParameterNode,
   ParameterKind,
   ReturnStatement,
+  StatementOrExpression,
   SwitchCase,
   SwitchStatement,
   ThrowStatement,
@@ -1393,7 +1394,7 @@ export class Parser extends DiagnosticEmitter {
       tn.range(signatureStart, tn.pos)
     );
 
-    var body: Statement | null;
+    var body: StatementOrExpression | null;
     if (isArrow) {
       body = this.parseArrowFunctionBody(tn);
     } else {
@@ -1420,9 +1421,8 @@ export class Parser extends DiagnosticEmitter {
     return Node.createFunctionExpression(declaration);
   }
 
-  private parseArrowFunctionBody(tn: Tokenizer): Statement | null {
-    // TODO: should parse an expression unless the next token is `{`.
-    return this.parseStatement(tn, false);
+  private parseArrowFunctionBody(tn: Tokenizer): StatementOrExpression | null {
+    return tn.skip(Token.OPENBRACE) ? this.parseBlockStatement(tn, false) : this.parseExpression(tn);
   }
 
   parseClassOrInterface(
