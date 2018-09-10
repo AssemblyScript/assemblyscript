@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Smallpt - AssemblyScript</title>
+  <title>Path Tracing 3D Rendering - AssemblyScript</title>
   <link rel="icon" href="http://assemblyscript.org/favicon.ico" type="image/x-icon" />
   <meta name="viewport" content="user-scalable=0" />
   <style>
@@ -37,240 +37,55 @@
     }
 
     canvas {
-      position: absolute;
       transform: rotate(180deg);
-      top: 60px;
-      left: 20px;
-      /* width: calc(100% - 40px); */
-      /* height: calc(100% - 80px); */
       background: #070809;
+    }
+
+    #startStopBtn {
+      display: inline-block;
+      padding: 10px;
+      background: #008dff;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    #stage {
+      position: relative;
+      text-align: center;
+    }
+
+    #profiler {
+      font-family: 'Courier New', Courier, monospace;
+      position: absolute;
+      padding: 10px;
+    }
+
+    .cpu-time {
+      display: inline-block;
     }
   </style>
 </head>
 
 <body>
   <h1>
-    <a href="https://en.wikipedia.org/wiki/Path_tracing">Smallpt</a> in
+    <a href="https://en.wikipedia.org/wiki/Path_tracing">Path Tracing 3D Rendering</a> in
     <a href="http://assemblyscript.org">AssemblyScript</a>
     (
-    <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/path-tracer/assembly/index.ts">source</a> )
+    <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/path-tracer/assembly/index.ts">source</a>
+    )
     <div style="font-size: 0.8rem">
       <a href="https://dump.01alchemist.com" target="_blank">By 01 Alchemist</a>
     </div>
   </h1>
-  <div>
-    <canvas id="viewport"></canvas>
+  <div id="profiler">
+    <h4>CPU Profile</h4>
   </div>
-  <script>
-    "use strict";
-    var width = 64 * 10;
-    // var width = 1280/2;
-    var height = 64 * 10;
-    // var height = 720/2;
-    var bucketSize = 64;
-    const canvas = document.getElementById('viewport')
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
-    let imageData = ctx.getImageData(0, 0, width, height)
-    let data = imageData.data;
-
-    const memory = new WebAssembly.Memory({
-      initial: 32767,
-      shared: true,
-      maximum: 32767
-    })
-    const numCPU = navigator.hardwareConcurrency - 1;
-    let threads = [];
-    let jobs = [];
-    let queue = [];
-    let memoryView;
-    let _exports = {};
-    var pixels_ptr;
-    var iterations = 0;
-    function onTraceJobComplete(job) {
-      console.log('onTraceJobComplete:' + job)
-    }
-
-    async function init() {
-      const res = await fetch("build/untouched.wasm");
-      const buffer = await res.arrayBuffer();
-
-      for (let i = 0; i < numCPU; i++) {
-        const module1 = await WebAssembly.instantiate(buffer, {
-          env: {
-            memory,
-            abort: function () { }
-          },
-          JSMath: Math,
-          index: {
-            id: i + 1,
-            onTraceJobComplete: onTraceJobComplete,
-            logf: f => console.log('float:' + f),
-            logi: i => console.log('int:' + i),
-          }
-        })
-
-        const exp1 = module1.instance.exports;
-        threads.push(exp1)
-      }
-
-      var col = width / bucketSize;
-      var row = height / bucketSize;
-
-      for (var j = 0; j < row; j++) {
-        for (var i = 0; i < col; i++) {
-          jobs.push({
-            id: j + "_" + i,
-            iterations: 0,
-            samples: 4,
-            width: bucketSize,
-            height: bucketSize,
-            xoffset: i * bucketSize,
-            yoffset: j * bucketSize
-          }
-          )
-        }
-      }
-
-      pixels_ptr = threads[0].createPixels(width, height);
-      // requestAnimationFrame(render)
-      start();
-    }
-
-    async function run(job, thread) {
-      return new Promise(async function (resolve) {
-        updateIndicator(job)
-        await sleep();
-        thread.render(pixels_ptr, job.samples, job.xoffset, job.yoffset, job.width, job.height);
-        job.iterations++;
-        updateFrame(job)
-        await sleep();
-        resolve()
-      })
-    }
-
-    async function start() {
-      if (iterations > 1000) {
-        return;
-      }
-      await render();
-      start();
-    }
-
-    async function sleep() {
-      return new Promise(function (resolve) {
-        setTimeout(resolve, 0)
-      })
-    }
-
-    async function render() {
-      // console.time('rendered in')
-
-      if (queue.length == 0) {
-        queue = jobs.concat()
-        iterations++;
-      }
-      let promises = [];
-      threads.forEach((thread, i) => {
-        let job = queue.shift();
-        if (job) {
-          promises.push(run(job, thread));
-        }
-      })
-      await Promise.all(promises)
-    }
-
-    function updateFrame(job) {
-      memoryView = new DataView(threads[0].memory.buffer);
-      let pixels = readPixels(pixels_ptr, memoryView);
-      // console.timeEnd('rendered in')
-      // console.time('write time')
-      for (let y = job.yoffset; y < job.yoffset + job.height; y++) {
-        for (let x = job.xoffset; x < job.xoffset + job.width; x++) {
-          // let i = (height - y - 1) * width + x
-          var i = y * (width * 4) + (x * 4);
-          var pi = y * (width * 3) + (x * 3);
-
-          // data[i] = (pixels[pi]) * 255;
-          // data[i + 1] = (pixels[pi + 1]) * 255;
-          // data[i + 2] = (pixels[pi + 2]) * 255;
-
-          data[i] = (pixels[pi] / job.iterations) * 255;
-          data[i + 1] = (pixels[pi + 1] / job.iterations) * 255;
-          data[i + 2] = (pixels[pi + 2] / job.iterations) * 255;
-
-          data[i + 3] = 255;
-        }
-      }
-
-      ctx.putImageData(imageData, 0, 0);
-    }
-
-    function readPixels(ptr, memory, arrayType = 'Float64') {
-      const floatSize =
-        (arrayType.indexOf('8') > -1) ? 1 :
-          (arrayType.indexOf('16') > -1) ? 2 :
-            (arrayType.indexOf('32') > -1) ? 4 :
-              (arrayType.indexOf('64') > -1) ? 8 :
-                1;
-
-      const AB_ptr = memory.getUint32(ptr, true);
-      const length = memory.getUint32((ptr + 4), true);
-      let element_ptr = AB_ptr + 8;
-      let rgb = new self[arrayType + 'Array'](length * 3)
-      let p = 0;
-
-      for (let i = 0; i < length; i++) {
-        const vec_ptr = memory.getUint32(element_ptr, true);
-
-        rgb[p++] = memory['get' + arrayType](vec_ptr, true);
-        rgb[p++] = memory['get' + arrayType]((vec_ptr + floatSize), true);
-        rgb[p++] = memory['get' + arrayType]((vec_ptr + (2 * floatSize)), true);
-
-        element_ptr += 4;
-      }
-
-      return rgb;
-    }
-
-    function updateIndicator(rect) {
-
-      var color = { r: Math.random(), g: Math.random(), b: Math.random() };
-
-      //top-left
-      fillRect({ x: rect.xoffset, y: rect.yoffset, width: 4, height: 1 }, color);
-      fillRect({ x: rect.xoffset, y: rect.yoffset + 1, width: 1, height: 3 }, color);
-
-      //top-right
-      fillRect({ x: rect.xoffset + rect.width - 4, y: rect.yoffset, width: 4, height: 1 }, color);
-      fillRect({ x: rect.xoffset + rect.width - 1, y: rect.yoffset + 1, width: 1, height: 3 }, color);
-
-      //bottom-left
-      fillRect({ x: rect.xoffset, y: rect.yoffset + rect.height - 4, width: 1, height: 4 }, color);
-      fillRect({ x: rect.xoffset + 1, y: rect.yoffset + rect.height - 1, width: 3, height: 1 }, color);
-
-      //bottom-right
-      fillRect({ x: rect.xoffset + rect.width - 4, y: rect.yoffset + rect.height - 1, width: 4, height: 1 }, color);
-      fillRect({ x: rect.xoffset + rect.width - 1, y: rect.yoffset + rect.height - 4, width: 1, height: 3 }, color);
-
-      ctx.putImageData(imageData, 0, 0);
-    }
-    function fillRect(rect, color) {
-      for (var y = rect.y; y < rect.y + rect.height; y++) {
-        for (var x = rect.x; x < rect.x + rect.width; x++) {
-
-          var i = y * (width * 4) + (x * 4);
-          data[i] = color.r * 255;
-          data[i + 1] = color.g * 255;
-          data[i + 2] = color.b * 255;
-          data[i + 3] = 255;
-        }
-      }
-      ctx.putImageData(imageData, 0, 0);
-    }
-    init();
-  </script>
+  <div id="stage">
+    <canvas id="viewport"></canvas>
+    <div id="startStopBtn">START</div>
+  </div>
+  <script type="application/javascript" src="js/index.js"></script>
 </body>
 
 </html>

@@ -1638,6 +1638,126 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
     }
+    case "Atomic.load": { // Atomic.load<T!>(offset: usize, constantOffset?: usize) -> *
+      if (operands.length < 1 || operands.length > 2) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        if (operands.length < 1) {
+          compiler.error(
+            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+            reportNode.range, "1", operands.length.toString(10)
+          );
+        } else {
+          compiler.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            reportNode.range, "2", operands.length.toString(10)
+          );
+        }
+        return module.createUnreachable();
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        if (typeArguments && typeArguments.length) compiler.currentType = typeArguments[0];
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      let offset = operands.length == 2 ? evaluateConstantOffset(compiler, operands[1]) : 0; // reports
+      if (offset < 0) { // reported in evaluateConstantOffset
+        return module.createUnreachable();
+      }
+      compiler.currentType = typeArguments[0];
+      return module.createAtomicLoad(
+        typeArguments[0].byteSize,
+        arg0,
+        typeArguments[0].is(TypeFlags.INTEGER) &&
+        contextualType.is(TypeFlags.INTEGER) &&
+        contextualType.size > typeArguments[0].size
+          ? (compiler.currentType = contextualType).toNativeType()
+          : (compiler.currentType = typeArguments[0]).toNativeType(),
+        offset
+      );
+    }
+    case "Atomic.store": { // Atomic.store<T!>(offset: usize, value: *, constantOffset?: usize) -> void
+      compiler.currentType = Type.void;
+      if (operands.length < 2 || operands.length > 3) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        if (operands.length < 2) {
+          compiler.error(
+            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+            reportNode.range, "2", operands.length.toString(10)
+          );
+        } else {
+          compiler.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            reportNode.range, "3", operands.length.toString(10)
+          );
+        }
+        return module.createUnreachable();
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg1 = compiler.compileExpression(
+        operands[1],
+        typeArguments[0],
+        typeArguments[0].is(TypeFlags.INTEGER)
+          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+          : ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      let type: Type;
+      if (
+        typeArguments[0].is(TypeFlags.INTEGER) &&
+        (
+          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
+          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+        )
+      ) {
+        arg1 = compiler.convertExpression(
+          arg1,
+          compiler.currentType, typeArguments[0],
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[1]
+        );
+        type = typeArguments[0];
+      } else {
+        type = compiler.currentType;
+      }
+      let offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
+      if (offset < 0) { // reported in evaluateConstantOffset
+        return module.createUnreachable();
+      }
+      compiler.currentType = Type.void;
+      return module.createAtomicStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
+    }
     case "sizeof": { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
       if (operands.length != 0) {
