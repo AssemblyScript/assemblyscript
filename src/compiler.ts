@@ -5152,7 +5152,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           this.error(
             DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, (<Field>target).type.toString()
+            expression.range, type.toString()
           );
           return module.createUnreachable();
         }
@@ -5167,7 +5167,20 @@ export class Compiler extends DiagnosticEmitter {
         );
         break;
       }
-      case ElementKind.PROPERTY: // TODO
+
+      case ElementKind.PROPERTY: {
+        indexArg = this.compileGetter(<Property>target, expression.expression);
+        let type = this.currentType;
+        signature = type.signatureReference;
+        if (!signature) {
+          this.error(
+            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+            expression.range, type.toString()
+          );
+          return module.createUnreachable();
+        }
+        break;
+      }
 
       // not supported
       default: {
@@ -6711,43 +6724,8 @@ export class Compiler extends DiagnosticEmitter {
           (<Field>target).memoryOffset
         );
       }
-      case ElementKind.PROPERTY: { // instance property (here: getter)
-        let prototype = (<Property>target).getterPrototype;
-        if (prototype) {
-          let instance = this.resolver.resolveFunction(prototype, null);
-          if (!instance) return module.createUnreachable();
-          let signature = instance.signature;
-          if (!this.checkCallSignature( // reports
-            signature,
-            0,
-            instance.is(CommonFlags.INSTANCE),
-            propertyAccess
-          )) {
-            return module.createUnreachable();
-          }
-          let inline = (instance.decoratorFlags & DecoratorFlags.INLINE) != 0;
-          if (instance.is(CommonFlags.INSTANCE)) {
-            let parent = assert(instance.parent);
-            assert(parent.kind == ElementKind.CLASS);
-            let thisExpression = assert(this.resolver.currentThisExpression);
-            let thisExpr = this.compileExpressionRetainType(
-              thisExpression,
-              this.options.usizeType,
-              WrapMode.NONE
-            );
-            this.currentType = signature.returnType;
-            return this.compileCallDirect(instance, [], propertyAccess, thisExpr, inline);
-          } else {
-            this.currentType = signature.returnType;
-            return this.compileCallDirect(instance, [], propertyAccess, 0, inline);
-          }
-        } else {
-          this.error(
-            DiagnosticCode.Property_0_does_not_exist_on_type_1,
-            propertyAccess.range, (<Property>target).simpleName, (<Property>target).parent.toString()
-          );
-          return module.createUnreachable();
-        }
+      case ElementKind.PROPERTY: {// instance property (here: getter)
+        return this.compileGetter(<Property>target, propertyAccess);
       }
     }
     this.error(
@@ -6755,6 +6733,45 @@ export class Compiler extends DiagnosticEmitter {
       propertyAccess.range
     );
     return module.createUnreachable();
+  }
+
+  private compileGetter(target: Property, reportNode: Node): ExpressionRef {
+    var prototype = target.getterPrototype;
+    if (prototype) {
+      let instance = this.resolver.resolveFunction(prototype, null);
+      if (!instance) return this.module.createUnreachable();
+      let signature = instance.signature;
+      if (!this.checkCallSignature( // reports
+        signature,
+        0,
+        instance.is(CommonFlags.INSTANCE),
+        reportNode
+      )) {
+        return this.module.createUnreachable();
+      }
+      let inline = (instance.decoratorFlags & DecoratorFlags.INLINE) != 0;
+      if (instance.is(CommonFlags.INSTANCE)) {
+        let parent = assert(instance.parent);
+        assert(parent.kind == ElementKind.CLASS);
+        let thisExpression = assert(this.resolver.currentThisExpression); //!!!
+        let thisExpr = this.compileExpressionRetainType(
+          thisExpression,
+          this.options.usizeType,
+          WrapMode.NONE
+        );
+        this.currentType = signature.returnType;
+        return this.compileCallDirect(instance, [], reportNode, thisExpr, inline);
+      } else {
+        this.currentType = signature.returnType;
+        return this.compileCallDirect(instance, [], reportNode, 0, inline);
+      }
+    } else {
+      this.error(
+        DiagnosticCode.Property_0_does_not_exist_on_type_1,
+        reportNode.range, (<Property>target).simpleName, (<Property>target).parent.toString()
+      );
+      return this.module.createUnreachable();
+    }
   }
 
   compileTernaryExpression(expression: TernaryExpression, contextualType: Type): ExpressionRef {
