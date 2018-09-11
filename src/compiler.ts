@@ -5444,9 +5444,8 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
     } else {
-      body.push(bodyStatement instanceof Expression
-        ? this.compileExpression(bodyStatement, instance.signature.returnType, ConversionKind.NONE, WrapMode.NONE)
-        : this.compileStatement(bodyStatement));
+      body.push(this.compileExpression(
+        <Expression>bodyStatement, instance.signature.returnType, ConversionKind.NONE, WrapMode.NONE));
     }
 
     // Free any new scoped locals and reset to the original flow
