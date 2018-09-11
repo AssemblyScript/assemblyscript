@@ -989,6 +989,9 @@ export class ASTBuilder {
     this.serializeAccessModifiers(node);
     this.visitIdentifierExpression(node.name);
     var sb = this.sb;
+    if (node.definiteAssignmentAssertion) {
+      sb.push("!");
+    }
     var type = node.type;
     if (type) {
       sb.push(": ");
@@ -1373,6 +1376,9 @@ export class ASTBuilder {
     this.visitIdentifierExpression(node.name);
     var type = node.type;
     var sb = this.sb;
+    if (node.definiteAssignmentAssertion) {
+      sb.push("!");
+    }
     if (type) {
       sb.push(": ");
       this.visitTypeNode(type);

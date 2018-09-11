@@ -818,6 +818,7 @@ export abstract class Node {
 
   static createFieldDeclaration(
     name: IdentifierExpression,
+    definiteAssignmentAssertion: boolean,
     type: CommonTypeNode | null,
     initializer: Expression | null,
     decorators: DecoratorNode[] | null,
@@ -828,6 +829,7 @@ export abstract class Node {
     stmt.range = range;
     stmt.flags = flags;
     stmt.name = name; name.parent = stmt;
+    stmt.definiteAssignmentAssertion = definiteAssignmentAssertion;
     stmt.type = type; if (type) type.parent = stmt;
     stmt.initializer = initializer; if (initializer) initializer.parent = stmt;
     stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
@@ -1003,6 +1005,7 @@ export abstract class Node {
 
   static createVariableDeclaration(
     name: IdentifierExpression,
+    definiteAssignmentAssertion: boolean,
     type: CommonTypeNode | null,
     initializer: Expression | null,
     decorators: DecoratorNode[] | null,
@@ -1013,6 +1016,7 @@ export abstract class Node {
     elem.range = range;
     elem.flags = flags;
     elem.name = name; name.parent = elem;
+    elem.definiteAssignmentAssertion = definiteAssignmentAssertion;
     elem.type = type; if (type) type.parent = elem;
     elem.initializer = initializer; if (initializer) initializer.parent = elem;
     elem.decorators = decorators; // inherited
@@ -1624,6 +1628,8 @@ export abstract class DeclarationStatement extends Statement {
 /** Base class of all variable-like declaration statements. */
 export abstract class VariableLikeDeclarationStatement extends DeclarationStatement {
 
+  /** If true, this was written with a `!` as in `x!: i32;`. */
+  definiteAssignmentAssertion: boolean;
   /** Variable type. */
   type: CommonTypeNode | null;
   /** Variable initializer. */

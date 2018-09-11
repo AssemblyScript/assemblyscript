@@ -769,6 +769,7 @@ export class Parser extends DiagnosticEmitter {
     }
     var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     var flags = parentFlags;
+    var definiteAssignmentAssertion = tn.skip(Token.EXCLAMATION);
 
     var type: CommonTypeNode | null = null;
     if (tn.skip(Token.COLON)) {
@@ -800,13 +801,20 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
     }
+    var range = Range.join(identifier.range, tn.range());
+    if (definiteAssignmentAssertion && initializer) {
+      this.error(
+        DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
+        range);
+    }
     return Node.createVariableDeclaration(
       identifier,
+      definiteAssignmentAssertion,
       type,
       initializer,
       parentDecorators,
       flags,
-      Range.join(identifier.range, tn.range())
+      range
     );
   }
 
@@ -1789,6 +1797,7 @@ export class Parser extends DiagnosticEmitter {
           )) {
             let implicitFieldDeclaration = Node.createFieldDeclaration(
               parameter.name,
+              false,
               parameter.type,
               null, // initialized via parameter
               null,
@@ -1926,6 +1935,13 @@ export class Parser extends DiagnosticEmitter {
       }
 
       let type: CommonTypeNode | null = null;
+      if (tn.skip(Token.QUESTION)) {
+        this.error(
+          DiagnosticCode.Optional_properties_are_not_supported,
+          tn.range(startPos, tn.pos)
+        );
+      }
+      let definiteAssignmentAssertion = tn.skip(Token.EXCLAMATION);
       if (tn.skip(Token.COLON)) {
         type = this.parseType(tn);
         if (!type) return null;
@@ -1940,13 +1956,21 @@ export class Parser extends DiagnosticEmitter {
         initializer = this.parseExpression(tn);
         if (!initializer) return null;
       }
+      let range = tn.range(startPos, tn.pos);
+      if (definiteAssignmentAssertion && ((flags & CommonFlags.STATIC) || isInterface || initializer)) {
+        this.error(
+          DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
+          range
+        );
+      }
       let retField = Node.createFieldDeclaration(
         name,
+        definiteAssignmentAssertion,
         type,
         initializer,
         decorators,
         flags,
-        tn.range(startPos, tn.pos)
+        range
       );
       tn.skip(Token.SEMICOLON);
       return retField;
