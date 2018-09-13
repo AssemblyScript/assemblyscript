@@ -28,11 +28,9 @@
   (i32.const 0)
  )
  (func $if/ifAlwaysReturns (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
-  (if
+  (if (result i32)
    (get_local $0)
-   (return
-    (i32.const 1)
-   )
+   (i32.const 1)
    (block
     (call $~lib/env/abort
      (i32.const 0)

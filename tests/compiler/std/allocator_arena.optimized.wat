@@ -1,10 +1,12 @@
 (module
- (type $ii (func (param i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iv (func (param i32)))
  (type $v (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -15,42 +17,26 @@
  (data (i32.const 8) "\16\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (if
    (i32.gt_u
-    (get_local $0)
-    (i32.const 1073741824)
-   )
-   (unreachable)
-  )
-  (if
-   (i32.gt_u
-    (tee_local $2
+    (tee_local $1
      (i32.and
       (i32.add
-       (i32.add
-        (tee_local $1
-         (get_global $~lib/allocator/arena/offset)
-        )
-        (select
-         (get_local $0)
-         (i32.const 1)
-         (i32.gt_u
-          (get_local $0)
-          (i32.const 1)
-         )
-        )
+       (tee_local $0
+        (get_global $~lib/allocator/arena/offset)
        )
-       (i32.const 7)
+       (i32.const 49)
       )
       (i32.const -8)
      )
     )
     (i32.shl
-     (tee_local $3
+     (tee_local $2
       (current_memory)
      )
      (i32.const 16)
@@ -60,14 +46,14 @@
     (i32.lt_s
      (grow_memory
       (select
-       (get_local $3)
-       (tee_local $0
+       (get_local $2)
+       (tee_local $3
         (i32.shr_u
          (i32.and
           (i32.add
            (i32.sub
-            (get_local $2)
             (get_local $1)
+            (get_local $0)
            )
            (i32.const 65535)
           )
@@ -77,8 +63,8 @@
         )
        )
        (i32.gt_s
+        (get_local $2)
         (get_local $3)
-        (get_local $0)
        )
       )
      )
@@ -87,7 +73,7 @@
     (if
      (i32.lt_s
       (grow_memory
-       (get_local $0)
+       (get_local $3)
       )
       (i32.const 0)
      )
@@ -96,134 +82,87 @@
    )
   )
   (set_global $~lib/allocator/arena/offset
-   (get_local $2)
+   (get_local $1)
   )
-  (get_local $1)
+  (get_local $0)
  )
- (func $~lib/internal/memory/memset (; 2 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i64)
-  (if
-   (i32.eqz
-    (get_local $2)
-   )
-   (return)
-  )
+ (func $~lib/internal/memory/memset (; 2 ;) (; has Stack IR ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
   (i32.store8
    (get_local $0)
-   (get_local $1)
+   (i32.const 18)
   )
   (i32.store8
    (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
-    (i32.const 1)
-   )
-   (get_local $1)
-  )
-  (if
-   (i32.le_u
-    (get_local $2)
-    (i32.const 2)
-   )
-   (return)
-  )
-  (i32.store8
-   (i32.add
-    (get_local $0)
-    (i32.const 1)
-   )
-   (get_local $1)
-  )
-  (i32.store8
-   (i32.add
-    (get_local $0)
-    (i32.const 2)
-   )
-   (get_local $1)
-  )
-  (i32.store8
-   (i32.sub
-    (tee_local $3
+    (tee_local $1
      (i32.add
       (get_local $0)
-      (get_local $2)
+      (i32.const 42)
      )
     )
+    (i32.const 1)
+   )
+   (i32.const 18)
+  )
+  (i32.store8
+   (i32.add
+    (get_local $0)
+    (i32.const 1)
+   )
+   (i32.const 18)
+  )
+  (i32.store8
+   (i32.add
+    (get_local $0)
     (i32.const 2)
    )
-   (get_local $1)
+   (i32.const 18)
   )
   (i32.store8
    (i32.sub
-    (get_local $3)
+    (get_local $1)
+    (i32.const 2)
+   )
+   (i32.const 18)
+  )
+  (i32.store8
+   (i32.sub
+    (get_local $1)
     (i32.const 3)
    )
-   (get_local $1)
-  )
-  (if
-   (i32.le_u
-    (get_local $2)
-    (i32.const 6)
-   )
-   (return)
+   (i32.const 18)
   )
   (i32.store8
    (i32.add
     (get_local $0)
     (i32.const 3)
    )
-   (get_local $1)
+   (i32.const 18)
   )
   (i32.store8
    (i32.sub
-    (i32.add
-     (get_local $0)
-     (get_local $2)
-    )
+    (get_local $1)
     (i32.const 4)
    )
-   (get_local $1)
-  )
-  (if
-   (i32.le_u
-    (get_local $2)
-    (i32.const 8)
-   )
-   (return)
-  )
-  (set_local $2
-   (i32.sub
-    (get_local $2)
-    (tee_local $3
-     (i32.and
-      (i32.sub
-       (i32.const 0)
-       (get_local $0)
-      )
-      (i32.const 3)
-     )
-    )
-   )
+   (i32.const 18)
   )
   (i32.store
    (tee_local $0
     (i32.add
      (get_local $0)
-     (get_local $3)
-    )
-   )
-   (tee_local $1
-    (i32.mul
-     (i32.and
-      (get_local $1)
-      (i32.const 255)
+     (tee_local $1
+      (i32.and
+       (i32.sub
+        (i32.const 0)
+        (get_local $0)
+       )
+       (i32.const 3)
+      )
      )
-     (i32.const 16843009)
     )
    )
+   (i32.const 303174162)
   )
   (i32.store
    (i32.sub
@@ -231,14 +170,17 @@
      (get_local $0)
      (tee_local $2
       (i32.and
-       (get_local $2)
+       (i32.sub
+        (i32.const 42)
+        (get_local $1)
+       )
        (i32.const -4)
       )
      )
     )
     (i32.const 4)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (if
    (i32.le_u
@@ -252,18 +194,18 @@
     (get_local $0)
     (i32.const 4)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 8)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (i32.store
    (i32.sub
-    (tee_local $3
+    (tee_local $1
      (i32.add
       (get_local $0)
       (get_local $2)
@@ -271,14 +213,14 @@
     )
     (i32.const 12)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $1)
     (i32.const 8)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (if
    (i32.le_u
@@ -292,32 +234,32 @@
     (get_local $0)
     (i32.const 12)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 16)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 20)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 24)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (i32.store
    (i32.sub
-    (tee_local $3
+    (tee_local $1
      (i32.add
       (get_local $0)
       (get_local $2)
@@ -325,33 +267,33 @@
     )
     (i32.const 28)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $1)
     (i32.const 24)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $1)
     (i32.const 20)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $1)
     (i32.const 16)
    )
-   (get_local $1)
+   (i32.const 303174162)
   )
   (set_local $0
    (i32.add
     (get_local $0)
-    (tee_local $3
+    (tee_local $1
      (i32.add
       (i32.and
        (get_local $0)
@@ -365,20 +307,7 @@
   (set_local $2
    (i32.sub
     (get_local $2)
-    (get_local $3)
-   )
-  )
-  (set_local $4
-   (i64.or
-    (tee_local $4
-     (i64.extend_u/i32
-      (get_local $1)
-     )
-    )
-    (i64.shl
-     (get_local $4)
-     (i64.const 32)
-    )
+    (get_local $1)
    )
   )
   (loop $continue|0
@@ -390,28 +319,28 @@
     (block
      (i64.store
       (get_local $0)
-      (get_local $4)
+      (i64.const 1302123111085380114)
      )
      (i64.store
       (i32.add
        (get_local $0)
        (i32.const 8)
       )
-      (get_local $4)
+      (i64.const 1302123111085380114)
      )
      (i64.store
       (i32.add
        (get_local $0)
        (i32.const 16)
       )
-      (get_local $4)
+      (i64.const 1302123111085380114)
      )
      (i64.store
       (i32.add
        (get_local $0)
        (i32.const 24)
       )
-      (get_local $4)
+      (i64.const 1302123111085380114)
      )
      (set_local $2
       (i32.sub
@@ -1816,9 +1745,13 @@
    )
   )
  )
- (func $~lib/internal/memory/memmove (; 4 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (set_local $2
+   (i32.const 42)
+  )
   (if
    (i32.eq
     (get_local $0)
@@ -1832,7 +1765,7 @@
      (i32.le_u
       (i32.add
        (get_local $1)
-       (get_local $2)
+       (i32.const 42)
       )
       (get_local $0)
      )
@@ -1842,7 +1775,7 @@
     (i32.le_u
      (i32.add
       (get_local $0)
-      (get_local $2)
+      (i32.const 42)
      )
      (get_local $1)
     )
@@ -1854,7 +1787,7 @@
     (call $~lib/internal/memory/memcpy
      (get_local $0)
      (get_local $1)
-     (get_local $2)
+     (i32.const 42)
     )
     (return)
    )
@@ -2108,8 +2041,12 @@
    )
   )
  )
- (func $~lib/internal/memory/memcmp (; 5 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/memory/memcmp (; 5 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
+  (set_local $2
+   (i32.const 42)
+  )
   (if
    (i32.eq
     (get_local $0)
@@ -2178,7 +2115,7 @@
    )
   )
  )
- (func $~lib/allocator/arena/__memory_free (; 6 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 6 ;) (; has Stack IR ;) (type $FUNCSIG$v)
   (nop)
  )
  (func $~lib/allocator/arena/__memory_reset (; 7 ;) (; has Stack IR ;) (type $v)
@@ -2194,14 +2131,10 @@
    (get_global $~lib/allocator/arena/startOffset)
   )
   (set_global $std/allocator_arena/ptr1
-   (call $~lib/allocator/arena/__memory_allocate
-    (i32.const 42)
-   )
+   (call $~lib/allocator/arena/__memory_allocate)
   )
   (set_global $std/allocator_arena/ptr2
-   (call $~lib/allocator/arena/__memory_allocate
-    (i32.const 42)
-   )
+   (call $~lib/allocator/arena/__memory_allocate)
   )
   (if
    (i32.eq
@@ -2220,8 +2153,6 @@
   )
   (call $~lib/internal/memory/memset
    (get_global $std/allocator_arena/ptr1)
-   (i32.const 18)
-   (i32.const 42)
   )
   (block $break|0
    (set_global $std/allocator_arena/i
@@ -2268,7 +2199,6 @@
   (call $~lib/internal/memory/memmove
    (get_global $std/allocator_arena/ptr2)
    (get_global $std/allocator_arena/ptr1)
-   (i32.const 42)
   )
   (block $break|1
    (set_global $std/allocator_arena/i
@@ -2316,7 +2246,6 @@
    (call $~lib/internal/memory/memcmp
     (get_global $std/allocator_arena/ptr1)
     (get_global $std/allocator_arena/ptr2)
-    (i32.const 42)
    )
    (block
     (call $~lib/env/abort
@@ -2328,17 +2257,11 @@
     (unreachable)
    )
   )
-  (call $~lib/allocator/arena/__memory_free
-   (get_global $std/allocator_arena/ptr1)
-  )
-  (call $~lib/allocator/arena/__memory_free
-   (get_global $std/allocator_arena/ptr2)
-  )
+  (call $~lib/allocator/arena/__memory_free)
+  (call $~lib/allocator/arena/__memory_free)
   (call $~lib/allocator/arena/__memory_reset)
   (set_global $std/allocator_arena/ptr1
-   (call $~lib/allocator/arena/__memory_allocate
-    (i32.const 42)
-   )
+   (call $~lib/allocator/arena/__memory_allocate)
   )
   (if
    (i32.ne

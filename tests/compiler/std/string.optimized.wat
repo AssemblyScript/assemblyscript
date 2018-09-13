@@ -2,16 +2,19 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
  (type $i (func (result i32)))
  (type $iiF (func (param i32 i32) (result f64)))
  (type $iF (func (param i32) (result f64)))
  (type $Ii (func (param i64) (result i32)))
  (type $iIiv (func (param i32 i64 i32)))
  (type $v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$di (func (param i32) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -110,7 +113,7 @@
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
  (start $start)
- (func $~lib/string/String#charCodeAt (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#charCodeAt (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -127,7 +130,7 @@
   )
   (if
    (i32.ge_u
-    (get_local $1)
+    (i32.const 0)
     (i32.load
      (get_local $0)
     )
@@ -137,13 +140,7 @@
    )
   )
   (i32.load16_u offset=4
-   (i32.add
-    (get_local $0)
-    (i32.shl
-     (get_local $1)
-     (i32.const 1)
-    )
-   )
+   (get_local $0)
   )
  )
  (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
@@ -289,8 +286,8 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/string/compareUnsafe (; 5 ;) (; has Stack IR ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
-  (local $5 i32)
+ (func $~lib/internal/string/compareUnsafe (; 5 ;) (; has Stack IR ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
   (set_local $1
    (i32.add
     (get_local $0)
@@ -300,22 +297,13 @@
     )
    )
   )
-  (set_local $2
-   (i32.add
-    (get_local $2)
-    (i32.shl
-     (get_local $3)
-     (i32.const 1)
-    )
-   )
-  )
   (loop $continue|0
    (if
     (tee_local $0
      (if (result i32)
-      (get_local $4)
+      (get_local $3)
       (i32.eqz
-       (tee_local $5
+       (tee_local $4
         (i32.sub
          (i32.load16_u offset=4
           (get_local $1)
@@ -326,13 +314,13 @@
         )
        )
       )
-      (get_local $4)
+      (get_local $3)
      )
     )
     (block
-     (set_local $4
+     (set_local $3
       (i32.sub
-       (get_local $4)
+       (get_local $3)
        (i32.const 1)
       )
      )
@@ -352,7 +340,7 @@
     )
    )
   )
-  (get_local $5)
+  (get_local $4)
  )
  (func $~lib/string/String.__eq (; 6 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -405,7 +393,6 @@
     (get_local $0)
     (i32.const 0)
     (get_local $1)
-    (i32.const 0)
     (get_local $2)
    )
   )
@@ -477,9 +464,10 @@
   )
   (get_local $1)
  )
- (func $~lib/string/String#startsWith (; 8 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#startsWith (; 8 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -495,46 +483,29 @@
    )
   )
   (if
-   (i32.eqz
-    (get_local $1)
-   )
-   (set_local $1
-    (i32.const 200)
-   )
-  )
-  (if
    (i32.gt_s
     (i32.add
-     (tee_local $4
+     (tee_local $2
       (i32.load
-       (get_local $1)
+       (i32.const 192)
       )
      )
      (tee_local $3
       (select
-       (tee_local $3
-        (select
-         (get_local $2)
-         (i32.const 0)
-         (i32.gt_s
-          (get_local $2)
-          (i32.const 0)
-         )
-        )
-       )
-       (tee_local $2
+       (i32.const 0)
+       (tee_local $1
         (i32.load
          (get_local $0)
         )
        )
        (i32.lt_s
-        (get_local $3)
-        (get_local $2)
+        (i32.const 0)
+        (get_local $1)
        )
       )
      )
     )
-    (get_local $2)
+    (get_local $1)
    )
    (return
     (i32.const 0)
@@ -544,9 +515,8 @@
    (call $~lib/internal/string/compareUnsafe
     (get_local $0)
     (get_local $3)
-    (get_local $1)
-    (i32.const 0)
-    (get_local $4)
+    (i32.const 192)
+    (get_local $2)
    )
   )
  )
@@ -617,12 +587,12 @@
     (get_local $0)
     (get_local $3)
     (get_local $1)
-    (i32.const 0)
     (get_local $2)
    )
   )
  )
- (func $~lib/string/String#endsWith|trampoline (; 10 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#endsWith|trampoline (; 10 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -635,14 +605,14 @@
     )
     (unreachable)
    )
-   (set_local $2
+   (set_local $1
     (i32.const 536870910)
    )
   )
   (call $~lib/string/String#endsWith
    (get_local $0)
+   (i32.const 216)
    (get_local $1)
-   (get_local $2)
   )
  )
  (func $~lib/string/String#indexOf (; 11 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -732,7 +702,6 @@
       (get_local $0)
       (get_local $2)
       (get_local $1)
-      (i32.const 0)
       (get_local $4)
      )
      (block
@@ -752,12 +721,12 @@
   )
   (i32.const -1)
  )
- (func $~lib/string/String#includes (; 12 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#includes (; 12 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (i32.ne
    (call $~lib/string/String#indexOf
     (get_local $0)
-    (get_local $1)
-    (get_local $2)
+    (i32.const 232)
+    (i32.const 0)
    )
    (i32.const -1)
   )
@@ -2730,7 +2699,7 @@
    )
   )
  )
- (func $~lib/internal/string/copyUnsafe (; 16 ;) (; has Stack IR ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 16 ;) (; has Stack IR ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (call $~lib/internal/memory/memmove
    (i32.add
     (i32.add
@@ -2743,17 +2712,11 @@
     (i32.const 4)
    )
    (i32.add
-    (i32.add
-     (get_local $2)
-     (i32.shl
-      (get_local $3)
-      (i32.const 1)
-     )
-    )
+    (get_local $2)
     (i32.const 4)
    )
    (i32.shl
-    (get_local $4)
+    (get_local $3)
     (i32.const 1)
    )
   )
@@ -2854,7 +2817,6 @@
       (get_local $5)
       (get_local $3)
       (get_local $2)
-      (i32.const 0)
       (get_local $4)
      )
     )
@@ -2863,7 +2825,6 @@
     (get_local $5)
     (i32.const 0)
     (get_local $2)
-    (i32.const 0)
     (get_local $1)
    )
   )
@@ -2873,13 +2834,13 @@
     (get_local $5)
     (get_local $1)
     (get_local $0)
-    (i32.const 0)
     (get_local $6)
    )
   )
   (get_local $5)
  )
- (func $~lib/string/String#padStart|trampoline (; 18 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#padStart|trampoline (; 18 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -2968,7 +2929,6 @@
     (get_local $1)
     (i32.const 0)
     (get_local $0)
-    (i32.const 0)
     (get_local $3)
    )
   )
@@ -3012,7 +2972,6 @@
        (get_local $3)
       )
       (get_local $2)
-      (i32.const 0)
       (get_local $4)
      )
     )
@@ -3021,13 +2980,13 @@
     (get_local $1)
     (get_local $3)
     (get_local $2)
-    (i32.const 0)
     (get_local $6)
    )
   )
   (get_local $1)
  )
- (func $~lib/string/String#padEnd|trampoline (; 20 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#padEnd|trampoline (; 20 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -3137,7 +3096,6 @@
       (get_local $0)
       (get_local $2)
       (get_local $1)
-      (i32.const 0)
       (get_local $4)
      )
      (block
@@ -3157,7 +3115,8 @@
   )
   (i32.const -1)
  )
- (func $~lib/string/String#lastIndexOf|trampoline (; 22 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#lastIndexOf|trampoline (; 22 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -3546,10 +3505,10 @@
    (get_local $5)
   )
  )
- (func $~lib/string/parseInt (; 25 ;) (; has Stack IR ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/string/parseInt (; 25 ;) (; has Stack IR ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (call $~lib/internal/string/parse<f64>
    (get_local $0)
-   (get_local $1)
+   (i32.const 0)
   )
  )
  (func $~lib/string/parseFloat (; 26 ;) (; has Stack IR ;) (type $iF) (param $0 i32) (result f64)
@@ -3857,14 +3816,12 @@
    )
    (i32.const 0)
    (get_local $0)
-   (i32.const 0)
    (get_local $3)
   )
   (call $~lib/internal/string/copyUnsafe
    (get_local $2)
    (get_local $3)
    (get_local $1)
-   (i32.const 0)
    (get_local $4)
   )
   (get_local $2)
@@ -3955,7 +3912,6 @@
     (get_local $0)
     (i32.const 0)
     (get_local $1)
-    (i32.const 0)
     (select
      (get_local $2)
      (get_local $3)
@@ -4032,7 +3988,6 @@
     (get_local $0)
     (i32.const 0)
     (get_local $1)
-    (i32.const 0)
     (select
      (get_local $2)
      (get_local $3)
@@ -4109,7 +4064,6 @@
     (get_local $0)
     (i32.const 0)
     (get_local $1)
-    (i32.const 0)
     (select
      (get_local $2)
      (get_local $3)
@@ -4122,60 +4076,50 @@
    (i32.const 0)
   )
  )
- (func $~lib/string/String.__lte (; 33 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lte (; 33 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   (if
    (i32.eq
     (get_local $0)
-    (get_local $1)
+    (i32.const 256)
    )
    (return
     (i32.const 1)
    )
   )
   (if
+   (tee_local $1
+    (i32.eqz
+     (get_local $0)
+    )
+   )
+   (return
+    (i32.const 0)
+   )
+  )
+  (set_local $1
+   (i32.load
+    (i32.const 256)
+   )
+  )
+  (if
    (i32.eqz
     (tee_local $2
-     (i32.eqz
+     (i32.load
       (get_local $0)
      )
     )
    )
-   (set_local $2
+   (return
     (i32.eqz
      (get_local $1)
     )
    )
   )
   (if
-   (get_local $2)
-   (return
-    (i32.const 0)
-   )
-  )
-  (set_local $2
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (if
    (i32.eqz
-    (tee_local $3
-     (i32.load
-      (get_local $1)
-     )
-    )
-   )
-   (return
-    (i32.eqz
-     (get_local $2)
-    )
-   )
-  )
-  (if
-   (i32.eqz
-    (get_local $2)
+    (get_local $1)
    )
    (return
     (i32.const 1)
@@ -4183,16 +4127,15 @@
   )
   (i32.le_s
    (call $~lib/internal/string/compareUnsafe
+    (i32.const 256)
+    (i32.const 0)
     (get_local $0)
-    (i32.const 0)
-    (get_local $1)
-    (i32.const 0)
     (select
+     (get_local $1)
      (get_local $2)
-     (get_local $3)
      (i32.lt_s
+      (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
    )
@@ -4939,7 +4882,6 @@
    (i32.ne
     (call $~lib/string/String#charCodeAt
      (get_global $std/string/str)
-     (i32.const 0)
     )
     (i32.const 104)
    )
@@ -5068,8 +5010,6 @@
    (i32.eqz
     (call $~lib/string/String#startsWith
      (get_global $std/string/str)
-     (i32.const 192)
-     (i32.const 0)
     )
    )
    (block
@@ -5089,8 +5029,6 @@
    (i32.eqz
     (call $~lib/string/String#endsWith|trampoline
      (get_global $std/string/str)
-     (i32.const 216)
-     (i32.const 0)
     )
    )
    (block
@@ -5107,8 +5045,6 @@
    (i32.eqz
     (call $~lib/string/String#includes
      (get_global $std/string/str)
-     (i32.const 232)
-     (i32.const 0)
     )
    )
    (block
@@ -5129,7 +5065,6 @@
     (call $~lib/string/String.__eq
      (call $~lib/string/String#padStart|trampoline
       (get_global $std/string/str)
-      (i32.const 0)
       (i32.const 0)
      )
      (get_global $std/string/str)
@@ -5154,7 +5089,6 @@
      (call $~lib/string/String#padStart|trampoline
       (get_global $std/string/str)
       (i32.const 15)
-      (i32.const 0)
      )
      (get_global $std/string/str)
     )
@@ -5178,7 +5112,6 @@
      (call $~lib/string/String#padStart|trampoline
       (i32.const 256)
       (i32.const 3)
-      (i32.const 0)
      )
      (i32.const 264)
     )
@@ -5244,7 +5177,6 @@
      (call $~lib/string/String#padStart|trampoline
       (i32.const 288)
       (i32.const 5)
-      (i32.const 0)
      )
      (i32.const 304)
     )
@@ -5310,7 +5242,6 @@
      (call $~lib/string/String#padEnd|trampoline
       (get_global $std/string/str)
       (i32.const 0)
-      (i32.const 0)
      )
      (get_global $std/string/str)
     )
@@ -5334,7 +5265,6 @@
      (call $~lib/string/String#padEnd|trampoline
       (get_global $std/string/str)
       (i32.const 15)
-      (i32.const 0)
      )
      (get_global $std/string/str)
     )
@@ -5358,7 +5288,6 @@
      (call $~lib/string/String#padEnd|trampoline
       (i32.const 256)
       (i32.const 3)
-      (i32.const 0)
      )
      (i32.const 264)
     )
@@ -5424,7 +5353,6 @@
      (call $~lib/string/String#padEnd|trampoline
       (i32.const 288)
       (i32.const 5)
-      (i32.const 0)
      )
      (i32.const 376)
     )
@@ -5634,7 +5562,6 @@
    (call $~lib/string/String#lastIndexOf|trampoline
     (i32.const 256)
     (i32.const 256)
-    (i32.const 0)
    )
    (block
     (call $~lib/env/abort
@@ -5654,7 +5581,6 @@
     (call $~lib/string/String#lastIndexOf|trampoline
      (i32.const 256)
      (i32.const 192)
-     (i32.const 0)
     )
     (i32.const -1)
    )
@@ -5676,7 +5602,6 @@
     (call $~lib/string/String#lastIndexOf|trampoline
      (get_global $std/string/str)
      (i32.const 256)
-     (i32.const 0)
     )
     (i32.load
      (get_global $std/string/str)
@@ -5700,7 +5625,6 @@
     (call $~lib/string/String#lastIndexOf|trampoline
      (get_global $std/string/str)
      (i32.const 432)
-     (i32.const 0)
     )
     (i32.const 2)
    )
@@ -5722,7 +5646,6 @@
     (call $~lib/string/String#lastIndexOf|trampoline
      (get_global $std/string/str)
      (i32.const 440)
-     (i32.const 0)
     )
     (i32.const -1)
    )
@@ -5744,7 +5667,6 @@
     (call $~lib/string/String#lastIndexOf|trampoline
      (get_global $std/string/str)
      (i32.const 464)
-     (i32.const 0)
     )
     (i32.const 15)
    )
@@ -5854,7 +5776,6 @@
    (f64.ne
     (call $~lib/string/parseInt
      (i32.const 480)
-     (i32.const 0)
     )
     (f64.const 0)
    )
@@ -5872,7 +5793,6 @@
    (f64.ne
     (call $~lib/string/parseInt
      (i32.const 488)
-     (i32.const 0)
     )
     (f64.const 1)
    )
@@ -5890,7 +5810,6 @@
    (f64.ne
     (call $~lib/string/parseInt
      (i32.const 496)
-     (i32.const 0)
     )
     (f64.const 5)
    )
@@ -5908,7 +5827,6 @@
    (f64.ne
     (call $~lib/string/parseInt
      (i32.const 512)
-     (i32.const 0)
     )
     (f64.const 455)
    )
@@ -5926,7 +5844,6 @@
    (f64.ne
     (call $~lib/string/parseInt
      (i32.const 528)
-     (i32.const 0)
     )
     (f64.const 3855)
    )
@@ -5944,7 +5861,6 @@
    (f64.ne
     (call $~lib/string/parseInt
      (i32.const 544)
-     (i32.const 0)
     )
     (f64.const 3855)
    )
@@ -5962,7 +5878,6 @@
    (f64.ne
     (call $~lib/string/parseInt
      (i32.const 560)
-     (i32.const 0)
     )
     (f64.const 11)
    )
@@ -5980,7 +5895,6 @@
    (f64.ne
     (call $~lib/string/parseInt
      (i32.const 576)
-     (i32.const 0)
     )
     (f64.const 1)
    )
@@ -6320,7 +6234,6 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__lte
-     (i32.const 256)
      (i32.const 288)
     )
    )
@@ -6414,7 +6327,6 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__lte
-     (i32.const 256)
      (i32.const 256)
     )
    )

@@ -199,10 +199,8 @@ declare function _BinaryenGeFloat64(): BinaryenOp;
 
 declare type BinaryenHostOp = BinaryenOp;
 
-declare function _BinaryenPageSize(): BinaryenHostOp;
 declare function _BinaryenCurrentMemory(): BinaryenHostOp;
 declare function _BinaryenGrowMemory(): BinaryenHostOp;
-declare function _BinaryenHasFeature(): BinaryenHostOp;
 
 declare type BinaryenAtomicRMWOp = BinaryenOp;
 

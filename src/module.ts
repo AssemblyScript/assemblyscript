@@ -204,10 +204,8 @@ export enum BinaryOp {
 }
 
 export enum HostOp {
-  PageSize = _BinaryenPageSize(),
   CurrentMemory = _BinaryenCurrentMemory(),
   GrowMemory = _BinaryenGrowMemory(),
-  HasFeature = _BinaryenHasFeature(),
 
   // see: https://github.com/WebAssembly/bulk-memory-operations
   // MoveMemory
@@ -875,12 +873,18 @@ export class Module {
     }
   }
 
-  setFunctionTable(funcs: FunctionRef[]): void {
-    var cArr = allocPtrArray(funcs);
+  setFunctionTable(funcs: string[]): void {
+    var numNames = funcs.length;
+    var names = new Array<usize>(numNames);
+    for (let i = 0; i < numNames; ++i) {
+      names[i] = allocString(funcs[i]);
+    }
+    var cArr = allocI32Array(names);
     try {
-      _BinaryenSetFunctionTable(this.ref, cArr, funcs.length);
+      _BinaryenSetFunctionTable(this.ref, cArr, numNames);
     } finally {
       memory.free(cArr);
+      for (let i = numNames; i >= 0; --i) memory.free(names[i]);
     }
   }
 

@@ -3,6 +3,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (type $iv (func (param i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $std/pointer/one (mut i32) (i32.const 0))
  (global $std/pointer/two (mut i32) (i32.const 0))
@@ -16,19 +17,17 @@
  (export "_setargc" (func $~setargc))
  (export "Pointer<Entry>#constructor" (func $std/pointer/Pointer<Entry>#constructor|trampoline))
  (start $start)
- (func $std/pointer/Pointer<Entry>#constructor (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (get_local $1)
+ (func $std/pointer/Pointer<Entry>#constructor (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (get_local $0)
  )
  (func $start (; 2 ;) (; has Stack IR ;) (type $v)
   (set_global $std/pointer/one
    (call $std/pointer/Pointer<Entry>#constructor
-    (i32.const 0)
     (i32.const 8)
    )
   )
   (set_global $std/pointer/two
    (call $std/pointer/Pointer<Entry>#constructor
-    (i32.const 0)
     (i32.const 24)
    )
   )
@@ -292,7 +291,6 @@
    )
   )
   (call $std/pointer/Pointer<Entry>#constructor
-   (get_local $0)
    (get_local $1)
   )
  )

@@ -286,7 +286,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Map of already compiled static string segments. */
   stringSegments: Map<string,MemorySegment> = new Map();
   /** Function table being compiled. */
-  functionTable: FunctionRef[] = [];
+  functionTable: string[] = [];
   /** Argument count helper global. */
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
@@ -1474,7 +1474,7 @@ export class Compiler extends DiagnosticEmitter {
       // insert the trampoline if the function has optional parameters
       func = this.ensureTrampoline(func);
     }
-    functionTable.push(func.ref);
+    functionTable.push(func.internalName);
     func.functionTableIndex = index;
     return index;
   }
