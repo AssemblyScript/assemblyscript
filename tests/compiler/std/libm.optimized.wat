@@ -4,6 +4,7 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $Ff (func (param f64) (result f32)))
+ (type $FUNCSIG$d (func (result f64)))
  (global $std/libm/E f64 (f64.const 2.718281828459045))
  (global $std/libm/LN10 f64 (f64.const 2.302585092994046))
  (global $std/libm/LN2 f64 (f64.const 0.6931471805599453))
@@ -2344,13 +2345,11 @@
    )
   )
  )
- (func $~lib/math/NativeMath.cos (; 23 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cos (; 23 ;) (; has Stack IR ;) (type $FUNCSIG$d) (result f64)
   (unreachable)
  )
  (func $std/libm/cos (; 24 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
-  (call $~lib/math/NativeMath.cos
-   (get_local $0)
-  )
+  (call $~lib/math/NativeMath.cos)
  )
  (func $~lib/math/NativeMath.expm1 (; 25 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
@@ -2683,7 +2682,7 @@
    (f64.reinterpret/i64
     (i64.shl
      (i64.add
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (get_local $2)
       )
       (i64.const 1023)
@@ -2750,7 +2749,7 @@
    (i64.shl
     (i64.sub
      (i64.const 1023)
-     (i64.extend_u/i32
+     (i64.extend_s/i32
       (get_local $2)
      )
     )
@@ -2900,7 +2899,7 @@
    (f64.reinterpret/i64
     (i64.shl
      (i64.add
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (get_local $1)
       )
       (i64.const 1023)
@@ -4954,7 +4953,7 @@
                (i64.const 4294967295)
               )
               (i64.shl
-               (i64.extend_u/i32
+               (i64.extend_s/i32
                 (get_local $5)
                )
                (i64.const 32)
@@ -4989,7 +4988,7 @@
           (tee_local $3
            (f64.reinterpret/i64
             (i64.shl
-             (i64.extend_u/i32
+             (i64.extend_s/i32
               (i32.add
                (i32.add
                 (i32.or
@@ -5398,7 +5397,7 @@
       (set_local $3
        (f64.reinterpret/i64
         (i64.shl
-         (i64.extend_u/i32
+         (i64.extend_s/i32
           (i32.and
            (get_local $7)
            (i32.xor
@@ -5600,7 +5599,7 @@
            (i64.const 4294967295)
           )
           (i64.shl
-           (i64.extend_u/i32
+           (i64.extend_s/i32
             (get_local $8)
            )
            (i64.const 32)

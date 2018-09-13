@@ -224,7 +224,7 @@
    (i64.const -1)
   )
   (set_global $unary/I
-   (i64.extend_s/i32
+   (i64.extend_u/i32
     (i64.eqz
      (i64.const 1)
     )
@@ -246,7 +246,7 @@
    )
   )
   (set_global $unary/I
-   (i64.extend_s/i32
+   (i64.extend_u/i32
     (i64.eqz
      (get_global $unary/I)
     )
@@ -467,7 +467,7 @@
    (f64.const -1.25)
   )
   (set_global $unary/I
-   (i64.extend_s/i32
+   (i64.extend_u/i32
     (f64.eq
      (f64.const 1.25)
      (f64.const 0)
@@ -483,7 +483,7 @@
    )
   )
   (set_global $unary/I
-   (i64.extend_s/i32
+   (i64.extend_u/i32
     (f64.eq
      (get_global $unary/F)
      (f64.const 0)

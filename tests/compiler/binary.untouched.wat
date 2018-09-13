@@ -123,7 +123,7 @@
     (i64.shl
      (i64.add
       (i64.const 1023)
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (get_local $1)
       )
      )
@@ -932,7 +932,7 @@
         (i64.const 4294967295)
        )
        (i64.shl
-        (i64.extend_u/i32
+        (i64.extend_s/i32
          (get_local $7)
         )
         (i64.const 32)
@@ -984,7 +984,7 @@
     (set_local $30
      (f64.reinterpret/i64
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.add
          (i32.add
           (i32.or
@@ -1461,7 +1461,7 @@
     (set_local $20
      (f64.reinterpret/i64
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.and
          (get_local $25)
          (i32.xor
@@ -1679,7 +1679,7 @@
        (i64.const 4294967295)
       )
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (get_local $24)
        )
        (i64.const 32)
@@ -3728,7 +3728,7 @@
     (set_local $2
      (i64.shl
       (get_local $2)
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (i32.add
         (i32.sub
          (i32.const 0)
@@ -3802,7 +3802,7 @@
     (set_local $3
      (i64.shl
       (get_local $3)
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (i32.add
         (i32.sub
          (i32.const 0)
@@ -3968,7 +3968,7 @@
      (i64.or
       (get_local $2)
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (get_local $4)
        )
        (i64.const 52)
@@ -3979,7 +3979,7 @@
    (set_local $2
     (i64.shr_u
      (get_local $2)
-     (i64.extend_u/i32
+     (i64.extend_s/i32
       (i32.add
        (i32.sub
         (i32.const 0)
@@ -3995,7 +3995,7 @@
    (i64.or
     (get_local $2)
     (i64.shl
-     (i64.extend_u/i32
+     (i64.extend_s/i32
       (get_local $6)
      )
      (i64.const 63)

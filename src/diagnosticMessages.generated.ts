@@ -28,6 +28,7 @@ export enum DiagnosticCode {
   Optional_parameter_must_have_an_initializer = 215,
   Constructor_of_class_0_must_not_require_any_arguments = 216,
   Function_0_cannot_be_inlined_into_itself = 217,
+  Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set = 218,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -147,6 +148,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 215: return "Optional parameter must have an initializer.";
     case 216: return "Constructor of class '{0}' must not require any arguments.";
     case 217: return "Function '{0}' cannot be inlined into itself.";
+    case 218: return "Cannot access method '{0}' without calling it as it requires 'this' to be set.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

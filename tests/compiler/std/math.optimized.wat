@@ -8,8 +8,6 @@
  (type $fi (func (param f32) (result i32)))
  (type $ffff (func (param f32 f32 f32) (result f32)))
  (type $fif (func (param f32 i32) (result f32)))
- (type $FiFFii (func (param f64 i32 f64 f64 i32) (result i32)))
- (type $fiffii (func (param f32 i32 f32 f32 i32) (result i32)))
  (type $FF (func (param f64) (result f64)))
  (type $ff (func (param f32) (result f32)))
  (type $FFFFii (func (param f64 f64 f64 f64 i32) (result i32)))
@@ -22,6 +20,16 @@
  (type $f (func (result f32)))
  (type $IiI (func (param i64 i32) (result i64)))
  (type $v (func))
+ (type $FUNCSIG$iddd (func (param f64 f64 f64) (result i32)))
+ (type $FUNCSIG$ifff (func (param f32 f32 f32) (result i32)))
+ (type $FUNCSIG$ididi (func (param f64 i32 f64 i32) (result i32)))
+ (type $FUNCSIG$ififi (func (param f32 i32 f32 i32) (result i32)))
+ (type $FUNCSIG$idd (func (param f64 f64) (result i32)))
+ (type $FUNCSIG$iff (func (param f32 f32) (result i32)))
+ (type $FUNCSIG$iddi (func (param f64 f64 i32) (result i32)))
+ (type $FUNCSIG$iffi (func (param f32 f32 i32) (result i32)))
+ (type $FUNCSIG$idddi (func (param f64 f64 f64 i32) (result i32)))
+ (type $FUNCSIG$ifffi (func (param f32 f32 f32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "JSMath" "E" (global $~lib/math/JSMath.E f64))
  (import "JSMath" "LN2" (global $~lib/math/JSMath.LN2 f64))
@@ -226,7 +234,7 @@
    (f64.reinterpret/i64
     (i64.shl
      (i64.add
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (get_local $1)
       )
       (i64.const 1023)
@@ -317,7 +325,7 @@
    (get_local $2)
   )
  )
- (func $std/math/check<f64> (; 36 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/check<f64> (; 36 ;) (; has Stack IR ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   (if
    (f64.eq
     (get_local $0)
@@ -598,7 +606,7 @@
    (get_local $2)
   )
  )
- (func $std/math/check<f32> (; 43 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/check<f32> (; 43 ;) (; has Stack IR ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   (if
    (f32.eq
     (get_local $0)
@@ -635,42 +643,39 @@
   )
   (i32.const 1)
  )
- (func $std/math/test_scalbn (; 44 ;) (; has Stack IR ;) (type $FiFFii) (param $0 f64) (param $1 i32) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_scalbn (; 44 ;) (; has Stack IR ;) (type $FUNCSIG$ididi) (param $0 f64) (param $1 i32) (param $2 f64) (param $3 i32) (result i32)
   (call $std/math/check<f64>
    (call $~lib/math/NativeMath.scalbn
     (get_local $0)
     (get_local $1)
    )
    (get_local $2)
-   (get_local $3)
-   (get_local $4)
+   (f64.const 0)
   )
  )
- (func $std/math/test_scalbnf (; 45 ;) (; has Stack IR ;) (type $fiffii) (param $0 f32) (param $1 i32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_scalbnf (; 45 ;) (; has Stack IR ;) (type $FUNCSIG$ififi) (param $0 f32) (param $1 i32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.scalbn
     (get_local $0)
     (get_local $1)
    )
    (get_local $2)
-   (get_local $3)
-   (get_local $4)
+   (f32.const 0)
   )
  )
- (func $std/math/test_abs (; 46 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
-  (tee_local $3
-   (if (result i32)
-    (tee_local $4
-     (call $std/math/check<f64>
-      (f64.abs
-       (get_local $0)
-      )
-      (get_local $1)
-      (get_local $2)
-      (get_local $3)
+ (func $std/math/test_abs (; 46 ;) (; has Stack IR ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+  (local $2 i32)
+  (if
+   (tee_local $2
+    (call $std/math/check<f64>
+     (f64.abs
+      (get_local $0)
      )
+     (get_local $1)
+     (f64.const 0)
     )
+   )
+   (set_local $2
     (call $std/math/check<f64>
      (tee_local $0
       (call $~lib/math/JSMath.abs
@@ -678,21 +683,19 @@
       )
      )
      (get_local $1)
-     (get_local $2)
-     (get_local $3)
+     (f64.const 0)
     )
-    (get_local $4)
    )
   )
+  (get_local $2)
  )
- (func $std/math/test_absf (; 47 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_absf (; 47 ;) (; has Stack IR ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   (call $std/math/check<f32>
    (f32.abs
     (get_local $0)
    )
    (get_local $1)
-   (get_local $2)
-   (get_local $3)
+   (f32.const 0)
   )
  )
  (func $~lib/math/R (; 48 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -963,7 +966,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -974,7 +976,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -1196,7 +1197,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $~lib/math/NativeMath.log1p (; 54 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -1853,7 +1853,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -1864,7 +1863,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -2409,7 +2407,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $~lib/math/NativeMath.asin (; 62 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -2631,7 +2628,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -2642,7 +2638,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -2792,7 +2787,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $~lib/math/NativeMath.asinh (; 66 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -2925,7 +2919,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -2936,7 +2929,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -3060,7 +3052,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $~lib/math/NativeMath.atan (; 70 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -3437,7 +3428,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -3448,7 +3438,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -3783,7 +3772,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $~lib/math/NativeMath.atanh (; 74 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -3896,7 +3884,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -3907,7 +3894,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -4008,7 +3994,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $~lib/math/NativeMath.atan2 (; 78 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -4373,7 +4358,6 @@
       )
       (get_local $2)
       (get_local $3)
-      (get_local $4)
      )
     )
     (call $std/math/check<f64>
@@ -4385,7 +4369,6 @@
      )
      (get_local $2)
      (get_local $3)
-     (get_local $4)
     )
     (get_local $5)
    )
@@ -4711,7 +4694,6 @@
    )
    (get_local $2)
    (get_local $3)
-   (get_local $4)
   )
  )
  (func $~lib/math/NativeMath.cbrt (; 82 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -4908,7 +4890,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -4919,7 +4900,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -5076,23 +5056,20 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
- (func $std/math/test_ceil (; 86 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
-  (tee_local $3
-   (if (result i32)
-    (tee_local $4
-     (call $std/math/check<f64>
-      (f64.ceil
-       (get_local $0)
-      )
-      (get_local $1)
-      (get_local $2)
-      (get_local $3)
+ (func $std/math/test_ceil (; 86 ;) (; has Stack IR ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
+  (if
+   (tee_local $2
+    (call $std/math/check<f64>
+     (f64.ceil
+      (get_local $0)
      )
+     (get_local $1)
+     (f64.const 0)
     )
+   )
+   (set_local $2
     (call $std/math/check<f64>
      (tee_local $0
       (call $~lib/math/JSMath.ceil
@@ -5100,21 +5077,19 @@
       )
      )
      (get_local $1)
-     (get_local $2)
-     (get_local $3)
+     (f64.const 0)
     )
-    (get_local $4)
    )
   )
+  (get_local $2)
  )
- (func $std/math/test_ceilf (; 87 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_ceilf (; 87 ;) (; has Stack IR ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
   (call $std/math/check<f32>
    (f32.ceil
     (get_local $0)
    )
    (get_local $1)
-   (get_local $2)
-   (get_local $3)
+   (f32.const 0)
   )
  )
  (func $~lib/math/NativeMath.expm1 (; 88 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -5448,7 +5423,7 @@
    (f64.reinterpret/i64
     (i64.shl
      (i64.add
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (get_local $2)
       )
       (i64.const 1023)
@@ -5515,7 +5490,7 @@
    (i64.shl
     (i64.sub
      (i64.const 1023)
-     (i64.extend_u/i32
+     (i64.extend_s/i32
       (get_local $2)
      )
     )
@@ -5877,7 +5852,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -5888,7 +5862,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -6605,7 +6578,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $std/math/test_exp (; 98 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
@@ -6619,7 +6591,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -6630,7 +6601,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -6643,7 +6613,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $std/math/test_expm1 (; 100 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
@@ -6657,7 +6626,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -6668,7 +6636,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -6681,23 +6648,20 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
- (func $std/math/test_floor (; 102 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
-  (tee_local $3
-   (if (result i32)
-    (tee_local $4
-     (call $std/math/check<f64>
-      (f64.floor
-       (get_local $0)
-      )
-      (get_local $1)
-      (get_local $2)
-      (get_local $3)
+ (func $std/math/test_floor (; 102 ;) (; has Stack IR ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
+  (if
+   (tee_local $2
+    (call $std/math/check<f64>
+     (f64.floor
+      (get_local $0)
      )
+     (get_local $1)
+     (f64.const 0)
     )
+   )
+   (set_local $2
     (call $std/math/check<f64>
      (tee_local $0
       (call $~lib/math/JSMath.floor
@@ -6705,21 +6669,19 @@
       )
      )
      (get_local $1)
-     (get_local $2)
-     (get_local $3)
+     (f64.const 0)
     )
-    (get_local $4)
    )
   )
+  (get_local $2)
  )
- (func $std/math/test_floorf (; 103 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_floorf (; 103 ;) (; has Stack IR ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
   (call $std/math/check<f32>
    (f32.floor
     (get_local $0)
    )
    (get_local $1)
-   (get_local $2)
-   (get_local $3)
+   (f32.const 0)
   )
  )
  (func $~lib/math/NativeMath.hypot (; 104 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -7007,7 +6969,6 @@
       )
       (get_local $2)
       (get_local $3)
-      (get_local $4)
      )
     )
     (call $std/math/check<f64>
@@ -7019,7 +6980,6 @@
      )
      (get_local $2)
      (get_local $3)
-     (get_local $4)
     )
     (get_local $5)
    )
@@ -7202,7 +7162,6 @@
    )
    (get_local $2)
    (get_local $3)
-   (get_local $4)
   )
  )
  (func $std/math/test_log (; 108 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
@@ -7216,7 +7175,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -7227,20 +7185,18 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
   )
  )
- (func $std/math/test_logf (; 109 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_logf (; 109 ;) (; has Stack IR ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.log
     (get_local $0)
    )
    (get_local $1)
-   (get_local $2)
-   (get_local $3)
+   (f32.const 0)
   )
  )
  (func $~lib/math/NativeMath.log10 (; 110 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -7577,7 +7533,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -7588,7 +7543,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -7840,7 +7794,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $std/math/test_log1p (; 114 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
@@ -7854,7 +7807,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -7865,7 +7817,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -7878,7 +7829,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $~lib/math/NativeMath.log2 (; 116 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -8203,7 +8153,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -8214,7 +8163,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -8454,24 +8402,22 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
- (func $std/math/test_max (; 120 ;) (; has Stack IR ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
-  (local $5 i32)
-  (tee_local $4
-   (if (result i32)
-    (tee_local $5
-     (call $std/math/check<f64>
-      (f64.max
-       (get_local $0)
-       (get_local $1)
-      )
-      (get_local $2)
-      (get_local $3)
-      (get_local $4)
+ (func $std/math/test_max (; 120 ;) (; has Stack IR ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
+  (if
+   (tee_local $3
+    (call $std/math/check<f64>
+     (f64.max
+      (get_local $0)
+      (get_local $1)
      )
+     (get_local $2)
+     (f64.const 0)
     )
+   )
+   (set_local $3
     (call $std/math/check<f64>
      (tee_local $0
       (call $~lib/math/JSMath.max
@@ -8480,39 +8426,36 @@
       )
      )
      (get_local $2)
-     (get_local $3)
-     (get_local $4)
+     (f64.const 0)
     )
-    (get_local $5)
    )
   )
+  (get_local $3)
  )
- (func $std/math/test_maxf (; 121 ;) (; has Stack IR ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_maxf (; 121 ;) (; has Stack IR ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   (call $std/math/check<f32>
    (f32.max
     (get_local $0)
     (get_local $1)
    )
    (get_local $2)
-   (get_local $3)
-   (get_local $4)
+   (f32.const 0)
   )
  )
- (func $std/math/test_min (; 122 ;) (; has Stack IR ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
-  (local $5 i32)
-  (tee_local $4
-   (if (result i32)
-    (tee_local $5
-     (call $std/math/check<f64>
-      (f64.min
-       (get_local $0)
-       (get_local $1)
-      )
-      (get_local $2)
-      (get_local $3)
-      (get_local $4)
+ (func $std/math/test_min (; 122 ;) (; has Stack IR ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
+  (if
+   (tee_local $3
+    (call $std/math/check<f64>
+     (f64.min
+      (get_local $0)
+      (get_local $1)
      )
+     (get_local $2)
+     (f64.const 0)
     )
+   )
+   (set_local $3
     (call $std/math/check<f64>
      (tee_local $0
       (call $~lib/math/JSMath.min
@@ -8521,22 +8464,20 @@
       )
      )
      (get_local $2)
-     (get_local $3)
-     (get_local $4)
+     (f64.const 0)
     )
-    (get_local $5)
    )
   )
+  (get_local $3)
  )
- (func $std/math/test_minf (; 123 ;) (; has Stack IR ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_minf (; 123 ;) (; has Stack IR ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   (call $std/math/check<f32>
    (f32.min
     (get_local $0)
     (get_local $1)
    )
    (get_local $2)
-   (get_local $3)
-   (get_local $4)
+   (f32.const 0)
   )
  )
  (func $~lib/math/NativeMath.mod (; 124 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -8705,7 +8646,7 @@
       )
       (i64.shl
        (get_local $2)
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.sub
          (i32.const 1)
          (get_local $3)
@@ -8761,7 +8702,7 @@
       )
       (i64.shl
        (get_local $5)
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.sub
          (i32.const 1)
          (get_local $6)
@@ -8882,7 +8823,7 @@
           (i64.const 4503599627370496)
          )
          (i64.shl
-          (i64.extend_u/i32
+          (i64.extend_s/i32
            (get_local $3)
           )
           (i64.const 52)
@@ -8890,7 +8831,7 @@
         )
         (i64.shr_u
          (get_local $2)
-         (i64.extend_u/i32
+         (i64.extend_s/i32
           (i32.sub
            (i32.const 1)
            (get_local $3)
@@ -8900,7 +8841,7 @@
        )
       )
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (get_local $8)
        )
        (i64.const 63)
@@ -8914,21 +8855,19 @@
    (get_local $0)
   )
  )
- (func $std/math/test_mod (; 125 ;) (; has Stack IR ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
-  (local $5 i32)
-  (tee_local $4
-   (if (result i32)
-    (tee_local $5
-     (call $std/math/check<f64>
-      (call $~lib/math/NativeMath.mod
-       (get_local $0)
-       (get_local $1)
-      )
-      (get_local $2)
-      (get_local $3)
-      (get_local $4)
+ (func $std/math/test_mod (; 125 ;) (; has Stack IR ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+  (if
+   (tee_local $3
+    (call $std/math/check<f64>
+     (call $~lib/math/NativeMath.mod
+      (get_local $0)
+      (get_local $1)
      )
+     (get_local $2)
+     (f64.const 0)
     )
+   )
+   (set_local $3
     (call $std/math/check<f64>
      (tee_local $0
       (call $std/math/JSOp.mod
@@ -8937,12 +8876,11 @@
       )
      )
      (get_local $2)
-     (get_local $3)
-     (get_local $4)
+     (f64.const 0)
     )
-    (get_local $5)
    )
   )
+  (get_local $3)
  )
  (func $~lib/math/NativeMathf.mod (; 126 ;) (; has Stack IR ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
@@ -9292,15 +9230,14 @@
    (get_local $0)
   )
  )
- (func $std/math/test_modf (; 127 ;) (; has Stack IR ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_modf (; 127 ;) (; has Stack IR ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.mod
     (get_local $0)
     (get_local $1)
    )
    (get_local $2)
-   (get_local $3)
-   (get_local $4)
+   (f32.const 0)
   )
  )
  (func $~lib/math/NativeMath.pow (; 128 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -10054,7 +9991,7 @@
                (i64.const 4294967295)
               )
               (i64.shl
-               (i64.extend_u/i32
+               (i64.extend_s/i32
                 (get_local $5)
                )
                (i64.const 32)
@@ -10089,7 +10026,7 @@
           (tee_local $3
            (f64.reinterpret/i64
             (i64.shl
-             (i64.extend_u/i32
+             (i64.extend_s/i32
               (i32.add
                (i32.add
                 (i32.or
@@ -10498,7 +10435,7 @@
       (set_local $3
        (f64.reinterpret/i64
         (i64.shl
-         (i64.extend_u/i32
+         (i64.extend_s/i32
           (i32.and
            (get_local $7)
            (i32.xor
@@ -10700,7 +10637,7 @@
            (i64.const 4294967295)
           )
           (i64.shl
-           (i64.extend_u/i32
+           (i64.extend_s/i32
             (get_local $8)
            )
            (i64.const 32)
@@ -10742,7 +10679,6 @@
       )
       (get_local $2)
       (get_local $3)
-      (get_local $4)
      )
     )
     (call $std/math/check<f64>
@@ -10754,7 +10690,6 @@
      )
      (get_local $2)
      (get_local $3)
-     (get_local $4)
     )
     (get_local $5)
    )
@@ -11955,7 +11890,6 @@
    )
    (get_local $2)
    (get_local $3)
-   (get_local $4)
   )
  )
  (func $~lib/math/murmurHash3 (; 132 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
@@ -12236,14 +12170,13 @@
    )
   )
  )
- (func $std/math/test_round (; 137 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_round (; 137 ;) (; has Stack IR ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
   (call $std/math/check<f64>
    (call $~lib/math/NativeMath.round
     (get_local $0)
    )
    (get_local $1)
-   (get_local $2)
-   (get_local $3)
+   (f64.const 0)
   )
  )
  (func $~lib/math/NativeMathf.round (; 138 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
@@ -12374,40 +12307,38 @@
    )
   )
  )
- (func $std/math/test_roundf (; 139 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_roundf (; 139 ;) (; has Stack IR ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.round
     (get_local $0)
    )
    (get_local $1)
-   (get_local $2)
-   (get_local $3)
+   (f32.const 0)
   )
  )
- (func $std/math/test_sign (; 140 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
-  (tee_local $3
-   (if (result i32)
-    (tee_local $4
-     (call $std/math/check<f64>
-      (if (result f64)
-       (f64.gt
-        (f64.abs
-         (get_local $0)
-        )
-        (f64.const 0)
-       )
-       (f64.copysign
-        (f64.const 1)
+ (func $std/math/test_sign (; 140 ;) (; has Stack IR ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+  (local $2 i32)
+  (if
+   (tee_local $2
+    (call $std/math/check<f64>
+     (if (result f64)
+      (f64.gt
+       (f64.abs
         (get_local $0)
        )
+       (f64.const 0)
+      )
+      (f64.copysign
+       (f64.const 1)
        (get_local $0)
       )
-      (get_local $1)
-      (get_local $2)
-      (get_local $3)
+      (get_local $0)
      )
+     (get_local $1)
+     (f64.const 0)
     )
+   )
+   (set_local $2
     (call $std/math/check<f64>
      (tee_local $0
       (call $~lib/math/JSMath.sign
@@ -12415,14 +12346,13 @@
       )
      )
      (get_local $1)
-     (get_local $2)
-     (get_local $3)
+     (f64.const 0)
     )
-    (get_local $4)
    )
   )
+  (get_local $2)
  )
- (func $std/math/test_signf (; 141 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_signf (; 141 ;) (; has Stack IR ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   (call $std/math/check<f32>
    (if (result f32)
     (f32.gt
@@ -12438,8 +12368,7 @@
     (get_local $0)
    )
    (get_local $1)
-   (get_local $2)
-   (get_local $3)
+   (f32.const 0)
   )
  )
  (func $~lib/math/NativeMath.rem (; 142 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -12598,7 +12527,7 @@
      )
      (i64.shl
       (get_local $2)
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (i32.sub
         (i32.const 1)
         (get_local $3)
@@ -12653,7 +12582,7 @@
      )
      (i64.shl
       (get_local $7)
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (i32.sub
         (i32.const 1)
         (get_local $6)
@@ -12813,7 +12742,7 @@
         (i64.const 4503599627370496)
        )
        (i64.shl
-        (i64.extend_u/i32
+        (i64.extend_s/i32
          (get_local $3)
         )
         (i64.const 52)
@@ -12821,7 +12750,7 @@
       )
       (i64.shr_u
        (get_local $2)
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.sub
          (i32.const 1)
          (get_local $3)
@@ -12910,15 +12839,14 @@
   )
   (get_local $0)
  )
- (func $std/math/test_rem (; 143 ;) (; has Stack IR ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_rem (; 143 ;) (; has Stack IR ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (call $std/math/check<f64>
    (call $~lib/math/NativeMath.rem
     (get_local $0)
     (get_local $1)
    )
    (get_local $2)
-   (get_local $3)
-   (get_local $4)
+   (f64.const 0)
   )
  )
  (func $~lib/math/NativeMathf.rem (; 144 ;) (; has Stack IR ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
@@ -13356,15 +13284,14 @@
   )
   (get_local $0)
  )
- (func $std/math/test_remf (; 145 ;) (; has Stack IR ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_remf (; 145 ;) (; has Stack IR ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.rem
     (get_local $0)
     (get_local $1)
    )
    (get_local $2)
-   (get_local $3)
-   (get_local $4)
+   (f32.const 0)
   )
  )
  (func $~lib/math/NativeMath.sinh (; 146 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -13495,7 +13422,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -13506,7 +13432,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -13625,7 +13550,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $std/math/test_sqrt (; 150 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
@@ -13639,7 +13563,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -13650,7 +13573,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -13663,7 +13585,6 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
  (func $~lib/math/NativeMath.tanh (; 152 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -13802,7 +13723,6 @@
       )
       (get_local $1)
       (get_local $2)
-      (get_local $3)
      )
     )
     (call $std/math/check<f64>
@@ -13813,7 +13733,6 @@
      )
      (get_local $1)
      (get_local $2)
-     (get_local $3)
     )
     (get_local $4)
    )
@@ -13941,23 +13860,20 @@
    )
    (get_local $1)
    (get_local $2)
-   (get_local $3)
   )
  )
- (func $std/math/test_trunc (; 156 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
-  (tee_local $3
-   (if (result i32)
-    (tee_local $4
-     (call $std/math/check<f64>
-      (f64.trunc
-       (get_local $0)
-      )
-      (get_local $1)
-      (get_local $2)
-      (get_local $3)
+ (func $std/math/test_trunc (; 156 ;) (; has Stack IR ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
+  (if
+   (tee_local $2
+    (call $std/math/check<f64>
+     (f64.trunc
+      (get_local $0)
      )
+     (get_local $1)
+     (f64.const 0)
     )
+   )
+   (set_local $2
     (call $std/math/check<f64>
      (tee_local $0
       (call $~lib/math/JSMath.trunc
@@ -13965,21 +13881,19 @@
       )
      )
      (get_local $1)
-     (get_local $2)
-     (get_local $3)
+     (f64.const 0)
     )
-    (get_local $4)
    )
   )
+  (get_local $2)
  )
- (func $std/math/test_truncf (; 157 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_truncf (; 157 ;) (; has Stack IR ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
   (call $std/math/check<f32>
    (f32.trunc
     (get_local $0)
    )
    (get_local $1)
-   (get_local $2)
-   (get_local $3)
+   (f32.const 0)
   )
  )
  (func $~lib/math/ipow64 (; 158 ;) (; has Stack IR ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
@@ -14263,7 +14177,6 @@
      (f64.const 2.718281828459045)
      (get_global $~lib/math/JSMath.E)
      (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14282,7 +14195,6 @@
      (f64.const 0.6931471805599453)
      (get_global $~lib/math/JSMath.LN2)
      (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14301,7 +14213,6 @@
      (f64.const 2.302585092994046)
      (get_global $~lib/math/JSMath.LN10)
      (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14320,7 +14231,6 @@
      (f64.const 1.4426950408889634)
      (get_global $~lib/math/JSMath.LOG2E)
      (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14339,7 +14249,6 @@
      (f64.const 3.141592653589793)
      (get_global $~lib/math/JSMath.PI)
      (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14358,7 +14267,6 @@
      (f64.const 0.7071067811865476)
      (get_global $~lib/math/JSMath.SQRT1_2)
      (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14377,7 +14285,6 @@
      (f64.const 1.4142135623730951)
      (get_global $~lib/math/JSMath.SQRT2)
      (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14398,7 +14305,6 @@
       (get_global $~lib/math/JSMath.E)
      )
      (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14419,7 +14325,6 @@
       (get_global $~lib/math/JSMath.LN2)
      )
      (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14440,7 +14345,6 @@
       (get_global $~lib/math/JSMath.LN10)
      )
      (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14461,7 +14365,6 @@
       (get_global $~lib/math/JSMath.LOG2E)
      )
      (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14482,7 +14385,6 @@
       (get_global $~lib/math/JSMath.PI)
      )
      (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14503,7 +14405,6 @@
       (get_global $~lib/math/JSMath.SQRT1_2)
      )
      (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14524,7 +14425,6 @@
       (get_global $~lib/math/JSMath.SQRT2)
      )
      (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -14543,7 +14443,6 @@
      (f64.const -8.06684839057968)
      (i32.const -2)
      (f64.const -2.01671209764492)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14563,7 +14462,6 @@
      (f64.const 4.345239849338305)
      (i32.const -1)
      (f64.const 2.1726199246691524)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14583,7 +14481,6 @@
      (f64.const -8.38143342755525)
      (i32.const 0)
      (f64.const -8.38143342755525)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14603,7 +14500,6 @@
      (f64.const -6.531673581913484)
      (i32.const 1)
      (f64.const -13.063347163826968)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14623,7 +14519,6 @@
      (f64.const 9.267056966972586)
      (i32.const 2)
      (f64.const 37.06822786789034)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14643,7 +14538,6 @@
      (f64.const 0.6619858980995045)
      (i32.const 3)
      (f64.const 5.295887184796036)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14663,7 +14557,6 @@
      (f64.const -0.4066039223853553)
      (i32.const 4)
      (f64.const -6.505662758165685)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14683,7 +14576,6 @@
      (f64.const 0.5617597462207241)
      (i32.const 5)
      (f64.const 17.97631187906317)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14703,7 +14595,6 @@
      (f64.const 0.7741522965913037)
      (i32.const 6)
      (f64.const 49.545746981843436)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14723,7 +14614,6 @@
      (f64.const -0.6787637026394024)
      (i32.const 7)
      (f64.const -86.88175393784351)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14742,7 +14632,6 @@
     (call $std/math/test_scalbn
      (f64.const 0)
      (i32.const 2147483647)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -14763,7 +14652,6 @@
      (f64.const 0)
      (i32.const -2147483647)
      (f64.const 0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14783,7 +14671,6 @@
      (f64.const -0)
      (i32.const 2147483647)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14803,7 +14690,6 @@
      (f64.const nan:0x8000000000000)
      (i32.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14823,7 +14709,6 @@
      (f64.const inf)
      (i32.const 0)
      (f64.const inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14843,7 +14728,6 @@
      (f64.const -inf)
      (i32.const 0)
      (f64.const -inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14863,7 +14747,6 @@
      (f64.const 1)
      (i32.const 0)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14883,7 +14766,6 @@
      (f64.const 1)
      (i32.const 1)
      (f64.const 2)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14903,7 +14785,6 @@
      (f64.const 1)
      (i32.const -1)
      (f64.const 0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14923,7 +14804,6 @@
      (f64.const 1)
      (i32.const 2147483647)
      (f64.const inf)
-     (f64.const 0)
      (i32.const 17)
     )
    )
@@ -14943,7 +14823,6 @@
      (f64.const nan:0x8000000000000)
      (i32.const 1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14963,7 +14842,6 @@
      (f64.const inf)
      (i32.const 2147483647)
      (f64.const inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -14983,7 +14861,6 @@
      (f64.const inf)
      (i32.const -2147483647)
      (f64.const inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -15003,7 +14880,6 @@
      (f64.const -inf)
      (i32.const 2147483647)
      (f64.const -inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -15023,7 +14899,6 @@
      (f64.const 8988465674311579538646525e283)
      (i32.const -2097)
      (f64.const 5e-324)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -15043,7 +14918,6 @@
      (f64.const 5e-324)
      (i32.const 2097)
      (f64.const 8988465674311579538646525e283)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -15063,7 +14937,6 @@
      (f64.const 1.000244140625)
      (i32.const -1074)
      (f64.const 5e-324)
-     (f64.const 0)
      (i32.const 9)
     )
    )
@@ -15083,7 +14956,6 @@
      (f64.const 0.7499999999999999)
      (i32.const -1073)
      (f64.const 5e-324)
-     (f64.const 0)
      (i32.const 9)
     )
    )
@@ -15103,7 +14975,6 @@
      (f64.const 0.5000000000000012)
      (i32.const -1024)
      (f64.const 2.781342323134007e-309)
-     (f64.const 0)
      (i32.const 9)
     )
    )
@@ -15123,7 +14994,6 @@
      (f32.const -8.066848754882812)
      (i32.const -2)
      (f32.const -2.016712188720703)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15143,7 +15013,6 @@
      (f32.const 4.345239639282227)
      (i32.const -1)
      (f32.const 2.1726198196411133)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15163,7 +15032,6 @@
      (f32.const -8.381433486938477)
      (i32.const 0)
      (f32.const -8.381433486938477)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15183,7 +15051,6 @@
      (f32.const -6.531673431396484)
      (i32.const 1)
      (f32.const -13.063346862792969)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15203,7 +15070,6 @@
      (f32.const 9.267057418823242)
      (i32.const 2)
      (f32.const 37.06822967529297)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15223,7 +15089,6 @@
      (f32.const 0.6619858741760254)
      (i32.const 3)
      (f32.const 5.295886993408203)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15243,7 +15108,6 @@
      (f32.const -0.40660393238067627)
      (i32.const 4)
      (f32.const -6.50566291809082)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15263,7 +15127,6 @@
      (f32.const 0.5617597699165344)
      (i32.const 5)
      (f32.const 17.9763126373291)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15283,7 +15146,6 @@
      (f32.const 0.7741522789001465)
      (i32.const 6)
      (f32.const 49.545745849609375)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15303,7 +15165,6 @@
      (f32.const -0.6787636876106262)
      (i32.const 7)
      (f32.const -86.88175201416016)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15322,7 +15183,6 @@
     (call $std/math/test_scalbnf
      (f32.const 0)
      (i32.const 2147483647)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -15343,7 +15203,6 @@
      (f32.const 0)
      (i32.const -2147483647)
      (f32.const 0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15363,7 +15222,6 @@
      (f32.const -0)
      (i32.const 2147483647)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15383,7 +15241,6 @@
      (f32.const nan:0x400000)
      (i32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15403,7 +15260,6 @@
      (f32.const inf)
      (i32.const 0)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15423,7 +15279,6 @@
      (f32.const -inf)
      (i32.const 0)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15443,7 +15298,6 @@
      (f32.const 1)
      (i32.const 0)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15463,7 +15317,6 @@
      (f32.const 1)
      (i32.const 1)
      (f32.const 2)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15483,7 +15336,6 @@
      (f32.const 1)
      (i32.const -1)
      (f32.const 0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15503,7 +15355,6 @@
      (f32.const 1)
      (i32.const 2147483647)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 17)
     )
    )
@@ -15523,7 +15374,6 @@
      (f32.const nan:0x400000)
      (i32.const 1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15543,7 +15393,6 @@
      (f32.const inf)
      (i32.const 2147483647)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15563,7 +15412,6 @@
      (f32.const inf)
      (i32.const -2147483647)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15583,7 +15431,6 @@
      (f32.const -inf)
      (i32.const 2147483647)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15603,7 +15450,6 @@
      (f32.const 1701411834604692317316873e14)
      (i32.const -276)
      (f32.const 1.401298464324817e-45)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15623,7 +15469,6 @@
      (f32.const 1.401298464324817e-45)
      (i32.const 276)
      (f32.const 1701411834604692317316873e14)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -15643,7 +15488,6 @@
      (f32.const 1.000244140625)
      (i32.const -149)
      (f32.const 1.401298464324817e-45)
-     (f32.const 0)
      (i32.const 9)
     )
    )
@@ -15663,7 +15507,6 @@
      (f32.const 0.7499999403953552)
      (i32.const -148)
      (f32.const 1.401298464324817e-45)
-     (f32.const 0)
      (i32.const 9)
     )
    )
@@ -15683,7 +15526,6 @@
      (f32.const 0.5000006556510925)
      (i32.const -128)
      (f32.const 1.4693693398263237e-39)
-     (f32.const 0)
      (i32.const 9)
     )
    )
@@ -15702,8 +15544,6 @@
     (call $std/math/test_abs
      (f64.const -8.06684839057968)
      (f64.const 8.06684839057968)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15721,8 +15561,6 @@
     (call $std/math/test_abs
      (f64.const 4.345239849338305)
      (f64.const 4.345239849338305)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15740,8 +15578,6 @@
     (call $std/math/test_abs
      (f64.const -8.38143342755525)
      (f64.const 8.38143342755525)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15759,8 +15595,6 @@
     (call $std/math/test_abs
      (f64.const -6.531673581913484)
      (f64.const 6.531673581913484)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15778,8 +15612,6 @@
     (call $std/math/test_abs
      (f64.const 9.267056966972586)
      (f64.const 9.267056966972586)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15797,8 +15629,6 @@
     (call $std/math/test_abs
      (f64.const 0.6619858980995045)
      (f64.const 0.6619858980995045)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15816,8 +15646,6 @@
     (call $std/math/test_abs
      (f64.const -0.4066039223853553)
      (f64.const 0.4066039223853553)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15835,8 +15663,6 @@
     (call $std/math/test_abs
      (f64.const 0.5617597462207241)
      (f64.const 0.5617597462207241)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15854,8 +15680,6 @@
     (call $std/math/test_abs
      (f64.const 0.7741522965913037)
      (f64.const 0.7741522965913037)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15873,8 +15697,6 @@
     (call $std/math/test_abs
      (f64.const -0.6787637026394024)
      (f64.const 0.6787637026394024)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15892,8 +15714,6 @@
     (call $std/math/test_abs
      (f64.const 0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15911,8 +15731,6 @@
     (call $std/math/test_abs
      (f64.const -0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15930,8 +15748,6 @@
     (call $std/math/test_abs
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15949,8 +15765,6 @@
     (call $std/math/test_abs
      (f64.const -1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15968,8 +15782,6 @@
     (call $std/math/test_abs
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -15987,8 +15799,6 @@
     (call $std/math/test_abs
      (f64.const -inf)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16006,8 +15816,6 @@
     (call $std/math/test_abs
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16025,8 +15833,6 @@
     (call $std/math/test_absf
      (f32.const -8.066848754882812)
      (f32.const 8.066848754882812)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16044,8 +15850,6 @@
     (call $std/math/test_absf
      (f32.const 4.345239639282227)
      (f32.const 4.345239639282227)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16063,8 +15867,6 @@
     (call $std/math/test_absf
      (f32.const -8.381433486938477)
      (f32.const 8.381433486938477)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16082,8 +15884,6 @@
     (call $std/math/test_absf
      (f32.const -6.531673431396484)
      (f32.const 6.531673431396484)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16101,8 +15901,6 @@
     (call $std/math/test_absf
      (f32.const 9.267057418823242)
      (f32.const 9.267057418823242)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16120,8 +15918,6 @@
     (call $std/math/test_absf
      (f32.const 0.6619858741760254)
      (f32.const 0.6619858741760254)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16139,8 +15935,6 @@
     (call $std/math/test_absf
      (f32.const -0.40660393238067627)
      (f32.const 0.40660393238067627)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16158,8 +15952,6 @@
     (call $std/math/test_absf
      (f32.const 0.5617597699165344)
      (f32.const 0.5617597699165344)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16177,8 +15969,6 @@
     (call $std/math/test_absf
      (f32.const 0.7741522789001465)
      (f32.const 0.7741522789001465)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16196,8 +15986,6 @@
     (call $std/math/test_absf
      (f32.const -0.6787636876106262)
      (f32.const 0.6787636876106262)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16215,8 +16003,6 @@
     (call $std/math/test_absf
      (f32.const 0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16234,8 +16020,6 @@
     (call $std/math/test_absf
      (f32.const -0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16253,8 +16037,6 @@
     (call $std/math/test_absf
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16272,8 +16054,6 @@
     (call $std/math/test_absf
      (f32.const -1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16291,8 +16071,6 @@
     (call $std/math/test_absf
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16310,8 +16088,6 @@
     (call $std/math/test_absf
      (f32.const -inf)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -16329,8 +16105,6 @@
     (call $std/math/test_absf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -23076,7 +22850,6 @@
     (call $std/math/test_ceil
      (f64.const -8.06684839057968)
      (f64.const -8)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23095,7 +22868,6 @@
     (call $std/math/test_ceil
      (f64.const 4.345239849338305)
      (f64.const 5)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23114,7 +22886,6 @@
     (call $std/math/test_ceil
      (f64.const -8.38143342755525)
      (f64.const -8)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23133,7 +22904,6 @@
     (call $std/math/test_ceil
      (f64.const -6.531673581913484)
      (f64.const -6)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23152,7 +22922,6 @@
     (call $std/math/test_ceil
      (f64.const 9.267056966972586)
      (f64.const 10)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23171,7 +22940,6 @@
     (call $std/math/test_ceil
      (f64.const 0.6619858980995045)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23190,7 +22958,6 @@
     (call $std/math/test_ceil
      (f64.const -0.4066039223853553)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23209,7 +22976,6 @@
     (call $std/math/test_ceil
      (f64.const 0.5617597462207241)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23228,7 +22994,6 @@
     (call $std/math/test_ceil
      (f64.const 0.7741522965913037)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23247,7 +23012,6 @@
     (call $std/math/test_ceil
      (f64.const -0.6787637026394024)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23266,7 +23030,6 @@
     (call $std/math/test_ceil
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23285,7 +23048,6 @@
     (call $std/math/test_ceil
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23304,7 +23066,6 @@
     (call $std/math/test_ceil
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23321,7 +23082,6 @@
   (if
    (i32.eqz
     (call $std/math/test_ceil
-     (f64.const 0)
      (f64.const 0)
      (f64.const 0)
      (i32.const 0)
@@ -23342,7 +23102,6 @@
     (call $std/math/test_ceil
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23361,7 +23120,6 @@
     (call $std/math/test_ceil
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23380,7 +23138,6 @@
     (call $std/math/test_ceil
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23399,7 +23156,6 @@
     (call $std/math/test_ceil
      (f64.const 0.5)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23418,7 +23174,6 @@
     (call $std/math/test_ceil
      (f64.const -0.5)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23437,7 +23192,6 @@
     (call $std/math/test_ceil
      (f64.const 1.0000152587890625)
      (f64.const 2)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23456,7 +23210,6 @@
     (call $std/math/test_ceil
      (f64.const -1.0000152587890625)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23475,7 +23228,6 @@
     (call $std/math/test_ceil
      (f64.const 0.9999923706054688)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23494,7 +23246,6 @@
     (call $std/math/test_ceil
      (f64.const -0.9999923706054688)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23513,7 +23264,6 @@
     (call $std/math/test_ceil
      (f64.const 7.888609052210118e-31)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23532,7 +23282,6 @@
     (call $std/math/test_ceil
      (f64.const -7.888609052210118e-31)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23551,7 +23300,6 @@
     (call $std/math/test_ceil
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23570,7 +23318,6 @@
     (call $std/math/test_ceil
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23589,7 +23336,6 @@
     (call $std/math/test_ceil
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23606,7 +23352,6 @@
   (if
    (i32.eqz
     (call $std/math/test_ceil
-     (f64.const 0)
      (f64.const 0)
      (f64.const 0)
      (i32.const 0)
@@ -23627,7 +23372,6 @@
     (call $std/math/test_ceil
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23646,7 +23390,6 @@
     (call $std/math/test_ceil
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23665,7 +23408,6 @@
     (call $std/math/test_ceil
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23684,7 +23426,6 @@
     (call $std/math/test_ceil
      (f64.const 0.5)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23703,7 +23444,6 @@
     (call $std/math/test_ceil
      (f64.const -0.5)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23722,7 +23462,6 @@
     (call $std/math/test_ceil
      (f64.const 1.0000152587890625)
      (f64.const 2)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23741,7 +23480,6 @@
     (call $std/math/test_ceil
      (f64.const -1.0000152587890625)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23760,7 +23498,6 @@
     (call $std/math/test_ceil
      (f64.const 0.9999923706054688)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23779,7 +23516,6 @@
     (call $std/math/test_ceil
      (f64.const -0.9999923706054688)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23798,7 +23534,6 @@
     (call $std/math/test_ceil
      (f64.const 7.888609052210118e-31)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23817,7 +23552,6 @@
     (call $std/math/test_ceil
      (f64.const -7.888609052210118e-31)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23836,7 +23570,6 @@
     (call $std/math/test_ceil
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23855,7 +23588,6 @@
     (call $std/math/test_ceil
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23874,7 +23606,6 @@
     (call $std/math/test_ceil
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23891,7 +23622,6 @@
   (if
    (i32.eqz
     (call $std/math/test_ceil
-     (f64.const 0)
      (f64.const 0)
      (f64.const 0)
      (i32.const 0)
@@ -23912,7 +23642,6 @@
     (call $std/math/test_ceil
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23931,7 +23660,6 @@
     (call $std/math/test_ceil
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23950,7 +23678,6 @@
     (call $std/math/test_ceil
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -23969,7 +23696,6 @@
     (call $std/math/test_ceil
      (f64.const 0.5)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -23988,7 +23714,6 @@
     (call $std/math/test_ceil
      (f64.const -0.5)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -24007,7 +23732,6 @@
     (call $std/math/test_ceil
      (f64.const 1.0000152587890625)
      (f64.const 2)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -24026,7 +23750,6 @@
     (call $std/math/test_ceil
      (f64.const -1.0000152587890625)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -24045,7 +23768,6 @@
     (call $std/math/test_ceil
      (f64.const 0.9999923706054688)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -24064,7 +23786,6 @@
     (call $std/math/test_ceil
      (f64.const -0.9999923706054688)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -24083,7 +23804,6 @@
     (call $std/math/test_ceil
      (f64.const 7.888609052210118e-31)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -24102,7 +23822,6 @@
     (call $std/math/test_ceil
      (f64.const -7.888609052210118e-31)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -24121,7 +23840,6 @@
     (call $std/math/test_ceilf
      (f32.const -8.066848754882812)
      (f32.const -8)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24140,7 +23858,6 @@
     (call $std/math/test_ceilf
      (f32.const 4.345239639282227)
      (f32.const 5)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24159,7 +23876,6 @@
     (call $std/math/test_ceilf
      (f32.const -8.381433486938477)
      (f32.const -8)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24178,7 +23894,6 @@
     (call $std/math/test_ceilf
      (f32.const -6.531673431396484)
      (f32.const -6)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24197,7 +23912,6 @@
     (call $std/math/test_ceilf
      (f32.const 9.267057418823242)
      (f32.const 10)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24216,7 +23930,6 @@
     (call $std/math/test_ceilf
      (f32.const 0.6619858741760254)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24235,7 +23948,6 @@
     (call $std/math/test_ceilf
      (f32.const -0.40660393238067627)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24254,7 +23966,6 @@
     (call $std/math/test_ceilf
      (f32.const 0.5617597699165344)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24273,7 +23984,6 @@
     (call $std/math/test_ceilf
      (f32.const 0.7741522789001465)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24292,7 +24002,6 @@
     (call $std/math/test_ceilf
      (f32.const -0.6787636876106262)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24311,7 +24020,6 @@
     (call $std/math/test_ceilf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24330,7 +24038,6 @@
     (call $std/math/test_ceilf
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24349,7 +24056,6 @@
     (call $std/math/test_ceilf
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24366,7 +24072,6 @@
   (if
    (i32.eqz
     (call $std/math/test_ceilf
-     (f32.const 0)
      (f32.const 0)
      (f32.const 0)
      (i32.const 0)
@@ -24387,7 +24092,6 @@
     (call $std/math/test_ceilf
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24406,7 +24110,6 @@
     (call $std/math/test_ceilf
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24425,7 +24128,6 @@
     (call $std/math/test_ceilf
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24444,7 +24146,6 @@
     (call $std/math/test_ceilf
      (f32.const 0.5)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24463,7 +24164,6 @@
     (call $std/math/test_ceilf
      (f32.const -0.5)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24482,7 +24182,6 @@
     (call $std/math/test_ceilf
      (f32.const 1.0000152587890625)
      (f32.const 2)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24501,7 +24200,6 @@
     (call $std/math/test_ceilf
      (f32.const -1.0000152587890625)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24520,7 +24218,6 @@
     (call $std/math/test_ceilf
      (f32.const 0.9999923706054688)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24539,7 +24236,6 @@
     (call $std/math/test_ceilf
      (f32.const -0.9999923706054688)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24558,7 +24254,6 @@
     (call $std/math/test_ceilf
      (f32.const 7.888609052210118e-31)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24577,7 +24272,6 @@
     (call $std/math/test_ceilf
      (f32.const -7.888609052210118e-31)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24596,7 +24290,6 @@
     (call $std/math/test_ceilf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24615,7 +24308,6 @@
     (call $std/math/test_ceilf
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24634,7 +24326,6 @@
     (call $std/math/test_ceilf
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24651,7 +24342,6 @@
   (if
    (i32.eqz
     (call $std/math/test_ceilf
-     (f32.const 0)
      (f32.const 0)
      (f32.const 0)
      (i32.const 0)
@@ -24672,7 +24362,6 @@
     (call $std/math/test_ceilf
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24691,7 +24380,6 @@
     (call $std/math/test_ceilf
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24710,7 +24398,6 @@
     (call $std/math/test_ceilf
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24729,7 +24416,6 @@
     (call $std/math/test_ceilf
      (f32.const 0.5)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24748,7 +24434,6 @@
     (call $std/math/test_ceilf
      (f32.const -0.5)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24767,7 +24452,6 @@
     (call $std/math/test_ceilf
      (f32.const 1.0000152587890625)
      (f32.const 2)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24786,7 +24470,6 @@
     (call $std/math/test_ceilf
      (f32.const -1.0000152587890625)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24805,7 +24488,6 @@
     (call $std/math/test_ceilf
      (f32.const 0.9999923706054688)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24824,7 +24506,6 @@
     (call $std/math/test_ceilf
      (f32.const -0.9999923706054688)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24843,7 +24524,6 @@
     (call $std/math/test_ceilf
      (f32.const 7.888609052210118e-31)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24862,7 +24542,6 @@
     (call $std/math/test_ceilf
      (f32.const -7.888609052210118e-31)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -24881,7 +24560,6 @@
     (call $std/math/test_ceilf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24900,7 +24578,6 @@
     (call $std/math/test_ceilf
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24919,7 +24596,6 @@
     (call $std/math/test_ceilf
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24936,7 +24612,6 @@
   (if
    (i32.eqz
     (call $std/math/test_ceilf
-     (f32.const 0)
      (f32.const 0)
      (f32.const 0)
      (i32.const 0)
@@ -24957,7 +24632,6 @@
     (call $std/math/test_ceilf
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24976,7 +24650,6 @@
     (call $std/math/test_ceilf
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -24995,7 +24668,6 @@
     (call $std/math/test_ceilf
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -25014,7 +24686,6 @@
     (call $std/math/test_ceilf
      (f32.const 0.5)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -25033,7 +24704,6 @@
     (call $std/math/test_ceilf
      (f32.const -0.5)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -25052,7 +24722,6 @@
     (call $std/math/test_ceilf
      (f32.const 1.0000152587890625)
      (f32.const 2)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -25071,7 +24740,6 @@
     (call $std/math/test_ceilf
      (f32.const -1.0000152587890625)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -25090,7 +24758,6 @@
     (call $std/math/test_ceilf
      (f32.const 0.9999923706054688)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -25109,7 +24776,6 @@
     (call $std/math/test_ceilf
      (f32.const -0.9999923706054688)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -25128,7 +24794,6 @@
     (call $std/math/test_ceilf
      (f32.const 7.888609052210118e-31)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -25147,7 +24812,6 @@
     (call $std/math/test_ceilf
      (f32.const -7.888609052210118e-31)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -27275,7 +26939,6 @@
     (call $std/math/test_floor
      (f64.const -8.06684839057968)
      (f64.const -9)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27294,7 +26957,6 @@
     (call $std/math/test_floor
      (f64.const 4.345239849338305)
      (f64.const 4)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27313,7 +26975,6 @@
     (call $std/math/test_floor
      (f64.const -8.38143342755525)
      (f64.const -9)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27332,7 +26993,6 @@
     (call $std/math/test_floor
      (f64.const -6.531673581913484)
      (f64.const -7)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27351,7 +27011,6 @@
     (call $std/math/test_floor
      (f64.const 9.267056966972586)
      (f64.const 9)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27369,7 +27028,6 @@
    (i32.eqz
     (call $std/math/test_floor
      (f64.const 0.6619858980995045)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -27389,7 +27047,6 @@
     (call $std/math/test_floor
      (f64.const -0.4066039223853553)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27407,7 +27064,6 @@
    (i32.eqz
     (call $std/math/test_floor
      (f64.const 0.5617597462207241)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -27427,7 +27083,6 @@
     (call $std/math/test_floor
      (f64.const 0.7741522965913037)
      (f64.const 0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27446,7 +27101,6 @@
     (call $std/math/test_floor
      (f64.const -0.6787637026394024)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27465,7 +27119,6 @@
     (call $std/math/test_floor
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -27484,7 +27137,6 @@
     (call $std/math/test_floor
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -27503,7 +27155,6 @@
     (call $std/math/test_floor
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -27520,7 +27171,6 @@
   (if
    (i32.eqz
     (call $std/math/test_floor
-     (f64.const 0)
      (f64.const 0)
      (f64.const 0)
      (i32.const 0)
@@ -27541,7 +27191,6 @@
     (call $std/math/test_floor
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -27560,7 +27209,6 @@
     (call $std/math/test_floor
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -27579,7 +27227,6 @@
     (call $std/math/test_floor
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -27597,7 +27244,6 @@
    (i32.eqz
     (call $std/math/test_floor
      (f64.const 0.5)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -27617,7 +27263,6 @@
     (call $std/math/test_floor
      (f64.const -0.5)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27636,7 +27281,6 @@
     (call $std/math/test_floor
      (f64.const 1.0000152587890625)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27655,7 +27299,6 @@
     (call $std/math/test_floor
      (f64.const -1.0000152587890625)
      (f64.const -2)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27673,7 +27316,6 @@
    (i32.eqz
     (call $std/math/test_floor
      (f64.const 0.9999923706054688)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -27693,7 +27335,6 @@
     (call $std/math/test_floor
      (f64.const -0.9999923706054688)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27711,7 +27352,6 @@
    (i32.eqz
     (call $std/math/test_floor
      (f64.const 7.888609052210118e-31)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -27731,7 +27371,6 @@
     (call $std/math/test_floor
      (f64.const -7.888609052210118e-31)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -27750,7 +27389,6 @@
     (call $std/math/test_floorf
      (f32.const -8.066848754882812)
      (f32.const -9)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -27769,7 +27407,6 @@
     (call $std/math/test_floorf
      (f32.const 4.345239639282227)
      (f32.const 4)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -27788,7 +27425,6 @@
     (call $std/math/test_floorf
      (f32.const -8.381433486938477)
      (f32.const -9)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -27807,7 +27443,6 @@
     (call $std/math/test_floorf
      (f32.const -6.531673431396484)
      (f32.const -7)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -27826,7 +27461,6 @@
     (call $std/math/test_floorf
      (f32.const 9.267057418823242)
      (f32.const 9)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -27844,7 +27478,6 @@
    (i32.eqz
     (call $std/math/test_floorf
      (f32.const 0.6619858741760254)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -27864,7 +27497,6 @@
     (call $std/math/test_floorf
      (f32.const -0.40660393238067627)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -27882,7 +27514,6 @@
    (i32.eqz
     (call $std/math/test_floorf
      (f32.const 0.5617597699165344)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -27902,7 +27533,6 @@
     (call $std/math/test_floorf
      (f32.const 0.7741522789001465)
      (f32.const 0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -27921,7 +27551,6 @@
     (call $std/math/test_floorf
      (f32.const -0.6787636876106262)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -27940,7 +27569,6 @@
     (call $std/math/test_floorf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -27959,7 +27587,6 @@
     (call $std/math/test_floorf
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -27978,7 +27605,6 @@
     (call $std/math/test_floorf
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -27995,7 +27621,6 @@
   (if
    (i32.eqz
     (call $std/math/test_floorf
-     (f32.const 0)
      (f32.const 0)
      (f32.const 0)
      (i32.const 0)
@@ -28016,7 +27641,6 @@
     (call $std/math/test_floorf
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -28035,7 +27659,6 @@
     (call $std/math/test_floorf
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -28054,7 +27677,6 @@
     (call $std/math/test_floorf
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -28072,7 +27694,6 @@
    (i32.eqz
     (call $std/math/test_floorf
      (f32.const 0.5)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -28092,7 +27713,6 @@
     (call $std/math/test_floorf
      (f32.const -0.5)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -28111,7 +27731,6 @@
     (call $std/math/test_floorf
      (f32.const 1.0000152587890625)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -28130,7 +27749,6 @@
     (call $std/math/test_floorf
      (f32.const -1.0000152587890625)
      (f32.const -2)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -28148,7 +27766,6 @@
    (i32.eqz
     (call $std/math/test_floorf
      (f32.const 0.9999923706054688)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -28168,7 +27785,6 @@
     (call $std/math/test_floorf
      (f32.const -0.9999923706054688)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -28186,7 +27802,6 @@
    (i32.eqz
     (call $std/math/test_floorf
      (f32.const 7.888609052210118e-31)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -28206,7 +27821,6 @@
     (call $std/math/test_floorf
      (f32.const -7.888609052210118e-31)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -29727,7 +29341,6 @@
     (call $std/math/test_logf
      (f32.const 0)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 4)
     )
    )
@@ -29746,7 +29359,6 @@
     (call $std/math/test_logf
      (f32.const -0)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 4)
     )
    )
@@ -29765,7 +29377,6 @@
     (call $std/math/test_logf
      (f32.const -7.888609052210118e-31)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -29783,7 +29394,6 @@
    (i32.eqz
     (call $std/math/test_logf
      (f32.const 1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -29803,7 +29413,6 @@
     (call $std/math/test_logf
      (f32.const -1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -29822,7 +29431,6 @@
     (call $std/math/test_logf
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -29841,7 +29449,6 @@
     (call $std/math/test_logf
      (f32.const -inf)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -29860,7 +29467,6 @@
     (call $std/math/test_logf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -29879,7 +29485,6 @@
     (call $std/math/test_logf
      (f32.const 0)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 4)
     )
    )
@@ -29898,7 +29503,6 @@
     (call $std/math/test_logf
      (f32.const -0)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 4)
     )
    )
@@ -29917,7 +29521,6 @@
     (call $std/math/test_logf
      (f32.const -7.888609052210118e-31)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -29935,7 +29538,6 @@
    (i32.eqz
     (call $std/math/test_logf
      (f32.const 1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -29955,7 +29557,6 @@
     (call $std/math/test_logf
      (f32.const -1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -29974,7 +29575,6 @@
     (call $std/math/test_logf
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -29993,7 +29593,6 @@
     (call $std/math/test_logf
      (f32.const -inf)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -30012,7 +29611,6 @@
     (call $std/math/test_logf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -32103,8 +31701,6 @@
      (f64.const -8.06684839057968)
      (f64.const 4.535662560676869)
      (f64.const 4.535662560676869)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32123,8 +31719,6 @@
      (f64.const 4.345239849338305)
      (f64.const -8.88799136300345)
      (f64.const 4.345239849338305)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32143,8 +31737,6 @@
      (f64.const -8.38143342755525)
      (f64.const -2.763607337379588)
      (f64.const -2.763607337379588)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32163,8 +31755,6 @@
      (f64.const -6.531673581913484)
      (f64.const 4.567535276842744)
      (f64.const 4.567535276842744)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32183,8 +31773,6 @@
      (f64.const 9.267056966972586)
      (f64.const 4.811392084359796)
      (f64.const 9.267056966972586)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32203,8 +31791,6 @@
      (f64.const -6.450045556060236)
      (f64.const 0.6620717923376739)
      (f64.const 0.6620717923376739)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32223,8 +31809,6 @@
      (f64.const 7.858890253041697)
      (f64.const 0.05215452675006225)
      (f64.const 7.858890253041697)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32243,8 +31827,6 @@
      (f64.const -0.792054511984896)
      (f64.const 7.67640268511754)
      (f64.const 7.67640268511754)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32263,8 +31845,6 @@
      (f64.const 0.615702673197924)
      (f64.const 2.0119025790324803)
      (f64.const 2.0119025790324803)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32283,8 +31863,6 @@
      (f64.const -0.5587586823609152)
      (f64.const 0.03223983060263804)
      (f64.const 0.03223983060263804)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32303,8 +31881,6 @@
      (f64.const 0)
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32323,8 +31899,6 @@
      (f64.const -0)
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32343,8 +31917,6 @@
      (f64.const 0.5)
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32363,8 +31935,6 @@
      (f64.const -0.5)
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32383,8 +31953,6 @@
      (f64.const 1)
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32403,8 +31971,6 @@
      (f64.const -1)
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32423,8 +31989,6 @@
      (f64.const inf)
      (f64.const 1)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32443,8 +32007,6 @@
      (f64.const -inf)
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32463,8 +32025,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const 1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32483,8 +32043,6 @@
      (f64.const 0)
      (f64.const -1)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32503,8 +32061,6 @@
      (f64.const -0)
      (f64.const -1)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32523,8 +32079,6 @@
      (f64.const 0.5)
      (f64.const -1)
      (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32543,8 +32097,6 @@
      (f64.const -0.5)
      (f64.const -1)
      (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32563,8 +32115,6 @@
      (f64.const 1)
      (f64.const -1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32583,8 +32133,6 @@
      (f64.const -1)
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32603,8 +32151,6 @@
      (f64.const inf)
      (f64.const -1)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32623,8 +32169,6 @@
      (f64.const -inf)
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32643,8 +32187,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const -1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32663,8 +32205,6 @@
      (f64.const 0)
      (f64.const 0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32683,8 +32223,6 @@
      (f64.const 0)
      (f64.const -0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32703,8 +32241,6 @@
      (f64.const 0)
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32723,8 +32259,6 @@
      (f64.const 0)
      (f64.const -inf)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32743,8 +32277,6 @@
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32763,8 +32295,6 @@
      (f64.const -0)
      (f64.const 0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32783,8 +32313,6 @@
      (f64.const -0)
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32803,8 +32331,6 @@
      (f64.const -0)
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32823,8 +32349,6 @@
      (f64.const -0)
      (f64.const -inf)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32843,8 +32367,6 @@
      (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32863,8 +32385,6 @@
      (f64.const 1)
      (f64.const 0)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32883,8 +32403,6 @@
      (f64.const -1)
      (f64.const 0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32903,8 +32421,6 @@
      (f64.const inf)
      (f64.const 0)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32923,8 +32439,6 @@
      (f64.const -inf)
      (f64.const 0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32943,8 +32457,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32963,8 +32475,6 @@
      (f64.const -1)
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -32983,8 +32493,6 @@
      (f64.const inf)
      (f64.const -0)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33003,8 +32511,6 @@
      (f64.const -inf)
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33023,8 +32529,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33043,8 +32547,6 @@
      (f64.const inf)
      (f64.const 2)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33063,8 +32565,6 @@
      (f64.const inf)
      (f64.const -0.5)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33083,8 +32583,6 @@
      (f64.const inf)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33103,8 +32601,6 @@
      (f64.const -inf)
      (f64.const 2)
      (f64.const 2)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33123,8 +32619,6 @@
      (f64.const -inf)
      (f64.const -0.5)
      (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33143,8 +32637,6 @@
      (f64.const -inf)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33163,8 +32655,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33183,8 +32673,6 @@
      (f64.const 1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33203,8 +32691,6 @@
      (f64.const -1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33223,8 +32709,6 @@
      (f64.const 1)
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33243,8 +32727,6 @@
      (f64.const -1)
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33263,8 +32745,6 @@
      (f64.const inf)
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33283,8 +32763,6 @@
      (f64.const -inf)
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33303,8 +32781,6 @@
      (f64.const 1)
      (f64.const -inf)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33323,8 +32799,6 @@
      (f64.const -1)
      (f64.const -inf)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33343,8 +32817,6 @@
      (f64.const inf)
      (f64.const -inf)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33363,8 +32835,6 @@
      (f64.const -inf)
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33383,8 +32853,6 @@
      (f64.const 1.75)
      (f64.const 0.5)
      (f64.const 1.75)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33403,8 +32871,6 @@
      (f64.const -1.75)
      (f64.const 0.5)
      (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33423,8 +32889,6 @@
      (f64.const 1.75)
      (f64.const -0.5)
      (f64.const 1.75)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33443,8 +32907,6 @@
      (f64.const -1.75)
      (f64.const -0.5)
      (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33463,8 +32925,6 @@
      (f32.const -8.066848754882812)
      (f32.const 4.535662651062012)
      (f32.const 4.535662651062012)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33483,8 +32943,6 @@
      (f32.const 4.345239639282227)
      (f32.const -8.887990951538086)
      (f32.const 4.345239639282227)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33503,8 +32961,6 @@
      (f32.const -8.381433486938477)
      (f32.const -2.7636072635650635)
      (f32.const -2.7636072635650635)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33523,8 +32979,6 @@
      (f32.const -6.531673431396484)
      (f32.const 4.567535400390625)
      (f32.const 4.567535400390625)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33543,8 +32997,6 @@
      (f32.const 9.267057418823242)
      (f32.const 4.811392307281494)
      (f32.const 9.267057418823242)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33563,8 +33015,6 @@
      (f32.const -6.450045585632324)
      (f32.const 0.6620717644691467)
      (f32.const 0.6620717644691467)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33583,8 +33033,6 @@
      (f32.const 7.858890056610107)
      (f32.const 0.052154526114463806)
      (f32.const 7.858890056610107)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33603,8 +33051,6 @@
      (f32.const -0.7920545339584351)
      (f32.const 7.676402568817139)
      (f32.const 7.676402568817139)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33623,8 +33069,6 @@
      (f32.const 0.6157026886940002)
      (f32.const 2.0119025707244873)
      (f32.const 2.0119025707244873)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33643,8 +33087,6 @@
      (f32.const -0.5587586760520935)
      (f32.const 0.03223983198404312)
      (f32.const 0.03223983198404312)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33663,8 +33105,6 @@
      (f32.const 0)
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33683,8 +33123,6 @@
      (f32.const -0)
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33703,8 +33141,6 @@
      (f32.const 0.5)
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33723,8 +33159,6 @@
      (f32.const -0.5)
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33743,8 +33177,6 @@
      (f32.const 1)
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33763,8 +33195,6 @@
      (f32.const -1)
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33783,8 +33213,6 @@
      (f32.const inf)
      (f32.const 1)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33803,8 +33231,6 @@
      (f32.const -inf)
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33823,8 +33249,6 @@
      (f32.const nan:0x400000)
      (f32.const 1)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33843,8 +33267,6 @@
      (f32.const 0)
      (f32.const -1)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33863,8 +33285,6 @@
      (f32.const -0)
      (f32.const -1)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33883,8 +33303,6 @@
      (f32.const 0.5)
      (f32.const -1)
      (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33903,8 +33321,6 @@
      (f32.const -0.5)
      (f32.const -1)
      (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33923,8 +33339,6 @@
      (f32.const 1)
      (f32.const -1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33943,8 +33357,6 @@
      (f32.const -1)
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33963,8 +33375,6 @@
      (f32.const inf)
      (f32.const -1)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -33983,8 +33393,6 @@
      (f32.const -inf)
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34003,8 +33411,6 @@
      (f32.const nan:0x400000)
      (f32.const -1)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34023,8 +33429,6 @@
      (f32.const 0)
      (f32.const 0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34043,8 +33447,6 @@
      (f32.const 0)
      (f32.const -0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34063,8 +33465,6 @@
      (f32.const 0)
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34083,8 +33483,6 @@
      (f32.const 0)
      (f32.const -inf)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34103,8 +33501,6 @@
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34123,8 +33519,6 @@
      (f32.const -0)
      (f32.const 0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34143,8 +33537,6 @@
      (f32.const -0)
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34163,8 +33555,6 @@
      (f32.const -0)
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34183,8 +33573,6 @@
      (f32.const -0)
      (f32.const -inf)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34203,8 +33591,6 @@
      (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34223,8 +33609,6 @@
      (f32.const 1)
      (f32.const 0)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34243,8 +33627,6 @@
      (f32.const -1)
      (f32.const 0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34263,8 +33645,6 @@
      (f32.const inf)
      (f32.const 0)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34283,8 +33663,6 @@
      (f32.const -inf)
      (f32.const 0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34303,8 +33681,6 @@
      (f32.const nan:0x400000)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34323,8 +33699,6 @@
      (f32.const -1)
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34343,8 +33717,6 @@
      (f32.const inf)
      (f32.const -0)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34363,8 +33735,6 @@
      (f32.const -inf)
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34383,8 +33753,6 @@
      (f32.const nan:0x400000)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34403,8 +33771,6 @@
      (f32.const inf)
      (f32.const 2)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34423,8 +33789,6 @@
      (f32.const inf)
      (f32.const -0.5)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34443,8 +33807,6 @@
      (f32.const inf)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34463,8 +33825,6 @@
      (f32.const -inf)
      (f32.const 2)
      (f32.const 2)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34483,8 +33843,6 @@
      (f32.const -inf)
      (f32.const -0.5)
      (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34503,8 +33861,6 @@
      (f32.const -inf)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34523,8 +33879,6 @@
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34543,8 +33897,6 @@
      (f32.const 1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34563,8 +33915,6 @@
      (f32.const -1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34583,8 +33933,6 @@
      (f32.const 1)
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34603,8 +33951,6 @@
      (f32.const -1)
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34623,8 +33969,6 @@
      (f32.const inf)
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34643,8 +33987,6 @@
      (f32.const -inf)
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34663,8 +34005,6 @@
      (f32.const 1)
      (f32.const -inf)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34683,8 +34023,6 @@
      (f32.const -1)
      (f32.const -inf)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34703,8 +34041,6 @@
      (f32.const inf)
      (f32.const -inf)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34723,8 +34059,6 @@
      (f32.const -inf)
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34743,8 +34077,6 @@
      (f32.const 1.75)
      (f32.const 0.5)
      (f32.const 1.75)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34763,8 +34095,6 @@
      (f32.const -1.75)
      (f32.const 0.5)
      (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34783,8 +34113,6 @@
      (f32.const 1.75)
      (f32.const -0.5)
      (f32.const 1.75)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34803,8 +34131,6 @@
      (f32.const -1.75)
      (f32.const -0.5)
      (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34823,8 +34149,6 @@
      (f64.const -8.06684839057968)
      (f64.const 4.535662560676869)
      (f64.const -8.06684839057968)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34843,8 +34167,6 @@
      (f64.const 4.345239849338305)
      (f64.const -8.88799136300345)
      (f64.const -8.88799136300345)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34863,8 +34185,6 @@
      (f64.const -8.38143342755525)
      (f64.const -2.763607337379588)
      (f64.const -8.38143342755525)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34883,8 +34203,6 @@
      (f64.const -6.531673581913484)
      (f64.const 4.567535276842744)
      (f64.const -6.531673581913484)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34903,8 +34221,6 @@
      (f64.const 9.267056966972586)
      (f64.const 4.811392084359796)
      (f64.const 4.811392084359796)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34923,8 +34239,6 @@
      (f64.const -6.450045556060236)
      (f64.const 0.6620717923376739)
      (f64.const -6.450045556060236)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34943,8 +34257,6 @@
      (f64.const 7.858890253041697)
      (f64.const 0.05215452675006225)
      (f64.const 0.05215452675006225)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34963,8 +34275,6 @@
      (f64.const -0.792054511984896)
      (f64.const 7.67640268511754)
      (f64.const -0.792054511984896)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -34983,8 +34293,6 @@
      (f64.const 0.615702673197924)
      (f64.const 2.0119025790324803)
      (f64.const 0.615702673197924)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35003,8 +34311,6 @@
      (f64.const -0.5587586823609152)
      (f64.const 0.03223983060263804)
      (f64.const -0.5587586823609152)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35023,8 +34329,6 @@
      (f64.const 0)
      (f64.const 1)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35043,8 +34347,6 @@
      (f64.const -0)
      (f64.const 1)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35063,8 +34365,6 @@
      (f64.const 0.5)
      (f64.const 1)
      (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35083,8 +34383,6 @@
      (f64.const -0.5)
      (f64.const 1)
      (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35103,8 +34401,6 @@
      (f64.const 1)
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35123,8 +34419,6 @@
      (f64.const -1)
      (f64.const 1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35143,8 +34437,6 @@
      (f64.const inf)
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35163,8 +34455,6 @@
      (f64.const -inf)
      (f64.const 1)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35183,8 +34473,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const 1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35203,8 +34491,6 @@
      (f64.const 0)
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35223,8 +34509,6 @@
      (f64.const -0)
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35243,8 +34527,6 @@
      (f64.const 0.5)
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35263,8 +34545,6 @@
      (f64.const -0.5)
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35283,8 +34563,6 @@
      (f64.const 1)
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35303,8 +34581,6 @@
      (f64.const -1)
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35323,8 +34599,6 @@
      (f64.const inf)
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35343,8 +34617,6 @@
      (f64.const -inf)
      (f64.const -1)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35363,8 +34635,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const -1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35383,8 +34653,6 @@
      (f64.const 0)
      (f64.const 0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35403,8 +34671,6 @@
      (f64.const 0)
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35423,8 +34689,6 @@
      (f64.const 0)
      (f64.const inf)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35443,8 +34707,6 @@
      (f64.const 0)
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35463,8 +34725,6 @@
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35483,8 +34743,6 @@
      (f64.const -0)
      (f64.const 0)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35503,8 +34761,6 @@
      (f64.const -0)
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35523,8 +34779,6 @@
      (f64.const -0)
      (f64.const inf)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35543,8 +34797,6 @@
      (f64.const -0)
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35563,8 +34815,6 @@
      (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35583,8 +34833,6 @@
      (f64.const 1)
      (f64.const 0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35603,8 +34851,6 @@
      (f64.const -1)
      (f64.const 0)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35623,8 +34869,6 @@
      (f64.const inf)
      (f64.const 0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35643,8 +34887,6 @@
      (f64.const -inf)
      (f64.const 0)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35663,8 +34905,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35683,8 +34923,6 @@
      (f64.const -1)
      (f64.const -0)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35703,8 +34941,6 @@
      (f64.const inf)
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35723,8 +34959,6 @@
      (f64.const -inf)
      (f64.const -0)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35743,8 +34977,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35763,8 +34995,6 @@
      (f64.const inf)
      (f64.const 2)
      (f64.const 2)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35783,8 +35013,6 @@
      (f64.const inf)
      (f64.const -0.5)
      (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35803,8 +35031,6 @@
      (f64.const inf)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35823,8 +35049,6 @@
      (f64.const -inf)
      (f64.const 2)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35843,8 +35067,6 @@
      (f64.const -inf)
      (f64.const -0.5)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35863,8 +35085,6 @@
      (f64.const -inf)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35883,8 +35103,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35903,8 +35121,6 @@
      (f64.const 1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35923,8 +35139,6 @@
      (f64.const -1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35943,8 +35157,6 @@
      (f64.const 1)
      (f64.const inf)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35963,8 +35175,6 @@
      (f64.const -1)
      (f64.const inf)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -35983,8 +35193,6 @@
      (f64.const inf)
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36003,8 +35211,6 @@
      (f64.const -inf)
      (f64.const inf)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36023,8 +35229,6 @@
      (f64.const 1)
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36043,8 +35247,6 @@
      (f64.const -1)
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36063,8 +35265,6 @@
      (f64.const inf)
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36083,8 +35283,6 @@
      (f64.const -inf)
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36103,8 +35301,6 @@
      (f64.const 1.75)
      (f64.const 0.5)
      (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36123,8 +35319,6 @@
      (f64.const -1.75)
      (f64.const 0.5)
      (f64.const -1.75)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36143,8 +35337,6 @@
      (f64.const 1.75)
      (f64.const -0.5)
      (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36163,8 +35355,6 @@
      (f64.const -1.75)
      (f64.const -0.5)
      (f64.const -1.75)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36183,8 +35373,6 @@
      (f32.const -8.066848754882812)
      (f32.const 4.535662651062012)
      (f32.const -8.066848754882812)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36203,8 +35391,6 @@
      (f32.const 4.345239639282227)
      (f32.const -8.887990951538086)
      (f32.const -8.887990951538086)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36223,8 +35409,6 @@
      (f32.const -8.381433486938477)
      (f32.const -2.7636072635650635)
      (f32.const -8.381433486938477)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36243,8 +35427,6 @@
      (f32.const -6.531673431396484)
      (f32.const 4.567535400390625)
      (f32.const -6.531673431396484)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36263,8 +35445,6 @@
      (f32.const 9.267057418823242)
      (f32.const 4.811392307281494)
      (f32.const 4.811392307281494)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36283,8 +35463,6 @@
      (f32.const -6.450045585632324)
      (f32.const 0.6620717644691467)
      (f32.const -6.450045585632324)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36303,8 +35481,6 @@
      (f32.const 7.858890056610107)
      (f32.const 0.052154526114463806)
      (f32.const 0.052154526114463806)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36323,8 +35499,6 @@
      (f32.const -0.7920545339584351)
      (f32.const 7.676402568817139)
      (f32.const -0.7920545339584351)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36343,8 +35517,6 @@
      (f32.const 0.6157026886940002)
      (f32.const 2.0119025707244873)
      (f32.const 0.6157026886940002)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36363,8 +35535,6 @@
      (f32.const -0.5587586760520935)
      (f32.const 0.03223983198404312)
      (f32.const -0.5587586760520935)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36383,8 +35553,6 @@
      (f32.const 0)
      (f32.const 1)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36403,8 +35571,6 @@
      (f32.const -0)
      (f32.const 1)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36423,8 +35589,6 @@
      (f32.const 0.5)
      (f32.const 1)
      (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36443,8 +35607,6 @@
      (f32.const -0.5)
      (f32.const 1)
      (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36463,8 +35625,6 @@
      (f32.const 1)
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36483,8 +35643,6 @@
      (f32.const -1)
      (f32.const 1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36503,8 +35661,6 @@
      (f32.const inf)
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36523,8 +35679,6 @@
      (f32.const -inf)
      (f32.const 1)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36543,8 +35697,6 @@
      (f32.const nan:0x400000)
      (f32.const 1)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36563,8 +35715,6 @@
      (f32.const 0)
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36583,8 +35733,6 @@
      (f32.const -0)
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36603,8 +35751,6 @@
      (f32.const 0.5)
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36623,8 +35769,6 @@
      (f32.const -0.5)
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36643,8 +35787,6 @@
      (f32.const 1)
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36663,8 +35805,6 @@
      (f32.const -1)
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36683,8 +35823,6 @@
      (f32.const inf)
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36703,8 +35841,6 @@
      (f32.const -inf)
      (f32.const -1)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36723,8 +35859,6 @@
      (f32.const nan:0x400000)
      (f32.const -1)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36743,8 +35877,6 @@
      (f32.const 0)
      (f32.const 0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36763,8 +35895,6 @@
      (f32.const 0)
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36783,8 +35913,6 @@
      (f32.const 0)
      (f32.const inf)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36803,8 +35931,6 @@
      (f32.const 0)
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36823,8 +35949,6 @@
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36843,8 +35967,6 @@
      (f32.const -0)
      (f32.const 0)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36863,8 +35985,6 @@
      (f32.const -0)
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36883,8 +36003,6 @@
      (f32.const -0)
      (f32.const inf)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36903,8 +36021,6 @@
      (f32.const -0)
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36923,8 +36039,6 @@
      (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36943,8 +36057,6 @@
      (f32.const 1)
      (f32.const 0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36963,8 +36075,6 @@
      (f32.const -1)
      (f32.const 0)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -36983,8 +36093,6 @@
      (f32.const inf)
      (f32.const 0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37003,8 +36111,6 @@
      (f32.const -inf)
      (f32.const 0)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37023,8 +36129,6 @@
      (f32.const nan:0x400000)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37043,8 +36147,6 @@
      (f32.const -1)
      (f32.const -0)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37063,8 +36165,6 @@
      (f32.const inf)
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37083,8 +36183,6 @@
      (f32.const -inf)
      (f32.const -0)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37103,8 +36201,6 @@
      (f32.const nan:0x400000)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37123,8 +36219,6 @@
      (f32.const inf)
      (f32.const 2)
      (f32.const 2)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37143,8 +36237,6 @@
      (f32.const inf)
      (f32.const -0.5)
      (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37163,8 +36255,6 @@
      (f32.const inf)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37183,8 +36273,6 @@
      (f32.const -inf)
      (f32.const 2)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37203,8 +36291,6 @@
      (f32.const -inf)
      (f32.const -0.5)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37223,8 +36309,6 @@
      (f32.const -inf)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37243,8 +36327,6 @@
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37263,8 +36345,6 @@
      (f32.const 1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37283,8 +36363,6 @@
      (f32.const -1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37303,8 +36381,6 @@
      (f32.const 1)
      (f32.const inf)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37323,8 +36399,6 @@
      (f32.const -1)
      (f32.const inf)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37343,8 +36417,6 @@
      (f32.const inf)
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37363,8 +36435,6 @@
      (f32.const -inf)
      (f32.const inf)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37383,8 +36453,6 @@
      (f32.const 1)
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37403,8 +36471,6 @@
      (f32.const -1)
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37423,8 +36489,6 @@
      (f32.const inf)
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37443,8 +36507,6 @@
      (f32.const -inf)
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37463,8 +36525,6 @@
      (f32.const 1.75)
      (f32.const 0.5)
      (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37483,8 +36543,6 @@
      (f32.const -1.75)
      (f32.const 0.5)
      (f32.const -1.75)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37503,8 +36561,6 @@
      (f32.const 1.75)
      (f32.const -0.5)
      (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37523,8 +36579,6 @@
      (f32.const -1.75)
      (f32.const -0.5)
      (f32.const -1.75)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -37543,7 +36597,6 @@
      (f64.const -8.06684839057968)
      (f64.const 4.535662560676869)
      (f64.const -3.531185829902812)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37563,7 +36616,6 @@
      (f64.const 4.345239849338305)
      (f64.const -8.88799136300345)
      (f64.const 4.345239849338305)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37583,7 +36635,6 @@
      (f64.const -8.38143342755525)
      (f64.const -2.763607337379588)
      (f64.const -0.09061141541648476)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37603,7 +36654,6 @@
      (f64.const -6.531673581913484)
      (f64.const 4.567535276842744)
      (f64.const -1.9641383050707404)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37623,7 +36673,6 @@
      (f64.const 9.267056966972586)
      (f64.const 4.811392084359796)
      (f64.const 4.45566488261279)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37643,7 +36692,6 @@
      (f64.const -6.450045556060236)
      (f64.const 0.6620717923376739)
      (f64.const -0.4913994250211714)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37663,7 +36711,6 @@
      (f64.const 7.858890253041697)
      (f64.const 0.05215452675006225)
      (f64.const 0.035711240532359426)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37683,7 +36730,6 @@
      (f64.const -0.792054511984896)
      (f64.const 7.67640268511754)
      (f64.const -0.792054511984896)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37703,7 +36749,6 @@
      (f64.const 0.615702673197924)
      (f64.const 2.0119025790324803)
      (f64.const 0.615702673197924)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37723,7 +36768,6 @@
      (f64.const -0.5587586823609152)
      (f64.const 0.03223983060263804)
      (f64.const -0.0106815621160685)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37742,7 +36786,6 @@
     (call $std/math/test_mod
      (f64.const 0)
      (f64.const 1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -37763,7 +36806,6 @@
      (f64.const -0)
      (f64.const 1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37783,7 +36825,6 @@
      (f64.const 0.5)
      (f64.const 1)
      (f64.const 0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37803,7 +36844,6 @@
      (f64.const -0.5)
      (f64.const 1)
      (f64.const -0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37822,7 +36862,6 @@
     (call $std/math/test_mod
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -37843,7 +36882,6 @@
      (f64.const -1)
      (f64.const 1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37863,7 +36901,6 @@
      (f64.const 1.5)
      (f64.const 1)
      (f64.const 0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37883,7 +36920,6 @@
      (f64.const -1.5)
      (f64.const 1)
      (f64.const -0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37902,7 +36938,6 @@
     (call $std/math/test_mod
      (f64.const 2)
      (f64.const 1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -37923,7 +36958,6 @@
      (f64.const -2)
      (f64.const 1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -37943,7 +36977,6 @@
      (f64.const inf)
      (f64.const 1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -37963,7 +36996,6 @@
      (f64.const -inf)
      (f64.const 1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -37983,7 +37015,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const 1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38002,7 +37033,6 @@
     (call $std/math/test_mod
      (f64.const 0)
      (f64.const -1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -38023,7 +37053,6 @@
      (f64.const -0)
      (f64.const -1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38043,7 +37072,6 @@
      (f64.const 0.5)
      (f64.const -1)
      (f64.const 0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38063,7 +37091,6 @@
      (f64.const -0.5)
      (f64.const -1)
      (f64.const -0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38082,7 +37109,6 @@
     (call $std/math/test_mod
      (f64.const 1)
      (f64.const -1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -38103,7 +37129,6 @@
      (f64.const -1)
      (f64.const -1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38123,7 +37148,6 @@
      (f64.const 1.5)
      (f64.const -1)
      (f64.const 0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38143,7 +37167,6 @@
      (f64.const -1.5)
      (f64.const -1)
      (f64.const -0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38162,7 +37185,6 @@
     (call $std/math/test_mod
      (f64.const 2)
      (f64.const -1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -38183,7 +37205,6 @@
      (f64.const -2)
      (f64.const -1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38203,7 +37224,6 @@
      (f64.const inf)
      (f64.const -1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38223,7 +37243,6 @@
      (f64.const -inf)
      (f64.const -1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38243,7 +37262,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const -1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38263,7 +37281,6 @@
      (f64.const 0)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38283,7 +37300,6 @@
      (f64.const 0)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38302,7 +37318,6 @@
     (call $std/math/test_mod
      (f64.const 0)
      (f64.const inf)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -38323,7 +37338,6 @@
      (f64.const 0)
      (f64.const -inf)
      (f64.const 0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38343,7 +37357,6 @@
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38363,7 +37376,6 @@
      (f64.const -0)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38383,7 +37395,6 @@
      (f64.const -0)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38403,7 +37414,6 @@
      (f64.const -0)
      (f64.const inf)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38423,7 +37433,6 @@
      (f64.const -0)
      (f64.const -inf)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38443,7 +37452,6 @@
      (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38463,7 +37471,6 @@
      (f64.const 1)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38483,7 +37490,6 @@
      (f64.const -1)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38503,7 +37509,6 @@
      (f64.const inf)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38523,7 +37528,6 @@
      (f64.const -inf)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38543,7 +37547,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38563,7 +37566,6 @@
      (f64.const -1)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38583,7 +37585,6 @@
      (f64.const inf)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38603,7 +37604,6 @@
      (f64.const -inf)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38623,7 +37623,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38643,7 +37642,6 @@
      (f64.const inf)
      (f64.const 2)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38663,7 +37661,6 @@
      (f64.const inf)
      (f64.const -0.5)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38683,7 +37680,6 @@
      (f64.const inf)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38703,7 +37699,6 @@
      (f64.const -inf)
      (f64.const 2)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38723,7 +37718,6 @@
      (f64.const -inf)
      (f64.const -0.5)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38743,7 +37737,6 @@
      (f64.const -inf)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38763,7 +37756,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38783,7 +37775,6 @@
      (f64.const 1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38803,7 +37794,6 @@
      (f64.const -1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38823,7 +37813,6 @@
      (f64.const 1)
      (f64.const inf)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38843,7 +37832,6 @@
      (f64.const -1)
      (f64.const inf)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38863,7 +37851,6 @@
      (f64.const inf)
      (f64.const inf)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38883,7 +37870,6 @@
      (f64.const -inf)
      (f64.const inf)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38903,7 +37889,6 @@
      (f64.const 1)
      (f64.const -inf)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38923,7 +37908,6 @@
      (f64.const -1)
      (f64.const -inf)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -38943,7 +37927,6 @@
      (f64.const inf)
      (f64.const -inf)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38963,7 +37946,6 @@
      (f64.const -inf)
      (f64.const -inf)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -38983,7 +37965,6 @@
      (f64.const 1.75)
      (f64.const 0.5)
      (f64.const 0.25)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -39003,7 +37984,6 @@
      (f64.const -1.75)
      (f64.const 0.5)
      (f64.const -0.25)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -39023,7 +38003,6 @@
      (f64.const 1.75)
      (f64.const -0.5)
      (f64.const 0.25)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -39043,7 +38022,6 @@
      (f64.const -1.75)
      (f64.const -0.5)
      (f64.const -0.25)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -39063,7 +38041,6 @@
      (f32.const -8.066848754882812)
      (f32.const 4.535662651062012)
      (f32.const -3.531186103820801)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39083,7 +38060,6 @@
      (f32.const 4.345239639282227)
      (f32.const -8.887990951538086)
      (f32.const 4.345239639282227)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39103,7 +38079,6 @@
      (f32.const -8.381433486938477)
      (f32.const -2.7636072635650635)
      (f32.const -0.09061169624328613)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39123,7 +38098,6 @@
      (f32.const -6.531673431396484)
      (f32.const 4.567535400390625)
      (f32.const -1.9641380310058594)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39143,7 +38117,6 @@
      (f32.const 9.267057418823242)
      (f32.const 4.811392307281494)
      (f32.const 4.455665111541748)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39163,7 +38136,6 @@
      (f32.const -6.450045585632324)
      (f32.const 0.6620717644691467)
      (f32.const -0.49139970541000366)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39183,7 +38155,6 @@
      (f32.const 7.858890056610107)
      (f32.const 0.052154526114463806)
      (f32.const 0.0357111394405365)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39203,7 +38174,6 @@
      (f32.const -0.7920545339584351)
      (f32.const 7.676402568817139)
      (f32.const -0.7920545339584351)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39223,7 +38193,6 @@
      (f32.const 0.6157026886940002)
      (f32.const 2.0119025707244873)
      (f32.const 0.6157026886940002)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39243,7 +38212,6 @@
      (f32.const -0.5587586760520935)
      (f32.const 0.03223983198404312)
      (f32.const -0.010681532323360443)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39262,7 +38230,6 @@
     (call $std/math/test_modf
      (f32.const 0)
      (f32.const 1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -39283,7 +38250,6 @@
      (f32.const -0)
      (f32.const 1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39303,7 +38269,6 @@
      (f32.const 0.5)
      (f32.const 1)
      (f32.const 0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39323,7 +38288,6 @@
      (f32.const -0.5)
      (f32.const 1)
      (f32.const -0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39342,7 +38306,6 @@
     (call $std/math/test_modf
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -39363,7 +38326,6 @@
      (f32.const -1)
      (f32.const 1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39383,7 +38345,6 @@
      (f32.const 1.5)
      (f32.const 1)
      (f32.const 0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39403,7 +38364,6 @@
      (f32.const -1.5)
      (f32.const 1)
      (f32.const -0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39422,7 +38382,6 @@
     (call $std/math/test_modf
      (f32.const 2)
      (f32.const 1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -39443,7 +38402,6 @@
      (f32.const -2)
      (f32.const 1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39463,7 +38421,6 @@
      (f32.const inf)
      (f32.const 1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -39483,7 +38440,6 @@
      (f32.const -inf)
      (f32.const 1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -39503,7 +38459,6 @@
      (f32.const nan:0x400000)
      (f32.const 1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39522,7 +38477,6 @@
     (call $std/math/test_modf
      (f32.const 0)
      (f32.const -1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -39543,7 +38497,6 @@
      (f32.const -0)
      (f32.const -1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39563,7 +38516,6 @@
      (f32.const 0.5)
      (f32.const -1)
      (f32.const 0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39583,7 +38535,6 @@
      (f32.const -0.5)
      (f32.const -1)
      (f32.const -0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39602,7 +38553,6 @@
     (call $std/math/test_modf
      (f32.const 1)
      (f32.const -1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -39623,7 +38573,6 @@
      (f32.const -1)
      (f32.const -1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39643,7 +38592,6 @@
      (f32.const 1.5)
      (f32.const -1)
      (f32.const 0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39663,7 +38611,6 @@
      (f32.const -1.5)
      (f32.const -1)
      (f32.const -0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39682,7 +38629,6 @@
     (call $std/math/test_modf
      (f32.const 2)
      (f32.const -1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -39703,7 +38649,6 @@
      (f32.const -2)
      (f32.const -1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39723,7 +38668,6 @@
      (f32.const inf)
      (f32.const -1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -39743,7 +38687,6 @@
      (f32.const -inf)
      (f32.const -1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -39763,7 +38706,6 @@
      (f32.const nan:0x400000)
      (f32.const -1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39783,7 +38725,6 @@
      (f32.const 0)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -39803,7 +38744,6 @@
      (f32.const 0)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -39822,7 +38762,6 @@
     (call $std/math/test_modf
      (f32.const 0)
      (f32.const inf)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -39843,7 +38782,6 @@
      (f32.const 0)
      (f32.const -inf)
      (f32.const 0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39863,7 +38801,6 @@
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39883,7 +38820,6 @@
      (f32.const -0)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -39903,7 +38839,6 @@
      (f32.const -0)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -39923,7 +38858,6 @@
      (f32.const -0)
      (f32.const inf)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39943,7 +38877,6 @@
      (f32.const -0)
      (f32.const -inf)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39963,7 +38896,6 @@
      (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -39983,7 +38915,6 @@
      (f32.const 1)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40003,7 +38934,6 @@
      (f32.const -1)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40023,7 +38953,6 @@
      (f32.const inf)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40043,7 +38972,6 @@
      (f32.const -inf)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40063,7 +38991,6 @@
      (f32.const nan:0x400000)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40083,7 +39010,6 @@
      (f32.const -1)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40103,7 +39029,6 @@
      (f32.const inf)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40123,7 +39048,6 @@
      (f32.const -inf)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40143,7 +39067,6 @@
      (f32.const nan:0x400000)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40163,7 +39086,6 @@
      (f32.const inf)
      (f32.const 2)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40183,7 +39105,6 @@
      (f32.const inf)
      (f32.const -0.5)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40203,7 +39124,6 @@
      (f32.const inf)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40223,7 +39143,6 @@
      (f32.const -inf)
      (f32.const 2)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40243,7 +39162,6 @@
      (f32.const -inf)
      (f32.const -0.5)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40263,7 +39181,6 @@
      (f32.const -inf)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40283,7 +39200,6 @@
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40303,7 +39219,6 @@
      (f32.const 1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40323,7 +39238,6 @@
      (f32.const -1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40343,7 +39257,6 @@
      (f32.const 1)
      (f32.const inf)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40363,7 +39276,6 @@
      (f32.const -1)
      (f32.const inf)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40383,7 +39295,6 @@
      (f32.const inf)
      (f32.const inf)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40403,7 +39314,6 @@
      (f32.const -inf)
      (f32.const inf)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40423,7 +39333,6 @@
      (f32.const 1)
      (f32.const -inf)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40443,7 +39352,6 @@
      (f32.const -1)
      (f32.const -inf)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40463,7 +39371,6 @@
      (f32.const inf)
      (f32.const -inf)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40483,7 +39390,6 @@
      (f32.const -inf)
      (f32.const -inf)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -40503,7 +39409,6 @@
      (f32.const 1.75)
      (f32.const 0.5)
      (f32.const 0.25)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40523,7 +39428,6 @@
      (f32.const -1.75)
      (f32.const 0.5)
      (f32.const -0.25)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40543,7 +39447,6 @@
      (f32.const 1.75)
      (f32.const -0.5)
      (f32.const 0.25)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -40563,7 +39466,6 @@
      (f32.const -1.75)
      (f32.const -0.5)
      (f32.const -0.25)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -44777,7 +43679,6 @@
     (call $std/math/test_round
      (f64.const -8.06684839057968)
      (f64.const -8)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -44796,7 +43697,6 @@
     (call $std/math/test_round
      (f64.const 4.345239849338305)
      (f64.const 4)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -44815,7 +43715,6 @@
     (call $std/math/test_round
      (f64.const -8.38143342755525)
      (f64.const -8)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -44834,7 +43733,6 @@
     (call $std/math/test_round
      (f64.const -6.531673581913484)
      (f64.const -7)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -44853,7 +43751,6 @@
     (call $std/math/test_round
      (f64.const 9.267056966972586)
      (f64.const 9)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -44872,7 +43769,6 @@
     (call $std/math/test_round
      (f64.const 0.6619858980995045)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -44891,7 +43787,6 @@
     (call $std/math/test_round
      (f64.const -0.4066039223853553)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -44910,7 +43805,6 @@
     (call $std/math/test_round
      (f64.const 0.5617597462207241)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -44929,7 +43823,6 @@
     (call $std/math/test_round
      (f64.const 0.7741522965913037)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -44948,7 +43841,6 @@
     (call $std/math/test_round
      (f64.const -0.6787637026394024)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -44967,7 +43859,6 @@
     (call $std/math/test_round
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -44986,7 +43877,6 @@
     (call $std/math/test_round
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -45005,7 +43895,6 @@
     (call $std/math/test_round
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -45022,7 +43911,6 @@
   (if
    (i32.eqz
     (call $std/math/test_round
-     (f64.const 0)
      (f64.const 0)
      (f64.const 0)
      (i32.const 0)
@@ -45043,7 +43931,6 @@
     (call $std/math/test_round
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -45062,7 +43949,6 @@
     (call $std/math/test_round
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -45081,7 +43967,6 @@
     (call $std/math/test_round
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -45100,7 +43985,6 @@
     (call $std/math/test_round
      (f64.const 0.5)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45119,7 +44003,6 @@
     (call $std/math/test_round
      (f64.const -0.5)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45138,7 +44021,6 @@
     (call $std/math/test_round
      (f64.const 1.5)
      (f64.const 2)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45157,7 +44039,6 @@
     (call $std/math/test_round
      (f64.const -1.5)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45176,7 +44057,6 @@
     (call $std/math/test_round
      (f64.const 1.0000152587890625)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45195,7 +44075,6 @@
     (call $std/math/test_round
      (f64.const -1.0000152587890625)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45214,7 +44093,6 @@
     (call $std/math/test_round
      (f64.const 0.9999923706054688)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45233,7 +44111,6 @@
     (call $std/math/test_round
      (f64.const -0.9999923706054688)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45251,7 +44128,6 @@
    (i32.eqz
     (call $std/math/test_round
      (f64.const 7.888609052210118e-31)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -45271,7 +44147,6 @@
     (call $std/math/test_round
      (f64.const -7.888609052210118e-31)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45290,7 +44165,6 @@
     (call $std/math/test_roundf
      (f32.const -8.066848754882812)
      (f32.const -8)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45309,7 +44183,6 @@
     (call $std/math/test_roundf
      (f32.const 4.345239639282227)
      (f32.const 4)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45328,7 +44201,6 @@
     (call $std/math/test_roundf
      (f32.const -8.381433486938477)
      (f32.const -8)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45347,7 +44219,6 @@
     (call $std/math/test_roundf
      (f32.const -6.531673431396484)
      (f32.const -7)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45366,7 +44237,6 @@
     (call $std/math/test_roundf
      (f32.const 9.267057418823242)
      (f32.const 9)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45385,7 +44255,6 @@
     (call $std/math/test_roundf
      (f32.const 0.6619858741760254)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45404,7 +44273,6 @@
     (call $std/math/test_roundf
      (f32.const -0.40660393238067627)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45423,7 +44291,6 @@
     (call $std/math/test_roundf
      (f32.const 0.5617597699165344)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45442,7 +44309,6 @@
     (call $std/math/test_roundf
      (f32.const 0.7741522789001465)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45461,7 +44327,6 @@
     (call $std/math/test_roundf
      (f32.const -0.6787636876106262)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45480,7 +44345,6 @@
     (call $std/math/test_roundf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -45499,7 +44363,6 @@
     (call $std/math/test_roundf
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -45518,7 +44381,6 @@
     (call $std/math/test_roundf
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -45535,7 +44397,6 @@
   (if
    (i32.eqz
     (call $std/math/test_roundf
-     (f32.const 0)
      (f32.const 0)
      (f32.const 0)
      (i32.const 0)
@@ -45556,7 +44417,6 @@
     (call $std/math/test_roundf
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -45575,7 +44435,6 @@
     (call $std/math/test_roundf
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -45594,7 +44453,6 @@
     (call $std/math/test_roundf
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -45613,7 +44471,6 @@
     (call $std/math/test_roundf
      (f32.const 0.5)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45632,7 +44489,6 @@
     (call $std/math/test_roundf
      (f32.const -0.5)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45651,7 +44507,6 @@
     (call $std/math/test_round
      (f64.const 1.5)
      (f64.const 2)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45670,7 +44525,6 @@
     (call $std/math/test_round
      (f64.const -1.5)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -45689,7 +44543,6 @@
     (call $std/math/test_roundf
      (f32.const 1.0000152587890625)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45708,7 +44561,6 @@
     (call $std/math/test_roundf
      (f32.const -1.0000152587890625)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45727,7 +44579,6 @@
     (call $std/math/test_roundf
      (f32.const 0.9999923706054688)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45746,7 +44597,6 @@
     (call $std/math/test_roundf
      (f32.const -0.9999923706054688)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45764,7 +44614,6 @@
    (i32.eqz
     (call $std/math/test_roundf
      (f32.const 7.888609052210118e-31)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -45784,7 +44633,6 @@
     (call $std/math/test_roundf
      (f32.const -7.888609052210118e-31)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -45803,8 +44651,6 @@
     (call $std/math/test_sign
      (f64.const 0)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -45822,8 +44668,6 @@
     (call $std/math/test_sign
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -45841,8 +44685,6 @@
     (call $std/math/test_sign
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -45860,8 +44702,6 @@
     (call $std/math/test_sign
      (f64.const 2)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -45879,8 +44719,6 @@
     (call $std/math/test_sign
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -45898,8 +44736,6 @@
     (call $std/math/test_sign
      (f64.const -2)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -45917,8 +44753,6 @@
     (call $std/math/test_sign
      (f64.const inf)
      (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -45936,8 +44770,6 @@
     (call $std/math/test_sign
      (f64.const -inf)
      (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -45955,8 +44787,6 @@
     (call $std/math/test_sign
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -45974,8 +44804,6 @@
     (call $std/math/test_signf
      (f32.const 0)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -45993,8 +44821,6 @@
     (call $std/math/test_signf
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -46012,8 +44838,6 @@
     (call $std/math/test_signf
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -46031,8 +44855,6 @@
     (call $std/math/test_signf
      (f32.const 2)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -46050,8 +44872,6 @@
     (call $std/math/test_signf
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -46069,8 +44889,6 @@
     (call $std/math/test_signf
      (f32.const -2)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -46088,8 +44906,6 @@
     (call $std/math/test_signf
      (f32.const inf)
      (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -46107,8 +44923,6 @@
     (call $std/math/test_signf
      (f32.const -inf)
      (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -46126,8 +44940,6 @@
     (call $std/math/test_signf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
     )
    )
    (block
@@ -46146,7 +44958,6 @@
      (f64.const -8.06684839057968)
      (f64.const 4.535662560676869)
      (f64.const 1.0044767307740567)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46166,7 +44977,6 @@
      (f64.const 4.345239849338305)
      (f64.const -8.88799136300345)
      (f64.const 4.345239849338305)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46186,7 +44996,6 @@
      (f64.const -8.38143342755525)
      (f64.const -2.763607337379588)
      (f64.const -0.09061141541648476)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46206,7 +45015,6 @@
      (f64.const -6.531673581913484)
      (f64.const 4.567535276842744)
      (f64.const -1.9641383050707404)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46226,7 +45034,6 @@
      (f64.const 9.267056966972586)
      (f64.const 4.811392084359796)
      (f64.const -0.35572720174700656)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46246,7 +45053,6 @@
      (f64.const -6.450045556060236)
      (f64.const 0.6620717923376739)
      (f64.const 0.17067236731650248)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46266,7 +45072,6 @@
      (f64.const 7.858890253041697)
      (f64.const 0.05215452675006225)
      (f64.const -0.016443286217702822)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46286,7 +45091,6 @@
      (f64.const -0.792054511984896)
      (f64.const 7.67640268511754)
      (f64.const -0.792054511984896)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46306,7 +45110,6 @@
      (f64.const 0.615702673197924)
      (f64.const 2.0119025790324803)
      (f64.const 0.615702673197924)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46326,7 +45129,6 @@
      (f64.const -0.5587586823609152)
      (f64.const 0.03223983060263804)
      (f64.const -0.0106815621160685)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46345,7 +45147,6 @@
     (call $std/math/test_rem
      (f64.const 0)
      (f64.const 1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -46366,7 +45167,6 @@
      (f64.const -0)
      (f64.const 1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46386,7 +45186,6 @@
      (f64.const 0.5)
      (f64.const 1)
      (f64.const 0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46406,7 +45205,6 @@
      (f64.const -0.5)
      (f64.const 1)
      (f64.const -0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46425,7 +45223,6 @@
     (call $std/math/test_rem
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -46446,7 +45243,6 @@
      (f64.const -1)
      (f64.const 1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46466,7 +45262,6 @@
      (f64.const 1.5)
      (f64.const 1)
      (f64.const -0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46486,7 +45281,6 @@
      (f64.const -1.5)
      (f64.const 1)
      (f64.const 0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46505,7 +45299,6 @@
     (call $std/math/test_rem
      (f64.const 2)
      (f64.const 1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -46526,7 +45319,6 @@
      (f64.const -2)
      (f64.const 1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46546,7 +45338,6 @@
      (f64.const inf)
      (f64.const 1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -46566,7 +45357,6 @@
      (f64.const -inf)
      (f64.const 1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -46586,7 +45376,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const 1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46605,7 +45394,6 @@
     (call $std/math/test_rem
      (f64.const 0)
      (f64.const -1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -46626,7 +45414,6 @@
      (f64.const -0)
      (f64.const -1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46646,7 +45433,6 @@
      (f64.const 0.5)
      (f64.const -1)
      (f64.const 0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46666,7 +45452,6 @@
      (f64.const -0.5)
      (f64.const -1)
      (f64.const -0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46685,7 +45470,6 @@
     (call $std/math/test_rem
      (f64.const 1)
      (f64.const -1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -46706,7 +45490,6 @@
      (f64.const -1)
      (f64.const -1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46726,7 +45509,6 @@
      (f64.const 1.5)
      (f64.const -1)
      (f64.const -0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46746,7 +45528,6 @@
      (f64.const -1.5)
      (f64.const -1)
      (f64.const 0.5)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46765,7 +45546,6 @@
     (call $std/math/test_rem
      (f64.const 2)
      (f64.const -1)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -46786,7 +45566,6 @@
      (f64.const -2)
      (f64.const -1)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46806,7 +45585,6 @@
      (f64.const inf)
      (f64.const -1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -46826,7 +45604,6 @@
      (f64.const -inf)
      (f64.const -1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -46846,7 +45623,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const -1)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46866,7 +45642,6 @@
      (f64.const 0)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -46886,7 +45661,6 @@
      (f64.const 0)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -46905,7 +45679,6 @@
     (call $std/math/test_rem
      (f64.const 0)
      (f64.const inf)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -46926,7 +45699,6 @@
      (f64.const 0)
      (f64.const -inf)
      (f64.const 0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46946,7 +45718,6 @@
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -46966,7 +45737,6 @@
      (f64.const -0)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -46986,7 +45756,6 @@
      (f64.const -0)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47006,7 +45775,6 @@
      (f64.const -0)
      (f64.const inf)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47026,7 +45794,6 @@
      (f64.const -0)
      (f64.const -inf)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47046,7 +45813,6 @@
      (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47066,7 +45832,6 @@
      (f64.const 1)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47086,7 +45851,6 @@
      (f64.const -1)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47106,7 +45870,6 @@
      (f64.const inf)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47126,7 +45889,6 @@
      (f64.const -inf)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47146,7 +45908,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47166,7 +45927,6 @@
      (f64.const -1)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47186,7 +45946,6 @@
      (f64.const inf)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47206,7 +45965,6 @@
      (f64.const -inf)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47226,7 +45984,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47246,7 +46003,6 @@
      (f64.const inf)
      (f64.const 2)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47266,7 +46022,6 @@
      (f64.const inf)
      (f64.const -0.5)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47286,7 +46041,6 @@
      (f64.const inf)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47306,7 +46060,6 @@
      (f64.const -inf)
      (f64.const 2)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47326,7 +46079,6 @@
      (f64.const -inf)
      (f64.const -0.5)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47346,7 +46098,6 @@
      (f64.const -inf)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47366,7 +46117,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47386,7 +46136,6 @@
      (f64.const 1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47406,7 +46155,6 @@
      (f64.const -1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47426,7 +46174,6 @@
      (f64.const 1)
      (f64.const inf)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47446,7 +46193,6 @@
      (f64.const -1)
      (f64.const inf)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47466,7 +46212,6 @@
      (f64.const inf)
      (f64.const inf)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47486,7 +46231,6 @@
      (f64.const -inf)
      (f64.const inf)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47506,7 +46250,6 @@
      (f64.const 1)
      (f64.const -inf)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47526,7 +46269,6 @@
      (f64.const -1)
      (f64.const -inf)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47546,7 +46288,6 @@
      (f64.const inf)
      (f64.const -inf)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47566,7 +46307,6 @@
      (f64.const -inf)
      (f64.const -inf)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 2)
     )
    )
@@ -47586,7 +46326,6 @@
      (f64.const 1.75)
      (f64.const 0.5)
      (f64.const -0.25)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47606,7 +46345,6 @@
      (f64.const -1.75)
      (f64.const 0.5)
      (f64.const 0.25)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47626,7 +46364,6 @@
      (f64.const 1.75)
      (f64.const -0.5)
      (f64.const -0.25)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47646,7 +46383,6 @@
      (f64.const -1.75)
      (f64.const -0.5)
      (f64.const 0.25)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47666,7 +46402,6 @@
      (f64.const 8e-323)
      (f64.const inf)
      (f64.const 8e-323)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -47686,7 +46421,6 @@
      (f32.const -8.066848754882812)
      (f32.const 4.535662651062012)
      (f32.const 1.004476547241211)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47706,7 +46440,6 @@
      (f32.const 4.345239639282227)
      (f32.const -8.887990951538086)
      (f32.const 4.345239639282227)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47726,7 +46459,6 @@
      (f32.const -8.381433486938477)
      (f32.const -2.7636072635650635)
      (f32.const -0.09061169624328613)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47746,7 +46478,6 @@
      (f32.const -6.531673431396484)
      (f32.const 4.567535400390625)
      (f32.const -1.9641380310058594)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47766,7 +46497,6 @@
      (f32.const 9.267057418823242)
      (f32.const 4.811392307281494)
      (f32.const -0.3557271957397461)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47786,7 +46516,6 @@
      (f32.const -6.450045585632324)
      (f32.const 0.6620717644691467)
      (f32.const 0.17067205905914307)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47806,7 +46535,6 @@
      (f32.const 7.858890056610107)
      (f32.const 0.052154526114463806)
      (f32.const -0.016443386673927307)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47826,7 +46554,6 @@
      (f32.const -0.7920545339584351)
      (f32.const 7.676402568817139)
      (f32.const -0.7920545339584351)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47846,7 +46573,6 @@
      (f32.const 0.6157026886940002)
      (f32.const 2.0119025707244873)
      (f32.const 0.6157026886940002)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47866,7 +46592,6 @@
      (f32.const -0.5587586760520935)
      (f32.const 0.03223983198404312)
      (f32.const -0.010681532323360443)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47885,7 +46610,6 @@
     (call $std/math/test_remf
      (f32.const 0)
      (f32.const 1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -47906,7 +46630,6 @@
      (f32.const -0)
      (f32.const 1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47926,7 +46649,6 @@
      (f32.const 0.5)
      (f32.const 1)
      (f32.const 0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47946,7 +46668,6 @@
      (f32.const -0.5)
      (f32.const 1)
      (f32.const -0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -47965,7 +46686,6 @@
     (call $std/math/test_remf
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -47986,7 +46706,6 @@
      (f32.const -1)
      (f32.const 1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48006,7 +46725,6 @@
      (f32.const 1.5)
      (f32.const 1)
      (f32.const -0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48026,7 +46744,6 @@
      (f32.const -1.5)
      (f32.const 1)
      (f32.const 0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48045,7 +46762,6 @@
     (call $std/math/test_remf
      (f32.const 2)
      (f32.const 1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -48066,7 +46782,6 @@
      (f32.const -2)
      (f32.const 1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48086,7 +46801,6 @@
      (f32.const inf)
      (f32.const 1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48106,7 +46820,6 @@
      (f32.const -inf)
      (f32.const 1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48126,7 +46839,6 @@
      (f32.const nan:0x400000)
      (f32.const 1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48145,7 +46857,6 @@
     (call $std/math/test_remf
      (f32.const 0)
      (f32.const -1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -48166,7 +46877,6 @@
      (f32.const -0)
      (f32.const -1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48186,7 +46896,6 @@
      (f32.const 0.5)
      (f32.const -1)
      (f32.const 0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48206,7 +46915,6 @@
      (f32.const -0.5)
      (f32.const -1)
      (f32.const -0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48225,7 +46933,6 @@
     (call $std/math/test_remf
      (f32.const 1)
      (f32.const -1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -48246,7 +46953,6 @@
      (f32.const -1)
      (f32.const -1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48266,7 +46972,6 @@
      (f32.const 1.5)
      (f32.const -1)
      (f32.const -0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48286,7 +46991,6 @@
      (f32.const -1.5)
      (f32.const -1)
      (f32.const 0.5)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48305,7 +47009,6 @@
     (call $std/math/test_remf
      (f32.const 2)
      (f32.const -1)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -48326,7 +47029,6 @@
      (f32.const -2)
      (f32.const -1)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48346,7 +47048,6 @@
      (f32.const inf)
      (f32.const -1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48366,7 +47067,6 @@
      (f32.const -inf)
      (f32.const -1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48386,7 +47086,6 @@
      (f32.const nan:0x400000)
      (f32.const -1)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48406,7 +47105,6 @@
      (f32.const 0)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48426,7 +47124,6 @@
      (f32.const 0)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48445,7 +47142,6 @@
     (call $std/math/test_remf
      (f32.const 0)
      (f32.const inf)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -48466,7 +47162,6 @@
      (f32.const 0)
      (f32.const -inf)
      (f32.const 0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48486,7 +47181,6 @@
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48506,7 +47200,6 @@
      (f32.const -0)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48526,7 +47219,6 @@
      (f32.const -0)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48546,7 +47238,6 @@
      (f32.const -0)
      (f32.const inf)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48566,7 +47257,6 @@
      (f32.const -0)
      (f32.const -inf)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48586,7 +47276,6 @@
      (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48606,7 +47295,6 @@
      (f32.const 1)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48626,7 +47314,6 @@
      (f32.const -1)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48646,7 +47333,6 @@
      (f32.const inf)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48666,7 +47352,6 @@
      (f32.const -inf)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48686,7 +47371,6 @@
      (f32.const nan:0x400000)
      (f32.const 0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48706,7 +47390,6 @@
      (f32.const -1)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48726,7 +47409,6 @@
      (f32.const inf)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48746,7 +47428,6 @@
      (f32.const -inf)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48766,7 +47447,6 @@
      (f32.const nan:0x400000)
      (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48786,7 +47466,6 @@
      (f32.const inf)
      (f32.const 2)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48806,7 +47485,6 @@
      (f32.const inf)
      (f32.const -0.5)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48826,7 +47504,6 @@
      (f32.const inf)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48846,7 +47523,6 @@
      (f32.const -inf)
      (f32.const 2)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48866,7 +47542,6 @@
      (f32.const -inf)
      (f32.const -0.5)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -48886,7 +47561,6 @@
      (f32.const -inf)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48906,7 +47580,6 @@
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48926,7 +47599,6 @@
      (f32.const 1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48946,7 +47618,6 @@
      (f32.const -1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48966,7 +47637,6 @@
      (f32.const 1)
      (f32.const inf)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -48986,7 +47656,6 @@
      (f32.const -1)
      (f32.const inf)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -49006,7 +47675,6 @@
      (f32.const inf)
      (f32.const inf)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -49026,7 +47694,6 @@
      (f32.const -inf)
      (f32.const inf)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -49046,7 +47713,6 @@
      (f32.const 1)
      (f32.const -inf)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -49066,7 +47732,6 @@
      (f32.const -1)
      (f32.const -inf)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -49086,7 +47751,6 @@
      (f32.const inf)
      (f32.const -inf)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -49106,7 +47770,6 @@
      (f32.const -inf)
      (f32.const -inf)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 2)
     )
    )
@@ -49126,7 +47789,6 @@
      (f32.const 1.75)
      (f32.const 0.5)
      (f32.const -0.25)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -49146,7 +47808,6 @@
      (f32.const -1.75)
      (f32.const 0.5)
      (f32.const 0.25)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -49166,7 +47827,6 @@
      (f32.const 1.75)
      (f32.const -0.5)
      (f32.const -0.25)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -49186,7 +47846,6 @@
      (f32.const -1.75)
      (f32.const -0.5)
      (f32.const 0.25)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -49206,7 +47865,6 @@
      (f32.const 5.877471754111438e-39)
      (f32.const inf)
      (f32.const 5.877471754111438e-39)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -52569,7 +51227,6 @@
     (call $std/math/test_trunc
      (f64.const -8.06684839057968)
      (f64.const -8)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52588,7 +51245,6 @@
     (call $std/math/test_trunc
      (f64.const 4.345239849338305)
      (f64.const 4)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52607,7 +51263,6 @@
     (call $std/math/test_trunc
      (f64.const -8.38143342755525)
      (f64.const -8)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52626,7 +51281,6 @@
     (call $std/math/test_trunc
      (f64.const -6.531673581913484)
      (f64.const -6)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52645,7 +51299,6 @@
     (call $std/math/test_trunc
      (f64.const 9.267056966972586)
      (f64.const 9)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52663,7 +51316,6 @@
    (i32.eqz
     (call $std/math/test_trunc
      (f64.const 0.6619858980995045)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -52683,7 +51335,6 @@
     (call $std/math/test_trunc
      (f64.const -0.4066039223853553)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52701,7 +51352,6 @@
    (i32.eqz
     (call $std/math/test_trunc
      (f64.const 0.5617597462207241)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -52721,7 +51371,6 @@
     (call $std/math/test_trunc
      (f64.const 0.7741522965913037)
      (f64.const 0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52740,7 +51389,6 @@
     (call $std/math/test_trunc
      (f64.const -0.6787637026394024)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52759,7 +51407,6 @@
     (call $std/math/test_trunc
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -52778,7 +51425,6 @@
     (call $std/math/test_trunc
      (f64.const inf)
      (f64.const inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -52797,7 +51443,6 @@
     (call $std/math/test_trunc
      (f64.const -inf)
      (f64.const -inf)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -52814,7 +51459,6 @@
   (if
    (i32.eqz
     (call $std/math/test_trunc
-     (f64.const 0)
      (f64.const 0)
      (f64.const 0)
      (i32.const 0)
@@ -52835,7 +51479,6 @@
     (call $std/math/test_trunc
      (f64.const -0)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -52854,7 +51497,6 @@
     (call $std/math/test_trunc
      (f64.const 1)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -52873,7 +51515,6 @@
     (call $std/math/test_trunc
      (f64.const -1)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 0)
     )
    )
@@ -52891,7 +51532,6 @@
    (i32.eqz
     (call $std/math/test_trunc
      (f64.const 0.5)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -52911,7 +51551,6 @@
     (call $std/math/test_trunc
      (f64.const -0.5)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52930,7 +51569,6 @@
     (call $std/math/test_trunc
      (f64.const 1.0000152587890625)
      (f64.const 1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52949,7 +51587,6 @@
     (call $std/math/test_trunc
      (f64.const -1.0000152587890625)
      (f64.const -1)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -52967,7 +51604,6 @@
    (i32.eqz
     (call $std/math/test_trunc
      (f64.const 0.9999923706054688)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -52987,7 +51623,6 @@
     (call $std/math/test_trunc
      (f64.const -0.9999923706054688)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -53005,7 +51640,6 @@
    (i32.eqz
     (call $std/math/test_trunc
      (f64.const 7.888609052210118e-31)
-     (f64.const 0)
      (f64.const 0)
      (i32.const 1)
     )
@@ -53025,7 +51659,6 @@
     (call $std/math/test_trunc
      (f64.const -7.888609052210118e-31)
      (f64.const -0)
-     (f64.const 0)
      (i32.const 1)
     )
    )
@@ -53044,7 +51677,6 @@
     (call $std/math/test_truncf
      (f32.const -8.066848754882812)
      (f32.const -8)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53063,7 +51695,6 @@
     (call $std/math/test_truncf
      (f32.const 4.345239639282227)
      (f32.const 4)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53082,7 +51713,6 @@
     (call $std/math/test_truncf
      (f32.const -8.381433486938477)
      (f32.const -8)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53101,7 +51731,6 @@
     (call $std/math/test_truncf
      (f32.const -6.531673431396484)
      (f32.const -6)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53120,7 +51749,6 @@
     (call $std/math/test_truncf
      (f32.const 9.267057418823242)
      (f32.const 9)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53138,7 +51766,6 @@
    (i32.eqz
     (call $std/math/test_truncf
      (f32.const 0.6619858741760254)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -53158,7 +51785,6 @@
     (call $std/math/test_truncf
      (f32.const -0.40660393238067627)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53176,7 +51802,6 @@
    (i32.eqz
     (call $std/math/test_truncf
      (f32.const 0.5617597699165344)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -53196,7 +51821,6 @@
     (call $std/math/test_truncf
      (f32.const 0.7741522789001465)
      (f32.const 0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53215,7 +51839,6 @@
     (call $std/math/test_truncf
      (f32.const -0.6787636876106262)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53234,7 +51857,6 @@
     (call $std/math/test_truncf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -53253,7 +51875,6 @@
     (call $std/math/test_truncf
      (f32.const inf)
      (f32.const inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -53272,7 +51893,6 @@
     (call $std/math/test_truncf
      (f32.const -inf)
      (f32.const -inf)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -53289,7 +51909,6 @@
   (if
    (i32.eqz
     (call $std/math/test_truncf
-     (f32.const 0)
      (f32.const 0)
      (f32.const 0)
      (i32.const 0)
@@ -53310,7 +51929,6 @@
     (call $std/math/test_truncf
      (f32.const -0)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -53329,7 +51947,6 @@
     (call $std/math/test_truncf
      (f32.const 1)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -53348,7 +51965,6 @@
     (call $std/math/test_truncf
      (f32.const -1)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 0)
     )
    )
@@ -53366,7 +51982,6 @@
    (i32.eqz
     (call $std/math/test_truncf
      (f32.const 0.5)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -53386,7 +52001,6 @@
     (call $std/math/test_truncf
      (f32.const -0.5)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53405,7 +52019,6 @@
     (call $std/math/test_truncf
      (f32.const 1.0000152587890625)
      (f32.const 1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53424,7 +52037,6 @@
     (call $std/math/test_truncf
      (f32.const -1.0000152587890625)
      (f32.const -1)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53442,7 +52054,6 @@
    (i32.eqz
     (call $std/math/test_truncf
      (f32.const 0.9999923706054688)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -53462,7 +52073,6 @@
     (call $std/math/test_truncf
      (f32.const -0.9999923706054688)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )
@@ -53480,7 +52090,6 @@
    (i32.eqz
     (call $std/math/test_truncf
      (f32.const 7.888609052210118e-31)
-     (f32.const 0)
      (f32.const 0)
      (i32.const 1)
     )
@@ -53500,7 +52109,6 @@
     (call $std/math/test_truncf
      (f32.const -7.888609052210118e-31)
      (f32.const -0)
-     (f32.const 0)
      (i32.const 1)
     )
    )

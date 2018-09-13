@@ -1,70 +1,34 @@
 (module
- (type $iii (func (param i32 i32) (result i32)))
- (type $fff (func (param f32 f32) (result f32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $ifff (func (param i32 f32 f32) (result f32)))
  (type $v (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$f (func (result f32)))
  (global $class/Animal.ONE (mut i32) (i32.const 1))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s")
  (export "memory" (memory $0))
  (export "test" (func $class/test))
  (start $start)
- (func $class/Animal.add (; 0 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $class/Animal.add (; 0 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (i32.add
-   (i32.add
-    (get_local $0)
-    (get_local $1)
-   )
    (get_global $class/Animal.ONE)
+   (i32.const 3)
   )
  )
- (func $class/Animal.sub<f32> (; 1 ;) (; has Stack IR ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $class/Animal.sub<f32> (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$f) (result f32)
   (f32.add
-   (f32.sub
-    (get_local $0)
-    (get_local $1)
-   )
+   (f32.const -1)
    (f32.convert_s/i32
     (get_global $class/Animal.ONE)
    )
   )
  )
- (func $class/Animal<f64>#instanceAdd (; 2 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (i32.add
-   (i32.add
-    (get_local $1)
-    (get_local $2)
-   )
-   (get_global $class/Animal.ONE)
-  )
- )
- (func $class/Animal<f64>#instanceSub<f32> (; 3 ;) (; has Stack IR ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
-  (f32.add
-   (f32.sub
-    (get_local $1)
-    (get_local $2)
-   )
-   (f32.convert_s/i32
-    (get_global $class/Animal.ONE)
-   )
-  )
- )
- (func $class/test (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $class/test (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (drop
-   (call $class/Animal<f64>#instanceAdd
-    (get_local $0)
-    (i32.const 1)
-    (i32.const 2)
-   )
+   (call $class/Animal.add)
   )
   (drop
-   (call $class/Animal<f64>#instanceSub<f32>
-    (get_local $0)
-    (f32.const 1)
-    (f32.const 2)
-   )
+   (call $class/Animal.sub<f32>)
   )
   (drop
    (i32.load
@@ -95,18 +59,12 @@
   )
   (get_local $0)
  )
- (func $start (; 5 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 3 ;) (; has Stack IR ;) (type $v)
   (drop
-   (call $class/Animal.add
-    (i32.const 1)
-    (i32.const 2)
-   )
+   (call $class/Animal.add)
   )
   (drop
-   (call $class/Animal.sub<f32>
-    (f32.const 1)
-    (f32.const 2)
-   )
+   (call $class/Animal.sub<f32>)
   )
  )
 )

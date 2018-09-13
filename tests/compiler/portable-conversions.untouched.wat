@@ -154,7 +154,7 @@
    )
   )
   (drop
-   (i64.extend_u/i32
+   (i64.extend_s/i32
     (get_global $portable-conversions/i)
    )
   )
