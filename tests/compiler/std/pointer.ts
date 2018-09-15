@@ -19,6 +19,19 @@ class Pointer<T> {
     }
   }
 
+  @inline set value(value: T) {
+    if (isReference<T>()) {
+      if (isManaged<T>()) ERROR("Unsafe unmanaged set of a managed object");
+      if (value === null) {
+        memory.fill(changetype<usize>(this), 0, offsetof<T>());
+      } else {
+        memory.copy(changetype<usize>(this), changetype<usize>(value), offsetof<T>());
+      }
+    } else {
+      store<T>(changetype<usize>(this), value);
+    }
+  }
+
   // FIXME: in general, inlining any of the following always yields a block. one could argue that
   // this helps debuggability, or that it is unnecessary overhead due to the simplicity of the
   // functions. a compromise could be to inline a block consisting of a single 'return' as is,
@@ -89,6 +102,11 @@ assert(two.offset == 8);
 assert(two.value.key == 1);
 assert(two.value.val == 2);
 
+one.value = two.value;
+assert(one.offset != two.offset);
+assert(one.value.key == 1);
+assert(one.value.val == 2);
+
 var buf = new Pointer<f32>(0);
 buf[0] = 1.1;
 buf[1] = 1.2;
@@ -106,3 +124,7 @@ buf.set(2, 1.3);
 assert(buf[2] == 1.3);
 assert(buf.get(2) == 1.3);
 assert(load<f32>(8) == 1.3);
+
+buf.value = 1.4;
+assert(buf.value == 1.4);
+assert(load<f32>(0) == 1.4);
