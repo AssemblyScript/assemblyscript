@@ -769,7 +769,9 @@ export class Parser extends DiagnosticEmitter {
     }
     var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     var flags = parentFlags;
-    var definiteAssignmentAssertion = tn.skip(Token.EXCLAMATION);
+    if (tn.skip(Token.EXCLAMATION)) {
+      flags |= CommonFlags.DEFINITE_ASSIGNMENT;
+    }
 
     var type: CommonTypeNode | null = null;
     if (tn.skip(Token.COLON)) {
@@ -802,14 +804,13 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     var range = Range.join(identifier.range, tn.range());
-    if (definiteAssignmentAssertion && initializer) {
+    if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) && initializer) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
         range);
     }
     return Node.createVariableDeclaration(
       identifier,
-      definiteAssignmentAssertion,
       type,
       initializer,
       parentDecorators,
@@ -1797,7 +1798,6 @@ export class Parser extends DiagnosticEmitter {
           )) {
             let implicitFieldDeclaration = Node.createFieldDeclaration(
               parameter.name,
-              false,
               parameter.type,
               null, // initialized via parameter
               null,
@@ -1941,7 +1941,9 @@ export class Parser extends DiagnosticEmitter {
           tn.range(startPos, tn.pos)
         );
       }
-      let definiteAssignmentAssertion = tn.skip(Token.EXCLAMATION);
+      if (tn.skip(Token.EXCLAMATION)) {
+        flags |= CommonFlags.DEFINITE_ASSIGNMENT;
+      }
       if (tn.skip(Token.COLON)) {
         type = this.parseType(tn);
         if (!type) return null;
@@ -1957,7 +1959,7 @@ export class Parser extends DiagnosticEmitter {
         if (!initializer) return null;
       }
       let range = tn.range(startPos, tn.pos);
-      if (definiteAssignmentAssertion && ((flags & CommonFlags.STATIC) || isInterface || initializer)) {
+      if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) && ((flags & CommonFlags.STATIC) || isInterface || initializer)) {
         this.error(
           DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
           range
@@ -1965,7 +1967,6 @@ export class Parser extends DiagnosticEmitter {
       }
       let retField = Node.createFieldDeclaration(
         name,
-        definiteAssignmentAssertion,
         type,
         initializer,
         decorators,
