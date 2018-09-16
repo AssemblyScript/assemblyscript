@@ -234,4 +234,7 @@
    (call $std/constructor/CtorConditionallyAllocates#constructor)
   )
  )
+ (func $null (; 9 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

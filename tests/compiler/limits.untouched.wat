@@ -27,6 +27,8 @@
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $HEAP_BASE i32 (i32.const 8))
+ (table 1 1 anyfunc)
+ (elem (i32.const 0) $null)
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
@@ -109,5 +111,7 @@
   (drop
    (get_global $~lib/builtins/f64.MAX_SAFE_INTEGER)
   )
+ )
+ (func $null (; 1 ;) (type $v)
  )
 )

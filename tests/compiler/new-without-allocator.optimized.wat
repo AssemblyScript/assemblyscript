@@ -1,5 +1,6 @@
 (module
  (type $i (func (result i32)))
+ (type $v (func))
  (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (export "memory" (memory $0))
@@ -12,5 +13,8 @@
    (call $~lib/memory/memory.allocate)
   )
   (i32.const 3)
+ )
+ (func $null (; 2 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

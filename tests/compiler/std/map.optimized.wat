@@ -9322,4 +9322,7 @@
   (call $std/map/test<f32,i32>)
   (call $std/map/test<f64,i32>)
  )
+ (func $null (; 73 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

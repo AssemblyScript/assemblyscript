@@ -1,5 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
+ (type $v (func))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "fib" (func $recursive/fib))
@@ -27,5 +28,8 @@
     )
    )
   )
+ )
+ (func $null (; 1 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

@@ -4,6 +4,8 @@
  (global $main/code (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
+ (table 1 1 anyfunc)
+ (elem (i32.const 0) $null)
  (memory $0 0)
  (export "memory" (memory $0))
  (export "main" (func $main/main))
@@ -25,5 +27,7 @@
   (set_global $main/code
    (i32.const 1)
   )
+ )
+ (func $null (; 2 ;) (type $v)
  )
 )

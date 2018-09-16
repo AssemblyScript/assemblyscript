@@ -17,4 +17,7 @@
    (i32.const 0)
   )
  )
+ (func $null (; 3 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

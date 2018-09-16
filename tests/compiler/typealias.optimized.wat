@@ -1,9 +1,13 @@
 (module
  (type $ii (func (param i32) (result i32)))
+ (type $v (func))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "alias" (func $typealias/alias))
  (func $typealias/alias (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (get_local $0)
+ )
+ (func $start (; 1 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

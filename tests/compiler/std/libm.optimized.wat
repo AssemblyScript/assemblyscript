@@ -4,6 +4,7 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $Ff (func (param f64) (result f32)))
+ (type $v (func))
  (type $FUNCSIG$d (func (result f64)))
  (global $std/libm/E f64 (f64.const 2.718281828459045))
  (global $std/libm/LN10 f64 (f64.const 2.302585092994046))
@@ -6049,5 +6050,8 @@
   (f64.trunc
    (get_local $0)
   )
+ )
+ (func $null (; 58 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

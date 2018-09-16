@@ -19,10 +19,10 @@
  (global $std/gc-basics/obj (mut i32) (i32.const 0))
  (global $std/gc-basics/obj2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (table 3 3 anyfunc)
- (elem (i32.const 0) $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark $~lib/string/String~gc)
+ (table 4 4 anyfunc)
+ (elem (i32.const 0) $null $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark $~lib/string/String~gc)
  (memory $0 1)
- (data (i32.const 16) "\02\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s")
+ (data (i32.const 16) "\03\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-basics/main))
@@ -441,7 +441,7 @@
      (i32.const 20)
     )
    )
-   (i32.const 0)
+   (i32.const 1)
   )
   (call $~lib/collector/itcm/ManagedObject#set:color
    (get_local $0)
@@ -594,8 +594,11 @@
    )
   )
   (if
-   (i32.load offset=8
-    (get_local $0)
+   (i32.ne
+    (i32.load offset=8
+     (get_local $0)
+    )
+    (i32.const 1)
    )
    (block
     (call $~lib/env/abort
@@ -644,14 +647,17 @@
   )
   (call $~lib/gc/gc.collect)
  )
- (func $~iterateRoots (; 19 ;) (; has Stack IR ;) (type $FUNCSIG$v)
+ (func $null (; 19 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
+ (func $~iterateRoots (; 20 ;) (; has Stack IR ;) (type $FUNCSIG$v)
   (call_indirect (type $iv)
    (get_global $std/gc-basics/obj)
-   (i32.const 1)
+   (i32.const 2)
   )
   (call_indirect (type $iv)
    (get_global $std/gc-basics/obj2)
-   (i32.const 1)
+   (i32.const 2)
   )
  )
 )

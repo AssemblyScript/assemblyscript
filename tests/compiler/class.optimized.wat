@@ -67,4 +67,7 @@
    (call $class/Animal.sub<f32>)
   )
  )
+ (func $null (; 4 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

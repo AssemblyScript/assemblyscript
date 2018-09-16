@@ -1,6 +1,9 @@
 (module
  (type $i (func (result i32)))
+ (type $v (func))
  (global $HEAP_BASE i32 (i32.const 8))
+ (table 1 1 anyfunc)
+ (elem (i32.const 0) $null)
  (memory $0 0)
  (export "memory" (memory $0))
  (export "test" (func $class-with-boolean-field/test))
@@ -13,5 +16,7 @@
   (i32.load8_u
    (get_local $0)
   )
+ )
+ (func $null (; 1 ;) (type $v)
  )
 )

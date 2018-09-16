@@ -19,8 +19,8 @@
  (global $std/typedarray/af64 (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
- (table 1 1 anyfunc)
- (elem (i32.const 0) $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|0)
+ (table 2 2 anyfunc)
+ (elem (i32.const 0) $null $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1)
  (memory $0 1)
  (data (i32.const 8) "\11\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 48) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
@@ -2346,7 +2346,7 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|0 (; 20 ;) (; has Stack IR ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1 (; 20 ;) (; has Stack IR ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   (i32.sub
@@ -2391,6 +2391,7 @@
   )
  )
  (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline (; 21 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -2400,10 +2401,13 @@
     )
     (unreachable)
    )
+   (set_local $1
+    (i32.const 1)
+   )
   )
   (call $~lib/internal/typedarray/TypedArray<f64,f64>#sort
    (get_local $0)
-   (i32.const 0)
+   (get_local $1)
   )
  )
  (func $~lib/internal/typedarray/TypedArray<f64,f64>#__get (; 22 ;) (; has Stack IR ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
@@ -3009,5 +3013,8 @@
     (i32.const 134217727)
    )
   )
+ )
+ (func $null (; 27 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

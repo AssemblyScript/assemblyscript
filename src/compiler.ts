@@ -286,7 +286,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Map of already compiled static string segments. */
   stringSegments: Map<string,MemorySegment> = new Map();
   /** Function table being compiled. */
-  functionTable: string[] = [];
+  functionTable: string[] = [ "null" ];
   /** Argument count helper global. */
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
@@ -394,10 +394,13 @@ export class Compiler extends DiagnosticEmitter {
     var functionTable = this.functionTable;
     var functionTableSize = functionTable.length;
     var functionTableExported = false;
-    if (functionTableSize) {
-      module.setFunctionTable(functionTable);
-      module.addTableExport("0", "table");
-      functionTableExported = true;
+    module.setFunctionTable(functionTable);
+    if (functionTableSize) { // index 0 is NULL
+      module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.createBlock(null, []));
+      if (functionTableSize > 1) {
+        module.addTableExport("0", "table");
+        functionTableExported = true;
+      }
     }
 
     // import table if requested (default table is named '0' by Binaryen)

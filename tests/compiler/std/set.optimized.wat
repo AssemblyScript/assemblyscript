@@ -7873,4 +7873,7 @@
   (call $std/set/test<f32>)
   (call $std/set/test<f64>)
  )
+ (func $null (; 73 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

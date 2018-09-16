@@ -2336,4 +2336,7 @@
    )
   )
  )
+ (func $null (; 10 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

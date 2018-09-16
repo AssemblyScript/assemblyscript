@@ -39,6 +39,8 @@
  (global $~lib/symbol/Symbol.hasInstance i32 (i32.const 1))
  (global $~lib/symbol/Symbol.concatSpreadable i32 (i32.const 2))
  (global $HEAP_BASE i32 (i32.const 164))
+ (table 1 1 anyfunc)
+ (elem (i32.const 0) $null)
  (memory $0 1)
  (data (i32.const 8) "\03\00\00\001\002\003\00")
  (data (i32.const 24) "\0d\00\00\00s\00t\00d\00/\00s\00y\00m\00b\00o\00l\00.\00t\00s\00")
@@ -2219,5 +2221,7 @@
   (drop
    (get_global $~lib/symbol/Symbol.concatSpreadable)
   )
+ )
+ (func $null (; 29 ;) (type $v)
  )
 )
