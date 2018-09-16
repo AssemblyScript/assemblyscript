@@ -2303,3 +2303,111 @@ export namespace NativeMathf {
     return sx ? -x : x;
   }
 }
+
+export function ipow32(x: i32, e: i32): i32 {
+  var out = 1;
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (e < 0) return 0;
+
+    switch (e) {
+      case 0: return 1;
+      case 1: return x;
+      case 2: return x * x;
+    }
+
+    let log = 32 - clz(e);
+    if (log <= 5) {
+      // 32 = 2 ^ 5, so need only five cases.
+      // But some extra cases needs for properly overflowing
+      switch (log) {
+        case 5: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 4: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 3: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 2: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 1: {
+          if (e & 1) out *= x;
+        }
+      }
+      return out;
+    }
+  }
+
+  while (e > 0) {
+    if (e & 1) out *= x;
+    e >>= 1;
+    x *= x;
+  }
+  return out;
+}
+
+export function ipow64(x: i64, e: i32): i64 {
+  var out: i64 = 1;
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (e < 0) return 0;
+    switch (e) {
+      case 0: return 1;
+      case 1: return x;
+      case 2: return x * x;
+    }
+
+    let log = 32 - clz(e);
+    if (log <= 6) {
+      // 64 = 2 ^ 6, so need only six cases.
+      // But some extra cases needs for properly overflowing
+      switch (log) {
+        case 6: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 5: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 4: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 3: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 2: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 1: {
+          if (e & 1) out *= x;
+        }
+      }
+      return out;
+    }
+  }
+
+  while (e > 0) {
+    if (e & 1) out *= x;
+    e >>= 1;
+    x *= x;
+  }
+  return out;
+}

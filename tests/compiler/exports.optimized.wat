@@ -5,6 +5,7 @@
  (type $iiv (func (param i32 i32)))
  (type $iv (func (param i32)))
  (type $v (func))
+ (type $FUNCSIG$i (func (result i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $exports/Animal.CAT i32 (i32.const 0))
@@ -143,9 +144,9 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/memory.allocate (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
-   (get_local $0)
+   (i32.const 4)
   )
  )
  (func $exports/Car#constructor (; 5 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -155,9 +156,7 @@
    )
    (i32.store
     (tee_local $0
-     (call $~lib/memory/memory.allocate
-      (i32.const 4)
-     )
+     (call $~lib/memory/memory.allocate)
     )
     (get_local $1)
    )

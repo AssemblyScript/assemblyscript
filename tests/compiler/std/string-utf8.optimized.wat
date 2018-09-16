@@ -1,8 +1,8 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iv (func (param i32)))
  (type $v (func))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -531,7 +531,7 @@
   )
   (get_local $5)
  )
- (func $~lib/allocator/arena/__memory_free (; 4 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$v)
   (nop)
  )
  (func $start (; 5 ;) (; has Stack IR ;) (type $v)
@@ -750,8 +750,6 @@
     (unreachable)
    )
   )
-  (call $~lib/allocator/arena/__memory_free
-   (get_global $std/string-utf8/ptr)
-  )
+  (call $~lib/allocator/arena/__memory_free)
  )
 )

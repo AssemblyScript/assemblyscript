@@ -181,7 +181,7 @@
       )
       (i64.shl
        (get_local $2)
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.sub
          (i32.const 1)
          (get_local $3)
@@ -237,7 +237,7 @@
       )
       (i64.shl
        (get_local $5)
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.sub
          (i32.const 1)
          (get_local $6)
@@ -358,7 +358,7 @@
           (i64.const 4503599627370496)
          )
          (i64.shl
-          (i64.extend_u/i32
+          (i64.extend_s/i32
            (get_local $3)
           )
           (i64.const 52)
@@ -366,7 +366,7 @@
         )
         (i64.shr_u
          (get_local $2)
-         (i64.extend_u/i32
+         (i64.extend_s/i32
           (i32.sub
            (i32.const 1)
            (get_local $3)
@@ -376,7 +376,7 @@
        )
       )
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (get_local $8)
        )
        (i64.const 63)

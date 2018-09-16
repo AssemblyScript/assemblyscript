@@ -1,10 +1,10 @@
 (module
- (type $iv (func (param i32)))
  (type $v (func))
+ (type $FUNCSIG$v (func))
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
- (func $scoped/fn (; 0 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $scoped/fn (; 0 ;) (; has Stack IR ;) (type $FUNCSIG$v)
   (nop)
  )
  (func $start (; 1 ;) (; has Stack IR ;) (type $v)
@@ -46,8 +46,6 @@
     (br $repeat|1)
    )
   )
-  (call $scoped/fn
-   (i32.const 42)
-  )
+  (call $scoped/fn)
  )
 )

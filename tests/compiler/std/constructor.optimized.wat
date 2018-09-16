@@ -1,6 +1,7 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
+ (type $FUNCSIG$i (func (result i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/constructor/emptyCtor (mut i32) (i32.const 0))
@@ -107,86 +108,60 @@
    (get_local $0)
   )
  )
- (func $std/constructor/EmptyCtor#constructor (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
-  (if (result i32)
-   (get_local $0)
-   (get_local $0)
-   (call $~lib/memory/memory.allocate
-    (i32.const 0)
-   )
+ (func $std/constructor/EmptyCtor#constructor (; 2 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (call $~lib/memory/memory.allocate
+   (i32.const 0)
   )
  )
- (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (i32.store
-    (tee_local $0
-     (call $~lib/memory/memory.allocate
-      (i32.const 4)
-     )
+ (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 3 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  (i32.store
+   (tee_local $0
+    (call $~lib/memory/memory.allocate
+     (i32.const 4)
     )
-    (i32.const 1)
    )
+   (i32.const 1)
   )
   (get_local $0)
  )
- (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (i32.store
-    (tee_local $0
-     (call $~lib/memory/memory.allocate
-      (i32.const 4)
-     )
+ (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  (i32.store
+   (tee_local $0
+    (call $~lib/memory/memory.allocate
+     (i32.const 4)
     )
-    (i32.const 0)
    )
+   (i32.const 0)
   )
   (get_local $0)
  )
- (func $std/constructor/CtorReturns#constructor (; 5 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorReturns#constructor (; 5 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
    (i32.const 0)
   )
  )
- (func $std/constructor/CtorConditionallyReturns#constructor (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorConditionallyReturns#constructor (; 6 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (if
    (get_global $std/constructor/b)
    (return
-    (tee_local $0
-     (call $~lib/allocator/arena/__memory_allocate
-      (i32.const 0)
-     )
-    )
-   )
-  )
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (set_local $0
-    (call $~lib/memory/memory.allocate
+    (call $~lib/allocator/arena/__memory_allocate
      (i32.const 0)
     )
    )
   )
-  (get_local $0)
+  (call $~lib/memory/memory.allocate
+   (i32.const 0)
+  )
  )
- (func $std/constructor/CtorConditionallyAllocates#constructor (; 7 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorConditionallyAllocates#constructor (; 7 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
   (if
    (get_global $std/constructor/b)
-   (if
-    (i32.eqz
-     (get_local $0)
-    )
-    (set_local $0
-     (call $~lib/memory/memory.allocate
-      (i32.const 0)
-     )
+   (set_local $0
+    (call $~lib/memory/memory.allocate
+     (i32.const 0)
     )
    )
   )
@@ -211,19 +186,13 @@
    (get_global $~lib/allocator/arena/startOffset)
   )
   (set_global $std/constructor/emptyCtor
-   (call $std/constructor/EmptyCtor#constructor
-    (i32.const 0)
-   )
+   (call $std/constructor/EmptyCtor#constructor)
   )
   (set_global $std/constructor/emptyCtorWithFieldInit
-   (call $std/constructor/EmptyCtorWithFieldInit#constructor
-    (i32.const 0)
-   )
+   (call $std/constructor/EmptyCtorWithFieldInit#constructor)
   )
   (set_global $std/constructor/emptyCtorWithFieldNoInit
-   (call $std/constructor/EmptyCtorWithFieldNoInit#constructor
-    (i32.const 0)
-   )
+   (call $std/constructor/EmptyCtorWithFieldNoInit#constructor)
   )
   (set_global $std/constructor/none
    (call $~lib/memory/memory.allocate
@@ -253,24 +222,16 @@
    (get_local $0)
   )
   (set_global $std/constructor/ctorReturns
-   (call $std/constructor/CtorReturns#constructor
-    (i32.const 0)
-   )
+   (call $std/constructor/CtorReturns#constructor)
   )
   (set_global $std/constructor/ctorConditionallyReturns
-   (call $std/constructor/CtorConditionallyReturns#constructor
-    (i32.const 0)
-   )
+   (call $std/constructor/CtorConditionallyReturns#constructor)
   )
   (set_global $std/constructor/ctorAllocates
-   (call $std/constructor/EmptyCtor#constructor
-    (i32.const 0)
-   )
+   (call $std/constructor/EmptyCtor#constructor)
   )
   (set_global $std/constructor/ctorConditionallyAllocates
-   (call $std/constructor/CtorConditionallyAllocates#constructor
-    (i32.const 0)
-   )
+   (call $std/constructor/CtorConditionallyAllocates#constructor)
   )
  )
 )

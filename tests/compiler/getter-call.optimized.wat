@@ -1,12 +1,17 @@
 (module
+ (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
  (type $FUNCSIG$i (func (result i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $std/new/aClass (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
+ (table 1 1 anyfunc)
+ (elem (i32.const 0) $getter-call/C#get:x~anonymous|0)
  (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
+ (export "test" (func $getter-call/test))
  (start $start)
  (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -95,45 +100,33 @@
  )
  (func $~lib/memory/memory.allocate (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
-   (i32.const 8)
-  )
- )
- (func $std/new/AClass#constructor (; 2 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  (i32.store
-   (tee_local $0
-    (call $~lib/memory/memory.allocate)
-   )
-   (i32.const 1)
-  )
-  (f32.store offset=4
-   (get_local $0)
-   (f32.const 2)
-  )
-  (i32.store
    (i32.const 0)
-   (i32.add
-    (i32.load
-     (get_local $0)
-    )
-    (i32.const 1)
-   )
   )
-  (f32.store offset=4
-   (get_local $0)
-   (f32.const 3)
-  )
-  (get_local $0)
  )
- (func $start (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $getter-call/C#get:x~anonymous|0 (; 2 ;) (; has Stack IR ;) (type $i) (result i32)
+  (i32.const 42)
+ )
+ (func $getter-call/C#get:x (; 3 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (i32.const 0)
+ )
+ (func $getter-call/test (; 4 ;) (; has Stack IR ;) (type $i) (result i32)
+  (local $0 i32)
+  (set_local $0
+   (call $~lib/memory/memory.allocate)
+  )
+  (set_global $~argc
+   (i32.const 0)
+  )
+  (call_indirect (type $i)
+   (call $getter-call/C#get:x)
+  )
+ )
+ (func $start (; 5 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 8)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
-  )
-  (set_global $std/new/aClass
-   (call $std/new/AClass#constructor)
   )
  )
 )

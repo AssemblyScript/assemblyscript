@@ -457,12 +457,6 @@ declare class Array<T> {
   sort(comparator?: (a: T, b: T) => i32): this;
 }
 
-/** Class representing a C-like array of values of type `T` with limited capabilities. */
-declare class CArray<T> {
-  [key: number]: T;
-  private constructor();
-}
-
 /** Class representing a sequence of characters. */
 declare class String {
 
@@ -524,6 +518,7 @@ declare class Map<K,V> {
   readonly size: i32;
   has(key: K): bool;
   set(key: K, value: V): void;
+  get(key: K): V;
   delete(key: K): bool;
   clear(): void;
 }

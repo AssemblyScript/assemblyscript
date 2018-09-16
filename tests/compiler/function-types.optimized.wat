@@ -6,6 +6,7 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
+ (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
@@ -54,17 +55,18 @@
    (get_local $2)
   )
  )
- (func $function-types/doAdd<i32> (; 8 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-types/doAdd<i32> (; 8 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (set_global $~argc
    (i32.const 2)
   )
   (call_indirect (type $iii)
-   (get_local $0)
-   (get_local $1)
+   (i32.const 3)
+   (i32.const 4)
    (call $function-types/makeAdder<i32>)
   )
  )
- (func $function-types/makeAndAdd<i32>|trampoline (; 9 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/makeAndAdd<i32>|trampoline (; 9 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -77,14 +79,14 @@
     )
     (unreachable)
    )
-   (set_local $2
+   (set_local $0
     (call $function-types/makeAdder<i32>)
    )
   )
   (call $function-types/doAddWithFn<i32>
+   (i32.const 1)
+   (i32.const 2)
    (get_local $0)
-   (get_local $1)
-   (get_local $2)
   )
  )
  (func $start (; 10 ;) (; has Stack IR ;) (type $v)
@@ -181,10 +183,7 @@
   )
   (if
    (i32.ne
-    (call $function-types/doAdd<i32>
-     (i32.const 3)
-     (i32.const 4)
-    )
+    (call $function-types/doAdd<i32>)
     (i32.const 7)
    )
    (block
@@ -221,11 +220,7 @@
   )
   (if
    (i32.ne
-    (call $function-types/makeAndAdd<i32>|trampoline
-     (i32.const 1)
-     (i32.const 2)
-     (i32.const 0)
-    )
+    (call $function-types/makeAndAdd<i32>|trampoline)
     (i32.const 3)
    )
    (block

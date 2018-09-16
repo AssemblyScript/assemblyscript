@@ -17,7 +17,6 @@ export class String {
 
   // TODO Add and handle second argument
   static fromCharCode(code: i32): String {
-    if (!code) return changetype<String>("\0");
     var out = allocateUnsafe(1);
     store<u16>(
       changetype<usize>(out),
@@ -28,8 +27,7 @@ export class String {
   }
 
   static fromCodePoint(code: i32): String {
-    assert(<u32>code <= 0x10FFFF); // Invalid code point range
-    if (!code) return changetype<String>("\0");
+    assert(<u32>code <= 0x10FFFF);
     var sur = code > 0xFFFF;
     var out = allocateUnsafe(<i32>sur + 1);
     if (!sur) {

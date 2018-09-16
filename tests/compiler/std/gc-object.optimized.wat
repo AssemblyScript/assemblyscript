@@ -1,9 +1,10 @@
 (module
- (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
  (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
  (type $iiv (func (param i32 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$i (func (result i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
@@ -256,7 +257,7 @@
    )
   )
  )
- (func $~lib/allocator/arena/__memory_free (; 10 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 10 ;) (; has Stack IR ;) (type $FUNCSIG$v)
   (nop)
  )
  (func $~lib/collector/itcm/step (; 11 ;) (; has Stack IR ;) (type $v)
@@ -316,9 +317,7 @@
        (i32.const 1)
       )
      )
-     (call $~iterateRoots
-      (i32.const 0)
-     )
+     (call $~iterateRoots)
      (set_global $~lib/collector/itcm/state
       (i32.const 2)
      )
@@ -357,9 +356,7 @@
       )
      )
      (block
-      (call $~iterateRoots
-       (i32.const 0)
-      )
+      (call $~iterateRoots)
       (if
        (i32.eq
         (call $~lib/collector/itcm/ManagedObject#get:next
@@ -414,9 +411,7 @@
        (get_local $0)
        (i32.const 8)
       )
-      (call $~lib/allocator/arena/__memory_free
-       (get_local $0)
-      )
+      (call $~lib/allocator/arena/__memory_free)
      )
     )
     (block
@@ -430,25 +425,16 @@
    )
   )
  )
- (func $~lib/collector/itcm/__gc_allocate (; 12 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (if
-   (i32.gt_u
-    (get_local $0)
-    (i32.const 1073741808)
-   )
-   (unreachable)
-  )
+ (func $~lib/collector/itcm/__gc_allocate (; 12 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
   (call $~lib/collector/itcm/step)
   (i32.store offset=8
    (tee_local $0
     (call $~lib/allocator/arena/__memory_allocate
-     (i32.add
-      (get_local $0)
-      (i32.const 16)
-     )
+     (i32.const 24)
     )
    )
-   (get_local $1)
+   (i32.const 1)
   )
   (call $~lib/collector/itcm/ManagedObject#set:color
    (get_local $0)
@@ -559,10 +545,7 @@
   )
   (i32.store
    (tee_local $0
-    (call $~lib/collector/itcm/__gc_allocate
-     (i32.const 8)
-     (i32.const 1)
-    )
+    (call $~lib/collector/itcm/__gc_allocate)
    )
    (i32.const 0)
   )
@@ -584,10 +567,10 @@
   )
   (call $~lib/gc/gc.collect)
  )
- (func $~iterateRoots (; 19 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~iterateRoots (; 19 ;) (; has Stack IR ;) (type $FUNCSIG$v)
   (call_indirect (type $iv)
    (get_global $std/gc-object/obj)
-   (get_local $0)
+   (i32.const 0)
   )
  )
 )

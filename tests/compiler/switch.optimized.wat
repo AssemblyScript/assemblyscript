@@ -2,6 +2,7 @@
  (type $ii (func (param i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
+ (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\t\00\00\00s\00w\00i\00t\00c\00h\00.\00t\00s")
@@ -140,7 +141,7 @@
   )
   (i32.const 2)
  )
- (func $switch/doSwitchEmpty (; 7 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchEmpty (; 7 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (i32.const 2)
  )
  (func $start (; 8 ;) (; has Stack IR ;) (type $v)
@@ -587,9 +588,7 @@
   )
   (if
    (i32.ne
-    (call $switch/doSwitchEmpty
-     (i32.const 0)
-    )
+    (call $switch/doSwitchEmpty)
     (i32.const 2)
    )
    (block
@@ -604,9 +603,7 @@
   )
   (if
    (i32.ne
-    (call $switch/doSwitchEmpty
-     (i32.const 1)
-    )
+    (call $switch/doSwitchEmpty)
     (i32.const 2)
    )
    (block
@@ -621,9 +618,7 @@
   )
   (if
    (i32.ne
-    (call $switch/doSwitchEmpty
-     (i32.const 2)
-    )
+    (call $switch/doSwitchEmpty)
     (i32.const 2)
    )
    (block
