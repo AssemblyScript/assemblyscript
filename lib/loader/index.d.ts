@@ -10,6 +10,17 @@ interface ImportsObject {
   }
 }
 
+export declare type JSWASMSafeInteropTypedArray =
+    Int8Array|Uint8Array|Uint8ClampedArray|
+    Int16Array|Uint16Array|
+    Int32Array|Uint32Array|Float32Array|
+    Float64Array;
+
+export interface TypedArrayRef<T extends JSWASMSafeInteropTypedArray> {
+    ptr: number;
+    view: T;
+}
+
 /** Utility mixed in by the loader. */
 interface ASUtil {
   /** An 8-bit signed integer view on the memory. */
@@ -36,6 +47,8 @@ interface ASUtil {
   newString(str: string): number;
   /** Gets a string from the module's memory by its pointer. */
   getString(ptr: number): string;
+  /** Allocates a new TypedArray in the module's memory and returns it's pointer and TypedArray object instance reference */
+  newTypedArray<T extends JSWASMSafeInteropTypedArray>(length: number, type: T): TypedArrayRef<T>;
 }
 
 /** Instantiates an AssemblyScript module using the specified imports. */
