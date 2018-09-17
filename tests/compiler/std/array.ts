@@ -614,21 +614,21 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 
 // Tests for default comparator
 
-var f32ArrayTyped: f32[] = [1.0, NaN, -Infinity, 1.00000001, 0.0, -1.0, -2.0, +Infinity];
-f32ArrayTyped.sort();
-assert(isArraysEqual<f32>(f32ArrayTyped, [-Infinity, -2.0, -1.0, 0.0, 1.0, 1.00000001, Infinity, NaN]));
+var f32Array: f32[] = [1.0, NaN, -Infinity, 1.00000001, 0.0, -1.0, -2.0, +Infinity];
+f32Array.sort();
+assert(isArraysEqual<f32>(f32Array, [-Infinity, -2.0, -1.0, 0.0, 1.0, 1.00000001, Infinity, NaN]));
 
-var f64ArrayTyped: f64[] = [1.0, NaN, -Infinity, 1.000000000000001, 0.0, -1.0, -2.0, +Infinity];
-f64ArrayTyped.sort();
-assert(isArraysEqual<f64>(f64ArrayTyped, [-Infinity, -2.0, -1.0, 0.0, 1.0, 1.000000000000001, Infinity, NaN]));
+var f64Array: f64[] = [1.0, NaN, -Infinity, 1.000000000000001, 0.0, -1.0, -2.0, +Infinity];
+f64Array.sort();
+assert(isArraysEqual<f64>(f64Array, [-Infinity, -2.0, -1.0, 0.0, 1.0, 1.000000000000001, Infinity, NaN]));
 
-var i32ArrayTyped: i32[] = [1, -2, -1, 0, 2];
-i32ArrayTyped.sort();
-assert(isArraysEqual<i32>(i32ArrayTyped, [-2, -1, 0, 1, 2]));
+var i32Array: i32[] = [1, -2, -1, 0, 2];
+i32Array.sort();
+assert(isArraysEqual<i32>(i32Array, [-2, -1, 0, 1, 2]));
 
-var u32ArrayTyped: u32[] = [1, 4294967295, 4294967294, 0, 2];
-u32ArrayTyped.sort();
-assert(isArraysEqual<u32>(u32ArrayTyped, [0, 1, 2, 4294967294, 4294967295]));
+var u32Array: u32[] = [1, 4294967295, 4294967294, 0, 2];
+u32Array.sort();
+assert(isArraysEqual<u32>(u32Array, [0, 1, 2, 4294967294, 4294967295]));
 
 var reversed0: i32[] = [];
 var reversed1: i32[] = [1];

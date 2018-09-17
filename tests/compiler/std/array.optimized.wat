@@ -43,10 +43,10 @@
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1 (mut i64) (i64.const 0))
- (global $std/array/f32ArrayTyped (mut i32) (i32.const 408))
- (global $std/array/f64ArrayTyped (mut i32) (i32.const 616))
- (global $std/array/i32ArrayTyped (mut i32) (i32.const 792))
- (global $std/array/u32ArrayTyped (mut i32) (i32.const 872))
+ (global $std/array/f32Array (mut i32) (i32.const 408))
+ (global $std/array/f64Array (mut i32) (i32.const 616))
+ (global $std/array/i32Array (mut i32) (i32.const 792))
+ (global $std/array/u32Array (mut i32) (i32.const 872))
  (global $std/array/reversed0 (mut i32) (i32.const 928))
  (global $std/array/reversed1 (mut i32) (i32.const 952))
  (global $std/array/reversed2 (mut i32) (i32.const 976))
@@ -4705,20 +4705,6 @@
   (local $4 f32)
   (local $5 f32)
   (if
-   (i32.eqz
-    (get_local $1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 311)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
-  (if
    (i32.le_s
     (tee_local $3
      (i32.load offset=4
@@ -5462,20 +5448,6 @@
   (local $3 i32)
   (local $4 f64)
   (local $5 f64)
-  (if
-   (i32.eqz
-    (get_local $1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 311)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
   (if
    (i32.le_s
     (tee_local $3
@@ -6250,20 +6222,6 @@
   (local $3 i32)
   (local $4 i32)
   (if
-   (i32.eqz
-    (get_local $1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 311)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
-  (if
    (i32.le_s
     (tee_local $2
      (i32.load offset=4
@@ -6784,20 +6742,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (if
-   (i32.eqz
-    (get_local $1)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 311)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
   (if
    (i32.le_s
     (tee_local $2
@@ -10517,13 +10461,13 @@
   )
   (drop
    (call $~lib/array/Array<f32>#sort|trampoline
-    (get_global $std/array/f32ArrayTyped)
+    (get_global $std/array/f32Array)
    )
   )
   (if
    (i32.eqz
     (call $std/array/isArraysEqual<f32>
-     (get_global $std/array/f32ArrayTyped)
+     (get_global $std/array/f32Array)
     )
    )
    (block
@@ -10541,13 +10485,13 @@
   )
   (drop
    (call $~lib/array/Array<f64>#sort|trampoline
-    (get_global $std/array/f64ArrayTyped)
+    (get_global $std/array/f64Array)
    )
   )
   (if
    (i32.eqz
     (call $std/array/isArraysEqual<f64>
-     (get_global $std/array/f64ArrayTyped)
+     (get_global $std/array/f64Array)
     )
    )
    (block
@@ -10565,13 +10509,13 @@
   )
   (drop
    (call $~lib/array/Array<i32>#sort|trampoline
-    (get_global $std/array/i32ArrayTyped)
+    (get_global $std/array/i32Array)
    )
   )
   (if
    (i32.eqz
     (call $std/array/isArraysEqual<i32>
-     (get_global $std/array/i32ArrayTyped)
+     (get_global $std/array/i32Array)
      (i32.const 832)
      (i32.const 0)
     )
@@ -10591,13 +10535,13 @@
   )
   (drop
    (call $~lib/array/Array<u32>#sort|trampoline
-    (get_global $std/array/u32ArrayTyped)
+    (get_global $std/array/u32Array)
    )
   )
   (if
    (i32.eqz
     (call $std/array/isArraysEqual<i32>
-     (get_global $std/array/u32ArrayTyped)
+     (get_global $std/array/u32Array)
      (i32.const 912)
      (i32.const 0)
     )
