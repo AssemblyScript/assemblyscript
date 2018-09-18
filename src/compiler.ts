@@ -6523,6 +6523,8 @@ export class Compiler extends DiagnosticEmitter {
     // if present, check that the constructor is compatible with object literals
     var ctor = classReference.constructorInstance;
     if (ctor) {
+      // TODO: if the constructor requires parameters, check whether these are given as part of the
+      // object literal and use them to call the ctor while not generating a store.
       if (ctor.signature.requiredParameters) {
         this.error(
           DiagnosticCode.Constructor_of_class_0_must_not_require_any_arguments,

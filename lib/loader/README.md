@@ -61,7 +61,7 @@ Instances are automatically populated with useful utility:
   A 64-bit float view on the memory.
 
 * **newString**(str: `string`): `number`<br />
-  Allocates a new string in the module's memory and returns its pointer. Requires `allocate_memory` to be exported from your module's entry file, i.e.:
+  Allocates a new string in the module's memory and returns its pointer. Requires `memory.allocate` to be exported from your module's entry file, i.e.:
 
   ```js
   import "allocator/tlsf";
@@ -70,6 +70,18 @@ Instances are automatically populated with useful utility:
 
 * **getString**(ptr: `number`): `string`<br />
   Gets a string from the module's memory by its pointer.
+
+* **newArray**(view: `TypedArray`, length?: `number`, unsafe?: `boolean`): `number`<br />
+  Copies a typed array into the module's memory and returns its pointer.
+
+* **newArray**(ctor: `TypedArrayConstructor`, length: `number`): `number`<br />
+  Creates a typed array in the module's memory and returns its pointer.
+
+* **getArray**(ctor: `TypedArrayConstructor`, ptr: `number`): `TypedArray`<br />
+  Gets a view on a typed array in the module's memory by its pointer.
+
+* **freeArray**(ptr: `number`): `void`<br />
+  Frees a typed array in the module's memory. Must not be accessed anymore afterwards.
 
 <sup>1</sup> This feature has not yet landed in any VM as of this writing.
 
@@ -125,7 +137,7 @@ myModule.F64[ptrToFloat64 >>> 3] = newValue;
 var str = "Hello world!";
 var ptr = module.newString(str);
 
-// Disposing a string that is no longer needed (requires free_memory to be exported)
+// Disposing a string that is no longer needed (requires memory.free to be exported)
 module.memory.free(ptr);
 
 // Obtaining a string, i.e. as returned by an export

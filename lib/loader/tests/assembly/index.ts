@@ -1,4 +1,4 @@
-import "allocator/arena";
+import "allocator/tlsf";
 
 export { memory };
 
@@ -43,4 +43,10 @@ export class Car {
   dispose(): void {
     memory.free(changetype<usize>(this));
   }
+}
+
+export function sum(arr: Int32Array): i32 {
+  var v = 0;
+  for (let i = 0, k = arr.length; i < k; ++i) v += arr[i];
+  return v;
 }
