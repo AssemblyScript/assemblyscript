@@ -752,4 +752,7 @@
   )
   (call $~lib/allocator/arena/__memory_free)
  )
+ (func $null (; 6 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

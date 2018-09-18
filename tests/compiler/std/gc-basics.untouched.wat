@@ -29,10 +29,10 @@
  (global $std/gc-basics/obj2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 60))
- (table 3 3 anyfunc)
- (elem (i32.const 0) $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark $~lib/string/String~gc)
+ (table 4 4 anyfunc)
+ (elem (i32.const 0) $null $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark $~lib/string/String~gc)
  (memory $0 1)
- (data (i32.const 8) "\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s\00")
+ (data (i32.const 8) "\00\00\00\00\00\00\00\00\03\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s\00")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-basics/main))
@@ -407,7 +407,7 @@
      )
      (block
       (call $~iterateRoots
-       (i32.const 1)
+       (i32.const 2)
       )
       (set_global $~lib/collector/itcm/state
        (get_global $~lib/collector/itcm/State.MARK)
@@ -453,7 +453,7 @@
       )
       (block
        (call $~iterateRoots
-        (i32.const 1)
+        (i32.const 2)
        )
        (set_local $0
         (call $~lib/collector/itcm/ManagedObject#get:next
@@ -683,7 +683,7 @@
   (set_global $std/gc-basics/obj
    (call $~lib/collector/itcm/__gc_allocate
     (i32.const 4)
-    (i32.const 0)
+    (i32.const 1)
    )
   )
   (i32.store
@@ -757,7 +757,7 @@
     (i32.eqz
      (i32.eq
       (get_local $3)
-      (i32.const 0)
+      (i32.const 1)
      )
     )
     (block
@@ -821,7 +821,9 @@
   )
   (call $~lib/gc/gc.collect)
  )
- (func $~iterateRoots (; 20 ;) (type $iv) (param $0 i32)
+ (func $null (; 20 ;) (type $v)
+ )
+ (func $~iterateRoots (; 21 ;) (type $iv) (param $0 i32)
   (call_indirect (type $iv)
    (get_global $std/gc-basics/obj)
    (get_local $0)

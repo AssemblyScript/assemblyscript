@@ -1,5 +1,6 @@
 (module
  (type $i (func (result i32)))
+ (type $v (func))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "getValue" (func $named-import-default/getValue))
@@ -8,5 +9,8 @@
  )
  (func $named-import-default/getValue (; 1 ;) (; has Stack IR ;) (type $i) (result i32)
   (call $named-export-default/get3)
+ )
+ (func $null (; 2 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

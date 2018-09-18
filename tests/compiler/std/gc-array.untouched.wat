@@ -31,13 +31,13 @@
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
  (global $~started (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 180))
- (table 6 6 anyfunc)
- (elem (i32.const 0) $~lib/arraybuffer/ArrayBuffer~gc $~lib/array/Array<Foo>~gc $~lib/collector/itcm/__gc_mark $std/gc-array/Foo~gc $~lib/string/String~gc $~lib/internal/arraybuffer/__gc)
+ (table 7 7 anyfunc)
+ (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~gc $~lib/array/Array<Foo>~gc $~lib/collector/itcm/__gc_mark $std/gc-array/Foo~gc $~lib/string/String~gc $~lib/internal/arraybuffer/__gc)
  (memory $0 1)
- (data (i32.const 8) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 32) "\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00")
- (data (i32.const 56) "\00\00\00\00\00\00\00\00\04\00\00\00\00\00\00\00\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 104) "\00\00\00\00\00\00\00\00\04\00\00\00\00\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 8) "\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 32) "\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00")
+ (data (i32.const 56) "\00\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 104) "\00\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-array/main))
@@ -473,7 +473,7 @@
      )
      (block
       (call $~iterateRoots
-       (i32.const 2)
+       (i32.const 3)
       )
       (set_global $~lib/collector/itcm/state
        (get_global $~lib/collector/itcm/State.MARK)
@@ -519,7 +519,7 @@
       )
       (block
        (call $~iterateRoots
-        (i32.const 2)
+        (i32.const 3)
        )
        (set_local $0
         (call $~lib/collector/itcm/ManagedObject#get:next
@@ -1114,7 +1114,7 @@
     (call $~lib/internal/arraybuffer/computeSize
      (get_local $0)
     )
-    (i32.const 5)
+    (i32.const 6)
    )
   )
   (i32.store
@@ -3570,7 +3570,7 @@
     (set_local $0
      (call $~lib/collector/itcm/__gc_allocate
       (i32.const 0)
-      (i32.const 3)
+      (i32.const 4)
      )
     )
     (get_local $0)
@@ -3584,7 +3584,7 @@
     (set_local $1
      (call $~lib/collector/itcm/__gc_allocate
       (i32.const 0)
-      (i32.const 3)
+      (i32.const 4)
      )
     )
     (get_local $1)
@@ -3598,7 +3598,7 @@
     (set_local $2
      (call $~lib/collector/itcm/__gc_allocate
       (i32.const 0)
-      (i32.const 3)
+      (i32.const 4)
      )
     )
     (get_local $2)
@@ -3606,7 +3606,9 @@
   )
   (call $~lib/gc/gc.collect)
  )
- (func $~iterateRoots (; 31 ;) (type $iv) (param $0 i32)
+ (func $null (; 31 ;) (type $v)
+ )
+ (func $~iterateRoots (; 32 ;) (type $iv) (param $0 i32)
   (call_indirect (type $iv)
    (get_global $std/gc-array/arr)
    (get_local $0)

@@ -2,6 +2,7 @@
  (type $i (func (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $v (func))
  (global $../../examples/i64-polyfill/assembly/i64/lo (mut i32) (i32.const 0))
  (global $../../examples/i64-polyfill/assembly/i64/hi (mut i32) (i32.const 0))
  (memory $0 0)
@@ -1053,5 +1054,8 @@
   (set_global $../../examples/i64-polyfill/assembly/i64/hi
    (i32.const 0)
   )
+ )
+ (func $null (; 31 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

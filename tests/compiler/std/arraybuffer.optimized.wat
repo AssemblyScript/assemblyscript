@@ -2530,4 +2530,7 @@
    )
   )
  )
+ (func $null (; 11 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

@@ -327,4 +327,7 @@
    (get_local $0)
   )
  )
+ (func $null (; 9 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

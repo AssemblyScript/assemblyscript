@@ -14,4 +14,7 @@
  (func $inlining-recursive/bar (; 2 ;) (; has Stack IR ;) (type $v)
   (call $inlining-recursive/baz)
  )
+ (func $null (; 3 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

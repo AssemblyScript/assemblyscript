@@ -458,12 +458,6 @@ declare class Array<T> {
   sort(comparator?: (a: T, b: T) => i32): this;
 }
 
-/** Class representing a C-like array of values of type `T` with limited capabilities. */
-declare class CArray<T> {
-  [key: number]: T;
-  private constructor();
-}
-
 /** Class representing a sequence of characters. */
 declare class String {
 

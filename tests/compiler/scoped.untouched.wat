@@ -5,6 +5,8 @@
  (global $scoped/aConstant i32 (i32.const 3))
  (global $scoped/aStartFunctionLocal (mut i32) (i32.const 2))
  (global $HEAP_BASE i32 (i32.const 8))
+ (table 1 1 anyfunc)
+ (elem (i32.const 0) $null)
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
@@ -81,5 +83,7 @@
   (call $scoped/fn
    (i32.const 42)
   )
+ )
+ (func $null (; 2 ;) (type $v)
  )
 )

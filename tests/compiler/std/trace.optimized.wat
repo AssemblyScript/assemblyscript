@@ -101,4 +101,7 @@
    (f64.const 5.5)
   )
  )
+ (func $null (; 3 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

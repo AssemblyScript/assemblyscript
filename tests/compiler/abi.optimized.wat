@@ -53,4 +53,7 @@
    )
   )
  )
+ (func $null (; 6 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

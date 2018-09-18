@@ -52633,4 +52633,7 @@
    )
   )
  )
+ (func $null (; 160 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
 )

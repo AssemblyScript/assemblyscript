@@ -189,7 +189,10 @@
    (get_global $~lib/allocator/arena/startOffset)
   )
  )
- (func $exports/subOpt|trampoline (; 10 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $null (; 10 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
+ (func $exports/subOpt|trampoline (; 11 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -211,12 +214,12 @@
    (get_local $1)
   )
  )
- (func $~setargc (; 11 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~setargc (; 12 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (set_global $~argc
    (get_local $0)
   )
  )
- (func $exports/Car#constructor|trampoline (; 12 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 13 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange

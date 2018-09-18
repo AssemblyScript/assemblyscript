@@ -1,5 +1,6 @@
 (module
  (type $iv (func (param i32)))
+ (type $v (func))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "test" (func $class-extends/test))
@@ -22,5 +23,8 @@
    (get_local $0)
    (i32.const 3)
   )
+ )
+ (func $null (; 1 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

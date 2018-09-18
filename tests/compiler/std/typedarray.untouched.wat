@@ -35,8 +35,8 @@
  (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
  (global $std/typedarray/MAX_F64LENGTH i32 (i32.const 134217727))
  (global $HEAP_BASE i32 (i32.const 172))
- (table 1 1 anyfunc)
- (elem (i32.const 0) $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|0)
+ (table 2 2 anyfunc)
+ (elem (i32.const 0) $null $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1)
  (memory $0 1)
  (data (i32.const 8) "\11\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 48) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
@@ -3666,7 +3666,7 @@
    (get_local $0)
   )
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|0 (; 26 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1 (; 26 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   (set_local $2
@@ -3727,7 +3727,7 @@
    (set_local $1
     (block $~lib/internal/array/defaultComparator<f64>|inlined.0 (result i32)
      (br $~lib/internal/array/defaultComparator<f64>|inlined.0
-      (i32.const 0)
+      (i32.const 1)
      )
     )
    )
@@ -4649,5 +4649,7 @@
     (get_global $std/typedarray/MAX_F64LENGTH)
    )
   )
+ )
+ (func $null (; 33 ;) (type $v)
  )
 )

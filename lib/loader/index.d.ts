@@ -10,6 +10,26 @@ interface ImportsObject {
   }
 }
 
+type TypedArray
+  = Int8Array
+  | Uint8Array
+  | Int16Array
+  | Uint16Array
+  | Int32Array
+  | Uint32Array
+  | Float32Array
+  | Float64Array;
+
+type TypedArrayConstructor
+  = Int8ArrayConstructor
+  | Uint8ArrayConstructor
+  | Int16ArrayConstructor
+  | Uint16ArrayConstructor
+  | Int32ArrayConstructor
+  | Uint32ArrayConstructor
+  | Float32ArrayConstructor
+  | Float32ArrayConstructor;
+
 /** Utility mixed in by the loader. */
 interface ASUtil {
   /** An 8-bit signed integer view on the memory. */
@@ -36,6 +56,14 @@ interface ASUtil {
   newString(str: string): number;
   /** Gets a string from the module's memory by its pointer. */
   getString(ptr: number): string;
+  /** Copies a typed array into the module's memory and returns its pointer. */
+  newArray(view: TypedArray, length?: number): number;
+  /** Creates a typed array in the module's memory and returns its pointer. */
+  newArray(ctor: TypedArrayConstructor, length: number, unsafe?: boolean): number;
+  /** Gets a view on a typed array in the module's memory by its pointer. */
+  getArray(ctor: TypedArrayConstructor, ptr: number): TypedArray;
+  /** Frees a typed array in the module's memory. Must not be accessed anymore afterwards. */
+  freeArray(ptr: number): void;
 }
 
 /** Instantiates an AssemblyScript module using the specified imports. */

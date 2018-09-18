@@ -19,6 +19,8 @@
  (global $enum/SelfReference.ONE i32 (i32.const 1))
  (global $enum/enumType (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
+ (table 1 1 anyfunc)
+ (elem (i32.const 0) $null)
  (memory $0 0)
  (export "memory" (memory $0))
  (export "Implicit.ZERO" (global $enum/Implicit.ZERO))
@@ -55,5 +57,7 @@
   (drop
    (get_global $enum/NonConstant.ONE)
   )
+ )
+ (func $null (; 2 ;) (type $v)
  )
 )
