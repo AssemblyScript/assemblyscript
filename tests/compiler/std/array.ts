@@ -10,7 +10,53 @@ function internalCapacity<T>(array: Array<T>): i32 {
   return buffer.byteLength >> alignof<T>();
 }
 
+// Checks if two arrays are equal
+function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
+  if (!len) {
+    len = a.length;
+    if (len != b.length) return false;
+    if (a === b) return true;
+  }
+  for (let i = 0; i < len; i++) {
+    if (isFloat<T>()) {
+      if (isNaN(a[i]) == isNaN(b[i])) continue;
+    }
+    if (a[i] != b[i]) return false;
+  }
+  return true;
+}
+
 var arr = new Array<i32>();
+
+// Array#fill //////////////////////////////////////////////////////////////////////////////////////
+
+var arr8: u8[] = [1, 2, 3, 4, 5];
+
+arr8.fill(1, 1, 3);
+assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 1, 4, 5]));
+
+arr8.fill(0);
+assert(isArraysEqual<u8>(arr8, <u8[]>[0, 0, 0, 0, 0]));
+
+arr8.fill(1, 0, -3);
+assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 0, 0]));
+
+arr8.fill(2, -2);
+assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 2, 2]));
+
+var arr32: u32[] = [1, 2, 3, 4, 5];
+
+arr32.fill(1, 1, 3);
+assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 1, 4, 5]));
+
+arr32.fill(0);
+assert(isArraysEqual<u32>(arr32, <u32[]>[0, 0, 0, 0, 0]));
+
+arr32.fill(1, 0, -3);
+assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 0, 0]));
+
+arr32.fill(2, -2);
+assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 2, 2]));
 
 // Array#push/pop //////////////////////////////////////////////////////////////////////////////////
 
@@ -527,21 +573,6 @@ arr.push(3);
 function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = defaultComparator<T>()): bool {
   for (let i: i32 = 1, len: i32 = data.length; i < len; i++) {
     if (comparator(data[i - 1], data[i]) > 0) return false;
-  }
-  return true;
-}
-
-// Checks if two arrays are equal
-function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
-  if (!len) {
-    if (a.length != b.length) return false;
-    len = a.length;
-  }
-  for (let i = 0; i < len; i++) {
-    if (isFloat<T>()) {
-      if (isNaN(a[i]) && isNaN(a[i]) == isNaN(b[i])) continue;
-    }
-    if (a[i] != b[i]) return false;
   }
   return true;
 }

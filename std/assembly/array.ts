@@ -99,6 +99,25 @@ export class Array<T> {
     if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
   }
 
+  fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    var buffer = this.buffer_;
+    var len    = this.length_;
+    start = start < 0 ? max(len + start, 0) : min(start, len);
+    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+    if (sizeof<T>() == 1) {
+      memory.fill(
+        changetype<usize>(buffer) + start + HEADER_SIZE,
+        <u8>value,
+        <usize>(end - start)
+      );
+    } else {
+      for (; start < end; ++start) {
+        storeUnsafe<T,T>(buffer, start, value);
+      }
+    }
+    return this;
+  }
+
   includes(searchElement: T, fromIndex: i32 = 0): bool {
     var length = this.length_;
     if (length == 0 || fromIndex >= length) return false;

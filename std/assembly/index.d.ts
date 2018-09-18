@@ -436,6 +436,7 @@ declare class Array<T> {
   length: i32;
   /** Constructs a new array. */
   constructor(capacity?: i32);
+  fill(value: T, start?: i32, end?: i32): this;
   every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   findIndex(predicate: (element: T, index: i32, array?: Array<T>) => bool): i32;
   includes(searchElement: T, fromIndex?: i32): bool;
