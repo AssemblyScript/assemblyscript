@@ -67,8 +67,8 @@ export abstract class TypedArray<T,V> {
     var buffer = this.buffer;
     var byteOffset = this.byteOffset;
     var len = this.length;
-    start = start < 0 ? max(len + start, byteOffset >> alignof<T>()) : min(start, len);
-    end   = end   < 0 ? max(len + end,   byteOffset >> alignof<T>()) : min(end,   len);
+    start = start < 0 ? max(len + start, 0) : min(start, len);
+    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
     if (sizeof<T>() == 1) {
       memory.fill(
         changetype<usize>(buffer) + start + byteOffset + AB_HEADER_SIZE,
