@@ -361,26 +361,31 @@ export class Array<T> {
   join(separator: string = ","): string {
     var result = "";
     var buffer = this.buffer_;
-    var len    = this.length_ - 1;
-    if (len < 0) return "";
+    var lastIndex = this.length_ - 1;
+    if (lastIndex < 0) return "";
     if (isInteger<T>()) {
-      for (let i = 0; i < len; ++i) {
+      for (let i = 0; i < lastIndex; ++i) {
         result += itoa<T>(loadUnsafe<T,T>(buffer, i)) + separator;
       }
-      result += itoa<T>(loadUnsafe<T,T>(buffer, len));
+      result += itoa<T>(loadUnsafe<T,T>(buffer, lastIndex));
     } else if (isFloat<T>()) {
       // TODO
     } else if (isString<T>()) {
       let value: T;
-      for (let i = 0; i < len; ++i) {
+      for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) result += value;
         result += separator;
       }
-      value = loadUnsafe<T,T>(buffer, len);
+      value = loadUnsafe<T,T>(buffer, lastIndex);
       if (value) result += value;
-    } else if (isReference<T>()) {
-      // TODO
+    } else if (isArray<T>()) {
+      result += this.join(separator);
+    } else { // References
+      for (let i = 0; i < lastIndex; ++i) {
+        result += "[object Object]" + separator;
+      }
+      result += "[object Object]";
     }
     return result;
   }
