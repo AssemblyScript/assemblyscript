@@ -1,5 +1,3 @@
-/* tslint:disable:no-unsafe-any */
-
 import {
   MAX_BLENGTH,
   HEADER_SIZE,
@@ -385,11 +383,11 @@ export class Array<T> {
       let value: T;
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
-        if (value) result += value.join(separator);
+        if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
         result += separator;
       }
       value = loadUnsafe<T,T>(buffer, lastIndex);
-      if (value) result += value.join(separator);
+      if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
     } else { // References
       for (let i = 0; i < lastIndex; ++i) {
         result += "[object Object]" + separator;
