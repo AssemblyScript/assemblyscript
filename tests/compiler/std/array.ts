@@ -730,3 +730,25 @@ assert(isArraysEqual<string>(randomStringsActual, randomStringsExpected));
 
 var randomStrings400 = createRandomStringArray(400);
 assertSorted<string>(randomStrings400, (a: string, b: string): i32 => <i32>(a > b) - <i32>(a < b));
+
+
+// Array#toString //////////////////////////////////////////////////////////////////////////////////
+
+assert(reversed0.toString() == "");
+assert(reversed1.toString() == "1");
+assert(reversed2.toString() == "1,2");
+assert(reversed4.toString() == "0,1,2,3");
+
+var i8Arr: i8[] = [1, -1, 0];
+assert(i8Arr.toString() == "1,-1,0");
+
+var u16Arr: u16[] = [1, 0xFFFF, 0];
+assert(u16Arr.toString() == "1,65535,0");
+
+var u64Arr: u64[] = [1, 0xFFFFFFFFFFFFFFFF, 0];
+assert(u64Arr.toString() == "1,18446744073709551615,0");
+
+assert(randomStringsExpected.toString() == ",a,a,ab,b,ba,");
+
+var strArr: string[] = ['1', '2', null, '4'];
+assert(strArr.toString() == "1,2,,4");

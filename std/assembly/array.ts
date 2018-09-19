@@ -13,6 +13,8 @@ import {
   weakHeapSort
 } from "./internal/array";
 
+import { itoa } from "./internal/itoa";
+
 export class Array<T> {
 
   /* @internal */ buffer_: ArrayBuffer;
@@ -354,6 +356,31 @@ export class Array<T> {
       }
       return this;
     }
+  }
+
+  toString(): string {
+    var result = "";
+    var buffer = this.buffer_;
+    var len    = this.length_ - 1;
+    if (len < 0) return "";
+    if (isInteger<T>()) {
+      for (let i = 0; i < len; ++i) {
+        result += itoa<T>(loadUnsafe<T,T>(buffer, i)) + ",";
+      }
+      result += itoa<T>(loadUnsafe<T,T>(buffer, len));
+    } else if (isFloat<T>()) {
+      // TODO
+    } else if (isString<T>()) {
+      for (let i = 0; i < len; ++i) {
+        let value = loadUnsafe<T,T>(buffer, i);
+        if (value) result += value;
+        result += ",";
+      }
+      result += loadUnsafe<T,T>(buffer, len) || "";
+    } else if (isReference<T>()) {
+      // TODO
+    }
+    return result;
   }
 
   private __gc(): void {
