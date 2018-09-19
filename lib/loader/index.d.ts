@@ -66,16 +66,8 @@ interface ASUtil {
   getArray(ctor: TypedArrayConstructor, ptr: number): TypedArray;
   /** Frees a typed array in the module's memory. Must not be accessed anymore afterwards. */
   freeArray(ptr: number): void;
-  /** Gets a function with 0 parameters from the module's memory by its pointer. */
-  getFunction0(ptr: number): () => any;
-  /** Gets a function with 1 parameters from the module's memory by its pointer. */
-  getFunction1(ptr: number): (p1: any) => any;
-  /** Gets a function with 2 parameters from the module's memory by its pointer. */
-  getFunction2(ptr: number): (p1: any, p2: any) => any;
-  /** Gets a function with 3 parameters from the module's memory by its pointer. */
-  getFunction3(ptr: number): (p1: any, p2: any, p3: any) => any;
-  /** Gets a function with 4 parameters from the module's memory by its pointer. */
-  getFunction4(ptr: number): (p1: any, p2: any, p3: any, p4: any) => any;
+  /** Gets a function from the module's memory by its pointer. Precising the nbArg will do a check. */
+  getFunction(ptr: number, nbArg?: number): (...params: any[]) => any;
 }
 
 /** Instantiates an AssemblyScript module using the specified imports. */

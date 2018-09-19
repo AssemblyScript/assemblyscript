@@ -86,23 +86,9 @@ Instances are automatically populated with useful utility:
 * **freeArray**(ptr: `number`): `void`<br />
   Frees a typed array in the module's memory. Must not be accessed anymore afterwards.
 
-* **getFunction**(ptr: `number`): `(...args: any) => any`<br />
-  Gets a function in the module's memory by its pointer. Unsafe.
-  
-* **getFunction0**(ptr: `number`): `() => any`<br />
-  Gets a function with 0 argument in the module's memory by its pointer.
-  
-* **getFunction1**(ptr: `number`): `(p1: any) => any`<br />
-  Gets a function with 1 argument in the module's memory by its pointer.
-  
-* **getFunction2**(ptr: `number`): `(p1: any, p2: any) => any`<br />
-  Gets a function with 2 arguments in the module's memory by its pointer.
-  
-* **getFunction3**(ptr: `number`): `(p1: any, p2: any, p3: any) => any`<br />
-  Gets a function with 3 arguments in the module's memory by its pointer.
-  
-* **getFunction4**(ptr: `number`): `(p1: any, p2: any, p3: any, p4: any) => any`<br />
-  Gets a function with 4 arguments in the module's memory by its pointer.
+* **getFunction**(ptr: `number`, nbArg: `?number`): `(...args: any[]) => any`<br />
+  Gets a function from the module's memory by its pointer.
+  Precising the nbArg will do a check of the number of arguments, throws `Error` in case of mismatch.
 
 <sup>1</sup> This feature has not yet landed in any VM as of this writing.
 
