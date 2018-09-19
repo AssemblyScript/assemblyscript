@@ -1,3 +1,5 @@
+/* tslint:disable:no-unsafe-any */
+
 import {
   MAX_BLENGTH,
   HEADER_SIZE,
