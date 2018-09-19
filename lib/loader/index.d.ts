@@ -57,7 +57,7 @@ interface ASUtil {
   /** Gets a string from the module's memory by its pointer. */
   getString(ptr: number): string;
   /** Frees a string in the module's memory by its pointer. */
-  freeString(ptr): void;
+  freeString(ptr: number): void;
   /** Copies a typed array into the module's memory and returns its pointer. */
   newArray(view: TypedArray, length?: number): number;
   /** Creates a typed array in the module's memory and returns its pointer. */
@@ -67,15 +67,15 @@ interface ASUtil {
   /** Frees a typed array in the module's memory. Must not be accessed anymore afterwards. */
   freeArray(ptr: number): void;
   /** Gets a function with 0 parameters from the module's memory by its pointer. */
-  getFunction0(ptr): () => any;
+  getFunction0(ptr: number): () => any;
   /** Gets a function with 1 parameters from the module's memory by its pointer. */
-  getFunction1(ptr): (p1: any) => any;
+  getFunction1(ptr: number): (p1: any) => any;
   /** Gets a function with 2 parameters from the module's memory by its pointer. */
-  getFunction2(ptr): (p1: any, p2: any) => any;
+  getFunction2(ptr: number): (p1: any, p2: any) => any;
   /** Gets a function with 3 parameters from the module's memory by its pointer. */
-  getFunction3(ptr): (p1: any, p2: any, p3: any) => any;
+  getFunction3(ptr: number): (p1: any, p2: any, p3: any) => any;
   /** Gets a function with 4 parameters from the module's memory by its pointer. */
-  getFunction4(ptr): (p1: any, p2: any, p3: any, p4: any) => any;
+  getFunction4(ptr: number): (p1: any, p2: any, p3: any, p4: any) => any;
 }
 
 /** Instantiates an AssemblyScript module using the specified imports. */
