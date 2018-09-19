@@ -380,7 +380,14 @@ export class Array<T> {
       value = loadUnsafe<T,T>(buffer, lastIndex);
       if (value) result += value;
     } else if (isArray<T>()) {
-      result += this.join(separator);
+      let value: T;
+      for (let i = 0; i < lastIndex; ++i) {
+        value = loadUnsafe<T,T>(buffer, i);
+        if (value) result += value.join(separator);
+        result += separator;
+      }
+      value = loadUnsafe<T,T>(buffer, lastIndex);
+      if (value) result += value.join(separator);
     } else { // References
       for (let i = 0; i < lastIndex; ++i) {
         result += "[object Object]" + separator;

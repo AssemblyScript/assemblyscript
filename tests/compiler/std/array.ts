@@ -752,3 +752,6 @@ assert(randomStringsExpected.toString() == ",a,a,ab,b,ba,");
 
 var strArr: string[] = ['1', '2', null, '4'];
 assert(strArr.toString() == "1,2,,4");
+
+var subArr: i32[][] = [[1,2], [3,4]];
+assert(subArr.toString() == "1,2,3,4");
