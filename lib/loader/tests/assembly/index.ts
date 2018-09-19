@@ -50,3 +50,43 @@ export function sum(arr: Int32Array): i32 {
   for (let i = 0, k = arr.length; i < k; ++i) v += arr[i];
   return v;
 }
+
+export function callback0(): i32 {
+    return 42;
+}
+
+export function getCallback0(): () => i32 {
+  return callback0;
+}
+
+export function callback1(p1: i32) : i32 {
+  return p1 + 42;
+}
+
+export function getCallback1(): (p1: i32) => i32 {
+  return callback1;
+}
+
+export function callback2(p1: i32, p2: i32) : i32 {
+    return p1 + p2;
+}
+
+export function getCallback2(): (p1: i32, p2: i32) => i32 {
+    return callback2;
+}
+
+export function callback3(p1: i32, p2: i32, p3: i32) : i32 {
+    return p1 + p2 + p3;
+}
+
+export function getCallback3(): (p1: i32, p2: i32, p3: i32) => i32 {
+    return callback3;
+}
+
+export function callback4(p1: i32, p2: i32, p3: i32, p4: i32) : i32 {
+    return p1 + p2 + p3 + p4;
+}
+
+export function getCallback4(): (p1: i32, p2: i32, p3: i32, p4: i32) => i32 {
+    return callback4;
+}
