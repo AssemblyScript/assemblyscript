@@ -12,6 +12,7 @@ assert(Float64Array.BYTES_PER_ELEMENT == 8);
 
 
 function isInt8ArrayEqual(a: Int8Array, b: Array<i8>): bool {
+  if (a.length != b.length) return false;
   for (let i = 0, len = a.length; i < len; i++) {
     if (a[i] != b[i]) return false;
   }
@@ -19,6 +20,7 @@ function isInt8ArrayEqual(a: Int8Array, b: Array<i8>): bool {
 }
 
 function isInt32ArrayEqual(a: Int32Array, b: Array<i32>): bool {
+  if (a.length != b.length) return false;
   for (let i = 0, len = a.length; i < len; i++) {
     if (a[i] != b[i]) return false;
   }

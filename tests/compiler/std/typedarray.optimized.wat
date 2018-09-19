@@ -783,7 +783,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 33)
+     (i32.const 35)
      (i32.const 2)
     )
     (unreachable)
@@ -800,7 +800,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 34)
+     (i32.const 36)
      (i32.const 2)
     )
     (unreachable)
@@ -822,7 +822,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 35)
+     (i32.const 37)
      (i32.const 2)
     )
     (unreachable)
@@ -835,45 +835,6 @@
       (get_local $0)
      )
     )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 38)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.load offset=8
-     (get_local $1)
-    )
-    (get_local $0)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 39)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.sub
-     (i32.load offset=8
-      (get_local $1)
-     )
-     (i32.load offset=4
-      (get_local $1)
-     )
-    )
-    (get_local $0)
    )
    (block
     (call $~lib/env/abort
@@ -886,24 +847,6 @@
    )
   )
   (if
-   (i32.load offset=4
-    (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i8,i32>#constructor
-      (get_local $0)
-     )
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 43)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
    (i32.ne
     (i32.load offset=8
      (get_local $1)
@@ -914,7 +857,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 44)
+     (i32.const 41)
      (i32.const 2)
     )
     (unreachable)
@@ -936,7 +879,64 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
+     (i32.const 42)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.load offset=4
+    (tee_local $1
+     (call $~lib/internal/typedarray/TypedArray<i8,i32>#constructor
+      (get_local $0)
+     )
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
      (i32.const 45)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (i32.load offset=8
+     (get_local $1)
+    )
+    (get_local $0)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 46)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (i32.sub
+     (i32.load offset=8
+      (get_local $1)
+     )
+     (i32.load offset=4
+      (get_local $1)
+     )
+    )
+    (get_local $0)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 47)
      (i32.const 2)
     )
     (unreachable)
@@ -949,51 +949,6 @@
       (get_local $0)
      )
     )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 48)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.load offset=8
-     (get_local $1)
-    )
-    (i32.shl
-     (get_local $0)
-     (i32.const 1)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 49)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.ne
-    (i32.shr_s
-     (i32.sub
-      (i32.load offset=8
-       (get_local $1)
-      )
-      (i32.load offset=4
-       (get_local $1)
-      )
-     )
-     (i32.const 1)
-    )
-    (get_local $0)
    )
    (block
     (call $~lib/env/abort
@@ -1006,24 +961,6 @@
    )
   )
   (if
-   (i32.load offset=4
-    (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i16,i32>#constructor
-      (get_local $0)
-     )
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 53)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
    (i32.ne
     (i32.load offset=8
      (get_local $1)
@@ -1037,7 +974,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 54)
+     (i32.const 51)
      (i32.const 2)
     )
     (unreachable)
@@ -1057,6 +994,24 @@
      (i32.const 1)
     )
     (get_local $0)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 52)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.load offset=4
+    (tee_local $1
+     (call $~lib/internal/typedarray/TypedArray<i16,i32>#constructor
+      (get_local $0)
+     )
+    )
    )
    (block
     (call $~lib/env/abort
@@ -1069,38 +1024,20 @@
    )
   )
   (if
-   (i32.load offset=4
-    (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i32,i32>#constructor
-      (get_local $0)
-     )
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 58)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
    (i32.ne
     (i32.load offset=8
      (get_local $1)
     )
     (i32.shl
      (get_local $0)
-     (i32.const 2)
+     (i32.const 1)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 59)
+     (i32.const 56)
      (i32.const 2)
     )
     (unreachable)
@@ -1117,9 +1054,27 @@
        (get_local $1)
       )
      )
-     (i32.const 2)
+     (i32.const 1)
     )
     (get_local $0)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 57)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.load offset=4
+    (tee_local $1
+     (call $~lib/internal/typedarray/TypedArray<i32,i32>#constructor
+      (get_local $0)
+     )
+    )
    )
    (block
     (call $~lib/env/abort
@@ -1132,24 +1087,6 @@
    )
   )
   (if
-   (i32.load offset=4
-    (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i32,i32>#constructor
-      (get_local $0)
-     )
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 63)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
    (i32.ne
     (i32.load offset=8
      (get_local $1)
@@ -1163,7 +1100,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 64)
+     (i32.const 61)
      (i32.const 2)
     )
     (unreachable)
@@ -1183,6 +1120,24 @@
      (i32.const 2)
     )
     (get_local $0)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 62)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.load offset=4
+    (tee_local $1
+     (call $~lib/internal/typedarray/TypedArray<i32,i32>#constructor
+      (get_local $0)
+     )
+    )
    )
    (block
     (call $~lib/env/abort
@@ -1195,38 +1150,20 @@
    )
   )
   (if
-   (i32.load offset=4
-    (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i64,i64>#constructor
-      (get_local $0)
-     )
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 68)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
    (i32.ne
     (i32.load offset=8
      (get_local $1)
     )
     (i32.shl
      (get_local $0)
-     (i32.const 3)
+     (i32.const 2)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 69)
+     (i32.const 66)
      (i32.const 2)
     )
     (unreachable)
@@ -1243,9 +1180,27 @@
        (get_local $1)
       )
      )
-     (i32.const 3)
+     (i32.const 2)
     )
     (get_local $0)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 67)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.load offset=4
+    (tee_local $1
+     (call $~lib/internal/typedarray/TypedArray<i64,i64>#constructor
+      (get_local $0)
+     )
+    )
    )
    (block
     (call $~lib/env/abort
@@ -1258,24 +1213,6 @@
    )
   )
   (if
-   (i32.load offset=4
-    (tee_local $1
-     (call $~lib/internal/typedarray/TypedArray<i64,i64>#constructor
-      (get_local $0)
-     )
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 73)
-     (i32.const 2)
-    )
-    (unreachable)
-   )
-  )
-  (if
    (i32.ne
     (i32.load offset=8
      (get_local $1)
@@ -1289,7 +1226,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 74)
+     (i32.const 71)
      (i32.const 2)
     )
     (unreachable)
@@ -1314,7 +1251,70 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
+     (i32.const 72)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.load offset=4
+    (tee_local $1
+     (call $~lib/internal/typedarray/TypedArray<i64,i64>#constructor
+      (get_local $0)
+     )
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
      (i32.const 75)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (i32.load offset=8
+     (get_local $1)
+    )
+    (i32.shl
+     (get_local $0)
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 76)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (i32.shr_s
+     (i32.sub
+      (i32.load offset=8
+       (get_local $1)
+      )
+      (i32.load offset=4
+       (get_local $1)
+      )
+     )
+     (i32.const 3)
+    )
+    (get_local $0)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 77)
      (i32.const 2)
     )
     (unreachable)
@@ -1332,7 +1332,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 78)
+     (i32.const 80)
      (i32.const 2)
     )
     (unreachable)
@@ -1352,7 +1352,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 79)
+     (i32.const 81)
      (i32.const 2)
     )
     (unreachable)
@@ -1377,7 +1377,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 80)
+     (i32.const 82)
      (i32.const 2)
     )
     (unreachable)
@@ -1395,7 +1395,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 83)
+     (i32.const 85)
      (i32.const 2)
     )
     (unreachable)
@@ -1415,7 +1415,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 84)
+     (i32.const 86)
      (i32.const 2)
     )
     (unreachable)
@@ -1440,7 +1440,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 85)
+     (i32.const 87)
      (i32.const 2)
     )
     (unreachable)
@@ -2798,6 +2798,24 @@
  (func $std/typedarray/isInt8ArrayEqual (; 29 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (if
+   (i32.ne
+    (i32.sub
+     (i32.load offset=8
+      (get_local $0)
+     )
+     (i32.load offset=4
+      (get_local $0)
+     )
+    )
+    (i32.load offset=4
+     (get_local $1)
+    )
+   )
+   (return
+    (i32.const 0)
+   )
+  )
   (block $break|0
    (set_local $3
     (i32.sub
@@ -3096,6 +3114,27 @@
  (func $std/typedarray/isInt32ArrayEqual (; 34 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (if
+   (i32.ne
+    (i32.shr_s
+     (i32.sub
+      (i32.load offset=8
+       (get_local $0)
+      )
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+     (i32.const 2)
+    )
+    (i32.load offset=4
+     (get_local $1)
+    )
+   )
+   (return
+    (i32.const 0)
+   )
+  )
   (block $break|0
    (set_local $3
     (i32.shr_s
@@ -3230,7 +3269,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 95)
+     (i32.const 97)
      (i32.const 0)
     )
     (unreachable)
@@ -3244,7 +3283,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 96)
+     (i32.const 98)
      (i32.const 0)
     )
     (unreachable)
@@ -3261,7 +3300,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 97)
+     (i32.const 99)
      (i32.const 0)
     )
     (unreachable)
@@ -3279,7 +3318,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 98)
+     (i32.const 100)
      (i32.const 0)
     )
     (unreachable)
@@ -3297,7 +3336,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 99)
+     (i32.const 101)
      (i32.const 0)
     )
     (unreachable)
@@ -3315,7 +3354,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 100)
+     (i32.const 102)
      (i32.const 0)
     )
     (unreachable)
@@ -3348,7 +3387,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 103)
+     (i32.const 105)
      (i32.const 0)
     )
     (unreachable)
@@ -3365,7 +3404,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 104)
+     (i32.const 106)
      (i32.const 0)
     )
     (unreachable)
@@ -3382,7 +3421,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 105)
+     (i32.const 107)
      (i32.const 0)
     )
     (unreachable)
@@ -3400,7 +3439,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 106)
+     (i32.const 108)
      (i32.const 0)
     )
     (unreachable)
@@ -3477,7 +3516,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 120)
+     (i32.const 122)
      (i32.const 0)
     )
     (unreachable)
@@ -3543,7 +3582,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 122)
+     (i32.const 124)
      (i32.const 0)
     )
     (unreachable)
@@ -3581,7 +3620,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 129)
+     (i32.const 131)
      (i32.const 0)
     )
     (unreachable)
@@ -3602,7 +3641,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 130)
+     (i32.const 132)
      (i32.const 0)
     )
     (unreachable)
@@ -3623,7 +3662,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 131)
+     (i32.const 133)
      (i32.const 0)
     )
     (unreachable)
@@ -3678,7 +3717,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 141)
+     (i32.const 143)
      (i32.const 0)
     )
     (unreachable)
@@ -3705,7 +3744,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 144)
+     (i32.const 146)
      (i32.const 0)
     )
     (unreachable)
@@ -3730,7 +3769,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 147)
+     (i32.const 149)
      (i32.const 0)
     )
     (unreachable)
@@ -3757,7 +3796,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 150)
+     (i32.const 152)
      (i32.const 0)
     )
     (unreachable)
@@ -3796,7 +3835,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 154)
+     (i32.const 156)
      (i32.const 0)
     )
     (unreachable)
@@ -3813,7 +3852,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 155)
+     (i32.const 157)
      (i32.const 0)
     )
     (unreachable)
@@ -3830,7 +3869,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 156)
+     (i32.const 158)
      (i32.const 0)
     )
     (unreachable)
@@ -3885,7 +3924,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 166)
+     (i32.const 168)
      (i32.const 0)
     )
     (unreachable)
@@ -3912,7 +3951,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 169)
+     (i32.const 171)
      (i32.const 0)
     )
     (unreachable)
@@ -3937,7 +3976,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 172)
+     (i32.const 174)
      (i32.const 0)
     )
     (unreachable)
@@ -3964,7 +4003,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 175)
+     (i32.const 177)
      (i32.const 0)
     )
     (unreachable)
@@ -4007,7 +4046,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 179)
+     (i32.const 181)
      (i32.const 0)
     )
     (unreachable)
@@ -4024,7 +4063,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 180)
+     (i32.const 182)
      (i32.const 0)
     )
     (unreachable)
@@ -4041,7 +4080,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 181)
+     (i32.const 183)
      (i32.const 0)
     )
     (unreachable)
