@@ -749,5 +749,8 @@ assert((<u64[]>[1, 0xFFFFFFFFFFFFFFFF, 0]).toString() == "1,18446744073709551615
 assert(randomStringsExpected.toString() == ",a,a,ab,b,ba,");
 assert((<string[]>["1", "2", null, "4"]).toString() == "1,2,,4");
 
-var subarr: i32[][] = [[1,2], [3,4]];
-assert(subarr.toString() == "1,2,3,4");
+var subarr32: i32[][] = [[1,2], [3,4]];
+assert(subarr32.toString() == "1,2,3,4");
+
+var subarr8: u8[][] = [[1,2], [3,4]];
+assert(subarr8.toString() == "1,2,3,4");

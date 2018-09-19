@@ -256,18 +256,21 @@ export function itoa64(value: i64): string {
 }
 
 export function itoa<T>(value: T): string {
-  if (!isInteger<T>()) unreachable();
-  if (isSigned<T>()) {
-    if (sizeof<T>() <= 4) {
-      return itoa32(<i32>value);
-    } else {
-      return itoa64(<i64>value);
-    }
+  if (!isInteger<T>()) {
+    assert(false);
   } else {
-    if (sizeof<T>() <= 4) {
-      return utoa32(<u32>value);
+    if (isSigned<T>()) {
+      if (sizeof<T>() <= 4) {
+        return itoa32(<i32>value);
+      } else {
+        return itoa64(<i64>value);
+      }
     } else {
-      return utoa64(<u64>value);
+      if (sizeof<T>() <= 4) {
+        return utoa32(<u32>value);
+      } else {
+        return utoa64(<u64>value);
+      }
     }
   }
 }
