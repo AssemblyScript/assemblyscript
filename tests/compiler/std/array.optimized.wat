@@ -8238,7 +8238,7 @@
    (get_local $0)
   )
  )
- (func $~lib/array/Array<i32>#toString (; 127 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#join (; 127 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8331,7 +8331,7 @@
    )
   )
  )
- (func $~lib/array/Array<i8>#toString (; 129 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i8>#join (; 129 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8441,7 +8441,7 @@
    )
   )
  )
- (func $~lib/array/Array<u16>#toString (; 132 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u16>#join (; 132 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8772,7 +8772,7 @@
    (get_local $0)
   )
  )
- (func $~lib/array/Array<u64>#toString (; 137 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u64>#join (; 137 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8854,7 +8854,7 @@
    )
   )
  )
- (func $~lib/array/Array<String>#toString (; 138 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<String>#join (; 138 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8862,14 +8862,14 @@
   (set_local $1
    (i32.const 1464)
   )
-  (set_local $2
+  (set_local $3
    (i32.load
     (get_local $0)
    )
   )
   (if
    (i32.lt_s
-    (tee_local $3
+    (tee_local $4
      (i32.sub
       (i32.load offset=4
        (get_local $0)
@@ -8891,14 +8891,14 @@
     (br_if $break|0
      (i32.ge_s
       (get_local $0)
-      (get_local $3)
+      (get_local $4)
      )
     )
     (if
-     (tee_local $4
+     (tee_local $2
       (i32.load offset=8
        (i32.add
-        (get_local $2)
+        (get_local $3)
         (i32.shl
          (get_local $0)
          (i32.const 2)
@@ -8909,7 +8909,7 @@
      (set_local $1
       (call $~lib/string/String.__concat
        (get_local $1)
-       (get_local $4)
+       (get_local $2)
       )
      )
     )
@@ -8929,27 +8929,25 @@
    )
   )
   (if
-   (i32.eqz
-    (tee_local $0
-     (i32.load offset=8
-      (i32.add
-       (get_local $2)
-       (i32.shl
-        (get_local $3)
-        (i32.const 2)
-       )
+   (tee_local $2
+    (i32.load offset=8
+     (i32.add
+      (get_local $3)
+      (i32.shl
+       (get_local $4)
+       (i32.const 2)
       )
      )
     )
    )
-   (set_local $0
-    (i32.const 1464)
+   (set_local $1
+    (call $~lib/string/String.__concat
+     (get_local $1)
+     (get_local $2)
+    )
    )
   )
-  (call $~lib/string/String.__concat
-   (get_local $1)
-   (get_local $0)
-  )
+  (get_local $1)
  )
  (func $start (; 139 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
@@ -12468,7 +12466,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<i32>#toString
+     (call $~lib/array/Array<i32>#join
       (get_global $std/array/reversed0)
      )
      (i32.const 1464)
@@ -12487,7 +12485,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<i32>#toString
+     (call $~lib/array/Array<i32>#join
       (get_global $std/array/reversed1)
      )
      (i32.const 2328)
@@ -12506,7 +12504,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<i32>#toString
+     (call $~lib/array/Array<i32>#join
       (get_global $std/array/reversed2)
      )
      (i32.const 2336)
@@ -12525,7 +12523,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<i32>#toString
+     (call $~lib/array/Array<i32>#join
       (get_global $std/array/reversed4)
      )
      (i32.const 2352)
@@ -12544,7 +12542,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<i8>#toString
+     (call $~lib/array/Array<i8>#join
       (get_global $std/array/i8Arr)
      )
      (i32.const 2400)
@@ -12563,7 +12561,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<u16>#toString
+     (call $~lib/array/Array<u16>#join
       (get_global $std/array/u16Arr)
      )
      (i32.const 2440)
@@ -12582,7 +12580,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<u64>#toString
+     (call $~lib/array/Array<u64>#join
       (get_global $std/array/u64Arr)
      )
      (i32.const 3096)
@@ -12601,7 +12599,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<String>#toString
+     (call $~lib/array/Array<String>#join
       (get_global $std/array/randomStringsExpected)
      )
      (i32.const 3152)
@@ -12620,7 +12618,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<String>#toString
+     (call $~lib/array/Array<String>#join
       (get_global $std/array/strArr)
      )
      (i32.const 3240)

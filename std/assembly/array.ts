@@ -358,29 +358,36 @@ export class Array<T> {
     }
   }
 
-  toString(): string {
+  join(separator: string = ","): string {
     var result = "";
     var buffer = this.buffer_;
     var len    = this.length_ - 1;
     if (len < 0) return "";
     if (isInteger<T>()) {
       for (let i = 0; i < len; ++i) {
-        result += itoa<T>(loadUnsafe<T,T>(buffer, i)) + ",";
+        result += itoa<T>(loadUnsafe<T,T>(buffer, i)) + separator;
       }
       result += itoa<T>(loadUnsafe<T,T>(buffer, len));
     } else if (isFloat<T>()) {
       // TODO
     } else if (isString<T>()) {
+      let value: T;
       for (let i = 0; i < len; ++i) {
-        let value = loadUnsafe<T,T>(buffer, i);
+        value = loadUnsafe<T,T>(buffer, i);
         if (value) result += value;
-        result += ",";
+        result += separator;
       }
-      result += loadUnsafe<T,T>(buffer, len) || "";
+      value = loadUnsafe<T,T>(buffer, len);
+      if (value) result += value;
     } else if (isReference<T>()) {
       // TODO
     }
     return result;
+  }
+
+  @inline
+  toString(): string {
+    return this.join();
   }
 
   private __gc(): void {
