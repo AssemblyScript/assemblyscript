@@ -362,10 +362,12 @@ export class Array<T> {
     var result = "";
     var buffer = this.buffer_;
     var lastIndex = this.length_ - 1;
+    var hasSeparator = separator.length != 0;
     if (lastIndex < 0) return "";
     if (isInteger<T>()) {
       for (let i = 0; i < lastIndex; ++i) {
-        result += itoa<T>(loadUnsafe<T,T>(buffer, i)) + separator;
+        result += itoa<T>(loadUnsafe<T,T>(buffer, i));
+        if (hasSeparator) result += separator;
       }
       result += itoa<T>(loadUnsafe<T,T>(buffer, lastIndex));
     } else if (isFloat<T>()) {
@@ -375,7 +377,7 @@ export class Array<T> {
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) result += value;
-        result += separator;
+        if (hasSeparator) result += separator;
       }
       value = loadUnsafe<T,T>(buffer, lastIndex);
       if (value) result += value;
@@ -384,13 +386,14 @@ export class Array<T> {
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
-        result += separator;
+        if (hasSeparator) result += separator;
       }
       value = loadUnsafe<T,T>(buffer, lastIndex);
       if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
     } else { // References
       for (let i = 0; i < lastIndex; ++i) {
-        result += "[object Object]" + separator;
+        result += "[object Object]";
+        if (hasSeparator) result += separator;
       }
       result += "[object Object]";
     }
