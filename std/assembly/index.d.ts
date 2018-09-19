@@ -454,8 +454,10 @@ declare class Array<T> {
   unshift(element: T): i32;
   slice(from: i32, to?: i32): T[];
   splice(start: i32, deleteCount?: i32): void;
-  reverse(): T[];
   sort(comparator?: (a: T, b: T) => i32): this;
+  join(separator?: string): string;
+  reverse(): T[];
+  toString(): string;
 }
 
 /** Class representing a sequence of characters. */
