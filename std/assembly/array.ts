@@ -364,7 +364,14 @@ export class Array<T> {
     var lastIndex = this.length_ - 1;
     var hasSeparator = separator.length != 0;
     if (lastIndex < 0) return "";
-    if (isInteger<T>()) {
+    var value: T;
+    if (value instanceof bool) {
+      for (let i = 0; i < lastIndex; ++i) {
+        result += loadUnsafe<T,T>(buffer, i) ? "true" : "false";
+        if (hasSeparator) result += separator;
+      }
+      result += loadUnsafe<T,T>(buffer, lastIndex) ? "true" : "false";
+    } else if (isInteger<T>()) {
       for (let i = 0; i < lastIndex; ++i) {
         result += itoa<T>(loadUnsafe<T,T>(buffer, i));
         if (hasSeparator) result += separator;
@@ -373,7 +380,6 @@ export class Array<T> {
     } else if (isFloat<T>()) {
       // TODO
     } else if (isString<T>()) {
-      let value: T;
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) result += value;
@@ -382,7 +388,6 @@ export class Array<T> {
       value = loadUnsafe<T,T>(buffer, lastIndex);
       if (value) result += value;
     } else if (isArray<T>()) {
-      let value: T;
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any

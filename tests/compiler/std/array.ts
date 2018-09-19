@@ -733,8 +733,10 @@ assertSorted<string>(randomStrings400, (a: string, b: string): i32 => <i32>(a > 
 
 // Array#join //////////////////////////////////////////////////////////////////////////////////////
 
+assert((<bool[]>[true, false]).join() == "true,false");
 assert((<i32[]>[1, 2, 3]).join("") == "123");
 assert((<i32[]>[1, 2, 3]).join("-") == "1-2-3");
+assert((<string[]>["", "1", null]).join("") == "1");
 
 // Array#toString //////////////////////////////////////////////////////////////////////////////////
 

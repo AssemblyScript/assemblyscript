@@ -67,8 +67,8 @@
  (global $std/array/randomStringsActual (mut i32) (i32.const 1536))
  (global $std/array/randomStringsExpected (mut i32) (i32.const 1608))
  (global $std/array/randomStrings400 (mut i32) (i32.const 0))
- (global $std/array/subarr32 (mut i32) (i32.const 3648))
- (global $std/array/subarr8 (mut i32) (i32.const 3744))
+ (global $std/array/subarr32 (mut i32) (i32.const 3832))
+ (global $std/array/subarr8 (mut i32) (i32.const 3928))
  (table 56 56 anyfunc)
  (elem (i32.const 0) $null $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|3 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|17 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $start~anonymous|23 $start~anonymous|24 $start~anonymous|25 $start~anonymous|26 $start~anonymous|27 $start~anonymous|28 $start~anonymous|29 $start~anonymous|29 $start~anonymous|31 $start~anonymous|32 $start~anonymous|33 $start~anonymous|29 $start~anonymous|35 $start~anonymous|29 $start~anonymous|29 $start~anonymous|31 $start~anonymous|32 $start~anonymous|33 $start~anonymous|29 $start~anonymous|35 $~lib/array/Array<f32>#sort|trampoline~anonymous|43 $~lib/array/Array<f64>#sort|trampoline~anonymous|44 $~lib/array/Array<i32>#sort|trampoline~anonymous|45 $~lib/array/Array<u32>#sort|trampoline~anonymous|46 $~lib/array/Array<i32>#sort|trampoline~anonymous|45 $~lib/array/Array<i32>#sort|trampoline~anonymous|45 $start~anonymous|49 $~lib/array/Array<i32>#sort|trampoline~anonymous|45 $start~anonymous|49 $start~anonymous|52 $start~anonymous|53 $start~anonymous|54 $start~anonymous|54)
  (memory $0 1)
@@ -145,66 +145,77 @@
  (data (i32.const 1616) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
  (data (i32.const 1648) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
  (data (i32.const 1704) "\04\00\00\00n\00u\00l\00l")
- (data (i32.const 1720) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03")
- (data (i32.const 1752) "\b8\06\00\00\03")
- (data (i32.const 1760) "\01\00\00\000")
- (data (i32.const 1768) "(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
- (data (i32.const 1832) "\e8\06\00\00\n")
- (data (i32.const 1840) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009")
- (data (i32.const 2352) "0\07\00\00d")
- (data (i32.const 2360) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03")
- (data (i32.const 2392) "8\t\00\00\03")
- (data (i32.const 2400) "\03\00\00\001\002\003")
- (data (i32.const 2416) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03")
- (data (i32.const 2448) "p\t\00\00\03")
- (data (i32.const 2456) "\01\00\00\00-")
- (data (i32.const 2464) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03")
- (data (i32.const 2496) "\a0\t\00\00\03")
- (data (i32.const 2504) "\05\00\00\001\00-\002\00-\003")
- (data (i32.const 2520) "\01\00\00\00,")
- (data (i32.const 2528) "\01\00\00\001")
- (data (i32.const 2536) "\03\00\00\001\00,\002")
- (data (i32.const 2552) "\07\00\00\000\00,\001\00,\002\00,\003")
- (data (i32.const 2576) "\03\00\00\00\00\00\00\00\01\ff")
- (data (i32.const 2592) "\10\n\00\00\03")
- (data (i32.const 2600) "\03\00\00\00\00\00\00\00\01\ff")
- (data (i32.const 2616) "(\n\00\00\03")
- (data (i32.const 2624) "\06\00\00\001\00,\00-\001\00,\000")
- (data (i32.const 2640) "\06\00\00\00\00\00\00\00\01\00\ff\ff")
- (data (i32.const 2656) "P\n\00\00\03")
- (data (i32.const 2664) "\06\00\00\00\00\00\00\00\01\00\ff\ff")
- (data (i32.const 2680) "h\n\00\00\03")
- (data (i32.const 2688) "\t\00\00\001\00,\006\005\005\003\005\00,\000")
- (data (i32.const 2712) "\18\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff")
- (data (i32.const 2744) "\98\n\00\00\03")
- (data (i32.const 2752) "(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
- (data (i32.const 2816) "\c0\n\00\00\n")
- (data (i32.const 2824) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009")
- (data (i32.const 3336) "\08\0b\00\00d")
- (data (i32.const 3344) "\18\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff")
- (data (i32.const 3376) "\10\0d\00\00\03")
- (data (i32.const 3384) "\18\00\00\001\00,\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005\00,\000")
- (data (i32.const 3440) "\0d\00\00\00,\00a\00,\00a\00,\00a\00b\00,\00b\00,\00b\00a\00,")
- (data (i32.const 3472) "\01\00\00\002")
- (data (i32.const 3480) "\01\00\00\004")
- (data (i32.const 3488) "\10\00\00\00\00\00\00\00\e0\t\00\00\90\0d\00\00\00\00\00\00\98\0d")
- (data (i32.const 3520) "\a0\0d\00\00\04")
- (data (i32.const 3528) "\10\00\00\00\00\00\00\00\e0\t\00\00\90\0d\00\00\00\00\00\00\98\0d")
- (data (i32.const 3560) "\c8\0d\00\00\04")
- (data (i32.const 3568) "\06\00\00\001\00,\002\00,\00,\004")
- (data (i32.const 3584) "\08\00\00\00\00\00\00\00\01\00\00\00\02")
- (data (i32.const 3601) "\0e\00\00\02")
- (data (i32.const 3608) "\08\00\00\00\00\00\00\00\03\00\00\00\04")
- (data (i32.const 3624) "\18\0e\00\00\02")
- (data (i32.const 3632) "\08\00\00\00\00\00\00\00\10\0e\00\00(\0e")
- (data (i32.const 3648) "0\0e\00\00\02")
- (data (i32.const 3656) "\07\00\00\001\00,\002\00,\003\00,\004")
- (data (i32.const 3680) "\02\00\00\00\00\00\00\00\01\02")
- (data (i32.const 3696) "`\0e\00\00\02")
- (data (i32.const 3704) "\02\00\00\00\00\00\00\00\03\04")
- (data (i32.const 3720) "x\0e\00\00\02")
- (data (i32.const 3728) "\08\00\00\00\00\00\00\00p\0e\00\00\88\0e")
- (data (i32.const 3744) "\90\0e\00\00\02")
+ (data (i32.const 1720) "\02\00\00\00\00\00\00\00\01")
+ (data (i32.const 1736) "\b8\06\00\00\02")
+ (data (i32.const 1744) "\04\00\00\00t\00r\00u\00e")
+ (data (i32.const 1760) "\05\00\00\00f\00a\00l\00s\00e")
+ (data (i32.const 1776) "\01\00\00\00,")
+ (data (i32.const 1784) "\02\00\00\00\00\00\00\00\01")
+ (data (i32.const 1800) "\f8\06\00\00\02")
+ (data (i32.const 1808) "\n\00\00\00t\00r\00u\00e\00,\00f\00a\00l\00s\00e")
+ (data (i32.const 1832) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03")
+ (data (i32.const 1864) "(\07\00\00\03")
+ (data (i32.const 1872) "\01\00\00\000")
+ (data (i32.const 1880) "(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
+ (data (i32.const 1944) "X\07\00\00\n")
+ (data (i32.const 1952) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009")
+ (data (i32.const 2464) "\a0\07\00\00d")
+ (data (i32.const 2472) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03")
+ (data (i32.const 2504) "\a8\t\00\00\03")
+ (data (i32.const 2512) "\03\00\00\001\002\003")
+ (data (i32.const 2528) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03")
+ (data (i32.const 2560) "\e0\t\00\00\03")
+ (data (i32.const 2568) "\01\00\00\00-")
+ (data (i32.const 2576) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03")
+ (data (i32.const 2608) "\10\n\00\00\03")
+ (data (i32.const 2616) "\05\00\00\001\00-\002\00-\003")
+ (data (i32.const 2632) "\01\00\00\001")
+ (data (i32.const 2640) "\0c\00\00\00\00\00\00\00\b8\05\00\00H\n")
+ (data (i32.const 2672) "P\n\00\00\03")
+ (data (i32.const 2680) "\0c\00\00\00\00\00\00\00\b8\05\00\00H\n")
+ (data (i32.const 2712) "x\n\00\00\03")
+ (data (i32.const 2720) "\03\00\00\001\00,\002")
+ (data (i32.const 2736) "\07\00\00\000\00,\001\00,\002\00,\003")
+ (data (i32.const 2760) "\03\00\00\00\00\00\00\00\01\ff")
+ (data (i32.const 2776) "\c8\n\00\00\03")
+ (data (i32.const 2784) "\03\00\00\00\00\00\00\00\01\ff")
+ (data (i32.const 2800) "\e0\n\00\00\03")
+ (data (i32.const 2808) "\06\00\00\001\00,\00-\001\00,\000")
+ (data (i32.const 2824) "\06\00\00\00\00\00\00\00\01\00\ff\ff")
+ (data (i32.const 2840) "\08\0b\00\00\03")
+ (data (i32.const 2848) "\06\00\00\00\00\00\00\00\01\00\ff\ff")
+ (data (i32.const 2864) " \0b\00\00\03")
+ (data (i32.const 2872) "\t\00\00\001\00,\006\005\005\003\005\00,\000")
+ (data (i32.const 2896) "\18\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff")
+ (data (i32.const 2928) "P\0b\00\00\03")
+ (data (i32.const 2936) "(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
+ (data (i32.const 3000) "x\0b\00\00\n")
+ (data (i32.const 3008) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009")
+ (data (i32.const 3520) "\c0\0b\00\00d")
+ (data (i32.const 3528) "\18\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff")
+ (data (i32.const 3560) "\c8\0d\00\00\03")
+ (data (i32.const 3568) "\18\00\00\001\00,\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005\00,\000")
+ (data (i32.const 3624) "\0d\00\00\00,\00a\00,\00a\00,\00a\00b\00,\00b\00,\00b\00a\00,")
+ (data (i32.const 3656) "\01\00\00\002")
+ (data (i32.const 3664) "\01\00\00\004")
+ (data (i32.const 3672) "\10\00\00\00\00\00\00\00H\n\00\00H\0e\00\00\00\00\00\00P\0e")
+ (data (i32.const 3704) "X\0e\00\00\04")
+ (data (i32.const 3712) "\10\00\00\00\00\00\00\00H\n\00\00H\0e\00\00\00\00\00\00P\0e")
+ (data (i32.const 3744) "\80\0e\00\00\04")
+ (data (i32.const 3752) "\06\00\00\001\00,\002\00,\00,\004")
+ (data (i32.const 3768) "\08\00\00\00\00\00\00\00\01\00\00\00\02")
+ (data (i32.const 3784) "\b8\0e\00\00\02")
+ (data (i32.const 3792) "\08\00\00\00\00\00\00\00\03\00\00\00\04")
+ (data (i32.const 3808) "\d0\0e\00\00\02")
+ (data (i32.const 3816) "\08\00\00\00\00\00\00\00\c8\0e\00\00\e0\0e")
+ (data (i32.const 3832) "\e8\0e\00\00\02")
+ (data (i32.const 3840) "\07\00\00\001\00,\002\00,\003\00,\004")
+ (data (i32.const 3864) "\02\00\00\00\00\00\00\00\01\02")
+ (data (i32.const 3880) "\18\0f\00\00\02")
+ (data (i32.const 3888) "\02\00\00\00\00\00\00\00\03\04")
+ (data (i32.const 3904) "0\0f\00\00\02")
+ (data (i32.const 3912) "\08\00\00\00\00\00\00\00(\0f\00\00@\0f")
+ (data (i32.const 3928) "H\0f\00\00\02")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -8011,14 +8022,115 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/itoa/decimalCountU32 (; 123 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<bool>#join (; 123 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (set_local $0
+   (i32.const 1464)
+  )
+  (set_local $2
+   (i32.load
+    (i32.const 1800)
+   )
+  )
+  (set_local $4
+   (i32.ne
+    (i32.load
+     (i32.const 1776)
+    )
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.lt_s
+    (tee_local $3
+     (i32.sub
+      (i32.load
+       (i32.const 1804)
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (block $break|0
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.ge_s
+      (get_local $1)
+      (get_local $3)
+     )
+    )
+    (set_local $0
+     (call $~lib/string/String.__concat
+      (get_local $0)
+      (if (result i32)
+       (i32.and
+        (i32.load8_u offset=8
+         (i32.add
+          (get_local $2)
+          (get_local $1)
+         )
+        )
+        (i32.const 1)
+       )
+       (i32.const 1744)
+       (i32.const 1760)
+      )
+     )
+    )
+    (if
+     (get_local $4)
+     (set_local $0
+      (call $~lib/string/String.__concat
+       (get_local $0)
+       (i32.const 1776)
+      )
+     )
+    )
+    (set_local $1
+     (i32.add
+      (get_local $1)
+      (i32.const 1)
+     )
+    )
+    (br $repeat|0)
+   )
+  )
+  (call $~lib/string/String.__concat
+   (get_local $0)
+   (tee_local $1
+    (if (result i32)
+     (i32.and
+      (i32.load8_u offset=8
+       (i32.add
+        (get_local $2)
+        (get_local $3)
+       )
+      )
+      (i32.const 1)
+     )
+     (i32.const 1744)
+     (i32.const 1760)
+    )
+   )
+  )
+ )
+ (func $~lib/internal/itoa/decimalCountU32 (; 124 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (set_local $2
    (i32.load offset=8
     (i32.add
      (i32.load
-      (i32.const 1832)
+      (i32.const 1944)
      )
      (i32.shl
       (tee_local $1
@@ -8051,12 +8163,12 @@
    (i32.const 1)
   )
  )
- (func $~lib/internal/itoa/utoa32_lut (; 124 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/itoa/utoa32_lut (; 125 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
    (i32.load
-    (i32.const 2352)
+    (i32.const 2464)
    )
   )
   (loop $continue|0
@@ -8212,7 +8324,7 @@
    )
   )
  )
- (func $~lib/internal/itoa/itoa32 (; 125 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/itoa/itoa32 (; 126 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8221,7 +8333,7 @@
     (get_local $0)
    )
    (return
-    (i32.const 1760)
+    (i32.const 1872)
    )
   )
   (if
@@ -8263,12 +8375,12 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/itoa/itoa<i32> (; 126 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/itoa/itoa<i32> (; 127 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/itoa/itoa32
    (get_local $0)
   )
  )
- (func $~lib/array/Array<i32>#join (; 127 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#join (; 128 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8365,7 +8477,114 @@
    )
   )
  )
- (func $~lib/internal/itoa/itoa<i8> (; 128 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<String>#join (; 129 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (set_local $2
+   (i32.const 1464)
+  )
+  (set_local $4
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $6
+   (i32.ne
+    (i32.load
+     (get_local $1)
+    )
+    (i32.const 0)
+   )
+  )
+  (if
+   (i32.lt_s
+    (tee_local $5
+     (i32.sub
+      (i32.load offset=4
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (block $break|0
+   (set_local $0
+    (i32.const 0)
+   )
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.ge_s
+      (get_local $0)
+      (get_local $5)
+     )
+    )
+    (if
+     (tee_local $3
+      (i32.load offset=8
+       (i32.add
+        (get_local $4)
+        (i32.shl
+         (get_local $0)
+         (i32.const 2)
+        )
+       )
+      )
+     )
+     (set_local $2
+      (call $~lib/string/String.__concat
+       (get_local $2)
+       (get_local $3)
+      )
+     )
+    )
+    (if
+     (get_local $6)
+     (set_local $2
+      (call $~lib/string/String.__concat
+       (get_local $2)
+       (get_local $1)
+      )
+     )
+    )
+    (set_local $0
+     (i32.add
+      (get_local $0)
+      (i32.const 1)
+     )
+    )
+    (br $repeat|0)
+   )
+  )
+  (if
+   (tee_local $3
+    (i32.load offset=8
+     (i32.add
+      (get_local $4)
+      (i32.shl
+       (get_local $5)
+       (i32.const 2)
+      )
+     )
+    )
+   )
+   (set_local $2
+    (call $~lib/string/String.__concat
+     (get_local $2)
+     (get_local $3)
+    )
+   )
+  )
+  (get_local $2)
+ )
+ (func $~lib/internal/itoa/itoa<i8> (; 130 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/itoa/itoa32
    (i32.shr_s
     (i32.shl
@@ -8376,7 +8595,7 @@
    )
   )
  )
- (func $~lib/array/Array<i8>#join (; 129 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<i8>#join (; 131 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -8387,13 +8606,13 @@
   )
   (set_local $2
    (i32.load
-    (i32.const 2616)
+    (i32.const 2800)
    )
   )
   (set_local $4
    (i32.ne
     (i32.load
-     (i32.const 2520)
+     (i32.const 1776)
     )
     (i32.const 0)
    )
@@ -8403,7 +8622,7 @@
     (tee_local $3
      (i32.sub
       (i32.load
-       (i32.const 2620)
+       (i32.const 2804)
       )
       (i32.const 1)
      )
@@ -8440,7 +8659,7 @@
      (set_local $0
       (call $~lib/string/String.__concat
        (get_local $0)
-       (i32.const 2520)
+       (i32.const 1776)
       )
      )
     )
@@ -8465,7 +8684,7 @@
    )
   )
  )
- (func $~lib/internal/itoa/utoa32 (; 130 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/itoa/utoa32 (; 132 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -8473,7 +8692,7 @@
     (get_local $0)
    )
    (return
-    (i32.const 1760)
+    (i32.const 1872)
    )
   )
   (call $~lib/internal/itoa/utoa32_lut
@@ -8491,7 +8710,7 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/itoa/itoa<u16> (; 131 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/itoa/itoa<u16> (; 133 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/itoa/utoa32
    (i32.and
     (get_local $0)
@@ -8499,7 +8718,7 @@
    )
   )
  )
- (func $~lib/array/Array<u16>#join (; 132 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<u16>#join (; 134 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -8510,13 +8729,13 @@
   )
   (set_local $2
    (i32.load
-    (i32.const 2680)
+    (i32.const 2864)
    )
   )
   (set_local $4
    (i32.ne
     (i32.load
-     (i32.const 2520)
+     (i32.const 1776)
     )
     (i32.const 0)
    )
@@ -8526,7 +8745,7 @@
     (tee_local $3
      (i32.sub
       (i32.load
-       (i32.const 2684)
+       (i32.const 2868)
       )
       (i32.const 1)
      )
@@ -8566,7 +8785,7 @@
      (set_local $0
       (call $~lib/string/String.__concat
        (get_local $0)
-       (i32.const 2520)
+       (i32.const 1776)
       )
      )
     )
@@ -8594,14 +8813,14 @@
    )
   )
  )
- (func $~lib/internal/itoa/decimalCountU64 (; 133 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/itoa/decimalCountU64 (; 135 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i64)
   (set_local $2
    (i64.load32_u offset=8
     (i32.add
      (i32.load
-      (i32.const 2816)
+      (i32.const 3000)
      )
      (i32.shl
       (i32.sub
@@ -8642,14 +8861,14 @@
    (i32.const 1)
   )
  )
- (func $~lib/internal/itoa/utoa64_lut (; 134 ;) (; has Stack IR ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/internal/itoa/utoa64_lut (; 136 ;) (; has Stack IR ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (set_local $3
    (i32.load
-    (i32.const 3336)
+    (i32.const 3520)
    )
   )
   (loop $continue|0
@@ -8788,7 +9007,7 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/itoa/utoa64 (; 135 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/itoa/utoa64 (; 137 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8797,7 +9016,7 @@
     (get_local $0)
    )
    (return
-    (i32.const 1760)
+    (i32.const 1872)
    )
   )
   (if
@@ -8838,12 +9057,12 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/itoa/itoa<u64> (; 136 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/itoa/itoa<u64> (; 138 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
   (call $~lib/internal/itoa/utoa64
    (get_local $0)
   )
  )
- (func $~lib/array/Array<u64>#join (; 137 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<u64>#join (; 139 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -8854,13 +9073,13 @@
   )
   (set_local $2
    (i32.load
-    (i32.const 3376)
+    (i32.const 3560)
    )
   )
   (set_local $4
    (i32.ne
     (i32.load
-     (i32.const 2520)
+     (i32.const 1776)
     )
     (i32.const 0)
    )
@@ -8870,7 +9089,7 @@
     (tee_local $3
      (i32.sub
       (i32.load
-       (i32.const 3380)
+       (i32.const 3564)
       )
       (i32.const 1)
      )
@@ -8910,7 +9129,7 @@
      (set_local $0
       (call $~lib/string/String.__concat
        (get_local $0)
-       (i32.const 2520)
+       (i32.const 1776)
       )
      )
     )
@@ -8938,7 +9157,7 @@
    )
   )
  )
- (func $~lib/array/Array<String>#join (; 138 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#join (; 140 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8955,114 +9174,7 @@
   (set_local $5
    (i32.ne
     (i32.load
-     (i32.const 2520)
-    )
-    (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (tee_local $4
-     (i32.sub
-      (i32.load offset=4
-       (get_local $0)
-      )
-      (i32.const 1)
-     )
-    )
-    (i32.const 0)
-   )
-   (return
-    (i32.const 1464)
-   )
-  )
-  (block $break|0
-   (set_local $0
-    (i32.const 0)
-   )
-   (loop $repeat|0
-    (br_if $break|0
-     (i32.ge_s
-      (get_local $0)
-      (get_local $4)
-     )
-    )
-    (if
-     (tee_local $2
-      (i32.load offset=8
-       (i32.add
-        (get_local $3)
-        (i32.shl
-         (get_local $0)
-         (i32.const 2)
-        )
-       )
-      )
-     )
-     (set_local $1
-      (call $~lib/string/String.__concat
-       (get_local $1)
-       (get_local $2)
-      )
-     )
-    )
-    (if
-     (get_local $5)
-     (set_local $1
-      (call $~lib/string/String.__concat
-       (get_local $1)
-       (i32.const 2520)
-      )
-     )
-    )
-    (set_local $0
-     (i32.add
-      (get_local $0)
-      (i32.const 1)
-     )
-    )
-    (br $repeat|0)
-   )
-  )
-  (if
-   (tee_local $2
-    (i32.load offset=8
-     (i32.add
-      (get_local $3)
-      (i32.shl
-       (get_local $4)
-       (i32.const 2)
-      )
-     )
-    )
-   )
-   (set_local $1
-    (call $~lib/string/String.__concat
-     (get_local $1)
-     (get_local $2)
-    )
-   )
-  )
-  (get_local $1)
- )
- (func $~lib/array/Array<Array<i32>>#join (; 139 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (set_local $1
-   (i32.const 1464)
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $5
-   (i32.ne
-    (i32.load
-     (i32.const 2520)
+     (i32.const 1776)
     )
     (i32.const 0)
    )
@@ -9111,7 +9223,7 @@
        (get_local $1)
        (call $~lib/array/Array<i32>#join
         (get_local $2)
-        (i32.const 2520)
+        (i32.const 1776)
        )
       )
      )
@@ -9121,7 +9233,7 @@
      (set_local $1
       (call $~lib/string/String.__concat
        (get_local $1)
-       (i32.const 2520)
+       (i32.const 1776)
       )
      )
     )
@@ -9151,14 +9263,14 @@
      (get_local $1)
      (call $~lib/array/Array<i32>#join
       (get_local $2)
-      (i32.const 2520)
+      (i32.const 1776)
      )
     )
    )
   )
   (get_local $1)
  )
- (func $~lib/internal/itoa/itoa<u8> (; 140 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/itoa/itoa<u8> (; 141 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/itoa/utoa32
    (i32.and
     (get_local $0)
@@ -9166,7 +9278,7 @@
    )
   )
  )
- (func $~lib/array/Array<u8>#join (; 141 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#join (; 142 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9257,7 +9369,7 @@
    )
   )
  )
- (func $~lib/array/Array<Array<u8>>#join (; 142 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Array<u8>>#join (; 143 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9274,7 +9386,7 @@
   (set_local $5
    (i32.ne
     (i32.load
-     (i32.const 2520)
+     (i32.const 1776)
     )
     (i32.const 0)
    )
@@ -9323,7 +9435,7 @@
        (get_local $1)
        (call $~lib/array/Array<u8>#join
         (get_local $2)
-        (i32.const 2520)
+        (i32.const 1776)
        )
       )
      )
@@ -9333,7 +9445,7 @@
      (set_local $1
       (call $~lib/string/String.__concat
        (get_local $1)
-       (i32.const 2520)
+       (i32.const 1776)
       )
      )
     )
@@ -9363,16 +9475,16 @@
      (get_local $1)
      (call $~lib/array/Array<u8>#join
       (get_local $2)
-      (i32.const 2520)
+      (i32.const 1776)
      )
     )
    )
   )
   (get_local $1)
  )
- (func $start (; 143 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 144 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.const 3752)
+   (i32.const 3936)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
@@ -12887,11 +12999,8 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<i32>#join
-      (i32.const 2392)
-      (i32.const 1464)
-     )
-     (i32.const 2400)
+     (call $~lib/array/Array<bool>#join)
+     (i32.const 1808)
     )
    )
    (block
@@ -12908,10 +13017,10 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/array/Array<i32>#join
-      (i32.const 2496)
-      (i32.const 2456)
+      (i32.const 2504)
+      (i32.const 1464)
      )
-     (i32.const 2504)
+     (i32.const 2512)
     )
    )
    (block
@@ -12928,50 +13037,50 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/array/Array<i32>#join
+      (i32.const 2608)
+      (i32.const 2568)
+     )
+     (i32.const 2616)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 152)
+     (i32.const 738)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/array/Array<String>#join
+      (i32.const 2712)
+      (i32.const 1464)
+     )
+     (i32.const 2632)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 152)
+     (i32.const 739)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/array/Array<i32>#join
       (get_global $std/array/reversed0)
-      (i32.const 2520)
+      (i32.const 1776)
      )
      (i32.const 1464)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 152)
-     (i32.const 741)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/array/Array<i32>#join
-      (get_global $std/array/reversed1)
-      (i32.const 2520)
-     )
-     (i32.const 2528)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 152)
-     (i32.const 742)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/array/Array<i32>#join
-      (get_global $std/array/reversed2)
-      (i32.const 2520)
-     )
-     (i32.const 2536)
     )
    )
    (block
@@ -12988,10 +13097,10 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/array/Array<i32>#join
-      (get_global $std/array/reversed4)
-      (i32.const 2520)
+      (get_global $std/array/reversed1)
+      (i32.const 1776)
      )
-     (i32.const 2552)
+     (i32.const 2632)
     )
    )
    (block
@@ -13007,8 +13116,31 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<i8>#join)
-     (i32.const 2624)
+     (call $~lib/array/Array<i32>#join
+      (get_global $std/array/reversed2)
+      (i32.const 1776)
+     )
+     (i32.const 2720)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 152)
+     (i32.const 745)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/array/Array<i32>#join
+      (get_global $std/array/reversed4)
+      (i32.const 1776)
+     )
+     (i32.const 2736)
     )
    )
    (block
@@ -13024,25 +13156,8 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<u16>#join)
-     (i32.const 2688)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 152)
-     (i32.const 747)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $~lib/string/String.__eq
-     (call $~lib/array/Array<u64>#join)
-     (i32.const 3384)
+     (call $~lib/array/Array<i8>#join)
+     (i32.const 2808)
     )
    )
    (block
@@ -13058,10 +13173,8 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<String>#join
-      (get_global $std/array/randomStringsExpected)
-     )
-     (i32.const 3440)
+     (call $~lib/array/Array<u16>#join)
+     (i32.const 2872)
     )
    )
    (block
@@ -13077,9 +13190,7 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<String>#join
-      (i32.const 3560)
-     )
+     (call $~lib/array/Array<u64>#join)
      (i32.const 3568)
     )
    )
@@ -13096,17 +13207,57 @@
   (if
    (i32.eqz
     (call $~lib/string/String.__eq
-     (call $~lib/array/Array<Array<i32>>#join
-      (get_global $std/array/subarr32)
+     (call $~lib/array/Array<String>#join
+      (get_global $std/array/randomStringsExpected)
+      (i32.const 1776)
      )
-     (i32.const 3656)
+     (i32.const 3624)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 152)
-     (i32.const 753)
+     (i32.const 751)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/array/Array<String>#join
+      (i32.const 3744)
+      (i32.const 1776)
+     )
+     (i32.const 3752)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 152)
+     (i32.const 752)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/array/Array<Array<i32>>#join
+      (get_global $std/array/subarr32)
+     )
+     (i32.const 3840)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 152)
+     (i32.const 755)
      (i32.const 0)
     )
     (unreachable)
@@ -13118,21 +13269,21 @@
      (call $~lib/array/Array<Array<u8>>#join
       (get_global $std/array/subarr8)
      )
-     (i32.const 3656)
+     (i32.const 3840)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 152)
-     (i32.const 756)
+     (i32.const 758)
      (i32.const 0)
     )
     (unreachable)
    )
   )
  )
- (func $null (; 144 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 145 ;) (; has Stack IR ;) (type $v)
   (nop)
  )
 )
