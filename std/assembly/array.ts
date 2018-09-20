@@ -380,10 +380,10 @@ export class Array<T> {
       result += itoa<T>(loadUnsafe<T,T>(buffer, lastIndex));
     } else if (isFloat<T>()) {
       for (let i = 0; i < lastIndex; ++i) {
-        result += <T>dtoa(<f64>loadUnsafe<T,T>(buffer, i));
+        result += dtoa(loadUnsafe<T,f64>(buffer, i));
         if (hasSeparator) result += separator;
       }
-      result += <T>dtoa(<f64>loadUnsafe<T,T>(buffer, lastIndex));
+      result += dtoa(loadUnsafe<T,f64>(buffer, lastIndex));
     } else if (isString<T>()) {
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
