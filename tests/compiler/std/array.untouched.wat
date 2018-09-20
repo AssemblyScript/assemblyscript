@@ -100,9 +100,9 @@
  (global $~lib/internal/string/CharCode.x i32 (i32.const 120))
  (global $~lib/internal/string/CharCode.z i32 (i32.const 122))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $std/array/subarr32 (mut i32) (i32.const 3832))
- (global $std/array/subarr8 (mut i32) (i32.const 3928))
- (global $HEAP_BASE i32 (i32.const 3936))
+ (global $std/array/subarr32 (mut i32) (i32.const 3688))
+ (global $std/array/subarr8 (mut i32) (i32.const 3784))
+ (global $HEAP_BASE i32 (i32.const 3792))
  (table 56 56 anyfunc)
  (elem (i32.const 0) $null $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $start~anonymous|23 $start~anonymous|24 $start~anonymous|25 $start~anonymous|26 $start~anonymous|27 $start~anonymous|28 $start~anonymous|29 $start~anonymous|30 $start~anonymous|31 $start~anonymous|32 $start~anonymous|33 $start~anonymous|34 $start~anonymous|35 $start~anonymous|36 $start~anonymous|37 $start~anonymous|38 $start~anonymous|39 $start~anonymous|40 $start~anonymous|41 $start~anonymous|42 $~lib/array/Array<f32>#sort|trampoline~anonymous|43 $~lib/array/Array<f64>#sort|trampoline~anonymous|44 $~lib/array/Array<i32>#sort|trampoline~anonymous|45 $~lib/array/Array<u32>#sort|trampoline~anonymous|46 $std/array/assertSortedDefault<i32>~anonymous|47 $start~anonymous|48 $start~anonymous|49 $start~anonymous|50 $start~anonymous|51 $start~anonymous|52 $start~anonymous|53 $start~anonymous|54 $start~anonymous|55)
  (memory $0 1)
@@ -184,66 +184,62 @@
  (data (i32.const 1832) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1864) "(\07\00\00\03\00\00\00")
  (data (i32.const 1872) "\01\00\00\000\00")
- (data (i32.const 1880) "(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1944) "X\07\00\00\n\00\00\00")
- (data (i32.const 1952) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2464) "\a0\07\00\00d\00\00\00")
- (data (i32.const 2472) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2504) "\a8\t\00\00\03\00\00\00")
- (data (i32.const 2512) "\03\00\00\001\002\003\00")
- (data (i32.const 2528) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2560) "\e0\t\00\00\03\00\00\00")
- (data (i32.const 2568) "\01\00\00\00-\00")
- (data (i32.const 2576) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2608) "\10\n\00\00\03\00\00\00")
- (data (i32.const 2616) "\05\00\00\001\00-\002\00-\003\00")
- (data (i32.const 2632) "\01\00\00\001\00")
- (data (i32.const 2640) "\0c\00\00\00\00\00\00\00\b8\05\00\00H\n\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2672) "P\n\00\00\03\00\00\00")
- (data (i32.const 2680) "\0c\00\00\00\00\00\00\00\b8\05\00\00H\n\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2712) "x\n\00\00\03\00\00\00")
- (data (i32.const 2720) "\03\00\00\001\00,\002\00")
- (data (i32.const 2736) "\07\00\00\000\00,\001\00,\002\00,\003\00")
- (data (i32.const 2760) "\03\00\00\00\00\00\00\00\01\ff\00\00\00\00\00\00")
- (data (i32.const 2776) "\c8\n\00\00\03\00\00\00")
- (data (i32.const 2784) "\03\00\00\00\00\00\00\00\01\ff\00\00\00\00\00\00")
- (data (i32.const 2800) "\e0\n\00\00\03\00\00\00")
- (data (i32.const 2808) "\06\00\00\001\00,\00-\001\00,\000\00")
- (data (i32.const 2824) "\06\00\00\00\00\00\00\00\01\00\ff\ff\00\00\00\00")
- (data (i32.const 2840) "\08\0b\00\00\03\00\00\00")
- (data (i32.const 2848) "\06\00\00\00\00\00\00\00\01\00\ff\ff\00\00\00\00")
- (data (i32.const 2864) " \0b\00\00\03\00\00\00")
- (data (i32.const 2872) "\t\00\00\001\00,\006\005\005\003\005\00,\000\00")
- (data (i32.const 2896) "\18\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\00\00\00\00")
- (data (i32.const 2928) "P\0b\00\00\03\00\00\00")
- (data (i32.const 2936) "(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3000) "x\0b\00\00\n\00\00\00")
- (data (i32.const 3008) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3520) "\c0\0b\00\00d\00\00\00")
- (data (i32.const 3528) "\18\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\00\00\00\00")
- (data (i32.const 3560) "\c8\0d\00\00\03\00\00\00")
- (data (i32.const 3568) "\18\00\00\001\00,\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005\00,\000\00")
- (data (i32.const 3624) "\0d\00\00\00,\00a\00,\00a\00,\00a\00b\00,\00b\00,\00b\00a\00,\00")
- (data (i32.const 3656) "\01\00\00\002\00")
- (data (i32.const 3664) "\01\00\00\004\00")
- (data (i32.const 3672) "\10\00\00\00\00\00\00\00H\n\00\00H\0e\00\00\00\00\00\00P\0e\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3704) "X\0e\00\00\04\00\00\00")
- (data (i32.const 3712) "\10\00\00\00\00\00\00\00H\n\00\00H\0e\00\00\00\00\00\00P\0e\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3744) "\80\0e\00\00\04\00\00\00")
- (data (i32.const 3752) "\06\00\00\001\00,\002\00,\00,\004\00")
- (data (i32.const 3768) "\08\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00")
+ (data (i32.const 1880) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2392) "X\07\00\00d\00\00\00")
+ (data (i32.const 2400) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2432) "`\t\00\00\03\00\00\00")
+ (data (i32.const 2440) "\03\00\00\001\002\003\00")
+ (data (i32.const 2456) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2488) "\98\t\00\00\03\00\00\00")
+ (data (i32.const 2496) "\01\00\00\00-\00")
+ (data (i32.const 2504) "\0c\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2536) "\c8\t\00\00\03\00\00\00")
+ (data (i32.const 2544) "\05\00\00\001\00-\002\00-\003\00")
+ (data (i32.const 2560) "\01\00\00\001\00")
+ (data (i32.const 2568) "\0c\00\00\00\00\00\00\00\b8\05\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2600) "\08\n\00\00\03\00\00\00")
+ (data (i32.const 2608) "\0c\00\00\00\00\00\00\00\b8\05\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2640) "0\n\00\00\03\00\00\00")
+ (data (i32.const 2648) "\03\00\00\001\00,\002\00")
+ (data (i32.const 2664) "\07\00\00\000\00,\001\00,\002\00,\003\00")
+ (data (i32.const 2688) "\03\00\00\00\00\00\00\00\01\ff\00\00\00\00\00\00")
+ (data (i32.const 2704) "\80\n\00\00\03\00\00\00")
+ (data (i32.const 2712) "\03\00\00\00\00\00\00\00\01\ff\00\00\00\00\00\00")
+ (data (i32.const 2728) "\98\n\00\00\03\00\00\00")
+ (data (i32.const 2736) "\06\00\00\001\00,\00-\001\00,\000\00")
+ (data (i32.const 2752) "\06\00\00\00\00\00\00\00\01\00\ff\ff\00\00\00\00")
+ (data (i32.const 2768) "\c0\n\00\00\03\00\00\00")
+ (data (i32.const 2776) "\06\00\00\00\00\00\00\00\01\00\ff\ff\00\00\00\00")
+ (data (i32.const 2792) "\d8\n\00\00\03\00\00\00")
+ (data (i32.const 2800) "\t\00\00\001\00,\006\005\005\003\005\00,\000\00")
+ (data (i32.const 2824) "\18\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\00\00\00\00")
+ (data (i32.const 2856) "\08\0b\00\00\03\00\00\00")
+ (data (i32.const 2864) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3376) "0\0b\00\00d\00\00\00")
+ (data (i32.const 3384) "\18\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\00\00\00\00")
+ (data (i32.const 3416) "8\0d\00\00\03\00\00\00")
+ (data (i32.const 3424) "\18\00\00\001\00,\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005\00,\000\00")
+ (data (i32.const 3480) "\0d\00\00\00,\00a\00,\00a\00,\00a\00b\00,\00b\00,\00b\00a\00,\00")
+ (data (i32.const 3512) "\01\00\00\002\00")
+ (data (i32.const 3520) "\01\00\00\004\00")
+ (data (i32.const 3528) "\10\00\00\00\00\00\00\00\00\n\00\00\b8\0d\00\00\00\00\00\00\c0\0d\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3560) "\c8\0d\00\00\04\00\00\00")
+ (data (i32.const 3568) "\10\00\00\00\00\00\00\00\00\n\00\00\b8\0d\00\00\00\00\00\00\c0\0d\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3600) "\f0\0d\00\00\04\00\00\00")
+ (data (i32.const 3608) "\06\00\00\001\00,\002\00,\00,\004\00")
+ (data (i32.const 3624) "\08\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00")
+ (data (i32.const 3640) "(\0e\00\00\02\00\00\00")
+ (data (i32.const 3648) "\08\00\00\00\00\00\00\00\03\00\00\00\04\00\00\00")
+ (data (i32.const 3664) "@\0e\00\00\02\00\00\00")
+ (data (i32.const 3672) "\08\00\00\00\00\00\00\008\0e\00\00P\0e\00\00")
+ (data (i32.const 3688) "X\0e\00\00\02\00\00\00")
+ (data (i32.const 3696) "\07\00\00\001\00,\002\00,\003\00,\004\00")
+ (data (i32.const 3720) "\02\00\00\00\00\00\00\00\01\02\00\00\00\00\00\00")
+ (data (i32.const 3736) "\88\0e\00\00\02\00\00\00")
+ (data (i32.const 3744) "\02\00\00\00\00\00\00\00\03\04\00\00\00\00\00\00")
+ (data (i32.const 3760) "\a0\0e\00\00\02\00\00\00")
+ (data (i32.const 3768) "\08\00\00\00\00\00\00\00\98\0e\00\00\b0\0e\00\00")
  (data (i32.const 3784) "\b8\0e\00\00\02\00\00\00")
- (data (i32.const 3792) "\08\00\00\00\00\00\00\00\03\00\00\00\04\00\00\00")
- (data (i32.const 3808) "\d0\0e\00\00\02\00\00\00")
- (data (i32.const 3816) "\08\00\00\00\00\00\00\00\c8\0e\00\00\e0\0e\00\00")
- (data (i32.const 3832) "\e8\0e\00\00\02\00\00\00")
- (data (i32.const 3840) "\07\00\00\001\00,\002\00,\003\00,\004\00")
- (data (i32.const 3864) "\02\00\00\00\00\00\00\00\01\02\00\00\00\00\00\00")
- (data (i32.const 3880) "\18\0f\00\00\02\00\00\00")
- (data (i32.const 3888) "\02\00\00\00\00\00\00\00\03\04\00\00\00\00\00\00")
- (data (i32.const 3904) "0\0f\00\00\02\00\00\00")
- (data (i32.const 3912) "\08\00\00\00\00\00\00\00(\0f\00\00@\0f\00\00")
- (data (i32.const 3928) "H\0f\00\00\02\00\00\00")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -13089,14 +13085,6 @@
   (local $6 i32)
   (local $7 i32)
   (set_local $2
-   (i32.const 1464)
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $4
    (i32.sub
     (i32.load offset=4
      (get_local $0)
@@ -13104,21 +13092,29 @@
     (i32.const 1)
    )
   )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (set_local $3
+   (i32.const 1464)
+  )
   (set_local $5
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $6
    (i32.ne
     (i32.load
      (get_local $1)
     )
     (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.const 1464)
    )
   )
   (block $break|0
@@ -13130,20 +13126,20 @@
      (i32.eqz
       (i32.lt_s
        (get_local $7)
-       (get_local $4)
+       (get_local $2)
       )
      )
     )
     (block
-     (set_local $2
+     (set_local $3
       (call $~lib/string/String.__concat
-       (get_local $2)
+       (get_local $3)
        (if (result i32)
         (i32.and
          (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.1 (result i32)
           (i32.load8_u offset=8
            (i32.add
-            (get_local $3)
+            (get_local $5)
             (i32.shl
              (get_local $7)
              (i32.const 0)
@@ -13159,10 +13155,10 @@
       )
      )
      (if
-      (get_local $5)
-      (set_local $2
+      (get_local $6)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (get_local $1)
        )
       )
@@ -13177,17 +13173,17 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $3
    (call $~lib/string/String.__concat
-    (get_local $2)
+    (get_local $3)
     (if (result i32)
      (i32.and
       (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.3 (result i32)
        (i32.load8_u offset=8
         (i32.add
-         (get_local $3)
+         (get_local $5)
          (i32.shl
-          (get_local $4)
+          (get_local $2)
           (i32.const 0)
          )
         )
@@ -13200,62 +13196,92 @@
     )
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $~lib/internal/itoa/decimalCountU32 (; 167 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (set_local $1
-   (i32.sub
-    (i32.const 32)
-    (i32.clz
-     (get_local $0)
-    )
+  (if
+   (i32.lt_u
+    (get_local $0)
+    (i32.const 10)
+   )
+   (return
+    (i32.const 1)
    )
   )
-  (set_local $2
-   (i32.shr_u
-    (i32.mul
-     (get_local $1)
-     (i32.const 1233)
-    )
-    (i32.const 12)
+  (if
+   (i32.lt_u
+    (get_local $0)
+    (i32.const 100)
+   )
+   (return
+    (i32.const 2)
    )
   )
-  (set_local $3
-   (i32.load
-    (block $~lib/internal/itoa/POWERS10|inlined.0 (result i32)
-     (i32.const 1944)
-    )
+  (if
+   (i32.lt_u
+    (get_local $0)
+    (i32.const 1000)
+   )
+   (return
+    (i32.const 3)
    )
   )
-  (set_local $4
-   (block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.3 (result i32)
-    (i32.load offset=8
-     (i32.add
-      (get_local $3)
-      (i32.shl
-       (get_local $2)
-       (i32.const 2)
-      )
-     )
-    )
+  (if
+   (i32.lt_u
+    (get_local $0)
+    (i32.const 10000)
+   )
+   (return
+    (i32.const 4)
    )
   )
-  (set_local $2
-   (i32.sub
-    (get_local $2)
-    (i32.lt_u
-     (get_local $0)
-     (get_local $4)
-    )
+  (if
+   (i32.lt_u
+    (get_local $0)
+    (i32.const 100000)
+   )
+   (return
+    (i32.const 5)
    )
   )
-  (i32.add
-   (get_local $2)
-   (i32.const 1)
+  (if
+   (i32.lt_u
+    (get_local $0)
+    (i32.const 1000000)
+   )
+   (return
+    (i32.const 6)
+   )
+  )
+  (if
+   (i32.lt_u
+    (get_local $0)
+    (i32.const 10000000)
+   )
+   (return
+    (i32.const 7)
+   )
+  )
+  (if
+   (i32.lt_u
+    (get_local $0)
+    (i32.const 100000000)
+   )
+   (return
+    (i32.const 8)
+   )
+  )
+  (if
+   (i32.lt_u
+    (get_local $0)
+    (i32.const 1000000000)
+   )
+   (return
+    (i32.const 9)
+   )
+  )
+  (return
+   (i32.const 10)
   )
  )
  (func $~lib/internal/itoa/utoa32_lut (; 168 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -13269,7 +13295,7 @@
   (set_local $3
    (i32.load
     (block $~lib/internal/itoa/DIGITS|inlined.0 (result i32)
-     (i32.const 2464)
+     (i32.const 2392)
     )
    )
   )
@@ -13391,7 +13417,7 @@
      )
     )
     (set_local $5
-     (block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.4 (result i32)
+     (block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.3 (result i32)
       (i32.load offset=8
        (i32.add
         (get_local $3)
@@ -13428,7 +13454,7 @@
      )
     )
     (set_local $5
-     (block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.5 (result i32)
+     (block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.4 (result i32)
       (i32.load offset=8
        (i32.add
         (get_local $3)
@@ -13548,14 +13574,6 @@
   (local $6 i32)
   (local $7 i32)
   (set_local $2
-   (i32.const 1464)
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $4
    (i32.sub
     (i32.load offset=4
      (get_local $0)
@@ -13563,21 +13581,29 @@
     (i32.const 1)
    )
   )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (set_local $3
+   (i32.const 1464)
+  )
   (set_local $5
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $6
    (i32.ne
     (i32.load
      (get_local $1)
     )
     (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.const 1464)
    )
   )
   (block $break|0
@@ -13589,19 +13615,19 @@
      (i32.eqz
       (i32.lt_s
        (get_local $7)
-       (get_local $4)
+       (get_local $2)
       )
      )
     )
     (block
-     (set_local $2
+     (set_local $3
       (call $~lib/string/String.__concat
-       (get_local $2)
+       (get_local $3)
        (call $~lib/internal/itoa/itoa<i32>
         (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.25 (result i32)
          (i32.load offset=8
           (i32.add
-           (get_local $3)
+           (get_local $5)
            (i32.shl
             (get_local $7)
             (i32.const 2)
@@ -13613,10 +13639,10 @@
       )
      )
      (if
-      (get_local $5)
-      (set_local $2
+      (get_local $6)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (get_local $1)
        )
       )
@@ -13631,16 +13657,16 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $3
    (call $~lib/string/String.__concat
-    (get_local $2)
+    (get_local $3)
     (call $~lib/internal/itoa/itoa<i32>
      (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.26 (result i32)
       (i32.load offset=8
        (i32.add
-        (get_local $3)
+        (get_local $5)
         (i32.shl
-         (get_local $4)
+         (get_local $2)
          (i32.const 2)
         )
        )
@@ -13649,7 +13675,7 @@
     )
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $~lib/array/Array<String>#join (; 172 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13659,14 +13685,6 @@
   (local $6 i32)
   (local $7 i32)
   (set_local $2
-   (i32.const 1464)
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $4
    (i32.sub
     (i32.load offset=4
      (get_local $0)
@@ -13674,21 +13692,29 @@
     (i32.const 1)
    )
   )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (set_local $3
+   (i32.const 1464)
+  )
   (set_local $5
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $6
    (i32.ne
     (i32.load
      (get_local $1)
     )
     (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.const 1464)
    )
   )
   (block $break|0
@@ -13700,16 +13726,16 @@
      (i32.eqz
       (i32.lt_s
        (get_local $7)
-       (get_local $4)
+       (get_local $2)
       )
      )
     )
     (block
-     (set_local $6
+     (set_local $4
       (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.3 (result i32)
        (i32.load offset=8
         (i32.add
-         (get_local $3)
+         (get_local $5)
          (i32.shl
           (get_local $7)
           (i32.const 2)
@@ -13719,19 +13745,19 @@
       )
      )
      (if
-      (get_local $6)
-      (set_local $2
+      (get_local $4)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
-        (get_local $6)
+        (get_local $3)
+        (get_local $4)
        )
       )
      )
      (if
-      (get_local $5)
-      (set_local $2
+      (get_local $6)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (get_local $1)
        )
       )
@@ -13746,13 +13772,13 @@
     (br $repeat|0)
    )
   )
-  (set_local $6
+  (set_local $4
    (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.4 (result i32)
     (i32.load offset=8
      (i32.add
-      (get_local $3)
+      (get_local $5)
       (i32.shl
-       (get_local $4)
+       (get_local $2)
        (i32.const 2)
       )
      )
@@ -13760,15 +13786,15 @@
    )
   )
   (if
-   (get_local $6)
-   (set_local $2
+   (get_local $4)
+   (set_local $3
     (call $~lib/string/String.__concat
-     (get_local $2)
-     (get_local $6)
+     (get_local $3)
+     (get_local $4)
     )
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $~lib/internal/itoa/itoa<i8> (; 173 ;) (type $ii) (param $0 i32) (result i32)
   (return
@@ -13791,14 +13817,6 @@
   (local $6 i32)
   (local $7 i32)
   (set_local $2
-   (i32.const 1464)
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $4
    (i32.sub
     (i32.load offset=4
      (get_local $0)
@@ -13806,21 +13824,29 @@
     (i32.const 1)
    )
   )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (set_local $3
+   (i32.const 1464)
+  )
   (set_local $5
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $6
    (i32.ne
     (i32.load
      (get_local $1)
     )
     (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.const 1464)
    )
   )
   (block $break|0
@@ -13832,19 +13858,19 @@
      (i32.eqz
       (i32.lt_s
        (get_local $7)
-       (get_local $4)
+       (get_local $2)
       )
      )
     )
     (block
-     (set_local $2
+     (set_local $3
       (call $~lib/string/String.__concat
-       (get_local $2)
+       (get_local $3)
        (call $~lib/internal/itoa/itoa<i8>
         (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.0 (result i32)
          (i32.load8_s offset=8
           (i32.add
-           (get_local $3)
+           (get_local $5)
            (i32.shl
             (get_local $7)
             (i32.const 0)
@@ -13856,10 +13882,10 @@
       )
      )
      (if
-      (get_local $5)
-      (set_local $2
+      (get_local $6)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (get_local $1)
        )
       )
@@ -13874,16 +13900,16 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $3
    (call $~lib/string/String.__concat
-    (get_local $2)
+    (get_local $3)
     (call $~lib/internal/itoa/itoa<i8>
      (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.1 (result i32)
       (i32.load8_s offset=8
        (i32.add
-        (get_local $3)
+        (get_local $5)
         (i32.shl
-         (get_local $4)
+         (get_local $2)
          (i32.const 0)
         )
        )
@@ -13892,7 +13918,7 @@
     )
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $~lib/internal/itoa/utoa32 (; 175 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -13942,14 +13968,6 @@
   (local $6 i32)
   (local $7 i32)
   (set_local $2
-   (i32.const 1464)
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $4
    (i32.sub
     (i32.load offset=4
      (get_local $0)
@@ -13957,21 +13975,29 @@
     (i32.const 1)
    )
   )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (set_local $3
+   (i32.const 1464)
+  )
   (set_local $5
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $6
    (i32.ne
     (i32.load
      (get_local $1)
     )
     (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.const 1464)
    )
   )
   (block $break|0
@@ -13983,19 +14009,19 @@
      (i32.eqz
       (i32.lt_s
        (get_local $7)
-       (get_local $4)
+       (get_local $2)
       )
      )
     )
     (block
-     (set_local $2
+     (set_local $3
       (call $~lib/string/String.__concat
-       (get_local $2)
+       (get_local $3)
        (call $~lib/internal/itoa/itoa<u16>
         (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.0 (result i32)
          (i32.load16_u offset=8
           (i32.add
-           (get_local $3)
+           (get_local $5)
            (i32.shl
             (get_local $7)
             (i32.const 1)
@@ -14007,10 +14033,10 @@
       )
      )
      (if
-      (get_local $5)
-      (set_local $2
+      (get_local $6)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (get_local $1)
        )
       )
@@ -14025,16 +14051,16 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $3
    (call $~lib/string/String.__concat
-    (get_local $2)
+    (get_local $3)
     (call $~lib/internal/itoa/itoa<u16>
      (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.1 (result i32)
       (i32.load16_u offset=8
        (i32.add
-        (get_local $3)
+        (get_local $5)
         (i32.shl
-         (get_local $4)
+         (get_local $2)
          (i32.const 1)
         )
        )
@@ -14043,74 +14069,92 @@
     )
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $~lib/internal/itoa/decimalCountU64 (; 178 ;) (type $Ii) (param $0 i64) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i64)
-  (set_local $1
-   (i32.sub
-    (i32.const 64)
-    (i32.wrap/i64
-     (i64.clz
-      (get_local $0)
-     )
-    )
+  (if
+   (i64.lt_u
+    (get_local $0)
+    (i64.const 100000000000)
+   )
+   (return
+    (i32.const 11)
    )
   )
-  (set_local $2
-   (i32.shr_u
-    (i32.mul
-     (get_local $1)
-     (i32.const 1233)
-    )
+  (if
+   (i64.lt_u
+    (get_local $0)
+    (i64.const 1000000000000)
+   )
+   (return
     (i32.const 12)
    )
   )
-  (set_local $3
-   (i32.load
-    (block $~lib/internal/itoa/POWERS10|inlined.1 (result i32)
-     (i32.const 3000)
-    )
+  (if
+   (i64.lt_u
+    (get_local $0)
+    (i64.const 10000000000000)
+   )
+   (return
+    (i32.const 13)
    )
   )
-  (set_local $5
-   (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.2 (result i64)
-    (set_local $4
-     (i32.sub
-      (get_local $2)
-      (i32.const 10)
-     )
-    )
-    (i64.load32_u offset=8
-     (i32.add
-      (get_local $3)
-      (i32.shl
-       (get_local $4)
-       (i32.const 2)
-      )
-     )
-    )
+  (if
+   (i64.lt_u
+    (get_local $0)
+    (i64.const 100000000000000)
+   )
+   (return
+    (i32.const 14)
    )
   )
-  (set_local $2
-   (i32.sub
-    (get_local $2)
-    (i64.lt_u
-     (get_local $0)
-     (i64.mul
-      (i64.const 10000000000)
-      (get_local $5)
-     )
-    )
+  (if
+   (i64.lt_u
+    (get_local $0)
+    (i64.const 1000000000000000)
+   )
+   (return
+    (i32.const 15)
    )
   )
-  (i32.add
-   (get_local $2)
-   (i32.const 1)
+  (if
+   (i64.lt_u
+    (get_local $0)
+    (i64.const 10000000000000000)
+   )
+   (return
+    (i32.const 16)
+   )
+  )
+  (if
+   (i64.lt_u
+    (get_local $0)
+    (i64.const 100000000000000000)
+   )
+   (return
+    (i32.const 17)
+   )
+  )
+  (if
+   (i64.lt_u
+    (get_local $0)
+    (i64.const 1000000000000000000)
+   )
+   (return
+    (i32.const 18)
+   )
+  )
+  (if
+   (i64.lt_u
+    (get_local $0)
+    (i64.const -8446744073709551616)
+   )
+   (return
+    (i32.const 19)
+   )
+  )
+  (return
+   (i32.const 20)
   )
  )
  (func $~lib/internal/itoa/utoa64_lut (; 179 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
@@ -14128,7 +14172,7 @@
   (set_local $3
    (i32.load
     (block $~lib/internal/itoa/DIGITS|inlined.1 (result i32)
-     (i32.const 3520)
+     (i32.const 3376)
     )
    )
   )
@@ -14198,7 +14242,7 @@
         )
        )
        (set_local $12
-        (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.3 (result i64)
+        (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.2 (result i64)
          (i64.load32_u offset=8
           (i32.add
            (get_local $3)
@@ -14211,7 +14255,7 @@
         )
        )
        (set_local $13
-        (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.4 (result i64)
+        (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.3 (result i64)
          (i64.load32_u offset=8
           (i32.add
            (get_local $3)
@@ -14246,7 +14290,7 @@
         )
        )
        (set_local $12
-        (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.5 (result i64)
+        (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.4 (result i64)
          (i64.load32_u offset=8
           (i32.add
            (get_local $3)
@@ -14259,7 +14303,7 @@
         )
        )
        (set_local $13
-        (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.6 (result i64)
+        (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.5 (result i64)
          (i64.load32_u offset=8
           (i32.add
            (get_local $3)
@@ -14382,19 +14426,11 @@
  (func $~lib/array/Array<u64>#join (; 182 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 i64)
   (local $5 i32)
-  (local $6 i64)
+  (local $6 i32)
   (local $7 i32)
   (set_local $2
-   (i32.const 1464)
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $4
    (i32.sub
     (i32.load offset=4
      (get_local $0)
@@ -14402,21 +14438,29 @@
     (i32.const 1)
    )
   )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (set_local $3
+   (i32.const 1464)
+  )
   (set_local $5
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $6
    (i32.ne
     (i32.load
      (get_local $1)
     )
     (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.const 1464)
    )
   )
   (block $break|0
@@ -14428,19 +14472,19 @@
      (i32.eqz
       (i32.lt_s
        (get_local $7)
-       (get_local $4)
+       (get_local $2)
       )
      )
     )
     (block
-     (set_local $2
+     (set_local $3
       (call $~lib/string/String.__concat
-       (get_local $2)
+       (get_local $3)
        (call $~lib/internal/itoa/itoa<u64>
         (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.0 (result i64)
          (i64.load offset=8
           (i32.add
-           (get_local $3)
+           (get_local $5)
            (i32.shl
             (get_local $7)
             (i32.const 3)
@@ -14452,10 +14496,10 @@
       )
      )
      (if
-      (get_local $5)
-      (set_local $2
+      (get_local $6)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (get_local $1)
        )
       )
@@ -14470,16 +14514,16 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $3
    (call $~lib/string/String.__concat
-    (get_local $2)
+    (get_local $3)
     (call $~lib/internal/itoa/itoa<u64>
      (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.1 (result i64)
       (i64.load offset=8
        (i32.add
-        (get_local $3)
+        (get_local $5)
         (i32.shl
-         (get_local $4)
+         (get_local $2)
          (i32.const 3)
         )
        )
@@ -14488,7 +14532,7 @@
     )
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $~lib/array/Array<Array<i32>>#join (; 183 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14498,14 +14542,6 @@
   (local $6 i32)
   (local $7 i32)
   (set_local $2
-   (i32.const 1464)
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $4
    (i32.sub
     (i32.load offset=4
      (get_local $0)
@@ -14513,21 +14549,29 @@
     (i32.const 1)
    )
   )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (set_local $3
+   (i32.const 1464)
+  )
   (set_local $5
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $6
    (i32.ne
     (i32.load
      (get_local $1)
     )
     (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.const 1464)
    )
   )
   (block $break|0
@@ -14539,16 +14583,16 @@
      (i32.eqz
       (i32.lt_s
        (get_local $7)
-       (get_local $4)
+       (get_local $2)
       )
      )
     )
     (block
-     (set_local $6
+     (set_local $4
       (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.3 (result i32)
        (i32.load offset=8
         (i32.add
-         (get_local $3)
+         (get_local $5)
          (i32.shl
           (get_local $7)
           (i32.const 2)
@@ -14558,22 +14602,22 @@
       )
      )
      (if
-      (get_local $6)
-      (set_local $2
+      (get_local $4)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (call $~lib/array/Array<i32>#join
-         (get_local $6)
+         (get_local $4)
          (get_local $1)
         )
        )
       )
      )
      (if
-      (get_local $5)
-      (set_local $2
+      (get_local $6)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (get_local $1)
        )
       )
@@ -14588,13 +14632,13 @@
     (br $repeat|0)
    )
   )
-  (set_local $6
+  (set_local $4
    (block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.4 (result i32)
     (i32.load offset=8
      (i32.add
-      (get_local $3)
+      (get_local $5)
       (i32.shl
-       (get_local $4)
+       (get_local $2)
        (i32.const 2)
       )
      )
@@ -14602,18 +14646,18 @@
    )
   )
   (if
-   (get_local $6)
-   (set_local $2
+   (get_local $4)
+   (set_local $3
     (call $~lib/string/String.__concat
-     (get_local $2)
+     (get_local $3)
      (call $~lib/array/Array<i32>#join
-      (get_local $6)
+      (get_local $4)
       (get_local $1)
      )
     )
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $~lib/internal/itoa/itoa<u8> (; 184 ;) (type $ii) (param $0 i32) (result i32)
   (return
@@ -14633,14 +14677,6 @@
   (local $6 i32)
   (local $7 i32)
   (set_local $2
-   (i32.const 1464)
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $4
    (i32.sub
     (i32.load offset=4
      (get_local $0)
@@ -14648,21 +14684,29 @@
     (i32.const 1)
    )
   )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (set_local $3
+   (i32.const 1464)
+  )
   (set_local $5
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $6
    (i32.ne
     (i32.load
      (get_local $1)
     )
     (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.const 1464)
    )
   )
   (block $break|0
@@ -14674,19 +14718,19 @@
      (i32.eqz
       (i32.lt_s
        (get_local $7)
-       (get_local $4)
+       (get_local $2)
       )
      )
     )
     (block
-     (set_local $2
+     (set_local $3
       (call $~lib/string/String.__concat
-       (get_local $2)
+       (get_local $3)
        (call $~lib/internal/itoa/itoa<u8>
         (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.1 (result i32)
          (i32.load8_u offset=8
           (i32.add
-           (get_local $3)
+           (get_local $5)
            (i32.shl
             (get_local $7)
             (i32.const 0)
@@ -14698,10 +14742,10 @@
       )
      )
      (if
-      (get_local $5)
-      (set_local $2
+      (get_local $6)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (get_local $1)
        )
       )
@@ -14716,16 +14760,16 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $3
    (call $~lib/string/String.__concat
-    (get_local $2)
+    (get_local $3)
     (call $~lib/internal/itoa/itoa<u8>
      (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.2 (result i32)
       (i32.load8_u offset=8
        (i32.add
-        (get_local $3)
+        (get_local $5)
         (i32.shl
-         (get_local $4)
+         (get_local $2)
          (i32.const 0)
         )
        )
@@ -14734,7 +14778,7 @@
     )
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $~lib/array/Array<Array<u8>>#join (; 186 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14744,14 +14788,6 @@
   (local $6 i32)
   (local $7 i32)
   (set_local $2
-   (i32.const 1464)
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $4
    (i32.sub
     (i32.load offset=4
      (get_local $0)
@@ -14759,21 +14795,29 @@
     (i32.const 1)
    )
   )
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (set_local $3
+   (i32.const 1464)
+  )
   (set_local $5
+   (i32.load
+    (get_local $0)
+   )
+  )
+  (set_local $6
    (i32.ne
     (i32.load
      (get_local $1)
     )
     (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $4)
-    (i32.const 0)
-   )
-   (return
-    (i32.const 1464)
    )
   )
   (block $break|0
@@ -14785,16 +14829,16 @@
      (i32.eqz
       (i32.lt_s
        (get_local $7)
-       (get_local $4)
+       (get_local $2)
       )
      )
     )
     (block
-     (set_local $6
+     (set_local $4
       (block $~lib/internal/arraybuffer/loadUnsafe<Array<u8>,Array<u8>>|inlined.0 (result i32)
        (i32.load offset=8
         (i32.add
-         (get_local $3)
+         (get_local $5)
          (i32.shl
           (get_local $7)
           (i32.const 2)
@@ -14804,22 +14848,22 @@
       )
      )
      (if
-      (get_local $6)
-      (set_local $2
+      (get_local $4)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (call $~lib/array/Array<u8>#join
-         (get_local $6)
+         (get_local $4)
          (get_local $1)
         )
        )
       )
      )
      (if
-      (get_local $5)
-      (set_local $2
+      (get_local $6)
+      (set_local $3
        (call $~lib/string/String.__concat
-        (get_local $2)
+        (get_local $3)
         (get_local $1)
        )
       )
@@ -14834,13 +14878,13 @@
     (br $repeat|0)
    )
   )
-  (set_local $6
+  (set_local $4
    (block $~lib/internal/arraybuffer/loadUnsafe<Array<u8>,Array<u8>>|inlined.1 (result i32)
     (i32.load offset=8
      (i32.add
-      (get_local $3)
+      (get_local $5)
       (i32.shl
-       (get_local $4)
+       (get_local $2)
        (i32.const 2)
       )
      )
@@ -14848,18 +14892,18 @@
    )
   )
   (if
-   (get_local $6)
-   (set_local $2
+   (get_local $4)
+   (set_local $3
     (call $~lib/string/String.__concat
-     (get_local $2)
+     (get_local $3)
      (call $~lib/array/Array<u8>#join
-      (get_local $6)
+      (get_local $4)
       (get_local $1)
      )
     )
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $start (; 187 ;) (type $v)
   (local $0 i32)
@@ -18915,10 +18959,10 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/array/Array<i32>#join
-      (i32.const 2504)
+      (i32.const 2432)
       (i32.const 1464)
      )
-     (i32.const 2512)
+     (i32.const 2440)
     )
    )
    (block
@@ -18935,10 +18979,10 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/array/Array<i32>#join
-      (i32.const 2608)
-      (i32.const 2568)
+      (i32.const 2536)
+      (i32.const 2496)
      )
-     (i32.const 2616)
+     (i32.const 2544)
     )
    )
    (block
@@ -18955,10 +18999,10 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/array/Array<String>#join
-      (i32.const 2712)
+      (i32.const 2640)
       (i32.const 1464)
      )
-     (i32.const 2632)
+     (i32.const 2560)
     )
    )
    (block
@@ -19008,7 +19052,7 @@
        (i32.const 1776)
       )
      )
-     (i32.const 2632)
+     (i32.const 2560)
     )
    )
    (block
@@ -19033,7 +19077,7 @@
        (i32.const 1776)
       )
      )
-     (i32.const 2720)
+     (i32.const 2648)
     )
    )
    (block
@@ -19058,7 +19102,7 @@
        (i32.const 1776)
       )
      )
-     (i32.const 2736)
+     (i32.const 2664)
     )
    )
    (block
@@ -19076,14 +19120,14 @@
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<i8>#toString|inlined.1 (result i32)
       (set_local $0
-       (i32.const 2800)
+       (i32.const 2728)
       )
       (call $~lib/array/Array<i8>#join
        (get_local $0)
        (i32.const 1776)
       )
      )
-     (i32.const 2808)
+     (i32.const 2736)
     )
    )
    (block
@@ -19101,14 +19145,14 @@
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<u16>#toString|inlined.1 (result i32)
       (set_local $0
-       (i32.const 2864)
+       (i32.const 2792)
       )
       (call $~lib/array/Array<u16>#join
        (get_local $0)
        (i32.const 1776)
       )
      )
-     (i32.const 2872)
+     (i32.const 2800)
     )
    )
    (block
@@ -19126,14 +19170,14 @@
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<u64>#toString|inlined.1 (result i32)
       (set_local $0
-       (i32.const 3560)
+       (i32.const 3416)
       )
       (call $~lib/array/Array<u64>#join
        (get_local $0)
        (i32.const 1776)
       )
      )
-     (i32.const 3568)
+     (i32.const 3424)
     )
    )
    (block
@@ -19158,7 +19202,7 @@
        (i32.const 1776)
       )
      )
-     (i32.const 3624)
+     (i32.const 3480)
     )
    )
    (block
@@ -19176,14 +19220,14 @@
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<String>#toString|inlined.3 (result i32)
       (set_local $0
-       (i32.const 3744)
+       (i32.const 3600)
       )
       (call $~lib/array/Array<String>#join
        (get_local $0)
        (i32.const 1776)
       )
      )
-     (i32.const 3752)
+     (i32.const 3608)
     )
    )
    (block
@@ -19208,7 +19252,7 @@
        (i32.const 1776)
       )
      )
-     (i32.const 3840)
+     (i32.const 3696)
     )
    )
    (block
@@ -19233,7 +19277,7 @@
        (i32.const 1776)
       )
      )
-     (i32.const 3840)
+     (i32.const 3696)
     )
    )
    (block

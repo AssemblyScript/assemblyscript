@@ -359,12 +359,12 @@ export class Array<T> {
   }
 
   join(separator: string = ","): string {
-    var result = "";
-    var buffer = this.buffer_;
     var lastIndex = this.length_ - 1;
-    var hasSeparator = separator.length != 0;
     if (lastIndex < 0) return "";
+    var result = "";
     var value: T;
+    var buffer = this.buffer_;
+    var hasSeparator = separator.length != 0;
     if (value instanceof bool) {
       for (let i = 0; i < lastIndex; ++i) {
         result += loadUnsafe<T,T>(buffer, i) ? "true" : "false";

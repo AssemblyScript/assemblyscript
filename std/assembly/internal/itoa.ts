@@ -70,25 +70,51 @@ function DIGITS(): u32[] {
 // Count number of decimals for u32 values
 // In our case input value always non-zero so we can simplify some parts
 function decimalCountU32(value: u32): i32 {
-  var l: usize = 32 - <usize>clz<u32>(value); // log2
-  var t = l * 1233 >>> 12; // log10
+  if (ASC_SHRINK_LEVEL >= 1) {
+    let l: usize = 32 - <usize>clz<u32>(value); // log2
+    let t = l * 1233 >>> 12; // log10
 
-  var lutbuf = <ArrayBuffer>POWERS10().buffer_;
-  var power  = loadUnsafe<u32,u32>(lutbuf, t);
-  t -= <usize>(value < power);
-  return t + 1;
+    let lutbuf = <ArrayBuffer>POWERS10().buffer_;
+    let power  = loadUnsafe<u32,u32>(lutbuf, t);
+    t -= <usize>(value < power);
+    return t + 1;
+  } else {
+    if (value < 10) return 1;
+    if (value < 100) return 2;
+    if (value < 1000) return 3;
+    if (value < 10000) return 4;
+    if (value < 100000) return 5;
+    if (value < 1000000) return 6;
+    if (value < 10000000) return 7;
+    if (value < 100000000) return 8;
+    if (value < 1000000000) return 9;
+    return 10;
+  }
 }
 
 // Count number of decimals for u64 values
 // In our case input value always greater than 2^32-1 so we can skip some parts
 function decimalCountU64(value: u64): i32 {
-  var l: usize = 64 - <usize>clz<u64>(value); // log2
-  var t = l * 1233 >>> 12; // log10
+  if (ASC_SHRINK_LEVEL >= 1) {
+    let l: usize = 64 - <usize>clz<u64>(value); // log2
+    let t = l * 1233 >>> 12; // log10
 
-  var lutbuf = <ArrayBuffer>POWERS10().buffer_;
-  var power  = loadUnsafe<u32,u64>(lutbuf, t - 10);
-  t -= <usize>(value < 10000000000 * power);
-  return t + 1;
+    let lutbuf = <ArrayBuffer>POWERS10().buffer_;
+    let power  = loadUnsafe<u32,u64>(lutbuf, t - 10);
+    t -= <usize>(value < 10000000000 * power);
+    return t + 1;
+  } else {
+    if (value < 100000000000) return 11;
+    if (value < 1000000000000) return 12;
+    if (value < 10000000000000) return 13;
+    if (value < 100000000000000) return 14;
+    if (value < 1000000000000000) return 15;
+    if (value < 10000000000000000) return 16;
+    if (value < 100000000000000000) return 17;
+    if (value < 1000000000000000000) return 18;
+    if (value < 10000000000000000000) return 19;
+    return 20;
+  }
 }
 
 function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
