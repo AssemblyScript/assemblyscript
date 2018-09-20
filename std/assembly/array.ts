@@ -14,6 +14,7 @@ import {
 } from "./internal/array";
 
 import { itoa } from "./internal/itoa";
+import { dtoa } from "./internal/dtoa";
 
 export class Array<T> {
 
@@ -378,7 +379,11 @@ export class Array<T> {
       }
       result += itoa<T>(loadUnsafe<T,T>(buffer, lastIndex));
     } else if (isFloat<T>()) {
-      // TODO
+      for (let i = 0; i < lastIndex; ++i) {
+        result += <T>dtoa(<f64>loadUnsafe<T,T>(buffer, i));
+        if (hasSeparator) result += separator;
+      }
+      result += <T>dtoa(<f64>loadUnsafe<T,T>(buffer, lastIndex));
     } else if (isString<T>()) {
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);

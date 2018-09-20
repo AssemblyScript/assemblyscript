@@ -36,7 +36,7 @@ function EXP_POWERS(): i16[] {
   return table;
 }
 
-// 10^-348, 10^-340, ..., 10^340
+// 1e-348, 1e-340, ..., 1e340
 @inline
 function FRC_POWERS(): u64[] {
   const table: u64[] = [
@@ -138,12 +138,13 @@ function normalizeBoundary(f: u64, e: i32): void {
 function normalizedBoundaries(f: u64, e: i32): void {
   normalizeBoundary((f << 1) + 1, e - 1);
   var m = <i32>(f == 0x0010000000000000) + 1;
+  var exp = _exp;
 
   _frc_plus = _frc;
-  _exp_plus = _exp;
+  _exp_plus = exp;
 
-  _frc_minus = ((f << m) - 1) << e - 1 - _exp;
-  _exp_minus = _exp;
+  _frc_minus = ((f << m) - 1) << e - 1 - exp;
+  _exp_minus = exp;
 }
 
 @inline
