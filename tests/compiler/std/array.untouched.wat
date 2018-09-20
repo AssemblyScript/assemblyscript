@@ -13199,90 +13199,96 @@
   (get_local $3)
  )
  (func $~lib/internal/itoa/decimalCountU32 (; 167 ;) (type $ii) (param $0 i32) (result i32)
-  (if
-   (i32.lt_u
-    (get_local $0)
-    (i32.const 10)
-   )
-   (return
-    (i32.const 1)
-   )
-  )
-  (if
-   (i32.lt_u
-    (get_local $0)
-    (i32.const 100)
-   )
-   (return
-    (i32.const 2)
-   )
-  )
-  (if
-   (i32.lt_u
-    (get_local $0)
-    (i32.const 1000)
-   )
-   (return
-    (i32.const 3)
-   )
-  )
-  (if
-   (i32.lt_u
-    (get_local $0)
-    (i32.const 10000)
-   )
-   (return
-    (i32.const 4)
-   )
-  )
+  (local $1 i32)
   (if
    (i32.lt_u
     (get_local $0)
     (i32.const 100000)
    )
-   (return
-    (i32.const 5)
+   (block
+    (if
+     (i32.lt_u
+      (get_local $0)
+      (i32.const 100)
+     )
+     (return
+      (select
+       (i32.const 1)
+       (i32.const 2)
+       (i32.lt_u
+        (get_local $0)
+        (i32.const 10)
+       )
+      )
+     )
+     (block
+      (set_local $1
+       (select
+        (i32.const 4)
+        (i32.const 5)
+        (i32.lt_u
+         (get_local $0)
+         (i32.const 10000)
+        )
+       )
+      )
+      (return
+       (select
+        (i32.const 3)
+        (get_local $1)
+        (i32.lt_u
+         (get_local $0)
+         (i32.const 1000)
+        )
+       )
+      )
+     )
+    )
+    (unreachable)
+   )
+   (block
+    (if
+     (i32.lt_u
+      (get_local $0)
+      (i32.const 10000000)
+     )
+     (return
+      (select
+       (i32.const 6)
+       (i32.const 7)
+       (i32.lt_u
+        (get_local $0)
+        (i32.const 1000000)
+       )
+      )
+     )
+     (block
+      (set_local $1
+       (select
+        (i32.const 9)
+        (i32.const 10)
+        (i32.lt_u
+         (get_local $0)
+         (i32.const 1000000000)
+        )
+       )
+      )
+      (return
+       (select
+        (i32.const 8)
+        (get_local $1)
+        (i32.lt_u
+         (get_local $0)
+         (i32.const 100000000)
+        )
+       )
+      )
+     )
+    )
+    (unreachable)
    )
   )
-  (if
-   (i32.lt_u
-    (get_local $0)
-    (i32.const 1000000)
-   )
-   (return
-    (i32.const 6)
-   )
-  )
-  (if
-   (i32.lt_u
-    (get_local $0)
-    (i32.const 10000000)
-   )
-   (return
-    (i32.const 7)
-   )
-  )
-  (if
-   (i32.lt_u
-    (get_local $0)
-    (i32.const 100000000)
-   )
-   (return
-    (i32.const 8)
-   )
-  )
-  (if
-   (i32.lt_u
-    (get_local $0)
-    (i32.const 1000000000)
-   )
-   (return
-    (i32.const 9)
-   )
-  )
-  (return
-   (i32.const 10)
-  )
+  (unreachable)
  )
  (func $~lib/internal/itoa/utoa32_lut (; 168 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -14072,90 +14078,96 @@
   (get_local $3)
  )
  (func $~lib/internal/itoa/decimalCountU64 (; 178 ;) (type $Ii) (param $0 i64) (result i32)
-  (if
-   (i64.lt_u
-    (get_local $0)
-    (i64.const 100000000000)
-   )
-   (return
-    (i32.const 11)
-   )
-  )
-  (if
-   (i64.lt_u
-    (get_local $0)
-    (i64.const 1000000000000)
-   )
-   (return
-    (i32.const 12)
-   )
-  )
-  (if
-   (i64.lt_u
-    (get_local $0)
-    (i64.const 10000000000000)
-   )
-   (return
-    (i32.const 13)
-   )
-  )
-  (if
-   (i64.lt_u
-    (get_local $0)
-    (i64.const 100000000000000)
-   )
-   (return
-    (i32.const 14)
-   )
-  )
+  (local $1 i32)
   (if
    (i64.lt_u
     (get_local $0)
     (i64.const 1000000000000000)
    )
-   (return
-    (i32.const 15)
+   (block
+    (if
+     (i64.lt_u
+      (get_local $0)
+      (i64.const 1000000000000)
+     )
+     (return
+      (select
+       (i32.const 11)
+       (i32.const 12)
+       (i64.lt_u
+        (get_local $0)
+        (i64.const 100000000000)
+       )
+      )
+     )
+     (block
+      (set_local $1
+       (select
+        (i32.const 14)
+        (i32.const 15)
+        (i64.lt_u
+         (get_local $0)
+         (i64.const 100000000000000)
+        )
+       )
+      )
+      (return
+       (select
+        (i32.const 13)
+        (get_local $1)
+        (i64.lt_u
+         (get_local $0)
+         (i64.const 10000000000000)
+        )
+       )
+      )
+     )
+    )
+    (unreachable)
+   )
+   (block
+    (if
+     (i64.lt_u
+      (get_local $0)
+      (i64.const 100000000000000000)
+     )
+     (return
+      (select
+       (i32.const 16)
+       (i32.const 17)
+       (i64.lt_u
+        (get_local $0)
+        (i64.const 10000000000000000)
+       )
+      )
+     )
+     (block
+      (set_local $1
+       (select
+        (i32.const 19)
+        (i32.const 20)
+        (i64.lt_u
+         (get_local $0)
+         (i64.const -8446744073709551616)
+        )
+       )
+      )
+      (return
+       (select
+        (i32.const 18)
+        (get_local $1)
+        (i64.lt_u
+         (get_local $0)
+         (i64.const 1000000000000000000)
+        )
+       )
+      )
+     )
+    )
+    (unreachable)
    )
   )
-  (if
-   (i64.lt_u
-    (get_local $0)
-    (i64.const 10000000000000000)
-   )
-   (return
-    (i32.const 16)
-   )
-  )
-  (if
-   (i64.lt_u
-    (get_local $0)
-    (i64.const 100000000000000000)
-   )
-   (return
-    (i32.const 17)
-   )
-  )
-  (if
-   (i64.lt_u
-    (get_local $0)
-    (i64.const 1000000000000000000)
-   )
-   (return
-    (i32.const 18)
-   )
-  )
-  (if
-   (i64.lt_u
-    (get_local $0)
-    (i64.const -8446744073709551616)
-   )
-   (return
-    (i32.const 19)
-   )
-  )
-  (return
-   (i32.const 20)
-  )
+  (unreachable)
  )
  (func $~lib/internal/itoa/utoa64_lut (; 179 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)

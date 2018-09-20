@@ -79,16 +79,21 @@ function decimalCountU32(value: u32): i32 {
     t -= <usize>(value < power);
     return t + 1;
   } else {
-    if (value < 10) return 1;
-    if (value < 100) return 2;
-    if (value < 1000) return 3;
-    if (value < 10000) return 4;
-    if (value < 100000) return 5;
-    if (value < 1000000) return 6;
-    if (value < 10000000) return 7;
-    if (value < 100000000) return 8;
-    if (value < 1000000000) return 9;
-    return 10;
+    if (value < 100000) {
+      if (value < 100) {
+        return select<u32>(1, 2, value < 10);
+      } else {
+        let m = select<u32>(4, 5, value < 10000);
+        return select<u32>(3, m, value < 1000);
+      }
+    } else {
+      if (value < 10000000) {
+        return select<u32>(6, 7, value < 1000000);
+      } else {
+        let m = select<u32>(9, 10, value < 1000000000);
+        return select<u32>(8, m, value < 100000000);
+      }
+    }
   }
 }
 
@@ -104,16 +109,21 @@ function decimalCountU64(value: u64): i32 {
     t -= <usize>(value < 10000000000 * power);
     return t + 1;
   } else {
-    if (value < 100000000000) return 11;
-    if (value < 1000000000000) return 12;
-    if (value < 10000000000000) return 13;
-    if (value < 100000000000000) return 14;
-    if (value < 1000000000000000) return 15;
-    if (value < 10000000000000000) return 16;
-    if (value < 100000000000000000) return 17;
-    if (value < 1000000000000000000) return 18;
-    if (value < 10000000000000000000) return 19;
-    return 20;
+    if (value < 1000000000000000) {
+      if (value < 1000000000000) {
+        return select<u32>(11, 12, value < 100000000000);
+      } else {
+        let m = select<u32>(14, 15, value < 100000000000000);
+        return select<u32>(13, m, value < 10000000000000);
+      }
+    } else {
+      if (value < 100000000000000000) {
+        return select<u32>(16, 17, value < 10000000000000000);
+      } else {
+        let m = select<u32>(19, 20, value < 10000000000000000000);
+        return select<u32>(18, m, value < 1000000000000000000);
+      }
+    }
   }
 }
 
@@ -283,7 +293,7 @@ export function itoa64(value: i64): string {
 
 export function itoa<T>(value: T): string {
   if (!isInteger<T>()) {
-    assert(false);
+    assert(false); // unexpecteble non-integer generic type
   } else {
     if (isSigned<T>()) {
       if (sizeof<T>() <= 4) {
