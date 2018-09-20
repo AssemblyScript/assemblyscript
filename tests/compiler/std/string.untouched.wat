@@ -5091,7 +5091,7 @@
   )
   (get_local $4)
  )
- (func $~lib/internal/itoa/decimalCountU32 (; 35 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/itoa/decimalCount32 (; 35 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.lt_u
@@ -5431,7 +5431,7 @@
   )
   (set_local $2
    (i32.add
-    (call $~lib/internal/itoa/decimalCountU32
+    (call $~lib/internal/itoa/decimalCount32
      (get_local $0)
     )
     (get_local $1)
@@ -5470,7 +5470,7 @@
    )
   )
   (set_local $1
-   (call $~lib/internal/itoa/decimalCountU32
+   (call $~lib/internal/itoa/decimalCount32
     (get_local $0)
    )
   )
@@ -5488,7 +5488,7 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/itoa/decimalCountU64 (; 39 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/itoa/decimalCount64 (; 39 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (if
    (i64.lt_u
@@ -5800,7 +5800,7 @@
      )
     )
     (set_local $3
-     (call $~lib/internal/itoa/decimalCountU32
+     (call $~lib/internal/itoa/decimalCount32
       (get_local $2)
      )
     )
@@ -5819,7 +5819,7 @@
    )
    (block
     (set_local $3
-     (call $~lib/internal/itoa/decimalCountU64
+     (call $~lib/internal/itoa/decimalCount64
       (get_local $0)
      )
     )
@@ -5882,7 +5882,7 @@
     )
     (set_local $4
      (i32.add
-      (call $~lib/internal/itoa/decimalCountU32
+      (call $~lib/internal/itoa/decimalCount32
        (get_local $3)
       )
       (get_local $1)
@@ -5904,7 +5904,7 @@
    (block
     (set_local $4
      (i32.add
-      (call $~lib/internal/itoa/decimalCountU64
+      (call $~lib/internal/itoa/decimalCount64
        (get_local $0)
       )
       (get_local $1)

@@ -4235,7 +4235,7 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/itoa/decimalCountU32 (; 35 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/itoa/decimalCount32 (; 35 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if (result i32)
    (i32.lt_u
     (get_local $0)
@@ -4493,7 +4493,7 @@
     (call $~lib/internal/string/allocateUnsafe
      (tee_local $3
       (i32.add
-       (call $~lib/internal/itoa/decimalCountU32
+       (call $~lib/internal/itoa/decimalCount32
         (get_local $0)
        )
        (get_local $1)
@@ -4528,7 +4528,7 @@
    (tee_local $2
     (call $~lib/internal/string/allocateUnsafe
      (tee_local $1
-      (call $~lib/internal/itoa/decimalCountU32
+      (call $~lib/internal/itoa/decimalCount32
        (get_local $0)
       )
      )
@@ -4539,7 +4539,7 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/itoa/decimalCountU64 (; 39 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/itoa/decimalCount64 (; 39 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
   (if (result i32)
    (i64.lt_u
     (get_local $0)
@@ -4772,7 +4772,7 @@
     (tee_local $2
      (call $~lib/internal/string/allocateUnsafe
       (tee_local $1
-       (call $~lib/internal/itoa/decimalCountU32
+       (call $~lib/internal/itoa/decimalCount32
         (tee_local $3
          (i32.wrap/i64
           (get_local $0)
@@ -4789,7 +4789,7 @@
     (tee_local $2
      (call $~lib/internal/string/allocateUnsafe
       (tee_local $1
-       (call $~lib/internal/itoa/decimalCountU64
+       (call $~lib/internal/itoa/decimalCount64
         (get_local $0)
        )
       )
@@ -4838,7 +4838,7 @@
      (call $~lib/internal/string/allocateUnsafe
       (tee_local $2
        (i32.add
-        (call $~lib/internal/itoa/decimalCountU32
+        (call $~lib/internal/itoa/decimalCount32
          (tee_local $4
           (i32.wrap/i64
            (get_local $0)
@@ -4858,7 +4858,7 @@
      (call $~lib/internal/string/allocateUnsafe
       (tee_local $2
        (i32.add
-        (call $~lib/internal/itoa/decimalCountU64
+        (call $~lib/internal/itoa/decimalCount64
          (get_local $0)
         )
         (get_local $1)

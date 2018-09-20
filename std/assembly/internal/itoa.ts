@@ -10,7 +10,7 @@ import {
 } from "./arraybuffer";
 
 @inline
-function POWERS10(): u32[] {
+export function POWERS10(): u32[] {
   const table: u32[] = [
     1,
     10,
@@ -41,7 +41,7 @@ function POWERS10(): u32[] {
   "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"
 */
 @inline
-function DIGITS(): u32[] {
+export function DIGITS(): u32[] {
   const table: u32[] = [
     0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030,
     0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
@@ -69,7 +69,7 @@ function DIGITS(): u32[] {
 
 // Count number of decimals for u32 values
 // In our case input value always non-zero so we can simplify some parts
-function decimalCountU32(value: u32): u32 {
+export function decimalCount32(value: u32): u32 {
   if (ASC_SHRINK_LEVEL >= 1) {
     let l: u32 = 32 - clz<u32>(value); // log2
     let t = l * 1233 >>> 12; // log10
@@ -99,7 +99,7 @@ function decimalCountU32(value: u32): u32 {
 
 // Count number of decimals for u64 values
 // In our case input value always greater than 2^32-1 so we can skip some parts
-function decimalCountU64(value: u64): u32 {
+export function decimalCount64(value: u64): u32 {
   if (ASC_SHRINK_LEVEL >= 1) {
     let l: u32 = 64 - <u32>clz<u64>(value); // log2
     let t = l * 1233 >>> 12; // log10
@@ -229,7 +229,7 @@ export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
 export function utoa32(value: u32): string {
   if (!value) return "0";
 
-  var decimals = decimalCountU32(value);
+  var decimals = decimalCount32(value);
   var buffer   = allocateUnsafeString(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
@@ -242,7 +242,7 @@ export function itoa32(value: i32): string {
   var isneg = value < 0;
   if (isneg) value = -value;
 
-  var decimals = decimalCountU32(value) + <u32>isneg;
+  var decimals = decimalCount32(value) + <u32>isneg;
   var buffer   = allocateUnsafeString(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
@@ -256,12 +256,12 @@ export function utoa64(value: u64): string {
 
   var buffer: string;
   if (value <= u32.MAX_VALUE) {
-    let value32  = <u32>value;
-    let decimals = decimalCountU32(value32);
+    let val32    = <u32>value;
+    let decimals = decimalCount32(val32);
     buffer = allocateUnsafeString(decimals);
-    utoa32_core(changetype<usize>(buffer), value32, decimals);
+    utoa32_core(changetype<usize>(buffer), val32, decimals);
   } else {
-    let decimals = decimalCountU64(value);
+    let decimals = decimalCount64(value);
     buffer = allocateUnsafeString(decimals);
     utoa64_core(changetype<usize>(buffer), value, decimals);
   }
@@ -277,12 +277,12 @@ export function itoa64(value: i64): string {
 
   var buffer: string;
   if (<u64>value <= <u64>u32.MAX_VALUE) {
-    let value32  = <u32>value;
-    let decimals = decimalCountU32(value32) + <u32>isneg;
+    let val32    = <u32>value;
+    let decimals = decimalCount32(val32) + <u32>isneg;
     buffer = allocateUnsafeString(decimals);
-    utoa32_core(changetype<usize>(buffer), value32, decimals);
+    utoa32_core(changetype<usize>(buffer), val32, decimals);
   } else {
-    let decimals = decimalCountU64(value) + <u32>isneg;
+    let decimals = decimalCount64(value) + <u32>isneg;
     buffer = allocateUnsafeString(decimals);
     utoa64_core(changetype<usize>(buffer), value, decimals);
   }
