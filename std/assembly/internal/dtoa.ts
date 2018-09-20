@@ -174,13 +174,13 @@ function normalizedBoundaries(f: u64, e: i32): void {
   var frc = (f << 1) + 1;
   var exp = e - 1;
   var off = <i32>clz<u64>(frc) + 10; // sfould be 9 if frc < 0
-  _frc = frc << off;
-  _exp = exp - off;
+  frc <<= off;
+  exp  -= off;
 
   var m = <i32>(f == 0x0010000000000000) + 1;
-  var exp = _exp;
+  // var exp = _exp;
 
-  _frc_plus  = _frc;
+  _frc_plus  = frc;
   _frc_minus = ((f << m) - 1) << e - 1 - exp;
   _exp_plus  = exp;
   _exp_minus = exp;
