@@ -89,14 +89,16 @@ var _exp_plus: i32 = 0;
 var _frc_pow: u64 = 0;
 var _exp_pow: i32 = 0;
 
+/*
 @inline
-function frcExp(value: f64): void {
-  var uv   = reinterpret<u64>(value);
-  var exp  = <i32>((uv & 0x7FF0000000000000) >>> 52);
-  var sigd = uv & 0x000FFFFFFFFFFFFF;
-  _frc = select<u64>(0x0010000000000000, 0, exp != 0) + sigd;
+function frexp(value: f64): void {
+  var uv  = reinterpret<u64>(value);
+  var exp = <i32>((uv & 0x7FF0000000000000) >>> 52);
+  var sid = uv & 0x000FFFFFFFFFFFFF;
+  _frc = select<u64>(0x0010000000000000, 0, exp != 0) + sid;
   _exp = select<i32>(exp, 1, exp != 0) - (0x3FF + 52);
 }
+*/
 
 @inline
 function frcSub(f1: u64, e1: i32, f2: u64, e2: i32): void {
@@ -106,7 +108,34 @@ function frcSub(f1: u64, e1: i32, f2: u64, e2: i32): void {
 }
 
 @inline
+function umul64f(u: u64, v: u64): u64 {
+  var u0 = u & 0xFFFFFFFF;
+  var v0 = v & 0xFFFFFFFF;
+
+  var u1 = u >> 32;
+  var v1 = v >> 32;
+
+  var l = u0 * v0;
+  var t = u1 * v0 + (l >> 32);
+  var w = u0 * v1 + (t & 0xFFFFFFFF);
+
+  w += 0x7FFFFFFF; // rounding
+
+  t >>= 32;
+  w >>= 32;
+
+  return u1 * v1 + t + w;
+}
+
+@inline
+function umul64e(e1: i32, e2: i32): i32 {
+  return e1 + e2 + 64;
+}
+
+/*
+@inline
 function umul128(f1: u64, e1: i32, f2: u64, e2: i32): void {
+  // TODO optimize
   var a  = f1 >> 32;
   var b  = f1 & 0xFFFFFFFF;
   var c  = f2 >> 32;
@@ -119,31 +148,41 @@ function umul128(f1: u64, e1: i32, f2: u64, e2: i32): void {
   _frc = ac + (ad >> 32) + (bc >> 32) + (m >> 32);
   _exp = e1 + e2 + 64;
 }
+*/
 
+/*
 @inline
 function normalize(f: u64, e: i32): void {
   var s = <i32>clz<u64>(f);
   _frc = f << s;
   _exp = e - s;
 }
+*/
 
+/*
 @inline
 function normalizeBoundary(f: u64, e: i32): void {
   while (!(f & (0x0010000000000000 << 1))) { f <<= 1; --e; }
   _frc = f << 10;
   _exp = e - 10;
 }
+*/
 
 @inline
 function normalizedBoundaries(f: u64, e: i32): void {
-  normalizeBoundary((f << 1) + 1, e - 1);
+  // normalizeBoundary((f << 1) + 1, e - 1);
+  var frc = (f << 1) + 1;
+  var exp = e - 1;
+  var off = <i32>clz<u64>(frc) + 10; // sfould be 9 if frc < 0
+  _frc = frc << off;
+  _exp = exp - off;
+
   var m = <i32>(f == 0x0010000000000000) + 1;
   var exp = _exp;
 
-  _frc_plus = _frc;
-  _exp_plus = exp;
-
+  _frc_plus  = _frc;
   _frc_minus = ((f << m) - 1) << e - 1 - exp;
+  _exp_plus  = exp;
   _exp_minus = exp;
 }
 
@@ -156,7 +195,6 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
       wp_w - rest > rest + ten_kappa - wp_w
     )
   ) {
-    // buffer[len - 1]--;
     let digit = load<u16>(buffer + ((len - 1) << 1), STRING_HEADER_SIZE);
     store<u16>(buffer + ((len - 1) << 1), digit - 1, STRING_HEADER_SIZE);
     rest += ten_kappa;
@@ -165,38 +203,51 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
 
 @inline
 function getCachedPower(e: i32): void {
-  var dk = (-61 - e) * 0.30102999566398114 + 347;	// dk must be positive, so can do ceiling in positive
+  const c0 = reinterpret<f64>(0x3FD34413509F79FE);  // 0.30102999566398114;
+  var dk = (-63 - e) * c0 + 347;	                  // dk must be positive, so can do ceiling in positive
   var k = <i32>dk;
   k += <i32>(k != dk);
 
-  var index: u32 = (k >> 3) + 1;
-  _K = -(-348 + <i32>(index << 3));	// decimal exponent no need lookup table
+  var index = (k >> 3) + 1;
+  _K = 348 - (index << 3);	// decimal exponent no need lookup table
   // assert(index < sizeof(kCachedPowers_F) / sizeof(kCachedPowers_F[0]));
-  var frcPowersBuf = <ArrayBuffer>FRC_POWERS().buffer_;
-  var expPowersBuf = <ArrayBuffer>EXP_POWERS().buffer_;
-  _frc_pow = loadUnsafe<u64,u64>(frcPowersBuf, index);
-  _exp_pow = loadUnsafe<i32,i32>(expPowersBuf, index);
+  var frcPowers = <ArrayBuffer>FRC_POWERS().buffer_;
+  var expPowers = <ArrayBuffer>EXP_POWERS().buffer_;
+  _frc_pow = loadUnsafe<u64,u64>(frcPowers, index);
+  _exp_pow = loadUnsafe<i32,i32>(expPowers, index);
 }
 
 @inline
 function grisu2(value: f64, buffer: usize): i32 {
-  frcExp(value);
-  normalizedBoundaries(_frc, _exp);
+
+  // frexp routine
+  var uv  = reinterpret<u64>(value);
+  var exp = <i32>((uv & 0x7FF0000000000000) >>> 52);
+  var sid = uv & 0x000FFFFFFFFFFFFF;
+  var frc = select<u64>(0x0010000000000000, 0, exp != 0) + sid;
+      exp = select<i32>(exp, 1, exp != 0) - (0x3FF + 52);
+
+  normalizedBoundaries(frc, exp);
   getCachedPower(_exp_plus);
-  normalize(_frc, _exp);
 
-  umul128(_frc, _exp, _frc_pow, _exp_pow);
-  var w_frc = _frc;
-  var w_exp = _exp;
+  frc = _frc;
+  exp = _exp;
 
-  umul128(_frc_plus, _exp_plus, _frc_pow, _exp_pow);
-  var wp_frc = _frc - 1;
-  var wp_exp = _exp;
+  // normalize
+  var off = <i32>clz<u64>(frc);
+  frc <<= off;
+  exp  -= off;
 
-  umul128(_frc_minus, _exp_minus, _frc_pow, _exp_pow);
-  var wm_frc = _frc + 1;
+  var w_frc = umul64f(frc, _frc_pow);
+  var w_exp = umul64e(exp, _exp_pow);
 
-  return digitGen(w_frc, w_exp, wp_frc, wp_exp, wp_frc - wm_frc, buffer);
+  var wp_frc = umul64f(_frc_plus, _frc_pow) - 1;
+  var wp_exp = umul64e(_exp_plus, _exp_pow);
+
+  var wm_frc = umul64f(_exp_minus, _frc_pow) + 1;
+  var delta  = wp_frc - wm_frc;
+
+  return digitGen(w_frc, w_exp, wp_frc, wp_exp, delta, buffer);
 }
 
 function digitGen(w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, buffer: usize): i32 {
@@ -217,12 +268,18 @@ function prettify(buffer: usize, length: i32, k: i32): void {
 }
 
 export function dtoa(value: f64): string {
+  if (value == 0) return "0.0";
   if (!isFinite(value)) {
     if (isNaN(value)) return "NaN";
     return value < 0.0 ? "-Infinity" : "Infinity";
   }
-
-  // TODO
-
-  return "0.0";
+  var isneg = value < 0;
+  if (isneg) value = -value;
+  var decimals = 32; // TMP
+  var result = allocateUnsafeString(decimals);
+  var buffer = changetype<usize>(result.buffer_);
+  var len = grisu2(value, buffer);
+  prettify(buffer, len, _K);
+  if (isneg) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
+  return changetype<string>(result);
 }
