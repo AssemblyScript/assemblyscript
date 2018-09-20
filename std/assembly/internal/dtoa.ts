@@ -177,7 +177,7 @@ function normalizedBoundaries(f: u64, e: i32): void {
   frc <<= off;
   exp  -= off;
 
-  var m = <i32>(f == 0x0010000000000000) + 1;
+  var m = 1 + <i32>(f == 0x0010000000000000);
   // var exp = _exp;
 
   _frc_plus  = frc;
@@ -203,8 +203,8 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
 
 @inline
 function getCachedPower(e: i32): void {
-  const c0 = reinterpret<f64>(0x3FD34413509F79FE);  // 0.30102999566398114;
-  var dk = (-63 - e) * c0 + 347;	                  // dk must be positive, so can do ceiling in positive
+  const c = reinterpret<f64>(0x3FD34413509F79FE);  // 0.30102999566398114;
+  var dk = (-63 - e) * c + 347;	                  // dk must be positive, so can do ceiling in positive
   var k = <i32>dk;
   k += <i32>(k != dk);
 
@@ -214,7 +214,7 @@ function getCachedPower(e: i32): void {
   var frcPowers = <ArrayBuffer>FRC_POWERS().buffer_;
   var expPowers = <ArrayBuffer>EXP_POWERS().buffer_;
   _frc_pow = loadUnsafe<u64,u64>(frcPowers, index);
-  _exp_pow = loadUnsafe<i32,i32>(expPowers, index);
+  _exp_pow = loadUnsafe<i16,i32>(expPowers, index);
 }
 
 @inline
@@ -238,13 +238,16 @@ function grisu2(value: f64, buffer: usize): i32 {
   frc <<= off;
   exp  -= off;
 
-  var w_frc = umul64f(frc, _frc_pow);
-  var w_exp = umul64e(exp, _exp_pow);
+  var frc_pow = _frc_pow;
+  var exp_pow = _exp_pow;
 
-  var wp_frc = umul64f(_frc_plus, _frc_pow) - 1;
-  var wp_exp = umul64e(_exp_plus, _exp_pow);
+  var w_frc = umul64f(frc, frc_pow);
+  var w_exp = umul64e(exp, exp_pow);
 
-  var wm_frc = umul64f(_exp_minus, _frc_pow) + 1;
+  var wp_frc = umul64f(_frc_plus, frc_pow) - 1;
+  var wp_exp = umul64e(_exp_plus, exp_pow);
+
+  var wm_frc = umul64f(_frc_minus, frc_pow) + 1;
   var delta  = wp_frc - wm_frc;
 
   return digitGen(w_frc, w_exp, wp_frc, wp_exp, delta, buffer);
