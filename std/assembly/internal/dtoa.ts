@@ -65,16 +65,6 @@ function FRC_POWERS(): u64[] {
   return table;
 }
 
-/*
-const kDiySignificandSize: i32 = 64;
-const kDpSignificandSize:  i32 = 52;
-const kDpExponentBias:     i32 = 0x3FF + kDpSignificandSize;
-const kDpMinExponent:      i32 = -kDpExponentBias;
-const kDpExponentMask:     u64 = 0x7FF0000000000000;
-const kDpSignificandMask:  u64 = 0x000FFFFFFFFFFFFF;
-const kDpHiddenBit:        u64 = 0x0010000000000000;
-*/
-
 var _K: i32 = 0;
 
 var _frc: u64 = 0;
@@ -142,6 +132,7 @@ function normalizedBoundaries(f: u64, e: i32): void {
 
 @inline
 function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u64, wp_w: u64): void {
+  var digit = load<u16>(buffer + ((len - 1) << 1), STRING_HEADER_SIZE);
   while (
     rest < wp_w &&
     delta - rest >= ten_kappa && (
@@ -149,15 +140,17 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
       wp_w - rest > rest + ten_kappa - wp_w
     )
   ) {
-    let digit = load<u16>(buffer + ((len - 1) << 1), STRING_HEADER_SIZE);
-    store<u16>(buffer + ((len - 1) << 1), digit - 1, STRING_HEADER_SIZE);
+    // let digit = load<u16>(buffer + ((len - 1) << 1), STRING_HEADER_SIZE);
+    // store<u16>(buffer + ((len - 1) << 1), digit - 1, STRING_HEADER_SIZE);
+    --digit;
     rest += ten_kappa;
   }
+  store<u16>(buffer + ((len - 1) << 1), digit, STRING_HEADER_SIZE);
 }
 
 @inline
 function getCachedPower(e: i32): void {
-  const c = reinterpret<f64>(0x3FD34413509F79FE);  // 0.30102999566398114;
+  const c = reinterpret<f64>(0x3FD34413509F79FE); // 0.30102999566398114;
   var dk = (-61 - e) * c + 347;	                  // dk must be positive, so can do ceiling in positive
   var k = <i32>dk;
   k += <i32>(k != dk);
@@ -172,20 +165,18 @@ function getCachedPower(e: i32): void {
 }
 
 @inline
-function grisu2(value: f64, buffer: usize): i32 {
+function grisu2(value: f64, buffer: usize, isneg: bool): i32 {
 
   // frexp routine
   var uv  = reinterpret<u64>(value);
   var exp = <i32>((uv & 0x7FF0000000000000) >>> 52);
   var sid = uv & 0x000FFFFFFFFFFFFF;
-  var frc = select<u64>(0x0010000000000000, 0, exp != 0) + sid;
+  // var frc = select<u64>(0x0010000000000000, 0, exp != 0) + sid;
+  var frc = (<u64>(exp != 0) << 52) + sid;
       exp = select<i32>(exp, 1, exp != 0) - (0x3FF + 52);
 
   normalizedBoundaries(frc, exp);
   getCachedPower(_exp_plus);
-
-  // frc = _frc;
-  // exp = _exp;
 
   // normalize
   var off = <i32>clz<u64>(frc);
@@ -204,10 +195,10 @@ function grisu2(value: f64, buffer: usize): i32 {
   var wm_frc = umul64f(_frc_minus, frc_pow) + 1;
   var delta  = wp_frc - wm_frc;
 
-  return write(buffer, w_frc, w_exp, wp_frc, wp_exp, delta);
+  return write(buffer, w_frc, w_exp, wp_frc, wp_exp, delta, isneg);
 }
 
-function write(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64): i32 {
+function write(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, isneg: bool): i32 {
   var one_frc = (<u64>1) << -mp_exp;
   var one_exp = mp_exp;
 
@@ -219,7 +210,7 @@ function write(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, 
   var p2 = mp_frc & (one_frc - 1);
 
   var kappa = <i32>decimalCount32(p1);
-  var len = 0;
+  var len = <i32>isneg;
 
   var powers10 = <ArrayBuffer>POWERS10().buffer_;
 
@@ -299,7 +290,7 @@ export function dtoa(value: f64): string {
   var decimals = 32; // TMP
   var result = allocateUnsafeString(decimals);
   var buffer = changetype<usize>(result);
-  var len = grisu2(value, buffer);
+  var len = grisu2(value, buffer, isneg);
   prettify(buffer, len, _K);
   _K = 0;
   if (isneg) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
