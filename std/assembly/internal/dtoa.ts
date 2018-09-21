@@ -203,7 +203,7 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
 @inline
 function getCachedPower(e: i32): void {
   const c = reinterpret<f64>(0x3FD34413509F79FE);  // 0.30102999566398114;
-  var dk = (-63 - e) * c + 347;	                  // dk must be positive, so can do ceiling in positive
+  var dk = (-61 - e) * c + 347;	                  // dk must be positive, so can do ceiling in positive
   var k = <i32>dk;
   k += <i32>(k != dk);
 
