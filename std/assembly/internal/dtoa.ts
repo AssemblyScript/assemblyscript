@@ -254,7 +254,71 @@ function grisu2(value: f64, buffer: usize): i32 {
 }
 
 function digitGen(w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, buffer: usize): i32 {
-  return 0; // len
+  var one_frc = (<u64>1) << -mp_exp;
+  var one_exp = mp_exp;
+
+  // const DiyFp wp_w = Mp - W;
+  var wp_w_frc = mp_frc - w_frc;
+  var wp_w_exp = mp_exp;
+
+  var p1 = <u32>(mp_frc >> -one_exp);
+  var p2 = mp_frc & (one_frc - 1);
+
+  var kappa = <i32>decimalCount32(p1);
+  var len = 0;
+
+  var powers10 = <ArrayBuffer>POWERS10().buffer_;
+
+  while (kappa > 0) {
+    let d: u32;
+    switch (kappa) {
+      case 10: { d = p1 / 1000000000; p1 %= 1000000000; break; }
+      case  9: { d = p1 /  100000000; p1 %=  100000000; break; }
+      case  8: { d = p1 /   10000000; p1 %=   10000000; break; }
+      case  7: { d = p1 /    1000000; p1 %=    1000000; break; }
+      case  6: { d = p1 /     100000; p1 %=     100000; break; }
+      case  5: { d = p1 /      10000; p1 %=      10000; break; }
+      case  4: { d = p1 /       1000; p1 %=       1000; break; }
+      case  3: { d = p1 /        100; p1 %=        100; break; }
+      case  2: { d = p1 /         10; p1 %=         10; break; }
+      case  1: { d = p1;              p1 =           0; break; }
+      default: { d = 0; break; }
+    }
+
+    if (d || len) {
+      store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
+      // buffer[len++] = "0" + <u16>(d);
+    }
+
+    --kappa;
+    let tmp = ((<u64>p1) << -one_exp) + p2;
+    if (tmp <= delta) {
+      _K += kappa;
+      grisuRound(buffer, len, delta, tmp, loadUnsafe<u32,u64>(powers10, kappa) << -one_exp, wp_w_frc);
+      return len;
+    }
+  }
+
+  // kappa = 0
+  while (1) {
+    p2    *= 10;
+    delta *= 10;
+    let d = <u16>(p2 >> -one_exp);
+    if (d || len) {
+      store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
+      // buffer[(len)++] = '0' + d;
+    }
+    p2 &= one_frc - 1;
+    --kappa;
+    if (p2 < delta) {
+      _K += kappa;
+      wp_w_frc *= loadUnsafe<u32,u64>(powers10, -kappa);
+      grisuRound(buffer, len, delta, p2, one_frc, wp_w_frc);
+      return len;
+    }
+  }
+
+  return len;
 }
 
 @inline
@@ -283,6 +347,7 @@ export function dtoa(value: f64): string {
   var buffer = changetype<usize>(result.buffer_);
   var len = grisu2(value, buffer);
   prettify(buffer, len, _K);
+  _K = 0;
   if (isneg) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
   return changetype<string>(result);
 }
