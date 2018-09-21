@@ -200,6 +200,25 @@ declare namespace i32 {
   export function parseFloat(string: string): i32;
   /** Converts A string to an integer. */
   export function parseInt(string: string, radix?: i32): i32;
+
+  namespace atomic {
+      /** Loads an 8-bit signed integer from memory and returns it as a 32-bit integer. */
+    export function load8_s(offset: usize, constantOffset?: usize): i32;
+    /** Loads an 8-bit unsigned integer from memory and returns it as a 32-bit integer. */
+    export function load8_u(offset: usize, constantOffset?: usize): i32;
+    /** Loads a 16-bit signed integer from memory and returns it as a 32-bit integer. */
+    export function load16_s(offset: usize, constantOffset?: usize): i32;
+    /** Loads a 16-bit unsigned integer from memory and returns it as a 32-bit integer. */
+    export function load16_u(offset: usize, constantOffset?: usize): i32;
+    /** Loads a 32-bit integer from memory. */
+    export function load(offset: usize, constantOffset?: usize): i32;
+    /** Stores a 32-bit integer to memory as an 8-bit integer. */
+    export function store8(offset: usize, value: i32, constantOffset?: usize): void;
+    /** Stores a 32-bit integer to memory as a 16-bit integer. */
+    export function store16(offset: usize, value: i32, constantOffset?: usize): void;
+    /** Stores a 32-bit integer to memory. */
+    export function store(offset: usize, value: i32, constantOffset?: usize): void;
+  }
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
 declare function i64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -609,6 +628,7 @@ declare class String {
   toString(): string;
   static fromUTF8(ptr: usize, len: usize): string;
   toUTF8(): usize;
+  // split(separator?: string, limit?:i32): string[];
 }
 
 /** Class for representing a runtime error. Base class of all errors. */
@@ -821,3 +841,26 @@ declare function inline(target: any, propertyKey: any, descriptor: any): any;
 
 /** Annotates an explicit external name of a function or global. */
 declare function external(target: any, propertyKey: any, descriptor: any): any;
+
+declare namespace Atomic { 
+  /** Atomically loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
+  export function load<T>(ptr: usize, constantOffset?: usize): T;
+  /** Atomically stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
+  export function store<T>(ptr: usize, value: any, constantOffset?: usize): void;
+  /** Atomically add a value of the specified type to memory.*/
+  export function add<T>(ptr: usize, value: T): void;
+  /** Atomically subtract a value of the specified type from memory.*/
+  export function sub<T>(ptr: usize, value: T): void;
+  /** Atomically and a value of the specified type to memory.*/
+  export function and<T>(ptr: usize, value: T): void;
+  /** Atomically or a value of the specified type to memory.*/
+  export function or<T>(ptr: usize, value: T): void;
+  /** Atomically xor a value of the specified type to memory.*/
+  export function xor<T>(ptr: usize, value: T): void;
+  /** Atomically exchange a value of the specified type to memory.*/
+  export function xchg<T>(ptr: usize, value: T): void;
+  // export function exchange<T>(ptr: usize, value: T): void;
+  /** Atomically compare exchange a value of the specified type to memory.*/
+  export function cmpxchg<T>(ptr: usize, expected:T, replacement: T): T;
+  // export function compareExchange<T>(ptr: usize, expected:T, replacement: T): T;
+}

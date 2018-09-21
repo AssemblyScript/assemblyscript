@@ -827,7 +827,8 @@ export class Module {
     maximum: Index,
     segments: MemorySegment[],
     target: Target,
-    exportName: string | null = null
+    exportName: string | null = null,
+    shared: bool = false
   ): void {
     var cStr = allocString(exportName);
     var k = segments.length;
@@ -847,7 +848,7 @@ export class Module {
     var cArr2 = allocI32Array(offs);
     var cArr3 = allocI32Array(sizs);
     try {
-      _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, k);
+      _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, k, shared);
     } finally {
       memory.free(cArr3);
       memory.free(cArr2);

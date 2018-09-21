@@ -1,19 +1,13 @@
-import "allocator/atomic";
-
-var threadId: i32;
-
-export function setId(id: i32): void {
-  threadId = id;
-}
-
-export function getId(): i32 {
-  return threadId;
-}
-
-class Obj {
-  constructor(public id: i32, public name: string) {}
-}
-
-export function _alloc(id: i32, name: string): Obj {
-  return new Obj(id, name);
+declare function log(v: i32): void;
+export function test(): i32 {
+  Atomic.store<i32>(128, 2);
+  var num: i32 = Atomic.load<i32>(128);
+  log(num);
+  Atomic.add<i32>(128, 1);
+  num = Atomic.load<i32>(128);
+  log(num);
+  Atomic.sub<i32>(128, 1);
+  num = Atomic.load<i32>(128);
+  log(num);
+  return num;
 }

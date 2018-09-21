@@ -54,28 +54,13 @@
     (
     <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/shared-memory/assembly/index.ts">source</a> )
   </h1>
-  <div>
-    <label>Input :</label>
-    <input id="writeInput" type="text" value="test" />
-    <button onclick="writeString()">write</button>
-  </div>
-  <div>
-    <label>Wasm1 :</label>
-    <input id="wasm1" type="text" value="test" />
-    <button onclick="read(1, 'wasm1')">read</button>
-  </div>
-  <div>
-    <label>Wasm2 :</label>
-    <input id="wasm2" type="text" value="test" />
-    <button onclick="read(2, 'wasm2')">read</button>
-  </div>
   <script>
     "use strict";
 
     const memory = new WebAssembly.Memory({
-      initial: 1,
+      initial: 256,
       shared: true,
-      maximum: 1
+      maximum: 256
     })
     const memoryView = new DataView(memory.buffer);
     let _exports = {};
@@ -89,8 +74,8 @@
           abort: function () {}
         },
         index: {
-          id: 1
-        }
+          log: console.log
+        },
       })
       const module2 = await WebAssembly.instantiate(buffer, {
         env: {
@@ -98,7 +83,7 @@
           abort: function () {}
         },
         index: {
-          id: 2
+          log: console.log
         }
       })
       const exp1 = module1.instance.exports;
@@ -106,58 +91,12 @@
 
       _exports.exp1 = exp1;
       _exports.exp2 = exp2;
+     
+      _exports.exp1.test();
 
-      const str_ptr = exp1.read();
-      console.log(readUTF8(str_ptr));
-      console.log(readUTF8(exp1.talk()));
-      console.log(readUTF8(exp2.talk()));
-      writeUTF8(str_ptr, "GFEDCBA");
-      console.log(readUTF8(str_ptr));
-      console.log(readUTF8(exp1.talk()));
-      console.log(readUTF8(exp2.talk()));
     }
 
     init();
-
-    const read = function(id, input){
-      const str_ptr = _exports[`exp${id}`].read();
-      const value = readUTF8(str_ptr);
-      console.log(value);
-      const element = document.getElementById(input)
-      element.value = value;
-    }
-
-    const writeString = function(value) {
-      value = value || document.getElementById('writeInput').value;
-      const str_ptr = _exports[`exp1`].read();
-      writeUTF8(str_ptr, value);
-    }
-
-    function readUTF8(ptr, _memoryView) {
-      _memoryView = _memoryView || memoryView;
-      const u8a = new Uint8Array(_memoryView.buffer);
-      const str_len = _memoryView.getUint32(ptr, true);
-      const utf16 = u8a.subarray(ptr + 4, ptr + (str_len * 2) + 4);
-      const decoder = new TextDecoder("utf-16");
-      const _utf16 = utf16.map(a => a);
-      return decoder.decode(_utf16);
-    }
-
-    function writeUTF8(ptr, str, _memoryView) {
-      _memoryView = _memoryView || memoryView;
-      const u8a = new Uint8Array(_memoryView.buffer);
-      const decoder = new TextEncoder("utf-8");
-      const utf8 = decoder.encode(str);
-      const str_len = utf8.length;
-      const _utf8 = u8a.subarray(ptr + 4, ptr + (str_len * 2) + 4);
-      let ii = 0;
-      utf8.forEach((a, i) => {
-        _utf8[ii++] = a;
-        _utf8[ii++] = 0;
-      })
-      _memoryView.setUint32(ptr, str_len, true);
-      return str_len
-    }
   </script>
 </body>
 

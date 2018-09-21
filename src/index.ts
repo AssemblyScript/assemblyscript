@@ -103,7 +103,7 @@ export function setImportMemory(options: Options, importMemory: bool): void {
 }
 
 /** Sets the `sharedMemory` option. */
-export function setSharedMemory(options: Options, sharedMemory: bool): void {
+export function setSharedMemory(options: Options, sharedMemory: i32): void {
   options.sharedMemory = sharedMemory;
 }
 

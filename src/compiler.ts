@@ -184,8 +184,8 @@ export class Options {
   noAssert: bool = false;
   /** If true, imports the memory provided by the embedder. */
   importMemory: bool = false;
-  /** If true, declare memory as shared. */
-  sharedMemory: bool = false;
+  /** If greater than zero, declare memory as shared by setting max memory to sharedMemory. */
+  sharedMemory: i32 = 0;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, generates information necessary for source maps. */
@@ -235,7 +235,8 @@ export const enum Feature {
   /** Sign extension operations. */
   SIGN_EXTENSION = 1 << 0, // see: https://github.com/WebAssembly/sign-extension-ops
   /** Mutable global imports and exports. */
-  MUTABLE_GLOBAL = 1 << 1  // see: https://github.com/WebAssembly/mutable-global
+  MUTABLE_GLOBAL = 1 << 1,  // see: https://github.com/WebAssembly/mutable-global
+  ATOMIC = 1 << 2
 }
 
 /** Indicates the desired kind of a conversion. */
@@ -402,7 +403,8 @@ export class Compiler extends DiagnosticEmitter {
       Module.UNLIMITED_MEMORY,
       this.memorySegments,
       options.target,
-      "memory"
+      "memory",
+      options.sharedMemory > 0
     );
     // import memory if requested (default memory is named '0' by Binaryen)
     if (options.importMemory) module.addMemoryImport("0", "env", "memory", options.sharedMemory);

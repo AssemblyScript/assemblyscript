@@ -9,10 +9,10 @@ export function allocator_get_offset(): usize {
 }
 
 export function allocator_set_offset(old_offset: usize, new_offset: usize): u32 {
-  return Atomic.compareExchange<u32>(offset_ptr, old_offset, new_offset);
+  return Atomic.cmpxchg<u32>(offset_ptr, old_offset, new_offset);
 }
 
-export function allocate_memory(size: usize): usize {
+@global export function __memory_allocate(size: usize): usize {
   if (size) {
     if (size > MAX_SIZE_32) unreachable();
     let currentOffset: u32;
@@ -20,18 +20,18 @@ export function allocate_memory(size: usize): usize {
     do {
       currentOffset = allocator_get_offset();
       top = (currentOffset + size + AL_MASK) & ~AL_MASK;
-      let pagesBefore = current_memory();
+      let pagesBefore = memory.size();
       if (top > (<usize>pagesBefore) << 16) {
         let pagesNeeded = ((top - currentOffset + 0xffff) & ~0xffff) >>> 16;
         let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
-        if (grow_memory(pagesWanted) < 0) {
-          if (grow_memory(pagesNeeded) < 0) {
+        if (memory.grow(pagesWanted) < 0) {
+          if (memory.grow(pagesNeeded) < 0) {
             unreachable(); // out of memory
           }
         }
       }
     } while (
-      Atomic.compareExchange(offset_ptr, currentOffset, top) != currentOffset
+      Atomic.cmpxchg(offset_ptr, currentOffset, top) != currentOffset
     );
 
     return currentOffset;
@@ -39,12 +39,12 @@ export function allocate_memory(size: usize): usize {
   return 0;
 }
 
-export function free_memory(ptr: usize): void {
+@global export function __memory_free(ptr: usize): void {
   // Drop it on the floor, for now
   // In the future: figure out the size from the header or other info,
   // add to free list, etc etc.
 }
 
-export function reset_memory(): void {
+@global export function __memory_reset(): void {
   Atomic.store<u32>(offset_ptr, startOffset);
 }
