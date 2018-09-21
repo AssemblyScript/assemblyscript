@@ -396,18 +396,20 @@ export class Compiler extends DiagnosticEmitter {
 
     // determine initial page size
     var numPages = this.memorySegments.length
-      ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
-      : 0;
+    ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
+    : 0;
+    var isSharedMemory = options.sharedMemory > 0;
     module.setMemory(
       numPages,
-      Module.UNLIMITED_MEMORY,
+      isSharedMemory ? options.sharedMemory : Module.UNLIMITED_MEMORY,
       this.memorySegments,
       options.target,
       "memory",
-      options.sharedMemory > 0
+      isSharedMemory
     );
+
     // import memory if requested (default memory is named '0' by Binaryen)
-    if (options.importMemory) module.addMemoryImport("0", "env", "memory", options.sharedMemory);
+    if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
 
     // set up function table
     var functionTable = this.functionTable;
