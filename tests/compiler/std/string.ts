@@ -1,6 +1,7 @@
 import "allocator/arena";
 
 import { utoa32, itoa32, utoa64, itoa64 } from "internal/itoa";
+import { dtoa } from "internal/dtoa";
 
 // preliminary
 
@@ -169,3 +170,8 @@ assert(itoa64(-999868719476735) == "-999868719476735");
 assert(itoa64(-19999868719476735) == "-19999868719476735");
 assert(itoa64(i64.MAX_VALUE) == "9223372036854775807");
 assert(itoa64(i64.MIN_VALUE) == "-9223372036854775808");
+
+assert(dtoa(0.0) == "0.0");
+assert(dtoa(NaN) == "NaN");
+assert(dtoa(+Infinity) == "Infinity");
+assert(dtoa(-Infinity) == "-Infinity");
