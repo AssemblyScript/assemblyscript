@@ -226,17 +226,17 @@ export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
   }
 }
 
-export function utoa32(value: u32): string {
+export function utoa32(value: u32): String {
   if (!value) return "0";
 
   var decimals = decimalCount32(value);
   var buffer   = allocateUnsafeString(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
-  return changetype<string>(buffer);
+  return buffer;
 }
 
-export function itoa32(value: i32): string {
+export function itoa32(value: i32): String {
   if (!value) return "0";
 
   var isneg = value < 0;
@@ -248,13 +248,13 @@ export function itoa32(value: i32): string {
   utoa32_core(changetype<usize>(buffer), value, decimals);
   if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
 
-  return changetype<string>(buffer);
+  return buffer;
 }
 
-export function utoa64(value: u64): string {
+export function utoa64(value: u64): String {
   if (!value) return "0";
 
-  var buffer: string;
+  var buffer: String;
   if (value <= u32.MAX_VALUE) {
     let val32    = <u32>value;
     let decimals = decimalCount32(val32);
@@ -265,17 +265,16 @@ export function utoa64(value: u64): string {
     buffer = allocateUnsafeString(decimals);
     utoa64_core(changetype<usize>(buffer), value, decimals);
   }
-
-  return changetype<string>(buffer);
+  return buffer;
 }
 
-export function itoa64(value: i64): string {
+export function itoa64(value: i64): String {
   if (!value) return "0";
 
   var isneg = value < 0;
   if (isneg) value = -value;
 
-  var buffer: string;
+  var buffer: String;
   if (<u64>value <= <u64>u32.MAX_VALUE) {
     let val32    = <u32>value;
     let decimals = decimalCount32(val32) + <u32>isneg;
@@ -288,10 +287,10 @@ export function itoa64(value: i64): string {
   }
   if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
 
-  return changetype<string>(buffer);
+  return buffer;
 }
 
-export function itoa<T>(value: T): string {
+export function itoa<T>(value: T): String {
   if (!isInteger<T>()) {
     assert(false); // unexpecteble non-integer generic type
   } else {

@@ -275,16 +275,15 @@ function prettify(buffer: usize, length: i32, k: i32): void {
   // TODO
 }
 
-export function dtoa_core(buffer: usize, value: f64): string {
+export function dtoa_core(buffer: usize, value: f64): void {
   var isneg = value < 0;
   if (isneg) value = -value;
   var len = grisu2(value, buffer, isneg);
   prettify(buffer, len, _K);
   if (isneg) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
-  return changetype<string>(buffer);
 }
 
-export function dtoa(value: f64): string {
+export function dtoa(value: f64): String {
   if (value == 0) return "0.0";
   if (!isFinite(value)) {
     if (isNaN(value)) return "NaN";
@@ -292,5 +291,6 @@ export function dtoa(value: f64): string {
   }
   var decimals = 32; // TMP
   var result = allocateUnsafeString(decimals);
-  return dtoa_core(changetype<usize>(result), value);
+  dtoa_core(changetype<usize>(result), value);
+  return result;
 }
