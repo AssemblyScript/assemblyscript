@@ -6297,8 +6297,7 @@
         )
        )
        (if
-        (if (result i32)
-         (get_local $16)
+        (i32.or
          (get_local $16)
          (get_local $14)
         )
@@ -6525,11 +6524,7 @@
        )
        (if
         (i64.ne
-         (if (result i64)
-          (i64.ne
-           (get_local $18)
-           (i64.const 0)
-          )
+         (i64.or
           (get_local $18)
           (i64.extend_s/i32
            (get_local $14)
@@ -7373,13 +7368,13 @@
      )
     )
     (return
-     (if (result i32)
+     (select
+      (i32.const 2688)
+      (i32.const 2712)
       (f64.lt
        (get_local $0)
        (f64.const 0)
       )
-      (i32.const 2688)
-      (i32.const 2712)
      )
     )
    )
