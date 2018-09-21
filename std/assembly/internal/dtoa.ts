@@ -89,24 +89,6 @@ var _exp_plus: i32 = 0;
 var _frc_pow: u64 = 0;
 var _exp_pow: i32 = 0;
 
-/*
-@inline
-function frexp(value: f64): void {
-  var uv  = reinterpret<u64>(value);
-  var exp = <i32>((uv & 0x7FF0000000000000) >>> 52);
-  var sid = uv & 0x000FFFFFFFFFFFFF;
-  _frc = select<u64>(0x0010000000000000, 0, exp != 0) + sid;
-  _exp = select<i32>(exp, 1, exp != 0) - (0x3FF + 52);
-}
-*/
-
-@inline
-function frcSub(f1: u64, e1: i32, f2: u64, e2: i32): void {
-  assert(e1 == e2 && f1 >= f2);
-  _frc = f1 - f2;
-  _exp = e1;
-}
-
 @inline
 function umul64f(u: u64, v: u64): u64 {
   var u0 = u & 0xFFFFFFFF;
@@ -131,33 +113,6 @@ function umul64f(u: u64, v: u64): u64 {
 function umul64e(e1: i32, e2: i32): i32 {
   return e1 + e2 + 64;
 }
-
-/*
-@inline
-function umul128(f1: u64, e1: i32, f2: u64, e2: i32): void {
-  // TODO optimize
-  var a  = f1 >> 32;
-  var b  = f1 & 0xFFFFFFFF;
-  var c  = f2 >> 32;
-  var d  = f2 & 0xFFFFFFFF;
-  var ac = a * c;
-  var bc = b * c;
-  var ad = a * d;
-  var bd = b * d;
-  var m  = (bd >> 32) + (ad & 0xFFFFFFFF) + (bc & 0xFFFFFFFF) + 0x7FFFFFFF;
-  _frc = ac + (ad >> 32) + (bc >> 32) + (m >> 32);
-  _exp = e1 + e2 + 64;
-}
-*/
-
-/*
-@inline
-function normalize(f: u64, e: i32): void {
-  var s = <i32>clz<u64>(f);
-  _frc = f << s;
-  _exp = e - s;
-}
-*/
 
 /*
 @inline
@@ -256,8 +211,7 @@ function write(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, 
   var one_frc = (<u64>1) << -mp_exp;
   var one_exp = mp_exp;
 
-  // const DiyFp wp_w = Mp - W;
-  assert(mp_exp == w_exp && mp_frc >= w_frc);
+  // assert(mp_exp == w_exp && mp_frc >= w_frc);
   var wp_w_frc = mp_frc - w_frc;
   var wp_w_exp = mp_exp;
 
@@ -336,11 +290,11 @@ function prettify(buffer: usize, length: i32, k: i32): void {
 
 export function dtoa(value: f64): string {
   if (value == 0) return "0.0";
+  var isneg = value < 0;
   if (!isFinite(value)) {
     if (isNaN(value)) return "NaN";
-    return value < 0.0 ? "-Infinity" : "Infinity";
+    return isneg ? "-Infinity" : "Infinity";
   }
-  var isneg = value < 0;
   if (isneg) value = -value;
   var decimals = 32; // TMP
   var result = allocateUnsafeString(decimals);
