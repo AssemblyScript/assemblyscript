@@ -230,10 +230,7 @@ function write(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, 
       default: { d = 0; break; }
     }
 
-    if (d || len) {
-      store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
-      // buffer[len++] = "0" + <u16>(d);
-    }
+    if (d || len) store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
 
     --kappa;
     let tmp = ((<u64>p1) << -one_exp) + p2;
@@ -248,11 +245,10 @@ function write(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, 
   while (1) {
     p2    *= 10;
     delta *= 10;
+
     let d = p2 >> -one_exp;
-    if (d || len) {
-      store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
-      // buffer[(len)++] = '0' + d;
-    }
+    if (d || len) store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
+
     p2 &= one_frc - 1;
     --kappa;
     if (p2 < delta) {
@@ -279,20 +275,22 @@ function prettify(buffer: usize, length: i32, k: i32): void {
   // TODO
 }
 
-export function dtoa(value: f64): string {
-  if (value == 0) return "0.0";
+export function dtoa_core(buffer: usize, value: f64): string {
   var isneg = value < 0;
-  if (!isFinite(value)) {
-    if (isNaN(value)) return "NaN";
-    return isneg ? "-Infinity" : "Infinity";
-  }
   if (isneg) value = -value;
-  var decimals = 32; // TMP
-  var result = allocateUnsafeString(decimals);
-  var buffer = changetype<usize>(result);
   var len = grisu2(value, buffer, isneg);
   prettify(buffer, len, _K);
-  _K = 0;
   if (isneg) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
-  return changetype<string>(result);
+  return changetype<string>(buffer);
+}
+
+export function dtoa(value: f64): string {
+  if (value == 0) return "0.0";
+  if (!isFinite(value)) {
+    if (isNaN(value)) return "NaN";
+    return value < 0 ? "-Infinity" : "Infinity";
+  }
+  var decimals = 32; // TMP
+  var result = allocateUnsafeString(decimals);
+  return dtoa_core(changetype<usize>(result), value);
 }
