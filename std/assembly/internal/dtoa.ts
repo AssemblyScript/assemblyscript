@@ -14,7 +14,6 @@ import {
 } from "./arraybuffer";
 
 import {
-  DIGITS,
   POWERS10,
   decimalCount32,
   utoa32_core
@@ -63,6 +62,7 @@ function FRC_POWERS(): u64[] {
     0x80444B5E7AA7CF85, 0xBF21E44003ACDD2D, 0x8E679C2F5E44FF8F, 0xD433179D9C8CB841,
     0x9E19DB92B4E31BA9, 0xEB96BF6EBADF77D9, 0xAF87023B9BF0EE6B
   ];
+  return table;
 }
 
 /*
@@ -173,15 +173,14 @@ function normalizedBoundaries(f: u64, e: i32): void {
   // normalizeBoundary((f << 1) + 1, e - 1);
   var frc = (f << 1) + 1;
   var exp = e - 1;
-  var off = <i32>clz<u64>(frc) + 10; // sfould be 9 if frc < 0
+  var off = <i32>clz<u64>(frc);
   frc <<= off;
   exp  -= off;
 
   var m = 1 + <i32>(f == 0x0010000000000000);
-  // var exp = _exp;
 
   _frc_plus  = frc;
-  _frc_minus = ((f << m) - 1) << e - 1 - exp;
+  _frc_minus = ((f << m) - 1) << e - m - exp;
   _exp_plus  = exp;
   _exp_minus = exp;
 }
@@ -230,8 +229,8 @@ function grisu2(value: f64, buffer: usize): i32 {
   normalizedBoundaries(frc, exp);
   getCachedPower(_exp_plus);
 
-  frc = _frc;
-  exp = _exp;
+  // frc = _frc;
+  // exp = _exp;
 
   // normalize
   var off = <i32>clz<u64>(frc);
@@ -250,14 +249,15 @@ function grisu2(value: f64, buffer: usize): i32 {
   var wm_frc = umul64f(_frc_minus, frc_pow) + 1;
   var delta  = wp_frc - wm_frc;
 
-  return digitGen(w_frc, w_exp, wp_frc, wp_exp, delta, buffer);
+  return write(buffer, w_frc, w_exp, wp_frc, wp_exp, delta);
 }
 
-function digitGen(w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, buffer: usize): i32 {
+function write(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64): i32 {
   var one_frc = (<u64>1) << -mp_exp;
   var one_exp = mp_exp;
 
   // const DiyFp wp_w = Mp - W;
+  assert(mp_exp == w_exp && mp_frc >= w_frc);
   var wp_w_frc = mp_frc - w_frc;
   var wp_w_exp = mp_exp;
 
@@ -303,7 +303,7 @@ function digitGen(w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, 
   while (1) {
     p2    *= 10;
     delta *= 10;
-    let d = <u16>(p2 >> -one_exp);
+    let d = p2 >> -one_exp;
     if (d || len) {
       store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
       // buffer[(len)++] = '0' + d;
@@ -344,7 +344,7 @@ export function dtoa(value: f64): string {
   if (isneg) value = -value;
   var decimals = 32; // TMP
   var result = allocateUnsafeString(decimals);
-  var buffer = changetype<usize>(result.buffer_);
+  var buffer = changetype<usize>(result);
   var len = grisu2(value, buffer);
   prettify(buffer, len, _K);
   _K = 0;
