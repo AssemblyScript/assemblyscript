@@ -263,18 +263,19 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
 }
 
 @inline
-function writeExponent(buffer: usize, offset: usize): void {
-  var k = _K;
+function genExponent(buffer: usize, k: i32): i32 {
   var sign = k < 0;
   if (k < 0) k = -k;
-  utoa32_core(buffer, k, offset + <u32>sign);
+  var decimals = decimalCount32(k) + <u32>sign;
+  utoa32_core(buffer, k, decimals);
   if (sign) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
+  return decimals;
 }
 
-function prettify(buffer: usize, length: i32, k: i32): void {
+function prettify(buffer: usize, length: i32, k: i32): i32 {
   if (!k) {
     store<u32>(buffer + (length << 1), CharCode.DOT | (CharCode._0 << 16), STRING_HEADER_SIZE);
-    return;
+    return length + 2;
   }
 
   var kk = length + k;
@@ -284,6 +285,7 @@ function prettify(buffer: usize, length: i32, k: i32): void {
       store<u16>(buffer + (i << 1), CharCode._0, STRING_HEADER_SIZE);
     }
     store<u32>(buffer + (kk << 1), CharCode.DOT | (CharCode._0 << 16), STRING_HEADER_SIZE);
+    return kk + 2;
   } else if (kk > 0 && kk <= 21) {
     // 1234e-2 -> 12.34
     memory.copy(
@@ -292,7 +294,7 @@ function prettify(buffer: usize, length: i32, k: i32): void {
       (length - kk) << 1
     );
     store<u16>(buffer + (kk << 1), CharCode.DOT, STRING_HEADER_SIZE);
-    // 	buffer[length + 1] = '\0';
+    return length;
   } else if (-6 < kk && kk <= 0) {
     // 1234e-6 -> 0.001234
     let offset = 2 - kk;
@@ -305,11 +307,12 @@ function prettify(buffer: usize, length: i32, k: i32): void {
     for (let i = 2; i < offset; ++i) {
       store<u16>(buffer + (i << 1), CharCode._0, STRING_HEADER_SIZE);
     }
-    // buffer[length + offset] = '\0';
+    return length + offset + 1;
   } else if (length == 1) {
     // 1e30
     store<u16>(buffer, CharCode.e, STRING_HEADER_SIZE + 2);
-    writeExponent(kk - 1, buffer + 4);
+    let expLen = genExponent(buffer + 4, kk - 1);
+    return length + expLen + 1;
   } else {
     memory.copy(
       buffer + 4 + STRING_HEADER_SIZE,
@@ -318,7 +321,8 @@ function prettify(buffer: usize, length: i32, k: i32): void {
     );
     store<u16>(buffer, CharCode.DOT, STRING_HEADER_SIZE + 2);
     store<u16>(buffer + ((length + 1) << 1), CharCode.e, STRING_HEADER_SIZE);
-    writeExponent(kk - 1, buffer + (length + 2) << 1);
+    let expLen = genExponent(buffer + (length + 2) << 1, kk - 1);
+    return length + expLen + 2;
   }
 }
 
