@@ -6,6 +6,7 @@
 import {
   CharCode,
   allocateUnsafe as allocateUnsafeString,
+  freeUnsafe as freeUnsafeString,
   HEADER_SIZE as STRING_HEADER_SIZE
 } from "./string";
 
@@ -343,10 +344,10 @@ export function dtoa(value: f64): String {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var len = 64; // TODO figure outing optimizal max size
+  var len = 30; // TODO figure outing optimizal max size
   var buffer = allocateUnsafeString(len);
   len = dtoa_core(changetype<usize>(buffer), value);
   var result = buffer.substring(0, len);
-  // TODO free buffer
+  freeUnsafeString(buffer);
   return result;
 }

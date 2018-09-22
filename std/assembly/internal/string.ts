@@ -22,6 +22,14 @@ export function allocateUnsafe(length: i32): String {
   return changetype<String>(buffer);
 }
 
+@inline
+export function freeUnsafe(buffer: String): void {
+  if (!isManaged<String>()) {
+    assert(buffer);
+    memory.free(changetype<usize>(buffer));
+  }
+}
+
 export function copyUnsafe(dest: String, destOffset: usize, src: String, srcOffset: usize, len: usize): void {
   memory.copy(
     changetype<usize>(dest) + (destOffset << 1) + HEADER_SIZE,

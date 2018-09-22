@@ -14,6 +14,7 @@
  (type $Fi (func (param f64) (result i32)))
  (type $iFi (func (param i32 f64) (result i32)))
  (type $iIiIiIii (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
+ (type $iv (func (param i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
@@ -7276,7 +7277,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 2736)
-     (i32.const 332)
+     (i32.const 333)
      (i32.const 2)
     )
     (unreachable)
@@ -8033,7 +8034,10 @@
   )
   (get_local $10)
  )
- (func $~lib/internal/dtoa/dtoa (; 49 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/allocator/arena/__memory_free (; 49 ;) (type $iv) (param $0 i32)
+  (nop)
+ )
+ (func $~lib/internal/dtoa/dtoa (; 50 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8074,7 +8078,7 @@
    )
   )
   (set_local $1
-   (i32.const 64)
+   (i32.const 30)
   )
   (set_local $2
    (call $~lib/internal/string/allocateUnsafe
@@ -8094,9 +8098,35 @@
     (get_local $1)
    )
   )
+  (block $~lib/internal/string/freeUnsafe|inlined.0
+   (block
+    (if
+     (i32.eqz
+      (get_local $2)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 112)
+       (i32.const 28)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (block $~lib/memory/memory.free|inlined.0
+     (block
+      (call $~lib/allocator/arena/__memory_free
+       (get_local $2)
+      )
+      (br $~lib/memory/memory.free|inlined.0)
+     )
+    )
+   )
+  )
   (get_local $3)
  )
- (func $start (; 50 ;) (type $v)
+ (func $start (; 51 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -10869,6 +10899,6 @@
    )
   )
  )
- (func $null (; 51 ;) (type $v)
+ (func $null (; 52 ;) (type $v)
  )
 )

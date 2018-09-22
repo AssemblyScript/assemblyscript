@@ -18,6 +18,7 @@
  (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$di (func (param i32) (result f64)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -6008,7 +6009,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 2736)
-     (i32.const 332)
+     (i32.const 333)
      (i32.const 2)
     )
     (unreachable)
@@ -6608,7 +6609,10 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/dtoa/dtoa (; 49 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/allocator/arena/__memory_free (; 49 ;) (; has Stack IR ;) (type $FUNCSIG$v)
+  (nop)
+ )
+ (func $~lib/internal/dtoa/dtoa (; 50 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -6651,18 +6655,36 @@
    (call $~lib/internal/dtoa/dtoa_core
     (tee_local $1
      (call $~lib/internal/string/allocateUnsafe
-      (i32.const 64)
+      (i32.const 30)
      )
     )
     (get_local $0)
    )
   )
-  (call $~lib/string/String#substring
-   (get_local $1)
-   (get_local $2)
+  (set_local $2
+   (call $~lib/string/String#substring
+    (get_local $1)
+    (get_local $2)
+   )
   )
+  (if
+   (i32.eqz
+    (get_local $1)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 112)
+     (i32.const 28)
+     (i32.const 4)
+    )
+    (unreachable)
+   )
+  )
+  (call $~lib/allocator/arena/__memory_free)
+  (get_local $2)
  )
- (func $start (; 50 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 51 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 4152)
   )
@@ -9248,7 +9270,7 @@
    )
   )
  )
- (func $null (; 51 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 52 ;) (; has Stack IR ;) (type $v)
   (nop)
  )
 )
