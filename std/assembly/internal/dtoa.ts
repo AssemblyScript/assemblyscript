@@ -105,18 +105,8 @@ function umul64e(e1: i32, e2: i32): i32 {
   return e1 + e2 + 64;
 }
 
-/*
-@inline
-function normalizeBoundary(f: u64, e: i32): void {
-  while (!(f & (0x0010000000000000 << 1))) { f <<= 1; --e; }
-  _frc = f << 10;
-  _exp = e - 10;
-}
-*/
-
 @inline
 function normalizedBoundaries(f: u64, e: i32): void {
-  // normalizeBoundary((f << 1) + 1, e - 1);
   var frc = (f << 1) + 1;
   var exp = e - 1;
   var off = <i32>clz<u64>(frc);
@@ -169,7 +159,6 @@ function grisu2(value: f64, buffer: usize, sign: bool): i32 {
   var uv  = reinterpret<u64>(value);
   var exp = <i32>((uv & 0x7FF0000000000000) >>> 52);
   var sid = uv & 0x000FFFFFFFFFFFFF;
-  // var frc = select<u64>(0x0010000000000000, 0, exp != 0) + sid;
   var frc = (<u64>(exp != 0) << 52) + sid;
       exp = select<i32>(exp, 1, exp != 0) - (0x3FF + 52);
 
@@ -200,7 +189,6 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
   var one_frc = (<u64>1) << -mp_exp;
   var one_exp = mp_exp;
 
-  // assert(mp_exp == w_exp && mp_frc >= w_frc);
   var wp_w_frc = mp_frc - w_frc;
   var wp_w_exp = mp_exp;
 
@@ -239,7 +227,6 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     }
   }
 
-  // kappa = 0
   while (1) {
     p2    *= 10;
     delta *= 10;
