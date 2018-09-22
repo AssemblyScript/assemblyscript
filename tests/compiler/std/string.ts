@@ -176,6 +176,12 @@ assert(dtoa(-0.0) == "0.0");
 assert(dtoa(NaN)  == "NaN");
 assert(dtoa(+Infinity) == "Infinity");
 assert(dtoa(-Infinity) == "-Infinity");
+assert(dtoa(f64.EPSILON) == "2.220446049250313e-16");
+assert(dtoa(-f64.EPSILON) == "-2.220446049250313e-16");
+assert(dtoa(f64.MAX_VALUE) == "1.7976931348623157e+308");
+assert(dtoa(-f64.MAX_VALUE) == "-1.7976931348623157e+308");
+assert(dtoa(f64.MAX_VALUE + f64.EPSILON) == "1.7976931348623157e+308");
+assert(dtoa(f64.MAX_VALUE * 1.000000000000001) == "Infinity");
 
 assert(dtoa(1.0)  == "1.0");
 assert(dtoa(0.1)  == "0.1");
@@ -196,5 +202,9 @@ assert(dtoa(-1e+309) == "-Infinity");
 assert(dtoa(1e-308)  == "1e-308");
 assert(dtoa(-1e-308) == "-1e-308");
 assert(dtoa(1e-323)  == "1e-323");
-assert(dtoa(-1e-323)  == "-1e-323");
+assert(dtoa(-1e-323) == "-1e-323");
 assert(dtoa(1e-324)  == "0.0");
+
+assert(dtoa(1.23121456734562345678e-8) == "1.2312145673456234e-8");
+assert(dtoa(0.9999999999999999) == "0.9999999999999999");
+assert(dtoa(0.99999999999999995) == "1.0");
