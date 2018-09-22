@@ -321,18 +321,20 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
     );
     store<u16>(buffer, CharCode.DOT, STRING_HEADER_SIZE + 2);
     store<u16>(buffer + ((length + 1) << 1), CharCode.e, STRING_HEADER_SIZE);
-    let expLen = genExponent(buffer + (length + 2) << 1, kk - 1);
+    let expLen = genExponent(buffer + ((length + 2) << 1), kk - 1);
     return length + expLen + 2;
   }
 }
 
-export function dtoa_core(buffer: usize, value: f64): void {
+export function dtoa_core(buffer: usize, value: f64): i32 {
   var sign = value < 0;
   if (sign) value = -value;
+  assert(value > 0 && value <= 1.7976931348623157e308);
   var len = grisu2(value, buffer, sign);
       len = prettify(buffer + (<i32>sign << 1), len - <i32>sign, _K);
       len += <i32>sign;
   if (sign) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
+  return len;
 }
 
 export function dtoa(value: f64): String {
@@ -341,8 +343,10 @@ export function dtoa(value: f64): String {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var len = 32; // TMP
-  var result = allocateUnsafeString(len);
-  dtoa_core(changetype<usize>(result), value);
+  var len = 64; // TODO figure outing optimizal max size
+  var buffer = allocateUnsafeString(len);
+  len = dtoa_core(changetype<usize>(buffer), value);
+  var result = buffer.substring(0, len);
+  // TODO free buffer
   return result;
 }

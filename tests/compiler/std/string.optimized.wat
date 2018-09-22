@@ -4,18 +4,18 @@
  (type $ii (func (param i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
+ (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
  (type $i (func (result i32)))
  (type $iiF (func (param i32 i32) (result f64)))
  (type $iF (func (param i32) (result f64)))
  (type $Ii (func (param i64) (result i32)))
  (type $iIiv (func (param i32 i64 i32)))
  (type $Fi (func (param f64) (result i32)))
- (type $iFv (func (param i32 f64)))
+ (type $iFi (func (param i32 f64) (result i32)))
  (type $iIiIiIii (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$di (func (param i32) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -120,12 +120,13 @@
  (data (i32.const 2672) "\03\00\00\00N\00a\00N")
  (data (i32.const 2688) "\t\00\00\00-\00I\00n\00f\00i\00n\00i\00t\00y")
  (data (i32.const 2712) "\08\00\00\00I\00n\00f\00i\00n\00i\00t\00y")
- (data (i32.const 2736) "\b8\02\00\00\00\00\00\00\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\0dXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
- (data (i32.const 3760) "\b0\n\00\00W")
- (data (i32.const 3768) "\ae\00\00\00\00\00\00\00<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
- (data (i32.const 4024) "\b8\0e\00\00W")
- (data (i32.const 4032) "(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
- (data (i32.const 4096) "\c0\0f\00\00\n")
+ (data (i32.const 2736) "\15\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00d\00t\00o\00a\00.\00t\00s")
+ (data (i32.const 2784) "\b8\02\00\00\00\00\00\00\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\0dXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
+ (data (i32.const 3808) "\e0\n\00\00W")
+ (data (i32.const 3816) "\ae\00\00\00\00\00\00\00<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
+ (data (i32.const 4072) "\e8\0e\00\00W")
+ (data (i32.const 4080) "(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
+ (data (i32.const 4144) "\f0\0f\00\00\n")
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
  (start $start)
@@ -2715,7 +2716,7 @@
    )
   )
  )
- (func $~lib/internal/string/copyUnsafe (; 16 ;) (; has Stack IR ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/string/copyUnsafe (; 16 ;) (; has Stack IR ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (call $~lib/internal/memory/memmove
    (i32.add
     (i32.add
@@ -2728,11 +2729,17 @@
     (i32.const 4)
    )
    (i32.add
-    (get_local $2)
+    (i32.add
+     (get_local $2)
+     (i32.shl
+      (get_local $3)
+      (i32.const 1)
+     )
+    )
     (i32.const 4)
    )
    (i32.shl
-    (get_local $3)
+    (get_local $4)
     (i32.const 1)
    )
   )
@@ -2833,6 +2840,7 @@
       (get_local $5)
       (get_local $3)
       (get_local $2)
+      (i32.const 0)
       (get_local $4)
      )
     )
@@ -2841,6 +2849,7 @@
     (get_local $5)
     (i32.const 0)
     (get_local $2)
+    (i32.const 0)
     (get_local $1)
    )
   )
@@ -2850,6 +2859,7 @@
     (get_local $5)
     (get_local $1)
     (get_local $0)
+    (i32.const 0)
     (get_local $6)
    )
   )
@@ -2945,6 +2955,7 @@
     (get_local $1)
     (i32.const 0)
     (get_local $0)
+    (i32.const 0)
     (get_local $3)
    )
   )
@@ -2988,6 +2999,7 @@
        (get_local $3)
       )
       (get_local $2)
+      (i32.const 0)
       (get_local $4)
      )
     )
@@ -2996,6 +3008,7 @@
     (get_local $1)
     (get_local $3)
     (get_local $2)
+    (i32.const 0)
     (get_local $6)
    )
   )
@@ -3832,12 +3845,14 @@
    )
    (i32.const 0)
    (get_local $0)
+   (i32.const 0)
    (get_local $3)
   )
   (call $~lib/internal/string/copyUnsafe
    (get_local $2)
    (get_local $3)
    (get_local $1)
+   (i32.const 0)
    (get_local $4)
   )
   (get_local $2)
@@ -4972,7 +4987,7 @@
   )
   (set_local $12
    (i32.load
-    (i32.const 4096)
+    (i32.const 4144)
    )
   )
   (loop $continue|0
@@ -5879,15 +5894,15 @@
           (i32.const 101)
          )
          (set_local $4
-          (i32.shl
-           (i32.add
-            (get_local $0)
+          (i32.add
+           (get_local $0)
+           (i32.shl
             (i32.add
              (get_local $1)
              (i32.const 2)
             )
+            (i32.const 1)
            )
-           (i32.const 1)
           )
          )
          (if
@@ -5943,23 +5958,23 @@
    )
   )
  )
- (func $~lib/internal/dtoa/dtoa_core (; 47 ;) (; has Stack IR ;) (type $iFv) (param $0 i32) (param $1 f64)
+ (func $~lib/internal/dtoa/dtoa_core (; 47 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 i32)
+  (local $3 i32)
+  (local $4 i64)
   (local $5 i32)
   (local $6 i64)
   (local $7 i64)
-  (local $8 i64)
-  (local $9 i64)
+  (local $8 i32)
+  (local $9 i32)
   (local $10 i64)
   (local $11 i64)
-  (local $12 i32)
-  (local $13 i32)
+  (local $12 i64)
+  (local $13 i64)
   (local $14 i32)
   (local $15 i64)
   (if
-   (tee_local $12
+   (tee_local $9
     (f64.lt
      (get_local $1)
      (f64.const 0)
@@ -5971,13 +5986,41 @@
     )
    )
   )
+  (if
+   (tee_local $5
+    (f64.gt
+     (get_local $1)
+     (f64.const 0)
+    )
+   )
+   (set_local $5
+    (f64.le
+     (get_local $1)
+     (f64.const 1797693134862315708145274e284)
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $5)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 2736)
+     (i32.const 332)
+     (i32.const 2)
+    )
+    (unreachable)
+   )
+  )
   (set_local $2
    (i64.add
     (i64.shl
      (i64.extend_u/i32
-      (tee_local $4
+      (tee_local $3
        (i32.ne
-        (tee_local $13
+        (tee_local $5
          (i32.wrap/i64
           (i64.shr_u
            (i64.and
@@ -6004,14 +6047,14 @@
     )
    )
   )
-  (set_local $4
+  (set_local $3
    (i32.sub
-    (tee_local $13
+    (tee_local $5
      (i32.sub
       (select
-       (get_local $13)
+       (get_local $5)
        (i32.const 1)
-       (get_local $4)
+       (get_local $3)
       )
       (i32.const 1075)
      )
@@ -6019,7 +6062,7 @@
     (i32.const 1)
    )
   )
-  (set_local $5
+  (set_local $8
    (i32.wrap/i64
     (i64.clz
      (tee_local $6
@@ -6038,7 +6081,7 @@
    (i64.shl
     (get_local $6)
     (i64.extend_s/i32
-     (get_local $5)
+     (get_local $8)
     )
    )
   )
@@ -6064,13 +6107,13 @@
     (i64.extend_s/i32
      (i32.sub
       (i32.sub
-       (get_local $13)
+       (get_local $5)
        (get_local $14)
       )
-      (tee_local $4
+      (tee_local $3
        (i32.sub
-        (get_local $4)
-        (get_local $5)
+        (get_local $3)
+        (get_local $8)
        )
       )
      )
@@ -6078,20 +6121,20 @@
    )
   )
   (set_global $~lib/internal/dtoa/_exp_plus
-   (get_local $4)
+   (get_local $3)
   )
   (set_global $~lib/internal/dtoa/_exp_minus
-   (get_local $4)
+   (get_local $3)
   )
   (set_global $~lib/internal/dtoa/_K
    (i32.sub
     (i32.const 348)
     (i32.shl
-     (tee_local $4
+     (tee_local $3
       (i32.add
        (i32.shr_s
         (i32.add
-         (tee_local $5
+         (tee_local $8
           (i32.trunc_s/f64
            (tee_local $1
             (f64.add
@@ -6111,7 +6154,7 @@
          )
          (f64.ne
           (f64.convert_s/i32
-           (get_local $5)
+           (get_local $8)
           )
           (get_local $1)
          )
@@ -6125,19 +6168,19 @@
     )
    )
   )
-  (set_local $5
+  (set_local $8
    (i32.load
-    (i32.const 4024)
+    (i32.const 4072)
    )
   )
   (set_global $~lib/internal/dtoa/_frc_pow
    (i64.load offset=8
     (i32.add
      (i32.load
-      (i32.const 3760)
+      (i32.const 3808)
      )
      (i32.shl
-      (get_local $4)
+      (get_local $3)
       (i32.const 3)
      )
     )
@@ -6146,15 +6189,15 @@
   (set_global $~lib/internal/dtoa/_exp_pow
    (i32.load16_s offset=8
     (i32.add
-     (get_local $5)
+     (get_local $8)
      (i32.shl
-      (get_local $4)
+      (get_local $3)
       (i32.const 1)
      )
     )
    )
   )
-  (set_local $9
+  (set_local $11
    (i64.mul
     (tee_local $7
      (i64.and
@@ -6162,7 +6205,7 @@
        (i64.shl
         (get_local $2)
         (i64.extend_s/i32
-         (tee_local $5
+         (tee_local $8
           (i32.wrap/i64
            (i64.clz
             (get_local $2)
@@ -6175,7 +6218,7 @@
       (i64.const 4294967295)
      )
     )
-    (tee_local $8
+    (tee_local $10
      (i64.and
       (tee_local $6
        (get_global $~lib/internal/dtoa/_frc_pow)
@@ -6189,7 +6232,7 @@
    (i64.add
     (i64.mul
      (get_local $7)
-     (tee_local $10
+     (tee_local $12
       (i64.shr_u
        (get_local $6)
        (i64.const 32)
@@ -6197,19 +6240,19 @@
      )
     )
     (i64.and
-     (tee_local $3
+     (tee_local $4
       (i64.add
        (i64.mul
-        (tee_local $11
+        (tee_local $13
          (i64.shr_u
           (get_local $2)
           (i64.const 32)
          )
         )
-        (get_local $8)
+        (get_local $10)
        )
        (i64.shr_u
-        (get_local $9)
+        (get_local $11)
         (i64.const 32)
        )
       )
@@ -6222,11 +6265,11 @@
    (i64.add
     (i64.add
      (i64.mul
-      (get_local $11)
-      (get_local $10)
+      (get_local $13)
+      (get_local $12)
      )
      (i64.shr_u
-      (get_local $3)
+      (get_local $4)
       (i64.const 32)
      )
     )
@@ -6241,15 +6284,15 @@
   )
   (set_local $7
    (i64.mul
-    (tee_local $9
+    (tee_local $11
      (i64.and
-      (tee_local $3
+      (tee_local $4
        (get_global $~lib/internal/dtoa/_frc_plus)
       )
       (i64.const 4294967295)
      )
     )
-    (tee_local $10
+    (tee_local $12
      (i64.and
       (get_local $6)
       (i64.const 4294967295)
@@ -6260,8 +6303,8 @@
   (set_local $7
    (i64.add
     (i64.mul
-     (get_local $9)
-     (tee_local $8
+     (get_local $11)
+     (tee_local $10
       (i64.shr_u
        (get_local $6)
        (i64.const 32)
@@ -6269,16 +6312,16 @@
      )
     )
     (i64.and
-     (tee_local $3
+     (tee_local $4
       (i64.add
        (i64.mul
-        (tee_local $11
+        (tee_local $13
          (i64.shr_u
-          (get_local $3)
+          (get_local $4)
           (i64.const 32)
          )
         )
-        (get_local $10)
+        (get_local $12)
        )
        (i64.shr_u
         (get_local $7)
@@ -6294,11 +6337,11 @@
    (i64.add
     (i64.add
      (i64.mul
-      (get_local $11)
-      (get_local $8)
+      (get_local $13)
+      (get_local $10)
      )
      (i64.shr_u
-      (get_local $3)
+      (get_local $4)
       (i64.const 32)
      )
     )
@@ -6311,17 +6354,17 @@
     )
    )
   )
-  (set_local $9
+  (set_local $11
    (i64.mul
     (tee_local $7
      (i64.and
-      (tee_local $3
+      (tee_local $4
        (get_global $~lib/internal/dtoa/_frc_minus)
       )
       (i64.const 4294967295)
      )
     )
-    (tee_local $8
+    (tee_local $10
      (i64.and
       (get_local $6)
       (i64.const 4294967295)
@@ -6333,7 +6376,7 @@
    (i64.add
     (i64.mul
      (get_local $7)
-     (tee_local $10
+     (tee_local $12
       (i64.shr_u
        (get_local $6)
        (i64.const 32)
@@ -6341,19 +6384,19 @@
      )
     )
     (i64.and
-     (tee_local $3
+     (tee_local $4
       (i64.add
        (i64.mul
-        (tee_local $11
+        (tee_local $13
          (i64.shr_u
-          (get_local $3)
+          (get_local $4)
           (i64.const 32)
          )
         )
-        (get_local $8)
+        (get_local $10)
        )
        (i64.shr_u
-        (get_local $9)
+        (get_local $11)
         (i64.const 32)
        )
       )
@@ -6362,7 +6405,7 @@
     )
    )
   )
-  (set_local $3
+  (set_local $4
    (i64.sub
     (tee_local $7
      (i64.sub
@@ -6374,11 +6417,11 @@
      (i64.add
       (i64.add
        (i64.mul
-        (get_local $11)
-        (get_local $10)
+        (get_local $13)
+        (get_local $12)
        )
        (i64.shr_u
-        (get_local $3)
+        (get_local $4)
         (i64.const 32)
        )
       )
@@ -6394,59 +6437,180 @@
     )
    )
   )
-  (drop
-   (call $~lib/internal/dtoa/prettify
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $12)
-      (i32.const 1)
-     )
-    )
-    (i32.sub
-     (call $~lib/internal/dtoa/genDigits
+  (set_local $3
+   (i32.add
+    (call $~lib/internal/dtoa/prettify
+     (i32.add
       (get_local $0)
-      (get_local $2)
-      (tee_local $4
+      (i32.shl
+       (get_local $9)
+       (i32.const 1)
+      )
+     )
+     (i32.sub
+      (call $~lib/internal/dtoa/genDigits
+       (get_local $0)
+       (get_local $2)
+       (tee_local $3
+        (i32.sub
+         (i32.add
+          (i32.sub
+           (get_local $5)
+           (get_local $8)
+          )
+          (tee_local $5
+           (get_global $~lib/internal/dtoa/_exp_pow)
+          )
+         )
+         (i32.const -64)
+        )
+       )
+       (get_local $7)
        (i32.sub
         (i32.add
-         (i32.sub
-          (get_local $13)
-          (get_local $5)
-         )
-         (tee_local $5
-          (get_global $~lib/internal/dtoa/_exp_pow)
-         )
+         (get_global $~lib/internal/dtoa/_exp_plus)
+         (get_local $5)
         )
         (i32.const -64)
        )
+       (get_local $4)
+       (get_local $9)
       )
-      (get_local $7)
-      (i32.sub
-       (i32.add
-        (get_global $~lib/internal/dtoa/_exp_plus)
-        (get_local $5)
-       )
-       (i32.const -64)
-      )
-      (get_local $3)
-      (get_local $12)
+      (get_local $9)
      )
-     (get_local $12)
+     (get_global $~lib/internal/dtoa/_K)
     )
-    (get_global $~lib/internal/dtoa/_K)
+    (get_local $9)
    )
   )
   (if
-   (get_local $12)
+   (get_local $9)
    (i32.store16 offset=4
     (get_local $0)
     (i32.const 45)
    )
   )
+  (get_local $3)
  )
- (func $~lib/internal/dtoa/dtoa (; 48 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/string/String#substring (; 48 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 80)
+     (i32.const 264)
+     (i32.const 4)
+    )
+    (unreachable)
+   )
+  )
+  (set_local $1
+   (select
+    (tee_local $2
+     (select
+      (get_local $1)
+      (i32.const 0)
+      (i32.gt_s
+       (get_local $1)
+       (i32.const 0)
+      )
+     )
+    )
+    (tee_local $3
+     (i32.load
+      (get_local $0)
+     )
+    )
+    (i32.lt_s
+     (get_local $2)
+     (get_local $3)
+    )
+   )
+  )
+  (set_local $4
+   (select
+    (tee_local $2
+     (select
+      (i32.const 0)
+      (get_local $3)
+      (i32.lt_s
+       (i32.const 0)
+       (get_local $3)
+      )
+     )
+    )
+    (get_local $1)
+    (i32.lt_s
+     (get_local $2)
+     (get_local $1)
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (tee_local $3
+     (i32.sub
+      (tee_local $1
+       (select
+        (get_local $2)
+        (get_local $1)
+        (i32.gt_s
+         (get_local $2)
+         (get_local $1)
+        )
+       )
+      )
+      (get_local $4)
+     )
+    )
+   )
+   (return
+    (i32.const 256)
+   )
+  )
+  (if
+   (tee_local $2
+    (i32.eqz
+     (get_local $4)
+    )
+   )
+   (set_local $2
+    (i32.eq
+     (get_local $1)
+     (i32.load
+      (get_local $0)
+     )
+    )
+   )
+  )
+  (if
+   (get_local $2)
+   (return
+    (get_local $0)
+   )
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $2
+    (call $~lib/internal/string/allocateUnsafe
+     (get_local $3)
+    )
+   )
+   (i32.const 0)
+   (get_local $0)
+   (get_local $4)
+   (get_local $3)
+  )
+  (get_local $2)
+ )
+ (func $~lib/internal/dtoa/dtoa (; 49 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
+  (local $2 i32)
   (if
    (f64.eq
     (get_local $0)
@@ -6483,19 +6647,24 @@
     )
    )
   )
-  (call $~lib/internal/dtoa/dtoa_core
-   (tee_local $1
-    (call $~lib/internal/string/allocateUnsafe
-     (i32.const 32)
+  (set_local $2
+   (call $~lib/internal/dtoa/dtoa_core
+    (tee_local $1
+     (call $~lib/internal/string/allocateUnsafe
+      (i32.const 64)
+     )
     )
+    (get_local $0)
    )
-   (get_local $0)
   )
-  (get_local $1)
+  (call $~lib/string/String#substring
+   (get_local $1)
+   (get_local $2)
+  )
  )
- (func $start (; 49 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 50 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.const 4104)
+   (i32.const 4152)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
@@ -9079,7 +9248,7 @@
    )
   )
  )
- (func $null (; 50 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 51 ;) (; has Stack IR ;) (type $v)
   (nop)
  )
 )
