@@ -18,7 +18,6 @@
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$di (func (param i32) (result f64)))
- (type $FUNCSIG$vi (func (param i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -4915,7 +4914,7 @@
    (get_local $0)
   )
  )
- (func $~lib/internal/dtoa/write (; 45 ;) (; has Stack IR ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/dtoa/genDigits (; 45 ;) (; has Stack IR ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i32)
@@ -5544,8 +5543,22 @@
    )
   )
  )
- (func $~lib/internal/dtoa/prettify (; 46 ;) (; has Stack IR ;) (type $FUNCSIG$vi) (param $0 i32)
-  (nop)
+ (func $~lib/internal/dtoa/prettify (; 46 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (i32.store offset=4
+    (i32.add
+     (get_local $0)
+     (i32.shl
+      (get_local $1)
+      (i32.const 1)
+     )
+    )
+    (i32.const 3145774)
+   )
+  )
  )
  (func $~lib/internal/dtoa/dtoa_core (; 47 ;) (; has Stack IR ;) (type $iFv) (param $0 i32) (param $1 f64)
   (local $2 i64)
@@ -5999,7 +6012,8 @@
    )
   )
   (call $~lib/internal/dtoa/prettify
-   (call $~lib/internal/dtoa/write
+   (get_local $0)
+   (call $~lib/internal/dtoa/genDigits
     (get_local $0)
     (get_local $2)
     (tee_local $4
@@ -6027,6 +6041,7 @@
     (get_local $3)
     (get_local $13)
    )
+   (get_global $~lib/internal/dtoa/_K)
   )
   (if
    (get_local $13)

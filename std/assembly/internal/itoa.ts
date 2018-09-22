@@ -239,14 +239,14 @@ export function utoa32(value: u32): String {
 export function itoa32(value: i32): String {
   if (!value) return "0";
 
-  var isneg = value < 0;
-  if (isneg) value = -value;
+  var sign = value < 0;
+  if (sign) value = -value;
 
-  var decimals = decimalCount32(value) + <u32>isneg;
+  var decimals = decimalCount32(value) + <u32>sign;
   var buffer   = allocateUnsafeString(decimals);
 
   utoa32_core(changetype<usize>(buffer), value, decimals);
-  if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
+  if (sign) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
 
   return buffer;
 }
@@ -271,21 +271,21 @@ export function utoa64(value: u64): String {
 export function itoa64(value: i64): String {
   if (!value) return "0";
 
-  var isneg = value < 0;
-  if (isneg) value = -value;
+  var sign = value < 0;
+  if (sign) value = -value;
 
   var buffer: String;
   if (<u64>value <= <u64>u32.MAX_VALUE) {
     let val32    = <u32>value;
-    let decimals = decimalCount32(val32) + <u32>isneg;
+    let decimals = decimalCount32(val32) + <u32>sign;
     buffer = allocateUnsafeString(decimals);
     utoa32_core(changetype<usize>(buffer), val32, decimals);
   } else {
-    let decimals = decimalCount64(value) + <u32>isneg;
+    let decimals = decimalCount64(value) + <u32>sign;
     buffer = allocateUnsafeString(decimals);
     utoa64_core(changetype<usize>(buffer), value, decimals);
   }
-  if (isneg) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
+  if (sign) store<u16>(changetype<usize>(buffer), CharCode.MINUS, STRING_HEADER_SIZE);
 
   return buffer;
 }

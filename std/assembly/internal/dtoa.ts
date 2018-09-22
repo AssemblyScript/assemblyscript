@@ -150,7 +150,7 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
 
 @inline
 function getCachedPower(e: i32): void {
-  const c = reinterpret<f64>(0x3FD34413509F79FE); // 0.30102999566398114;
+  const c = reinterpret<f64>(0x3FD34413509F79FE); // 1 / lg(10) = 0.30102999566398114
   var dk = (-61 - e) * c + 347;	                  // dk must be positive, so can do ceiling in positive
   var k = <i32>dk;
   k += <i32>(k != dk);
@@ -165,7 +165,7 @@ function getCachedPower(e: i32): void {
 }
 
 @inline
-function grisu2(value: f64, buffer: usize, isneg: bool): i32 {
+function grisu2(value: f64, buffer: usize, sign: bool): i32 {
 
   // frexp routine
   var uv  = reinterpret<u64>(value);
@@ -195,10 +195,10 @@ function grisu2(value: f64, buffer: usize, isneg: bool): i32 {
   var wm_frc = umul64f(_frc_minus, frc_pow) + 1;
   var delta  = wp_frc - wm_frc;
 
-  return write(buffer, w_frc, w_exp, wp_frc, wp_exp, delta, isneg);
+  return genDigits(buffer, w_frc, w_exp, wp_frc, wp_exp, delta, sign);
 }
 
-function write(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, isneg: bool): i32 {
+function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, sign: bool): i32 {
   var one_frc = (<u64>1) << -mp_exp;
   var one_exp = mp_exp;
 
@@ -210,7 +210,7 @@ function write(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, 
   var p2 = mp_frc & (one_frc - 1);
 
   var kappa = <i32>decimalCount32(p1);
-  var len = <i32>isneg;
+  var len = <i32>sign;
 
   var powers10 = <ArrayBuffer>POWERS10().buffer_;
 
@@ -265,22 +265,27 @@ function write(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, 
 @inline
 function writeExponent(buffer: usize, offset: usize): void {
   var k = _K;
-  var isneg = k < 0;
+  var sign = k < 0;
   if (k < 0) k = -k;
-  utoa32_core(buffer, k, offset + <u32>isneg);
-  if (isneg) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
+  utoa32_core(buffer, k, offset + <u32>sign);
+  if (sign) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
 }
 
 function prettify(buffer: usize, length: i32, k: i32): void {
+  if (!k) {
+    store<u32>(buffer + (length << 1), CharCode.DOT | (CharCode._0 << 16), STRING_HEADER_SIZE);
+    return;
+  }
+
   // TODO
 }
 
 export function dtoa_core(buffer: usize, value: f64): void {
-  var isneg = value < 0;
-  if (isneg) value = -value;
-  var len = grisu2(value, buffer, isneg);
+  var sign = value < 0;
+  if (sign) value = -value;
+  var len = grisu2(value, buffer, sign);
   prettify(buffer, len, _K);
-  if (isneg) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
+  if (sign) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
 }
 
 export function dtoa(value: f64): String {

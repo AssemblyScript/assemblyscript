@@ -5971,7 +5971,7 @@
    (get_local $0)
   )
  )
- (func $~lib/internal/dtoa/write (; 45 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/dtoa/genDigits (; 45 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i64)
   (local $8 i32)
   (local $9 i64)
@@ -6723,7 +6723,30 @@
   (get_local $14)
  )
  (func $~lib/internal/dtoa/prettify (; 46 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (nop)
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (block
+    (i32.store offset=4
+     (i32.add
+      (get_local $0)
+      (i32.shl
+       (get_local $1)
+       (i32.const 1)
+      )
+     )
+     (i32.or
+      (get_global $~lib/internal/string/CharCode.DOT)
+      (i32.shl
+       (get_global $~lib/internal/string/CharCode._0)
+       (i32.const 16)
+      )
+     )
+    )
+    (return)
+   )
+  )
  )
  (func $~lib/internal/dtoa/dtoa_core (; 47 ;) (type $iFv) (param $0 i32) (param $1 f64)
   (local $2 i32)
@@ -7316,7 +7339,7 @@
       (get_local $23)
      )
     )
-    (call $~lib/internal/dtoa/write
+    (call $~lib/internal/dtoa/genDigits
      (get_local $0)
      (get_local $20)
      (get_local $8)
