@@ -182,6 +182,7 @@ assert(dtoa(f64.MAX_VALUE) == "1.7976931348623157e+308");
 assert(dtoa(-f64.MAX_VALUE) == "-1.7976931348623157e+308");
 assert(dtoa(f64.MAX_VALUE + f64.EPSILON) == "1.7976931348623157e+308");
 assert(dtoa(f64.MAX_VALUE * 1.000000000000001) == "Infinity");
+assert(dtoa(4.185580496821357e+298) == "4.185580496821357e+298");
 assert(dtoa(5e-324) == "5e-324");
 
 assert(dtoa(1.0)  == "1.0");
@@ -206,14 +207,17 @@ assert(dtoa(1e-323)  == "1e-323");
 assert(dtoa(-1e-323) == "-1e-323");
 assert(dtoa(1e-324)  == "0.0");
 
+assert(dtoa(4294967272) == "4294967272.0");
 assert(dtoa(1.23121456734562345678e-8) == "1.2312145673456234e-8");
 assert(dtoa(0.9999999999999999) == "0.9999999999999999");
 assert(dtoa(0.99999999999999995) == "1.0");
-assert(dtoa(1.0 / 3.0)  == "0.3333333333333333");
-assert(dtoa(1.234e+20)  == "123400000000000000000.0");
-assert(dtoa(1.234e+21)  == "1.234e+21");
-assert(dtoa(2.71828)    == "2.71828");
-assert(dtoa(2.71828e-2) == "0.0271828");
-assert(dtoa(2.71828e+2) == "271.828");
-assert(dtoa(1.1e+128)   == "1.1e+128");
-assert(dtoa(1.1e-64)    == "1.1e-64");
+assert(dtoa(0.1 + 0.2)   == "0.30000000000000004");
+assert(dtoa(1.0 / 3.0)   == "0.3333333333333333");
+assert(dtoa(1.234e+20)   == "123400000000000000000.0");
+assert(dtoa(1.234e+21)   == "1.234e+21");
+assert(dtoa(2.71828)     == "2.71828");
+assert(dtoa(2.71828e-2)  == "0.0271828");
+assert(dtoa(2.71828e+2)  == "271.828");
+assert(dtoa(1.1e+128)    == "1.1e+128");
+assert(dtoa(1.1e-64)     == "1.1e-64");
+assert(dtoa(0.000035689) == "0.000035689"); // should use bignum arithmetics
