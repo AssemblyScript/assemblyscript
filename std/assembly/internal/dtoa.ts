@@ -149,7 +149,7 @@ function getCachedPower(e: i32): void {
 }
 
 @inline
-function grisu2(value: f64, buffer: usize, sign: bool): i32 {
+function grisu2(value: f64, buffer: usize, sign: i32): i32 {
 
   // frexp routine
   var uv  = reinterpret<u64>(value);
@@ -181,7 +181,7 @@ function grisu2(value: f64, buffer: usize, sign: bool): i32 {
   return genDigits(buffer, w_frc, w_exp, wp_frc, wp_exp, delta, sign);
 }
 
-function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, sign: bool): i32 {
+function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, sign: i32): i32 {
   var one_frc = (<u64>1) << -mp_exp;
   var one_exp = mp_exp;
 
@@ -192,7 +192,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
   var p2 = mp_frc & (one_frc - 1);
 
   var kappa = <i32>decimalCount32(p1);
-  var len = <i32>sign;
+  var len = sign;
 
   var powers10 = <ArrayBuffer>POWERS10().buffer_;
 
@@ -308,14 +308,13 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
 }
 
 export function dtoa_core(buffer: usize, value: f64): i32 {
-  var sign = value < 0;
+  var sign = <i32>(value < 0);
   if (sign) value = -value;
-  assert(value > 0 && value <= 1.7976931348623157e308);
+  // assert(value > 0 && value <= 1.7976931348623157e308);
   var len = grisu2(value, buffer, sign);
-      len = prettify(buffer + (<i32>sign << 1), len - <i32>sign, _K);
-      len += <i32>sign;
+      len = prettify(buffer + (sign << 1), len - sign, _K);
   if (sign) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
-  return len;
+  return len + sign;
 }
 
 export function dtoa(value: f64): String {
