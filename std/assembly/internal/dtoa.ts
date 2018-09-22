@@ -72,10 +72,7 @@ var _frc: u64 = 0;
 var _exp: i32 = 0;
 
 var _frc_minus: u64 = 0;
-var _exp_minus: i32 = 0;
-
-var _frc_plus: u64 = 0;
-var _exp_plus: i32 = 0;
+var _frc_plus:  u64 = 0;
 
 var _frc_pow: u64 = 0;
 var _exp_pow: i32 = 0;
@@ -117,8 +114,7 @@ function normalizedBoundaries(f: u64, e: i32): void {
 
   _frc_plus  = frc;
   _frc_minus = ((f << m) - 1) << e - m - exp;
-  _exp_plus  = exp;
-  _exp_minus = exp;
+  _exp = exp;
 }
 
 @inline
@@ -163,7 +159,7 @@ function grisu2(value: f64, buffer: usize, sign: bool): i32 {
       exp = select<i32>(exp, 1, exp != 0) - (0x3FF + 52);
 
   normalizedBoundaries(frc, exp);
-  getCachedPower(_exp_plus);
+  getCachedPower(_exp);
 
   // normalize
   var off = <i32>clz<u64>(frc);
@@ -177,7 +173,7 @@ function grisu2(value: f64, buffer: usize, sign: bool): i32 {
   var w_exp = umul64e(exp, exp_pow);
 
   var wp_frc = umul64f(_frc_plus, frc_pow) - 1;
-  var wp_exp = umul64e(_exp_plus, exp_pow);
+  var wp_exp = umul64e(_exp,      exp_pow);
 
   var wm_frc = umul64f(_frc_minus, frc_pow) + 1;
   var delta  = wp_frc - wm_frc;

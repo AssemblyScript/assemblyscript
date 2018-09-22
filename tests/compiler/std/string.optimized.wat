@@ -23,10 +23,9 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/internal/dtoa/_K (mut i32) (i32.const 0))
+ (global $~lib/internal/dtoa/_exp (mut i32) (i32.const 0))
  (global $~lib/internal/dtoa/_frc_minus (mut i64) (i64.const 0))
- (global $~lib/internal/dtoa/_exp_minus (mut i32) (i32.const 0))
  (global $~lib/internal/dtoa/_frc_plus (mut i64) (i64.const 0))
- (global $~lib/internal/dtoa/_exp_plus (mut i32) (i32.const 0))
  (global $~lib/internal/dtoa/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/internal/dtoa/_exp_pow (mut i32) (i32.const 0))
  (global $std/string/str (mut i32) (i32.const 8))
@@ -153,16 +152,17 @@
  (data (i32.const 4760) "\15\00\00\001\00.\002\003\001\002\001\004\005\006\007\003\004\005\006\002\003\004\00e\00-\008")
  (data (i32.const 4808) "\11\00\00\005\005\005\005\005\005\005\005\005\00.\005\005\005\005\005\005\006")
  (data (i32.const 4848) "\12\00\00\000\00.\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009")
- (data (i32.const 4888) "\13\00\00\000\00.\003\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\004")
- (data (i32.const 4936) "\12\00\00\000\00.\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003")
- (data (i32.const 4976) "\17\00\00\001\002\003\004\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\00.\000")
- (data (i32.const 5032) "\t\00\00\001\00.\002\003\004\00e\00+\002\001")
- (data (i32.const 5056) "\07\00\00\002\00.\007\001\008\002\008")
- (data (i32.const 5080) "\t\00\00\000\00.\000\002\007\001\008\002\008")
- (data (i32.const 5104) "\07\00\00\002\007\001\00.\008\002\008")
- (data (i32.const 5128) "\08\00\00\001\00.\001\00e\00+\001\002\008")
- (data (i32.const 5152) "\07\00\00\001\00.\001\00e\00-\006\004")
- (data (i32.const 5176) "\0b\00\00\000\00.\000\000\000\000\003\005\006\008\009")
+ (data (i32.const 4888) "\05\00\00\001\002\00.\003\004")
+ (data (i32.const 4904) "\13\00\00\000\00.\003\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\004")
+ (data (i32.const 4952) "\12\00\00\000\00.\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003")
+ (data (i32.const 4992) "\17\00\00\001\002\003\004\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\00.\000")
+ (data (i32.const 5048) "\t\00\00\001\00.\002\003\004\00e\00+\002\001")
+ (data (i32.const 5072) "\07\00\00\002\00.\007\001\008\002\008")
+ (data (i32.const 5096) "\t\00\00\000\00.\000\002\007\001\008\002\008")
+ (data (i32.const 5120) "\07\00\00\002\007\001\00.\008\002\008")
+ (data (i32.const 5144) "\08\00\00\001\00.\001\00e\00+\001\002\008")
+ (data (i32.const 5168) "\07\00\00\001\00.\001\00e\00-\006\004")
+ (data (i32.const 5192) "\0b\00\00\000\00.\000\000\000\000\003\005\006\008\009")
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
  (start $start)
@@ -6025,13 +6025,13 @@
    )
   )
   (if
-   (tee_local $5
+   (tee_local $3
     (f64.gt
      (get_local $1)
      (f64.const 0)
     )
    )
-   (set_local $5
+   (set_local $3
     (f64.le
      (get_local $1)
      (f64.const 1797693134862315708145274e284)
@@ -6040,13 +6040,13 @@
   )
   (if
    (i32.eqz
-    (get_local $5)
+    (get_local $3)
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 2736)
-     (i32.const 317)
+     (i32.const 313)
      (i32.const 2)
     )
     (unreachable)
@@ -6056,9 +6056,9 @@
    (i64.add
     (i64.shl
      (i64.extend_u/i32
-      (tee_local $3
+      (tee_local $5
        (i32.ne
-        (tee_local $5
+        (tee_local $3
          (i32.wrap/i64
           (i64.shr_u
            (i64.and
@@ -6085,14 +6085,14 @@
     )
    )
   )
-  (set_local $3
+  (set_local $5
    (i32.sub
-    (tee_local $5
+    (tee_local $3
      (i32.sub
       (select
-       (get_local $5)
-       (i32.const 1)
        (get_local $3)
+       (i32.const 1)
+       (get_local $5)
       )
       (i32.const 1075)
      )
@@ -6145,12 +6145,12 @@
     (i64.extend_s/i32
      (i32.sub
       (i32.sub
-       (get_local $5)
+       (get_local $3)
        (get_local $14)
       )
-      (tee_local $3
+      (tee_local $5
        (i32.sub
-        (get_local $3)
+        (get_local $5)
         (get_local $8)
        )
       )
@@ -6158,17 +6158,14 @@
     )
    )
   )
-  (set_global $~lib/internal/dtoa/_exp_plus
-   (get_local $3)
-  )
-  (set_global $~lib/internal/dtoa/_exp_minus
-   (get_local $3)
+  (set_global $~lib/internal/dtoa/_exp
+   (get_local $5)
   )
   (set_global $~lib/internal/dtoa/_K
    (i32.sub
     (i32.const 348)
     (i32.shl
-     (tee_local $3
+     (tee_local $5
       (i32.add
        (i32.shr_s
         (i32.add
@@ -6180,7 +6177,7 @@
               (f64.convert_s/i32
                (i32.sub
                 (i32.const -61)
-                (get_global $~lib/internal/dtoa/_exp_plus)
+                (get_global $~lib/internal/dtoa/_exp)
                )
               )
               (f64.const 0.30102999566398114)
@@ -6218,7 +6215,7 @@
       (i32.const 3808)
      )
      (i32.shl
-      (get_local $3)
+      (get_local $5)
       (i32.const 3)
      )
     )
@@ -6229,7 +6226,7 @@
     (i32.add
      (get_local $8)
      (i32.shl
-      (get_local $3)
+      (get_local $5)
       (i32.const 1)
      )
     )
@@ -6489,14 +6486,14 @@
       (call $~lib/internal/dtoa/genDigits
        (get_local $0)
        (get_local $2)
-       (tee_local $3
+       (tee_local $5
         (i32.sub
          (i32.add
           (i32.sub
-           (get_local $5)
+           (get_local $3)
            (get_local $8)
           )
-          (tee_local $5
+          (tee_local $3
            (get_global $~lib/internal/dtoa/_exp_pow)
           )
          )
@@ -6506,8 +6503,8 @@
        (get_local $7)
        (i32.sub
         (i32.add
-         (get_global $~lib/internal/dtoa/_exp_plus)
-         (get_local $5)
+         (get_global $~lib/internal/dtoa/_exp)
+         (get_local $3)
         )
         (i32.const -64)
        )
@@ -6723,7 +6720,7 @@
  )
  (func $start (; 51 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.const 5208)
+   (i32.const 5224)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
@@ -9937,7 +9934,7 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/dtoa/dtoa
-      (f64.const 0.30000000000000004)
+      (f64.const 12.34)
      )
      (i32.const 4888)
     )
@@ -9956,9 +9953,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/dtoa/dtoa
-      (f64.const 0.3333333333333333)
+      (f64.const 0.30000000000000004)
      )
-     (i32.const 4936)
+     (i32.const 4904)
     )
    )
    (block
@@ -9975,9 +9972,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/dtoa/dtoa
-      (f64.const 1234e17)
+      (f64.const 0.3333333333333333)
      )
-     (i32.const 4976)
+     (i32.const 4952)
     )
    )
    (block
@@ -9994,9 +9991,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/dtoa/dtoa
-      (f64.const 1234e18)
+      (f64.const 1234e17)
      )
-     (i32.const 5032)
+     (i32.const 4992)
     )
    )
    (block
@@ -10013,9 +10010,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/dtoa/dtoa
-      (f64.const 2.71828)
+      (f64.const 1234e18)
      )
-     (i32.const 5056)
+     (i32.const 5048)
     )
    )
    (block
@@ -10032,9 +10029,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/dtoa/dtoa
-      (f64.const 0.0271828)
+      (f64.const 2.71828)
      )
-     (i32.const 5080)
+     (i32.const 5072)
     )
    )
    (block
@@ -10051,9 +10048,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/dtoa/dtoa
-      (f64.const 271.828)
+      (f64.const 0.0271828)
      )
-     (i32.const 5104)
+     (i32.const 5096)
     )
    )
    (block
@@ -10070,9 +10067,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/dtoa/dtoa
-      (f64.const 1.1e+128)
+      (f64.const 271.828)
      )
-     (i32.const 5128)
+     (i32.const 5120)
     )
    )
    (block
@@ -10089,9 +10086,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/dtoa/dtoa
-      (f64.const 1.1e-64)
+      (f64.const 1.1e+128)
      )
-     (i32.const 5152)
+     (i32.const 5144)
     )
    )
    (block
@@ -10108,9 +10105,9 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (call $~lib/internal/dtoa/dtoa
-      (f64.const 0.000035689)
+      (f64.const 1.1e-64)
      )
-     (i32.const 5176)
+     (i32.const 5168)
     )
    )
    (block
@@ -10118,6 +10115,25 @@
      (i32.const 0)
      (i32.const 48)
      (i32.const 224)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/dtoa/dtoa
+      (f64.const 0.000035689)
+     )
+     (i32.const 5192)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 225)
      (i32.const 0)
     )
     (unreachable)
