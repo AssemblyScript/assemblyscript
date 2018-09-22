@@ -5959,7 +5959,7 @@
   (local $14 i32)
   (local $15 i64)
   (if
-   (tee_local $13
+   (tee_local $12
     (f64.lt
      (get_local $1)
      (f64.const 0)
@@ -5977,7 +5977,7 @@
      (i64.extend_u/i32
       (tee_local $4
        (i32.ne
-        (tee_local $12
+        (tee_local $13
          (i32.wrap/i64
           (i64.shr_u
            (i64.and
@@ -6006,10 +6006,10 @@
   )
   (set_local $4
    (i32.sub
-    (tee_local $12
+    (tee_local $13
      (i32.sub
       (select
-       (get_local $12)
+       (get_local $13)
        (i32.const 1)
        (get_local $4)
       )
@@ -6064,7 +6064,7 @@
     (i64.extend_s/i32
      (i32.sub
       (i32.sub
-       (get_local $12)
+       (get_local $13)
        (get_local $14)
       )
       (tee_local $4
@@ -6396,40 +6396,49 @@
   )
   (drop
    (call $~lib/internal/dtoa/prettify
-    (get_local $0)
-    (call $~lib/internal/dtoa/genDigits
+    (i32.add
      (get_local $0)
-     (get_local $2)
-     (tee_local $4
+     (i32.shl
+      (get_local $12)
+      (i32.const 1)
+     )
+    )
+    (i32.sub
+     (call $~lib/internal/dtoa/genDigits
+      (get_local $0)
+      (get_local $2)
+      (tee_local $4
+       (i32.sub
+        (i32.add
+         (i32.sub
+          (get_local $13)
+          (get_local $5)
+         )
+         (tee_local $5
+          (get_global $~lib/internal/dtoa/_exp_pow)
+         )
+        )
+        (i32.const -64)
+       )
+      )
+      (get_local $7)
       (i32.sub
        (i32.add
-        (i32.sub
-         (get_local $12)
-         (get_local $5)
-        )
-        (tee_local $5
-         (get_global $~lib/internal/dtoa/_exp_pow)
-        )
+        (get_global $~lib/internal/dtoa/_exp_plus)
+        (get_local $5)
        )
        (i32.const -64)
       )
+      (get_local $3)
+      (get_local $12)
      )
-     (get_local $7)
-     (i32.sub
-      (i32.add
-       (get_global $~lib/internal/dtoa/_exp_plus)
-       (get_local $5)
-      )
-      (i32.const -64)
-     )
-     (get_local $3)
-     (get_local $13)
+     (get_local $12)
     )
     (get_global $~lib/internal/dtoa/_K)
    )
   )
   (if
-   (get_local $13)
+   (get_local $12)
    (i32.store16 offset=4
     (get_local $0)
     (i32.const 45)

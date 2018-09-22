@@ -7819,11 +7819,26 @@
     )
    )
   )
-  (drop
+  (set_local $24
    (call $~lib/internal/dtoa/prettify
-    (get_local $0)
-    (get_local $24)
+    (i32.add
+     (get_local $0)
+     (i32.shl
+      (get_local $2)
+      (i32.const 1)
+     )
+    )
+    (i32.sub
+     (get_local $24)
+     (get_local $2)
+    )
     (get_global $~lib/internal/dtoa/_K)
+   )
+  )
+  (set_local $24
+   (i32.add
+    (get_local $24)
+    (get_local $2)
    )
   )
   (if

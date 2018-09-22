@@ -330,7 +330,8 @@ export function dtoa_core(buffer: usize, value: f64): void {
   var sign = value < 0;
   if (sign) value = -value;
   var len = grisu2(value, buffer, sign);
-  prettify(buffer, len, _K);
+      len = prettify(buffer + (<i32>sign << 1), len - <i32>sign, _K);
+      len += <i32>sign;
   if (sign) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
 }
 
@@ -340,8 +341,8 @@ export function dtoa(value: f64): String {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var decimals = 32; // TMP
-  var result = allocateUnsafeString(decimals);
+  var len = 32; // TMP
+  var result = allocateUnsafeString(len);
   dtoa_core(changetype<usize>(result), value);
   return result;
 }
