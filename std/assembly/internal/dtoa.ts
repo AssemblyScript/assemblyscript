@@ -141,8 +141,6 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
       wp_w - rest > rest + ten_kappa - wp_w
     )
   ) {
-    // let digit = load<u16>(buffer + ((len - 1) << 1), STRING_HEADER_SIZE);
-    // store<u16>(buffer + ((len - 1) << 1), digit - 1, STRING_HEADER_SIZE);
     --digit;
     rest += ten_kappa;
   }
@@ -158,7 +156,6 @@ function getCachedPower(e: i32): void {
 
   var index = (k >> 3) + 1;
   _K = 348 - (index << 3);	// decimal exponent no need lookup table
-  // assert(index < sizeof(kCachedPowers_F) / sizeof(kCachedPowers_F[0]));
   var frcPowers = <ArrayBuffer>FRC_POWERS().buffer_;
   var expPowers = <ArrayBuffer>EXP_POWERS().buffer_;
   _frc_pow = loadUnsafe<u64,u64>(frcPowers, index);
@@ -267,9 +264,9 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
 function genExponent(buffer: usize, k: i32): i32 {
   var sign = k < 0;
   if (k < 0) k = -k;
-  var decimals = decimalCount32(k) + <u32>sign;
+  var decimals = decimalCount32(k) + 1;
   utoa32_core(buffer, k, decimals);
-  if (sign) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
+  store<u16>(buffer, <u16>select<u32>(CharCode.MINUS, CharCode.PLUS, sign), STRING_HEADER_SIZE);
   return decimals;
 }
 
@@ -308,7 +305,7 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
     for (let i = 2; i < offset; ++i) {
       store<u16>(buffer + (i << 1), CharCode._0, STRING_HEADER_SIZE);
     }
-    return length + offset + 1;
+    return length + offset;
   } else if (length == 1) {
     // 1e30
     store<u16>(buffer, CharCode.e, STRING_HEADER_SIZE + 2);
@@ -344,10 +341,9 @@ export function dtoa(value: f64): String {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var len = 30; // TODO figure outing optimizal max size
-  var buffer = allocateUnsafeString(len);
-  len = dtoa_core(changetype<usize>(buffer), value);
-  var result = buffer.substring(0, len);
+  var buffer = allocateUnsafeString(30);
+  var length = dtoa_core(changetype<usize>(buffer), value);
+  var result = buffer.substring(0, length);
   freeUnsafeString(buffer);
   return result;
 }

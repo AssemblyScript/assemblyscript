@@ -171,7 +171,30 @@ assert(itoa64(-19999868719476735) == "-19999868719476735");
 assert(itoa64(i64.MAX_VALUE) == "9223372036854775807");
 assert(itoa64(i64.MIN_VALUE) == "-9223372036854775808");
 
-assert(dtoa(0.0) == "0.0");
-assert(dtoa(NaN) == "NaN");
+assert(dtoa(0.0)  == "0.0");
+assert(dtoa(-0.0) == "0.0");
+assert(dtoa(NaN)  == "NaN");
 assert(dtoa(+Infinity) == "Infinity");
 assert(dtoa(-Infinity) == "-Infinity");
+
+assert(dtoa(1.0)  == "1.0");
+assert(dtoa(0.1)  == "0.1");
+assert(dtoa(-1.0) == "-1.0");
+assert(dtoa(-0.1) == "-0.1");
+
+assert(dtoa(1e+6)  == "1000000.0");
+assert(dtoa(1e-6)  == "0.000001");
+assert(dtoa(-1e+6) == "-1000000.0");
+assert(dtoa(-1e-6) == "-0.000001");
+assert(dtoa(1e+7)  == "10000000.0");
+assert(dtoa(1e-7)  == "1e-7");
+
+assert(dtoa(1e+308)  == "1e+308");
+assert(dtoa(-1e+308) == "-1e+308");
+assert(dtoa(1e+309)  == "Infinity");
+assert(dtoa(-1e+309) == "-Infinity");
+assert(dtoa(1e-308)  == "1e-308");
+assert(dtoa(-1e-308) == "-1e-308");
+assert(dtoa(1e-323)  == "1e-323");
+assert(dtoa(-1e-323)  == "-1e-323");
+assert(dtoa(1e-324)  == "0.0");
