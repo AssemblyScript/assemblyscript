@@ -77,7 +77,7 @@
  (global $Infinity f64 (f64.const inf))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
- (global $HEAP_BASE i32 (i32.const 4752))
+ (global $HEAP_BASE i32 (i32.const 4892))
  (table 1 1 anyfunc)
  (elem (i32.const 0) $null)
  (memory $0 1)
@@ -195,6 +195,10 @@
  (data (i32.const 4640) "\07\00\00\00-\001\00e\00-\003\002\003\00")
  (data (i32.const 4664) "\15\00\00\001\00.\002\003\001\002\001\004\005\006\007\003\004\005\006\002\003\004\00e\00-\008\00")
  (data (i32.const 4712) "\12\00\00\000\00.\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009\00")
+ (data (i32.const 4752) "\12\00\00\000\00.\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\00")
+ (data (i32.const 4792) "\17\00\00\001\002\003\004\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\00.\000\00")
+ (data (i32.const 4848) "\t\00\00\001\00.\002\003\004\00e\00+\002\001\00")
+ (data (i32.const 4872) "\07\00\00\002\00.\007\001\008\002\008\00")
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
  (start $start)
@@ -6927,7 +6931,10 @@
       (get_global $~lib/internal/string/CharCode.DOT)
      )
      (return
-      (get_local $1)
+      (i32.add
+       (get_local $1)
+       (i32.const 1)
+      )
      )
     )
     (if
@@ -11473,6 +11480,85 @@
      (i32.const 0)
      (i32.const 48)
      (i32.const 210)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/dtoa/dtoa
+      (f64.div
+       (f64.const 1)
+       (f64.const 3)
+      )
+     )
+     (i32.const 4752)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 211)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/dtoa/dtoa
+      (f64.const 1234e17)
+     )
+     (i32.const 4792)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 212)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/dtoa/dtoa
+      (f64.const 1234e18)
+     )
+     (i32.const 4848)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 213)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/dtoa/dtoa
+      (f64.const 2.71828)
+     )
+     (i32.const 4872)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 214)
      (i32.const 0)
     )
     (unreachable)

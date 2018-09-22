@@ -292,7 +292,7 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
       (length - kk) << 1
     );
     store<u16>(buffer + (kk << 1), CharCode.DOT, STRING_HEADER_SIZE);
-    return length;
+    return length + 1;
   } else if (-6 < kk && kk <= 0) {
     // 1234e-6 -> 0.001234
     let offset = 2 - kk;
