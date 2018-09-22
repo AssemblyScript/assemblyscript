@@ -119,7 +119,8 @@ function normalizedBoundaries(f: u64, e: i32): void {
 
 @inline
 function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u64, wp_w: u64): void {
-  var digit = load<u16>(buffer + ((len - 1) << 1), STRING_HEADER_SIZE);
+  var lastp = buffer + ((len - 1) << 1);
+  var digit = load<u16>(lastp, STRING_HEADER_SIZE);
   while (
     rest < wp_w &&
     delta - rest >= ten_kappa && (
@@ -130,7 +131,7 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
     --digit;
     rest += ten_kappa;
   }
-  store<u16>(buffer + ((len - 1) << 1), digit, STRING_HEADER_SIZE);
+  store<u16>(lastp, digit, STRING_HEADER_SIZE);
 }
 
 @inline
@@ -301,8 +302,8 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
       buffer + STRING_HEADER_SIZE + 2,
       len - 2
     );
-    store<u16>(buffer, CharCode.DOT, STRING_HEADER_SIZE + 2);
-    store<u16>(buffer + len + 2, CharCode.e, STRING_HEADER_SIZE);
+    store<u16>(buffer,       CharCode.DOT, STRING_HEADER_SIZE + 2);
+    store<u16>(buffer + len, CharCode.e,   STRING_HEADER_SIZE + 2);
     let expLen = genExponent(buffer + len + 4, kk - 1);
     return length + expLen + 2;
   }
