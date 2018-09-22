@@ -5590,7 +5590,6 @@
  (func $~lib/internal/dtoa/prettify (; 46 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   (if
    (i32.eqz
     (get_local $2)
@@ -5615,10 +5614,10 @@
    )
   )
   (if
-   (tee_local $2
+   (tee_local $3
     (i32.le_s
      (get_local $1)
-     (tee_local $3
+     (tee_local $4
       (i32.add
        (get_local $1)
        (get_local $2)
@@ -5626,40 +5625,40 @@
      )
     )
    )
-   (set_local $2
+   (set_local $3
     (i32.le_s
-     (get_local $3)
+     (get_local $4)
      (i32.const 21)
     )
    )
   )
   (if (result i32)
-   (get_local $2)
+   (get_local $3)
    (block (result i32)
     (block $break|0
-     (set_local $2
+     (set_local $3
       (get_local $1)
      )
      (loop $repeat|0
       (br_if $break|0
        (i32.ge_s
-        (get_local $2)
         (get_local $3)
+        (get_local $4)
        )
       )
       (i32.store16 offset=4
        (i32.add
         (get_local $0)
         (i32.shl
-         (get_local $2)
+         (get_local $3)
          (i32.const 1)
         )
        )
        (i32.const 48)
       )
-      (set_local $2
+      (set_local $3
        (i32.add
-        (get_local $2)
+        (get_local $3)
         (i32.const 1)
        )
       )
@@ -5670,60 +5669,56 @@
      (i32.add
       (get_local $0)
       (i32.shl
-       (get_local $3)
+       (get_local $4)
        (i32.const 1)
       )
      )
      (i32.const 3145774)
     )
     (i32.add
-     (get_local $3)
+     (get_local $4)
      (i32.const 2)
     )
    )
    (block (result i32)
     (if
-     (tee_local $2
+     (tee_local $3
       (i32.gt_s
-       (get_local $3)
+       (get_local $4)
        (i32.const 0)
       )
      )
-     (set_local $2
+     (set_local $3
       (i32.le_s
-       (get_local $3)
+       (get_local $4)
        (i32.const 21)
       )
      )
     )
     (if (result i32)
-     (get_local $2)
+     (get_local $3)
      (block (result i32)
       (call $~lib/internal/memory/memmove
        (i32.add
-        (i32.add
-         (get_local $0)
-         (i32.shl
-          (get_local $3)
-          (i32.const 1)
+        (tee_local $3
+         (i32.add
+          (get_local $0)
+          (i32.shl
+           (get_local $4)
+           (i32.const 1)
+          )
          )
         )
         (i32.const 6)
        )
        (i32.add
-        (i32.add
-         (get_local $0)
-         (i32.shl
-          (get_local $3)
-          (i32.const 1)
-         )
-        )
+        (get_local $3)
         (i32.const 4)
        )
        (i32.shl
         (i32.sub
-         (get_local $1)
-         (get_local $3)
+         (i32.const 0)
+         (get_local $2)
         )
         (i32.const 1)
        )
@@ -5732,7 +5727,7 @@
        (i32.add
         (get_local $0)
         (i32.shl
-         (get_local $3)
+         (get_local $4)
          (i32.const 1)
         )
        )
@@ -5745,37 +5740,37 @@
      )
      (block (result i32)
       (if
-       (tee_local $5
+       (tee_local $3
         (i32.lt_s
          (i32.const -6)
-         (get_local $3)
+         (get_local $4)
         )
        )
-       (set_local $5
+       (set_local $3
         (i32.le_s
-         (get_local $3)
+         (get_local $4)
          (i32.const 0)
         )
        )
       )
       (if (result i32)
-       (get_local $5)
+       (get_local $3)
        (block (result i32)
         (call $~lib/internal/memory/memmove
          (i32.add
           (i32.add
            (get_local $0)
-           (i32.shl
-            (tee_local $5
-             (i32.sub
-              (i32.const 2)
-              (get_local $3)
-             )
-            )
-            (i32.const 1)
-           )
+           (i32.const 4)
           )
-          (i32.const 4)
+          (i32.shl
+           (tee_local $3
+            (i32.sub
+             (i32.const 2)
+             (get_local $4)
+            )
+           )
+           (i32.const 1)
+          )
          )
          (i32.add
           (get_local $0)
@@ -5791,29 +5786,29 @@
          (i32.const 3014704)
         )
         (block $break|1
-         (set_local $4
+         (set_local $2
           (i32.const 2)
          )
          (loop $repeat|1
           (br_if $break|1
            (i32.ge_s
-            (get_local $4)
-            (get_local $5)
+            (get_local $2)
+            (get_local $3)
            )
           )
           (i32.store16 offset=4
            (i32.add
             (get_local $0)
             (i32.shl
-             (get_local $4)
+             (get_local $2)
              (i32.const 1)
             )
            )
            (i32.const 48)
           )
-          (set_local $4
+          (set_local $2
            (i32.add
-            (get_local $4)
+            (get_local $2)
             (i32.const 1)
            )
           )
@@ -5822,7 +5817,7 @@
         )
         (i32.add
          (get_local $1)
-         (get_local $5)
+         (get_local $3)
         )
        )
        (if (result i32)
@@ -5835,112 +5830,18 @@
           (get_local $0)
           (i32.const 101)
          )
-         (set_local $5
+         (set_local $3
           (i32.add
            (get_local $0)
            (i32.const 4)
           )
          )
          (if
-          (tee_local $2
-           (i32.lt_s
-            (tee_local $4
-             (i32.sub
-              (get_local $3)
-              (i32.const 1)
-             )
-            )
-            (i32.const 0)
-           )
-          )
-          (set_local $4
-           (i32.sub
-            (i32.const 0)
-            (get_local $4)
-           )
-          )
-         )
-         (call $~lib/internal/itoa/utoa32_lut
-          (get_local $5)
-          (get_local $4)
-          (tee_local $0
-           (i32.add
-            (call $~lib/internal/itoa/decimalCount32
-             (get_local $4)
-            )
-            (i32.const 1)
-           )
-          )
-         )
-         (i32.store16 offset=4
-          (get_local $5)
-          (select
-           (i32.const 45)
-           (i32.const 43)
-           (get_local $2)
-          )
-         )
-         (i32.add
-          (i32.add
-           (get_local $1)
-           (get_local $0)
-          )
-          (i32.const 1)
-         )
-        )
-        (block (result i32)
-         (call $~lib/internal/memory/memmove
-          (i32.add
-           (get_local $0)
-           (i32.const 8)
-          )
-          (i32.add
-           (get_local $0)
-           (i32.const 6)
-          )
-          (i32.shl
-           (i32.sub
-            (get_local $1)
-            (i32.const 1)
-           )
-           (i32.const 1)
-          )
-         )
-         (i32.store16 offset=6
-          (get_local $0)
-          (i32.const 46)
-         )
-         (i32.store16 offset=4
-          (i32.add
-           (get_local $0)
-           (i32.shl
-            (i32.add
-             (get_local $1)
-             (i32.const 1)
-            )
-            (i32.const 1)
-           )
-          )
-          (i32.const 101)
-         )
-         (set_local $4
-          (i32.add
-           (get_local $0)
-           (i32.shl
-            (i32.add
-             (get_local $1)
-             (i32.const 2)
-            )
-            (i32.const 1)
-           )
-          )
-         )
-         (if
-          (tee_local $0
+          (tee_local $4
            (i32.lt_s
             (tee_local $2
              (i32.sub
-              (get_local $3)
+              (get_local $4)
               (i32.const 1)
              )
             )
@@ -5955,9 +5856,9 @@
           )
          )
          (call $~lib/internal/itoa/utoa32_lut
-          (get_local $4)
+          (get_local $3)
           (get_local $2)
-          (tee_local $5
+          (tee_local $2
            (i32.add
             (call $~lib/internal/itoa/decimalCount32
              (get_local $2)
@@ -5967,17 +5868,103 @@
           )
          )
          (i32.store16 offset=4
-          (get_local $4)
+          (get_local $3)
           (select
            (i32.const 45)
            (i32.const 43)
+           (get_local $4)
+          )
+         )
+         (i32.add
+          (get_local $2)
+          (i32.const 2)
+         )
+        )
+        (block (result i32)
+         (call $~lib/internal/memory/memmove
+          (i32.add
            (get_local $0)
+           (i32.const 8)
+          )
+          (i32.add
+           (get_local $0)
+           (i32.const 6)
+          )
+          (i32.sub
+           (tee_local $2
+            (i32.shl
+             (get_local $1)
+             (i32.const 1)
+            )
+           )
+           (i32.const 2)
+          )
+         )
+         (i32.store16 offset=6
+          (get_local $0)
+          (i32.const 46)
+         )
+         (i32.store16 offset=4
+          (i32.add
+           (tee_local $0
+            (i32.add
+             (get_local $0)
+             (get_local $2)
+            )
+           )
+           (i32.const 2)
+          )
+          (i32.const 101)
+         )
+         (set_local $3
+          (i32.add
+           (get_local $0)
+           (i32.const 4)
+          )
+         )
+         (if
+          (tee_local $4
+           (i32.lt_s
+            (tee_local $2
+             (i32.sub
+              (get_local $4)
+              (i32.const 1)
+             )
+            )
+            (i32.const 0)
+           )
+          )
+          (set_local $2
+           (i32.sub
+            (i32.const 0)
+            (get_local $2)
+           )
+          )
+         )
+         (call $~lib/internal/itoa/utoa32_lut
+          (get_local $3)
+          (get_local $2)
+          (tee_local $0
+           (i32.add
+            (call $~lib/internal/itoa/decimalCount32
+             (get_local $2)
+            )
+            (i32.const 1)
+           )
+          )
+         )
+         (i32.store16 offset=4
+          (get_local $3)
+          (select
+           (i32.const 45)
+           (i32.const 43)
+           (get_local $4)
           )
          )
          (i32.add
           (i32.add
            (get_local $1)
-           (get_local $5)
+           (get_local $0)
           )
           (i32.const 2)
          )

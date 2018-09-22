@@ -269,10 +269,11 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
     return kk + 2;
   } else if (kk > 0 && kk <= 21) {
     // 1234e-2 -> 12.34
+    let ptr = buffer + (kk << 1);
     memory.copy(
-      buffer + ((kk + 1) << 1) + STRING_HEADER_SIZE,
-      buffer + (kk << 1) + STRING_HEADER_SIZE,
-      (length - kk) << 1
+      ptr + STRING_HEADER_SIZE + 2,
+      ptr + STRING_HEADER_SIZE,
+      -k << 1
     );
     store<u16>(buffer + (kk << 1), CharCode.DOT, STRING_HEADER_SIZE);
     return length + 1;
@@ -280,7 +281,7 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
     // 1234e-6 -> 0.001234
     let offset = 2 - kk;
     memory.copy(
-      buffer + (offset << 1) + STRING_HEADER_SIZE,
+      buffer + STRING_HEADER_SIZE + (offset << 1),
       buffer + STRING_HEADER_SIZE,
       length << 1
     );
@@ -292,17 +293,17 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
   } else if (length == 1) {
     // 1e30
     store<u16>(buffer, CharCode.e, STRING_HEADER_SIZE + 2);
-    let expLen = genExponent(buffer + 4, kk - 1);
-    return length + expLen + 1;
+    return genExponent(buffer + 4, kk - 1) + 2;
   } else {
+    let len = length << 1;
     memory.copy(
-      buffer + 4 + STRING_HEADER_SIZE,
-      buffer + 2 + STRING_HEADER_SIZE,
-      (length - 1) << 1
+      buffer + STRING_HEADER_SIZE + 4,
+      buffer + STRING_HEADER_SIZE + 2,
+      len - 2
     );
     store<u16>(buffer, CharCode.DOT, STRING_HEADER_SIZE + 2);
-    store<u16>(buffer + ((length + 1) << 1), CharCode.e, STRING_HEADER_SIZE);
-    let expLen = genExponent(buffer + ((length + 2) << 1), kk - 1);
+    store<u16>(buffer + len + 2, CharCode.e, STRING_HEADER_SIZE);
+    let expLen = genExponent(buffer + len + 4, kk - 1);
     return length + expLen + 2;
   }
 }
