@@ -277,7 +277,49 @@ function prettify(buffer: usize, length: i32, k: i32): void {
     return;
   }
 
-  // TODO
+  var kk = length + k;
+  if (length <= kk && kk <= 21) {
+    // 1234e7 -> 12340000000
+    for (let i = length; i < kk; ++i) {
+      store<u16>(buffer + (i << 1), CharCode._0, STRING_HEADER_SIZE);
+    }
+    store<u32>(buffer + (kk << 1), CharCode.DOT | (CharCode._0 << 16), STRING_HEADER_SIZE);
+  } else if (kk > 0 && kk <= 21) {
+    // 1234e-2 -> 12.34
+    memory.copy(
+      buffer + ((kk + 1) << 1) + STRING_HEADER_SIZE,
+      buffer + (kk << 1) + STRING_HEADER_SIZE,
+      (length - kk) << 1
+    );
+    store<u16>(buffer + (kk << 1), CharCode.DOT, STRING_HEADER_SIZE);
+    // 	buffer[length + 1] = '\0';
+  } else if (-6 < kk && kk <= 0) {
+    // 1234e-6 -> 0.001234
+    let offset = 2 - kk;
+    memory.copy(
+      buffer + (offset << 1) + STRING_HEADER_SIZE,
+      buffer + STRING_HEADER_SIZE,
+      length << 1
+    );
+    store<u32>(buffer, CharCode._0 | (CharCode.DOT << 16), STRING_HEADER_SIZE);
+    for (let i = 2; i < offset; ++i) {
+      store<u16>(buffer + (i << 1), CharCode._0, STRING_HEADER_SIZE);
+    }
+    // buffer[length + offset] = '\0';
+  } else if (length == 1) {
+    // 1e30
+    store<u16>(buffer, CharCode.e, STRING_HEADER_SIZE + 2);
+    writeExponent(kk - 1, buffer + 4);
+  } else {
+    memory.copy(
+      buffer + 4 + STRING_HEADER_SIZE,
+      buffer + 2 + STRING_HEADER_SIZE,
+      (length - 1) << 1
+    );
+    store<u16>(buffer, CharCode.DOT, STRING_HEADER_SIZE + 2);
+    store<u16>(buffer + ((length + 1) << 1), CharCode.e, STRING_HEADER_SIZE);
+    writeExponent(kk - 1, buffer + (length + 2) << 1);
+  }
 }
 
 export function dtoa_core(buffer: usize, value: f64): void {

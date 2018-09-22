@@ -6723,6 +6723,12 @@
   (get_local $14)
  )
  (func $~lib/internal/dtoa/prettify (; 46 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   (if
    (i32.eqz
     (get_local $2)
@@ -6745,6 +6751,424 @@
      )
     )
     (return)
+   )
+  )
+  (set_local $3
+   (i32.add
+    (get_local $1)
+    (get_local $2)
+   )
+  )
+  (if
+   (if (result i32)
+    (tee_local $4
+     (i32.le_s
+      (get_local $1)
+      (get_local $3)
+     )
+    )
+    (i32.le_s
+     (get_local $3)
+     (i32.const 21)
+    )
+    (get_local $4)
+   )
+   (block
+    (block $break|0
+     (set_local $4
+      (get_local $1)
+     )
+     (loop $repeat|0
+      (br_if $break|0
+       (i32.eqz
+        (i32.lt_s
+         (get_local $4)
+         (get_local $3)
+        )
+       )
+      )
+      (i32.store16 offset=4
+       (i32.add
+        (get_local $0)
+        (i32.shl
+         (get_local $4)
+         (i32.const 1)
+        )
+       )
+       (get_global $~lib/internal/string/CharCode._0)
+      )
+      (set_local $4
+       (i32.add
+        (get_local $4)
+        (i32.const 1)
+       )
+      )
+      (br $repeat|0)
+     )
+    )
+    (i32.store offset=4
+     (i32.add
+      (get_local $0)
+      (i32.shl
+       (get_local $3)
+       (i32.const 1)
+      )
+     )
+     (i32.or
+      (get_global $~lib/internal/string/CharCode.DOT)
+      (i32.shl
+       (get_global $~lib/internal/string/CharCode._0)
+       (i32.const 16)
+      )
+     )
+    )
+   )
+   (if
+    (if (result i32)
+     (tee_local $4
+      (i32.gt_s
+       (get_local $3)
+       (i32.const 0)
+      )
+     )
+     (i32.le_s
+      (get_local $3)
+      (i32.const 21)
+     )
+     (get_local $4)
+    )
+    (block
+     (block $~lib/memory/memory.copy|inlined.2
+      (set_local $4
+       (i32.add
+        (i32.add
+         (get_local $0)
+         (i32.shl
+          (i32.add
+           (get_local $3)
+           (i32.const 1)
+          )
+          (i32.const 1)
+         )
+        )
+        (get_global $~lib/internal/string/HEADER_SIZE)
+       )
+      )
+      (set_local $5
+       (i32.add
+        (i32.add
+         (get_local $0)
+         (i32.shl
+          (get_local $3)
+          (i32.const 1)
+         )
+        )
+        (get_global $~lib/internal/string/HEADER_SIZE)
+       )
+      )
+      (set_local $6
+       (i32.shl
+        (i32.sub
+         (get_local $1)
+         (get_local $3)
+        )
+        (i32.const 1)
+       )
+      )
+      (call $~lib/internal/memory/memmove
+       (get_local $4)
+       (get_local $5)
+       (get_local $6)
+      )
+     )
+     (i32.store16 offset=4
+      (i32.add
+       (get_local $0)
+       (i32.shl
+        (get_local $3)
+        (i32.const 1)
+       )
+      )
+      (get_global $~lib/internal/string/CharCode.DOT)
+     )
+    )
+    (if
+     (if (result i32)
+      (tee_local $6
+       (i32.lt_s
+        (i32.const -6)
+        (get_local $3)
+       )
+      )
+      (i32.le_s
+       (get_local $3)
+       (i32.const 0)
+      )
+      (get_local $6)
+     )
+     (block
+      (set_local $6
+       (i32.sub
+        (i32.const 2)
+        (get_local $3)
+       )
+      )
+      (block $~lib/memory/memory.copy|inlined.3
+       (set_local $5
+        (i32.add
+         (i32.add
+          (get_local $0)
+          (i32.shl
+           (get_local $6)
+           (i32.const 1)
+          )
+         )
+         (get_global $~lib/internal/string/HEADER_SIZE)
+        )
+       )
+       (set_local $4
+        (i32.add
+         (get_local $0)
+         (get_global $~lib/internal/string/HEADER_SIZE)
+        )
+       )
+       (set_local $7
+        (i32.shl
+         (get_local $1)
+         (i32.const 1)
+        )
+       )
+       (call $~lib/internal/memory/memmove
+        (get_local $5)
+        (get_local $4)
+        (get_local $7)
+       )
+      )
+      (i32.store offset=4
+       (get_local $0)
+       (i32.or
+        (get_global $~lib/internal/string/CharCode._0)
+        (i32.shl
+         (get_global $~lib/internal/string/CharCode.DOT)
+         (i32.const 16)
+        )
+       )
+      )
+      (block $break|1
+       (set_local $7
+        (i32.const 2)
+       )
+       (loop $repeat|1
+        (br_if $break|1
+         (i32.eqz
+          (i32.lt_s
+           (get_local $7)
+           (get_local $6)
+          )
+         )
+        )
+        (i32.store16 offset=4
+         (i32.add
+          (get_local $0)
+          (i32.shl
+           (get_local $7)
+           (i32.const 1)
+          )
+         )
+         (get_global $~lib/internal/string/CharCode._0)
+        )
+        (set_local $7
+         (i32.add
+          (get_local $7)
+          (i32.const 1)
+         )
+        )
+        (br $repeat|1)
+       )
+      )
+     )
+     (if
+      (i32.eq
+       (get_local $1)
+       (i32.const 1)
+      )
+      (block
+       (i32.store16 offset=6
+        (get_local $0)
+        (get_global $~lib/internal/string/CharCode.e)
+       )
+       (block $~lib/internal/dtoa/writeExponent|inlined.0
+        (set_local $6
+         (i32.sub
+          (get_local $3)
+          (i32.const 1)
+         )
+        )
+        (set_local $7
+         (i32.add
+          (get_local $0)
+          (i32.const 4)
+         )
+        )
+        (set_local $4
+         (get_global $~lib/internal/dtoa/_K)
+        )
+        (set_local $5
+         (i32.lt_s
+          (get_local $4)
+          (i32.const 0)
+         )
+        )
+        (if
+         (i32.lt_s
+          (get_local $4)
+          (i32.const 0)
+         )
+         (set_local $4
+          (i32.sub
+           (i32.const 0)
+           (get_local $4)
+          )
+         )
+        )
+        (block $~lib/internal/itoa/utoa32_core|inlined.4
+         (set_local $8
+          (i32.add
+           (get_local $7)
+           (get_local $5)
+          )
+         )
+         (call $~lib/internal/itoa/utoa32_lut
+          (get_local $6)
+          (get_local $4)
+          (get_local $8)
+         )
+        )
+        (if
+         (get_local $5)
+         (i32.store16 offset=4
+          (get_local $6)
+          (get_global $~lib/internal/string/CharCode.MINUS)
+         )
+        )
+       )
+      )
+      (block
+       (block $~lib/memory/memory.copy|inlined.4
+        (set_local $5
+         (i32.add
+          (i32.add
+           (get_local $0)
+           (i32.const 4)
+          )
+          (get_global $~lib/internal/string/HEADER_SIZE)
+         )
+        )
+        (set_local $4
+         (i32.add
+          (i32.add
+           (get_local $0)
+           (i32.const 2)
+          )
+          (get_global $~lib/internal/string/HEADER_SIZE)
+         )
+        )
+        (set_local $7
+         (i32.shl
+          (i32.sub
+           (get_local $1)
+           (i32.const 1)
+          )
+          (i32.const 1)
+         )
+        )
+        (call $~lib/internal/memory/memmove
+         (get_local $5)
+         (get_local $4)
+         (get_local $7)
+        )
+       )
+       (i32.store16 offset=6
+        (get_local $0)
+        (get_global $~lib/internal/string/CharCode.DOT)
+       )
+       (i32.store16 offset=4
+        (i32.add
+         (get_local $0)
+         (i32.shl
+          (i32.add
+           (get_local $1)
+           (i32.const 1)
+          )
+          (i32.const 1)
+         )
+        )
+        (get_global $~lib/internal/string/CharCode.e)
+       )
+       (block $~lib/internal/dtoa/writeExponent|inlined.1
+        (set_local $7
+         (i32.sub
+          (get_local $3)
+          (i32.const 1)
+         )
+        )
+        (set_local $4
+         (i32.shl
+          (i32.add
+           (get_local $0)
+           (i32.add
+            (get_local $1)
+            (i32.const 2)
+           )
+          )
+          (i32.const 1)
+         )
+        )
+        (set_local $5
+         (get_global $~lib/internal/dtoa/_K)
+        )
+        (set_local $6
+         (i32.lt_s
+          (get_local $5)
+          (i32.const 0)
+         )
+        )
+        (if
+         (i32.lt_s
+          (get_local $5)
+          (i32.const 0)
+         )
+         (set_local $5
+          (i32.sub
+           (i32.const 0)
+           (get_local $5)
+          )
+         )
+        )
+        (block $~lib/internal/itoa/utoa32_core|inlined.5
+         (set_local $8
+          (i32.add
+           (get_local $4)
+           (get_local $6)
+          )
+         )
+         (call $~lib/internal/itoa/utoa32_lut
+          (get_local $7)
+          (get_local $5)
+          (get_local $8)
+         )
+        )
+        (if
+         (get_local $6)
+         (i32.store16 offset=4
+          (get_local $7)
+          (get_global $~lib/internal/string/CharCode.MINUS)
+         )
+        )
+       )
+      )
+     )
+    )
    )
   )
  )
