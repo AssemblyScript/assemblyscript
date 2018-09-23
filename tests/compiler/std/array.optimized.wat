@@ -8544,13 +8544,14 @@
  )
  (func $~lib/internal/dtoa/genDigits (; 130 ;) (; has Stack IR ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i64)
-  (local $10 i32)
-  (local $11 i64)
+  (local $8 i64)
+  (local $9 i32)
+  (local $10 i64)
+  (local $11 i32)
   (local $12 i32)
   (local $13 i64)
-  (set_local $9
+  (local $14 i64)
+  (set_local $8
    (i64.sub
     (get_local $3)
     (get_local $1)
@@ -8559,27 +8560,29 @@
   (set_local $1
    (i64.and
     (get_local $3)
-    (i64.sub
-     (tee_local $11
-      (i64.shl
-       (i64.const 1)
-       (tee_local $13
-        (i64.extend_s/i32
-         (i32.sub
-          (i32.const 0)
-          (tee_local $8
-           (get_local $4)
+    (tee_local $14
+     (i64.sub
+      (tee_local $10
+       (i64.shl
+        (i64.const 1)
+        (tee_local $13
+         (i64.extend_s/i32
+          (tee_local $11
+           (i32.sub
+            (i32.const 0)
+            (get_local $4)
+           )
           )
          )
         )
        )
       )
+      (i64.const 1)
      )
-     (i64.const 1)
     )
    )
   )
-  (set_local $10
+  (set_local $9
    (call $~lib/internal/itoa/decimalCount32
     (tee_local $7
      (i32.wrap/i64
@@ -8599,7 +8602,7 @@
   (loop $continue|0
    (if
     (i32.gt_s
-     (get_local $10)
+     (get_local $9)
      (i32.const 0)
     )
     (block
@@ -8617,7 +8620,7 @@
                 (if
                  (i32.ne
                   (tee_local $2
-                   (get_local $10)
+                   (get_local $9)
                   )
                   (i32.const 10)
                  )
@@ -8803,9 +8806,9 @@
        )
       )
      )
-     (set_local $10
+     (set_local $9
       (i32.sub
-       (get_local $10)
+       (get_local $9)
        (i32.const 1)
       )
      )
@@ -8818,10 +8821,7 @@
            (get_local $7)
           )
           (i64.extend_s/i32
-           (i32.sub
-            (i32.const 0)
-            (get_local $8)
-           )
+           (get_local $11)
           )
          )
          (get_local $1)
@@ -8833,7 +8833,7 @@
        (set_global $~lib/internal/dtoa/_K
         (i32.add
          (get_global $~lib/internal/dtoa/_K)
-         (get_local $10)
+         (get_local $9)
         )
        )
        (set_local $1
@@ -8842,20 +8842,17 @@
           (i32.add
            (get_local $12)
            (i32.shl
-            (get_local $10)
+            (get_local $9)
             (i32.const 2)
            )
           )
          )
          (i64.extend_s/i32
-          (i32.sub
-           (i32.const 0)
-           (get_local $8)
-          )
+          (get_local $11)
          )
         )
        )
-       (set_local $8
+       (set_local $7
         (i32.load16_u offset=4
          (tee_local $2
           (i32.add
@@ -8876,7 +8873,7 @@
          (tee_local $0
           (i64.lt_u
            (get_local $3)
-           (get_local $9)
+           (get_local $8)
           )
          )
          (set_local $0
@@ -8899,14 +8896,14 @@
               (get_local $3)
               (get_local $1)
              )
-             (get_local $9)
+             (get_local $8)
             )
            )
           )
           (set_local $0
            (i64.gt_u
             (i64.sub
-             (get_local $9)
+             (get_local $8)
              (get_local $3)
             )
             (i64.sub
@@ -8914,7 +8911,7 @@
               (get_local $3)
               (get_local $1)
              )
-             (get_local $9)
+             (get_local $8)
             )
            )
           )
@@ -8923,9 +8920,9 @@
         (if
          (get_local $0)
          (block
-          (set_local $8
+          (set_local $7
            (i32.sub
-            (get_local $8)
+            (get_local $7)
             (i32.const 1)
            )
           )
@@ -8941,7 +8938,7 @@
        )
        (i32.store16 offset=4
         (get_local $2)
-        (get_local $8)
+        (get_local $7)
        )
        (return
         (get_local $6)
@@ -8971,10 +8968,7 @@
          )
         )
         (i64.extend_s/i32
-         (i32.sub
-          (i32.const 0)
-          (get_local $8)
-         )
+         (get_local $11)
         )
        )
       )
@@ -9013,9 +9007,9 @@
      )
     )
    )
-   (set_local $10
+   (set_local $9
     (i32.sub
-     (get_local $10)
+     (get_local $9)
      (i32.const 1)
     )
    )
@@ -9024,10 +9018,7 @@
      (tee_local $1
       (i64.and
        (get_local $1)
-       (i64.sub
-        (get_local $11)
-        (i64.const 1)
-       )
+       (get_local $14)
       )
      )
      (get_local $5)
@@ -9036,19 +9027,19 @@
      (set_global $~lib/internal/dtoa/_K
       (i32.add
        (get_global $~lib/internal/dtoa/_K)
-       (get_local $10)
+       (get_local $9)
       )
      )
-     (set_local $9
+     (set_local $8
       (i64.mul
-       (get_local $9)
+       (get_local $8)
        (i64.load32_u offset=8
         (i32.add
          (get_local $12)
          (i32.shl
           (i32.sub
            (i32.const 0)
-           (get_local $10)
+           (get_local $9)
           )
           (i32.const 2)
          )
@@ -9056,7 +9047,7 @@
        )
       )
      )
-     (set_local $8
+     (set_local $7
       (i32.load16_u offset=4
        (tee_local $4
         (i32.add
@@ -9077,7 +9068,7 @@
        (tee_local $2
         (i64.lt_u
          (get_local $1)
-         (get_local $9)
+         (get_local $8)
         )
        )
        (set_local $2
@@ -9086,7 +9077,7 @@
           (get_local $5)
           (get_local $1)
          )
-         (get_local $11)
+         (get_local $10)
         )
        )
       )
@@ -9098,24 +9089,24 @@
           (i64.lt_u
            (i64.add
             (get_local $1)
-            (get_local $11)
+            (get_local $10)
            )
-           (get_local $9)
+           (get_local $8)
           )
          )
         )
         (set_local $2
          (i64.gt_u
           (i64.sub
-           (get_local $9)
+           (get_local $8)
            (get_local $1)
           )
           (i64.sub
            (i64.add
             (get_local $1)
-            (get_local $11)
+            (get_local $10)
            )
-           (get_local $9)
+           (get_local $8)
           )
          )
         )
@@ -9124,16 +9115,16 @@
       (if
        (get_local $2)
        (block
-        (set_local $8
+        (set_local $7
          (i32.sub
-          (get_local $8)
+          (get_local $7)
           (i32.const 1)
          )
         )
         (set_local $1
          (i64.add
           (get_local $1)
-          (get_local $11)
+          (get_local $10)
          )
         )
         (br $continue|4)
@@ -9142,7 +9133,7 @@
      )
      (i32.store16 offset=4
       (get_local $4)
-      (get_local $8)
+      (get_local $7)
      )
      (get_local $6)
     )

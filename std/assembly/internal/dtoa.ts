@@ -183,14 +183,15 @@ function grisu2(value: f64, buffer: usize, sign: i32): i32 {
 }
 
 function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i32, delta: u64, sign: i32): i32 {
-  var one_frc = (<u64>1) << -mp_exp;
-  var one_exp = mp_exp;
+  var one_exp = -mp_exp;
+  var one_frc = (<u64>1) << one_exp;
+  var mask    = one_frc - 1;
 
   var wp_w_frc = mp_frc - w_frc;
   var wp_w_exp = mp_exp;
 
-  var p1 = <u32>(mp_frc >> -one_exp);
-  var p2 = mp_frc & (one_frc - 1);
+  var p1 = <u32>(mp_frc >> one_exp);
+  var p2 = mp_frc & mask;
 
   var kappa = <i32>decimalCount32(p1);
   var len = sign;
@@ -216,10 +217,10 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     if (d | len) store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
 
     --kappa;
-    let tmp = ((<u64>p1) << -one_exp) + p2;
+    let tmp = ((<u64>p1) << one_exp) + p2;
     if (tmp <= delta) {
       _K += kappa;
-      grisuRound(buffer, len, delta, tmp, loadUnsafe<u32,u64>(powers10, kappa) << -one_exp, wp_w_frc);
+      grisuRound(buffer, len, delta, tmp, loadUnsafe<u32,u64>(powers10, kappa) << one_exp, wp_w_frc);
       return len;
     }
   }
@@ -228,10 +229,10 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     p2    *= 10;
     delta *= 10;
 
-    let d = p2 >> -one_exp;
+    let d = p2 >> one_exp;
     if (d | len) store<u16>(buffer + (len++ << 1), CharCode._0 + <u16>d, STRING_HEADER_SIZE);
 
-    p2 &= one_frc - 1;
+    p2 &= mask;
     --kappa;
     if (p2 < delta) {
       _K += kappa;

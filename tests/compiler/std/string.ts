@@ -176,12 +176,10 @@ assert(dtoa(-0.0) == "0.0");
 assert(dtoa(NaN)  == "NaN");
 assert(dtoa(+Infinity) == "Infinity");
 assert(dtoa(-Infinity) == "-Infinity");
-assert(dtoa(f64.EPSILON) == "2.220446049250313e-16");
-assert(dtoa(-f64.EPSILON) == "-2.220446049250313e-16");
-assert(dtoa(f64.MAX_VALUE) == "1.7976931348623157e+308");
+assert(dtoa(+f64.EPSILON)   == "2.220446049250313e-16");
+assert(dtoa(-f64.EPSILON)   == "-2.220446049250313e-16");
+assert(dtoa(+f64.MAX_VALUE) == "1.7976931348623157e+308");
 assert(dtoa(-f64.MAX_VALUE) == "-1.7976931348623157e+308");
-assert(dtoa(f64.MAX_VALUE + f64.EPSILON) == "1.7976931348623157e+308");
-assert(dtoa(f64.MAX_VALUE * 1.000000000000001) == "Infinity");
 assert(dtoa(4.185580496821357e+298) == "4.185580496821357e+298");
 assert(dtoa(5e-324) == "5e-324");
 
