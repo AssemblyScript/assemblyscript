@@ -5973,17 +5973,10 @@
   (local $13 i32)
   (local $14 i32)
   (local $15 i64)
-  (if
-   (tee_local $8
-    (f64.lt
-     (get_local $1)
-     (f64.const 0)
-    )
-   )
-   (set_local $1
-    (f64.neg
-     (get_local $1)
-    )
+  (set_local $8
+   (f64.lt
+    (get_local $1)
+    (f64.const 0)
    )
   )
   (set_local $2
@@ -5998,7 +5991,9 @@
            (i64.and
             (tee_local $2
              (i64.reinterpret/f64
-              (get_local $1)
+              (f64.abs
+               (get_local $1)
+              )
              )
             )
             (i64.const 9218868437227405312)

@@ -7062,10 +7062,7 @@
            )
           )
           (if
-           (i32.lt_s
-            (get_local $5)
-            (i32.const 0)
-           )
+           (get_local $6)
            (set_local $5
             (i32.sub
              (i32.const 0)
@@ -7175,10 +7172,7 @@
           )
          )
          (if
-          (i32.lt_s
-           (get_local $5)
-           (i32.const 0)
-          )
+          (get_local $6)
           (set_local $5
            (i32.sub
             (i32.const 0)
@@ -7258,12 +7252,9 @@
     (f64.const 0)
    )
   )
-  (if
-   (get_local $2)
-   (set_local $1
-    (f64.neg
-     (get_local $1)
-    )
+  (set_local $1
+   (f64.abs
+    (get_local $1)
    )
   )
   (set_local $24

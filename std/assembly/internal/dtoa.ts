@@ -247,7 +247,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
 @inline
 function genExponent(buffer: usize, k: i32): i32 {
   var sign = k < 0;
-  if (k < 0) k = -k;
+  if (sign) k = -k;
   var decimals = decimalCount32(k) + 1;
   utoa32_core(buffer, k, decimals);
   store<u16>(buffer, <u16>select<u32>(CharCode.MINUS, CharCode.PLUS, sign), STRING_HEADER_SIZE);
@@ -311,7 +311,7 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
 
 export function dtoa_core(buffer: usize, value: f64): i32 {
   var sign = <i32>(value < 0);
-  if (sign) value = -value;
+  value = abs(value);
   // assert(value > 0 && value <= 1.7976931348623157e308);
   var len = grisu2(value, buffer, sign);
       len = prettify(buffer + (sign << 1), len - sign, _K);
