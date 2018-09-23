@@ -75,7 +75,9 @@
  (global $Infinity f64 (f64.const inf))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
- (global $HEAP_BASE i32 (i32.const 5172))
+ (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
+ (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
+ (global $HEAP_BASE i32 (i32.const 5272))
  (table 1 1 anyfunc)
  (elem (i32.const 0) $null)
  (memory $0 1)
@@ -207,6 +209,8 @@
  (data (i32.const 5096) "\08\00\00\001\00.\001\00e\00+\001\002\008\00")
  (data (i32.const 5120) "\07\00\00\001\00.\001\00e\00-\006\004\00")
  (data (i32.const 5144) "\0b\00\00\000\00.\000\000\000\000\003\005\006\008\009\00")
+ (data (i32.const 5176) "\16\00\00\003\00.\004\000\002\008\002\003\004\006\006\003\008\005\002\008\008\006\00e\00+\003\008\00")
+ (data (i32.const 5224) "\15\00\00\001\00.\001\009\002\000\009\002\008\009\005\005\000\007\008\001\002\005\00e\00-\007\00")
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
  (start $start)
@@ -11655,6 +11659,48 @@
      (i32.const 0)
      (i32.const 48)
      (i32.const 223)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/dtoa/dtoa
+      (f64.promote/f32
+       (get_global $~lib/builtins/f32.MAX_VALUE)
+      )
+     )
+     (i32.const 5176)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 225)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/dtoa/dtoa
+      (f64.promote/f32
+       (get_global $~lib/builtins/f32.EPSILON)
+      )
+     )
+     (i32.const 5224)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 226)
      (i32.const 0)
     )
     (unreachable)

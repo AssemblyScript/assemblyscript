@@ -162,6 +162,8 @@
  (data (i32.const 5096) "\08\00\00\001\00.\001\00e\00+\001\002\008")
  (data (i32.const 5120) "\07\00\00\001\00.\001\00e\00-\006\004")
  (data (i32.const 5144) "\0b\00\00\000\00.\000\000\000\000\003\005\006\008\009")
+ (data (i32.const 5176) "\16\00\00\003\00.\004\000\002\008\002\003\004\006\006\003\008\005\002\008\008\006\00e\00+\003\008")
+ (data (i32.const 5224) "\15\00\00\001\00.\001\009\002\000\009\002\008\009\005\005\000\007\008\001\002\005\00e\00-\007")
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
  (start $start)
@@ -6640,7 +6642,7 @@
  )
  (func $start (; 51 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.const 5176)
+   (i32.const 5272)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
@@ -10016,6 +10018,44 @@
      (i32.const 0)
      (i32.const 48)
      (i32.const 223)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/dtoa/dtoa
+      (f64.const 3402823466385288598117041e14)
+     )
+     (i32.const 5176)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 225)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $~lib/string/String.__eq
+     (call $~lib/internal/dtoa/dtoa
+      (f64.const 1.1920928955078125e-07)
+     )
+     (i32.const 5224)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 226)
      (i32.const 0)
     )
     (unreachable)

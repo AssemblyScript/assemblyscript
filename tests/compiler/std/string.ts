@@ -221,3 +221,6 @@ assert(dtoa(2.71828e+2)  == "271.828");
 assert(dtoa(1.1e+128)    == "1.1e+128");
 assert(dtoa(1.1e-64)     == "1.1e-64");
 assert(dtoa(0.000035689) == "0.000035689");
+
+assert(dtoa(f32.MAX_VALUE) == "3.4028234663852886e+38");
+assert(dtoa(f32.EPSILON) == "1.1920928955078125e-7");
