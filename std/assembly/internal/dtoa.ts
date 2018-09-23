@@ -1,6 +1,8 @@
 /*
  * Implementation based on dtoa-pldi2010).pdf
  * "Printing Floating-Point Numbers Quickly and Accurately with Integers" by Florian Loitsh paper and implementation
+ * Also some parts inspired from milo's implementation:
+ * https://github.com/miloyip/dtoa-benchmark/blob/master/src/milo/dtoa_milo.h
  */
 
 import {
@@ -99,7 +101,7 @@ function umul64f(u: u64, v: u64): u64 {
 
 @inline
 function umul64e(e1: i32, e2: i32): i32 {
-  return e1 + e2 + 64;
+  return e1 + e2 + 64; // where 64 is significand size
 }
 
 @inline
@@ -135,11 +137,11 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
 }
 
 @inline
-function getCachedPower(e: i32): void {
+function getCachedPower(minExp: i32): void {
   const c = reinterpret<f64>(0x3FD34413509F79FE); // 1 / lg(10) = 0.30102999566398114
-  var dk = (-61 - e) * c + 347;	                  // dk must be positive, so can do ceiling in positive
+  var dk = (-61 - minExp) * c + 347;	            // dk must be positive, so can do ceiling in positive
   var k = <i32>dk;
-  k += <i32>(k != dk);
+      k += <i32>(k != dk); // conversion with ceil
 
   var index = (k >> 3) + 1;
   _K = 348 - (index << 3);	// decimal exponent no need lookup table
