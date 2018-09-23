@@ -155,7 +155,7 @@ export namespace f32 {
   export const MAX_SAFE_INTEGER: f32 =  16777215;
   export const POSITIVE_INFINITY: f32 =  Infinity;
   export const NEGATIVE_INFINITY: f32 = -Infinity;
-  export const NaN: f32 = 0.0 / 0.0;
+  export const NaN: f32 = NaN;
   @builtin export declare function abs(value: f32): f32;
   @builtin export declare function ceil(value: f32): f32;
   @builtin export declare function copysign(x: f32, y: f32): f32;
@@ -180,7 +180,7 @@ export namespace f64 {
   export const MAX_SAFE_INTEGER: f64 =  9007199254740991;
   export const POSITIVE_INFINITY: f64 =  Infinity;
   export const NEGATIVE_INFINITY: f64 = -Infinity;
-  export const NaN: f64 = 0.0 / 0.0;
+  export const NaN: f64 = NaN;
   @builtin export declare function abs(value: f64): f64;
   @builtin export declare function ceil(value: f64): f64;
   @builtin export declare function copysign(x: f64, y: f64): f64;
