@@ -155,17 +155,17 @@ declare namespace Atomic {
   /** Atomically stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
   export function store<T>(ptr: usize, value: any, constantOffset?: usize): void;
   /** Atomically add a value of the specified type to memory.*/
-  export function add<T>(ptr: usize, value: T, constantOffset?: usize): void;
+  export function add<T>(ptr: usize, value: T, constantOffset?: usize): T;
   /** Atomically subtract a value of the specified type from memory.*/
-  export function sub<T>(ptr: usize, value: T, constantOffset?: usize): void;
+  export function sub<T>(ptr: usize, value: T, constantOffset?: usize): T;
   /** Atomically and a value of the specified type to memory.*/
-  export function and<T>(ptr: usize, value: T, constantOffset?: usize): void;
+  export function and<T>(ptr: usize, value: T, constantOffset?: usize): T;
   /** Atomically or a value of the specified type to memory.*/
-  export function or<T>(ptr: usize, value: T, constantOffset?: usize): void;
+  export function or<T>(ptr: usize, value: T, constantOffset?: usize): T;
   /** Atomically xor a value of the specified type to memory.*/
-  export function xor<T>(ptr: usize, value: T, constantOffset?: usize): void;
+  export function xor<T>(ptr: usize, value: T, constantOffset?: usize): T;
   /** Atomically exchange a value of the specified type to memory.*/
-  export function xchg<T>(ptr: usize, value: T, constantOffset?: usize): void;
+  export function xchg<T>(ptr: usize, value: T, constantOffset?: usize): T;
   /** Atomically compare exchange a value of the specified type to memory.*/
   export function cmpxchg<T>(ptr: usize, expected:T, replacement: T, constantOffset?: usize): T;
 }
@@ -239,6 +239,36 @@ declare namespace i32 {
     export function store16(offset: usize, value: i32, constantOffset?: usize): void;
     /** Atomically stores a 32-bit integer to memory. */
     export function store(offset: usize, value: i32, constantOffset?: usize): void;
+
+    namespace rmw8_u {
+      export function add(offset: usize, value: i32, constantOffset?: usize): i32
+      export function sub(offset: usize, value: i32, constantOffset?: usize): i32
+      export function and(offset: usize, value: i32, constantOffset?: usize): i32
+      export function or(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xor(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xchg(offset: usize, value: i32, constantOffset?: usize): i32
+      export function cmpxchg(offset: usize, expected:i32, replacement: i32, constantOffset?: usize): i32;
+    }
+
+    namespace rmw16_u {
+      export function add(offset: usize, value: i32, constantOffset?: usize): i32
+      export function sub(offset: usize, value: i32, constantOffset?: usize): i32
+      export function and(offset: usize, value: i32, constantOffset?: usize): i32
+      export function or(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xor(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xchg(offset: usize, value: i32, constantOffset?: usize): i32
+      export function cmpxchg(offset: usize, expected:i32, replacement: i32, constantOffset?: usize): i32;
+    }
+
+    namespace rmw {
+      export function add(offset: usize, value: i32, constantOffset?: usize): i32
+      export function sub(offset: usize, value: i32, constantOffset?: usize): i32
+      export function and(offset: usize, value: i32, constantOffset?: usize): i32
+      export function or(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xor(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xchg(offset: usize, value: i32, constantOffset?: usize): i32
+      export function cmpxchg(offset: usize, expected:i32, replacement: i32, constantOffset?: usize): i32;
+    }
   }
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
@@ -298,6 +328,46 @@ declare namespace i64 {
     export function store32(offset: usize, value: i64, constantOffset?: usize): void;
     /** Atomically stores a 64-bit integer to memory. */
     export function store(offset: usize, value: i64, constantOffset?: usize): void;
+
+    namespace rmw8_u {
+      export function add(offset: usize, value: i64, constantOffset?: usize): i64
+      export function sub(offset: usize, value: i64, constantOffset?: usize): i64
+      export function and(offset: usize, value: i64, constantOffset?: usize): i64
+      export function or(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xor(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xchg(offset: usize, value: i64, constantOffset?: usize): i64
+      export function cmpxchg(offset: usize, expected:i64, replacement: i64, constantOffset?: usize): i64;
+    }
+
+    namespace rmw16_u {
+      export function add(offset: usize, value: i64, constantOffset?: usize): i64
+      export function sub(offset: usize, value: i64, constantOffset?: usize): i64
+      export function and(offset: usize, value: i64, constantOffset?: usize): i64
+      export function or(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xor(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xchg(offset: usize, value: i64, constantOffset?: usize): i64
+      export function cmpxchg(offset: usize, expected:i64, replacement: i64, constantOffset?: usize): i64;
+    }
+
+    namespace rmw32_u {
+      export function add(offset: usize, value: i64, constantOffset?: usize): i64
+      export function sub(offset: usize, value: i64, constantOffset?: usize): i64
+      export function and(offset: usize, value: i64, constantOffset?: usize): i64
+      export function or(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xor(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xchg(offset: usize, value: i64, constantOffset?: usize): i64
+      export function cmpxchg(offset: usize, expected:i64, replacement: i64, constantOffset?: usize): i64;
+    }
+
+    namespace rmw {
+      export function add(offset: usize, value: i64, constantOffset?: usize): i64
+      export function sub(offset: usize, value: i64, constantOffset?: usize): i64
+      export function and(offset: usize, value: i64, constantOffset?: usize): i64
+      export function or(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xor(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xchg(offset: usize, value: i64, constantOffset?: usize): i64
+      export function cmpxchg(offset: usize, expected:i64, replacement: i64, constantOffset?: usize): i64;
+    }
   }
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */

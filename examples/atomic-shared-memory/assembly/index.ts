@@ -34,72 +34,72 @@ export function test(): void {
   U = Atomic.load<i64>(127);
 
   // Atomic add
-  Atomic.add<i8>(120, 1);
-  Atomic.add<i16>(121, 1);
-  Atomic.add<i32>(123, 1);
+  i = Atomic.add<i8>(120, 1);
+  i = Atomic.add<i16>(121, 1);
+  i = Atomic.add<i32>(123, 1);
 
-  Atomic.add<i8>(120, <i64>1);
-  Atomic.add<i16>(121, <i64>1);
-  Atomic.add<i32>(123, <i64>1);
-  Atomic.add<i64>(127, <i64>1);
+  I = Atomic.add<i8>(120, <i64>1);
+  I = Atomic.add<i16>(121, <i64>1);
+  I = Atomic.add<i32>(123, <i64>1);
+  I = Atomic.add<i64>(127, <i64>1);
 
   // Atomic subtract
   Atomic.sub<i8>(120, 1);
   Atomic.sub<i16>(121, 1);
   Atomic.sub<i32>(123, 1);
 
-  Atomic.sub<i8>(120, <i64>1);
-  Atomic.sub<i16>(121, <i64>1);
-  Atomic.sub<i32>(123, <i64>1);
-  Atomic.sub<i64>(127, <i64>1);
+  I = Atomic.sub<i8>(120, <i64>1);
+  I = Atomic.sub<i16>(121, <i64>1);
+  I = Atomic.sub<i32>(123, <i64>1);
+  I = Atomic.sub<i64>(127, <i64>1);
 
   // Atomic AND
   Atomic.and<i8>(120, 1);
   Atomic.and<i16>(121, 1);
   Atomic.and<i32>(123, 1);
 
-  Atomic.and<i8>(120, <i64>1);
-  Atomic.and<i16>(121, <i64>1);
-  Atomic.and<i32>(123, <i64>1);
-  Atomic.and<i64>(127, <i64>1);
+  I = Atomic.and<i8>(120, <i64>1);
+  I = Atomic.and<i16>(121, <i64>1);
+  I = Atomic.and<i32>(123, <i64>1);
+  I = Atomic.and<i64>(127, <i64>1);
 
   // Atomic OR
   Atomic.or<i8>(120, 1);
   Atomic.or<i16>(121, 1);
   Atomic.or<i32>(123, 1);
 
-  Atomic.or<i8>(120, <i64>1);
-  Atomic.or<i16>(121, <i64>1);
-  Atomic.or<i32>(123, <i64>1);
-  Atomic.or<i64>(127, <i64>1);
+  I = Atomic.or<i8>(120, <i64>1);
+  I = Atomic.or<i16>(121, <i64>1);
+  I = Atomic.or<i32>(123, <i64>1);
+  I = Atomic.or<i64>(127, <i64>1);
 
   // Atomic XOR
   Atomic.xor<i8>(120, 1);
   Atomic.xor<i16>(121, 1);
   Atomic.xor<i32>(123, 1);
 
-  Atomic.xor<i8>(120, <i64>1);
-  Atomic.xor<i16>(121, <i64>1);
-  Atomic.xor<i32>(123, <i64>1);
-  Atomic.xor<i64>(127, <i64>1);
+  I = Atomic.xor<i8>(120, <i64>1);
+  I = Atomic.xor<i16>(121, <i64>1);
+  I = Atomic.xor<i32>(123, <i64>1);
+  I = Atomic.xor<i64>(127, <i64>1);
 
   // Atomic xchg
   Atomic.xchg<i8>(120, 1);
   Atomic.xchg<i16>(121, 1);
   Atomic.xchg<i32>(123, 1);
 
-  Atomic.xchg<i8>(120, <i64>1);
-  Atomic.xchg<i16>(121, <i64>1);
-  Atomic.xchg<i32>(123, <i64>1);
-  Atomic.xchg<i64>(127, <i64>1);
+  I = Atomic.xchg<i8>(120, <i64>1);
+  I = Atomic.xchg<i16>(121, <i64>1);
+  I = Atomic.xchg<i32>(123, <i64>1);
+  I = Atomic.xchg<i64>(127, <i64>1);
 
   // Atomic cmpxchg
   Atomic.cmpxchg<i8>(120, 1, 2);
   Atomic.cmpxchg<i16>(121, 1, 2);
   Atomic.cmpxchg<i32>(123, 1, 2);
 
-  Atomic.cmpxchg<i8>(120, <i64>1, <i64>2);
-  Atomic.cmpxchg<i16>(121, <i64>1, <i64>2);
-  Atomic.cmpxchg<i32>(123, <i64>1, <i64>2);
-  Atomic.cmpxchg<i64>(127, <i64>1, <i64>2);
+  I = Atomic.cmpxchg<i8>(120, <i64>1, <i64>2);
+  I = Atomic.cmpxchg<i16>(121, <i64>1, <i64>2);
+  I = Atomic.cmpxchg<i32>(123, <i64>1, <i64>2);
+  I = Atomic.cmpxchg<i64>(127, <i64>1, <i64>2);
 }

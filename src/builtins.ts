@@ -1760,14 +1760,13 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createAtomicStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
     }
-    case "Atomic.add":  // add<T>(ptr: usize, value: T): void;
-    case "Atomic.sub":  // sub<T>(ptr: usize, value: T): void;
-    case "Atomic.and":  // and<T>(ptr: usize, value: T): void;
-    case "Atomic.or":   // or<T>(ptr: usize, value: T): void;
-    case "Atomic.xor":  // xor<T>(ptr: usize, value: T): void;
-    case "Atomic.xchg": // xchg<T>(ptr: usize, value: T): void;
+    case "Atomic.add":  // add<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "Atomic.sub":  // sub<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "Atomic.and":  // and<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "Atomic.or":   // or<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "Atomic.xor":  // xor<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "Atomic.xchg": // xchg<T!>(ptr: usize, value: T, constantOffset?: usize): T;
     {
-      compiler.currentType = Type.void;
       if (operands.length < 2 || operands.length > 3) {
         if (!(typeArguments && typeArguments.length == 1)) {
           compiler.error(
@@ -1809,7 +1808,6 @@ export function compileCall(
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      let type: Type;
       if (
         typeArguments[0].is(TypeFlags.INTEGER) &&
         (
@@ -1824,15 +1822,11 @@ export function compileCall(
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
-        type = typeArguments[0];
-      } else {
-        type = compiler.currentType;
       }
       let offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
       if (offset < 0) { // reported in evaluateConstantOffset
         return module.createUnreachable();
       }
-      compiler.currentType = Type.void;
       let RMWOp: AtomicRMWOp | null = null;
       switch (prototype.internalName) {
         case "Atomic.add": { RMWOp = AtomicRMWOp.Add; break; }
@@ -1842,10 +1836,14 @@ export function compileCall(
         case "Atomic.xor": { RMWOp = AtomicRMWOp.Xor; break; }
         case "Atomic.xchg": { RMWOp = AtomicRMWOp.Xchg; break; }
       }
+      compiler.currentType = typeArguments[0];
       if (RMWOp !== null) {
-        return module.createDrop(
-          module.createAtomicRMW(RMWOp, typeArguments[0].byteSize, offset, arg0, arg1, type.toNativeType())
-        );
+        return module.createAtomicRMW(
+          RMWOp, typeArguments[0].byteSize, offset, arg0, arg1,
+          contextualType.size > typeArguments[0].size
+          ? (compiler.currentType = contextualType).toNativeType()
+          : (compiler.currentType = typeArguments[0]).toNativeType(),
+          );
       } else {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
@@ -1854,8 +1852,7 @@ export function compileCall(
         return module.createUnreachable();
       }
     }
-    case "Atomic.cmpxchg": { // cmpxchg<T>(ptr: usize, expected:T, replacement: T): T;
-      compiler.currentType = Type.void;
+    case "Atomic.cmpxchg": { // cmpxchg<T!>(ptr: usize, expected:T, replacement: T, constantOffset?: usize): T;
       if (operands.length < 3 || operands.length > 4) {
         if (!(typeArguments && typeArguments.length == 1)) {
           compiler.error(
@@ -1905,7 +1902,6 @@ export function compileCall(
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      let type: Type;
       if (
         typeArguments[0].is(TypeFlags.INTEGER) &&
         (
@@ -1927,17 +1923,17 @@ export function compileCall(
           WrapMode.NONE, // still clears garbage bits
           operands[2]
         );
-        type = typeArguments[0];
-      } else {
-        type = compiler.currentType;
       }
       let offset = operands.length == 4 ? evaluateConstantOffset(compiler, operands[3]) : 0; // reports
       if (offset < 0) { // reported in evaluateConstantOffset
         return module.createUnreachable();
       }
-      compiler.currentType = Type.void;
-      return module.createDrop(
-        module.createAtomicCmpxchg(typeArguments[0].byteSize, offset, arg0, arg1, arg2, type.toNativeType())
+      compiler.currentType = typeArguments[0];
+      return module.createAtomicCmpxchg(
+        typeArguments[0].byteSize, offset, arg0, arg1, arg2,
+        contextualType.size > typeArguments[0].size
+        ? (compiler.currentType = contextualType).toNativeType()
+        : (compiler.currentType = typeArguments[0]).toNativeType(),
       );
     }
     case "sizeof": { // sizeof<T!>() -> usize
