@@ -1920,11 +1920,18 @@ export function compileCall(
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
+        arg2 = compiler.convertExpression(
+          arg2,
+          compiler.currentType, typeArguments[0],
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[2]
+        );
         type = typeArguments[0];
       } else {
         type = compiler.currentType;
       }
-      let offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
+      let offset = operands.length == 4 ? evaluateConstantOffset(compiler, operands[3]) : 0; // reports
       if (offset < 0) { // reported in evaluateConstantOffset
         return module.createUnreachable();
       }

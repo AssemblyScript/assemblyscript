@@ -4,11 +4,11 @@ var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset_ptr: usize = startOffset;
 store<u32>(offset_ptr, (HEAP_BASE + 4 + AL_MASK) & ~AL_MASK);
 
-export function allocator_get_offset(): usize {
+@global export function allocator_get_offset(): usize {
   return Atomic.load<u32>(offset_ptr);
 }
 
-export function allocator_set_offset(old_offset: usize, new_offset: usize): u32 {
+@global export function allocator_set_offset(old_offset: usize, new_offset: usize): u32 {
   return Atomic.cmpxchg<u32>(offset_ptr, old_offset, new_offset);
 }
 

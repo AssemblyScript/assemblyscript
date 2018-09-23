@@ -1,7 +1,7 @@
 // import "allocator/tlsf";
 // import "allocator/arena";
 // import "allocator/buddy";
-import "allocator/shared";
+import "allocator/atomic";
 
 type float = f64;
 type int = i32;
@@ -16,7 +16,7 @@ export function GET_MEMORY_TOP(): usize {
 }
 
 export function SET_MEMORY_TOP(offset: usize): void {
-    allocator_set_offset(offset);
+    allocator_set_offset(GET_MEMORY_TOP(), offset);
 }
 
 function rand(): float {
@@ -29,7 +29,7 @@ export class Vec {
     constructor(public x: float = 0.0, public y: float = 0.0, public z: float = 0.0) {}
 
     free(): void {
-        free_memory(<usize>this);
+        __memory_free(<usize>this);
     }
 
     // @operator("+")
@@ -169,7 +169,7 @@ class Ray {
     free(): void {
         this.o.free();
         this.d.free();
-        free_memory(<usize>this);
+        __memory_free(<usize>this);
     }
 }
 
@@ -203,7 +203,7 @@ class Sphere {
     }
 
     free(): void {
-        free_memory(<usize>this);
+        __memory_free(<usize>this);
     }
 }
 
@@ -220,7 +220,7 @@ function clamp(x: float): float {
 class Hit {
     constructor(public ray: Ray = new Ray(), public t: float = 0, public id: int = -1) {}
     free(): void {
-        free_memory(<usize>this);
+        __memory_free(<usize>this);
     }
 }
 
