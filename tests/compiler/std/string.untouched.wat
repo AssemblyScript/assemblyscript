@@ -7033,61 +7033,64 @@
         (get_local $0)
         (get_global $~lib/internal/string/CharCode.e)
        )
-       (return
-        (i32.add
-         (block $~lib/internal/dtoa/genExponent|inlined.0 (result i32)
-          (set_local $4
-           (i32.add
-            (get_local $0)
-            (i32.const 4)
-           )
+       (set_local $1
+        (block $~lib/internal/dtoa/genExponent|inlined.0 (result i32)
+         (set_local $4
+          (i32.add
+           (get_local $0)
+           (i32.const 4)
           )
+         )
+         (set_local $5
+          (i32.sub
+           (get_local $3)
+           (i32.const 1)
+          )
+         )
+         (set_local $6
+          (i32.lt_s
+           (get_local $5)
+           (i32.const 0)
+          )
+         )
+         (if
+          (get_local $6)
           (set_local $5
            (i32.sub
-            (get_local $3)
-            (i32.const 1)
-           )
-          )
-          (set_local $6
-           (i32.lt_s
-            (get_local $5)
             (i32.const 0)
-           )
-          )
-          (if
-           (get_local $6)
-           (set_local $5
-            (i32.sub
-             (i32.const 0)
-             (get_local $5)
-            )
-           )
-          )
-          (set_local $7
-           (i32.add
-            (call $~lib/internal/itoa/decimalCount32
-             (get_local $5)
-            )
-            (i32.const 1)
-           )
-          )
-          (block $~lib/internal/itoa/utoa32_core|inlined.4
-           (call $~lib/internal/itoa/utoa32_lut
-            (get_local $4)
             (get_local $5)
-            (get_local $7)
            )
           )
-          (i32.store16 offset=4
-           (get_local $4)
-           (select
-            (get_global $~lib/internal/string/CharCode.MINUS)
-            (get_global $~lib/internal/string/CharCode.PLUS)
-            (get_local $6)
-           )
-          )
-          (get_local $7)
          )
+         (set_local $7
+          (i32.add
+           (call $~lib/internal/itoa/decimalCount32
+            (get_local $5)
+           )
+           (i32.const 1)
+          )
+         )
+         (block $~lib/internal/itoa/utoa32_core|inlined.4
+          (call $~lib/internal/itoa/utoa32_lut
+           (get_local $4)
+           (get_local $5)
+           (get_local $7)
+          )
+         )
+         (i32.store16 offset=4
+          (get_local $4)
+          (select
+           (get_global $~lib/internal/string/CharCode.MINUS)
+           (get_global $~lib/internal/string/CharCode.PLUS)
+           (get_local $6)
+          )
+         )
+         (get_local $7)
+        )
+       )
+       (return
+        (i32.add
+         (get_local $1)
          (i32.const 2)
         )
        )
@@ -7141,70 +7144,70 @@
         )
         (get_global $~lib/internal/string/CharCode.e)
        )
-       (set_local $8
-        (block $~lib/internal/dtoa/genExponent|inlined.1 (result i32)
-         (set_local $4
-          (i32.add
+       (set_local $1
+        (i32.add
+         (get_local $1)
+         (block $~lib/internal/dtoa/genExponent|inlined.1 (result i32)
+          (set_local $4
            (i32.add
-            (get_local $0)
-            (get_local $7)
+            (i32.add
+             (get_local $0)
+             (get_local $7)
+            )
+            (i32.const 4)
            )
-           (i32.const 4)
           )
-         )
-         (set_local $5
-          (i32.sub
-           (get_local $3)
-           (i32.const 1)
-          )
-         )
-         (set_local $6
-          (i32.lt_s
-           (get_local $5)
-           (i32.const 0)
-          )
-         )
-         (if
-          (get_local $6)
           (set_local $5
            (i32.sub
+            (get_local $3)
+            (i32.const 1)
+           )
+          )
+          (set_local $6
+           (i32.lt_s
+            (get_local $5)
             (i32.const 0)
-            (get_local $5)
            )
           )
-         )
-         (set_local $8
-          (i32.add
-           (call $~lib/internal/itoa/decimalCount32
-            (get_local $5)
-           )
-           (i32.const 1)
-          )
-         )
-         (block $~lib/internal/itoa/utoa32_core|inlined.5
-          (call $~lib/internal/itoa/utoa32_lut
-           (get_local $4)
-           (get_local $5)
-           (get_local $8)
-          )
-         )
-         (i32.store16 offset=4
-          (get_local $4)
-          (select
-           (get_global $~lib/internal/string/CharCode.MINUS)
-           (get_global $~lib/internal/string/CharCode.PLUS)
+          (if
            (get_local $6)
+           (set_local $5
+            (i32.sub
+             (i32.const 0)
+             (get_local $5)
+            )
+           )
           )
+          (set_local $8
+           (i32.add
+            (call $~lib/internal/itoa/decimalCount32
+             (get_local $5)
+            )
+            (i32.const 1)
+           )
+          )
+          (block $~lib/internal/itoa/utoa32_core|inlined.5
+           (call $~lib/internal/itoa/utoa32_lut
+            (get_local $4)
+            (get_local $5)
+            (get_local $8)
+           )
+          )
+          (i32.store16 offset=4
+           (get_local $4)
+           (select
+            (get_global $~lib/internal/string/CharCode.MINUS)
+            (get_global $~lib/internal/string/CharCode.PLUS)
+            (get_local $6)
+           )
+          )
+          (get_local $8)
          )
-         (get_local $8)
         )
        )
        (return
         (i32.add
-         (i32.add
-          (get_local $1)
-          (get_local $8)
-         )
+         (get_local $1)
          (i32.const 2)
         )
        )
@@ -7245,9 +7248,18 @@
     (f64.const 0)
    )
   )
-  (set_local $1
-   (f64.abs
-    (get_local $1)
+  (if
+   (get_local $2)
+   (block
+    (set_local $1
+     (f64.neg
+      (get_local $1)
+     )
+    )
+    (i32.store16 offset=4
+     (get_local $0)
+     (get_global $~lib/internal/string/CharCode.MINUS)
+    )
    )
   )
   (set_local $24
@@ -7825,13 +7837,6 @@
      (get_local $2)
     )
     (get_global $~lib/internal/dtoa/_K)
-   )
-  )
-  (if
-   (get_local $2)
-   (i32.store16 offset=4
-    (get_local $0)
-    (get_global $~lib/internal/string/CharCode.MINUS)
    )
   )
   (i32.add

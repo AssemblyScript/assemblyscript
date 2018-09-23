@@ -297,7 +297,8 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
   } else if (length == 1) {
     // 1e30
     store<u16>(buffer, CharCode.e, STRING_HEADER_SIZE + 2);
-    return genExponent(buffer + 4, kk - 1) + 2;
+    length = genExponent(buffer + 4, kk - 1);
+    return length + 2;
   } else {
     let len = length << 1;
     memory.copy(
@@ -307,23 +308,25 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
     );
     store<u16>(buffer,       CharCode.DOT, STRING_HEADER_SIZE + 2);
     store<u16>(buffer + len, CharCode.e,   STRING_HEADER_SIZE + 2);
-    let expLen = genExponent(buffer + len + 4, kk - 1);
-    return length + expLen + 2;
+    length += genExponent(buffer + len + 4, kk - 1);
+    return length + 2;
   }
 }
 
 export function dtoa_core(buffer: usize, value: f64): i32 {
   var sign = <i32>(value < 0);
-  value = abs(value);
+  if (sign) {
+    value = -value;
+    store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
+  }
   // assert(value > 0 && value <= 1.7976931348623157e308);
   var len = grisu2(value, buffer, sign);
       len = prettify(buffer + (sign << 1), len - sign, _K);
-  if (sign) store<u16>(buffer, CharCode.MINUS, STRING_HEADER_SIZE);
   return len + sign;
 }
 
 export function dtoa(value: f64): String {
-  if (value == 0) return "0.0"; // or should be "0" following js semantics?
+  if (value == 0) return "0.0";
   if (!isFinite(value)) {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);

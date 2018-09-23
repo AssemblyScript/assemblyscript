@@ -9391,7 +9391,7 @@
           )
          )
          (if
-          (tee_local $4
+          (tee_local $0
            (i32.lt_s
             (tee_local $2
              (i32.sub
@@ -9426,7 +9426,7 @@
           (select
            (i32.const 45)
            (i32.const 43)
-           (get_local $4)
+           (get_local $0)
           )
          )
          (i32.add
@@ -9474,7 +9474,7 @@
           )
          )
          (if
-          (tee_local $4
+          (tee_local $0
            (i32.lt_s
             (tee_local $2
              (i32.sub
@@ -9495,7 +9495,7 @@
          (call $~lib/internal/itoa/utoa32_lut
           (get_local $3)
           (get_local $2)
-          (tee_local $0
+          (tee_local $2
            (i32.add
             (call $~lib/internal/itoa/decimalCount32
              (get_local $2)
@@ -9509,13 +9509,13 @@
           (select
            (i32.const 45)
            (i32.const 43)
-           (get_local $4)
+           (get_local $0)
           )
          )
          (i32.add
           (i32.add
            (get_local $1)
-           (get_local $0)
+           (get_local $2)
           )
           (i32.const 2)
          )
@@ -9529,30 +9529,43 @@
  )
  (func $~lib/internal/dtoa/dtoa_core (; 132 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i64)
   (local $7 i64)
-  (local $8 i32)
+  (local $8 i64)
   (local $9 i64)
   (local $10 i64)
   (local $11 i64)
-  (local $12 i64)
+  (local $12 i32)
   (local $13 i32)
   (local $14 i32)
   (local $15 i64)
-  (set_local $8
-   (f64.lt
-    (get_local $1)
-    (f64.const 0)
+  (if
+   (tee_local $12
+    (f64.lt
+     (get_local $1)
+     (f64.const 0)
+    )
+   )
+   (block
+    (set_local $1
+     (f64.neg
+      (get_local $1)
+     )
+    )
+    (i32.store16 offset=4
+     (get_local $0)
+     (i32.const 45)
+    )
    )
   )
   (set_local $2
    (i64.add
     (i64.shl
      (i64.extend_u/i32
-      (tee_local $3
+      (tee_local $5
        (i32.ne
         (tee_local $13
          (i32.wrap/i64
@@ -9560,9 +9573,7 @@
            (i64.and
             (tee_local $2
              (i64.reinterpret/f64
-              (f64.abs
-               (get_local $1)
-              )
+              (get_local $1)
              )
             )
             (i64.const 9218868437227405312)
@@ -9583,14 +9594,14 @@
     )
    )
   )
-  (set_local $3
+  (set_local $5
    (i32.sub
     (tee_local $13
      (i32.sub
       (select
        (get_local $13)
        (i32.const 1)
-       (get_local $3)
+       (get_local $5)
       )
       (i32.const 1075)
      )
@@ -9598,7 +9609,7 @@
     (i32.const 1)
    )
   )
-  (set_local $5
+  (set_local $4
    (i32.wrap/i64
     (i64.clz
      (tee_local $6
@@ -9617,7 +9628,7 @@
    (i64.shl
     (get_local $6)
     (i64.extend_s/i32
-     (get_local $5)
+     (get_local $4)
     )
    )
   )
@@ -9646,10 +9657,10 @@
        (get_local $13)
        (get_local $14)
       )
-      (tee_local $3
+      (tee_local $5
        (i32.sub
-        (get_local $3)
         (get_local $5)
+        (get_local $4)
        )
       )
      )
@@ -9657,17 +9668,17 @@
    )
   )
   (set_global $~lib/internal/dtoa/_exp
-   (get_local $3)
+   (get_local $5)
   )
   (set_global $~lib/internal/dtoa/_K
    (i32.sub
     (i32.const 348)
     (i32.shl
-     (tee_local $3
+     (tee_local $5
       (i32.add
        (i32.shr_s
         (i32.add
-         (tee_local $5
+         (tee_local $4
           (i32.trunc_s/f64
            (tee_local $1
             (f64.add
@@ -9687,7 +9698,7 @@
          )
          (f64.ne
           (f64.convert_s/i32
-           (get_local $5)
+           (get_local $4)
           )
           (get_local $1)
          )
@@ -9701,7 +9712,7 @@
     )
    )
   )
-  (set_local $5
+  (set_local $4
    (i32.load
     (i32.const 3976)
    )
@@ -9713,7 +9724,7 @@
       (i32.const 3712)
      )
      (i32.shl
-      (get_local $3)
+      (get_local $5)
       (i32.const 3)
      )
     )
@@ -9722,15 +9733,15 @@
   (set_global $~lib/internal/dtoa/_exp_pow
    (i32.load16_s offset=8
     (i32.add
-     (get_local $5)
+     (get_local $4)
      (i32.shl
-      (get_local $3)
+      (get_local $5)
       (i32.const 1)
      )
     )
    )
   )
-  (set_local $10
+  (set_local $9
    (i64.mul
     (tee_local $7
      (i64.and
@@ -9738,7 +9749,7 @@
        (i64.shl
         (get_local $2)
         (i64.extend_s/i32
-         (tee_local $5
+         (tee_local $4
           (i32.wrap/i64
            (i64.clz
             (get_local $2)
@@ -9751,7 +9762,7 @@
       (i64.const 4294967295)
      )
     )
-    (tee_local $9
+    (tee_local $8
      (i64.and
       (tee_local $6
        (get_global $~lib/internal/dtoa/_frc_pow)
@@ -9765,7 +9776,7 @@
    (i64.add
     (i64.mul
      (get_local $7)
-     (tee_local $11
+     (tee_local $10
       (i64.shr_u
        (get_local $6)
        (i64.const 32)
@@ -9773,19 +9784,19 @@
      )
     )
     (i64.and
-     (tee_local $4
+     (tee_local $3
       (i64.add
        (i64.mul
-        (tee_local $12
+        (tee_local $11
          (i64.shr_u
           (get_local $2)
           (i64.const 32)
          )
         )
-        (get_local $9)
+        (get_local $8)
        )
        (i64.shr_u
-        (get_local $10)
+        (get_local $9)
         (i64.const 32)
        )
       )
@@ -9798,11 +9809,11 @@
    (i64.add
     (i64.add
      (i64.mul
-      (get_local $12)
       (get_local $11)
+      (get_local $10)
      )
      (i64.shr_u
-      (get_local $4)
+      (get_local $3)
       (i64.const 32)
      )
     )
@@ -9817,15 +9828,15 @@
   )
   (set_local $7
    (i64.mul
-    (tee_local $10
+    (tee_local $9
      (i64.and
-      (tee_local $4
+      (tee_local $3
        (get_global $~lib/internal/dtoa/_frc_plus)
       )
       (i64.const 4294967295)
      )
     )
-    (tee_local $11
+    (tee_local $10
      (i64.and
       (get_local $6)
       (i64.const 4294967295)
@@ -9836,8 +9847,8 @@
   (set_local $7
    (i64.add
     (i64.mul
-     (get_local $10)
-     (tee_local $9
+     (get_local $9)
+     (tee_local $8
       (i64.shr_u
        (get_local $6)
        (i64.const 32)
@@ -9845,16 +9856,16 @@
      )
     )
     (i64.and
-     (tee_local $4
+     (tee_local $3
       (i64.add
        (i64.mul
-        (tee_local $12
+        (tee_local $11
          (i64.shr_u
-          (get_local $4)
+          (get_local $3)
           (i64.const 32)
          )
         )
-        (get_local $11)
+        (get_local $10)
        )
        (i64.shr_u
         (get_local $7)
@@ -9870,11 +9881,11 @@
    (i64.add
     (i64.add
      (i64.mul
-      (get_local $12)
-      (get_local $9)
+      (get_local $11)
+      (get_local $8)
      )
      (i64.shr_u
-      (get_local $4)
+      (get_local $3)
       (i64.const 32)
      )
     )
@@ -9887,17 +9898,17 @@
     )
    )
   )
-  (set_local $10
+  (set_local $9
    (i64.mul
     (tee_local $7
      (i64.and
-      (tee_local $4
+      (tee_local $3
        (get_global $~lib/internal/dtoa/_frc_minus)
       )
       (i64.const 4294967295)
      )
     )
-    (tee_local $9
+    (tee_local $8
      (i64.and
       (get_local $6)
       (i64.const 4294967295)
@@ -9909,7 +9920,7 @@
    (i64.add
     (i64.mul
      (get_local $7)
-     (tee_local $11
+     (tee_local $10
       (i64.shr_u
        (get_local $6)
        (i64.const 32)
@@ -9917,19 +9928,19 @@
      )
     )
     (i64.and
-     (tee_local $4
+     (tee_local $3
       (i64.add
        (i64.mul
-        (tee_local $12
+        (tee_local $11
          (i64.shr_u
-          (get_local $4)
+          (get_local $3)
           (i64.const 32)
          )
         )
-        (get_local $9)
+        (get_local $8)
        )
        (i64.shr_u
-        (get_local $10)
+        (get_local $9)
         (i64.const 32)
        )
       )
@@ -9938,7 +9949,7 @@
     )
    )
   )
-  (set_local $4
+  (set_local $3
    (i64.sub
     (tee_local $7
      (i64.sub
@@ -9950,11 +9961,11 @@
      (i64.add
       (i64.add
        (i64.mul
-        (get_local $12)
         (get_local $11)
+        (get_local $10)
        )
        (i64.shr_u
-        (get_local $4)
+        (get_local $3)
         (i64.const 32)
        )
       )
@@ -9970,12 +9981,12 @@
     )
    )
   )
-  (set_local $3
+  (i32.add
    (call $~lib/internal/dtoa/prettify
     (i32.add
      (get_local $0)
      (i32.shl
-      (get_local $8)
+      (get_local $12)
       (i32.const 1)
      )
     )
@@ -9983,14 +9994,14 @@
      (call $~lib/internal/dtoa/genDigits
       (get_local $0)
       (get_local $2)
-      (tee_local $3
+      (tee_local $5
        (i32.sub
         (i32.add
          (i32.sub
           (get_local $13)
-          (get_local $5)
+          (get_local $4)
          )
-         (tee_local $5
+         (tee_local $4
           (get_global $~lib/internal/dtoa/_exp_pow)
          )
         )
@@ -10001,28 +10012,18 @@
       (i32.sub
        (i32.add
         (get_global $~lib/internal/dtoa/_exp)
-        (get_local $5)
+        (get_local $4)
        )
        (i32.const -64)
       )
-      (get_local $4)
-      (get_local $8)
+      (get_local $3)
+      (get_local $12)
      )
-     (get_local $8)
+     (get_local $12)
     )
     (get_global $~lib/internal/dtoa/_K)
    )
-  )
-  (if
-   (get_local $8)
-   (i32.store16 offset=4
-    (get_local $0)
-    (i32.const 45)
-   )
-  )
-  (i32.add
-   (get_local $3)
-   (get_local $8)
+   (get_local $12)
   )
  )
  (func $~lib/string/String#substring (; 133 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
