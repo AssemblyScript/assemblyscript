@@ -102,6 +102,307 @@
     (i32.const 127)
    )
   )
+  (drop
+   (i32.atomic.rmw8_u.add
+    (i32.const 120)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw16_u.add
+    (i32.const 121)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw.add
+    (i32.const 123)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw8_u.add
+    (i32.const 120)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw16_u.add
+    (i32.const 121)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw32_u.add
+    (i32.const 123)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw.add
+    (i32.const 127)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw8_u.sub
+    (i32.const 120)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw16_u.sub
+    (i32.const 121)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw.sub
+    (i32.const 123)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw8_u.sub
+    (i32.const 120)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw16_u.sub
+    (i32.const 121)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw32_u.sub
+    (i32.const 123)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw.sub
+    (i32.const 127)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw8_u.and
+    (i32.const 120)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw16_u.and
+    (i32.const 121)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw.and
+    (i32.const 123)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw8_u.and
+    (i32.const 120)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw16_u.and
+    (i32.const 121)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw32_u.and
+    (i32.const 123)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw.and
+    (i32.const 127)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw8_u.or
+    (i32.const 120)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw16_u.or
+    (i32.const 121)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw.or
+    (i32.const 123)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw8_u.or
+    (i32.const 120)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw16_u.or
+    (i32.const 121)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw32_u.or
+    (i32.const 123)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw.or
+    (i32.const 127)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw8_u.xor
+    (i32.const 120)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw16_u.xor
+    (i32.const 121)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw.xor
+    (i32.const 123)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw8_u.xor
+    (i32.const 120)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw16_u.xor
+    (i32.const 121)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw32_u.xor
+    (i32.const 123)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw.xor
+    (i32.const 127)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw8_u.xchg
+    (i32.const 120)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw16_u.xchg
+    (i32.const 121)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw.xchg
+    (i32.const 123)
+    (i32.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw8_u.xchg
+    (i32.const 120)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw16_u.xchg
+    (i32.const 121)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw32_u.xchg
+    (i32.const 123)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i64.atomic.rmw.xchg
+    (i32.const 127)
+    (i64.const 1)
+   )
+  )
+  (drop
+   (i32.atomic.rmw8_u.cmpxchg
+    (i32.const 120)
+    (i32.const 1)
+    (i32.const 2)
+   )
+  )
+  (drop
+   (i32.atomic.rmw16_u.cmpxchg
+    (i32.const 121)
+    (i32.const 1)
+    (i32.const 2)
+   )
+  )
+  (drop
+   (i32.atomic.rmw.cmpxchg
+    (i32.const 123)
+    (i32.const 1)
+    (i32.const 2)
+   )
+  )
+  (drop
+   (i64.atomic.rmw8_u.cmpxchg
+    (i32.const 120)
+    (i64.const 1)
+    (i64.const 2)
+   )
+  )
+  (drop
+   (i64.atomic.rmw16_u.cmpxchg
+    (i32.const 121)
+    (i64.const 1)
+    (i64.const 2)
+   )
+  )
+  (drop
+   (i64.atomic.rmw32_u.cmpxchg
+    (i32.const 123)
+    (i64.const 1)
+    (i64.const 2)
+   )
+  )
+  (drop
+   (i64.atomic.rmw.cmpxchg
+    (i32.const 127)
+    (i64.const 1)
+    (i64.const 2)
+   )
+  )
  )
  (func $null (; 1 ;) (; has Stack IR ;) (type $v)
   (nop)

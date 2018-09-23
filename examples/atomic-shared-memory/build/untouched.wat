@@ -192,66 +192,73 @@
     (i32.const 127)
    )
   )
-  ;;@ assembly/index.ts:37:9
-  (drop
+  ;;@ assembly/index.ts:37:2
+  (set_local $0
+   ;;@ assembly/index.ts:37:13
    (i32.atomic.rmw8_u.add
-    ;;@ assembly/index.ts:37:17
+    ;;@ assembly/index.ts:37:21
     (i32.const 120)
-    ;;@ assembly/index.ts:37:22
+    ;;@ assembly/index.ts:37:26
     (i32.const 1)
    )
   )
-  ;;@ assembly/index.ts:38:9
-  (drop
+  ;;@ assembly/index.ts:38:2
+  (set_local $0
+   ;;@ assembly/index.ts:38:13
    (i32.atomic.rmw16_u.add
-    ;;@ assembly/index.ts:38:18
+    ;;@ assembly/index.ts:38:22
     (i32.const 121)
-    ;;@ assembly/index.ts:38:23
+    ;;@ assembly/index.ts:38:27
     (i32.const 1)
    )
   )
-  ;;@ assembly/index.ts:39:9
-  (drop
+  ;;@ assembly/index.ts:39:2
+  (set_local $0
+   ;;@ assembly/index.ts:39:13
    (i32.atomic.rmw.add
-    ;;@ assembly/index.ts:39:18
+    ;;@ assembly/index.ts:39:22
     (i32.const 123)
-    ;;@ assembly/index.ts:39:23
+    ;;@ assembly/index.ts:39:27
     (i32.const 1)
    )
   )
-  ;;@ assembly/index.ts:41:9
-  (drop
+  ;;@ assembly/index.ts:41:2
+  (set_local $2
+   ;;@ assembly/index.ts:41:13
    (i64.atomic.rmw8_u.add
-    ;;@ assembly/index.ts:41:17
+    ;;@ assembly/index.ts:41:21
     (i32.const 120)
-    ;;@ assembly/index.ts:41:22
+    ;;@ assembly/index.ts:41:26
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:42:9
-  (drop
+  ;;@ assembly/index.ts:42:2
+  (set_local $2
+   ;;@ assembly/index.ts:42:13
    (i64.atomic.rmw16_u.add
-    ;;@ assembly/index.ts:42:18
+    ;;@ assembly/index.ts:42:22
     (i32.const 121)
-    ;;@ assembly/index.ts:42:23
+    ;;@ assembly/index.ts:42:27
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:43:9
-  (drop
+  ;;@ assembly/index.ts:43:2
+  (set_local $2
+   ;;@ assembly/index.ts:43:13
    (i64.atomic.rmw32_u.add
-    ;;@ assembly/index.ts:43:18
+    ;;@ assembly/index.ts:43:22
     (i32.const 123)
-    ;;@ assembly/index.ts:43:23
+    ;;@ assembly/index.ts:43:27
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:44:9
-  (drop
+  ;;@ assembly/index.ts:44:2
+  (set_local $2
+   ;;@ assembly/index.ts:44:13
    (i64.atomic.rmw.add
-    ;;@ assembly/index.ts:44:18
+    ;;@ assembly/index.ts:44:22
     (i32.const 127)
-    ;;@ assembly/index.ts:44:23
+    ;;@ assembly/index.ts:44:27
     (i64.const 1)
    )
   )
@@ -282,39 +289,43 @@
     (i32.const 1)
    )
   )
-  ;;@ assembly/index.ts:51:9
-  (drop
+  ;;@ assembly/index.ts:51:2
+  (set_local $2
+   ;;@ assembly/index.ts:51:13
    (i64.atomic.rmw8_u.sub
-    ;;@ assembly/index.ts:51:17
+    ;;@ assembly/index.ts:51:21
     (i32.const 120)
-    ;;@ assembly/index.ts:51:22
+    ;;@ assembly/index.ts:51:26
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:52:9
-  (drop
+  ;;@ assembly/index.ts:52:2
+  (set_local $2
+   ;;@ assembly/index.ts:52:13
    (i64.atomic.rmw16_u.sub
-    ;;@ assembly/index.ts:52:18
+    ;;@ assembly/index.ts:52:22
     (i32.const 121)
-    ;;@ assembly/index.ts:52:23
+    ;;@ assembly/index.ts:52:27
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:53:9
-  (drop
+  ;;@ assembly/index.ts:53:2
+  (set_local $2
+   ;;@ assembly/index.ts:53:13
    (i64.atomic.rmw32_u.sub
-    ;;@ assembly/index.ts:53:18
+    ;;@ assembly/index.ts:53:22
     (i32.const 123)
-    ;;@ assembly/index.ts:53:23
+    ;;@ assembly/index.ts:53:27
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:54:9
-  (drop
+  ;;@ assembly/index.ts:54:2
+  (set_local $2
+   ;;@ assembly/index.ts:54:13
    (i64.atomic.rmw.sub
-    ;;@ assembly/index.ts:54:18
+    ;;@ assembly/index.ts:54:22
     (i32.const 127)
-    ;;@ assembly/index.ts:54:23
+    ;;@ assembly/index.ts:54:27
     (i64.const 1)
    )
   )
@@ -345,39 +356,43 @@
     (i32.const 1)
    )
   )
-  ;;@ assembly/index.ts:61:9
-  (drop
+  ;;@ assembly/index.ts:61:2
+  (set_local $2
+   ;;@ assembly/index.ts:61:13
    (i64.atomic.rmw8_u.and
-    ;;@ assembly/index.ts:61:17
+    ;;@ assembly/index.ts:61:21
     (i32.const 120)
-    ;;@ assembly/index.ts:61:22
+    ;;@ assembly/index.ts:61:26
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:62:9
-  (drop
+  ;;@ assembly/index.ts:62:2
+  (set_local $2
+   ;;@ assembly/index.ts:62:13
    (i64.atomic.rmw16_u.and
-    ;;@ assembly/index.ts:62:18
+    ;;@ assembly/index.ts:62:22
     (i32.const 121)
-    ;;@ assembly/index.ts:62:23
+    ;;@ assembly/index.ts:62:27
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:63:9
-  (drop
+  ;;@ assembly/index.ts:63:2
+  (set_local $2
+   ;;@ assembly/index.ts:63:13
    (i64.atomic.rmw32_u.and
-    ;;@ assembly/index.ts:63:18
+    ;;@ assembly/index.ts:63:22
     (i32.const 123)
-    ;;@ assembly/index.ts:63:23
+    ;;@ assembly/index.ts:63:27
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:64:9
-  (drop
+  ;;@ assembly/index.ts:64:2
+  (set_local $2
+   ;;@ assembly/index.ts:64:13
    (i64.atomic.rmw.and
-    ;;@ assembly/index.ts:64:18
+    ;;@ assembly/index.ts:64:22
     (i32.const 127)
-    ;;@ assembly/index.ts:64:23
+    ;;@ assembly/index.ts:64:27
     (i64.const 1)
    )
   )
@@ -408,39 +423,43 @@
     (i32.const 1)
    )
   )
-  ;;@ assembly/index.ts:71:9
-  (drop
+  ;;@ assembly/index.ts:71:2
+  (set_local $2
+   ;;@ assembly/index.ts:71:13
    (i64.atomic.rmw8_u.or
-    ;;@ assembly/index.ts:71:16
+    ;;@ assembly/index.ts:71:20
     (i32.const 120)
-    ;;@ assembly/index.ts:71:21
+    ;;@ assembly/index.ts:71:25
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:72:9
-  (drop
+  ;;@ assembly/index.ts:72:2
+  (set_local $2
+   ;;@ assembly/index.ts:72:13
    (i64.atomic.rmw16_u.or
-    ;;@ assembly/index.ts:72:17
+    ;;@ assembly/index.ts:72:21
     (i32.const 121)
-    ;;@ assembly/index.ts:72:22
+    ;;@ assembly/index.ts:72:26
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:73:9
-  (drop
+  ;;@ assembly/index.ts:73:2
+  (set_local $2
+   ;;@ assembly/index.ts:73:13
    (i64.atomic.rmw32_u.or
-    ;;@ assembly/index.ts:73:17
+    ;;@ assembly/index.ts:73:21
     (i32.const 123)
-    ;;@ assembly/index.ts:73:22
+    ;;@ assembly/index.ts:73:26
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:74:9
-  (drop
+  ;;@ assembly/index.ts:74:2
+  (set_local $2
+   ;;@ assembly/index.ts:74:13
    (i64.atomic.rmw.or
-    ;;@ assembly/index.ts:74:17
+    ;;@ assembly/index.ts:74:21
     (i32.const 127)
-    ;;@ assembly/index.ts:74:22
+    ;;@ assembly/index.ts:74:26
     (i64.const 1)
    )
   )
@@ -471,39 +490,43 @@
     (i32.const 1)
    )
   )
-  ;;@ assembly/index.ts:81:9
-  (drop
+  ;;@ assembly/index.ts:81:2
+  (set_local $2
+   ;;@ assembly/index.ts:81:13
    (i64.atomic.rmw8_u.xor
-    ;;@ assembly/index.ts:81:17
+    ;;@ assembly/index.ts:81:21
     (i32.const 120)
-    ;;@ assembly/index.ts:81:22
+    ;;@ assembly/index.ts:81:26
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:82:9
-  (drop
+  ;;@ assembly/index.ts:82:2
+  (set_local $2
+   ;;@ assembly/index.ts:82:13
    (i64.atomic.rmw16_u.xor
-    ;;@ assembly/index.ts:82:18
+    ;;@ assembly/index.ts:82:22
     (i32.const 121)
-    ;;@ assembly/index.ts:82:23
+    ;;@ assembly/index.ts:82:27
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:83:9
-  (drop
+  ;;@ assembly/index.ts:83:2
+  (set_local $2
+   ;;@ assembly/index.ts:83:13
    (i64.atomic.rmw32_u.xor
-    ;;@ assembly/index.ts:83:18
+    ;;@ assembly/index.ts:83:22
     (i32.const 123)
-    ;;@ assembly/index.ts:83:23
+    ;;@ assembly/index.ts:83:27
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:84:9
-  (drop
+  ;;@ assembly/index.ts:84:2
+  (set_local $2
+   ;;@ assembly/index.ts:84:13
    (i64.atomic.rmw.xor
-    ;;@ assembly/index.ts:84:18
+    ;;@ assembly/index.ts:84:22
     (i32.const 127)
-    ;;@ assembly/index.ts:84:23
+    ;;@ assembly/index.ts:84:27
     (i64.const 1)
    )
   )
@@ -534,39 +557,43 @@
     (i32.const 1)
    )
   )
-  ;;@ assembly/index.ts:91:9
-  (drop
+  ;;@ assembly/index.ts:91:2
+  (set_local $2
+   ;;@ assembly/index.ts:91:13
    (i64.atomic.rmw8_u.xchg
-    ;;@ assembly/index.ts:91:18
+    ;;@ assembly/index.ts:91:22
     (i32.const 120)
-    ;;@ assembly/index.ts:91:23
+    ;;@ assembly/index.ts:91:27
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:92:9
-  (drop
+  ;;@ assembly/index.ts:92:2
+  (set_local $2
+   ;;@ assembly/index.ts:92:13
    (i64.atomic.rmw16_u.xchg
-    ;;@ assembly/index.ts:92:19
+    ;;@ assembly/index.ts:92:23
     (i32.const 121)
-    ;;@ assembly/index.ts:92:24
+    ;;@ assembly/index.ts:92:28
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:93:9
-  (drop
+  ;;@ assembly/index.ts:93:2
+  (set_local $2
+   ;;@ assembly/index.ts:93:13
    (i64.atomic.rmw32_u.xchg
-    ;;@ assembly/index.ts:93:19
+    ;;@ assembly/index.ts:93:23
     (i32.const 123)
-    ;;@ assembly/index.ts:93:24
+    ;;@ assembly/index.ts:93:28
     (i64.const 1)
    )
   )
-  ;;@ assembly/index.ts:94:9
-  (drop
+  ;;@ assembly/index.ts:94:2
+  (set_local $2
+   ;;@ assembly/index.ts:94:13
    (i64.atomic.rmw.xchg
-    ;;@ assembly/index.ts:94:19
+    ;;@ assembly/index.ts:94:23
     (i32.const 127)
-    ;;@ assembly/index.ts:94:24
+    ;;@ assembly/index.ts:94:28
     (i64.const 1)
    )
   )
@@ -603,47 +630,51 @@
     (i32.const 2)
    )
   )
-  ;;@ assembly/index.ts:101:9
-  (drop
+  ;;@ assembly/index.ts:101:2
+  (set_local $2
+   ;;@ assembly/index.ts:101:13
    (i64.atomic.rmw8_u.cmpxchg
-    ;;@ assembly/index.ts:101:21
+    ;;@ assembly/index.ts:101:25
     (i32.const 120)
-    ;;@ assembly/index.ts:101:26
+    ;;@ assembly/index.ts:101:30
     (i64.const 1)
-    ;;@ assembly/index.ts:101:34
+    ;;@ assembly/index.ts:101:38
     (i64.const 2)
    )
   )
-  ;;@ assembly/index.ts:102:9
-  (drop
+  ;;@ assembly/index.ts:102:2
+  (set_local $2
+   ;;@ assembly/index.ts:102:13
    (i64.atomic.rmw16_u.cmpxchg
-    ;;@ assembly/index.ts:102:22
+    ;;@ assembly/index.ts:102:26
     (i32.const 121)
-    ;;@ assembly/index.ts:102:27
+    ;;@ assembly/index.ts:102:31
     (i64.const 1)
-    ;;@ assembly/index.ts:102:35
+    ;;@ assembly/index.ts:102:39
     (i64.const 2)
    )
   )
-  ;;@ assembly/index.ts:103:9
-  (drop
+  ;;@ assembly/index.ts:103:2
+  (set_local $2
+   ;;@ assembly/index.ts:103:13
    (i64.atomic.rmw32_u.cmpxchg
-    ;;@ assembly/index.ts:103:22
+    ;;@ assembly/index.ts:103:26
     (i32.const 123)
-    ;;@ assembly/index.ts:103:27
+    ;;@ assembly/index.ts:103:31
     (i64.const 1)
-    ;;@ assembly/index.ts:103:35
+    ;;@ assembly/index.ts:103:39
     (i64.const 2)
    )
   )
-  ;;@ assembly/index.ts:104:9
-  (drop
+  ;;@ assembly/index.ts:104:2
+  (set_local $2
+   ;;@ assembly/index.ts:104:13
    (i64.atomic.rmw.cmpxchg
-    ;;@ assembly/index.ts:104:22
+    ;;@ assembly/index.ts:104:26
     (i32.const 127)
-    ;;@ assembly/index.ts:104:27
+    ;;@ assembly/index.ts:104:31
     (i64.const 1)
-    ;;@ assembly/index.ts:104:35
+    ;;@ assembly/index.ts:104:39
     (i64.const 2)
    )
   )

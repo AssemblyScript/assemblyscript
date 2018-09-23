@@ -18,8 +18,8 @@ let data = imageData.data;
 
 const memory = new WebAssembly.Memory({
   initial: 32767,
-  shared: true,
   maximum: 32767,
+  shared: true,
 });
 const numCPU = navigator.hardwareConcurrency - 1;
 let profiles = [];
@@ -49,7 +49,7 @@ async function init() {
   wasmModule = await WebAssembly.compile(buffer);
   wasmLibModule = await WebAssembly.compile(libBuffer);
   for (let i = 0; i < numCPU; i++) {
-    let worker = new Worker("./worker.js");
+    let worker = new Worker("./js/worker.js");
     worker.onmessage = onWorkerMessage;
     workers.push(worker);
     let cpuTime = document.createElement("div", { class: "cpu-time" });

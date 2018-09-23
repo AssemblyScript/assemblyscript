@@ -174,9 +174,9 @@ class Ray {
 }
 
 enum Refl_t {
-    DIFF,
-    SPEC,
-    REFR,
+    DIFF = 0x0,
+    SPEC = 0x1,
+    REFR = 0x2
 } // material types, used in radiance()
 
 class Sphere {

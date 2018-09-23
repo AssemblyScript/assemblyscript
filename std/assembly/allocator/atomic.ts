@@ -2,21 +2,21 @@ import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
 
 var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset_ptr: usize = startOffset;
-store<u32>(offset_ptr, (HEAP_BASE + 4 + AL_MASK) & ~AL_MASK);
+store<usize>(offset_ptr, (HEAP_BASE + 4 + AL_MASK) & ~AL_MASK);
 
 @global export function allocator_get_offset(): usize {
-  return Atomic.load<u32>(offset_ptr);
+  return Atomic.load<usize>(offset_ptr);
 }
 
-@global export function allocator_set_offset(old_offset: usize, new_offset: usize): u32 {
-  return Atomic.cmpxchg<u32>(offset_ptr, old_offset, new_offset);
+@global export function allocator_set_offset(old_offset: usize, new_offset: usize): usize {
+  return Atomic.cmpxchg<usize>(offset_ptr, old_offset, new_offset);
 }
 
 @global export function __memory_allocate(size: usize): usize {
   if (size) {
     if (size > MAX_SIZE_32) unreachable();
-    let currentOffset: u32;
-    let top: u32;
+    let currentOffset: usize;
+    let top: usize;
     do {
       currentOffset = allocator_get_offset();
       top = (currentOffset + size + AL_MASK) & ~AL_MASK;
@@ -31,7 +31,7 @@ store<u32>(offset_ptr, (HEAP_BASE + 4 + AL_MASK) & ~AL_MASK);
         }
       }
     } while (
-      Atomic.cmpxchg(offset_ptr, currentOffset, top) != currentOffset
+      Atomic.cmpxchg<usize>(offset_ptr, currentOffset, top) != currentOffset
     );
 
     return currentOffset;
@@ -46,5 +46,5 @@ store<u32>(offset_ptr, (HEAP_BASE + 4 + AL_MASK) & ~AL_MASK);
 }
 
 @global export function __memory_reset(): void {
-  Atomic.store<u32>(offset_ptr, startOffset);
+  Atomic.store<usize>(offset_ptr, startOffset);
 }

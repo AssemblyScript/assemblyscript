@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --importMemory --sharedMemory=0xffff --validate",
-        "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat -O3 --importMemory --sharedMemory=0xffff --validate --noDebug --noAssert",
+        "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --importMemory --sharedMemory=32767 --validate",
+        "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat -O3 --importMemory --sharedMemory=32767 --validate --noDebug --noAssert",
         "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
         "build": "npm run asbuild",
         "watch": "nodemon --exec 'npm run asbuild:untouched' ./assembly/index.ts",
