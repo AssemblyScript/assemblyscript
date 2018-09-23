@@ -147,9 +147,9 @@ export namespace bool {
 
 @builtin export declare function f32(value: void): f32;
 export namespace f32 {
-  export const MIN_VALUE = reinterpret<f32>(0xFF7FFFFF); // -0x1.fffffep+127f
-  export const MAX_VALUE = reinterpret<f32>(0x7F7FFFFF); //  0x1.fffffep+127f
-  export const MIN_POSITIVE_VALUE = reinterpret<f32>(0x00800000); // 0x1p-126f
+  export const MIN_VALUE = reinterpret<f32>(0x00000001); // 0x0.000001p+0f
+  export const MAX_VALUE = reinterpret<f32>(0x7F7FFFFF); // 0x1.fffffep+127f
+  export const MIN_NORMAL_VALUE = reinterpret<f32>(0x00800000); // 0x1p-126f
   export const MIN_SAFE_INTEGER: f32 = -16777215;
   export const MAX_SAFE_INTEGER: f32 =  16777215;
   export const EPSILON = reinterpret<f32>(0x34000000); // 0x1p-23f
@@ -169,9 +169,9 @@ export namespace f32 {
 
 @builtin export declare function f64(value: void): f64;
 export namespace f64 {
-  export const MIN_VALUE = reinterpret<f64>(0xFFEFFFFFFFFFFFFF); // -0x1.fffffffffffffp+1023
-  export const MAX_VALUE = reinterpret<f64>(0x7FEFFFFFFFFFFFFF); //  0x1.fffffffffffffp+1023
-  export const MIN_POSITIVE_VALUE = reinterpret<f64>(0x0010000000000000); // 0x1p-1022
+  export const MIN_VALUE = reinterpret<f64>(0x0000000000000001); // 0x0.0000000000001p+0
+  export const MAX_VALUE = reinterpret<f64>(0x7FEFFFFFFFFFFFFF); // 0x1.fffffffffffffp+1023
+  export const MIN_NORMAL_VALUE = reinterpret<f64>(0x0010000000000000); // 0x1p-1022
   export const MIN_SAFE_INTEGER: f64 = -9007199254740991;
   export const MAX_SAFE_INTEGER: f64 =  9007199254740991;
   export const EPSILON = reinterpret<f64>(0x3CB0000000000000); // 0x1p-52
