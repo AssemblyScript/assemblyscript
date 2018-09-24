@@ -8077,7 +8077,7 @@
     (i32.const 1464)
    )
   )
-  (set_local $0
+  (set_local $1
    (i32.const 1464)
   )
   (set_local $3
@@ -8093,23 +8093,42 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (tee_local $0
+     (if (result i32)
+      (i32.and
+       (i32.load8_u offset=8
+        (get_local $3)
+       )
+       (i32.const 1)
+      )
+      (i32.const 1744)
+      (i32.const 1760)
+     )
+    )
+   )
+  )
   (block $break|0
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $1)
+      (get_local $0)
       (get_local $2)
      )
     )
-    (set_local $0
+    (set_local $1
      (call $~lib/string/String.__concat
-      (get_local $0)
+      (get_local $1)
       (if (result i32)
        (i32.and
         (i32.load8_u offset=8
          (i32.add
           (get_local $3)
-          (get_local $1)
+          (get_local $0)
          )
         )
         (i32.const 1)
@@ -8121,16 +8140,16 @@
     )
     (if
      (get_local $4)
-     (set_local $0
+     (set_local $1
       (call $~lib/string/String.__concat
-       (get_local $0)
+       (get_local $1)
        (i32.const 1776)
       )
      )
     )
-    (set_local $1
+    (set_local $0
      (i32.add
-      (get_local $1)
+      (get_local $0)
       (i32.const 1)
      )
     )
@@ -8138,8 +8157,8 @@
    )
   )
   (call $~lib/string/String.__concat
-   (get_local $0)
-   (tee_local $1
+   (get_local $1)
+   (tee_local $0
     (if (result i32)
      (i32.and
       (i32.load8_u offset=8
@@ -8474,6 +8493,18 @@
      (get_local $1)
     )
     (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $3)
+   )
+   (return
+    (call $~lib/internal/number/itoa<i32>
+     (i32.load offset=8
+      (get_local $4)
+     )
+    )
    )
   )
   (block $break|0
@@ -10255,6 +10286,18 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (call $~lib/internal/number/dtoa
+     (f64.load offset=8
+      (get_local $3)
+     )
+    )
+   )
+  )
   (block $break|0
    (loop $repeat|0
     (br_if $break|0
@@ -10320,7 +10363,7 @@
   (local $6 i32)
   (if
    (i32.lt_s
-    (tee_local $4
+    (tee_local $3
      (i32.sub
       (i32.load offset=4
        (get_local $0)
@@ -10337,7 +10380,7 @@
   (set_local $2
    (i32.const 1464)
   )
-  (set_local $5
+  (set_local $4
    (i32.load
     (get_local $0)
    )
@@ -10350,6 +10393,16 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $3)
+   )
+   (return
+    (i32.load offset=8
+     (get_local $4)
+    )
+   )
+  )
   (block $break|0
    (set_local $0
     (i32.const 0)
@@ -10358,14 +10411,14 @@
     (br_if $break|0
      (i32.ge_s
       (get_local $0)
-      (get_local $4)
+      (get_local $3)
      )
     )
     (if
-     (tee_local $3
+     (tee_local $5
       (i32.load offset=8
        (i32.add
-        (get_local $5)
+        (get_local $4)
         (i32.shl
          (get_local $0)
          (i32.const 2)
@@ -10376,7 +10429,7 @@
      (set_local $2
       (call $~lib/string/String.__concat
        (get_local $2)
-       (get_local $3)
+       (get_local $5)
       )
      )
     )
@@ -10399,12 +10452,12 @@
    )
   )
   (if
-   (tee_local $3
+   (tee_local $5
     (i32.load offset=8
      (i32.add
-      (get_local $5)
+      (get_local $4)
       (i32.shl
-       (get_local $4)
+       (get_local $3)
        (i32.const 2)
       )
      )
@@ -10413,7 +10466,7 @@
    (set_local $2
     (call $~lib/string/String.__concat
      (get_local $2)
-     (get_local $3)
+     (get_local $5)
     )
    )
   )
@@ -10473,6 +10526,14 @@
      (i32.const 1776)
     )
     (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (i32.const 4216)
    )
   )
   (block $break|0
@@ -10587,6 +10648,18 @@
      (i32.const 1776)
     )
     (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (call $~lib/internal/number/itoa<i8>
+     (i32.load8_s offset=8
+      (get_local $3)
+     )
+    )
    )
   )
   (block $break|0
@@ -10710,6 +10783,18 @@
      (i32.const 1776)
     )
     (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (call $~lib/internal/number/itoa<u16>
+     (i32.load16_u offset=8
+      (get_local $3)
+     )
+    )
    )
   )
   (block $break|0
@@ -11074,6 +11159,18 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (call $~lib/internal/number/itoa<u64>
+     (i64.load offset=8
+      (get_local $3)
+     )
+    )
+   )
+  )
   (block $break|0
    (loop $repeat|0
     (br_if $break|0
@@ -11287,6 +11384,18 @@
      (get_local $1)
     )
     (i32.const 0)
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $3)
+   )
+   (return
+    (call $~lib/internal/number/itoa<u8>
+     (i32.load8_u offset=8
+      (get_local $4)
+     )
+    )
    )
   )
   (block $break|0

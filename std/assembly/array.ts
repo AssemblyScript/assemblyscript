@@ -366,24 +366,36 @@ export class Array<T> {
     var buffer = this.buffer_;
     var hasSeparator = separator.length != 0;
     if (value instanceof bool) {
+      if (!lastIndex) {
+        return loadUnsafe<T,T>(buffer, 0) ? "true" : "false";
+      }
       for (let i = 0; i < lastIndex; ++i) {
         result += loadUnsafe<T,T>(buffer, i) ? "true" : "false";
         if (hasSeparator) result += separator;
       }
       result += loadUnsafe<T,T>(buffer, lastIndex) ? "true" : "false";
     } else if (isInteger<T>()) {
+      if (!lastIndex) {
+        return changetype<string>(itoa<T>(loadUnsafe<T,T>(buffer, 0)));
+      }
       for (let i = 0; i < lastIndex; ++i) {
         result += itoa<T>(loadUnsafe<T,T>(buffer, i));
         if (hasSeparator) result += separator;
       }
       result += itoa<T>(loadUnsafe<T,T>(buffer, lastIndex));
     } else if (isFloat<T>()) {
+      if (!lastIndex) {
+        return changetype<string>(dtoa(loadUnsafe<T,f64>(buffer, 0)));
+      }
       for (let i = 0; i < lastIndex; ++i) {
         result += dtoa(loadUnsafe<T,f64>(buffer, i));
         if (hasSeparator) result += separator;
       }
       result += dtoa(loadUnsafe<T,f64>(buffer, lastIndex));
     } else if (isString<T>()) {
+      if (!lastIndex) {
+        return loadUnsafe<T,string>(buffer, 0);
+      }
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) result += value;
@@ -400,6 +412,7 @@ export class Array<T> {
       value = loadUnsafe<T,T>(buffer, lastIndex);
       if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
     } else if (isReference<T>()) { // References
+      if (!lastIndex) return "[object Object]";
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) result += "[object Object]";

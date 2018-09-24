@@ -13145,6 +13145,34 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (if (result i32)
+     (i32.and
+      (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.1 (result i32)
+       (set_local $7
+        (i32.const 0)
+       )
+       (i32.load8_u offset=8
+        (i32.add
+         (get_local $5)
+         (i32.shl
+          (get_local $7)
+          (i32.const 0)
+         )
+        )
+       )
+      )
+      (i32.const 1)
+     )
+     (i32.const 1744)
+     (i32.const 1760)
+    )
+   )
+  )
   (block $break|0
    (set_local $7
     (i32.const 0)
@@ -13164,7 +13192,7 @@
        (get_local $3)
        (if (result i32)
         (i32.and
-         (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.1 (result i32)
+         (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.3 (result i32)
           (i32.load8_u offset=8
            (i32.add
             (get_local $5)
@@ -13206,7 +13234,7 @@
     (get_local $3)
     (if (result i32)
      (i32.and
-      (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.3 (result i32)
+      (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.5 (result i32)
        (i32.load8_u offset=8
         (i32.add
          (get_local $5)
@@ -13640,6 +13668,29 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (call $~lib/internal/number/itoa<i32>
+     (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.25 (result i32)
+      (set_local $7
+       (i32.const 0)
+      )
+      (i32.load offset=8
+       (i32.add
+        (get_local $5)
+        (i32.shl
+         (get_local $7)
+         (i32.const 2)
+        )
+       )
+      )
+     )
+    )
+   )
+  )
   (block $break|0
    (set_local $7
     (i32.const 0)
@@ -13658,7 +13709,7 @@
       (call $~lib/string/String.__concat
        (get_local $3)
        (call $~lib/internal/number/itoa<i32>
-        (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.25 (result i32)
+        (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.26 (result i32)
          (i32.load offset=8
           (i32.add
            (get_local $5)
@@ -13695,7 +13746,7 @@
    (call $~lib/string/String.__concat
     (get_local $3)
     (call $~lib/internal/number/itoa<i32>
-     (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.26 (result i32)
+     (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.27 (result i32)
       (i32.load offset=8
        (i32.add
         (get_local $5)
@@ -15834,6 +15885,29 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (call $~lib/internal/number/dtoa
+     (block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.3 (result f64)
+      (set_local $7
+       (i32.const 0)
+      )
+      (f64.load offset=8
+       (i32.add
+        (get_local $5)
+        (i32.shl
+         (get_local $7)
+         (i32.const 3)
+        )
+       )
+      )
+     )
+    )
+   )
+  )
   (block $break|0
    (set_local $7
     (i32.const 0)
@@ -15852,7 +15926,7 @@
       (call $~lib/string/String.__concat
        (get_local $3)
        (call $~lib/internal/number/dtoa
-        (block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.3 (result f64)
+        (block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.4 (result f64)
          (f64.load offset=8
           (i32.add
            (get_local $5)
@@ -15889,7 +15963,7 @@
    (call $~lib/string/String.__concat
     (get_local $3)
     (call $~lib/internal/number/dtoa
-     (block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.4 (result f64)
+     (block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.5 (result f64)
       (f64.load offset=8
        (i32.add
         (get_local $5)
@@ -15945,6 +16019,27 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.3 (result i32)
+     (set_local $7
+      (i32.const 0)
+     )
+     (i32.load offset=8
+      (i32.add
+       (get_local $5)
+       (i32.shl
+        (get_local $7)
+        (i32.const 2)
+       )
+      )
+     )
+    )
+   )
+  )
   (block $break|0
    (set_local $7
     (i32.const 0)
@@ -15960,7 +16055,7 @@
     )
     (block
      (set_local $4
-      (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.3 (result i32)
+      (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.4 (result i32)
        (i32.load offset=8
         (i32.add
          (get_local $5)
@@ -16001,7 +16096,7 @@
    )
   )
   (set_local $4
-   (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.4 (result i32)
+   (block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.5 (result i32)
     (i32.load offset=8
      (i32.add
       (get_local $5)
@@ -16183,6 +16278,14 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (i32.const 4216)
+   )
+  )
   (block $break|0
    (set_local $7
     (i32.const 0)
@@ -16315,6 +16418,29 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (call $~lib/internal/number/itoa<i8>
+     (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.0 (result i32)
+      (set_local $7
+       (i32.const 0)
+      )
+      (i32.load8_s offset=8
+       (i32.add
+        (get_local $5)
+        (i32.shl
+         (get_local $7)
+         (i32.const 0)
+        )
+       )
+      )
+     )
+    )
+   )
+  )
   (block $break|0
    (set_local $7
     (i32.const 0)
@@ -16333,7 +16459,7 @@
       (call $~lib/string/String.__concat
        (get_local $3)
        (call $~lib/internal/number/itoa<i8>
-        (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.0 (result i32)
+        (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.1 (result i32)
          (i32.load8_s offset=8
           (i32.add
            (get_local $5)
@@ -16370,7 +16496,7 @@
    (call $~lib/string/String.__concat
     (get_local $3)
     (call $~lib/internal/number/itoa<i8>
-     (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.1 (result i32)
+     (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.2 (result i32)
       (i32.load8_s offset=8
        (i32.add
         (get_local $5)
@@ -16466,6 +16592,29 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (call $~lib/internal/number/itoa<u16>
+     (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.0 (result i32)
+      (set_local $7
+       (i32.const 0)
+      )
+      (i32.load16_u offset=8
+       (i32.add
+        (get_local $5)
+        (i32.shl
+         (get_local $7)
+         (i32.const 1)
+        )
+       )
+      )
+     )
+    )
+   )
+  )
   (block $break|0
    (set_local $7
     (i32.const 0)
@@ -16484,7 +16633,7 @@
       (call $~lib/string/String.__concat
        (get_local $3)
        (call $~lib/internal/number/itoa<u16>
-        (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.0 (result i32)
+        (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.1 (result i32)
          (i32.load16_u offset=8
           (i32.add
            (get_local $5)
@@ -16521,7 +16670,7 @@
    (call $~lib/string/String.__concat
     (get_local $3)
     (call $~lib/internal/number/itoa<u16>
-     (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.1 (result i32)
+     (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.2 (result i32)
       (i32.load16_u offset=8
        (i32.add
         (get_local $5)
@@ -16935,6 +17084,29 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (call $~lib/internal/number/itoa<u64>
+     (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.1 (result i64)
+      (set_local $7
+       (i32.const 0)
+      )
+      (i64.load offset=8
+       (i32.add
+        (get_local $5)
+        (i32.shl
+         (get_local $7)
+         (i32.const 3)
+        )
+       )
+      )
+     )
+    )
+   )
+  )
   (block $break|0
    (set_local $7
     (i32.const 0)
@@ -16953,7 +17125,7 @@
       (call $~lib/string/String.__concat
        (get_local $3)
        (call $~lib/internal/number/itoa<u64>
-        (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.1 (result i64)
+        (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.2 (result i64)
          (i64.load offset=8
           (i32.add
            (get_local $5)
@@ -16990,7 +17162,7 @@
    (call $~lib/string/String.__concat
     (get_local $3)
     (call $~lib/internal/number/itoa<u64>
-     (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.2 (result i64)
+     (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.3 (result i64)
       (i64.load offset=8
        (i32.add
         (get_local $5)
@@ -17181,6 +17353,29 @@
     (i32.const 0)
    )
   )
+  (if
+   (i32.eqz
+    (get_local $2)
+   )
+   (return
+    (call $~lib/internal/number/itoa<u8>
+     (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.1 (result i32)
+      (set_local $7
+       (i32.const 0)
+      )
+      (i32.load8_u offset=8
+       (i32.add
+        (get_local $5)
+        (i32.shl
+         (get_local $7)
+         (i32.const 0)
+        )
+       )
+      )
+     )
+    )
+   )
+  )
   (block $break|0
    (set_local $7
     (i32.const 0)
@@ -17199,7 +17394,7 @@
       (call $~lib/string/String.__concat
        (get_local $3)
        (call $~lib/internal/number/itoa<u8>
-        (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.1 (result i32)
+        (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.2 (result i32)
          (i32.load8_u offset=8
           (i32.add
            (get_local $5)
@@ -17236,7 +17431,7 @@
    (call $~lib/string/String.__concat
     (get_local $3)
     (call $~lib/internal/number/itoa<u8>
-     (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.2 (result i32)
+     (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.3 (result i32)
       (i32.load8_u offset=8
        (i32.add
         (get_local $5)
