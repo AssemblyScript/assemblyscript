@@ -400,12 +400,16 @@ export class Array<T> {
       }
       value = loadUnsafe<T,T>(buffer, lastIndex);
       if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
-    } else { // References
+    } else if (isReference<T>()) { // References
       for (let i = 0; i < lastIndex; ++i) {
-        result += "[object Object]";
+        value = loadUnsafe<T,T>(buffer, i);
+        if (value) result += "[object Object]";
         if (hasSeparator) result += separator;
       }
-      result += "[object Object]";
+      value = loadUnsafe<T,T>(buffer, lastIndex);
+      if (value) result += "[object Object]";
+    } else {
+      assert(false); // Unsupported generic typename
     }
     return result;
   }
