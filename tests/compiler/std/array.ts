@@ -733,15 +733,15 @@ assertSorted<string>(randomStrings400, (a: string, b: string): i32 => <i32>(a > 
 
 // Array#join //////////////////////////////////////////////////////////////////////////////////////
 
-class Ref {}
+class Ref { constructor() {} }
 
 assert((<bool[]>[true, false]).join() == "true,false");
 assert((<i32[]>[1, 2, 3]).join("") == "123");
 assert((<i32[]>[1, 2, 3]).join("-") == "1-2-3");
 assert((<f64[]>[1.0, 2.0, 3.0]).join(", ") == "1.0, 2.0, 3.0");
 assert((<string[]>["", "1", null]).join("") == "1");
-// var refArr: Ref[] = [new Ref(), new Ref()];
-// assert(refArr.join() == "[object Object],[object Object]");
+var refArr: Ref[] = [new Ref(), null, new Ref()];
+assert(refArr.join() == "[object Object],,[object Object]");
 
 // Array#toString //////////////////////////////////////////////////////////////////////////////////
 
