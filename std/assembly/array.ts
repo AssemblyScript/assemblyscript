@@ -367,13 +367,13 @@ export class Array<T> {
     var hasSeparator = separator.length != 0;
     if (value instanceof bool) {
       if (!lastIndex) {
-        return loadUnsafe<T,T>(buffer, 0) ? "true" : "false";
+        return select<string>("true", "false", loadUnsafe<T,bool>(buffer, 0));
       }
       for (let i = 0; i < lastIndex; ++i) {
-        result += loadUnsafe<T,T>(buffer, i) ? "true" : "false";
+        result += select<string>("true", "false", loadUnsafe<T,bool>(buffer, i));
         if (hasSeparator) result += separator;
       }
-      result += loadUnsafe<T,T>(buffer, lastIndex) ? "true" : "false";
+      result += select<string>("true", "false", loadUnsafe<T,bool>(buffer, lastIndex));
     } else if (isInteger<T>()) {
       if (!lastIndex) {
         return changetype<string>(itoa<T>(loadUnsafe<T,T>(buffer, 0)));

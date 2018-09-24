@@ -8077,7 +8077,7 @@
     (i32.const 1464)
    )
   )
-  (set_local $1
+  (set_local $0
    (i32.const 1464)
   )
   (set_local $3
@@ -8098,16 +8098,14 @@
     (get_local $2)
    )
    (return
-    (tee_local $0
-     (if (result i32)
-      (i32.and
-       (i32.load8_u offset=8
-        (get_local $3)
-       )
-       (i32.const 1)
+    (select
+     (i32.const 1744)
+     (i32.const 1760)
+     (i32.and
+      (i32.load8_u offset=8
+       (get_local $3)
       )
-      (i32.const 1744)
-      (i32.const 1760)
+      (i32.const 1)
      )
     )
    )
@@ -8116,40 +8114,40 @@
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $0)
+      (get_local $1)
       (get_local $2)
      )
     )
-    (set_local $1
+    (set_local $0
      (call $~lib/string/String.__concat
-      (get_local $1)
-      (if (result i32)
+      (get_local $0)
+      (select
+       (i32.const 1744)
+       (i32.const 1760)
        (i32.and
         (i32.load8_u offset=8
          (i32.add
           (get_local $3)
-          (get_local $0)
+          (get_local $1)
          )
         )
         (i32.const 1)
        )
-       (i32.const 1744)
-       (i32.const 1760)
       )
      )
     )
     (if
      (get_local $4)
-     (set_local $1
+     (set_local $0
       (call $~lib/string/String.__concat
-       (get_local $1)
+       (get_local $0)
        (i32.const 1776)
       )
      )
     )
-    (set_local $0
+    (set_local $1
      (i32.add
-      (get_local $0)
+      (get_local $1)
       (i32.const 1)
      )
     )
@@ -8157,20 +8155,18 @@
    )
   )
   (call $~lib/string/String.__concat
-   (get_local $1)
-   (tee_local $0
-    (if (result i32)
-     (i32.and
-      (i32.load8_u offset=8
-       (i32.add
-        (get_local $3)
-        (get_local $2)
-       )
+   (get_local $0)
+   (select
+    (i32.const 1744)
+    (i32.const 1760)
+    (i32.and
+     (i32.load8_u offset=8
+      (i32.add
+       (get_local $3)
+       (get_local $2)
       )
-      (i32.const 1)
      )
-     (i32.const 1744)
-     (i32.const 1760)
+     (i32.const 1)
     )
    )
   )

@@ -13150,9 +13150,11 @@
     (get_local $2)
    )
    (return
-    (if (result i32)
+    (select
+     (i32.const 1744)
+     (i32.const 1760)
      (i32.and
-      (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.1 (result i32)
+      (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.0 (result i32)
        (set_local $7
         (i32.const 0)
        )
@@ -13168,8 +13170,6 @@
       )
       (i32.const 1)
      )
-     (i32.const 1744)
-     (i32.const 1760)
     )
    )
   )
@@ -13190,9 +13190,11 @@
      (set_local $3
       (call $~lib/string/String.__concat
        (get_local $3)
-       (if (result i32)
+       (select
+        (i32.const 1744)
+        (i32.const 1760)
         (i32.and
-         (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.3 (result i32)
+         (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.1 (result i32)
           (i32.load8_u offset=8
            (i32.add
             (get_local $5)
@@ -13205,8 +13207,6 @@
          )
          (i32.const 1)
         )
-        (i32.const 1744)
-        (i32.const 1760)
        )
       )
      )
@@ -13232,9 +13232,11 @@
   (set_local $3
    (call $~lib/string/String.__concat
     (get_local $3)
-    (if (result i32)
+    (select
+     (i32.const 1744)
+     (i32.const 1760)
      (i32.and
-      (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.5 (result i32)
+      (block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.2 (result i32)
        (i32.load8_u offset=8
         (i32.add
          (get_local $5)
@@ -13247,8 +13249,6 @@
       )
       (i32.const 1)
      )
-     (i32.const 1744)
-     (i32.const 1760)
     )
    )
   )
