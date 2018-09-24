@@ -13,8 +13,7 @@ import {
   weakHeapSort
 } from "./internal/array";
 
-import { itoa } from "./internal/itoa";
-import { dtoa } from "./internal/dtoa";
+import { itoa, dtoa } from "./internal/number";
 
 export class Array<T> {
 

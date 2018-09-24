@@ -36,13 +36,13 @@
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
  (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
- (global $~lib/internal/dtoa/_K (mut i32) (i32.const 0))
- (global $~lib/internal/dtoa/_frc (mut i64) (i64.const 0))
- (global $~lib/internal/dtoa/_exp (mut i32) (i32.const 0))
- (global $~lib/internal/dtoa/_frc_minus (mut i64) (i64.const 0))
- (global $~lib/internal/dtoa/_frc_plus (mut i64) (i64.const 0))
- (global $~lib/internal/dtoa/_frc_pow (mut i64) (i64.const 0))
- (global $~lib/internal/dtoa/_exp_pow (mut i32) (i32.const 0))
+ (global $~lib/internal/number/_K (mut i32) (i32.const 0))
+ (global $~lib/internal/number/_frc (mut i64) (i64.const 0))
+ (global $~lib/internal/number/_exp (mut i32) (i32.const 0))
+ (global $~lib/internal/number/_frc_minus (mut i64) (i64.const 0))
+ (global $~lib/internal/number/_frc_plus (mut i64) (i64.const 0))
+ (global $~lib/internal/number/_frc_pow (mut i64) (i64.const 0))
+ (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $std/array/arr8 (mut i32) (i32.const 120))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
@@ -812,7 +812,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 26)
+     (i32.const 25)
      (i32.const 39)
     )
     (unreachable)
@@ -3726,7 +3726,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 168)
+       (i32.const 167)
        (i32.const 42)
       )
       (unreachable)
@@ -3815,7 +3815,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 180)
+     (i32.const 179)
      (i32.const 20)
     )
     (unreachable)
@@ -3900,7 +3900,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 270)
+       (i32.const 269)
        (i32.const 42)
       )
       (unreachable)
@@ -4003,7 +4003,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 241)
+     (i32.const 240)
      (i32.const 20)
     )
     (unreachable)
@@ -4535,7 +4535,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 90)
+       (i32.const 89)
        (i32.const 41)
       )
       (unreachable)
@@ -5087,7 +5087,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 26)
+     (i32.const 25)
      (i32.const 39)
     )
     (unreachable)
@@ -6829,7 +6829,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 332)
      (i32.const 4)
     )
     (unreachable)
@@ -7906,7 +7906,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 332)
      (i32.const 4)
     )
     (unreachable)
@@ -9014,7 +9014,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 332)
      (i32.const 4)
     )
     (unreachable)
@@ -10022,7 +10022,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 332)
      (i32.const 4)
     )
     (unreachable)
@@ -10520,7 +10520,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 26)
+     (i32.const 25)
      (i32.const 39)
     )
     (unreachable)
@@ -10617,7 +10617,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 90)
+       (i32.const 89)
        (i32.const 41)
       )
       (unreachable)
@@ -10936,7 +10936,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 332)
      (i32.const 4)
     )
     (unreachable)
@@ -11160,7 +11160,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 26)
+     (i32.const 25)
      (i32.const 39)
     )
     (unreachable)
@@ -11280,7 +11280,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 90)
+       (i32.const 89)
        (i32.const 41)
       )
       (unreachable)
@@ -11556,7 +11556,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 332)
      (i32.const 4)
     )
     (unreachable)
@@ -12216,7 +12216,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 333)
+     (i32.const 332)
      (i32.const 4)
     )
     (unreachable)
@@ -12612,7 +12612,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 26)
+     (i32.const 25)
      (i32.const 39)
     )
     (unreachable)
@@ -13000,7 +13000,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 90)
+       (i32.const 89)
        (i32.const 41)
       )
       (unreachable)
@@ -13226,7 +13226,7 @@
   )
   (get_local $3)
  )
- (func $~lib/internal/itoa/decimalCount32 (; 167 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/decimalCount32 (; 167 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.lt_u
@@ -13318,7 +13318,7 @@
   )
   (unreachable)
  )
- (func $~lib/internal/itoa/utoa32_lut (; 168 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 168 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -13328,7 +13328,7 @@
   (local $9 i64)
   (set_local $3
    (i32.load
-    (block $~lib/internal/itoa/DIGITS|inlined.0 (result i32)
+    (block $~lib/internal/number/DIGITS|inlined.0 (result i32)
      (i32.const 2392)
     )
    )
@@ -13537,7 +13537,7 @@
    )
   )
  )
- (func $~lib/internal/itoa/itoa32 (; 169 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa32 (; 169 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -13566,7 +13566,7 @@
   )
   (set_local $2
    (i32.add
-    (call $~lib/internal/itoa/decimalCount32
+    (call $~lib/internal/number/decimalCount32
      (get_local $0)
     )
     (get_local $1)
@@ -13577,8 +13577,8 @@
     (get_local $2)
    )
   )
-  (block $~lib/internal/itoa/utoa32_core|inlined.0
-   (call $~lib/internal/itoa/utoa32_lut
+  (block $~lib/internal/number/utoa32_core|inlined.0
+   (call $~lib/internal/number/utoa32_lut
     (get_local $3)
     (get_local $0)
     (get_local $2)
@@ -13593,9 +13593,9 @@
   )
   (get_local $3)
  )
- (func $~lib/internal/itoa/itoa<i32> (; 170 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i32> (; 170 ;) (type $ii) (param $0 i32) (result i32)
   (return
-   (call $~lib/internal/itoa/itoa32
+   (call $~lib/internal/number/itoa32
     (get_local $0)
    )
   )
@@ -13657,7 +13657,7 @@
      (set_local $3
       (call $~lib/string/String.__concat
        (get_local $3)
-       (call $~lib/internal/itoa/itoa<i32>
+       (call $~lib/internal/number/itoa<i32>
         (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.25 (result i32)
          (i32.load offset=8
           (i32.add
@@ -13694,7 +13694,7 @@
   (set_local $3
    (call $~lib/string/String.__concat
     (get_local $3)
-    (call $~lib/internal/itoa/itoa<i32>
+    (call $~lib/internal/number/itoa<i32>
      (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.26 (result i32)
       (i32.load offset=8
        (i32.add
@@ -13720,7 +13720,7 @@
    (f64.const 0)
   )
  )
- (func $~lib/internal/dtoa/genDigits (; 173 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/number/genDigits (; 173 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -13783,7 +13783,7 @@
    )
   )
   (set_local $14
-   (call $~lib/internal/itoa/decimalCount32
+   (call $~lib/internal/number/decimalCount32
     (get_local $12)
    )
   )
@@ -13792,7 +13792,7 @@
   )
   (set_local $16
    (i32.load
-    (block $~lib/internal/itoa/POWERS10|inlined.0 (result i32)
+    (block $~lib/internal/number/POWERS10|inlined.0 (result i32)
      (i32.const 4048)
     )
    )
@@ -14102,13 +14102,13 @@
          (get_local $5)
         )
         (block
-         (set_global $~lib/internal/dtoa/_K
+         (set_global $~lib/internal/number/_K
           (i32.add
-           (get_global $~lib/internal/dtoa/_K)
+           (get_global $~lib/internal/number/_K)
            (get_local $14)
           )
          )
-         (block $~lib/internal/dtoa/grisuRound|inlined.0
+         (block $~lib/internal/number/grisuRound|inlined.0
           (set_local $20
            (i64.shl
             (block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.2 (result i64)
@@ -14313,9 +14313,9 @@
          (get_local $5)
         )
         (block
-         (set_global $~lib/internal/dtoa/_K
+         (set_global $~lib/internal/number/_K
           (i32.add
-           (get_global $~lib/internal/dtoa/_K)
+           (get_global $~lib/internal/number/_K)
            (get_local $14)
           )
          )
@@ -14341,7 +14341,7 @@
            )
           )
          )
-         (block $~lib/internal/dtoa/grisuRound|inlined.1
+         (block $~lib/internal/number/grisuRound|inlined.1
           (set_local $17
            (i32.add
             (get_local $0)
@@ -14446,7 +14446,7 @@
   )
   (get_local $15)
  )
- (func $~lib/internal/dtoa/prettify (; 174 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/prettify (; 174 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -14742,7 +14742,7 @@
         (get_global $~lib/internal/string/CharCode.e)
        )
        (set_local $1
-        (block $~lib/internal/dtoa/genExponent|inlined.0 (result i32)
+        (block $~lib/internal/number/genExponent|inlined.0 (result i32)
          (set_local $4
           (i32.add
            (get_local $0)
@@ -14772,14 +14772,14 @@
          )
          (set_local $7
           (i32.add
-           (call $~lib/internal/itoa/decimalCount32
+           (call $~lib/internal/number/decimalCount32
             (get_local $5)
            )
            (i32.const 1)
           )
          )
-         (block $~lib/internal/itoa/utoa32_core|inlined.1
-          (call $~lib/internal/itoa/utoa32_lut
+         (block $~lib/internal/number/utoa32_core|inlined.1
+          (call $~lib/internal/number/utoa32_lut
            (get_local $4)
            (get_local $5)
            (get_local $7)
@@ -14855,7 +14855,7 @@
        (set_local $1
         (i32.add
          (get_local $1)
-         (block $~lib/internal/dtoa/genExponent|inlined.1 (result i32)
+         (block $~lib/internal/number/genExponent|inlined.1 (result i32)
           (set_local $4
            (i32.add
             (i32.add
@@ -14888,14 +14888,14 @@
           )
           (set_local $8
            (i32.add
-            (call $~lib/internal/itoa/decimalCount32
+            (call $~lib/internal/number/decimalCount32
              (get_local $5)
             )
             (i32.const 1)
            )
           )
-          (block $~lib/internal/itoa/utoa32_core|inlined.2
-           (call $~lib/internal/itoa/utoa32_lut
+          (block $~lib/internal/number/utoa32_core|inlined.2
+           (call $~lib/internal/number/utoa32_lut
             (get_local $4)
             (get_local $5)
             (get_local $8)
@@ -14926,7 +14926,7 @@
   )
   (unreachable)
  )
- (func $~lib/internal/dtoa/dtoa_core (; 175 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/internal/number/dtoa_core (; 175 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i64)
   (local $4 i32)
@@ -14971,7 +14971,7 @@
    )
   )
   (set_local $24
-   (block $~lib/internal/dtoa/grisu2|inlined.0 (result i32)
+   (block $~lib/internal/number/grisu2|inlined.0 (result i32)
     (set_local $3
      (i64.reinterpret/f64
       (get_local $1)
@@ -15024,7 +15024,7 @@
       )
      )
     )
-    (block $~lib/internal/dtoa/normalizedBoundaries|inlined.0
+    (block $~lib/internal/number/normalizedBoundaries|inlined.0
      (set_local $7
       (i64.add
        (i64.shl
@@ -15070,10 +15070,10 @@
        )
       )
      )
-     (set_global $~lib/internal/dtoa/_frc_plus
+     (set_global $~lib/internal/number/_frc_plus
       (get_local $7)
      )
-     (set_global $~lib/internal/dtoa/_frc_minus
+     (set_global $~lib/internal/number/_frc_minus
       (i64.shl
        (i64.sub
         (i64.shl
@@ -15095,13 +15095,13 @@
        )
       )
      )
-     (set_global $~lib/internal/dtoa/_exp
+     (set_global $~lib/internal/number/_exp
       (get_local $8)
      )
     )
-    (block $~lib/internal/dtoa/getCachedPower|inlined.0
+    (block $~lib/internal/number/getCachedPower|inlined.0
      (set_local $10
-      (get_global $~lib/internal/dtoa/_exp)
+      (get_global $~lib/internal/number/_exp)
      )
      (set_local $11
       (f64.add
@@ -15142,7 +15142,7 @@
        (i32.const 1)
       )
      )
-     (set_global $~lib/internal/dtoa/_K
+     (set_global $~lib/internal/number/_K
       (i32.sub
        (i32.const 348)
        (i32.shl
@@ -15153,19 +15153,19 @@
      )
      (set_local $12
       (i32.load
-       (block $~lib/internal/dtoa/FRC_POWERS|inlined.0 (result i32)
+       (block $~lib/internal/number/FRC_POWERS|inlined.0 (result i32)
         (i32.const 3712)
        )
       )
      )
      (set_local $13
       (i32.load
-       (block $~lib/internal/dtoa/EXP_POWERS|inlined.0 (result i32)
+       (block $~lib/internal/number/EXP_POWERS|inlined.0 (result i32)
         (i32.const 3976)
        )
       )
      )
-     (set_global $~lib/internal/dtoa/_frc_pow
+     (set_global $~lib/internal/number/_frc_pow
       (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.0 (result i64)
        (i64.load offset=8
         (i32.add
@@ -15178,7 +15178,7 @@
        )
       )
      )
-     (set_global $~lib/internal/dtoa/_exp_pow
+     (set_global $~lib/internal/number/_exp_pow
       (block $~lib/internal/arraybuffer/loadUnsafe<i16,i32>|inlined.0 (result i32)
        (i32.load16_s offset=8
         (i32.add
@@ -15214,13 +15214,13 @@
      )
     )
     (set_local $7
-     (get_global $~lib/internal/dtoa/_frc_pow)
+     (get_global $~lib/internal/number/_frc_pow)
     )
     (set_local $12
-     (get_global $~lib/internal/dtoa/_exp_pow)
+     (get_global $~lib/internal/number/_exp_pow)
     )
     (set_local $20
-     (block $~lib/internal/dtoa/umul64f|inlined.0 (result i64)
+     (block $~lib/internal/number/umul64f|inlined.0 (result i64)
       (set_local $14
        (i64.and
         (get_local $6)
@@ -15306,7 +15306,7 @@
      )
     )
     (set_local $8
-     (block $~lib/internal/dtoa/umul64e|inlined.0 (result i32)
+     (block $~lib/internal/number/umul64e|inlined.0 (result i32)
       (i32.add
        (i32.add
         (get_local $4)
@@ -15318,9 +15318,9 @@
     )
     (set_local $22
      (i64.sub
-      (block $~lib/internal/dtoa/umul64f|inlined.1 (result i64)
+      (block $~lib/internal/number/umul64f|inlined.1 (result i64)
        (set_local $19
-        (get_global $~lib/internal/dtoa/_frc_plus)
+        (get_global $~lib/internal/number/_frc_plus)
        )
        (set_local $18
         (i64.and
@@ -15409,9 +15409,9 @@
      )
     )
     (set_local $9
-     (block $~lib/internal/dtoa/umul64e|inlined.1 (result i32)
+     (block $~lib/internal/number/umul64e|inlined.1 (result i32)
       (set_local $9
-       (get_global $~lib/internal/dtoa/_exp)
+       (get_global $~lib/internal/number/_exp)
       )
       (i32.add
        (i32.add
@@ -15424,9 +15424,9 @@
     )
     (set_local $23
      (i64.add
-      (block $~lib/internal/dtoa/umul64f|inlined.2 (result i64)
+      (block $~lib/internal/number/umul64f|inlined.2 (result i64)
        (set_local $21
-        (get_global $~lib/internal/dtoa/_frc_minus)
+        (get_global $~lib/internal/number/_frc_minus)
        )
        (set_local $14
         (i64.and
@@ -15520,7 +15520,7 @@
       (get_local $23)
      )
     )
-    (call $~lib/internal/dtoa/genDigits
+    (call $~lib/internal/number/genDigits
      (get_local $0)
      (get_local $20)
      (get_local $8)
@@ -15532,7 +15532,7 @@
    )
   )
   (set_local $24
-   (call $~lib/internal/dtoa/prettify
+   (call $~lib/internal/number/prettify
     (i32.add
      (get_local $0)
      (i32.shl
@@ -15544,7 +15544,7 @@
      (get_local $24)
      (get_local $2)
     )
-    (get_global $~lib/internal/dtoa/_K)
+    (get_global $~lib/internal/number/_K)
    )
   )
   (i32.add
@@ -15708,7 +15708,7 @@
   )
   (get_local $10)
  )
- (func $~lib/internal/dtoa/dtoa (; 177 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/number/dtoa (; 177 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -15754,7 +15754,7 @@
    )
   )
   (set_local $2
-   (call $~lib/internal/dtoa/dtoa_core
+   (call $~lib/internal/number/dtoa_core
     (get_local $1)
     (get_local $0)
    )
@@ -15851,7 +15851,7 @@
      (set_local $3
       (call $~lib/string/String.__concat
        (get_local $3)
-       (call $~lib/internal/dtoa/dtoa
+       (call $~lib/internal/number/dtoa
         (block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.3 (result f64)
          (f64.load offset=8
           (i32.add
@@ -15888,7 +15888,7 @@
   (set_local $3
    (call $~lib/string/String.__concat
     (get_local $3)
-    (call $~lib/internal/dtoa/dtoa
+    (call $~lib/internal/number/dtoa
      (block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.4 (result f64)
       (f64.load offset=8
        (i32.add
@@ -16057,7 +16057,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 26)
+     (i32.const 25)
      (i32.const 39)
     )
     (unreachable)
@@ -16262,9 +16262,9 @@
   )
   (get_local $3)
  )
- (func $~lib/internal/itoa/itoa<i8> (; 184 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i8> (; 184 ;) (type $ii) (param $0 i32) (result i32)
   (return
-   (call $~lib/internal/itoa/itoa32
+   (call $~lib/internal/number/itoa32
     (i32.shr_s
      (i32.shl
       (get_local $0)
@@ -16332,7 +16332,7 @@
      (set_local $3
       (call $~lib/string/String.__concat
        (get_local $3)
-       (call $~lib/internal/itoa/itoa<i8>
+       (call $~lib/internal/number/itoa<i8>
         (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.0 (result i32)
          (i32.load8_s offset=8
           (i32.add
@@ -16369,7 +16369,7 @@
   (set_local $3
    (call $~lib/string/String.__concat
     (get_local $3)
-    (call $~lib/internal/itoa/itoa<i8>
+    (call $~lib/internal/number/itoa<i8>
      (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.1 (result i32)
       (i32.load8_s offset=8
        (i32.add
@@ -16386,7 +16386,7 @@
   )
   (get_local $3)
  )
- (func $~lib/internal/itoa/utoa32 (; 186 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/utoa32 (; 186 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -16398,7 +16398,7 @@
    )
   )
   (set_local $1
-   (call $~lib/internal/itoa/decimalCount32
+   (call $~lib/internal/number/decimalCount32
     (get_local $0)
    )
   )
@@ -16407,8 +16407,8 @@
     (get_local $1)
    )
   )
-  (block $~lib/internal/itoa/utoa32_core|inlined.3
-   (call $~lib/internal/itoa/utoa32_lut
+  (block $~lib/internal/number/utoa32_core|inlined.3
+   (call $~lib/internal/number/utoa32_lut
     (get_local $2)
     (get_local $0)
     (get_local $1)
@@ -16416,9 +16416,9 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/itoa/itoa<u16> (; 187 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u16> (; 187 ;) (type $ii) (param $0 i32) (result i32)
   (return
-   (call $~lib/internal/itoa/utoa32
+   (call $~lib/internal/number/utoa32
     (i32.and
      (get_local $0)
      (i32.const 65535)
@@ -16483,7 +16483,7 @@
      (set_local $3
       (call $~lib/string/String.__concat
        (get_local $3)
-       (call $~lib/internal/itoa/itoa<u16>
+       (call $~lib/internal/number/itoa<u16>
         (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.0 (result i32)
          (i32.load16_u offset=8
           (i32.add
@@ -16520,7 +16520,7 @@
   (set_local $3
    (call $~lib/string/String.__concat
     (get_local $3)
-    (call $~lib/internal/itoa/itoa<u16>
+    (call $~lib/internal/number/itoa<u16>
      (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.1 (result i32)
       (i32.load16_u offset=8
        (i32.add
@@ -16537,7 +16537,7 @@
   )
   (get_local $3)
  )
- (func $~lib/internal/itoa/decimalCount64 (; 189 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/decimalCount64 (; 189 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (if
    (i64.lt_u
@@ -16629,7 +16629,7 @@
   )
   (unreachable)
  )
- (func $~lib/internal/itoa/utoa64_lut (; 190 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/internal/number/utoa64_lut (; 190 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
@@ -16643,7 +16643,7 @@
   (local $13 i64)
   (set_local $3
    (i32.load
-    (block $~lib/internal/itoa/DIGITS|inlined.1 (result i32)
+    (block $~lib/internal/number/DIGITS|inlined.1 (result i32)
      (i32.const 5056)
     )
    )
@@ -16815,7 +16815,7 @@
     )
    )
   )
-  (call $~lib/internal/itoa/utoa32_lut
+  (call $~lib/internal/number/utoa32_lut
    (get_local $0)
    (i32.wrap/i64
     (get_local $1)
@@ -16823,7 +16823,7 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/itoa/utoa64 (; 191 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/utoa64 (; 191 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -16849,7 +16849,7 @@
      )
     )
     (set_local $3
-     (call $~lib/internal/itoa/decimalCount32
+     (call $~lib/internal/number/decimalCount32
       (get_local $2)
      )
     )
@@ -16858,8 +16858,8 @@
       (get_local $3)
      )
     )
-    (block $~lib/internal/itoa/utoa32_core|inlined.4
-     (call $~lib/internal/itoa/utoa32_lut
+    (block $~lib/internal/number/utoa32_core|inlined.4
+     (call $~lib/internal/number/utoa32_lut
       (get_local $1)
       (get_local $2)
       (get_local $3)
@@ -16868,7 +16868,7 @@
    )
    (block
     (set_local $3
-     (call $~lib/internal/itoa/decimalCount64
+     (call $~lib/internal/number/decimalCount64
       (get_local $0)
      )
     )
@@ -16877,8 +16877,8 @@
       (get_local $3)
      )
     )
-    (block $~lib/internal/itoa/utoa64_core|inlined.0
-     (call $~lib/internal/itoa/utoa64_lut
+    (block $~lib/internal/number/utoa64_core|inlined.0
+     (call $~lib/internal/number/utoa64_lut
       (get_local $1)
       (get_local $0)
       (get_local $3)
@@ -16888,9 +16888,9 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/itoa/itoa<u64> (; 192 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa<u64> (; 192 ;) (type $Ii) (param $0 i64) (result i32)
   (return
-   (call $~lib/internal/itoa/utoa64
+   (call $~lib/internal/number/utoa64
     (get_local $0)
    )
   )
@@ -16952,7 +16952,7 @@
      (set_local $3
       (call $~lib/string/String.__concat
        (get_local $3)
-       (call $~lib/internal/itoa/itoa<u64>
+       (call $~lib/internal/number/itoa<u64>
         (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.1 (result i64)
          (i64.load offset=8
           (i32.add
@@ -16989,7 +16989,7 @@
   (set_local $3
    (call $~lib/string/String.__concat
     (get_local $3)
-    (call $~lib/internal/itoa/itoa<u64>
+    (call $~lib/internal/number/itoa<u64>
      (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.2 (result i64)
       (i64.load offset=8
        (i32.add
@@ -17131,9 +17131,9 @@
   )
   (get_local $3)
  )
- (func $~lib/internal/itoa/itoa<u8> (; 195 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u8> (; 195 ;) (type $ii) (param $0 i32) (result i32)
   (return
-   (call $~lib/internal/itoa/utoa32
+   (call $~lib/internal/number/utoa32
     (i32.and
      (get_local $0)
      (i32.const 255)
@@ -17198,7 +17198,7 @@
      (set_local $3
       (call $~lib/string/String.__concat
        (get_local $3)
-       (call $~lib/internal/itoa/itoa<u8>
+       (call $~lib/internal/number/itoa<u8>
         (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.1 (result i32)
          (i32.load8_u offset=8
           (i32.add
@@ -17235,7 +17235,7 @@
   (set_local $3
    (call $~lib/string/String.__concat
     (get_local $3)
-    (call $~lib/internal/itoa/itoa<u8>
+    (call $~lib/internal/number/itoa<u8>
      (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.2 (result i32)
       (i32.load8_u offset=8
        (i32.add

@@ -1,7 +1,12 @@
 import "allocator/arena";
-
-import { utoa32, itoa32, utoa64, itoa64 } from "internal/itoa";
-import { dtoa } from "internal/dtoa";
+import {
+  utoa32,
+  itoa32,
+  utoa64,
+  itoa64,
+  itoa,
+  dtoa
+} from "internal/number";
 
 // preliminary
 
