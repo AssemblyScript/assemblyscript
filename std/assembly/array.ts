@@ -8,6 +8,13 @@ import {
 } from "./internal/arraybuffer";
 
 import {
+  HEADER_SIZE as STRING_HEADER_SIZE,
+  allocateUnsafe as allocateUnsafeString,
+  freeUnsafe as freeUnsafeString,
+  copyUnsafe as copyUnsafeString
+} from "./internal/string";
+
+import {
   defaultComparator,
   insertionSort,
   weakHeapSort
@@ -413,13 +420,31 @@ export class Array<T> {
       if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
     } else if (isReference<T>()) { // References
       if (!lastIndex) return "[object Object]";
+      let offset = 0;
+      const valueLen = 15;
+      let sepLen = separator.length;
+      let estlen = (15 + sepLen) * this.length_ - sepLen;
+      let result = allocateUnsafeString(estlen);
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
-        if (value) result += "[object Object]";
-        if (hasSeparator) result += separator;
+        if (value) {
+          copyUnsafeString(result, offset, changetype<String>("[object Object]"), 0, valueLen);
+          offset += valueLen;
+        }
+        if (hasSeparator) {
+          copyUnsafeString(result, offset, changetype<String>(separator), 0, sepLen);
+          offset += sepLen;
+        }
       }
       value = loadUnsafe<T,T>(buffer, lastIndex);
-      if (value) result += "[object Object]";
+      copyUnsafeString(result, offset, changetype<String>("[object Object]"), 0, valueLen);
+      offset += valueLen;
+      let out: String;
+      if (estlen > offset) {
+        out = result.substring(0, offset);
+        freeUnsafeString(result);
+      }
+      return out;
     } else {
       assert(false); // Unsupported generic typename
     }
