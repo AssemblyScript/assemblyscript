@@ -10,6 +10,8 @@ import {
   loadUnsafe
 } from "./arraybuffer";
 
+export const MAX_DOUBLE_LENGTH = 28;
+
 @inline
 export function POWERS10(): u32[] {
   const table: u32[] = [
@@ -620,7 +622,7 @@ export function dtoa(value: f64): String {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var buffer = allocateUnsafeString(30);
+  var buffer = allocateUnsafeString(MAX_DOUBLE_LENGTH);
   var length = dtoa_core(changetype<usize>(buffer), value);
   var result = buffer.substring(0, length);
   freeUnsafeString(buffer);

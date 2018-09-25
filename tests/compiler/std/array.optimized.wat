@@ -10610,7 +10610,7 @@
    (call $~lib/internal/number/dtoa_core
     (tee_local $1
      (call $~lib/internal/string/allocateUnsafe
-      (i32.const 30)
+      (i32.const 28)
      )
     )
     (get_local $0)
@@ -10817,11 +10817,11 @@
       (i32.mul
        (i32.add
         (get_local $5)
-        (i32.const 30)
+        (i32.const 28)
        )
        (get_local $3)
       )
-      (i32.const 30)
+      (i32.const 28)
      )
     )
    )

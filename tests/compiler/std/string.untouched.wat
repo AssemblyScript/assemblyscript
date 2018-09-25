@@ -27,6 +27,7 @@
  (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
+ (global $~lib/internal/number/MAX_DOUBLE_LENGTH i32 (i32.const 28))
  (global $~lib/internal/number/_K (mut i32) (i32.const 0))
  (global $~lib/internal/number/_frc (mut i64) (i64.const 0))
  (global $~lib/internal/number/_exp (mut i32) (i32.const 0))
@@ -8047,7 +8048,7 @@
   )
   (set_local $1
    (call $~lib/internal/string/allocateUnsafe
-    (i32.const 30)
+    (get_global $~lib/internal/number/MAX_DOUBLE_LENGTH)
    )
   )
   (set_local $2

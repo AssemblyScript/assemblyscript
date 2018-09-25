@@ -24,7 +24,7 @@ import {
   dtoa,
   itoa_stream,
   dtoa_stream,
-  // dtoa_core
+  MAX_DOUBLE_LENGTH
 } from "./internal/number";
 
 export class Array<T> {
@@ -404,7 +404,7 @@ export class Array<T> {
       if (!lastIndex) {
         return changetype<string>(itoa<T>(loadUnsafe<T,T>(buffer, 0)));
       }
-      let valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
+      const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
       let offset = 0;
@@ -428,7 +428,7 @@ export class Array<T> {
       if (!lastIndex) {
         return changetype<string>(dtoa(loadUnsafe<T,f64>(buffer, 0)));
       }
-      const valueLen = 30;
+      const valueLen = MAX_DOUBLE_LENGTH;
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
       let offset = 0;
