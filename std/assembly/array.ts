@@ -371,7 +371,8 @@ export class Array<T> {
     var result = "";
     var value: T;
     var buffer = this.buffer_;
-    var hasSeparator = separator.length != 0;
+    var sepLen = separator.length;
+    var hasSeparator = sepLen != 0;
     if (value instanceof bool) {
       if (!lastIndex) {
         return select<string>("true", "false", loadUnsafe<T,bool>(buffer, 0));
@@ -404,17 +405,13 @@ export class Array<T> {
         return loadUnsafe<T,string>(buffer, 0);
       }
       let estLen = 0;
-      let sepLen = separator.length;
-      for (let i = 0, len = this.length_; i < len; ++i) {
+      for (let i = 0, len = lastIndex + 1; i < len; ++i) {
         estLen += loadUnsafe<T,string>(buffer, i).length;
       }
-      estLen += sepLen * lastIndex;
       let offset = 0;
-      let result = allocateUnsafeString(estLen);
+      let result = allocateUnsafeString(estLen + sepLen * lastIndex);
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,String>(buffer, i);
-        // if (value) result += value;
-        // if (hasSeparator) result += separator;
         if (value) {
           let valueLen = value.length;
           copyUnsafeString(result, offset, value, 0, valueLen);
@@ -426,7 +423,6 @@ export class Array<T> {
         }
       }
       value = loadUnsafe<T,String>(buffer, lastIndex);
-      // if (value) result += value;
       if (value) {
         let valueLen = value.length;
         copyUnsafeString(result, offset, value, 0, valueLen);
@@ -443,11 +439,10 @@ export class Array<T> {
       if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
     } else if (isReference<T>()) { // References
       if (!lastIndex) return "[object Object]";
-      let offset = 0;
       const valueLen = 15;
-      let sepLen = separator.length;
-      let estLen = (valueLen + sepLen) * this.length_ - sepLen;
+      let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
+      let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) {
@@ -459,8 +454,7 @@ export class Array<T> {
           offset += sepLen;
         }
       }
-      value = loadUnsafe<T,T>(buffer, lastIndex);
-      if (value) {
+      if (loadUnsafe<T,T>(buffer, lastIndex)) {
         copyUnsafeString(result, offset, changetype<String>("[object Object]"), 0, valueLen);
         offset += valueLen;
       }
