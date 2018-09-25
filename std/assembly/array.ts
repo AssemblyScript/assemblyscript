@@ -413,20 +413,20 @@ export class Array<T> {
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,String>(buffer, i);
         if (value) {
-          let valueLen = value.length;
-          copyUnsafeString(result, offset, value, 0, valueLen);
-          offset += valueLen;
+          let valueLen = value.length;                          // tslint:disable-line:no-unsafe-any
+          copyUnsafeString(result, offset, value, 0, valueLen); // tslint:disable-line:no-unsafe-any
+          offset += valueLen;                                   // tslint:disable-line:no-unsafe-any
         }
         if (hasSeparator) {
-          copyUnsafeString(result, offset, changetype<String>(separator), 0, sepLen);
+          copyUnsafeString(result, offset, separator, 0, sepLen);
           offset += sepLen;
         }
       }
       value = loadUnsafe<T,String>(buffer, lastIndex);
       if (value) {
-        let valueLen = value.length;
-        copyUnsafeString(result, offset, value, 0, valueLen);
-        offset += valueLen;
+        let valueLen = value.length;                          // tslint:disable-line:no-unsafe-any
+        copyUnsafeString(result, offset, value, 0, valueLen); // tslint:disable-line:no-unsafe-any
+        offset += valueLen;                                   // tslint:disable-line:no-unsafe-any
       }
       return result;
     } else if (isArray<T>()) {
