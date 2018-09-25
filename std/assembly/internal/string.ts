@@ -33,7 +33,7 @@ export function freeUnsafe(buffer: String): void {
 export function copyUnsafe(dest: String, destOffset: usize, src: String, srcOffset: usize, len: usize): void {
   memory.copy(
     changetype<usize>(dest) + (destOffset << 1) + HEADER_SIZE,
-    changetype<usize>(src)  + (srcOffset << 1)  + HEADER_SIZE,
+    changetype<usize>(src)  + (srcOffset  << 1) + HEADER_SIZE,
     len << 1
   );
 }
@@ -139,15 +139,15 @@ export const enum CharCode {
 
 export function isWhiteSpaceOrLineTerminator(c: u16): bool {
   switch (c) {
+    case 9:    // <TAB>
     case 10:   // <LF>
     case 13:   // <CR>
-    case 8232: // <LS>
-    case 8233: // <PS>
-    case 9:    // <TAB>
     case 11:   // <VT>
     case 12:   // <FF>
     case 32:   // <SP>
     case 160:  // <NBSP>
+    case 8232: // <LS>
+    case 8233: // <PS>
     case 65279: return true; // <ZWNBSP>
     default: return false;
   }

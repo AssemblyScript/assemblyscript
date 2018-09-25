@@ -8,7 +8,6 @@ import {
 } from "./internal/arraybuffer";
 
 import {
-  HEADER_SIZE as STRING_HEADER_SIZE,
   allocateUnsafe as allocateUnsafeString,
   freeUnsafe as freeUnsafeString,
   copyUnsafe as copyUnsafeString
@@ -20,7 +19,13 @@ import {
   weakHeapSort
 } from "./internal/array";
 
-import { itoa, dtoa } from "./internal/number";
+import {
+  itoa,
+  dtoa,
+  utoa32_core,
+  utoa64_core,
+  dtoa_core
+} from "./internal/number";
 
 export class Array<T> {
 
@@ -127,16 +132,9 @@ export class Array<T> {
     return this;
   }
 
+  @inline
   includes(searchElement: T, fromIndex: i32 = 0): bool {
-    var length = this.length_;
-    if (length == 0 || fromIndex >= length) return false;
-    if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
-    var buffer = this.buffer_;
-    while (fromIndex < length) {
-      if (loadUnsafe<T,T>(buffer, fromIndex) == searchElement) return true;
-      ++fromIndex;
-    }
-    return false;
+    return this.indexOf(searchElement, fromIndex) >= 0;
   }
 
   indexOf(searchElement: T, fromIndex: i32 = 0): i32 {

@@ -720,7 +720,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 32)
+     (i32.const 37)
      (i32.const 39)
     )
     (unreachable)
@@ -3057,7 +3057,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 174)
+       (i32.const 172)
        (i32.const 42)
       )
       (unreachable)
@@ -3109,7 +3109,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 186)
+     (i32.const 184)
      (i32.const 20)
     )
     (unreachable)
@@ -3180,7 +3180,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 276)
+       (i32.const 274)
        (i32.const 42)
       )
       (unreachable)
@@ -3252,7 +3252,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 247)
+     (i32.const 245)
      (i32.const 20)
     )
     (unreachable)
@@ -3474,97 +3474,7 @@
   )
   (i32.const -1)
  )
- (func $~lib/array/Array<i32>#includes (; 26 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (if
-   (i32.eqz
-    (tee_local $3
-     (i32.eqz
-      (tee_local $4
-       (i32.load offset=4
-        (get_local $0)
-       )
-      )
-     )
-    )
-   )
-   (set_local $3
-    (i32.ge_s
-     (get_local $2)
-     (get_local $4)
-    )
-   )
-  )
-  (if
-   (get_local $3)
-   (return
-    (i32.const 0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $2)
-    (i32.const 0)
-   )
-   (set_local $2
-    (select
-     (tee_local $3
-      (i32.add
-       (get_local $4)
-       (get_local $2)
-      )
-     )
-     (i32.const 0)
-     (i32.gt_s
-      (get_local $3)
-      (i32.const 0)
-     )
-    )
-   )
-  )
-  (set_local $0
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (loop $continue|0
-   (if
-    (i32.lt_s
-     (get_local $2)
-     (get_local $4)
-    )
-    (block
-     (if
-      (i32.eq
-       (i32.load offset=8
-        (i32.add
-         (get_local $0)
-         (i32.shl
-          (get_local $2)
-          (i32.const 2)
-         )
-        )
-       )
-       (get_local $1)
-      )
-      (return
-       (i32.const 1)
-      )
-     )
-     (set_local $2
-      (i32.add
-       (get_local $2)
-       (i32.const 1)
-      )
-     )
-     (br $continue|0)
-    )
-   )
-  )
-  (i32.const 0)
- )
- (func $~lib/array/Array<i32>#splice (; 27 ;) (; has Stack IR ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<i32>#splice (; 26 ;) (; has Stack IR ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -3627,7 +3537,7 @@
    )
   )
  )
- (func $~lib/array/Array<i32>#__set (; 28 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 27 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -3654,7 +3564,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 96)
+       (i32.const 101)
        (i32.const 41)
       )
       (unreachable)
@@ -3694,12 +3604,12 @@
    (get_local $2)
   )
  )
- (func $start~anonymous|1 (; 29 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|1 (; 28 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.eqz
    (get_local $0)
   )
  )
- (func $~lib/array/Array<i32>#findIndex (; 30 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#findIndex (; 29 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3775,19 +3685,19 @@
   )
   (i32.const -1)
  )
- (func $start~anonymous|2 (; 31 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|2 (; 30 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.eq
    (get_local $0)
    (i32.const 1)
   )
  )
- (func $start~anonymous|3 (; 32 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|3 (; 31 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.eq
    (get_local $0)
    (i32.const 100)
   )
  )
- (func $start~anonymous|4 (; 33 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|4 (; 32 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -3799,7 +3709,7 @@
    (i32.const 100)
   )
  )
- (func $start~anonymous|6 (; 34 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|6 (; 33 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -3810,13 +3720,13 @@
    (i32.const 100)
   )
  )
- (func $start~anonymous|7 (; 35 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|7 (; 34 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.ge_s
    (get_local $0)
    (i32.const 0)
   )
  )
- (func $~lib/array/Array<i32>#every (; 36 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#every (; 35 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3892,13 +3802,13 @@
   )
   (i32.const 1)
  )
- (func $start~anonymous|8 (; 37 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|8 (; 36 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.le_s
    (get_local $0)
    (i32.const 0)
   )
  )
- (func $start~anonymous|9 (; 38 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|9 (; 37 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -3910,13 +3820,13 @@
    (i32.const 10)
   )
  )
- (func $start~anonymous|10 (; 39 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|10 (; 38 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.lt_s
    (get_local $0)
    (i32.const 10)
   )
  )
- (func $start~anonymous|11 (; 40 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|11 (; 39 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -3927,13 +3837,13 @@
    (i32.const 3)
   )
  )
- (func $start~anonymous|12 (; 41 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|12 (; 40 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.ge_s
    (get_local $0)
    (i32.const 3)
   )
  )
- (func $~lib/array/Array<i32>#some (; 42 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#some (; 41 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4009,13 +3919,13 @@
   )
   (i32.const 0)
  )
- (func $start~anonymous|13 (; 43 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|13 (; 42 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.le_s
    (get_local $0)
    (i32.const -1)
   )
  )
- (func $start~anonymous|14 (; 44 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|14 (; 43 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -4027,13 +3937,13 @@
    (i32.const 10)
   )
  )
- (func $start~anonymous|15 (; 45 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|15 (; 44 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.gt_s
    (get_local $0)
    (i32.const 10)
   )
  )
- (func $start~anonymous|16 (; 46 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|16 (; 45 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -4044,7 +3954,7 @@
    (i32.const 3)
   )
  )
- (func $start~anonymous|17 (; 47 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|17 (; 46 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (set_global $std/array/i
    (i32.add
     (get_global $std/array/i)
@@ -4052,7 +3962,7 @@
    )
   )
  )
- (func $~lib/array/Array<i32>#forEach (; 48 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#forEach (; 47 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4117,7 +4027,7 @@
    )
   )
  )
- (func $start~anonymous|18 (; 49 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|18 (; 48 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -4131,7 +4041,7 @@
    )
   )
  )
- (func $start~anonymous|20 (; 50 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|20 (; 49 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -4144,12 +4054,12 @@
    )
   )
  )
- (func $start~anonymous|21 (; 51 ;) (; has Stack IR ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $start~anonymous|21 (; 50 ;) (; has Stack IR ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   (f32.convert_s/i32
    (get_local $0)
   )
  )
- (func $~lib/array/Array<i32>#map<f32> (; 52 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#map<f32> (; 51 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4233,7 +4143,7 @@
   )
   (get_local $5)
  )
- (func $~lib/array/Array<f32>#__get (; 53 ;) (; has Stack IR ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (; 52 ;) (; has Stack IR ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (if (result f32)
    (i32.lt_u
     (get_local $1)
@@ -4260,7 +4170,7 @@
    (unreachable)
   )
  )
- (func $start~anonymous|22 (; 54 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|22 (; 53 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -4275,7 +4185,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<i32>#map<i32> (; 55 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#map<i32> (; 54 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4360,7 +4270,7 @@
   )
   (get_local $6)
  )
- (func $start~anonymous|23 (; 56 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|23 (; 55 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (set_global $std/array/i
    (i32.add
     (get_global $std/array/i)
@@ -4369,7 +4279,7 @@
   )
   (get_local $0)
  )
- (func $start~anonymous|24 (; 57 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|24 (; 56 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -4383,13 +4293,13 @@
   )
   (get_local $0)
  )
- (func $start~anonymous|25 (; 58 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|25 (; 57 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (i32.ge_s
    (get_local $0)
    (i32.const 2)
   )
  )
- (func $~lib/array/Array<i32>#filter (; 59 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#filter (; 58 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4475,7 +4385,7 @@
   )
   (get_local $4)
  )
- (func $start~anonymous|26 (; 60 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|26 (; 59 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $2)
@@ -4493,7 +4403,7 @@
    (i32.const 2)
   )
  )
- (func $start~anonymous|27 (; 61 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|27 (; 60 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (set_global $std/array/i
    (i32.add
     (get_global $std/array/i)
@@ -4505,7 +4415,7 @@
    (i32.const 2)
   )
  )
- (func $start~anonymous|28 (; 62 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|28 (; 61 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $2)
@@ -4522,13 +4432,13 @@
    (i32.const 2)
   )
  )
- (func $start~anonymous|29 (; 63 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|29 (; 62 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (i32.add
    (get_local $0)
    (get_local $1)
   )
  )
- (func $~lib/array/Array<i32>#reduce<i32> (; 64 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduce<i32> (; 63 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4597,7 +4507,7 @@
   )
   (get_local $2)
  )
- (func $start~anonymous|31 (; 65 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|31 (; 64 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (if (result i32)
    (i32.and
     (get_local $0)
@@ -4610,7 +4520,7 @@
    )
   )
  )
- (func $start~anonymous|32 (; 66 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|32 (; 65 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (if (result i32)
    (i32.and
     (get_local $0)
@@ -4623,7 +4533,7 @@
    )
   )
  )
- (func $start~anonymous|33 (; 67 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|33 (; 66 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#push
     (get_local $3)
@@ -4635,7 +4545,7 @@
    (get_local $1)
   )
  )
- (func $start~anonymous|35 (; 68 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|35 (; 67 ;) (; has Stack IR ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (drop
    (call $~lib/array/Array<i32>#pop
     (get_local $3)
@@ -4646,7 +4556,7 @@
    (get_local $1)
   )
  )
- (func $~lib/array/Array<i32>#reduceRight<i32> (; 69 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduceRight<i32> (; 68 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $4
@@ -4701,7 +4611,7 @@
   )
   (get_local $2)
  )
- (func $~lib/math/murmurHash3 (; 70 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (; 69 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
   (i64.xor
    (tee_local $0
     (i64.mul
@@ -4732,7 +4642,7 @@
    )
   )
  )
- (func $~lib/math/NativeMath.seedRandom (; 71 ;) (; has Stack IR ;) (type $Iv) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 70 ;) (; has Stack IR ;) (type $Iv) (param $0 i64)
   (if
    (i64.eqz
     (get_local $0)
@@ -4761,7 +4671,7 @@
    )
   )
  )
- (func $~lib/internal/array/insertionSort<f32> (; 72 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/array/insertionSort<f32> (; 71 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 f32)
@@ -4873,10 +4783,10 @@
    )
   )
  )
- (func $~lib/allocator/arena/__memory_free (; 73 ;) (; has Stack IR ;) (type $FUNCSIG$v)
+ (func $~lib/allocator/arena/__memory_free (; 72 ;) (; has Stack IR ;) (type $FUNCSIG$v)
   (nop)
  )
- (func $~lib/internal/array/weakHeapSort<f32> (; 74 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/array/weakHeapSort<f32> (; 73 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5261,7 +5171,7 @@
    (get_local $6)
   )
  )
- (func $~lib/array/Array<f32>#sort (; 75 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#sort (; 74 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f32)
@@ -5274,7 +5184,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 339)
+     (i32.const 337)
      (i32.const 4)
     )
     (unreachable)
@@ -5366,7 +5276,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<f32>#sort|trampoline~anonymous|43 (; 76 ;) (; has Stack IR ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
+ (func $~lib/array/Array<f32>#sort|trampoline~anonymous|43 (; 75 ;) (; has Stack IR ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (i32.sub
@@ -5410,7 +5320,7 @@
    )
   )
  )
- (func $~lib/array/Array<f32>#sort|trampoline (; 77 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<f32>#sort|trampoline (; 76 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (block $1of1
    (block $0of1
@@ -5430,13 +5340,13 @@
    (get_local $1)
   )
  )
- (func $~lib/builtins/isNaN<f32> (; 78 ;) (; has Stack IR ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/builtins/isNaN<f32> (; 77 ;) (; has Stack IR ;) (type $fi) (param $0 f32) (result i32)
   (f32.ne
    (get_local $0)
    (get_local $0)
   )
  )
- (func $std/array/isArraysEqual<f32> (; 79 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/isArraysEqual<f32> (; 78 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -5515,7 +5425,7 @@
   )
   (i32.const 1)
  )
- (func $~lib/internal/array/insertionSort<f64> (; 80 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/array/insertionSort<f64> (; 79 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 f64)
@@ -5627,7 +5537,7 @@
    )
   )
  )
- (func $~lib/internal/array/weakHeapSort<f64> (; 81 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/array/weakHeapSort<f64> (; 80 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6012,7 +5922,7 @@
    (get_local $6)
   )
  )
- (func $~lib/array/Array<f64>#sort (; 82 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#sort (; 81 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f64)
@@ -6025,7 +5935,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 339)
+     (i32.const 337)
      (i32.const 4)
     )
     (unreachable)
@@ -6117,7 +6027,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<f64>#sort|trampoline~anonymous|44 (; 83 ;) (; has Stack IR ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/array/Array<f64>#sort|trampoline~anonymous|44 (; 82 ;) (; has Stack IR ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   (i32.sub
@@ -6161,7 +6071,7 @@
    )
   )
  )
- (func $~lib/array/Array<f64>#sort|trampoline (; 84 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<f64>#sort|trampoline (; 83 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (block $1of1
    (block $0of1
@@ -6181,7 +6091,7 @@
    (get_local $1)
   )
  )
- (func $~lib/array/Array<f64>#__get (; 85 ;) (; has Stack IR ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (; 84 ;) (; has Stack IR ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (if (result f64)
    (i32.lt_u
     (get_local $1)
@@ -6208,13 +6118,13 @@
    (unreachable)
   )
  )
- (func $~lib/builtins/isNaN<f64> (; 86 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 85 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
   (f64.ne
    (get_local $0)
    (get_local $0)
   )
  )
- (func $std/array/isArraysEqual<f64> (; 87 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/isArraysEqual<f64> (; 86 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -6293,7 +6203,7 @@
   )
   (i32.const 1)
  )
- (func $~lib/internal/array/insertionSort<i32> (; 88 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/array/insertionSort<i32> (; 87 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6408,7 +6318,7 @@
    )
   )
  )
- (func $~lib/internal/array/weakHeapSort<i32> (; 89 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/array/weakHeapSort<i32> (; 88 ;) (; has Stack IR ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6793,7 +6703,7 @@
    (get_local $1)
   )
  )
- (func $~lib/array/Array<i32>#sort (; 90 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort (; 89 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6805,7 +6715,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 339)
+     (i32.const 337)
      (i32.const 4)
     )
     (unreachable)
@@ -6897,13 +6807,13 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<i32>#sort|trampoline~anonymous|45 (; 91 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort|trampoline~anonymous|45 (; 90 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $0)
    (get_local $1)
   )
  )
- (func $~lib/array/Array<i32>#sort|trampoline (; 92 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort|trampoline (; 91 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (block $1of1
    (block $0of1
@@ -6923,7 +6833,7 @@
    (get_local $1)
   )
  )
- (func $~lib/array/Array<u32>#sort|trampoline~anonymous|46 (; 93 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort|trampoline~anonymous|46 (; 92 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (i32.gt_u
     (get_local $0)
@@ -6935,7 +6845,7 @@
    )
   )
  )
- (func $~lib/array/Array<u32>#sort|trampoline (; 94 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort|trampoline (; 93 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (block $1of1
    (block $0of1
@@ -6955,7 +6865,7 @@
    (get_local $1)
   )
  )
- (func $std/array/createReverseOrderedArray (; 95 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedArray (; 94 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $1
    (call $~lib/array/Array<i32>#constructor
@@ -6999,7 +6909,7 @@
   )
   (get_local $1)
  )
- (func $~lib/math/NativeMath.random (; 96 ;) (; has Stack IR ;) (type $F) (result f64)
+ (func $~lib/math/NativeMath.random (; 95 ;) (; has Stack IR ;) (type $F) (result f64)
   (local $0 i64)
   (local $1 i64)
   (if
@@ -7068,7 +6978,7 @@
    (f64.const 1)
   )
  )
- (func $std/array/createRandomOrderedArray (; 97 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomOrderedArray (; 96 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (set_local $0
    (call $~lib/array/Array<i32>#constructor
@@ -7110,7 +7020,7 @@
   )
   (get_local $0)
  )
- (func $std/array/isSorted<i32> (; 98 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<i32> (; 97 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (block $break|0
@@ -7167,7 +7077,7 @@
   )
   (i32.const 1)
  )
- (func $std/array/assertSorted<i32> (; 99 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<i32> (; 98 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (if
    (i32.eqz
     (call $std/array/isSorted<i32>
@@ -7189,19 +7099,19 @@
    )
   )
  )
- (func $std/array/assertSortedDefault<i32> (; 100 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $std/array/assertSortedDefault<i32> (; 99 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (call $std/array/assertSorted<i32>
    (get_local $0)
    (i32.const 47)
   )
  )
- (func $start~anonymous|49 (; 101 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|49 (; 100 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (get_local $1)
    (get_local $0)
   )
  )
- (func $std/array/createReverseOrderedNestedArray (; 102 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $std/array/createReverseOrderedNestedArray (; 101 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
@@ -7253,7 +7163,7 @@
   )
   (get_local $1)
  )
- (func $start~anonymous|52 (; 103 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|52 (; 102 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (call $~lib/array/Array<u32>#__get
     (get_local $0)
@@ -7265,7 +7175,7 @@
    )
   )
  )
- (func $~lib/array/Array<Array<i32>>#sort (; 104 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#sort (; 103 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7277,7 +7187,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 339)
+     (i32.const 337)
      (i32.const 4)
     )
     (unreachable)
@@ -7358,7 +7268,7 @@
   )
   (get_local $0)
  )
- (func $std/array/assertSorted<Array<i32>> (; 105 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<Array<i32>> (; 104 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
   (if
    (i32.eqz
     (call $std/array/isSorted<i32>
@@ -7380,7 +7290,7 @@
    )
   )
  )
- (func $std/array/Proxy<i32>#constructor (; 106 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/array/Proxy<i32>#constructor (; 105 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (i32.store
    (tee_local $1
@@ -7392,7 +7302,7 @@
   )
   (get_local $1)
  )
- (func $std/array/createReverseOrderedElementsArray (; 107 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $std/array/createReverseOrderedElementsArray (; 106 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
@@ -7436,7 +7346,7 @@
   )
   (get_local $1)
  )
- (func $start~anonymous|53 (; 108 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|53 (; 107 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (i32.load
     (get_local $0)
@@ -7446,7 +7356,7 @@
    )
   )
  )
- (func $~lib/internal/string/compareUnsafe (; 109 ;) (; has Stack IR ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 108 ;) (; has Stack IR ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -7497,7 +7407,7 @@
   )
   (get_local $4)
  )
- (func $~lib/string/String.__gt (; 110 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gt (; 109 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -7572,7 +7482,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/string/String.__lt (; 111 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lt (; 110 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -7647,7 +7557,7 @@
    (i32.const 0)
   )
  )
- (func $start~anonymous|54 (; 112 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|54 (; 111 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.sub
    (call $~lib/string/String.__gt
     (get_local $0)
@@ -7659,7 +7569,7 @@
    )
   )
  )
- (func $~lib/string/String.__eq (; 113 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 112 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (if
    (i32.eq
@@ -7713,7 +7623,7 @@
    )
   )
  )
- (func $~lib/string/String.__ne (; 114 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__ne (; 113 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (i32.eqz
    (call $~lib/string/String.__eq
     (get_local $0)
@@ -7721,7 +7631,7 @@
    )
   )
  )
- (func $std/array/isArraysEqual<String> (; 115 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isArraysEqual<String> (; 114 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (if
@@ -7784,7 +7694,7 @@
   )
   (i32.const 1)
  )
- (func $~lib/internal/string/allocateUnsafe (; 116 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 115 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (tee_local $1
@@ -7830,7 +7740,7 @@
   )
   (get_local $1)
  )
- (func $~lib/string/String#charAt (; 117 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#charAt (; 116 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (i32.ge_u
@@ -7861,7 +7771,7 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/string/copyUnsafe (; 118 ;) (; has Stack IR ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 117 ;) (; has Stack IR ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (call $~lib/internal/memory/memmove
    (i32.add
     (i32.add
@@ -7889,7 +7799,7 @@
    )
   )
  )
- (func $~lib/string/String#concat (; 119 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 118 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7956,7 +7866,7 @@
   )
   (get_local $2)
  )
- (func $~lib/string/String.__concat (; 120 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 119 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -7970,7 +7880,7 @@
    (get_local $1)
   )
  )
- (func $std/array/createRandomString (; 121 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomString (; 120 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (set_local $1
@@ -8014,7 +7924,7 @@
   )
   (get_local $1)
  )
- (func $std/array/createRandomStringArray (; 122 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $std/array/createRandomStringArray (; 121 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
@@ -8055,7 +7965,7 @@
   )
   (get_local $1)
  )
- (func $~lib/string/String#substring (; 123 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 122 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8171,7 +8081,7 @@
   )
   (get_local $2)
  )
- (func $~lib/array/Array<bool>#join (; 124 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<bool>#join (; 123 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -8384,7 +8294,7 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/number/decimalCount32 (; 125 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/decimalCount32 (; 124 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if (result i32)
    (i32.lt_u
     (get_local $0)
@@ -8450,7 +8360,7 @@
    )
   )
  )
- (func $~lib/internal/number/utoa32_lut (; 126 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 125 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -8611,7 +8521,7 @@
    )
   )
  )
- (func $~lib/internal/number/itoa32 (; 127 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa32 (; 126 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8662,12 +8572,12 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/number/itoa<i32> (; 128 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i32> (; 127 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/number/itoa32
    (get_local $0)
   )
  )
- (func $~lib/array/Array<i32>#join (; 129 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#join (; 128 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8776,7 +8686,7 @@
    )
   )
  )
- (func $~lib/builtins/isFinite<f64> (; 130 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 129 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
   (f64.eq
    (f64.sub
     (get_local $0)
@@ -8785,7 +8695,7 @@
    (f64.const 0)
   )
  )
- (func $~lib/internal/number/genDigits (; 131 ;) (; has Stack IR ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/number/genDigits (; 130 ;) (; has Stack IR ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i32)
@@ -9384,7 +9294,7 @@
    )
   )
  )
- (func $~lib/internal/number/prettify (; 132 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/prettify (; 131 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -9770,7 +9680,7 @@
    )
   )
  )
- (func $~lib/internal/number/dtoa_core (; 133 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/internal/number/dtoa_core (; 132 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -10269,7 +10179,7 @@
    (get_local $12)
   )
  )
- (func $~lib/internal/number/dtoa (; 134 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/number/dtoa (; 133 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -10341,7 +10251,7 @@
   (call $~lib/allocator/arena/__memory_free)
   (get_local $2)
  )
- (func $~lib/array/Array<f64>#join (; 135 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<f64>#join (; 134 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -10448,7 +10358,7 @@
    )
   )
  )
- (func $~lib/array/Array<String>#join (; 136 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#join (; 135 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10646,12 +10556,12 @@
   )
   (get_local $3)
  )
- (func $std/array/Ref#constructor (; 137 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $std/array/Ref#constructor (; 136 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (call $~lib/memory/memory.allocate
    (i32.const 0)
   )
  )
- (func $~lib/array/Array<Ref>#__unchecked_set (; 138 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref>#__unchecked_set (; 137 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (i32.store offset=8
    (i32.add
     (i32.load
@@ -10665,7 +10575,7 @@
    (get_local $2)
   )
  )
- (func $~lib/array/Array<Ref>#join (; 139 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Ref>#join (; 138 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -10849,7 +10759,7 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/number/itoa<i8> (; 140 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i8> (; 139 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/number/itoa32
    (i32.shr_s
     (i32.shl
@@ -10860,7 +10770,7 @@
    )
   )
  )
- (func $~lib/array/Array<i8>#join (; 141 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<i8>#join (; 140 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -10961,7 +10871,7 @@
    )
   )
  )
- (func $~lib/internal/number/utoa32 (; 142 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/utoa32 (; 141 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -10987,7 +10897,7 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/number/itoa<u16> (; 143 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u16> (; 142 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/number/utoa32
    (i32.and
     (get_local $0)
@@ -10995,7 +10905,7 @@
    )
   )
  )
- (func $~lib/array/Array<u16>#join (; 144 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<u16>#join (; 143 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -11102,7 +11012,7 @@
    )
   )
  )
- (func $~lib/internal/number/decimalCount64 (; 145 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/decimalCount64 (; 144 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
   (if (result i32)
    (i64.lt_u
     (get_local $0)
@@ -11168,7 +11078,7 @@
    )
   )
  )
- (func $~lib/internal/number/utoa64_lut (; 146 ;) (; has Stack IR ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/internal/number/utoa64_lut (; 145 ;) (; has Stack IR ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -11314,7 +11224,7 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/number/utoa64 (; 147 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/utoa64 (; 146 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11364,12 +11274,12 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/number/itoa<u64> (; 148 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa<u64> (; 147 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
   (call $~lib/internal/number/utoa64
    (get_local $0)
   )
  )
- (func $~lib/array/Array<u64>#join (; 149 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<u64>#join (; 148 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -11476,7 +11386,7 @@
    )
   )
  )
- (func $~lib/array/Array<Array<i32>>#join (; 150 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#join (; 149 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11589,7 +11499,7 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/number/itoa<u8> (; 151 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u8> (; 150 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/number/utoa32
    (i32.and
     (get_local $0)
@@ -11597,7 +11507,7 @@
    )
   )
  )
- (func $~lib/array/Array<u8>#join (; 152 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#join (; 151 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11700,7 +11610,7 @@
    )
   )
  )
- (func $~lib/array/Array<Array<u8>>#join (; 153 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Array<u8>>#join (; 152 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11813,7 +11723,7 @@
   )
   (get_local $1)
  )
- (func $start (; 154 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 153 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 5472)
@@ -13202,9 +13112,12 @@
    )
   )
   (set_global $std/array/includes
-   (call $~lib/array/Array<i32>#includes
-    (get_global $std/array/arr)
-    (i32.const 44)
+   (i32.ge_s
+    (call $~lib/array/Array<i32>#indexOf
+     (get_global $std/array/arr)
+     (i32.const 44)
+     (i32.const 0)
+    )
     (i32.const 0)
    )
   )
@@ -13224,9 +13137,12 @@
    )
   )
   (set_global $std/array/includes
-   (call $~lib/array/Array<i32>#includes
-    (get_global $std/array/arr)
-    (i32.const 42)
+   (i32.ge_s
+    (call $~lib/array/Array<i32>#indexOf
+     (get_global $std/array/arr)
+     (i32.const 42)
+     (i32.const 0)
+    )
     (i32.const 0)
    )
   )
@@ -13246,9 +13162,12 @@
    )
   )
   (set_global $std/array/includes
-   (call $~lib/array/Array<i32>#includes
-    (get_global $std/array/arr)
-    (i32.const 45)
+   (i32.ge_s
+    (call $~lib/array/Array<i32>#indexOf
+     (get_global $std/array/arr)
+     (i32.const 45)
+     (i32.const 0)
+    )
     (i32.const 0)
    )
   )
@@ -13265,10 +13184,13 @@
    )
   )
   (set_global $std/array/includes
-   (call $~lib/array/Array<i32>#includes
-    (get_global $std/array/arr)
-    (i32.const 43)
-    (i32.const 100)
+   (i32.ge_s
+    (call $~lib/array/Array<i32>#indexOf
+     (get_global $std/array/arr)
+     (i32.const 43)
+     (i32.const 100)
+    )
+    (i32.const 0)
    )
   )
   (if
@@ -13284,10 +13206,13 @@
    )
   )
   (set_global $std/array/includes
-   (call $~lib/array/Array<i32>#includes
-    (get_global $std/array/arr)
-    (i32.const 43)
-    (i32.const -100)
+   (i32.ge_s
+    (call $~lib/array/Array<i32>#indexOf
+     (get_global $std/array/arr)
+     (i32.const 43)
+     (i32.const -100)
+    )
+    (i32.const 0)
    )
   )
   (if
@@ -13306,10 +13231,13 @@
    )
   )
   (set_global $std/array/includes
-   (call $~lib/array/Array<i32>#includes
-    (get_global $std/array/arr)
-    (i32.const 43)
-    (i32.const -2)
+   (i32.ge_s
+    (call $~lib/array/Array<i32>#indexOf
+     (get_global $std/array/arr)
+     (i32.const 43)
+     (i32.const -2)
+    )
+    (i32.const 0)
    )
   )
   (if
@@ -13328,10 +13256,13 @@
    )
   )
   (set_global $std/array/includes
-   (call $~lib/array/Array<i32>#includes
-    (get_global $std/array/arr)
-    (i32.const 43)
-    (i32.const -4)
+   (i32.ge_s
+    (call $~lib/array/Array<i32>#indexOf
+     (get_global $std/array/arr)
+     (i32.const 43)
+     (i32.const -4)
+    )
+    (i32.const 0)
    )
   )
   (if
@@ -13350,9 +13281,12 @@
    )
   )
   (set_global $std/array/includes
-   (call $~lib/array/Array<i32>#includes
-    (get_global $std/array/arr)
-    (i32.const 43)
+   (i32.ge_s
+    (call $~lib/array/Array<i32>#indexOf
+     (get_global $std/array/arr)
+     (i32.const 43)
+     (i32.const 0)
+    )
     (i32.const 0)
    )
   )
@@ -13372,10 +13306,13 @@
    )
   )
   (set_global $std/array/includes
-   (call $~lib/array/Array<i32>#includes
-    (get_global $std/array/arr)
-    (i32.const 43)
-    (i32.const 1)
+   (i32.ge_s
+    (call $~lib/array/Array<i32>#indexOf
+     (get_global $std/array/arr)
+     (i32.const 43)
+     (i32.const 1)
+    )
+    (i32.const 0)
    )
   )
   (if
@@ -13394,10 +13331,13 @@
    )
   )
   (set_global $std/array/includes
-   (call $~lib/array/Array<i32>#includes
-    (get_global $std/array/arr)
-    (i32.const 43)
-    (i32.const 2)
+   (i32.ge_s
+    (call $~lib/array/Array<i32>#indexOf
+     (get_global $std/array/arr)
+     (i32.const 43)
+     (i32.const 2)
+    )
+    (i32.const 0)
    )
   )
   (if
@@ -15673,7 +15613,7 @@
    )
   )
  )
- (func $null (; 155 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 154 ;) (; has Stack IR ;) (type $v)
   (nop)
  )
 )
