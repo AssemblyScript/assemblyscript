@@ -8055,15 +8055,136 @@
   )
   (get_local $1)
  )
- (func $~lib/array/Array<bool>#join (; 123 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/string/String#substring (; 123 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (if
+   (i32.eqz
+    (get_local $0)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 1616)
+     (i32.const 264)
+     (i32.const 4)
+    )
+    (unreachable)
+   )
+  )
+  (set_local $1
+   (select
+    (tee_local $2
+     (select
+      (get_local $1)
+      (i32.const 0)
+      (i32.gt_s
+       (get_local $1)
+       (i32.const 0)
+      )
+     )
+    )
+    (tee_local $3
+     (i32.load
+      (get_local $0)
+     )
+    )
+    (i32.lt_s
+     (get_local $2)
+     (get_local $3)
+    )
+   )
+  )
+  (set_local $4
+   (select
+    (tee_local $2
+     (select
+      (i32.const 0)
+      (get_local $3)
+      (i32.lt_s
+       (i32.const 0)
+       (get_local $3)
+      )
+     )
+    )
+    (get_local $1)
+    (i32.lt_s
+     (get_local $2)
+     (get_local $1)
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (tee_local $3
+     (i32.sub
+      (tee_local $1
+       (select
+        (get_local $2)
+        (get_local $1)
+        (i32.gt_s
+         (get_local $2)
+         (get_local $1)
+        )
+       )
+      )
+      (get_local $4)
+     )
+    )
+   )
+   (return
+    (i32.const 1464)
+   )
+  )
+  (if
+   (tee_local $2
+    (i32.eqz
+     (get_local $4)
+    )
+   )
+   (set_local $2
+    (i32.eq
+     (get_local $1)
+     (i32.load
+      (get_local $0)
+     )
+    )
+   )
+  )
+  (if
+   (get_local $2)
+   (return
+    (get_local $0)
+   )
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $2
+    (call $~lib/internal/string/allocateUnsafe
+     (get_local $3)
+    )
+   )
+   (i32.const 0)
+   (get_local $0)
+   (get_local $4)
+   (get_local $3)
+  )
+  (get_local $2)
+ )
+ (func $~lib/array/Array<bool>#join (; 124 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   (if
    (i32.lt_s
-    (tee_local $2
+    (tee_local $4
      (i32.sub
       (i32.load
        (i32.const 1804)
@@ -8077,25 +8198,24 @@
     (i32.const 1464)
    )
   )
-  (set_local $0
-   (i32.const 1464)
-  )
-  (set_local $3
+  (set_local $5
    (i32.load
     (i32.const 1800)
    )
   )
-  (set_local $4
+  (set_local $7
    (i32.ne
-    (i32.load
-     (i32.const 1776)
+    (tee_local $6
+     (i32.load
+      (i32.const 1776)
+     )
     )
     (i32.const 0)
    )
   )
   (if
    (i32.eqz
-    (get_local $2)
+    (get_local $4)
    )
    (return
     (select
@@ -8103,9 +8223,25 @@
      (i32.const 1760)
      (i32.and
       (i32.load8_u offset=8
-       (get_local $3)
+       (get_local $5)
       )
       (i32.const 1)
+     )
+    )
+   )
+  )
+  (set_local $2
+   (call $~lib/internal/string/allocateUnsafe
+    (tee_local $8
+     (i32.add
+      (i32.mul
+       (i32.add
+        (get_local $6)
+        (i32.const 5)
+       )
+       (get_local $4)
+      )
+      (i32.const 5)
      )
     )
    )
@@ -8115,33 +8251,59 @@
     (br_if $break|0
      (i32.ge_s
       (get_local $1)
-      (get_local $2)
+      (get_local $4)
      )
     )
-    (set_local $0
-     (call $~lib/string/String.__concat
-      (get_local $0)
-      (select
-       (i32.const 1744)
-       (i32.const 1760)
-       (i32.and
-        (i32.load8_u offset=8
-         (i32.add
-          (get_local $3)
-          (get_local $1)
+    (set_local $3
+     (i32.add
+      (i32.eqz
+       (tee_local $9
+        (i32.and
+         (i32.load8_u offset=8
+          (i32.add
+           (get_local $5)
+           (get_local $1)
+          )
          )
+         (i32.const 1)
         )
-        (i32.const 1)
        )
       )
+      (i32.const 4)
+     )
+    )
+    (call $~lib/internal/string/copyUnsafe
+     (get_local $2)
+     (get_local $0)
+     (select
+      (i32.const 1744)
+      (i32.const 1760)
+      (get_local $9)
+     )
+     (i32.const 0)
+     (get_local $3)
+    )
+    (set_local $0
+     (i32.add
+      (get_local $0)
+      (get_local $3)
      )
     )
     (if
-     (get_local $4)
-     (set_local $0
-      (call $~lib/string/String.__concat
+     (get_local $7)
+     (block
+      (call $~lib/internal/string/copyUnsafe
+       (get_local $2)
        (get_local $0)
        (i32.const 1776)
+       (i32.const 0)
+       (get_local $6)
+      )
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (get_local $6)
+       )
       )
      )
     )
@@ -8154,24 +8316,75 @@
     (br $repeat|0)
    )
   )
-  (call $~lib/string/String.__concat
+  (set_local $3
+   (i32.add
+    (i32.eqz
+     (tee_local $1
+      (i32.and
+       (i32.load8_u offset=8
+        (i32.add
+         (get_local $5)
+         (get_local $4)
+        )
+       )
+       (i32.const 1)
+      )
+     )
+    )
+    (i32.const 4)
+   )
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $2)
    (get_local $0)
    (select
     (i32.const 1744)
     (i32.const 1760)
-    (i32.and
-     (i32.load8_u offset=8
-      (i32.add
-       (get_local $3)
-       (get_local $2)
-      )
+    (get_local $1)
+   )
+   (i32.const 0)
+   (get_local $3)
+  )
+  (set_local $1
+   (get_local $2)
+  )
+  (if
+   (i32.gt_s
+    (get_local $8)
+    (tee_local $0
+     (i32.add
+      (get_local $0)
+      (get_local $3)
      )
-     (i32.const 1)
     )
    )
+   (block
+    (set_local $1
+     (call $~lib/string/String#substring
+      (get_local $2)
+      (get_local $0)
+     )
+    )
+    (if
+     (i32.eqz
+      (get_local $2)
+     )
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 1648)
+       (i32.const 28)
+       (i32.const 4)
+      )
+      (unreachable)
+     )
+    )
+    (call $~lib/allocator/arena/__memory_free)
+   )
   )
+  (get_local $1)
  )
- (func $~lib/internal/number/decimalCount32 (; 124 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/decimalCount32 (; 125 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (if (result i32)
    (i32.lt_u
     (get_local $0)
@@ -8237,7 +8450,7 @@
    )
   )
  )
- (func $~lib/internal/number/utoa32_lut (; 125 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 126 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (set_local $3
@@ -8398,7 +8611,7 @@
    )
   )
  )
- (func $~lib/internal/number/itoa32 (; 126 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa32 (; 127 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8449,12 +8662,12 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/number/itoa<i32> (; 127 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i32> (; 128 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/number/itoa32
    (get_local $0)
   )
  )
- (func $~lib/array/Array<i32>#join (; 128 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#join (; 129 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8563,7 +8776,7 @@
    )
   )
  )
- (func $~lib/builtins/isFinite<f64> (; 129 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 130 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
   (f64.eq
    (f64.sub
     (get_local $0)
@@ -8572,7 +8785,7 @@
    (f64.const 0)
   )
  )
- (func $~lib/internal/number/genDigits (; 130 ;) (; has Stack IR ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/number/genDigits (; 131 ;) (; has Stack IR ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i32)
@@ -9171,7 +9384,7 @@
    )
   )
  )
- (func $~lib/internal/number/prettify (; 131 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/prettify (; 132 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (if
@@ -9557,7 +9770,7 @@
    )
   )
  )
- (func $~lib/internal/number/dtoa_core (; 132 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/internal/number/dtoa_core (; 133 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -10055,122 +10268,6 @@
    )
    (get_local $12)
   )
- )
- (func $~lib/string/String#substring (; 133 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 1616)
-     (i32.const 264)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
-  (set_local $1
-   (select
-    (tee_local $2
-     (select
-      (get_local $1)
-      (i32.const 0)
-      (i32.gt_s
-       (get_local $1)
-       (i32.const 0)
-      )
-     )
-    )
-    (tee_local $3
-     (i32.load
-      (get_local $0)
-     )
-    )
-    (i32.lt_s
-     (get_local $2)
-     (get_local $3)
-    )
-   )
-  )
-  (set_local $4
-   (select
-    (tee_local $2
-     (select
-      (i32.const 0)
-      (get_local $3)
-      (i32.lt_s
-       (i32.const 0)
-       (get_local $3)
-      )
-     )
-    )
-    (get_local $1)
-    (i32.lt_s
-     (get_local $2)
-     (get_local $1)
-    )
-   )
-  )
-  (if
-   (i32.eqz
-    (tee_local $3
-     (i32.sub
-      (tee_local $1
-       (select
-        (get_local $2)
-        (get_local $1)
-        (i32.gt_s
-         (get_local $2)
-         (get_local $1)
-        )
-       )
-      )
-      (get_local $4)
-     )
-    )
-   )
-   (return
-    (i32.const 1464)
-   )
-  )
-  (if
-   (tee_local $2
-    (i32.eqz
-     (get_local $4)
-    )
-   )
-   (set_local $2
-    (i32.eq
-     (get_local $1)
-     (i32.load
-      (get_local $0)
-     )
-    )
-   )
-  )
-  (if
-   (get_local $2)
-   (return
-    (get_local $0)
-   )
-  )
-  (call $~lib/internal/string/copyUnsafe
-   (tee_local $2
-    (call $~lib/internal/string/allocateUnsafe
-     (get_local $3)
-    )
-   )
-   (i32.const 0)
-   (get_local $0)
-   (get_local $4)
-   (get_local $3)
-  )
-  (get_local $2)
  )
  (func $~lib/internal/number/dtoa (; 134 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)

@@ -377,11 +377,31 @@ export class Array<T> {
       if (!lastIndex) {
         return select<string>("true", "false", loadUnsafe<T,bool>(buffer, 0));
       }
+      let valueLen = 5; // max possible length of element len("false")
+      let offset = 0;
+      let estLen = (valueLen + sepLen) * lastIndex + valueLen;
+      let result = allocateUnsafeString(estLen);
       for (let i = 0; i < lastIndex; ++i) {
-        result += select<string>("true", "false", loadUnsafe<T,bool>(buffer, i));
-        if (hasSeparator) result += separator;
+        value = loadUnsafe<T,bool>(buffer, i);
+        valueLen = 4 + <i32>(!value);
+        copyUnsafeString(result, offset, select<string>("true", "false", value), 0, valueLen);
+        offset += valueLen;
+        if (hasSeparator) {
+          copyUnsafeString(result, offset, changetype<String>(separator), 0, sepLen);
+          offset += sepLen;
+        }
       }
-      result += select<string>("true", "false", loadUnsafe<T,bool>(buffer, lastIndex));
+      value = loadUnsafe<T,bool>(buffer, lastIndex);
+      valueLen = 4 + <i32>(!value);
+      copyUnsafeString(result, offset, select<string>("true", "false", value), 0, valueLen);
+      offset += valueLen;
+
+      let out = result;
+      if (estLen > offset) {
+        out = result.substring(0, offset);
+        freeUnsafeString(result);
+      }
+      return out;
     } else if (isInteger<T>()) {
       if (!lastIndex) {
         return changetype<string>(itoa<T>(loadUnsafe<T,T>(buffer, 0)));
@@ -439,7 +459,7 @@ export class Array<T> {
       if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
     } else if (isReference<T>()) { // References
       if (!lastIndex) return "[object Object]";
-      const valueLen = 15;
+      const valueLen = 15; // max possible length of element len("[object Object]")
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
       let offset = 0;
