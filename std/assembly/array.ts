@@ -423,7 +423,7 @@ export class Array<T> {
       let offset = 0;
       const valueLen = 15;
       let sepLen = separator.length;
-      let estlen = (15 + sepLen) * this.length_ - sepLen;
+      let estlen = (valueLen + sepLen) * this.length_ - sepLen;
       let result = allocateUnsafeString(estlen);
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
@@ -439,7 +439,7 @@ export class Array<T> {
       value = loadUnsafe<T,T>(buffer, lastIndex);
       copyUnsafeString(result, offset, changetype<String>("[object Object]"), 0, valueLen);
       offset += valueLen;
-      let out: String;
+      let out = result;
       if (estlen > offset) {
         out = result.substring(0, offset);
         freeUnsafeString(result);

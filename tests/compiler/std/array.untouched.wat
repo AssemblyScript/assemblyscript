@@ -16416,6 +16416,9 @@
     (i32.const 15)
    )
   )
+  (set_local $11
+   (get_local $10)
+  )
   (if
    (i32.gt_s
     (get_local $9)

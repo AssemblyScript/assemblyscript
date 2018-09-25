@@ -10633,6 +10633,9 @@
    (i32.const 0)
    (i32.const 15)
   )
+  (set_local $2
+   (get_local $0)
+  )
   (if
    (i32.gt_s
     (get_local $7)
