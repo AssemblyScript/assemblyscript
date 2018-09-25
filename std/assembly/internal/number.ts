@@ -628,6 +628,10 @@ export function dtoa(value: f64): String {
 }
 
 export function itoa_stream<T>(buffer: usize, offset: usize, value: T): u32 {
+  if (!value) {
+    store<u16>(buffer + (offset << 1), CharCode._0, STRING_HEADER_SIZE);
+    return 1;
+  }
   var decimals: u32 = 0;
   if (isSigned<T>()) {
     let sign = value < 0;
@@ -662,4 +666,30 @@ export function itoa_stream<T>(buffer: usize, offset: usize, value: T): u32 {
     }
   }
   return decimals;
+}
+
+export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
+  if (value == 0.0) {
+    buffer += (offset << 1);
+    store<u16>(buffer, CharCode._0,  STRING_HEADER_SIZE + 0);
+    store<u16>(buffer, CharCode.DOT, STRING_HEADER_SIZE + 2);
+    store<u16>(buffer, CharCode._0,  STRING_HEADER_SIZE + 4);
+    return 3;
+  }
+  if (!isFinite(value)) {
+    if (isNaN(value)) {
+      buffer += (offset << 1);
+      store<u16>(buffer, CharCode.N, STRING_HEADER_SIZE + 0);
+      store<u16>(buffer, CharCode.a, STRING_HEADER_SIZE + 2);
+      store<u16>(buffer, CharCode.N, STRING_HEADER_SIZE + 4);
+      return 3;
+    } else {
+      let sign = <i32>(value < 0);
+      let len  = 8 + sign;
+      let source = changetype<usize>(select<String>("-Infinity", "Infinity", sign));
+      memory.copy(buffer + (offset << 1) + STRING_HEADER_SIZE, source, len << 1);
+      return len;
+    }
+  }
+  return dtoa_core(buffer + (offset << 1), value);
 }

@@ -8,8 +8,6 @@ import {
 } from "./internal/arraybuffer";
 
 import {
-  CharCode,
-  HEADER_SIZE as STRING_HEADER_SIZE,
   allocateUnsafe as allocateUnsafeString,
   freeUnsafe as freeUnsafeString,
   copyUnsafe as copyUnsafeString
@@ -25,7 +23,8 @@ import {
   itoa,
   dtoa,
   itoa_stream,
-  dtoa_core
+  dtoa_stream,
+  // dtoa_core
 } from "./internal/number";
 
 export class Array<T> {
@@ -377,9 +376,9 @@ export class Array<T> {
         return select<string>("true", "false", loadUnsafe<T,bool>(buffer, 0));
       }
       let valueLen = 5; // max possible length of element len("false")
-      let offset = 0;
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
+      let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,bool>(buffer, i);
         valueLen = 4 + <i32>(!value);
@@ -405,40 +404,20 @@ export class Array<T> {
       if (!lastIndex) {
         return changetype<string>(itoa<T>(loadUnsafe<T,T>(buffer, 0)));
       }
-
-      /*
-      for (let i = 0; i < lastIndex; ++i) {
-        result += itoa<T>(loadUnsafe<T,T>(buffer, i));
-        if (hasSeparator) result += separator;
-      }
-      result += itoa<T>(loadUnsafe<T,T>(buffer, lastIndex));
-      */
-
-      let offset = 0;
       let valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
-
+      let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
-        if (!value) {
-          store<u16>(changetype<usize>(result) + (offset << 1), CharCode._0, STRING_HEADER_SIZE);
-          ++offset;
-        } else {
-          offset += itoa_stream<T>(changetype<usize>(result), offset, value);
-        }
+        offset += itoa_stream<T>(changetype<usize>(result), offset, value);
         if (hasSeparator) {
           copyUnsafeString(result, offset, separator, 0, sepLen);
           offset += sepLen;
         }
       }
       value = loadUnsafe<T,T>(buffer, lastIndex);
-      if (!value) {
-        store<u16>(changetype<usize>(result) + (offset << 1), CharCode._0, STRING_HEADER_SIZE);
-        ++offset;
-      } else {
-        offset += itoa_stream<T>(changetype<usize>(result), offset, value);
-      }
+      offset += itoa_stream<T>(changetype<usize>(result), offset, value);
       let out = result;
       if (estLen > offset) {
         out = result.substring(0, offset);
@@ -449,11 +428,26 @@ export class Array<T> {
       if (!lastIndex) {
         return changetype<string>(dtoa(loadUnsafe<T,f64>(buffer, 0)));
       }
+      const valueLen = 30;
+      let estLen = (valueLen + sepLen) * lastIndex + valueLen;
+      let result = allocateUnsafeString(estLen);
+      let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
-        result += dtoa(loadUnsafe<T,f64>(buffer, i));
-        if (hasSeparator) result += separator;
+        value = loadUnsafe<T,f64>(buffer, i);
+        offset += dtoa_stream(changetype<usize>(result), offset, value);
+        if (hasSeparator) {
+          copyUnsafeString(result, offset, separator, 0, sepLen);
+          offset += sepLen;
+        }
       }
-      result += dtoa(loadUnsafe<T,f64>(buffer, lastIndex));
+      value = loadUnsafe<T,f64>(buffer, lastIndex);
+      offset += dtoa_stream(changetype<usize>(result), offset, value);
+      let out = result;
+      if (estLen > offset) {
+        out = result.substring(0, offset);
+        freeUnsafeString(result);
+      }
+      return out;
     } else if (isString<T>()) {
       if (!lastIndex) {
         return loadUnsafe<T,string>(buffer, 0);
