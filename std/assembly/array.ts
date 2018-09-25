@@ -8,6 +8,8 @@ import {
 } from "./internal/arraybuffer";
 
 import {
+  CharCode,
+  HEADER_SIZE as STRING_HEADER_SIZE,
   allocateUnsafe as allocateUnsafeString,
   freeUnsafe as freeUnsafeString,
   copyUnsafe as copyUnsafeString
@@ -22,8 +24,7 @@ import {
 import {
   itoa,
   dtoa,
-  utoa32_core,
-  utoa64_core,
+  itoa_stream,
   dtoa_core
 } from "./internal/number";
 
@@ -404,11 +405,46 @@ export class Array<T> {
       if (!lastIndex) {
         return changetype<string>(itoa<T>(loadUnsafe<T,T>(buffer, 0)));
       }
+
+      /*
       for (let i = 0; i < lastIndex; ++i) {
         result += itoa<T>(loadUnsafe<T,T>(buffer, i));
         if (hasSeparator) result += separator;
       }
       result += itoa<T>(loadUnsafe<T,T>(buffer, lastIndex));
+      */
+
+      let offset = 0;
+      let valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
+      let estLen = (valueLen + sepLen) * lastIndex + valueLen;
+      let result = allocateUnsafeString(estLen);
+
+      for (let i = 0; i < lastIndex; ++i) {
+        value = loadUnsafe<T,T>(buffer, i);
+        if (!value) {
+          store<u16>(changetype<usize>(result) + (offset << 1), CharCode._0, STRING_HEADER_SIZE);
+          ++offset;
+        } else {
+          offset += itoa_stream<T>(changetype<usize>(result), offset, value);
+        }
+        if (hasSeparator) {
+          copyUnsafeString(result, offset, separator, 0, sepLen);
+          offset += sepLen;
+        }
+      }
+      value = loadUnsafe<T,T>(buffer, lastIndex);
+      if (!value) {
+        store<u16>(changetype<usize>(result) + (offset << 1), CharCode._0, STRING_HEADER_SIZE);
+        ++offset;
+      } else {
+        offset += itoa_stream<T>(changetype<usize>(result), offset, value);
+      }
+      let out = result;
+      if (estLen > offset) {
+        out = result.substring(0, offset);
+        freeUnsafeString(result);
+      }
+      return out;
     } else if (isFloat<T>()) {
       if (!lastIndex) {
         return changetype<string>(dtoa(loadUnsafe<T,f64>(buffer, 0)));
@@ -444,7 +480,6 @@ export class Array<T> {
       if (value) {
         let valueLen = value.length;                          // tslint:disable-line:no-unsafe-any
         copyUnsafeString(result, offset, value, 0, valueLen); // tslint:disable-line:no-unsafe-any
-        offset += valueLen;                                   // tslint:disable-line:no-unsafe-any
       }
       return result;
     } else if (isArray<T>()) {

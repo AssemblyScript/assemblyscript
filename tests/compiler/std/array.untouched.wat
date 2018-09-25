@@ -23,6 +23,7 @@
  (type $iIiIiIii (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $Ii (func (param i64) (result i32)))
  (type $iIiv (func (param i32 i64 i32)))
+ (type $iiIi (func (param i32 i32 i64) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "JSMath" "random" (func $~lib/math/JSMath.random (result f64)))
@@ -812,7 +813,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 37)
+     (i32.const 38)
      (i32.const 39)
     )
     (unreachable)
@@ -3726,7 +3727,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 172)
+       (i32.const 173)
        (i32.const 42)
       )
       (unreachable)
@@ -3815,7 +3816,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 184)
+     (i32.const 185)
      (i32.const 20)
     )
     (unreachable)
@@ -3900,7 +3901,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 274)
+       (i32.const 275)
        (i32.const 42)
       )
       (unreachable)
@@ -4003,7 +4004,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 245)
+     (i32.const 246)
      (i32.const 20)
     )
     (unreachable)
@@ -4437,7 +4438,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 101)
+       (i32.const 102)
        (i32.const 41)
       )
       (unreachable)
@@ -4989,7 +4990,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 37)
+     (i32.const 38)
      (i32.const 39)
     )
     (unreachable)
@@ -6731,7 +6732,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 337)
+     (i32.const 338)
      (i32.const 4)
     )
     (unreachable)
@@ -7808,7 +7809,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 337)
+     (i32.const 338)
      (i32.const 4)
     )
     (unreachable)
@@ -8916,7 +8917,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 337)
+     (i32.const 338)
      (i32.const 4)
     )
     (unreachable)
@@ -9924,7 +9925,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 337)
+     (i32.const 338)
      (i32.const 4)
     )
     (unreachable)
@@ -10422,7 +10423,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 37)
+     (i32.const 38)
      (i32.const 39)
     )
     (unreachable)
@@ -10519,7 +10520,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 101)
+       (i32.const 102)
        (i32.const 41)
       )
       (unreachable)
@@ -10838,7 +10839,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 337)
+     (i32.const 338)
      (i32.const 4)
     )
     (unreachable)
@@ -11062,7 +11063,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 37)
+     (i32.const 38)
      (i32.const 39)
     )
     (unreachable)
@@ -11182,7 +11183,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 101)
+       (i32.const 102)
        (i32.const 41)
       )
       (unreachable)
@@ -11458,7 +11459,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 337)
+     (i32.const 338)
      (i32.const 4)
     )
     (unreachable)
@@ -12118,7 +12119,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 337)
+     (i32.const 338)
      (i32.const 4)
     )
     (unreachable)
@@ -12514,7 +12515,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 37)
+     (i32.const 38)
      (i32.const 39)
     )
     (unreachable)
@@ -12902,7 +12903,7 @@
       (call $~lib/env/abort
        (i32.const 0)
        (i32.const 8)
-       (i32.const 101)
+       (i32.const 102)
        (i32.const 41)
       )
       (unreachable)
@@ -13814,7 +13815,68 @@
    )
   )
  )
- (func $~lib/array/Array<i32>#join (; 171 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<i32> (; 171 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (set_local $3
+   (i32.const 0)
+  )
+  (set_local $4
+   (i32.lt_s
+    (get_local $2)
+    (i32.const 0)
+   )
+  )
+  (if
+   (get_local $4)
+   (set_local $2
+    (i32.sub
+     (i32.const 0)
+     (get_local $2)
+    )
+   )
+  )
+  (set_local $3
+   (i32.add
+    (call $~lib/internal/number/decimalCount32
+     (get_local $2)
+    )
+    (get_local $4)
+   )
+  )
+  (block $~lib/internal/number/utoa32_core|inlined.1
+   (set_local $5
+    (i32.add
+     (get_local $0)
+     (i32.shl
+      (get_local $1)
+      (i32.const 1)
+     )
+    )
+   )
+   (call $~lib/internal/number/utoa32_lut
+    (get_local $5)
+    (get_local $2)
+    (get_local $3)
+   )
+  )
+  (if
+   (get_local $4)
+   (i32.store16 offset=4
+    (i32.add
+     (get_local $0)
+     (i32.shl
+      (get_local $1)
+      (i32.const 1)
+     )
+    )
+    (get_global $~lib/internal/string/CharCode.MINUS)
+   )
+  )
+  (get_local $3)
+ )
+ (func $~lib/array/Array<i32>#join (; 172 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13822,6 +13884,10 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -13881,47 +13947,147 @@
     )
    )
   )
+  (set_local $8
+   (i32.const 0)
+  )
+  (set_local $9
+   (i32.add
+    (i32.const 10)
+    (i32.const 1)
+   )
+  )
+  (set_local $10
+   (i32.add
+    (i32.mul
+     (i32.add
+      (get_local $9)
+      (get_local $6)
+     )
+     (get_local $2)
+    )
+    (get_local $9)
+   )
+  )
+  (set_local $11
+   (call $~lib/internal/string/allocateUnsafe
+    (get_local $10)
+   )
+  )
   (block $break|0
-   (set_local $8
+   (set_local $12
     (i32.const 0)
    )
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (i32.lt_s
-       (get_local $8)
+       (get_local $12)
        (get_local $2)
       )
      )
     )
     (block
-     (set_local $3
-      (call $~lib/string/String.__concat
-       (get_local $3)
-       (call $~lib/internal/number/itoa<i32>
-        (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.24 (result i32)
-         (i32.load offset=8
-          (i32.add
-           (get_local $5)
-           (i32.shl
-            (get_local $8)
-            (i32.const 2)
-           )
-          )
+     (set_local $4
+      (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.24 (result i32)
+       (i32.load offset=8
+        (i32.add
+         (get_local $5)
+         (i32.shl
+          (get_local $12)
+          (i32.const 2)
          )
         )
        )
       )
      )
      (if
-      (get_local $7)
-      (set_local $3
-       (call $~lib/string/String.__concat
-        (get_local $3)
-        (get_local $1)
+      (i32.eqz
+       (get_local $4)
+      )
+      (block
+       (i32.store16 offset=4
+        (i32.add
+         (get_local $11)
+         (i32.shl
+          (get_local $8)
+          (i32.const 1)
+         )
+        )
+        (get_global $~lib/internal/string/CharCode._0)
+       )
+       (set_local $8
+        (i32.add
+         (get_local $8)
+         (i32.const 1)
+        )
+       )
+      )
+      (set_local $8
+       (i32.add
+        (get_local $8)
+        (call $~lib/internal/number/itoa_stream<i32>
+         (get_local $11)
+         (get_local $8)
+         (get_local $4)
+        )
        )
       )
      )
+     (if
+      (get_local $7)
+      (block
+       (call $~lib/internal/string/copyUnsafe
+        (get_local $11)
+        (get_local $8)
+        (get_local $1)
+        (i32.const 0)
+        (get_local $6)
+       )
+       (set_local $8
+        (i32.add
+         (get_local $8)
+         (get_local $6)
+        )
+       )
+      )
+     )
+    )
+    (set_local $12
+     (i32.add
+      (get_local $12)
+      (i32.const 1)
+     )
+    )
+    (br $repeat|0)
+   )
+  )
+  (set_local $4
+   (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.25 (result i32)
+    (i32.load offset=8
+     (i32.add
+      (get_local $5)
+      (i32.shl
+       (get_local $2)
+       (i32.const 2)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $4)
+   )
+   (block
+    (i32.store16 offset=4
+     (i32.add
+      (get_local $11)
+      (i32.shl
+       (get_local $8)
+       (i32.const 1)
+      )
+     )
+     (get_global $~lib/internal/string/CharCode._0)
     )
     (set_local $8
      (i32.add
@@ -13929,30 +14095,67 @@
       (i32.const 1)
      )
     )
-    (br $repeat|0)
+   )
+   (set_local $8
+    (i32.add
+     (get_local $8)
+     (call $~lib/internal/number/itoa_stream<i32>
+      (get_local $11)
+      (get_local $8)
+      (get_local $4)
+     )
+    )
    )
   )
-  (set_local $3
-   (call $~lib/string/String.__concat
-    (get_local $3)
-    (call $~lib/internal/number/itoa<i32>
-     (block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.25 (result i32)
-      (i32.load offset=8
-       (i32.add
-        (get_local $5)
-        (i32.shl
-         (get_local $2)
-         (i32.const 2)
+  (set_local $12
+   (get_local $11)
+  )
+  (if
+   (i32.gt_s
+    (get_local $10)
+    (get_local $8)
+   )
+   (block
+    (set_local $12
+     (call $~lib/string/String#substring
+      (get_local $11)
+      (i32.const 0)
+      (get_local $8)
+     )
+    )
+    (block $~lib/internal/string/freeUnsafe|inlined.1
+     (block
+      (if
+       (i32.eqz
+        (get_local $11)
+       )
+       (block
+        (call $~lib/env/abort
+         (i32.const 0)
+         (i32.const 1648)
+         (i32.const 28)
+         (i32.const 4)
         )
+        (unreachable)
+       )
+      )
+      (block $~lib/memory/memory.free|inlined.5
+       (block
+        (call $~lib/allocator/arena/__memory_free
+         (get_local $11)
+        )
+        (br $~lib/memory/memory.free|inlined.5)
        )
       )
      )
     )
    )
   )
-  (get_local $3)
+  (return
+   (get_local $12)
+  )
  )
- (func $~lib/builtins/isFinite<f64> (; 172 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 173 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.eq
    (f64.sub
     (get_local $0)
@@ -13961,7 +14164,7 @@
    (f64.const 0)
   )
  )
- (func $~lib/internal/number/genDigits (; 173 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/number/genDigits (; 174 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -14687,7 +14890,7 @@
   )
   (get_local $15)
  )
- (func $~lib/internal/number/prettify (; 174 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/prettify (; 175 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -15019,7 +15222,7 @@
            (i32.const 1)
           )
          )
-         (block $~lib/internal/number/utoa32_core|inlined.1
+         (block $~lib/internal/number/utoa32_core|inlined.2
           (call $~lib/internal/number/utoa32_lut
            (get_local $4)
            (get_local $5)
@@ -15135,7 +15338,7 @@
             (i32.const 1)
            )
           )
-          (block $~lib/internal/number/utoa32_core|inlined.2
+          (block $~lib/internal/number/utoa32_core|inlined.3
            (call $~lib/internal/number/utoa32_lut
             (get_local $4)
             (get_local $5)
@@ -15167,7 +15370,7 @@
   )
   (unreachable)
  )
- (func $~lib/internal/number/dtoa_core (; 175 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/internal/number/dtoa_core (; 176 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i64)
   (local $4 i32)
@@ -15793,7 +15996,7 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/number/dtoa (; 176 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/number/dtoa (; 177 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -15851,7 +16054,7 @@
     (get_local $2)
    )
   )
-  (block $~lib/internal/string/freeUnsafe|inlined.1
+  (block $~lib/internal/string/freeUnsafe|inlined.2
    (block
     (if
      (i32.eqz
@@ -15867,19 +16070,19 @@
       (unreachable)
      )
     )
-    (block $~lib/memory/memory.free|inlined.5
+    (block $~lib/memory/memory.free|inlined.6
      (block
       (call $~lib/allocator/arena/__memory_free
        (get_local $1)
       )
-      (br $~lib/memory/memory.free|inlined.5)
+      (br $~lib/memory/memory.free|inlined.6)
      )
     )
    )
   )
   (get_local $3)
  )
- (func $~lib/array/Array<f64>#join (; 177 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#join (; 178 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f64)
@@ -16017,7 +16220,7 @@
   )
   (get_local $3)
  )
- (func $~lib/array/Array<String>#join (; 178 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#join (; 179 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16257,19 +16460,13 @@
      (i32.const 0)
      (get_local $11)
     )
-    (set_local $10
-     (i32.add
-      (get_local $10)
-      (get_local $11)
-     )
-    )
    )
   )
   (return
    (get_local $9)
   )
  )
- (func $std/array/Ref#constructor (; 179 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/Ref#constructor (; 180 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (tee_local $0
    (if (result i32)
@@ -16288,7 +16485,7 @@
    )
   )
  )
- (func $~lib/array/Array<Ref>#constructor (; 180 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref>#constructor (; 181 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16302,7 +16499,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 37)
+     (i32.const 38)
      (i32.const 39)
     )
     (unreachable)
@@ -16368,7 +16565,7 @@
   )
   (get_local $0)
  )
- (func $~lib/array/Array<Ref>#__unchecked_set (; 181 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref>#__unchecked_set (; 182 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (block $~lib/internal/arraybuffer/storeUnsafe<Ref,Ref>|inlined.0
    (set_local $3
@@ -16388,7 +16585,7 @@
    )
   )
  )
- (func $~lib/array/Array<Ref>#join (; 182 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref>#join (; 183 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16580,7 +16777,7 @@
       (get_local $10)
      )
     )
-    (block $~lib/internal/string/freeUnsafe|inlined.2
+    (block $~lib/internal/string/freeUnsafe|inlined.3
      (block
       (if
        (i32.eqz
@@ -16596,12 +16793,12 @@
         (unreachable)
        )
       )
-      (block $~lib/memory/memory.free|inlined.6
+      (block $~lib/memory/memory.free|inlined.7
        (block
         (call $~lib/allocator/arena/__memory_free
          (get_local $9)
         )
-        (br $~lib/memory/memory.free|inlined.6)
+        (br $~lib/memory/memory.free|inlined.7)
        )
       )
      )
@@ -16612,7 +16809,7 @@
    (get_local $11)
   )
  )
- (func $~lib/internal/number/itoa<i8> (; 183 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i8> (; 184 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (call $~lib/internal/number/itoa32
     (i32.shr_s
@@ -16625,7 +16822,90 @@
    )
   )
  )
- (func $~lib/array/Array<i8>#join (; 184 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<i8> (; 185 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (set_local $3
+   (i32.const 0)
+  )
+  (set_local $4
+   (i32.lt_s
+    (i32.shr_s
+     (i32.shl
+      (get_local $2)
+      (i32.const 24)
+     )
+     (i32.const 24)
+    )
+    (i32.const 0)
+   )
+  )
+  (if
+   (get_local $4)
+   (set_local $2
+    (i32.sub
+     (i32.const 0)
+     (get_local $2)
+    )
+   )
+  )
+  (set_local $3
+   (i32.add
+    (call $~lib/internal/number/decimalCount32
+     (i32.shr_s
+      (i32.shl
+       (get_local $2)
+       (i32.const 24)
+      )
+      (i32.const 24)
+     )
+    )
+    (get_local $4)
+   )
+  )
+  (block $~lib/internal/number/utoa32_core|inlined.4
+   (set_local $5
+    (i32.add
+     (get_local $0)
+     (i32.shl
+      (get_local $1)
+      (i32.const 1)
+     )
+    )
+   )
+   (set_local $6
+    (i32.shr_s
+     (i32.shl
+      (get_local $2)
+      (i32.const 24)
+     )
+     (i32.const 24)
+    )
+   )
+   (call $~lib/internal/number/utoa32_lut
+    (get_local $5)
+    (get_local $6)
+    (get_local $3)
+   )
+  )
+  (if
+   (get_local $4)
+   (i32.store16 offset=4
+    (i32.add
+     (get_local $0)
+     (i32.shl
+      (get_local $1)
+      (i32.const 1)
+     )
+    )
+    (get_global $~lib/internal/string/CharCode.MINUS)
+   )
+  )
+  (get_local $3)
+ )
+ (func $~lib/array/Array<i8>#join (; 186 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16633,6 +16913,10 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -16692,47 +16976,159 @@
     )
    )
   )
+  (set_local $8
+   (i32.const 0)
+  )
+  (set_local $9
+   (i32.add
+    (i32.const 10)
+    (i32.const 1)
+   )
+  )
+  (set_local $10
+   (i32.add
+    (i32.mul
+     (i32.add
+      (get_local $9)
+      (get_local $6)
+     )
+     (get_local $2)
+    )
+    (get_local $9)
+   )
+  )
+  (set_local $11
+   (call $~lib/internal/string/allocateUnsafe
+    (get_local $10)
+   )
+  )
   (block $break|0
-   (set_local $8
+   (set_local $12
     (i32.const 0)
    )
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (i32.lt_s
-       (get_local $8)
+       (get_local $12)
        (get_local $2)
       )
      )
     )
     (block
-     (set_local $3
-      (call $~lib/string/String.__concat
-       (get_local $3)
-       (call $~lib/internal/number/itoa<i8>
-        (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.1 (result i32)
-         (i32.load8_s offset=8
-          (i32.add
-           (get_local $5)
-           (i32.shl
-            (get_local $8)
-            (i32.const 0)
-           )
-          )
+     (set_local $4
+      (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.1 (result i32)
+       (i32.load8_s offset=8
+        (i32.add
+         (get_local $5)
+         (i32.shl
+          (get_local $12)
+          (i32.const 0)
          )
         )
        )
       )
      )
      (if
-      (get_local $7)
-      (set_local $3
-       (call $~lib/string/String.__concat
-        (get_local $3)
-        (get_local $1)
+      (i32.eqz
+       (i32.shr_s
+        (i32.shl
+         (get_local $4)
+         (i32.const 24)
+        )
+        (i32.const 24)
+       )
+      )
+      (block
+       (i32.store16 offset=4
+        (i32.add
+         (get_local $11)
+         (i32.shl
+          (get_local $8)
+          (i32.const 1)
+         )
+        )
+        (get_global $~lib/internal/string/CharCode._0)
+       )
+       (set_local $8
+        (i32.add
+         (get_local $8)
+         (i32.const 1)
+        )
+       )
+      )
+      (set_local $8
+       (i32.add
+        (get_local $8)
+        (call $~lib/internal/number/itoa_stream<i8>
+         (get_local $11)
+         (get_local $8)
+         (get_local $4)
+        )
        )
       )
      )
+     (if
+      (get_local $7)
+      (block
+       (call $~lib/internal/string/copyUnsafe
+        (get_local $11)
+        (get_local $8)
+        (get_local $1)
+        (i32.const 0)
+        (get_local $6)
+       )
+       (set_local $8
+        (i32.add
+         (get_local $8)
+         (get_local $6)
+        )
+       )
+      )
+     )
+    )
+    (set_local $12
+     (i32.add
+      (get_local $12)
+      (i32.const 1)
+     )
+    )
+    (br $repeat|0)
+   )
+  )
+  (set_local $4
+   (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.2 (result i32)
+    (i32.load8_s offset=8
+     (i32.add
+      (get_local $5)
+      (i32.shl
+       (get_local $2)
+       (i32.const 0)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.shr_s
+     (i32.shl
+      (get_local $4)
+      (i32.const 24)
+     )
+     (i32.const 24)
+    )
+   )
+   (block
+    (i32.store16 offset=4
+     (i32.add
+      (get_local $11)
+      (i32.shl
+       (get_local $8)
+       (i32.const 1)
+      )
+     )
+     (get_global $~lib/internal/string/CharCode._0)
     )
     (set_local $8
      (i32.add
@@ -16740,30 +17136,67 @@
       (i32.const 1)
      )
     )
-    (br $repeat|0)
+   )
+   (set_local $8
+    (i32.add
+     (get_local $8)
+     (call $~lib/internal/number/itoa_stream<i8>
+      (get_local $11)
+      (get_local $8)
+      (get_local $4)
+     )
+    )
    )
   )
-  (set_local $3
-   (call $~lib/string/String.__concat
-    (get_local $3)
-    (call $~lib/internal/number/itoa<i8>
-     (block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.2 (result i32)
-      (i32.load8_s offset=8
-       (i32.add
-        (get_local $5)
-        (i32.shl
-         (get_local $2)
+  (set_local $12
+   (get_local $11)
+  )
+  (if
+   (i32.gt_s
+    (get_local $10)
+    (get_local $8)
+   )
+   (block
+    (set_local $12
+     (call $~lib/string/String#substring
+      (get_local $11)
+      (i32.const 0)
+      (get_local $8)
+     )
+    )
+    (block $~lib/internal/string/freeUnsafe|inlined.4
+     (block
+      (if
+       (i32.eqz
+        (get_local $11)
+       )
+       (block
+        (call $~lib/env/abort
          (i32.const 0)
+         (i32.const 1648)
+         (i32.const 28)
+         (i32.const 4)
         )
+        (unreachable)
+       )
+      )
+      (block $~lib/memory/memory.free|inlined.8
+       (block
+        (call $~lib/allocator/arena/__memory_free
+         (get_local $11)
+        )
+        (br $~lib/memory/memory.free|inlined.8)
        )
       )
      )
     )
    )
   )
-  (get_local $3)
+  (return
+   (get_local $12)
+  )
  )
- (func $~lib/internal/number/utoa32 (; 185 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/utoa32 (; 187 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (if
@@ -16784,7 +17217,7 @@
     (get_local $1)
    )
   )
-  (block $~lib/internal/number/utoa32_core|inlined.3
+  (block $~lib/internal/number/utoa32_core|inlined.5
    (call $~lib/internal/number/utoa32_lut
     (get_local $2)
     (get_local $0)
@@ -16793,7 +17226,7 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/number/itoa<u16> (; 186 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u16> (; 188 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (call $~lib/internal/number/utoa32
     (i32.and
@@ -16803,7 +17236,46 @@
    )
   )
  )
- (func $~lib/array/Array<u16>#join (; 187 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<u16> (; 189 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (set_local $3
+   (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/number/decimalCount32
+    (i32.and
+     (get_local $2)
+     (i32.const 65535)
+    )
+   )
+  )
+  (block $~lib/internal/number/utoa32_core|inlined.6
+   (set_local $4
+    (i32.add
+     (get_local $0)
+     (i32.shl
+      (get_local $1)
+      (i32.const 1)
+     )
+    )
+   )
+   (set_local $5
+    (i32.and
+     (get_local $2)
+     (i32.const 65535)
+    )
+   )
+   (call $~lib/internal/number/utoa32_lut
+    (get_local $4)
+    (get_local $5)
+    (get_local $3)
+   )
+  )
+  (get_local $3)
+ )
+ (func $~lib/array/Array<u16>#join (; 190 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16811,6 +17283,10 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -16870,47 +17346,153 @@
     )
    )
   )
+  (set_local $8
+   (i32.const 0)
+  )
+  (set_local $9
+   (i32.add
+    (i32.const 10)
+    (i32.const 0)
+   )
+  )
+  (set_local $10
+   (i32.add
+    (i32.mul
+     (i32.add
+      (get_local $9)
+      (get_local $6)
+     )
+     (get_local $2)
+    )
+    (get_local $9)
+   )
+  )
+  (set_local $11
+   (call $~lib/internal/string/allocateUnsafe
+    (get_local $10)
+   )
+  )
   (block $break|0
-   (set_local $8
+   (set_local $12
     (i32.const 0)
    )
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (i32.lt_s
-       (get_local $8)
+       (get_local $12)
        (get_local $2)
       )
      )
     )
     (block
-     (set_local $3
-      (call $~lib/string/String.__concat
-       (get_local $3)
-       (call $~lib/internal/number/itoa<u16>
-        (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.1 (result i32)
-         (i32.load16_u offset=8
-          (i32.add
-           (get_local $5)
-           (i32.shl
-            (get_local $8)
-            (i32.const 1)
-           )
-          )
+     (set_local $4
+      (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.1 (result i32)
+       (i32.load16_u offset=8
+        (i32.add
+         (get_local $5)
+         (i32.shl
+          (get_local $12)
+          (i32.const 1)
          )
         )
        )
       )
      )
      (if
-      (get_local $7)
-      (set_local $3
-       (call $~lib/string/String.__concat
-        (get_local $3)
-        (get_local $1)
+      (i32.eqz
+       (i32.and
+        (get_local $4)
+        (i32.const 65535)
+       )
+      )
+      (block
+       (i32.store16 offset=4
+        (i32.add
+         (get_local $11)
+         (i32.shl
+          (get_local $8)
+          (i32.const 1)
+         )
+        )
+        (get_global $~lib/internal/string/CharCode._0)
+       )
+       (set_local $8
+        (i32.add
+         (get_local $8)
+         (i32.const 1)
+        )
+       )
+      )
+      (set_local $8
+       (i32.add
+        (get_local $8)
+        (call $~lib/internal/number/itoa_stream<u16>
+         (get_local $11)
+         (get_local $8)
+         (get_local $4)
+        )
        )
       )
      )
+     (if
+      (get_local $7)
+      (block
+       (call $~lib/internal/string/copyUnsafe
+        (get_local $11)
+        (get_local $8)
+        (get_local $1)
+        (i32.const 0)
+        (get_local $6)
+       )
+       (set_local $8
+        (i32.add
+         (get_local $8)
+         (get_local $6)
+        )
+       )
+      )
+     )
+    )
+    (set_local $12
+     (i32.add
+      (get_local $12)
+      (i32.const 1)
+     )
+    )
+    (br $repeat|0)
+   )
+  )
+  (set_local $4
+   (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.2 (result i32)
+    (i32.load16_u offset=8
+     (i32.add
+      (get_local $5)
+      (i32.shl
+       (get_local $2)
+       (i32.const 1)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.and
+     (get_local $4)
+     (i32.const 65535)
+    )
+   )
+   (block
+    (i32.store16 offset=4
+     (i32.add
+      (get_local $11)
+      (i32.shl
+       (get_local $8)
+       (i32.const 1)
+      )
+     )
+     (get_global $~lib/internal/string/CharCode._0)
     )
     (set_local $8
      (i32.add
@@ -16918,30 +17500,67 @@
       (i32.const 1)
      )
     )
-    (br $repeat|0)
+   )
+   (set_local $8
+    (i32.add
+     (get_local $8)
+     (call $~lib/internal/number/itoa_stream<u16>
+      (get_local $11)
+      (get_local $8)
+      (get_local $4)
+     )
+    )
    )
   )
-  (set_local $3
-   (call $~lib/string/String.__concat
-    (get_local $3)
-    (call $~lib/internal/number/itoa<u16>
-     (block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.2 (result i32)
-      (i32.load16_u offset=8
-       (i32.add
-        (get_local $5)
-        (i32.shl
-         (get_local $2)
-         (i32.const 1)
+  (set_local $12
+   (get_local $11)
+  )
+  (if
+   (i32.gt_s
+    (get_local $10)
+    (get_local $8)
+   )
+   (block
+    (set_local $12
+     (call $~lib/string/String#substring
+      (get_local $11)
+      (i32.const 0)
+      (get_local $8)
+     )
+    )
+    (block $~lib/internal/string/freeUnsafe|inlined.5
+     (block
+      (if
+       (i32.eqz
+        (get_local $11)
+       )
+       (block
+        (call $~lib/env/abort
+         (i32.const 0)
+         (i32.const 1648)
+         (i32.const 28)
+         (i32.const 4)
         )
+        (unreachable)
+       )
+      )
+      (block $~lib/memory/memory.free|inlined.9
+       (block
+        (call $~lib/allocator/arena/__memory_free
+         (get_local $11)
+        )
+        (br $~lib/memory/memory.free|inlined.9)
        )
       )
      )
     )
    )
   )
-  (get_local $3)
+  (return
+   (get_local $12)
+  )
  )
- (func $~lib/internal/number/decimalCount64 (; 188 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/decimalCount64 (; 191 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (if
    (i64.lt_u
@@ -17033,7 +17652,7 @@
   )
   (unreachable)
  )
- (func $~lib/internal/number/utoa64_lut (; 189 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/internal/number/utoa64_lut (; 192 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
@@ -17227,7 +17846,7 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/number/utoa64 (; 190 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/utoa64 (; 193 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -17262,7 +17881,7 @@
       (get_local $3)
      )
     )
-    (block $~lib/internal/number/utoa32_core|inlined.4
+    (block $~lib/internal/number/utoa32_core|inlined.7
      (call $~lib/internal/number/utoa32_lut
       (get_local $1)
       (get_local $2)
@@ -17292,14 +17911,82 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/number/itoa<u64> (; 191 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa<u64> (; 194 ;) (type $Ii) (param $0 i64) (result i32)
   (return
    (call $~lib/internal/number/utoa64
     (get_local $0)
    )
   )
  )
- (func $~lib/array/Array<u64>#join (; 192 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<u64> (; 195 ;) (type $iiIi) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (set_local $3
+   (i32.const 0)
+  )
+  (if
+   (i64.le_u
+    (get_local $2)
+    (i64.extend_u/i32
+     (get_global $~lib/builtins/u32.MAX_VALUE)
+    )
+   )
+   (block
+    (set_local $4
+     (i32.wrap/i64
+      (get_local $2)
+     )
+    )
+    (set_local $3
+     (call $~lib/internal/number/decimalCount32
+      (get_local $4)
+     )
+    )
+    (block $~lib/internal/number/utoa32_core|inlined.8
+     (set_local $5
+      (i32.add
+       (get_local $0)
+       (i32.shl
+        (get_local $1)
+        (i32.const 1)
+       )
+      )
+     )
+     (call $~lib/internal/number/utoa32_lut
+      (get_local $5)
+      (get_local $4)
+      (get_local $3)
+     )
+    )
+   )
+   (block
+    (set_local $3
+     (call $~lib/internal/number/decimalCount64
+      (get_local $2)
+     )
+    )
+    (block $~lib/internal/number/utoa64_core|inlined.1
+     (set_local $4
+      (i32.add
+       (get_local $0)
+       (i32.shl
+        (get_local $1)
+        (i32.const 1)
+       )
+      )
+     )
+     (call $~lib/internal/number/utoa64_lut
+      (get_local $4)
+      (get_local $2)
+      (get_local $3)
+     )
+    )
+   )
+  )
+  (get_local $3)
+ )
+ (func $~lib/array/Array<u64>#join (; 196 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i64)
@@ -17307,6 +17994,10 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -17366,47 +18057,147 @@
     )
    )
   )
+  (set_local $8
+   (i32.const 0)
+  )
+  (set_local $9
+   (i32.add
+    (i32.const 20)
+    (i32.const 0)
+   )
+  )
+  (set_local $10
+   (i32.add
+    (i32.mul
+     (i32.add
+      (get_local $9)
+      (get_local $6)
+     )
+     (get_local $2)
+    )
+    (get_local $9)
+   )
+  )
+  (set_local $11
+   (call $~lib/internal/string/allocateUnsafe
+    (get_local $10)
+   )
+  )
   (block $break|0
-   (set_local $8
+   (set_local $12
     (i32.const 0)
    )
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (i32.lt_s
-       (get_local $8)
+       (get_local $12)
        (get_local $2)
       )
      )
     )
     (block
-     (set_local $3
-      (call $~lib/string/String.__concat
-       (get_local $3)
-       (call $~lib/internal/number/itoa<u64>
-        (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.2 (result i64)
-         (i64.load offset=8
-          (i32.add
-           (get_local $5)
-           (i32.shl
-            (get_local $8)
-            (i32.const 3)
-           )
-          )
+     (set_local $4
+      (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.2 (result i64)
+       (i64.load offset=8
+        (i32.add
+         (get_local $5)
+         (i32.shl
+          (get_local $12)
+          (i32.const 3)
          )
         )
        )
       )
      )
      (if
-      (get_local $7)
-      (set_local $3
-       (call $~lib/string/String.__concat
-        (get_local $3)
-        (get_local $1)
+      (i64.eqz
+       (get_local $4)
+      )
+      (block
+       (i32.store16 offset=4
+        (i32.add
+         (get_local $11)
+         (i32.shl
+          (get_local $8)
+          (i32.const 1)
+         )
+        )
+        (get_global $~lib/internal/string/CharCode._0)
+       )
+       (set_local $8
+        (i32.add
+         (get_local $8)
+         (i32.const 1)
+        )
+       )
+      )
+      (set_local $8
+       (i32.add
+        (get_local $8)
+        (call $~lib/internal/number/itoa_stream<u64>
+         (get_local $11)
+         (get_local $8)
+         (get_local $4)
+        )
        )
       )
      )
+     (if
+      (get_local $7)
+      (block
+       (call $~lib/internal/string/copyUnsafe
+        (get_local $11)
+        (get_local $8)
+        (get_local $1)
+        (i32.const 0)
+        (get_local $6)
+       )
+       (set_local $8
+        (i32.add
+         (get_local $8)
+         (get_local $6)
+        )
+       )
+      )
+     )
+    )
+    (set_local $12
+     (i32.add
+      (get_local $12)
+      (i32.const 1)
+     )
+    )
+    (br $repeat|0)
+   )
+  )
+  (set_local $4
+   (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.3 (result i64)
+    (i64.load offset=8
+     (i32.add
+      (get_local $5)
+      (i32.shl
+       (get_local $2)
+       (i32.const 3)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (i64.eqz
+    (get_local $4)
+   )
+   (block
+    (i32.store16 offset=4
+     (i32.add
+      (get_local $11)
+      (i32.shl
+       (get_local $8)
+       (i32.const 1)
+      )
+     )
+     (get_global $~lib/internal/string/CharCode._0)
     )
     (set_local $8
      (i32.add
@@ -17414,30 +18205,67 @@
       (i32.const 1)
      )
     )
-    (br $repeat|0)
+   )
+   (set_local $8
+    (i32.add
+     (get_local $8)
+     (call $~lib/internal/number/itoa_stream<u64>
+      (get_local $11)
+      (get_local $8)
+      (get_local $4)
+     )
+    )
    )
   )
-  (set_local $3
-   (call $~lib/string/String.__concat
-    (get_local $3)
-    (call $~lib/internal/number/itoa<u64>
-     (block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.3 (result i64)
-      (i64.load offset=8
-       (i32.add
-        (get_local $5)
-        (i32.shl
-         (get_local $2)
-         (i32.const 3)
+  (set_local $12
+   (get_local $11)
+  )
+  (if
+   (i32.gt_s
+    (get_local $10)
+    (get_local $8)
+   )
+   (block
+    (set_local $12
+     (call $~lib/string/String#substring
+      (get_local $11)
+      (i32.const 0)
+      (get_local $8)
+     )
+    )
+    (block $~lib/internal/string/freeUnsafe|inlined.6
+     (block
+      (if
+       (i32.eqz
+        (get_local $11)
+       )
+       (block
+        (call $~lib/env/abort
+         (i32.const 0)
+         (i32.const 1648)
+         (i32.const 28)
+         (i32.const 4)
         )
+        (unreachable)
+       )
+      )
+      (block $~lib/memory/memory.free|inlined.10
+       (block
+        (call $~lib/allocator/arena/__memory_free
+         (get_local $11)
+        )
+        (br $~lib/memory/memory.free|inlined.10)
        )
       )
      )
     )
    )
   )
-  (get_local $3)
+  (return
+   (get_local $12)
+  )
  )
- (func $~lib/array/Array<Array<i32>>#join (; 193 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#join (; 197 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -17566,7 +18394,7 @@
   )
   (get_local $3)
  )
- (func $~lib/internal/number/itoa<u8> (; 194 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u8> (; 198 ;) (type $ii) (param $0 i32) (result i32)
   (return
    (call $~lib/internal/number/utoa32
     (i32.and
@@ -17576,7 +18404,46 @@
    )
   )
  )
- (func $~lib/array/Array<u8>#join (; 195 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<u8> (; 199 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (set_local $3
+   (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/number/decimalCount32
+    (i32.and
+     (get_local $2)
+     (i32.const 255)
+    )
+   )
+  )
+  (block $~lib/internal/number/utoa32_core|inlined.9
+   (set_local $4
+    (i32.add
+     (get_local $0)
+     (i32.shl
+      (get_local $1)
+      (i32.const 1)
+     )
+    )
+   )
+   (set_local $5
+    (i32.and
+     (get_local $2)
+     (i32.const 255)
+    )
+   )
+   (call $~lib/internal/number/utoa32_lut
+    (get_local $4)
+    (get_local $5)
+    (get_local $3)
+   )
+  )
+  (get_local $3)
+ )
+ (func $~lib/array/Array<u8>#join (; 200 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -17584,6 +18451,10 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -17643,47 +18514,153 @@
     )
    )
   )
+  (set_local $8
+   (i32.const 0)
+  )
+  (set_local $9
+   (i32.add
+    (i32.const 10)
+    (i32.const 0)
+   )
+  )
+  (set_local $10
+   (i32.add
+    (i32.mul
+     (i32.add
+      (get_local $9)
+      (get_local $6)
+     )
+     (get_local $2)
+    )
+    (get_local $9)
+   )
+  )
+  (set_local $11
+   (call $~lib/internal/string/allocateUnsafe
+    (get_local $10)
+   )
+  )
   (block $break|0
-   (set_local $8
+   (set_local $12
     (i32.const 0)
    )
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
       (i32.lt_s
-       (get_local $8)
+       (get_local $12)
        (get_local $2)
       )
      )
     )
     (block
-     (set_local $3
-      (call $~lib/string/String.__concat
-       (get_local $3)
-       (call $~lib/internal/number/itoa<u8>
-        (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.2 (result i32)
-         (i32.load8_u offset=8
-          (i32.add
-           (get_local $5)
-           (i32.shl
-            (get_local $8)
-            (i32.const 0)
-           )
-          )
+     (set_local $4
+      (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.2 (result i32)
+       (i32.load8_u offset=8
+        (i32.add
+         (get_local $5)
+         (i32.shl
+          (get_local $12)
+          (i32.const 0)
          )
         )
        )
       )
      )
      (if
-      (get_local $7)
-      (set_local $3
-       (call $~lib/string/String.__concat
-        (get_local $3)
-        (get_local $1)
+      (i32.eqz
+       (i32.and
+        (get_local $4)
+        (i32.const 255)
+       )
+      )
+      (block
+       (i32.store16 offset=4
+        (i32.add
+         (get_local $11)
+         (i32.shl
+          (get_local $8)
+          (i32.const 1)
+         )
+        )
+        (get_global $~lib/internal/string/CharCode._0)
+       )
+       (set_local $8
+        (i32.add
+         (get_local $8)
+         (i32.const 1)
+        )
+       )
+      )
+      (set_local $8
+       (i32.add
+        (get_local $8)
+        (call $~lib/internal/number/itoa_stream<u8>
+         (get_local $11)
+         (get_local $8)
+         (get_local $4)
+        )
        )
       )
      )
+     (if
+      (get_local $7)
+      (block
+       (call $~lib/internal/string/copyUnsafe
+        (get_local $11)
+        (get_local $8)
+        (get_local $1)
+        (i32.const 0)
+        (get_local $6)
+       )
+       (set_local $8
+        (i32.add
+         (get_local $8)
+         (get_local $6)
+        )
+       )
+      )
+     )
+    )
+    (set_local $12
+     (i32.add
+      (get_local $12)
+      (i32.const 1)
+     )
+    )
+    (br $repeat|0)
+   )
+  )
+  (set_local $4
+   (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.3 (result i32)
+    (i32.load8_u offset=8
+     (i32.add
+      (get_local $5)
+      (i32.shl
+       (get_local $2)
+       (i32.const 0)
+      )
+     )
+    )
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.and
+     (get_local $4)
+     (i32.const 255)
+    )
+   )
+   (block
+    (i32.store16 offset=4
+     (i32.add
+      (get_local $11)
+      (i32.shl
+       (get_local $8)
+       (i32.const 1)
+      )
+     )
+     (get_global $~lib/internal/string/CharCode._0)
     )
     (set_local $8
      (i32.add
@@ -17691,30 +18668,67 @@
       (i32.const 1)
      )
     )
-    (br $repeat|0)
+   )
+   (set_local $8
+    (i32.add
+     (get_local $8)
+     (call $~lib/internal/number/itoa_stream<u8>
+      (get_local $11)
+      (get_local $8)
+      (get_local $4)
+     )
+    )
    )
   )
-  (set_local $3
-   (call $~lib/string/String.__concat
-    (get_local $3)
-    (call $~lib/internal/number/itoa<u8>
-     (block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.3 (result i32)
-      (i32.load8_u offset=8
-       (i32.add
-        (get_local $5)
-        (i32.shl
-         (get_local $2)
+  (set_local $12
+   (get_local $11)
+  )
+  (if
+   (i32.gt_s
+    (get_local $10)
+    (get_local $8)
+   )
+   (block
+    (set_local $12
+     (call $~lib/string/String#substring
+      (get_local $11)
+      (i32.const 0)
+      (get_local $8)
+     )
+    )
+    (block $~lib/internal/string/freeUnsafe|inlined.7
+     (block
+      (if
+       (i32.eqz
+        (get_local $11)
+       )
+       (block
+        (call $~lib/env/abort
          (i32.const 0)
+         (i32.const 1648)
+         (i32.const 28)
+         (i32.const 4)
         )
+        (unreachable)
+       )
+      )
+      (block $~lib/memory/memory.free|inlined.11
+       (block
+        (call $~lib/allocator/arena/__memory_free
+         (get_local $11)
+        )
+        (br $~lib/memory/memory.free|inlined.11)
        )
       )
      )
     )
    )
   )
-  (get_local $3)
+  (return
+   (get_local $12)
+  )
  )
- (func $~lib/array/Array<Array<u8>>#join (; 196 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<u8>>#join (; 201 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -17843,7 +18857,7 @@
   )
   (get_local $3)
  )
- (func $start (; 197 ;) (type $v)
+ (func $start (; 202 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -22471,6 +23485,6 @@
    )
   )
  )
- (func $null (; 198 ;) (type $v)
+ (func $null (; 203 ;) (type $v)
  )
 )

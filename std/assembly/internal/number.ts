@@ -626,3 +626,40 @@ export function dtoa(value: f64): String {
   freeUnsafeString(buffer);
   return result;
 }
+
+export function itoa_stream<T>(buffer: usize, offset: usize, value: T): u32 {
+  var decimals: u32 = 0;
+  if (isSigned<T>()) {
+    let sign = value < 0;
+    if (sign) value = -value;
+    if (sizeof<T>() <= 4) {
+      decimals = decimalCount32(value) + <u32>sign;
+      utoa32_core(buffer + (offset << 1), value, decimals);
+    } else {
+      if (<u64>value <= <u64>u32.MAX_VALUE) {
+        let val32 = <u32>value;
+        decimals = decimalCount32(val32) + <u32>sign;
+        utoa32_core(buffer + (offset << 1), val32, decimals);
+      } else {
+        decimals = decimalCount64(value) + <u32>sign;
+        utoa64_core(buffer + (offset << 1), value, decimals);
+      }
+    }
+    if (sign) store<u16>(buffer + (offset << 1), CharCode.MINUS, STRING_HEADER_SIZE);
+  } else {
+    if (sizeof<T>() <= 4) {
+      decimals = decimalCount32(value);
+      utoa32_core(buffer + (offset << 1), value, decimals);
+    } else {
+      if (<u64>value <= <u64>u32.MAX_VALUE) {
+        let val32 = <u32>value;
+        decimals = decimalCount32(val32);
+        utoa32_core(buffer + (offset << 1), val32, decimals);
+      } else {
+        decimals = decimalCount64(value);
+        utoa64_core(buffer + (offset << 1), value, decimals);
+      }
+    }
+  }
+  return decimals;
+}
