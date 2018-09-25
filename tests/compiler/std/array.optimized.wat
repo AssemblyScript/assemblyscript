@@ -10357,9 +10357,11 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   (if
    (i32.lt_s
-    (tee_local $3
+    (tee_local $5
      (i32.sub
       (i32.load offset=4
        (get_local $0)
@@ -10373,15 +10375,12 @@
     (i32.const 1464)
    )
   )
-  (set_local $2
-   (i32.const 1464)
-  )
-  (set_local $4
+  (set_local $6
    (i32.load
     (get_local $0)
    )
   )
-  (set_local $6
+  (set_local $8
    (i32.ne
     (i32.load
      (get_local $1)
@@ -10391,82 +10390,166 @@
   )
   (if
    (i32.eqz
-    (get_local $3)
+    (get_local $5)
    )
    (return
     (i32.load offset=8
-     (get_local $4)
+     (get_local $6)
     )
+   )
+  )
+  (set_local $7
+   (i32.load
+    (get_local $1)
    )
   )
   (block $break|0
    (set_local $0
-    (i32.const 0)
+    (i32.load offset=4
+     (get_local $0)
+    )
    )
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $0)
       (get_local $3)
+      (get_local $0)
      )
     )
-    (if
-     (tee_local $5
-      (i32.load offset=8
-       (i32.add
-        (get_local $4)
-        (i32.shl
-         (get_local $0)
-         (i32.const 2)
+    (set_local $2
+     (i32.add
+      (get_local $2)
+      (i32.load
+       (i32.load offset=8
+        (i32.add
+         (get_local $6)
+         (i32.shl
+          (get_local $3)
+          (i32.const 2)
+         )
         )
        )
       )
      )
-     (set_local $2
-      (call $~lib/string/String.__concat
-       (get_local $2)
-       (get_local $5)
-      )
-     )
     )
-    (if
-     (get_local $6)
-     (set_local $2
-      (call $~lib/string/String.__concat
-       (get_local $2)
-       (get_local $1)
-      )
-     )
-    )
-    (set_local $0
+    (set_local $3
      (i32.add
-      (get_local $0)
+      (get_local $3)
       (i32.const 1)
      )
     )
     (br $repeat|0)
    )
   )
+  (set_local $0
+   (i32.const 0)
+  )
+  (set_local $3
+   (call $~lib/internal/string/allocateUnsafe
+    (i32.add
+     (get_local $2)
+     (i32.mul
+      (get_local $7)
+      (get_local $5)
+     )
+    )
+   )
+  )
+  (block $break|1
+   (set_local $2
+    (i32.const 0)
+   )
+   (loop $repeat|1
+    (br_if $break|1
+     (i32.ge_s
+      (get_local $2)
+      (get_local $5)
+     )
+    )
+    (if
+     (tee_local $4
+      (i32.load offset=8
+       (i32.add
+        (get_local $6)
+        (i32.shl
+         (get_local $2)
+         (i32.const 2)
+        )
+       )
+      )
+     )
+     (block
+      (call $~lib/internal/string/copyUnsafe
+       (get_local $3)
+       (get_local $0)
+       (get_local $4)
+       (i32.const 0)
+       (tee_local $4
+        (i32.load
+         (get_local $4)
+        )
+       )
+      )
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (get_local $4)
+       )
+      )
+     )
+    )
+    (if
+     (get_local $8)
+     (block
+      (call $~lib/internal/string/copyUnsafe
+       (get_local $3)
+       (get_local $0)
+       (get_local $1)
+       (i32.const 0)
+       (get_local $7)
+      )
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (get_local $7)
+       )
+      )
+     )
+    )
+    (set_local $2
+     (i32.add
+      (get_local $2)
+      (i32.const 1)
+     )
+    )
+    (br $repeat|1)
+   )
+  )
   (if
-   (tee_local $5
+   (tee_local $4
     (i32.load offset=8
      (i32.add
-      (get_local $4)
+      (get_local $6)
       (i32.shl
-       (get_local $3)
+       (get_local $5)
        (i32.const 2)
       )
      )
     )
    )
-   (set_local $2
-    (call $~lib/string/String.__concat
-     (get_local $2)
-     (get_local $5)
+   (call $~lib/internal/string/copyUnsafe
+    (get_local $3)
+    (get_local $0)
+    (get_local $4)
+    (i32.const 0)
+    (tee_local $2
+     (i32.load
+      (get_local $4)
+     )
     )
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $std/array/Ref#constructor (; 137 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (call $~lib/memory/memory.allocate
@@ -10615,7 +10698,7 @@
     (br $repeat|0)
    )
   )
-  (drop
+  (if
    (i32.load offset=8
     (i32.add
      (get_local $5)
@@ -10625,13 +10708,21 @@
      )
     )
    )
-  )
-  (call $~lib/internal/string/copyUnsafe
-   (get_local $0)
-   (get_local $1)
-   (i32.const 4216)
-   (i32.const 0)
-   (i32.const 15)
+   (block
+    (call $~lib/internal/string/copyUnsafe
+     (get_local $0)
+     (get_local $1)
+     (i32.const 4216)
+     (i32.const 0)
+     (i32.const 15)
+    )
+    (set_local $1
+     (i32.add
+      (get_local $1)
+      (i32.const 15)
+     )
+    )
+   )
   )
   (set_local $2
    (get_local $0)
@@ -10639,12 +10730,7 @@
   (if
    (i32.gt_s
     (get_local $7)
-    (tee_local $1
-     (i32.add
-      (get_local $1)
-      (i32.const 15)
-     )
-    )
+    (get_local $1)
    )
    (block
     (set_local $2

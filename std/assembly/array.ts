@@ -403,13 +403,36 @@ export class Array<T> {
       if (!lastIndex) {
         return loadUnsafe<T,string>(buffer, 0);
       }
-      for (let i = 0; i < lastIndex; ++i) {
-        value = loadUnsafe<T,T>(buffer, i);
-        if (value) result += value;
-        if (hasSeparator) result += separator;
+      let estLen = 0;
+      let sepLen = separator.length;
+      for (let i = 0, len = this.length_; i < len; ++i) {
+        estLen += loadUnsafe<T,string>(buffer, i).length;
       }
-      value = loadUnsafe<T,T>(buffer, lastIndex);
-      if (value) result += value;
+      estLen += sepLen * lastIndex;
+      let offset = 0;
+      let result = allocateUnsafeString(estLen);
+      for (let i = 0; i < lastIndex; ++i) {
+        value = loadUnsafe<T,String>(buffer, i);
+        // if (value) result += value;
+        // if (hasSeparator) result += separator;
+        if (value) {
+          let valueLen = value.length;
+          copyUnsafeString(result, offset, value, 0, valueLen);
+          offset += valueLen;
+        }
+        if (hasSeparator) {
+          copyUnsafeString(result, offset, changetype<String>(separator), 0, sepLen);
+          offset += sepLen;
+        }
+      }
+      value = loadUnsafe<T,String>(buffer, lastIndex);
+      // if (value) result += value;
+      if (value) {
+        let valueLen = value.length;
+        copyUnsafeString(result, offset, value, 0, valueLen);
+        offset += valueLen;
+      }
+      return result;
     } else if (isArray<T>()) {
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
@@ -423,8 +446,8 @@ export class Array<T> {
       let offset = 0;
       const valueLen = 15;
       let sepLen = separator.length;
-      let estlen = (valueLen + sepLen) * this.length_ - sepLen;
-      let result = allocateUnsafeString(estlen);
+      let estLen = (valueLen + sepLen) * this.length_ - sepLen;
+      let result = allocateUnsafeString(estLen);
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) {
@@ -437,10 +460,12 @@ export class Array<T> {
         }
       }
       value = loadUnsafe<T,T>(buffer, lastIndex);
-      copyUnsafeString(result, offset, changetype<String>("[object Object]"), 0, valueLen);
-      offset += valueLen;
+      if (value) {
+        copyUnsafeString(result, offset, changetype<String>("[object Object]"), 0, valueLen);
+        offset += valueLen;
+      }
       let out = result;
-      if (estlen > offset) {
+      if (estLen > offset) {
         out = result.substring(0, offset);
         freeUnsafeString(result);
       }
