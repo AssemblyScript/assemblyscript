@@ -736,8 +736,9 @@ assertSorted<string>(randomStrings400, (a: string, b: string): i32 => <i32>(a > 
 class Ref { constructor() {} }
 
 assert((<bool[]>[true, false]).join() == "true,false");
-assert((<i32[]>[1, 2, 3]).join("") == "123");
-assert((<i32[]>[1, 2, 3]).join("-") == "1-2-3");
+assert((<i32[]>[1,-2,-3]).join("") == "1-2-3");
+assert((<u32[]>[1, 2, 3]).join("-") == "1-2-3");
+assert((<i32[]>[i32.MIN_VALUE, i32.MIN_VALUE]).join("__") == "-2147483648__-2147483648");
 assert((<f64[]>[1.0, 2.0, 3.0]).join(", ") == "1.0, 2.0, 3.0");
 assert((<string[]>["", "1", null]).join("") == "1");
 var refArr: Ref[] = [new Ref(), null, new Ref()];
@@ -753,6 +754,7 @@ assert(reversed4.toString() == "0,1,2,3");
 assert((<i8[]>[1, -1, 0]).toString() == "1,-1,0");
 assert((<u16[]>[1, 0xFFFF, 0]).toString() == "1,65535,0");
 assert((<u64[]>[1, 0xFFFFFFFFFFFFFFFF, 0]).toString() == "1,18446744073709551615,0");
+assert((<i64[]>[-1, -1234567890123456, 0, i64.MAX_VALUE]).toString() == "-1,-1234567890123456,0,9223372036854775807");
 assert(randomStringsExpected.toString() == ",a,a,ab,b,ba,");
 assert((<string[]>["1", "2", null, "4"]).toString() == "1,2,,4");
 
