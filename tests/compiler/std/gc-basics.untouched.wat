@@ -6,6 +6,10 @@
  (type $iiv (func (param i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\00\00\00\00\00\00\00\00\03\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s\00")
+ (table 4 4 anyfunc)
+ (elem (i32.const 0) $null $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark $~lib/string/String~gc)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
@@ -14,6 +18,7 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/TRACE i32 (i32.const 0))
+ (global $~lib/collector/itcm/_HEAP_BASE (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/collector/itcm/State.INIT i32 (i32.const 0))
  (global $~lib/collector/itcm/State.IDLE i32 (i32.const 1))
@@ -29,10 +34,6 @@
  (global $std/gc-basics/obj2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 60))
- (table 4 4 anyfunc)
- (elem (i32.const 0) $null $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark $~lib/string/String~gc)
- (memory $0 1)
- (data (i32.const 8) "\00\00\00\00\00\00\00\00\03\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s\00")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-basics/main))
@@ -513,7 +514,7 @@
       (if
        (i32.ge_u
         (get_local $0)
-        (get_global $HEAP_BASE)
+        (get_global $~lib/collector/itcm/_HEAP_BASE)
        )
        (block $~lib/memory/memory.free|inlined.0
         (block
@@ -676,6 +677,9 @@
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
+  )
+  (set_global $~lib/collector/itcm/_HEAP_BASE
+   (get_global $HEAP_BASE)
   )
   (set_global $~lib/collector/itcm/state
    (get_global $~lib/collector/itcm/State.INIT)

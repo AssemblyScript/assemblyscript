@@ -7,6 +7,13 @@
  (type $iiiv (func (param i32 i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 32) "\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00")
+ (data (i32.const 56) "\00\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 104) "\00\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (table 7 7 anyfunc)
+ (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~gc $~lib/array/Array<Foo>~gc $~lib/collector/itcm/__gc_mark $std/gc-array/Foo~gc $~lib/string/String~gc $~lib/internal/arraybuffer/__gc)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
@@ -15,6 +22,7 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/TRACE i32 (i32.const 0))
+ (global $~lib/collector/itcm/_HEAP_BASE (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/collector/itcm/State.INIT i32 (i32.const 0))
  (global $~lib/collector/itcm/State.IDLE i32 (i32.const 1))
@@ -31,13 +39,6 @@
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
  (global $~started (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 180))
- (table 7 7 anyfunc)
- (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~gc $~lib/array/Array<Foo>~gc $~lib/collector/itcm/__gc_mark $std/gc-array/Foo~gc $~lib/string/String~gc $~lib/internal/arraybuffer/__gc)
- (memory $0 1)
- (data (i32.const 8) "\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 32) "\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00")
- (data (i32.const 56) "\00\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 104) "\00\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-array/main))
@@ -579,7 +580,7 @@
       (if
        (i32.ge_u
         (get_local $0)
-        (get_global $HEAP_BASE)
+        (get_global $~lib/collector/itcm/_HEAP_BASE)
        )
        (block $~lib/memory/memory.free|inlined.0
         (block
@@ -3558,6 +3559,9 @@
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
+  )
+  (set_global $~lib/collector/itcm/_HEAP_BASE
+   (get_global $HEAP_BASE)
   )
   (set_global $~lib/collector/itcm/state
    (get_global $~lib/collector/itcm/State.INIT)

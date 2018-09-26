@@ -813,15 +813,6 @@ export class Module {
     }
   }
 
-  removeImport(internalName: string): void {
-    var cStr = allocString(internalName);
-    try {
-      _BinaryenRemoveImport(this.ref, cStr);
-    } finally {
-      memory.free(cStr);
-    }
-  }
-
   setMemory(
     initial: Index,
     maximum: Index,

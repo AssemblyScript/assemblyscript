@@ -375,13 +375,17 @@ declare function _BinaryenFunctionOptimize(func: BinaryenFunctionRef, module: Bi
 declare function _BinaryenFunctionRunPasses(func: BinaryenFunctionRef, module: BinaryenModuleRef, passes: usize, numPasses: BinaryenIndex): void;
 declare function _BinaryenFunctionSetDebugLocation(func: BinaryenFunctionRef, expr: BinaryenExpressionRef, fileIndex: BinaryenIndex, lineNumber: BinaryenIndex, columnNumber: BinaryenIndex): void;
 
+declare function _BinaryenGlobalImportGetModule(func: BinaryenFunctionRef): usize;
+declare function _BinaryenGlobalImportGetBase(func: BinaryenFunctionRef): usize;
+declare function _BinaryenFunctionImportGetModule(func: BinaryenFunctionRef): usize;
+declare function _BinaryenFunctionImportGetBase(func: BinaryenFunctionRef): usize;
+
 declare type BinaryenImportRef = usize;
 
 declare function _BinaryenAddFunctionImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, functionType: BinaryenFunctionTypeRef): BinaryenImportRef;
 declare function _BinaryenAddTableImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize): BinaryenImportRef;
 declare function _BinaryenAddMemoryImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize): BinaryenImportRef;
 declare function _BinaryenAddGlobalImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, globalType: BinaryenType): BinaryenImportRef;
-declare function _BinaryenRemoveImport(module: BinaryenModuleRef, internalName: usize): void;
 
 declare type BinaryenExportRef = usize;
 
