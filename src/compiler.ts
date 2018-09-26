@@ -5733,7 +5733,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise just call through
     this.currentType = returnType;
-    if (isCallImport) return module.createCallImport(instance.internalName, operands, returnType.toNativeType());
     var ret = module.createCall(instance.internalName, operands, returnType.toNativeType());
     return ret;
   }

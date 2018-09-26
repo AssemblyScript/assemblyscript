@@ -34,7 +34,6 @@ export enum ExpressionId {
   Break = _BinaryenBreakId(),
   Switch = _BinaryenSwitchId(),
   Call = _BinaryenCallId(),
-  CallImport = _BinaryenCallImportId(),
   CallIndirect = _BinaryenCallIndirectId(),
   GetLocal = _BinaryenGetLocalId(),
   SetLocal = _BinaryenSetLocalId(),
@@ -590,21 +589,6 @@ export class Module {
     var cArr = allocPtrArray(operands);
     try {
       return _BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
-    } finally {
-      memory.free(cArr);
-      memory.free(cStr);
-    }
-  }
-
-  createCallImport(
-    target: string,
-    operands: ExpressionRef[] | null,
-    returnType: NativeType
-  ): ExpressionRef {
-    var cStr = allocString(target);
-    var cArr = allocPtrArray(operands);
-    try {
-      return _BinaryenCallImport(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
     } finally {
       memory.free(cArr);
       memory.free(cStr);

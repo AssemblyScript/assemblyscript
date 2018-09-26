@@ -1,11 +1,11 @@
 (module
  (type $v (func))
+ (memory $0 0)
+ (import "foo" "var" (global $external/var_ i32))
  (import "external" "foo" (func $external/foo))
  (import "foo" "bar" (func $external/foo.bar))
  (import "external" "bar" (func $external/two))
  (import "foo" "baz" (func $external/three))
- (import "foo" "var" (global $external/var_ i32))
- (memory $0 0)
  (export "memory" (memory $0))
  (export "foo.bar" (func $external/foo.bar))
  (export "foo" (func $external/foo))

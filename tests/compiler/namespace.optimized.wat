@@ -1,8 +1,8 @@
 (module
  (type $i (func (result i32)))
  (type $v (func))
- (global $namespace/Outer.Inner.aVar (mut i32) (i32.const 0))
  (memory $0 0)
+ (global $namespace/Outer.Inner.aVar (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $namespace/Outer.Inner.aFunc (; 0 ;) (; has Stack IR ;) (type $i) (result i32)

@@ -1,8 +1,8 @@
 (module
  (type $v (func))
+ (memory $0 0)
  (global $portable-conversions/f (mut f32) (f32.const 0))
  (global $portable-conversions/F (mut f64) (f64.const 0))
- (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
  (func $start (; 0 ;) (; has Stack IR ;) (type $v)

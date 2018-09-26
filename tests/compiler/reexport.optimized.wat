@@ -1,10 +1,10 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
+ (memory $0 0)
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
- (memory $0 0)
  (export "memory" (memory $0))
  (export "add" (func $export/add))
  (export "renamed_sub" (func $export/sub))
@@ -41,15 +41,15 @@
  )
  (func $start (; 4 ;) (; has Stack IR ;) (type $v)
   (drop
-   (i32.add
-    (call $export/add
-     (i32.const 1)
-     (i32.const 2)
-    )
-    (call $export/mul
-     (i32.const 3)
-     (i32.const 4)
-    )
+   (call $export/add
+    (i32.const 1)
+    (i32.const 2)
+   )
+  )
+  (drop
+   (call $export/mul
+    (i32.const 3)
+    (i32.const 4)
    )
   )
  )
