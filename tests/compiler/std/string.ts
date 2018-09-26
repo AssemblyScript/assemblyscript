@@ -195,7 +195,10 @@ assert(dtoa(9.0608011534336e+15) == "9060801153433600.0");
 assert(dtoa(4.708356024711512e+18) == "4708356024711512000.0");
 assert(dtoa(9.409340012568248e+18) == "9409340012568248000.0");
 assert(dtoa(5e-324) == "5e-324");
-// assert(dtoa(1.2345e+21) == "1.2345e+21"); // Known BUG for Grisu alghoritm. Need workaround
+// Known imprecise issue for Grisu alghoritm. Need workaround
+// Expeced: 1.2345e+21
+// Actual:  1.2344999999999999e+21
+// assert(dtoa(1.2345e+21) == "1.2345e+21");
 
 assert(dtoa(1.0)  == "1.0");
 assert(dtoa(0.1)  == "0.1");
