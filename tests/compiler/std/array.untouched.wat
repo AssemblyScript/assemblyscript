@@ -13834,20 +13834,22 @@
  (func $~lib/internal/number/itoa_stream<i32> (; 171 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    (i32.shl
+     (get_local $1)
+     (i32.const 1)
+    )
+   )
+  )
   (if
    (i32.eqz
     (get_local $2)
    )
    (block
     (i32.store16 offset=4
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (get_global $~lib/internal/string/CharCode._0)
     )
     (return
@@ -13882,17 +13884,8 @@
    )
   )
   (block $~lib/internal/number/utoa32_core|inlined.1
-   (set_local $5
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $1)
-      (i32.const 1)
-     )
-    )
-   )
    (call $~lib/internal/number/utoa32_lut
-    (get_local $5)
+    (get_local $0)
     (get_local $2)
     (get_local $3)
    )
@@ -13900,13 +13893,7 @@
   (if
    (get_local $4)
    (i32.store16 offset=4
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $1)
-      (i32.const 1)
-     )
-    )
+    (get_local $0)
     (get_global $~lib/internal/string/CharCode.MINUS)
    )
   )
@@ -14177,20 +14164,22 @@
  )
  (func $~lib/internal/number/itoa_stream<u32> (; 175 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    (i32.shl
+     (get_local $1)
+     (i32.const 1)
+    )
+   )
+  )
   (if
    (i32.eqz
     (get_local $2)
    )
    (block
     (i32.store16 offset=4
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (get_global $~lib/internal/string/CharCode._0)
     )
     (return
@@ -14207,17 +14196,8 @@
    )
   )
   (block $~lib/internal/number/utoa32_core|inlined.3
-   (set_local $4
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $1)
-      (i32.const 1)
-     )
-    )
-   )
    (call $~lib/internal/number/utoa32_lut
-    (get_local $4)
+    (get_local $0)
     (get_local $2)
     (get_local $3)
    )
@@ -16383,21 +16363,21 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    (i32.shl
+     (get_local $1)
+     (i32.const 1)
+    )
+   )
+  )
   (if
    (f64.eq
     (get_local $2)
     (f64.const 0)
    )
    (block
-    (set_local $0
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
-    )
     (i32.store16 offset=4
      (get_local $0)
      (get_global $~lib/internal/string/CharCode._0)
@@ -16427,15 +16407,6 @@
       (get_local $2)
      )
      (block
-      (set_local $0
-       (i32.add
-        (get_local $0)
-        (i32.shl
-         (get_local $1)
-         (i32.const 1)
-        )
-       )
-      )
       (i32.store16 offset=4
        (get_local $0)
        (get_global $~lib/internal/string/CharCode.N)
@@ -16475,13 +16446,7 @@
       (block $~lib/memory/memory.copy|inlined.8
        (set_local $6
         (i32.add
-         (i32.add
-          (get_local $0)
-          (i32.shl
-           (get_local $1)
-           (i32.const 1)
-          )
-         )
+         (get_local $0)
          (get_global $~lib/internal/string/HEADER_SIZE)
         )
        )
@@ -16506,13 +16471,7 @@
    )
   )
   (call $~lib/internal/number/dtoa_core
-   (i32.add
-    (get_local $0)
-    (i32.shl
-     (get_local $1)
-     (i32.const 1)
-    )
-   )
+   (get_local $0)
    (get_local $2)
   )
  )
@@ -17348,7 +17307,15 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    (i32.shl
+     (get_local $1)
+     (i32.const 1)
+    )
+   )
+  )
   (if
    (i32.eqz
     (i32.shr_s
@@ -17361,13 +17328,7 @@
    )
    (block
     (i32.store16 offset=4
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (get_global $~lib/internal/string/CharCode._0)
     )
     (return
@@ -17415,15 +17376,6 @@
   )
   (block $~lib/internal/number/utoa32_core|inlined.6
    (set_local $5
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $1)
-      (i32.const 1)
-     )
-    )
-   )
-   (set_local $6
     (i32.shr_s
      (i32.shl
       (get_local $2)
@@ -17433,21 +17385,15 @@
     )
    )
    (call $~lib/internal/number/utoa32_lut
+    (get_local $0)
     (get_local $5)
-    (get_local $6)
     (get_local $3)
    )
   )
   (if
    (get_local $4)
    (i32.store16 offset=4
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $1)
-      (i32.const 1)
-     )
-    )
+    (get_local $0)
     (get_global $~lib/internal/string/CharCode.MINUS)
    )
   )
@@ -17692,7 +17638,15 @@
  (func $~lib/internal/number/itoa_stream<u16> (; 193 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    (i32.shl
+     (get_local $1)
+     (i32.const 1)
+    )
+   )
+  )
   (if
    (i32.eqz
     (i32.and
@@ -17702,13 +17656,7 @@
    )
    (block
     (i32.store16 offset=4
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (get_global $~lib/internal/string/CharCode._0)
     )
     (return
@@ -17729,23 +17677,14 @@
   )
   (block $~lib/internal/number/utoa32_core|inlined.7
    (set_local $4
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $1)
-      (i32.const 1)
-     )
-    )
-   )
-   (set_local $5
     (i32.and
      (get_local $2)
      (i32.const 65535)
     )
    )
    (call $~lib/internal/number/utoa32_lut
+    (get_local $0)
     (get_local $4)
-    (get_local $5)
     (get_local $3)
    )
   )
@@ -18338,20 +18277,22 @@
  (func $~lib/internal/number/itoa_stream<u64> (; 199 ;) (type $iiIi) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    (i32.shl
+     (get_local $1)
+     (i32.const 1)
+    )
+   )
+  )
   (if
    (i64.eqz
     (get_local $2)
    )
    (block
     (i32.store16 offset=4
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (get_global $~lib/internal/string/CharCode._0)
     )
     (return
@@ -18381,17 +18322,8 @@
      )
     )
     (block $~lib/internal/number/utoa32_core|inlined.9
-     (set_local $5
-      (i32.add
-       (get_local $0)
-       (i32.shl
-        (get_local $1)
-        (i32.const 1)
-       )
-      )
-     )
      (call $~lib/internal/number/utoa32_lut
-      (get_local $5)
+      (get_local $0)
       (get_local $4)
       (get_local $3)
      )
@@ -18404,17 +18336,8 @@
      )
     )
     (block $~lib/internal/number/utoa64_core|inlined.1
-     (set_local $4
-      (i32.add
-       (get_local $0)
-       (i32.shl
-        (get_local $1)
-        (i32.const 1)
-       )
-      )
-     )
      (call $~lib/internal/number/utoa64_lut
-      (get_local $4)
+      (get_local $0)
       (get_local $2)
       (get_local $3)
      )
@@ -18754,20 +18677,22 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    (i32.shl
+     (get_local $1)
+     (i32.const 1)
+    )
+   )
+  )
   (if
    (i64.eqz
     (get_local $2)
    )
    (block
     (i32.store16 offset=4
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (get_global $~lib/internal/string/CharCode._0)
     )
     (return
@@ -18815,17 +18740,8 @@
      )
     )
     (block $~lib/internal/number/utoa32_core|inlined.11
-     (set_local $6
-      (i32.add
-       (get_local $0)
-       (i32.shl
-        (get_local $1)
-        (i32.const 1)
-       )
-      )
-     )
      (call $~lib/internal/number/utoa32_lut
-      (get_local $6)
+      (get_local $0)
       (get_local $5)
       (get_local $3)
      )
@@ -18841,17 +18757,8 @@
      )
     )
     (block $~lib/internal/number/utoa64_core|inlined.3
-     (set_local $5
-      (i32.add
-       (get_local $0)
-       (i32.shl
-        (get_local $1)
-        (i32.const 1)
-       )
-      )
-     )
      (call $~lib/internal/number/utoa64_lut
-      (get_local $5)
+      (get_local $0)
       (get_local $2)
       (get_local $3)
      )
@@ -18861,13 +18768,7 @@
   (if
    (get_local $4)
    (i32.store16 offset=4
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $1)
-      (i32.const 1)
-     )
-    )
+    (get_local $0)
     (get_global $~lib/internal/string/CharCode.MINUS)
    )
   )
@@ -19241,7 +19142,15 @@
  (func $~lib/internal/number/itoa_stream<u8> (; 207 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    (i32.shl
+     (get_local $1)
+     (i32.const 1)
+    )
+   )
+  )
   (if
    (i32.eqz
     (i32.and
@@ -19251,13 +19160,7 @@
    )
    (block
     (i32.store16 offset=4
-     (i32.add
-      (get_local $0)
-      (i32.shl
-       (get_local $1)
-       (i32.const 1)
-      )
-     )
+     (get_local $0)
      (get_global $~lib/internal/string/CharCode._0)
     )
     (return
@@ -19278,23 +19181,14 @@
   )
   (block $~lib/internal/number/utoa32_core|inlined.12
    (set_local $4
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $1)
-      (i32.const 1)
-     )
-    )
-   )
-   (set_local $5
     (i32.and
      (get_local $2)
      (i32.const 255)
     )
    )
    (call $~lib/internal/number/utoa32_lut
+    (get_local $0)
     (get_local $4)
-    (get_local $5)
     (get_local $3)
    )
   )
