@@ -1,6 +1,7 @@
 (module
  (type $i (func (result i32)))
  (type $v (func))
+ (memory $0 0)
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
  (global $enum/Implicit.TWO i32 (i32.const 2))
@@ -17,7 +18,6 @@
  (global $enum/NonConstant.ONE (mut i32) (i32.const 0))
  (global $enum/SelfReference.ZERO i32 (i32.const 0))
  (global $enum/SelfReference.ONE i32 (i32.const 1))
- (memory $0 0)
  (export "memory" (memory $0))
  (export "Implicit.ZERO" (global $enum/Implicit.ZERO))
  (export "Implicit.ONE" (global $enum/Implicit.ONE))

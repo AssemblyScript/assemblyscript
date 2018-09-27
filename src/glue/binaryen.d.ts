@@ -30,7 +30,6 @@ declare function _BinaryenLoopId(): BinaryenExpressionId;
 declare function _BinaryenBreakId(): BinaryenExpressionId;
 declare function _BinaryenSwitchId(): BinaryenExpressionId;
 declare function _BinaryenCallId(): BinaryenExpressionId;
-declare function _BinaryenCallImportId(): BinaryenExpressionId;
 declare function _BinaryenCallIndirectId(): BinaryenExpressionId;
 declare function _BinaryenGetLocalId(): BinaryenExpressionId;
 declare function _BinaryenSetLocalId(): BinaryenExpressionId;
@@ -219,7 +218,6 @@ declare function _BinaryenLoop(module: BinaryenModuleRef, name: usize, body: Bin
 declare function _BinaryenBreak(module: BinaryenModuleRef, name: usize, condition: BinaryenExpressionRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenSwitch(module: BinaryenModuleRef, names: usize, numNames: BinaryenIndex, defaultName: usize, condition: BinaryenExpressionRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenCall(module: BinaryenModuleRef, target: usize, operands: usize, numOperands: BinaryenIndex, returnType: BinaryenType): BinaryenExpressionRef;
-declare function _BinaryenCallImport(module: BinaryenModuleRef, target: usize, operands: usize, numOperands: BinaryenIndex, returnType: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenCallIndirect(module: BinaryenModuleRef, target: BinaryenExpressionRef, operands: usize, numOperands: BinaryenIndex, type: usize): BinaryenExpressionRef;
 declare function _BinaryenGetLocal(module: BinaryenModuleRef, index: BinaryenIndex, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenSetLocal(module: BinaryenModuleRef, index: BinaryenIndex, value: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -272,10 +270,6 @@ declare function _BinaryenSwitchGetValue(expr: BinaryenExpressionRef): BinaryenE
 declare function _BinaryenCallGetTarget(expr: BinaryenExpressionRef): usize;
 declare function _BinaryenCallGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
 declare function _BinaryenCallGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
-
-declare function _BinaryenCallImportGetTarget(expr: BinaryenExpressionRef): usize;
-declare function _BinaryenCallImportGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
-declare function _BinaryenCallImportGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
 
 declare function _BinaryenCallIndirectGetTarget(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenCallIndirectGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
@@ -381,13 +375,17 @@ declare function _BinaryenFunctionOptimize(func: BinaryenFunctionRef, module: Bi
 declare function _BinaryenFunctionRunPasses(func: BinaryenFunctionRef, module: BinaryenModuleRef, passes: usize, numPasses: BinaryenIndex): void;
 declare function _BinaryenFunctionSetDebugLocation(func: BinaryenFunctionRef, expr: BinaryenExpressionRef, fileIndex: BinaryenIndex, lineNumber: BinaryenIndex, columnNumber: BinaryenIndex): void;
 
+declare function _BinaryenGlobalImportGetModule(func: BinaryenFunctionRef): usize;
+declare function _BinaryenGlobalImportGetBase(func: BinaryenFunctionRef): usize;
+declare function _BinaryenFunctionImportGetModule(func: BinaryenFunctionRef): usize;
+declare function _BinaryenFunctionImportGetBase(func: BinaryenFunctionRef): usize;
+
 declare type BinaryenImportRef = usize;
 
 declare function _BinaryenAddFunctionImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, functionType: BinaryenFunctionTypeRef): BinaryenImportRef;
 declare function _BinaryenAddTableImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize): BinaryenImportRef;
 declare function _BinaryenAddMemoryImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize): BinaryenImportRef;
 declare function _BinaryenAddGlobalImport(module: BinaryenModuleRef, internalName: usize, externalModuleName: usize, externalBaseName: usize, globalType: BinaryenType): BinaryenImportRef;
-declare function _BinaryenRemoveImport(module: BinaryenModuleRef, internalName: usize): void;
 
 declare type BinaryenExportRef = usize;
 

@@ -14,24 +14,26 @@
   (nop)
  )
  (func $start (; 3 ;) (; has Stack IR ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
+  (set_local $0
+   (call $export/add)
+  )
+  (set_local $1
+   (call $export/sub)
+  )
   (drop
-   (i32.add
-    (i32.add
-     (call $export/add)
-     (call $export/sub)
-    )
-    (call $export/add)
-   )
+   (call $export/add)
   )
   (call $export/ns.two)
+  (set_local $0
+   (call $export/add)
+  )
+  (set_local $1
+   (call $export/sub)
+  )
   (drop
-   (i32.add
-    (i32.add
-     (call $export/add)
-     (call $export/sub)
-    )
-    (call $export/add)
-   )
+   (call $export/add)
   )
   (call $export/ns.two)
  )

@@ -8,6 +8,8 @@
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -76,8 +78,6 @@
  (global $std/operator-overloading/aii1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
- (memory $0 1)
- (data (i32.const 8) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
@@ -1689,50 +1689,45 @@
       (get_local $2)
      )
     )
-    (return
-     (f64.mul
-      (get_local $13)
-      (tee_local $2
-       (if (result f64)
-        (i32.le_s
-         (i32.shr_s
-          (tee_local $8
-           (i32.add
-            (i32.wrap/i64
-             (i64.shr_u
-              (i64.reinterpret/f64
-               (tee_local $2
+    (set_local $2
+     (if (result f64)
+      (i32.le_s
+       (i32.shr_s
+        (tee_local $8
+         (i32.add
+          (i32.wrap/i64
+           (i64.shr_u
+            (i64.reinterpret/f64
+             (tee_local $2
+              (f64.sub
+               (f64.const 1)
+               (f64.sub
                 (f64.sub
-                 (f64.const 1)
-                 (f64.sub
-                  (f64.sub
-                   (f64.div
-                    (f64.mul
+                 (f64.div
+                  (f64.mul
+                   (get_local $2)
+                   (tee_local $9
+                    (f64.sub
                      (get_local $2)
-                     (tee_local $9
-                      (f64.sub
-                       (get_local $2)
+                     (f64.mul
+                      (get_local $3)
+                      (f64.add
+                       (f64.const 0.16666666666666602)
                        (f64.mul
                         (get_local $3)
                         (f64.add
-                         (f64.const 0.16666666666666602)
+                         (f64.const -2.7777777777015593e-03)
                          (f64.mul
                           (get_local $3)
                           (f64.add
-                           (f64.const -2.7777777777015593e-03)
+                           (f64.const 6.613756321437934e-05)
                            (f64.mul
                             (get_local $3)
                             (f64.add
-                             (f64.const 6.613756321437934e-05)
+                             (f64.const -1.6533902205465252e-06)
                              (f64.mul
                               (get_local $3)
-                              (f64.add
-                               (f64.const -1.6533902205465252e-06)
-                               (f64.mul
-                                (get_local $3)
-                                (f64.const 4.1381367970572385e-08)
-                               )
-                              )
+                              (f64.const 4.1381367970572385e-08)
                              )
                             )
                            )
@@ -1743,67 +1738,73 @@
                       )
                      )
                     )
-                    (f64.sub
-                     (get_local $9)
-                     (f64.const 2)
-                    )
                    )
-                   (f64.add
-                    (tee_local $0
-                     (f64.sub
-                      (get_local $6)
-                      (f64.sub
-                       (get_local $2)
-                       (get_local $16)
-                      )
-                     )
-                    )
-                    (f64.mul
+                  )
+                  (f64.sub
+                   (get_local $9)
+                   (f64.const 2)
+                  )
+                 )
+                 (f64.add
+                  (tee_local $0
+                   (f64.sub
+                    (get_local $6)
+                    (f64.sub
                      (get_local $2)
-                     (get_local $0)
+                     (get_local $16)
                     )
                    )
                   )
-                  (get_local $2)
+                  (f64.mul
+                   (get_local $2)
+                   (get_local $0)
+                  )
                  )
                 )
+                (get_local $2)
                )
               )
-              (i64.const 32)
              )
             )
-            (i32.shl
-             (get_local $7)
-             (i32.const 20)
-            )
+            (i64.const 32)
            )
           )
-          (i32.const 20)
-         )
-         (i32.const 0)
-        )
-        (call $~lib/math/NativeMath.scalbn
-         (get_local $2)
-         (get_local $7)
-        )
-        (f64.reinterpret/i64
-         (i64.or
-          (i64.and
-           (i64.reinterpret/f64
-            (get_local $2)
-           )
-           (i64.const 4294967295)
-          )
-          (i64.shl
-           (i64.extend_s/i32
-            (get_local $8)
-           )
-           (i64.const 32)
+          (i32.shl
+           (get_local $7)
+           (i32.const 20)
           )
          )
+        )
+        (i32.const 20)
+       )
+       (i32.const 0)
+      )
+      (call $~lib/math/NativeMath.scalbn
+       (get_local $2)
+       (get_local $7)
+      )
+      (f64.reinterpret/i64
+       (i64.or
+        (i64.and
+         (i64.reinterpret/f64
+          (get_local $2)
+         )
+         (i64.const 4294967295)
+        )
+        (i64.shl
+         (i64.extend_s/i32
+          (get_local $8)
+         )
+         (i64.const 32)
         )
        )
       )
+     )
+    )
+    (return
+     (f64.mul
+      (get_local $13)
+      (get_local $2)
      )
     )
    )
@@ -1826,35 +1827,42 @@
   )
  )
  (func $std/operator-overloading/Tester.pow (; 11 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (set_local $2
+   (i32.trunc_s/f64
+    (call $~lib/math/NativeMath.pow
+     (f64.convert_s/i32
+      (i32.load
+       (get_local $0)
+      )
+     )
+     (f64.convert_s/i32
+      (i32.load
+       (get_local $1)
+      )
+     )
+    )
+   )
+  )
+  (set_local $0
+   (i32.trunc_s/f64
+    (call $~lib/math/NativeMath.pow
+     (f64.convert_s/i32
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+     (f64.convert_s/i32
+      (i32.load offset=4
+       (get_local $1)
+      )
+     )
+    )
+   )
+  )
   (call $std/operator-overloading/Tester#constructor
-   (i32.trunc_s/f64
-    (call $~lib/math/NativeMath.pow
-     (f64.convert_s/i32
-      (i32.load
-       (get_local $0)
-      )
-     )
-     (f64.convert_s/i32
-      (i32.load
-       (get_local $1)
-      )
-     )
-    )
-   )
-   (i32.trunc_s/f64
-    (call $~lib/math/NativeMath.pow
-     (f64.convert_s/i32
-      (i32.load offset=4
-       (get_local $0)
-      )
-     )
-     (f64.convert_s/i32
-      (i32.load offset=4
-       (get_local $1)
-      )
-     )
-    )
-   )
+   (get_local $2)
+   (get_local $0)
   )
  )
  (func $std/operator-overloading/Tester.and (; 12 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -2229,7 +2237,7 @@
   (local $0 i32)
   (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.const 72)
+   (i32.const 8)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)

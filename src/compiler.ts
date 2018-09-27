@@ -379,7 +379,7 @@ export class Compiler extends DiagnosticEmitter {
       : 0;
     module.setMemory(
       numPages,
-      this.options.isWasm64
+      options.isWasm64
         ? Module.MAX_MEMORY_WASM64
         : Module.MAX_MEMORY_WASM32,
       this.memorySegments,
@@ -5733,9 +5733,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise just call through
     this.currentType = returnType;
-    if (isCallImport) return module.createCallImport(instance.internalName, operands, returnType.toNativeType());
-    var ret = module.createCall(instance.internalName, operands, returnType.toNativeType());
-    return ret;
+    return module.createCall(instance.internalName, operands, returnType.toNativeType());
   }
 
   /** Compiles an indirect call using an index argument and a signature. */
