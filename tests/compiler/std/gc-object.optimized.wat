@@ -10,7 +10,6 @@
  (elem (i32.const 0) $null $~lib/collector/itcm/__gc_mark $std/gc-object/Custom~gc $std/gc-object/Base~gc)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/collector/itcm/_HEAP_BASE (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/white (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/fromSpace (mut i32) (i32.const 0))
@@ -410,7 +409,7 @@
      (if
       (i32.ge_u
        (get_local $0)
-       (get_global $~lib/collector/itcm/_HEAP_BASE)
+       (i32.const 8)
       )
       (call $~lib/allocator/arena/__memory_free)
      )
@@ -540,9 +539,6 @@
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
-  )
-  (set_global $~lib/collector/itcm/_HEAP_BASE
-   (i32.const 8)
   )
   (set_global $~lib/collector/itcm/state
    (i32.const 0)

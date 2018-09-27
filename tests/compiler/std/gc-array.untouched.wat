@@ -15,6 +15,7 @@
  (table 7 7 anyfunc)
  (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~gc $~lib/array/Array<Foo>~gc $~lib/collector/itcm/__gc_mark $std/gc-array/Foo~gc $~lib/string/String~gc $~lib/internal/arraybuffer/__gc)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (global $HEAP_BASE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
@@ -22,7 +23,6 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/TRACE i32 (i32.const 0))
- (global $~lib/collector/itcm/_HEAP_BASE (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/HEADER_SIZE i32 (i32.const 16))
  (global $~lib/collector/itcm/State.INIT i32 (i32.const 0))
  (global $~lib/collector/itcm/State.IDLE i32 (i32.const 1))
@@ -38,7 +38,6 @@
  (global $~argc (mut i32) (i32.const 0))
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
  (global $~started (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 180))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-array/main))
@@ -580,7 +579,7 @@
       (if
        (i32.ge_u
         (get_local $0)
-        (get_global $~lib/collector/itcm/_HEAP_BASE)
+        (get_global $HEAP_BASE)
        )
        (block $~lib/memory/memory.free|inlined.0
         (block
@@ -3559,9 +3558,6 @@
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
-  )
-  (set_global $~lib/collector/itcm/_HEAP_BASE
-   (get_global $HEAP_BASE)
   )
   (set_global $~lib/collector/itcm/state
    (get_global $~lib/collector/itcm/State.INIT)

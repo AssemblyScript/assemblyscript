@@ -14,7 +14,6 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/collector/itcm/_HEAP_BASE (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/white (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/fromSpace (mut i32) (i32.const 0))
@@ -415,7 +414,7 @@
      (if
       (i32.ge_u
        (get_local $0)
-       (get_global $~lib/collector/itcm/_HEAP_BASE)
+       (i32.const 8)
       )
       (call $std/gc-basics/MyObject_visit
        (get_local $0)
@@ -525,13 +524,10 @@
   (local $2 i32)
   (local $3 i32)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.const 64)
+   (i32.const 8)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
-  )
-  (set_global $~lib/collector/itcm/_HEAP_BASE
-   (i32.const 60)
   )
   (set_global $~lib/collector/itcm/state
    (i32.const 0)

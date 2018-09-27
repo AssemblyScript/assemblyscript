@@ -2237,7 +2237,7 @@
   (local $0 i32)
   (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
-   (i32.const 72)
+   (i32.const 8)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)

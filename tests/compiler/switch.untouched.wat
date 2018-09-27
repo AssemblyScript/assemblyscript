@@ -7,7 +7,7 @@
  (table 1 1 anyfunc)
  (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (global $HEAP_BASE i32 (i32.const 32))
+ (global $HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (start $start)
  (func $switch/doSwitch (; 1 ;) (type $ii) (param $0 i32) (result i32)

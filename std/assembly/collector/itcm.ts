@@ -7,7 +7,6 @@
 // Largely based on Bach Le's μgc, see: https://github.com/bullno1/ugc
 
 const TRACE = false;
-// var _HEAP_BASE: usize = HEAP_BASE;
 
 /** Size of a managed object header. */
 export const HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
