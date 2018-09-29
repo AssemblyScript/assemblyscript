@@ -480,6 +480,8 @@ declare class String {
   substr(start: u32, length?: u32): string;
   substring(start: u32, end?: u32): string;
   trim(): string;
+  trimLeft(): string;
+  trimRight(): string;
   trimStart(): string;
   trimEnd(): string;
   padStart(targetLength: i32, padString?: string): string;

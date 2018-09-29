@@ -303,6 +303,16 @@ export class String {
     return out;
   }
 
+  @inline
+  trimLeft(): String {
+    return this.trimStart();
+  }
+
+  @inline
+  trimRight(): String {
+    return this.trimEnd();
+  }
+
   trimStart(): String {
     assert(this !== null);
     var start: isize = 0;
