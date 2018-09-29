@@ -40,10 +40,10 @@ export class ExternalString {
   trim(): String { return unreachable(); }
 
   @binding(BindingCall.THIS, [], BindingType.OBJECT_HANDLE)
-  trimLeft(): String { return unreachable(); }
+  trimStart(): String { return unreachable(); }
 
   @binding(BindingCall.THIS, [], BindingType.OBJECT_HANDLE)
-  trimRight(): String { return unreachable(); }
+  trimEnd(): String { return unreachable(); }
 
   @binding(BindingCall.THIS, [ BindingType.OBJECT_HANDLE ], BindingType.PASS_THRU)
   @operator("==")

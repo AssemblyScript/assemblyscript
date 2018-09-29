@@ -303,7 +303,7 @@ export class String {
     return out;
   }
 
-  trimLeft(): String {
+  trimStart(): String {
     assert(this !== null);
     var start: isize = 0;
     var len: isize = this.length;
@@ -323,7 +323,7 @@ export class String {
     return out;
   }
 
-  trimRight(): String {
+  trimEnd(): String {
     assert(this !== null);
     var len: isize = this.length;
     while (
