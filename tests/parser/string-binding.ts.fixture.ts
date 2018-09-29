@@ -50,11 +50,11 @@ export class ExternalString {
     return unreachable();
   }
   @binding(BindingCall.THIS, [], BindingType.OBJECT_HANDLE)
-  trimLeft(): String {
+  trimStart(): String {
     return unreachable();
   }
   @binding(BindingCall.THIS, [], BindingType.OBJECT_HANDLE)
-  trimRight(): String {
+  trimEnd(): String {
     return unreachable();
   }
   @binding(BindingCall.THIS, [BindingType.OBJECT_HANDLE], BindingType.PASS_THRU)
