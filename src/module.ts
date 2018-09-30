@@ -34,7 +34,6 @@ export enum ExpressionId {
   Break = _BinaryenBreakId(),
   Switch = _BinaryenSwitchId(),
   Call = _BinaryenCallId(),
-  CallImport = _BinaryenCallImportId(),
   CallIndirect = _BinaryenCallIndirectId(),
   GetLocal = _BinaryenGetLocalId(),
   SetLocal = _BinaryenSetLocalId(),
@@ -596,21 +595,6 @@ export class Module {
     }
   }
 
-  createCallImport(
-    target: string,
-    operands: ExpressionRef[] | null,
-    returnType: NativeType
-  ): ExpressionRef {
-    var cStr = allocString(target);
-    var cArr = allocPtrArray(operands);
-    try {
-      return _BinaryenCallImport(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
-    } finally {
-      memory.free(cArr);
-      memory.free(cStr);
-    }
-  }
-
   createCallIndirect(
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
@@ -641,6 +625,17 @@ export class Module {
     var cStr = allocString(name);
     try {
       return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
+    } finally {
+      memory.free(cStr);
+    }
+  }
+
+  removeGlobal(
+    name: string
+  ): void {
+    var cStr = allocString(name);
+    try {
+      return _BinaryenRemoveGlobal(this.ref, cStr);
     } finally {
       memory.free(cStr);
     }
@@ -829,15 +824,6 @@ export class Module {
     }
   }
 
-  removeImport(internalName: string): void {
-    var cStr = allocString(internalName);
-    try {
-      _BinaryenRemoveImport(this.ref, cStr);
-    } finally {
-      memory.free(cStr);
-    }
-  }
-
   setMemory(
     initial: Index,
     maximum: Index,
@@ -873,7 +859,11 @@ export class Module {
     }
   }
 
-  setFunctionTable(funcs: string[]): void {
+  setFunctionTable(
+    initial: Index,
+    maximum: Index,
+    funcs: string[]
+  ): void {
     var numNames = funcs.length;
     var names = new Array<usize>(numNames);
     for (let i = 0; i < numNames; ++i) {
@@ -881,7 +871,7 @@ export class Module {
     }
     var cArr = allocI32Array(names);
     try {
-      _BinaryenSetFunctionTable(this.ref, cArr, numNames);
+      _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames);
     } finally {
       memory.free(cArr);
       for (let i = numNames; i >= 0; --i) memory.free(names[i]);

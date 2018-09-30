@@ -26,6 +26,9 @@ const EOL = process.platform === "win32" ? "\r\n" : "\n";
 // useless code fragment on top of an actual error. suppress this:
 if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
 
+// CAUTION: this overrides the binaryen version used by the compiler compiled to JS
+global.Binaryen = require("../lib/binaryen");
+
 // Use distribution files if present, otherwise run the sources directly
 var assemblyscript, isDev = false;
 (() => {
