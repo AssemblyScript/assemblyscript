@@ -31,6 +31,8 @@ export interface ParseOptions {
   onMemory?(index: number, initial: number, maximum: number, flags: number): void;
   /** Called with each function if the function section is evaluated. */
   onFunction?(index: number, typeIndex: number): void;
+  /** Called with each table if the table section is evaluated.*/
+  onTable?(index: number, type: Type, initial: number, maximum: number, flags: number): void;
   /** Called with each global if the global section is evaluated. */
   onGlobal?(index: number, type: Type, mutability: number): void;
   /** Called with the start function index if the start section is evaluated. */
@@ -82,6 +84,7 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
     "onGlobalImport",
     "onMemory",
     "onFunction",
+    "onTable",
     "onGlobal",
     "onExport",
     "onStart",

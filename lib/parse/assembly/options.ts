@@ -10,6 +10,7 @@ export declare function onMemoryImport(index: u32, initial: u32, maximum: u32, f
 export declare function onGlobalImport(index: u32, type: u32, mutability: u32): void;
 export declare function onMemory(index: u32, initial: u32, maximum: u32, flags: u32): void;
 export declare function onFunction(index: u32, typeIndex: u32): void;
+export declare function onTable(index: u32, type: u32, initial: u32, maximum: u32, flags: u32): void;
 export declare function onGlobal(index: u32, type: u32, mutability: u32): void;
 export declare function onExport(index: u32, kind: u32, kindIndex: u32, nameOffset: u32, nameLength: u32): void;
 export declare function onStart(index: u32): void;

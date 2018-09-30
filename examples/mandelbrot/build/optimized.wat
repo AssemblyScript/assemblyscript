@@ -1,13 +1,17 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $FF (func (param f64) (result f64)))
- (import "JSMath" "sqrt" (func $~lib/math/JSMath.sqrt (param f64) (result f64)))
- (import "JSMath" "log" (func $~lib/math/JSMath.log (param f64) (result f64)))
- (import "JSMath" "LN2" (global $~lib/math/JSMath.LN2 f64))
+ (type $v (func))
  (import "env" "memory" (memory $0 0))
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
+ (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
+ (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
+ (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "computeLine" (func $assembly/index/computeLine))
- (func $assembly/index/computeLine (; 2 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $assembly/index/computeLine (; 2 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
@@ -279,11 +283,11 @@
           ;;@ assembly/index.ts:36:15
           (f64.div
            ;;@ assembly/index.ts:36:20
-           (call $~lib/math/JSMath.log
+           (call $~lib/bindings/Math/log
             ;;@ assembly/index.ts:36:29
-            (call $~lib/math/JSMath.log
+            (call $~lib/bindings/Math/log
              ;;@ assembly/index.ts:36:38
-             (call $~lib/math/JSMath.sqrt
+             (call $~lib/bindings/Math/sqrt
               ;;@ assembly/index.ts:36:43
               (f64.add
                (f64.mul
@@ -300,7 +304,7 @@
             )
            )
            ;;@ assembly/index.ts:36:66
-           (get_global $~lib/math/JSMath.LN2)
+           (get_global $~lib/bindings/Math/LN2)
           )
          )
          (get_local $6)
@@ -351,5 +355,8 @@
     (br $repeat|0)
    )
   )
+ )
+ (func $null (; 3 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )
