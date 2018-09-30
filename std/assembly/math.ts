@@ -1,5 +1,7 @@
 export namespace JSMath {
 
+  /* tslint:disable */
+
   @external("Math", "E")
   export declare const E: f64;
   @external("Math", "LN2")
@@ -87,6 +89,8 @@ export namespace JSMath {
   export declare function tanh(x: f64): f64;
   @external("Math", "trunc")
   export declare function trunc(x: f64): f64;
+
+  /* tslint:enable */
 }
 
 import {
