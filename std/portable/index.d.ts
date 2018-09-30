@@ -304,6 +304,8 @@ declare class String {
   trim(): string;
   trimLeft(): string;
   trimRight(): string;
+  trimStart(): string;
+  trimEnd(): string;
   padStart(targetLength: i32, padString?: string): string;
   padEnd(targetLength: i32, padString?: string): string;
   replace(search: string, replacement: string): string;
