@@ -4,8 +4,8 @@
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $v (func))
- (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$i (func (result i32)))
  (memory $0 1)
  (data (i32.const 8) "\03")
  (data (i32.const 17) "\01\02")
@@ -26,6 +26,7 @@
  (global $std/array-literal/i (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayI8 (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayI32 (mut i32) (i32.const 0))
+ (global $std/array-literal/dynamicArrayRef (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -209,9 +210,9 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/memory.allocate (; 6 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/memory/memory.allocate (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
-   (i32.const 8)
+   (get_local $0)
   )
  )
  (func $~lib/internal/memory/memset (; 7 ;) (; has Stack IR ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -529,7 +530,9 @@
   )
   (i32.store
    (tee_local $0
-    (call $~lib/memory/memory.allocate)
+    (call $~lib/memory/memory.allocate
+     (i32.const 8)
+    )
    )
    (i32.const 0)
   )
@@ -575,7 +578,9 @@
   )
   (i32.store
    (tee_local $0
-    (call $~lib/memory/memory.allocate)
+    (call $~lib/memory/memory.allocate
+     (i32.const 8)
+    )
    )
    (i32.const 0)
   )
@@ -616,6 +621,7 @@
  )
  (func $start (; 12 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
+  (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 232)
   )
@@ -988,6 +994,59 @@
      (i32.const 0)
      (i32.const 32)
      (i32.const 32)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_local $1
+   (call $~lib/array/Array<i32>#constructor)
+  )
+  (set_local $0
+   (call $~lib/memory/memory.allocate
+    (i32.const 0)
+   )
+  )
+  (call $~lib/array/Array<i32>#__unchecked_set
+   (get_local $1)
+   (i32.const 0)
+   (get_local $0)
+  )
+  (set_local $0
+   (call $~lib/memory/memory.allocate
+    (i32.const 0)
+   )
+  )
+  (call $~lib/array/Array<i32>#__unchecked_set
+   (get_local $1)
+   (i32.const 1)
+   (get_local $0)
+  )
+  (set_local $0
+   (call $~lib/memory/memory.allocate
+    (i32.const 0)
+   )
+  )
+  (call $~lib/array/Array<i32>#__unchecked_set
+   (get_local $1)
+   (i32.const 2)
+   (get_local $0)
+  )
+  (set_global $std/array-literal/dynamicArrayRef
+   (get_local $1)
+  )
+  (if
+   (i32.ne
+    (i32.load offset=4
+     (get_global $std/array-literal/dynamicArrayRef)
+    )
+    (i32.const 3)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 36)
      (i32.const 0)
     )
     (unreachable)

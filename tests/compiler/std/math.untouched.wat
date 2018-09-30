@@ -13792,7 +13792,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1043)
+     (i32.const 1047)
      (i32.const 4)
     )
     (unreachable)
@@ -13824,7 +13824,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1050)
+     (i32.const 1054)
      (i32.const 24)
     )
     (unreachable)
