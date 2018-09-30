@@ -27,43 +27,43 @@
  (data (i32.const 40) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (table 1 anyfunc)
  (elem (i32.const 0) $null)
- (import "Math" "E" (global $~lib/math/JSMath.E f64))
- (import "Math" "LN2" (global $~lib/math/JSMath.LN2 f64))
- (import "Math" "LN10" (global $~lib/math/JSMath.LN10 f64))
- (import "Math" "LOG2E" (global $~lib/math/JSMath.LOG2E f64))
- (import "Math" "PI" (global $~lib/math/JSMath.PI f64))
- (import "Math" "SQRT1_2" (global $~lib/math/JSMath.SQRT1_2 f64))
- (import "Math" "SQRT2" (global $~lib/math/JSMath.SQRT2 f64))
+ (import "Math" "E" (global $~lib/bindings/Math/E f64))
+ (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
+ (import "Math" "LN10" (global $~lib/bindings/Math/LN10 f64))
+ (import "Math" "LOG2E" (global $~lib/bindings/Math/LOG2E f64))
+ (import "Math" "PI" (global $~lib/bindings/Math/PI f64))
+ (import "Math" "SQRT1_2" (global $~lib/bindings/Math/SQRT1_2 f64))
+ (import "Math" "SQRT2" (global $~lib/bindings/Math/SQRT2 f64))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (import "Math" "abs" (func $~lib/math/JSMath.abs (param f64) (result f64)))
- (import "Math" "acos" (func $~lib/math/JSMath.acos (param f64) (result f64)))
- (import "Math" "acosh" (func $~lib/math/JSMath.acosh (param f64) (result f64)))
- (import "Math" "asin" (func $~lib/math/JSMath.asin (param f64) (result f64)))
- (import "Math" "asinh" (func $~lib/math/JSMath.asinh (param f64) (result f64)))
- (import "Math" "atan" (func $~lib/math/JSMath.atan (param f64) (result f64)))
- (import "Math" "atanh" (func $~lib/math/JSMath.atanh (param f64) (result f64)))
- (import "Math" "atan2" (func $~lib/math/JSMath.atan2 (param f64 f64) (result f64)))
- (import "Math" "cbrt" (func $~lib/math/JSMath.cbrt (param f64) (result f64)))
- (import "Math" "ceil" (func $~lib/math/JSMath.ceil (param f64) (result f64)))
- (import "Math" "cosh" (func $~lib/math/JSMath.cosh (param f64) (result f64)))
- (import "Math" "exp" (func $~lib/math/JSMath.exp (param f64) (result f64)))
- (import "Math" "expm1" (func $~lib/math/JSMath.expm1 (param f64) (result f64)))
- (import "Math" "floor" (func $~lib/math/JSMath.floor (param f64) (result f64)))
- (import "Math" "hypot" (func $~lib/math/JSMath.hypot (param f64 f64) (result f64)))
- (import "Math" "log" (func $~lib/math/JSMath.log (param f64) (result f64)))
- (import "Math" "log10" (func $~lib/math/JSMath.log10 (param f64) (result f64)))
- (import "Math" "log1p" (func $~lib/math/JSMath.log1p (param f64) (result f64)))
- (import "Math" "log2" (func $~lib/math/JSMath.log2 (param f64) (result f64)))
- (import "Math" "max" (func $~lib/math/JSMath.max (param f64 f64) (result f64)))
- (import "Math" "min" (func $~lib/math/JSMath.min (param f64 f64) (result f64)))
+ (import "Math" "abs" (func $~lib/bindings/Math/abs (param f64) (result f64)))
+ (import "Math" "acos" (func $~lib/bindings/Math/acos (param f64) (result f64)))
+ (import "Math" "acosh" (func $~lib/bindings/Math/acosh (param f64) (result f64)))
+ (import "Math" "asin" (func $~lib/bindings/Math/asin (param f64) (result f64)))
+ (import "Math" "asinh" (func $~lib/bindings/Math/asinh (param f64) (result f64)))
+ (import "Math" "atan" (func $~lib/bindings/Math/atan (param f64) (result f64)))
+ (import "Math" "atanh" (func $~lib/bindings/Math/atanh (param f64) (result f64)))
+ (import "Math" "atan2" (func $~lib/bindings/Math/atan2 (param f64 f64) (result f64)))
+ (import "Math" "cbrt" (func $~lib/bindings/Math/cbrt (param f64) (result f64)))
+ (import "Math" "ceil" (func $~lib/bindings/Math/ceil (param f64) (result f64)))
+ (import "Math" "cosh" (func $~lib/bindings/Math/cosh (param f64) (result f64)))
+ (import "Math" "exp" (func $~lib/bindings/Math/exp (param f64) (result f64)))
+ (import "Math" "expm1" (func $~lib/bindings/Math/expm1 (param f64) (result f64)))
+ (import "Math" "floor" (func $~lib/bindings/Math/floor (param f64) (result f64)))
+ (import "Math" "hypot" (func $~lib/bindings/Math/hypot (param f64 f64) (result f64)))
+ (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
+ (import "Math" "log10" (func $~lib/bindings/Math/log10 (param f64) (result f64)))
+ (import "Math" "log1p" (func $~lib/bindings/Math/log1p (param f64) (result f64)))
+ (import "Math" "log2" (func $~lib/bindings/Math/log2 (param f64) (result f64)))
+ (import "Math" "max" (func $~lib/bindings/Math/max (param f64 f64) (result f64)))
+ (import "Math" "min" (func $~lib/bindings/Math/min (param f64 f64) (result f64)))
  (import "math" "mod" (func $std/math/mod (param f64 f64) (result f64)))
- (import "Math" "pow" (func $~lib/math/JSMath.pow (param f64 f64) (result f64)))
- (import "Math" "random" (func $~lib/math/JSMath.random (result f64)))
- (import "Math" "sign" (func $~lib/math/JSMath.sign (param f64) (result f64)))
- (import "Math" "sinh" (func $~lib/math/JSMath.sinh (param f64) (result f64)))
- (import "Math" "sqrt" (func $~lib/math/JSMath.sqrt (param f64) (result f64)))
- (import "Math" "tanh" (func $~lib/math/JSMath.tanh (param f64) (result f64)))
- (import "Math" "trunc" (func $~lib/math/JSMath.trunc (param f64) (result f64)))
+ (import "Math" "pow" (func $~lib/bindings/Math/pow (param f64 f64) (result f64)))
+ (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
+ (import "Math" "sign" (func $~lib/bindings/Math/sign (param f64) (result f64)))
+ (import "Math" "sinh" (func $~lib/bindings/Math/sinh (param f64) (result f64)))
+ (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
+ (import "Math" "tanh" (func $~lib/bindings/Math/tanh (param f64) (result f64)))
+ (import "Math" "trunc" (func $~lib/bindings/Math/trunc (param f64) (result f64)))
  (global $std/math/js i32 (i32.const 1))
  (global $std/math/INEXACT i32 (i32.const 1))
  (global $std/math/INVALID i32 (i32.const 2))
@@ -737,7 +737,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.abs
+     (call $~lib/bindings/Math/abs
       (get_local $0)
      )
      (get_local $1)
@@ -1080,7 +1080,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.acos
+     (call $~lib/bindings/Math/acos
       (get_local $0)
      )
      (get_local $1)
@@ -2111,7 +2111,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.acosh
+     (call $~lib/bindings/Math/acosh
       (get_local $0)
      )
      (get_local $1)
@@ -3025,7 +3025,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.asin
+     (call $~lib/bindings/Math/asin
       (get_local $0)
      )
      (get_local $1)
@@ -3343,7 +3343,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.asinh
+     (call $~lib/bindings/Math/asinh
       (get_local $0)
      )
      (get_local $1)
@@ -3922,7 +3922,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.atan
+     (call $~lib/bindings/Math/atan
       (get_local $0)
      )
      (get_local $1)
@@ -4435,7 +4435,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.atanh
+     (call $~lib/bindings/Math/atanh
       (get_local $0)
      )
      (get_local $1)
@@ -5049,7 +5049,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.atan2
+     (call $~lib/bindings/Math/atan2
       (get_local $0)
       (get_local $1)
      )
@@ -5738,7 +5738,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.cbrt
+     (call $~lib/bindings/Math/cbrt
       (get_local $0)
      )
      (get_local $1)
@@ -5954,7 +5954,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.ceil
+     (call $~lib/bindings/Math/ceil
       (get_local $0)
      )
      (get_local $1)
@@ -6849,7 +6849,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.cosh
+     (call $~lib/bindings/Math/cosh
       (get_local $0)
      )
      (get_local $1)
@@ -7681,7 +7681,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.exp
+     (call $~lib/bindings/Math/exp
       (get_local $0)
      )
      (get_local $1)
@@ -7723,7 +7723,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.expm1
+     (call $~lib/bindings/Math/expm1
       (get_local $0)
      )
      (get_local $1)
@@ -7767,7 +7767,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.floor
+     (call $~lib/bindings/Math/floor
       (get_local $0)
      )
      (get_local $1)
@@ -8107,7 +8107,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.hypot
+     (call $~lib/bindings/Math/hypot
       (get_local $0)
       (get_local $1)
      )
@@ -8343,7 +8343,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.log
+     (call $~lib/bindings/Math/log
       (get_local $0)
      )
      (get_local $1)
@@ -8762,7 +8762,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.log10
+     (call $~lib/bindings/Math/log10
       (get_local $0)
      )
      (get_local $1)
@@ -9090,7 +9090,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.log1p
+     (call $~lib/bindings/Math/log1p
       (get_local $0)
      )
      (get_local $1)
@@ -9496,7 +9496,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.log2
+     (call $~lib/bindings/Math/log2
       (get_local $0)
      )
      (get_local $1)
@@ -9819,7 +9819,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.max
+     (call $~lib/bindings/Math/max
       (get_local $0)
       (get_local $1)
      )
@@ -9868,7 +9868,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.min
+     (call $~lib/bindings/Math/min
       (get_local $0)
       (get_local $1)
      )
@@ -12400,7 +12400,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.pow
+     (call $~lib/bindings/Math/pow
       (get_local $0)
       (get_local $1)
      )
@@ -13792,7 +13792,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1047)
+     (i32.const 955)
      (i32.const 4)
     )
     (unreachable)
@@ -13824,7 +13824,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1054)
+     (i32.const 962)
      (i32.const 24)
     )
     (unreachable)
@@ -14277,7 +14277,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.sign
+     (call $~lib/bindings/Math/sign
       (get_local $0)
      )
      (get_local $1)
@@ -15571,7 +15571,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.sinh
+     (call $~lib/bindings/Math/sinh
       (get_local $0)
      )
      (get_local $1)
@@ -15735,7 +15735,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.sqrt
+     (call $~lib/bindings/Math/sqrt
       (get_local $0)
      )
      (get_local $1)
@@ -15922,7 +15922,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.tanh
+     (call $~lib/bindings/Math/tanh
       (get_local $0)
      )
      (get_local $1)
@@ -16098,7 +16098,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.trunc
+     (call $~lib/bindings/Math/trunc
       (get_local $0)
      )
      (get_local $1)
@@ -16479,7 +16479,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.E)
-     (get_global $~lib/math/JSMath.E)
+     (get_global $~lib/bindings/Math/E)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16498,7 +16498,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.LN2)
-     (get_global $~lib/math/JSMath.LN2)
+     (get_global $~lib/bindings/Math/LN2)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16517,7 +16517,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.LN10)
-     (get_global $~lib/math/JSMath.LN10)
+     (get_global $~lib/bindings/Math/LN10)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16536,7 +16536,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.LOG2E)
-     (get_global $~lib/math/JSMath.LOG2E)
+     (get_global $~lib/bindings/Math/LOG2E)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16555,7 +16555,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.PI)
-     (get_global $~lib/math/JSMath.PI)
+     (get_global $~lib/bindings/Math/PI)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16574,7 +16574,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.SQRT1_2)
-     (get_global $~lib/math/JSMath.SQRT1_2)
+     (get_global $~lib/bindings/Math/SQRT1_2)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16593,7 +16593,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.SQRT2)
-     (get_global $~lib/math/JSMath.SQRT2)
+     (get_global $~lib/bindings/Math/SQRT2)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16613,7 +16613,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.E)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.E)
+      (get_global $~lib/bindings/Math/E)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16634,7 +16634,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.LN2)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.LN2)
+      (get_global $~lib/bindings/Math/LN2)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16655,7 +16655,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.LN10)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.LN10)
+      (get_global $~lib/bindings/Math/LN10)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16676,7 +16676,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.LOG2E)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.LOG2E)
+      (get_global $~lib/bindings/Math/LOG2E)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16697,7 +16697,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.PI)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.PI)
+      (get_global $~lib/bindings/Math/PI)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16718,7 +16718,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.SQRT1_2)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.SQRT1_2)
+      (get_global $~lib/bindings/Math/SQRT1_2)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16739,7 +16739,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.SQRT2)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.SQRT2)
+      (get_global $~lib/bindings/Math/SQRT2)
      )
      (f32.const 0)
      (i32.const 0)
@@ -47488,7 +47488,7 @@
   )
   (call $~lib/math/NativeMath.seedRandom
    (i64.reinterpret/f64
-    (call $~lib/math/JSMath.random)
+    (call $~lib/bindings/Math/random)
    )
   )
   (block $break|0
@@ -47549,7 +47549,7 @@
   (block $~lib/math/NativeMathf.seedRandom|inlined.0
    (set_local $3
     (i64.reinterpret/f64
-     (call $~lib/math/JSMath.random)
+     (call $~lib/bindings/Math/random)
     )
    )
    (call $~lib/math/NativeMath.seedRandom

@@ -91,7 +91,7 @@
  (table 56 anyfunc)
  (elem (i32.const 0) $null $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $start~anonymous|23 $start~anonymous|24 $start~anonymous|25 $start~anonymous|26 $start~anonymous|27 $start~anonymous|28 $start~anonymous|29 $start~anonymous|30 $start~anonymous|31 $start~anonymous|32 $start~anonymous|33 $start~anonymous|34 $start~anonymous|35 $start~anonymous|36 $start~anonymous|37 $start~anonymous|38 $start~anonymous|39 $start~anonymous|40 $start~anonymous|41 $start~anonymous|42 $~lib/array/Array<f32>#sort|trampoline~anonymous|43 $~lib/array/Array<f64>#sort|trampoline~anonymous|44 $~lib/array/Array<i32>#sort|trampoline~anonymous|45 $~lib/array/Array<u32>#sort|trampoline~anonymous|46 $std/array/assertSortedDefault<i32>~anonymous|47 $start~anonymous|48 $start~anonymous|49 $start~anonymous|50 $start~anonymous|51 $start~anonymous|52 $start~anonymous|53 $start~anonymous|54 $start~anonymous|55)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (import "Math" "random" (func $~lib/math/JSMath.random (result f64)))
+ (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
@@ -5915,7 +5915,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 456)
-     (i32.const 1047)
+     (i32.const 955)
      (i32.const 4)
     )
     (unreachable)
@@ -10132,7 +10132,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 456)
-     (i32.const 1054)
+     (i32.const 962)
      (i32.const 24)
     )
     (unreachable)
@@ -16637,7 +16637,7 @@
   )
   (call $~lib/math/NativeMath.seedRandom
    (i64.reinterpret/f64
-    (call $~lib/math/JSMath.random)
+    (call $~lib/bindings/Math/random)
    )
   )
   (drop
