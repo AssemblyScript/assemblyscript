@@ -635,7 +635,7 @@ export class Module {
   ): void {
     var cStr = allocString(name);
     try {
-      return _BinaryenRemoveGlobal(this.ref, cStr);
+      _BinaryenRemoveGlobal(this.ref, cStr);
     } finally {
       memory.free(cStr);
     }
