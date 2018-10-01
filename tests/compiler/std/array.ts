@@ -730,3 +730,39 @@ assert(isArraysEqual<string>(randomStringsActual, randomStringsExpected));
 
 var randomStrings400 = createRandomStringArray(400);
 assertSorted<string>(randomStrings400, (a: string, b: string): i32 => <i32>(a > b) - <i32>(a < b));
+
+// Array#join //////////////////////////////////////////////////////////////////////////////////////
+
+class Ref { constructor() {} }
+
+assert((<bool[]>[true, false]).join() == "true,false");
+assert((<i32[]>[1,-2,-3]).join("") == "1-2-3");
+assert((<u32[]>[1, 2, 3]).join("-") == "1-2-3");
+assert((<i32[]>[i32.MIN_VALUE, i32.MIN_VALUE]).join("__") == "-2147483648__-2147483648");
+assert((<f64[]>[0.0, 1.0, -2.0, NaN, -Infinity, Infinity]).join(", ") == "0.0, 1.0, -2.0, NaN, -Infinity, Infinity");
+assert((<string[]>["", "1", null]).join("") == "1");
+var refArr: Ref[] = [new Ref(), null, new Ref()];
+assert(refArr.join() == "[object Object],,[object Object]");
+
+// Array#toString //////////////////////////////////////////////////////////////////////////////////
+
+assert(reversed0.toString() == "");
+assert(reversed1.toString() == "1");
+assert(reversed2.toString() == "1,2");
+assert(reversed4.toString() == "0,1,2,3");
+
+assert((<i8[]>[1, -1, 0]).toString() == "1,-1,0");
+assert((<u16[]>[1, 0xFFFF, 0]).toString() == "1,65535,0");
+assert((<u64[]>[1, 0xFFFFFFFFFFFFFFFF, 0]).toString() == "1,18446744073709551615,0");
+assert((<i64[]>[-1, -1234567890123456, 0, i64.MAX_VALUE]).toString() == "-1,-1234567890123456,0,9223372036854775807");
+assert(randomStringsExpected.toString() == ",a,a,ab,b,ba,");
+assert((<string[]>["1", "2", null, "4"]).toString() == "1,2,,4");
+
+var subarr32: i32[][] = [[1,2], [3,4]];
+assert(subarr32.toString() == "1,2,3,4");
+
+var subarr8: u8[][] = [[1,2], [3,4]];
+assert(subarr8.toString() == "1,2,3,4");
+
+var subarrU32: u32[][][] = [[[1]]];
+assert(subarrU32.toString() == "1");

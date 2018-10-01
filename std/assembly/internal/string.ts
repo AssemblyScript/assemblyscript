@@ -22,10 +22,18 @@ export function allocateUnsafe(length: i32): String {
   return changetype<String>(buffer);
 }
 
+@inline
+export function freeUnsafe(buffer: String): void {
+  if (!isManaged<String>()) {
+    assert(buffer);
+    memory.free(changetype<usize>(buffer));
+  }
+}
+
 export function copyUnsafe(dest: String, destOffset: usize, src: String, srcOffset: usize, len: usize): void {
   memory.copy(
     changetype<usize>(dest) + (destOffset << 1) + HEADER_SIZE,
-    changetype<usize>(src)  + (srcOffset << 1)  + HEADER_SIZE,
+    changetype<usize>(src)  + (srcOffset  << 1) + HEADER_SIZE,
     len << 1
   );
 }
@@ -118,12 +126,14 @@ export const enum CharCode {
   A = 0x41,
   B = 0x42,
   E = 0x45,
+  N = 0x4E,
   O = 0x4F,
   X = 0x58,
   Z = 0x5a,
   a = 0x61,
   b = 0x62,
   e = 0x65,
+  n = 0x6E,
   o = 0x6F,
   x = 0x78,
   z = 0x7A
@@ -131,15 +141,15 @@ export const enum CharCode {
 
 export function isWhiteSpaceOrLineTerminator(c: u16): bool {
   switch (c) {
+    case 9:    // <TAB>
     case 10:   // <LF>
     case 13:   // <CR>
-    case 8232: // <LS>
-    case 8233: // <PS>
-    case 9:    // <TAB>
     case 11:   // <VT>
     case 12:   // <FF>
     case 32:   // <SP>
     case 160:  // <NBSP>
+    case 8232: // <LS>
+    case 8233: // <PS>
     case 65279: return true; // <ZWNBSP>
     default: return false;
   }
