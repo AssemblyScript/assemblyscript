@@ -253,7 +253,7 @@ export function parse(begin: usize, end: usize): void {
             let type = readVaruint(7) & 0x7f;
             let flags = readVaruint(1);
             let initial = readVaruint(32);
-            let maximum = flags & 1 ? readVaruint(32) : MAX_ELEMS;
+            let maximum = flags & 1 ? readVaruint(32) : <u32>MAX_ELEMS;
             opt.onTable(
               tbl_space_index++,
               type,
@@ -269,7 +269,7 @@ export function parse(begin: usize, end: usize): void {
           for (let index: u32 = 0; index < count; ++index) {
             let flags = readVaruint(1);
             let initial = readVaruint(32);
-            let maximum = flags & 1 ? readVaruint(32) : MAX_PAGES;
+            let maximum = flags & 1 ? readVaruint(32) : <u32>MAX_PAGES;
             opt.onMemory(
               mem_space_index++,
               initial,

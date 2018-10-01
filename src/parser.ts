@@ -3254,22 +3254,9 @@ export class Parser extends DiagnosticEmitter {
 
     var expr = this.parseExpressionStart(tn);
     if (!expr) return null;
+    expr = this.maybeParseCallExpression(tn, expr); // simple call like on an Identifier
+
     var startPos = expr.range.start;
-
-    // CallExpression?
-    if (nodeIsCallable(expr.kind)) {
-      let typeArguments: CommonTypeNode[] | null = null;
-      while (
-        tn.skip(Token.OPENPAREN)
-        ||
-        nodeIsGenericCallable(expr.kind) && (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) !== null
-      ) {
-        let args = this.parseArguments(tn);
-        if (!args) return null;
-        expr = Node.createCallExpression(expr, typeArguments, args, tn.range(startPos, tn.pos)); // is again callable
-      }
-    }
-
     var token: Token;
     var next: Expression | null = null;
     var nextPrecedence: Precedence;
@@ -3420,6 +3407,31 @@ export class Parser extends DiagnosticEmitter {
           }
           break;
         }
+      }
+      expr = this.maybeParseCallExpression(tn, expr); // compound call like on an ElementAccess
+    }
+    return expr;
+  }
+
+  private maybeParseCallExpression(
+    tn: Tokenizer,
+    expr: Expression
+  ): Expression {
+    if (nodeIsCallable(expr.kind)) {
+      let typeArguments: CommonTypeNode[] | null = null;
+      while (
+        tn.skip(Token.OPENPAREN)
+        ||
+        nodeIsGenericCallable(expr.kind) && (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) !== null
+      ) {
+        let args = this.parseArguments(tn);
+        if (!args) break;
+        expr = Node.createCallExpression( // is again callable
+          expr,
+          typeArguments,
+          args,
+          tn.range(expr.range.start, tn.pos)
+        );
       }
     }
     return expr;
