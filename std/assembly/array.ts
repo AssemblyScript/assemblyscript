@@ -477,6 +477,10 @@ export class Array<T> {
       }
       return result;
     } else if (isArray<T>()) {
+      if (!lastIndex) {
+        value = loadUnsafe<T,T>(buffer, 0);
+        return value ? value.join(separator) : ""; // tslint:disable-line:no-unsafe-any
+      }
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
@@ -484,6 +488,7 @@ export class Array<T> {
       }
       value = loadUnsafe<T,T>(buffer, lastIndex);
       if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
+      return result;
     } else if (isReference<T>()) { // References
       if (!lastIndex) return "[object Object]";
       const valueLen = 15; // max possible length of element len("[object Object]")
@@ -514,7 +519,6 @@ export class Array<T> {
     } else {
       assert(false); // Unsupported generic typename
     }
-    return result;
   }
 
   @inline

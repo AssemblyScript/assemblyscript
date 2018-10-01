@@ -763,3 +763,6 @@ assert(subarr32.toString() == "1,2,3,4");
 
 var subarr8: u8[][] = [[1,2], [3,4]];
 assert(subarr8.toString() == "1,2,3,4");
+
+var subarrU32: u32[][][] = [[[1]]];
+assert(subarrU32.toString() == "1");
