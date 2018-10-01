@@ -308,16 +308,20 @@ assert(u64.MAX_VALUE == 0xffffffffffffffff);
 assert(bool.MIN_VALUE == 0); assert(bool.MIN_VALUE == false);
 assert(bool.MAX_VALUE == 1); assert(bool.MAX_VALUE == true);
 
-assert(f32.MIN_VALUE == -3.40282347e+38);
+assert(f32.MIN_NORMAL_VALUE == 1.1754943508222875e-38);
+assert(f32.MIN_VALUE == 1.401298464324817e-45);
 assert(f32.MAX_VALUE == 3.40282347e+38);
 assert(f32.MIN_SAFE_INTEGER == -16777215);
 assert(f32.MAX_SAFE_INTEGER == 16777215);
 assert(f32.EPSILON == 1.19209290e-07);
-assert(f64.MIN_VALUE == -1.7976931348623157e+308);
+assert(isNaN<f32>(f32.NaN));
+assert(f64.MIN_NORMAL_VALUE == 2.2250738585072014e-308);
+assert(f64.MIN_VALUE == 5e-324);
 assert(f64.MAX_VALUE == 1.7976931348623157e+308);
 assert(f64.MIN_SAFE_INTEGER == -9007199254740991);
 assert(f64.MAX_SAFE_INTEGER == 9007199254740991);
 assert(f64.EPSILON == 2.2204460492503131e-16);
+assert(isNaN<f64>(f64.NaN));
 
 // inline-assembler
 
