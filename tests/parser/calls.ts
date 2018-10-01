@@ -13,4 +13,4 @@ obj.a();
 obj.a(1);
 
 // Everything
-arr[0]().a();
+id(a)[0](b)(c).a(d)(e)[1](f)(g);

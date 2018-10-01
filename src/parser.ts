@@ -3371,28 +3371,15 @@ export class Parser extends DiagnosticEmitter {
 
           // PropertyAccessExpression
           if (token == Token.DOT) {
-            if (next.kind == NodeKind.IDENTIFIER) {
+            if (next.kind == NodeKind.IDENTIFIER) { // expr '.' Identifier
               expr = Node.createPropertyAccessExpression(
                 expr,
                 <IdentifierExpression>next,
                 tn.range(startPos, tn.pos)
               );
-            } else if (next.kind == NodeKind.CALL) { // join
-              let propertyCall = <CallExpression>next;
-              if (propertyCall.expression.kind == NodeKind.IDENTIFIER) {
-                propertyCall.expression = Node.createPropertyAccessExpression(
-                  expr,
-                  <IdentifierExpression>propertyCall.expression,
-                  tn.range(startPos, tn.pos)
-                );
-              } else {
-                this.error(
-                  DiagnosticCode.Identifier_expected,
-                  propertyCall.expression.range
-                );
-                return null;
-              }
-              expr = propertyCall;
+            } else if (next.kind == NodeKind.CALL) { // expr '.' CallExpression
+              expr = this.joinPropertyCall(tn, startPos, expr, <CallExpression>next);
+              if (!expr) return null;
             } else {
               this.error(
                 DiagnosticCode.Identifier_expected,
@@ -3411,6 +3398,40 @@ export class Parser extends DiagnosticEmitter {
       expr = this.maybeParseCallExpression(tn, expr); // compound call like on an ElementAccess
     }
     return expr;
+  }
+
+  private joinPropertyCall(
+    tn: Tokenizer,
+    startPos: i32,
+    expr: Expression,
+    call: CallExpression
+  ): Expression | null {
+    var callee = call.expression;
+    switch (callee.kind) {
+      case NodeKind.IDENTIFIER: { // join property access and use as call target
+        call.expression = Node.createPropertyAccessExpression(
+          expr,
+          <IdentifierExpression>callee,
+          tn.range(startPos, tn.pos)
+        );
+        break;
+      }
+      case NodeKind.CALL: { // join call target und wrap the original call around it
+        let inner = this.joinPropertyCall(tn, startPos, expr, <CallExpression>callee);
+        if (!inner) return null;
+        call.expression = inner;
+        call.range = tn.range(startPos, tn.pos);
+        break;
+      }
+      default: {
+        this.error(
+          DiagnosticCode.Identifier_expected,
+          call.range
+        );
+        return null;
+      }
+    }
+    return call;
   }
 
   private maybeParseCallExpression(
