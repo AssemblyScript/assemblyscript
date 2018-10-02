@@ -9,6 +9,9 @@ export class ArrayBuffer {
 
   readonly byteLength: i32; // capped to [0, MAX_LENGTH]
 
+  // @unsafe
+  get data(): usize { return changetype<usize>(this) + HEADER_SIZE; }
+
   constructor(length: i32, unsafe: bool = false) {
     if (<u32>length > <u32>MAX_BLENGTH) throw new RangeError("Invalid array buffer length");
     var buffer = allocateUnsafe(length);
