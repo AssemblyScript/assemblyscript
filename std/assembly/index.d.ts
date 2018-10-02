@@ -490,6 +490,7 @@ declare class String {
   padEnd(targetLength: i32, padString?: string): string;
   repeat(count?: i32): string;
   toString(): string;
+  static fromUTF8(ptr: usize, len: usize): string;
   toUTF8(): usize;
 }
 
