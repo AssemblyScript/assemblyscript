@@ -6484,7 +6484,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var nativeArrayType = arrayType.toNativeType();
     var currentFunction = this.currentFunction;
-    var tempLocal = currentFunction.getTempLocal(arrayType, false);
+    var tempLocal = currentFunction.addLocal(arrayType); // can't reuse a temp (used in compiledValues)
     var stmts = new Array<ExpressionRef>(2 + length);
     var index = 0;
     stmts[index++] = module.createSetLocal(tempLocal.index,
@@ -6502,7 +6502,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     assert(index + 1 == stmts.length);
     stmts[index] = module.createGetLocal(tempLocal.index, nativeArrayType);
-    currentFunction.freeTempLocal(tempLocal);
+    currentFunction.freeTempLocal(tempLocal); // but can be reused now
     this.currentType = arrayType;
     return module.createBlock(null, stmts, nativeArrayType);
   }

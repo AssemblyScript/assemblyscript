@@ -19958,6 +19958,7 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -24278,32 +24279,32 @@
   )
   (set_global $std/array/refArr
    (block (result i32)
-    (set_local $0
+    (set_local $3
      (call $~lib/array/Array<Ref>#constructor
       (i32.const 0)
       (i32.const 3)
      )
     )
     (call $~lib/array/Array<Ref>#__unchecked_set
-     (get_local $0)
+     (get_local $3)
      (i32.const 0)
      (call $std/array/Ref#constructor
       (i32.const 0)
      )
     )
     (call $~lib/array/Array<Ref>#__unchecked_set
-     (get_local $0)
+     (get_local $3)
      (i32.const 1)
      (i32.const 0)
     )
     (call $~lib/array/Array<Ref>#__unchecked_set
-     (get_local $0)
+     (get_local $3)
      (i32.const 2)
      (call $std/array/Ref#constructor
       (i32.const 0)
      )
     )
-    (get_local $0)
+    (get_local $3)
    )
   )
   (if
@@ -24330,11 +24331,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<i32>#toString|inlined.1 (result i32)
-      (set_local $0
+      (set_local $3
        (get_global $std/array/reversed0)
       )
       (call $~lib/array/Array<i32>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24355,11 +24356,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<i32>#toString|inlined.3 (result i32)
-      (set_local $0
+      (set_local $3
        (get_global $std/array/reversed1)
       )
       (call $~lib/array/Array<i32>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24380,11 +24381,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<i32>#toString|inlined.5 (result i32)
-      (set_local $0
+      (set_local $3
        (get_global $std/array/reversed2)
       )
       (call $~lib/array/Array<i32>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24405,11 +24406,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<i32>#toString|inlined.7 (result i32)
-      (set_local $0
+      (set_local $3
        (get_global $std/array/reversed4)
       )
       (call $~lib/array/Array<i32>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24430,11 +24431,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<i8>#toString|inlined.1 (result i32)
-      (set_local $0
+      (set_local $3
        (i32.const 4624)
       )
       (call $~lib/array/Array<i8>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24455,11 +24456,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<u16>#toString|inlined.1 (result i32)
-      (set_local $0
+      (set_local $3
        (i32.const 4688)
       )
       (call $~lib/array/Array<u16>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24480,11 +24481,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<u64>#toString|inlined.1 (result i32)
-      (set_local $0
+      (set_local $3
        (i32.const 5312)
       )
       (call $~lib/array/Array<u64>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24505,11 +24506,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<i64>#toString|inlined.1 (result i32)
-      (set_local $0
+      (set_local $3
        (i32.const 5512)
       )
       (call $~lib/array/Array<i64>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24530,11 +24531,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<String>#toString|inlined.1 (result i32)
-      (set_local $0
+      (set_local $3
        (get_global $std/array/randomStringsExpected)
       )
       (call $~lib/array/Array<String>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24555,11 +24556,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<String>#toString|inlined.3 (result i32)
-      (set_local $0
+      (set_local $3
        (i32.const 5728)
       )
       (call $~lib/array/Array<String>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24580,11 +24581,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<Array<i32>>#toString|inlined.1 (result i32)
-      (set_local $0
+      (set_local $3
        (get_global $std/array/subarr32)
       )
       (call $~lib/array/Array<Array<i32>>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24605,11 +24606,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<Array<u8>>#toString|inlined.1 (result i32)
-      (set_local $0
+      (set_local $3
        (get_global $std/array/subarr8)
       )
       (call $~lib/array/Array<Array<u8>>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )
@@ -24630,11 +24631,11 @@
    (i32.eqz
     (call $~lib/string/String.__eq
      (block $~lib/array/Array<Array<Array<u32>>>#toString|inlined.1 (result i32)
-      (set_local $0
+      (set_local $3
        (get_global $std/array/subarrU32)
       )
       (call $~lib/array/Array<Array<Array<u32>>>#join
-       (get_local $0)
+       (get_local $3)
        (i32.const 1776)
       )
      )

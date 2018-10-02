@@ -354,6 +354,7 @@ declare class Map<K,V> {
   entries(): Iterable<[K, V]>;
   keys(): Iterable<K>;
   values(): Iterable<V>;
+  delete(key: K): bool;
   [Symbol.iterator](): Iterator<[K,V]>;
 }
 
