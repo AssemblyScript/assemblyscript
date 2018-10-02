@@ -303,7 +303,17 @@ export class String {
     return out;
   }
 
+  @inline
   trimLeft(): String {
+    return this.trimStart();
+  }
+
+  @inline
+  trimRight(): String {
+    return this.trimEnd();
+  }
+
+  trimStart(): String {
     assert(this !== null);
     var start: isize = 0;
     var len: isize = this.length;
@@ -323,7 +333,7 @@ export class String {
     return out;
   }
 
-  trimRight(): String {
+  trimEnd(): String {
     assert(this !== null);
     var len: isize = this.length;
     while (

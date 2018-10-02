@@ -265,10 +265,10 @@ declare class Array<T> {
   unshift(element: T): i32;
   slice(from?: i32, to?: i32): T[];
   splice(start: i32, deleteCount?: i32): void;
-  reverse(): T[];
   sort(comparator?: (a: T, b: T) => i32): this;
-
-  join(delim: string): string;
+  join(separator?: string): string;
+  reverse(): T[];
+  toString(): string;
 }
 
 declare class Uint8Array extends Array<u8> {}
@@ -304,6 +304,8 @@ declare class String {
   trim(): string;
   trimLeft(): string;
   trimRight(): string;
+  trimStart(): string;
+  trimEnd(): string;
   padStart(targetLength: i32, padString?: string): string;
   padEnd(targetLength: i32, padString?: string): string;
   replace(search: string, replacement: string): string;
