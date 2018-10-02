@@ -27,6 +27,7 @@
  (global $std/array-literal/dynamicArrayI8 (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayI32 (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayRef (mut i32) (i32.const 0))
+ (global $std/array-literal/dynamicArrayRefWithCtor (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -619,7 +620,12 @@
    (get_local $2)
   )
  )
- (func $start (; 12 ;) (; has Stack IR ;) (type $v)
+ (func $std/array-literal/RefWithCtor#constructor (; 12 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (call $~lib/memory/memory.allocate
+   (i32.const 0)
+  )
+ )
+ (func $start (; 13 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
@@ -1052,8 +1058,55 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (call $~lib/array/Array<i32>#constructor)
+  )
+  (set_local $1
+   (call $std/array-literal/RefWithCtor#constructor)
+  )
+  (call $~lib/array/Array<i32>#__unchecked_set
+   (get_local $0)
+   (i32.const 0)
+   (get_local $1)
+  )
+  (set_local $1
+   (call $std/array-literal/RefWithCtor#constructor)
+  )
+  (call $~lib/array/Array<i32>#__unchecked_set
+   (get_local $0)
+   (i32.const 1)
+   (get_local $1)
+  )
+  (set_local $1
+   (call $std/array-literal/RefWithCtor#constructor)
+  )
+  (call $~lib/array/Array<i32>#__unchecked_set
+   (get_local $0)
+   (i32.const 2)
+   (get_local $1)
+  )
+  (set_global $std/array-literal/dynamicArrayRefWithCtor
+   (get_local $0)
+  )
+  (if
+   (i32.ne
+    (i32.load offset=4
+     (get_global $std/array-literal/dynamicArrayRefWithCtor)
+    )
+    (i32.const 3)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 40)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
  )
- (func $null (; 13 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 14 ;) (; has Stack IR ;) (type $v)
   (nop)
  )
 )

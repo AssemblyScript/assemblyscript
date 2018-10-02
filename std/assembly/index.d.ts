@@ -372,6 +372,8 @@ declare namespace table {
 declare class ArrayBuffer {
   /** The size, in bytes, of the array. */
   readonly byteLength: i32;
+  /** Unsafe pointer to the start of the data in memory. */
+  readonly data: usize;
   /** Constructs a new array buffer of the given length in bytes. */
   constructor(length: i32, unsafe?: bool);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
@@ -490,6 +492,7 @@ declare class String {
   padEnd(targetLength: i32, padString?: string): string;
   repeat(count?: i32): string;
   toString(): string;
+  static fromUTF8(ptr: usize, len: usize): string;
   toUTF8(): usize;
 }
 

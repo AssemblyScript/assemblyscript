@@ -2277,7 +2277,15 @@
    (get_local $2)
   )
  )
- (func $start (; 10 ;) (; has Stack IR ;) (type $v)
+ (func $~lib/arraybuffer/ArrayBuffer#get:data (; 10 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+  (i32.add
+   (get_local $0)
+   (i32.const 8)
+  )
+ )
+ (func $start (; 11 ;) (; has Stack IR ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 160)
   )
@@ -2330,6 +2338,31 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (call $~lib/arraybuffer/ArrayBuffer#get:data
+    (get_global $std/arraybuffer/sliced)
+   )
+  )
+  (set_local $1
+   (call $~lib/arraybuffer/ArrayBuffer#get:data
+    (get_global $std/arraybuffer/buffer)
+   )
+  )
+  (if
+   (i32.eq
+    (get_local $0)
+    (get_local $1)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 10)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
   (if
    (i32.eq
     (get_global $std/arraybuffer/sliced)
@@ -2339,7 +2372,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 10)
+     (i32.const 11)
      (i32.const 0)
     )
     (unreachable)
@@ -2365,7 +2398,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 14)
+     (i32.const 15)
      (i32.const 0)
     )
     (unreachable)
@@ -2391,7 +2424,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 18)
+     (i32.const 19)
      (i32.const 0)
     )
     (unreachable)
@@ -2415,7 +2448,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 22)
+     (i32.const 23)
      (i32.const 0)
     )
     (unreachable)
@@ -2439,7 +2472,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 26)
+     (i32.const 27)
      (i32.const 0)
     )
     (unreachable)
@@ -2463,7 +2496,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 30)
+     (i32.const 31)
      (i32.const 0)
     )
     (unreachable)
@@ -2487,7 +2520,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 34)
+     (i32.const 35)
      (i32.const 0)
     )
     (unreachable)
@@ -2510,7 +2543,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 38)
+     (i32.const 39)
      (i32.const 0)
     )
     (unreachable)
@@ -2524,14 +2557,14 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 39)
+     (i32.const 40)
      (i32.const 0)
     )
     (unreachable)
    )
   )
  )
- (func $null (; 11 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 12 ;) (; has Stack IR ;) (type $v)
   (nop)
  )
 )
