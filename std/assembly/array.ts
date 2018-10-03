@@ -396,7 +396,8 @@ export class Array<T> {
 
       let out = result;
       if (estLen > offset) {
-        out = result.substring(0, offset);
+        out = allocateUnsafeString(offset);
+        copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
       return out;
@@ -420,7 +421,8 @@ export class Array<T> {
       offset += itoa_stream<T>(changetype<usize>(result), offset, value);
       let out = result;
       if (estLen > offset) {
-        out = result.substring(0, offset);
+        out = allocateUnsafeString(offset);
+        copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
       return out;
@@ -444,7 +446,8 @@ export class Array<T> {
       offset += dtoa_stream(changetype<usize>(result), offset, value);
       let out = result;
       if (estLen > offset) {
-        out = result.substring(0, offset);
+        out = allocateUnsafeString(offset);
+        copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
       return out;
@@ -512,7 +515,8 @@ export class Array<T> {
       }
       let out = result;
       if (estLen > offset) {
-        out = result.substring(0, offset);
+        out = allocateUnsafeString(offset);
+        copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
       return out;
