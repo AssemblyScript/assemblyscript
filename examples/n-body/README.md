@@ -31,9 +31,9 @@ Benchmark
 
 ***Environment:***
 - MacBook Pro (Retina, 15-inch, Late 2013)
-- macOS 10.13.5
-- node.js v10.6.0
-- rustc 1.29.0-nightly (254f8796b 2018-07-13)
+- macOS 10.14
+- node.js v10.11.0
+- rustc 1.31.0-nightly (2bd5993ca 2018-10-02)
 
 ***Results:***
 
