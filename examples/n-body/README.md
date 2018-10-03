@@ -42,6 +42,6 @@ Benchmark
 | **AssemblyScript WASM** | **3167**        | **2**          |
 | AssemblyScript ASMJS    | 3633            | 21*            |
 | JavaScript              | 2628            | 5*             |
-| Rust WASM               | 3876            | 15             |
+| Rust WASM               | 3876            | 13             |
 
 ___* unminified___

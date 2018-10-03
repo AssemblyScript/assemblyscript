@@ -1,15 +1,14 @@
 (module
  (type $v (func))
- (type $iFFFFFFFi (func (param i32 f64 f64 f64 f64 f64 f64 f64) (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiiv (func (param i32 i32 i32)))
  (type $F (func (result f64)))
- (type $iFv (func (param i32 f64)))
  (type $iF (func (param i32) (result f64)))
  (type $iv (func (param i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (type $FUNCSIG$iddddddd (func (param f64 f64 f64 f64 f64 f64 f64) (result i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (import "env" "memory" (memory $0 1))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -21,160 +20,152 @@
  (export "bench" (func $assembly/index/bench))
  (export "getBody" (func $assembly/index/getBody))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (if
-   (get_local $0)
-   (block
+   (i32.gt_u
+    (get_local $0)
+    (i32.const 1073741824)
+   )
+   (unreachable)
+  )
+  (if
+   (i32.gt_u
+    (tee_local $2
+     (i32.and
+      (i32.add
+       (i32.add
+        (tee_local $1
+         (get_global $~lib/allocator/arena/offset)
+        )
+        (select
+         (get_local $0)
+         (i32.const 1)
+         (i32.gt_u
+          (get_local $0)
+          (i32.const 1)
+         )
+        )
+       )
+       (i32.const 7)
+      )
+      (i32.const -8)
+     )
+    )
+    (i32.shl
+     (tee_local $3
+      (current_memory)
+     )
+     (i32.const 16)
+    )
+   )
+   (if
+    (i32.lt_s
+     (grow_memory
+      (select
+       (get_local $3)
+       (tee_local $0
+        (i32.shr_u
+         (i32.and
+          (i32.add
+           (i32.sub
+            (get_local $2)
+            (get_local $1)
+           )
+           (i32.const 65535)
+          )
+          (i32.const -65536)
+         )
+         (i32.const 16)
+        )
+       )
+       (i32.gt_s
+        (get_local $3)
+        (get_local $0)
+       )
+      )
+     )
+     (i32.const 0)
+    )
     (if
-     (i32.gt_u
-      (get_local $0)
-      (i32.const 1073741824)
+     (i32.lt_s
+      (grow_memory
+       (get_local $0)
+      )
+      (i32.const 0)
      )
      (unreachable)
     )
-    (if
-     (i32.gt_u
-      (tee_local $0
-       (i32.and
-        (i32.add
-         (i32.add
-          (tee_local $1
-           (get_global $~lib/allocator/arena/offset)
-          )
-          (get_local $0)
-         )
-         (i32.const 7)
-        )
-        (i32.const -8)
-       )
-      )
-      (i32.shl
-       (tee_local $2
-        (current_memory)
-       )
-       (i32.const 16)
-      )
-     )
-     (if
-      (i32.lt_s
-       (grow_memory
-        (select
-         (get_local $2)
-         (tee_local $3
-          (i32.shr_u
-           (i32.and
-            (i32.add
-             (i32.sub
-              (get_local $0)
-              (get_local $1)
-             )
-             (i32.const 65535)
-            )
-            (i32.const -65536)
-           )
-           (i32.const 16)
-          )
-         )
-         (i32.gt_s
-          (get_local $2)
-          (get_local $3)
-         )
-        )
-       )
-       (i32.const 0)
-      )
-      (if
-       (i32.lt_s
-        (grow_memory
-         (get_local $3)
-        )
-        (i32.const 0)
-       )
-       (unreachable)
-      )
-     )
-    )
-    (set_global $~lib/allocator/arena/offset
-     (get_local $0)
-    )
-    (return
-     (get_local $1)
-    )
    )
   )
-  (i32.const 0)
- )
- (func $assembly/index/Body#constructor (; 2 ;) (type $iFFFFFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (block
-    (f64.store
-     (tee_local $0
-      (call $~lib/allocator/arena/__memory_allocate
-       (i32.const 56)
-      )
-     )
-     (get_local $1)
-    )
-    (f64.store offset=8
-     (get_local $0)
-     (get_local $2)
-    )
-    (f64.store offset=16
-     (get_local $0)
-     (get_local $3)
-    )
-    (f64.store offset=24
-     (get_local $0)
-     (get_local $4)
-    )
-    (f64.store offset=32
-     (get_local $0)
-     (get_local $5)
-    )
-    (f64.store offset=40
-     (get_local $0)
-     (get_local $6)
-    )
-    (f64.store offset=48
-     (get_local $0)
-     (get_local $7)
-    )
-   )
+  (set_global $~lib/allocator/arena/offset
+   (get_local $2)
   )
-  (get_local $0)
+  (get_local $1)
  )
- (func $~lib/memory/memset (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i64)
+ (func $assembly/index/Body#constructor (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$iddddddd) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (result i32)
+  (local $7 i32)
+  (f64.store
+   (tee_local $7
+    (call $~lib/allocator/arena/__memory_allocate
+     (i32.const 56)
+    )
+   )
+   (get_local $0)
+  )
+  (f64.store offset=8
+   (get_local $7)
+   (get_local $1)
+  )
+  (f64.store offset=16
+   (get_local $7)
+   (get_local $2)
+  )
+  (f64.store offset=24
+   (get_local $7)
+   (get_local $3)
+  )
+  (f64.store offset=32
+   (get_local $7)
+   (get_local $4)
+  )
+  (f64.store offset=40
+   (get_local $7)
+   (get_local $5)
+  )
+  (f64.store offset=48
+   (get_local $7)
+   (get_local $6)
+  )
+  (get_local $7)
+ )
+ (func $~lib/internal/memory/memset (; 2 ;) (; has Stack IR ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   (if
    (i32.eqz
-    (get_local $2)
+    (get_local $1)
    )
    (return)
   )
   (i32.store8
    (get_local $0)
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store8
    (i32.sub
     (i32.add
      (get_local $0)
-     (get_local $2)
+     (get_local $1)
     )
     (i32.const 1)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (if
    (i32.le_u
-    (get_local $2)
+    (get_local $1)
     (i32.const 2)
    )
    (return)
@@ -184,37 +175,37 @@
     (get_local $0)
     (i32.const 1)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store8
    (i32.add
     (get_local $0)
     (i32.const 2)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store8
    (i32.sub
-    (tee_local $3
+    (tee_local $2
      (i32.add
       (get_local $0)
-      (get_local $2)
+      (get_local $1)
      )
     )
     (i32.const 2)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store8
    (i32.sub
-    (get_local $3)
+    (get_local $2)
     (i32.const 3)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (if
    (i32.le_u
-    (get_local $2)
+    (get_local $1)
     (i32.const 6)
    )
    (return)
@@ -224,74 +215,63 @@
     (get_local $0)
     (i32.const 3)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store8
    (i32.sub
     (i32.add
      (get_local $0)
-     (get_local $2)
+     (get_local $1)
     )
     (i32.const 4)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (if
    (i32.le_u
-    (get_local $2)
+    (get_local $1)
     (i32.const 8)
    )
    (return)
-  )
-  (set_local $2
-   (i32.sub
-    (get_local $2)
-    (tee_local $3
-     (i32.and
-      (i32.sub
-       (i32.const 0)
-       (get_local $0)
-      )
-      (i32.const 3)
-     )
-    )
-   )
   )
   (i32.store
    (tee_local $0
     (i32.add
      (get_local $0)
-     (get_local $3)
-    )
-   )
-   (tee_local $1
-    (i32.mul
-     (i32.and
-      (get_local $1)
-      (i32.const 255)
+     (tee_local $2
+      (i32.and
+       (i32.sub
+        (i32.const 0)
+        (get_local $0)
+       )
+       (i32.const 3)
+      )
      )
-     (i32.const 16843009)
     )
    )
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
     (i32.add
      (get_local $0)
-     (tee_local $2
+     (tee_local $1
       (i32.and
-       (get_local $2)
+       (i32.sub
+        (get_local $1)
+        (get_local $2)
+       )
        (i32.const -4)
       )
      )
     )
     (i32.const 4)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (if
    (i32.le_u
-    (get_local $2)
+    (get_local $1)
     (i32.const 8)
    )
    (return)
@@ -301,37 +281,37 @@
     (get_local $0)
     (i32.const 4)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 8)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (tee_local $3
+    (tee_local $2
      (i32.add
       (get_local $0)
-      (get_local $2)
+      (get_local $1)
      )
     )
     (i32.const 12)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $2)
     (i32.const 8)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (if
    (i32.le_u
-    (get_local $2)
+    (get_local $1)
     (i32.const 24)
    )
    (return)
@@ -341,66 +321,66 @@
     (get_local $0)
     (i32.const 12)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 16)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 20)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 24)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (tee_local $3
+    (tee_local $2
      (i32.add
       (get_local $0)
-      (get_local $2)
+      (get_local $1)
      )
     )
     (i32.const 28)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $2)
     (i32.const 24)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $2)
     (i32.const 20)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $2)
     (i32.const 16)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (set_local $0
    (i32.add
     (get_local $0)
-    (tee_local $3
+    (tee_local $2
      (i32.add
       (i32.and
        (get_local $0)
@@ -411,60 +391,47 @@
     )
    )
   )
-  (set_local $2
+  (set_local $1
    (i32.sub
+    (get_local $1)
     (get_local $2)
-    (get_local $3)
-   )
-  )
-  (set_local $4
-   (i64.or
-    (tee_local $4
-     (i64.extend_u/i32
-      (get_local $1)
-     )
-    )
-    (i64.shl
-     (get_local $4)
-     (i64.const 32)
-    )
    )
   )
   (loop $continue|0
    (if
     (i32.ge_u
-     (get_local $2)
+     (get_local $1)
      (i32.const 32)
     )
     (block
      (i64.store
       (get_local $0)
-      (get_local $4)
+      (i64.const 0)
      )
      (i64.store
       (i32.add
        (get_local $0)
        (i32.const 8)
       )
-      (get_local $4)
+      (i64.const 0)
      )
      (i64.store
       (i32.add
        (get_local $0)
        (i32.const 16)
       )
-      (get_local $4)
+      (i64.const 0)
      )
      (i64.store
       (i32.add
        (get_local $0)
        (i32.const 24)
       )
-      (get_local $4)
+      (i64.const 0)
      )
-     (set_local $2
+     (set_local $1
       (i32.sub
-       (get_local $2)
+       (get_local $1)
        (i32.const 32)
       )
      )
@@ -479,116 +446,77 @@
    )
   )
  )
- (func $~lib/array/Array<Body>#constructor (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (if
-   (i32.gt_u
-    (get_local $1)
-    (i32.const 268435454)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 23)
-     (i32.const 39)
-    )
-    (unreachable)
-   )
-  )
+ (func $~lib/array/Array<Body>#constructor (; 3 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  (local $1 i32)
   (i32.store
-   (tee_local $3
+   (tee_local $1
     (call $~lib/allocator/arena/__memory_allocate
-     (i32.shl
-      (i32.const 1)
-      (i32.sub
-       (i32.const 32)
-       (i32.clz
-        (i32.add
-         (tee_local $2
-          (i32.shl
-           (get_local $1)
-           (i32.const 2)
-          )
-         )
-         (i32.const 7)
-        )
-       )
-      )
-     )
+     (i32.const 32)
     )
    )
-   (get_local $2)
-  )
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (block
-    (i32.store
-     (tee_local $0
-      (call $~lib/allocator/arena/__memory_allocate
-       (i32.const 8)
-      )
-     )
-     (i32.const 0)
-    )
-    (i32.store offset=4
-     (get_local $0)
-     (i32.const 0)
-    )
-   )
+   (i32.const 20)
   )
   (i32.store
-   (get_local $0)
-   (get_local $3)
+   (tee_local $0
+    (call $~lib/allocator/arena/__memory_allocate
+     (i32.const 8)
+    )
+   )
+   (i32.const 0)
   )
   (i32.store offset=4
    (get_local $0)
+   (i32.const 0)
+  )
+  (i32.store
+   (get_local $0)
    (get_local $1)
   )
-  (call $~lib/memory/memset
+  (i32.store offset=4
+   (get_local $0)
+   (i32.const 5)
+  )
+  (call $~lib/internal/memory/memset
    (i32.add
-    (get_local $3)
+    (get_local $1)
     (i32.const 8)
    )
-   (i32.const 0)
-   (get_local $2)
+   (i32.const 20)
   )
   (get_local $0)
  )
- (func $assembly/index/NBodySystem#constructor (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/index/NBodySystem#constructor (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
+  (local $3 f64)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
-  (local $7 f64)
-  (local $8 i32)
-  (set_local $8
+  (local $7 i32)
+  (set_local $7
    (i32.load offset=4
-    (get_local $1)
+    (get_local $0)
    )
   )
   (block $break|0
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $2)
-      (get_local $8)
+      (get_local $1)
+      (get_local $7)
      )
     )
-    (set_local $4
+    (set_local $3
      (f64.load offset=48
-      (tee_local $3
+      (tee_local $2
        (i32.load offset=8
         (i32.add
          (i32.load
-          (get_local $1)
+          (get_local $0)
          )
          (i32.shl
-          (get_local $2)
+          (get_local $1)
           (i32.const 2)
          )
         )
@@ -596,14 +524,25 @@
       )
      )
     )
+    (set_local $4
+     (f64.add
+      (get_local $4)
+      (f64.mul
+       (f64.load offset=24
+        (get_local $2)
+       )
+       (get_local $3)
+      )
+     )
+    )
     (set_local $5
      (f64.add
       (get_local $5)
       (f64.mul
-       (f64.load offset=24
-        (get_local $3)
+       (f64.load offset=32
+        (get_local $2)
        )
-       (get_local $4)
+       (get_local $3)
       )
      )
     )
@@ -611,27 +550,16 @@
      (f64.add
       (get_local $6)
       (f64.mul
-       (f64.load offset=32
-        (get_local $3)
-       )
-       (get_local $4)
-      )
-     )
-    )
-    (set_local $7
-     (f64.add
-      (get_local $7)
-      (f64.mul
        (f64.load offset=40
-        (get_local $3)
+        (get_local $2)
        )
-       (get_local $4)
+       (get_local $3)
       )
      )
     )
-    (set_local $2
+    (set_local $1
      (i32.add
-      (get_local $2)
+      (get_local $1)
       (i32.const 1)
      )
     )
@@ -639,15 +567,15 @@
    )
   )
   (f64.store offset=24
-   (tee_local $2
+   (tee_local $1
     (if (result i32)
      (i32.lt_u
       (i32.const 0)
       (i32.shr_u
        (i32.load
-        (tee_local $2
+        (tee_local $1
          (i32.load
-          (get_local $1)
+          (get_local $0)
          )
         )
        )
@@ -655,11 +583,20 @@
       )
      )
      (i32.load offset=8
-      (get_local $2)
+      (get_local $1)
      )
      (unreachable)
     )
    )
+   (f64.div
+    (f64.neg
+     (get_local $4)
+    )
+    (f64.const 39.47841760435743)
+   )
+  )
+  (f64.store offset=32
+   (get_local $1)
    (f64.div
     (f64.neg
      (get_local $5)
@@ -667,8 +604,8 @@
     (f64.const 39.47841760435743)
    )
   )
-  (f64.store offset=32
-   (get_local $2)
+  (f64.store offset=40
+   (get_local $1)
    (f64.div
     (f64.neg
      (get_local $6)
@@ -676,47 +613,24 @@
     (f64.const 39.47841760435743)
    )
   )
-  (f64.store offset=40
-   (get_local $2)
-   (f64.div
-    (f64.neg
-     (get_local $7)
+  (i32.store
+   (tee_local $1
+    (call $~lib/allocator/arena/__memory_allocate
+     (i32.const 4)
     )
-    (f64.const 39.47841760435743)
    )
+   (get_local $0)
   )
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (block
-    (i32.store
-     (tee_local $2
-      (call $~lib/allocator/arena/__memory_allocate
-       (i32.const 4)
-      )
-     )
-     (get_local $1)
-    )
-    (set_local $0
-     (get_local $2)
-    )
-   )
-  )
-  (get_local $0)
+  (get_local $1)
  )
- (func $assembly/index/init (; 6 ;) (type $v)
+ (func $assembly/index/init (; 5 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_local $1
-   (call $~lib/array/Array<Body>#constructor
-    (i32.const 0)
-    (i32.const 5)
-   )
+   (call $~lib/array/Array<Body>#constructor)
   )
   (set_local $0
    (call $assembly/index/Body#constructor
-    (i32.const 0)
     (f64.const 0)
     (f64.const 0)
     (f64.const 0)
@@ -734,7 +648,6 @@
   )
   (set_local $0
    (call $assembly/index/Body#constructor
-    (i32.const 0)
     (f64.const 4.841431442464721)
     (f64.const -1.1603200440274284)
     (f64.const -0.10362204447112311)
@@ -755,7 +668,6 @@
   )
   (set_local $0
    (call $assembly/index/Body#constructor
-    (i32.const 0)
     (f64.const 8.34336671824458)
     (f64.const 4.124798564124305)
     (f64.const -0.4035234171143214)
@@ -776,7 +688,6 @@
   )
   (set_local $0
    (call $assembly/index/Body#constructor
-    (i32.const 0)
     (f64.const 12.894369562139131)
     (f64.const -15.111151401698631)
     (f64.const -0.22330757889265573)
@@ -797,7 +708,6 @@
   )
   (set_local $0
    (call $assembly/index/Body#constructor
-    (i32.const 0)
     (f64.const 15.379697114850917)
     (f64.const -25.919314609987964)
     (f64.const 0.17925877295037118)
@@ -818,33 +728,32 @@
   )
   (set_global $assembly/index/system
    (call $assembly/index/NBodySystem#constructor
-    (i32.const 0)
     (get_local $1)
    )
   )
  )
- (func $assembly/index/NBodySystem#advance (; 7 ;) (type $iFv) (param $0 i32) (param $1 f64)
-  (local $2 i32)
-  (local $3 f64)
-  (local $4 i32)
+ (func $assembly/index/NBodySystem#advance (; 6 ;) (; has Stack IR ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 f64)
+  (local $3 i32)
+  (local $4 f64)
   (local $5 f64)
   (local $6 f64)
-  (local $7 f64)
-  (local $8 i32)
+  (local $7 i32)
+  (local $8 f64)
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
-  (local $12 f64)
+  (local $12 i32)
   (local $13 i32)
-  (local $14 i32)
+  (local $14 f64)
   (local $15 f64)
   (local $16 f64)
   (local $17 f64)
   (local $18 f64)
-  (local $19 f64)
-  (set_local $14
+  (set_local $13
    (i32.load offset=4
-    (tee_local $13
+    (tee_local $12
      (i32.load
       (get_local $0)
      )
@@ -855,20 +764,20 @@
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_u
-      (get_local $4)
-      (get_local $14)
+      (get_local $3)
+      (get_local $13)
      )
     )
-    (set_local $15
+    (set_local $14
      (f64.load
       (tee_local $0
        (i32.load offset=8
         (i32.add
          (i32.load
-          (get_local $13)
+          (get_local $12)
          )
          (i32.shl
-          (get_local $4)
+          (get_local $3)
           (i32.const 2)
          )
         )
@@ -876,69 +785,69 @@
       )
      )
     )
-    (set_local $16
+    (set_local $15
      (f64.load offset=8
       (get_local $0)
      )
     )
-    (set_local $17
+    (set_local $16
      (f64.load offset=16
       (get_local $0)
      )
     )
-    (set_local $5
+    (set_local $4
      (f64.load offset=24
       (get_local $0)
      )
     )
-    (set_local $6
+    (set_local $5
      (f64.load offset=32
       (get_local $0)
      )
     )
-    (set_local $7
+    (set_local $6
      (f64.load offset=40
       (get_local $0)
      )
     )
-    (set_local $18
+    (set_local $17
      (f64.load offset=48
       (get_local $0)
      )
     )
     (block $break|1
-     (set_local $8
+     (set_local $7
       (i32.add
-       (get_local $4)
+       (get_local $3)
        (i32.const 1)
       )
      )
      (loop $repeat|1
       (br_if $break|1
        (i32.ge_u
-        (get_local $8)
-        (get_local $14)
+        (get_local $7)
+        (get_local $13)
        )
       )
-      (set_local $12
+      (set_local $11
        (f64.sqrt
-        (tee_local $9
+        (tee_local $8
          (f64.add
           (f64.add
            (f64.mul
-            (tee_local $3
-             (tee_local $19
+            (tee_local $2
+             (tee_local $18
               (f64.sub
-               (get_local $15)
+               (get_local $14)
                (f64.load
-                (tee_local $2
+                (tee_local $1
                  (i32.load offset=8
                   (i32.add
                    (i32.load
-                    (get_local $13)
+                    (get_local $12)
                    )
                    (i32.shl
-                    (get_local $8)
+                    (get_local $7)
                     (i32.const 2)
                    )
                   )
@@ -948,30 +857,54 @@
               )
              )
             )
-            (get_local $3)
+            (get_local $2)
            )
            (f64.mul
-            (tee_local $10
+            (tee_local $9
              (f64.sub
-              (get_local $16)
+              (get_local $15)
               (f64.load offset=8
-               (get_local $2)
+               (get_local $1)
               )
              )
             )
-            (get_local $10)
+            (get_local $9)
            )
           )
           (f64.mul
-           (tee_local $11
+           (tee_local $10
             (f64.sub
-             (get_local $17)
+             (get_local $16)
              (f64.load offset=16
-              (get_local $2)
+              (get_local $1)
              )
             )
            )
-           (get_local $11)
+           (get_local $10)
+          )
+         )
+        )
+       )
+      )
+      (set_local $4
+       (f64.sub
+        (get_local $4)
+        (f64.mul
+         (get_local $2)
+         (tee_local $8
+          (f64.mul
+           (f64.load offset=48
+            (get_local $1)
+           )
+           (tee_local $11
+            (f64.div
+             (f64.const 0.01)
+             (f64.mul
+              (get_local $8)
+              (get_local $11)
+             )
+            )
+           )
           )
          )
         )
@@ -981,23 +914,8 @@
        (f64.sub
         (get_local $5)
         (f64.mul
-         (get_local $3)
-         (tee_local $9
-          (f64.mul
-           (f64.load offset=48
-            (get_local $2)
-           )
-           (tee_local $12
-            (f64.div
-             (get_local $1)
-             (f64.mul
-              (get_local $9)
-              (get_local $12)
-             )
-            )
-           )
-          )
-         )
+         (get_local $9)
+         (get_local $8)
         )
        )
       )
@@ -1006,63 +924,54 @@
         (get_local $6)
         (f64.mul
          (get_local $10)
-         (get_local $9)
-        )
-       )
-      )
-      (set_local $7
-       (f64.sub
-        (get_local $7)
-        (f64.mul
-         (get_local $11)
-         (get_local $9)
+         (get_local $8)
         )
        )
       )
       (f64.store offset=24
-       (get_local $2)
+       (get_local $1)
        (f64.add
         (f64.load offset=24
-         (get_local $2)
+         (get_local $1)
         )
         (f64.mul
-         (get_local $19)
-         (tee_local $3
+         (get_local $18)
+         (tee_local $2
           (f64.mul
-           (get_local $18)
-           (get_local $12)
+           (get_local $17)
+           (get_local $11)
           )
          )
         )
        )
       )
       (f64.store offset=32
-       (get_local $2)
+       (get_local $1)
        (f64.add
         (f64.load offset=32
-         (get_local $2)
+         (get_local $1)
         )
         (f64.mul
-         (get_local $10)
-         (get_local $3)
+         (get_local $9)
+         (get_local $2)
         )
        )
       )
       (f64.store offset=40
-       (get_local $2)
+       (get_local $1)
        (f64.add
         (f64.load offset=40
-         (get_local $2)
+         (get_local $1)
         )
         (f64.mul
-         (get_local $11)
-         (get_local $3)
+         (get_local $10)
+         (get_local $2)
         )
        )
       )
-      (set_local $8
+      (set_local $7
        (i32.add
-        (get_local $8)
+        (get_local $7)
         (i32.const 1)
        )
       )
@@ -1071,15 +980,15 @@
     )
     (f64.store offset=24
      (get_local $0)
-     (get_local $5)
+     (get_local $4)
     )
     (f64.store offset=32
      (get_local $0)
-     (get_local $6)
+     (get_local $5)
     )
     (f64.store offset=40
      (get_local $0)
-     (get_local $7)
+     (get_local $6)
     )
     (f64.store
      (get_local $0)
@@ -1088,8 +997,8 @@
        (get_local $0)
       )
       (f64.mul
-       (get_local $1)
-       (get_local $5)
+       (f64.const 0.01)
+       (get_local $4)
       )
      )
     )
@@ -1100,8 +1009,8 @@
        (get_local $0)
       )
       (f64.mul
-       (get_local $1)
-       (get_local $6)
+       (f64.const 0.01)
+       (get_local $5)
       )
      )
     )
@@ -1112,14 +1021,14 @@
        (get_local $0)
       )
       (f64.mul
-       (get_local $1)
-       (get_local $7)
+       (f64.const 0.01)
+       (get_local $6)
       )
      )
     )
-    (set_local $4
+    (set_local $3
      (i32.add
-      (get_local $4)
+      (get_local $3)
       (i32.const 1)
      )
     )
@@ -1127,7 +1036,7 @@
    )
   )
  )
- (func $assembly/index/NBodySystem#energy (; 8 ;) (type $iF) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 7 ;) (; has Stack IR ;) (type $iF) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -1324,16 +1233,15 @@
   )
   (get_local $1)
  )
- (func $assembly/index/step (; 9 ;) (type $F) (result f64)
+ (func $assembly/index/step (; 8 ;) (; has Stack IR ;) (type $F) (result f64)
   (call $assembly/index/NBodySystem#advance
    (get_global $assembly/index/system)
-   (f64.const 0.01)
   )
   (call $assembly/index/NBodySystem#energy
    (get_global $assembly/index/system)
   )
  )
- (func $assembly/index/bench (; 10 ;) (type $iv) (param $0 i32)
+ (func $assembly/index/bench (; 9 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (block $break|0
    (loop $repeat|0
@@ -1345,7 +1253,6 @@
     )
     (call $assembly/index/NBodySystem#advance
      (get_global $assembly/index/system)
-     (f64.const 0.01)
     )
     (set_local $1
      (i32.add
@@ -1357,7 +1264,7 @@
    )
   )
  )
- (func $assembly/index/getBody (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 10 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (tee_local $0
    (if (result i32)
@@ -1400,12 +1307,15 @@
    )
   )
  )
- (func $start (; 12 ;) (type $v)
+ (func $start (; 11 ;) (; has Stack IR ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 40)
   )
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
   )
+ )
+ (func $null (; 12 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )
