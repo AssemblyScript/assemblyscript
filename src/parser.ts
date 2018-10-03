@@ -70,6 +70,7 @@ import {
   ParameterNode,
   ParameterKind,
   ReturnStatement,
+  StatementOrExpression,
   SwitchCase,
   SwitchStatement,
   ThrowStatement,
@@ -1393,9 +1394,9 @@ export class Parser extends DiagnosticEmitter {
       tn.range(signatureStart, tn.pos)
     );
 
-    var body: Statement | null;
+    var body: StatementOrExpression | null;
     if (isArrow) {
-      body = this.parseStatement(tn, false);
+      body = this.parseArrowFunctionBody(tn);
     } else {
       if (!tn.skip(Token.OPENBRACE)) {
         this.error(
@@ -1418,6 +1419,10 @@ export class Parser extends DiagnosticEmitter {
       tn.range(startPos, tn.pos)
     );
     return Node.createFunctionExpression(declaration);
+  }
+
+  private parseArrowFunctionBody(tn: Tokenizer): StatementOrExpression | null {
+    return tn.skip(Token.OPENBRACE) ? this.parseBlockStatement(tn, false) : this.parseExpression(tn);
   }
 
   parseClassOrInterface(
@@ -2965,80 +2970,7 @@ export class Parser extends DiagnosticEmitter {
 
       // ParenthesizedExpression
       // FunctionExpression
-      case Token.OPENPAREN: {
-
-        // determine whether this is a function expression
-        if (tn.skip(Token.CLOSEPAREN)) { // must be a function expression (fast route)
-          return this.parseFunctionExpressionCommon(
-            tn,
-            Node.createEmptyIdentifierExpression(tn.range(startPos)),
-            [],
-            true
-          );
-        }
-        let state = tn.mark();
-        let again = true;
-        do {
-          switch (tn.next(IdentifierHandling.PREFER)) {
-
-            // function expression
-            case Token.DOT_DOT_DOT: {
-              tn.reset(state);
-              return this.parseFunctionExpression(tn);
-            }
-            // can be both
-            case Token.IDENTIFIER: {
-              tn.readIdentifier();
-              switch (tn.next()) {
-
-                // if we got here, check for arrow
-                case Token.CLOSEPAREN: {
-                  if (!tn.skip(Token.EQUALS_GREATERTHAN)) {
-                    again = false;
-                    break;
-                  }
-                  // fall-through
-                }
-                // function expression
-                case Token.COLON: {    // type annotation
-                  tn.reset(state);
-                  return this.parseFunctionExpression(tn);
-                }
-                // can be both
-                case Token.QUESTION:   // optional parameter or ternary
-                case Token.COMMA: {
-                  break; // continue
-                }
-                // parenthesized expression
-                // case Token.EQUALS:  // missing type annotation for simplicity
-                default: {
-                  again = false;
-                  break;
-                }
-              }
-              break;
-            }
-            // parenthesized expression
-            default: {
-              again = false;
-              break;
-            }
-          }
-        } while (again);
-        tn.reset(state);
-
-        // parse parenthesized
-        expr = this.parseExpression(tn);
-        if (!expr) return null;
-        if (!tn.skip(Token.CLOSEPAREN)) {
-          this.error(
-            DiagnosticCode._0_expected,
-            tn.range(), ")"
-          );
-          return null;
-        }
-        return Node.createParenthesizedExpression(expr, tn.range(startPos, tn.pos));
-      }
+      case Token.OPENPAREN: return this.parseArrowFunctionOrParenthesizedExpression(tn, startPos);
       // ArrayLiteralExpression
       case Token.OPENBRACKET: {
         let elementExpressions = new Array<Expression | null>();
@@ -3133,7 +3065,24 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       case Token.IDENTIFIER: {
-        return Node.createIdentifierExpression(tn.readIdentifier(), tn.range(startPos, tn.pos));
+        const name = tn.readIdentifier();
+        const range = tn.range(startPos, tn.pos);
+        const id = Node.createIdentifierExpression(name, range);
+        if (!tn.skip(Token.EQUALS_GREATERTHAN)) return id;
+
+        let param = new ParameterNode();
+        param.parameterKind = ParameterKind.DEFAULT;
+        param.name = id;
+        param.type = Node.createOmittedType(range);
+        return Node.createFunctionExpression(Node.createFunctionDeclaration(
+          Node.createEmptyIdentifierExpression(range),
+          null,
+          Node.createSignature([param], Node.createOmittedType(range), null, false, range),
+          this.parseArrowFunctionBody(tn),
+          null,
+          CommonFlags.ARROW,
+          range
+        ));
       }
       case Token.THIS: {
         return Node.createThisExpression(tn.range(startPos, tn.pos));
@@ -3189,6 +3138,66 @@ export class Parser extends DiagnosticEmitter {
           );
         }
         return null;
+      }
+    }
+  }
+
+  private parseArrowFunctionOrParenthesizedExpression(tn: Tokenizer, startPos: number): Expression | null {
+      if (tn.skip(Token.CLOSEPAREN)) { // must be a function expression (fast route)
+        return this.parseFunctionExpressionCommon(
+          tn,
+          Node.createEmptyIdentifierExpression(tn.range(startPos)),
+          [],
+          true
+        );
+      }
+
+      var state = tn.mark();
+      var isArrow = this.lookAheadIsArrowFunction(tn);
+      tn.reset(state);
+      if (isArrow) {
+        return this.parseFunctionExpression(tn);
+      } else {
+        // parse parenthesized
+        const expr = this.parseExpression(tn);
+        if (!expr) return null;
+        if (!tn.skip(Token.CLOSEPAREN)) {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), ")"
+          );
+          return null;
+        }
+        return Node.createParenthesizedExpression(expr, tn.range(startPos, tn.pos));
+      }
+  }
+
+  private lookAheadIsArrowFunction(tn: Tokenizer): boolean {
+    while (true) {
+      switch (tn.next(IdentifierHandling.PREFER)) {
+        case Token.DOT_DOT_DOT: return true; // rest argument
+        case Token.IDENTIFIER: {
+          tn.readIdentifier();
+          switch (tn.next()) {
+            // if we got here, check for arrow
+            case Token.CLOSEPAREN: {
+              return tn.skip(Token.EQUALS_GREATERTHAN) || tn.skip(Token.COLON);
+            }
+            case Token.COLON: return true; // type annotation
+            case Token.QUESTION: {  // optional parameter or ternary
+              // Arrow function may be `(x?: i32) => 0`, `(x?, y) => 0`, or `(x?) => 0`.
+              // Anything else is a conditional expression.
+              return (tn.skip(Token.COLON) || tn.skip(Token.COMMA) || tn.skip(Token.CLOSEPAREN));
+            }
+            case Token.COMMA: {
+              break; // continue
+            }
+            // case Token.EQUALS:  // missing type annotation for simplicity
+            default: return false;
+          }
+          break;
+        }
+        default: return false;
       }
     }
   }
