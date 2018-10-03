@@ -7855,166 +7855,10 @@
    (get_local $2)
   )
  )
- (func $~lib/string/String#substring (; 48 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (if
-   (i32.eqz
-    (i32.ne
-     (get_local $0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 80)
-     (i32.const 264)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
-  (set_local $3
-   (i32.load
-    (get_local $0)
-   )
-  )
-  (set_local $6
-   (select
-    (tee_local $4
-     (select
-      (tee_local $4
-       (get_local $1)
-      )
-      (tee_local $5
-       (i32.const 0)
-      )
-      (i32.gt_s
-       (get_local $4)
-       (get_local $5)
-      )
-     )
-    )
-    (tee_local $5
-     (get_local $3)
-    )
-    (i32.lt_s
-     (get_local $4)
-     (get_local $5)
-    )
-   )
-  )
-  (set_local $7
-   (select
-    (tee_local $4
-     (select
-      (tee_local $4
-       (get_local $2)
-      )
-      (tee_local $5
-       (i32.const 0)
-      )
-      (i32.gt_s
-       (get_local $4)
-       (get_local $5)
-      )
-     )
-    )
-    (tee_local $5
-     (get_local $3)
-    )
-    (i32.lt_s
-     (get_local $4)
-     (get_local $5)
-    )
-   )
-  )
-  (set_local $8
-   (select
-    (tee_local $4
-     (get_local $6)
-    )
-    (tee_local $5
-     (get_local $7)
-    )
-    (i32.lt_s
-     (get_local $4)
-     (get_local $5)
-    )
-   )
-  )
-  (set_local $9
-   (select
-    (tee_local $4
-     (get_local $6)
-    )
-    (tee_local $5
-     (get_local $7)
-    )
-    (i32.gt_s
-     (get_local $4)
-     (get_local $5)
-    )
-   )
-  )
-  (set_local $3
-   (i32.sub
-    (get_local $9)
-    (get_local $8)
-   )
-  )
-  (if
-   (i32.eqz
-    (get_local $3)
-   )
-   (return
-    (i32.const 256)
-   )
-  )
-  (if
-   (if (result i32)
-    (tee_local $4
-     (i32.eqz
-      (get_local $8)
-     )
-    )
-    (i32.eq
-     (get_local $9)
-     (i32.load
-      (get_local $0)
-     )
-    )
-    (get_local $4)
-   )
-   (return
-    (get_local $0)
-   )
-  )
-  (set_local $10
-   (call $~lib/internal/string/allocateUnsafe
-    (get_local $3)
-   )
-  )
-  (call $~lib/internal/string/copyUnsafe
-   (get_local $10)
-   (i32.const 0)
-   (get_local $0)
-   (get_local $8)
-   (get_local $3)
-  )
-  (get_local $10)
- )
- (func $~lib/allocator/arena/__memory_free (; 49 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 48 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $~lib/internal/number/dtoa (; 50 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/number/dtoa (; 49 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8066,41 +7910,57 @@
    )
   )
   (set_local $3
-   (call $~lib/string/String#substring
-    (get_local $1)
-    (i32.const 0)
-    (get_local $2)
-   )
+   (get_local $1)
   )
-  (block $~lib/internal/string/freeUnsafe|inlined.0
+  (if
+   (i32.lt_s
+    (get_local $2)
+    (get_global $~lib/internal/number/MAX_DOUBLE_LENGTH)
+   )
    (block
-    (if
-     (i32.eqz
-      (get_local $1)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 112)
-       (i32.const 28)
-       (i32.const 4)
-      )
-      (unreachable)
+    (set_local $3
+     (call $~lib/internal/string/allocateUnsafe
+      (get_local $2)
      )
     )
-    (block $~lib/memory/memory.free|inlined.0
+    (call $~lib/internal/string/copyUnsafe
+     (get_local $3)
+     (i32.const 0)
+     (get_local $1)
+     (i32.const 0)
+     (get_local $2)
+    )
+    (block $~lib/internal/string/freeUnsafe|inlined.0
      (block
-      (call $~lib/allocator/arena/__memory_free
-       (get_local $1)
+      (if
+       (i32.eqz
+        (get_local $1)
+       )
+       (block
+        (call $~lib/env/abort
+         (i32.const 0)
+         (i32.const 112)
+         (i32.const 28)
+         (i32.const 4)
+        )
+        (unreachable)
+       )
       )
-      (br $~lib/memory/memory.free|inlined.0)
+      (block $~lib/memory/memory.free|inlined.0
+       (block
+        (call $~lib/allocator/arena/__memory_free
+         (get_local $1)
+        )
+        (br $~lib/memory/memory.free|inlined.0)
+       )
+      )
      )
     )
    )
   )
   (get_local $3)
  )
- (func $start (; 51 ;) (type $v)
+ (func $start (; 50 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -11875,6 +11735,6 @@
    )
   )
  )
- (func $null (; 52 ;) (type $v)
+ (func $null (; 51 ;) (type $v)
  )
 )

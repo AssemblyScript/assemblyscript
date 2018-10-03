@@ -2,6 +2,7 @@
 import {
   CharCode,
   allocateUnsafe as allocateUnsafeString,
+  copyUnsafe as copyUnsafeString,
   freeUnsafe as freeUnsafeString,
   HEADER_SIZE as STRING_HEADER_SIZE
 } from "./string";
@@ -624,8 +625,13 @@ export function dtoa(value: f64): String {
   }
   var buffer = allocateUnsafeString(MAX_DOUBLE_LENGTH);
   var length = dtoa_core(changetype<usize>(buffer), value);
-  var result = buffer.substring(0, length);
-  freeUnsafeString(buffer);
+  var result = buffer;
+
+  if (length < MAX_DOUBLE_LENGTH) {
+    result = allocateUnsafeString(length);
+    copyUnsafeString(result, 0, buffer, 0, length);
+    freeUnsafeString(buffer);
+  }
   return result;
 }
 
