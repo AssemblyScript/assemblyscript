@@ -42,11 +42,11 @@ export enum NameType {
   Local = 2
 }
 
-/** Maximum number of pages. */
+/** Maximum number of memory pages. */
 export const MAX_PAGES = 0xffff;
 
-/** Maximum number of tables. */
-export const MAX_TABLES = 1; // MVP
+/** Maximum number of table elements. */
+export const MAX_ELEMS = 0xffffffff;
 
 /** WebAssembly opcodes. */
 export enum Opcode { // just a few of these are actually used
