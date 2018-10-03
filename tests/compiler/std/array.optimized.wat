@@ -10548,13 +10548,9 @@
     (f64.const 0)
    )
    (block
-    (i32.store16 offset=4
+    (i32.store offset=4
      (get_local $0)
-     (i32.const 48)
-    )
-    (i32.store16 offset=6
-     (get_local $0)
-     (i32.const 46)
+     (i32.const 3014704)
     )
     (i32.store16 offset=8
      (get_local $0)
@@ -10576,13 +10572,9 @@
      (get_local $2)
     )
     (block
-     (i32.store16 offset=4
+     (i32.store offset=4
       (get_local $0)
-      (i32.const 78)
-     )
-     (i32.store16 offset=6
-      (get_local $0)
-      (i32.const 97)
+      (i32.const 6357070)
      )
      (i32.store16 offset=8
       (get_local $0)

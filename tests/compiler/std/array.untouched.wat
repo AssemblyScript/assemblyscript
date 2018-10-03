@@ -16260,13 +16260,15 @@
     (f64.const 0)
    )
    (block
-    (i32.store16 offset=4
+    (i32.store offset=4
      (get_local $0)
-     (get_global $~lib/internal/string/CharCode._0)
-    )
-    (i32.store16 offset=6
-     (get_local $0)
-     (get_global $~lib/internal/string/CharCode.DOT)
+     (i32.or
+      (get_global $~lib/internal/string/CharCode._0)
+      (i32.shl
+       (get_global $~lib/internal/string/CharCode.DOT)
+       (i32.const 16)
+      )
+     )
     )
     (i32.store16 offset=8
      (get_local $0)
@@ -16289,13 +16291,15 @@
       (get_local $2)
      )
      (block
-      (i32.store16 offset=4
+      (i32.store offset=4
        (get_local $0)
-       (get_global $~lib/internal/string/CharCode.N)
-      )
-      (i32.store16 offset=6
-       (get_local $0)
-       (get_global $~lib/internal/string/CharCode.a)
+       (i32.or
+        (get_global $~lib/internal/string/CharCode.N)
+        (i32.shl
+         (get_global $~lib/internal/string/CharCode.a)
+         (i32.const 16)
+        )
+       )
       )
       (i32.store16 offset=8
        (get_local $0)

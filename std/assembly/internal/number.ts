@@ -680,15 +680,13 @@ export function itoa_stream<T>(buffer: usize, offset: usize, value: T): u32 {
 export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
   buffer += (offset << 1);
   if (value == 0.0) {
-    store<u16>(buffer, CharCode._0,  STRING_HEADER_SIZE + 0);
-    store<u16>(buffer, CharCode.DOT, STRING_HEADER_SIZE + 2);
+    store<u32>(buffer, CharCode._0 | (CharCode.DOT << 16), STRING_HEADER_SIZE);
     store<u16>(buffer, CharCode._0,  STRING_HEADER_SIZE + 4);
     return 3;
   }
   if (!isFinite(value)) {
     if (isNaN(value)) {
-      store<u16>(buffer, CharCode.N, STRING_HEADER_SIZE + 0);
-      store<u16>(buffer, CharCode.a, STRING_HEADER_SIZE + 2);
+      store<u32>(buffer, CharCode.N | (CharCode.a << 16), STRING_HEADER_SIZE);
       store<u16>(buffer, CharCode.N, STRING_HEADER_SIZE + 4);
       return 3;
     } else {
