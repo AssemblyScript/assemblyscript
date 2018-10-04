@@ -85,7 +85,8 @@
     },
     "no-trailing-whitespace": {},
     "no-unbound-method": {
-      "severity": "error"
+      "severity": "error",
+      "options": ["ignore-static"]
     },
     "no-unsafe-any": {
       "severity": "error"
