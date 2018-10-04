@@ -2993,7 +2993,10 @@ export class Parser extends DiagnosticEmitter {
 
                 // if we got here, check for arrow
                 case Token.CLOSEPAREN: {
-                  if (!tn.skip(Token.EQUALS_GREATERTHAN)) {
+                  if (
+                    !tn.skip(Token.COLON) &&
+                    !tn.skip(Token.EQUALS_GREATERTHAN)
+                  ) {
                     again = false;
                     break;
                   }
@@ -3004,8 +3007,19 @@ export class Parser extends DiagnosticEmitter {
                   tn.reset(state);
                   return this.parseFunctionExpression(tn);
                 }
-                // can be both
-                case Token.QUESTION:   // optional parameter or ternary
+                // optional parameter or parenthesized
+                case Token.QUESTION: {
+                  if (
+                    tn.skip(Token.COLON) ||   // optional parameter with type
+                    tn.skip(Token.COMMA) ||   // optional parameter without type
+                    tn.skip(Token.CLOSEPAREN) // last optional parameter without type
+                  ) {
+                    tn.reset(state);
+                    return this.parseFunctionExpression(tn);
+                  }
+                  again = false; // parenthesized
+                  break;
+                  }
                 case Token.COMMA: {
                   break; // continue
                 }
