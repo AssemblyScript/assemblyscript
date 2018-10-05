@@ -1158,10 +1158,14 @@
             )
            )
            (tee_local $0
-            (select
-             (f64.const 1.5)
+            (f64.add
              (f64.const 1)
-             (get_local $10)
+             (f64.mul
+              (f64.const 0.5)
+              (f64.convert_s/i32
+               (get_local $10)
+              )
+             )
             )
            )
           )

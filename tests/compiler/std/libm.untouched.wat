@@ -763,14 +763,11 @@
    (i32.const 0)
   )
   (if
-   (if (result i32)
-    (tee_local $4
-     (i32.lt_u
-      (get_local $2)
-      (i32.const 1048576)
-     )
+   (i32.or
+    (i32.lt_u
+     (get_local $2)
+     (i32.const 1048576)
     )
-    (get_local $4)
     (i32.shr_u
      (get_local $2)
      (i32.const 31)
@@ -1374,6 +1371,7 @@
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
+  (local $4 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -1400,7 +1398,7 @@
     (i64.const 9223372036854775807)
    )
   )
-  (set_local $0
+  (set_local $4
    (f64.reinterpret/i64
     (get_local $1)
    )
@@ -1413,10 +1411,10 @@
      (i64.const 26)
     )
    )
-   (set_local $0
+   (set_local $4
     (f64.add
      (call $~lib/math/NativeMath.log
-      (get_local $0)
+      (get_local $4)
      )
      (f64.const 0.6931471805599453)
     )
@@ -1429,12 +1427,12 @@
       (i64.const 1)
      )
     )
-    (set_local $0
+    (set_local $4
      (call $~lib/math/NativeMath.log
       (f64.add
        (f64.mul
         (f64.const 2)
-        (get_local $0)
+        (get_local $4)
        )
        (f64.div
         (f64.const 1)
@@ -1442,13 +1440,13 @@
          (f64.sqrt
           (f64.add
            (f64.mul
-            (get_local $0)
-            (get_local $0)
+            (get_local $4)
+            (get_local $4)
            )
            (f64.const 1)
           )
          )
-         (get_local $0)
+         (get_local $4)
         )
        )
       )
@@ -1462,21 +1460,21 @@
        (i64.const 26)
       )
      )
-     (set_local $0
+     (set_local $4
       (call $~lib/math/NativeMath.log1p
        (f64.add
-        (get_local $0)
+        (get_local $4)
         (f64.div
          (f64.mul
-          (get_local $0)
-          (get_local $0)
+          (get_local $4)
+          (get_local $4)
          )
          (f64.add
           (f64.sqrt
            (f64.add
             (f64.mul
-             (get_local $0)
-             (get_local $0)
+             (get_local $4)
+             (get_local $4)
             )
             (f64.const 1)
            )
@@ -1490,14 +1488,8 @@
     )
    )
   )
-  (if (result f64)
-   (i64.ne
-    (get_local $3)
-    (i64.const 0)
-   )
-   (f64.neg
-    (get_local $0)
-   )
+  (f64.copysign
+   (get_local $4)
    (get_local $0)
   )
  )
@@ -1514,7 +1506,7 @@
  )
  (func $~lib/math/NativeMath.atan (; 13 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
-  (local $2 i32)
+  (local $2 f64)
   (local $3 f64)
   (local $4 i32)
   (local $5 f64)
@@ -1532,10 +1524,7 @@
    )
   )
   (set_local $2
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
+   (get_local $0)
   )
   (set_local $1
    (i32.and
@@ -1566,12 +1555,9 @@
      )
     )
     (return
-     (if (result f64)
-      (get_local $2)
-      (f64.neg
-       (get_local $3)
-      )
+     (f64.copysign
       (get_local $3)
+      (get_local $2)
      )
     )
    )
@@ -1910,12 +1896,9 @@
    )
    (unreachable)
   )
-  (if (result f64)
-   (get_local $2)
-   (f64.neg
-    (get_local $3)
-   )
+  (f64.copysign
    (get_local $3)
+   (get_local $2)
   )
  )
  (func $std/libm/atan (; 14 ;) (type $FF) (param $0 f64) (result f64)
@@ -2020,15 +2003,9 @@
     )
    )
   )
-  (if (result f64)
-   (i64.ne
-    (get_local $3)
-    (i64.const 0)
-   )
-   (f64.neg
-    (get_local $4)
-   )
+  (f64.copysign
    (get_local $4)
+   (get_local $0)
   )
  )
  (func $std/libm/atanh (; 16 ;) (type $FF) (param $0 f64) (result f64)
@@ -2899,10 +2876,9 @@
           (f64.const 1.4426950408889634)
           (get_local $0)
          )
-         (if (result f64)
-          (get_local $4)
-          (f64.const -0.5)
+         (f64.copysign
           (f64.const 0.5)
+          (get_local $0)
          )
         )
        )
@@ -3465,11 +3441,11 @@
      )
      (set_local $5
       (i32.sub
-       (i32.sub
-        (i32.const 1)
+       (i32.const 1)
+       (i32.shl
         (get_local $2)
+        (i32.const 1)
        )
-       (get_local $2)
       )
      )
     )
@@ -5663,10 +5639,14 @@
      )
     )
     (set_local $32
-     (select
-      (f64.const 1.5)
+     (f64.add
       (f64.const 1)
-      (get_local $11)
+      (f64.mul
+       (f64.const 0.5)
+       (f64.convert_s/i32
+        (get_local $11)
+       )
+      )
      )
     )
     (set_local $21
@@ -6765,20 +6745,12 @@
  )
  (func $~lib/math/NativeMath.tanh (; 59 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
-  (local $2 i32)
+  (local $2 f64)
   (local $3 i32)
   (local $4 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
-   )
-  )
-  (set_local $2
-   (i32.wrap/i64
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
    )
   )
   (set_local $1
@@ -6787,7 +6759,7 @@
     (i64.const 9223372036854775807)
    )
   )
-  (set_local $0
+  (set_local $2
    (f64.reinterpret/i64
     (get_local $1)
    )
@@ -6815,7 +6787,7 @@
       (f64.const 1)
       (f64.div
        (f64.const 0)
-       (get_local $0)
+       (get_local $2)
       )
      )
     )
@@ -6824,7 +6796,7 @@
       (call $~lib/math/NativeMath.expm1
        (f64.mul
         (f64.const 2)
-        (get_local $0)
+        (get_local $2)
        )
       )
      )
@@ -6852,7 +6824,7 @@
       (call $~lib/math/NativeMath.expm1
        (f64.mul
         (f64.const 2)
-        (get_local $0)
+        (get_local $2)
        )
       )
      )
@@ -6876,7 +6848,7 @@
        (call $~lib/math/NativeMath.expm1
         (f64.mul
          (f64.const -2)
-         (get_local $0)
+         (get_local $2)
         )
        )
       )
@@ -6893,17 +6865,14 @@
       )
      )
      (set_local $4
-      (get_local $0)
+      (get_local $2)
      )
     )
    )
   )
-  (if (result f64)
-   (get_local $2)
-   (f64.neg
-    (get_local $4)
-   )
+  (f64.copysign
    (get_local $4)
+   (get_local $0)
   )
  )
  (func $std/libm/tanh (; 60 ;) (type $FF) (param $0 f64) (result f64)
