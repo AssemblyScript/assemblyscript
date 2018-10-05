@@ -578,12 +578,12 @@ export namespace NativeMath {
     var h = x - c + c;
     var l = x - h;
     var hx = x * x;
-    var lx = h * h - hx + 2 * h * l + l * l;
+    var lx = h * h - hx + (2 * h + l) * l;
     c = y * SPLIT;
     h = y - c + c;
     l = y - h;
     var hy = y * y;
-    var ly = h * h - hy + 2 * h * l + l * l;
+    var ly = h * h - hy + (2 * h + l) * l;
     return z * builtin_sqrt(ly + lx + hy + hx);
   }
 
@@ -701,7 +701,7 @@ export namespace NativeMath {
     var hx = <u32>(u >> 32);
     var k = 1;
     var c = 0.0, f = 0.0;
-    if (hx < 0x3FDA827A || <bool>(hx >> 31)) {
+    if (<u32>(hx < 0x3FDA827A) | (hx >> 31)) {
       if (hx >= 0xBFF00000) {
         if (x == -1) return x / 0.0;
         return (x - x) / 0.0;
@@ -1570,11 +1570,14 @@ export namespace NativeMathf {
     var sign_ = <i32>(hx >> 31);
     hx &= 0x7FFFFFFF;
     if (hx >= 0x42AEAC50) {
-      if (hx >= 0x42B17218 && !sign_) {
-        x *= Ox1p127f;
-        return x;
+      if (hx >= 0x42B17218) {
+        if (!sign_) {
+          x *= Ox1p127f;
+          return x;
+        } else {
+          if (hx >= 0x42CFF1B5) return 0;
+        }
       }
-      if (sign_ && hx >= 0x42CFF1B5) return 0;
     }
     var hi: f32, lo: f32;
     var k: i32;
