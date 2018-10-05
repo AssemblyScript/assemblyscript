@@ -5643,7 +5643,7 @@
       (f64.const 1)
       (f64.mul
        (f64.const 0.5)
-       (f64.convert_s/i32
+       (f64.convert_u/i32
         (get_local $11)
        )
       )
@@ -5879,10 +5879,11 @@
      )
     )
     (set_local $34
-     (select
+     (f64.mul
       (f64.const 1.350039202129749e-08)
-      (f64.const 0)
-      (get_local $11)
+      (f64.convert_u/i32
+       (get_local $11)
+      )
      )
     )
     (set_local $35
@@ -5906,10 +5907,11 @@
      )
     )
     (set_local $36
-     (select
+     (f64.mul
       (f64.const 0.5849624872207642)
-      (f64.const 0)
-      (get_local $11)
+      (f64.convert_u/i32
+       (get_local $11)
+      )
      )
     )
     (set_local $15

@@ -924,7 +924,7 @@ export namespace NativeMath {
       }
       ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xFFFFFFFF | (<u64>ix << 32));
       // let bp = select<f64>(1.5, 1.0, k);
-      let bp = 1.0 + 0.5 * k;
+      let bp: f64 = 1.0 + 0.5 * <f64><bool>k;
       u = ax - bp;
       v = 1.0 / (ax + bp);
       ss = u * v;
@@ -946,10 +946,12 @@ export namespace NativeMath {
       p_h = reinterpret<f64>(reinterpret<u64>(p_h) & 0xFFFFFFFF00000000);
       p_l = v - (p_h - u);
       let z_h = cp_h * p_h;
-      let dp_l = select<f64>(dp_l1, 0.0, k);
+      // let dp_l = select<f64>(dp_l1, 0.0, k);
+      let dp_l: f64 = dp_l1 * <f64><bool>k;
       let z_l = cp_l * p_h + p_l * cp + dp_l;
       t = <f64>n;
-      let dp_h = select<f64>(dp_h1, 0.0, k);
+      // let dp_h = select<f64>(dp_h1, 0.0, k);
+      let dp_h: f64 = dp_h1 * <f64><bool>k;
       t1 = ((z_h + z_l) + dp_h) + t;
       t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xFFFFFFFF00000000);
       t2 = z_l - (((t1 - t) - dp_h) - z_h);
@@ -1987,7 +1989,7 @@ export namespace NativeMathf {
         ix -= 0x00800000;
       }
       ax = reinterpret<f32>(ix);
-      let bp = select<f32>(1.5, 1.0, k);
+      let bp: f32 = 1.0 + 0.5 * <f32><bool>k;
       u = ax - bp;
       v = 1.0 / (ax + bp);
       s = u * v;
@@ -2003,20 +2005,22 @@ export namespace NativeMathf {
       r += s_l * (s_h + s);
       s2 = s_h * s_h;
       t_h = 3.0 + s2 + r;
-      is = reinterpret<u32>(t_h);
+      is  = reinterpret<u32>(t_h);
       t_h = reinterpret<f32>(is & 0xFFFFF000);
       t_l = r - ((t_h - 3.0) - s2);
       u = s_h * t_h;
       v = s_l * t_h + t_l * s;
       p_h = u + v;
-      is = reinterpret<u32>(p_h);
+      is  = reinterpret<u32>(p_h);
       p_h = reinterpret<f32>(is & 0xFFFFF000);
       p_l = v - (p_h - u);
       let z_h = cp_h * p_h;
-      let dp_l = select<f32>(dp_l1, 0.0, k);
+      // let dp_l = select<f32>(dp_l1, 0.0, k);
+      let dp_l: f32 = dp_l1 * <f32><bool>k;
       let z_l = cp_l * p_h + p_l * cp + dp_l;
       t = <f32>n;
-      let dp_h = select<f32>(dp_h1, 0.0, k);
+      // let dp_h = select<f32>(dp_h1, 0.0, k);
+      let dp_h: f32 = dp_h1 * <f32><bool>k;
       t1 = (((z_h + z_l) + dp_h) + t);
       is = reinterpret<u32>(t1);
       t1 = reinterpret<f32>(is & 0xFFFFF000);
