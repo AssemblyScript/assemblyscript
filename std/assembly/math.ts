@@ -1021,27 +1021,10 @@ export namespace NativeMath {
     return reinterpret<f64>(r) - 1;
   }
 
-  export function round(x: f64): f64 { // see: musl/src/math/round.c
-    const toint = 1.0 / f64.EPSILON;
-    var ux = reinterpret<u64>(x);
-    var e = <i32>(ux >> 52 & 0x7FF);
-    if (e >= 0x3FF + 52) return x;
-    if (e < 0x3FF - 1) return 0 * x;
-    var y: f64;
-    if (ux >> 63) {
-      // FIXME: JS always rounds fractional 0.5 towards +Infinity
-      // and there certainly is a smarter way to do this.
-      y = toint - x - toint + x;
-      if (y >= 0.5) y = x - y + 1;
-      else if (y < -0.5) y = x - y - 1;
-      else y = x - y;
-    } else {
-      y = x + toint - toint - x;
-      if (y > 0.5) y = y + x - 1;
-      else if (y <= -0.5) y = y + x + 1;
-      else y = y + x;
-    }
-    return y;
+  export function round(x: f64): f64 {
+    if (!isFinite(x) || x == 0) return x;
+    if (-0.5 <= x && x < 0) return -0.0;
+    return builtin_floor<f64>(x + 0.5);
   }
 
   @inline
@@ -2084,27 +2067,10 @@ export namespace NativeMathf {
     return f;
   }
 
-  export function round(x: f32): f32 { // see: musl/src/math/roundf.c
-    const toint = <f32>1.0 / f32.EPSILON;
-    var ux = reinterpret<u32>(x);
-    var e = <i32>(ux >> 23 & 0xFF);
-    if (e >= 0x7F + 23) return x;
-    if (e < 0x7F - 1) return 0 * x;
-    var y: f32;
-    if (ux >> 31) {
-      // FIXME: JS always rounds fractional 0.5 towards +Infinity
-      // and there certainly is a smarter way to do this.
-      y = toint - x - toint + x;
-      if (y >= 0.5) y = x - y + 1;
-      else if (y < -0.5) y = x - y - 1;
-      else y = x - y;
-    } else {
-      y = x + toint - toint - x;
-      if (y > 0.5) y = y + x - 1;
-      else if (y <= -0.5) y = y + x + 1;
-      else y = y + x;
-    }
-    return y;
+  export function round(x: f32): f32 {
+    if (!isFinite<f32>(x) || x == 0) return x;
+    if (-0.5 <= x && x < 0) return -0.0;
+    return builtin_floor<f32>(x + 0.5);
   }
 
   @inline

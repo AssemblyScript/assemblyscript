@@ -84,8 +84,6 @@
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1 (mut i64) (i64.const 0))
- (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
- (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
  (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 68))
  (table 1 1 anyfunc)
@@ -13878,162 +13876,50 @@
   (get_local $0)
  )
  (func $~lib/math/NativeMath.round (; 136 ;) (type $FF) (param $0 f64) (result f64)
-  (local $1 i64)
-  (local $2 i32)
-  (local $3 f64)
-  (set_local $1
-   (i64.reinterpret/f64
-    (get_local $0)
-   )
-  )
-  (set_local $2
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $1)
-      (i64.const 52)
+  (local $1 i32)
+  (if
+   (if (result i32)
+    (tee_local $1
+     (i32.eqz
+      (call $~lib/builtins/isFinite<f64>
+       (get_local $0)
+      )
      )
-     (i64.const 2047)
     )
-   )
-  )
-  (if
-   (i32.ge_s
-    (get_local $2)
-    (i32.add
-     (i32.const 1023)
-     (i32.const 52)
-    )
-   )
-   (return
-    (get_local $0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $2)
-    (i32.sub
-     (i32.const 1023)
-     (i32.const 1)
-    )
-   )
-   (return
-    (f64.mul
-     (f64.const 0)
+    (get_local $1)
+    (f64.eq
      (get_local $0)
+     (f64.const 0)
     )
+   )
+   (return
+    (get_local $0)
    )
   )
   (if
-   (i64.ne
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (block
-    (set_local $3
-     (f64.add
-      (f64.sub
-       (f64.sub
-        (f64.const 4503599627370496)
-        (get_local $0)
-       )
-       (f64.const 4503599627370496)
-      )
+   (if (result i32)
+    (tee_local $1
+     (f64.le
+      (f64.const -0.5)
       (get_local $0)
      )
     )
-    (if
-     (f64.ge
-      (get_local $3)
-      (f64.const 0.5)
-     )
-     (set_local $3
-      (f64.add
-       (f64.sub
-        (get_local $0)
-        (get_local $3)
-       )
-       (f64.const 1)
-      )
-     )
-     (if
-      (f64.lt
-       (get_local $3)
-       (f64.const -0.5)
-      )
-      (set_local $3
-       (f64.sub
-        (f64.sub
-         (get_local $0)
-         (get_local $3)
-        )
-        (f64.const 1)
-       )
-      )
-      (set_local $3
-       (f64.sub
-        (get_local $0)
-        (get_local $3)
-       )
-      )
-     )
+    (f64.lt
+     (get_local $0)
+     (f64.const 0)
     )
+    (get_local $1)
    )
-   (block
-    (set_local $3
-     (f64.sub
-      (f64.sub
-       (f64.add
-        (get_local $0)
-        (f64.const 4503599627370496)
-       )
-       (f64.const 4503599627370496)
-      )
-      (get_local $0)
-     )
-    )
-    (if
-     (f64.gt
-      (get_local $3)
-      (f64.const 0.5)
-     )
-     (set_local $3
-      (f64.sub
-       (f64.add
-        (get_local $3)
-        (get_local $0)
-       )
-       (f64.const 1)
-      )
-     )
-     (if
-      (f64.le
-       (get_local $3)
-       (f64.const -0.5)
-      )
-      (set_local $3
-       (f64.add
-        (f64.add
-         (get_local $3)
-         (get_local $0)
-        )
-        (f64.const 1)
-       )
-      )
-      (set_local $3
-       (f64.add
-        (get_local $3)
-        (get_local $0)
-       )
-      )
-     )
-    )
+   (return
+    (f64.const -0)
    )
   )
-  (get_local $3)
+  (f64.floor
+   (f64.add
+    (get_local $0)
+    (f64.const 0.5)
+   )
+  )
  )
  (func $std/math/test_round (; 137 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (call $std/math/check<f64>
@@ -14047,156 +13933,60 @@
  )
  (func $~lib/math/NativeMathf.round (; 138 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 f32)
-  (set_local $1
-   (i32.reinterpret/f32
-    (get_local $0)
-   )
-  )
-  (set_local $2
-   (i32.and
-    (i32.shr_u
-     (get_local $1)
-     (i32.const 23)
-    )
-    (i32.const 255)
-   )
-  )
   (if
-   (i32.ge_s
-    (get_local $2)
-    (i32.add
-     (i32.const 127)
-     (i32.const 23)
+   (if (result i32)
+    (tee_local $1
+     (i32.eqz
+      (i32.and
+       (block $~lib/builtins/isFinite<f32>|inlined.1 (result i32)
+        (f32.eq
+         (f32.sub
+          (get_local $0)
+          (get_local $0)
+         )
+         (f32.const 0)
+        )
+       )
+       (i32.const 1)
+      )
+     )
     )
-   )
-   (return
-    (get_local $0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $2)
-    (i32.sub
-     (i32.const 127)
-     (i32.const 1)
-    )
-   )
-   (return
-    (f32.mul
-     (f32.const 0)
-     (get_local $0)
-    )
-   )
-  )
-  (if
-   (i32.shr_u
     (get_local $1)
-    (i32.const 31)
-   )
-   (block
-    (set_local $3
-     (f32.add
-      (f32.sub
-       (f32.sub
-        (f32.const 8388608)
-        (get_local $0)
-       )
-       (f32.const 8388608)
-      )
-      (get_local $0)
-     )
-    )
-    (if
-     (f32.ge
-      (get_local $3)
-      (f32.const 0.5)
-     )
-     (set_local $3
-      (f32.add
-       (f32.sub
-        (get_local $0)
-        (get_local $3)
-       )
-       (f32.const 1)
-      )
-     )
-     (if
-      (f32.lt
-       (get_local $3)
-       (f32.const -0.5)
-      )
-      (set_local $3
-       (f32.sub
-        (f32.sub
-         (get_local $0)
-         (get_local $3)
-        )
-        (f32.const 1)
-       )
-      )
-      (set_local $3
-       (f32.sub
-        (get_local $0)
-        (get_local $3)
-       )
-      )
-     )
+    (f32.eq
+     (get_local $0)
+     (f32.const 0)
     )
    )
-   (block
-    (set_local $3
-     (f32.sub
-      (f32.sub
-       (f32.add
-        (get_local $0)
-        (f32.const 8388608)
-       )
-       (f32.const 8388608)
-      )
-      (get_local $0)
-     )
-    )
-    (if
-     (f32.gt
-      (get_local $3)
-      (f32.const 0.5)
-     )
-     (set_local $3
-      (f32.sub
-       (f32.add
-        (get_local $3)
-        (get_local $0)
-       )
-       (f32.const 1)
-      )
-     )
-     (if
-      (f32.le
-       (get_local $3)
-       (f32.const -0.5)
-      )
-      (set_local $3
-       (f32.add
-        (f32.add
-         (get_local $3)
-         (get_local $0)
-        )
-        (f32.const 1)
-       )
-      )
-      (set_local $3
-       (f32.add
-        (get_local $3)
-        (get_local $0)
-       )
-      )
-     )
-    )
+   (return
+    (get_local $0)
    )
   )
-  (get_local $3)
+  (if
+   (if (result i32)
+    (tee_local $1
+     (f64.le
+      (f64.const -0.5)
+      (f64.promote/f32
+       (get_local $0)
+      )
+     )
+    )
+    (f32.lt
+     (get_local $0)
+     (f32.const 0)
+    )
+    (get_local $1)
+   )
+   (return
+    (f32.const -0)
+   )
+  )
+  (f32.floor
+   (f32.add
+    (get_local $0)
+    (f32.const 0.5)
+   )
+  )
  )
  (func $std/math/test_roundf (; 139 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
