@@ -924,7 +924,7 @@ export namespace NativeMath {
       }
       ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xFFFFFFFF | (<u64>ix << 32));
       // let bp = select<f64>(1.5, 1.0, k);
-      let bp: f64 = 1.0 + 0.5 * <f64><bool>k;
+      let bp = 1.0 + 0.5 * <f64>(k != 0);
       u = ax - bp;
       v = 1.0 / (ax + bp);
       ss = u * v;
@@ -947,11 +947,11 @@ export namespace NativeMath {
       p_l = v - (p_h - u);
       let z_h = cp_h * p_h;
       // let dp_l = select<f64>(dp_l1, 0.0, k);
-      let dp_l: f64 = dp_l1 * <f64><bool>k;
+      let dp_l = dp_l1 * <f64>(k != 0);
       let z_l = cp_l * p_h + p_l * cp + dp_l;
       t = <f64>n;
       // let dp_h = select<f64>(dp_h1, 0.0, k);
-      let dp_h: f64 = dp_h1 * <f64><bool>k;
+      let dp_h = dp_h1 * <f64>(k != 0);
       t1 = ((z_h + z_l) + dp_h) + t;
       t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xFFFFFFFF00000000);
       t2 = z_l - (((t1 - t) - dp_h) - z_h);
@@ -1989,7 +1989,7 @@ export namespace NativeMathf {
         ix -= 0x00800000;
       }
       ax = reinterpret<f32>(ix);
-      let bp: f32 = 1.0 + 0.5 * <f32><bool>k;
+      let bp: f32 = 1.0 + 0.5 * <f32>(k != 0);
       u = ax - bp;
       v = 1.0 / (ax + bp);
       s = u * v;
@@ -2016,11 +2016,11 @@ export namespace NativeMathf {
       p_l = v - (p_h - u);
       let z_h = cp_h * p_h;
       // let dp_l = select<f32>(dp_l1, 0.0, k);
-      let dp_l: f32 = dp_l1 * <f32><bool>k;
+      let dp_l: f32 = dp_l1 * <f32>(k != 0);
       let z_l = cp_l * p_h + p_l * cp + dp_l;
       t = <f32>n;
       // let dp_h = select<f32>(dp_h1, 0.0, k);
-      let dp_h: f32 = dp_h1 * <f32><bool>k;
+      let dp_h: f32 = dp_h1 * <f32>(k != 0);
       t1 = (((z_h + z_l) + dp_h) + t);
       is = reinterpret<u32>(t1);
       t1 = reinterpret<f32>(is & 0xFFFFF000);

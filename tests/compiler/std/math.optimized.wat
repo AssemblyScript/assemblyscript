@@ -9919,7 +9919,10 @@
               (f64.const 0.5)
               (tee_local $9
                (f64.convert_u/i32
-                (get_local $12)
+                (i32.ne
+                 (get_local $12)
+                 (i32.const 0)
+                )
                )
               )
              )
@@ -11190,7 +11193,10 @@
                   (f32.const 0.5)
                   (tee_local $13
                    (f32.convert_u/i32
-                    (get_local $8)
+                    (i32.ne
+                     (get_local $8)
+                     (i32.const 0)
+                    )
                    )
                   )
                  )

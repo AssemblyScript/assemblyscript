@@ -11584,7 +11584,10 @@
       (f64.mul
        (f64.const 0.5)
        (f64.convert_u/i32
-        (get_local $11)
+        (i32.ne
+         (get_local $11)
+         (i32.const 0)
+        )
        )
       )
      )
@@ -11822,7 +11825,10 @@
      (f64.mul
       (f64.const 1.350039202129749e-08)
       (f64.convert_u/i32
-       (get_local $11)
+       (i32.ne
+        (get_local $11)
+        (i32.const 0)
+       )
       )
      )
     )
@@ -11850,7 +11856,10 @@
      (f64.mul
       (f64.const 0.5849624872207642)
       (f64.convert_u/i32
-       (get_local $11)
+       (i32.ne
+        (get_local $11)
+        (i32.const 0)
+       )
       )
      )
     )
@@ -12981,7 +12990,10 @@
       (f32.mul
        (f32.const 0.5)
        (f32.convert_u/i32
-        (get_local $9)
+        (i32.ne
+         (get_local $9)
+         (i32.const 0)
+        )
        )
       )
      )
@@ -13229,7 +13241,10 @@
      (f32.mul
       (f32.const 1.5632208487659227e-06)
       (f32.convert_u/i32
-       (get_local $9)
+       (i32.ne
+        (get_local $9)
+        (i32.const 0)
+       )
       )
      )
     )
@@ -13257,7 +13272,10 @@
      (f32.mul
       (f32.const 0.5849609375)
       (f32.convert_u/i32
-       (get_local $9)
+       (i32.ne
+        (get_local $9)
+        (i32.const 0)
+       )
       )
      )
     )
