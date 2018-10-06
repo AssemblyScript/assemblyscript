@@ -147,12 +147,12 @@ export namespace NativeMath {
     }
     var s: f64, w: f64, z: f64;
     if (hx >> 31) {
-      z = (1.0 + x) * 0.5;
+      z = 0.5 + x * 0.5;
       s = builtin_sqrt<f64>(z);
       w = R(z) * s - pio2_lo;
       return 2 * (pio2_hi - (s + w));
     }
-    z = (1.0 - x) * 0.5;
+    z = 0.5 - x * 0.5;
     s = builtin_sqrt<f64>(z);
     var df = reinterpret<f64>(reinterpret<u64>(s) & 0xFFFFFFFF00000000);
     var c = (z - df * df) / (s + df);
@@ -184,7 +184,7 @@ export namespace NativeMath {
       if (ix < 0x3E500000 && ix >= 0x00100000) return x;
       return x + x * R(x * x);
     }
-    var z = (1.0 - builtin_abs<f64>(x)) * 0.5;
+    var z = 0.5 - builtin_abs<f64>(x) * 0.5;
     var s = builtin_sqrt<f64>(z);
     var r = R(z);
     if (ix >= 0x3FEF3333) x = pio2_hi - (2 * (s + s * r) - pio2_lo);

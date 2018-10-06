@@ -878,12 +878,12 @@
        (tee_local $0
         (f64.sqrt
          (tee_local $1
-          (f64.mul
-           (f64.add
-            (f64.const 1)
-            (get_local $0)
-           )
+          (f64.add
            (f64.const 0.5)
+           (f64.mul
+            (get_local $0)
+            (f64.const 0.5)
+           )
           )
          )
         )
@@ -905,12 +905,12 @@
   (set_local $0
    (f64.sqrt
     (tee_local $1
-     (f64.mul
-      (f64.sub
-       (f64.const 1)
-       (get_local $0)
-      )
+     (f64.sub
       (f64.const 0.5)
+      (f64.mul
+       (get_local $0)
+       (f64.const 0.5)
+      )
      )
     )
    )
@@ -2496,14 +2496,14 @@
   (set_local $0
    (f64.sqrt
     (tee_local $1
-     (f64.mul
-      (f64.sub
-       (f64.const 1)
+     (f64.sub
+      (f64.const 0.5)
+      (f64.mul
        (f64.abs
         (get_local $0)
        )
+       (f64.const 0.5)
       )
-      (f64.const 0.5)
      )
     )
    )
