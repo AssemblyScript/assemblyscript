@@ -3612,10 +3612,10 @@
         (get_local $3)
         (get_local $3)
        )
-       (f64.mul
+       (f64.add
         (f64.const 2)
-        (f64.add
-         (f64.const 1)
+        (f64.mul
+         (f64.const 2)
          (get_local $3)
         )
        )

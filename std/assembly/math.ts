@@ -403,7 +403,7 @@ export namespace NativeMath {
     if (w < 0x3FE62E42) {
       if (w < 0x3FF00000 - (26 << 20)) return 1;
       t = expm1(x);
-      return 1 + t * t / (2 * (1 + t));
+      return 1 + t * t / (2 + 2 * t);
     }
     if (w < 0x40862E42) {
       t = exp(x);
@@ -1483,12 +1483,12 @@ export namespace NativeMathf {
     }
     u &= 0x80000000;
     u |= hx;
-    var T = <f64>reinterpret<f32>(u);
-    var r = T * T * T;
-    T = T * (<f64>x + x + r) / (x + r + r);
-    r = T * T * T;
-    T = T * (<f64>x + x + r) / (x + r + r);
-    return <f32>T;
+    var t = <f64>reinterpret<f32>(u);
+    var r = t * t * t;
+    t = t * (<f64>x + x + r) / (x + r + r);
+    r = t * t * t;
+    t = t * (<f64>x + x + r) / (x + r + r);
+    return <f32>t;
   }
 
   @inline
