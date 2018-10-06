@@ -3018,21 +3018,7 @@
    (get_local $2)
   )
  )
- (func $~lib/math/expo2 (; 28 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
-  (f64.mul
-   (f64.mul
-    (call $~lib/math/NativeMath.exp
-     (f64.sub
-      (get_local $0)
-      (f64.const 1416.0996898839683)
-     )
-    )
-    (f64.const 2247116418577894884661631e283)
-   )
-   (f64.const 2247116418577894884661631e283)
-  )
- )
- (func $~lib/math/NativeMath.cosh (; 29 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cosh (; 28 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i64)
   (set_local $0
@@ -3115,36 +3101,45 @@
     )
    )
   )
-  (call $~lib/math/expo2
-   (get_local $0)
+  (f64.mul
+   (f64.mul
+    (call $~lib/math/NativeMath.exp
+     (f64.sub
+      (get_local $0)
+      (f64.const 1416.0996898839683)
+     )
+    )
+    (f64.const 2247116418577894884661631e283)
+   )
+   (f64.const 2247116418577894884661631e283)
   )
  )
- (func $std/libm/cosh (; 30 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/cosh (; 29 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.cosh
    (get_local $0)
   )
  )
- (func $std/libm/exp (; 31 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/exp (; 30 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.exp
    (get_local $0)
   )
  )
- (func $std/libm/expm1 (; 32 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/expm1 (; 31 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.expm1
    (get_local $0)
   )
  )
- (func $std/libm/floor (; 33 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/floor (; 32 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (f64.floor
    (get_local $0)
   )
  )
- (func $std/libm/fround (; 34 ;) (; has Stack IR ;) (type $Ff) (param $0 f64) (result f32)
+ (func $std/libm/fround (; 33 ;) (; has Stack IR ;) (type $Ff) (param $0 f64) (result f32)
   (f32.demote/f64
    (get_local $0)
   )
  )
- (func $~lib/math/NativeMath.hypot (; 35 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.hypot (; 34 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 i64)
   (local $4 f64)
@@ -3411,13 +3406,13 @@
    )
   )
  )
- (func $std/libm/hypot (; 36 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/hypot (; 35 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (call $~lib/math/NativeMath.hypot
    (get_local $0)
    (get_local $1)
   )
  )
- (func $~lib/math/NativeMath.imul (; 37 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.imul (; 36 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (f64.convert_s/i32
    (i32.mul
     (i32.trunc_s/f64
@@ -3429,18 +3424,18 @@
    )
   )
  )
- (func $std/libm/imul (; 38 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/imul (; 37 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (call $~lib/math/NativeMath.imul
    (get_local $0)
    (get_local $1)
   )
  )
- (func $std/libm/log (; 39 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log (; 38 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.log
    (get_local $0)
   )
  )
- (func $~lib/math/NativeMath.log10 (; 40 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log10 (; 39 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 i32)
@@ -3763,17 +3758,17 @@
    )
   )
  )
- (func $std/libm/log10 (; 41 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log10 (; 40 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.log10
    (get_local $0)
   )
  )
- (func $std/libm/log1p (; 42 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log1p (; 41 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.log1p
    (get_local $0)
   )
  )
- (func $~lib/math/NativeMath.log2 (; 43 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log2 (; 42 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 i32)
@@ -4084,24 +4079,24 @@
    )
   )
  )
- (func $std/libm/log2 (; 44 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log2 (; 43 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.log2
    (get_local $0)
   )
  )
- (func $std/libm/max (; 45 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/max (; 44 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (f64.max
    (get_local $0)
    (get_local $1)
   )
  )
- (func $std/libm/min (; 46 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/min (; 45 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (f64.min
    (get_local $0)
    (get_local $1)
   )
  )
- (func $~lib/math/NativeMath.pow (; 47 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 46 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -5536,13 +5531,13 @@
    (f64.const 1.e+300)
   )
  )
- (func $std/libm/pow (; 48 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/pow (; 47 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (call $~lib/math/NativeMath.pow
    (get_local $0)
    (get_local $1)
   )
  )
- (func $std/libm/round (; 49 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/round (; 48 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (f64.copysign
    (f64.floor
     (f64.add
@@ -5553,7 +5548,7 @@
    (get_local $0)
   )
  )
- (func $std/libm/sign (; 50 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sign (; 49 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (if (result f64)
    (f64.gt
     (f64.abs
@@ -5568,7 +5563,7 @@
    (get_local $0)
   )
  )
- (func $~lib/math/NativeMath.sinh (; 51 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sinh (; 50 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (local $3 i32)
@@ -5669,22 +5664,31 @@
     (f64.const 2)
     (get_local $2)
    )
-   (call $~lib/math/expo2
-    (get_local $1)
+   (f64.mul
+    (f64.mul
+     (call $~lib/math/NativeMath.exp
+      (f64.sub
+       (get_local $1)
+       (f64.const 1416.0996898839683)
+      )
+     )
+     (f64.const 2247116418577894884661631e283)
+    )
+    (f64.const 2247116418577894884661631e283)
    )
   )
  )
- (func $std/libm/sinh (; 52 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sinh (; 51 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.sinh
    (get_local $0)
   )
  )
- (func $std/libm/sqrt (; 53 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sqrt (; 52 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (f64.sqrt
    (get_local $0)
   )
  )
- (func $~lib/math/NativeMath.tanh (; 54 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tanh (; 53 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i64)
@@ -5794,17 +5798,17 @@
    (get_local $0)
   )
  )
- (func $std/libm/tanh (; 55 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/tanh (; 54 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.tanh
    (get_local $0)
   )
  )
- (func $std/libm/trunc (; 56 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/trunc (; 55 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (f64.trunc
    (get_local $0)
   )
  )
- (func $null (; 57 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 56 ;) (; has Stack IR ;) (type $v)
   (nop)
  )
 )

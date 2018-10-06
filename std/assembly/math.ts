@@ -69,6 +69,7 @@ import {
 
 // TODO: sin, cos, tan
 
+/** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
   const                   // see: musl/src/math/asin.c and SUN COPYRIGHT NOTICE above
     pS0 = reinterpret<f64>(0x3FC5555555555555), //  1.66666666666666657415e-01
@@ -86,6 +87,7 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
   return p / q;
 }
 
+@inline /** @internal */
 function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
   const                       // see: musl/src/math/__expo2.c
     k    = <u32>2043,
@@ -98,6 +100,7 @@ var random_seeded = false;
 var random_state0: u64;
 var random_state1: u64;
 
+/** @internal */
 function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanche
   h ^= h >> 33;                     // see: https://github.com/aappleby/smhasher
   h *= 0xFF51AFD7ED558CCD;
@@ -1227,6 +1230,7 @@ export namespace NativeMath {
   }
 }
 
+@inline /** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   const                    // see: musl/src/math/asinf.c and SUN COPYRIGHT NOTICE above
     pS0 = reinterpret<f32>(0x3E2AAA75), //  1.6666586697e-01f
@@ -1238,6 +1242,7 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   return p / q;
 }
 
+@inline /** @internal */
 function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   const                        // see: musl/src/math/__expo2f.c
     k    = <u32>235,
