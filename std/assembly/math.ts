@@ -202,8 +202,12 @@ export namespace NativeMath {
     u &= 0x7FFFFFFFFFFFFFFF;
     var y = reinterpret<f64>(u);
     if (e >= 0x3FF + 26) y = log(y) + c;
-    else if (e >= 0x3FF + 1)  y =   log(2 * y + 1 / (builtin_sqrt<f64>(y * y + 1) + y));
-    else if (e >= 0x3FF - 26) y = log1p(y + y * y / (builtin_sqrt<f64>(y * y + 1) + 1));
+    else {
+      let yy = y * y;
+      let z = builtin_sqrt<f64>(yy + 1);
+           if (e >= 0x3FF + 1)  y = log(2 * y + 1 / (z + y));
+      else if (e >= 0x3FF - 26) y = log1p(y + yy / (z + 1));
+    }
     return builtin_copysign(y, x);
   }
 
@@ -1340,8 +1344,12 @@ export namespace NativeMathf {
     u = i;
     var y = reinterpret<f32>(u);
     if (i >= 0x3F800000 + (12 << 23)) y = log(y) + c;
-    else if (i >= 0x3F800000 + (1 << 23))  y =   log(2 * y + 1 / (builtin_sqrt<f32>(y * y + 1) + y));
-    else if (i >= 0x3F800000 - (12 << 23)) y = log1p(y + y * y / (builtin_sqrt<f32>(y * y + 1) + 1));
+    else {
+      let yy = y * y;
+      let z = builtin_sqrt<f32>(yy + 1);
+           if (i >= 0x3F800000 + (1 << 23))  y = log(2 * y + 1 / (z + y));
+      else if (i >= 0x3F800000 - (12 << 23)) y = log1p(y + yy / (z + 1));
+    }
     return builtin_copysign(y, x);
   }
 

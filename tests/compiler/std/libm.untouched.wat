@@ -1368,6 +1368,8 @@
   (local $2 i64)
   (local $3 i64)
   (local $4 f64)
+  (local $5 f64)
+  (local $6 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -1415,67 +1417,64 @@
      (f64.const 0.6931471805599453)
     )
    )
-   (if
-    (i64.ge_u
-     (get_local $2)
-     (i64.add
-      (i64.const 1023)
-      (i64.const 1)
+   (block
+    (set_local $5
+     (f64.mul
+      (get_local $4)
+      (get_local $4)
      )
     )
-    (set_local $4
-     (call $~lib/math/NativeMath.log
+    (set_local $6
+     (f64.sqrt
       (f64.add
-       (f64.mul
-        (f64.const 2)
-        (get_local $4)
-       )
-       (f64.div
-        (f64.const 1)
-        (f64.add
-         (f64.sqrt
-          (f64.add
-           (f64.mul
-            (get_local $4)
-            (get_local $4)
-           )
-           (f64.const 1)
-          )
-         )
-         (get_local $4)
-        )
-       )
+       (get_local $5)
+       (f64.const 1)
       )
      )
     )
     (if
      (i64.ge_u
       (get_local $2)
-      (i64.sub
+      (i64.add
        (i64.const 1023)
-       (i64.const 26)
+       (i64.const 1)
       )
      )
      (set_local $4
-      (call $~lib/math/NativeMath.log1p
+      (call $~lib/math/NativeMath.log
        (f64.add
-        (get_local $4)
+        (f64.mul
+         (f64.const 2)
+         (get_local $4)
+        )
         (f64.div
-         (f64.mul
-          (get_local $4)
+         (f64.const 1)
+         (f64.add
+          (get_local $6)
           (get_local $4)
          )
-         (f64.add
-          (f64.sqrt
-           (f64.add
-            (f64.mul
-             (get_local $4)
-             (get_local $4)
-            )
-            (f64.const 1)
-           )
+        )
+       )
+      )
+     )
+     (if
+      (i64.ge_u
+       (get_local $2)
+       (i64.sub
+        (i64.const 1023)
+        (i64.const 26)
+       )
+      )
+      (set_local $4
+       (call $~lib/math/NativeMath.log1p
+        (f64.add
+         (get_local $4)
+         (f64.div
+          (get_local $5)
+          (f64.add
+           (get_local $6)
+           (f64.const 1)
           )
-          (f64.const 1)
          )
         )
        )
