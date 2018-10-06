@@ -1230,7 +1230,7 @@ export namespace NativeMath {
   }
 }
 
-@inline /** @internal */
+/** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   const                    // see: musl/src/math/asinf.c and SUN COPYRIGHT NOTICE above
     pS0 = reinterpret<f32>(0x3E2AAA75), //  1.6666586697e-01f
