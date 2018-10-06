@@ -6018,81 +6018,51 @@
     (i32.const 1071001154)
    )
    (block
-    (if
-     (i32.lt_u
-      (get_local $2)
-      (i32.const 1072734898)
-     )
-     (if
-      (i32.eqz
-       (get_local $4)
-      )
-      (block
-       (set_local $7
-        (f64.sub
-         (get_local $0)
-         (f64.const 0.6931471803691238)
-        )
-       )
-       (set_local $8
-        (f64.const 1.9082149292705877e-10)
-       )
-       (set_local $3
+    (set_local $3
+     (select
+      (i32.sub
+       (i32.const 1)
+       (i32.shl
+        (get_local $4)
         (i32.const 1)
        )
       )
-      (block
-       (set_local $7
-        (f64.add
+      (i32.trunc_s/f64
+       (f64.add
+        (f64.mul
+         (f64.const 1.4426950408889634)
          (get_local $0)
-         (f64.const 0.6931471803691238)
+        )
+        (f64.copysign
+         (f64.const 0.5)
+         (get_local $0)
         )
        )
-       (set_local $8
-        (f64.neg
-         (f64.const 1.9082149292705877e-10)
-        )
-       )
-       (set_local $3
-        (i32.const -1)
-       )
+      )
+      (i32.lt_u
+       (get_local $2)
+       (i32.const 1072734898)
       )
      )
-     (block
-      (set_local $3
-       (i32.trunc_s/f64
-        (f64.add
-         (f64.mul
-          (f64.const 1.4426950408889634)
-          (get_local $0)
-         )
-         (f64.copysign
-          (f64.const 0.5)
-          (get_local $0)
-         )
-        )
-       )
+    )
+    (set_local $6
+     (f64.convert_s/i32
+      (get_local $3)
+     )
+    )
+    (set_local $7
+     (f64.sub
+      (get_local $0)
+      (f64.mul
+       (get_local $6)
+       (f64.const 0.6931471803691238)
       )
-      (set_local $6
-       (f64.convert_s/i32
-        (get_local $3)
-       )
-      )
-      (set_local $7
-       (f64.sub
-        (get_local $0)
-        (f64.mul
-         (get_local $6)
-         (f64.const 0.6931471803691238)
-        )
-       )
-      )
-      (set_local $8
-       (f64.mul
-        (get_local $6)
-        (f64.const 1.9082149292705877e-10)
-       )
-      )
+     )
+    )
+    (set_local $8
+     (f64.mul
+      (get_local $6)
+      (f64.const 1.9082149292705877e-10)
      )
     )
     (set_local $0
@@ -6891,81 +6861,51 @@
     (i32.const 1051816472)
    )
    (block
-    (if
-     (i32.lt_u
-      (get_local $2)
-      (i32.const 1065686418)
-     )
-     (if
-      (i32.eqz
-       (get_local $3)
-      )
-      (block
-       (set_local $7
-        (f32.sub
-         (get_local $0)
-         (f32.const 0.6931381225585938)
-        )
-       )
-       (set_local $8
-        (f32.const 9.05800061445916e-06)
-       )
-       (set_local $6
+    (set_local $6
+     (select
+      (i32.sub
+       (i32.const 1)
+       (i32.shl
+        (get_local $3)
         (i32.const 1)
        )
       )
-      (block
-       (set_local $7
-        (f32.add
+      (i32.trunc_s/f32
+       (f32.add
+        (f32.mul
+         (f32.const 1.4426950216293335)
          (get_local $0)
-         (f32.const 0.6931381225585938)
+        )
+        (f32.copysign
+         (f32.const 0.5)
+         (get_local $0)
         )
        )
-       (set_local $8
-        (f32.neg
-         (f32.const 9.05800061445916e-06)
-        )
-       )
-       (set_local $6
-        (i32.const -1)
-       )
+      )
+      (i32.lt_u
+       (get_local $2)
+       (i32.const 1065686418)
       )
      )
-     (block
-      (set_local $6
-       (i32.trunc_s/f32
-        (f32.add
-         (f32.mul
-          (f32.const 1.4426950216293335)
-          (get_local $0)
-         )
-         (f32.copysign
-          (f32.const 0.5)
-          (get_local $0)
-         )
-        )
-       )
+    )
+    (set_local $5
+     (f32.convert_s/i32
+      (get_local $6)
+     )
+    )
+    (set_local $7
+     (f32.sub
+      (get_local $0)
+      (f32.mul
+       (get_local $5)
+       (f32.const 0.6931381225585938)
       )
-      (set_local $5
-       (f32.convert_s/i32
-        (get_local $6)
-       )
-      )
-      (set_local $7
-       (f32.sub
-        (get_local $0)
-        (f32.mul
-         (get_local $5)
-         (f32.const 0.6931381225585938)
-        )
-       )
-      )
-      (set_local $8
-       (f32.mul
-        (get_local $5)
-        (f32.const 9.05800061445916e-06)
-       )
-      )
+     )
+    )
+    (set_local $8
+     (f32.mul
+      (get_local $5)
+      (f32.const 9.05800061445916e-06)
      )
     )
     (set_local $0
@@ -13754,7 +13694,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1004)
+     (i32.const 995)
      (i32.const 4)
     )
     (unreachable)
@@ -13786,7 +13726,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1011)
+     (i32.const 1002)
      (i32.const 24)
     )
     (unreachable)

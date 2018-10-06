@@ -485,23 +485,14 @@ export namespace NativeMath {
     }
     var c = 0.0, t: f64;
     if (hx > 0x3FD62E42) {
-      let hi: f64, lo: f64;
-      if (hx < 0x3FF0A2B2) {
-        if (!sign_) {
-          hi = x - ln2_hi;
-          lo = ln2_lo;
-          k =  1;
-        } else {
-          hi = x + ln2_hi;
-          lo = -ln2_lo;
-          k = -1;
-        }
-      } else {
-        k  = <i32>(invln2 * x + builtin_copysign<f64>(0.5, x));
-        t  = <f64>k;
-        hi = x - t * ln2_hi;
-        lo = t * ln2_lo;
-      }
+      k = select<i32>(
+        1 - (sign_ << 1),
+        <i32>(invln2 * x + builtin_copysign<f64>(0.5, x)),
+        hx < 0x3FF0A2B2
+      );
+      t = <f64>k;
+      let hi = x - t * ln2_hi;
+      let lo = t * ln2_lo;
       x = hi - lo;
       c = (hi - x) - lo;
     } else if (hx < 0x3C900000) return x;
@@ -1608,23 +1599,14 @@ export namespace NativeMathf {
     }
     var c: f32 = 0.0, t: f32, k: i32;
     if (hx > 0x3EB17218) {
-      let hi: f32, lo: f32;
-      if (hx < 0x3F851592) {
-        if (!sign_) {
-          hi = x - ln2_hi;
-          lo = ln2_lo;
-          k =  1;
-        } else {
-          hi = x + ln2_hi;
-          lo = -ln2_lo;
-          k = -1;
-        }
-      } else {
-        k  = <i32>(invln2 * x + builtin_copysign<f32>(0.5, x));
-        t  = <f32>k;
-        hi = x - t * ln2_hi;
-        lo = t * ln2_lo;
-      }
+      k = select<i32>(
+        1 - (sign_ << 1),
+        <i32>(invln2 * x + builtin_copysign<f32>(0.5, x)),
+        hx < 0x3F851592
+      );
+      t = <f32>k;
+      let hi = x - t * ln2_hi;
+      let lo = t * ln2_lo;
       x = hi - lo;
       c = (hi - x) - lo;
     } else if (hx < 0x33000000) {
