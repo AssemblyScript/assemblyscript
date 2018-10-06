@@ -11938,24 +11938,13 @@
  (func $~lib/math/NativeMath.round (; 136 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (if
-   (i32.eqz
-    (tee_local $1
-     (i32.eqz
-      (call $~lib/builtins/isFinite<f64>
-       (get_local $0)
-      )
-     )
-    )
-   )
-   (set_local $1
-    (f64.eq
+   (f64.ne
+    (f64.sub
      (get_local $0)
-     (f64.const 0)
+     (get_local $0)
     )
+    (f64.const 0)
    )
-  )
-  (if
-   (get_local $1)
    (return
     (get_local $0)
    )
@@ -11968,7 +11957,7 @@
     )
    )
    (set_local $1
-    (f64.lt
+    (f64.le
      (get_local $0)
      (f64.const 0)
     )
@@ -11977,7 +11966,10 @@
   (if
    (get_local $1)
    (return
-    (f64.const -0)
+    (f64.copysign
+     (f64.const 0)
+     (get_local $0)
+    )
    )
   )
   (f64.floor
@@ -11999,26 +11991,13 @@
  (func $~lib/math/NativeMathf.round (; 138 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (if
-   (i32.eqz
-    (tee_local $1
-     (f32.ne
-      (f32.sub
-       (get_local $0)
-       (get_local $0)
-      )
-      (f32.const 0)
-     )
-    )
-   )
-   (set_local $1
-    (f32.eq
+   (f32.ne
+    (f32.sub
      (get_local $0)
-     (f32.const 0)
+     (get_local $0)
     )
+    (f32.const 0)
    )
-  )
-  (if
-   (get_local $1)
    (return
     (get_local $0)
    )
@@ -12033,7 +12012,7 @@
     )
    )
    (set_local $1
-    (f32.lt
+    (f32.le
      (get_local $0)
      (f32.const 0)
     )
@@ -12042,7 +12021,10 @@
   (if
    (get_local $1)
    (return
-    (f32.const -0)
+    (f32.copysign
+     (f32.const 0)
+     (get_local $0)
+    )
    )
   )
   (f32.floor
