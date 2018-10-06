@@ -6335,47 +6335,42 @@
     (i64.const 52)
    )
   )
+  (set_local $14
+   (f64.reinterpret/i64
+    (get_local $1)
+   )
+  )
   (if
    (i32.lt_s
     (get_local $3)
     (i32.const 20)
    )
    (set_local $14
-    (f64.mul
-     (f64.add
-      (f64.sub
-       (get_local $0)
-       (get_local $12)
-      )
-      (f64.sub
-       (f64.const 1)
-       (f64.reinterpret/i64
-        (get_local $1)
-       )
-      )
+    (f64.sub
+     (f64.sub
+      (f64.const 1)
+      (get_local $14)
      )
-     (get_local $13)
+     (get_local $12)
     )
    )
    (set_local $14
-    (f64.mul
+    (f64.sub
+     (f64.const 1)
      (f64.add
-      (f64.sub
-       (get_local $0)
-       (f64.add
-        (get_local $12)
-        (f64.reinterpret/i64
-         (get_local $1)
-        )
-       )
-      )
-      (f64.const 1)
+      (get_local $12)
+      (get_local $14)
      )
-     (get_local $13)
     )
    )
   )
-  (get_local $14)
+  (f64.mul
+   (f64.add
+    (get_local $0)
+    (get_local $14)
+   )
+   (get_local $13)
+  )
  )
  (func $~lib/math/NativeMath.exp (; 89 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
@@ -7159,47 +7154,42 @@
     (i32.const 23)
    )
   )
+  (set_local $14
+   (f32.reinterpret/i32
+    (get_local $1)
+   )
+  )
   (if
    (i32.lt_s
     (get_local $6)
-    (i32.const 23)
+    (i32.const 20)
    )
    (set_local $14
-    (f32.mul
-     (f32.add
-      (f32.sub
-       (get_local $0)
-       (get_local $12)
-      )
-      (f32.sub
-       (f32.const 1)
-       (f32.reinterpret/i32
-        (get_local $1)
-       )
-      )
+    (f32.sub
+     (f32.sub
+      (f32.const 1)
+      (get_local $14)
      )
-     (get_local $13)
+     (get_local $12)
     )
    )
    (set_local $14
-    (f32.mul
+    (f32.sub
+     (f32.const 1)
      (f32.add
-      (f32.sub
-       (get_local $0)
-       (f32.add
-        (get_local $12)
-        (f32.reinterpret/i32
-         (get_local $1)
-        )
-       )
-      )
-      (f32.const 1)
+      (get_local $12)
+      (get_local $14)
      )
-     (get_local $13)
     )
    )
   )
-  (get_local $14)
+  (f32.mul
+   (f32.add
+    (get_local $0)
+    (get_local $14)
+   )
+   (get_local $13)
+  )
  )
  (func $~lib/math/NativeMathf.exp (; 94 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
@@ -13694,7 +13684,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 995)
+     (i32.const 996)
      (i32.const 4)
     )
     (unreachable)
@@ -13726,7 +13716,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1002)
+     (i32.const 1003)
      (i32.const 24)
     )
     (unreachable)

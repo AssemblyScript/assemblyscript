@@ -519,9 +519,10 @@ export namespace NativeMath {
       return y - 1.0;
     }
     u = (0x3FF - k) << 52;
-    if (k < 20) y = (x - e + (1 - reinterpret<f64>(u))) * twopk;
-    else y = (x - (e + reinterpret<f64>(u)) + 1) * twopk;
-    return y;
+    y = reinterpret<f64>(u);
+    if (k < 20) y = (1 - y) - e;
+    else y = 1 - (e + y);
+    return (x + y) * twopk;
   }
 
   @inline
@@ -1635,9 +1636,10 @@ export namespace NativeMathf {
       return y - 1.0;
     }
     u = (0x7F - k) << 23;
-    if (k < 23) y = (x - e + (1 - reinterpret<f32>(u))) * twopk;
-    else y = (x - (e + reinterpret<f32>(u)) + 1) * twopk;
-    return y;
+    y = reinterpret<f32>(u);
+    if (k < 20) y = (1 - y) - e;
+    else y = 1 - (e + y);
+    return (x + y) * twopk;
   }
 
   @inline

@@ -3141,47 +3141,42 @@
     (i64.const 52)
    )
   )
+  (set_local $14
+   (f64.reinterpret/i64
+    (get_local $1)
+   )
+  )
   (if
    (i32.lt_s
     (get_local $3)
     (i32.const 20)
    )
    (set_local $14
-    (f64.mul
-     (f64.add
-      (f64.sub
-       (get_local $0)
-       (get_local $12)
-      )
-      (f64.sub
-       (f64.const 1)
-       (f64.reinterpret/i64
-        (get_local $1)
-       )
-      )
+    (f64.sub
+     (f64.sub
+      (f64.const 1)
+      (get_local $14)
      )
-     (get_local $13)
+     (get_local $12)
     )
    )
    (set_local $14
-    (f64.mul
+    (f64.sub
+     (f64.const 1)
      (f64.add
-      (f64.sub
-       (get_local $0)
-       (f64.add
-        (get_local $12)
-        (f64.reinterpret/i64
-         (get_local $1)
-        )
-       )
-      )
-      (f64.const 1)
+      (get_local $12)
+      (get_local $14)
      )
-     (get_local $13)
     )
    )
   )
-  (get_local $14)
+  (f64.mul
+   (f64.add
+    (get_local $0)
+    (get_local $14)
+   )
+   (get_local $13)
+  )
  )
  (func $~lib/math/NativeMath.scalbn (; 26 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
