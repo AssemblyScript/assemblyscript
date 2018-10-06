@@ -2774,33 +2774,29 @@
  (func $~lib/math/NativeMath.asinh (; 66 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i64)
-  (local $3 f64)
-  (local $4 i64)
-  (local $5 f64)
-  (set_local $2
-   (i64.and
-    (i64.shr_u
-     (tee_local $4
+  (set_local $1
+   (f64.reinterpret/i64
+    (i64.and
+     (tee_local $2
       (i64.reinterpret/f64
        (get_local $0)
       )
      )
-     (i64.const 52)
-    )
-    (i64.const 2047)
-   )
-  )
-  (set_local $1
-   (f64.reinterpret/i64
-    (i64.and
-     (get_local $4)
      (i64.const 9223372036854775807)
     )
    )
   )
   (if
    (i64.ge_u
-    (get_local $2)
+    (tee_local $2
+     (i64.and
+      (i64.shr_u
+       (get_local $2)
+       (i64.const 52)
+      )
+      (i64.const 2047)
+     )
+    )
     (i64.const 1049)
    )
    (set_local $1
@@ -2811,57 +2807,60 @@
      (f64.const 0.6931471805599453)
     )
    )
-   (block
-    (set_local $3
-     (f64.sqrt
+   (if
+    (i64.ge_u
+     (get_local $2)
+     (i64.const 1024)
+    )
+    (set_local $1
+     (call $~lib/math/NativeMath.log
       (f64.add
-       (tee_local $5
-        (f64.mul
-         (get_local $1)
+       (f64.mul
+        (f64.const 2)
+        (get_local $1)
+       )
+       (f64.div
+        (f64.const 1)
+        (f64.add
+         (f64.sqrt
+          (f64.add
+           (f64.mul
+            (get_local $1)
+            (get_local $1)
+           )
+           (f64.const 1)
+          )
+         )
          (get_local $1)
         )
        )
-       (f64.const 1)
       )
      )
     )
     (if
      (i64.ge_u
       (get_local $2)
-      (i64.const 1024)
+      (i64.const 997)
      )
      (set_local $1
-      (call $~lib/math/NativeMath.log
+      (call $~lib/math/NativeMath.log1p
        (f64.add
-        (f64.mul
-         (f64.const 2)
-         (get_local $1)
-        )
+        (get_local $1)
         (f64.div
-         (f64.const 1)
-         (f64.add
-          (get_local $3)
-          (get_local $1)
-         )
-        )
-       )
-      )
-     )
-     (if
-      (i64.ge_u
-       (get_local $2)
-       (i64.const 997)
-      )
-      (set_local $1
-       (call $~lib/math/NativeMath.log1p
-        (f64.add
-         (get_local $1)
-         (f64.div
-          (get_local $5)
-          (f64.add
-           (get_local $3)
-           (f64.const 1)
+         (tee_local $1
+          (f64.mul
+           (get_local $1)
+           (get_local $1)
           )
+         )
+         (f64.add
+          (f64.sqrt
+           (f64.add
+            (get_local $1)
+            (f64.const 1)
+           )
+          )
+          (f64.const 1)
          )
         )
        )
@@ -2904,21 +2903,14 @@
  (func $~lib/math/NativeMathf.asinh (; 68 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 f32)
-  (local $5 f32)
   (set_local $1
    (f32.reinterpret/i32
     (tee_local $2
-     (tee_local $3
-      (i32.and
-       (tee_local $2
-        (i32.reinterpret/f32
-         (get_local $0)
-        )
-       )
-       (i32.const 2147483647)
+     (i32.and
+      (i32.reinterpret/f32
+       (get_local $0)
       )
+      (i32.const 2147483647)
      )
     )
    )
@@ -2936,57 +2928,60 @@
      (f32.const 0.6931471824645996)
     )
    )
-   (block
-    (set_local $4
-     (f32.sqrt
+   (if
+    (i32.ge_u
+     (get_local $2)
+     (i32.const 1073741824)
+    )
+    (set_local $1
+     (call $~lib/math/NativeMathf.log
       (f32.add
-       (tee_local $5
-        (f32.mul
-         (get_local $1)
+       (f32.mul
+        (f32.const 2)
+        (get_local $1)
+       )
+       (f32.div
+        (f32.const 1)
+        (f32.add
+         (f32.sqrt
+          (f32.add
+           (f32.mul
+            (get_local $1)
+            (get_local $1)
+           )
+           (f32.const 1)
+          )
+         )
          (get_local $1)
         )
        )
-       (f32.const 1)
       )
      )
     )
     (if
      (i32.ge_u
-      (get_local $3)
-      (i32.const 1073741824)
+      (get_local $2)
+      (i32.const 964689920)
      )
      (set_local $1
-      (call $~lib/math/NativeMathf.log
+      (call $~lib/math/NativeMathf.log1p
        (f32.add
-        (f32.mul
-         (f32.const 2)
-         (get_local $1)
-        )
+        (get_local $1)
         (f32.div
-         (f32.const 1)
-         (f32.add
-          (get_local $4)
-          (get_local $1)
-         )
-        )
-       )
-      )
-     )
-     (if
-      (i32.ge_u
-       (get_local $3)
-       (i32.const 964689920)
-      )
-      (set_local $1
-       (call $~lib/math/NativeMathf.log1p
-        (f32.add
-         (get_local $1)
-         (f32.div
-          (get_local $5)
-          (f32.add
-           (get_local $4)
-           (f32.const 1)
+         (tee_local $1
+          (f32.mul
+           (get_local $1)
+           (get_local $1)
           )
+         )
+         (f32.add
+          (f32.sqrt
+           (f32.add
+            (get_local $1)
+            (f32.const 1)
+           )
+          )
+          (f32.const 1)
          )
         )
        )
@@ -11749,7 +11744,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1000)
+     (i32.const 994)
      (i32.const 4)
     )
     (unreachable)
@@ -11783,7 +11778,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1007)
+     (i32.const 1001)
      (i32.const 24)
     )
     (unreachable)

@@ -198,16 +198,10 @@ export namespace NativeMath {
     const c = reinterpret<f64>(0x3FE62E42FEFA39EF); // 0.693147180559945309417232121458176568
     var u = reinterpret<u64>(x);
     var e = u >> 52 & 0x7FF;
-    var s = u >> 63;
-    u &= 0x7FFFFFFFFFFFFFFF;
-    var y = reinterpret<f64>(u);
+    var y = reinterpret<f64>(u & 0x7FFFFFFFFFFFFFFF);
     if (e >= 0x3FF + 26) y = log(y) + c;
-    else {
-      let yy = y * y;
-      let z = builtin_sqrt<f64>(yy + 1);
-           if (e >= 0x3FF + 1)  y = log(2 * y + 1 / (z + y));
-      else if (e >= 0x3FF - 26) y = log1p(y + yy / (z + 1));
-    }
+    else if (e >= 0x3FF + 1)  y =   log(2 * y + 1 / (builtin_sqrt<f64>(y * y + 1) + y));
+    else if (e >= 0x3FF - 26) y = log1p(y + y * y / (builtin_sqrt<f64>(y * y + 1) + 1));
     return builtin_copysign(y, x);
   }
 
@@ -1338,18 +1332,11 @@ export namespace NativeMathf {
 
   export function asinh(x: f32): f32 { // see: musl/src/math/asinhf.c
     const c = reinterpret<f32>(0x3F317218); // 0.693147180559945309417232121458176568f
-    var u = reinterpret<u32>(x);
-    var i = u & 0x7FFFFFFF;
-    var s = <u32>(u >> 31);
-    u = i;
+    var u = reinterpret<u32>(x) & 0x7FFFFFFF;
     var y = reinterpret<f32>(u);
-    if (i >= 0x3F800000 + (12 << 23)) y = log(y) + c;
-    else {
-      let yy = y * y;
-      let z = builtin_sqrt<f32>(yy + 1);
-           if (i >= 0x3F800000 + (1 << 23))  y = log(2 * y + 1 / (z + y));
-      else if (i >= 0x3F800000 - (12 << 23)) y = log1p(y + yy / (z + 1));
-    }
+    if (u >= 0x3F800000 + (12 << 23)) y = log(y) + c;
+    else if (u >= 0x3F800000 + (1 << 23))  y =   log(2 * y + 1 / (builtin_sqrt<f32>(y * y + 1) + y));
+    else if (u >= 0x3F800000 - (12 << 23)) y = log1p(y + y * y / (builtin_sqrt<f32>(y * y + 1) + 1));
     return builtin_copysign(y, x);
   }
 

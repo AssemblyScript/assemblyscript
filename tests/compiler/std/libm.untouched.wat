@@ -1366,10 +1366,7 @@
  (func $~lib/math/NativeMath.asinh (; 10 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 f64)
-  (local $5 f64)
-  (local $6 f64)
+  (local $3 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -1385,20 +1382,11 @@
    )
   )
   (set_local $3
-   (i64.shr_u
-    (get_local $1)
-    (i64.const 63)
-   )
-  )
-  (set_local $1
-   (i64.and
-    (get_local $1)
-    (i64.const 9223372036854775807)
-   )
-  )
-  (set_local $4
    (f64.reinterpret/i64
-    (get_local $1)
+    (i64.and
+     (get_local $1)
+     (i64.const 9223372036854775807)
+    )
    )
   )
   (if
@@ -1409,72 +1397,75 @@
      (i64.const 26)
     )
    )
-   (set_local $4
+   (set_local $3
     (f64.add
      (call $~lib/math/NativeMath.log
-      (get_local $4)
+      (get_local $3)
      )
      (f64.const 0.6931471805599453)
     )
    )
-   (block
-    (set_local $5
-     (f64.mul
-      (get_local $4)
-      (get_local $4)
+   (if
+    (i64.ge_u
+     (get_local $2)
+     (i64.add
+      (i64.const 1023)
+      (i64.const 1)
      )
     )
-    (set_local $6
-     (f64.sqrt
+    (set_local $3
+     (call $~lib/math/NativeMath.log
       (f64.add
-       (get_local $5)
-       (f64.const 1)
+       (f64.mul
+        (f64.const 2)
+        (get_local $3)
+       )
+       (f64.div
+        (f64.const 1)
+        (f64.add
+         (f64.sqrt
+          (f64.add
+           (f64.mul
+            (get_local $3)
+            (get_local $3)
+           )
+           (f64.const 1)
+          )
+         )
+         (get_local $3)
+        )
+       )
       )
      )
     )
     (if
      (i64.ge_u
       (get_local $2)
-      (i64.add
+      (i64.sub
        (i64.const 1023)
-       (i64.const 1)
+       (i64.const 26)
       )
      )
-     (set_local $4
-      (call $~lib/math/NativeMath.log
+     (set_local $3
+      (call $~lib/math/NativeMath.log1p
        (f64.add
-        (f64.mul
-         (f64.const 2)
-         (get_local $4)
-        )
+        (get_local $3)
         (f64.div
-         (f64.const 1)
-         (f64.add
-          (get_local $6)
-          (get_local $4)
+         (f64.mul
+          (get_local $3)
+          (get_local $3)
          )
-        )
-       )
-      )
-     )
-     (if
-      (i64.ge_u
-       (get_local $2)
-       (i64.sub
-        (i64.const 1023)
-        (i64.const 26)
-       )
-      )
-      (set_local $4
-       (call $~lib/math/NativeMath.log1p
-        (f64.add
-         (get_local $4)
-         (f64.div
-          (get_local $5)
-          (f64.add
-           (get_local $6)
-           (f64.const 1)
+         (f64.add
+          (f64.sqrt
+           (f64.add
+            (f64.mul
+             (get_local $3)
+             (get_local $3)
+            )
+            (f64.const 1)
+           )
           )
+          (f64.const 1)
          )
         )
        )
@@ -1484,7 +1475,7 @@
    )
   )
   (f64.copysign
-   (get_local $4)
+   (get_local $3)
    (get_local $0)
   )
  )

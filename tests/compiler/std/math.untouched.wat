@@ -3179,10 +3179,7 @@
  (func $~lib/math/NativeMath.asinh (; 66 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 f64)
-  (local $5 f64)
-  (local $6 f64)
+  (local $3 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -3198,20 +3195,11 @@
    )
   )
   (set_local $3
-   (i64.shr_u
-    (get_local $1)
-    (i64.const 63)
-   )
-  )
-  (set_local $1
-   (i64.and
-    (get_local $1)
-    (i64.const 9223372036854775807)
-   )
-  )
-  (set_local $4
    (f64.reinterpret/i64
-    (get_local $1)
+    (i64.and
+     (get_local $1)
+     (i64.const 9223372036854775807)
+    )
    )
   )
   (if
@@ -3222,72 +3210,75 @@
      (i64.const 26)
     )
    )
-   (set_local $4
+   (set_local $3
     (f64.add
      (call $~lib/math/NativeMath.log
-      (get_local $4)
+      (get_local $3)
      )
      (f64.const 0.6931471805599453)
     )
    )
-   (block
-    (set_local $5
-     (f64.mul
-      (get_local $4)
-      (get_local $4)
+   (if
+    (i64.ge_u
+     (get_local $2)
+     (i64.add
+      (i64.const 1023)
+      (i64.const 1)
      )
     )
-    (set_local $6
-     (f64.sqrt
+    (set_local $3
+     (call $~lib/math/NativeMath.log
       (f64.add
-       (get_local $5)
-       (f64.const 1)
+       (f64.mul
+        (f64.const 2)
+        (get_local $3)
+       )
+       (f64.div
+        (f64.const 1)
+        (f64.add
+         (f64.sqrt
+          (f64.add
+           (f64.mul
+            (get_local $3)
+            (get_local $3)
+           )
+           (f64.const 1)
+          )
+         )
+         (get_local $3)
+        )
+       )
       )
      )
     )
     (if
      (i64.ge_u
       (get_local $2)
-      (i64.add
+      (i64.sub
        (i64.const 1023)
-       (i64.const 1)
+       (i64.const 26)
       )
      )
-     (set_local $4
-      (call $~lib/math/NativeMath.log
+     (set_local $3
+      (call $~lib/math/NativeMath.log1p
        (f64.add
-        (f64.mul
-         (f64.const 2)
-         (get_local $4)
-        )
+        (get_local $3)
         (f64.div
-         (f64.const 1)
-         (f64.add
-          (get_local $6)
-          (get_local $4)
+         (f64.mul
+          (get_local $3)
+          (get_local $3)
          )
-        )
-       )
-      )
-     )
-     (if
-      (i64.ge_u
-       (get_local $2)
-       (i64.sub
-        (i64.const 1023)
-        (i64.const 26)
-       )
-      )
-      (set_local $4
-       (call $~lib/math/NativeMath.log1p
-        (f64.add
-         (get_local $4)
-         (f64.div
-          (get_local $5)
-          (f64.add
-           (get_local $6)
-           (f64.const 1)
+         (f64.add
+          (f64.sqrt
+           (f64.add
+            (f64.mul
+             (get_local $3)
+             (get_local $3)
+            )
+            (f64.const 1)
+           )
           )
+          (f64.const 1)
          )
         )
        )
@@ -3297,7 +3288,7 @@
    )
   )
   (f64.copysign
-   (get_local $4)
+   (get_local $3)
    (get_local $0)
   )
  )
@@ -3335,39 +3326,23 @@
  )
  (func $~lib/math/NativeMathf.asinh (; 68 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 f32)
-  (local $5 f32)
-  (local $6 f32)
+  (local $2 f32)
   (set_local $1
-   (i32.reinterpret/f32
-    (get_local $0)
-   )
-  )
-  (set_local $2
    (i32.and
-    (get_local $1)
+    (i32.reinterpret/f32
+     (get_local $0)
+    )
     (i32.const 2147483647)
    )
   )
-  (set_local $3
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
-  )
-  (set_local $1
-   (get_local $2)
-  )
-  (set_local $4
+  (set_local $2
    (f32.reinterpret/i32
     (get_local $1)
    )
   )
   (if
    (i32.ge_u
-    (get_local $2)
+    (get_local $1)
     (i32.add
      (i32.const 1065353216)
      (i32.shl
@@ -3376,78 +3351,81 @@
      )
     )
    )
-   (set_local $4
+   (set_local $2
     (f32.add
      (call $~lib/math/NativeMathf.log
-      (get_local $4)
+      (get_local $2)
      )
      (f32.const 0.6931471824645996)
     )
    )
-   (block
-    (set_local $5
-     (f32.mul
-      (get_local $4)
-      (get_local $4)
+   (if
+    (i32.ge_u
+     (get_local $1)
+     (i32.add
+      (i32.const 1065353216)
+      (i32.shl
+       (i32.const 1)
+       (i32.const 23)
+      )
      )
     )
-    (set_local $6
-     (f32.sqrt
+    (set_local $2
+     (call $~lib/math/NativeMathf.log
       (f32.add
-       (get_local $5)
-       (f32.const 1)
+       (f32.mul
+        (f32.const 2)
+        (get_local $2)
+       )
+       (f32.div
+        (f32.const 1)
+        (f32.add
+         (f32.sqrt
+          (f32.add
+           (f32.mul
+            (get_local $2)
+            (get_local $2)
+           )
+           (f32.const 1)
+          )
+         )
+         (get_local $2)
+        )
+       )
       )
      )
     )
     (if
      (i32.ge_u
-      (get_local $2)
-      (i32.add
+      (get_local $1)
+      (i32.sub
        (i32.const 1065353216)
        (i32.shl
-        (i32.const 1)
+        (i32.const 12)
         (i32.const 23)
        )
       )
      )
-     (set_local $4
-      (call $~lib/math/NativeMathf.log
+     (set_local $2
+      (call $~lib/math/NativeMathf.log1p
        (f32.add
-        (f32.mul
-         (f32.const 2)
-         (get_local $4)
-        )
+        (get_local $2)
         (f32.div
-         (f32.const 1)
-         (f32.add
-          (get_local $6)
-          (get_local $4)
+         (f32.mul
+          (get_local $2)
+          (get_local $2)
          )
-        )
-       )
-      )
-     )
-     (if
-      (i32.ge_u
-       (get_local $2)
-       (i32.sub
-        (i32.const 1065353216)
-        (i32.shl
-         (i32.const 12)
-         (i32.const 23)
-        )
-       )
-      )
-      (set_local $4
-       (call $~lib/math/NativeMathf.log1p
-        (f32.add
-         (get_local $4)
-         (f32.div
-          (get_local $5)
-          (f32.add
-           (get_local $6)
-           (f32.const 1)
+         (f32.add
+          (f32.sqrt
+           (f32.add
+            (f32.mul
+             (get_local $2)
+             (get_local $2)
+            )
+            (f32.const 1)
+           )
           )
+          (f32.const 1)
          )
         )
        )
@@ -3457,7 +3435,7 @@
    )
   )
   (f32.copysign
-   (get_local $4)
+   (get_local $2)
    (get_local $0)
   )
  )
@@ -13673,7 +13651,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1000)
+     (i32.const 994)
      (i32.const 4)
     )
     (unreachable)
@@ -13708,7 +13686,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1007)
+     (i32.const 1001)
      (i32.const 24)
     )
     (unreachable)
