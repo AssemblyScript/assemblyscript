@@ -3902,7 +3902,7 @@
  )
  (func $~lib/math/NativeMathf.atan (; 72 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
-  (local $2 i32)
+  (local $2 f32)
   (local $3 f32)
   (local $4 i32)
   (local $5 f32)
@@ -3915,10 +3915,7 @@
    )
   )
   (set_local $2
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
+   (get_local $0)
   )
   (set_local $1
    (i32.and
@@ -3947,12 +3944,9 @@
      )
     )
     (return
-     (if (result f32)
-      (get_local $2)
-      (f32.neg
-       (get_local $3)
-      )
+     (f32.copysign
       (get_local $3)
+      (get_local $2)
      )
     )
    )
@@ -4255,12 +4249,9 @@
    )
    (unreachable)
   )
-  (if (result f32)
-   (get_local $2)
-   (f32.neg
-    (get_local $3)
-   )
+  (f32.copysign
    (get_local $3)
+   (get_local $2)
   )
  )
  (func $std/math/test_atanf (; 73 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)

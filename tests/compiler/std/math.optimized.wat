@@ -3389,22 +3389,17 @@
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
-  (local $4 i32)
+  (local $4 f32)
   (set_local $4
-   (i32.shr_u
-    (tee_local $1
-     (i32.reinterpret/f32
-      (get_local $0)
-     )
-    )
-    (i32.const 31)
-   )
+   (get_local $0)
   )
   (if
    (i32.ge_u
     (tee_local $1
      (i32.and
-      (get_local $1)
+      (i32.reinterpret/f32
+       (get_local $0)
+      )
       (i32.const 2147483647)
      )
     )
@@ -3420,12 +3415,9 @@
      )
     )
     (return
-     (tee_local $0
-      (if (result f32)
-       (get_local $4)
-       (f32.const -1.570796251296997)
-       (f32.const 1.570796251296997)
-      )
+     (f32.copysign
+      (f32.const 1.570796251296997)
+      (get_local $4)
      )
     )
    )
@@ -3697,15 +3689,10 @@
    )
    (unreachable)
   )
-  (if
+  (f32.copysign
+   (get_local $2)
    (get_local $4)
-   (set_local $2
-    (f32.neg
-     (get_local $2)
-    )
-   )
   )
-  (get_local $2)
  )
  (func $std/math/test_atanf (; 73 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>

@@ -1370,13 +1370,13 @@ export namespace NativeMathf {
       aT4       = reinterpret<f32>(0x3D7CAC25), //  6.1687607318e-02f
       Ox1p_120f = reinterpret<f32>(0x03800000);
     var ix = reinterpret<u32>(x);
-    var sig = <u32>(ix >> 31);
+    var sx = x;
     ix &= 0x7FFFFFFF;
     var z: f32;
     if (ix >= 0x4C800000) {
       if (isNaN(x)) return x;
       z = atanhi3 + Ox1p_120f;
-      return sig ? -z : z;
+      return builtin_copysign(z, sx);
     }
     var id: i32;
     if (ix < 0x3EE00000) {
@@ -1414,7 +1414,7 @@ export namespace NativeMathf {
       case 3: { z = atanhi3 - ((x * (s1 + s2) - atanlo3) - x); break; }
       default: unreachable();
     }
-    return sig ? -z : z;
+    return builtin_copysign(z, sx);
   }
 
   export function atanh(x: f32): f32 { // see: musl/src/math/atanhf.c
