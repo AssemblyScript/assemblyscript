@@ -11938,18 +11938,6 @@
  (func $~lib/math/NativeMath.round (; 136 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (if
-   (f64.ne
-    (f64.sub
-     (get_local $0)
-     (get_local $0)
-    )
-    (f64.const 0)
-   )
-   (return
-    (get_local $0)
-   )
-  )
-  (if
    (tee_local $1
     (f64.le
      (f64.const -0.5)
@@ -11990,18 +11978,6 @@
  )
  (func $~lib/math/NativeMathf.round (; 138 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
-  (if
-   (f32.ne
-    (f32.sub
-     (get_local $0)
-     (get_local $0)
-    )
-    (f32.const 0)
-   )
-   (return
-    (get_local $0)
-   )
-  )
   (if
    (tee_local $1
     (f64.le

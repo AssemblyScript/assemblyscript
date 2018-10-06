@@ -6405,25 +6405,6 @@
  (func $~lib/math/NativeMath.round (; 49 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (if
-   (i32.eqz
-    (i32.and
-     (block $~lib/builtins/isFinite<f64>|inlined.1 (result i32)
-      (f64.eq
-       (f64.sub
-        (get_local $0)
-        (get_local $0)
-       )
-       (f64.const 0)
-      )
-     )
-     (i32.const 1)
-    )
-   )
-   (return
-    (get_local $0)
-   )
-  )
-  (if
    (if (result i32)
     (tee_local $1
      (f64.le

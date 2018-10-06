@@ -1022,7 +1022,6 @@ export namespace NativeMath {
   }
 
   export function round(x: f64): f64 {
-    if (!isFinite<f64>(x)) return x;
     if (-0.5 <= x && x <= 0) return builtin_copysign<f64>(0, x);
     return builtin_floor<f64>(x + 0.5);
   }
@@ -2068,7 +2067,6 @@ export namespace NativeMathf {
   }
 
   export function round(x: f32): f32 {
-    if (!isFinite<f32>(x)) return x;
     if (-0.5 <= x && x <= 0) return builtin_copysign<f32>(0, x);
     return builtin_floor<f32>(x + 0.5);
   }
