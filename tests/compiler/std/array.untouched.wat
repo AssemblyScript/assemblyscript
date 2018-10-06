@@ -5983,7 +5983,10 @@
   )
   (set_global $~lib/math/random_state1
    (call $~lib/math/murmurHash3
-    (get_global $~lib/math/random_state0)
+    (i64.xor
+     (get_global $~lib/math/random_state0)
+     (i64.const -1)
+    )
    )
   )
  )

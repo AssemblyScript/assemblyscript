@@ -996,7 +996,7 @@ export namespace NativeMath {
     assert(value);
     random_seeded = true;
     random_state0 = murmurHash3(value);
-    random_state1 = murmurHash3(random_state0);
+    random_state1 = murmurHash3(~random_state0);
   }
 
   export function random(): f64 { // see: v8/src/base/random-number-generator.cc
