@@ -5571,32 +5571,21 @@
  (func $~lib/math/NativeMath.sinh (; 51 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
-  (local $3 i64)
-  (local $4 i32)
+  (local $3 i32)
+  (local $4 i64)
   (set_local $2
-   (f64.const 0.5)
-  )
-  (if
-   (i64.ne
-    (i64.shr_u
-     (tee_local $3
-      (i64.reinterpret/f64
-       (get_local $0)
-      )
-     )
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (set_local $2
-    (f64.const -0.5)
+   (f64.copysign
+    (f64.const 0.5)
+    (get_local $0)
    )
   )
   (set_local $1
    (f64.reinterpret/i64
-    (tee_local $3
+    (tee_local $4
      (i64.and
-      (get_local $3)
+      (i64.reinterpret/f64
+       (get_local $0)
+      )
       (i64.const 9223372036854775807)
      )
     )
@@ -5604,10 +5593,10 @@
   )
   (if
    (i32.lt_u
-    (tee_local $4
+    (tee_local $3
      (i32.wrap/i64
       (i64.shr_u
-       (get_local $3)
+       (get_local $4)
        (i64.const 32)
       )
      )
@@ -5622,13 +5611,13 @@
     )
     (if
      (i32.lt_u
-      (get_local $4)
+      (get_local $3)
       (i32.const 1072693248)
      )
      (block
       (if
        (i32.lt_u
-        (get_local $4)
+        (get_local $3)
         (i32.const 1045430272)
        )
        (return

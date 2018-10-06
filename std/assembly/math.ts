@@ -1029,8 +1029,7 @@ export namespace NativeMath {
 
   export function sinh(x: f64): f64 { // see: musl/src/math/sinh.c
     var u = reinterpret<u64>(x);
-    var h = 0.5;
-    if (u >> 63) h = -h;
+    var h = builtin_copysign(0.5, x);
     u &=  0x7FFFFFFFFFFFFFFF;
     var absx = reinterpret<f64>(u);
     var w = <u32>(u >> 32);
@@ -2063,8 +2062,7 @@ export namespace NativeMathf {
 
   export function sinh(x: f32): f32 { // see: musl/src/math/sinhf.c
     var u = reinterpret<u32>(x);
-    var h: f32 = 0.5;
-    if (u >> 31) h = -h;
+    var h = builtin_copysign<f32>(0.5, x);
     u &= 0x7FFFFFFF;
     var absx = reinterpret<f32>(u);
     var t: f32;

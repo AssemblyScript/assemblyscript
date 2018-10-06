@@ -12864,32 +12864,21 @@
  (func $~lib/math/NativeMath.sinh (; 144 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
-  (local $3 i64)
-  (local $4 i32)
+  (local $3 i32)
+  (local $4 i64)
   (set_local $2
-   (f64.const 0.5)
-  )
-  (if
-   (i64.ne
-    (i64.shr_u
-     (tee_local $3
-      (i64.reinterpret/f64
-       (get_local $0)
-      )
-     )
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (set_local $2
-    (f64.const -0.5)
+   (f64.copysign
+    (f64.const 0.5)
+    (get_local $0)
    )
   )
   (set_local $1
    (f64.reinterpret/i64
-    (tee_local $3
+    (tee_local $4
      (i64.and
-      (get_local $3)
+      (i64.reinterpret/f64
+       (get_local $0)
+      )
       (i64.const 9223372036854775807)
      )
     )
@@ -12897,10 +12886,10 @@
   )
   (if
    (i32.lt_u
-    (tee_local $4
+    (tee_local $3
      (i32.wrap/i64
       (i64.shr_u
-       (get_local $3)
+       (get_local $4)
        (i64.const 32)
       )
      )
@@ -12915,13 +12904,13 @@
     )
     (if
      (i32.lt_u
-      (get_local $4)
+      (get_local $3)
       (i32.const 1072693248)
      )
      (block
       (if
        (i32.lt_u
-        (get_local $4)
+        (get_local $3)
         (i32.const 1045430272)
        )
        (return
@@ -13006,29 +12995,21 @@
  )
  (func $~lib/math/NativeMathf.sinh (; 146 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
-  (local $2 i32)
-  (local $3 f32)
-  (set_local $3
-   (f32.const 0.5)
-  )
-  (if
-   (i32.shr_u
-    (tee_local $2
-     (i32.reinterpret/f32
-      (get_local $0)
-     )
-    )
-    (i32.const 31)
-   )
-   (set_local $3
-    (f32.const -0.5)
+  (local $2 f32)
+  (local $3 i32)
+  (set_local $2
+   (f32.copysign
+    (f32.const 0.5)
+    (get_local $0)
    )
   )
   (set_local $1
    (f32.reinterpret/i32
-    (tee_local $2
+    (tee_local $3
      (i32.and
-      (get_local $2)
+      (i32.reinterpret/f32
+       (get_local $0)
+      )
       (i32.const 2147483647)
      )
     )
@@ -13036,7 +13017,7 @@
   )
   (if
    (i32.lt_u
-    (get_local $2)
+    (get_local $3)
     (i32.const 1118925335)
    )
    (block
@@ -13047,13 +13028,13 @@
     )
     (if
      (i32.lt_u
-      (get_local $2)
+      (get_local $3)
       (i32.const 1065353216)
      )
      (block
       (if
        (i32.lt_u
-        (get_local $2)
+        (get_local $3)
         (i32.const 964689920)
        )
        (return
@@ -13062,7 +13043,7 @@
       )
       (return
        (f32.mul
-        (get_local $3)
+        (get_local $2)
         (f32.sub
          (f32.mul
           (f32.const 2)
@@ -13085,7 +13066,7 @@
     )
     (return
      (f32.mul
-      (get_local $3)
+      (get_local $2)
       (f32.add
        (get_local $1)
        (f32.div
@@ -13103,7 +13084,7 @@
   (f32.mul
    (f32.mul
     (f32.const 2)
-    (get_local $3)
+    (get_local $2)
    )
    (call $~lib/math/expo2f
     (get_local $1)

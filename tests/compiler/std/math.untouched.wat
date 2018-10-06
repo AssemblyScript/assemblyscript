@@ -14998,20 +14998,9 @@
    )
   )
   (set_local $2
-   (f64.const 0.5)
-  )
-  (if
-   (i64.ne
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (set_local $2
-    (f64.neg
-     (get_local $2)
-    )
+   (f64.copysign
+    (f64.const 0.5)
+    (get_local $0)
    )
   )
   (set_local $1
@@ -15161,17 +15150,9 @@
    )
   )
   (set_local $2
-   (f32.const 0.5)
-  )
-  (if
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
-   (set_local $2
-    (f32.neg
-     (get_local $2)
-    )
+   (f32.copysign
+    (f32.const 0.5)
+    (get_local $0)
    )
   )
   (set_local $1
