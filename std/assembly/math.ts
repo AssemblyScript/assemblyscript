@@ -1021,9 +1021,9 @@ export namespace NativeMath {
     return reinterpret<f64>(r) - 1;
   }
 
+  @inline
   export function round(x: f64): f64 {
-    if (-0.5 <= x && x <= 0) return builtin_copysign<f64>(0, x);
-    return builtin_floor<f64>(x + 0.5);
+    return builtin_copysign<f64>(builtin_floor<f64>(x + 0.5), x);
   }
 
   @inline
@@ -2066,9 +2066,9 @@ export namespace NativeMathf {
     return f;
   }
 
+  @inline
   export function round(x: f32): f32 {
-    if (-0.5 <= x && x <= 0) return builtin_copysign<f32>(0, x);
-    return builtin_floor<f32>(x + 0.5);
+    return builtin_copysign<f32>(builtin_floor<f32>(x + 0.5), x);
   }
 
   @inline

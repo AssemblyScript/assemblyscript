@@ -13875,89 +13875,43 @@
   )
   (get_local $0)
  )
- (func $~lib/math/NativeMath.round (; 136 ;) (type $FF) (param $0 f64) (result f64)
-  (local $1 i32)
-  (if
-   (if (result i32)
-    (tee_local $1
-     (f64.le
-      (f64.const -0.5)
-      (get_local $0)
-     )
-    )
-    (f64.le
-     (get_local $0)
-     (f64.const 0)
-    )
-    (get_local $1)
-   )
-   (return
-    (f64.copysign
-     (f64.const 0)
-     (get_local $0)
-    )
-   )
-  )
-  (f64.floor
-   (f64.add
-    (get_local $0)
-    (f64.const 0.5)
-   )
-  )
- )
- (func $std/math/test_round (; 137 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_round (; 136 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (call $std/math/check<f64>
-   (call $~lib/math/NativeMath.round
-    (get_local $0)
-   )
-   (get_local $1)
-   (get_local $2)
-   (get_local $3)
-  )
- )
- (func $~lib/math/NativeMathf.round (; 138 ;) (type $ff) (param $0 f32) (result f32)
-  (local $1 i32)
-  (if
-   (if (result i32)
-    (tee_local $1
-     (f64.le
-      (f64.const -0.5)
-      (f64.promote/f32
+   (block $~lib/math/NativeMath.round|inlined.0 (result f64)
+    (f64.copysign
+     (f64.floor
+      (f64.add
        (get_local $0)
+       (f64.const 0.5)
       )
      )
-    )
-    (f32.le
-     (get_local $0)
-     (f32.const 0)
-    )
-    (get_local $1)
-   )
-   (return
-    (f32.copysign
-     (f32.const 0)
      (get_local $0)
     )
-   )
-  )
-  (f32.floor
-   (f32.add
-    (get_local $0)
-    (f32.const 0.5)
-   )
-  )
- )
- (func $std/math/test_roundf (; 139 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
-  (call $std/math/check<f32>
-   (call $~lib/math/NativeMathf.round
-    (get_local $0)
    )
    (get_local $1)
    (get_local $2)
    (get_local $3)
   )
  )
- (func $std/math/test_sign (; 140 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_roundf (; 137 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+  (call $std/math/check<f32>
+   (block $~lib/math/NativeMathf.round|inlined.0 (result f32)
+    (f32.copysign
+     (f32.floor
+      (f32.add
+       (get_local $0)
+       (f32.const 0.5)
+      )
+     )
+     (get_local $0)
+    )
+   )
+   (get_local $1)
+   (get_local $2)
+   (get_local $3)
+  )
+ )
+ (func $std/math/test_sign (; 138 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -14001,7 +13955,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_signf (; 141 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_signf (; 139 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (block $~lib/math/NativeMathf.sign|inlined.0 (result f32)
     (if (result f32)
@@ -14023,7 +13977,7 @@
    (get_local $3)
   )
  )
- (func $~lib/math/NativeMath.rem (; 142 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.rem (; 140 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -14575,7 +14529,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_rem (; 143 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_rem (; 141 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (call $std/math/check<f64>
    (call $~lib/math/NativeMath.rem
     (get_local $0)
@@ -14586,7 +14540,7 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMathf.rem (; 144 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.rem (; 142 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -15121,7 +15075,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_remf (; 145 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_remf (; 143 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.rem
     (get_local $0)
@@ -15132,7 +15086,7 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMath.sinh (; 146 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sinh (; 144 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
   (local $3 f64)
@@ -15264,7 +15218,7 @@
   )
   (get_local $5)
  )
- (func $std/math/test_sinh (; 147 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sinh (; 145 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -15296,7 +15250,7 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMathf.sinh (; 148 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sinh (; 146 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -15416,7 +15370,7 @@
   )
   (get_local $4)
  )
- (func $std/math/test_sinhf (; 149 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sinhf (; 147 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.sinh
     (get_local $0)
@@ -15426,7 +15380,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_sqrt (; 150 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sqrt (; 148 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -15460,7 +15414,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_sqrtf (; 151 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sqrtf (; 149 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (block $~lib/math/NativeMathf.sqrt|inlined.0 (result f32)
     (f32.sqrt
@@ -15472,7 +15426,7 @@
    (get_local $3)
   )
  )
- (func $~lib/math/NativeMath.tanh (; 152 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tanh (; 150 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
   (local $3 i32)
@@ -15604,7 +15558,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_tanh (; 153 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_tanh (; 151 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -15636,7 +15590,7 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMathf.tanh (; 154 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tanh (; 152 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -15759,7 +15713,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_tanhf (; 155 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_tanhf (; 153 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.tanh
     (get_local $0)
@@ -15769,7 +15723,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_trunc (; 156 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_trunc (; 154 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -15803,7 +15757,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_truncf (; 157 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_truncf (; 155 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (block $~lib/math/NativeMathf.trunc|inlined.0 (result f32)
     (f32.trunc
@@ -15815,7 +15769,7 @@
    (get_local $3)
   )
  )
- (func $~lib/math/ipow64 (; 158 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 156 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -16129,7 +16083,7 @@
   )
   (get_local $2)
  )
- (func $start (; 159 ;) (type $v)
+ (func $start (; 157 ;) (type $v)
   (local $0 i32)
   (local $1 f64)
   (local $2 i32)
@@ -56710,6 +56664,6 @@
    )
   )
  )
- (func $null (; 160 ;) (type $v)
+ (func $null (; 158 ;) (type $v)
  )
 )
