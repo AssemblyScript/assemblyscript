@@ -4809,7 +4809,8 @@
   (local $35 f64)
   (local $36 f64)
   (local $37 f64)
-  (local $38 i32)
+  (local $38 f64)
+  (local $39 i32)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -5594,7 +5595,7 @@
          (get_local $32)
         )
         (i64.reinterpret/f64
-         (f64.const 1)
+         (get_local $33)
         )
         (i32.and
          (get_local $11)
@@ -5833,18 +5834,31 @@
       (get_local $17)
      )
     )
-    (set_local $34
-     (f64.mul
-      (f64.const 1.350039202129749e-08)
-      (f64.convert_u/i32
-       (i32.ne
-        (get_local $11)
-        (i32.const 0)
+    (set_local $35
+     (block $~lib/math/casted_select<u64,f64>|inlined.1 (result f64)
+      (set_local $34
+       (f64.const 1.350039202129749e-08)
+      )
+      (set_local $35
+       (f64.const 0)
+      )
+      (f64.reinterpret/i64
+       (select
+        (i64.reinterpret/f64
+         (get_local $34)
+        )
+        (i64.reinterpret/f64
+         (get_local $35)
+        )
+        (i32.and
+         (get_local $11)
+         (i32.const 1)
+        )
        )
       )
      )
     )
-    (set_local $35
+    (set_local $34
      (f64.add
       (f64.add
        (f64.mul
@@ -5856,7 +5870,7 @@
         (f64.const 0.9617966939259756)
        )
       )
-      (get_local $34)
+      (get_local $35)
      )
     )
     (set_local $20
@@ -5864,13 +5878,26 @@
       (get_local $25)
      )
     )
-    (set_local $36
-     (f64.mul
-      (f64.const 0.5849624872207642)
-      (f64.convert_u/i32
-       (i32.ne
-        (get_local $11)
-        (i32.const 0)
+    (set_local $37
+     (block $~lib/math/casted_select<u64,f64>|inlined.2 (result f64)
+      (set_local $36
+       (f64.const 0.5849624872207642)
+      )
+      (set_local $37
+       (f64.const 0)
+      )
+      (f64.reinterpret/i64
+       (select
+        (i64.reinterpret/f64
+         (get_local $36)
+        )
+        (i64.reinterpret/f64
+         (get_local $37)
+        )
+        (i32.and
+         (get_local $11)
+         (i32.const 1)
+        )
        )
       )
      )
@@ -5880,9 +5907,9 @@
       (f64.add
        (f64.add
         (get_local $32)
-        (get_local $35)
+        (get_local $34)
        )
-       (get_local $36)
+       (get_local $37)
       )
       (get_local $20)
      )
@@ -5899,14 +5926,14 @@
     )
     (set_local $16
      (f64.sub
-      (get_local $35)
+      (get_local $34)
       (f64.sub
        (f64.sub
         (f64.sub
          (get_local $15)
          (get_local $20)
         )
-        (get_local $36)
+        (get_local $37)
        )
        (get_local $32)
       )
@@ -5914,14 +5941,14 @@
     )
    )
   )
-  (set_local $37
+  (set_local $38
    (get_local $1)
   )
-  (set_local $37
+  (set_local $38
    (f64.reinterpret/i64
     (i64.and
      (i64.reinterpret/f64
-      (get_local $37)
+      (get_local $38)
      )
      (i64.const -4294967296)
     )
@@ -5932,7 +5959,7 @@
     (f64.mul
      (f64.sub
       (get_local $1)
-      (get_local $37)
+      (get_local $38)
      )
      (get_local $15)
     )
@@ -5944,7 +5971,7 @@
   )
   (set_local $17
    (f64.mul
-    (get_local $37)
+    (get_local $38)
     (get_local $15)
    )
   )
@@ -5967,7 +5994,7 @@
     )
    )
   )
-  (set_local $38
+  (set_local $39
    (i32.wrap/i64
     (get_local $2)
    )
@@ -5985,7 +6012,7 @@
         (get_local $24)
         (i32.const 1083179008)
        )
-       (get_local $38)
+       (get_local $39)
       )
       (i32.const 0)
      )
@@ -6037,7 +6064,7 @@
          (get_local $24)
          (i32.const -1064252416)
         )
-        (get_local $38)
+        (get_local $39)
        )
        (i32.const 0)
       )
@@ -6072,7 +6099,7 @@
     )
    )
   )
-  (set_local $38
+  (set_local $39
    (i32.and
     (get_local $24)
     (i32.const 2147483647)
@@ -6081,7 +6108,7 @@
   (set_local $11
    (i32.sub
     (i32.shr_s
-     (get_local $38)
+     (get_local $39)
      (i32.const 20)
     )
     (i32.const 1023)
@@ -6092,7 +6119,7 @@
   )
   (if
    (i32.gt_s
-    (get_local $38)
+    (get_local $39)
     (i32.const 1071644672)
    )
    (block

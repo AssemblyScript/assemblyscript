@@ -171,7 +171,8 @@
   (local $35 f64)
   (local $36 f64)
   (local $37 f64)
-  (local $38 i32)
+  (local $38 f64)
+  (local $39 i32)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -956,7 +957,7 @@
          (get_local $32)
         )
         (i64.reinterpret/f64
-         (f64.const 1)
+         (get_local $33)
         )
         (i32.and
          (get_local $11)
@@ -1195,18 +1196,31 @@
       (get_local $17)
      )
     )
-    (set_local $34
-     (f64.mul
-      (f64.const 1.350039202129749e-08)
-      (f64.convert_u/i32
-       (i32.ne
-        (get_local $11)
-        (i32.const 0)
+    (set_local $35
+     (block $~lib/math/casted_select<u64,f64>|inlined.1 (result f64)
+      (set_local $34
+       (f64.const 1.350039202129749e-08)
+      )
+      (set_local $35
+       (f64.const 0)
+      )
+      (f64.reinterpret/i64
+       (select
+        (i64.reinterpret/f64
+         (get_local $34)
+        )
+        (i64.reinterpret/f64
+         (get_local $35)
+        )
+        (i32.and
+         (get_local $11)
+         (i32.const 1)
+        )
        )
       )
      )
     )
-    (set_local $35
+    (set_local $34
      (f64.add
       (f64.add
        (f64.mul
@@ -1218,7 +1232,7 @@
         (f64.const 0.9617966939259756)
        )
       )
-      (get_local $34)
+      (get_local $35)
      )
     )
     (set_local $20
@@ -1226,13 +1240,26 @@
       (get_local $25)
      )
     )
-    (set_local $36
-     (f64.mul
-      (f64.const 0.5849624872207642)
-      (f64.convert_u/i32
-       (i32.ne
-        (get_local $11)
-        (i32.const 0)
+    (set_local $37
+     (block $~lib/math/casted_select<u64,f64>|inlined.2 (result f64)
+      (set_local $36
+       (f64.const 0.5849624872207642)
+      )
+      (set_local $37
+       (f64.const 0)
+      )
+      (f64.reinterpret/i64
+       (select
+        (i64.reinterpret/f64
+         (get_local $36)
+        )
+        (i64.reinterpret/f64
+         (get_local $37)
+        )
+        (i32.and
+         (get_local $11)
+         (i32.const 1)
+        )
        )
       )
      )
@@ -1242,9 +1269,9 @@
       (f64.add
        (f64.add
         (get_local $32)
-        (get_local $35)
+        (get_local $34)
        )
-       (get_local $36)
+       (get_local $37)
       )
       (get_local $20)
      )
@@ -1261,14 +1288,14 @@
     )
     (set_local $16
      (f64.sub
-      (get_local $35)
+      (get_local $34)
       (f64.sub
        (f64.sub
         (f64.sub
          (get_local $15)
          (get_local $20)
         )
-        (get_local $36)
+        (get_local $37)
        )
        (get_local $32)
       )
@@ -1276,14 +1303,14 @@
     )
    )
   )
-  (set_local $37
+  (set_local $38
    (get_local $1)
   )
-  (set_local $37
+  (set_local $38
    (f64.reinterpret/i64
     (i64.and
      (i64.reinterpret/f64
-      (get_local $37)
+      (get_local $38)
      )
      (i64.const -4294967296)
     )
@@ -1294,7 +1321,7 @@
     (f64.mul
      (f64.sub
       (get_local $1)
-      (get_local $37)
+      (get_local $38)
      )
      (get_local $15)
     )
@@ -1306,7 +1333,7 @@
   )
   (set_local $17
    (f64.mul
-    (get_local $37)
+    (get_local $38)
     (get_local $15)
    )
   )
@@ -1329,7 +1356,7 @@
     )
    )
   )
-  (set_local $38
+  (set_local $39
    (i32.wrap/i64
     (get_local $2)
    )
@@ -1347,7 +1374,7 @@
         (get_local $24)
         (i32.const 1083179008)
        )
-       (get_local $38)
+       (get_local $39)
       )
       (i32.const 0)
      )
@@ -1399,7 +1426,7 @@
          (get_local $24)
          (i32.const -1064252416)
         )
-        (get_local $38)
+        (get_local $39)
        )
        (i32.const 0)
       )
@@ -1434,7 +1461,7 @@
     )
    )
   )
-  (set_local $38
+  (set_local $39
    (i32.and
     (get_local $24)
     (i32.const 2147483647)
@@ -1443,7 +1470,7 @@
   (set_local $11
    (i32.sub
     (i32.shr_s
-     (get_local $38)
+     (get_local $39)
      (i32.const 20)
     )
     (i32.const 1023)
@@ -1454,7 +1481,7 @@
   )
   (if
    (i32.gt_s
-    (get_local $38)
+    (get_local $39)
     (i32.const 1071644672)
    )
    (block
@@ -2301,7 +2328,8 @@
   (local $33 f32)
   (local $34 f32)
   (local $35 f32)
-  (local $36 i32)
+  (local $36 f32)
+  (local $37 i32)
   (set_local $2
    (i32.reinterpret/f32
     (get_local $0)
@@ -2884,7 +2912,7 @@
          (get_local $30)
         )
         (i32.reinterpret/f32
-         (f32.const 1)
+         (get_local $31)
         )
         (i32.and
          (get_local $9)
@@ -3133,18 +3161,31 @@
       (get_local $21)
      )
     )
-    (set_local $32
-     (f32.mul
-      (f32.const 1.5632208487659227e-06)
-      (f32.convert_u/i32
-       (i32.ne
-        (get_local $9)
-        (i32.const 0)
+    (set_local $33
+     (block $~lib/math/casted_select<u32,f32>|inlined.1 (result f32)
+      (set_local $32
+       (f32.const 1.5632208487659227e-06)
+      )
+      (set_local $33
+       (f32.const 0)
+      )
+      (f32.reinterpret/i32
+       (select
+        (i32.reinterpret/f32
+         (get_local $32)
+        )
+        (i32.reinterpret/f32
+         (get_local $33)
+        )
+        (i32.and
+         (get_local $9)
+         (i32.const 1)
+        )
        )
       )
      )
     )
-    (set_local $33
+    (set_local $32
      (f32.add
       (f32.add
        (f32.mul
@@ -3156,7 +3197,7 @@
         (f32.const 0.9617967009544373)
        )
       )
-      (get_local $32)
+      (get_local $33)
      )
     )
     (set_local $17
@@ -3164,13 +3205,26 @@
       (get_local $23)
      )
     )
-    (set_local $34
-     (f32.mul
-      (f32.const 0.5849609375)
-      (f32.convert_u/i32
-       (i32.ne
-        (get_local $9)
-        (i32.const 0)
+    (set_local $35
+     (block $~lib/math/casted_select<u32,f32>|inlined.2 (result f32)
+      (set_local $34
+       (f32.const 0.5849609375)
+      )
+      (set_local $35
+       (f32.const 0)
+      )
+      (f32.reinterpret/i32
+       (select
+        (i32.reinterpret/f32
+         (get_local $34)
+        )
+        (i32.reinterpret/f32
+         (get_local $35)
+        )
+        (i32.and
+         (get_local $9)
+         (i32.const 1)
+        )
        )
       )
      )
@@ -3180,9 +3234,9 @@
       (f32.add
        (f32.add
         (get_local $30)
-        (get_local $33)
+        (get_local $32)
        )
-       (get_local $34)
+       (get_local $35)
       )
       (get_local $17)
      )
@@ -3202,14 +3256,14 @@
     )
     (set_local $14
      (f32.sub
-      (get_local $33)
+      (get_local $32)
       (f32.sub
        (f32.sub
         (f32.sub
          (get_local $13)
          (get_local $17)
         )
-        (get_local $34)
+        (get_local $35)
        )
        (get_local $30)
       )
@@ -3222,7 +3276,7 @@
     (get_local $1)
    )
   )
-  (set_local $35
+  (set_local $36
    (f32.reinterpret/i32
     (i32.and
      (get_local $24)
@@ -3235,7 +3289,7 @@
     (f32.mul
      (f32.sub
       (get_local $1)
-      (get_local $35)
+      (get_local $36)
      )
      (get_local $13)
     )
@@ -3247,7 +3301,7 @@
   )
   (set_local $21
    (f32.mul
-    (get_local $35)
+    (get_local $36)
     (get_local $13)
    )
   )
@@ -3346,7 +3400,7 @@
     )
    )
   )
-  (set_local $36
+  (set_local $37
    (i32.and
     (get_local $8)
     (i32.const 2147483647)
@@ -3355,7 +3409,7 @@
   (set_local $9
    (i32.sub
     (i32.shr_s
-     (get_local $36)
+     (get_local $37)
      (i32.const 23)
     )
     (i32.const 127)
@@ -3366,7 +3420,7 @@
   )
   (if
    (i32.gt_s
-    (get_local $36)
+    (get_local $37)
     (i32.const 1056964608)
    )
    (block
