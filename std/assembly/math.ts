@@ -762,7 +762,7 @@ export namespace NativeMath {
     var u = reinterpret<u64>(x);
     var hx = <u32>(u >> 32);
     var k = 0;
-    if (hx < 0x00100000 || <bool>(hx >> 31)) {
+    if (<u32>(hx < 0x00100000) | hx >> 31) {
       if (u << 1 == 0) return -1 / (x * x);
       if (hx >> 31) return (x - x) / 0.0;
       k -= 54;
@@ -1333,21 +1333,20 @@ export namespace NativeMathf {
     const
       pio2      = reinterpret<f32>(0x3FC90FDB), // 1.570796326794896558e+00f
       Ox1p_120f = reinterpret<f32>(0x03800000);
-    var hx = reinterpret<u32>(x);
-    var ix = hx & 0x7FFFFFFF;
-    if (ix >= 0x3F800000) {
-      if (ix == 0x3F800000) return x * pio2 + Ox1p_120f;
+    var sx = x;
+    var hx = reinterpret<u32>(x) & 0x7FFFFFFF;
+    if (hx >= 0x3F800000) {
+      if (hx == 0x3F800000) return x * pio2 + Ox1p_120f;
       return 0 / (x - x);
     }
-    if (ix < 0x3F000000) {
-      if (ix < 0x39800000 && ix >= 0x00800000) return x;
+    if (hx < 0x3F000000) {
+      if (hx < 0x39800000 && hx >= 0x00800000) return x;
       return x + x * Rf(x * x);
     }
     var z: f32 = 0.5 - builtin_abs<f32>(x) * 0.5;
     var s = builtin_sqrt<f64>(z); // sic
     x = <f32>(pio2 - 2 * (s + s * Rf(z)));
-    if (hx >> 31) return -x;
-    return x;
+    return builtin_copysign(x, sx);
   }
 
   export function asinh(x: f32): f32 { // see: musl/src/math/asinhf.c

@@ -3025,19 +3025,19 @@
   )
  )
  (func $~lib/math/NativeMathf.asin (; 64 ;) (type $ff) (param $0 f32) (result f32)
-  (local $1 i32)
+  (local $1 f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f32)
   (local $5 f64)
   (set_local $1
-   (i32.reinterpret/f32
-    (get_local $0)
-   )
+   (get_local $0)
   )
   (set_local $2
    (i32.and
-    (get_local $1)
+    (i32.reinterpret/f32
+     (get_local $0)
+    )
     (i32.const 2147483647)
    )
   )
@@ -3156,18 +3156,10 @@
     )
    )
   )
-  (if
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
-   (return
-    (f32.neg
-     (get_local $0)
-    )
-   )
+  (f32.copysign
+   (get_local $0)
+   (get_local $1)
   )
-  (get_local $0)
  )
  (func $std/math/test_asinf (; 65 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
@@ -8971,14 +8963,11 @@
    (i32.const 0)
   )
   (if
-   (if (result i32)
-    (tee_local $4
-     (i32.lt_u
-      (get_local $2)
-      (i32.const 1048576)
-     )
+   (i32.or
+    (i32.lt_u
+     (get_local $2)
+     (i32.const 1048576)
     )
-    (get_local $4)
     (i32.shr_u
      (get_local $2)
      (i32.const 31)
@@ -13883,7 +13872,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2064)
+     (i32.const 2063)
      (i32.const 24)
     )
     (unreachable)
