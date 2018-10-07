@@ -11896,7 +11896,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2065)
+     (i32.const 2064)
      (i32.const 24)
     )
     (unreachable)
@@ -12967,12 +12967,6 @@
   (local $2 f64)
   (local $3 i32)
   (local $4 i64)
-  (set_local $2
-   (f64.copysign
-    (f64.const 0.5)
-    (get_local $0)
-   )
-  )
   (set_local $1
    (f64.reinterpret/i64
     (tee_local $4
@@ -12983,6 +12977,12 @@
       (i64.const 9223372036854775807)
      )
     )
+   )
+  )
+  (set_local $2
+   (f64.copysign
+    (f64.const 0.5)
+    (get_local $0)
    )
   )
   (if
@@ -13105,17 +13105,11 @@
  )
  (func $~lib/math/NativeMathf.sinh (; 145 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
-  (local $2 f32)
-  (local $3 i32)
-  (set_local $2
-   (f32.copysign
-    (f32.const 0.5)
-    (get_local $0)
-   )
-  )
+  (local $2 i32)
+  (local $3 f32)
   (set_local $1
    (f32.reinterpret/i32
-    (tee_local $3
+    (tee_local $2
      (i32.and
       (i32.reinterpret/f32
        (get_local $0)
@@ -13125,9 +13119,15 @@
     )
    )
   )
+  (set_local $3
+   (f32.copysign
+    (f32.const 0.5)
+    (get_local $0)
+   )
+  )
   (if
    (i32.lt_u
-    (get_local $3)
+    (get_local $2)
     (i32.const 1118925335)
    )
    (block
@@ -13138,13 +13138,13 @@
     )
     (if
      (i32.lt_u
-      (get_local $3)
+      (get_local $2)
       (i32.const 1065353216)
      )
      (block
       (if
        (i32.lt_u
-        (get_local $3)
+        (get_local $2)
         (i32.const 964689920)
        )
        (return
@@ -13153,7 +13153,7 @@
       )
       (return
        (f32.mul
-        (get_local $2)
+        (get_local $3)
         (f32.sub
          (f32.mul
           (f32.const 2)
@@ -13176,7 +13176,7 @@
     )
     (return
      (f32.mul
-      (get_local $2)
+      (get_local $3)
       (f32.add
        (get_local $1)
        (f32.div
@@ -13194,7 +13194,7 @@
   (f32.mul
    (f32.mul
     (f32.const 2)
-    (get_local $2)
+    (get_local $3)
    )
    (f32.mul
     (f32.mul

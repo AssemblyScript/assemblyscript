@@ -5566,12 +5566,6 @@
   (local $2 f64)
   (local $3 i32)
   (local $4 i64)
-  (set_local $2
-   (f64.copysign
-    (f64.const 0.5)
-    (get_local $0)
-   )
-  )
   (set_local $1
    (f64.reinterpret/i64
     (tee_local $4
@@ -5582,6 +5576,12 @@
       (i64.const 9223372036854775807)
      )
     )
+   )
+  )
+  (set_local $2
+   (f64.copysign
+    (f64.const 0.5)
+    (get_local $0)
    )
   )
   (if

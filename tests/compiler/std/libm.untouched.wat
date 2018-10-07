@@ -6424,33 +6424,24 @@
  (func $~lib/math/NativeMath.sinh (; 52 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
-  (local $3 f64)
-  (local $4 i32)
+  (local $3 i32)
+  (local $4 f64)
   (local $5 f64)
   (local $6 f64)
   (set_local $1
-   (i64.reinterpret/f64
-    (get_local $0)
-   )
-  )
-  (set_local $2
-   (f64.copysign
-    (f64.const 0.5)
-    (get_local $0)
-   )
-  )
-  (set_local $1
    (i64.and
-    (get_local $1)
+    (i64.reinterpret/f64
+     (get_local $0)
+    )
     (i64.const 9223372036854775807)
    )
   )
-  (set_local $3
+  (set_local $2
    (f64.reinterpret/i64
     (get_local $1)
    )
   )
-  (set_local $4
+  (set_local $3
    (i32.wrap/i64
     (i64.shr_u
      (get_local $1)
@@ -6458,26 +6449,32 @@
     )
    )
   )
+  (set_local $5
+   (f64.copysign
+    (f64.const 0.5)
+    (get_local $0)
+   )
+  )
   (if
    (i32.lt_u
-    (get_local $4)
+    (get_local $3)
     (i32.const 1082535490)
    )
    (block
-    (set_local $5
+    (set_local $4
      (call $~lib/math/NativeMath.expm1
-      (get_local $3)
+      (get_local $2)
      )
     )
     (if
      (i32.lt_u
-      (get_local $4)
+      (get_local $3)
       (i32.const 1072693248)
      )
      (block
       (if
        (i32.lt_u
-        (get_local $4)
+        (get_local $3)
         (i32.sub
          (i32.const 1072693248)
          (i32.shl
@@ -6492,19 +6489,19 @@
       )
       (return
        (f64.mul
-        (get_local $2)
+        (get_local $5)
         (f64.sub
          (f64.mul
           (f64.const 2)
-          (get_local $5)
+          (get_local $4)
          )
          (f64.div
           (f64.mul
-           (get_local $5)
-           (get_local $5)
+           (get_local $4)
+           (get_local $4)
           )
           (f64.add
-           (get_local $5)
+           (get_local $4)
            (f64.const 1)
           )
          )
@@ -6515,13 +6512,13 @@
     )
     (return
      (f64.mul
-      (get_local $2)
+      (get_local $5)
       (f64.add
-       (get_local $5)
+       (get_local $4)
        (f64.div
-        (get_local $5)
+        (get_local $4)
         (f64.add
-         (get_local $5)
+         (get_local $4)
          (f64.const 1)
         )
        )
@@ -6530,11 +6527,11 @@
     )
    )
   )
-  (set_local $5
+  (set_local $4
    (f64.mul
     (f64.mul
      (f64.const 2)
-     (get_local $2)
+     (get_local $5)
     )
     (block $~lib/math/expo2|inlined.1 (result f64)
      (set_local $6
@@ -6560,7 +6557,7 @@
       (f64.mul
        (call $~lib/math/NativeMath.exp
         (f64.sub
-         (get_local $3)
+         (get_local $2)
          (f64.const 1416.0996898839683)
         )
        )
@@ -6571,7 +6568,7 @@
     )
    )
   )
-  (get_local $5)
+  (get_local $4)
  )
  (func $std/libm/sinh (; 53 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.sinh

@@ -13883,7 +13883,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2065)
+     (i32.const 2064)
      (i32.const 24)
     )
     (unreachable)
@@ -15164,33 +15164,24 @@
  (func $~lib/math/NativeMath.sinh (; 143 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
-  (local $3 f64)
-  (local $4 i32)
+  (local $3 i32)
+  (local $4 f64)
   (local $5 f64)
   (local $6 f64)
   (set_local $1
-   (i64.reinterpret/f64
-    (get_local $0)
-   )
-  )
-  (set_local $2
-   (f64.copysign
-    (f64.const 0.5)
-    (get_local $0)
-   )
-  )
-  (set_local $1
    (i64.and
-    (get_local $1)
+    (i64.reinterpret/f64
+     (get_local $0)
+    )
     (i64.const 9223372036854775807)
    )
   )
-  (set_local $3
+  (set_local $2
    (f64.reinterpret/i64
     (get_local $1)
    )
   )
-  (set_local $4
+  (set_local $3
    (i32.wrap/i64
     (i64.shr_u
      (get_local $1)
@@ -15198,26 +15189,32 @@
     )
    )
   )
+  (set_local $5
+   (f64.copysign
+    (f64.const 0.5)
+    (get_local $0)
+   )
+  )
   (if
    (i32.lt_u
-    (get_local $4)
+    (get_local $3)
     (i32.const 1082535490)
    )
    (block
-    (set_local $5
+    (set_local $4
      (call $~lib/math/NativeMath.expm1
-      (get_local $3)
+      (get_local $2)
      )
     )
     (if
      (i32.lt_u
-      (get_local $4)
+      (get_local $3)
       (i32.const 1072693248)
      )
      (block
       (if
        (i32.lt_u
-        (get_local $4)
+        (get_local $3)
         (i32.sub
          (i32.const 1072693248)
          (i32.shl
@@ -15232,19 +15229,19 @@
       )
       (return
        (f64.mul
-        (get_local $2)
+        (get_local $5)
         (f64.sub
          (f64.mul
           (f64.const 2)
-          (get_local $5)
+          (get_local $4)
          )
          (f64.div
           (f64.mul
-           (get_local $5)
-           (get_local $5)
+           (get_local $4)
+           (get_local $4)
           )
           (f64.add
-           (get_local $5)
+           (get_local $4)
            (f64.const 1)
           )
          )
@@ -15255,13 +15252,13 @@
     )
     (return
      (f64.mul
-      (get_local $2)
+      (get_local $5)
       (f64.add
-       (get_local $5)
+       (get_local $4)
        (f64.div
-        (get_local $5)
+        (get_local $4)
         (f64.add
-         (get_local $5)
+         (get_local $4)
          (f64.const 1)
         )
        )
@@ -15270,11 +15267,11 @@
     )
    )
   )
-  (set_local $5
+  (set_local $4
    (f64.mul
     (f64.mul
      (f64.const 2)
-     (get_local $2)
+     (get_local $5)
     )
     (block $~lib/math/expo2|inlined.1 (result f64)
      (set_local $6
@@ -15300,7 +15297,7 @@
       (f64.mul
        (call $~lib/math/NativeMath.exp
         (f64.sub
-         (get_local $3)
+         (get_local $2)
          (f64.const 1416.0996898839683)
         )
        )
@@ -15311,7 +15308,7 @@
     )
    )
   )
-  (get_local $5)
+  (get_local $4)
  )
  (func $std/math/test_sinh (; 144 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
@@ -15352,25 +15349,22 @@
   (local $4 f32)
   (local $5 f32)
   (set_local $1
-   (i32.reinterpret/f32
-    (get_local $0)
-   )
-  )
-  (set_local $2
-   (f32.copysign
-    (f32.const 0.5)
-    (get_local $0)
-   )
-  )
-  (set_local $1
    (i32.and
-    (get_local $1)
+    (i32.reinterpret/f32
+     (get_local $0)
+    )
     (i32.const 2147483647)
    )
   )
-  (set_local $3
+  (set_local $2
    (f32.reinterpret/i32
     (get_local $1)
+   )
+  )
+  (set_local $4
+   (f32.copysign
+    (f32.const 0.5)
+    (get_local $0)
    )
   )
   (if
@@ -15379,9 +15373,9 @@
     (i32.const 1118925335)
    )
    (block
-    (set_local $4
+    (set_local $3
      (call $~lib/math/NativeMathf.expm1
-      (get_local $3)
+      (get_local $2)
      )
     )
     (if
@@ -15407,19 +15401,19 @@
       )
       (return
        (f32.mul
-        (get_local $2)
+        (get_local $4)
         (f32.sub
          (f32.mul
           (f32.const 2)
-          (get_local $4)
+          (get_local $3)
          )
          (f32.div
           (f32.mul
-           (get_local $4)
-           (get_local $4)
+           (get_local $3)
+           (get_local $3)
           )
           (f32.add
-           (get_local $4)
+           (get_local $3)
            (f32.const 1)
           )
          )
@@ -15430,13 +15424,13 @@
     )
     (return
      (f32.mul
-      (get_local $2)
+      (get_local $4)
       (f32.add
-       (get_local $4)
+       (get_local $3)
        (f32.div
-        (get_local $4)
+        (get_local $3)
         (f32.add
-         (get_local $4)
+         (get_local $3)
          (f32.const 1)
         )
        )
@@ -15445,11 +15439,11 @@
     )
    )
   )
-  (set_local $4
+  (set_local $3
    (f32.mul
     (f32.mul
      (f32.const 2)
-     (get_local $2)
+     (get_local $4)
     )
     (block $~lib/math/expo2f|inlined.1 (result f32)
      (set_local $5
@@ -15470,7 +15464,7 @@
       (f32.mul
        (call $~lib/math/NativeMathf.exp
         (f32.sub
-         (get_local $3)
+         (get_local $2)
          (f32.const 162.88958740234375)
         )
        )
@@ -15481,7 +15475,7 @@
     )
    )
   )
-  (get_local $4)
+  (get_local $3)
  )
  (func $std/math/test_sinhf (; 146 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
