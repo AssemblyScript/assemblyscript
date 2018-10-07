@@ -70,6 +70,12 @@ import {
 // TODO: sin, cos, tan
 
 /** @internal */
+@inline
+function casted_select<T, U>(a: U, b: U, cond: bool): U {
+  return reinterpret<U>(select<T>(reinterpret<T>(a), reinterpret<T>(1.0), cond));
+}
+
+/** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
   const                   // see: musl/src/math/asin.c and SUN COPYRIGHT NOTICE above
     pS0 = reinterpret<f64>(0x3FC5555555555555), //  1.66666666666666657415e-01
@@ -916,7 +922,7 @@ export namespace NativeMath {
         ix -= 0x00100000;
       }
       ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xFFFFFFFF | (<u64>ix << 32));
-      let bp = reinterpret<f64>(select<u64>(reinterpret<u64>(1.5), reinterpret<u64>(1.0), k)); // k ? 1.5 : 1.0
+      let bp = casted_select<u64, f64>(1.5, 1.0, <bool>k); // k ? 1.5 : 1.0
       u = ax - bp;
       v = 1.0 / (ax + bp);
       ss = u * v;
@@ -1956,7 +1962,7 @@ export namespace NativeMathf {
         ix -= 0x00800000;
       }
       ax = reinterpret<f32>(ix);
-      let bp = reinterpret<f32>(select<u32>(reinterpret<u32>(1.5), reinterpret<u32>(1.0), k)); // k ? 1.5 : 1.0
+      let bp = casted_select<u32, f32>(1.5, 1.0, <bool>k); // k ? 1.5 : 1.0
       u = ax - bp;
       v = 1.0 / (ax + bp);
       s = u * v;

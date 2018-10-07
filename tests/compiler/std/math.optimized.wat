@@ -9790,7 +9790,10 @@
              (select
               (i64.const 4609434218613702656)
               (i64.const 4607182418800017408)
-              (get_local $12)
+              (i32.and
+               (get_local $12)
+               (i32.const 1)
+              )
              )
             )
            )
@@ -11065,7 +11068,10 @@
                  (select
                   (i32.const 1069547520)
                   (i32.const 1065353216)
-                  (get_local $8)
+                  (i32.and
+                   (get_local $8)
+                   (i32.const 1)
+                  )
                  )
                 )
                )
@@ -11736,7 +11742,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 996)
+     (i32.const 1002)
      (i32.const 4)
     )
     (unreachable)
@@ -11770,7 +11776,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1003)
+     (i32.const 1009)
      (i32.const 24)
     )
     (unreachable)
