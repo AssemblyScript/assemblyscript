@@ -13928,14 +13928,20 @@
     (i32.const 13)
    )
   )
-  (f32.mul
-   (f32.convert_u/i32
-    (i32.shr_u
-     (get_local $2)
-     (i32.const 9)
+  (f32.sub
+   (f32.reinterpret/i32
+    (i32.or
+     (i32.shr_u
+      (get_local $2)
+      (i32.const 9)
+     )
+     (i32.shl
+      (i32.const 127)
+      (i32.const 23)
+     )
     )
    )
-   (f32.const 1.1920928955078125e-07)
+   (f32.const 1)
   )
  )
  (func $std/math/test_round (; 135 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)

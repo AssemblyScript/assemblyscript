@@ -2066,8 +2066,6 @@ export namespace NativeMathf {
   export function random(): f32 {
     if (!random_seeded) throw new Error("PRNG must be seeded.");
 
-    const scale = reinterpret<f32>(0x34000000); // 2 ^ -23 = 1.1920928955078125e-7
-
     var s0 = random_state0_32;
     var s1 = random_state1_32;
     var r  = rotl<u32>(s0 * 0x9E3779BB, 5) * 5;
@@ -2076,7 +2074,7 @@ export namespace NativeMathf {
     random_state0_32 = rotl<u32>(s0, 26) ^ s1 ^ (s1 << 9);
     random_state1_32 = rotl<u32>(s1, 13);
 
-    return <f32>(r >> 9) * scale;
+    return reinterpret<f32>((r >> 9) | (127 << 23)) - 1.0;
   }
 
   @inline
