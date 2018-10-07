@@ -4636,7 +4636,7 @@
   )
   (get_local $2)
  )
- (func $~lib/math/murmurHash3_64 (; 69 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (; 69 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
   (i64.xor
    (tee_local $0
     (i64.mul
@@ -4667,34 +4667,51 @@
    )
   )
  )
- (func $~lib/math/murmurHash3_32 (; 70 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/math/splitMix32 (; 70 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.xor
    (tee_local $0
-    (i32.mul
-     (i32.xor
-      (tee_local $0
-       (i32.mul
-        (i32.xor
-         (get_local $0)
-         (i32.shr_u
+    (i32.xor
+     (tee_local $0
+      (i32.mul
+       (i32.xor
+        (tee_local $0
+         (i32.add
           (get_local $0)
-          (i32.const 16)
+          (i32.const 1831565813)
          )
         )
-        (i32.const -2048144789)
+        (i32.shr_u
+         (get_local $0)
+         (i32.const 15)
+        )
+       )
+       (i32.or
+        (get_local $0)
+        (i32.const 1)
        )
       )
-      (i32.shr_u
-       (get_local $0)
-       (i32.const 13)
+     )
+     (i32.add
+      (get_local $0)
+      (i32.mul
+       (i32.xor
+        (get_local $0)
+        (i32.shr_u
+         (get_local $0)
+         (i32.const 7)
+        )
+       )
+       (i32.or
+        (get_local $0)
+        (i32.const 61)
+       )
       )
      )
-     (i32.const -1028477387)
     )
    )
    (i32.shr_u
     (get_local $0)
-    (i32.const 16)
+    (i32.const 14)
    )
   )
  )
@@ -4707,7 +4724,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 456)
-     (i32.const 1014)
+     (i32.const 1012)
      (i32.const 4)
     )
     (unreachable)
@@ -4717,12 +4734,12 @@
    (i32.const 1)
   )
   (set_global $~lib/math/random_state0_64
-   (call $~lib/math/murmurHash3_64
+   (call $~lib/math/murmurHash3
     (get_local $0)
    )
   )
   (set_global $~lib/math/random_state1_64
-   (call $~lib/math/murmurHash3_64
+   (call $~lib/math/murmurHash3
     (i64.xor
      (get_global $~lib/math/random_state0_64)
      (i64.const -1)
@@ -4730,18 +4747,15 @@
    )
   )
   (set_global $~lib/math/random_state0_32
-   (call $~lib/math/murmurHash3_32
+   (call $~lib/math/splitMix32
     (i32.wrap/i64
      (get_local $0)
     )
    )
   )
   (set_global $~lib/math/random_state1_32
-   (call $~lib/math/murmurHash3_32
-    (i32.xor
-     (get_global $~lib/math/random_state0_32)
-     (i32.const -1)
-    )
+   (call $~lib/math/splitMix32
+    (get_global $~lib/math/random_state0_32)
    )
   )
  )
@@ -6994,7 +7008,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 456)
-     (i32.const 1023)
+     (i32.const 1021)
      (i32.const 24)
     )
     (unreachable)

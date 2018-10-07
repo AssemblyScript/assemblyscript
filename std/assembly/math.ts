@@ -109,7 +109,7 @@ var random_state0_32: u32;
 var random_state1_32: u32;
 
 /** @internal */
-function murmurHash3_64(h: u64): u64 { // Force all bits of a hash block to avalanche
+function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanche
   h ^= h >> 33;                     // see: https://github.com/aappleby/smhasher
   h *= 0xFF51AFD7ED558CCD;
   h ^= h >> 33;
@@ -119,13 +119,11 @@ function murmurHash3_64(h: u64): u64 { // Force all bits of a hash block to aval
 }
 
 /** @internal */
-function murmurHash3_32(h: u32): u32 {
-  h ^= h >> 16;
-  h *= 0x85EBCA6B;
-  h ^= h >> 13;
-  h *= 0xC2B2AE35;
-  h ^= h >> 16;
-  return h;
+function splitMix32(h: u32): u32 {
+  h += 0x6D2B79F5;
+  h  = (h ^ (h >> 15)) * (h | 1);
+  h ^= h + (h ^ (h >> 7)) * (h | 61);
+  return h ^ (h >> 14);
 }
 
 export namespace NativeMath {
@@ -1013,10 +1011,10 @@ export namespace NativeMath {
   export function seedRandom(value: i64): void {
     assert(value);
     random_seeded = true;
-    random_state0_64 = murmurHash3_64(value);
-    random_state1_64 = murmurHash3_64(~random_state0_64);
-    random_state0_32 = murmurHash3_32(<u32>value);
-    random_state1_32 = murmurHash3_32(~random_state0_32);
+    random_state0_64 = murmurHash3(value);
+    random_state1_64 = murmurHash3(~random_state0_64);
+    random_state0_32 = splitMix32(<u32>value);
+    random_state1_32 = splitMix32(random_state0_32);
   }
 
   export function random(): f64 { // see: v8/src/base/random-number-generator.cc
