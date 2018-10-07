@@ -17,6 +17,7 @@
  (type $F (func (result f64)))
  (type $Iv (func (param i64)))
  (type $II (func (param i64) (result i64)))
+ (type $ii (func (param i32) (result i32)))
  (type $f (func (result f32)))
  (type $IiI (func (param i64 i32) (result i64)))
  (type $v (func))
@@ -68,8 +69,10 @@
  (import "JSMath" "tanh" (func $~lib/math/JSMath.tanh (param f64) (result f64)))
  (import "JSMath" "trunc" (func $~lib/math/JSMath.trunc (param f64) (result f64)))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
- (global $~lib/math/random_state0 (mut i64) (i64.const 0))
- (global $~lib/math/random_state1 (mut i64) (i64.const 0))
+ (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
+ (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
+ (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
+ (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s")
  (data (i32.const 40) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
@@ -11690,7 +11693,7 @@
    (get_local $3)
   )
  )
- (func $~lib/math/murmurHash3 (; 130 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3_64 (; 130 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
   (i64.xor
    (tee_local $0
     (i64.mul
@@ -11721,7 +11724,38 @@
    )
   )
  )
- (func $~lib/math/NativeMath.seedRandom (; 131 ;) (; has Stack IR ;) (type $Iv) (param $0 i64)
+ (func $~lib/math/murmurHash3_32 (; 131 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+  (i32.xor
+   (tee_local $0
+    (i32.mul
+     (i32.xor
+      (tee_local $0
+       (i32.mul
+        (i32.xor
+         (get_local $0)
+         (i32.shr_u
+          (get_local $0)
+          (i32.const 16)
+         )
+        )
+        (i32.const -2048144789)
+       )
+      )
+      (i32.shr_u
+       (get_local $0)
+       (i32.const 13)
+      )
+     )
+     (i32.const -1028477387)
+    )
+   )
+   (i32.shr_u
+    (get_local $0)
+    (i32.const 16)
+   )
+  )
+ )
+ (func $~lib/math/NativeMath.seedRandom (; 132 ;) (; has Stack IR ;) (type $Iv) (param $0 i64)
   (if
    (i64.eqz
     (get_local $0)
@@ -11730,7 +11764,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1002)
+     (i32.const 1014)
      (i32.const 4)
     )
     (unreachable)
@@ -11739,21 +11773,36 @@
   (set_global $~lib/math/random_seeded
    (i32.const 1)
   )
-  (set_global $~lib/math/random_state0
-   (call $~lib/math/murmurHash3
+  (set_global $~lib/math/random_state0_64
+   (call $~lib/math/murmurHash3_64
     (get_local $0)
    )
   )
-  (set_global $~lib/math/random_state1
-   (call $~lib/math/murmurHash3
+  (set_global $~lib/math/random_state1_64
+   (call $~lib/math/murmurHash3_64
     (i64.xor
-     (get_global $~lib/math/random_state0)
+     (get_global $~lib/math/random_state0_64)
      (i64.const -1)
     )
    )
   )
+  (set_global $~lib/math/random_state0_32
+   (call $~lib/math/murmurHash3_32
+    (i32.wrap/i64
+     (get_local $0)
+    )
+   )
+  )
+  (set_global $~lib/math/random_state1_32
+   (call $~lib/math/murmurHash3_32
+    (i32.xor
+     (get_global $~lib/math/random_state0_32)
+     (i32.const -1)
+    )
+   )
+  )
  )
- (func $~lib/math/NativeMath.random (; 132 ;) (; has Stack IR ;) (type $F) (result f64)
+ (func $~lib/math/NativeMath.random (; 133 ;) (; has Stack IR ;) (type $F) (result f64)
   (local $0 i64)
   (local $1 i64)
   (if
@@ -11764,21 +11813,21 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1009)
+     (i32.const 1023)
      (i32.const 24)
     )
     (unreachable)
    )
   )
   (set_local $0
-   (get_global $~lib/math/random_state0)
+   (get_global $~lib/math/random_state0_64)
   )
-  (set_global $~lib/math/random_state0
+  (set_global $~lib/math/random_state0_64
    (tee_local $1
-    (get_global $~lib/math/random_state1)
+    (get_global $~lib/math/random_state1_64)
    )
   )
-  (set_global $~lib/math/random_state1
+  (set_global $~lib/math/random_state1_64
    (tee_local $0
     (i64.xor
      (i64.xor
@@ -11822,23 +11871,72 @@
    (f64.const 1)
   )
  )
- (func $~lib/math/NativeMathf.random (; 133 ;) (; has Stack IR ;) (type $f) (result f32)
-  (local $0 f32)
-  (loop $continue|0
-   (br_if $continue|0
-    (f32.eq
-     (tee_local $0
-      (f32.demote/f64
-       (call $~lib/math/NativeMath.random)
-      )
-     )
-     (f32.const 1)
+ (func $~lib/math/NativeMathf.random (; 134 ;) (; has Stack IR ;) (type $f) (result f32)
+  (local $0 i32)
+  (local $1 i32)
+  (if
+   (i32.eqz
+    (get_global $~lib/math/random_seeded)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 2067)
+     (i32.const 24)
+    )
+    (unreachable)
+   )
+  )
+  (set_local $0
+   (i32.xor
+    (get_global $~lib/math/random_state1_32)
+    (tee_local $1
+     (get_global $~lib/math/random_state0_32)
     )
    )
   )
-  (get_local $0)
+  (set_global $~lib/math/random_state0_32
+   (i32.xor
+    (i32.xor
+     (i32.rotl
+      (get_local $1)
+      (i32.const 26)
+     )
+     (get_local $0)
+    )
+    (i32.shl
+     (get_local $0)
+     (i32.const 9)
+    )
+   )
+  )
+  (set_global $~lib/math/random_state1_32
+   (i32.rotl
+    (get_local $0)
+    (i32.const 13)
+   )
+  )
+  (f32.mul
+   (f32.convert_u/i32
+    (i32.shr_u
+     (i32.mul
+      (i32.rotl
+       (i32.mul
+        (get_local $1)
+        (i32.const -1640531525)
+       )
+       (i32.const 5)
+      )
+      (i32.const 5)
+     )
+     (i32.const 9)
+    )
+   )
+   (f32.const 1.1920928955078125e-07)
+  )
  )
- (func $std/math/test_round (; 134 ;) (; has Stack IR ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
+ (func $std/math/test_round (; 135 ;) (; has Stack IR ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
   (call $std/math/check<f64>
    (f64.copysign
     (f64.floor
@@ -11853,7 +11951,7 @@
    (f64.const 0)
   )
  )
- (func $std/math/test_roundf (; 135 ;) (; has Stack IR ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
+ (func $std/math/test_roundf (; 136 ;) (; has Stack IR ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
   (call $std/math/check<f32>
    (f32.copysign
     (f32.floor
@@ -11868,7 +11966,7 @@
    (f32.const 0)
   )
  )
- (func $std/math/test_sign (; 136 ;) (; has Stack IR ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+ (func $std/math/test_sign (; 137 ;) (; has Stack IR ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i32)
   (if
    (tee_local $2
@@ -11904,7 +12002,7 @@
   )
   (get_local $2)
  )
- (func $std/math/test_signf (; 137 ;) (; has Stack IR ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
+ (func $std/math/test_signf (; 138 ;) (; has Stack IR ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   (call $std/math/check<f32>
    (if (result f32)
     (f32.gt
@@ -11923,7 +12021,7 @@
    (f32.const 0)
   )
  )
- (func $~lib/math/NativeMath.rem (; 138 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.rem (; 139 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i64)
@@ -12392,7 +12490,7 @@
   )
   (get_local $0)
  )
- (func $std/math/test_rem (; 139 ;) (; has Stack IR ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_rem (; 140 ;) (; has Stack IR ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (call $std/math/check<f64>
    (call $~lib/math/NativeMath.rem
     (get_local $0)
@@ -12402,7 +12500,7 @@
    (f64.const 0)
   )
  )
- (func $~lib/math/NativeMathf.rem (; 140 ;) (; has Stack IR ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.rem (; 141 ;) (; has Stack IR ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12837,7 +12935,7 @@
   )
   (get_local $0)
  )
- (func $std/math/test_remf (; 141 ;) (; has Stack IR ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_remf (; 142 ;) (; has Stack IR ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.rem
     (get_local $0)
@@ -12847,7 +12945,7 @@
    (f32.const 0)
   )
  )
- (func $~lib/math/NativeMath.sinh (; 142 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sinh (; 143 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (local $3 i32)
@@ -12962,7 +13060,7 @@
    )
   )
  )
- (func $std/math/test_sinh (; 143 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sinh (; 144 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (tee_local $3
    (if (result i32)
@@ -12988,7 +13086,7 @@
    )
   )
  )
- (func $~lib/math/NativeMathf.sinh (; 144 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sinh (; 145 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 f32)
   (local $3 i32)
@@ -13095,7 +13193,7 @@
    )
   )
  )
- (func $std/math/test_sinhf (; 145 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sinhf (; 146 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.sinh
     (get_local $0)
@@ -13104,7 +13202,7 @@
    (get_local $2)
   )
  )
- (func $std/math/test_sqrt (; 146 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sqrt (; 147 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (tee_local $3
    (if (result i32)
@@ -13130,7 +13228,7 @@
    )
   )
  )
- (func $std/math/test_sqrtf (; 147 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sqrtf (; 148 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (f32.sqrt
     (get_local $0)
@@ -13139,7 +13237,7 @@
    (get_local $2)
   )
  )
- (func $~lib/math/NativeMath.tanh (; 148 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tanh (; 149 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i64)
@@ -13249,7 +13347,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_tanh (; 149 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_tanh (; 150 ;) (; has Stack IR ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (tee_local $3
    (if (result i32)
@@ -13275,7 +13373,7 @@
    )
   )
  )
- (func $~lib/math/NativeMathf.tanh (; 150 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tanh (; 151 ;) (; has Stack IR ;) (type $ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (set_local $1
@@ -13377,7 +13475,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_tanhf (; 151 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_tanhf (; 152 ;) (; has Stack IR ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.tanh
     (get_local $0)
@@ -13386,7 +13484,7 @@
    (get_local $2)
   )
  )
- (func $std/math/test_trunc (; 152 ;) (; has Stack IR ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
+ (func $std/math/test_trunc (; 153 ;) (; has Stack IR ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
   (if
    (tee_local $2
     (call $std/math/check<f64>
@@ -13411,7 +13509,7 @@
   )
   (get_local $2)
  )
- (func $std/math/test_truncf (; 153 ;) (; has Stack IR ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
+ (func $std/math/test_truncf (; 154 ;) (; has Stack IR ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
   (call $std/math/check<f32>
    (f32.trunc
     (get_local $0)
@@ -13420,7 +13518,7 @@
    (f32.const 0)
   )
  )
- (func $~lib/math/ipow64 (; 154 ;) (; has Stack IR ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 155 ;) (; has Stack IR ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   (set_local $2
@@ -13690,7 +13788,7 @@
   )
   (get_local $2)
  )
- (func $start (; 155 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 156 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 f64)
@@ -52157,7 +52255,7 @@
    )
   )
  )
- (func $null (; 156 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 157 ;) (; has Stack IR ;) (type $v)
   (nop)
  )
 )

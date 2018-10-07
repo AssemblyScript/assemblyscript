@@ -103,16 +103,28 @@ function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
 }
 
 var random_seeded = false;
-var random_state0: u64;
-var random_state1: u64;
+var random_state0_64: u64;
+var random_state1_64: u64;
+var random_state0_32: u32;
+var random_state1_32: u32;
 
 /** @internal */
-function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanche
+function murmurHash3_64(h: u64): u64 { // Force all bits of a hash block to avalanche
   h ^= h >> 33;                     // see: https://github.com/aappleby/smhasher
   h *= 0xFF51AFD7ED558CCD;
   h ^= h >> 33;
   h *= 0xC4CEB9FE1A85EC53;
   h ^= h >> 33;
+  return h;
+}
+
+/** @internal */
+function murmurHash3_32(h: u32): u32 {
+  h ^= h >> 16;
+  h *= 0x85EBCA6B;
+  h ^= h >> 13;
+  h *= 0xC2B2AE35;
+  h ^= h >> 16;
   return h;
 }
 
@@ -1001,20 +1013,22 @@ export namespace NativeMath {
   export function seedRandom(value: i64): void {
     assert(value);
     random_seeded = true;
-    random_state0 = murmurHash3(value);
-    random_state1 = murmurHash3(~random_state0);
+    random_state0_64 = murmurHash3_64(value);
+    random_state1_64 = murmurHash3_64(~random_state0_64);
+    random_state0_32 = murmurHash3_32(<u32>value);
+    random_state1_32 = murmurHash3_32(~random_state0_32);
   }
 
   export function random(): f64 { // see: v8/src/base/random-number-generator.cc
     if (!random_seeded) throw new Error("PRNG must be seeded.");
-    var s1 = random_state0;
-    var s0 = random_state1;
-    random_state0 = s0;
+    var s1 = random_state0_64;
+    var s0 = random_state1_64;
+    random_state0_64 = s0;
     s1 ^= s1 << 23;
     s1 ^= s1 >> 17;
     s1 ^= s0;
     s1 ^= s0 >> 26;
-    random_state1 = s1;
+    random_state1_64 = s1;
     var r = ((s0 + s1) & 0x000FFFFFFFFFFFFF) | 0x3FF0000000000000;
     return reinterpret<f64>(r) - 1;
   }
@@ -2048,10 +2062,21 @@ export namespace NativeMathf {
     NativeMath.seedRandom(value);
   }
 
+  // Using xoroshiro64starstar from http://xoshiro.di.unimi.it/xoroshiro64starstar.c
   export function random(): f32 {
-    var f: f32; // FIXME: demoting from f64 to f32 might yield 1.0f
-    do f = <f32>NativeMath.random(); while (f == 1.0);
-    return f;
+    if (!random_seeded) throw new Error("PRNG must be seeded.");
+
+    const scale = reinterpret<f32>(0x34000000); // 2 ^ -23 = 1.1920928955078125e-7
+
+    var s0 = random_state0_32;
+    var s1 = random_state1_32;
+    var r  = rotl<u32>(s0 * 0x9E3779BB, 5) * 5;
+
+    s1 ^= s0;
+    random_state0_32 = rotl<u32>(s0, 26) ^ s1 ^ (s1 << 9);
+    random_state1_32 = rotl<u32>(s1, 13);
+
+    return <f32>(r >> 9) * scale;
   }
 
   @inline
