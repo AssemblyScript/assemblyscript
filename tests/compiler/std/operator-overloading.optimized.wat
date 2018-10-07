@@ -1162,10 +1162,7 @@
              (select
               (i64.const 4609434218613702656)
               (i64.const 4607182418800017408)
-              (i32.and
-               (get_local $10)
-               (i32.const 1)
-              )
+              (get_local $10)
              )
             )
            )
@@ -1398,10 +1395,7 @@
               (select
                (i64.const 4489242115478376454)
                (i64.const 0)
-               (i32.and
-                (get_local $10)
-                (i32.const 1)
-               )
+               (get_local $10)
               )
              )
             )
@@ -1412,10 +1406,7 @@
             (select
              (i64.const 4603444093224222720)
              (i64.const 0)
-             (i32.and
-              (get_local $10)
-              (i32.const 1)
-             )
+             (get_local $10)
             )
            )
           )

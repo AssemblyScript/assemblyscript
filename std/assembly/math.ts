@@ -71,7 +71,7 @@ import {
 
 /** @internal */
 @inline
-function casted_select<T, U>(a: U, b: U, cond: bool): U {
+function casted_select<T, U>(a: U, b: U, cond: i32): U {
   return reinterpret<U>(select<T>(reinterpret<T>(a), reinterpret<T>(b), cond));
 }
 
@@ -922,7 +922,7 @@ export namespace NativeMath {
         ix -= 0x00100000;
       }
       ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xFFFFFFFF | (<u64>ix << 32));
-      let bp = casted_select<u64, f64>(1.5, 1.0, <bool>k); // k ? 1.5 : 1.0
+      let bp = casted_select<u64, f64>(1.5, 1.0, k); // k ? 1.5 : 1.0
       u = ax - bp;
       v = 1.0 / (ax + bp);
       ss = u * v;
@@ -945,11 +945,11 @@ export namespace NativeMath {
       p_l = v - (p_h - u);
       let z_h = cp_h * p_h;
       // let dp_l = select<f64>(dp_l1, 0.0, k);
-      let dp_l = casted_select<u64, f64>(dp_l1, 0.0, <bool>k);
+      let dp_l = casted_select<u64, f64>(dp_l1, 0.0, k);
       let z_l = cp_l * p_h + p_l * cp + dp_l;
       t = <f64>n;
       // let dp_h = select<f64>(dp_h1, 0.0, k);
-      let dp_h = casted_select<u64, f64>(dp_h1, 0.0, <bool>k);
+      let dp_h = casted_select<u64, f64>(dp_h1, 0.0, k);
       t1 = ((z_h + z_l) + dp_h) + t;
       t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xFFFFFFFF00000000);
       t2 = z_l - (((t1 - t) - dp_h) - z_h);
@@ -1962,7 +1962,7 @@ export namespace NativeMathf {
         ix -= 0x00800000;
       }
       ax = reinterpret<f32>(ix);
-      let bp = casted_select<u32, f32>(1.5, 1.0, <bool>k); // k ? 1.5 : 1.0
+      let bp = casted_select<u32, f32>(1.5, 1.0, k); // k ? 1.5 : 1.0
       u = ax - bp;
       v = 1.0 / (ax + bp);
       s = u * v;
@@ -1989,11 +1989,11 @@ export namespace NativeMathf {
       p_l = v - (p_h - u);
       let z_h = cp_h * p_h;
       // let dp_l = select<f32>(dp_l1, 0.0, k);
-      let dp_l = casted_select<u32, f32>(dp_l1, 0.0, <bool>k);
+      let dp_l = casted_select<u32, f32>(dp_l1, 0.0, k);
       let z_l = cp_l * p_h + p_l * cp + dp_l;
       t = <f32>n;
       // let dp_h = select<f32>(dp_h1, 0.0, k);
-      let dp_h = casted_select<u32, f32>(dp_h1, 0.0, <bool>k);
+      let dp_h = casted_select<u32, f32>(dp_h1, 0.0, k);
       t1 = (((z_h + z_l) + dp_h) + t);
       is = reinterpret<u32>(t1);
       t1 = reinterpret<f32>(is & 0xFFFFF000);

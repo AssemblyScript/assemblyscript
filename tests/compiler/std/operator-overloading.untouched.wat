@@ -1280,10 +1280,7 @@
         (i64.reinterpret/f64
          (get_local $33)
         )
-        (i32.and
-         (get_local $11)
-         (i32.const 1)
-        )
+        (get_local $11)
        )
       )
      )
@@ -1533,10 +1530,7 @@
         (i64.reinterpret/f64
          (get_local $35)
         )
-        (i32.and
-         (get_local $11)
-         (i32.const 1)
-        )
+        (get_local $11)
        )
       )
      )
@@ -1577,10 +1571,7 @@
         (i64.reinterpret/f64
          (get_local $37)
         )
-        (i32.and
-         (get_local $11)
-         (i32.const 1)
-        )
+        (get_local $11)
        )
       )
      )
