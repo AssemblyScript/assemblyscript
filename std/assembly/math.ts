@@ -916,8 +916,7 @@ export namespace NativeMath {
         ix -= 0x00100000;
       }
       ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xFFFFFFFF | (<u64>ix << 32));
-      // let bp = select<f64>(1.5, 1.0, k);
-      let bp = 1.0 + 0.5 * <f64>(k != 0);
+      let bp = reinterpret<f64>(select<u64>(reinterpret<u64>(1.5), reinterpret<u64>(1.0), k)); // k ? 1.5 : 1.0
       u = ax - bp;
       v = 1.0 / (ax + bp);
       ss = u * v;
@@ -1957,7 +1956,7 @@ export namespace NativeMathf {
         ix -= 0x00800000;
       }
       ax = reinterpret<f32>(ix);
-      let bp: f32 = 1.0 + 0.5 * <f32>(k != 0);
+      let bp = reinterpret<f32>(select<u32>(reinterpret<u32>(1.5), reinterpret<u32>(1.0), k)); // k ? 1.5 : 1.0
       u = ax - bp;
       v = 1.0 / (ax + bp);
       s = u * v;

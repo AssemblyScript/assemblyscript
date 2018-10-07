@@ -5581,16 +5581,15 @@
      )
     )
     (set_local $32
-     (f64.add
-      (f64.const 1)
-      (f64.mul
-       (f64.const 0.5)
-       (f64.convert_u/i32
-        (i32.ne
-         (get_local $11)
-         (i32.const 0)
-        )
+     (f64.reinterpret/i64
+      (select
+       (i64.reinterpret/f64
+        (f64.const 1.5)
        )
+       (i64.reinterpret/f64
+        (f64.const 1)
+       )
+       (get_local $11)
       )
      )
     )
