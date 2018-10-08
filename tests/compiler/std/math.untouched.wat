@@ -13759,7 +13759,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2067)
+     (i32.const 2066)
      (i32.const 24)
     )
     (unreachable)
@@ -13933,7 +13933,7 @@
   (local $3 i64)
   (local $4 i32)
   (local $5 i32)
-  (local $6 f64)
+  (local $6 i32)
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
@@ -13973,7 +13973,12 @@
    )
   )
   (set_local $6
-   (get_local $0)
+   (i32.wrap/i64
+    (i64.shr_u
+     (get_local $2)
+     (i64.const 63)
+    )
+   )
   )
   (set_local $7
    (i32.wrap/i64
@@ -14414,9 +14419,12 @@
     )
    )
   )
-  (f64.copysign
-   (get_local $0)
+  (if (result f64)
    (get_local $6)
+   (f64.neg
+    (get_local $0)
+   )
+   (get_local $0)
   )
  )
  (func $std/math/test_rem (; 140 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)

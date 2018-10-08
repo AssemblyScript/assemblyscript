@@ -11759,7 +11759,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2067)
+     (i32.const 2066)
      (i32.const 24)
     )
     (unreachable)
@@ -11908,9 +11908,9 @@
   (local $5 i64)
   (local $6 i32)
   (local $7 i32)
-  (local $8 f64)
-  (local $9 i64)
-  (local $10 f64)
+  (local $8 i64)
+  (local $9 f64)
+  (local $10 i32)
   (local $11 i32)
   (set_local $3
    (i32.wrap/i64
@@ -11942,8 +11942,13 @@
     )
    )
   )
-  (set_local $8
-   (get_local $0)
+  (set_local $10
+   (i32.wrap/i64
+    (i64.shr_u
+     (get_local $2)
+     (i64.const 63)
+    )
+   )
   )
   (set_local $11
    (i32.wrap/i64
@@ -11988,7 +11993,7 @@
     (f64.div
      (tee_local $0
       (f64.mul
-       (get_local $8)
+       (get_local $0)
        (get_local $1)
       )
      )
@@ -12005,7 +12010,7 @@
     (i64.const 0)
    )
    (return
-    (get_local $8)
+    (get_local $0)
    )
   )
   (set_local $2
@@ -12091,7 +12096,7 @@
       )
      )
      (return
-      (get_local $8)
+      (get_local $0)
      )
     )
    )
@@ -12106,7 +12111,7 @@
      (if
       (i64.eq
        (i64.shr_u
-        (tee_local $9
+        (tee_local $8
          (i64.sub
           (get_local $2)
           (get_local $5)
@@ -12118,7 +12123,7 @@
       )
       (block
        (set_local $2
-        (get_local $9)
+        (get_local $8)
        )
        (set_local $7
         (i32.add
@@ -12152,7 +12157,7 @@
    (if
     (i64.eq
      (i64.shr_u
-      (tee_local $9
+      (tee_local $8
        (i64.sub
         (get_local $2)
         (get_local $5)
@@ -12164,7 +12169,7 @@
     )
     (block
      (set_local $2
-      (get_local $9)
+      (get_local $8)
      )
      (set_local $7
       (i32.add
@@ -12250,7 +12255,7 @@
     )
    )
   )
-  (set_local $10
+  (set_local $9
    (f64.add
     (get_local $0)
     (get_local $0)
@@ -12279,7 +12284,7 @@
      (i32.eqz
       (tee_local $4
        (f64.gt
-        (get_local $10)
+        (get_local $9)
         (get_local $1)
        )
       )
@@ -12287,7 +12292,7 @@
      (if
       (tee_local $4
        (f64.eq
-        (get_local $10)
+        (get_local $9)
         (get_local $1)
        )
       )
@@ -12310,10 +12315,15 @@
     )
    )
   )
-  (f64.copysign
-   (get_local $0)
-   (get_local $8)
+  (if
+   (get_local $10)
+   (set_local $0
+    (f64.neg
+     (get_local $0)
+    )
+   )
   )
+  (get_local $0)
  )
  (func $std/math/test_rem (; 140 ;) (; has Stack IR ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (call $std/math/check<f64>
