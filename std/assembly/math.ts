@@ -1136,7 +1136,6 @@ export namespace NativeMath {
       if (ux << 1 == uy << 1) return 0 * x;
       return x;
     }
-    var i: u64;
     if (!ex) {
       ex -= <i32>builtin_clz<u64>(ux << 12);
       ux <<= -ex + 1;
@@ -1151,6 +1150,7 @@ export namespace NativeMath {
       uy &= <u64>-1 >> 12;
       uy |= 1 << 52;
     }
+    var i: u64;
     for (; ex > ey; ex--) {
       i = ux - uy;
       if (!(i >> 63)) {
@@ -1188,7 +1188,6 @@ export namespace NativeMath {
     if (uy << 1 == 0 || isNaN(y) || ex == 0x7FF) return (x * y) / (x * y);
     if (ux << 1 == 0) return x;
     var uxi = ux;
-    var i: u64;
     if (!ex) {
       ex -= <i32>builtin_clz<u64>(uxi << 12);
       uxi <<= -ex + 1;
@@ -1209,6 +1208,7 @@ export namespace NativeMath {
         if (ex + 1 == ey) break; // goto end
         return x;
       }
+      let i: u64;
       for (; ex > ey; ex--) {
         i = uxi - uy;
         if (i >> 63 == 0) {
@@ -2182,7 +2182,6 @@ export namespace NativeMathf {
       if (ux << 1 == uy << 1) return 0 * x;
       return x;
     }
-    var i: u32;
     if (!ex) {
       ex -= builtin_clz<u32>(ux << 9);
       ux <<= -ex + 1;
@@ -2197,6 +2196,7 @@ export namespace NativeMathf {
       uy &= <u32>-1 >> 9;
       uy |= 1 << 23;
     }
+    var i: u32;
     for (; ex > ey; --ex) {
       i = ux - uy;
       if (!(i >> 31)) {
@@ -2231,7 +2231,6 @@ export namespace NativeMathf {
     var ey = <i32>(uy >> 23 & 0xFF);
     var sx = <i32>(ux >> 31);
     var sy = <i32>(uy >> 31);
-    var i: u32;
     var uxi = ux;
     if (uy << 1 == 0 || isNaN(y) || ex == 0xFF) return (x * y) / (x * y);
     if (ux << 1 == 0) return x;
@@ -2255,6 +2254,7 @@ export namespace NativeMathf {
         if (ex + 1 == ey) break; // goto end
         return x;
       }
+      let i: u32;
       for (; ex > ey; ex--) {
         i = uxi - uy;
         if (i >> 31 == 0) {
