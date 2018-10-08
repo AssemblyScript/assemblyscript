@@ -1110,16 +1110,14 @@ export namespace NativeMath {
       n -= 1023;
       if (n > 1023) {
         y *= Ox1p1023;
-        n -= 1023;
-        if (n > 1023) n = 1023;
+        n = builtin_min<i32>(n - 1023, 1023);
       }
     } else if (n < -1022) {
       y *= Ox1p_1022;
       n += 1022;
       if (n < -1022) {
         y *= Ox1p_1022;
-        n += 1022;
-        if (n < -1022) n = -1022;
+        n = builtin_max<i32>(n + 1022, -1022);
       }
     }
     return y * reinterpret<f64>(<u64>(0x3FF + n) << 52);
@@ -2156,16 +2154,14 @@ export namespace NativeMathf {
       n -= 127;
       if (n > 127) {
         y *= Ox1p127f;
-        n -= 127;
-        if (n > 127) n = 127;
+        n = builtin_min<i32>(n - 127, 127);
       }
     } else if (n < -126) {
       y *= Ox1p_126f;
       n += 126;
       if (n < -126) {
         y *= Ox1p_126f;
-        n += 126;
-        if (n < -126) n = -126;
+        n = builtin_max<i32>(n + 126, -126);
       }
     }
     return y * reinterpret<f32>(<u32>(0x7F + n) << 23);

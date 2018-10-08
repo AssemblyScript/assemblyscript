@@ -18,6 +18,8 @@
  (start $start)
  (func $~lib/math/NativeMath.scalbn (; 0 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
+  (local $3 i32)
+  (local $4 i32)
   (set_local $2
    (get_local $0)
   )
@@ -52,18 +54,20 @@
        )
       )
       (set_local $1
-       (i32.sub
-        (get_local $1)
-        (i32.const 1023)
-       )
-      )
-      (if
-       (i32.gt_s
-        (get_local $1)
-        (i32.const 1023)
-       )
-       (set_local $1
-        (i32.const 1023)
+       (select
+        (tee_local $3
+         (i32.sub
+          (get_local $1)
+          (i32.const 1023)
+         )
+        )
+        (tee_local $4
+         (i32.const 1023)
+        )
+        (i32.lt_s
+         (get_local $3)
+         (get_local $4)
+        )
        )
       )
      )
@@ -100,18 +104,20 @@
         )
        )
        (set_local $1
-        (i32.add
-         (get_local $1)
-         (i32.const 1022)
-        )
-       )
-       (if
-        (i32.lt_s
-         (get_local $1)
-         (i32.const -1022)
-        )
-        (set_local $1
-         (i32.const -1022)
+        (select
+         (tee_local $3
+          (i32.add
+           (get_local $1)
+           (i32.const 1022)
+          )
+         )
+         (tee_local $4
+          (i32.const -1022)
+         )
+         (i32.gt_s
+          (get_local $3)
+          (get_local $4)
+         )
         )
        )
       )
@@ -2117,6 +2123,8 @@
  )
  (func $~lib/math/NativeMathf.scalbn (; 3 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
+  (local $3 i32)
+  (local $4 i32)
   (set_local $2
    (get_local $0)
   )
@@ -2151,18 +2159,20 @@
        )
       )
       (set_local $1
-       (i32.sub
-        (get_local $1)
-        (i32.const 127)
-       )
-      )
-      (if
-       (i32.gt_s
-        (get_local $1)
-        (i32.const 127)
-       )
-       (set_local $1
-        (i32.const 127)
+       (select
+        (tee_local $3
+         (i32.sub
+          (get_local $1)
+          (i32.const 127)
+         )
+        )
+        (tee_local $4
+         (i32.const 127)
+        )
+        (i32.lt_s
+         (get_local $3)
+         (get_local $4)
+        )
        )
       )
      )
@@ -2199,18 +2209,20 @@
         )
        )
        (set_local $1
-        (i32.add
-         (get_local $1)
-         (i32.const 126)
-        )
-       )
-       (if
-        (i32.lt_s
-         (get_local $1)
-         (i32.const -126)
-        )
-        (set_local $1
-         (i32.const -126)
+        (select
+         (tee_local $3
+          (i32.add
+           (get_local $1)
+           (i32.const 126)
+          )
+         )
+         (tee_local $4
+          (i32.const -126)
+         )
+         (i32.gt_s
+          (get_local $3)
+          (get_local $4)
+         )
         )
        )
       )

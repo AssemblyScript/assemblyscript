@@ -2701,19 +2701,15 @@
   )
  )
  (func $~lib/math/NativeMath.scalbn (; 26 ;) (; has Stack IR ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
-  (local $2 f64)
-  (set_local $2
-   (get_local $0)
-  )
   (if
    (i32.gt_s
     (get_local $1)
     (i32.const 1023)
    )
    (block
-    (set_local $2
+    (set_local $0
      (f64.mul
-      (get_local $2)
+      (get_local $0)
       (f64.const 8988465674311579538646525e283)
      )
     )
@@ -2728,14 +2724,14 @@
       (i32.const 1023)
      )
      (block
-      (set_local $2
+      (set_local $0
        (f64.mul
-        (get_local $2)
+        (get_local $0)
         (f64.const 8988465674311579538646525e283)
        )
       )
-      (if
-       (i32.gt_s
+      (set_local $1
+       (select
         (tee_local $1
          (i32.sub
           (get_local $1)
@@ -2743,9 +2739,10 @@
          )
         )
         (i32.const 1023)
-       )
-       (set_local $1
-        (i32.const 1023)
+        (i32.lt_s
+         (get_local $1)
+         (i32.const 1023)
+        )
        )
       )
      )
@@ -2757,9 +2754,9 @@
      (i32.const -1022)
     )
     (block
-     (set_local $2
+     (set_local $0
       (f64.mul
-       (get_local $2)
+       (get_local $0)
        (f64.const 2.2250738585072014e-308)
       )
      )
@@ -2774,14 +2771,14 @@
        (i32.const -1022)
       )
       (block
-       (set_local $2
+       (set_local $0
         (f64.mul
-         (get_local $2)
+         (get_local $0)
          (f64.const 2.2250738585072014e-308)
         )
        )
-       (if
-        (i32.lt_s
+       (set_local $1
+        (select
          (tee_local $1
           (i32.add
            (get_local $1)
@@ -2789,9 +2786,10 @@
           )
          )
          (i32.const -1022)
-        )
-        (set_local $1
-         (i32.const -1022)
+         (i32.gt_s
+          (get_local $1)
+          (i32.const -1022)
+         )
         )
        )
       )
@@ -2800,7 +2798,7 @@
    )
   )
   (f64.mul
-   (get_local $2)
+   (get_local $0)
    (f64.reinterpret/i64
     (i64.shl
      (i64.add

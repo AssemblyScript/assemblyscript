@@ -134,19 +134,15 @@
   )
  )
  (func $~lib/math/NativeMath.scalbn (; 34 ;) (; has Stack IR ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
-  (local $2 f64)
-  (set_local $2
-   (get_local $0)
-  )
   (if
    (i32.gt_s
     (get_local $1)
     (i32.const 1023)
    )
    (block
-    (set_local $2
+    (set_local $0
      (f64.mul
-      (get_local $2)
+      (get_local $0)
       (f64.const 8988465674311579538646525e283)
      )
     )
@@ -161,14 +157,14 @@
       (i32.const 1023)
      )
      (block
-      (set_local $2
+      (set_local $0
        (f64.mul
-        (get_local $2)
+        (get_local $0)
         (f64.const 8988465674311579538646525e283)
        )
       )
-      (if
-       (i32.gt_s
+      (set_local $1
+       (select
         (tee_local $1
          (i32.sub
           (get_local $1)
@@ -176,9 +172,10 @@
          )
         )
         (i32.const 1023)
-       )
-       (set_local $1
-        (i32.const 1023)
+        (i32.lt_s
+         (get_local $1)
+         (i32.const 1023)
+        )
        )
       )
      )
@@ -190,9 +187,9 @@
      (i32.const -1022)
     )
     (block
-     (set_local $2
+     (set_local $0
       (f64.mul
-       (get_local $2)
+       (get_local $0)
        (f64.const 2.2250738585072014e-308)
       )
      )
@@ -207,14 +204,14 @@
        (i32.const -1022)
       )
       (block
-       (set_local $2
+       (set_local $0
         (f64.mul
-         (get_local $2)
+         (get_local $0)
          (f64.const 2.2250738585072014e-308)
         )
        )
-       (if
-        (i32.lt_s
+       (set_local $1
+        (select
          (tee_local $1
           (i32.add
            (get_local $1)
@@ -222,9 +219,10 @@
           )
          )
          (i32.const -1022)
-        )
-        (set_local $1
-         (i32.const -1022)
+         (i32.gt_s
+          (get_local $1)
+          (i32.const -1022)
+         )
         )
        )
       )
@@ -233,7 +231,7 @@
    )
   )
   (f64.mul
-   (get_local $2)
+   (get_local $0)
    (f64.reinterpret/i64
     (i64.shl
      (i64.add
@@ -417,19 +415,15 @@
   )
  )
  (func $~lib/math/NativeMathf.scalbn (; 41 ;) (; has Stack IR ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
-  (local $2 f32)
-  (set_local $2
-   (get_local $0)
-  )
   (if
    (i32.gt_s
     (get_local $1)
     (i32.const 127)
    )
    (block
-    (set_local $2
+    (set_local $0
      (f32.mul
-      (get_local $2)
+      (get_local $0)
       (f32.const 1701411834604692317316873e14)
      )
     )
@@ -444,14 +438,14 @@
       (i32.const 127)
      )
      (block
-      (set_local $2
+      (set_local $0
        (f32.mul
-        (get_local $2)
+        (get_local $0)
         (f32.const 1701411834604692317316873e14)
        )
       )
-      (if
-       (i32.gt_s
+      (set_local $1
+       (select
         (tee_local $1
          (i32.sub
           (get_local $1)
@@ -459,9 +453,10 @@
          )
         )
         (i32.const 127)
-       )
-       (set_local $1
-        (i32.const 127)
+        (i32.lt_s
+         (get_local $1)
+         (i32.const 127)
+        )
        )
       )
      )
@@ -473,9 +468,9 @@
      (i32.const -126)
     )
     (block
-     (set_local $2
+     (set_local $0
       (f32.mul
-       (get_local $2)
+       (get_local $0)
        (f32.const 1.1754943508222875e-38)
       )
      )
@@ -490,14 +485,14 @@
        (i32.const -126)
       )
       (block
-       (set_local $2
+       (set_local $0
         (f32.mul
-         (get_local $2)
+         (get_local $0)
          (f32.const 1.1754943508222875e-38)
         )
        )
-       (if
-        (i32.lt_s
+       (set_local $1
+        (select
          (tee_local $1
           (i32.add
            (get_local $1)
@@ -505,9 +500,10 @@
           )
          )
          (i32.const -126)
-        )
-        (set_local $1
-         (i32.const -126)
+         (i32.gt_s
+          (get_local $1)
+          (i32.const -126)
+         )
         )
        )
       )
@@ -516,7 +512,7 @@
    )
   )
   (f32.mul
-   (get_local $2)
+   (get_local $0)
    (f32.reinterpret/i32
     (i32.shl
      (i32.add
@@ -11745,7 +11741,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2066)
+     (i32.const 2064)
      (i32.const 24)
     )
     (unreachable)
