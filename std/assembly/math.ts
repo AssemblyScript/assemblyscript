@@ -1138,14 +1138,14 @@ export namespace NativeMath {
     }
     var i: u64;
     if (!ex) {
-      for (i = ux << 12; !(i >> 63); i <<= 1) --ex;
+      ex -= <i32>builtin_clz<u64>(ux << 12);
       ux <<= -ex + 1;
     } else {
       ux &= <u64>-1 >> 12;
       ux |= 1 << 52;
     }
     if (!ey) {
-      for (i = uy << 12; !(i >> 63); i <<= 1) --ey;
+      ey -= <i32>builtin_clz<u64>(uy << 12);
       uy <<= -ey + 1;
     } else {
       uy &= <u64>-1 >> 12;
@@ -1187,14 +1187,14 @@ export namespace NativeMath {
     var uxi = ux;
     var i: u64;
     if (!ex) {
-      for (i = uxi << 12; i >> 63 == 0; ex--, i <<= 1) {}
+      ex -= <i32>builtin_clz<u64>(uxi << 12);
       uxi <<= -ex + 1;
     } else {
       uxi &= <u64>-1 >> 12;
       uxi |= 1 << 52;
     }
     if (!ey) {
-      for (i = uy << 12; i >> 63 == 0; ey--, i <<= 1) {}
+      ey -= <i32>builtin_clz<u64>(uy << 12);
       uy <<= -ey + 1;
     } else {
       uy &= <u64>-1 >> 12;
@@ -2177,14 +2177,14 @@ export namespace NativeMathf {
     }
     var i: u32;
     if (!ex) {
-      for (i = ux << 9; !(i >> 31); i <<= 1) --ex;
+      ex -= builtin_clz<u32>(ux << 9);
       ux <<= -ex + 1;
     } else {
       ux &= <u32>-1 >> 9;
       ux |= 1 << 23;
     }
     if (!ey) {
-      for (i = uy << 9; !(i >> 31); i <<= 1) --ey;
+      ey -= builtin_clz<u32>(uy << 9);
       uy <<= -ey + 1;
     } else {
       uy &= <u32>-1 >> 9;
@@ -2226,14 +2226,14 @@ export namespace NativeMathf {
     if (uy << 1 == 0 || isNaN(y) || ex == 0xFF) return (x * y) / (x * y);
     if (ux << 1 == 0) return x;
     if (!ex) {
-      for (i = uxi << 9; i >> 31 == 0; ex--, i <<= 1) {}
+      ex -= builtin_clz<u32>(uxi << 9);
       uxi <<= -ex + 1;
     } else {
       uxi &= <u32>-1 >> 9;
       uxi |= 1 << 23;
     }
     if (!ey) {
-      for (i = uy << 9; i >> 31 == 0; ey--, i <<= 1) {}
+      ey -= builtin_clz<u32>(uy << 9);
       uy <<= -ey + 1;
     } else {
       uy &= <u32>-1 >> 9;
@@ -2260,7 +2260,7 @@ export namespace NativeMathf {
         q++;
       }
       if (uxi == 0) ex = -30;
-      else for (; uxi >> 23 == 0; uxi <<= 1, ex--) {}
+      else for (; uxi >> 23 == 0; uxi <<= 1) --ex;
       break;
     } while (false);
   // end
