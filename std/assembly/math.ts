@@ -1164,7 +1164,10 @@ export namespace NativeMath {
       if (!i) return 0 * x;
       ux = i;
     }
-    for (; !(ux >> 52); ux <<= 1) --ex;
+    // for (; !(ux >> 52); ux <<= 1) --ex;
+    var shift = <i32>builtin_clz<u64>(ux << 11);
+    ex -= shift;
+    ux <<= shift;
     if (ex > 0) {
       ux -= 1 << 52;
       ux |= <u64>ex << 52;
@@ -1221,7 +1224,11 @@ export namespace NativeMath {
         ++q;
       }
       if (uxi == 0) ex = -60;
-      else for (; uxi >> 52 == 0; uxi <<= 1, ex--) {}
+      else {
+        let shift = <i32>builtin_clz<u64>(uxi << 11);
+        ex -= shift;
+        uxi <<= shift;
+      }
       break;
     } while (false);
   // end:
@@ -2203,7 +2210,10 @@ export namespace NativeMathf {
       if (!i) return 0 * x;
       ux = i;
     }
-    for (; !(ux >> 23); ux <<= 1) --ex;
+    // for (; !(ux >> 23); ux <<= 1) --ex;
+    var shift = <i32>builtin_clz<u32>(ux << 8);
+    ex -= shift;
+    ux <<= shift;
     if (ex > 0) {
       ux -= 1 << 23;
       ux |= <u32>ex << 23;
@@ -2260,7 +2270,11 @@ export namespace NativeMathf {
         q++;
       }
       if (uxi == 0) ex = -30;
-      else for (; uxi >> 23 == 0; uxi <<= 1) --ex;
+      else {
+        let shift = <i32>builtin_clz<u32>(uxi << 8);
+        ex -= shift;
+        uxi <<= shift;
+      }
       break;
     } while (false);
   // end
