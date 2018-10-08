@@ -2791,15 +2791,10 @@
       (get_local $0)
       (f64.const 709.782712893384)
      )
-     (block
-      (set_local $0
-       (f64.mul
-        (get_local $0)
-        (f64.const 8988465674311579538646525e283)
-       )
-      )
-      (return
+     (return
+      (f64.mul
        (get_local $0)
+       (f64.const 8988465674311579538646525e283)
       )
      )
     )
@@ -4369,12 +4364,9 @@
     )
    )
   )
-  (set_local $15
-   (get_local $9)
-  )
   (f64.add
    (get_local $18)
-   (get_local $15)
+   (get_local $9)
   )
  )
  (func $std/libm/log10 (; 40 ;) (type $FF) (param $0 f64) (result f64)

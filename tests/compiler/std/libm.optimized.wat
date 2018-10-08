@@ -3583,9 +3583,9 @@
   )
   (set_local $0
    (f64.mul
-    (tee_local $7
+    (tee_local $8
      (f64.mul
-      (tee_local $6
+      (tee_local $7
        (f64.div
         (tee_local $2
          (f64.sub
@@ -3618,13 +3618,13 @@
         )
        )
       )
-      (get_local $6)
+      (get_local $7)
      )
     )
-    (get_local $7)
+    (get_local $8)
    )
   )
-  (set_local $8
+  (set_local $9
    (f64.mul
     (tee_local $11
      (f64.convert_s/i32
@@ -3635,85 +3635,83 @@
    )
   )
   (f64.add
-   (tee_local $6
-    (f64.add
-     (tee_local $6
+   (f64.add
+    (tee_local $2
+     (f64.add
       (f64.add
-       (f64.add
-        (f64.mul
-         (get_local $11)
-         (f64.const 3.694239077158931e-13)
-        )
-        (f64.mul
-         (f64.add
-          (tee_local $0
-           (f64.add
+       (f64.mul
+        (get_local $11)
+        (f64.const 3.694239077158931e-13)
+       )
+       (f64.mul
+        (f64.add
+         (tee_local $0
+          (f64.add
+           (f64.sub
             (f64.sub
-             (f64.sub
-              (get_local $2)
-              (tee_local $10
-               (f64.reinterpret/i64
-                (i64.and
-                 (i64.reinterpret/f64
-                  (f64.sub
-                   (get_local $2)
-                   (tee_local $9
+             (get_local $2)
+             (tee_local $6
+              (f64.reinterpret/i64
+               (i64.and
+                (i64.reinterpret/f64
+                 (f64.sub
+                  (get_local $2)
+                  (tee_local $10
+                   (f64.mul
                     (f64.mul
-                     (f64.mul
-                      (f64.const 0.5)
-                      (get_local $2)
-                     )
+                     (f64.const 0.5)
                      (get_local $2)
                     )
+                    (get_local $2)
                    )
                   )
                  )
-                 (i64.const -4294967296)
                 )
+                (i64.const -4294967296)
                )
               )
              )
-             (get_local $9)
             )
-            (f64.mul
-             (get_local $6)
+            (get_local $10)
+           )
+           (f64.mul
+            (get_local $7)
+            (f64.add
+             (get_local $10)
              (f64.add
-              (get_local $9)
-              (f64.add
-               (f64.mul
-                (get_local $7)
-                (f64.add
-                 (f64.const 0.6666666666666735)
-                 (f64.mul
-                  (get_local $0)
-                  (f64.add
-                   (f64.const 0.2857142874366239)
-                   (f64.mul
-                    (get_local $0)
-                    (f64.add
-                     (f64.const 0.1818357216161805)
-                     (f64.mul
-                      (get_local $0)
-                      (f64.const 0.14798198605116586)
-                     )
+              (f64.mul
+               (get_local $8)
+               (f64.add
+                (f64.const 0.6666666666666735)
+                (f64.mul
+                 (get_local $0)
+                 (f64.add
+                  (f64.const 0.2857142874366239)
+                  (f64.mul
+                   (get_local $0)
+                   (f64.add
+                    (f64.const 0.1818357216161805)
+                    (f64.mul
+                     (get_local $0)
+                     (f64.const 0.14798198605116586)
                     )
                    )
                   )
                  )
                 )
                )
-               (f64.mul
-                (get_local $0)
-                (f64.add
-                 (f64.const 0.3999999999940942)
-                 (f64.mul
-                  (get_local $0)
-                  (f64.add
-                   (f64.const 0.22222198432149784)
-                   (f64.mul
-                    (get_local $0)
-                    (f64.const 0.15313837699209373)
-                   )
+              )
+              (f64.mul
+               (get_local $0)
+               (f64.add
+                (f64.const 0.3999999999940942)
+                (f64.mul
+                 (get_local $0)
+                 (f64.add
+                  (f64.const 0.22222198432149784)
+                  (f64.mul
+                   (get_local $0)
+                   (f64.const 0.15313837699209373)
                   )
                  )
                 )
@@ -3723,39 +3721,37 @@
             )
            )
           )
-          (get_local $10)
          )
-         (f64.const 2.5082946711645275e-11)
+         (get_local $6)
         )
-       )
-       (f64.mul
-        (get_local $0)
-        (f64.const 0.4342944818781689)
+        (f64.const 2.5082946711645275e-11)
        )
       )
-     )
-     (f64.add
-      (f64.sub
-       (get_local $8)
-       (tee_local $0
-        (f64.add
-         (get_local $8)
-         (tee_local $2
-          (f64.mul
-           (get_local $10)
-           (f64.const 0.4342944818781689)
-          )
-         )
-        )
-       )
+      (f64.mul
+       (get_local $0)
+       (f64.const 0.4342944818781689)
       )
-      (get_local $2)
      )
     )
+    (f64.add
+     (f64.sub
+      (get_local $9)
+      (tee_local $0
+       (f64.add
+        (get_local $9)
+        (tee_local $6
+         (f64.mul
+          (get_local $6)
+          (f64.const 0.4342944818781689)
+         )
+        )
+       )
+      )
+     )
+     (get_local $6)
+    )
    )
-   (tee_local $2
-    (get_local $0)
-   )
+   (get_local $0)
   )
  )
  (func $std/libm/log10 (; 40 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)

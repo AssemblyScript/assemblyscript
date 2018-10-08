@@ -495,10 +495,7 @@ export namespace NativeMath {
     if (hx >= 0x4043687A) {
       if (isNaN(x)) return x;
       if (sign_) return -1;
-      if (x > o_threshold) {
-        x *= Ox1p1023;
-        return x;
-      }
+      if (x > o_threshold) return x * Ox1p1023;
     }
     var c = 0.0, t: f64;
     if (hx > 0x3FD62E42) {
@@ -691,8 +688,7 @@ export namespace NativeMath {
     var val_lo = dk * log10_2lo + (lo + hi) * ivln10lo + lo * ivln10hi;
     w = y + val_hi;
     val_lo += (y - w) + val_hi;
-    val_hi = w;
-    return val_lo + val_hi;
+    return val_lo + w;
   }
 
   export function log1p(x: f64): f64 { // see: musl/src/math/log1p.c and SUN COPYRIGHT NOTICE above
@@ -1784,7 +1780,7 @@ export namespace NativeMathf {
     var ix = reinterpret<u32>(x);
     var c: f32 = 0, f: f32 = 0;
     var k: i32 = 1;
-    if (ix < 0x3ED413D0 || <bool>(ix >> 31)) {
+    if (<u32>(ix < 0x3ED413D0) | (ix >> 31)) {
       if (ix >= 0xBF800000) {
         if (x == -1) return x / 0.0;
         return (x - x) / 0.0;
@@ -1830,7 +1826,7 @@ export namespace NativeMathf {
       Ox1p25f = reinterpret<f32>(0x4C000000);
     var ix = reinterpret<u32>(x);
     var k: i32 = 0;
-    if (ix < 0x00800000 || <bool>(ix >> 31)) {
+    if (<u32>(ix < 0x00800000) | (ix >> 31)) {
       if (ix << 1 == 0) return -1 / (x * x);
       if (ix >> 31) return (x - x) / 0.0;
       k -= 25;
