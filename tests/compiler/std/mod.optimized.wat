@@ -75,23 +75,20 @@
      )
     )
     (set_local $5
-     (f64.ne
-      (get_local $1)
-      (get_local $1)
+     (i32.eq
+      (get_local $3)
+      (i32.const 2047)
      )
     )
    )
    (if
     (i32.eqz
-     (i32.and
-      (get_local $5)
-      (i32.const 1)
-     )
+     (get_local $5)
     )
     (set_local $5
-     (i32.eq
-      (get_local $3)
-      (i32.const 2047)
+     (f64.ne
+      (get_local $1)
+      (get_local $1)
      )
     )
    )
@@ -463,23 +460,20 @@
      )
     )
     (set_local $3
-     (f32.ne
-      (get_local $1)
-      (get_local $1)
+     (i32.eq
+      (get_local $4)
+      (i32.const 255)
      )
     )
    )
    (if
     (i32.eqz
-     (i32.and
-      (get_local $3)
-      (i32.const 1)
-     )
+     (get_local $3)
     )
     (set_local $3
-     (i32.eq
-      (get_local $4)
-      (i32.const 255)
+     (f32.ne
+      (get_local $1)
+      (get_local $1)
      )
     )
    )

@@ -9744,33 +9744,30 @@
   (if
    (i32.and
     (if (result i32)
-     (i32.and
-      (tee_local $7
-       (if (result i32)
-        (tee_local $7
-         (i64.eq
-          (i64.shl
-           (get_local $3)
-           (i64.const 1)
-          )
-          (i64.const 0)
+     (tee_local $7
+      (if (result i32)
+       (tee_local $7
+        (i64.eq
+         (i64.shl
+          (get_local $3)
+          (i64.const 1)
          )
-        )
-        (get_local $7)
-        (block $~lib/builtins/isNaN<f64>|inlined.1 (result i32)
-         (f64.ne
-          (get_local $1)
-          (get_local $1)
-         )
+         (i64.const 0)
         )
        )
+       (get_local $7)
+       (i32.eq
+        (get_local $4)
+        (i32.const 2047)
+       )
       )
-      (i32.const 1)
      )
      (get_local $7)
-     (i32.eq
-      (get_local $4)
-      (i32.const 2047)
+     (block $~lib/builtins/isNaN<f64>|inlined.1 (result i32)
+      (f64.ne
+       (get_local $1)
+       (get_local $1)
+      )
      )
     )
     (i32.const 1)
@@ -10179,33 +10176,30 @@
   (if
    (i32.and
     (if (result i32)
-     (i32.and
-      (tee_local $7
-       (if (result i32)
-        (tee_local $7
-         (i32.eq
-          (i32.shl
-           (get_local $3)
-           (i32.const 1)
-          )
-          (i32.const 0)
+     (tee_local $7
+      (if (result i32)
+       (tee_local $7
+        (i32.eq
+         (i32.shl
+          (get_local $3)
+          (i32.const 1)
          )
-        )
-        (get_local $7)
-        (block $~lib/builtins/isNaN<f32>|inlined.1 (result i32)
-         (f32.ne
-          (get_local $1)
-          (get_local $1)
-         )
+         (i32.const 0)
         )
        )
+       (get_local $7)
+       (i32.eq
+        (get_local $4)
+        (i32.const 255)
+       )
       )
-      (i32.const 1)
      )
      (get_local $7)
-     (i32.eq
-      (get_local $4)
-      (i32.const 255)
+     (block $~lib/builtins/isNaN<f32>|inlined.1 (result i32)
+      (f32.ne
+       (get_local $1)
+       (get_local $1)
+      )
      )
     )
     (i32.const 1)
@@ -13765,7 +13759,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2066)
+     (i32.const 2067)
      (i32.const 24)
     )
     (unreachable)
@@ -13939,7 +13933,7 @@
   (local $3 i64)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
+  (local $6 f64)
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
@@ -13979,12 +13973,7 @@
    )
   )
   (set_local $6
-   (i32.wrap/i64
-    (i64.shr_u
-     (get_local $2)
-     (i64.const 63)
-    )
-   )
+   (get_local $0)
   )
   (set_local $7
    (i32.wrap/i64
@@ -14008,15 +13997,15 @@
        )
       )
       (get_local $8)
-      (call $~lib/builtins/isNaN<f64>
-       (get_local $1)
+      (i32.eq
+       (get_local $4)
+       (i32.const 2047)
       )
      )
     )
     (get_local $8)
-    (i32.eq
-     (get_local $4)
-     (i32.const 2047)
+    (call $~lib/builtins/isNaN<f64>
+     (get_local $1)
     )
    )
    (return
@@ -14425,12 +14414,9 @@
     )
    )
   )
-  (if (result f64)
-   (get_local $6)
-   (f64.neg
-    (get_local $0)
-   )
+  (f64.copysign
    (get_local $0)
+   (get_local $6)
   )
  )
  (func $std/math/test_rem (; 140 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
@@ -14512,15 +14498,15 @@
        )
       )
       (get_local $9)
-      (call $~lib/builtins/isNaN<f32>
-       (get_local $1)
+      (i32.eq
+       (get_local $4)
+       (i32.const 255)
       )
      )
     )
     (get_local $9)
-    (i32.eq
-     (get_local $4)
-     (i32.const 255)
+    (call $~lib/builtins/isNaN<f32>
+     (get_local $1)
     )
    )
    (return

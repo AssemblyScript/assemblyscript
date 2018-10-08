@@ -96,20 +96,15 @@
   (local $3 i32)
   (local $4 i32)
   (block $folding-inner0
-   (set_local $3
-    (i32.eq
-     (tee_local $2
-      (i32.and
-       (i32.shr_u
-        (tee_local $1
-         (i32.reinterpret/f32
-          (get_local $0)
-         )
-        )
-        (i32.const 23)
+   (set_local $2
+    (i32.and
+     (i32.shr_u
+      (tee_local $1
+       (i32.reinterpret/f32
+        (get_local $0)
        )
-       (i32.const 255)
       )
+      (i32.const 23)
      )
      (i32.const 255)
     )
@@ -118,6 +113,19 @@
     (i32.and
      (get_local $1)
      (i32.const -2147483648)
+    )
+   )
+   (if
+    (i32.eqz
+     (tee_local $3
+      (i32.eq
+       (get_local $2)
+       (i32.const 255)
+      )
+     )
+    )
+    (set_local $3
+     (i32.const 0)
     )
    )
    (if
@@ -352,24 +360,19 @@
   (local $4 i32)
   (local $5 i32)
   (block $folding-inner0
-   (set_local $4
-    (i32.eq
-     (tee_local $2
-      (i32.wrap/i64
-       (i64.and
-        (i64.shr_u
-         (tee_local $1
-          (i64.reinterpret/f64
-           (get_local $0)
-          )
-         )
-         (i64.const 52)
+   (set_local $2
+    (i32.wrap/i64
+     (i64.and
+      (i64.shr_u
+       (tee_local $1
+        (i64.reinterpret/f64
+         (get_local $0)
         )
-        (i64.const 2047)
        )
+       (i64.const 52)
       )
+      (i64.const 2047)
      )
-     (i32.const 2047)
     )
    )
    (set_local $5
@@ -378,6 +381,19 @@
       (get_local $1)
       (i64.const 63)
      )
+    )
+   )
+   (if
+    (i32.eqz
+     (tee_local $4
+      (i32.eq
+       (get_local $2)
+       (i32.const 2047)
+      )
+     )
+    )
+    (set_local $4
+     (i32.const 0)
     )
    )
    (if
