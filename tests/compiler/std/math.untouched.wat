@@ -9695,12 +9695,12 @@
  (func $~lib/math/NativeMath.mod (; 122 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
+  (local $4 i64)
+  (local $5 i64)
+  (local $6 i64)
   (local $7 i32)
   (local $8 i64)
-  (local $9 i32)
+  (local $9 i64)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -9712,33 +9712,27 @@
    )
   )
   (set_local $4
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $2)
-      (i64.const 52)
-     )
-     (i64.const 2047)
+   (i64.and
+    (i64.shr_u
+     (get_local $2)
+     (i64.const 52)
     )
+    (i64.const 2047)
    )
   )
   (set_local $5
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $3)
-      (i64.const 52)
-     )
-     (i64.const 2047)
+   (i64.and
+    (i64.shr_u
+     (get_local $3)
+     (i64.const 52)
     )
+    (i64.const 2047)
    )
   )
   (set_local $6
-   (i32.wrap/i64
-    (i64.shr_u
-     (get_local $2)
-     (i64.const 63)
-    )
+   (i64.shr_u
+    (get_local $2)
+    (i64.const 63)
    )
   )
   (if
@@ -9756,9 +9750,9 @@
         )
        )
        (get_local $7)
-       (i32.eq
+       (i64.eq
         (get_local $4)
-        (i32.const 2047)
+        (i64.const 2047)
        )
       )
      )
@@ -9821,19 +9815,17 @@
    )
   )
   (if
-   (i32.eqz
+   (i64.eqz
     (get_local $4)
    )
    (block
     (set_local $4
-     (i32.sub
+     (i64.sub
       (get_local $4)
-      (i32.wrap/i64
-       (i64.clz
-        (i64.shl
-         (get_local $2)
-         (i64.const 12)
-        )
+      (i64.clz
+       (i64.shl
+        (get_local $2)
+        (i64.const 12)
        )
       )
      )
@@ -9841,14 +9833,12 @@
     (set_local $2
      (i64.shl
       (get_local $2)
-      (i64.extend_s/i32
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $4)
-        )
-        (i32.const 1)
+      (i64.add
+       (i64.sub
+        (i64.const 0)
+        (get_local $4)
        )
+       (i64.const 1)
       )
      )
     )
@@ -9875,19 +9865,17 @@
    )
   )
   (if
-   (i32.eqz
+   (i64.eqz
     (get_local $5)
    )
    (block
     (set_local $5
-     (i32.sub
+     (i64.sub
       (get_local $5)
-      (i32.wrap/i64
-       (i64.clz
-        (i64.shl
-         (get_local $3)
-         (i64.const 12)
-        )
+      (i64.clz
+       (i64.shl
+        (get_local $3)
+        (i64.const 12)
        )
       )
      )
@@ -9895,14 +9883,12 @@
     (set_local $3
      (i64.shl
       (get_local $3)
-      (i64.extend_s/i32
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $5)
-        )
-        (i32.const 1)
+      (i64.add
+       (i64.sub
+        (i64.const 0)
+        (get_local $5)
        )
+       (i64.const 1)
       )
      )
     )
@@ -9932,7 +9918,7 @@
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
-      (i32.gt_s
+      (i64.gt_s
        (get_local $4)
        (get_local $5)
       )
@@ -9977,9 +9963,9 @@
      )
     )
     (set_local $4
-     (i32.sub
+     (i64.sub
       (get_local $4)
-      (i32.const 1)
+      (i64.const 1)
      )
     )
     (br $repeat|0)
@@ -10016,17 +10002,15 @@
    )
   )
   (set_local $9
-   (i32.wrap/i64
-    (i64.clz
-     (i64.shl
-      (get_local $2)
-      (i64.const 11)
-     )
+   (i64.clz
+    (i64.shl
+     (get_local $2)
+     (i64.const 11)
     )
    )
   )
   (set_local $4
-   (i32.sub
+   (i64.sub
     (get_local $4)
     (get_local $9)
    )
@@ -10034,15 +10018,13 @@
   (set_local $2
    (i64.shl
     (get_local $2)
-    (i64.extend_s/i32
-     (get_local $9)
-    )
+    (get_local $9)
    )
   )
   (if
-   (i32.gt_s
+   (i64.gt_s
     (get_local $4)
-    (i32.const 0)
+    (i64.const 0)
    )
    (block
     (set_local $2
@@ -10058,9 +10040,7 @@
      (i64.or
       (get_local $2)
       (i64.shl
-       (i64.extend_s/i32
-        (get_local $4)
-       )
+       (get_local $4)
        (i64.const 52)
       )
      )
@@ -10069,14 +10049,12 @@
    (set_local $2
     (i64.shr_u
      (get_local $2)
-     (i64.extend_s/i32
-      (i32.add
-       (i32.sub
-        (i32.const 0)
-        (get_local $4)
-       )
-       (i32.const 1)
+     (i64.add
+      (i64.sub
+       (i64.const 0)
+       (get_local $4)
       )
+      (i64.const 1)
      )
     )
    )
@@ -10085,9 +10063,7 @@
    (i64.or
     (get_local $2)
     (i64.shl
-     (i64.extend_s/i32
-      (get_local $6)
-     )
+     (get_local $6)
      (i64.const 63)
     )
    )
@@ -13931,15 +13907,16 @@
  (func $~lib/math/NativeMath.rem (; 139 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
-  (local $4 i32)
-  (local $5 i32)
+  (local $4 i64)
+  (local $5 i64)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
   (local $10 i32)
   (local $11 i64)
-  (local $12 f64)
+  (local $12 i64)
+  (local $13 f64)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -13951,25 +13928,21 @@
    )
   )
   (set_local $4
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $2)
-      (i64.const 52)
-     )
-     (i64.const 2047)
+   (i64.and
+    (i64.shr_u
+     (get_local $2)
+     (i64.const 52)
     )
+    (i64.const 2047)
    )
   )
   (set_local $5
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $3)
-      (i64.const 52)
-     )
-     (i64.const 2047)
+   (i64.and
+    (i64.shr_u
+     (get_local $3)
+     (i64.const 52)
     )
+    (i64.const 2047)
    )
   )
   (set_local $6
@@ -14002,9 +13975,9 @@
        )
       )
       (get_local $8)
-      (i32.eq
+      (i64.eq
        (get_local $4)
-       (i32.const 2047)
+       (i64.const 2047)
       )
      )
     )
@@ -14042,19 +14015,17 @@
    (get_local $2)
   )
   (if
-   (i32.eqz
+   (i64.eqz
     (get_local $4)
    )
    (block
     (set_local $4
-     (i32.sub
+     (i64.sub
       (get_local $4)
-      (i32.wrap/i64
-       (i64.clz
-        (i64.shl
-         (get_local $9)
-         (i64.const 12)
-        )
+      (i64.clz
+       (i64.shl
+        (get_local $9)
+        (i64.const 12)
        )
       )
      )
@@ -14062,14 +14033,12 @@
     (set_local $9
      (i64.shl
       (get_local $9)
-      (i64.extend_s/i32
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $4)
-        )
-        (i32.const 1)
+      (i64.add
+       (i64.sub
+        (i64.const 0)
+        (get_local $4)
        )
+       (i64.const 1)
       )
      )
     )
@@ -14096,19 +14065,17 @@
    )
   )
   (if
-   (i32.eqz
+   (i64.eqz
     (get_local $5)
    )
    (block
     (set_local $5
-     (i32.sub
+     (i64.sub
       (get_local $5)
-      (i32.wrap/i64
-       (i64.clz
-        (i64.shl
-         (get_local $3)
-         (i64.const 12)
-        )
+      (i64.clz
+       (i64.shl
+        (get_local $3)
+        (i64.const 12)
        )
       )
      )
@@ -14116,14 +14083,12 @@
     (set_local $3
      (i64.shl
       (get_local $3)
-      (i64.extend_s/i32
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $5)
-        )
-        (i32.const 1)
+      (i64.add
+       (i64.sub
+        (i64.const 0)
+        (get_local $5)
        )
+       (i64.const 1)
       )
      )
     )
@@ -14155,16 +14120,16 @@
   (block $break|0
    (loop $continue|0
     (if
-     (i32.lt_s
+     (i64.lt_s
       (get_local $4)
       (get_local $5)
      )
      (block
       (if
-       (i32.eq
-        (i32.add
+       (i64.eq
+        (i64.add
          (get_local $4)
-         (i32.const 1)
+         (i64.const 1)
         )
         (get_local $5)
        )
@@ -14179,7 +14144,7 @@
      (loop $repeat|1
       (br_if $break|1
        (i32.eqz
-        (i32.gt_s
+        (i64.gt_s
          (get_local $4)
          (get_local $5)
         )
@@ -14226,9 +14191,9 @@
        )
       )
       (set_local $4
-       (i32.sub
+       (i64.sub
         (get_local $4)
-        (i32.const 1)
+        (i64.const 1)
        )
       )
       (br $repeat|1)
@@ -14266,31 +14231,27 @@
       (i64.const 0)
      )
      (set_local $4
-      (i32.const -60)
+      (i64.const -60)
      )
      (block
-      (set_local $8
-       (i32.wrap/i64
-        (i64.clz
-         (i64.shl
-          (get_local $9)
-          (i64.const 11)
-         )
+      (set_local $12
+       (i64.clz
+        (i64.shl
+         (get_local $9)
+         (i64.const 11)
         )
        )
       )
       (set_local $4
-       (i32.sub
+       (i64.sub
         (get_local $4)
-        (get_local $8)
+        (get_local $12)
        )
       )
       (set_local $9
        (i64.shl
         (get_local $9)
-        (i64.extend_s/i32
-         (get_local $8)
-        )
+        (get_local $12)
        )
       )
      )
@@ -14300,9 +14261,9 @@
    (unreachable)
   )
   (if
-   (i32.gt_s
+   (i64.gt_s
     (get_local $4)
-    (i32.const 0)
+    (i64.const 0)
    )
    (block
     (set_local $9
@@ -14318,9 +14279,7 @@
      (i64.or
       (get_local $9)
       (i64.shl
-       (i64.extend_s/i32
-        (get_local $4)
-       )
+       (get_local $4)
        (i64.const 52)
       )
      )
@@ -14329,14 +14288,12 @@
    (set_local $9
     (i64.shr_u
      (get_local $9)
-     (i64.extend_s/i32
-      (i32.add
-       (i32.sub
-        (i32.const 0)
-        (get_local $4)
-       )
-       (i32.const 1)
+     (i64.add
+      (i64.sub
+       (i64.const 0)
+       (get_local $4)
       )
+      (i64.const 1)
      )
     )
    )
@@ -14354,7 +14311,7 @@
     )
    )
   )
-  (set_local $12
+  (set_local $13
    (f64.add
     (get_local $0)
     (get_local $0)
@@ -14363,7 +14320,7 @@
   (if
    (if (result i32)
     (tee_local $8
-     (i32.eq
+     (i64.eq
       (get_local $4)
       (get_local $5)
      )
@@ -14371,10 +14328,10 @@
     (get_local $8)
     (if (result i32)
      (tee_local $8
-      (i32.eq
-       (i32.add
+      (i64.eq
+       (i64.add
         (get_local $4)
-        (i32.const 1)
+        (i64.const 1)
        )
        (get_local $5)
       )
@@ -14382,7 +14339,7 @@
      (if (result i32)
       (tee_local $8
        (f64.gt
-        (get_local $12)
+        (get_local $13)
         (get_local $1)
        )
       )
@@ -14390,7 +14347,7 @@
       (if (result i32)
        (tee_local $8
         (f64.eq
-         (get_local $12)
+         (get_local $13)
          (get_local $1)
         )
        )
@@ -14404,18 +14361,10 @@
      (get_local $8)
     )
    )
-   (block
-    (set_local $0
-     (f64.sub
-      (get_local $0)
-      (get_local $1)
-     )
-    )
-    (set_local $10
-     (i32.add
-      (get_local $10)
-      (i32.const 1)
-     )
+   (set_local $0
+    (f64.sub
+     (get_local $0)
+     (get_local $1)
     )
    )
   )

@@ -1128,23 +1128,23 @@ export namespace NativeMath {
   export function mod(x: f64, y: f64): f64 { // see: musl/src/math/fmod.c
     var ux = reinterpret<u64>(x);
     var uy = reinterpret<u64>(y);
-    var ex = <i32>(ux >> 52 & 0x7FF);
-    var ey = <i32>(uy >> 52 & 0x7FF);
-    var sx = <i32>(ux >> 63);
+    var ex = <i64>(ux >> 52 & 0x7FF);
+    var ey = <i64>(uy >> 52 & 0x7FF);
+    var sx = ux >> 63;
     if (uy << 1 == 0 || ex == 0x7FF || isNaN<f64>(y)) return (x * y) / (x * y);
     if (ux << 1 <= uy << 1) {
       if (ux << 1 == uy << 1) return 0 * x;
       return x;
     }
     if (!ex) {
-      ex -= <i32>builtin_clz<u64>(ux << 12);
+      ex -= builtin_clz<i64>(ux << 12);
       ux <<= -ex + 1;
     } else {
       ux &= <u64>-1 >> 12;
       ux |= 1 << 52;
     }
     if (!ey) {
-      ey -= <i32>builtin_clz<u64>(uy << 12);
+      ey -= builtin_clz<i64>(uy << 12);
       uy <<= -ey + 1;
     } else {
       uy &= <u64>-1 >> 12;
@@ -1165,38 +1165,38 @@ export namespace NativeMath {
       ux = i;
     }
     // for (; !(ux >> 52); ux <<= 1) --ex;
-    var shift = <i32>builtin_clz<u64>(ux << 11);
+    var shift = builtin_clz<i64>(ux << 11);
     ex -= shift;
     ux <<= shift;
     if (ex > 0) {
       ux -= 1 << 52;
-      ux |= <u64>ex << 52;
+      ux |= ex << 52;
     } else {
       ux >>= -ex + 1;
     }
-    ux |= <u64>sx << 63;
+    ux |= sx << 63;
     return reinterpret<f64>(ux);
   }
 
   export function rem(x: f64, y: f64): f64 { // see: musl/src/math/remquo.c
     var ux = reinterpret<u64>(x);
     var uy = reinterpret<u64>(y);
-    var ex = <i32>(ux >> 52 & 0x7FF);
-    var ey = <i32>(uy >> 52 & 0x7FF);
+    var ex = <i64>(ux >> 52 & 0x7FF);
+    var ey = <i64>(uy >> 52 & 0x7FF);
     var sx = <i32>(ux >> 63);
     var sy = <i32>(uy >> 63);
     if (uy << 1 == 0 || ex == 0x7FF || isNaN(y)) return (x * y) / (x * y);
     if (ux << 1 == 0) return x;
     var uxi = ux;
     if (!ex) {
-      ex -= <i32>builtin_clz<u64>(uxi << 12);
+      ex -= builtin_clz<i64>(uxi << 12);
       uxi <<= -ex + 1;
     } else {
       uxi &= <u64>-1 >> 12;
       uxi |= 1 << 52;
     }
     if (!ey) {
-      ey -= <i32>builtin_clz<u64>(uy << 12);
+      ey -= builtin_clz<i64>(uy << 12);
       uy <<= -ey + 1;
     } else {
       uy &= <u64>-1 >> 12;
@@ -1225,7 +1225,7 @@ export namespace NativeMath {
       }
       if (uxi == 0) ex = -60;
       else {
-        let shift = <i32>builtin_clz<u64>(uxi << 11);
+        let shift = builtin_clz<i64>(uxi << 11);
         ex -= shift;
         uxi <<= shift;
       }
@@ -1234,7 +1234,7 @@ export namespace NativeMath {
   // end:
     if (ex > 0) {
       uxi -= 1 << 52;
-      uxi |= <u64>ex << 52;
+      uxi |= ex << 52;
     } else {
       uxi >>= -ex + 1;
     }
@@ -1243,7 +1243,7 @@ export namespace NativeMath {
     var x2 = x + x;
     if (ex == ey || (ex + 1 == ey && (x2 > y || (x2 == y && <bool>(q & 1))))) {
       x -= y;
-      ++q;
+      // ++q;
     }
     return sx ? -x : x;
   }
