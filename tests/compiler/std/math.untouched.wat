@@ -226,13 +226,19 @@
      (set_local $2
       (f64.mul
        (get_local $2)
-       (f64.const 2.2250738585072014e-308)
+       (f64.mul
+        (f64.const 2.2250738585072014e-308)
+        (f64.const 9007199254740992)
+       )
       )
      )
      (set_local $1
       (i32.add
        (get_local $1)
-       (i32.const 1022)
+       (i32.sub
+        (i32.const 1022)
+        (i32.const 53)
+       )
       )
      )
      (if
@@ -244,15 +250,21 @@
        (set_local $2
         (f64.mul
          (get_local $2)
-         (f64.const 2.2250738585072014e-308)
+         (f64.mul
+          (f64.const 2.2250738585072014e-308)
+          (f64.const 9007199254740992)
+         )
         )
        )
        (set_local $1
         (select
          (tee_local $3
-          (i32.add
-           (get_local $1)
-           (i32.const 1022)
+          (i32.sub
+           (i32.add
+            (get_local $1)
+            (i32.const 1022)
+           )
+           (i32.const 53)
           )
          )
          (tee_local $4
@@ -529,13 +541,19 @@
      (set_local $2
       (f32.mul
        (get_local $2)
-       (f32.const 1.1754943508222875e-38)
+       (f32.mul
+        (f32.const 1.1754943508222875e-38)
+        (f32.const 16777216)
+       )
       )
      )
      (set_local $1
       (i32.add
        (get_local $1)
-       (i32.const 126)
+       (i32.sub
+        (i32.const 126)
+        (i32.const 24)
+       )
       )
      )
      (if
@@ -547,15 +565,21 @@
        (set_local $2
         (f32.mul
          (get_local $2)
-         (f32.const 1.1754943508222875e-38)
+         (f32.mul
+          (f32.const 1.1754943508222875e-38)
+          (f32.const 16777216)
+         )
         )
        )
        (set_local $1
         (select
          (tee_local $3
-          (i32.add
-           (get_local $1)
-           (i32.const 126)
+          (i32.sub
+           (i32.add
+            (get_local $1)
+            (i32.const 126)
+           )
+           (i32.const 24)
           )
          )
          (tee_local $4
@@ -13662,7 +13686,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2009)
+     (i32.const 2012)
      (i32.const 24)
     )
     (unreachable)

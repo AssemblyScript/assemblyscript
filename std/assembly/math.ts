@@ -1047,8 +1047,9 @@ export namespace NativeMath {
   }
 
   /** @internal */
-  export function scalbn(x: f64, n: i32): f64 { // see: musl/src/math/scalbn.c
+  export function scalbn(x: f64, n: i32): f64 { // see: https://git.musl-libc.org/cgit/musl/tree/src/math/scalbn.c
     const
+      Ox1p53    = reinterpret<f64>(0x4340000000000000),
       Ox1p1023  = reinterpret<f64>(0x7FE0000000000000),
       Ox1p_1022 = reinterpret<f64>(0x0010000000000000);
     var y = x;
@@ -1060,11 +1061,13 @@ export namespace NativeMath {
         n = builtin_min<i32>(n - 1023, 1023);
       }
     } else if (n < -1022) {
-      y *= Ox1p_1022;
-      n += 1022;
+      /* make sure final n < -53 to avoid double
+		   rounding in the subnormal range */
+      y *= Ox1p_1022 * Ox1p53;
+      n += 1022 - 53;
       if (n < -1022) {
-        y *= Ox1p_1022;
-        n = builtin_max<i32>(n + 1022, -1022);
+        y *= Ox1p_1022 * Ox1p53;
+        n = builtin_max<i32>(n + 1022 - 53, -1022);
       }
     }
     return y * reinterpret<f64>(<u64>(0x3FF + n) << 52);
@@ -2089,8 +2092,9 @@ export namespace NativeMathf {
   }
 
   /** @internal */
-  export function scalbn(x: f32, n: i32): f32 { // see: musl/src/math/scalbnf.c
+  export function scalbn(x: f32, n: i32): f32 { // see: https://git.musl-libc.org/cgit/musl/tree/src/math/scalbnf.c
     const
+      Ox1p24f   = reinterpret<f32>(0x4B800000),
       Ox1p127f  = reinterpret<f32>(0x7F000000),
       Ox1p_126f = reinterpret<f32>(0x00800000);
     var y = x;
@@ -2102,11 +2106,11 @@ export namespace NativeMathf {
         n = builtin_min<i32>(n - 127, 127);
       }
     } else if (n < -126) {
-      y *= Ox1p_126f;
-      n += 126;
+      y *= Ox1p_126f * Ox1p24f;
+      n += 126 - 24;
       if (n < -126) {
-        y *= Ox1p_126f;
-        n = builtin_max<i32>(n + 126, -126);
+        y *= Ox1p_126f * Ox1p24f;
+        n = builtin_max<i32>(n + 126 - 24, -126);
       }
     }
     return y * reinterpret<f32>(<u32>(0x7F + n) << 23);

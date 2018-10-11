@@ -344,7 +344,7 @@
      (set_local $0
       (f64.mul
        (get_local $0)
-       (f64.const 2.2250738585072014e-308)
+       (f64.const 2.004168360008973e-292)
       )
      )
      (if
@@ -352,7 +352,7 @@
        (tee_local $1
         (i32.add
          (get_local $1)
-         (i32.const 1022)
+         (i32.const 969)
         )
        )
        (i32.const -1022)
@@ -361,7 +361,7 @@
        (set_local $0
         (f64.mul
          (get_local $0)
-         (f64.const 2.2250738585072014e-308)
+         (f64.const 2.004168360008973e-292)
         )
        )
        (set_local $1
@@ -369,7 +369,7 @@
          (tee_local $1
           (i32.add
            (get_local $1)
-           (i32.const 1022)
+           (i32.const 969)
           )
          )
          (i32.const -1022)
