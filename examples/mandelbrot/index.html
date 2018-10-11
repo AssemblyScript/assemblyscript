@@ -49,7 +49,7 @@ fetch("build/optimized.wasm")
 .then(response => response.arrayBuffer())
 .then(buffer => WebAssembly.instantiate(buffer, {
   env: { memory: memory },
-  JSMath: Math
+  Math
 }))
 .then(module => {
   var exports = module.instance.exports;

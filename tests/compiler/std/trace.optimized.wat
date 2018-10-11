@@ -1,8 +1,6 @@
 (module
  (type $iiFFFFFv (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $v (func))
- (import "env" "trace" (func $~lib/env/trace (param i32 i32 f64 f64 f64 f64 f64)))
- (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00z\00e\00r\00o\00_\00i\00m\00p\00l\00i\00c\00i\00t")
  (data (i32.const 40) "\0d\00\00\00z\00e\00r\00o\00_\00e\00x\00p\00l\00i\00c\00i\00t")
@@ -12,7 +10,12 @@
  (data (i32.const 144) "\08\00\00\00f\00o\00u\00r\00_\00i\00n\00t")
  (data (i32.const 168) "\08\00\00\00f\00i\00v\00e\00_\00i\00n\00t")
  (data (i32.const 192) "\08\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
+ (import "env" "trace" (func $~lib/env/trace (param i32 i32 f64 f64 f64 f64 f64)))
+ (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "main" (func $std/trace/main))
  (func $std/trace/main (; 1 ;) (; has Stack IR ;) (type $v)
   (if

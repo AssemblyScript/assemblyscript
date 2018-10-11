@@ -5,6 +5,9 @@
  (type $FiF (func (param f64 i32) (result f64)))
  (type $Ff (func (param f64) (result f32)))
  (type $v (func))
+ (memory $0 0)
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $~lib/math/NativeMath.E f64 (f64.const 2.718281828459045))
  (global $std/libm/E f64 (f64.const 2.718281828459045))
  (global $~lib/math/NativeMath.LN10 f64 (f64.const 2.302585092994046))
@@ -23,10 +26,8 @@
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
  (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $HEAP_BASE i32 (i32.const 8))
- (table 1 1 anyfunc)
- (elem (i32.const 0) $null)
- (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "E" (global $std/libm/E))
  (export "LN10" (global $std/libm/LN10))
  (export "LN2" (global $std/libm/LN2))
@@ -4804,8 +4805,7 @@
   (local $35 f64)
   (local $36 f64)
   (local $37 f64)
-  (local $38 f64)
-  (local $39 i32)
+  (local $38 i32)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -5576,31 +5576,17 @@
       )
      )
     )
-    (set_local $33
-     (block $~lib/math/casted_select<u64,f64>|inlined.0 (result f64)
-      (set_local $32
-       (f64.const 1.5)
-      )
-      (set_local $33
-       (f64.const 1)
-      )
-      (f64.reinterpret/i64
-       (select
-        (i64.reinterpret/f64
-         (get_local $32)
-        )
-        (i64.reinterpret/f64
-         (get_local $33)
-        )
-        (get_local $11)
-       )
-      )
+    (set_local $32
+     (select
+      (f64.const 1.5)
+      (f64.const 1)
+      (get_local $11)
      )
     )
     (set_local $21
      (f64.sub
       (get_local $12)
-      (get_local $33)
+      (get_local $32)
      )
     )
     (set_local $22
@@ -5608,7 +5594,7 @@
       (f64.const 1)
       (f64.add
        (get_local $12)
-       (get_local $33)
+       (get_local $32)
       )
      )
     )
@@ -5661,7 +5647,7 @@
       (get_local $12)
       (f64.sub
        (get_local $30)
-       (get_local $33)
+       (get_local $32)
       )
      )
     )
@@ -5820,34 +5806,20 @@
       )
      )
     )
-    (set_local $32
+    (set_local $33
      (f64.mul
       (f64.const 0.9617967009544373)
       (get_local $17)
      )
     )
-    (set_local $35
-     (block $~lib/math/casted_select<u64,f64>|inlined.1 (result f64)
-      (set_local $34
-       (f64.const 1.350039202129749e-08)
-      )
-      (set_local $35
-       (f64.const 0)
-      )
-      (f64.reinterpret/i64
-       (select
-        (i64.reinterpret/f64
-         (get_local $34)
-        )
-        (i64.reinterpret/f64
-         (get_local $35)
-        )
-        (get_local $11)
-       )
-      )
+    (set_local $34
+     (select
+      (f64.const 1.350039202129749e-08)
+      (f64.const 0)
+      (get_local $11)
      )
     )
-    (set_local $34
+    (set_local $35
      (f64.add
       (f64.add
        (f64.mul
@@ -5859,7 +5831,7 @@
         (f64.const 0.9617966939259756)
        )
       )
-      (get_local $35)
+      (get_local $34)
      )
     )
     (set_local $20
@@ -5867,35 +5839,21 @@
       (get_local $25)
      )
     )
-    (set_local $37
-     (block $~lib/math/casted_select<u64,f64>|inlined.2 (result f64)
-      (set_local $36
-       (f64.const 0.5849624872207642)
-      )
-      (set_local $37
-       (f64.const 0)
-      )
-      (f64.reinterpret/i64
-       (select
-        (i64.reinterpret/f64
-         (get_local $36)
-        )
-        (i64.reinterpret/f64
-         (get_local $37)
-        )
-        (get_local $11)
-       )
-      )
+    (set_local $36
+     (select
+      (f64.const 0.5849624872207642)
+      (f64.const 0)
+      (get_local $11)
      )
     )
     (set_local $15
      (f64.add
       (f64.add
        (f64.add
-        (get_local $32)
-        (get_local $34)
+        (get_local $33)
+        (get_local $35)
        )
-       (get_local $37)
+       (get_local $36)
       )
       (get_local $20)
      )
@@ -5912,29 +5870,29 @@
     )
     (set_local $16
      (f64.sub
-      (get_local $34)
+      (get_local $35)
       (f64.sub
        (f64.sub
         (f64.sub
          (get_local $15)
          (get_local $20)
         )
-        (get_local $37)
+        (get_local $36)
        )
-       (get_local $32)
+       (get_local $33)
       )
      )
     )
    )
   )
-  (set_local $38
+  (set_local $37
    (get_local $1)
   )
-  (set_local $38
+  (set_local $37
    (f64.reinterpret/i64
     (i64.and
      (i64.reinterpret/f64
-      (get_local $38)
+      (get_local $37)
      )
      (i64.const -4294967296)
     )
@@ -5945,7 +5903,7 @@
     (f64.mul
      (f64.sub
       (get_local $1)
-      (get_local $38)
+      (get_local $37)
      )
      (get_local $15)
     )
@@ -5957,7 +5915,7 @@
   )
   (set_local $17
    (f64.mul
-    (get_local $38)
+    (get_local $37)
     (get_local $15)
    )
   )
@@ -5980,7 +5938,7 @@
     )
    )
   )
-  (set_local $39
+  (set_local $38
    (i32.wrap/i64
     (get_local $2)
    )
@@ -5998,7 +5956,7 @@
         (get_local $24)
         (i32.const 1083179008)
        )
-       (get_local $39)
+       (get_local $38)
       )
       (i32.const 0)
      )
@@ -6050,7 +6008,7 @@
          (get_local $24)
          (i32.const -1064252416)
         )
-        (get_local $39)
+        (get_local $38)
        )
        (i32.const 0)
       )
@@ -6085,7 +6043,7 @@
     )
    )
   )
-  (set_local $39
+  (set_local $38
    (i32.and
     (get_local $24)
     (i32.const 2147483647)
@@ -6094,7 +6052,7 @@
   (set_local $11
    (i32.sub
     (i32.shr_s
-     (get_local $39)
+     (get_local $38)
      (i32.const 20)
     )
     (i32.const 1023)
@@ -6105,7 +6063,7 @@
   )
   (if
    (i32.gt_s
-    (get_local $39)
+    (get_local $38)
     (i32.const 1071644672)
    )
    (block

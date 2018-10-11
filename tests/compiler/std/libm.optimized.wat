@@ -6,6 +6,9 @@
  (type $Ff (func (param f64) (result f32)))
  (type $v (func))
  (type $FUNCSIG$d (func (result f64)))
+ (memory $0 0)
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $std/libm/E f64 (f64.const 2.718281828459045))
  (global $std/libm/LN10 f64 (f64.const 2.302585092994046))
  (global $std/libm/LN2 f64 (f64.const 0.6931471805599453))
@@ -14,8 +17,8 @@
  (global $std/libm/PI f64 (f64.const 3.141592653589793))
  (global $std/libm/SQRT1_2 f64 (f64.const 0.7071067811865476))
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
- (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "E" (global $std/libm/E))
  (export "LN10" (global $std/libm/LN10))
  (export "LN2" (global $std/libm/LN2))
@@ -207,6 +210,14 @@
       (f64.const 1.5707963267948966)
      )
     )
+    (set_local $1
+     (call $~lib/math/R
+      (f64.mul
+       (get_local $0)
+       (get_local $0)
+      )
+     )
+    )
     (return
      (f64.sub
       (f64.const 1.5707963267948966)
@@ -216,12 +227,7 @@
         (f64.const 6.123233995736766e-17)
         (f64.mul
          (get_local $0)
-         (call $~lib/math/R
-          (f64.mul
-           (get_local $0)
-           (get_local $0)
-          )
-         )
+         (get_local $1)
         )
        )
       )
@@ -234,33 +240,39 @@
     (get_local $4)
     (i32.const 31)
    )
-   (return
-    (f64.mul
-     (f64.const 2)
-     (f64.sub
-      (f64.const 1.5707963267948966)
-      (f64.add
-       (tee_local $0
-        (f64.sqrt
-         (tee_local $1
-          (f64.add
-           (f64.const 0.5)
-           (f64.mul
-            (get_local $0)
-            (f64.const 0.5)
-           )
-          )
-         )
+   (block
+    (set_local $0
+     (f64.sqrt
+      (tee_local $1
+       (f64.add
+        (f64.const 0.5)
+        (f64.mul
+         (get_local $0)
+         (f64.const 0.5)
         )
        )
-       (f64.sub
-        (f64.mul
-         (call $~lib/math/R
+      )
+     )
+    )
+    (set_local $1
+     (call $~lib/math/R
+      (get_local $1)
+     )
+    )
+    (return
+     (f64.mul
+      (f64.const 2)
+      (f64.sub
+       (f64.const 1.5707963267948966)
+       (f64.add
+        (get_local $0)
+        (f64.sub
+         (f64.mul
           (get_local $1)
+          (get_local $0)
          )
-         (get_local $0)
+         (f64.const 6.123233995736766e-17)
         )
-        (f64.const 6.123233995736766e-17)
        )
       )
      )
@@ -304,15 +316,18 @@
     )
    )
   )
+  (set_local $1
+   (call $~lib/math/R
+    (get_local $1)
+   )
+  )
   (f64.mul
    (f64.const 2)
    (f64.add
     (get_local $3)
     (f64.add
      (f64.mul
-      (call $~lib/math/R
-       (get_local $1)
-      )
+      (get_local $1)
       (get_local $0)
      )
      (get_local $5)
@@ -1044,17 +1059,20 @@
       (get_local $0)
      )
     )
+    (set_local $1
+     (call $~lib/math/R
+      (f64.mul
+       (get_local $0)
+       (get_local $0)
+      )
+     )
+    )
     (return
      (f64.add
       (get_local $0)
       (f64.mul
        (get_local $0)
-       (call $~lib/math/R
-        (f64.mul
-         (get_local $0)
-         (get_local $0)
-        )
-       )
+       (get_local $1)
       )
      )
     )
@@ -4843,12 +4861,10 @@
             )
            )
            (tee_local $0
-            (f64.reinterpret/i64
-             (select
-              (i64.const 4609434218613702656)
-              (i64.const 4607182418800017408)
-              (get_local $10)
-             )
+            (select
+             (f64.const 1.5)
+             (f64.const 1)
+             (get_local $10)
             )
            )
           )
@@ -5076,23 +5092,19 @@
                (f64.const 0.9617966939259756)
               )
              )
-             (f64.reinterpret/i64
-              (select
-               (i64.const 4489242115478376454)
-               (i64.const 0)
-               (get_local $10)
-              )
+             (select
+              (f64.const 1.350039202129749e-08)
+              (f64.const 0)
+              (get_local $10)
              )
             )
            )
           )
           (tee_local $0
-           (f64.reinterpret/i64
-            (select
-             (i64.const 4603444093224222720)
-             (i64.const 0)
-             (get_local $10)
-            )
+           (select
+            (f64.const 0.5849624872207642)
+            (f64.const 0)
+            (get_local $10)
            )
           )
          )
@@ -5380,50 +5392,45 @@
       (get_local $2)
      )
     )
-    (return
-     (f64.mul
-      (get_local $13)
-      (tee_local $2
-       (if (result f64)
-        (i32.le_s
-         (i32.shr_s
-          (tee_local $8
-           (i32.add
-            (i32.wrap/i64
-             (i64.shr_u
-              (i64.reinterpret/f64
-               (tee_local $2
+    (set_local $2
+     (if (result f64)
+      (i32.le_s
+       (i32.shr_s
+        (tee_local $8
+         (i32.add
+          (i32.wrap/i64
+           (i64.shr_u
+            (i64.reinterpret/f64
+             (tee_local $2
+              (f64.sub
+               (f64.const 1)
+               (f64.sub
                 (f64.sub
-                 (f64.const 1)
-                 (f64.sub
-                  (f64.sub
-                   (f64.div
-                    (f64.mul
+                 (f64.div
+                  (f64.mul
+                   (get_local $2)
+                   (tee_local $9
+                    (f64.sub
                      (get_local $2)
-                     (tee_local $9
-                      (f64.sub
-                       (get_local $2)
+                     (f64.mul
+                      (get_local $3)
+                      (f64.add
+                       (f64.const 0.16666666666666602)
                        (f64.mul
                         (get_local $3)
                         (f64.add
-                         (f64.const 0.16666666666666602)
+                         (f64.const -2.7777777777015593e-03)
                          (f64.mul
                           (get_local $3)
                           (f64.add
-                           (f64.const -2.7777777777015593e-03)
+                           (f64.const 6.613756321437934e-05)
                            (f64.mul
                             (get_local $3)
                             (f64.add
-                             (f64.const 6.613756321437934e-05)
+                             (f64.const -1.6533902205465252e-06)
                              (f64.mul
                               (get_local $3)
-                              (f64.add
-                               (f64.const -1.6533902205465252e-06)
-                               (f64.mul
-                                (get_local $3)
-                                (f64.const 4.1381367970572385e-08)
-                               )
-                              )
+                              (f64.const 4.1381367970572385e-08)
                              )
                             )
                            )
@@ -5434,67 +5441,73 @@
                       )
                      )
                     )
-                    (f64.sub
-                     (get_local $9)
-                     (f64.const 2)
-                    )
                    )
-                   (f64.add
-                    (tee_local $0
-                     (f64.sub
-                      (get_local $6)
-                      (f64.sub
-                       (get_local $2)
-                       (get_local $16)
-                      )
-                     )
-                    )
-                    (f64.mul
+                  )
+                  (f64.sub
+                   (get_local $9)
+                   (f64.const 2)
+                  )
+                 )
+                 (f64.add
+                  (tee_local $0
+                   (f64.sub
+                    (get_local $6)
+                    (f64.sub
                      (get_local $2)
-                     (get_local $0)
+                     (get_local $16)
                     )
                    )
                   )
-                  (get_local $2)
+                  (f64.mul
+                   (get_local $2)
+                   (get_local $0)
+                  )
                  )
                 )
+                (get_local $2)
                )
               )
-              (i64.const 32)
              )
             )
-            (i32.shl
-             (get_local $7)
-             (i32.const 20)
-            )
+            (i64.const 32)
            )
           )
-          (i32.const 20)
-         )
-         (i32.const 0)
-        )
-        (call $~lib/math/NativeMath.scalbn
-         (get_local $2)
-         (get_local $7)
-        )
-        (f64.reinterpret/i64
-         (i64.or
-          (i64.and
-           (i64.reinterpret/f64
-            (get_local $2)
-           )
-           (i64.const 4294967295)
-          )
-          (i64.shl
-           (i64.extend_s/i32
-            (get_local $8)
-           )
-           (i64.const 32)
+          (i32.shl
+           (get_local $7)
+           (i32.const 20)
           )
          )
+        )
+        (i32.const 20)
+       )
+       (i32.const 0)
+      )
+      (call $~lib/math/NativeMath.scalbn
+       (get_local $2)
+       (get_local $7)
+      )
+      (f64.reinterpret/i64
+       (i64.or
+        (i64.and
+         (i64.reinterpret/f64
+          (get_local $2)
+         )
+         (i64.const 4294967295)
+        )
+        (i64.shl
+         (i64.extend_s/i32
+          (get_local $8)
+         )
+         (i64.const 32)
         )
        )
       )
+     )
+    )
+    (return
+     (f64.mul
+      (get_local $13)
+      (get_local $2)
      )
     )
    )
@@ -5644,11 +5657,13 @@
     )
    )
   )
-  (f64.mul
+  (set_local $0
    (f64.mul
     (f64.const 2)
     (get_local $2)
    )
+  )
+  (set_local $1
    (f64.mul
     (f64.mul
      (call $~lib/math/NativeMath.exp
@@ -5661,6 +5676,10 @@
     )
     (f64.const 2247116418577894884661631e283)
    )
+  )
+  (f64.mul
+   (get_local $0)
+   (get_local $1)
   )
  )
  (func $std/libm/sinh (; 51 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)

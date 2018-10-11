@@ -330,6 +330,23 @@ export class Compiler extends DiagnosticEmitter {
     this.startFunctionBody = startFunctionBody;
     this.currentFunction = startFunctionInstance;
 
+    // add a mutable heap base dummy
+    if (options.isWasm64) {
+      module.addGlobal(
+        "HEAP_BASE",
+        NativeType.I64,
+        true,
+        module.createI64(0, 0)
+      );
+    } else {
+      module.addGlobal(
+        "HEAP_BASE",
+        NativeType.I32,
+        false,
+        module.createI32(0)
+      );
+    }
+
     // compile entry file(s) while traversing reachable elements
     var sources = program.sources;
     for (let i = 0, k = sources.length; i < k; ++i) {
@@ -353,10 +370,11 @@ export class Compiler extends DiagnosticEmitter {
       if (!program.mainFunction) module.setStart(funcRef);
     }
 
-    // set up static memory segments and the heap base pointer
+    // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
     this.memoryOffset = memoryOffset;
+    module.removeGlobal("HEAP_BASE");
     if (options.isWasm64) {
       module.addGlobal(
         "HEAP_BASE",
@@ -392,22 +410,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up function table
     var functionTable = this.functionTable;
-    var functionTableSize = functionTable.length;
-    var functionTableExported = false;
-    module.setFunctionTable(functionTable);
-    if (functionTableSize) { // index 0 is NULL
-      module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.createBlock(null, []));
-      if (functionTableSize > 1) {
-        module.addTableExport("0", "table");
-        functionTableExported = true;
-      }
-    }
+    module.setFunctionTable(functionTable.length, 0xffffffff, functionTable);
+    module.addTableExport("0", "table");
+    module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.createBlock(null, []));
 
     // import table if requested (default table is named '0' by Binaryen)
-    if (options.importTable) {
-      module.addTableImport("0", "env", "table");
-      if (!functionTableExported) module.addTableExport("0", "table");
-    }
+    if (options.importTable) module.addTableImport("0", "env", "table");
 
     // set up module exports
     for (let [name, moduleExport] of program.moduleLevelExports) {
@@ -748,7 +756,7 @@ export class Compiler extends DiagnosticEmitter {
       if (isDeclaredConstant || this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
         global.set(CommonFlags.MODULE_IMPORT);
         if (declaration) {
-          mangleImportName(global, declaration, global.parent);
+          mangleImportName(global, declaration);
         } else {
           mangleImportName_moduleName = "env";
           mangleImportName_elementName = global.simpleName;
@@ -1137,7 +1145,7 @@ export class Compiler extends DiagnosticEmitter {
 
     } else {
       instance.set(CommonFlags.MODULE_IMPORT);
-      mangleImportName(instance, declaration, instance.prototype.parent); // TODO: check for duplicates
+      mangleImportName(instance, declaration); // TODO: check for duplicates
 
       // create the function import
       ref = module.addFunctionImport(
@@ -5733,9 +5741,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise just call through
     this.currentType = returnType;
-    if (isCallImport) return module.createCallImport(instance.internalName, operands, returnType.toNativeType());
-    var ret = module.createCall(instance.internalName, operands, returnType.toNativeType());
-    return ret;
+    return module.createCall(instance.internalName, operands, returnType.toNativeType());
   }
 
   /** Compiles an indirect call using an index argument and a signature. */
@@ -7652,11 +7658,12 @@ export class Compiler extends DiagnosticEmitter {
 
 function mangleImportName(
   element: Element,
-  declaration: DeclarationStatement,
-  parentElement: Element | null = null
+  declaration: DeclarationStatement
 ): void {
-  mangleImportName_moduleName = parentElement ? parentElement.simpleName : declaration.range.source.simplePath;
-  mangleImportName_elementName = element.simpleName;
+  // by default, use the file name as the module name
+  mangleImportName_moduleName = declaration.range.source.simplePath;
+  // and the internal name of the element within that file as the element name
+  mangleImportName_elementName = declaration.programLevelInternalName;
 
   if (!element.hasDecorator(DecoratorFlags.EXTERNAL)) return;
 
@@ -7665,6 +7672,8 @@ function mangleImportName(
   var args = decorator.arguments;
   if (args && args.length) {
     let arg = args[0];
+    // if one argument is given, override just the element name
+    // if two arguments are given, override both module and element name
     if (arg.kind == NodeKind.LITERAL && (<LiteralExpression>arg).literalKind == LiteralKind.STRING) {
       mangleImportName_elementName = (<StringLiteralExpression>arg).value;
       if (args.length >= 2) {

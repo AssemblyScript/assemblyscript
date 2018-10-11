@@ -1,50 +1,5 @@
-export declare namespace JSMath {
-
-  export const E: f64;
-  export const LN2: f64;
-  export const LN10: f64;
-  export const LOG2E: f64;
-  export const LOG10E: f64;
-  export const PI: f64;
-  export const SQRT1_2: f64;
-  export const SQRT2: f64;
-
-  export function abs(x: f64): f64;
-  export function acos(x: f64): f64;
-  export function acosh(x: f64): f64;
-  export function asin(x: f64): f64;
-  export function asinh(x: f64): f64;
-  export function atan(x: f64): f64;
-  export function atan2(y: f64, x: f64): f64;
-  export function atanh(x: f64): f64;
-  export function cbrt(x: f64): f64;
-  export function ceil(x: f64): f64;
-  export function clz32(x: f64): f64;
-  export function cos(x: f64): f64;
-  export function cosh(x: f64): f64;
-  export function exp(x: f64): f64;
-  export function expm1(x: f64): f64;
-  export function floor(x: f64): f64;
-  export function fround(x: f64): f32;
-  export function hypot(value1: f64, value2: f64): f64; // TODO: rest
-  export function imul(a: f64, b: f64): f64;
-  export function log(x: f64): f64;
-  export function log10(x: f64): f64;
-  export function log1p(x: f64): f64;
-  export function log2(x: f64): f64;
-  export function max(value1: f64, value2: f64): f64; // TODO: rest
-  export function min(value1: f64, value2: f64): f64; // TODO: rest
-  export function pow(base: f64, exponent: f64): f64;
-  export function random(): f64;
-  export function round(x: f64): f64;
-  export function sign(x: f64): f64;
-  export function sin(x: f64): f64;
-  export function sinh(x: f64): f64;
-  export function sqrt(x: f64): f64;
-  export function tan(x: f64): f64;
-  export function tanh(x: f64): f64;
-  export function trunc(x: f64): f64;
-}
+import * as JSMath from "./bindings/Math";
+export { JSMath };
 
 import {
   abs as builtin_abs,
@@ -68,12 +23,6 @@ import {
 // Applies to all functions marked with a comment referring here.
 
 // TODO: sin, cos, tan
-
-/** @internal */
-@inline
-function casted_select<T, U>(a: U, b: U, cond: i32): U {
-  return reinterpret<U>(select<T>(reinterpret<T>(a), reinterpret<T>(b), cond));
-}
 
 /** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
@@ -928,7 +877,7 @@ export namespace NativeMath {
         ix -= 0x00100000;
       }
       ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xFFFFFFFF | (<u64>ix << 32));
-      let bp = casted_select<u64, f64>(1.5, 1.0, k); // k ? 1.5 : 1.0
+      let bp = select<f64>(1.5, 1.0, k); // k ? 1.5 : 1.0
       u = ax - bp;
       v = 1.0 / (ax + bp);
       ss = u * v;
@@ -950,12 +899,10 @@ export namespace NativeMath {
       p_h = reinterpret<f64>(reinterpret<u64>(p_h) & 0xFFFFFFFF00000000);
       p_l = v - (p_h - u);
       let z_h = cp_h * p_h;
-      // let dp_l = select<f64>(dp_l1, 0.0, k);
-      let dp_l = casted_select<u64, f64>(dp_l1, 0.0, k);
+      let dp_l = select<f64>(dp_l1, 0.0, k);
       let z_l = cp_l * p_h + p_l * cp + dp_l;
       t = <f64>n;
-      // let dp_h = select<f64>(dp_h1, 0.0, k);
-      let dp_h = casted_select<u64, f64>(dp_h1, 0.0, k);
+      let dp_h = select<f64>(dp_h1, 0.0, k);
       t1 = ((z_h + z_l) + dp_h) + t;
       t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xFFFFFFFF00000000);
       t2 = z_l - (((t1 - t) - dp_h) - z_h);
@@ -1973,7 +1920,7 @@ export namespace NativeMathf {
         ix -= 0x00800000;
       }
       ax = reinterpret<f32>(ix);
-      let bp = casted_select<u32, f32>(1.5, 1.0, k); // k ? 1.5 : 1.0
+      let bp = select<f32>(1.5, 1.0, k); // k ? 1.5 : 1.0
       u = ax - bp;
       v = 1.0 / (ax + bp);
       s = u * v;
@@ -1999,12 +1946,10 @@ export namespace NativeMathf {
       p_h = reinterpret<f32>(is & 0xFFFFF000);
       p_l = v - (p_h - u);
       let z_h = cp_h * p_h;
-      // let dp_l = select<f32>(dp_l1, 0.0, k);
-      let dp_l = casted_select<u32, f32>(dp_l1, 0.0, k);
+      let dp_l = select<f32>(dp_l1, 0.0, k);
       let z_l = cp_l * p_h + p_l * cp + dp_l;
       t = <f32>n;
-      // let dp_h = select<f32>(dp_h1, 0.0, k);
-      let dp_h = casted_select<u32, f32>(dp_h1, 0.0, k);
+      let dp_h = select<f32>(dp_h1, 0.0, k);
       t1 = (((z_h + z_l) + dp_h) + t);
       is = reinterpret<u32>(t1);
       t1 = reinterpret<f32>(is & 0xFFFFF000);

@@ -3,24 +3,28 @@
  (type $FF (func (param f64) (result f64)))
  (type $Fi (func (param f64) (result i32)))
  (type $FFFF (func (param f64 f64 f64) (result f64)))
- (import "JSMath" "sqrt" (func $~lib/math/JSMath.sqrt (param f64) (result f64)))
- (import "JSMath" "log" (func $~lib/math/JSMath.log (param f64) (result f64)))
- (import "JSMath" "LN2" (global $~lib/math/JSMath.LN2 f64))
+ (type $v (func))
  (import "env" "memory" (memory $0 0))
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
+ (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
+ (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
+ (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
  (global $assembly/index/NUM_COLORS i32 (i32.const 2048))
  (global $HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "computeLine" (func $assembly/index/computeLine))
  (func $~lib/builtins/isFinite<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
-  ;;@ ~lib/builtins.ts:16:70
+  ;;@ ~lib/builtins.ts:16:78
   (f64.eq
-   ;;@ ~lib/builtins.ts:16:53
+   ;;@ ~lib/builtins.ts:16:61
    (f64.sub
     (get_local $0)
-    ;;@ ~lib/builtins.ts:16:61
+    ;;@ ~lib/builtins.ts:16:69
     (get_local $0)
    )
-   ;;@ ~lib/builtins.ts:16:70
+   ;;@ ~lib/builtins.ts:16:78
    (f64.const 0)
   )
  )
@@ -195,6 +199,7 @@
          (f64.const 4)
         )
         (block
+         ;;@ assembly/index.ts:18:55
          (block
           ;;@ assembly/index.ts:19:6
           (set_local $15
@@ -345,11 +350,11 @@
       ;;@ assembly/index.ts:36:15
       (f64.div
        ;;@ assembly/index.ts:36:20
-       (call $~lib/math/JSMath.log
+       (call $~lib/bindings/Math/log
         ;;@ assembly/index.ts:36:29
-        (call $~lib/math/JSMath.log
+        (call $~lib/bindings/Math/log
          ;;@ assembly/index.ts:36:38
-         (call $~lib/math/JSMath.sqrt
+         (call $~lib/bindings/Math/sqrt
           ;;@ assembly/index.ts:36:43
           (f64.add
            (f64.mul
@@ -368,7 +373,7 @@
         )
        )
        ;;@ assembly/index.ts:36:66
-       (get_global $~lib/math/JSMath.LN2)
+       (get_global $~lib/bindings/Math/LN2)
       )
      )
      ;;@ assembly/index.ts:37:4
@@ -459,5 +464,7 @@
     (br $repeat|0)
    )
   )
+ )
+ (func $null (; 5 ;) (type $v)
  )
 )

@@ -81,7 +81,7 @@ tests.forEach(filename => {
   // TODO: also save stdout/stderr and diff it (-> expected failures)
 
   // Build unoptimized
-  asc.main( [
+  asc.main([
     filename,
     "--baseDir", basedir,
     "--validate",
@@ -188,28 +188,26 @@ tests.forEach(filename => {
               externalFunction: function() { },
               externalConstant: 1
             },
-            JSOp: {
+            math: {
               mod: function(a, b) { return a % b; }
             },
-            JSMath: Math,
+            Math: Math,
 
             // tests/declare
             declare: {
               externalFunction: function() { },
-              externalConstant: 1
-            },
-            my: {
-              externalFunction: function() { },
-              externalConstant: 2
+              externalConstant: 1,
+              "my.externalFunction": function() { },
+              "my.externalConstant": 2
             },
 
             // tests/external
             external: {
               foo: function() {},
+              "foo.bar": function() {},
               bar: function() {}
             },
             foo: {
-              bar: function() {},
               baz: function() {},
               "var": 3
             }

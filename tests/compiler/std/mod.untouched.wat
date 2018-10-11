@@ -1,6 +1,6 @@
 (module
- (type $FFFi (func (param f64 f64 f64) (result i32)))
  (type $FFF (func (param f64 f64) (result f64)))
+ (type $FFFi (func (param f64 f64 f64) (result i32)))
  (type $FFi (func (param f64 f64) (result i32)))
  (type $Fi (func (param f64) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
@@ -9,17 +9,19 @@
  (type $ffi (func (param f32 f32) (result i32)))
  (type $fi (func (param f32) (result i32)))
  (type $v (func))
- (import "JSOp" "mod" (func $std/mod/JSOp.mod (param f64 f64) (result f64)))
+ (memory $0 1)
+ (data (i32.const 8) "\n\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
+ (import "math" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $std/mod/js i32 (i32.const 1))
  (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $Infinity f64 (f64.const inf))
  (global $HEAP_BASE i32 (i32.const 32))
- (table 1 1 anyfunc)
- (elem (i32.const 0) $null)
- (memory $0 1)
- (data (i32.const 8) "\n\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00")
  (export "memory" (memory $0))
+ (export "table" (table $0))
+ (export "mod" (func $std/mod/mod))
  (start $start)
  (func $~lib/math/NativeMath.mod (; 2 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
@@ -463,7 +465,7 @@
     )
     (get_local $3)
     (call $std/mod/check<f64>
-     (call $std/mod/JSOp.mod
+     (call $std/mod/mod
       (get_local $0)
       (get_local $1)
      )
@@ -914,7 +916,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 21)
+     (i32.const 20)
      (i32.const 0)
     )
     (unreachable)
@@ -926,6 +928,24 @@
      (f64.const 3)
      (f64.const -2)
      (f64.const 1)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 21)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/mod/test_fmod
+     (f64.const -3)
+     (f64.const 2)
+     (f64.const -1)
     )
    )
    (block
@@ -942,7 +962,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const -3)
-     (f64.const 2)
+     (f64.const -2)
      (f64.const -1)
     )
    )
@@ -959,9 +979,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -3)
-     (f64.const -2)
-     (f64.const -1)
+     (f64.const 3.5)
+     (f64.const 2)
+     (f64.const 1.5)
     )
    )
    (block
@@ -978,7 +998,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const 3.5)
-     (f64.const 2)
+     (f64.const -2)
      (f64.const 1.5)
     )
    )
@@ -995,9 +1015,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 3.5)
-     (f64.const -2)
-     (f64.const 1.5)
+     (f64.const -3.5)
+     (f64.const 2)
+     (f64.const -1.5)
     )
    )
    (block
@@ -1014,7 +1034,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const -3.5)
-     (f64.const 2)
+     (f64.const -2)
      (f64.const -1.5)
     )
    )
@@ -1031,9 +1051,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -3.5)
-     (f64.const -2)
-     (f64.const -1.5)
+     (f64.const 3)
+     (f64.const 2.5)
+     (f64.const 0.5)
     )
    )
    (block
@@ -1050,7 +1070,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const 3)
-     (f64.const 2.5)
+     (f64.const -2.5)
      (f64.const 0.5)
     )
    )
@@ -1067,9 +1087,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 3)
-     (f64.const -2.5)
-     (f64.const 0.5)
+     (f64.const -3)
+     (f64.const 2.5)
+     (f64.const -0.5)
     )
    )
    (block
@@ -1086,7 +1106,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const -3)
-     (f64.const 2.5)
+     (f64.const -2.5)
      (f64.const -0.5)
     )
    )
@@ -1103,9 +1123,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -3)
-     (f64.const -2.5)
-     (f64.const -0.5)
+     (f64.const 0.5)
+     (f64.const 1)
+     (f64.const 0.5)
     )
    )
    (block
@@ -1122,7 +1142,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const 0.5)
-     (f64.const 1)
+     (f64.const -1)
      (f64.const 0.5)
     )
    )
@@ -1139,9 +1159,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 0.5)
-     (f64.const -1)
-     (f64.const 0.5)
+     (f64.const -0.5)
+     (f64.const 1)
+     (f64.const -0.5)
     )
    )
    (block
@@ -1158,7 +1178,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const -0.5)
-     (f64.const 1)
+     (f64.const -1)
      (f64.const -0.5)
     )
    )
@@ -1175,9 +1195,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -0.5)
-     (f64.const -1)
-     (f64.const -0.5)
+     (f64.const 1.5)
+     (f64.const 1)
+     (f64.const 0.5)
     )
    )
    (block
@@ -1194,7 +1214,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const 1.5)
-     (f64.const 1)
+     (f64.const -1)
      (f64.const 0.5)
     )
    )
@@ -1211,9 +1231,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 1.5)
-     (f64.const -1)
-     (f64.const 0.5)
+     (f64.const -1.5)
+     (f64.const 1)
+     (f64.const -0.5)
     )
    )
    (block
@@ -1230,7 +1250,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const -1.5)
-     (f64.const 1)
+     (f64.const -1)
      (f64.const -0.5)
     )
    )
@@ -1247,9 +1267,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -1.5)
-     (f64.const -1)
-     (f64.const -0.5)
+     (f64.const 1.25)
+     (f64.const 1)
+     (f64.const 0.25)
     )
    )
    (block
@@ -1266,7 +1286,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const 1.25)
-     (f64.const 1)
+     (f64.const -1)
      (f64.const 0.25)
     )
    )
@@ -1283,9 +1303,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 1.25)
-     (f64.const -1)
-     (f64.const 0.25)
+     (f64.const -1.25)
+     (f64.const 1)
+     (f64.const -0.25)
     )
    )
    (block
@@ -1302,7 +1322,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const -1.25)
-     (f64.const 1)
+     (f64.const -1)
      (f64.const -0.25)
     )
    )
@@ -1319,9 +1339,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -1.25)
-     (f64.const -1)
-     (f64.const -0.25)
+     (f64.const 1)
+     (f64.const 1.25)
+     (f64.const 1)
     )
    )
    (block
@@ -1338,7 +1358,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const 1)
-     (f64.const 1.25)
+     (f64.const -1.25)
      (f64.const 1)
     )
    )
@@ -1355,9 +1375,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 1)
-     (f64.const -1.25)
-     (f64.const 1)
+     (f64.const -1)
+     (f64.const 1.25)
+     (f64.const -1)
     )
    )
    (block
@@ -1374,24 +1394,6 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const -1)
-     (f64.const 1.25)
-     (f64.const -1)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 47)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/mod/test_fmod
-     (f64.const -1)
      (f64.const -1.25)
      (f64.const -1)
     )
@@ -1400,7 +1402,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 48)
+     (i32.const 47)
      (i32.const 0)
     )
     (unreachable)
@@ -1418,7 +1420,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 49)
+     (i32.const 48)
      (i32.const 0)
     )
     (unreachable)
@@ -1428,6 +1430,24 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const 0)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 51)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/mod/test_fmod
+     (f64.const -0)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
     )
@@ -1445,8 +1465,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -0)
      (f64.const 0)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1463,7 +1483,7 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 0)
+     (f64.const -0)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
     )
@@ -1481,9 +1501,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (f64.const 1)
+     (f64.const 0)
     )
    )
    (block
@@ -1499,9 +1519,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 0)
+     (f64.const -0)
      (f64.const 1)
-     (f64.const 0)
+     (f64.const -0)
     )
    )
    (block
@@ -1517,9 +1537,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const -0)
+     (f64.const 0)
+     (f64.const -1)
+     (f64.const 0)
     )
    )
    (block
@@ -1535,9 +1555,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 0)
+     (f64.const -0)
      (f64.const -1)
-     (f64.const 0)
+     (f64.const -0)
     )
    )
    (block
@@ -1553,9 +1573,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -0)
-     (f64.const -1)
-     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
     )
    )
    (block
@@ -1571,7 +1591,7 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 1)
+     (f64.const -1)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
     )
@@ -1589,8 +1609,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -1)
-     (f64.const 0)
+     (f64.const 1)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1607,7 +1627,7 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 1)
+     (f64.const -1)
      (f64.const -0)
      (f64.const nan:0x8000000000000)
     )
@@ -1625,8 +1645,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -1)
-     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1644,7 +1664,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1662,7 +1682,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const nan:0x8000000000000)
-     (f64.const -0)
+     (f64.const 1)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1680,7 +1700,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const nan:0x8000000000000)
-     (f64.const 1)
+     (f64.const -1)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1698,7 +1718,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const nan:0x8000000000000)
-     (f64.const -1)
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1716,7 +1736,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const nan:0x8000000000000)
-     (f64.const 0)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1734,7 +1754,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const nan:0x8000000000000)
-     (f64.const -0)
+     (f64.const 1)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1752,7 +1772,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const nan:0x8000000000000)
-     (f64.const 1)
+     (f64.const -1)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1770,7 +1790,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const nan:0x8000000000000)
-     (f64.const -1)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1787,9 +1807,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (f64.const inf)
+     (f64.const 0)
     )
    )
    (block
@@ -1805,9 +1825,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 0)
+     (f64.const -0)
      (f64.const inf)
-     (f64.const 0)
+     (f64.const -0)
     )
    )
    (block
@@ -1823,9 +1843,11 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -0)
-     (f64.const inf)
-     (f64.const -0)
+     (f64.const 0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
     )
    )
    (block
@@ -1841,11 +1863,11 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 0)
+     (f64.const -0)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 0)
+     (f64.const -0)
     )
    )
    (block
@@ -1861,11 +1883,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0)
+     (f64.const 1)
+     (f64.const inf)
+     (f64.const 1)
     )
    )
    (block
@@ -1881,9 +1901,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 1)
+     (f64.const -1)
      (f64.const inf)
-     (f64.const 1)
+     (f64.const -1)
     )
    )
    (block
@@ -1899,9 +1919,11 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -1)
-     (f64.const inf)
-     (f64.const -1)
+     (f64.const 1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
     )
    )
    (block
@@ -1917,11 +1939,11 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const 1)
+     (f64.const -1)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 1)
+     (f64.const -1)
     )
    )
    (block
@@ -1937,11 +1959,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const -1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -1)
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
     )
    )
    (block
@@ -1958,7 +1978,7 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const inf)
-     (f64.const 0)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1975,8 +1995,10 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const inf)
-     (f64.const -0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -1996,26 +2018,6 @@
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 83)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/mod/test_fmod
-     (f64.neg
-      (f64.const inf)
-     )
      (f64.const -0)
      (f64.const nan:0x8000000000000)
     )
@@ -2024,7 +2026,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 84)
+     (i32.const 83)
      (i32.const 0)
     )
     (unreachable)
@@ -2042,7 +2044,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 85)
+     (i32.const 84)
      (i32.const 0)
     )
     (unreachable)
@@ -2053,6 +2055,26 @@
     (call $std/mod/test_fmod
      (f64.const inf)
      (f64.const -1)
+     (f64.const nan:0x8000000000000)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 85)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/mod/test_fmod
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -2072,7 +2094,7 @@
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 1)
+     (f64.const -1)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -2089,10 +2111,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -1)
+     (f64.const inf)
+     (f64.const inf)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -2109,7 +2129,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const inf)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const inf)
      (f64.const nan:0x8000000000000)
     )
@@ -2127,10 +2149,10 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
+     (f64.const inf)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const inf)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -2147,7 +2169,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const inf)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.neg
       (f64.const inf)
      )
@@ -2167,12 +2191,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -2189,7 +2209,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.const inf)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
     )
@@ -2207,10 +2229,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmod
-     (f64.neg
-      (f64.const inf)
-     )
      (f64.const nan:0x8000000000000)
+     (f64.const inf)
      (f64.const nan:0x8000000000000)
     )
    )
@@ -2228,7 +2248,9 @@
    (i32.eqz
     (call $std/mod/test_fmod
      (f64.const nan:0x8000000000000)
-     (f64.const inf)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const nan:0x8000000000000)
     )
    )
@@ -2244,19 +2266,17 @@
   )
   (if
    (i32.eqz
-    (call $std/mod/test_fmod
-     (f64.const nan:0x8000000000000)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
+    (call $std/mod/test_fmodf
+     (f32.const 3)
+     (f32.const 2)
+     (f32.const 1)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 96)
+     (i32.const 104)
      (i32.const 0)
     )
     (unreachable)
@@ -2266,7 +2286,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const 3)
-     (f32.const 2)
+     (f32.const -2)
      (f32.const 1)
     )
    )
@@ -2283,9 +2303,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 3)
-     (f32.const -2)
-     (f32.const 1)
+     (f32.const -3)
+     (f32.const 2)
+     (f32.const -1)
     )
    )
    (block
@@ -2302,7 +2322,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const -3)
-     (f32.const 2)
+     (f32.const -2)
      (f32.const -1)
     )
    )
@@ -2319,9 +2339,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -3)
-     (f32.const -2)
-     (f32.const -1)
+     (f32.const 3.5)
+     (f32.const 2)
+     (f32.const 1.5)
     )
    )
    (block
@@ -2338,7 +2358,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const 3.5)
-     (f32.const 2)
+     (f32.const -2)
      (f32.const 1.5)
     )
    )
@@ -2355,9 +2375,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 3.5)
-     (f32.const -2)
-     (f32.const 1.5)
+     (f32.const -3.5)
+     (f32.const 2)
+     (f32.const -1.5)
     )
    )
    (block
@@ -2374,7 +2394,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const -3.5)
-     (f32.const 2)
+     (f32.const -2)
      (f32.const -1.5)
     )
    )
@@ -2391,9 +2411,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -3.5)
-     (f32.const -2)
-     (f32.const -1.5)
+     (f32.const 3)
+     (f32.const 2.5)
+     (f32.const 0.5)
     )
    )
    (block
@@ -2410,7 +2430,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const 3)
-     (f32.const 2.5)
+     (f32.const -2.5)
      (f32.const 0.5)
     )
    )
@@ -2427,9 +2447,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 3)
-     (f32.const -2.5)
-     (f32.const 0.5)
+     (f32.const -3)
+     (f32.const 2.5)
+     (f32.const -0.5)
     )
    )
    (block
@@ -2446,7 +2466,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const -3)
-     (f32.const 2.5)
+     (f32.const -2.5)
      (f32.const -0.5)
     )
    )
@@ -2463,9 +2483,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -3)
-     (f32.const -2.5)
-     (f32.const -0.5)
+     (f32.const 0.5)
+     (f32.const 1)
+     (f32.const 0.5)
     )
    )
    (block
@@ -2482,7 +2502,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const 0.5)
-     (f32.const 1)
+     (f32.const -1)
      (f32.const 0.5)
     )
    )
@@ -2499,9 +2519,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 0.5)
-     (f32.const -1)
-     (f32.const 0.5)
+     (f32.const -0.5)
+     (f32.const 1)
+     (f32.const -0.5)
     )
    )
    (block
@@ -2518,7 +2538,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const -0.5)
-     (f32.const 1)
+     (f32.const -1)
      (f32.const -0.5)
     )
    )
@@ -2535,9 +2555,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -0.5)
-     (f32.const -1)
-     (f32.const -0.5)
+     (f32.const 1.5)
+     (f32.const 1)
+     (f32.const 0.5)
     )
    )
    (block
@@ -2554,7 +2574,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const 1.5)
-     (f32.const 1)
+     (f32.const -1)
      (f32.const 0.5)
     )
    )
@@ -2571,9 +2591,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 1.5)
-     (f32.const -1)
-     (f32.const 0.5)
+     (f32.const -1.5)
+     (f32.const 1)
+     (f32.const -0.5)
     )
    )
    (block
@@ -2590,7 +2610,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const -1.5)
-     (f32.const 1)
+     (f32.const -1)
      (f32.const -0.5)
     )
    )
@@ -2607,16 +2627,16 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -1.5)
-     (f32.const -1)
-     (f32.const -0.5)
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const nan:0x400000)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 124)
+     (i32.const 126)
      (i32.const 0)
     )
     (unreachable)
@@ -2625,7 +2645,7 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 0)
+     (f32.const -0)
      (f32.const 0)
      (f32.const nan:0x400000)
     )
@@ -2643,8 +2663,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -0)
      (f32.const 0)
+     (f32.const -0)
      (f32.const nan:0x400000)
     )
    )
@@ -2661,7 +2681,7 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 0)
+     (f32.const -0)
      (f32.const -0)
      (f32.const nan:0x400000)
     )
@@ -2679,8 +2699,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -0)
-     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
      (f32.const nan:0x400000)
     )
    )
@@ -2697,7 +2717,7 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 1)
+     (f32.const -1)
      (f32.const 0)
      (f32.const nan:0x400000)
     )
@@ -2715,8 +2735,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -1)
-     (f32.const 0)
+     (f32.const 1)
+     (f32.const -0)
      (f32.const nan:0x400000)
     )
    )
@@ -2733,7 +2753,7 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 1)
+     (f32.const -1)
      (f32.const -0)
      (f32.const nan:0x400000)
     )
@@ -2751,8 +2771,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -1)
-     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
      (f32.const nan:0x400000)
     )
    )
@@ -2770,7 +2790,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const nan:0x400000)
-     (f32.const 0)
+     (f32.const -0)
      (f32.const nan:0x400000)
     )
    )
@@ -2788,7 +2808,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const nan:0x400000)
-     (f32.const -0)
+     (f32.const 1)
      (f32.const nan:0x400000)
     )
    )
@@ -2806,7 +2826,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const nan:0x400000)
-     (f32.const 1)
+     (f32.const -1)
      (f32.const nan:0x400000)
     )
    )
@@ -2824,7 +2844,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const nan:0x400000)
-     (f32.const -1)
+     (f32.const 0)
      (f32.const nan:0x400000)
     )
    )
@@ -2842,7 +2862,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const nan:0x400000)
-     (f32.const 0)
+     (f32.const -0)
      (f32.const nan:0x400000)
     )
    )
@@ -2860,7 +2880,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const nan:0x400000)
-     (f32.const -0)
+     (f32.const 1)
      (f32.const nan:0x400000)
     )
    )
@@ -2878,7 +2898,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const nan:0x400000)
-     (f32.const 1)
+     (f32.const -1)
      (f32.const nan:0x400000)
     )
    )
@@ -2896,7 +2916,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const nan:0x400000)
-     (f32.const -1)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
     )
    )
@@ -2913,9 +2933,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+     (f32.const 0)
+     (f32.const inf)
+     (f32.const 0)
     )
    )
    (block
@@ -2931,9 +2951,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 0)
+     (f32.const -0)
      (f32.const inf)
-     (f32.const 0)
+     (f32.const -0)
     )
    )
    (block
@@ -2949,9 +2969,11 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -0)
-     (f32.const inf)
-     (f32.const -0)
+     (f32.const 0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
     )
    )
    (block
@@ -2967,11 +2989,11 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 0)
+     (f32.const -0)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 0)
+     (f32.const -0)
     )
    )
    (block
@@ -2987,11 +3009,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0)
+     (f32.const 1)
+     (f32.const inf)
+     (f32.const 1)
     )
    )
    (block
@@ -3007,9 +3027,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 1)
+     (f32.const -1)
      (f32.const inf)
-     (f32.const 1)
+     (f32.const -1)
     )
    )
    (block
@@ -3025,9 +3045,11 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -1)
-     (f32.const inf)
-     (f32.const -1)
+     (f32.const 1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
     )
    )
    (block
@@ -3043,11 +3065,11 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const 1)
+     (f32.const -1)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 1)
+     (f32.const -1)
     )
    )
    (block
@@ -3063,11 +3085,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const -1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -1)
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const nan:0x400000)
     )
    )
    (block
@@ -3084,7 +3104,7 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const inf)
-     (f32.const 0)
+     (f32.const -0)
      (f32.const nan:0x400000)
     )
    )
@@ -3101,8 +3121,10 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const inf)
-     (f32.const -0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
      (f32.const nan:0x400000)
     )
    )
@@ -3122,26 +3144,6 @@
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 0)
-     (f32.const nan:0x400000)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 154)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/mod/test_fmodf
-     (f32.neg
-      (f32.const inf)
-     )
      (f32.const -0)
      (f32.const nan:0x400000)
     )
@@ -3150,7 +3152,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 155)
+     (i32.const 154)
      (i32.const 0)
     )
     (unreachable)
@@ -3168,7 +3170,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 156)
+     (i32.const 155)
      (i32.const 0)
     )
     (unreachable)
@@ -3179,6 +3181,26 @@
     (call $std/mod/test_fmodf
      (f32.const inf)
      (f32.const -1)
+     (f32.const nan:0x400000)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 156)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/mod/test_fmodf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
      (f32.const nan:0x400000)
     )
    )
@@ -3198,7 +3220,7 @@
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 1)
+     (f32.const -1)
      (f32.const nan:0x400000)
     )
    )
@@ -3215,10 +3237,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -1)
+     (f32.const inf)
+     (f32.const inf)
      (f32.const nan:0x400000)
     )
    )
@@ -3235,7 +3255,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const inf)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const inf)
      (f32.const nan:0x400000)
     )
@@ -3253,10 +3275,10 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
+     (f32.const inf)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const inf)
      (f32.const nan:0x400000)
     )
    )
@@ -3273,7 +3295,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const inf)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.neg
       (f32.const inf)
      )
@@ -3293,12 +3317,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const inf)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
     )
    )
@@ -3315,7 +3335,9 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.const inf)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
     )
@@ -3333,10 +3355,8 @@
   (if
    (i32.eqz
     (call $std/mod/test_fmodf
-     (f32.neg
-      (f32.const inf)
-     )
      (f32.const nan:0x400000)
+     (f32.const inf)
      (f32.const nan:0x400000)
     )
    )
@@ -3354,24 +3374,6 @@
    (i32.eqz
     (call $std/mod/test_fmodf
      (f32.const nan:0x400000)
-     (f32.const inf)
-     (f32.const nan:0x400000)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 166)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/mod/test_fmodf
-     (f32.const nan:0x400000)
      (f32.neg
       (f32.const inf)
      )
@@ -3382,7 +3384,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 167)
+     (i32.const 166)
      (i32.const 0)
     )
     (unreachable)

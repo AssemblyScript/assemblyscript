@@ -10,9 +10,6 @@
  (type $FUNCSIG$ji (func (param i32) (result i64)))
  (type $FUNCSIG$fi (func (param i32) (result f32)))
  (type $FUNCSIG$di (func (param i32) (result f64)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00\00\00\00\00\01\00\00\00\02")
  (data (i32.const 24) "\08\00\00\00\02")
@@ -27,7 +24,13 @@
  (data (i32.const 136) "\13\00\00\00s\00t\00d\00/\00s\00t\00a\00t\00i\00c\00-\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 184) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 216) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $~lib/array/Array<i32>#__get (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -2198,13 +2201,16 @@
       (unreachable)
      )
     )
+    (set_local $3
+     (call $~lib/internal/arraybuffer/computeSize
+      (get_local $2)
+     )
+    )
     (if
      (i32.le_s
       (get_local $1)
       (i32.sub
-       (call $~lib/internal/arraybuffer/computeSize
-        (get_local $2)
-       )
+       (get_local $3)
        (i32.const 8)
       )
      )
