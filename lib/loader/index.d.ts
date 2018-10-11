@@ -61,9 +61,11 @@ interface ASUtil {
   /** Creates a typed array in the module's memory and returns its pointer. */
   newArray(ctor: TypedArrayConstructor, length: number, unsafe?: boolean): number;
   /** Gets a view on a typed array in the module's memory by its pointer. */
-  getArray(ctor: TypedArrayConstructor, ptr: number): TypedArray;
+  getArray<T extends TypedArray = TypedArray>(ctor: TypedArrayConstructor, ptr: number): T;
   /** Frees a typed array in the module's memory. Must not be accessed anymore afterwards. */
   freeArray(ptr: number): void;
+  /** Gets a function by its pointer. */
+  getFunction<R = any>(ptr: number): (...args: any[]) => R;
 }
 
 /** Instantiates an AssemblyScript module using the specified imports. */

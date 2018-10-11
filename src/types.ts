@@ -213,7 +213,11 @@ export class Type {
     } else if (!target.is(TypeFlags.REFERENCE)) {
       if (this.is(TypeFlags.INTEGER)) {
         if (target.is(TypeFlags.INTEGER)) {
-          if (!signednessIsRelevant || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)) {
+          if (
+            !signednessIsRelevant ||
+            this == Type.bool || // a bool (0 or 1) can be safely assigned to all sorts of integers
+            this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)
+          ) {
             return this.size <= target.size;
           }
         } else if (target.kind == TypeKind.F32) {

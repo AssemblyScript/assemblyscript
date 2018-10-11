@@ -1985,13 +1985,11 @@ assert(test_minf(-1.75, -0.5, -1.75, 0.0, 0));
 // Math.mod
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-declare namespace JSOp {
-  export function mod(x: f64, y: f64): f64;
-}
+declare function mod(x: f64, y: f64): f64;
 
 function test_mod(left: f64, right: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.mod(left, right), expected, error, flags) &&
-  (!js || check<f64>(      JSOp.mod(left, right), expected, error, flags));
+  (!js || check<f64>(           mod(left, right), expected, error, flags));
 }
 
 // sanity

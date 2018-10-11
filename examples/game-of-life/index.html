@@ -70,7 +70,7 @@ fetch("build/optimized.wasm")
     BGR_DEAD  : rgb2bgr(RGB_DEAD) & ~1, // little endian, LSB must not be set
     BIT_ROT
   },
-  JSMath: Math
+  Math
 }))
 .then(module => {
   var exports = module.instance.exports;
