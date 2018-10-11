@@ -366,7 +366,6 @@ export class Array<T> {
   join(separator: string = ","): string {
     var lastIndex = this.length_ - 1;
     if (lastIndex < 0) return "";
-    var result = "";
     var value: T;
     var buffer = this.buffer_;
     var sepLen = separator.length;
@@ -400,7 +399,7 @@ export class Array<T> {
         copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
-      return out;
+      return out as string;
     } else if (isInteger<T>()) {
       if (!lastIndex) {
         return changetype<string>(itoa<T>(loadUnsafe<T,T>(buffer, 0)));
@@ -425,7 +424,7 @@ export class Array<T> {
         copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
-      return out;
+      return out as string;
     } else if (isFloat<T>()) {
       if (!lastIndex) {
         return changetype<string>(dtoa(loadUnsafe<T,f64>(buffer, 0)));
@@ -450,7 +449,7 @@ export class Array<T> {
         copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
-      return out;
+      return out as string;
     } else if (isString<T>()) {
       if (!lastIndex) {
         return loadUnsafe<T,string>(buffer, 0);
@@ -478,12 +477,13 @@ export class Array<T> {
         let valueLen = value.length;                          // tslint:disable-line:no-unsafe-any
         copyUnsafeString(result, offset, value, 0, valueLen); // tslint:disable-line:no-unsafe-any
       }
-      return result;
+      return result as string;
     } else if (isArray<T>()) {
       if (!lastIndex) {
         value = loadUnsafe<T,T>(buffer, 0);
         return value ? value.join(separator) : ""; // tslint:disable-line:no-unsafe-any
       }
+      let result = "";
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
         if (value) result += value.join(separator); // tslint:disable-line:no-unsafe-any
@@ -519,7 +519,7 @@ export class Array<T> {
         copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
-      return out;
+      return out as string;
     } else {
       assert(false); // Unsupported generic typename
     }

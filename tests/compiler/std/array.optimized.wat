@@ -12734,7 +12734,7 @@
   (local $5 i32)
   (if
    (i32.lt_s
-    (tee_local $3
+    (tee_local $2
      (i32.sub
       (i32.load offset=4
        (get_local $0)
@@ -12748,10 +12748,7 @@
     (i32.const 1464)
    )
   )
-  (set_local $1
-   (i32.const 1464)
-  )
-  (set_local $4
+  (set_local $3
    (i32.load
     (get_local $0)
    )
@@ -12766,18 +12763,18 @@
   )
   (if
    (i32.eqz
-    (get_local $3)
+    (get_local $2)
    )
    (return
     (tee_local $0
      (if (result i32)
-      (tee_local $2
+      (tee_local $1
        (i32.load offset=8
-        (get_local $4)
+        (get_local $3)
        )
       )
       (call $~lib/array/Array<i32>#join
-       (get_local $2)
+       (get_local $1)
        (i32.const 1776)
       )
       (i32.const 1464)
@@ -12785,56 +12782,56 @@
     )
    )
   )
+  (set_local $0
+   (i32.const 1464)
+  )
   (block $break|0
-   (set_local $0
-    (i32.const 0)
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $0)
-      (get_local $3)
+      (get_local $4)
+      (get_local $2)
      )
     )
     (if
-     (tee_local $2
+     (tee_local $1
       (i32.load offset=8
        (i32.add
-        (get_local $4)
+        (get_local $3)
         (i32.shl
-         (get_local $0)
+         (get_local $4)
          (i32.const 2)
         )
        )
       )
      )
      (block
-      (set_local $2
+      (set_local $1
        (call $~lib/array/Array<i32>#join
-        (get_local $2)
+        (get_local $1)
         (i32.const 1776)
        )
       )
-      (set_local $1
+      (set_local $0
        (call $~lib/string/String.__concat
+        (get_local $0)
         (get_local $1)
-        (get_local $2)
        )
       )
      )
     )
     (if
      (get_local $5)
-     (set_local $1
+     (set_local $0
       (call $~lib/string/String.__concat
-       (get_local $1)
+       (get_local $0)
        (i32.const 1776)
       )
      )
     )
-    (set_local $0
+    (set_local $4
      (i32.add
-      (get_local $0)
+      (get_local $4)
       (i32.const 1)
      )
     )
@@ -12842,33 +12839,33 @@
    )
   )
   (if
-   (tee_local $2
+   (tee_local $1
     (i32.load offset=8
      (i32.add
-      (get_local $4)
+      (get_local $3)
       (i32.shl
-       (get_local $3)
+       (get_local $2)
        (i32.const 2)
       )
      )
     )
    )
    (block
-    (set_local $0
+    (set_local $1
      (call $~lib/array/Array<i32>#join
-      (get_local $2)
+      (get_local $1)
       (i32.const 1776)
      )
     )
-    (set_local $1
+    (set_local $0
      (call $~lib/string/String.__concat
-      (get_local $1)
       (get_local $0)
+      (get_local $1)
      )
     )
    )
   )
-  (get_local $1)
+  (get_local $0)
  )
  (func $~lib/internal/number/itoa<u8> (; 161 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/number/utoa32
@@ -13110,7 +13107,7 @@
   (local $5 i32)
   (if
    (i32.lt_s
-    (tee_local $3
+    (tee_local $2
      (i32.sub
       (i32.load offset=4
        (get_local $0)
@@ -13124,10 +13121,7 @@
     (i32.const 1464)
    )
   )
-  (set_local $1
-   (i32.const 1464)
-  )
-  (set_local $4
+  (set_local $3
    (i32.load
     (get_local $0)
    )
@@ -13142,18 +13136,18 @@
   )
   (if
    (i32.eqz
-    (get_local $3)
+    (get_local $2)
    )
    (return
     (tee_local $0
      (if (result i32)
-      (tee_local $2
+      (tee_local $1
        (i32.load offset=8
-        (get_local $4)
+        (get_local $3)
        )
       )
       (call $~lib/array/Array<u8>#join
-       (get_local $2)
+       (get_local $1)
        (i32.const 1776)
       )
       (i32.const 1464)
@@ -13161,56 +13155,56 @@
     )
    )
   )
+  (set_local $0
+   (i32.const 1464)
+  )
   (block $break|0
-   (set_local $0
-    (i32.const 0)
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $0)
-      (get_local $3)
+      (get_local $4)
+      (get_local $2)
      )
     )
     (if
-     (tee_local $2
+     (tee_local $1
       (i32.load offset=8
        (i32.add
-        (get_local $4)
+        (get_local $3)
         (i32.shl
-         (get_local $0)
+         (get_local $4)
          (i32.const 2)
         )
        )
       )
      )
      (block
-      (set_local $2
+      (set_local $1
        (call $~lib/array/Array<u8>#join
-        (get_local $2)
+        (get_local $1)
         (i32.const 1776)
        )
       )
-      (set_local $1
+      (set_local $0
        (call $~lib/string/String.__concat
+        (get_local $0)
         (get_local $1)
-        (get_local $2)
        )
       )
      )
     )
     (if
      (get_local $5)
-     (set_local $1
+     (set_local $0
       (call $~lib/string/String.__concat
-       (get_local $1)
+       (get_local $0)
        (i32.const 1776)
       )
      )
     )
-    (set_local $0
+    (set_local $4
      (i32.add
-      (get_local $0)
+      (get_local $4)
       (i32.const 1)
      )
     )
@@ -13218,33 +13212,33 @@
    )
   )
   (if
-   (tee_local $2
+   (tee_local $1
     (i32.load offset=8
      (i32.add
-      (get_local $4)
+      (get_local $3)
       (i32.shl
-       (get_local $3)
+       (get_local $2)
        (i32.const 2)
       )
      )
     )
    )
    (block
-    (set_local $0
+    (set_local $1
      (call $~lib/array/Array<u8>#join
-      (get_local $2)
+      (get_local $1)
       (i32.const 1776)
      )
     )
-    (set_local $1
+    (set_local $0
      (call $~lib/string/String.__concat
-      (get_local $1)
       (get_local $0)
+      (get_local $1)
      )
     )
    )
   )
-  (get_local $1)
+  (get_local $0)
  )
  (func $~lib/array/Array<Array<u32>>#join (; 165 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13268,9 +13262,6 @@
     (i32.const 1464)
    )
   )
-  (set_local $2
-   (i32.const 1464)
-  )
   (set_local $5
    (i32.load
     (get_local $0)
@@ -13291,13 +13282,13 @@
    (return
     (tee_local $0
      (if (result i32)
-      (tee_local $3
+      (tee_local $2
        (i32.load offset=8
         (get_local $5)
        )
       )
       (call $~lib/array/Array<u32>#join
-       (get_local $3)
+       (get_local $2)
        (get_local $1)
       )
       (i32.const 1464)
@@ -13305,56 +13296,56 @@
     )
    )
   )
+  (set_local $0
+   (i32.const 1464)
+  )
   (block $break|0
-   (set_local $0
-    (i32.const 0)
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $0)
+      (get_local $3)
       (get_local $4)
      )
     )
     (if
-     (tee_local $3
+     (tee_local $2
       (i32.load offset=8
        (i32.add
         (get_local $5)
         (i32.shl
-         (get_local $0)
+         (get_local $3)
          (i32.const 2)
         )
        )
       )
      )
      (block
-      (set_local $3
+      (set_local $2
        (call $~lib/array/Array<u32>#join
-        (get_local $3)
+        (get_local $2)
         (get_local $1)
        )
       )
-      (set_local $2
+      (set_local $0
        (call $~lib/string/String.__concat
+        (get_local $0)
         (get_local $2)
-        (get_local $3)
        )
       )
      )
     )
     (if
      (get_local $6)
-     (set_local $2
+     (set_local $0
       (call $~lib/string/String.__concat
-       (get_local $2)
+       (get_local $0)
        (get_local $1)
       )
      )
     )
-    (set_local $0
+    (set_local $3
      (i32.add
-      (get_local $0)
+      (get_local $3)
       (i32.const 1)
      )
     )
@@ -13362,7 +13353,7 @@
    )
   )
   (if
-   (tee_local $3
+   (tee_local $2
     (i32.load offset=8
      (i32.add
       (get_local $5)
@@ -13374,21 +13365,21 @@
     )
    )
    (block
-    (set_local $0
+    (set_local $1
      (call $~lib/array/Array<u32>#join
-      (get_local $3)
+      (get_local $2)
       (get_local $1)
      )
     )
-    (set_local $2
+    (set_local $0
      (call $~lib/string/String.__concat
-      (get_local $2)
       (get_local $0)
+      (get_local $1)
      )
     )
    )
   )
-  (get_local $2)
+  (get_local $0)
  )
  (func $~lib/array/Array<Array<Array<u32>>>#join (; 166 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -13398,7 +13389,7 @@
   (local $5 i32)
   (if
    (i32.lt_s
-    (tee_local $3
+    (tee_local $2
      (i32.sub
       (i32.load offset=4
        (get_local $0)
@@ -13412,10 +13403,7 @@
     (i32.const 1464)
    )
   )
-  (set_local $1
-   (i32.const 1464)
-  )
-  (set_local $4
+  (set_local $3
    (i32.load
     (get_local $0)
    )
@@ -13430,18 +13418,18 @@
   )
   (if
    (i32.eqz
-    (get_local $3)
+    (get_local $2)
    )
    (return
     (tee_local $0
      (if (result i32)
-      (tee_local $2
+      (tee_local $1
        (i32.load offset=8
-        (get_local $4)
+        (get_local $3)
        )
       )
       (call $~lib/array/Array<Array<u32>>#join
-       (get_local $2)
+       (get_local $1)
        (i32.const 1776)
       )
       (i32.const 1464)
@@ -13449,56 +13437,56 @@
     )
    )
   )
+  (set_local $0
+   (i32.const 1464)
+  )
   (block $break|0
-   (set_local $0
-    (i32.const 0)
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $0)
-      (get_local $3)
+      (get_local $4)
+      (get_local $2)
      )
     )
     (if
-     (tee_local $2
+     (tee_local $1
       (i32.load offset=8
        (i32.add
-        (get_local $4)
+        (get_local $3)
         (i32.shl
-         (get_local $0)
+         (get_local $4)
          (i32.const 2)
         )
        )
       )
      )
      (block
-      (set_local $2
+      (set_local $1
        (call $~lib/array/Array<Array<u32>>#join
-        (get_local $2)
+        (get_local $1)
         (i32.const 1776)
        )
       )
-      (set_local $1
+      (set_local $0
        (call $~lib/string/String.__concat
+        (get_local $0)
         (get_local $1)
-        (get_local $2)
        )
       )
      )
     )
     (if
      (get_local $5)
-     (set_local $1
+     (set_local $0
       (call $~lib/string/String.__concat
-       (get_local $1)
+       (get_local $0)
        (i32.const 1776)
       )
      )
     )
-    (set_local $0
+    (set_local $4
      (i32.add
-      (get_local $0)
+      (get_local $4)
       (i32.const 1)
      )
     )
@@ -13506,33 +13494,33 @@
    )
   )
   (if
-   (tee_local $2
+   (tee_local $1
     (i32.load offset=8
      (i32.add
-      (get_local $4)
+      (get_local $3)
       (i32.shl
-       (get_local $3)
+       (get_local $2)
        (i32.const 2)
       )
      )
     )
    )
    (block
-    (set_local $0
+    (set_local $1
      (call $~lib/array/Array<Array<u32>>#join
-      (get_local $2)
+      (get_local $1)
       (i32.const 1776)
      )
     )
-    (set_local $1
+    (set_local $0
      (call $~lib/string/String.__concat
-      (get_local $1)
       (get_local $0)
+      (get_local $1)
      )
     )
    )
   )
-  (get_local $1)
+  (get_local $0)
  )
  (func $start (; 167 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
