@@ -2959,7 +2959,7 @@ export function compileAbort(
 
   compiler.currentType = Type.void;
   return module.createBlock(null, [
-    module.createCallImport(
+    module.createCall(
       abortInstance.internalName, [
         messageArg,
         filenameArg,

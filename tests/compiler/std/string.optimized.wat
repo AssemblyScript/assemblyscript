@@ -19,21 +19,6 @@
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$di (func (param i32) (result f64)))
  (type $FUNCSIG$v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/internal/number/_K (mut i32) (i32.const 0))
- (global $~lib/internal/number/_exp (mut i32) (i32.const 0))
- (global $~lib/internal/number/_frc_minus (mut i64) (i64.const 0))
- (global $~lib/internal/number/_frc_plus (mut i64) (i64.const 0))
- (global $~lib/internal/number/_frc_pow (mut i64) (i64.const 0))
- (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
- (global $std/string/str (mut i32) (i32.const 8))
- (global $std/string/nullStr (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
- (global $std/string/c (mut i32) (i32.const 0))
- (global $std/string/a (mut i32) (i32.const 0))
- (global $std/string/b (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g")
  (data (i32.const 48) "\0d\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
@@ -172,7 +157,25 @@
  (data (i32.const 5520) "\0b\00\00\000\00.\000\000\000\000\003\005\006\008\009")
  (data (i32.const 5552) "\16\00\00\003\00.\004\000\002\008\002\003\004\006\006\003\008\005\002\008\008\006\00e\00+\003\008")
  (data (i32.const 5600) "\15\00\00\001\00.\001\009\002\000\009\002\008\009\005\005\000\007\008\001\002\005\00e\00-\007")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $~lib/internal/number/_K (mut i32) (i32.const 0))
+ (global $~lib/internal/number/_exp (mut i32) (i32.const 0))
+ (global $~lib/internal/number/_frc_minus (mut i64) (i64.const 0))
+ (global $~lib/internal/number/_frc_plus (mut i64) (i64.const 0))
+ (global $~lib/internal/number/_frc_pow (mut i64) (i64.const 0))
+ (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
+ (global $std/string/str (mut i32) (i32.const 8))
+ (global $std/string/nullStr (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
+ (global $std/string/c (mut i32) (i32.const 0))
+ (global $std/string/a (mut i32) (i32.const 0))
+ (global $std/string/b (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "getString" (func $std/string/getString))
  (start $start)
  (func $~lib/string/String#charCodeAt (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -2788,6 +2791,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -2809,7 +2813,7 @@
   )
   (if
    (i32.eqz
-    (tee_local $4
+    (tee_local $5
      (i32.lt_s
       (get_local $1)
       (tee_local $6
@@ -2820,86 +2824,87 @@
      )
     )
    )
-   (set_local $4
+   (set_local $5
     (i32.eqz
      (get_local $3)
     )
    )
   )
   (if
-   (get_local $4)
+   (get_local $5)
    (return
     (get_local $0)
    )
   )
-  (set_local $5
+  (set_local $4
+   (i32.sub
+    (get_local $1)
+    (get_local $6)
+   )
+  )
+  (set_local $1
    (call $~lib/internal/string/allocateUnsafe
     (get_local $1)
    )
   )
   (if
    (i32.gt_s
-    (tee_local $1
-     (i32.sub
-      (get_local $1)
-      (get_local $6)
-     )
-    )
+    (get_local $4)
     (get_local $3)
    )
    (block
     (set_local $3
-     (i32.mul
-      (tee_local $4
-       (i32.div_s
-        (i32.sub
-         (get_local $1)
-         (i32.const 1)
+     (i32.sub
+      (get_local $4)
+      (tee_local $7
+       (i32.mul
+        (tee_local $5
+         (i32.div_s
+          (i32.sub
+           (get_local $4)
+           (i32.const 1)
+          )
+          (get_local $3)
+         )
         )
         (get_local $3)
        )
       )
-      (get_local $3)
      )
     )
     (call $~lib/internal/string/repeatUnsafe
-     (get_local $5)
+     (get_local $1)
      (i32.const 0)
      (get_local $2)
-     (get_local $4)
+     (get_local $5)
     )
     (if
-     (tee_local $4
-      (i32.sub
-       (get_local $1)
-       (get_local $3)
-      )
-     )
+     (get_local $3)
      (call $~lib/internal/string/copyUnsafe
-      (get_local $5)
-      (get_local $3)
+      (get_local $1)
+      (get_local $7)
       (get_local $2)
-      (get_local $4)
+      (get_local $3)
      )
     )
    )
    (call $~lib/internal/string/copyUnsafe
-    (get_local $5)
+    (get_local $1)
     (i32.const 0)
     (get_local $2)
-    (get_local $1)
+    (get_local $4)
    )
   )
   (if
    (get_local $6)
    (call $~lib/internal/string/copyUnsafe
-    (get_local $5)
     (get_local $1)
+    (get_local $4)
     (get_local $0)
     (get_local $6)
    )
   )
-  (get_local $5)
+  (get_local $1)
  )
  (func $~lib/string/String#padStart|trampoline (; 18 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2929,7 +2934,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   (if
    (i32.eqz
     (get_local $0)
@@ -2944,17 +2948,17 @@
     (unreachable)
    )
   )
-  (set_local $5
+  (set_local $4
    (i32.load
     (get_local $2)
    )
   )
   (if
    (i32.eqz
-    (tee_local $4
+    (tee_local $3
      (i32.lt_s
       (get_local $1)
-      (tee_local $3
+      (tee_local $5
        (i32.load
         (get_local $0)
        )
@@ -2962,22 +2966,22 @@
      )
     )
    )
-   (set_local $4
+   (set_local $3
     (i32.eqz
-     (get_local $5)
+     (get_local $4)
     )
    )
   )
   (if
-   (get_local $4)
+   (get_local $3)
    (return
     (get_local $0)
    )
   )
-  (set_local $6
+  (set_local $3
    (i32.sub
     (get_local $1)
-    (get_local $3)
+    (get_local $5)
    )
   )
   (set_local $1
@@ -2986,63 +2990,63 @@
    )
   )
   (if
-   (get_local $3)
+   (get_local $5)
    (call $~lib/internal/string/copyUnsafe
     (get_local $1)
     (i32.const 0)
     (get_local $0)
-    (get_local $3)
+    (get_local $5)
    )
   )
   (if
    (i32.gt_s
-    (get_local $6)
-    (get_local $5)
+    (get_local $3)
+    (get_local $4)
    )
    (block
     (set_local $0
-     (i32.mul
+     (i32.sub
+      (get_local $3)
       (tee_local $4
-       (i32.div_s
-        (i32.sub
-         (get_local $6)
-         (i32.const 1)
+       (i32.mul
+        (tee_local $3
+         (i32.div_s
+          (i32.sub
+           (get_local $3)
+           (i32.const 1)
+          )
+          (get_local $4)
+         )
         )
-        (get_local $5)
+        (get_local $4)
        )
       )
-      (get_local $5)
      )
     )
     (call $~lib/internal/string/repeatUnsafe
      (get_local $1)
-     (get_local $3)
+     (get_local $5)
      (get_local $2)
-     (get_local $4)
+     (get_local $3)
     )
     (if
-     (tee_local $4
-      (i32.sub
-       (get_local $6)
-       (get_local $0)
-      )
-     )
+     (get_local $0)
      (call $~lib/internal/string/copyUnsafe
       (get_local $1)
       (i32.add
-       (get_local $0)
-       (get_local $3)
+       (get_local $4)
+       (get_local $5)
       )
       (get_local $2)
-      (get_local $4)
+      (get_local $0)
      )
     )
    )
    (call $~lib/internal/string/copyUnsafe
     (get_local $1)
-    (get_local $3)
+    (get_local $5)
     (get_local $2)
-    (get_local $6)
+    (get_local $3)
    )
   )
   (get_local $1)
@@ -4541,7 +4545,7 @@
    )
   )
   (if
-   (tee_local $1
+   (tee_local $2
     (i32.lt_s
      (get_local $0)
      (i32.const 0)
@@ -4555,14 +4559,16 @@
    )
   )
   (call $~lib/internal/number/utoa32_lut
-   (tee_local $2
+   (tee_local $1
     (call $~lib/internal/string/allocateUnsafe
      (tee_local $3
       (i32.add
-       (call $~lib/internal/number/decimalCount32
-        (get_local $0)
+       (tee_local $1
+        (call $~lib/internal/number/decimalCount32
+         (get_local $0)
+        )
        )
-       (get_local $1)
+       (get_local $2)
       )
      )
     )
@@ -4571,13 +4577,13 @@
    (get_local $3)
   )
   (if
-   (get_local $1)
+   (get_local $2)
    (i32.store16 offset=4
-    (get_local $2)
+    (get_local $1)
     (i32.const 45)
    )
   )
-  (get_local $2)
+  (get_local $1)
  )
  (func $~lib/internal/number/utoa32 (; 38 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -4881,7 +4887,7 @@
    )
   )
   (if
-   (tee_local $1
+   (tee_local $2
     (i64.lt_s
      (get_local $0)
      (i64.const 0)
@@ -4900,50 +4906,54 @@
     (i64.const 4294967295)
    )
    (call $~lib/internal/number/utoa32_lut
-    (tee_local $3
+    (tee_local $1
      (call $~lib/internal/string/allocateUnsafe
-      (tee_local $2
+      (tee_local $3
        (i32.add
-        (call $~lib/internal/number/decimalCount32
-         (tee_local $4
-          (i32.wrap/i64
-           (get_local $0)
+        (tee_local $1
+         (call $~lib/internal/number/decimalCount32
+          (tee_local $4
+           (i32.wrap/i64
+            (get_local $0)
+           )
           )
          )
         )
-        (get_local $1)
+        (get_local $2)
        )
       )
      )
     )
     (get_local $4)
-    (get_local $2)
+    (get_local $3)
    )
    (call $~lib/internal/number/utoa64_lut
-    (tee_local $3
+    (tee_local $1
      (call $~lib/internal/string/allocateUnsafe
-      (tee_local $2
+      (tee_local $3
        (i32.add
-        (call $~lib/internal/number/decimalCount64
-         (get_local $0)
+        (tee_local $1
+         (call $~lib/internal/number/decimalCount64
+          (get_local $0)
+         )
         )
-        (get_local $1)
+        (get_local $2)
        )
       )
      )
     )
     (get_local $0)
-    (get_local $2)
+    (get_local $3)
    )
   )
   (if
-   (get_local $1)
+   (get_local $2)
    (i32.store16 offset=4
-    (get_local $3)
+    (get_local $1)
     (i32.const 45)
    )
   )
-  (get_local $3)
+  (get_local $1)
  )
  (func $~lib/builtins/isFinite<f64> (; 43 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
   (f64.eq
@@ -5586,10 +5596,10 @@
    )
   )
   (if
-   (tee_local $3
+   (tee_local $4
     (i32.le_s
      (get_local $1)
-     (tee_local $4
+     (tee_local $3
       (i32.add
        (get_local $1)
        (get_local $2)
@@ -5597,40 +5607,40 @@
      )
     )
    )
-   (set_local $3
+   (set_local $4
     (i32.le_s
-     (get_local $4)
+     (get_local $3)
      (i32.const 21)
     )
    )
   )
   (if (result i32)
-   (get_local $3)
+   (get_local $4)
    (block (result i32)
     (block $break|0
-     (set_local $3
+     (set_local $4
       (get_local $1)
      )
      (loop $repeat|0
       (br_if $break|0
        (i32.ge_s
-        (get_local $3)
         (get_local $4)
+        (get_local $3)
        )
       )
       (i32.store16 offset=4
        (i32.add
         (get_local $0)
         (i32.shl
-         (get_local $3)
+         (get_local $4)
          (i32.const 1)
         )
        )
        (i32.const 48)
       )
-      (set_local $3
+      (set_local $4
        (i32.add
-        (get_local $3)
+        (get_local $4)
         (i32.const 1)
        )
       )
@@ -5641,42 +5651,42 @@
      (i32.add
       (get_local $0)
       (i32.shl
-       (get_local $4)
+       (get_local $3)
        (i32.const 1)
       )
      )
      (i32.const 3145774)
     )
     (i32.add
-     (get_local $4)
+     (get_local $3)
      (i32.const 2)
     )
    )
    (block (result i32)
     (if
-     (tee_local $3
+     (tee_local $4
       (i32.gt_s
-       (get_local $4)
+       (get_local $3)
        (i32.const 0)
       )
      )
-     (set_local $3
+     (set_local $4
       (i32.le_s
-       (get_local $4)
+       (get_local $3)
        (i32.const 21)
       )
      )
     )
     (if (result i32)
-     (get_local $3)
+     (get_local $4)
      (block (result i32)
       (call $~lib/internal/memory/memmove
        (i32.add
-        (tee_local $3
+        (tee_local $4
          (i32.add
           (get_local $0)
           (i32.shl
-           (get_local $4)
+           (get_local $3)
            (i32.const 1)
           )
          )
@@ -5684,7 +5694,7 @@
         (i32.const 6)
        )
        (i32.add
-        (get_local $3)
+        (get_local $4)
         (i32.const 4)
        )
        (i32.shl
@@ -5699,7 +5709,7 @@
        (i32.add
         (get_local $0)
         (i32.shl
-         (get_local $4)
+         (get_local $3)
          (i32.const 1)
         )
        )
@@ -5712,21 +5722,21 @@
      )
      (block (result i32)
       (if
-       (tee_local $3
+       (tee_local $4
         (i32.lt_s
          (i32.const -6)
-         (get_local $4)
+         (get_local $3)
         )
        )
-       (set_local $3
+       (set_local $4
         (i32.le_s
-         (get_local $4)
+         (get_local $3)
          (i32.const 0)
         )
        )
       )
       (if (result i32)
-       (get_local $3)
+       (get_local $4)
        (block (result i32)
         (call $~lib/internal/memory/memmove
          (i32.add
@@ -5735,10 +5745,10 @@
            (i32.const 4)
           )
           (i32.shl
-           (tee_local $3
+           (tee_local $4
             (i32.sub
              (i32.const 2)
-             (get_local $4)
+             (get_local $3)
             )
            )
            (i32.const 1)
@@ -5758,29 +5768,29 @@
          (i32.const 3014704)
         )
         (block $break|1
-         (set_local $2
+         (set_local $3
           (i32.const 2)
          )
          (loop $repeat|1
           (br_if $break|1
            (i32.ge_s
-            (get_local $2)
             (get_local $3)
+            (get_local $4)
            )
           )
           (i32.store16 offset=4
            (i32.add
             (get_local $0)
             (i32.shl
-             (get_local $2)
+             (get_local $3)
              (i32.const 1)
             )
            )
            (i32.const 48)
           )
-          (set_local $2
+          (set_local $3
            (i32.add
-            (get_local $2)
+            (get_local $3)
             (i32.const 1)
            )
           )
@@ -5789,7 +5799,7 @@
         )
         (i32.add
          (get_local $1)
-         (get_local $3)
+         (get_local $4)
         )
        )
        (if (result i32)
@@ -5802,7 +5812,7 @@
           (get_local $0)
           (i32.const 101)
          )
-         (set_local $3
+         (set_local $4
           (i32.add
            (get_local $0)
            (i32.const 4)
@@ -5811,36 +5821,37 @@
          (if
           (tee_local $0
            (i32.lt_s
-            (tee_local $2
+            (tee_local $3
              (i32.sub
-              (get_local $4)
+              (get_local $3)
               (i32.const 1)
              )
             )
             (i32.const 0)
            )
           )
-          (set_local $2
+          (set_local $3
            (i32.sub
             (i32.const 0)
-            (get_local $2)
+            (get_local $3)
            )
+          )
+         )
+         (set_local $2
+          (i32.add
+           (call $~lib/internal/number/decimalCount32
+            (get_local $3)
+           )
+           (i32.const 1)
           )
          )
          (call $~lib/internal/number/utoa32_lut
+          (get_local $4)
           (get_local $3)
           (get_local $2)
-          (tee_local $2
-           (i32.add
-            (call $~lib/internal/number/decimalCount32
-             (get_local $2)
-            )
-            (i32.const 1)
-           )
-          )
          )
          (i32.store16 offset=4
-          (get_local $3)
+          (get_local $4)
           (select
            (i32.const 45)
            (i32.const 43)
@@ -5885,7 +5896,7 @@
           )
           (i32.const 101)
          )
-         (set_local $3
+         (set_local $4
           (i32.add
            (get_local $0)
            (i32.const 4)
@@ -5894,36 +5905,37 @@
          (if
           (tee_local $0
            (i32.lt_s
-            (tee_local $2
+            (tee_local $3
              (i32.sub
-              (get_local $4)
+              (get_local $3)
               (i32.const 1)
              )
             )
             (i32.const 0)
            )
           )
-          (set_local $2
+          (set_local $3
            (i32.sub
             (i32.const 0)
-            (get_local $2)
+            (get_local $3)
            )
+          )
+         )
+         (set_local $2
+          (i32.add
+           (call $~lib/internal/number/decimalCount32
+            (get_local $3)
+           )
+           (i32.const 1)
           )
          )
          (call $~lib/internal/number/utoa32_lut
+          (get_local $4)
           (get_local $3)
           (get_local $2)
-          (tee_local $2
-           (i32.add
-            (call $~lib/internal/number/decimalCount32
-             (get_local $2)
-            )
-            (i32.const 1)
-           )
-          )
          )
          (i32.store16 offset=4
-          (get_local $3)
+          (get_local $4)
           (select
            (i32.const 45)
            (i32.const 43)
@@ -5947,8 +5959,8 @@
  )
  (func $~lib/internal/number/dtoa_core (; 47 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 i32)
+  (local $3 i32)
+  (local $4 i64)
   (local $5 i32)
   (local $6 i64)
   (local $7 i64)
@@ -5956,12 +5968,13 @@
   (local $9 i64)
   (local $10 i64)
   (local $11 i64)
-  (local $12 i32)
-  (local $13 i32)
+  (local $12 i64)
+  (local $13 i64)
   (local $14 i32)
-  (local $15 i64)
+  (local $15 i32)
+  (local $16 i32)
   (if
-   (tee_local $12
+   (tee_local $14
     (f64.lt
      (get_local $1)
      (f64.const 0)
@@ -5983,9 +5996,9 @@
    (i64.add
     (i64.shl
      (i64.extend_u/i32
-      (tee_local $5
+      (tee_local $3
        (i32.ne
-        (tee_local $13
+        (tee_local $15
          (i32.wrap/i64
           (i64.shr_u
            (i64.and
@@ -6012,14 +6025,14 @@
     )
    )
   )
-  (set_local $5
+  (set_local $3
    (i32.sub
-    (tee_local $13
+    (tee_local $15
      (i32.sub
       (select
-       (get_local $13)
+       (get_local $15)
        (i32.const 1)
-       (get_local $5)
+       (get_local $3)
       )
       (i32.const 1075)
      )
@@ -6027,10 +6040,10 @@
     (i32.const 1)
    )
   )
-  (set_local $4
+  (set_local $16
    (i32.wrap/i64
     (i64.clz
-     (tee_local $6
+     (tee_local $4
       (i64.add
        (i64.shl
         (get_local $2)
@@ -6044,9 +6057,9 @@
   )
   (set_global $~lib/internal/number/_frc_plus
    (i64.shl
-    (get_local $6)
+    (get_local $4)
     (i64.extend_s/i32
-     (get_local $4)
+     (get_local $16)
     )
    )
   )
@@ -6056,7 +6069,7 @@
      (i64.shl
       (get_local $2)
       (i64.extend_s/i32
-       (tee_local $14
+       (tee_local $5
         (i32.add
          (i64.eq
           (get_local $2)
@@ -6072,13 +6085,13 @@
     (i64.extend_s/i32
      (i32.sub
       (i32.sub
-       (get_local $13)
-       (get_local $14)
+       (get_local $15)
+       (get_local $5)
       )
-      (tee_local $5
+      (tee_local $3
        (i32.sub
-        (get_local $5)
-        (get_local $4)
+        (get_local $3)
+        (get_local $16)
        )
       )
      )
@@ -6086,17 +6099,17 @@
    )
   )
   (set_global $~lib/internal/number/_exp
-   (get_local $5)
+   (get_local $3)
   )
   (set_global $~lib/internal/number/_K
    (i32.sub
     (i32.const 348)
     (i32.shl
-     (tee_local $5
+     (tee_local $3
       (i32.add
        (i32.shr_s
         (i32.add
-         (tee_local $4
+         (tee_local $16
           (i32.trunc_s/f64
            (tee_local $1
             (f64.add
@@ -6116,7 +6129,7 @@
          )
          (f64.ne
           (f64.convert_s/i32
-           (get_local $4)
+           (get_local $16)
           )
           (get_local $1)
          )
@@ -6130,7 +6143,7 @@
     )
    )
   )
-  (set_local $4
+  (set_local $5
    (i32.load
     (i32.const 4024)
    )
@@ -6142,7 +6155,7 @@
       (i32.const 3760)
      )
      (i32.shl
-      (get_local $5)
+      (get_local $3)
       (i32.const 3)
      )
     )
@@ -6151,9 +6164,9 @@
   (set_global $~lib/internal/number/_exp_pow
    (i32.load16_s offset=8
     (i32.add
-     (get_local $4)
+     (get_local $5)
      (i32.shl
-      (get_local $5)
+      (get_local $3)
       (i32.const 1)
      )
     )
@@ -6167,7 +6180,7 @@
        (i64.shl
         (get_local $2)
         (i64.extend_s/i32
-         (tee_local $4
+         (tee_local $5
           (i32.wrap/i64
            (i64.clz
             (get_local $2)
@@ -6182,7 +6195,7 @@
     )
     (tee_local $8
      (i64.and
-      (tee_local $6
+      (tee_local $4
        (get_global $~lib/internal/number/_frc_pow)
       )
       (i64.const 4294967295)
@@ -6196,13 +6209,13 @@
      (get_local $7)
      (tee_local $10
       (i64.shr_u
-       (get_local $6)
+       (get_local $4)
        (i64.const 32)
       )
      )
     )
     (i64.and
-     (tee_local $3
+     (tee_local $6
       (i64.add
        (i64.mul
         (tee_local $11
@@ -6231,7 +6244,7 @@
       (get_local $10)
      )
      (i64.shr_u
-      (get_local $3)
+      (get_local $6)
       (i64.const 32)
      )
     )
@@ -6248,7 +6261,7 @@
    (i64.mul
     (tee_local $9
      (i64.and
-      (tee_local $3
+      (tee_local $6
        (get_global $~lib/internal/number/_frc_plus)
       )
       (i64.const 4294967295)
@@ -6256,30 +6269,30 @@
     )
     (tee_local $10
      (i64.and
-      (get_local $6)
+      (get_local $4)
       (i64.const 4294967295)
      )
     )
    )
   )
-  (set_local $7
+  (set_local $13
    (i64.add
     (i64.mul
      (get_local $9)
      (tee_local $8
       (i64.shr_u
-       (get_local $6)
+       (get_local $4)
        (i64.const 32)
       )
      )
     )
     (i64.and
-     (tee_local $3
+     (tee_local $12
       (i64.add
        (i64.mul
         (tee_local $11
          (i64.shr_u
-          (get_local $3)
+          (get_local $6)
           (i64.const 32)
          )
         )
@@ -6295,7 +6308,7 @@
     )
    )
   )
-  (set_local $15
+  (set_local $13
    (i64.add
     (i64.add
      (i64.mul
@@ -6303,13 +6316,13 @@
       (get_local $8)
      )
      (i64.shr_u
-      (get_local $3)
+      (get_local $12)
       (i64.const 32)
      )
     )
     (i64.shr_u
      (i64.add
-      (get_local $7)
+      (get_local $13)
       (i64.const 2147483647)
      )
      (i64.const 32)
@@ -6320,7 +6333,7 @@
    (i64.mul
     (tee_local $7
      (i64.and
-      (tee_local $3
+      (tee_local $12
        (get_global $~lib/internal/number/_frc_minus)
       )
       (i64.const 4294967295)
@@ -6328,30 +6341,30 @@
     )
     (tee_local $8
      (i64.and
-      (get_local $6)
+      (get_local $4)
       (i64.const 4294967295)
      )
     )
    )
   )
-  (set_local $6
+  (set_local $12
    (i64.add
     (i64.mul
      (get_local $7)
      (tee_local $10
       (i64.shr_u
-       (get_local $6)
+       (get_local $4)
        (i64.const 32)
       )
      )
     )
     (i64.and
-     (tee_local $3
+     (tee_local $6
       (i64.add
        (i64.mul
         (tee_local $11
          (i64.shr_u
-          (get_local $3)
+          (get_local $12)
           (i64.const 32)
          )
         )
@@ -6367,11 +6380,11 @@
     )
    )
   )
-  (set_local $3
+  (set_local $6
    (i64.sub
-    (tee_local $7
+    (tee_local $13
      (i64.sub
-      (get_local $15)
+      (get_local $13)
       (i64.const 1)
      )
     )
@@ -6383,13 +6396,13 @@
         (get_local $10)
        )
        (i64.shr_u
-        (get_local $3)
+        (get_local $6)
         (i64.const 32)
        )
       )
       (i64.shr_u
        (i64.add
-        (get_local $6)
+        (get_local $12)
         (i64.const 2147483647)
        )
        (i64.const 32)
@@ -6399,49 +6412,54 @@
     )
    )
   )
-  (i32.add
-   (call $~lib/internal/number/prettify
-    (i32.add
-     (get_local $0)
-     (i32.shl
-      (get_local $12)
-      (i32.const 1)
-     )
-    )
-    (i32.sub
-     (call $~lib/internal/number/genDigits
-      (get_local $0)
-      (get_local $2)
-      (tee_local $5
+  (set_local $3
+   (call $~lib/internal/number/genDigits
+    (get_local $0)
+    (get_local $2)
+    (tee_local $3
+     (i32.sub
+      (i32.add
        (i32.sub
-        (i32.add
-         (i32.sub
-          (get_local $13)
-          (get_local $4)
-         )
-         (tee_local $4
-          (get_global $~lib/internal/number/_exp_pow)
-         )
-        )
-        (i32.const -64)
+        (get_local $15)
+        (get_local $5)
+       )
+       (tee_local $5
+        (get_global $~lib/internal/number/_exp_pow)
        )
       )
-      (get_local $7)
-      (i32.sub
-       (i32.add
-        (get_global $~lib/internal/number/_exp)
-        (get_local $4)
-       )
-       (i32.const -64)
-      )
-      (get_local $3)
-      (get_local $12)
+      (i32.const -64)
      )
-     (get_local $12)
     )
-    (get_global $~lib/internal/number/_K)
+    (get_local $13)
+    (i32.sub
+     (i32.add
+      (get_global $~lib/internal/number/_exp)
+      (get_local $5)
+     )
+     (i32.const -64)
+    )
+    (get_local $6)
+    (get_local $14)
    )
-   (get_local $12)
+  )
+  (i32.add
+   (tee_local $3
+    (call $~lib/internal/number/prettify
+     (i32.add
+      (get_local $0)
+      (i32.shl
+       (get_local $14)
+       (i32.const 1)
+      )
+     )
+     (i32.sub
+      (get_local $3)
+      (get_local $14)
+     )
+     (get_global $~lib/internal/number/_K)
+    )
+   )
+   (get_local $14)
   )
  )
  (func $~lib/allocator/arena/__memory_free (; 48 ;) (; has Stack IR ;) (type $FUNCSIG$v)
@@ -6488,32 +6506,33 @@
    )
   )
   (set_local $2
-   (tee_local $1
-    (call $~lib/internal/string/allocateUnsafe
-     (i32.const 28)
+   (call $~lib/internal/number/dtoa_core
+    (tee_local $1
+     (call $~lib/internal/string/allocateUnsafe
+      (i32.const 28)
+     )
     )
+    (get_local $0)
    )
+  )
+  (set_local $3
+   (get_local $1)
   )
   (if
    (i32.lt_s
-    (tee_local $3
-     (call $~lib/internal/number/dtoa_core
-      (get_local $1)
-      (get_local $0)
-     )
-    )
+    (get_local $2)
     (i32.const 28)
    )
    (block
     (call $~lib/internal/string/copyUnsafe
-     (tee_local $2
+     (tee_local $3
       (call $~lib/internal/string/allocateUnsafe
-       (get_local $3)
+       (get_local $2)
       )
      )
      (i32.const 0)
      (get_local $1)
-     (get_local $3)
+     (get_local $2)
     )
     (if
      (i32.eqz
@@ -6532,9 +6551,11 @@
     (call $~lib/allocator/arena/__memory_free)
    )
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $start (; 50 ;) (; has Stack IR ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 5648)
   )
@@ -8040,14 +8061,20 @@
     (i32.const 65377)
    )
   )
+  (set_local $0
+   (call $~lib/string/String.fromCodePoint
+    (i32.const 55296)
+   )
+  )
+  (set_local $1
+   (call $~lib/string/String.fromCodePoint
+    (i32.const 56322)
+   )
+  )
   (set_global $std/string/b
    (call $~lib/string/String.__concat
-    (call $~lib/string/String.fromCodePoint
-     (i32.const 55296)
-    )
-    (call $~lib/string/String.fromCodePoint
-     (i32.const 56322)
-    )
+    (get_local $0)
+    (get_local $1)
    )
   )
   (if

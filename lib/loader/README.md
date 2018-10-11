@@ -74,7 +74,7 @@ Instances are automatically populated with useful utility:
 * **newArray**(view: `TypedArray`, length?: `number`, unsafe?: `boolean`): `number`<br />
   Copies a typed array into the module's memory and returns its pointer.
 
-* **newArray**(ctor: `TypedArrayConstructor`, length: `number`): `number`<br />
+* **newArray**(ctor: `TypedArrayConstructor`, length: `number`, unsafe?: `boolean`): `number`<br />
   Creates a typed array in the module's memory and returns its pointer.
 
 * **getArray**(ctor: `TypedArrayConstructor`, ptr: `number`): `TypedArray`<br />
@@ -92,7 +92,7 @@ Examples
 
 ```js
 // From a module provided as a buffer, i.e. as returned by fs.readFileSync
-const myModule = loader.instatiateBuffer(fs.readFileSync("myModule.wasm"), myImports);
+const myModule = loader.instantiateBuffer(fs.readFileSync("myModule.wasm"), myImports);
 
 // From a response object, i.e. as returned by window.fetch
 const myModule = await loader.instantiateStreaming(fetch("myModule.wasm"), myImports);

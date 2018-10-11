@@ -6,12 +6,6 @@
  (type $v (func))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $std/string-utf8/str (mut i32) (i32.const 8))
- (global $std/string-utf8/len (mut i32) (i32.const 0))
- (global $std/string-utf8/ptr (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 8) "\06\00\00\00\01\d87\dch\00i\00R\d8b\df")
  (data (i32.const 24) "\12\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00-\00u\00t\00f\008\00.\00t\00s")
@@ -21,7 +15,16 @@
  (data (i32.const 168) "\02\00\00\00h\00i")
  (data (i32.const 176) "\02\00\00\00R\d8b\df")
  (data (i32.const 184) "\01")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $std/string-utf8/str (mut i32) (i32.const 8))
+ (global $std/string-utf8/len (mut i32) (i32.const 0))
+ (global $std/string-utf8/ptr (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $~lib/string/String#get:lengthUTF8 (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -2649,16 +2652,18 @@
    )
   )
   (call $~lib/internal/memory/memmove
-   (i32.add
-    (tee_local $0
-     (call $~lib/internal/string/allocateUnsafe
-      (i32.shr_u
-       (get_local $3)
-       (i32.const 1)
+   (tee_local $4
+    (i32.add
+     (tee_local $0
+      (call $~lib/internal/string/allocateUnsafe
+       (i32.shr_u
+        (get_local $3)
+        (i32.const 1)
+       )
       )
      )
+     (i32.const 4)
     )
-    (i32.const 4)
    )
    (get_local $6)
    (get_local $3)
