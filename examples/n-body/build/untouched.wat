@@ -1026,43 +1026,43 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  ;;@ ~lib/array.ts:23:4
+  ;;@ ~lib/array.ts:37:4
   (if
-   ;;@ ~lib/array.ts:23:8
+   ;;@ ~lib/array.ts:37:8
    (i32.gt_u
     (get_local $1)
-    ;;@ ~lib/array.ts:23:22
+    ;;@ ~lib/array.ts:37:22
     (i32.const 268435454)
    )
-   ;;@ ~lib/array.ts:23:39
+   ;;@ ~lib/array.ts:37:39
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 23)
+     (i32.const 37)
      (i32.const 39)
     )
     (unreachable)
    )
   )
-  ;;@ ~lib/array.ts:24:4
+  ;;@ ~lib/array.ts:38:4
   (set_local $2
-   ;;@ ~lib/array.ts:24:21
+   ;;@ ~lib/array.ts:38:21
    (i32.shl
     (get_local $1)
-    ;;@ ~lib/array.ts:24:31
+    ;;@ ~lib/array.ts:38:31
     (i32.const 2)
    )
   )
-  ;;@ ~lib/array.ts:25:4
+  ;;@ ~lib/array.ts:39:4
   (set_local $3
-   ;;@ ~lib/array.ts:25:17
+   ;;@ ~lib/array.ts:39:17
    (call $~lib/internal/arraybuffer/allocateUnsafe
-    ;;@ ~lib/array.ts:25:32
+    ;;@ ~lib/array.ts:39:32
     (get_local $2)
    )
   )
-  ;;@ ~lib/array.ts:26:4
+  ;;@ ~lib/array.ts:40:4
   (i32.store
    (tee_local $0
     (if (result i32)
@@ -1088,27 +1088,27 @@
      )
     )
    )
-   ;;@ ~lib/array.ts:26:19
+   ;;@ ~lib/array.ts:40:19
    (get_local $3)
   )
-  ;;@ ~lib/array.ts:27:4
+  ;;@ ~lib/array.ts:41:4
   (i32.store offset=4
    (get_local $0)
-   ;;@ ~lib/array.ts:27:19
+   ;;@ ~lib/array.ts:41:19
    (get_local $1)
   )
-  ;;@ ~lib/array.ts:28:11
+  ;;@ ~lib/array.ts:42:11
   (block $~lib/memory/memory.fill|inlined.0
    (set_local $4
-    ;;@ ~lib/array.ts:29:6
+    ;;@ ~lib/array.ts:43:6
     (i32.add
      (get_local $3)
-     ;;@ ~lib/array.ts:29:34
+     ;;@ ~lib/array.ts:43:34
      (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
     )
    )
    (set_local $5
-    ;;@ ~lib/array.ts:30:6
+    ;;@ ~lib/array.ts:44:6
     (i32.const 0)
    )
    ;;@ ~lib/memory.ts:15:4
@@ -1125,10 +1125,10 @@
  )
  (func $~lib/array/Array<Body>#__unchecked_set (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
-  ;;@ ~lib/array.ts:98:4
+  ;;@ ~lib/array.ts:112:4
   (block $~lib/internal/arraybuffer/storeUnsafe<Body,Body>|inlined.0
    (set_local $3
-    ;;@ ~lib/array.ts:98:21
+    ;;@ ~lib/array.ts:112:21
     (i32.load
      (get_local $0)
     )
@@ -1153,10 +1153,10 @@
  )
  (func $~lib/array/Array<Body>#__unchecked_get (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  ;;@ ~lib/array.ts:78:46
+  ;;@ ~lib/array.ts:92:46
   (block $~lib/internal/arraybuffer/loadUnsafe<Body,Body>|inlined.0 (result i32)
    (set_local $2
-    ;;@ ~lib/array.ts:78:27
+    ;;@ ~lib/array.ts:92:27
     (i32.load
      (get_local $0)
     )
@@ -1179,29 +1179,29 @@
  )
  (func $~lib/array/Array<Body>#__get (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  ;;@ ~lib/array.ts:70:4
+  ;;@ ~lib/array.ts:84:4
   (set_local $2
-   ;;@ ~lib/array.ts:70:17
+   ;;@ ~lib/array.ts:84:17
    (i32.load
     (get_local $0)
    )
   )
-  ;;@ ~lib/array.ts:73:23
+  ;;@ ~lib/array.ts:87:23
   (if (result i32)
-   ;;@ ~lib/array.ts:71:11
+   ;;@ ~lib/array.ts:85:11
    (i32.lt_u
     (get_local $1)
-    ;;@ ~lib/array.ts:71:24
+    ;;@ ~lib/array.ts:85:24
     (i32.shr_u
-     ;;@ ~lib/array.ts:71:30
+     ;;@ ~lib/array.ts:85:30
      (i32.load
       (get_local $2)
      )
-     ;;@ ~lib/array.ts:71:52
+     ;;@ ~lib/array.ts:85:52
      (i32.const 2)
     )
    )
-   ;;@ ~lib/array.ts:72:8
+   ;;@ ~lib/array.ts:86:8
    (block $~lib/internal/arraybuffer/loadUnsafe<Body,Body>|inlined.1 (result i32)
     ;;@ ~lib/internal/arraybuffer.ts:68:91
     (i32.load offset=8
@@ -1218,7 +1218,7 @@
      )
     )
    )
-   ;;@ ~lib/array.ts:73:8
+   ;;@ ~lib/array.ts:87:8
    (unreachable)
   )
  )
@@ -1292,9 +1292,9 @@
   (set_local $5
    ;;@ assembly/index.ts:91:15
    (block $~lib/array/Array<Body>#get:length|inlined.0 (result i32)
-    ;;@ ~lib/array.ts:37:16
+    ;;@ ~lib/array.ts:51:16
     (i32.load offset=4
-     ;;@ ~lib/array.ts:37:11
+     ;;@ ~lib/array.ts:51:11
      (get_local $1)
     )
    )
@@ -1511,9 +1511,9 @@
   (set_local $3
    ;;@ assembly/index.ts:104:20
    (block $~lib/array/Array<Body>#get:length|inlined.1 (result i32)
-    ;;@ ~lib/array.ts:37:16
+    ;;@ ~lib/array.ts:51:16
     (i32.load offset=4
-     ;;@ ~lib/array.ts:37:11
+     ;;@ ~lib/array.ts:51:11
      (get_local $2)
     )
    )
@@ -1945,9 +1945,9 @@
     (set_local $4
      ;;@ assembly/index.ts:158:37
      (block $~lib/array/Array<Body>#get:length|inlined.2 (result i32)
-      ;;@ ~lib/array.ts:37:16
+      ;;@ ~lib/array.ts:51:16
       (i32.load offset=4
-       ;;@ ~lib/array.ts:37:11
+       ;;@ ~lib/array.ts:51:11
        (get_local $2)
       )
      )
@@ -2278,9 +2278,9 @@
     (get_local $0)
     ;;@ assembly/index.ts:209:22
     (block $~lib/array/Array<Body>#get:length|inlined.4 (result i32)
-     ;;@ ~lib/array.ts:37:16
+     ;;@ ~lib/array.ts:51:16
      (i32.load offset=4
-      ;;@ ~lib/array.ts:37:11
+      ;;@ ~lib/array.ts:51:11
       (get_local $1)
      )
     )
