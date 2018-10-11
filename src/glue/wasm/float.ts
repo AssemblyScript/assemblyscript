@@ -1,3 +1,5 @@
+/** @module glue/wasm *//***/
+
 @global
 function f32_as_i32(value: f32): i32 {
   return reinterpret<i32>(value);

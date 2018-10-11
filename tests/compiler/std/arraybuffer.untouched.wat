@@ -4,6 +4,12 @@
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $v (func))
+ (memory $0 1)
+ (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 56) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 120) "\12\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
@@ -17,13 +23,8 @@
  (global $~argc (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 160))
- (table 1 1 anyfunc)
- (elem (i32.const 0) $null)
- (memory $0 1)
- (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 56) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 120) "\12\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $~lib/internal/arraybuffer/computeSize (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (i32.shl
@@ -558,7 +559,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 13)
+     (i32.const 16)
      (i32.const 40)
     )
     (unreachable)
@@ -2871,7 +2872,13 @@
    (get_local $2)
   )
  )
- (func $start (; 10 ;) (type $v)
+ (func $~lib/arraybuffer/ArrayBuffer#get:data (; 10 ;) (type $ii) (param $0 i32) (result i32)
+  (i32.add
+   (get_local $0)
+   (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
+  )
+ )
+ (func $start (; 11 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -2947,6 +2954,27 @@
   (if
    (i32.eqz
     (i32.ne
+     (call $~lib/arraybuffer/ArrayBuffer#get:data
+      (get_global $std/arraybuffer/sliced)
+     )
+     (call $~lib/arraybuffer/ArrayBuffer#get:data
+      (get_global $std/arraybuffer/buffer)
+     )
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 10)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.ne
      (get_global $std/arraybuffer/sliced)
      (get_global $std/arraybuffer/buffer)
     )
@@ -2955,7 +2983,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 10)
+     (i32.const 11)
      (i32.const 0)
     )
     (unreachable)
@@ -2986,7 +3014,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 14)
+     (i32.const 15)
      (i32.const 0)
     )
     (unreachable)
@@ -3017,7 +3045,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 18)
+     (i32.const 19)
      (i32.const 0)
     )
     (unreachable)
@@ -3043,7 +3071,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 22)
+     (i32.const 23)
      (i32.const 0)
     )
     (unreachable)
@@ -3069,7 +3097,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 26)
+     (i32.const 27)
      (i32.const 0)
     )
     (unreachable)
@@ -3095,7 +3123,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 30)
+     (i32.const 31)
      (i32.const 0)
     )
     (unreachable)
@@ -3121,7 +3149,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 34)
+     (i32.const 35)
      (i32.const 0)
     )
     (unreachable)
@@ -3152,7 +3180,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 38)
+     (i32.const 39)
      (i32.const 0)
     )
     (unreachable)
@@ -3169,13 +3197,13 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 39)
+     (i32.const 40)
      (i32.const 0)
     )
     (unreachable)
    )
   )
  )
- (func $null (; 11 ;) (type $v)
+ (func $null (; 12 ;) (type $v)
  )
 )

@@ -4,6 +4,18 @@
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $v (func))
+ (memory $0 1)
+ (data (i32.const 8) "\03\00\00\00\00\00\00\00\00\01\02\00\00\00\00\00")
+ (data (i32.const 24) "\08\00\00\00\03\00\00\00")
+ (data (i32.const 32) "\14\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
+ (data (i32.const 80) "\0c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 112) "P\00\00\00\03\00\00\00")
+ (data (i32.const 120) "\00\00\00\00\00\00\00\00")
+ (data (i32.const 128) "x\00\00\00\00\00\00\00")
+ (data (i32.const 136) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 168) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
@@ -19,20 +31,11 @@
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
  (global $std/array-literal/dynamicArrayI8 (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayI32 (mut i32) (i32.const 0))
+ (global $std/array-literal/dynamicArrayRef (mut i32) (i32.const 0))
+ (global $std/array-literal/dynamicArrayRefWithCtor (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 228))
- (table 1 1 anyfunc)
- (elem (i32.const 0) $null)
- (memory $0 1)
- (data (i32.const 8) "\03\00\00\00\00\00\00\00\00\01\02\00\00\00\00\00")
- (data (i32.const 24) "\08\00\00\00\03\00\00\00")
- (data (i32.const 32) "\14\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
- (data (i32.const 80) "\0c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 112) "P\00\00\00\03\00\00\00")
- (data (i32.const 120) "\00\00\00\00\00\00\00\00")
- (data (i32.const 128) "x\00\00\00\00\00\00\00")
- (data (i32.const 136) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 168) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $~lib/array/Array<i8>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -637,7 +640,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
-     (i32.const 23)
+     (i32.const 37)
      (i32.const 39)
     )
     (unreachable)
@@ -737,7 +740,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 136)
-     (i32.const 23)
+     (i32.const 37)
      (i32.const 39)
     )
     (unreachable)
@@ -823,8 +826,231 @@
    )
   )
  )
- (func $start (; 12 ;) (type $v)
+ (func $~lib/array/Array<Ref>#constructor (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 268435454)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 136)
+     (i32.const 37)
+     (i32.const 39)
+    )
+    (unreachable)
+   )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 2)
+   )
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocateUnsafe
+    (get_local $2)
+   )
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/memory/memory.allocate
+         (i32.const 8)
+        )
+       )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
+      )
+     )
+    )
+   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (get_local $1)
+  )
+  (block $~lib/memory/memory.fill|inlined.2
+   (set_local $4
+    (i32.add
+     (get_local $3)
+     (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
+    )
+   )
+   (set_local $5
+    (i32.const 0)
+   )
+   (call $~lib/internal/memory/memset
+    (get_local $4)
+    (get_local $5)
+    (get_local $2)
+   )
+  )
+  (get_local $0)
+ )
+ (func $~lib/array/Array<Ref>#__unchecked_set (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (block $~lib/internal/arraybuffer/storeUnsafe<Ref,Ref>|inlined.0
+   (set_local $3
+    (i32.load
+     (get_local $0)
+    )
+   )
+   (i32.store offset=8
+    (i32.add
+     (get_local $3)
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
+    )
+    (get_local $2)
+   )
+  )
+ )
+ (func $std/array-literal/RefWithCtor#constructor (; 14 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (tee_local $0
+   (if (result i32)
+    (get_local $0)
+    (get_local $0)
+    (tee_local $0
+     (block (result i32)
+      (set_local $1
+       (call $~lib/memory/memory.allocate
+        (i32.const 0)
+       )
+      )
+      (get_local $1)
+     )
+    )
+   )
+  )
+ )
+ (func $~lib/array/Array<RefWithCtor>#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (if
+   (i32.gt_u
+    (get_local $1)
+    (i32.const 268435454)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 136)
+     (i32.const 37)
+     (i32.const 39)
+    )
+    (unreachable)
+   )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $1)
+    (i32.const 2)
+   )
+  )
+  (set_local $3
+   (call $~lib/internal/arraybuffer/allocateUnsafe
+    (get_local $2)
+   )
+  )
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $4
+        (call $~lib/memory/memory.allocate
+         (i32.const 8)
+        )
+       )
+       (i32.store
+        (get_local $4)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $4)
+        (i32.const 0)
+       )
+       (get_local $4)
+      )
+     )
+    )
+   )
+   (get_local $3)
+  )
+  (i32.store offset=4
+   (get_local $0)
+   (get_local $1)
+  )
+  (block $~lib/memory/memory.fill|inlined.3
+   (set_local $4
+    (i32.add
+     (get_local $3)
+     (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
+    )
+   )
+   (set_local $5
+    (i32.const 0)
+   )
+   (call $~lib/internal/memory/memset
+    (get_local $4)
+    (get_local $5)
+    (get_local $2)
+   )
+  )
+  (get_local $0)
+ )
+ (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 16 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (block $~lib/internal/arraybuffer/storeUnsafe<RefWithCtor,RefWithCtor>|inlined.0
+   (set_local $3
+    (i32.load
+     (get_local $0)
+    )
+   )
+   (i32.store offset=8
+    (i32.add
+     (get_local $3)
+     (i32.shl
+      (get_local $1)
+      (i32.const 2)
+     )
+    )
+    (get_local $2)
+   )
+  )
+ )
+ (func $start (; 17 ;) (type $v)
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -1052,19 +1278,19 @@
   )
   (set_global $std/array-literal/dynamicArrayI8
    (block (result i32)
-    (set_local $0
+    (set_local $1
      (call $~lib/array/Array<i8>#constructor
       (i32.const 0)
       (i32.const 3)
      )
     )
     (call $~lib/array/Array<i8>#__unchecked_set
-     (get_local $0)
+     (get_local $1)
      (i32.const 0)
      (get_global $std/array-literal/i)
     )
     (call $~lib/array/Array<i8>#__unchecked_set
-     (get_local $0)
+     (get_local $1)
      (i32.const 1)
      (block (result i32)
       (set_global $std/array-literal/i
@@ -1077,7 +1303,7 @@
      )
     )
     (call $~lib/array/Array<i8>#__unchecked_set
-     (get_local $0)
+     (get_local $1)
      (i32.const 2)
      (block (result i32)
       (set_global $std/array-literal/i
@@ -1089,18 +1315,18 @@
       (get_global $std/array-literal/i)
      )
     )
-    (get_local $0)
+    (get_local $1)
    )
   )
   (if
    (i32.eqz
     (i32.eq
      (block $~lib/array/Array<i8>#get:length|inlined.1 (result i32)
-      (set_local $0
+      (set_local $1
        (get_global $std/array-literal/dynamicArrayI8)
       )
       (i32.load offset=4
-       (get_local $0)
+       (get_local $1)
       )
      )
      (i32.const 3)
@@ -1199,19 +1425,19 @@
   )
   (set_global $std/array-literal/dynamicArrayI32
    (block (result i32)
-    (set_local $0
+    (set_local $2
      (call $~lib/array/Array<i32>#constructor
       (i32.const 0)
       (i32.const 3)
      )
     )
     (call $~lib/array/Array<i32>#__unchecked_set
-     (get_local $0)
+     (get_local $2)
      (i32.const 0)
      (get_global $std/array-literal/i)
     )
     (call $~lib/array/Array<i32>#__unchecked_set
-     (get_local $0)
+     (get_local $2)
      (i32.const 1)
      (block (result i32)
       (set_global $std/array-literal/i
@@ -1224,7 +1450,7 @@
      )
     )
     (call $~lib/array/Array<i32>#__unchecked_set
-     (get_local $0)
+     (get_local $2)
      (i32.const 2)
      (block (result i32)
       (set_global $std/array-literal/i
@@ -1236,18 +1462,18 @@
       (get_global $std/array-literal/i)
      )
     )
-    (get_local $0)
+    (get_local $2)
    )
   )
   (if
    (i32.eqz
     (i32.eq
      (block $~lib/array/Array<i32>#get:length|inlined.2 (result i32)
-      (set_local $0
+      (set_local $2
        (get_global $std/array-literal/dynamicArrayI32)
       )
       (i32.load offset=4
-       (get_local $0)
+       (get_local $2)
       )
      )
      (i32.const 3)
@@ -1323,7 +1549,134 @@
     (unreachable)
    )
   )
+  (set_global $std/array-literal/dynamicArrayRef
+   (block (result i32)
+    (set_local $3
+     (call $~lib/array/Array<Ref>#constructor
+      (i32.const 0)
+      (i32.const 3)
+     )
+    )
+    (call $~lib/array/Array<Ref>#__unchecked_set
+     (get_local $3)
+     (i32.const 0)
+     (block (result i32)
+      (set_local $2
+       (call $~lib/memory/memory.allocate
+        (i32.const 0)
+       )
+      )
+      (get_local $2)
+     )
+    )
+    (call $~lib/array/Array<Ref>#__unchecked_set
+     (get_local $3)
+     (i32.const 1)
+     (block (result i32)
+      (set_local $2
+       (call $~lib/memory/memory.allocate
+        (i32.const 0)
+       )
+      )
+      (get_local $2)
+     )
+    )
+    (call $~lib/array/Array<Ref>#__unchecked_set
+     (get_local $3)
+     (i32.const 2)
+     (block (result i32)
+      (set_local $2
+       (call $~lib/memory/memory.allocate
+        (i32.const 0)
+       )
+      )
+      (get_local $2)
+     )
+    )
+    (get_local $3)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (block $~lib/array/Array<Ref>#get:length|inlined.0 (result i32)
+      (set_local $3
+       (get_global $std/array-literal/dynamicArrayRef)
+      )
+      (i32.load offset=4
+       (get_local $3)
+      )
+     )
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 36)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/array-literal/dynamicArrayRefWithCtor
+   (block (result i32)
+    (set_local $4
+     (call $~lib/array/Array<RefWithCtor>#constructor
+      (i32.const 0)
+      (i32.const 3)
+     )
+    )
+    (call $~lib/array/Array<RefWithCtor>#__unchecked_set
+     (get_local $4)
+     (i32.const 0)
+     (call $std/array-literal/RefWithCtor#constructor
+      (i32.const 0)
+     )
+    )
+    (call $~lib/array/Array<RefWithCtor>#__unchecked_set
+     (get_local $4)
+     (i32.const 1)
+     (call $std/array-literal/RefWithCtor#constructor
+      (i32.const 0)
+     )
+    )
+    (call $~lib/array/Array<RefWithCtor>#__unchecked_set
+     (get_local $4)
+     (i32.const 2)
+     (call $std/array-literal/RefWithCtor#constructor
+      (i32.const 0)
+     )
+    )
+    (get_local $4)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.eq
+     (block $~lib/array/Array<RefWithCtor>#get:length|inlined.0 (result i32)
+      (set_local $4
+       (get_global $std/array-literal/dynamicArrayRefWithCtor)
+      )
+      (i32.load offset=4
+       (get_local $4)
+      )
+     )
+     (i32.const 3)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 32)
+     (i32.const 40)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
  )
- (func $null (; 13 ;) (type $v)
+ (func $null (; 18 ;) (type $v)
  )
 )

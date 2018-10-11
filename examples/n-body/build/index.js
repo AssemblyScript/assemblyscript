@@ -137,3 +137,8 @@ function bench(steps) {
         system.advance(0.01);
 }
 exports.bench = bench;
+function getBody(index) {
+    var bodies = system.bodies;
+    return index < bodies.length ? bodies[index] : null;
+}
+exports.getBody = getBody;

@@ -303,7 +303,17 @@ export class String {
     return out;
   }
 
+  @inline
   trimLeft(): String {
+    return this.trimStart();
+  }
+
+  @inline
+  trimRight(): String {
+    return this.trimEnd();
+  }
+
+  trimStart(): String {
     assert(this !== null);
     var start: isize = 0;
     var len: isize = this.length;
@@ -323,7 +333,7 @@ export class String {
     return out;
   }
 
-  trimRight(): String {
+  trimEnd(): String {
     assert(this !== null);
     var len: isize = this.length;
     while (
@@ -424,6 +434,49 @@ export class String {
       }
     }
     return len;
+  }
+
+  static fromUTF8(ptr: usize, len: usize): String {
+    if (len < 1) return changetype<String>("");
+    var ptrPos = <usize>0;
+    var buf = memory.allocate(<usize>len << 1);
+    var bufPos = <usize>0;
+    while (ptrPos < len) {
+      let cp = <u32>load<u8>(ptr + ptrPos++);
+      if (cp < 128) {
+        store<u16>(buf + bufPos, cp);
+        bufPos += 2;
+      } else if (cp > 191 && cp < 224) {
+        assert(ptrPos + 1 <= len);
+        store<u16>(buf + bufPos, (cp & 31) << 6 | load<u8>(ptr + ptrPos++) & 63);
+        bufPos += 2;
+      } else if (cp > 239 && cp < 365) {
+        assert(ptrPos + 3 <= len);
+        cp = (
+          (cp                       &  7) << 18 |
+          (load<u8>(ptr + ptrPos++) & 63) << 12 |
+          (load<u8>(ptr + ptrPos++) & 63) << 6  |
+           load<u8>(ptr + ptrPos++) & 63
+        ) - 0x10000;
+        store<u16>(buf + bufPos, 0xD800 + (cp >> 10));
+        bufPos += 2;
+        store<u16>(buf + bufPos, 0xDC00 + (cp & 1023));
+        bufPos += 2;
+      } else {
+        assert(ptrPos + 2 <= len);
+        store<u16>(buf + bufPos,
+          (cp                       & 15) << 12 |
+          (load<u8>(ptr + ptrPos++) & 63) << 6  |
+           load<u8>(ptr + ptrPos++) & 63
+        );
+        bufPos += 2;
+      }
+    }
+    assert(ptrPos == len);
+    var str = allocateUnsafe(<u32>(bufPos >> 1));
+    memory.copy(changetype<usize>(str) + HEADER_SIZE, buf, bufPos);
+    memory.free(buf);
+    return str;
   }
 
   toUTF8(): usize {

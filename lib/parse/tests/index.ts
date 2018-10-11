@@ -54,6 +54,10 @@ function onFunction(funIndex: number, typeIndex: number): void {
   console.log("- Function[" + funIndex + "] -> FunctionType[" + typeIndex + "]");
 }
 
+function onTable(tblIndex: number, type: number, initial: number, maximum: number, flags: number): void {
+  console.log("- Table[" + tblIndex + "] -> " + Type[type] + ": initial=" + initial + ", maximum=" + (maximum >>> 0));
+}
+
 function onGlobal(gloIndex: number, type: Type, mutability: number): void {
   console.log("- Global[" + gloIndex + "]: " + (mutability & 1 ? "mutable " : "const ") + Type[type]);
 }
@@ -104,6 +108,7 @@ function onLocalName(funcIndex: number, index: number, offset: number, length: n
     onGlobalImport,
     onMemory,
     onFunction,
+    onTable,
     onGlobal,
     onStart,
     onExport,

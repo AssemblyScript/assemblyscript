@@ -14,19 +14,6 @@
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $std/typedarray/arr (mut i32) (i32.const 0))
- (global $std/typedarray/af64 (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
- (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
- (global $std/typedarray/arr8 (mut i32) (i32.const 0))
- (global $std/typedarray/sub8 (mut i32) (i32.const 0))
- (global $std/typedarray/arr32 (mut i32) (i32.const 0))
- (global $std/typedarray/sub32 (mut i32) (i32.const 0))
- (table 2 2 anyfunc)
- (elem (i32.const 0) $null $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1)
  (memory $0 1)
  (data (i32.const 8) "\11\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 48) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
@@ -56,6 +43,19 @@
  (data (i32.const 520) "\14\00\00\00\00\00\00\00\01")
  (data (i32.const 544) "\02")
  (data (i32.const 552) "\08\02\00\00\05")
+ (table 2 anyfunc)
+ (elem (i32.const 0) $null $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $std/typedarray/arr (mut i32) (i32.const 0))
+ (global $std/typedarray/af64 (mut i32) (i32.const 0))
+ (global $~argc (mut i32) (i32.const 0))
+ (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
+ (global $std/typedarray/arr8 (mut i32) (i32.const 0))
+ (global $std/typedarray/sub8 (mut i32) (i32.const 0))
+ (global $std/typedarray/arr32 (mut i32) (i32.const 0))
+ (global $std/typedarray/sub32 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -2798,6 +2798,8 @@
  (func $std/typedarray/isInt8ArrayEqual (; 29 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   (if
    (i32.ne
     (i32.sub
@@ -2834,22 +2836,34 @@
       (get_local $3)
      )
     )
-    (if
-     (i32.ne
-      (i32.and
+    (set_local $4
+     (i32.shr_s
+      (i32.shl
        (call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
         (get_local $0)
         (get_local $2)
        )
-       (i32.const 255)
+       (i32.const 24)
       )
-      (i32.and
+      (i32.const 24)
+     )
+    )
+    (set_local $5
+     (i32.shr_s
+      (i32.shl
        (call $~lib/array/Array<i8>#__get
         (get_local $1)
         (get_local $2)
        )
-       (i32.const 255)
+       (i32.const 24)
       )
+      (i32.const 24)
+     )
+    )
+    (if
+     (i32.ne
+      (get_local $4)
+      (get_local $5)
      )
      (return
       (i32.const 0)
@@ -3114,6 +3128,8 @@
  (func $std/typedarray/isInt32ArrayEqual (; 34 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   (if
    (i32.ne
     (i32.shr_s
@@ -3156,16 +3172,22 @@
       (get_local $3)
      )
     )
+    (set_local $4
+     (call $~lib/internal/typedarray/TypedArray<i32,i32>#__get
+      (get_local $0)
+      (get_local $2)
+     )
+    )
+    (set_local $5
+     (call $~lib/array/Array<i32>#__get
+      (get_local $1)
+      (get_local $2)
+     )
+    )
     (if
      (i32.ne
-      (call $~lib/internal/typedarray/TypedArray<i32,i32>#__get
-       (get_local $0)
-       (get_local $2)
-      )
-      (call $~lib/array/Array<i32>#__get
-       (get_local $1)
-       (get_local $2)
-      )
+      (get_local $4)
+      (get_local $5)
      )
      (return
       (i32.const 0)

@@ -3,16 +3,19 @@
  (type $F (func (result f64)))
  (type $v (func))
  (type $iiFv (func (param i32 i32 f64)))
+ (import "env" "memory" (memory $0 0))
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (import "config" "BGR_ALIVE" (global $assembly/config/BGR_ALIVE i32))
  (import "config" "BGR_DEAD" (global $assembly/config/BGR_DEAD i32))
  (import "config" "BIT_ROT" (global $assembly/config/BIT_ROT i32))
- (import "JSMath" "random" (func $~lib/math/JSMath.random (result f64)))
- (import "env" "memory" (memory $0 0))
+ (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
  (global $assembly/index/w (mut i32) (i32.const 0))
  (global $assembly/index/h (mut i32) (i32.const 0))
  (global $assembly/index/s (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "init" (func $assembly/index/init))
  (export "step" (func $assembly/index/step))
  (export "fill" (func $assembly/index/fill))
@@ -57,7 +60,7 @@
       )
      )
     )
-    ;;@ assembly/index.ts:34:30
+    ;;@ assembly/index.ts:35:4
     (block $break|1
      ;;@ assembly/index.ts:35:9
      (set_local $3
@@ -75,14 +78,14 @@
         )
        )
       )
-      ;;@ assembly/index.ts:35:32
+      ;;@ assembly/index.ts:36:6
       (block $assembly/index/set|inlined.0
        (set_local $4
         ;;@ assembly/index.ts:36:16
         (if (result i32)
          (f64.gt
           ;;@ assembly/index.ts:36:21
-          (call $~lib/math/JSMath.random)
+          (call $~lib/bindings/Math/random)
           ;;@ assembly/index.ts:36:32
           (f64.const 0.1)
          )
@@ -751,12 +754,12 @@
       )
      )
     )
-    ;;@ assembly/index.ts:81:33
+    ;;@ assembly/index.ts:82:4
     (if
      ;;@ assembly/index.ts:82:8
      (f64.lt
       ;;@ assembly/index.ts:82:13
-      (call $~lib/math/JSMath.random)
+      (call $~lib/bindings/Math/random)
       ;;@ assembly/index.ts:82:24
       (get_local $2)
      )
@@ -817,12 +820,12 @@
       )
      )
     )
-    ;;@ assembly/index.ts:84:33
+    ;;@ assembly/index.ts:85:4
     (if
      ;;@ assembly/index.ts:85:8
      (f64.lt
       ;;@ assembly/index.ts:85:13
-      (call $~lib/math/JSMath.random)
+      (call $~lib/bindings/Math/random)
       ;;@ assembly/index.ts:85:24
       (get_local $2)
      )
@@ -873,5 +876,7 @@
     (br $repeat|1)
    )
   )
+ )
+ (func $null (; 4 ;) (type $v)
  )
 )

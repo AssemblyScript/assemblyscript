@@ -9,8 +9,8 @@ export class Valid<T> {
 }
 export class Invalid<T> {
   constructor<T>() {}
-  instanceFunction():  {}
-  get instanceGetter<T>(a: i32):  {}
+  instanceFunction() {}
+  get instanceGetter<T>(a: i32) {}
   set instanceSetter<T>() {}
 }
 // ERROR 1092: "Type parameters cannot appear on a constructor declaration." in class.ts:13:13

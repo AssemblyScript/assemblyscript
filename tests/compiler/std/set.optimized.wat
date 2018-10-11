@@ -21,14 +21,17 @@
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (data (i32.const 56) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (data (i32.const 120) "\n\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -479,7 +482,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 13)
+     (i32.const 16)
      (i32.const 40)
     )
     (unreachable)
@@ -508,23 +511,30 @@
   (get_local $2)
  )
  (func $~lib/set/Set<i8>#clear (; 7 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
-  (i32.store
-   (get_local $0)
+  (local $1 i32)
+  (set_local $1
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.const 16)
     (i32.const 0)
    )
   )
+  (i32.store
+   (get_local $0)
+   (get_local $1)
+  )
   (i32.store offset=4
    (get_local $0)
    (i32.const 3)
   )
-  (i32.store offset=8
-   (get_local $0)
+  (set_local $1
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.const 32)
     (i32.const 1)
    )
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $1)
   )
   (i32.store offset=12
    (get_local $0)
@@ -659,13 +669,17 @@
   (i32.const 0)
  )
  (func $~lib/set/Set<i8>#has (; 12 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (set_local $2
+   (call $~lib/internal/hash/hash<i8>
+    (get_local $1)
+   )
+  )
   (i32.ne
    (call $~lib/set/Set<i8>#find
     (get_local $0)
     (get_local $1)
-    (call $~lib/internal/hash/hash<i8>
-     (get_local $1)
-    )
+    (get_local $2)
    )
    (i32.const 0)
   )
@@ -678,7 +692,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (set_local $4
+  (set_local $5
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $2
@@ -692,7 +706,7 @@
     (i32.const 0)
    )
   )
-  (set_local $5
+  (set_local $6
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $7
@@ -730,7 +744,7 @@
   )
   (set_local $3
    (i32.add
-    (get_local $5)
+    (get_local $6)
     (i32.const 8)
    )
   )
@@ -757,21 +771,22 @@
          (get_local $2)
         )
        )
+       (set_local $4
+        (call $~lib/internal/hash/hash8
+         (i32.load8_s
+          (get_local $2)
+         )
+        )
+       )
        (i32.store offset=4
         (get_local $3)
         (i32.load offset=8
-         (tee_local $6
+         (tee_local $4
           (i32.add
-           (get_local $4)
+           (get_local $5)
            (i32.shl
             (i32.and
-             (tee_local $6
-              (call $~lib/internal/hash/hash8
-               (i32.load8_s
-                (get_local $2)
-               )
-              )
-             )
+             (get_local $4)
              (get_local $1)
             )
             (i32.const 2)
@@ -781,7 +796,7 @@
         )
        )
        (i32.store offset=8
-        (get_local $6)
+        (get_local $4)
         (get_local $3)
        )
        (set_local $3
@@ -804,7 +819,7 @@
   )
   (i32.store
    (get_local $0)
-   (get_local $4)
+   (get_local $5)
   )
   (i32.store offset=4
    (get_local $0)
@@ -812,7 +827,7 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $5)
+   (get_local $6)
   )
   (i32.store offset=12
    (get_local $0)
@@ -829,16 +844,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (set_local $4
+   (call $~lib/internal/hash/hash<i8>
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
     (call $~lib/set/Set<i8>#find
      (get_local $0)
      (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<i8>
-       (get_local $1)
-      )
-     )
+     (get_local $4)
     )
    )
    (block
@@ -961,25 +977,27 @@
  )
  (func $~lib/set/Set<i8>#delete (; 16 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (set_local $2
+   (get_local $0)
+  )
+  (set_local $0
+   (call $~lib/internal/hash/hash8
+    (i32.shr_s
+     (i32.shl
+      (get_local $1)
+      (i32.const 24)
+     )
+     (i32.const 24)
+    )
+   )
+  )
   (if
    (i32.eqz
     (tee_local $0
      (call $~lib/set/Set<i8>#find
-      (tee_local $2
-       (get_local $0)
-      )
+      (get_local $2)
       (get_local $1)
-      (tee_local $0
-       (call $~lib/internal/hash/hash8
-        (i32.shr_s
-         (i32.shl
-          (get_local $1)
-          (i32.const 24)
-         )
-         (i32.const 24)
-        )
-       )
-      )
+      (get_local $0)
      )
     )
    )
@@ -1411,13 +1429,17 @@
   )
  )
  (func $~lib/set/Set<u8>#has (; 19 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (set_local $2
+   (call $~lib/internal/hash/hash<u8>
+    (get_local $1)
+   )
+  )
   (i32.ne
    (call $~lib/set/Set<i8>#find
     (get_local $0)
     (get_local $1)
-    (call $~lib/internal/hash/hash<u8>
-     (get_local $1)
-    )
+    (get_local $2)
    )
    (i32.const 0)
   )
@@ -1430,7 +1452,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (set_local $4
+  (set_local $5
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $2
@@ -1444,7 +1466,7 @@
     (i32.const 0)
    )
   )
-  (set_local $5
+  (set_local $6
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $7
@@ -1482,7 +1504,7 @@
   )
   (set_local $3
    (i32.add
-    (get_local $5)
+    (get_local $6)
     (i32.const 8)
    )
   )
@@ -1509,21 +1531,22 @@
          (get_local $2)
         )
        )
+       (set_local $4
+        (call $~lib/internal/hash/hash8
+         (i32.load8_u
+          (get_local $2)
+         )
+        )
+       )
        (i32.store offset=4
         (get_local $3)
         (i32.load offset=8
-         (tee_local $6
+         (tee_local $4
           (i32.add
-           (get_local $4)
+           (get_local $5)
            (i32.shl
             (i32.and
-             (tee_local $6
-              (call $~lib/internal/hash/hash8
-               (i32.load8_u
-                (get_local $2)
-               )
-              )
-             )
+             (get_local $4)
              (get_local $1)
             )
             (i32.const 2)
@@ -1533,7 +1556,7 @@
         )
        )
        (i32.store offset=8
-        (get_local $6)
+        (get_local $4)
         (get_local $3)
        )
        (set_local $3
@@ -1556,7 +1579,7 @@
   )
   (i32.store
    (get_local $0)
-   (get_local $4)
+   (get_local $5)
   )
   (i32.store offset=4
    (get_local $0)
@@ -1564,7 +1587,7 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $5)
+   (get_local $6)
   )
   (i32.store offset=12
    (get_local $0)
@@ -1581,16 +1604,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (set_local $4
+   (call $~lib/internal/hash/hash<u8>
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
     (call $~lib/set/Set<i8>#find
      (get_local $0)
      (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<u8>
-       (get_local $1)
-      )
-     )
+     (get_local $4)
     )
    )
    (block
@@ -1708,22 +1732,24 @@
  )
  (func $~lib/set/Set<u8>#delete (; 22 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (set_local $2
+   (get_local $0)
+  )
+  (set_local $0
+   (call $~lib/internal/hash/hash8
+    (i32.and
+     (get_local $1)
+     (i32.const 255)
+    )
+   )
+  )
   (if
    (i32.eqz
     (tee_local $0
      (call $~lib/set/Set<i8>#find
-      (tee_local $2
-       (get_local $0)
-      )
+      (get_local $2)
       (get_local $1)
-      (tee_local $0
-       (call $~lib/internal/hash/hash8
-        (i32.and
-         (get_local $1)
-         (i32.const 255)
-        )
-       )
-      )
+      (get_local $0)
      )
     )
    )
@@ -2245,13 +2271,17 @@
   (i32.const 0)
  )
  (func $~lib/set/Set<i16>#has (; 27 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (set_local $2
+   (call $~lib/internal/hash/hash<i16>
+    (get_local $1)
+   )
+  )
   (i32.ne
    (call $~lib/set/Set<i16>#find
     (get_local $0)
     (get_local $1)
-    (call $~lib/internal/hash/hash<i16>
-     (get_local $1)
-    )
+    (get_local $2)
    )
    (i32.const 0)
   )
@@ -2264,7 +2294,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (set_local $4
+  (set_local $5
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $2
@@ -2278,7 +2308,7 @@
     (i32.const 0)
    )
   )
-  (set_local $5
+  (set_local $6
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $7
@@ -2316,7 +2346,7 @@
   )
   (set_local $3
    (i32.add
-    (get_local $5)
+    (get_local $6)
     (i32.const 8)
    )
   )
@@ -2343,21 +2373,22 @@
          (get_local $2)
         )
        )
+       (set_local $4
+        (call $~lib/internal/hash/hash16
+         (i32.load16_s
+          (get_local $2)
+         )
+        )
+       )
        (i32.store offset=4
         (get_local $3)
         (i32.load offset=8
-         (tee_local $6
+         (tee_local $4
           (i32.add
-           (get_local $4)
+           (get_local $5)
            (i32.shl
             (i32.and
-             (tee_local $6
-              (call $~lib/internal/hash/hash16
-               (i32.load16_s
-                (get_local $2)
-               )
-              )
-             )
+             (get_local $4)
              (get_local $1)
             )
             (i32.const 2)
@@ -2367,7 +2398,7 @@
         )
        )
        (i32.store offset=8
-        (get_local $6)
+        (get_local $4)
         (get_local $3)
        )
        (set_local $3
@@ -2390,7 +2421,7 @@
   )
   (i32.store
    (get_local $0)
-   (get_local $4)
+   (get_local $5)
   )
   (i32.store offset=4
    (get_local $0)
@@ -2398,7 +2429,7 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $5)
+   (get_local $6)
   )
   (i32.store offset=12
    (get_local $0)
@@ -2415,16 +2446,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (set_local $4
+   (call $~lib/internal/hash/hash<i16>
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
     (call $~lib/set/Set<i16>#find
      (get_local $0)
      (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<i16>
-       (get_local $1)
-      )
-     )
+     (get_local $4)
     )
    )
    (block
@@ -2542,25 +2574,27 @@
  )
  (func $~lib/set/Set<i16>#delete (; 30 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (set_local $2
+   (get_local $0)
+  )
+  (set_local $0
+   (call $~lib/internal/hash/hash16
+    (i32.shr_s
+     (i32.shl
+      (get_local $1)
+      (i32.const 16)
+     )
+     (i32.const 16)
+    )
+   )
+  )
   (if
    (i32.eqz
     (tee_local $0
      (call $~lib/set/Set<i16>#find
-      (tee_local $2
-       (get_local $0)
-      )
+      (get_local $2)
       (get_local $1)
-      (tee_local $0
-       (call $~lib/internal/hash/hash16
-        (i32.shr_s
-         (i32.shl
-          (get_local $1)
-          (i32.const 16)
-         )
-         (i32.const 16)
-        )
-       )
-      )
+      (get_local $0)
      )
     )
    )
@@ -2992,13 +3026,17 @@
   )
  )
  (func $~lib/set/Set<u16>#has (; 33 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (set_local $2
+   (call $~lib/internal/hash/hash<u16>
+    (get_local $1)
+   )
+  )
   (i32.ne
    (call $~lib/set/Set<i16>#find
     (get_local $0)
     (get_local $1)
-    (call $~lib/internal/hash/hash<u16>
-     (get_local $1)
-    )
+    (get_local $2)
    )
    (i32.const 0)
   )
@@ -3011,7 +3049,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (set_local $4
+  (set_local $5
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $2
@@ -3025,7 +3063,7 @@
     (i32.const 0)
    )
   )
-  (set_local $5
+  (set_local $6
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $7
@@ -3063,7 +3101,7 @@
   )
   (set_local $3
    (i32.add
-    (get_local $5)
+    (get_local $6)
     (i32.const 8)
    )
   )
@@ -3090,21 +3128,22 @@
          (get_local $2)
         )
        )
+       (set_local $4
+        (call $~lib/internal/hash/hash16
+         (i32.load16_u
+          (get_local $2)
+         )
+        )
+       )
        (i32.store offset=4
         (get_local $3)
         (i32.load offset=8
-         (tee_local $6
+         (tee_local $4
           (i32.add
-           (get_local $4)
+           (get_local $5)
            (i32.shl
             (i32.and
-             (tee_local $6
-              (call $~lib/internal/hash/hash16
-               (i32.load16_u
-                (get_local $2)
-               )
-              )
-             )
+             (get_local $4)
              (get_local $1)
             )
             (i32.const 2)
@@ -3114,7 +3153,7 @@
         )
        )
        (i32.store offset=8
-        (get_local $6)
+        (get_local $4)
         (get_local $3)
        )
        (set_local $3
@@ -3137,7 +3176,7 @@
   )
   (i32.store
    (get_local $0)
-   (get_local $4)
+   (get_local $5)
   )
   (i32.store offset=4
    (get_local $0)
@@ -3145,7 +3184,7 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $5)
+   (get_local $6)
   )
   (i32.store offset=12
    (get_local $0)
@@ -3162,16 +3201,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (set_local $4
+   (call $~lib/internal/hash/hash<u16>
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
     (call $~lib/set/Set<i16>#find
      (get_local $0)
      (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<u16>
-       (get_local $1)
-      )
-     )
+     (get_local $4)
     )
    )
    (block
@@ -3289,22 +3329,24 @@
  )
  (func $~lib/set/Set<u16>#delete (; 36 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (set_local $2
+   (get_local $0)
+  )
+  (set_local $0
+   (call $~lib/internal/hash/hash16
+    (i32.and
+     (get_local $1)
+     (i32.const 65535)
+    )
+   )
+  )
   (if
    (i32.eqz
     (tee_local $0
      (call $~lib/set/Set<i16>#find
-      (tee_local $2
-       (get_local $0)
-      )
+      (get_local $2)
       (get_local $1)
-      (tee_local $0
-       (call $~lib/internal/hash/hash16
-        (i32.and
-         (get_local $1)
-         (i32.const 65535)
-        )
-       )
-      )
+      (get_local $0)
      )
     )
    )
@@ -3841,13 +3883,17 @@
   (i32.const 0)
  )
  (func $~lib/set/Set<i32>#has (; 41 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (set_local $2
+   (call $~lib/internal/hash/hash<i32>
+    (get_local $1)
+   )
+  )
   (i32.ne
    (call $~lib/set/Set<i32>#find
     (get_local $0)
     (get_local $1)
-    (call $~lib/internal/hash/hash<i32>
-     (get_local $1)
-    )
+    (get_local $2)
    )
    (i32.const 0)
   )
@@ -3860,7 +3906,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (set_local $4
+  (set_local $5
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $2
@@ -3874,7 +3920,7 @@
     (i32.const 0)
    )
   )
-  (set_local $5
+  (set_local $6
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $7
@@ -3912,7 +3958,7 @@
   )
   (set_local $3
    (i32.add
-    (get_local $5)
+    (get_local $6)
     (i32.const 8)
    )
   )
@@ -3939,21 +3985,22 @@
          (get_local $2)
         )
        )
+       (set_local $4
+        (call $~lib/internal/hash/hash32
+         (i32.load
+          (get_local $2)
+         )
+        )
+       )
        (i32.store offset=4
         (get_local $3)
         (i32.load offset=8
-         (tee_local $6
+         (tee_local $4
           (i32.add
-           (get_local $4)
+           (get_local $5)
            (i32.shl
             (i32.and
-             (tee_local $6
-              (call $~lib/internal/hash/hash32
-               (i32.load
-                (get_local $2)
-               )
-              )
-             )
+             (get_local $4)
              (get_local $1)
             )
             (i32.const 2)
@@ -3963,7 +4010,7 @@
         )
        )
        (i32.store offset=8
-        (get_local $6)
+        (get_local $4)
         (get_local $3)
        )
        (set_local $3
@@ -3986,7 +4033,7 @@
   )
   (i32.store
    (get_local $0)
-   (get_local $4)
+   (get_local $5)
   )
   (i32.store offset=4
    (get_local $0)
@@ -3994,7 +4041,7 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $5)
+   (get_local $6)
   )
   (i32.store offset=12
    (get_local $0)
@@ -4011,16 +4058,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (set_local $4
+   (call $~lib/internal/hash/hash<i32>
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
     (call $~lib/set/Set<i32>#find
      (get_local $0)
      (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<i32>
-       (get_local $1)
-      )
-     )
+     (get_local $4)
     )
    )
    (block
@@ -4138,19 +4186,21 @@
  )
  (func $~lib/set/Set<i32>#delete (; 44 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (set_local $2
+   (get_local $0)
+  )
+  (set_local $0
+   (call $~lib/internal/hash/hash32
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
     (tee_local $0
      (call $~lib/set/Set<i32>#find
-      (tee_local $2
-       (get_local $0)
-      )
+      (get_local $2)
       (get_local $1)
-      (tee_local $0
-       (call $~lib/internal/hash/hash32
-        (get_local $1)
-       )
-      )
+      (get_local $0)
      )
     )
    )
@@ -4916,23 +4966,30 @@
   )
  )
  (func $~lib/set/Set<i64>#clear (; 47 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
-  (i32.store
-   (get_local $0)
+  (local $1 i32)
+  (set_local $1
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.const 16)
     (i32.const 0)
    )
   )
+  (i32.store
+   (get_local $0)
+   (get_local $1)
+  )
   (i32.store offset=4
    (get_local $0)
    (i32.const 3)
   )
-  (i32.store offset=8
-   (get_local $0)
+  (set_local $1
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.const 64)
     (i32.const 1)
    )
+  )
+  (i32.store offset=8
+   (get_local $0)
+   (get_local $1)
   )
   (i32.store offset=12
    (get_local $0)
@@ -5148,13 +5205,17 @@
   (i32.const 0)
  )
  (func $~lib/set/Set<i64>#has (; 52 ;) (; has Stack IR ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+  (local $2 i32)
+  (set_local $2
+   (call $~lib/internal/hash/hash<i64>
+    (get_local $1)
+   )
+  )
   (i32.ne
    (call $~lib/set/Set<i64>#find
     (get_local $0)
     (get_local $1)
-    (call $~lib/internal/hash/hash<i64>
-     (get_local $1)
-    )
+    (get_local $2)
    )
    (i32.const 0)
   )
@@ -5167,7 +5228,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (set_local $4
+  (set_local $5
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $2
@@ -5181,7 +5242,7 @@
     (i32.const 0)
    )
   )
-  (set_local $5
+  (set_local $6
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $7
@@ -5219,7 +5280,7 @@
   )
   (set_local $3
    (i32.add
-    (get_local $5)
+    (get_local $6)
     (i32.const 8)
    )
   )
@@ -5246,21 +5307,22 @@
          (get_local $2)
         )
        )
+       (set_local $4
+        (call $~lib/internal/hash/hash64
+         (i64.load
+          (get_local $2)
+         )
+        )
+       )
        (i32.store offset=8
         (get_local $3)
         (i32.load offset=8
-         (tee_local $6
+         (tee_local $4
           (i32.add
-           (get_local $4)
+           (get_local $5)
            (i32.shl
             (i32.and
-             (tee_local $6
-              (call $~lib/internal/hash/hash64
-               (i64.load
-                (get_local $2)
-               )
-              )
-             )
+             (get_local $4)
              (get_local $1)
             )
             (i32.const 2)
@@ -5270,7 +5332,7 @@
         )
        )
        (i32.store offset=8
-        (get_local $6)
+        (get_local $4)
         (get_local $3)
        )
        (set_local $3
@@ -5293,7 +5355,7 @@
   )
   (i32.store
    (get_local $0)
-   (get_local $4)
+   (get_local $5)
   )
   (i32.store offset=4
    (get_local $0)
@@ -5301,7 +5363,7 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $5)
+   (get_local $6)
   )
   (i32.store offset=12
    (get_local $0)
@@ -5318,16 +5380,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (set_local $4
+   (call $~lib/internal/hash/hash<i64>
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
     (call $~lib/set/Set<i64>#find
      (get_local $0)
      (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<i64>
-       (get_local $1)
-      )
-     )
+     (get_local $4)
     )
    )
    (block
@@ -5446,19 +5509,21 @@
  (func $~lib/set/Set<i64>#delete (; 55 ;) (; has Stack IR ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (set_local $2
+   (get_local $0)
+  )
+  (set_local $0
+   (call $~lib/internal/hash/hash64
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
     (tee_local $0
      (call $~lib/set/Set<i64>#find
-      (tee_local $2
-       (get_local $0)
-      )
+      (get_local $2)
       (get_local $1)
-      (tee_local $0
-       (call $~lib/internal/hash/hash64
-        (get_local $1)
-       )
-      )
+      (get_local $0)
      )
     )
    )
@@ -6294,13 +6359,17 @@
   (i32.const 0)
  )
  (func $~lib/set/Set<f32>#has (; 60 ;) (; has Stack IR ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+  (local $2 i32)
+  (set_local $2
+   (call $~lib/internal/hash/hash<f32>
+    (get_local $1)
+   )
+  )
   (i32.ne
    (call $~lib/set/Set<f32>#find
     (get_local $0)
     (get_local $1)
-    (call $~lib/internal/hash/hash<f32>
-     (get_local $1)
-    )
+    (get_local $2)
    )
    (i32.const 0)
   )
@@ -6313,7 +6382,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (set_local $4
+  (set_local $5
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $2
@@ -6327,7 +6396,7 @@
     (i32.const 0)
    )
   )
-  (set_local $5
+  (set_local $6
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $7
@@ -6365,7 +6434,7 @@
   )
   (set_local $3
    (i32.add
-    (get_local $5)
+    (get_local $6)
     (i32.const 8)
    )
   )
@@ -6392,23 +6461,24 @@
          (get_local $2)
         )
        )
+       (set_local $4
+        (call $~lib/internal/hash/hash32
+         (i32.reinterpret/f32
+          (f32.load
+           (get_local $2)
+          )
+         )
+        )
+       )
        (i32.store offset=4
         (get_local $3)
         (i32.load offset=8
-         (tee_local $6
+         (tee_local $4
           (i32.add
-           (get_local $4)
+           (get_local $5)
            (i32.shl
             (i32.and
-             (tee_local $6
-              (call $~lib/internal/hash/hash32
-               (i32.reinterpret/f32
-                (f32.load
-                 (get_local $2)
-                )
-               )
-              )
-             )
+             (get_local $4)
              (get_local $1)
             )
             (i32.const 2)
@@ -6418,7 +6488,7 @@
         )
        )
        (i32.store offset=8
-        (get_local $6)
+        (get_local $4)
         (get_local $3)
        )
        (set_local $3
@@ -6441,7 +6511,7 @@
   )
   (i32.store
    (get_local $0)
-   (get_local $4)
+   (get_local $5)
   )
   (i32.store offset=4
    (get_local $0)
@@ -6449,7 +6519,7 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $5)
+   (get_local $6)
   )
   (i32.store offset=12
    (get_local $0)
@@ -6466,16 +6536,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (set_local $4
+   (call $~lib/internal/hash/hash<f32>
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
     (call $~lib/set/Set<f32>#find
      (get_local $0)
      (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<f32>
-       (get_local $1)
-      )
-     )
+     (get_local $4)
     )
    )
    (block
@@ -6594,21 +6665,23 @@
  (func $~lib/set/Set<f32>#delete (; 63 ;) (; has Stack IR ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (set_local $2
+   (get_local $0)
+  )
+  (set_local $0
+   (call $~lib/internal/hash/hash32
+    (i32.reinterpret/f32
+     (get_local $1)
+    )
+   )
+  )
   (if
    (i32.eqz
     (tee_local $0
      (call $~lib/set/Set<f32>#find
-      (tee_local $2
-       (get_local $0)
-      )
+      (get_local $2)
       (get_local $1)
-      (tee_local $0
-       (call $~lib/internal/hash/hash32
-        (i32.reinterpret/f32
-         (get_local $1)
-        )
-       )
-      )
+      (get_local $0)
      )
     )
    )
@@ -7110,13 +7183,17 @@
   (i32.const 0)
  )
  (func $~lib/set/Set<f64>#has (; 67 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+  (local $2 i32)
+  (set_local $2
+   (call $~lib/internal/hash/hash<f64>
+    (get_local $1)
+   )
+  )
   (i32.ne
    (call $~lib/set/Set<f64>#find
     (get_local $0)
     (get_local $1)
-    (call $~lib/internal/hash/hash<f64>
-     (get_local $1)
-    )
+    (get_local $2)
    )
    (i32.const 0)
   )
@@ -7129,7 +7206,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (set_local $4
+  (set_local $5
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $2
@@ -7143,7 +7220,7 @@
     (i32.const 0)
    )
   )
-  (set_local $5
+  (set_local $6
    (call $~lib/arraybuffer/ArrayBuffer#constructor
     (i32.shl
      (tee_local $7
@@ -7181,7 +7258,7 @@
   )
   (set_local $3
    (i32.add
-    (get_local $5)
+    (get_local $6)
     (i32.const 8)
    )
   )
@@ -7208,23 +7285,24 @@
          (get_local $2)
         )
        )
+       (set_local $4
+        (call $~lib/internal/hash/hash64
+         (i64.reinterpret/f64
+          (f64.load
+           (get_local $2)
+          )
+         )
+        )
+       )
        (i32.store offset=8
         (get_local $3)
         (i32.load offset=8
-         (tee_local $6
+         (tee_local $4
           (i32.add
-           (get_local $4)
+           (get_local $5)
            (i32.shl
             (i32.and
-             (tee_local $6
-              (call $~lib/internal/hash/hash64
-               (i64.reinterpret/f64
-                (f64.load
-                 (get_local $2)
-                )
-               )
-              )
-             )
+             (get_local $4)
              (get_local $1)
             )
             (i32.const 2)
@@ -7234,7 +7312,7 @@
         )
        )
        (i32.store offset=8
-        (get_local $6)
+        (get_local $4)
         (get_local $3)
        )
        (set_local $3
@@ -7257,7 +7335,7 @@
   )
   (i32.store
    (get_local $0)
-   (get_local $4)
+   (get_local $5)
   )
   (i32.store offset=4
    (get_local $0)
@@ -7265,7 +7343,7 @@
   )
   (i32.store offset=8
    (get_local $0)
-   (get_local $5)
+   (get_local $6)
   )
   (i32.store offset=12
    (get_local $0)
@@ -7282,16 +7360,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (set_local $4
+   (call $~lib/internal/hash/hash<f64>
+    (get_local $1)
+   )
+  )
   (if
    (i32.eqz
     (call $~lib/set/Set<f64>#find
      (get_local $0)
      (get_local $1)
-     (tee_local $4
-      (call $~lib/internal/hash/hash<f64>
-       (get_local $1)
-      )
-     )
+     (get_local $4)
     )
    )
    (block
@@ -7410,21 +7489,23 @@
  (func $~lib/set/Set<f64>#delete (; 70 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (set_local $2
+   (get_local $0)
+  )
+  (set_local $0
+   (call $~lib/internal/hash/hash64
+    (i64.reinterpret/f64
+     (get_local $1)
+    )
+   )
+  )
   (if
    (i32.eqz
     (tee_local $0
      (call $~lib/set/Set<f64>#find
-      (tee_local $2
-       (get_local $0)
-      )
+      (get_local $2)
       (get_local $1)
-      (tee_local $0
-       (call $~lib/internal/hash/hash64
-        (i64.reinterpret/f64
-         (get_local $1)
-        )
-       )
-      )
+      (get_local $0)
      )
     )
    )

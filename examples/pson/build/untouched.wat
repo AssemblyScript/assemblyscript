@@ -6,6 +6,9 @@
  (type $Fv (func (param f64)))
  (type $i (func (result i32)))
  (type $I (func (result i64)))
+ (memory $0 0)
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (import "pson" "onNull" (func $assembly/pson/onNull))
  (import "pson" "onTrue" (func $assembly/pson/onTrue))
  (import "pson" "onFalse" (func $assembly/pson/onFalse))
@@ -40,8 +43,8 @@
  (global $assembly/pson/Token.STRING_GET i32 (i32.const 254))
  (global $assembly/pson/Token.BINARY i32 (i32.const 255))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "onNull" (func $assembly/pson/onNull))
  (export "onTrue" (func $assembly/pson/onTrue))
  (export "onFalse" (func $assembly/pson/onFalse))
@@ -469,6 +472,7 @@
                   (get_local $0)
                  )
                  (block
+                  ;;@ assembly/pson.ts:76:21
                   (block
                    ;;@ assembly/pson.ts:77:8
                    (call $assembly/pson/decodeValue)
@@ -784,5 +788,7 @@
    ;;@ assembly/pson.ts:42:24
    (unreachable)
   )
+ )
+ (func $null (; 18 ;) (type $v)
  )
 )
