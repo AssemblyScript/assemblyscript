@@ -151,6 +151,9 @@ assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 0, 0]));
 arr8.fill(2, -2);
 assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 2, 2]));
 
+arr8.fill(0, 1, 0);
+assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 2, 2]));
+
 var sub8 = arr8.subarray(1, 4);
 sub8.fill(0);
 assert(sub8.length == 3);
@@ -174,6 +177,9 @@ arr32.fill(1, 0, -3);
 assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 0, 0]));
 
 arr32.fill(2, -2);
+assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 2, 2]));
+
+arr32.fill(0, 1, 0);
 assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 2, 2]));
 
 var sub32 = arr32.subarray(1, 4);

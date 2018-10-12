@@ -70,11 +70,13 @@ export abstract class TypedArray<T,V> {
     start = start < 0 ? max(len + start, 0) : min(start, len);
     end   = end   < 0 ? max(len + end,   0) : min(end,   len);
     if (sizeof<T>() == 1) {
-      memory.fill(
-        changetype<usize>(buffer) + start + byteOffset + AB_HEADER_SIZE,
-        <u8>value,
-        <usize>(end - start)
-      );
+      if (start < end) {
+        memory.fill(
+          changetype<usize>(buffer) + start + byteOffset + AB_HEADER_SIZE,
+          <u8>value,
+          <usize>(end - start)
+        );
+      }
     } else {
       for (; start < end; ++start) {
         storeUnsafeWithOffset<T,V>(buffer, start, value, byteOffset);
