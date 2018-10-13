@@ -413,12 +413,12 @@ export class String {
     return result;
   }
 
-  split(delimiter: String = null): String[] {
+  split(separator: String = null): String[] {
     assert(this !== null);
-    if (delimiter === null) return <String[]>[this];
+    if (separator === null) return <String[]>[this];
     var length: isize = this.length;
-    var delimLen: isize = delimiter.length;
-    if (!delimLen) {
+    var sepLen: isize = separator.length;
+    if (!sepLen) {
       if (!length) return <String[]>[];
       // split by chars
       let result = new Array<String>(length);
@@ -441,9 +441,9 @@ export class String {
     }
     var result: String[] = [];
     var next = 0, prev = 0;
-    while ((next = this.indexOf(delimiter, prev)) != -1) {
+    while ((next = this.indexOf(separator, prev)) != -1) {
       result.push(this.substring(prev, next));
-      prev = next + delimLen;
+      prev = next + sepLen;
     }
     if (!prev) return <String[]>[this];
     result.push(this.substring(prev, length));
