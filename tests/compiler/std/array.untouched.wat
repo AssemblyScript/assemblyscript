@@ -3736,7 +3736,7 @@
    )
   )
   (if
-   (i32.ge_u
+   (i32.gt_u
     (get_local $5)
     (get_local $4)
    )

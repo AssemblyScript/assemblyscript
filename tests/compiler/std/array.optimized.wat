@@ -3066,7 +3066,7 @@
   (local $3 i32)
   (local $4 i32)
   (if
-   (i32.ge_u
+   (i32.gt_u
     (tee_local $2
      (i32.add
       (tee_local $4
