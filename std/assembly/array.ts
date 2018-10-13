@@ -167,9 +167,9 @@ export class Array<T> {
     var buffer = this.buffer_;
     var capacity = buffer.byteLength >>> alignof<T>();
     var newLength = length + 1; // safe only if length is checked
-    if (<u32>length >= <u32>capacity) {
+    if (<u32>newLength >= <u32>capacity) {
       const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
-      if (<u32>length >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
+      if (<u32>newLength >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
       buffer = reallocateUnsafe(buffer, newLength << alignof<T>());
       this.buffer_ = buffer;
     }

@@ -3737,13 +3737,13 @@
   )
   (if
    (i32.ge_u
-    (get_local $2)
+    (get_local $5)
     (get_local $4)
    )
    (block
     (if
      (i32.ge_u
-      (get_local $2)
+      (get_local $5)
       (i32.const 268435454)
      )
      (block
@@ -3751,7 +3751,7 @@
        (i32.const 0)
        (i32.const 8)
        (i32.const 172)
-       (i32.const 42)
+       (i32.const 45)
       )
       (unreachable)
      )
