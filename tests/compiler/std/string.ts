@@ -131,6 +131,15 @@ assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
+var sa = "".split();
+assert(sa.length == 1 && sa[0] == "");
+sa = "".split("");
+assert(sa.length == 0);
+sa = "".split(",");
+assert(sa.length == 1 && sa[0] == "");
+sa = "a,b,c".split(",");
+assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
+
 assert(itoa32(0) == "0");
 assert(itoa32(1) == "1");
 assert(itoa32(8) == "8");

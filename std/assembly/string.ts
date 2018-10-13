@@ -408,6 +408,29 @@ export class String {
     return result;
   }
 
+  split(delimiter: String = null): String[] {
+    assert(this !== null);
+    if (delimiter === null) return <String[]>[this];
+    var length = this.length;
+    var delimLen = delimiter.length;
+    if (!delimLen) {
+      if (!length) return <String[]>[];
+      // TODO fast path. Split by chars
+    } else if (!length) {
+      return <String[]>[changetype<String>("")];
+    }
+    var result: String[] = [];
+    var next = 0;
+    var prev = 0;
+    while ((next = this.indexOf(delimiter, prev)) != -1) {
+      result.push(this.substring(prev, next));
+      prev = next + delimLen;
+    }
+    if (!prev) return <String[]>[this];
+    result.push(this.substring(prev, length));
+    return result;
+  }
+
   toString(): String {
     return this;
   }
