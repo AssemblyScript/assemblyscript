@@ -10,6 +10,10 @@ import {
   parse
 } from "./internal/string";
 
+import {
+  storeUnsafe as storeUnsafeArray
+} from "./internal/arraybuffer";
+
 @sealed
 export class String {
 
@@ -200,6 +204,7 @@ export class String {
     return compareUnsafe(left, 0, right, 0, length) <= 0;
   }
 
+  @inline
   includes(searchString: String, position: i32 = 0): bool {
     return this.indexOf(searchString, position) != -1;
   }
@@ -214,7 +219,7 @@ export class String {
     if (!len) return -1;
     var start = min<isize>(max<isize>(fromIndex, 0), len);
     len -= searchLen;
-    for (let k: isize = start; k <= len; ++k) {
+    for (let k: isize = start; k < len; ++k) {
       if (!compareUnsafe(this, k, searchString, 0, searchLen)) return <i32>k;
     }
     return -1;
@@ -411,17 +416,31 @@ export class String {
   split(delimiter: String = null): String[] {
     assert(this !== null);
     if (delimiter === null) return <String[]>[this];
-    var length = this.length;
-    var delimLen = delimiter.length;
+    var length: isize = this.length;
+    var delimLen: isize = delimiter.length;
     if (!delimLen) {
       if (!length) return <String[]>[];
-      // TODO fast path. Split by chars
+      // split by chars
+      let result = new Array<String>(length);
+      let buffer = <ArrayBuffer>result.buffer_;
+      for (let i: isize = 0; i < length; ++i) {
+        let char = allocateUnsafe(1);
+        store<u16>(
+          changetype<usize>(char),
+          load<u16>(
+            changetype<usize>(this) + (<usize>i << 1),
+            HEADER_SIZE
+          ),
+          HEADER_SIZE
+        );
+        storeUnsafeArray<String,String>(buffer, i, char);
+      }
+      return result;
     } else if (!length) {
       return <String[]>[changetype<String>("")];
     }
     var result: String[] = [];
-    var next = 0;
-    var prev = 0;
+    var next = 0, prev = 0;
     while ((next = this.indexOf(delimiter, prev)) != -1) {
       result.push(this.substring(prev, next));
       prev = next + delimLen;

@@ -139,6 +139,10 @@ sa = "".split(",");
 assert(sa.length == 1 && sa[0] == "");
 sa = "a,b,c".split(",");
 assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
+//sa = "a, b, c".split(", ");
+//assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
+sa = "abc".split("");
+assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
 
 assert(itoa32(0) == "0");
 assert(itoa32(1) == "1");
