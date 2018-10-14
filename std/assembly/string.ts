@@ -443,14 +443,28 @@ export class String {
       return <String[]>[changetype<String>("")];
     }
     var result = new Array<String>();
-    var next = 0, prev = 0, i = 0;
-    while ((next = this.indexOf(separator, prev)) != -1) {
-      result.push(this.substring(prev, next));
+    var end = 0, start = 0, i = 0;
+    while ((end = this.indexOf(separator, start)) != -1) {
+      let len = end - start;
+      if (len > 0) {
+        let out = allocateUnsafe(len);
+        copyUnsafe(out, 0, this, start, len);
+        result.push(out);
+      } else {
+        result.push(allocateUnsafe(0));
+      }
       if (++i == limit) return result;
-      prev = next + sepLen;
+      start = end + sepLen;
     }
-    if (!prev) return <String[]>[this];
-    result.push(this.substring(prev, length));
+    if (!start) return <String[]>[this];
+    var len = length - start;
+    if (len > 0) {
+      let out = allocateUnsafe(len);
+      copyUnsafe(out, 0, this, start, len);
+      result.push(out);
+    } else {
+      result.push(allocateUnsafe(0));
+    }
     return result;
   }
 
