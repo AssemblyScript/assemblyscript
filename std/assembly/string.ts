@@ -405,8 +405,8 @@ export class String {
       throw new RangeError("Invalid count value");
     }
 
-    if (count === 0 || !length) return changetype<String>("");
-    if (count === 1) return this;
+    if (count == 0 || !length) return changetype<String>("");
+    if (count == 1) return this;
 
     var result = allocateUnsafe(length * count);
     repeatUnsafe(result, 0, this, count);
