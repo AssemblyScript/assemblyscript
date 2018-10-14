@@ -451,7 +451,7 @@ export class String {
         copyUnsafe(out, 0, this, start, len);
         result.push(out);
       } else {
-        result.push(allocateUnsafe(0));
+        result.push(changetype<String>(""));
       }
       if (++i == limit) return result;
       start = end + sepLen;
@@ -463,7 +463,7 @@ export class String {
       copyUnsafe(out, 0, this, start, len);
       result.push(out);
     } else {
-      result.push(allocateUnsafe(0));
+      result.push(changetype<String>(""));
     }
     return result;
   }

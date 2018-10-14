@@ -628,7 +628,7 @@
    (i32.eqz
     (if (result i32)
      (tee_local $1
-      (i32.ge_s
+      (i32.gt_s
        (get_local $0)
        (i32.const 0)
       )

@@ -395,7 +395,7 @@
    (i32.eqz
     (if (result i32)
      (tee_local $1
-      (i32.ge_s
+      (i32.gt_s
        (get_local $0)
        (i32.const 0)
       )
@@ -6184,9 +6184,7 @@
         (drop
          (call $~lib/array/Array<String>#push
           (get_local $9)
-          (call $~lib/internal/string/allocateUnsafe
-           (i32.const 0)
-          )
+          (i32.const 256)
          )
         )
        )
@@ -6271,9 +6269,7 @@
    (drop
     (call $~lib/array/Array<String>#push
      (get_local $9)
-     (call $~lib/internal/string/allocateUnsafe
-      (i32.const 0)
-     )
+     (i32.const 256)
     )
    )
   )
