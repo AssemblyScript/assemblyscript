@@ -413,14 +413,17 @@ export class String {
     return result;
   }
 
-  split(separator: String = null): String[] {
+  split(separator: String = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
+    if (!limit) return <String[]>[];
     if (separator === null) return <String[]>[this];
     var length: isize = this.length;
     var sepLen: isize = separator.length;
+    if (limit < 0) limit = i32.MAX_VALUE;
     if (!sepLen) {
       if (!length) return <String[]>[];
       // split by chars
+      length = min<isize>(length, <isize>limit);
       let result = new Array<String>(length);
       let buffer = <ArrayBuffer>result.buffer_;
       for (let i: isize = 0; i < length; ++i) {
@@ -440,9 +443,10 @@ export class String {
       return <String[]>[changetype<String>("")];
     }
     var result: String[] = [];
-    var next = 0, prev = 0;
+    var next = 0, prev = 0, i = 0;
     while ((next = this.indexOf(separator, prev)) != -1) {
       result.push(this.substring(prev, next));
+      if (++i == limit) return result;
       prev = next + sepLen;
     }
     if (!prev) return <String[]>[this];

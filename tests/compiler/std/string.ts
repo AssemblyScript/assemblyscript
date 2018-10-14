@@ -143,6 +143,14 @@ assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
 //assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
 sa = "abc".split("");
 assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
+sa = "abc".split("", 0);
+assert(sa.length == 0);
+sa = "abc".split("", 1);
+assert(sa.length == 1 && sa[0] == "a");
+//sa = "a,b,c".split(",", 1);
+//assert(sa.length == 1 && sa[0] == "a");
+sa = "abc".split("", 4);
+assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
 
 assert(itoa32(0) == "0");
 assert(itoa32(1) == "1");
