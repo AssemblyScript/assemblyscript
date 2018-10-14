@@ -11,7 +11,7 @@ export const MAX_LENGTH = (<i32>MAX_SIZE_32 - HEADER_SIZE) >>> 1;
 function __gc(ref: usize): void {}
 
 export function allocateUnsafe(length: i32): String {
-  assert(length > 0 && length <= MAX_LENGTH);
+  assert(length >= 0 && length <= MAX_LENGTH);
   var buffer: usize;
   if (isManaged<String>()) {
     buffer = __gc_allocate(HEADER_SIZE + (<usize>length << 1), __gc);  // tslint:disable-line
