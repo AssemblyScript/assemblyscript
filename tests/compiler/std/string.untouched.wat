@@ -4536,7 +4536,7 @@
                  (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 80)
-                  (i32.const 630)
+                  (i32.const 626)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -6178,16 +6178,11 @@
           )
          )
         )
-        (block
-         (set_local $3
+        (drop
+         (call $~lib/array/Array<String>#push
+          (get_local $9)
           (call $~lib/internal/string/allocateUnsafe
            (i32.const 0)
-          )
-         )
-         (drop
-          (call $~lib/array/Array<String>#push
-           (get_local $9)
-           (get_local $3)
           )
          )
         )
@@ -6270,16 +6265,11 @@
      )
     )
    )
-   (block
-    (set_local $13
+   (drop
+    (call $~lib/array/Array<String>#push
+     (get_local $9)
      (call $~lib/internal/string/allocateUnsafe
       (i32.const 0)
-     )
-    )
-    (drop
-     (call $~lib/array/Array<String>#push
-      (get_local $9)
-      (get_local $13)
      )
     )
    )
