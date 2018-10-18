@@ -7813,7 +7813,7 @@
   )
   (i32.const 1)
  )
- (func $~lib/internal/string/allocateUnsafe (; 115 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 115 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (if
    (tee_local $1
@@ -8094,10 +8094,9 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   (if
    (i32.lt_s
-    (tee_local $4
+    (tee_local $3
      (i32.sub
       (i32.load
        (i32.const 1804)
@@ -8128,7 +8127,7 @@
   )
   (if
    (i32.eqz
-    (get_local $4)
+    (get_local $3)
    )
    (return
     (select
@@ -8143,19 +8142,17 @@
     )
    )
   )
-  (set_local $2
+  (set_local $4
    (call $~lib/internal/string/allocateUnsafe
-    (tee_local $8
-     (i32.add
-      (i32.mul
-       (i32.add
-        (get_local $6)
-        (i32.const 5)
-       )
-       (get_local $4)
+    (i32.add
+     (i32.mul
+      (i32.add
+       (get_local $6)
+       (i32.const 5)
       )
-      (i32.const 5)
+      (get_local $3)
      )
+     (i32.const 5)
     )
    )
   )
@@ -8164,13 +8161,13 @@
     (br_if $break|0
      (i32.ge_s
       (get_local $1)
-      (get_local $4)
+      (get_local $3)
      )
     )
-    (set_local $3
+    (set_local $2
      (i32.add
       (i32.eqz
-       (tee_local $9
+       (tee_local $8
         (i32.and
          (i32.load8_u offset=8
           (i32.add
@@ -8186,26 +8183,26 @@
      )
     )
     (call $~lib/internal/string/copyUnsafe
-     (get_local $2)
+     (get_local $4)
      (get_local $0)
      (select
       (i32.const 1744)
       (i32.const 1760)
-      (get_local $9)
+      (get_local $8)
      )
-     (get_local $3)
+     (get_local $2)
     )
     (set_local $0
      (i32.add
       (get_local $0)
-      (get_local $3)
+      (get_local $2)
      )
     )
     (if
      (get_local $7)
      (block
       (call $~lib/internal/string/copyUnsafe
-       (get_local $2)
+       (get_local $4)
        (get_local $0)
        (i32.const 1776)
        (get_local $6)
@@ -8227,7 +8224,7 @@
     (br $repeat|0)
    )
   )
-  (set_local $3
+  (set_local $2
    (i32.add
     (i32.eqz
      (tee_local $1
@@ -8235,7 +8232,7 @@
        (i32.load8_u offset=8
         (i32.add
          (get_local $5)
-         (get_local $4)
+         (get_local $3)
         )
        )
        (i32.const 1)
@@ -8246,55 +8243,29 @@
    )
   )
   (call $~lib/internal/string/copyUnsafe
-   (get_local $2)
+   (get_local $4)
    (get_local $0)
    (select
     (i32.const 1744)
     (i32.const 1760)
     (get_local $1)
    )
-   (get_local $3)
-  )
-  (set_local $1
    (get_local $2)
   )
-  (if
-   (i32.gt_s
-    (get_local $8)
-    (tee_local $0
-     (i32.add
-      (get_local $0)
-      (get_local $3)
-     )
-    )
-   )
-   (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $1
-      (call $~lib/internal/string/allocateUnsafe
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $1
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $0
+      (i32.add
        (get_local $0)
+       (get_local $2)
       )
      )
-     (i32.const 0)
-     (get_local $2)
-     (get_local $0)
     )
-    (if
-     (i32.eqz
-      (get_local $2)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 1648)
-       (i32.const 28)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $~lib/allocator/arena/__memory_free)
    )
+   (i32.const 0)
+   (get_local $4)
+   (get_local $0)
   )
   (get_local $1)
  )
@@ -8654,7 +8625,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   (if
    (i32.lt_s
     (tee_local $4
@@ -8698,67 +8668,42 @@
     )
    )
   )
-  (set_local $3
+  (set_local $2
    (call $~lib/internal/string/allocateUnsafe
-    (tee_local $8
-     (i32.add
-      (i32.mul
-       (i32.add
-        (get_local $6)
-        (i32.const 11)
-       )
-       (get_local $4)
+    (i32.add
+     (i32.mul
+      (i32.add
+       (get_local $6)
+       (i32.const 11)
       )
-      (i32.const 11)
+      (get_local $4)
      )
+     (i32.const 11)
     )
    )
   )
+  (set_local $0
+   (i32.const 0)
+  )
   (block $break|0
-   (set_local $0
-    (i32.const 0)
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $0)
+      (get_local $3)
       (get_local $4)
      )
     )
-    (set_local $9
+    (set_local $8
      (call $~lib/internal/number/itoa_stream<i32>
-      (get_local $3)
       (get_local $2)
+      (get_local $0)
       (i32.load offset=8
        (i32.add
         (get_local $5)
         (i32.shl
-         (get_local $0)
+         (get_local $3)
          (i32.const 2)
         )
-       )
-      )
-     )
-    )
-    (set_local $2
-     (i32.add
-      (get_local $2)
-      (get_local $9)
-     )
-    )
-    (if
-     (get_local $7)
-     (block
-      (call $~lib/internal/string/copyUnsafe
-       (get_local $3)
-       (get_local $2)
-       (get_local $1)
-       (get_local $6)
-      )
-      (set_local $2
-       (i32.add
-        (get_local $2)
-        (get_local $6)
        )
       )
      )
@@ -8766,6 +8711,29 @@
     (set_local $0
      (i32.add
       (get_local $0)
+      (get_local $8)
+     )
+    )
+    (if
+     (get_local $7)
+     (block
+      (call $~lib/internal/string/copyUnsafe
+       (get_local $2)
+       (get_local $0)
+       (get_local $1)
+       (get_local $6)
+      )
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (get_local $6)
+       )
+      )
+     )
+    )
+    (set_local $3
+     (i32.add
+      (get_local $3)
       (i32.const 1)
      )
     )
@@ -8774,8 +8742,8 @@
   )
   (set_local $1
    (call $~lib/internal/number/itoa_stream<i32>
-    (get_local $3)
     (get_local $2)
+    (get_local $0)
     (i32.load offset=8
      (i32.add
       (get_local $5)
@@ -8787,33 +8755,29 @@
     )
    )
   )
-  (set_local $0
-   (get_local $3)
-  )
-  (if
-   (i32.gt_s
-    (get_local $8)
-    (tee_local $2
-     (i32.add
-      (get_local $2)
-      (get_local $1)
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $3
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $0
+      (i32.add
+       (get_local $0)
+       (get_local $1)
+      )
      )
     )
    )
+   (i32.const 0)
+   (get_local $2)
+   (get_local $0)
+  )
+  (if
+   (tee_local $0
+    (i32.const 0)
+   )
    (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $0
-      (call $~lib/internal/string/allocateUnsafe
-       (get_local $2)
-      )
-     )
-     (i32.const 0)
-     (get_local $3)
-     (get_local $2)
-    )
     (if
      (i32.eqz
-      (get_local $3)
+      (get_local $2)
      )
      (block
       (call $~lib/env/abort
@@ -8828,7 +8792,7 @@
     (call $~lib/allocator/arena/__memory_free)
    )
   )
-  (get_local $0)
+  (get_local $3)
  )
  (func $~lib/internal/number/utoa32 (; 129 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -8906,7 +8870,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   (if
    (i32.lt_s
     (tee_local $4
@@ -8950,67 +8913,42 @@
     )
    )
   )
-  (set_local $3
+  (set_local $2
    (call $~lib/internal/string/allocateUnsafe
-    (tee_local $8
-     (i32.add
-      (i32.mul
-       (i32.add
-        (get_local $6)
-        (i32.const 10)
-       )
-       (get_local $4)
+    (i32.add
+     (i32.mul
+      (i32.add
+       (get_local $6)
+       (i32.const 10)
       )
-      (i32.const 10)
+      (get_local $4)
      )
+     (i32.const 10)
     )
    )
   )
+  (set_local $0
+   (i32.const 0)
+  )
   (block $break|0
-   (set_local $0
-    (i32.const 0)
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $0)
+      (get_local $3)
       (get_local $4)
      )
     )
-    (set_local $9
+    (set_local $8
      (call $~lib/internal/number/itoa_stream<u32>
-      (get_local $3)
       (get_local $2)
+      (get_local $0)
       (i32.load offset=8
        (i32.add
         (get_local $5)
         (i32.shl
-         (get_local $0)
+         (get_local $3)
          (i32.const 2)
         )
-       )
-      )
-     )
-    )
-    (set_local $2
-     (i32.add
-      (get_local $2)
-      (get_local $9)
-     )
-    )
-    (if
-     (get_local $7)
-     (block
-      (call $~lib/internal/string/copyUnsafe
-       (get_local $3)
-       (get_local $2)
-       (get_local $1)
-       (get_local $6)
-      )
-      (set_local $2
-       (i32.add
-        (get_local $2)
-        (get_local $6)
        )
       )
      )
@@ -9018,6 +8956,29 @@
     (set_local $0
      (i32.add
       (get_local $0)
+      (get_local $8)
+     )
+    )
+    (if
+     (get_local $7)
+     (block
+      (call $~lib/internal/string/copyUnsafe
+       (get_local $2)
+       (get_local $0)
+       (get_local $1)
+       (get_local $6)
+      )
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (get_local $6)
+       )
+      )
+     )
+    )
+    (set_local $3
+     (i32.add
+      (get_local $3)
       (i32.const 1)
      )
     )
@@ -9026,8 +8987,8 @@
   )
   (set_local $1
    (call $~lib/internal/number/itoa_stream<u32>
-    (get_local $3)
     (get_local $2)
+    (get_local $0)
     (i32.load offset=8
      (i32.add
       (get_local $5)
@@ -9039,33 +9000,29 @@
     )
    )
   )
-  (set_local $0
-   (get_local $3)
-  )
-  (if
-   (i32.gt_s
-    (get_local $8)
-    (tee_local $2
-     (i32.add
-      (get_local $2)
-      (get_local $1)
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $3
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $0
+      (i32.add
+       (get_local $0)
+       (get_local $1)
+      )
      )
     )
    )
+   (i32.const 0)
+   (get_local $2)
+   (get_local $0)
+  )
+  (if
+   (tee_local $0
+    (i32.const 0)
+   )
    (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $0
-      (call $~lib/internal/string/allocateUnsafe
-       (get_local $2)
-      )
-     )
-     (i32.const 0)
-     (get_local $3)
-     (get_local $2)
-    )
     (if
      (i32.eqz
-      (get_local $3)
+      (get_local $2)
      )
      (block
       (call $~lib/env/abort
@@ -9080,7 +9037,7 @@
     (call $~lib/allocator/arena/__memory_free)
    )
   )
-  (get_local $0)
+  (get_local $3)
  )
  (func $~lib/builtins/isFinite<f64> (; 133 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
   (f64.eq
@@ -10771,7 +10728,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (if
    (i32.lt_s
     (tee_local $2
@@ -10817,17 +10773,15 @@
   )
   (set_local $3
    (call $~lib/internal/string/allocateUnsafe
-    (tee_local $7
-     (i32.add
-      (i32.mul
-       (i32.add
-        (get_local $5)
-        (i32.const 28)
-       )
-       (get_local $2)
+    (i32.add
+     (i32.mul
+      (i32.add
+       (get_local $5)
+       (i32.const 28)
       )
-      (i32.const 28)
+      (get_local $2)
      )
+     (i32.const 28)
     )
    )
   )
@@ -10839,7 +10793,7 @@
       (get_local $2)
      )
     )
-    (set_local $8
+    (set_local $7
      (call $~lib/internal/number/dtoa_stream
       (get_local $3)
       (get_local $0)
@@ -10857,7 +10811,7 @@
     (set_local $0
      (i32.add
       (get_local $0)
-      (get_local $8)
+      (get_local $7)
      )
     )
     (if
@@ -10886,7 +10840,7 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $1
    (call $~lib/internal/number/dtoa_stream
     (get_local $3)
     (get_local $0)
@@ -10901,46 +10855,20 @@
     )
    )
   )
-  (set_local $1
-   (get_local $3)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
-    (tee_local $0
-     (i32.add
-      (get_local $0)
-      (get_local $2)
-     )
-    )
-   )
-   (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $1
-      (call $~lib/internal/string/allocateUnsafe
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $1
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $0
+      (i32.add
        (get_local $0)
+       (get_local $1)
       )
      )
-     (i32.const 0)
-     (get_local $3)
-     (get_local $0)
     )
-    (if
-     (i32.eqz
-      (get_local $3)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 1648)
-       (i32.const 28)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $~lib/allocator/arena/__memory_free)
    )
+   (i32.const 0)
+   (get_local $3)
+   (get_local $0)
   )
   (get_local $1)
  )
@@ -11166,10 +11094,9 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   (if
    (i32.lt_s
-    (tee_local $3
+    (tee_local $2
      (i32.sub
       (i32.load offset=4
        (get_local $0)
@@ -11200,37 +11127,35 @@
   )
   (if
    (i32.eqz
-    (get_local $3)
+    (get_local $2)
    )
    (return
     (i32.const 4432)
    )
   )
-  (set_local $2
+  (set_local $3
    (call $~lib/internal/string/allocateUnsafe
-    (tee_local $7
-     (i32.add
-      (i32.mul
-       (i32.add
-        (get_local $4)
-        (i32.const 15)
-       )
-       (get_local $3)
+    (i32.add
+     (i32.mul
+      (i32.add
+       (get_local $4)
+       (i32.const 15)
       )
-      (i32.const 15)
+      (get_local $2)
      )
+     (i32.const 15)
     )
    )
   )
+  (set_local $0
+   (i32.const 0)
+  )
   (block $break|0
-   (set_local $0
-    (i32.const 0)
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $0)
-      (get_local $3)
+      (get_local $1)
+      (get_local $2)
      )
     )
     (if
@@ -11238,21 +11163,21 @@
       (i32.add
        (get_local $5)
        (i32.shl
-        (get_local $0)
+        (get_local $1)
         (i32.const 2)
        )
       )
      )
      (block
       (call $~lib/internal/string/copyUnsafe
-       (get_local $2)
-       (get_local $1)
+       (get_local $3)
+       (get_local $0)
        (i32.const 4432)
        (i32.const 15)
       )
-      (set_local $1
+      (set_local $0
        (i32.add
-        (get_local $1)
+        (get_local $0)
         (i32.const 15)
        )
       )
@@ -11262,22 +11187,22 @@
      (get_local $6)
      (block
       (call $~lib/internal/string/copyUnsafe
-       (get_local $2)
-       (get_local $1)
+       (get_local $3)
+       (get_local $0)
        (i32.const 1776)
        (get_local $4)
       )
-      (set_local $1
+      (set_local $0
        (i32.add
-        (get_local $1)
+        (get_local $0)
         (get_local $4)
        )
       )
      )
     )
-    (set_local $0
+    (set_local $1
      (i32.add
-      (get_local $0)
+      (get_local $1)
       (i32.const 1)
      )
     )
@@ -11289,63 +11214,37 @@
     (i32.add
      (get_local $5)
      (i32.shl
-      (get_local $3)
+      (get_local $2)
       (i32.const 2)
      )
     )
    )
    (block
     (call $~lib/internal/string/copyUnsafe
-     (get_local $2)
-     (get_local $1)
+     (get_local $3)
+     (get_local $0)
      (i32.const 4432)
      (i32.const 15)
     )
-    (set_local $1
+    (set_local $0
      (i32.add
-      (get_local $1)
+      (get_local $0)
       (i32.const 15)
      )
     )
    )
   )
-  (set_local $0
-   (get_local $2)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
-    (get_local $1)
-   )
-   (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $0
-      (call $~lib/internal/string/allocateUnsafe
-       (get_local $1)
-      )
-     )
-     (i32.const 0)
-     (get_local $2)
-     (get_local $1)
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $1
+    (call $~lib/internal/string/allocateUnsafe
+     (get_local $0)
     )
-    (if
-     (i32.eqz
-      (get_local $2)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 1648)
-       (i32.const 28)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $~lib/allocator/arena/__memory_free)
    )
+   (i32.const 0)
+   (get_local $3)
+   (get_local $0)
   )
-  (get_local $0)
+  (get_local $1)
  )
  (func $~lib/internal/number/itoa<i8> (; 144 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (call $~lib/internal/number/itoa32
@@ -11451,7 +11350,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (if
    (i32.lt_s
     (tee_local $2
@@ -11497,17 +11395,15 @@
   )
   (set_local $3
    (call $~lib/internal/string/allocateUnsafe
-    (tee_local $7
-     (i32.add
-      (i32.mul
-       (i32.add
-        (get_local $5)
-        (i32.const 11)
-       )
-       (get_local $2)
+    (i32.add
+     (i32.mul
+      (i32.add
+       (get_local $5)
+       (i32.const 11)
       )
-      (i32.const 11)
+      (get_local $2)
      )
+     (i32.const 11)
     )
    )
   )
@@ -11519,7 +11415,7 @@
       (get_local $2)
      )
     )
-    (set_local $8
+    (set_local $7
      (call $~lib/internal/number/itoa_stream<i8>
       (get_local $3)
       (get_local $0)
@@ -11534,7 +11430,7 @@
     (set_local $0
      (i32.add
       (get_local $0)
-      (get_local $8)
+      (get_local $7)
      )
     )
     (if
@@ -11563,7 +11459,7 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $1
    (call $~lib/internal/number/itoa_stream<i8>
     (get_local $3)
     (get_local $0)
@@ -11575,46 +11471,20 @@
     )
    )
   )
-  (set_local $1
-   (get_local $3)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
-    (tee_local $0
-     (i32.add
-      (get_local $0)
-      (get_local $2)
-     )
-    )
-   )
-   (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $1
-      (call $~lib/internal/string/allocateUnsafe
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $1
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $0
+      (i32.add
        (get_local $0)
+       (get_local $1)
       )
      )
-     (i32.const 0)
-     (get_local $3)
-     (get_local $0)
     )
-    (if
-     (i32.eqz
-      (get_local $3)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 1648)
-       (i32.const 28)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $~lib/allocator/arena/__memory_free)
    )
+   (i32.const 0)
+   (get_local $3)
+   (get_local $0)
   )
   (get_local $1)
  )
@@ -11681,7 +11551,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (if
    (i32.lt_s
     (tee_local $2
@@ -11727,17 +11596,15 @@
   )
   (set_local $3
    (call $~lib/internal/string/allocateUnsafe
-    (tee_local $7
-     (i32.add
-      (i32.mul
-       (i32.add
-        (get_local $5)
-        (i32.const 10)
-       )
-       (get_local $2)
+    (i32.add
+     (i32.mul
+      (i32.add
+       (get_local $5)
+       (i32.const 10)
       )
-      (i32.const 10)
+      (get_local $2)
      )
+     (i32.const 10)
     )
    )
   )
@@ -11749,7 +11616,7 @@
       (get_local $2)
      )
     )
-    (set_local $8
+    (set_local $7
      (call $~lib/internal/number/itoa_stream<u16>
       (get_local $3)
       (get_local $0)
@@ -11767,7 +11634,7 @@
     (set_local $0
      (i32.add
       (get_local $0)
-      (get_local $8)
+      (get_local $7)
      )
     )
     (if
@@ -11796,7 +11663,7 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $1
    (call $~lib/internal/number/itoa_stream<u16>
     (get_local $3)
     (get_local $0)
@@ -11811,46 +11678,20 @@
     )
    )
   )
-  (set_local $1
-   (get_local $3)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
-    (tee_local $0
-     (i32.add
-      (get_local $0)
-      (get_local $2)
-     )
-    )
-   )
-   (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $1
-      (call $~lib/internal/string/allocateUnsafe
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $1
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $0
+      (i32.add
        (get_local $0)
+       (get_local $1)
       )
      )
-     (i32.const 0)
-     (get_local $3)
-     (get_local $0)
     )
-    (if
-     (i32.eqz
-      (get_local $3)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 1648)
-       (i32.const 28)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $~lib/allocator/arena/__memory_free)
    )
+   (i32.const 0)
+   (get_local $3)
+   (get_local $0)
   )
   (get_local $1)
  )
@@ -12191,7 +12032,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (if
    (i32.lt_s
     (tee_local $2
@@ -12237,17 +12077,15 @@
   )
   (set_local $3
    (call $~lib/internal/string/allocateUnsafe
-    (tee_local $7
-     (i32.add
-      (i32.mul
-       (i32.add
-        (get_local $5)
-        (i32.const 20)
-       )
-       (get_local $2)
+    (i32.add
+     (i32.mul
+      (i32.add
+       (get_local $5)
+       (i32.const 20)
       )
-      (i32.const 20)
+      (get_local $2)
      )
+     (i32.const 20)
     )
    )
   )
@@ -12259,7 +12097,7 @@
       (get_local $2)
      )
     )
-    (set_local $8
+    (set_local $7
      (call $~lib/internal/number/itoa_stream<u64>
       (get_local $3)
       (get_local $0)
@@ -12277,7 +12115,7 @@
     (set_local $0
      (i32.add
       (get_local $0)
-      (get_local $8)
+      (get_local $7)
      )
     )
     (if
@@ -12306,7 +12144,7 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $1
    (call $~lib/internal/number/itoa_stream<u64>
     (get_local $3)
     (get_local $0)
@@ -12321,46 +12159,20 @@
     )
    )
   )
-  (set_local $1
-   (get_local $3)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
-    (tee_local $0
-     (i32.add
-      (get_local $0)
-      (get_local $2)
-     )
-    )
-   )
-   (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $1
-      (call $~lib/internal/string/allocateUnsafe
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $1
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $0
+      (i32.add
        (get_local $0)
+       (get_local $1)
       )
      )
-     (i32.const 0)
-     (get_local $3)
-     (get_local $0)
     )
-    (if
-     (i32.eqz
-      (get_local $3)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 1648)
-       (i32.const 28)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $~lib/allocator/arena/__memory_free)
    )
+   (i32.const 0)
+   (get_local $3)
+   (get_local $0)
   )
   (get_local $1)
  )
@@ -12553,7 +12365,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   (if
    (i32.lt_s
     (tee_local $2
@@ -12599,17 +12410,15 @@
   )
   (set_local $3
    (call $~lib/internal/string/allocateUnsafe
-    (tee_local $7
-     (i32.add
-      (i32.mul
-       (i32.add
-        (get_local $5)
-        (i32.const 21)
-       )
-       (get_local $2)
+    (i32.add
+     (i32.mul
+      (i32.add
+       (get_local $5)
+       (i32.const 21)
       )
-      (i32.const 21)
+      (get_local $2)
      )
+     (i32.const 21)
     )
    )
   )
@@ -12621,7 +12430,7 @@
       (get_local $2)
      )
     )
-    (set_local $8
+    (set_local $7
      (call $~lib/internal/number/itoa_stream<i64>
       (get_local $3)
       (get_local $0)
@@ -12639,7 +12448,7 @@
     (set_local $0
      (i32.add
       (get_local $0)
-      (get_local $8)
+      (get_local $7)
      )
     )
     (if
@@ -12668,7 +12477,7 @@
     (br $repeat|0)
    )
   )
-  (set_local $2
+  (set_local $1
    (call $~lib/internal/number/itoa_stream<i64>
     (get_local $3)
     (get_local $0)
@@ -12683,46 +12492,20 @@
     )
    )
   )
-  (set_local $1
-   (get_local $3)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
-    (tee_local $0
-     (i32.add
-      (get_local $0)
-      (get_local $2)
-     )
-    )
-   )
-   (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $1
-      (call $~lib/internal/string/allocateUnsafe
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $1
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $0
+      (i32.add
        (get_local $0)
+       (get_local $1)
       )
      )
-     (i32.const 0)
-     (get_local $3)
-     (get_local $0)
     )
-    (if
-     (i32.eqz
-      (get_local $3)
-     )
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 1648)
-       (i32.const 28)
-       (i32.const 4)
-      )
-      (unreachable)
-     )
-    )
-    (call $~lib/allocator/arena/__memory_free)
    )
+   (i32.const 0)
+   (get_local $3)
+   (get_local $0)
   )
   (get_local $1)
  )
@@ -12929,7 +12712,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   (if
    (i32.lt_s
     (tee_local $4
@@ -12973,64 +12755,39 @@
     )
    )
   )
-  (set_local $3
+  (set_local $2
    (call $~lib/internal/string/allocateUnsafe
-    (tee_local $8
-     (i32.add
-      (i32.mul
-       (i32.add
-        (get_local $6)
-        (i32.const 10)
-       )
-       (get_local $4)
+    (i32.add
+     (i32.mul
+      (i32.add
+       (get_local $6)
+       (i32.const 10)
       )
-      (i32.const 10)
+      (get_local $4)
      )
+     (i32.const 10)
     )
    )
   )
+  (set_local $0
+   (i32.const 0)
+  )
   (block $break|0
-   (set_local $0
-    (i32.const 0)
-   )
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_s
-      (get_local $0)
+      (get_local $3)
       (get_local $4)
      )
     )
-    (set_local $9
+    (set_local $8
      (call $~lib/internal/number/itoa_stream<u8>
-      (get_local $3)
       (get_local $2)
+      (get_local $0)
       (i32.load8_u offset=8
        (i32.add
         (get_local $5)
-        (get_local $0)
-       )
-      )
-     )
-    )
-    (set_local $2
-     (i32.add
-      (get_local $2)
-      (get_local $9)
-     )
-    )
-    (if
-     (get_local $7)
-     (block
-      (call $~lib/internal/string/copyUnsafe
-       (get_local $3)
-       (get_local $2)
-       (get_local $1)
-       (get_local $6)
-      )
-      (set_local $2
-       (i32.add
-        (get_local $2)
-        (get_local $6)
+        (get_local $3)
        )
       )
      )
@@ -13038,6 +12795,29 @@
     (set_local $0
      (i32.add
       (get_local $0)
+      (get_local $8)
+     )
+    )
+    (if
+     (get_local $7)
+     (block
+      (call $~lib/internal/string/copyUnsafe
+       (get_local $2)
+       (get_local $0)
+       (get_local $1)
+       (get_local $6)
+      )
+      (set_local $0
+       (i32.add
+        (get_local $0)
+        (get_local $6)
+       )
+      )
+     )
+    )
+    (set_local $3
+     (i32.add
+      (get_local $3)
       (i32.const 1)
      )
     )
@@ -13046,8 +12826,8 @@
   )
   (set_local $1
    (call $~lib/internal/number/itoa_stream<u8>
-    (get_local $3)
     (get_local $2)
+    (get_local $0)
     (i32.load8_u offset=8
      (i32.add
       (get_local $5)
@@ -13056,33 +12836,29 @@
     )
    )
   )
-  (set_local $0
-   (get_local $3)
-  )
-  (if
-   (i32.gt_s
-    (get_local $8)
-    (tee_local $2
-     (i32.add
-      (get_local $2)
-      (get_local $1)
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $3
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $0
+      (i32.add
+       (get_local $0)
+       (get_local $1)
+      )
      )
     )
    )
+   (i32.const 0)
+   (get_local $2)
+   (get_local $0)
+  )
+  (if
+   (tee_local $0
+    (i32.const 0)
+   )
    (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $0
-      (call $~lib/internal/string/allocateUnsafe
-       (get_local $2)
-      )
-     )
-     (i32.const 0)
-     (get_local $3)
-     (get_local $2)
-    )
     (if
      (i32.eqz
-      (get_local $3)
+      (get_local $2)
      )
      (block
       (call $~lib/env/abort
@@ -13097,7 +12873,7 @@
     (call $~lib/allocator/arena/__memory_free)
    )
   )
-  (get_local $0)
+  (get_local $3)
  )
  (func $~lib/array/Array<Array<u8>>#join (; 164 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)

@@ -621,13 +621,13 @@
   )
   (get_local $2)
  )
- (func $~lib/internal/string/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $~lib/internal/string/allocateUnsafe (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   (if
    (i32.eqz
     (if (result i32)
-     (tee_local $1
+     (tee_local $2
       (i32.gt_s
        (get_local $0)
        (i32.const 0)
@@ -637,7 +637,7 @@
       (get_local $0)
       (get_global $~lib/internal/string/MAX_LENGTH)
      )
-     (get_local $1)
+     (get_local $2)
     )
    )
    (block
@@ -650,9 +650,9 @@
     (unreachable)
    )
   )
-  (set_local $2
+  (set_local $3
    (block $~lib/memory/memory.allocate|inlined.2 (result i32)
-    (set_local $1
+    (set_local $2
      (i32.add
       (get_global $~lib/internal/string/HEADER_SIZE)
       (i32.shl
@@ -663,16 +663,16 @@
     )
     (br $~lib/memory/memory.allocate|inlined.2
      (call $~lib/allocator/arena/__memory_allocate
-      (get_local $1)
+      (get_local $2)
      )
     )
    )
   )
   (i32.store
-   (get_local $2)
+   (get_local $3)
    (get_local $0)
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $~lib/internal/memory/memcpy (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -3237,6 +3237,7 @@
      (get_local $5)
      (i32.const 1)
     )
+    (i32.const 0)
    )
   )
   (block $~lib/memory/memory.copy|inlined.0

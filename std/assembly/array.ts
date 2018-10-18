@@ -376,7 +376,7 @@ export class Array<T> {
       }
       let valueLen = 5; // max possible length of element len("false")
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = allocateUnsafeString(estLen);
+      let result = allocateUnsafeString(estLen, true);
       let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,bool>(buffer, i);
@@ -393,12 +393,9 @@ export class Array<T> {
       copyUnsafeString(result, offset, select<String>("true", "false", value), 0, valueLen);
       offset += valueLen;
 
-      let out = result;
-      if (estLen > offset) {
-        out = allocateUnsafeString(offset);
-        copyUnsafeString(out, 0, result, 0, offset);
-        freeUnsafeString(result);
-      }
+      let out = allocateUnsafeString(offset);
+      copyUnsafeString(out, 0, result, 0, offset);
+      freeUnsafeString(result, true);
       return out;
     } else if (isInteger<T>()) {
       if (!lastIndex) {
@@ -406,7 +403,7 @@ export class Array<T> {
       }
       const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = allocateUnsafeString(estLen);
+      let result = allocateUnsafeString(estLen, true);
       let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
@@ -418,12 +415,10 @@ export class Array<T> {
       }
       value = loadUnsafe<T,T>(buffer, lastIndex);
       offset += itoa_stream<T>(changetype<usize>(result), offset, value);
-      let out = result;
-      if (estLen > offset) {
-        out = allocateUnsafeString(offset);
-        copyUnsafeString(out, 0, result, 0, offset);
-        freeUnsafeString(result);
-      }
+
+      let out = allocateUnsafeString(offset);
+      copyUnsafeString(out, 0, result, 0, offset);
+      freeUnsafeString(result, true);
       return out;
     } else if (isFloat<T>()) {
       if (!lastIndex) {
@@ -431,7 +426,7 @@ export class Array<T> {
       }
       const valueLen = MAX_DOUBLE_LENGTH;
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = allocateUnsafeString(estLen);
+      let result = allocateUnsafeString(estLen, true);
       let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,f64>(buffer, i);
@@ -443,12 +438,10 @@ export class Array<T> {
       }
       value = loadUnsafe<T,f64>(buffer, lastIndex);
       offset += dtoa_stream(changetype<usize>(result), offset, value);
-      let out = result;
-      if (estLen > offset) {
-        out = allocateUnsafeString(offset);
-        copyUnsafeString(out, 0, result, 0, offset);
-        freeUnsafeString(result);
-      }
+
+      let out = allocateUnsafeString(offset);
+      copyUnsafeString(out, 0, result, 0, offset);
+      freeUnsafeString(result, true);
       return out;
     } else if (isString<T>()) {
       if (!lastIndex) {
@@ -496,7 +489,7 @@ export class Array<T> {
       if (!lastIndex) return "[object Object]";
       const valueLen = 15; // max possible length of element len("[object Object]")
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
-      let result = allocateUnsafeString(estLen);
+      let result = allocateUnsafeString(estLen, true);
       let offset = 0;
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,T>(buffer, i);
@@ -513,12 +506,9 @@ export class Array<T> {
         copyUnsafeString(result, offset, changetype<String>("[object Object]"), 0, valueLen);
         offset += valueLen;
       }
-      let out = result;
-      if (estLen > offset) {
-        out = allocateUnsafeString(offset);
-        copyUnsafeString(out, 0, result, 0, offset);
-        freeUnsafeString(result);
-      }
+      let out = allocateUnsafeString(offset);
+      copyUnsafeString(out, 0, result, 0, offset);
+      freeUnsafeString(result, true);
       return out;
     } else {
       assert(false); // Unsupported generic typename

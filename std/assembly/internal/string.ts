@@ -10,10 +10,10 @@ export const MAX_LENGTH = (<i32>MAX_SIZE_32 - HEADER_SIZE) >>> 1;
 
 function __gc(ref: usize): void {}
 
-export function allocateUnsafe(length: i32): String {
+export function allocateUnsafe(length: i32, skipGC: bool = false): String {
   assert(length > 0 && length <= MAX_LENGTH);
   var buffer: usize;
-  if (isManaged<String>()) {
+  if (isManaged<String>() && !skipGC) {
     buffer = __gc_allocate(HEADER_SIZE + (<usize>length << 1), __gc);  // tslint:disable-line
   } else {
     buffer = memory.allocate(HEADER_SIZE + (<usize>length << 1));
@@ -23,8 +23,8 @@ export function allocateUnsafe(length: i32): String {
 }
 
 @inline
-export function freeUnsafe(buffer: String): void {
-  if (!isManaged<String>()) {
+export function freeUnsafe(buffer: String, skipGC: bool = false): void {
+  if (!isManaged<String>() && !skipGC) {
     assert(buffer);
     memory.free(changetype<usize>(buffer));
   }

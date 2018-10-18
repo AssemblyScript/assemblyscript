@@ -12604,13 +12604,13 @@
   )
   (get_local $0)
  )
- (func $~lib/internal/string/allocateUnsafe (; 156 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $~lib/internal/string/allocateUnsafe (; 156 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   (if
    (i32.eqz
     (if (result i32)
-     (tee_local $1
+     (tee_local $2
       (i32.gt_s
        (get_local $0)
        (i32.const 0)
@@ -12620,7 +12620,7 @@
       (get_local $0)
       (get_global $~lib/internal/string/MAX_LENGTH)
      )
-     (get_local $1)
+     (get_local $2)
     )
    )
    (block
@@ -12633,9 +12633,9 @@
     (unreachable)
    )
   )
-  (set_local $2
+  (set_local $3
    (block $~lib/memory/memory.allocate|inlined.5 (result i32)
-    (set_local $1
+    (set_local $2
      (i32.add
       (get_global $~lib/internal/string/HEADER_SIZE)
       (i32.shl
@@ -12646,16 +12646,16 @@
     )
     (br $~lib/memory/memory.allocate|inlined.5
      (call $~lib/allocator/arena/__memory_allocate
-      (get_local $1)
+      (get_local $2)
      )
     )
    )
   )
   (i32.store
-   (get_local $2)
+   (get_local $3)
    (get_local $0)
   )
-  (get_local $2)
+  (get_local $3)
  )
  (func $~lib/string/String#charAt (; 157 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -12690,6 +12690,7 @@
   (set_local $2
    (call $~lib/internal/string/allocateUnsafe
     (i32.const 1)
+    (i32.const 0)
    )
   )
   (i32.store16 offset=4
@@ -12807,6 +12808,7 @@
   (set_local $5
    (call $~lib/internal/string/allocateUnsafe
     (get_local $4)
+    (i32.const 0)
    )
   )
   (call $~lib/internal/string/copyUnsafe
@@ -13042,6 +13044,8 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -13121,6 +13125,7 @@
   (set_local $9
    (call $~lib/internal/string/allocateUnsafe
     (get_local $8)
+    (i32.const 1)
    )
   )
   (set_local $10
@@ -13257,49 +13262,55 @@
    )
   )
   (set_local $11
-   (get_local $9)
-  )
-  (if
-   (i32.gt_s
-    (get_local $8)
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $10)
+    (i32.const 0)
    )
-   (block
-    (set_local $11
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $10)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $11)
+   (i32.const 0)
+   (get_local $9)
+   (i32.const 0)
+   (get_local $10)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.0
+   (set_local $12
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $13
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (i32.eqz
+      (get_local $12)
+     )
+     (get_local $13)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $11)
-     (i32.const 0)
-     (get_local $9)
-     (i32.const 0)
-     (get_local $10)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.0
-     (block
-      (if
-       (i32.eqz
+    (block
+     (if
+      (i32.eqz
+       (get_local $9)
+      )
+      (block
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
+       )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.4
+      (block
+       (call $~lib/allocator/arena/__memory_free
         (get_local $9)
        )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (block $~lib/memory/memory.free|inlined.4
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $9)
-        )
-        (br $~lib/memory/memory.free|inlined.4)
-       )
+       (br $~lib/memory/memory.free|inlined.4)
       )
      )
     )
@@ -13658,6 +13669,7 @@
   (set_local $3
    (call $~lib/internal/string/allocateUnsafe
     (get_local $2)
+    (i32.const 0)
    )
   )
   (block $~lib/internal/number/utoa32_core|inlined.0
@@ -13761,6 +13773,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -13832,6 +13846,7 @@
   (set_local $8
    (call $~lib/internal/string/allocateUnsafe
     (get_local $7)
+    (i32.const 1)
    )
   )
   (set_local $9
@@ -13926,49 +13941,55 @@
    )
   )
   (set_local $10
-   (get_local $8)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $9)
+    (i32.const 0)
    )
-   (block
-    (set_local $10
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $9)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $10)
+   (i32.const 0)
+   (get_local $8)
+   (i32.const 0)
+   (get_local $9)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.1
+   (set_local $11
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $12
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (i32.eqz
+      (get_local $11)
+     )
+     (get_local $12)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $10)
-     (i32.const 0)
-     (get_local $8)
-     (i32.const 0)
-     (get_local $9)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.1
-     (block
-      (if
-       (i32.eqz
+    (block
+     (if
+      (i32.eqz
+       (get_local $8)
+      )
+      (block
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
+       )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.5
+      (block
+       (call $~lib/allocator/arena/__memory_free
         (get_local $8)
        )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (block $~lib/memory/memory.free|inlined.5
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $8)
-        )
-        (br $~lib/memory/memory.free|inlined.5)
-       )
+       (br $~lib/memory/memory.free|inlined.5)
       )
      )
     )
@@ -13997,6 +14018,7 @@
   (set_local $2
    (call $~lib/internal/string/allocateUnsafe
     (get_local $1)
+    (i32.const 0)
    )
   )
   (block $~lib/internal/number/utoa32_core|inlined.2
@@ -14067,6 +14089,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -14138,6 +14162,7 @@
   (set_local $8
    (call $~lib/internal/string/allocateUnsafe
     (get_local $7)
+    (i32.const 1)
    )
   )
   (set_local $9
@@ -14232,49 +14257,55 @@
    )
   )
   (set_local $10
-   (get_local $8)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $9)
+    (i32.const 0)
    )
-   (block
-    (set_local $10
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $9)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $10)
+   (i32.const 0)
+   (get_local $8)
+   (i32.const 0)
+   (get_local $9)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.2
+   (set_local $11
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $12
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (i32.eqz
+      (get_local $11)
+     )
+     (get_local $12)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $10)
-     (i32.const 0)
-     (get_local $8)
-     (i32.const 0)
-     (get_local $9)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.2
-     (block
-      (if
-       (i32.eqz
+    (block
+     (if
+      (i32.eqz
+       (get_local $8)
+      )
+      (block
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
+       )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.6
+      (block
+       (call $~lib/allocator/arena/__memory_free
         (get_local $8)
        )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (block $~lib/memory/memory.free|inlined.6
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $8)
-        )
-        (br $~lib/memory/memory.free|inlined.6)
-       )
+       (br $~lib/memory/memory.free|inlined.6)
       )
      )
     )
@@ -16129,6 +16160,8 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   (if
    (f64.eq
     (get_local $0)
@@ -16168,6 +16201,7 @@
   (set_local $1
    (call $~lib/internal/string/allocateUnsafe
     (get_global $~lib/internal/number/MAX_DOUBLE_LENGTH)
+    (i32.const 0)
    )
   )
   (set_local $2
@@ -16188,6 +16222,7 @@
     (set_local $3
      (call $~lib/internal/string/allocateUnsafe
       (get_local $2)
+      (i32.const 0)
      )
     )
     (call $~lib/internal/string/copyUnsafe
@@ -16198,27 +16233,43 @@
      (get_local $2)
     )
     (block $~lib/internal/string/freeUnsafe|inlined.3
-     (block
-      (if
-       (i32.eqz
-        (get_local $1)
-       )
-       (block
-        (call $~lib/env/abort
+     (set_local $4
+      (i32.const 0)
+     )
+     (if
+      (if (result i32)
+       (tee_local $5
+        (i32.eqz
          (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
         )
-        (unreachable)
        )
+       (i32.eqz
+        (get_local $4)
+       )
+       (get_local $5)
       )
-      (block $~lib/memory/memory.free|inlined.7
-       (block
-        (call $~lib/allocator/arena/__memory_free
+      (block
+       (if
+        (i32.eqz
          (get_local $1)
         )
-        (br $~lib/memory/memory.free|inlined.7)
+        (block
+         (call $~lib/env/abort
+          (i32.const 0)
+          (i32.const 1648)
+          (i32.const 28)
+          (i32.const 4)
+         )
+         (unreachable)
+        )
+       )
+       (block $~lib/memory/memory.free|inlined.7
+        (block
+         (call $~lib/allocator/arena/__memory_free
+          (get_local $1)
+         )
+         (br $~lib/memory/memory.free|inlined.7)
+        )
        )
       )
      )
@@ -16359,6 +16410,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -16430,6 +16483,7 @@
   (set_local $8
    (call $~lib/internal/string/allocateUnsafe
     (get_local $7)
+    (i32.const 1)
    )
   )
   (set_local $9
@@ -16524,49 +16578,55 @@
    )
   )
   (set_local $10
-   (get_local $8)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $9)
+    (i32.const 0)
    )
-   (block
-    (set_local $10
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $9)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $10)
+   (i32.const 0)
+   (get_local $8)
+   (i32.const 0)
+   (get_local $9)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.4
+   (set_local $11
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $12
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (i32.eqz
+      (get_local $11)
+     )
+     (get_local $12)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $10)
-     (i32.const 0)
-     (get_local $8)
-     (i32.const 0)
-     (get_local $9)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.4
-     (block
-      (if
-       (i32.eqz
+    (block
+     (if
+      (i32.eqz
+       (get_local $8)
+      )
+      (block
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
+       )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.8
+      (block
+       (call $~lib/allocator/arena/__memory_free
         (get_local $8)
        )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (block $~lib/memory/memory.free|inlined.8
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $8)
-        )
-        (br $~lib/memory/memory.free|inlined.8)
-       )
+       (br $~lib/memory/memory.free|inlined.8)
       )
      )
     )
@@ -16704,6 +16764,7 @@
       (get_local $2)
      )
     )
+    (i32.const 0)
    )
   )
   (block $break|1
@@ -16947,6 +17008,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -17003,6 +17066,7 @@
   (set_local $8
    (call $~lib/internal/string/allocateUnsafe
     (get_local $7)
+    (i32.const 1)
    )
   )
   (set_local $9
@@ -17110,49 +17174,55 @@
    )
   )
   (set_local $10
-   (get_local $8)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $9)
+    (i32.const 0)
    )
-   (block
-    (set_local $10
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $9)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $10)
+   (i32.const 0)
+   (get_local $8)
+   (i32.const 0)
+   (get_local $9)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.5
+   (set_local $11
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $12
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (i32.eqz
+      (get_local $11)
+     )
+     (get_local $12)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $10)
-     (i32.const 0)
-     (get_local $8)
-     (i32.const 0)
-     (get_local $9)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.5
-     (block
-      (if
-       (i32.eqz
+    (block
+     (if
+      (i32.eqz
+       (get_local $8)
+      )
+      (block
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
+       )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.9
+      (block
+       (call $~lib/allocator/arena/__memory_free
         (get_local $8)
        )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (block $~lib/memory/memory.free|inlined.9
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $8)
-        )
-        (br $~lib/memory/memory.free|inlined.9)
-       )
+       (br $~lib/memory/memory.free|inlined.9)
       )
      )
     )
@@ -17281,6 +17351,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -17352,6 +17424,7 @@
   (set_local $8
    (call $~lib/internal/string/allocateUnsafe
     (get_local $7)
+    (i32.const 1)
    )
   )
   (set_local $9
@@ -17446,49 +17519,55 @@
    )
   )
   (set_local $10
-   (get_local $8)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $9)
+    (i32.const 0)
    )
-   (block
-    (set_local $10
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $9)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $10)
+   (i32.const 0)
+   (get_local $8)
+   (i32.const 0)
+   (get_local $9)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.6
+   (set_local $11
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $12
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (i32.eqz
+      (get_local $11)
+     )
+     (get_local $12)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $10)
-     (i32.const 0)
-     (get_local $8)
-     (i32.const 0)
-     (get_local $9)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.6
-     (block
-      (if
-       (i32.eqz
+    (block
+     (if
+      (i32.eqz
+       (get_local $8)
+      )
+      (block
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
+       )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.10
+      (block
+       (call $~lib/allocator/arena/__memory_free
         (get_local $8)
        )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (block $~lib/memory/memory.free|inlined.10
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $8)
-        )
-        (br $~lib/memory/memory.free|inlined.10)
-       )
+       (br $~lib/memory/memory.free|inlined.10)
       )
      )
     )
@@ -17573,6 +17652,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -17644,6 +17725,7 @@
   (set_local $8
    (call $~lib/internal/string/allocateUnsafe
     (get_local $7)
+    (i32.const 1)
    )
   )
   (set_local $9
@@ -17738,49 +17820,55 @@
    )
   )
   (set_local $10
-   (get_local $8)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $9)
+    (i32.const 0)
    )
-   (block
-    (set_local $10
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $9)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $10)
+   (i32.const 0)
+   (get_local $8)
+   (i32.const 0)
+   (get_local $9)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.7
+   (set_local $11
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $12
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (i32.eqz
+      (get_local $11)
+     )
+     (get_local $12)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $10)
-     (i32.const 0)
-     (get_local $8)
-     (i32.const 0)
-     (get_local $9)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.7
-     (block
-      (if
-       (i32.eqz
+    (block
+     (if
+      (i32.eqz
+       (get_local $8)
+      )
+      (block
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
+       )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.11
+      (block
+       (call $~lib/allocator/arena/__memory_free
         (get_local $8)
        )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (block $~lib/memory/memory.free|inlined.11
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $8)
-        )
-        (br $~lib/memory/memory.free|inlined.11)
-       )
+       (br $~lib/memory/memory.free|inlined.11)
       )
      )
     )
@@ -18109,6 +18197,7 @@
     (set_local $1
      (call $~lib/internal/string/allocateUnsafe
       (get_local $3)
+      (i32.const 0)
      )
     )
     (block $~lib/internal/number/utoa32_core|inlined.8
@@ -18128,6 +18217,7 @@
     (set_local $1
      (call $~lib/internal/string/allocateUnsafe
       (get_local $3)
+      (i32.const 0)
      )
     )
     (block $~lib/internal/number/utoa64_core|inlined.0
@@ -18230,6 +18320,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -18301,6 +18393,7 @@
   (set_local $8
    (call $~lib/internal/string/allocateUnsafe
     (get_local $7)
+    (i32.const 1)
    )
   )
   (set_local $9
@@ -18395,49 +18488,55 @@
    )
   )
   (set_local $10
-   (get_local $8)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $9)
+    (i32.const 0)
    )
-   (block
-    (set_local $10
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $9)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $10)
+   (i32.const 0)
+   (get_local $8)
+   (i32.const 0)
+   (get_local $9)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.8
+   (set_local $11
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $12
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (i32.eqz
+      (get_local $11)
+     )
+     (get_local $12)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $10)
-     (i32.const 0)
-     (get_local $8)
-     (i32.const 0)
-     (get_local $9)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.8
-     (block
-      (if
-       (i32.eqz
+    (block
+     (if
+      (i32.eqz
+       (get_local $8)
+      )
+      (block
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
+       )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.12
+      (block
+       (call $~lib/allocator/arena/__memory_free
         (get_local $8)
        )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (block $~lib/memory/memory.free|inlined.12
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $8)
-        )
-        (br $~lib/memory/memory.free|inlined.12)
-       )
+       (br $~lib/memory/memory.free|inlined.12)
       )
      )
     )
@@ -18499,6 +18598,7 @@
     (set_local $2
      (call $~lib/internal/string/allocateUnsafe
       (get_local $4)
+      (i32.const 0)
      )
     )
     (block $~lib/internal/number/utoa32_core|inlined.10
@@ -18521,6 +18621,7 @@
     (set_local $2
      (call $~lib/internal/string/allocateUnsafe
       (get_local $4)
+      (i32.const 0)
      )
     )
     (block $~lib/internal/number/utoa64_core|inlined.2
@@ -18659,6 +18760,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -18730,6 +18833,7 @@
   (set_local $8
    (call $~lib/internal/string/allocateUnsafe
     (get_local $7)
+    (i32.const 1)
    )
   )
   (set_local $9
@@ -18824,49 +18928,55 @@
    )
   )
   (set_local $10
-   (get_local $8)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $9)
+    (i32.const 0)
    )
-   (block
-    (set_local $10
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $9)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $10)
+   (i32.const 0)
+   (get_local $8)
+   (i32.const 0)
+   (get_local $9)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.9
+   (set_local $11
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $12
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (i32.eqz
+      (get_local $11)
+     )
+     (get_local $12)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $10)
-     (i32.const 0)
-     (get_local $8)
-     (i32.const 0)
-     (get_local $9)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.9
-     (block
-      (if
-       (i32.eqz
+    (block
+     (if
+      (i32.eqz
+       (get_local $8)
+      )
+      (block
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
+       )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.13
+      (block
+       (call $~lib/allocator/arena/__memory_free
         (get_local $8)
        )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (block $~lib/memory/memory.free|inlined.13
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $8)
-        )
-        (br $~lib/memory/memory.free|inlined.13)
-       )
+       (br $~lib/memory/memory.free|inlined.13)
       )
      )
     )
@@ -19115,6 +19225,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   (set_local $2
    (i32.sub
     (i32.load offset=4
@@ -19186,6 +19298,7 @@
   (set_local $8
    (call $~lib/internal/string/allocateUnsafe
     (get_local $7)
+    (i32.const 1)
    )
   )
   (set_local $9
@@ -19280,49 +19393,55 @@
    )
   )
   (set_local $10
-   (get_local $8)
-  )
-  (if
-   (i32.gt_s
-    (get_local $7)
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $9)
+    (i32.const 0)
    )
-   (block
-    (set_local $10
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $9)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $10)
+   (i32.const 0)
+   (get_local $8)
+   (i32.const 0)
+   (get_local $9)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.10
+   (set_local $11
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $12
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (i32.eqz
+      (get_local $11)
+     )
+     (get_local $12)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $10)
-     (i32.const 0)
-     (get_local $8)
-     (i32.const 0)
-     (get_local $9)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.10
-     (block
-      (if
-       (i32.eqz
+    (block
+     (if
+      (i32.eqz
+       (get_local $8)
+      )
+      (block
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
+       )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.14
+      (block
+       (call $~lib/allocator/arena/__memory_free
         (get_local $8)
        )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (block $~lib/memory/memory.free|inlined.14
-       (block
-        (call $~lib/allocator/arena/__memory_free
-         (get_local $8)
-        )
-        (br $~lib/memory/memory.free|inlined.14)
-       )
+       (br $~lib/memory/memory.free|inlined.14)
       )
      )
     )
