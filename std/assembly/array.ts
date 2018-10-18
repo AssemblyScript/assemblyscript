@@ -363,7 +363,7 @@ export class Array<T> {
     }
   }
 
-  join(separator: string = ","): string {
+  join(separator: String = ","): String {
     var lastIndex = this.length_ - 1;
     if (lastIndex < 0) return "";
     var value: T;
@@ -372,7 +372,7 @@ export class Array<T> {
     var hasSeparator = sepLen != 0;
     if (value instanceof bool) {
       if (!lastIndex) {
-        return select<string>("true", "false", loadUnsafe<T,bool>(buffer, 0));
+        return select<String>("true", "false", loadUnsafe<T,bool>(buffer, 0));
       }
       let valueLen = 5; // max possible length of element len("false")
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
@@ -381,16 +381,16 @@ export class Array<T> {
       for (let i = 0; i < lastIndex; ++i) {
         value = loadUnsafe<T,bool>(buffer, i);
         valueLen = 4 + <i32>(!value);
-        copyUnsafeString(result, offset, select<string>("true", "false", value), 0, valueLen);
+        copyUnsafeString(result, offset, select<String>("true", "false", value), 0, valueLen);
         offset += valueLen;
         if (hasSeparator) {
-          copyUnsafeString(result, offset, changetype<String>(separator), 0, sepLen);
+          copyUnsafeString(result, offset, separator, 0, sepLen);
           offset += sepLen;
         }
       }
       value = loadUnsafe<T,bool>(buffer, lastIndex);
       valueLen = 4 + <i32>(!value);
-      copyUnsafeString(result, offset, select<string>("true", "false", value), 0, valueLen);
+      copyUnsafeString(result, offset, select<String>("true", "false", value), 0, valueLen);
       offset += valueLen;
 
       let out = result;
@@ -399,10 +399,10 @@ export class Array<T> {
         copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
-      return out as string;
+      return out;
     } else if (isInteger<T>()) {
       if (!lastIndex) {
-        return changetype<string>(itoa<T>(loadUnsafe<T,T>(buffer, 0)));
+        return changetype<String>(itoa<T>(loadUnsafe<T,T>(buffer, 0)));
       }
       const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
@@ -424,10 +424,10 @@ export class Array<T> {
         copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
-      return out as string;
+      return out;
     } else if (isFloat<T>()) {
       if (!lastIndex) {
-        return changetype<string>(dtoa(loadUnsafe<T,f64>(buffer, 0)));
+        return dtoa(loadUnsafe<T,f64>(buffer, 0));
       }
       const valueLen = MAX_DOUBLE_LENGTH;
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
@@ -449,14 +449,14 @@ export class Array<T> {
         copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
-      return out as string;
+      return out;
     } else if (isString<T>()) {
       if (!lastIndex) {
-        return loadUnsafe<T,string>(buffer, 0);
+        return loadUnsafe<T,String>(buffer, 0);
       }
       let estLen = 0;
       for (let i = 0, len = lastIndex + 1; i < len; ++i) {
-        estLen += loadUnsafe<T,string>(buffer, i).length;
+        estLen += loadUnsafe<T,String>(buffer, i).length;
       }
       let offset = 0;
       let result = allocateUnsafeString(estLen + sepLen * lastIndex);
@@ -477,7 +477,7 @@ export class Array<T> {
         let valueLen = value.length;                          // tslint:disable-line:no-unsafe-any
         copyUnsafeString(result, offset, value, 0, valueLen); // tslint:disable-line:no-unsafe-any
       }
-      return result as string;
+      return result;
     } else if (isArray<T>()) {
       if (!lastIndex) {
         value = loadUnsafe<T,T>(buffer, 0);
@@ -505,7 +505,7 @@ export class Array<T> {
           offset += valueLen;
         }
         if (hasSeparator) {
-          copyUnsafeString(result, offset, changetype<String>(separator), 0, sepLen);
+          copyUnsafeString(result, offset, separator, 0, sepLen);
           offset += sepLen;
         }
       }
@@ -519,7 +519,7 @@ export class Array<T> {
         copyUnsafeString(out, 0, result, 0, offset);
         freeUnsafeString(result);
       }
-      return out as string;
+      return out;
     } else {
       assert(false); // Unsupported generic typename
     }

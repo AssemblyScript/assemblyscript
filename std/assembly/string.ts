@@ -10,6 +10,10 @@ import {
   parse
 } from "./internal/string";
 
+import {
+  storeUnsafe as storeUnsafeArray
+} from "./internal/arraybuffer";
+
 @sealed
 export class String {
 
@@ -200,6 +204,7 @@ export class String {
     return compareUnsafe(left, 0, right, 0, length) <= 0;
   }
 
+  @inline
   includes(searchString: String, position: i32 = 0): bool {
     return this.indexOf(searchString, position) != -1;
   }
@@ -400,11 +405,66 @@ export class String {
       throw new RangeError("Invalid count value");
     }
 
-    if (count === 0 || !length) return changetype<String>("");
-    if (count === 1) return this;
+    if (count == 0 || !length) return changetype<String>("");
+    if (count == 1) return this;
 
     var result = allocateUnsafe(length * count);
     repeatUnsafe(result, 0, this, count);
+    return result;
+  }
+
+  split(separator: String = null, limit: i32 = i32.MAX_VALUE): String[] {
+    assert(this !== null);
+    if (!limit) return new Array<String>();
+    if (separator === null) return <String[]>[this];
+    var length: isize = this.length;
+    var sepLen: isize = separator.length;
+    if (limit < 0) limit = i32.MAX_VALUE;
+    if (!sepLen) {
+      if (!length) return new Array<String>();
+      // split by chars
+      length = min<isize>(length, <isize>limit);
+      let result = new Array<String>(length);
+      let buffer = <ArrayBuffer>result.buffer_;
+      for (let i: isize = 0; i < length; ++i) {
+        let char = allocateUnsafe(1);
+        store<u16>(
+          changetype<usize>(char),
+          load<u16>(
+            changetype<usize>(this) + (<usize>i << 1),
+            HEADER_SIZE
+          ),
+          HEADER_SIZE
+        );
+        storeUnsafeArray<String,String>(buffer, i, char);
+      }
+      return result;
+    } else if (!length) {
+      return <String[]>[changetype<String>("")];
+    }
+    var result = new Array<String>();
+    var end = 0, start = 0, i = 0;
+    while ((end = this.indexOf(separator, start)) != -1) {
+      let len = end - start;
+      if (len > 0) {
+        let out = allocateUnsafe(len);
+        copyUnsafe(out, 0, this, start, len);
+        result.push(out);
+      } else {
+        result.push(changetype<String>(""));
+      }
+      if (++i == limit) return result;
+      start = end + sepLen;
+    }
+    if (!start) return <String[]>[this];
+    var len = length - start;
+    if (len > 0) {
+      let out = allocateUnsafe(len);
+      copyUnsafe(out, 0, this, start, len);
+      result.push(out);
+    } else {
+      result.push(changetype<String>(""));
+    }
     return result;
   }
 
