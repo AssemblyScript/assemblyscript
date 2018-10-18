@@ -131,7 +131,9 @@ assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
-var sa = "".split();
+var sa: string[];
+
+sa = "".split();
 assert(sa.length == 1 && sa[0] == "");
 sa = "".split("");
 assert(sa.length == 0);
