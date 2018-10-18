@@ -3065,22 +3065,21 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (set_local $4
-   (i32.add
-    (tee_local $3
-     (i32.load offset=4
-      (get_local $0)
+  (if
+   (i32.gt_u
+    (tee_local $2
+     (i32.add
+      (tee_local $4
+       (i32.load offset=4
+        (get_local $0)
+       )
+      )
+      (i32.const 1)
      )
     )
-    (i32.const 1)
-   )
-  )
-  (if
-   (i32.ge_u
-    (get_local $3)
     (i32.shr_u
      (i32.load
-      (tee_local $2
+      (tee_local $3
        (i32.load
         (get_local $0)
        )
@@ -3092,7 +3091,7 @@
    (block
     (if
      (i32.ge_u
-      (get_local $3)
+      (get_local $2)
       (i32.const 268435454)
      )
      (block
@@ -3100,41 +3099,41 @@
        (i32.const 0)
        (i32.const 8)
        (i32.const 172)
-       (i32.const 42)
+       (i32.const 45)
       )
       (unreachable)
      )
     )
-    (set_local $2
+    (set_local $3
      (call $~lib/internal/arraybuffer/reallocateUnsafe
-      (get_local $2)
+      (get_local $3)
       (i32.shl
-       (get_local $4)
+       (get_local $2)
        (i32.const 2)
       )
      )
     )
     (i32.store
      (get_local $0)
-     (get_local $2)
+     (get_local $3)
     )
    )
   )
   (i32.store offset=4
    (get_local $0)
-   (get_local $4)
+   (get_local $2)
   )
   (i32.store offset=8
    (i32.add
-    (get_local $2)
+    (get_local $3)
     (i32.shl
-     (get_local $3)
+     (get_local $4)
      (i32.const 2)
     )
    )
    (get_local $1)
   )
-  (get_local $4)
+  (get_local $2)
  )
  (func $~lib/array/Array<i32>#pop (; 21 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
