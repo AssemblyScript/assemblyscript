@@ -218,7 +218,6 @@ export class String {
     var len: isize = this.length;
     if (!len) return -1;
     var start = min<isize>(max<isize>(fromIndex, 0), len);
-    if (searchLen > 1) len -= searchLen;
     for (let k: isize = start; k < len; ++k) {
       if (!compareUnsafe(this, k, searchString, 0, searchLen)) return <i32>k;
     }

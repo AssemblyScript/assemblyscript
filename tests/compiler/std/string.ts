@@ -51,6 +51,8 @@ assert("abc".padEnd(8, "abc") == "abcabcab");
 
 assert("".indexOf("") == 0);
 assert("".indexOf("hi") == -1);
+assert("a".indexOf("a") == 0);
+assert(str.indexOf(str) == 0);
 assert(str.indexOf("") == 0);
 assert(str.indexOf(",") == 2);
 assert(str.indexOf("x") == -1);
