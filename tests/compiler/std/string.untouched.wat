@@ -684,7 +684,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 243)
+     (i32.const 244)
      (i32.const 4)
     )
     (unreachable)
@@ -954,6 +954,12 @@
     )
    )
   )
+  (set_local $4
+   (i32.sub
+    (get_local $4)
+    (get_local $3)
+   )
+  )
   (block $break|0
    (set_local $5
     (get_local $7)
@@ -961,7 +967,7 @@
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
-      (i32.lt_s
+      (i32.le_s
        (get_local $5)
        (get_local $4)
       )
@@ -3520,7 +3526,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 359)
+     (i32.const 360)
      (i32.const 4)
     )
     (unreachable)
@@ -3670,7 +3676,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 379)
+     (i32.const 380)
      (i32.const 4)
     )
     (unreachable)
@@ -3821,7 +3827,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 228)
+     (i32.const 229)
      (i32.const 4)
     )
     (unreachable)
@@ -4534,7 +4540,7 @@
                  (call $~lib/env/abort
                   (i32.const 0)
                   (i32.const 80)
-                  (i32.const 625)
+                  (i32.const 626)
                   (i32.const 10)
                  )
                  (unreachable)
@@ -5081,7 +5087,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 399)
+     (i32.const 400)
      (i32.const 4)
     )
     (unreachable)
@@ -5116,7 +5122,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 404)
+     (i32.const 405)
      (i32.const 6)
     )
     (unreachable)
@@ -5950,7 +5956,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 416)
+     (i32.const 417)
      (i32.const 4)
     )
     (unreachable)
@@ -9035,7 +9041,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 80)
-     (i32.const 268)
+     (i32.const 269)
      (i32.const 4)
     )
     (unreachable)
