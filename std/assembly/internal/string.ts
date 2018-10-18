@@ -24,7 +24,7 @@ export function allocateUnsafe(length: i32, skipGC: bool = false): String {
 
 @inline
 export function freeUnsafe(buffer: String, skipGC: bool = false): void {
-  if (!isManaged<String>() && !skipGC) {
+  if (!isManaged<String>() || skipGC) {
     assert(buffer);
     memory.free(changetype<usize>(buffer));
   }

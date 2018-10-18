@@ -9126,10 +9126,8 @@
          (i32.const 0)
         )
        )
-       (i32.eqz
-        (get_local $4)
-       )
        (get_local $5)
+       (get_local $4)
       )
       (block
        (if
