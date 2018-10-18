@@ -16195,7 +16195,7 @@
   (set_local $1
    (call $~lib/internal/string/allocateUnsafe
     (get_global $~lib/internal/number/MAX_DOUBLE_LENGTH)
-    (i32.const 0)
+    (i32.const 1)
    )
   )
   (set_local $2
@@ -16205,64 +16205,53 @@
    )
   )
   (set_local $3
-   (get_local $1)
-  )
-  (if
-   (i32.lt_s
+   (call $~lib/internal/string/allocateUnsafe
     (get_local $2)
-    (get_global $~lib/internal/number/MAX_DOUBLE_LENGTH)
+    (i32.const 0)
    )
-   (block
-    (set_local $3
-     (call $~lib/internal/string/allocateUnsafe
-      (get_local $2)
-      (i32.const 0)
+  )
+  (call $~lib/internal/string/copyUnsafe
+   (get_local $3)
+   (i32.const 0)
+   (get_local $1)
+   (i32.const 0)
+   (get_local $2)
+  )
+  (block $~lib/internal/string/freeUnsafe|inlined.3
+   (set_local $4
+    (i32.const 1)
+   )
+   (if
+    (if (result i32)
+     (tee_local $5
+      (i32.eqz
+       (i32.const 0)
+      )
      )
+     (get_local $5)
+     (get_local $4)
     )
-    (call $~lib/internal/string/copyUnsafe
-     (get_local $3)
-     (i32.const 0)
-     (get_local $1)
-     (i32.const 0)
-     (get_local $2)
-    )
-    (block $~lib/internal/string/freeUnsafe|inlined.3
-     (set_local $4
-      (i32.const 0)
-     )
+    (block
      (if
-      (if (result i32)
-       (tee_local $5
-        (i32.eqz
-         (i32.const 0)
-        )
-       )
-       (get_local $5)
-       (get_local $4)
+      (i32.eqz
+       (get_local $1)
       )
       (block
-       (if
-        (i32.eqz
-         (get_local $1)
-        )
-        (block
-         (call $~lib/env/abort
-          (i32.const 0)
-          (i32.const 1648)
-          (i32.const 28)
-          (i32.const 4)
-         )
-         (unreachable)
-        )
+       (call $~lib/env/abort
+        (i32.const 0)
+        (i32.const 1648)
+        (i32.const 28)
+        (i32.const 4)
        )
-       (block $~lib/memory/memory.free|inlined.7
-        (block
-         (call $~lib/allocator/arena/__memory_free
-          (get_local $1)
-         )
-         (br $~lib/memory/memory.free|inlined.7)
-        )
+       (unreachable)
+      )
+     )
+     (block $~lib/memory/memory.free|inlined.7
+      (block
+       (call $~lib/allocator/arena/__memory_free
+        (get_local $1)
        )
+       (br $~lib/memory/memory.free|inlined.7)
       )
      )
     )

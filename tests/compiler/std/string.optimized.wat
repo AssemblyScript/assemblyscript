@@ -7495,60 +7495,41 @@
     )
    )
   )
-  (set_local $2
-   (call $~lib/internal/number/dtoa_core
-    (tee_local $1
-     (call $~lib/internal/string/allocateUnsafe
-      (i32.const 28)
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $3
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $2
+      (call $~lib/internal/number/dtoa_core
+       (tee_local $1
+        (call $~lib/internal/string/allocateUnsafe
+         (i32.const 28)
+        )
+       )
+       (get_local $0)
+      )
      )
     )
-    (get_local $0)
    )
-  )
-  (set_local $3
+   (i32.const 0)
    (get_local $1)
+   (i32.const 0)
+   (get_local $2)
   )
   (if
-   (i32.lt_s
-    (get_local $2)
-    (i32.const 28)
+   (i32.eqz
+    (get_local $1)
    )
    (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $3
-      (call $~lib/internal/string/allocateUnsafe
-       (get_local $2)
-      )
-     )
+    (call $~lib/env/abort
      (i32.const 0)
-     (get_local $1)
-     (i32.const 0)
-     (get_local $2)
+     (i32.const 112)
+     (i32.const 28)
+     (i32.const 4)
     )
-    (if
-     (tee_local $2
-      (i32.const 1)
-     )
-     (block
-      (if
-       (i32.eqz
-        (get_local $1)
-       )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 112)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (call $~lib/allocator/arena/__memory_free)
-     )
-    )
+    (unreachable)
    )
   )
+  (call $~lib/allocator/arena/__memory_free)
   (get_local $3)
  )
  (func $start (; 60 ;) (; has Stack IR ;) (type $v)

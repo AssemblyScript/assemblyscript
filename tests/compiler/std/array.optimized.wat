@@ -10581,59 +10581,40 @@
     )
    )
   )
-  (set_local $2
-   (call $~lib/internal/number/dtoa_core
-    (tee_local $1
-     (call $~lib/internal/string/allocateUnsafe
-      (i32.const 28)
+  (call $~lib/internal/string/copyUnsafe
+   (tee_local $3
+    (call $~lib/internal/string/allocateUnsafe
+     (tee_local $2
+      (call $~lib/internal/number/dtoa_core
+       (tee_local $1
+        (call $~lib/internal/string/allocateUnsafe
+         (i32.const 28)
+        )
+       )
+       (get_local $0)
+      )
      )
     )
-    (get_local $0)
    )
-  )
-  (set_local $3
+   (i32.const 0)
    (get_local $1)
+   (get_local $2)
   )
   (if
-   (i32.lt_s
-    (get_local $2)
-    (i32.const 28)
+   (i32.eqz
+    (get_local $1)
    )
    (block
-    (call $~lib/internal/string/copyUnsafe
-     (tee_local $3
-      (call $~lib/internal/string/allocateUnsafe
-       (get_local $2)
-      )
-     )
+    (call $~lib/env/abort
      (i32.const 0)
-     (get_local $1)
-     (get_local $2)
+     (i32.const 1648)
+     (i32.const 28)
+     (i32.const 4)
     )
-    (if
-     (tee_local $2
-      (i32.const 1)
-     )
-     (block
-      (if
-       (i32.eqz
-        (get_local $1)
-       )
-       (block
-        (call $~lib/env/abort
-         (i32.const 0)
-         (i32.const 1648)
-         (i32.const 28)
-         (i32.const 4)
-        )
-        (unreachable)
-       )
-      )
-      (call $~lib/allocator/arena/__memory_free)
-     )
-    )
+    (unreachable)
    )
   )
+  (call $~lib/allocator/arena/__memory_free)
   (get_local $3)
  )
  (func $~lib/internal/number/dtoa_stream (; 138 ;) (; has Stack IR ;) (type $iiFi) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)

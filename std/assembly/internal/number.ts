@@ -623,15 +623,12 @@ export function dtoa(value: f64): String {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var buffer = allocateUnsafeString(MAX_DOUBLE_LENGTH);
+  var buffer = allocateUnsafeString(MAX_DOUBLE_LENGTH, true);
   var length = dtoa_core(changetype<usize>(buffer), value);
-  var result = buffer;
 
-  if (length < MAX_DOUBLE_LENGTH) {
-    result = allocateUnsafeString(length);
-    copyUnsafeString(result, 0, buffer, 0, length);
-    freeUnsafeString(buffer);
-  }
+  var result = allocateUnsafeString(length);
+  copyUnsafeString(result, 0, buffer, 0, length);
+  freeUnsafeString(buffer, true);
   return result;
 }
 
