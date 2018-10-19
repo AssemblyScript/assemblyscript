@@ -801,13 +801,10 @@ export namespace NativeMath {
       if (iy >= 0x43400000) yisint = 2;
       else if (iy >= 0x3FF00000) {
         k = (iy >> 20) - 0x3FF;
-        if (k > 20) {
-          let jj = ly >> (52 - k);
-          if ((jj << (52 - k)) == ly) yisint = 2 - (jj & 1);
-        } else if (ly == 0) {
-          let jj = iy >> (20 - k);
-          if ((jj << (20 - k)) == iy) yisint = 2 - (jj & 1);
-        }
+        let offset = select<i32>(52, 20, k > 20) - k;
+        let Ly = select<i32>(ly, iy, k > 20);
+        let jj = Ly >> offset;
+        if ((jj << offset) == Ly) yisint = 2 - (jj & 1);
       }
     }
     if (ly == 0) {
