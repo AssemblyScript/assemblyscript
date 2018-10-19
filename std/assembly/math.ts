@@ -232,12 +232,13 @@ export namespace NativeMath {
     var w = z * z;
     var s1 = z * (aT0 + w * (aT2 + w * (aT4 + w * (aT6 + w * (aT8 + w * aT10)))));
     var s2 = w * (aT1 + w * (aT3 + w * (aT5 + w * (aT7 + w * aT9))));
-    if (id < 0) return x - x * (s1 + s2);
+    var s3 = x * (s1 + s2);
+    if (id < 0) return x - s3;
     switch (id) {
-      case 0: { z = atanhi0 - (x * (s1 + s2) - atanlo0 - x); break; }
-      case 1: { z = atanhi1 - (x * (s1 + s2) - atanlo1 - x); break; }
-      case 2: { z = atanhi2 - (x * (s1 + s2) - atanlo2 - x); break; }
-      case 3: { z = atanhi3 - (x * (s1 + s2) - atanlo3 - x); break; }
+      case 0: { z = atanhi0 - ((s3 - atanlo0) - x); break; }
+      case 1: { z = atanhi1 - ((s3 - atanlo1) - x); break; }
+      case 2: { z = atanhi2 - ((s3 - atanlo2) - x); break; }
+      case 3: { z = atanhi3 - ((s3 - atanlo3) - x); break; }
       default: unreachable();
     }
     return builtin_copysign<f64>(z, sx);
@@ -1358,12 +1359,13 @@ export namespace NativeMathf {
     var w = z * z;
     var s1 = z * (aT0 + w * (aT2 + w * aT4));
     var s2 = w * (aT1 + w * aT3);
-    if (id < 0) return x - x * (s1 + s2);
+    var s3 = x * (s1 + s2);
+    if (id < 0) return x - s3;
     switch (id) {
-      case 0: { z = atanhi0 - ((x * (s1 + s2) - atanlo0) - x); break; }
-      case 1: { z = atanhi1 - ((x * (s1 + s2) - atanlo1) - x); break; }
-      case 2: { z = atanhi2 - ((x * (s1 + s2) - atanlo2) - x); break; }
-      case 3: { z = atanhi3 - ((x * (s1 + s2) - atanlo3) - x); break; }
+      case 0: { z = atanhi0 - ((s3 - atanlo0) - x); break; }
+      case 1: { z = atanhi1 - ((s3 - atanlo1) - x); break; }
+      case 2: { z = atanhi2 - ((s3 - atanlo2) - x); break; }
+      case 3: { z = atanhi3 - ((s3 - atanlo3) - x); break; }
       default: unreachable();
     }
     return builtin_copysign(z, sx);

@@ -3211,30 +3211,35 @@
     (get_local $3)
    )
   )
-  (set_local $3
+  (set_local $1
    (f64.mul
-    (get_local $3)
+    (get_local $0)
     (f64.add
-     (f64.const 0.3333333333333293)
      (f64.mul
-      (get_local $1)
+      (get_local $3)
       (f64.add
-       (f64.const 0.14285714272503466)
+       (f64.const 0.3333333333333293)
        (f64.mul
         (get_local $1)
         (f64.add
-         (f64.const 0.09090887133436507)
+         (f64.const 0.14285714272503466)
          (f64.mul
           (get_local $1)
           (f64.add
-           (f64.const 0.06661073137387531)
+           (f64.const 0.09090887133436507)
            (f64.mul
             (get_local $1)
             (f64.add
-             (f64.const 0.049768779946159324)
+             (f64.const 0.06661073137387531)
              (f64.mul
               (get_local $1)
-              (f64.const 0.016285820115365782)
+              (f64.add
+               (f64.const 0.049768779946159324)
+               (f64.mul
+                (get_local $1)
+                (f64.const 0.016285820115365782)
+               )
+              )
              )
             )
            )
@@ -3244,29 +3249,27 @@
        )
       )
      )
-    )
-   )
-  )
-  (set_local $1
-   (f64.mul
-    (get_local $1)
-    (f64.add
-     (f64.const -0.19999999999876483)
      (f64.mul
       (get_local $1)
       (f64.add
-       (f64.const -0.11111110405462356)
+       (f64.const -0.19999999999876483)
        (f64.mul
         (get_local $1)
         (f64.add
-         (f64.const -0.0769187620504483)
+         (f64.const -0.11111110405462356)
          (f64.mul
           (get_local $1)
           (f64.add
-           (f64.const -0.058335701337905735)
+           (f64.const -0.0769187620504483)
            (f64.mul
             (get_local $1)
-            (f64.const -0.036531572744216916)
+            (f64.add
+             (f64.const -0.058335701337905735)
+             (f64.mul
+              (get_local $1)
+              (f64.const -0.036531572744216916)
+             )
+            )
            )
           )
          )
@@ -3285,13 +3288,7 @@
    (return
     (f64.sub
      (get_local $0)
-     (f64.mul
-      (get_local $0)
-      (f64.add
-       (get_local $3)
-       (get_local $1)
-      )
-     )
+     (get_local $1)
     )
    )
   )
@@ -3319,13 +3316,7 @@
          (f64.const 0.4636476090008061)
          (f64.sub
           (f64.sub
-           (f64.mul
-            (get_local $0)
-            (f64.add
-             (get_local $3)
-             (get_local $1)
-            )
-           )
+           (get_local $1)
            (f64.const 2.2698777452961687e-17)
           )
           (get_local $0)
@@ -3339,13 +3330,7 @@
         (f64.const 0.7853981633974483)
         (f64.sub
          (f64.sub
-          (f64.mul
-           (get_local $0)
-           (f64.add
-            (get_local $3)
-            (get_local $1)
-           )
-          )
+          (get_local $1)
           (f64.const 3.061616997868383e-17)
          )
          (get_local $0)
@@ -3359,13 +3344,7 @@
        (f64.const 0.982793723247329)
        (f64.sub
         (f64.sub
-         (f64.mul
-          (get_local $0)
-          (f64.add
-           (get_local $3)
-           (get_local $1)
-          )
-         )
+         (get_local $1)
          (f64.const 1.3903311031230998e-17)
         )
         (get_local $0)
@@ -3379,13 +3358,7 @@
       (f64.const 1.5707963267948966)
       (f64.sub
        (f64.sub
-        (f64.mul
-         (get_local $0)
-         (f64.add
-          (get_local $3)
-          (get_local $1)
-         )
-        )
+        (get_local $1)
         (f64.const 6.123233995736766e-17)
        )
        (get_local $0)
@@ -3584,30 +3557,33 @@
   )
   (set_local $2
    (f32.mul
-    (get_local $2)
+    (get_local $0)
     (f32.add
-     (f32.const 0.333333283662796)
      (f32.mul
-      (get_local $3)
+      (get_local $2)
       (f32.add
-       (f32.const 0.14253635704517365)
+       (f32.const 0.333333283662796)
        (f32.mul
         (get_local $3)
-        (f32.const 0.06168760731816292)
+        (f32.add
+         (f32.const 0.14253635704517365)
+         (f32.mul
+          (get_local $3)
+          (f32.const 0.06168760731816292)
+         )
+        )
        )
       )
      )
-    )
-   )
-  )
-  (set_local $3
-   (f32.mul
-    (get_local $3)
-    (f32.add
-     (f32.const -0.19999158382415771)
      (f32.mul
       (get_local $3)
-      (f32.const -0.106480173766613)
+      (f32.add
+       (f32.const -0.19999158382415771)
+       (f32.mul
+        (get_local $3)
+        (f32.const -0.106480173766613)
+       )
+      )
      )
     )
    )
@@ -3620,13 +3596,7 @@
    (return
     (f32.sub
      (get_local $0)
-     (f32.mul
-      (get_local $0)
-      (f32.add
-       (get_local $2)
-       (get_local $3)
-      )
-     )
+     (get_local $2)
     )
    )
   )
@@ -3654,13 +3624,7 @@
          (f32.const 0.46364760398864746)
          (f32.sub
           (f32.sub
-           (f32.mul
-            (get_local $0)
-            (f32.add
-             (get_local $2)
-             (get_local $3)
-            )
-           )
+           (get_local $2)
            (f32.const 5.01215824399992e-09)
           )
           (get_local $0)
@@ -3674,13 +3638,7 @@
         (f32.const 0.7853981256484985)
         (f32.sub
          (f32.sub
-          (f32.mul
-           (get_local $0)
-           (f32.add
-            (get_local $2)
-            (get_local $3)
-           )
-          )
+          (get_local $2)
           (f32.const 3.774894707930798e-08)
          )
          (get_local $0)
@@ -3694,13 +3652,7 @@
        (f32.const 0.9827936887741089)
        (f32.sub
         (f32.sub
-         (f32.mul
-          (get_local $0)
-          (f32.add
-           (get_local $2)
-           (get_local $3)
-          )
-         )
+         (get_local $2)
          (f32.const 3.447321716976148e-08)
         )
         (get_local $0)
@@ -3714,13 +3666,7 @@
       (f32.const 1.570796251296997)
       (f32.sub
        (f32.sub
-        (f32.mul
-         (get_local $0)
-         (f32.add
-          (get_local $2)
-          (get_local $3)
-         )
-        )
+        (get_local $2)
         (f32.const 7.549789415861596e-08)
        )
        (get_local $0)
@@ -11663,7 +11609,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 950)
+     (i32.const 951)
      (i32.const 4)
     )
     (unreachable)
@@ -11709,7 +11655,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 959)
+     (i32.const 960)
      (i32.const 24)
     )
     (unreachable)
@@ -11778,7 +11724,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2007)
+     (i32.const 2009)
      (i32.const 24)
     )
     (unreachable)

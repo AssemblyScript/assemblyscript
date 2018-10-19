@@ -1499,7 +1499,8 @@
   (local $5 f64)
   (local $6 f64)
   (local $7 f64)
-  (local $8 i32)
+  (local $8 f64)
+  (local $9 i32)
   (set_local $1
    (i32.wrap/i64
     (i64.shr_u
@@ -1740,6 +1741,15 @@
     )
    )
   )
+  (set_local $8
+   (f64.mul
+    (get_local $0)
+    (f64.add
+     (get_local $6)
+     (get_local $7)
+    )
+   )
+  )
   (if
    (i32.lt_s
     (get_local $4)
@@ -1748,13 +1758,7 @@
    (return
     (f64.sub
      (get_local $0)
-     (f64.mul
-      (get_local $0)
-      (f64.add
-       (get_local $6)
-       (get_local $7)
-      )
-     )
+     (get_local $8)
     )
    )
   )
@@ -1764,30 +1768,30 @@
      (block $case2|0
       (block $case1|0
        (block $case0|0
-        (set_local $8
+        (set_local $9
          (get_local $4)
         )
         (br_if $case0|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 0)
          )
         )
         (br_if $case1|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 1)
          )
         )
         (br_if $case2|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 2)
          )
         )
         (br_if $case3|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 3)
          )
         )
@@ -1799,13 +1803,7 @@
           (f64.const 0.4636476090008061)
           (f64.sub
            (f64.sub
-            (f64.mul
-             (get_local $0)
-             (f64.add
-              (get_local $6)
-              (get_local $7)
-             )
-            )
+            (get_local $8)
             (f64.const 2.2698777452961687e-17)
            )
            (get_local $0)
@@ -1821,13 +1819,7 @@
          (f64.const 0.7853981633974483)
          (f64.sub
           (f64.sub
-           (f64.mul
-            (get_local $0)
-            (f64.add
-             (get_local $6)
-             (get_local $7)
-            )
-           )
+           (get_local $8)
            (f64.const 3.061616997868383e-17)
           )
           (get_local $0)
@@ -1843,13 +1835,7 @@
         (f64.const 0.982793723247329)
         (f64.sub
          (f64.sub
-          (f64.mul
-           (get_local $0)
-           (f64.add
-            (get_local $6)
-            (get_local $7)
-           )
-          )
+          (get_local $8)
           (f64.const 1.3903311031230998e-17)
          )
          (get_local $0)
@@ -1865,13 +1851,7 @@
        (f64.const 1.5707963267948966)
        (f64.sub
         (f64.sub
-         (f64.mul
-          (get_local $0)
-          (f64.add
-           (get_local $6)
-           (get_local $7)
-          )
-         )
+         (get_local $8)
          (f64.const 6.123233995736766e-17)
         )
         (get_local $0)

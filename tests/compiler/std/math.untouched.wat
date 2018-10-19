@@ -3486,7 +3486,8 @@
   (local $5 f64)
   (local $6 f64)
   (local $7 f64)
-  (local $8 i32)
+  (local $8 f64)
+  (local $9 i32)
   (set_local $1
    (i32.wrap/i64
     (i64.shr_u
@@ -3727,6 +3728,15 @@
     )
    )
   )
+  (set_local $8
+   (f64.mul
+    (get_local $0)
+    (f64.add
+     (get_local $6)
+     (get_local $7)
+    )
+   )
+  )
   (if
    (i32.lt_s
     (get_local $4)
@@ -3735,13 +3745,7 @@
    (return
     (f64.sub
      (get_local $0)
-     (f64.mul
-      (get_local $0)
-      (f64.add
-       (get_local $6)
-       (get_local $7)
-      )
-     )
+     (get_local $8)
     )
    )
   )
@@ -3751,30 +3755,30 @@
      (block $case2|0
       (block $case1|0
        (block $case0|0
-        (set_local $8
+        (set_local $9
          (get_local $4)
         )
         (br_if $case0|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 0)
          )
         )
         (br_if $case1|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 1)
          )
         )
         (br_if $case2|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 2)
          )
         )
         (br_if $case3|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 3)
          )
         )
@@ -3786,13 +3790,7 @@
           (f64.const 0.4636476090008061)
           (f64.sub
            (f64.sub
-            (f64.mul
-             (get_local $0)
-             (f64.add
-              (get_local $6)
-              (get_local $7)
-             )
-            )
+            (get_local $8)
             (f64.const 2.2698777452961687e-17)
            )
            (get_local $0)
@@ -3808,13 +3806,7 @@
          (f64.const 0.7853981633974483)
          (f64.sub
           (f64.sub
-           (f64.mul
-            (get_local $0)
-            (f64.add
-             (get_local $6)
-             (get_local $7)
-            )
-           )
+           (get_local $8)
            (f64.const 3.061616997868383e-17)
           )
           (get_local $0)
@@ -3830,13 +3822,7 @@
         (f64.const 0.982793723247329)
         (f64.sub
          (f64.sub
-          (f64.mul
-           (get_local $0)
-           (f64.add
-            (get_local $6)
-            (get_local $7)
-           )
-          )
+          (get_local $8)
           (f64.const 1.3903311031230998e-17)
          )
          (get_local $0)
@@ -3852,13 +3838,7 @@
        (f64.const 1.5707963267948966)
        (f64.sub
         (f64.sub
-         (f64.mul
-          (get_local $0)
-          (f64.add
-           (get_local $6)
-           (get_local $7)
-          )
-         )
+         (get_local $8)
          (f64.const 6.123233995736766e-17)
         )
         (get_local $0)
@@ -3915,7 +3895,8 @@
   (local $5 f32)
   (local $6 f32)
   (local $7 f32)
-  (local $8 i32)
+  (local $8 f32)
+  (local $9 i32)
   (set_local $1
    (i32.reinterpret/f32
     (get_local $0)
@@ -4113,6 +4094,15 @@
     )
    )
   )
+  (set_local $8
+   (f32.mul
+    (get_local $0)
+    (f32.add
+     (get_local $6)
+     (get_local $7)
+    )
+   )
+  )
   (if
    (i32.lt_s
     (get_local $4)
@@ -4121,13 +4111,7 @@
    (return
     (f32.sub
      (get_local $0)
-     (f32.mul
-      (get_local $0)
-      (f32.add
-       (get_local $6)
-       (get_local $7)
-      )
-     )
+     (get_local $8)
     )
    )
   )
@@ -4137,30 +4121,30 @@
      (block $case2|0
       (block $case1|0
        (block $case0|0
-        (set_local $8
+        (set_local $9
          (get_local $4)
         )
         (br_if $case0|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 0)
          )
         )
         (br_if $case1|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 1)
          )
         )
         (br_if $case2|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 2)
          )
         )
         (br_if $case3|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 3)
          )
         )
@@ -4172,13 +4156,7 @@
           (f32.const 0.46364760398864746)
           (f32.sub
            (f32.sub
-            (f32.mul
-             (get_local $0)
-             (f32.add
-              (get_local $6)
-              (get_local $7)
-             )
-            )
+            (get_local $8)
             (f32.const 5.01215824399992e-09)
            )
            (get_local $0)
@@ -4194,13 +4172,7 @@
          (f32.const 0.7853981256484985)
          (f32.sub
           (f32.sub
-           (f32.mul
-            (get_local $0)
-            (f32.add
-             (get_local $6)
-             (get_local $7)
-            )
-           )
+           (get_local $8)
            (f32.const 3.774894707930798e-08)
           )
           (get_local $0)
@@ -4216,13 +4188,7 @@
         (f32.const 0.9827936887741089)
         (f32.sub
          (f32.sub
-          (f32.mul
-           (get_local $0)
-           (f32.add
-            (get_local $6)
-            (get_local $7)
-           )
-          )
+          (get_local $8)
           (f32.const 3.447321716976148e-08)
          )
          (get_local $0)
@@ -4238,13 +4204,7 @@
        (f32.const 1.570796251296997)
        (f32.sub
         (f32.sub
-         (f32.mul
-          (get_local $0)
-          (f32.add
-           (get_local $6)
-           (get_local $7)
-          )
-         )
+         (get_local $8)
          (f32.const 7.549789415861596e-08)
         )
         (get_local $0)
@@ -13530,7 +13490,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 950)
+     (i32.const 951)
      (i32.const 4)
     )
     (unreachable)
@@ -13577,7 +13537,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 959)
+     (i32.const 960)
      (i32.const 24)
     )
     (unreachable)
@@ -13659,7 +13619,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2007)
+     (i32.const 2009)
      (i32.const 24)
     )
     (unreachable)
