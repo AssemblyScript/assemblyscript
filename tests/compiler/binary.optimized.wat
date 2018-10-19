@@ -322,30 +322,19 @@
  )
  (func $~lib/math/NativeMathf.pow (; 2 ;) (; has Stack IR ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
-  (local $2 i32)
   (block $folding-inner0 (result f32)
    (if
-    (i32.eqz
-     (tee_local $1
-      (i32.gt_s
-       (i32.and
-        (tee_local $2
-         (i32.reinterpret/f32
-          (get_local $0)
-         )
-        )
-        (i32.const 2147483647)
+    (i32.gt_s
+     (i32.and
+      (tee_local $1
+       (i32.reinterpret/f32
+        (get_local $0)
        )
-       (i32.const 2139095040)
       )
+      (i32.const 2147483647)
      )
+     (i32.const 2139095040)
     )
-    (set_local $1
-     (i32.const 0)
-    )
-   )
-   (if
-    (get_local $1)
     (return
      (f32.add
       (get_local $0)
