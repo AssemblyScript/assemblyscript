@@ -258,9 +258,7 @@ export namespace NativeMath {
   }
 
   export function atan2(y: f64, x: f64): f64 { // see: musl/src/math/atan2.c and SUN COPYRIGHT NOTICE above
-    const
-      pi    = reinterpret<f64>(0x400921FB54442D18), // 3.1415926535897931160E+00
-      pi_lo = reinterpret<f64>(0x3CA1A62633145C07); // 1.2246467991473531772E-16
+    const pi_lo = reinterpret<f64>(0x3CA1A62633145C07); // 1.2246467991473531772E-16
     if (isNaN(x) || isNaN(y)) return x + y;
     var u = reinterpret<u64>(x);
     var ix = <u32>(u >> 32);
@@ -280,33 +278,33 @@ export namespace NativeMath {
         case 3: return -PI;
       }
     }
-    if ((ix | lx) == 0) return m & 1 ? -pi / 2 : pi / 2;
+    if ((ix | lx) == 0) return m & 1 ? -PI / 2 : PI / 2;
     if (ix == 0x7FF00000) {
       if (iy == 0x7FF00000) {
         switch (m) {
-          case 0: return  pi / 4;
-          case 1: return -pi / 4;
-          case 2: return  3 * pi / 4;
-          case 3: return -3 * pi / 4;
+          case 0: return  PI / 4;
+          case 1: return -PI / 4;
+          case 2: return  3 * PI / 4;
+          case 3: return -3 * PI / 4;
         }
       } else {
         switch (m) {
           case 0: return  0.0;
           case 1: return -0.0;
-          case 2: return  pi;
-          case 3: return -pi;
+          case 2: return  PI;
+          case 3: return -PI;
         }
       }
     }
     var z: f64;
-    if (ix + (64 << 20) < iy || iy == 0x7FF00000) return m & 1 ? -pi / 2 : pi / 2;
+    if (ix + (64 << 20) < iy || iy == 0x7FF00000) return m & 1 ? -PI / 2 : PI / 2;
     if ((m & 2) && iy + (64 << 20) < ix) z = 0;
     else z = atan(builtin_abs<f64>(y / x));
     switch (m) {
       case 0: return  z;
       case 1: return -z;
-      case 2: return pi - (z - pi_lo);
-      case 3: return (z - pi_lo) - pi;
+      case 2: return PI - (z - pi_lo);
+      case 3: return (z - pi_lo) - PI;
     }
     unreachable();
     return 0;

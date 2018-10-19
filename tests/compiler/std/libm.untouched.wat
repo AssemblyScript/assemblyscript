@@ -2185,12 +2185,12 @@
      )
      (f64.div
       (f64.neg
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
       (f64.const 2)
      )
      (f64.div
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
       (f64.const 2)
      )
     )
@@ -2242,7 +2242,7 @@
         )
         (return
          (f64.div
-          (f64.const 3.141592653589793)
+          (get_global $~lib/math/NativeMath.PI)
           (f64.const 4)
          )
         )
@@ -2250,7 +2250,7 @@
        (return
         (f64.div
          (f64.neg
-          (f64.const 3.141592653589793)
+          (get_global $~lib/math/NativeMath.PI)
          )
          (f64.const 4)
         )
@@ -2260,7 +2260,7 @@
        (f64.div
         (f64.mul
          (f64.const 3)
-         (f64.const 3.141592653589793)
+         (get_global $~lib/math/NativeMath.PI)
         )
         (f64.const 4)
        )
@@ -2270,7 +2270,7 @@
       (f64.div
        (f64.mul
         (f64.const -3)
-        (f64.const 3.141592653589793)
+        (get_global $~lib/math/NativeMath.PI)
        )
        (f64.const 4)
       )
@@ -2319,12 +2319,12 @@
        )
       )
       (return
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
      )
      (return
       (f64.neg
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
      )
     )
@@ -2358,12 +2358,12 @@
      )
      (f64.div
       (f64.neg
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
       (f64.const 2)
      )
      (f64.div
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
       (f64.const 2)
      )
     )
@@ -2449,7 +2449,7 @@
     )
     (return
      (f64.sub
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
       (f64.sub
        (get_local $9)
        (f64.const 1.2246467991473532e-16)
@@ -2463,7 +2463,7 @@
       (get_local $9)
       (f64.const 1.2246467991473532e-16)
      )
-     (f64.const 3.141592653589793)
+     (get_global $~lib/math/NativeMath.PI)
     )
    )
   )
