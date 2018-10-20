@@ -66,6 +66,11 @@ interface ASUtil {
   freeArray(ptr: number): void;
   /** Gets a function by its pointer. */
   getFunction<R = any>(ptr: number): (...args: any[]) => R;
+  /**
+   * Creates a new function in the module's table and returns its pointer. Note that only actual
+   * WebAssembly functions, i.e. as exported by the module, are supported.
+   */
+  newFunction(fn: (...args: any[]) => any): number;
 }
 
 /** Instantiates an AssemblyScript module using the specified imports. */
