@@ -1,12 +1,15 @@
 (module
  (type $v (func))
+ (memory $0 0)
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $portable-conversions/i (mut i32) (i32.const 0))
  (global $portable-conversions/I (mut i64) (i64.const 0))
  (global $portable-conversions/f (mut f32) (f32.const 0))
  (global $portable-conversions/F (mut f64) (f64.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $start (; 0 ;) (type $v)
   (drop
@@ -154,7 +157,7 @@
    )
   )
   (drop
-   (i64.extend_u/i32
+   (i64.extend_s/i32
     (get_global $portable-conversions/i)
    )
   )
@@ -243,5 +246,7 @@
   (drop
    (get_global $portable-conversions/F)
   )
+ )
+ (func $null (; 1 ;) (type $v)
  )
 )

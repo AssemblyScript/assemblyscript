@@ -5,6 +5,10 @@
  (type $iiv (func (param i32 i32)))
  (type $iv (func (param i32)))
  (type $v (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (memory $0 0)
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $exports/Animal.CAT i32 (i32.const 0))
@@ -15,8 +19,8 @@
  (global $exports/vehicles.Car.TIRES i32 (i32.const 4))
  (global $exports/outer.inner.a i32 (i32.const 42))
  (global $~argc (mut i32) (i32.const 0))
- (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "add" (func $exports/add))
  (export "_setargc" (func $~setargc))
  (export "subOpt" (func $exports/subOpt|trampoline))
@@ -143,9 +147,9 @@
   )
   (get_local $1)
  )
- (func $~lib/memory/memory.allocate (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
   (call $~lib/allocator/arena/__memory_allocate
-   (get_local $0)
+   (i32.const 4)
   )
  )
  (func $exports/Car#constructor (; 5 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -155,9 +159,7 @@
    )
    (i32.store
     (tee_local $0
-     (call $~lib/memory/memory.allocate
-      (i32.const 4)
-     )
+     (call $~lib/memory/memory.allocate)
     )
     (get_local $1)
    )
@@ -190,7 +192,10 @@
    (get_global $~lib/allocator/arena/startOffset)
   )
  )
- (func $exports/subOpt|trampoline (; 10 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $null (; 10 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
+ (func $exports/subOpt|trampoline (; 11 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange
@@ -212,12 +217,12 @@
    (get_local $1)
   )
  )
- (func $~setargc (; 11 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~setargc (; 12 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   (set_global $~argc
    (get_local $0)
   )
  )
- (func $exports/Car#constructor|trampoline (; 12 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 13 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (block $1of1
    (block $0of1
     (block $outOfRange

@@ -6,6 +6,10 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $v (func))
+ (memory $0 1)
+ (data (i32.const 8) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
@@ -81,9 +85,8 @@
  (global $std/operator-overloading/aii2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 68))
- (memory $0 1)
- (data (i32.const 8) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -444,7 +447,7 @@
     (i64.shl
      (i64.add
       (i64.const 1023)
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (get_local $1)
       )
      )
@@ -1253,7 +1256,7 @@
         (i64.const 4294967295)
        )
        (i64.shl
-        (i64.extend_u/i32
+        (i64.extend_s/i32
          (get_local $7)
         )
         (i64.const 32)
@@ -1305,7 +1308,7 @@
     (set_local $30
      (f64.reinterpret/i64
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.add
          (i32.add
           (i32.or
@@ -1782,7 +1785,7 @@
     (set_local $20
      (f64.reinterpret/i64
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.and
          (get_local $25)
          (i32.xor
@@ -2000,7 +2003,7 @@
        (i64.const 4294967295)
       )
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (get_local $24)
        )
        (i64.const 32)
@@ -3762,5 +3765,7 @@
     (unreachable)
    )
   )
+ )
+ (func $null (; 33 ;) (type $v)
  )
 )

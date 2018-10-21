@@ -61,7 +61,7 @@ Instances are automatically populated with useful utility:
   A 64-bit float view on the memory.
 
 * **newString**(str: `string`): `number`<br />
-  Allocates a new string in the module's memory and returns its pointer. Requires `allocate_memory` to be exported from your module's entry file, i.e.:
+  Allocates a new string in the module's memory and returns its pointer. Requires `memory.allocate` to be exported from your module's entry file, i.e.:
 
   ```js
   import "allocator/tlsf";
@@ -70,6 +70,25 @@ Instances are automatically populated with useful utility:
 
 * **getString**(ptr: `number`): `string`<br />
   Gets a string from the module's memory by its pointer.
+
+* **newArray**(view: `TypedArray`, length?: `number`, unsafe?: `boolean`): `number`<br />
+  Copies a typed array into the module's memory and returns its pointer.
+
+* **newArray**(ctor: `TypedArrayConstructor`, length: `number`, unsafe?: `boolean`): `number`<br />
+  Creates a typed array in the module's memory and returns its pointer.
+
+* **getArray**(ctor: `TypedArrayConstructor`, ptr: `number`): `TypedArray`<br />
+  Gets a view on a typed array in the module's memory by its pointer.
+
+* **freeArray**(ptr: `number`): `void`<br />
+  Frees a typed array in the module's memory. Must not be accessed anymore afterwards.
+
+* **getFunction**(ptr: `number`): `function`<br />
+  Gets a function by its pointer.
+
+* **newFunction**(fn: `function`): `number`<br />
+  Creates a new function in the module's table and returns its pointer. Note that only actual
+  WebAssembly functions, i.e. as exported by the module, are supported.
 
 <sup>1</sup> This feature has not yet landed in any VM as of this writing.
 
@@ -80,7 +99,7 @@ Examples
 
 ```js
 // From a module provided as a buffer, i.e. as returned by fs.readFileSync
-const myModule = loader.instatiateBuffer(fs.readFileSync("myModule.wasm"), myImports);
+const myModule = loader.instantiateBuffer(fs.readFileSync("myModule.wasm"), myImports);
 
 // From a response object, i.e. as returned by window.fetch
 const myModule = await loader.instantiateStreaming(fetch("myModule.wasm"), myImports);
@@ -125,7 +144,7 @@ myModule.F64[ptrToFloat64 >>> 3] = newValue;
 var str = "Hello world!";
 var ptr = module.newString(str);
 
-// Disposing a string that is no longer needed (requires free_memory to be exported)
+// Disposing a string that is no longer needed (requires memory.free to be exported)
 module.memory.free(ptr);
 
 // Obtaining a string, i.e. as returned by an export

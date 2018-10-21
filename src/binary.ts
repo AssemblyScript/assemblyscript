@@ -1,3 +1,8 @@
+/**
+ * Binary format utilities.
+ * @module binary
+ *//***/
+
 // TBD: Moving lib/parse here might make sense where the compiler has to evaluate WASM binaries on
 // the fly, like when importing other WASM files through `import`. Module integration hasn't been
 // specified, yet, though, and it somewhat conflicts with our dependency on Binaryen.

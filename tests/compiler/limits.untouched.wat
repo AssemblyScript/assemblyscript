@@ -1,5 +1,8 @@
 (module
  (type $v (func))
+ (memory $0 0)
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i16.MIN_VALUE i32 (i32.const -32768))
@@ -27,8 +30,8 @@
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $start (; 0 ;) (type $v)
   (drop
@@ -109,5 +112,7 @@
   (drop
    (get_global $~lib/builtins/f64.MAX_SAFE_INTEGER)
   )
+ )
+ (func $null (; 1 ;) (type $v)
  )
 )

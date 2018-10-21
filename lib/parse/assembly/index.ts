@@ -7,7 +7,7 @@ import {
   ExternalKind,
   NameType,
   MAX_PAGES,
-  MAX_TABLES,
+  MAX_ELEMS,
   Opcode
 } from "../src/common";
 
@@ -199,7 +199,7 @@ export function parse(begin: usize, end: usize): void {
                 let type = readVarint(7) & 0x7f;
                 let flags = readVaruint(1);
                 let initial = readVaruint(32);
-                let maximum: u32 = flags & 1 ? readVaruint(32) : MAX_TABLES;
+                let maximum = flags & 1 ? readVaruint(32) : <u32>MAX_ELEMS;
                 opt.onTableImport(
                   tbl_space_index++,
                   type,
@@ -212,7 +212,7 @@ export function parse(begin: usize, end: usize): void {
               case ExternalKind.Memory: {
                 let flags = readVaruint(1);
                 let initial = readVaruint(32);
-                let maximum: u32 = flags & 1 ? readVaruint(32) : MAX_PAGES;
+                let maximum = flags & 1 ? readVaruint(32) : <u32>MAX_PAGES;
                 opt.onMemoryImport(
                   mem_space_index++,
                   initial,
@@ -247,12 +247,29 @@ export function parse(begin: usize, end: usize): void {
           }
           break;
         }
+        case SectionId.Table: {
+          let count = readVaruint(32);
+          for (let index: u32 = 0; index < count; ++index) {
+            let type = readVaruint(7) & 0x7f;
+            let flags = readVaruint(1);
+            let initial = readVaruint(32);
+            let maximum = flags & 1 ? readVaruint(32) : <u32>MAX_ELEMS;
+            opt.onTable(
+              tbl_space_index++,
+              type,
+              initial,
+              maximum,
+              flags
+            );
+          }
+          break;
+        }
         case SectionId.Memory: {
           let count = readVaruint(32);
           for (let index: u32 = 0; index < count; ++index) {
             let flags = readVaruint(1);
             let initial = readVaruint(32);
-            let maximum: u32 = flags ? readVaruint(32) : MAX_PAGES;
+            let maximum = flags & 1 ? readVaruint(32) : <u32>MAX_PAGES;
             opt.onMemory(
               mem_space_index++,
               initial,

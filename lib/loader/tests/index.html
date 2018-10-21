@@ -1,0 +1,8 @@
+<script>var exports = {};</script>
+<script src="../index.js"></script>
+<script>
+(async () => {
+  var module = await exports.instantiateStreaming(fetch("./build/untouched.wasm"));
+  console.log(module);
+})();
+</script>

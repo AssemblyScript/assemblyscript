@@ -1,11 +1,16 @@
 (module
  (type $iv (func (param i32)))
- (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
  (type $ii (func (param i32) (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$v (func))
+ (memory $0 1)
+ (data (i32.const 16) "\03\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s")
+ (table 4 anyfunc)
+ (elem (i32.const 0) $null $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark $~lib/string/String~gc)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -18,10 +23,6 @@
  (global $std/gc-basics/obj (mut i32) (i32.const 0))
  (global $std/gc-basics/obj2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (table 3 3 anyfunc)
- (elem (i32.const 0) $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark $~lib/string/String~gc)
- (memory $0 1)
- (data (i32.const 16) "\02\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-basics/main))
@@ -321,9 +322,7 @@
        (i32.const 1)
       )
      )
-     (call $~iterateRoots
-      (i32.const 1)
-     )
+     (call $~iterateRoots)
      (set_global $~lib/collector/itcm/state
       (i32.const 2)
      )
@@ -362,9 +361,7 @@
       )
      )
      (block
-      (call $~iterateRoots
-       (i32.const 1)
-      )
+      (call $~iterateRoots)
       (if
        (i32.eq
         (call $~lib/collector/itcm/ManagedObject#get:next
@@ -435,25 +432,16 @@
    )
   )
  )
- (func $~lib/collector/itcm/__gc_allocate (; 13 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (if
-   (i32.gt_u
-    (get_local $0)
-    (i32.const 1073741808)
-   )
-   (unreachable)
-  )
+ (func $~lib/collector/itcm/__gc_allocate (; 13 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
   (call $~lib/collector/itcm/step)
   (i32.store offset=8
    (tee_local $0
     (call $~lib/allocator/arena/__memory_allocate
-     (i32.add
-      (get_local $0)
-      (i32.const 16)
-     )
+     (i32.const 20)
     )
    )
-   (get_local $1)
+   (i32.const 1)
   )
   (call $~lib/collector/itcm/ManagedObject#set:color
    (get_local $0)
@@ -545,10 +533,7 @@
    (i32.const 0)
   )
   (set_global $std/gc-basics/obj
-   (call $~lib/collector/itcm/__gc_allocate
-    (i32.const 4)
-    (i32.const 0)
-   )
+   (call $~lib/collector/itcm/__gc_allocate)
   )
   (i32.store
    (get_global $std/gc-basics/obj)
@@ -609,8 +594,11 @@
    )
   )
   (if
-   (i32.load offset=8
-    (get_local $0)
+   (i32.ne
+    (i32.load offset=8
+     (get_local $0)
+    )
+    (i32.const 1)
    )
    (block
     (call $~lib/env/abort
@@ -659,14 +647,17 @@
   )
   (call $~lib/gc/gc.collect)
  )
- (func $~iterateRoots (; 19 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $null (; 19 ;) (; has Stack IR ;) (type $v)
+  (nop)
+ )
+ (func $~iterateRoots (; 20 ;) (; has Stack IR ;) (type $FUNCSIG$v)
   (call_indirect (type $iv)
    (get_global $std/gc-basics/obj)
-   (get_local $0)
+   (i32.const 2)
   )
   (call_indirect (type $iv)
    (get_global $std/gc-basics/obj2)
-   (get_local $0)
+   (i32.const 2)
   )
  )
 )

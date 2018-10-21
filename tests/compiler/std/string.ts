@@ -1,6 +1,12 @@
 import "allocator/arena";
-
-import { utoa32, itoa32, utoa64, itoa64 } from "internal/itoa";
+import {
+  utoa32,
+  itoa32,
+  utoa64,
+  itoa64,
+  itoa,
+  dtoa
+} from "internal/number";
 
 // preliminary
 
@@ -45,6 +51,8 @@ assert("abc".padEnd(8, "abc") == "abcabcab");
 
 assert("".indexOf("") == 0);
 assert("".indexOf("hi") == -1);
+assert("a".indexOf("a") == 0);
+assert(str.indexOf(str) == 0);
 assert(str.indexOf("") == 0);
 assert(str.indexOf(",") == 2);
 assert(str.indexOf("x") == -1);
@@ -125,6 +133,41 @@ assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
+var sa: string[];
+
+sa = "".split();
+assert(sa.length == 1 && sa[0] == "");
+sa = "".split("");
+assert(sa.length == 0);
+sa = "".split(",");
+assert(sa.length == 1 && sa[0] == "");
+sa = "a,b,c".split(".");
+assert(sa.length == 1 && sa[0] == "a,b,c");
+sa = "a,b,c".split(",");
+assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
+sa = "a, b, c".split(", ");
+assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
+sa = "a,b,,c".split(",");
+assert(sa.length == 4 && sa[0] == "a" && sa[1] == "b" && sa[2] == "" && sa[3] == "c");
+sa = ",a,b,c".split(",");
+assert(sa.length == 4 && sa[0] == "" && sa[1] == "a" && sa[2] == "b" && sa[3] == "c");
+sa = "a,b,c,".split(",");
+assert(sa.length == 4 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c" && sa[3] == "");
+sa = "abc".split("");
+assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
+sa = "abc".split("", 0);
+assert(sa.length == 0);
+sa = "abc".split("", 1);
+assert(sa.length == 1 && sa[0] == "a");
+sa = "a,b,c".split(",", 1);
+assert(sa.length == 1 && sa[0] == "a");
+sa = "abc".split("", 4);
+assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
+sa = "abc".split("", -1);
+assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
+sa = "a,b,c".split(",", -1);
+assert(sa.length == 3 && sa[0] == "a" && sa[1] == "b" && sa[2] == "c");
+
 assert(itoa32(0) == "0");
 assert(itoa32(1) == "1");
 assert(itoa32(8) == "8");
@@ -169,3 +212,70 @@ assert(itoa64(-999868719476735) == "-999868719476735");
 assert(itoa64(-19999868719476735) == "-19999868719476735");
 assert(itoa64(i64.MAX_VALUE) == "9223372036854775807");
 assert(itoa64(i64.MIN_VALUE) == "-9223372036854775808");
+
+// special cases
+assert(dtoa(0.0)  == "0.0");
+assert(dtoa(-0.0) == "0.0");
+assert(dtoa(NaN)  == "NaN");
+assert(dtoa(+Infinity) == "Infinity");
+assert(dtoa(-Infinity) == "-Infinity");
+assert(dtoa(+f64.EPSILON)   == "2.220446049250313e-16");
+assert(dtoa(-f64.EPSILON)   == "-2.220446049250313e-16");
+assert(dtoa(+f64.MAX_VALUE) == "1.7976931348623157e+308");
+assert(dtoa(-f64.MAX_VALUE) == "-1.7976931348623157e+308");
+assert(dtoa(4.185580496821357e+298) == "4.185580496821357e+298");
+assert(dtoa(2.2250738585072014e-308) == "2.2250738585072014e-308");
+assert(dtoa(2.98023223876953125e-8) == "2.9802322387695312e-8");
+assert(dtoa(-2.109808898695963e+16) == "-21098088986959630.0");
+assert(dtoa(4.940656E-318) == "4.940656e-318");
+assert(dtoa(9.0608011534336e+15) == "9060801153433600.0");
+assert(dtoa(4.708356024711512e+18) == "4708356024711512000.0");
+assert(dtoa(9.409340012568248e+18) == "9409340012568248000.0");
+assert(dtoa(5e-324) == "5e-324");
+// Known imprecise issue for Grisu alghoritm. Need workaround
+// Expeced: 1.2345e+21
+// Actual:  1.2344999999999999e+21
+// assert(dtoa(1.2345e+21) == "1.2345e+21");
+
+assert(dtoa(1.0)  == "1.0");
+assert(dtoa(0.1)  == "0.1");
+assert(dtoa(-1.0) == "-1.0");
+assert(dtoa(-0.1) == "-0.1");
+
+assert(dtoa(1e+6)  == "1000000.0");
+assert(dtoa(1e-6)  == "0.000001");
+assert(dtoa(-1e+6) == "-1000000.0");
+assert(dtoa(-1e-6) == "-0.000001");
+assert(dtoa(1e+7)  == "10000000.0");
+assert(dtoa(1e-7)  == "1e-7");
+
+assert(dtoa(1e+308)  == "1e+308");
+assert(dtoa(-1e+308) == "-1e+308");
+assert(dtoa(1e+309)  == "Infinity");
+assert(dtoa(-1e+309) == "-Infinity");
+assert(dtoa(1e-308)  == "1e-308");
+assert(dtoa(-1e-308) == "-1e-308");
+assert(dtoa(1e-323)  == "1e-323");
+assert(dtoa(-1e-323) == "-1e-323");
+assert(dtoa(1e-324)  == "0.0");
+
+assert(dtoa(4294967272) == "4294967272.0");
+assert(dtoa(1.23121456734562345678e-8) == "1.2312145673456234e-8");
+assert(dtoa(-0.0000010471975511965976) == "-0.0000010471975511965976");
+assert(dtoa(555555555.55555555)  == "555555555.5555556");
+assert(dtoa(0.9999999999999999)  == "0.9999999999999999");
+assert(dtoa(0.99999999999999995) == "1.0");
+assert(dtoa(1234e-2)     == "12.34");
+assert(dtoa(0.1 + 0.2)   == "0.30000000000000004");
+assert(dtoa(1.0 / 3.0)   == "0.3333333333333333");
+assert(dtoa(1.234e+20)   == "123400000000000000000.0");
+assert(dtoa(1.234e+21)   == "1.234e+21");
+assert(dtoa(2.71828)     == "2.71828");
+assert(dtoa(2.71828e-2)  == "0.0271828");
+assert(dtoa(2.71828e+2)  == "271.828");
+assert(dtoa(1.1e+128)    == "1.1e+128");
+assert(dtoa(1.1e-64)     == "1.1e-64");
+assert(dtoa(0.000035689) == "0.000035689");
+
+assert(dtoa(f32.MAX_VALUE) == "3.4028234663852886e+38");
+assert(dtoa(f32.EPSILON) == "1.1920928955078125e-7");

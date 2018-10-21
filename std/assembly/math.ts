@@ -1,50 +1,5 @@
-export declare namespace JSMath {
-
-  export const E: f64;
-  export const LN2: f64;
-  export const LN10: f64;
-  export const LOG2E: f64;
-  export const LOG10E: f64;
-  export const PI: f64;
-  export const SQRT1_2: f64;
-  export const SQRT2: f64;
-
-  export function abs(x: f64): f64;
-  export function acos(x: f64): f64;
-  export function acosh(x: f64): f64;
-  export function asin(x: f64): f64;
-  export function asinh(x: f64): f64;
-  export function atan(x: f64): f64;
-  export function atan2(y: f64, x: f64): f64;
-  export function atanh(x: f64): f64;
-  export function cbrt(x: f64): f64;
-  export function ceil(x: f64): f64;
-  export function clz32(x: f64): f64;
-  export function cos(x: f64): f64;
-  export function cosh(x: f64): f64;
-  export function exp(x: f64): f64;
-  export function expm1(x: f64): f64;
-  export function floor(x: f64): f64;
-  export function fround(x: f64): f32;
-  export function hypot(value1: f64, value2: f64): f64; // TODO: rest
-  export function imul(a: f64, b: f64): f64;
-  export function log(x: f64): f64;
-  export function log10(x: f64): f64;
-  export function log1p(x: f64): f64;
-  export function log2(x: f64): f64;
-  export function max(value1: f64, value2: f64): f64; // TODO: rest
-  export function min(value1: f64, value2: f64): f64; // TODO: rest
-  export function pow(base: f64, exponent: f64): f64;
-  export function random(): f64;
-  export function round(x: f64): f64;
-  export function sign(x: f64): f64;
-  export function sin(x: f64): f64;
-  export function sinh(x: f64): f64;
-  export function sqrt(x: f64): f64;
-  export function tan(x: f64): f64;
-  export function tanh(x: f64): f64;
-  export function trunc(x: f64): f64;
-}
+import * as JSMath from "./bindings/Math";
+export { JSMath };
 
 import {
   abs as builtin_abs,
@@ -2302,4 +2257,112 @@ export namespace NativeMathf {
     }
     return sx ? -x : x;
   }
+}
+
+export function ipow32(x: i32, e: i32): i32 {
+  var out = 1;
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (e < 0) return 0;
+
+    switch (e) {
+      case 0: return 1;
+      case 1: return x;
+      case 2: return x * x;
+    }
+
+    let log = 32 - clz(e);
+    if (log <= 5) {
+      // 32 = 2 ^ 5, so need only five cases.
+      // But some extra cases needs for properly overflowing
+      switch (log) {
+        case 5: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 4: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 3: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 2: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 1: {
+          if (e & 1) out *= x;
+        }
+      }
+      return out;
+    }
+  }
+
+  while (e > 0) {
+    if (e & 1) out *= x;
+    e >>= 1;
+    x *= x;
+  }
+  return out;
+}
+
+export function ipow64(x: i64, e: i32): i64 {
+  var out: i64 = 1;
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (e < 0) return 0;
+    switch (e) {
+      case 0: return 1;
+      case 1: return x;
+      case 2: return x * x;
+    }
+
+    let log = 32 - clz(e);
+    if (log <= 6) {
+      // 64 = 2 ^ 6, so need only six cases.
+      // But some extra cases needs for properly overflowing
+      switch (log) {
+        case 6: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 5: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 4: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 3: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 2: {
+          if (e & 1) out *= x;
+          e >>= 1;
+          x *= x;
+        }
+        case 1: {
+          if (e & 1) out *= x;
+        }
+      }
+      return out;
+    }
+  }
+
+  while (e > 0) {
+    if (e & 1) out *= x;
+    e >>= 1;
+    x *= x;
+  }
+  return out;
 }

@@ -1985,13 +1985,11 @@ assert(test_minf(-1.75, -0.5, -1.75, 0.0, 0));
 // Math.mod
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-declare namespace JSOp {
-  export function mod(x: f64, y: f64): f64;
-}
+declare function mod(x: f64, y: f64): f64;
 
 function test_mod(left: f64, right: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.mod(left, right), expected, error, flags) &&
-  (!js || check<f64>(      JSOp.mod(left, right), expected, error, flags));
+  (!js || check<f64>(           mod(left, right), expected, error, flags));
 }
 
 // sanity
@@ -3117,3 +3115,40 @@ assert(test_truncf(0.9999923706, 0.0, 0.0, INEXACT));
 assert(test_truncf(-0.9999923706, -0.0, 0.0, INEXACT));
 assert(test_truncf(7.888609052e-31, 0.0, 0.0, INEXACT));
 assert(test_truncf(-7.888609052e-31, -0.0, 0.0, INEXACT));
+
+// ipow64 /////////////////////////////////////////////////////////////////////////////////////
+
+assert(ipow64(0, 0) == 1);
+assert(ipow64(0, 1) == 0);
+assert(ipow64(0, 2) == 0);
+assert(ipow64(0, 3) == 0);
+
+assert(ipow64(1, 0) == 1);
+assert(ipow64(1, 1) == 1);
+assert(ipow64(1, 2) == 1);
+assert(ipow64(1, 3) == 1);
+
+assert(ipow64(2, 0) == 1);
+assert(ipow64(2, 1) == 2);
+assert(ipow64(2, 2) == 4);
+assert(ipow64(2, 3) == 8);
+
+assert(ipow64(-1, 0) ==  1);
+assert(ipow64(-1, 1) == -1);
+assert(ipow64(-1, 2) ==  1);
+assert(ipow64(-1, 3) == -1);
+
+assert(ipow64(-2, 0) ==  1);
+assert(ipow64(-2, 1) == -2);
+assert(ipow64(-2, 2) ==  4);
+assert(ipow64(-2, 3) == -8);
+
+assert(ipow64(3,  40) ==  12157665459056928801);
+assert(ipow64(3,  41) == -420491770248316829);  // should overflow
+assert(ipow64(3,  42) == -1261475310744950487); // should overflow
+assert(ipow64(3,  43) == -3784425932234851461); // should overflow
+assert(ipow64(3,  63) == -3237885987332494933); // should overflow
+assert(ipow64(3,  64) ==  8733086111712066817); // should overflow
+assert(ipow64(3, 128) == -9204772141784466943); // should overflow
+
+assert(ipow64(57055, 3) + ipow64(339590, 3) == 39347712995520375); // add Buterin's twit example

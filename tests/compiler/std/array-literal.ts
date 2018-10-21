@@ -30,3 +30,11 @@ assert(dynamicArrayI32.length == 3);
 assert(dynamicArrayI32[0] == 0);
 assert(dynamicArrayI32[1] == 1);
 assert(dynamicArrayI32[2] == 2);
+
+class Ref {}
+var dynamicArrayRef: Ref[] = [new Ref(), new Ref(), new Ref()];
+assert(dynamicArrayRef.length == 3);
+
+class RefWithCtor { constructor() {} }
+var dynamicArrayRefWithCtor: RefWithCtor[] = [new RefWithCtor(), new RefWithCtor(), new RefWithCtor()];
+assert(dynamicArrayRefWithCtor.length == 3);

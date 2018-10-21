@@ -4,6 +4,9 @@
  (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
  (type $iiv (func (param i32 i32)))
+ (memory $0 0)
+ (table 4 anyfunc)
+ (elem (i32.const 0) $null $~lib/collector/itcm/__gc_mark $std/gc-object/Custom~gc $std/gc-object/Base~gc)
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
@@ -25,9 +28,6 @@
  (global $std/gc-object/obj (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
- (table 3 3 anyfunc)
- (elem (i32.const 0) $~lib/collector/itcm/__gc_mark $std/gc-object/Custom~gc $std/gc-object/Base~gc)
- (memory $0 0)
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-object/main))
@@ -399,7 +399,7 @@
      )
      (block
       (call $~iterateRoots
-       (i32.const 0)
+       (i32.const 1)
       )
       (set_global $~lib/collector/itcm/state
        (get_global $~lib/collector/itcm/State.MARK)
@@ -445,7 +445,7 @@
       )
       (block
        (call $~iterateRoots
-        (i32.const 0)
+        (i32.const 1)
        )
        (set_local $0
         (call $~lib/collector/itcm/ManagedObject#get:next
@@ -598,7 +598,7 @@
   )
   (call_indirect (type $iv)
    (get_local $0)
-   (i32.const 2)
+   (i32.const 3)
   )
   (call $~lib/collector/itcm/__gc_mark
    (i32.load
@@ -693,7 +693,7 @@
     (set_local $0
      (call $~lib/collector/itcm/__gc_allocate
       (i32.const 8)
-      (i32.const 1)
+      (i32.const 2)
      )
     )
     (i32.store
@@ -718,7 +718,9 @@
   )
   (call $~lib/gc/gc.collect)
  )
- (func $~iterateRoots (; 19 ;) (type $iv) (param $0 i32)
+ (func $null (; 19 ;) (type $v)
+ )
+ (func $~iterateRoots (; 20 ;) (type $iv) (param $0 i32)
   (call_indirect (type $iv)
    (get_global $std/gc-object/obj)
    (get_local $0)

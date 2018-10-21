@@ -4,17 +4,23 @@
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $v (func))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 56) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 120) "\12\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
- (memory $0 1)
- (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 56) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 120) "\12\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $~lib/internal/arraybuffer/computeSize (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (i32.shl
@@ -144,32 +150,31 @@
   )
   (get_local $1)
  )
- (func $~lib/internal/memory/memset (; 4 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i64)
+ (func $~lib/internal/memory/memset (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   (if
    (i32.eqz
-    (get_local $2)
+    (get_local $1)
    )
    (return)
   )
   (i32.store8
    (get_local $0)
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store8
    (i32.sub
     (i32.add
      (get_local $0)
-     (get_local $2)
+     (get_local $1)
     )
     (i32.const 1)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (if
    (i32.le_u
-    (get_local $2)
+    (get_local $1)
     (i32.const 2)
    )
    (return)
@@ -179,37 +184,37 @@
     (get_local $0)
     (i32.const 1)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store8
    (i32.add
     (get_local $0)
     (i32.const 2)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store8
    (i32.sub
-    (tee_local $3
+    (tee_local $2
      (i32.add
       (get_local $0)
-      (get_local $2)
+      (get_local $1)
      )
     )
     (i32.const 2)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store8
    (i32.sub
-    (get_local $3)
+    (get_local $2)
     (i32.const 3)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (if
    (i32.le_u
-    (get_local $2)
+    (get_local $1)
     (i32.const 6)
    )
    (return)
@@ -219,74 +224,63 @@
     (get_local $0)
     (i32.const 3)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store8
    (i32.sub
     (i32.add
      (get_local $0)
-     (get_local $2)
+     (get_local $1)
     )
     (i32.const 4)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (if
    (i32.le_u
-    (get_local $2)
+    (get_local $1)
     (i32.const 8)
    )
    (return)
-  )
-  (set_local $2
-   (i32.sub
-    (get_local $2)
-    (tee_local $3
-     (i32.and
-      (i32.sub
-       (i32.const 0)
-       (get_local $0)
-      )
-      (i32.const 3)
-     )
-    )
-   )
   )
   (i32.store
    (tee_local $0
     (i32.add
      (get_local $0)
-     (get_local $3)
-    )
-   )
-   (tee_local $1
-    (i32.mul
-     (i32.and
-      (get_local $1)
-      (i32.const 255)
+     (tee_local $2
+      (i32.and
+       (i32.sub
+        (i32.const 0)
+        (get_local $0)
+       )
+       (i32.const 3)
+      )
      )
-     (i32.const 16843009)
     )
    )
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
     (i32.add
      (get_local $0)
-     (tee_local $2
+     (tee_local $1
       (i32.and
-       (get_local $2)
+       (i32.sub
+        (get_local $1)
+        (get_local $2)
+       )
        (i32.const -4)
       )
      )
     )
     (i32.const 4)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (if
    (i32.le_u
-    (get_local $2)
+    (get_local $1)
     (i32.const 8)
    )
    (return)
@@ -296,37 +290,37 @@
     (get_local $0)
     (i32.const 4)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 8)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (tee_local $3
+    (tee_local $2
      (i32.add
       (get_local $0)
-      (get_local $2)
+      (get_local $1)
      )
     )
     (i32.const 12)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $2)
     (i32.const 8)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (if
    (i32.le_u
-    (get_local $2)
+    (get_local $1)
     (i32.const 24)
    )
    (return)
@@ -336,66 +330,66 @@
     (get_local $0)
     (i32.const 12)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 16)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 20)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.add
     (get_local $0)
     (i32.const 24)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (tee_local $3
+    (tee_local $2
      (i32.add
       (get_local $0)
-      (get_local $2)
+      (get_local $1)
      )
     )
     (i32.const 28)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $2)
     (i32.const 24)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $2)
     (i32.const 20)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (i32.store
    (i32.sub
-    (get_local $3)
+    (get_local $2)
     (i32.const 16)
    )
-   (get_local $1)
+   (i32.const 0)
   )
   (set_local $0
    (i32.add
     (get_local $0)
-    (tee_local $3
+    (tee_local $2
      (i32.add
       (i32.and
        (get_local $0)
@@ -406,60 +400,47 @@
     )
    )
   )
-  (set_local $2
+  (set_local $1
    (i32.sub
+    (get_local $1)
     (get_local $2)
-    (get_local $3)
-   )
-  )
-  (set_local $4
-   (i64.or
-    (tee_local $4
-     (i64.extend_u/i32
-      (get_local $1)
-     )
-    )
-    (i64.shl
-     (get_local $4)
-     (i64.const 32)
-    )
    )
   )
   (loop $continue|0
    (if
     (i32.ge_u
-     (get_local $2)
+     (get_local $1)
      (i32.const 32)
     )
     (block
      (i64.store
       (get_local $0)
-      (get_local $4)
+      (i64.const 0)
      )
      (i64.store
       (i32.add
        (get_local $0)
        (i32.const 8)
       )
-      (get_local $4)
+      (i64.const 0)
      )
      (i64.store
       (i32.add
        (get_local $0)
        (i32.const 16)
       )
-      (get_local $4)
+      (i64.const 0)
      )
      (i64.store
       (i32.add
        (get_local $0)
        (i32.const 24)
       )
-      (get_local $4)
+      (i64.const 0)
      )
-     (set_local $2
+     (set_local $1
       (i32.sub
-       (get_local $2)
+       (get_local $1)
        (i32.const 32)
       )
      )
@@ -474,45 +455,20 @@
    )
   )
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (if
-   (i32.gt_u
-    (get_local $1)
-    (i32.const 1073741816)
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 13)
-     (i32.const 40)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  (call $~lib/internal/memory/memset
+   (i32.add
+    (tee_local $0
+     (call $~lib/internal/arraybuffer/allocateUnsafe
+      (i32.const 8)
+     )
     )
-    (unreachable)
+    (i32.const 8)
    )
+   (i32.const 8)
   )
-  (set_local $3
-   (call $~lib/internal/arraybuffer/allocateUnsafe
-    (get_local $1)
-   )
-  )
-  (if
-   (i32.eqz
-    (i32.and
-     (get_local $2)
-     (i32.const 1)
-    )
-   )
-   (call $~lib/internal/memory/memset
-    (i32.add
-     (get_local $3)
-     (i32.const 8)
-    )
-    (i32.const 0)
-    (get_local $1)
-   )
-  )
-  (get_local $3)
+  (get_local $0)
  )
  (func $~lib/internal/memory/memcpy (; 6 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -2195,7 +2151,7 @@
  (func $~lib/arraybuffer/ArrayBuffer#slice (; 8 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (set_local $3
+  (set_local $4
    (i32.load
     (get_local $0)
    )
@@ -2207,84 +2163,82 @@
      (i32.const 0)
     )
     (select
-     (tee_local $4
+     (tee_local $3
       (i32.add
-       (get_local $3)
+       (get_local $4)
        (get_local $1)
       )
      )
      (i32.const 0)
      (i32.gt_s
-      (get_local $4)
+      (get_local $3)
       (i32.const 0)
      )
     )
     (select
-     (tee_local $4
+     (tee_local $3
       (get_local $1)
      )
-     (get_local $3)
+     (get_local $4)
      (i32.lt_s
-      (get_local $1)
       (get_local $3)
+      (get_local $4)
      )
     )
    )
   )
   (call $~lib/internal/memory/memmove
-   (tee_local $4
-    (i32.add
-     (tee_local $3
-      (call $~lib/internal/arraybuffer/allocateUnsafe
-       (tee_local $2
-        (select
-         (tee_local $4
-          (i32.sub
-           (tee_local $2
-            (if (result i32)
-             (i32.lt_s
-              (get_local $2)
-              (i32.const 0)
-             )
-             (select
-              (tee_local $4
-               (i32.add
-                (get_local $3)
-                (get_local $2)
-               )
-              )
-              (i32.const 0)
-              (i32.gt_s
+   (i32.add
+    (tee_local $2
+     (call $~lib/internal/arraybuffer/allocateUnsafe
+      (tee_local $3
+       (select
+        (tee_local $3
+         (i32.sub
+          (tee_local $2
+           (if (result i32)
+            (i32.lt_s
+             (get_local $2)
+             (i32.const 0)
+            )
+            (select
+             (tee_local $3
+              (i32.add
                (get_local $4)
-               (i32.const 0)
+               (get_local $2)
               )
              )
-             (select
-              (tee_local $4
-               (get_local $2)
-              )
+             (i32.const 0)
+             (i32.gt_s
               (get_local $3)
-              (i32.lt_s
-               (get_local $2)
-               (get_local $3)
-              )
+              (i32.const 0)
+             )
+            )
+            (select
+             (tee_local $3
+              (get_local $2)
+             )
+             (get_local $4)
+             (i32.lt_s
+              (get_local $3)
+              (get_local $4)
              )
             )
            )
-           (get_local $1)
           )
+          (get_local $1)
          )
+        )
+        (i32.const 0)
+        (i32.gt_s
+         (get_local $3)
          (i32.const 0)
-         (i32.gt_s
-          (get_local $4)
-          (i32.const 0)
-         )
         )
        )
       )
      )
-     (i32.const 8)
     )
+    (i32.const 8)
    )
    (i32.add
     (i32.add
@@ -2293,11 +2247,12 @@
     )
     (get_local $1)
    )
-   (get_local $2)
+   (get_local $3)
   )
-  (get_local $3)
+  (get_local $2)
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 9 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 9 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (block $2of2
    (block $1of2
     (block $0of2
@@ -2322,7 +2277,15 @@
    (get_local $2)
   )
  )
- (func $start (; 10 ;) (; has Stack IR ;) (type $v)
+ (func $~lib/arraybuffer/ArrayBuffer#get:data (; 10 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+  (i32.add
+   (get_local $0)
+   (i32.const 8)
+  )
+ )
+ (func $start (; 11 ;) (; has Stack IR ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
    (i32.const 160)
   )
@@ -2330,11 +2293,7 @@
    (get_global $~lib/allocator/arena/startOffset)
   )
   (set_global $std/arraybuffer/buffer
-   (call $~lib/arraybuffer/ArrayBuffer#constructor
-    (i32.const 0)
-    (i32.const 8)
-    (i32.const 0)
-   )
+   (call $~lib/arraybuffer/ArrayBuffer#constructor)
   )
   (if
    (i32.ne
@@ -2360,7 +2319,6 @@
    (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
     (get_global $std/arraybuffer/buffer)
     (i32.const 0)
-    (i32.const 0)
    )
   )
   (if
@@ -2380,6 +2338,31 @@
     (unreachable)
    )
   )
+  (set_local $0
+   (call $~lib/arraybuffer/ArrayBuffer#get:data
+    (get_global $std/arraybuffer/sliced)
+   )
+  )
+  (set_local $1
+   (call $~lib/arraybuffer/ArrayBuffer#get:data
+    (get_global $std/arraybuffer/buffer)
+   )
+  )
+  (if
+   (i32.eq
+    (get_local $0)
+    (get_local $1)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 120)
+     (i32.const 10)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
   (if
    (i32.eq
     (get_global $std/arraybuffer/sliced)
@@ -2389,7 +2372,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 10)
+     (i32.const 11)
      (i32.const 0)
     )
     (unreachable)
@@ -2402,7 +2385,6 @@
    (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
     (get_global $std/arraybuffer/buffer)
     (i32.const 1)
-    (i32.const 0)
    )
   )
   (if
@@ -2416,7 +2398,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 14)
+     (i32.const 15)
      (i32.const 0)
     )
     (unreachable)
@@ -2429,7 +2411,6 @@
    (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
     (get_global $std/arraybuffer/buffer)
     (i32.const -1)
-    (i32.const 0)
    )
   )
   (if
@@ -2443,7 +2424,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 18)
+     (i32.const 19)
      (i32.const 0)
     )
     (unreachable)
@@ -2467,7 +2448,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 22)
+     (i32.const 23)
      (i32.const 0)
     )
     (unreachable)
@@ -2491,7 +2472,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 26)
+     (i32.const 27)
      (i32.const 0)
     )
     (unreachable)
@@ -2515,7 +2496,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 30)
+     (i32.const 31)
      (i32.const 0)
     )
     (unreachable)
@@ -2539,7 +2520,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 34)
+     (i32.const 35)
      (i32.const 0)
     )
     (unreachable)
@@ -2552,7 +2533,6 @@
    (call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
     (get_global $std/arraybuffer/buffer)
     (i32.const 42)
-    (i32.const 0)
    )
   )
   (if
@@ -2563,7 +2543,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 38)
+     (i32.const 39)
      (i32.const 0)
     )
     (unreachable)
@@ -2577,11 +2557,14 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 120)
-     (i32.const 39)
+     (i32.const 40)
      (i32.const 0)
     )
     (unreachable)
    )
   )
+ )
+ (func $null (; 12 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

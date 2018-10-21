@@ -2,6 +2,11 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiv (func (param i32 i32)))
  (type $v (func))
+ (memory $0 1)
+ (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s\00")
+ (data (i32.const 40) "\01\00\00\001\00")
+ (table 2 anyfunc)
+ (elem (i32.const 0) $null $start~anonymous|1)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
@@ -14,7 +19,7 @@
  (global $builtins/u (mut i32) (i32.const 0))
  (global $builtins/U (mut i64) (i64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
- (global $builtins/fn (mut i32) (i32.const 0))
+ (global $builtins/fn (mut i32) (i32.const 1))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i16.MIN_VALUE i32 (i32.const -32768))
@@ -33,27 +38,26 @@
  (global $~lib/builtins/u64.MAX_VALUE i64 (i64.const -1))
  (global $~lib/builtins/bool.MIN_VALUE i32 (i32.const 0))
  (global $~lib/builtins/bool.MAX_VALUE i32 (i32.const 1))
- (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const -3402823466385288598117041e14))
+ (global $~lib/builtins/f32.MIN_NORMAL_VALUE f32 (f32.const 1.1754943508222875e-38))
+ (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const 1.401298464324817e-45))
  (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
  (global $~lib/builtins/f32.MIN_SAFE_INTEGER f32 (f32.const -16777215))
  (global $~lib/builtins/f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
  (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
- (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const -1797693134862315708145274e284))
+ (global $~lib/builtins/f32.NaN f32 (f32.const nan:0x400000))
+ (global $~lib/builtins/f64.MIN_NORMAL_VALUE f64 (f64.const 2.2250738585072014e-308))
+ (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
+ (global $~lib/builtins/f64.NaN f64 (f64.const nan:0x8000000000000))
  (global $HEAP_BASE i32 (i32.const 48))
- (table 1 1 anyfunc)
- (elem (i32.const 0) $start~anonymous|0)
- (memory $0 1)
- (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s\00")
- (data (i32.const 40) "\01\00\00\001\00")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $start~anonymous|0 (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $start~anonymous|1 (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (nop)
  )
  (func $builtins/test (; 2 ;) (type $v)
@@ -2668,8 +2672,8 @@
   (if
    (i32.eqz
     (f32.eq
-     (get_global $~lib/builtins/f32.MIN_VALUE)
-     (f32.const -3402823466385288598117041e14)
+     (get_global $~lib/builtins/f32.MIN_NORMAL_VALUE)
+     (f32.const 1.1754943508222875e-38)
     )
    )
    (block
@@ -2677,6 +2681,23 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 311)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (f32.eq
+     (get_global $~lib/builtins/f32.MIN_VALUE)
+     (f32.const 1.401298464324817e-45)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 312)
      (i32.const 0)
     )
     (unreachable)
@@ -2693,7 +2714,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 312)
+     (i32.const 313)
      (i32.const 0)
     )
     (unreachable)
@@ -2710,7 +2731,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 313)
+     (i32.const 314)
      (i32.const 0)
     )
     (unreachable)
@@ -2727,7 +2748,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 314)
+     (i32.const 315)
      (i32.const 0)
     )
     (unreachable)
@@ -2744,7 +2765,49 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 315)
+     (i32.const 316)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.and
+     (block $~lib/builtins/isNaN<f32>|inlined.4 (result i32)
+      (set_local $4
+       (get_global $~lib/builtins/f32.NaN)
+      )
+      (f32.ne
+       (get_local $4)
+       (get_local $4)
+      )
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 317)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (f64.eq
+     (get_global $~lib/builtins/f64.MIN_NORMAL_VALUE)
+     (f64.const 2.2250738585072014e-308)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 318)
      (i32.const 0)
     )
     (unreachable)
@@ -2754,14 +2817,14 @@
    (i32.eqz
     (f64.eq
      (get_global $~lib/builtins/f64.MIN_VALUE)
-     (f64.const -1797693134862315708145274e284)
+     (f64.const 5e-324)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 316)
+     (i32.const 319)
      (i32.const 0)
     )
     (unreachable)
@@ -2778,7 +2841,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 317)
+     (i32.const 320)
      (i32.const 0)
     )
     (unreachable)
@@ -2795,7 +2858,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 318)
+     (i32.const 321)
      (i32.const 0)
     )
     (unreachable)
@@ -2812,7 +2875,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 319)
+     (i32.const 322)
      (i32.const 0)
     )
     (unreachable)
@@ -2829,7 +2892,32 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 320)
+     (i32.const 323)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i32.and
+     (block $~lib/builtins/isNaN<f64>|inlined.4 (result i32)
+      (set_local $5
+       (get_global $~lib/builtins/f64.NaN)
+      )
+      (f64.ne
+       (get_local $5)
+       (get_local $5)
+      )
+     )
+     (i32.const 1)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 324)
      (i32.const 0)
     )
     (unreachable)
@@ -3112,7 +3200,7 @@
    )
   )
   (drop
-   (block $~lib/builtins/isNaN<f64>|inlined.4 (result i32)
+   (block $~lib/builtins/isNaN<f64>|inlined.5 (result i32)
     (set_local $5
      (f64.const 1)
     )
@@ -3122,5 +3210,7 @@
     )
    )
   )
+ )
+ (func $null (; 4 ;) (type $v)
  )
 )

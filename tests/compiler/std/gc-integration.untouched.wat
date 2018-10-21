@@ -2,6 +2,10 @@
  (type $iv (func (param i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
+ (memory $0 1)
+ (data (i32.const 8) "\15\00\00\00s\00t\00d\00/\00g\00c\00-\00i\00n\00t\00e\00g\00r\00a\00t\00i\00o\00n\00.\00t\00s\00")
+ (table 2 anyfunc)
+ (elem (i32.const 0) $null $start~anonymous|1)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $std/gc-integration/B.c i32 (i32.const 8))
  (global $std/gc-integration/B.d (mut i32) (i32.const 16))
@@ -10,14 +14,10 @@
  (global $std/gc-integration/b_ref (mut i32) (i32.const 32))
  (global $std/gc-integration/i (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 56))
- (table 1 1 anyfunc)
- (elem (i32.const 0) $start~anonymous|0)
- (memory $0 1)
- (data (i32.const 8) "\15\00\00\00s\00t\00d\00/\00g\00c\00-\00i\00n\00t\00e\00g\00r\00a\00t\00i\00o\00n\00.\00t\00s\00")
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start~anonymous|0 (; 1 ;) (type $iv) (param $0 i32)
+ (func $start~anonymous|1 (; 1 ;) (type $iv) (param $0 i32)
   (if
    (i32.eqz
     (i32.eq
@@ -55,7 +55,7 @@
    (get_global $std/gc-integration/B.d)
   )
   (call $~iterateRoots
-   (i32.const 0)
+   (i32.const 1)
   )
   (if
    (i32.eqz
@@ -75,7 +75,9 @@
    )
   )
  )
- (func $~iterateRoots (; 3 ;) (type $iv) (param $0 i32)
+ (func $null (; 3 ;) (type $v)
+ )
+ (func $~iterateRoots (; 4 ;) (type $iv) (param $0 i32)
   (call_indirect (type $iv)
    (get_global $std/gc-integration/B.c)
    (get_local $0)

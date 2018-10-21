@@ -2,16 +2,19 @@
  (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d")
  (data (i32.const 40) "\11\00\00\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -103,50 +106,42 @@
    (get_local $0)
   )
  )
- (func $~lib/internal/string/compareUnsafe (; 3 ;) (; has Stack IR ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
-  (local $5 i32)
-  (set_local $1
-   (i32.add
-    (get_local $0)
-    (i32.shl
-     (get_local $1)
-     (i32.const 1)
-    )
-   )
-  )
-  (set_local $2
-   (i32.add
-    (get_local $2)
-    (i32.shl
-     (get_local $3)
-     (i32.const 1)
-    )
-   )
+ (func $~lib/internal/string/compareUnsafe (; 3 ;) (; has Stack IR ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (set_local $3
+   (get_local $0)
   )
   (loop $continue|0
    (if
     (tee_local $0
      (if (result i32)
-      (get_local $4)
+      (get_local $2)
       (i32.eqz
-       (tee_local $5
+       (tee_local $4
         (i32.sub
          (i32.load16_u offset=4
-          (get_local $1)
+          (get_local $3)
          )
          (i32.load16_u offset=4
-          (get_local $2)
+          (get_local $1)
          )
         )
        )
       )
-      (get_local $4)
+      (get_local $2)
      )
     )
     (block
-     (set_local $4
+     (set_local $2
       (i32.sub
-       (get_local $4)
+       (get_local $2)
+       (i32.const 1)
+      )
+     )
+     (set_local $3
+      (i32.add
+       (get_local $3)
        (i32.const 1)
       )
      )
@@ -156,24 +151,18 @@
        (i32.const 1)
       )
      )
-     (set_local $2
-      (i32.add
-       (get_local $2)
-       (i32.const 1)
-      )
-     )
      (br $continue|0)
     )
    )
   )
-  (get_local $5)
+  (get_local $4)
  )
- (func $~lib/string/String.__eq (; 4 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/string/String.__eq (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
   (if
    (i32.eq
     (get_local $0)
-    (get_local $1)
+    (i32.const 8)
    )
    (return
     (i32.const 1)
@@ -181,33 +170,31 @@
   )
   (if
    (i32.eqz
-    (tee_local $2
+    (tee_local $1
      (i32.eqz
       (get_local $0)
      )
     )
    )
-   (set_local $2
-    (i32.eqz
-     (get_local $1)
-    )
+   (set_local $1
+    (i32.const 0)
    )
   )
   (if
-   (get_local $2)
+   (get_local $1)
    (return
     (i32.const 0)
    )
   )
   (if
    (i32.ne
-    (tee_local $2
+    (tee_local $1
      (i32.load
       (get_local $0)
      )
     )
     (i32.load
-     (get_local $1)
+     (i32.const 8)
     )
    )
    (return
@@ -217,10 +204,8 @@
   (i32.eqz
    (call $~lib/internal/string/compareUnsafe
     (get_local $0)
-    (i32.const 0)
+    (i32.const 8)
     (get_local $1)
-    (i32.const 0)
-    (get_local $2)
    )
   )
  )
@@ -248,7 +233,6 @@
      (i32.load offset=4
       (get_local $0)
      )
-     (i32.const 8)
     )
    )
    (block
@@ -345,5 +329,8 @@
   (call $object-literal/Foo2#test
    (get_local $0)
   )
+ )
+ (func $null (; 9 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

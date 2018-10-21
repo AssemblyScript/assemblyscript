@@ -4,6 +4,9 @@
  (type $fff (func (param f32 f32) (result f32)))
  (type $fif (func (param f32 i32) (result f32)))
  (type $v (func))
+ (memory $0 0)
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
  (global $NaN f64 (f64.const nan:0x8000000000000))
@@ -11,8 +14,8 @@
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $~lib/math/NativeMath.scalbn (; 0 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
@@ -123,7 +126,7 @@
     (i64.shl
      (i64.add
       (i64.const 1023)
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (get_local $1)
       )
      )
@@ -932,7 +935,7 @@
         (i64.const 4294967295)
        )
        (i64.shl
-        (i64.extend_u/i32
+        (i64.extend_s/i32
          (get_local $7)
         )
         (i64.const 32)
@@ -984,7 +987,7 @@
     (set_local $30
      (f64.reinterpret/i64
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.add
          (i32.add
           (i32.or
@@ -1461,7 +1464,7 @@
     (set_local $20
      (f64.reinterpret/i64
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.and
          (get_local $25)
          (i32.xor
@@ -1679,7 +1682,7 @@
        (i64.const 4294967295)
       )
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (get_local $24)
        )
        (i64.const 32)
@@ -3728,7 +3731,7 @@
     (set_local $2
      (i64.shl
       (get_local $2)
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (i32.add
         (i32.sub
          (i32.const 0)
@@ -3802,7 +3805,7 @@
     (set_local $3
      (i64.shl
       (get_local $3)
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (i32.add
         (i32.sub
          (i32.const 0)
@@ -3968,7 +3971,7 @@
      (i64.or
       (get_local $2)
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (get_local $4)
        )
        (i64.const 52)
@@ -3979,7 +3982,7 @@
    (set_local $2
     (i64.shr_u
      (get_local $2)
-     (i64.extend_u/i32
+     (i64.extend_s/i32
       (i32.add
        (i32.sub
         (i32.const 0)
@@ -3995,7 +3998,7 @@
    (i64.or
     (get_local $2)
     (i64.shl
-     (i64.extend_u/i32
+     (i64.extend_s/i32
       (get_local $6)
      )
      (i64.const 63)
@@ -4919,5 +4922,7 @@
     (f64.const 1)
    )
   )
+ )
+ (func $null (; 7 ;) (type $v)
  )
 )

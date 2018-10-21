@@ -1,111 +1,45 @@
 (module
- (type $iiv (func (param i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
+ (type $FUNCSIG$v (func))
+ (memory $0 1)
+ (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $retain-i32/si (mut i32) (i32.const 0))
  (global $retain-i32/ui (mut i32) (i32.const 0))
- (memory $0 1)
- (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s")
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
- (func $retain-i32/test (; 1 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $retain-i32/test (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$v)
   (nop)
  )
  (func $start (; 2 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
-  (call $retain-i32/test
-   (i32.const 0)
-   (i32.const 127)
-  )
-  (call $retain-i32/test
-   (i32.const 127)
-   (i32.const 0)
-  )
-  (call $retain-i32/test
-   (i32.const 1)
-   (i32.const 127)
-  )
-  (call $retain-i32/test
-   (i32.const 127)
-   (i32.const 1)
-  )
-  (call $retain-i32/test
-   (i32.const -1)
-   (i32.const 127)
-  )
-  (call $retain-i32/test
-   (i32.const 127)
-   (i32.const -1)
-  )
-  (call $retain-i32/test
-   (i32.const 0)
-   (i32.const -128)
-  )
-  (call $retain-i32/test
-   (i32.const -128)
-   (i32.const 0)
-  )
-  (call $retain-i32/test
-   (i32.const 1)
-   (i32.const -128)
-  )
-  (call $retain-i32/test
-   (i32.const -128)
-   (i32.const 1)
-  )
-  (call $retain-i32/test
-   (i32.const -1)
-   (i32.const -128)
-  )
-  (call $retain-i32/test
-   (i32.const -128)
-   (i32.const -1)
-  )
-  (call $retain-i32/test
-   (i32.const 127)
-   (i32.const 127)
-  )
-  (call $retain-i32/test
-   (i32.const -128)
-   (i32.const -128)
-  )
-  (call $retain-i32/test
-   (i32.const 127)
-   (i32.const -128)
-  )
-  (call $retain-i32/test
-   (i32.const -128)
-   (i32.const 127)
-  )
-  (call $retain-i32/test
-   (i32.const 0)
-   (i32.const 255)
-  )
-  (call $retain-i32/test
-   (i32.const 255)
-   (i32.const 0)
-  )
-  (call $retain-i32/test
-   (i32.const 1)
-   (i32.const 255)
-  )
-  (call $retain-i32/test
-   (i32.const 255)
-   (i32.const 1)
-  )
-  (call $retain-i32/test
-   (i32.const -1)
-   (i32.const 255)
-  )
-  (call $retain-i32/test
-   (i32.const 255)
-   (i32.const -1)
-  )
-  (call $retain-i32/test
-   (i32.const 255)
-   (i32.const 255)
-  )
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
+  (call $retain-i32/test)
   (block $break|0
    (set_local $0
     (i32.const -128)
@@ -117,54 +51,18 @@
       (i32.const 255)
      )
     )
-    (call $retain-i32/test
-     (i32.const 0)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const 1)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const -1)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const -128)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const 127)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const 255)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const -32768)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const 32767)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const 65535)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const 2147483647)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const -2147483648)
-     (get_local $0)
-    )
-    (call $retain-i32/test
-     (i32.const -1)
-     (get_local $0)
-    )
+    (call $retain-i32/test)
+    (call $retain-i32/test)
+    (call $retain-i32/test)
+    (call $retain-i32/test)
+    (call $retain-i32/test)
+    (call $retain-i32/test)
+    (call $retain-i32/test)
+    (call $retain-i32/test)
+    (call $retain-i32/test)
+    (call $retain-i32/test)
+    (call $retain-i32/test)
+    (call $retain-i32/test)
     (set_local $0
      (i32.add
       (get_local $0)
@@ -492,5 +390,8 @@
     (unreachable)
    )
   )
+ )
+ (func $null (; 3 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

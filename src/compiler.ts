@@ -286,7 +286,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Map of already compiled static string segments. */
   stringSegments: Map<string,MemorySegment> = new Map();
   /** Function table being compiled. */
-  functionTable: FunctionRef[] = [];
+  functionTable: string[] = [ "null" ];
   /** Argument count helper global. */
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
@@ -330,6 +330,23 @@ export class Compiler extends DiagnosticEmitter {
     this.startFunctionBody = startFunctionBody;
     this.currentFunction = startFunctionInstance;
 
+    // add a mutable heap base dummy
+    if (options.isWasm64) {
+      module.addGlobal(
+        "HEAP_BASE",
+        NativeType.I64,
+        true,
+        module.createI64(0, 0)
+      );
+    } else {
+      module.addGlobal(
+        "HEAP_BASE",
+        NativeType.I32,
+        false,
+        module.createI32(0)
+      );
+    }
+
     // compile entry file(s) while traversing reachable elements
     var sources = program.sources;
     for (let i = 0, k = sources.length; i < k; ++i) {
@@ -353,10 +370,11 @@ export class Compiler extends DiagnosticEmitter {
       if (!program.mainFunction) module.setStart(funcRef);
     }
 
-    // set up static memory segments and the heap base pointer
+    // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
     this.memoryOffset = memoryOffset;
+    module.removeGlobal("HEAP_BASE");
     if (options.isWasm64) {
       module.addGlobal(
         "HEAP_BASE",
@@ -392,19 +410,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up function table
     var functionTable = this.functionTable;
-    var functionTableSize = functionTable.length;
-    var functionTableExported = false;
-    if (functionTableSize) {
-      module.setFunctionTable(functionTable);
-      module.addTableExport("0", "table");
-      functionTableExported = true;
-    }
+    module.setFunctionTable(functionTable.length, 0xffffffff, functionTable);
+    module.addTableExport("0", "table");
+    module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.createBlock(null, []));
 
     // import table if requested (default table is named '0' by Binaryen)
-    if (options.importTable) {
-      module.addTableImport("0", "env", "table");
-      if (!functionTableExported) module.addTableExport("0", "table");
-    }
+    if (options.importTable) module.addTableImport("0", "env", "table");
 
     // set up module exports
     for (let [name, moduleExport] of program.moduleLevelExports) {
@@ -745,7 +756,7 @@ export class Compiler extends DiagnosticEmitter {
       if (isDeclaredConstant || this.options.hasFeature(Feature.MUTABLE_GLOBAL)) {
         global.set(CommonFlags.MODULE_IMPORT);
         if (declaration) {
-          mangleImportName(global, declaration, global.parent);
+          mangleImportName(global, declaration);
         } else {
           mangleImportName_moduleName = "env";
           mangleImportName_elementName = global.simpleName;
@@ -1134,7 +1145,7 @@ export class Compiler extends DiagnosticEmitter {
 
     } else {
       instance.set(CommonFlags.MODULE_IMPORT);
-      mangleImportName(instance, declaration, instance.prototype.parent); // TODO: check for duplicates
+      mangleImportName(instance, declaration); // TODO: check for duplicates
 
       // create the function import
       ref = module.addFunctionImport(
@@ -1474,7 +1485,7 @@ export class Compiler extends DiagnosticEmitter {
       // insert the trampoline if the function has optional parameters
       func = this.ensureTrampoline(func);
     }
-    functionTable.push(func.ref);
+    functionTable.push(func.internalName);
     func.functionTableIndex = index;
     return index;
   }
@@ -2641,7 +2652,7 @@ export class Compiler extends DiagnosticEmitter {
       // i32 or smaller to i64
       } else if (toType.is(TypeFlags.LONG)) {
         expr = module.createUnary(
-          toType.is(TypeFlags.SIGNED) ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32,
+          fromType.is(TypeFlags.SIGNED) ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32,
           this.ensureSmallIntegerWrap(expr, fromType) // must clear garbage bits
         );
         wrapMode = WrapMode.NONE;
@@ -5152,7 +5163,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           this.error(
             DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, (<Field>target).type.toString()
+            expression.range, type.toString()
           );
           return module.createUnreachable();
         }
@@ -5167,7 +5178,20 @@ export class Compiler extends DiagnosticEmitter {
         );
         break;
       }
-      case ElementKind.PROPERTY: // TODO
+
+      case ElementKind.PROPERTY: {
+        indexArg = this.compileGetter(<Property>target, expression.expression);
+        let type = this.currentType;
+        signature = type.signatureReference;
+        if (!signature) {
+          this.error(
+            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+            expression.range, type.toString()
+          );
+          return module.createUnreachable();
+        }
+        break;
+      }
 
       // not supported
       default: {
@@ -5717,9 +5741,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise just call through
     this.currentType = returnType;
-    if (isCallImport) return module.createCallImport(instance.internalName, operands, returnType.toNativeType());
-    var ret = module.createCall(instance.internalName, operands, returnType.toNativeType());
-    return ret;
+    return module.createCall(instance.internalName, operands, returnType.toNativeType());
   }
 
   /** Compiles an indirect call using an index argument and a signature. */
@@ -6468,7 +6490,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var nativeArrayType = arrayType.toNativeType();
     var currentFunction = this.currentFunction;
-    var tempLocal = currentFunction.getTempLocal(arrayType, false);
+    var tempLocal = currentFunction.addLocal(arrayType); // can't reuse a temp (used in compiledValues)
     var stmts = new Array<ExpressionRef>(2 + length);
     var index = 0;
     stmts[index++] = module.createSetLocal(tempLocal.index,
@@ -6486,7 +6508,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     assert(index + 1 == stmts.length);
     stmts[index] = module.createGetLocal(tempLocal.index, nativeArrayType);
-    currentFunction.freeTempLocal(tempLocal);
+    currentFunction.freeTempLocal(tempLocal); // but can be reused now
     this.currentType = arrayType;
     return module.createBlock(null, stmts, nativeArrayType);
   }
@@ -6507,6 +6529,8 @@ export class Compiler extends DiagnosticEmitter {
     // if present, check that the constructor is compatible with object literals
     var ctor = classReference.constructorInstance;
     if (ctor) {
+      // TODO: if the constructor requires parameters, check whether these are given as part of the
+      // object literal and use them to call the ctor while not generating a store.
       if (ctor.signature.requiredParameters) {
         this.error(
           DiagnosticCode.Constructor_of_class_0_must_not_require_any_arguments,
@@ -6711,43 +6735,15 @@ export class Compiler extends DiagnosticEmitter {
           (<Field>target).memoryOffset
         );
       }
-      case ElementKind.PROPERTY: { // instance property (here: getter)
-        let prototype = (<Property>target).getterPrototype;
-        if (prototype) {
-          let instance = this.resolver.resolveFunction(prototype, null);
-          if (!instance) return module.createUnreachable();
-          let signature = instance.signature;
-          if (!this.checkCallSignature( // reports
-            signature,
-            0,
-            instance.is(CommonFlags.INSTANCE),
-            propertyAccess
-          )) {
-            return module.createUnreachable();
-          }
-          let inline = (instance.decoratorFlags & DecoratorFlags.INLINE) != 0;
-          if (instance.is(CommonFlags.INSTANCE)) {
-            let parent = assert(instance.parent);
-            assert(parent.kind == ElementKind.CLASS);
-            let thisExpression = assert(this.resolver.currentThisExpression);
-            let thisExpr = this.compileExpressionRetainType(
-              thisExpression,
-              this.options.usizeType,
-              WrapMode.NONE
-            );
-            this.currentType = signature.returnType;
-            return this.compileCallDirect(instance, [], propertyAccess, thisExpr, inline);
-          } else {
-            this.currentType = signature.returnType;
-            return this.compileCallDirect(instance, [], propertyAccess, 0, inline);
-          }
-        } else {
-          this.error(
-            DiagnosticCode.Property_0_does_not_exist_on_type_1,
-            propertyAccess.range, (<Property>target).simpleName, (<Property>target).parent.toString()
-          );
-          return module.createUnreachable();
-        }
+      case ElementKind.PROPERTY: {// instance property (here: getter)
+        return this.compileGetter(<Property>target, propertyAccess);
+      }
+      case ElementKind.FUNCTION_PROTOTYPE: {
+        this.error(
+          DiagnosticCode.Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set,
+          propertyAccess.range, (<FunctionPrototype>target).simpleName
+        );
+        return module.createUnreachable();
       }
     }
     this.error(
@@ -6755,6 +6751,45 @@ export class Compiler extends DiagnosticEmitter {
       propertyAccess.range
     );
     return module.createUnreachable();
+  }
+
+  private compileGetter(target: Property, reportNode: Node): ExpressionRef {
+    var prototype = target.getterPrototype;
+    if (prototype) {
+      let instance = this.resolver.resolveFunction(prototype, null);
+      if (!instance) return this.module.createUnreachable();
+      let signature = instance.signature;
+      if (!this.checkCallSignature( // reports
+        signature,
+        0,
+        instance.is(CommonFlags.INSTANCE),
+        reportNode
+      )) {
+        return this.module.createUnreachable();
+      }
+      let inline = (instance.decoratorFlags & DecoratorFlags.INLINE) != 0;
+      if (instance.is(CommonFlags.INSTANCE)) {
+        let parent = assert(instance.parent);
+        assert(parent.kind == ElementKind.CLASS);
+        let thisExpression = assert(this.resolver.currentThisExpression); //!!!
+        let thisExpr = this.compileExpressionRetainType(
+          thisExpression,
+          this.options.usizeType,
+          WrapMode.NONE
+        );
+        this.currentType = signature.returnType;
+        return this.compileCallDirect(instance, [], reportNode, thisExpr, inline);
+      } else {
+        this.currentType = signature.returnType;
+        return this.compileCallDirect(instance, [], reportNode, 0, inline);
+      }
+    } else {
+      this.error(
+        DiagnosticCode.Property_0_does_not_exist_on_type_1,
+        reportNode.range, (<Property>target).simpleName, (<Property>target).parent.toString()
+      );
+      return this.module.createUnreachable();
+    }
   }
 
   compileTernaryExpression(expression: TernaryExpression, contextualType: Type): ExpressionRef {
@@ -7623,11 +7658,12 @@ export class Compiler extends DiagnosticEmitter {
 
 function mangleImportName(
   element: Element,
-  declaration: DeclarationStatement,
-  parentElement: Element | null = null
+  declaration: DeclarationStatement
 ): void {
-  mangleImportName_moduleName = parentElement ? parentElement.simpleName : declaration.range.source.simplePath;
-  mangleImportName_elementName = element.simpleName;
+  // by default, use the file name as the module name
+  mangleImportName_moduleName = declaration.range.source.simplePath;
+  // and the internal name of the element within that file as the element name
+  mangleImportName_elementName = declaration.programLevelInternalName;
 
   if (!element.hasDecorator(DecoratorFlags.EXTERNAL)) return;
 
@@ -7636,6 +7672,8 @@ function mangleImportName(
   var args = decorator.arguments;
   if (args && args.length) {
     let arg = args[0];
+    // if one argument is given, override just the element name
+    // if two arguments are given, override both module and element name
     if (arg.kind == NodeKind.LITERAL && (<LiteralExpression>arg).literalKind == LiteralKind.STRING) {
       mangleImportName_elementName = (<StringLiteralExpression>arg).value;
       if (args.length >= 2) {

@@ -4,6 +4,10 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $Ff (func (param f64) (result f32)))
+ (type $v (func))
+ (memory $0 0)
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $~lib/math/NativeMath.E f64 (f64.const 2.718281828459045))
  (global $std/libm/E f64 (f64.const 2.718281828459045))
  (global $~lib/math/NativeMath.LN10 f64 (f64.const 2.302585092994046))
@@ -23,8 +27,8 @@
  (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "E" (global $std/libm/E))
  (export "LN10" (global $std/libm/LN10))
  (export "LN2" (global $std/libm/LN2))
@@ -3120,7 +3124,7 @@
    (i64.shl
     (i64.add
      (i64.const 1023)
-     (i64.extend_u/i32
+     (i64.extend_s/i32
       (get_local $3)
      )
     )
@@ -3189,7 +3193,7 @@
    (i64.shl
     (i64.sub
      (i64.const 1023)
-     (i64.extend_u/i32
+     (i64.extend_s/i32
       (get_local $3)
      )
     )
@@ -3347,7 +3351,7 @@
     (i64.shl
      (i64.add
       (i64.const 1023)
-      (i64.extend_u/i32
+      (i64.extend_s/i32
        (get_local $1)
       )
      )
@@ -5651,7 +5655,7 @@
         (i64.const 4294967295)
        )
        (i64.shl
-        (i64.extend_u/i32
+        (i64.extend_s/i32
          (get_local $7)
         )
         (i64.const 32)
@@ -5703,7 +5707,7 @@
     (set_local $30
      (f64.reinterpret/i64
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.add
          (i32.add
           (i32.or
@@ -6180,7 +6184,7 @@
     (set_local $20
      (f64.reinterpret/i64
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (i32.and
          (get_local $25)
          (i32.xor
@@ -6398,7 +6402,7 @@
        (i64.const 4294967295)
       )
       (i64.shl
-       (i64.extend_u/i32
+       (i64.extend_s/i32
         (get_local $24)
        )
        (i64.const 32)
@@ -6914,5 +6918,7 @@
     (get_local $0)
    )
   )
+ )
+ (func $null (; 62 ;) (type $v)
  )
 )
