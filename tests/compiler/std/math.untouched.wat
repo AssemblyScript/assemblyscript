@@ -13591,7 +13591,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2011)
+     (i32.const 2014)
      (i32.const 24)
     )
     (unreachable)
@@ -13700,18 +13700,22 @@
    (tee_local $4
     (call $std/math/check<f64>
      (block $~lib/math/NativeMath.sign|inlined.0 (result f64)
-      (if (result f64)
-       (f64.gt
-        (f64.abs
+      (br $~lib/math/NativeMath.sign|inlined.0
+       (if (result f64)
+        (f64.gt
+         (get_local $0)
+         (f64.const 0)
+        )
+        (f64.const 1)
+        (if (result f64)
+         (f64.lt
+          (get_local $0)
+          (f64.const 0)
+         )
+         (f64.const -1)
          (get_local $0)
         )
-        (f64.const 0)
        )
-       (f64.copysign
-        (f64.const 1)
-        (get_local $0)
-       )
-       (get_local $0)
       )
      )
      (get_local $1)
@@ -13741,18 +13745,22 @@
  (func $std/math/test_signf (; 138 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (block $~lib/math/NativeMathf.sign|inlined.0 (result f32)
-    (if (result f32)
-     (f32.gt
-      (f32.abs
+    (br $~lib/math/NativeMathf.sign|inlined.0
+     (if (result f32)
+      (f32.gt
+       (get_local $0)
+       (f32.const 0)
+      )
+      (f32.const 1)
+      (if (result f32)
+       (f32.lt
+        (get_local $0)
+        (f32.const 0)
+       )
+       (f32.const -1)
        (get_local $0)
       )
-      (f32.const 0)
      )
-     (f32.copysign
-      (f32.const 1)
-      (get_local $0)
-     )
-     (get_local $0)
     )
    )
    (get_local $1)

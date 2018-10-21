@@ -11664,7 +11664,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2011)
+     (i32.const 2014)
      (i32.const 24)
     )
     (unreachable)
@@ -11758,16 +11758,18 @@
     (call $std/math/check<f64>
      (if (result f64)
       (f64.gt
-       (f64.abs
-        (get_local $0)
-       )
+       (get_local $0)
        (f64.const 0)
       )
-      (f64.copysign
-       (f64.const 1)
+      (f64.const 1)
+      (if (result f64)
+       (f64.lt
+        (get_local $0)
+        (f64.const 0)
+       )
+       (f64.const -1)
        (get_local $0)
       )
-      (get_local $0)
      )
      (get_local $1)
      (f64.const 0)
@@ -11788,20 +11790,26 @@
   (get_local $2)
  )
  (func $std/math/test_signf (; 138 ;) (; has Stack IR ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
-  (call $std/math/check<f32>
-   (if (result f32)
-    (f32.gt
-     (f32.abs
-      (get_local $0)
-     )
+  (if
+   (f32.gt
+    (get_local $0)
+    (f32.const 0)
+   )
+   (set_local $0
+    (f32.const 1)
+   )
+   (if
+    (f32.lt
+     (get_local $0)
      (f32.const 0)
     )
-    (f32.copysign
-     (f32.const 1)
-     (get_local $0)
+    (set_local $0
+     (f32.const -1)
     )
-    (get_local $0)
    )
+  )
+  (call $std/math/check<f32>
+   (get_local $0)
    (get_local $1)
    (f32.const 0)
   )

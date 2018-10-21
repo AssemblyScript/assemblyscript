@@ -25,6 +25,7 @@
  (global $~lib/math/NativeMath.SQRT2 f64 (f64.const 1.4142135623730951))
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
  (global $NaN f64 (f64.const nan:0x8000000000000))
+ (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -6304,18 +6305,22 @@
  )
  (func $std/libm/sign (; 49 ;) (type $FF) (param $0 f64) (result f64)
   (block $~lib/math/NativeMath.sign|inlined.0 (result f64)
-   (if (result f64)
-    (f64.gt
-     (f64.abs
+   (br $~lib/math/NativeMath.sign|inlined.0
+    (if (result f64)
+     (f64.gt
+      (get_local $0)
+      (f64.const 0)
+     )
+     (f64.const 1)
+     (if (result f64)
+      (f64.lt
+       (get_local $0)
+       (f64.const 0)
+      )
+      (f64.const -1)
       (get_local $0)
      )
-     (f64.const 0)
     )
-    (f64.copysign
-     (f64.const 1)
-     (get_local $0)
-    )
-    (get_local $0)
    )
   )
  )

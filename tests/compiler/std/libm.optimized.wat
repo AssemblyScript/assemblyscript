@@ -5477,19 +5477,25 @@
   )
  )
  (func $std/libm/sign (; 49 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
-  (if (result f64)
+  (if
    (f64.gt
-    (f64.abs
-     (get_local $0)
-    )
+    (get_local $0)
     (f64.const 0)
    )
-   (f64.copysign
+   (set_local $0
     (f64.const 1)
-    (get_local $0)
    )
-   (get_local $0)
+   (if
+    (f64.lt
+     (get_local $0)
+     (f64.const 0)
+    )
+    (set_local $0
+     (f64.const -1)
+    )
+   )
   )
+  (get_local $0)
  )
  (func $~lib/math/NativeMath.sinh (; 50 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
