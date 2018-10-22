@@ -112,11 +112,13 @@ export namespace NativeMath {
     }
     var s: f64, w: f64, z: f64;
     if (hx >> 31) {
+      // z = (1.0 + x) * 0.5;
       z = 0.5 + x * 0.5;
       s = builtin_sqrt<f64>(z);
       w = R(z) * s - pio2_lo;
       return 2 * (pio2_hi - (s + w));
     }
+    // z = (1.0 - x) * 0.5;
     z = 0.5 - x * 0.5;
     s = builtin_sqrt<f64>(z);
     var df = reinterpret<f64>(reinterpret<u64>(s) & 0xFFFFFFFF00000000);
@@ -149,6 +151,7 @@ export namespace NativeMath {
       if (ix < 0x3E500000 && ix >= 0x00100000) return x;
       return x + x * R(x * x);
     }
+    // var z = (1.0 - builtin_abs<f64>(x)) * 0.5;
     var z = 0.5 - builtin_abs<f64>(x) * 0.5;
     var s = builtin_sqrt<f64>(z);
     var r = R(z);
@@ -370,6 +373,7 @@ export namespace NativeMath {
     if (w < 0x3FE62E42) {
       if (w < 0x3FF00000 - (26 << 20)) return 1;
       t = expm1(x);
+      // return 1 + t * t / (2 * (1 + t));
       return 1 + t * t / (2 + 2 * t);
     }
     if (w < 0x40862E42) {
@@ -1255,11 +1259,13 @@ export namespace NativeMathf {
     }
     var z: f32, w: f32, s: f32;
     if (hx >> 31) {
+      // z = (1 + x) * 0.5;
       z = 0.5 + x * 0.5;
       s = builtin_sqrt<f32>(z);
       w = Rf(z) * s - pio2_lo;
       return 2 * (pio2_hi - (s + w));
     }
+    // z = (1 - x) * 0.5;
     z = 0.5 - x * 0.5;
     s = builtin_sqrt<f32>(z);
     hx = reinterpret<u32>(s);
@@ -1295,6 +1301,7 @@ export namespace NativeMathf {
       if (hx < 0x39800000 && hx >= 0x00800000) return x;
       return x + x * Rf(x * x);
     }
+    // var z: f32 = (1 - builtin_abs<f32>(x)) * 0.5;
     var z: f32 = 0.5 - builtin_abs<f32>(x) * 0.5;
     var s = builtin_sqrt<f64>(z); // sic
     x = <f32>(pio2 - 2 * (s + s * Rf(z)));
