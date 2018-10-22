@@ -133,12 +133,11 @@ out = arr.concat(null);
 assert(out.length == 3);
 assert(out[2] == 45);
 
-// test [].concat(arr);
-// var source: i32[] = [];
-// assert(source.length == 0);
-// source.concat(arr);
-// assert(arr.length == 3);
-// assert(source.length == 3);
+var source: i32[] = [];
+assert(source.length == 0);
+out = source.concat(arr);
+assert(out.length == 3);
+assert(source.length == 0);
 
 // Array#unshift ///////////////////////////////////////////////////////////////////////////////////
 
