@@ -189,8 +189,6 @@ export class Array<T> {
       memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE,
       changetype<usize>(this.buffer_) + HEADER_SIZE,
       <usize>(thisLen << alignof<T>()));
-
-      if (isManaged<T>()) __gc_link(changetype<usize>(out), changetype<usize>(this)); // tslint:disable-line
     }
     if (otherLen) {
       memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE + <usize>(thisLen << alignof<T>()),
