@@ -607,7 +607,7 @@ export namespace NativeMath {
     var u = reinterpret<u64>(x);
     var hx = <u32>(u >> 32);
     var k = 0;
-    if (<u32>(hx < 0x00100000) | (hx >> 31)) {
+    if (hx < 0x00100000 || <bool>(hx >> 31)) {
       if (u << 1 == 0) return -1 / (x * x);
       if (hx >> 31) return (x - x) / 0.0;
       k -= 54;
@@ -658,7 +658,7 @@ export namespace NativeMath {
     var hx = <u32>(u >> 32);
     var k = 1;
     var c = 0.0, f = 0.0;
-    if (<u32>(hx < 0x3FDA827A) | (hx >> 31)) {
+    if (hx < 0x3FDA827A || <bool>(hx >> 31)) {
       if (hx >= 0xBFF00000) {
         if (x == -1) return x / 0.0;
         return (x - x) / 0.0;
