@@ -53,6 +53,9 @@
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md"
   },
   "files": [
+    "lib/loader/index.d.ts",
+    "lib/loader/index.js",
+    "lib/loader/README.md",
     "bin/",
     "cli/",
     "dist/",

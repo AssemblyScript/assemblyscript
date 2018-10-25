@@ -83,6 +83,13 @@ Instances are automatically populated with useful utility:
 * **freeArray**(ptr: `number`): `void`<br />
   Frees a typed array in the module's memory. Must not be accessed anymore afterwards.
 
+* **getFunction**(ptr: `number`): `function`<br />
+  Gets a function by its pointer.
+
+* **newFunction**(fn: `function`): `number`<br />
+  Creates a new function in the module's table and returns its pointer. Note that only actual
+  WebAssembly functions, i.e. as exported by the module, are supported.
+
 <sup>1</sup> This feature has not yet landed in any VM as of this writing.
 
 Examples
