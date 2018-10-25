@@ -1492,10 +1492,12 @@ export namespace NativeMathf {
     if (u < 0x3F317217) {
       if (u < 0x3F800000 - (12 << 23)) return 1;
       let t = expm1(x);
+      // return 1 + t * t / (2 * (1 + t));
       return 1 + t * t / (2 + 2 * t);
     }
     if (u < 0x42B17217) {
       let t = exp(x);
+      // return 0.5 * (t + 1 / t);
       return 0.5 * t + 0.5 / t;
     }
     return expo2f(x);
