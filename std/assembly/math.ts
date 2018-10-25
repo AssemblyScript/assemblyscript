@@ -1746,7 +1746,7 @@ export namespace NativeMathf {
     var ix = reinterpret<u32>(x);
     var c: f32 = 0, f: f32 = 0;
     var k: i32 = 1;
-    if (<u32>(ix < 0x3ED413D0) | (ix >> 31)) {
+    if (ix < 0x3ED413D0 || <bool>(ix >> 31)) {
       if (ix >= 0xBF800000) {
         if (x == -1) return x / 0.0;
         return (x - x) / 0.0;
@@ -1792,7 +1792,7 @@ export namespace NativeMathf {
       Ox1p25f = reinterpret<f32>(0x4C000000);
     var ix = reinterpret<u32>(x);
     var k: i32 = 0;
-    if (<u32>(ix < 0x00800000) | (ix >> 31)) {
+    if (ix < 0x00800000 || <bool>(ix >> 31)) {
       if (ix << 1 == 0) return -1 / (x * x);
       if (ix >> 31) return (x - x) / 0.0;
       k -= 25;
