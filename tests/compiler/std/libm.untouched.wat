@@ -4420,11 +4420,14 @@
    (i32.const 0)
   )
   (if
-   (i32.or
-    (i32.lt_u
-     (get_local $2)
-     (i32.const 1048576)
+   (if (result i32)
+    (tee_local $4
+     (i32.lt_u
+      (get_local $2)
+      (i32.const 1048576)
+     )
     )
+    (get_local $4)
     (i32.shr_u
      (get_local $2)
      (i32.const 31)
