@@ -761,11 +761,14 @@
    (i32.const 0)
   )
   (if
-   (i32.or
-    (i32.lt_u
-     (get_local $2)
-     (i32.const 1048576)
+   (if (result i32)
+    (tee_local $4
+     (i32.lt_u
+      (get_local $2)
+      (i32.const 1048576)
+     )
     )
+    (get_local $4)
     (i32.shr_u
      (get_local $2)
      (i32.const 31)
@@ -2720,6 +2723,7 @@
   (local $12 f64)
   (local $13 f64)
   (local $14 f64)
+  (local $15 i32)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -3044,11 +3048,14 @@
    )
   )
   (if
-   (i32.or
-    (i32.lt_s
-     (get_local $3)
-     (i32.const 0)
+   (if (result i32)
+    (tee_local $15
+     (i32.lt_s
+      (get_local $3)
+      (i32.const 0)
+     )
     )
+    (get_local $15)
     (i32.gt_s
      (get_local $3)
      (i32.const 56)
@@ -3679,7 +3686,7 @@
   (local $4 i64)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f64)
+  (local $7 i32)
   (local $8 f64)
   (local $9 f64)
   (local $10 f64)
@@ -3687,6 +3694,7 @@
   (local $12 f64)
   (local $13 f64)
   (local $14 f64)
+  (local $15 f64)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -3762,11 +3770,14 @@
    )
   )
   (if
-   (i32.or
-    (i32.eq
-     (get_local $5)
-     (i32.const 2047)
+   (if (result i32)
+    (tee_local $7
+     (i32.eq
+      (get_local $5)
+      (i32.const 2047)
+     )
     )
+    (get_local $7)
     (i64.eq
      (get_local $3)
      (i64.const 0)
@@ -3791,7 +3802,7 @@
     )
    )
   )
-  (set_local $7
+  (set_local $8
    (f64.const 1)
   )
   (if
@@ -3803,7 +3814,7 @@
     )
    )
    (block
-    (set_local $7
+    (set_local $8
      (f64.const 5260135901548373507240989e186)
     )
     (set_local $0
@@ -3828,7 +3839,7 @@
      )
     )
     (block
-     (set_local $7
+     (set_local $8
       (f64.const 1.90109156629516e-211)
      )
      (set_local $0
@@ -3846,114 +3857,114 @@
     )
    )
   )
-  (set_local $8
+  (set_local $9
    (f64.mul
     (get_local $0)
     (f64.const 134217729)
    )
   )
-  (set_local $9
+  (set_local $10
    (f64.add
     (f64.sub
      (get_local $0)
-     (get_local $8)
+     (get_local $9)
     )
-    (get_local $8)
-   )
-  )
-  (set_local $10
-   (f64.sub
-    (get_local $0)
     (get_local $9)
    )
   )
   (set_local $11
+   (f64.sub
+    (get_local $0)
+    (get_local $10)
+   )
+  )
+  (set_local $12
    (f64.mul
     (get_local $0)
     (get_local $0)
    )
   )
-  (set_local $12
+  (set_local $13
    (f64.add
     (f64.sub
      (f64.mul
-      (get_local $9)
-      (get_local $9)
+      (get_local $10)
+      (get_local $10)
      )
-     (get_local $11)
+     (get_local $12)
     )
     (f64.mul
      (f64.add
       (f64.mul
        (f64.const 2)
-       (get_local $9)
+       (get_local $10)
       )
-      (get_local $10)
+      (get_local $11)
      )
-     (get_local $10)
+     (get_local $11)
     )
    )
   )
-  (set_local $8
+  (set_local $9
    (f64.mul
     (get_local $1)
     (f64.const 134217729)
    )
   )
-  (set_local $9
+  (set_local $10
    (f64.add
     (f64.sub
      (get_local $1)
-     (get_local $8)
+     (get_local $9)
     )
-    (get_local $8)
-   )
-  )
-  (set_local $10
-   (f64.sub
-    (get_local $1)
     (get_local $9)
    )
   )
-  (set_local $13
+  (set_local $11
+   (f64.sub
+    (get_local $1)
+    (get_local $10)
+   )
+  )
+  (set_local $14
    (f64.mul
     (get_local $1)
     (get_local $1)
    )
   )
-  (set_local $14
+  (set_local $15
    (f64.add
     (f64.sub
      (f64.mul
-      (get_local $9)
-      (get_local $9)
+      (get_local $10)
+      (get_local $10)
      )
-     (get_local $13)
+     (get_local $14)
     )
     (f64.mul
      (f64.add
       (f64.mul
        (f64.const 2)
-       (get_local $9)
+       (get_local $10)
       )
-      (get_local $10)
+      (get_local $11)
      )
-     (get_local $10)
+     (get_local $11)
     )
    )
   )
   (f64.mul
-   (get_local $7)
+   (get_local $8)
    (f64.sqrt
     (f64.add
      (f64.add
       (f64.add
-       (get_local $14)
-       (get_local $12)
+       (get_local $15)
+       (get_local $13)
       )
-      (get_local $13)
+      (get_local $14)
      )
-     (get_local $11)
+     (get_local $12)
     )
    )
   )

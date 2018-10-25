@@ -2205,9 +2205,9 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 f32)
+  (local $9 i32)
   (local $10 f32)
-  (local $11 i32)
+  (local $11 f32)
   (local $12 f32)
   (local $13 f32)
   (local $14 f32)
@@ -2265,11 +2265,14 @@
    )
   )
   (if
-   (i32.or
-    (i32.gt_s
-     (get_local $4)
-     (i32.const 2139095040)
+   (if (result i32)
+    (tee_local $6
+     (i32.gt_s
+      (get_local $4)
+      (i32.const 2139095040)
+     )
     )
+    (get_local $6)
     (i32.gt_s
      (get_local $5)
      (i32.const 2139095040)
@@ -2282,7 +2285,7 @@
     )
    )
   )
-  (set_local $6
+  (set_local $7
    (i32.const 0)
   )
   (if
@@ -2295,7 +2298,7 @@
      (get_local $5)
      (i32.const 1266679808)
     )
-    (set_local $6
+    (set_local $7
      (i32.const 2)
     )
     (if
@@ -2304,7 +2307,7 @@
       (i32.const 1065353216)
      )
      (block
-      (set_local $8
+      (set_local $9
        (i32.sub
         (i32.shr_s
          (get_local $5)
@@ -2313,31 +2316,31 @@
         (i32.const 127)
        )
       )
-      (set_local $7
+      (set_local $8
        (i32.shr_s
         (get_local $5)
         (i32.sub
          (i32.const 23)
-         (get_local $8)
+         (get_local $9)
         )
        )
       )
       (if
        (i32.eq
         (i32.shl
-         (get_local $7)
+         (get_local $8)
          (i32.sub
           (i32.const 23)
-          (get_local $8)
+          (get_local $9)
          )
         )
         (get_local $5)
        )
-       (set_local $6
+       (set_local $7
         (i32.sub
          (i32.const 2)
          (i32.and
-          (get_local $7)
+          (get_local $8)
           (i32.const 1)
          )
         )
@@ -2441,47 +2444,47 @@
     )
    )
   )
-  (set_local $9
+  (set_local $10
    (f32.abs
     (get_local $0)
    )
   )
   (if
    (if (result i32)
-    (tee_local $11
+    (tee_local $6
      (if (result i32)
-      (tee_local $11
+      (tee_local $6
        (i32.eq
         (get_local $4)
         (i32.const 2139095040)
        )
       )
-      (get_local $11)
+      (get_local $6)
       (i32.eq
        (get_local $4)
        (i32.const 0)
       )
      )
     )
-    (get_local $11)
+    (get_local $6)
     (i32.eq
      (get_local $4)
      (i32.const 1065353216)
     )
    )
    (block
-    (set_local $10
-     (get_local $9)
+    (set_local $11
+     (get_local $10)
     )
     (if
      (i32.lt_s
       (get_local $3)
       (i32.const 0)
      )
-     (set_local $10
+     (set_local $11
       (f32.div
        (f32.const 1)
-       (get_local $10)
+       (get_local $11)
       )
      )
     )
@@ -2497,37 +2500,37 @@
          (get_local $4)
          (i32.const 1065353216)
         )
-        (get_local $6)
+        (get_local $7)
        )
        (i32.const 0)
       )
-      (set_local $10
+      (set_local $11
        (f32.div
         (f32.sub
-         (get_local $10)
-         (get_local $10)
+         (get_local $11)
+         (get_local $11)
         )
         (f32.sub
-         (get_local $10)
-         (get_local $10)
+         (get_local $11)
+         (get_local $11)
         )
        )
       )
       (if
        (i32.eq
-        (get_local $6)
+        (get_local $7)
         (i32.const 1)
        )
-       (set_local $10
+       (set_local $11
         (f32.neg
-         (get_local $10)
+         (get_local $11)
         )
        )
       )
      )
     )
     (return
-     (get_local $10)
+     (get_local $11)
     )
    )
   )
@@ -2542,7 +2545,7 @@
    (block
     (if
      (i32.eq
-      (get_local $6)
+      (get_local $7)
       (i32.const 0)
      )
      (return
@@ -2560,7 +2563,7 @@
     )
     (if
      (i32.eq
-      (get_local $6)
+      (get_local $7)
       (i32.const 1)
      )
      (set_local $12
@@ -2633,7 +2636,7 @@
     )
     (set_local $17
      (f32.sub
-      (get_local $9)
+      (get_local $10)
       (f32.const 1)
      )
     )
@@ -2715,9 +2718,9 @@
       (i32.const 8388608)
      )
      (block
-      (set_local $9
+      (set_local $10
        (f32.mul
-        (get_local $9)
+        (get_local $10)
         (f32.const 16777216)
        )
       )
@@ -2729,7 +2732,7 @@
       )
       (set_local $4
        (i32.reinterpret/f32
-        (get_local $9)
+        (get_local $10)
        )
       )
      )
@@ -2746,7 +2749,7 @@
       )
      )
     )
-    (set_local $7
+    (set_local $8
      (i32.and
       (get_local $4)
       (i32.const 8388607)
@@ -2754,28 +2757,28 @@
     )
     (set_local $4
      (i32.or
-      (get_local $7)
+      (get_local $8)
       (i32.const 1065353216)
      )
     )
     (if
      (i32.le_s
-      (get_local $7)
+      (get_local $8)
       (i32.const 1885297)
      )
-     (set_local $8
+     (set_local $9
       (i32.const 0)
      )
      (if
       (i32.lt_s
-       (get_local $7)
+       (get_local $8)
        (i32.const 6140887)
       )
-      (set_local $8
+      (set_local $9
        (i32.const 1)
       )
       (block
-       (set_local $8
+       (set_local $9
         (i32.const 0)
        )
        (set_local $23
@@ -2793,7 +2796,7 @@
       )
      )
     )
-    (set_local $9
+    (set_local $10
      (f32.reinterpret/i32
       (get_local $4)
      )
@@ -2802,12 +2805,12 @@
      (select
       (f32.const 1.5)
       (f32.const 1)
-      (get_local $8)
+      (get_local $9)
      )
     )
     (set_local $18
      (f32.sub
-      (get_local $9)
+      (get_local $10)
       (get_local $30)
      )
     )
@@ -2815,7 +2818,7 @@
      (f32.div
       (f32.const 1)
       (f32.add
-       (get_local $9)
+       (get_local $10)
        (get_local $30)
       )
      )
@@ -2862,7 +2865,7 @@
         (i32.const 4194304)
        )
        (i32.shl
-        (get_local $8)
+        (get_local $9)
         (i32.const 21)
        )
       )
@@ -2870,7 +2873,7 @@
     )
     (set_local $29
      (f32.sub
-      (get_local $9)
+      (get_local $10)
       (f32.sub
        (get_local $28)
        (get_local $30)
@@ -3048,7 +3051,7 @@
      (select
       (f32.const 1.5632208487659227e-06)
       (f32.const 0)
-      (get_local $8)
+      (get_local $9)
      )
     )
     (set_local $33
@@ -3075,7 +3078,7 @@
      (select
       (f32.const 0.5849609375)
       (f32.const 0)
-      (get_local $8)
+      (get_local $9)
      )
     )
     (set_local $13
@@ -3154,20 +3157,20 @@
     (get_local $13)
    )
   )
-  (set_local $10
+  (set_local $11
    (f32.add
     (get_local $22)
     (get_local $21)
    )
   )
-  (set_local $7
+  (set_local $8
    (i32.reinterpret/f32
-    (get_local $10)
+    (get_local $11)
    )
   )
   (if
    (i32.gt_s
-    (get_local $7)
+    (get_local $8)
     (i32.const 1124073472)
    )
    (return
@@ -3181,7 +3184,7 @@
    )
    (if
     (i32.eq
-     (get_local $7)
+     (get_local $8)
      (i32.const 1124073472)
     )
     (if
@@ -3191,7 +3194,7 @@
        (f32.const 4.299566569443414e-08)
       )
       (f32.sub
-       (get_local $10)
+       (get_local $11)
        (get_local $21)
       )
      )
@@ -3208,7 +3211,7 @@
     (if
      (i32.gt_s
       (i32.and
-       (get_local $7)
+       (get_local $8)
        (i32.const 2147483647)
       )
       (i32.const 1125515264)
@@ -3224,14 +3227,14 @@
      )
      (if
       (i32.eq
-       (get_local $7)
+       (get_local $8)
        (i32.const -1021968384)
       )
       (if
        (f32.le
         (get_local $22)
         (f32.sub
-         (get_local $10)
+         (get_local $11)
          (get_local $21)
         )
        )
@@ -3251,11 +3254,11 @@
   )
   (set_local $36
    (i32.and
-    (get_local $7)
+    (get_local $8)
     (i32.const 2147483647)
    )
   )
-  (set_local $8
+  (set_local $9
    (i32.sub
     (i32.shr_s
      (get_local $36)
@@ -3275,17 +3278,17 @@
    (block
     (set_local $23
      (i32.add
-      (get_local $7)
+      (get_local $8)
       (i32.shr_s
        (i32.const 8388608)
        (i32.add
-        (get_local $8)
+        (get_local $9)
         (i32.const 1)
        )
       )
      )
     )
-    (set_local $8
+    (set_local $9
      (i32.sub
       (i32.shr_s
        (i32.and
@@ -3304,7 +3307,7 @@
        (i32.xor
         (i32.shr_s
          (i32.const 8388607)
-         (get_local $8)
+         (get_local $9)
         )
         (i32.const -1)
        )
@@ -3322,13 +3325,13 @@
       )
       (i32.sub
        (i32.const 23)
-       (get_local $8)
+       (get_local $9)
       )
      )
     )
     (if
      (i32.lt_s
-      (get_local $7)
+      (get_local $8)
       (i32.const 0)
      )
      (set_local $23
@@ -3389,7 +3392,7 @@
     )
    )
   )
-  (set_local $10
+  (set_local $11
    (f32.add
     (get_local $18)
     (get_local $19)
@@ -3399,20 +3402,20 @@
    (f32.sub
     (get_local $19)
     (f32.sub
-     (get_local $10)
+     (get_local $11)
      (get_local $18)
     )
    )
   )
   (set_local $17
    (f32.mul
-    (get_local $10)
-    (get_local $10)
+    (get_local $11)
+    (get_local $11)
    )
   )
   (set_local $13
    (f32.sub
-    (get_local $10)
+    (get_local $11)
     (f32.mul
      (get_local $17)
      (f32.add
@@ -3447,7 +3450,7 @@
    (f32.sub
     (f32.div
      (f32.mul
-      (get_local $10)
+      (get_local $11)
       (get_local $13)
      )
      (f32.sub
@@ -3458,29 +3461,29 @@
     (f32.add
      (get_local $20)
      (f32.mul
-      (get_local $10)
+      (get_local $11)
       (get_local $20)
      )
     )
    )
   )
-  (set_local $10
+  (set_local $11
    (f32.sub
     (f32.const 1)
     (f32.sub
      (get_local $15)
-     (get_local $10)
+     (get_local $11)
     )
    )
   )
-  (set_local $7
+  (set_local $8
    (i32.reinterpret/f32
-    (get_local $10)
+    (get_local $11)
    )
   )
-  (set_local $7
+  (set_local $8
    (i32.add
-    (get_local $7)
+    (get_local $8)
     (i32.shl
      (get_local $23)
      (i32.const 23)
@@ -3490,26 +3493,26 @@
   (if
    (i32.le_s
     (i32.shr_s
-     (get_local $7)
+     (get_local $8)
      (i32.const 23)
     )
     (i32.const 0)
    )
-   (set_local $10
+   (set_local $11
     (call $~lib/math/NativeMathf.scalbn
-     (get_local $10)
+     (get_local $11)
      (get_local $23)
     )
    )
-   (set_local $10
+   (set_local $11
     (f32.reinterpret/i32
-     (get_local $7)
+     (get_local $8)
     )
    )
   )
   (f32.mul
    (get_local $12)
-   (get_local $10)
+   (get_local $11)
   )
  )
  (func $~lib/math/NativeMath.mod (; 5 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)

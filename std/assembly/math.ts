@@ -478,7 +478,7 @@ export namespace NativeMath {
     u = (0x3FF + k) << 52;
     var twopk = reinterpret<f64>(u);
     var y: f64;
-    if (<i32>(k < 0) | <i32>(k > 56)) {
+    if (k < 0 || k > 56) {
       y = x - e + 1.0;
       if (k == 1024) y = y * 2.0 * Ox1p1023;
       else y = y * twopk;
@@ -520,7 +520,7 @@ export namespace NativeMath {
     y = reinterpret<f64>(uy);
     if (ey == 0x7FF) return y;
     x = reinterpret<f64>(ux);
-    if (<i32>(ex == 0x7FF) | <i32>(uy == 0)) return x;
+    if (ex == 0x7FF || uy == 0) return x;
     if (ex - ey > 64) return x + y;
     var z = 1.0;
     if (ex > 0x3FF + 510) {
@@ -564,7 +564,7 @@ export namespace NativeMath {
     var u = reinterpret<u64>(x);
     var hx = <u32>(u >> 32);
     var k = 0;
-    if (<u32>(hx < 0x00100000) | (hx >> 31)) {
+    if (hx < 0x00100000 || <bool>(hx >> 31)) {
       if (u << 1 == 0) return -1 / (x * x);
       if (hx >> 31)    return (x - x) / 0.0;
       k -= 54;
@@ -1603,7 +1603,7 @@ export namespace NativeMathf {
     u = (0x7F + k) << 23;
     var twopk = reinterpret<f32>(u);
     var y: f32;
-    if (<i32>(k < 0) | <i32>(k > 56)) {
+    if (k < 0 || k > 56) {
       y = x - e + 1.0;
       if (k == 128) y = y * 2.0 * Ox1p127f;
       else y = y * twopk;
@@ -1667,7 +1667,7 @@ export namespace NativeMathf {
       Ox1p25f = reinterpret<f32>(0x4C000000);
     var u = reinterpret<u32>(x);
     var k = 0;
-    if (<u32>(u < 0x00800000) | (u >> 31)) {
+    if (u < 0x00800000 || <bool>(u >> 31)) {
       if (u << 1 == 0) return -1 / (x * x);
       if (u >> 31) return (x - x) / 0;
       k -= 25;
@@ -1704,7 +1704,7 @@ export namespace NativeMathf {
       Ox1p25f   = reinterpret<f32>(0x4C000000);
     var ix = reinterpret<u32>(x);
     var k = 0;
-    if (<u32>(ix < 0x00800000) | (ix >> 31)) {
+    if (ix < 0x00800000 || <bool>(ix >> 31)) {
       if (ix << 1 == 0) return -1 / (x * x);
       if (ix >> 31) return (x - x) / 0.0;
       k -= 25;
@@ -1864,7 +1864,7 @@ export namespace NativeMathf {
     var iy = hy & 0x7FFFFFFF;
     if (iy == 0) return 1.0; // x**0 = 1, even if x is NaN
     // if (hx == 0x3F800000) return 1.0; // C: 1**y = 1, even if y is NaN, JS: NaN
-    if (<i32>(ix > 0x7F800000) | <i32>(iy > 0x7F800000)) return x + y; // NaN if either arg is NaN
+    if (ix > 0x7F800000 || iy > 0x7F800000) return x + y; // NaN if either arg is NaN
     var yisint  = 0, j: i32, k: i32;
     if (hx < 0) {
       if (iy >= 0x4B800000) yisint = 2;
