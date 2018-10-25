@@ -13,8 +13,12 @@ function __gc(ref: usize): void {}
 export function allocateUnsafe(length: i32, skipGC: bool = false): String {
   assert(length > 0 && length <= MAX_LENGTH);
   var buffer: usize;
-  if (isManaged<String>() && !skipGC) {
-    buffer = __gc_allocate(HEADER_SIZE + (<usize>length << 1), __gc);  // tslint:disable-line
+  if (isManaged<String>()) {
+    if (skipGC) {
+      buffer = memory.allocate(HEADER_SIZE + (<usize>length << 1));
+    } else {
+      buffer = __gc_allocate(HEADER_SIZE + (<usize>length << 1), __gc);  // tslint:disable-line
+    }
   } else {
     buffer = memory.allocate(HEADER_SIZE + (<usize>length << 1));
   }

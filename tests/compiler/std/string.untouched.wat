@@ -9129,7 +9129,7 @@
        (call $~lib/env/abort
         (i32.const 0)
         (i32.const 112)
-        (i32.const 28)
+        (i32.const 32)
         (i32.const 4)
        )
        (unreachable)
