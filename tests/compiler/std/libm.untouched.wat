@@ -25,7 +25,7 @@
  (global $~lib/math/NativeMath.SQRT2 f64 (f64.const 1.4142135623730951))
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
  (global $NaN f64 (f64.const nan:0x8000000000000))
- (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
+ (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -281,12 +281,12 @@
    )
    (block
     (set_local $6
-     (f64.mul
-      (f64.add
-       (f64.const 1)
-       (get_local $0)
-      )
+     (f64.add
       (f64.const 0.5)
+      (f64.mul
+       (get_local $0)
+       (f64.const 0.5)
+      )
      )
     )
     (set_local $4
@@ -320,12 +320,12 @@
    )
   )
   (set_local $6
-   (f64.mul
-    (f64.sub
-     (f64.const 1)
-     (get_local $0)
-    )
+   (f64.sub
     (f64.const 0.5)
+    (f64.mul
+     (get_local $0)
+     (f64.const 0.5)
+    )
    )
   )
   (set_local $4
@@ -1246,14 +1246,14 @@
    )
   )
   (set_local $4
-   (f64.mul
-    (f64.sub
-     (f64.const 1)
+   (f64.sub
+    (f64.const 0.5)
+    (f64.mul
      (f64.abs
       (get_local $0)
      )
+     (f64.const 0.5)
     )
-    (f64.const 0.5)
    )
   )
   (set_local $5
@@ -1374,7 +1374,7 @@
  (func $~lib/math/NativeMath.asinh (; 10 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i64)
+  (local $3 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -1390,20 +1390,11 @@
    )
   )
   (set_local $3
-   (i64.shr_u
-    (get_local $1)
-    (i64.const 63)
-   )
-  )
-  (set_local $1
-   (i64.and
-    (get_local $1)
-    (i64.const 9223372036854775807)
-   )
-  )
-  (set_local $0
    (f64.reinterpret/i64
-    (get_local $1)
+    (i64.and
+     (get_local $1)
+     (i64.const 9223372036854775807)
+    )
    )
   )
   (if
@@ -1414,10 +1405,10 @@
      (i64.const 26)
     )
    )
-   (set_local $0
+   (set_local $3
     (f64.add
      (call $~lib/math/NativeMath.log
-      (get_local $0)
+      (get_local $3)
      )
      (f64.const 0.6931471805599453)
     )
@@ -1430,12 +1421,12 @@
       (i64.const 1)
      )
     )
-    (set_local $0
+    (set_local $3
      (call $~lib/math/NativeMath.log
       (f64.add
        (f64.mul
         (f64.const 2)
-        (get_local $0)
+        (get_local $3)
        )
        (f64.div
         (f64.const 1)
@@ -1443,13 +1434,13 @@
          (f64.sqrt
           (f64.add
            (f64.mul
-            (get_local $0)
-            (get_local $0)
+            (get_local $3)
+            (get_local $3)
            )
            (f64.const 1)
           )
          )
-         (get_local $0)
+         (get_local $3)
         )
        )
       )
@@ -1463,21 +1454,21 @@
        (i64.const 26)
       )
      )
-     (set_local $0
+     (set_local $3
       (call $~lib/math/NativeMath.log1p
        (f64.add
-        (get_local $0)
+        (get_local $3)
         (f64.div
          (f64.mul
-          (get_local $0)
-          (get_local $0)
+          (get_local $3)
+          (get_local $3)
          )
          (f64.add
           (f64.sqrt
            (f64.add
             (f64.mul
-             (get_local $0)
-             (get_local $0)
+             (get_local $3)
+             (get_local $3)
             )
             (f64.const 1)
            )
@@ -1491,14 +1482,8 @@
     )
    )
   )
-  (if (result f64)
-   (i64.ne
-    (get_local $3)
-    (i64.const 0)
-   )
-   (f64.neg
-    (get_local $0)
-   )
+  (f64.copysign
+   (get_local $3)
    (get_local $0)
   )
  )
@@ -1515,13 +1500,14 @@
  )
  (func $~lib/math/NativeMath.atan (; 13 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
-  (local $2 i32)
+  (local $2 f64)
   (local $3 f64)
   (local $4 i32)
   (local $5 f64)
   (local $6 f64)
   (local $7 f64)
-  (local $8 i32)
+  (local $8 f64)
+  (local $9 i32)
   (set_local $1
    (i32.wrap/i64
     (i64.shr_u
@@ -1533,10 +1519,7 @@
    )
   )
   (set_local $2
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
+   (get_local $0)
   )
   (set_local $1
    (i32.and
@@ -1567,12 +1550,9 @@
      )
     )
     (return
-     (if (result f64)
-      (get_local $2)
-      (f64.neg
-       (get_local $3)
-      )
+     (f64.copysign
       (get_local $3)
+      (get_local $2)
      )
     )
    )
@@ -1768,6 +1748,15 @@
     )
    )
   )
+  (set_local $8
+   (f64.mul
+    (get_local $0)
+    (f64.add
+     (get_local $6)
+     (get_local $7)
+    )
+   )
+  )
   (if
    (i32.lt_s
     (get_local $4)
@@ -1776,13 +1765,7 @@
    (return
     (f64.sub
      (get_local $0)
-     (f64.mul
-      (get_local $0)
-      (f64.add
-       (get_local $6)
-       (get_local $7)
-      )
-     )
+     (get_local $8)
     )
    )
   )
@@ -1792,30 +1775,30 @@
      (block $case2|0
       (block $case1|0
        (block $case0|0
-        (set_local $8
+        (set_local $9
          (get_local $4)
         )
         (br_if $case0|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 0)
          )
         )
         (br_if $case1|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 1)
          )
         )
         (br_if $case2|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 2)
          )
         )
         (br_if $case3|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 3)
          )
         )
@@ -1827,13 +1810,7 @@
           (f64.const 0.4636476090008061)
           (f64.sub
            (f64.sub
-            (f64.mul
-             (get_local $0)
-             (f64.add
-              (get_local $6)
-              (get_local $7)
-             )
-            )
+            (get_local $8)
             (f64.const 2.2698777452961687e-17)
            )
            (get_local $0)
@@ -1849,13 +1826,7 @@
          (f64.const 0.7853981633974483)
          (f64.sub
           (f64.sub
-           (f64.mul
-            (get_local $0)
-            (f64.add
-             (get_local $6)
-             (get_local $7)
-            )
-           )
+           (get_local $8)
            (f64.const 3.061616997868383e-17)
           )
           (get_local $0)
@@ -1871,13 +1842,7 @@
         (f64.const 0.982793723247329)
         (f64.sub
          (f64.sub
-          (f64.mul
-           (get_local $0)
-           (f64.add
-            (get_local $6)
-            (get_local $7)
-           )
-          )
+          (get_local $8)
           (f64.const 1.3903311031230998e-17)
          )
          (get_local $0)
@@ -1893,13 +1858,7 @@
        (f64.const 1.5707963267948966)
        (f64.sub
         (f64.sub
-         (f64.mul
-          (get_local $0)
-          (f64.add
-           (get_local $6)
-           (get_local $7)
-          )
-         )
+         (get_local $8)
          (f64.const 6.123233995736766e-17)
         )
         (get_local $0)
@@ -1911,12 +1870,9 @@
    )
    (unreachable)
   )
-  (if (result f64)
-   (get_local $2)
-   (f64.neg
-    (get_local $3)
-   )
+  (f64.copysign
    (get_local $3)
+   (get_local $2)
   )
  )
  (func $std/libm/atan (; 14 ;) (type $FF) (param $0 f64) (result f64)
@@ -2021,15 +1977,9 @@
     )
    )
   )
-  (if (result f64)
-   (i64.ne
-    (get_local $3)
-    (i64.const 0)
-   )
-   (f64.neg
-    (get_local $4)
-   )
+  (f64.copysign
    (get_local $4)
+   (get_local $0)
   )
  )
  (func $std/libm/atanh (; 16 ;) (type $FF) (param $0 f64) (result f64)
@@ -2222,12 +2172,12 @@
      )
      (f64.div
       (f64.neg
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
       (f64.const 2)
      )
      (f64.div
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
       (f64.const 2)
      )
     )
@@ -2279,7 +2229,7 @@
         )
         (return
          (f64.div
-          (f64.const 3.141592653589793)
+          (get_global $~lib/math/NativeMath.PI)
           (f64.const 4)
          )
         )
@@ -2287,7 +2237,7 @@
        (return
         (f64.div
          (f64.neg
-          (f64.const 3.141592653589793)
+          (get_global $~lib/math/NativeMath.PI)
          )
          (f64.const 4)
         )
@@ -2297,7 +2247,7 @@
        (f64.div
         (f64.mul
          (f64.const 3)
-         (f64.const 3.141592653589793)
+         (get_global $~lib/math/NativeMath.PI)
         )
         (f64.const 4)
        )
@@ -2307,7 +2257,7 @@
       (f64.div
        (f64.mul
         (f64.const -3)
-        (f64.const 3.141592653589793)
+        (get_global $~lib/math/NativeMath.PI)
        )
        (f64.const 4)
       )
@@ -2356,12 +2306,12 @@
        )
       )
       (return
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
      )
      (return
       (f64.neg
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
      )
     )
@@ -2395,12 +2345,12 @@
      )
      (f64.div
       (f64.neg
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
       (f64.const 2)
      )
      (f64.div
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
       (f64.const 2)
      )
     )
@@ -2486,7 +2436,7 @@
     )
     (return
      (f64.sub
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
       (f64.sub
        (get_local $9)
        (f64.const 1.2246467991473532e-16)
@@ -2500,7 +2450,7 @@
       (get_local $9)
       (f64.const 1.2246467991473532e-16)
      )
-     (f64.const 3.141592653589793)
+     (get_global $~lib/math/NativeMath.PI)
     )
    )
   )
@@ -2829,15 +2779,10 @@
       (get_local $0)
       (f64.const 709.782712893384)
      )
-     (block
-      (set_local $0
-       (f64.mul
-        (get_local $0)
-        (f64.const 8988465674311579538646525e283)
-       )
-      )
-      (return
+     (return
+      (f64.mul
        (get_local $0)
+       (f64.const 8988465674311579538646525e283)
       )
      )
     )
@@ -2852,82 +2797,51 @@
     (i32.const 1071001154)
    )
    (block
-    (if
-     (i32.lt_u
-      (get_local $2)
-      (i32.const 1072734898)
-     )
-     (if
-      (i32.eqz
-       (get_local $4)
-      )
-      (block
-       (set_local $7
-        (f64.sub
-         (get_local $0)
-         (f64.const 0.6931471803691238)
-        )
-       )
-       (set_local $8
-        (f64.const 1.9082149292705877e-10)
-       )
-       (set_local $3
+    (set_local $3
+     (select
+      (i32.sub
+       (i32.const 1)
+       (i32.shl
+        (get_local $4)
         (i32.const 1)
        )
       )
-      (block
-       (set_local $7
-        (f64.add
+      (i32.trunc_s/f64
+       (f64.add
+        (f64.mul
+         (f64.const 1.4426950408889634)
          (get_local $0)
-         (f64.const 0.6931471803691238)
+        )
+        (f64.copysign
+         (f64.const 0.5)
+         (get_local $0)
         )
        )
-       (set_local $8
-        (f64.neg
-         (f64.const 1.9082149292705877e-10)
-        )
-       )
-       (set_local $3
-        (i32.const -1)
-       )
+      )
+      (i32.lt_u
+       (get_local $2)
+       (i32.const 1072734898)
       )
      )
-     (block
-      (set_local $3
-       (i32.trunc_s/f64
-        (f64.add
-         (f64.mul
-          (f64.const 1.4426950408889634)
-          (get_local $0)
-         )
-         (if (result f64)
-          (get_local $4)
-          (f64.const -0.5)
-          (f64.const 0.5)
-         )
-        )
-       )
+    )
+    (set_local $6
+     (f64.convert_s/i32
+      (get_local $3)
+     )
+    )
+    (set_local $7
+     (f64.sub
+      (get_local $0)
+      (f64.mul
+       (get_local $6)
+       (f64.const 0.6931471803691238)
       )
-      (set_local $6
-       (f64.convert_s/i32
-        (get_local $3)
-       )
-      )
-      (set_local $7
-       (f64.sub
-        (get_local $0)
-        (f64.mul
-         (get_local $6)
-         (f64.const 0.6931471803691238)
-        )
-       )
-      )
-      (set_local $8
-       (f64.mul
-        (get_local $6)
-        (f64.const 1.9082149292705877e-10)
-       )
-      )
+     )
+    )
+    (set_local $8
+     (f64.mul
+      (get_local $6)
+      (f64.const 1.9082149292705877e-10)
      )
     )
     (set_local $0
@@ -3200,50 +3114,47 @@
     (i64.const 52)
    )
   )
+  (set_local $14
+   (f64.reinterpret/i64
+    (get_local $1)
+   )
+  )
   (if
    (i32.lt_s
     (get_local $3)
     (i32.const 20)
    )
    (set_local $14
-    (f64.mul
-     (f64.add
-      (f64.sub
-       (get_local $0)
-       (get_local $12)
-      )
-      (f64.sub
-       (f64.const 1)
-       (f64.reinterpret/i64
-        (get_local $1)
-       )
-      )
+    (f64.sub
+     (f64.sub
+      (f64.const 1)
+      (get_local $14)
      )
-     (get_local $13)
+     (get_local $12)
     )
    )
    (set_local $14
-    (f64.mul
+    (f64.sub
+     (f64.const 1)
      (f64.add
-      (f64.sub
-       (get_local $0)
-       (f64.add
-        (get_local $12)
-        (f64.reinterpret/i64
-         (get_local $1)
-        )
-       )
-      )
-      (f64.const 1)
+      (get_local $12)
+      (get_local $14)
      )
-     (get_local $13)
     )
    )
   )
-  (get_local $14)
+  (f64.mul
+   (f64.add
+    (get_local $0)
+    (get_local $14)
+   )
+   (get_local $13)
+  )
  )
  (func $~lib/math/NativeMath.scalbn (; 26 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
+  (local $3 i32)
+  (local $4 i32)
   (set_local $2
    (get_local $0)
   )
@@ -3278,18 +3189,20 @@
        )
       )
       (set_local $1
-       (i32.sub
-        (get_local $1)
-        (i32.const 1023)
-       )
-      )
-      (if
-       (i32.gt_s
-        (get_local $1)
-        (i32.const 1023)
-       )
-       (set_local $1
-        (i32.const 1023)
+       (select
+        (tee_local $3
+         (i32.sub
+          (get_local $1)
+          (i32.const 1023)
+         )
+        )
+        (tee_local $4
+         (i32.const 1023)
+        )
+        (i32.lt_s
+         (get_local $3)
+         (get_local $4)
+        )
        )
       )
      )
@@ -3304,13 +3217,19 @@
      (set_local $2
       (f64.mul
        (get_local $2)
-       (f64.const 2.2250738585072014e-308)
+       (f64.mul
+        (f64.const 2.2250738585072014e-308)
+        (f64.const 9007199254740992)
+       )
       )
      )
      (set_local $1
       (i32.add
        (get_local $1)
-       (i32.const 1022)
+       (i32.sub
+        (i32.const 1022)
+        (i32.const 53)
+       )
       )
      )
      (if
@@ -3322,22 +3241,30 @@
        (set_local $2
         (f64.mul
          (get_local $2)
-         (f64.const 2.2250738585072014e-308)
+         (f64.mul
+          (f64.const 2.2250738585072014e-308)
+          (f64.const 9007199254740992)
+         )
         )
        )
        (set_local $1
-        (i32.add
-         (get_local $1)
-         (i32.const 1022)
-        )
-       )
-       (if
-        (i32.lt_s
-         (get_local $1)
-         (i32.const -1022)
-        )
-        (set_local $1
-         (i32.const -1022)
+        (select
+         (tee_local $3
+          (i32.sub
+           (i32.add
+            (get_local $1)
+            (i32.const 1022)
+           )
+           (i32.const 53)
+          )
+         )
+         (tee_local $4
+          (i32.const -1022)
+         )
+         (i32.gt_s
+          (get_local $3)
+          (get_local $4)
+         )
         )
        )
       )
@@ -3466,11 +3393,11 @@
      )
      (set_local $5
       (i32.sub
-       (i32.sub
-        (i32.const 1)
+       (i32.const 1)
+       (i32.shl
         (get_local $2)
+        (i32.const 1)
        )
-       (get_local $2)
       )
      )
     )
@@ -3590,44 +3517,11 @@
    (get_local $5)
   )
  )
- (func $~lib/math/expo2 (; 28 ;) (type $FF) (param $0 f64) (result f64)
-  (local $1 f64)
-  (set_local $1
-   (f64.reinterpret/i64
-    (i64.shl
-     (i64.extend_u/i32
-      (i32.shl
-       (i32.add
-        (i32.const 1023)
-        (i32.div_u
-         (i32.const 2043)
-         (i32.const 2)
-        )
-       )
-       (i32.const 20)
-      )
-     )
-     (i64.const 32)
-    )
-   )
-  )
-  (f64.mul
-   (f64.mul
-    (call $~lib/math/NativeMath.exp
-     (f64.sub
-      (get_local $0)
-      (f64.const 1416.0996898839683)
-     )
-    )
-    (get_local $1)
-   )
-   (get_local $1)
-  )
- )
- (func $~lib/math/NativeMath.cosh (; 29 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cosh (; 28 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 f64)
+  (local $4 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -3686,10 +3580,10 @@
         (get_local $3)
         (get_local $3)
        )
-       (f64.mul
+       (f64.add
         (f64.const 2)
-        (f64.add
-         (f64.const 1)
+        (f64.mul
+         (f64.const 2)
          (get_local $3)
         )
        )
@@ -3724,42 +3618,72 @@
    )
   )
   (set_local $3
-   (call $~lib/math/expo2
-    (get_local $0)
+   (block $~lib/math/expo2|inlined.0 (result f64)
+    (set_local $4
+     (f64.reinterpret/i64
+      (i64.shl
+       (i64.extend_u/i32
+        (i32.shl
+         (i32.add
+          (i32.const 1023)
+          (i32.div_u
+           (i32.const 2043)
+           (i32.const 2)
+          )
+         )
+         (i32.const 20)
+        )
+       )
+       (i64.const 32)
+      )
+     )
+    )
+    (f64.mul
+     (f64.mul
+      (call $~lib/math/NativeMath.exp
+       (f64.sub
+        (get_local $0)
+        (f64.const 1416.0996898839683)
+       )
+      )
+      (get_local $4)
+     )
+     (get_local $4)
+    )
    )
   )
   (get_local $3)
  )
- (func $std/libm/cosh (; 30 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/cosh (; 29 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.cosh
    (get_local $0)
   )
  )
- (func $std/libm/exp (; 31 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/exp (; 30 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.exp
    (get_local $0)
   )
  )
- (func $std/libm/expm1 (; 32 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/expm1 (; 31 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.expm1
    (get_local $0)
   )
  )
- (func $std/libm/floor (; 33 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/floor (; 32 ;) (type $FF) (param $0 f64) (result f64)
   (block $~lib/math/NativeMath.floor|inlined.0 (result f64)
    (f64.floor
     (get_local $0)
    )
   )
  )
- (func $std/libm/fround (; 34 ;) (type $Ff) (param $0 f64) (result f32)
+ (func $std/libm/fround (; 33 ;) (type $Ff) (param $0 f64) (result f32)
   (block $~lib/math/NativeMath.fround|inlined.0 (result f32)
    (f32.demote/f64
     (get_local $0)
    )
   )
  )
- (func $~lib/math/NativeMath.hypot (; 35 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.hypot (; 34 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -3965,24 +3889,21 @@
   )
   (set_local $13
    (f64.add
-    (f64.add
-     (f64.sub
-      (f64.mul
-       (get_local $10)
-       (get_local $10)
-      )
-      (get_local $12)
-     )
+    (f64.sub
      (f64.mul
+      (get_local $10)
+      (get_local $10)
+     )
+     (get_local $12)
+    )
+    (f64.mul
+     (f64.add
       (f64.mul
        (f64.const 2)
        (get_local $10)
       )
       (get_local $11)
      )
-    )
-    (f64.mul
-     (get_local $11)
      (get_local $11)
     )
    )
@@ -4016,24 +3937,21 @@
   )
   (set_local $15
    (f64.add
-    (f64.add
-     (f64.sub
-      (f64.mul
-       (get_local $10)
-       (get_local $10)
-      )
-      (get_local $14)
-     )
+    (f64.sub
      (f64.mul
+      (get_local $10)
+      (get_local $10)
+     )
+     (get_local $14)
+    )
+    (f64.mul
+     (f64.add
       (f64.mul
        (f64.const 2)
        (get_local $10)
       )
       (get_local $11)
      )
-    )
-    (f64.mul
-     (get_local $11)
      (get_local $11)
     )
    )
@@ -4054,13 +3972,13 @@
    )
   )
  )
- (func $std/libm/hypot (; 36 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/hypot (; 35 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (call $~lib/math/NativeMath.hypot
    (get_local $0)
    (get_local $1)
   )
  )
- (func $~lib/math/NativeMath.imul (; 37 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.imul (; 36 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (f64.convert_s/i32
    (i32.mul
     (i32.trunc_s/f64
@@ -4072,18 +3990,18 @@
    )
   )
  )
- (func $std/libm/imul (; 38 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/imul (; 37 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (call $~lib/math/NativeMath.imul
    (get_local $0)
    (get_local $1)
   )
  )
- (func $std/libm/log (; 39 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log (; 38 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.log
    (get_local $0)
   )
  )
- (func $~lib/math/NativeMath.log10 (; 40 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log10 (; 39 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -4452,25 +4370,22 @@
     )
    )
   )
-  (set_local $15
-   (get_local $9)
-  )
   (f64.add
    (get_local $18)
-   (get_local $15)
+   (get_local $9)
   )
  )
- (func $std/libm/log10 (; 41 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log10 (; 40 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.log10
    (get_local $0)
   )
  )
- (func $std/libm/log1p (; 42 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log1p (; 41 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.log1p
    (get_local $0)
   )
  )
- (func $~lib/math/NativeMath.log2 (; 43 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log2 (; 42 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -4834,12 +4749,12 @@
    (get_local $15)
   )
  )
- (func $std/libm/log2 (; 44 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log2 (; 43 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.log2
    (get_local $0)
   )
  )
- (func $std/libm/max (; 45 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/max (; 44 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (block $~lib/math/NativeMath.max|inlined.0 (result f64)
    (f64.max
     (get_local $0)
@@ -4847,7 +4762,7 @@
    )
   )
  )
- (func $std/libm/min (; 46 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/min (; 45 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (block $~lib/math/NativeMath.min|inlined.0 (result f64)
    (f64.min
     (get_local $0)
@@ -4855,7 +4770,7 @@
    )
   )
  )
- (func $~lib/math/NativeMath.pow (; 47 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 46 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -4866,8 +4781,8 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 f64)
-  (local $13 f64)
+  (local $12 i32)
+  (local $13 i32)
   (local $14 f64)
   (local $15 f64)
   (local $16 f64)
@@ -4878,10 +4793,10 @@
   (local $21 f64)
   (local $22 f64)
   (local $23 f64)
-  (local $24 i32)
-  (local $25 i32)
-  (local $26 f64)
-  (local $27 f64)
+  (local $24 f64)
+  (local $25 f64)
+  (local $26 i32)
+  (local $27 i32)
   (local $28 f64)
   (local $29 f64)
   (local $30 f64)
@@ -4892,7 +4807,9 @@
   (local $35 f64)
   (local $36 f64)
   (local $37 f64)
-  (local $38 i32)
+  (local $38 f64)
+  (local $39 f64)
+  (local $40 i32)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -5041,78 +4958,49 @@
         (i32.const 1023)
        )
       )
-      (if
-       (i32.gt_s
+      (set_local $9
+       (i32.sub
+        (select
+         (i32.const 52)
+         (i32.const 20)
+         (i32.gt_s
+          (get_local $11)
+          (i32.const 20)
+         )
+        )
         (get_local $11)
-        (i32.const 20)
        )
-       (block
-        (set_local $9
-         (i32.shr_u
-          (get_local $6)
-          (i32.sub
-           (i32.const 52)
-           (get_local $11)
-          )
-         )
-        )
-        (if
-         (i32.eq
-          (i32.shl
-           (get_local $9)
-           (i32.sub
-            (i32.const 52)
-            (get_local $11)
-           )
-          )
-          (get_local $6)
-         )
-         (set_local $10
-          (i32.sub
-           (i32.const 2)
-           (i32.and
-            (get_local $9)
-            (i32.const 1)
-           )
-          )
-         )
+      )
+      (set_local $12
+       (select
+        (get_local $6)
+        (get_local $8)
+        (i32.gt_s
+         (get_local $11)
+         (i32.const 20)
         )
        )
-       (if
-        (i32.eq
-         (get_local $6)
-         (i32.const 0)
+      )
+      (set_local $13
+       (i32.shr_s
+        (get_local $12)
+        (get_local $9)
+       )
+      )
+      (if
+       (i32.eq
+        (i32.shl
+         (get_local $13)
+         (get_local $9)
         )
-        (block
-         (set_local $9
-          (i32.shr_s
-           (get_local $8)
-           (i32.sub
-            (i32.const 20)
-            (get_local $11)
-           )
-          )
-         )
-         (if
-          (i32.eq
-           (i32.shl
-            (get_local $9)
-            (i32.sub
-             (i32.const 20)
-             (get_local $11)
-            )
-           )
-           (get_local $8)
-          )
-          (set_local $10
-           (i32.sub
-            (i32.const 2)
-            (i32.and
-             (get_local $9)
-             (i32.const 1)
-            )
-           )
-          )
+        (get_local $12)
+       )
+       (set_local $10
+        (i32.sub
+         (i32.const 2)
+         (i32.and
+          (get_local $13)
+          (i32.const 1)
          )
         )
        )
@@ -5233,7 +5121,7 @@
     )
    )
   )
-  (set_local $12
+  (set_local $14
    (f64.abs
     (get_local $0)
    )
@@ -5245,40 +5133,40 @@
    )
    (if
     (if (result i32)
-     (tee_local $9
+     (tee_local $13
       (if (result i32)
-       (tee_local $9
+       (tee_local $13
         (i32.eq
          (get_local $7)
          (i32.const 2146435072)
         )
        )
-       (get_local $9)
+       (get_local $13)
        (i32.eq
         (get_local $7)
         (i32.const 0)
        )
       )
      )
-     (get_local $9)
+     (get_local $13)
      (i32.eq
       (get_local $7)
       (i32.const 1072693248)
      )
     )
     (block
-     (set_local $13
-      (get_local $12)
+     (set_local $15
+      (get_local $14)
      )
      (if
       (i32.lt_s
        (get_local $5)
        (i32.const 0)
       )
-      (set_local $13
+      (set_local $15
        (f64.div
         (f64.const 1)
-        (get_local $13)
+        (get_local $15)
        )
       )
      )
@@ -5298,15 +5186,15 @@
         )
         (i32.const 0)
        )
-       (set_local $13
+       (set_local $15
         (f64.div
          (f64.sub
-          (get_local $13)
-          (get_local $13)
+          (get_local $15)
+          (get_local $15)
          )
          (f64.sub
-          (get_local $13)
-          (get_local $13)
+          (get_local $15)
+          (get_local $15)
          )
         )
        )
@@ -5315,21 +5203,21 @@
          (get_local $10)
          (i32.const 1)
         )
-        (set_local $13
+        (set_local $15
          (f64.neg
-          (get_local $13)
+          (get_local $15)
          )
         )
        )
       )
      )
      (return
-      (get_local $13)
+      (get_local $15)
      )
     )
    )
   )
-  (set_local $14
+  (set_local $16
    (f64.const 1)
   )
   (if
@@ -5361,7 +5249,7 @@
       (get_local $10)
       (i32.const 1)
      )
-     (set_local $14
+     (set_local $16
       (f64.const -1)
      )
     )
@@ -5438,14 +5326,14 @@
        )
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1.e+300)
         )
         (f64.const 1.e+300)
        )
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1e-300)
         )
         (f64.const 1e-300)
@@ -5466,14 +5354,14 @@
        )
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1.e+300)
         )
         (f64.const 1.e+300)
        )
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1e-300)
         )
         (f64.const 1e-300)
@@ -5481,26 +5369,26 @@
       )
      )
     )
-    (set_local $20
+    (set_local $22
      (f64.sub
-      (get_local $12)
+      (get_local $14)
       (f64.const 1)
      )
     )
-    (set_local $23
+    (set_local $25
      (f64.mul
       (f64.mul
-       (get_local $20)
-       (get_local $20)
+       (get_local $22)
+       (get_local $22)
       )
       (f64.sub
        (f64.const 0.5)
        (f64.mul
-        (get_local $20)
+        (get_local $22)
         (f64.sub
          (f64.const 0.3333333333333333)
          (f64.mul
-          (get_local $20)
+          (get_local $22)
           (f64.const 0.25)
          )
         )
@@ -5508,52 +5396,52 @@
       )
      )
     )
-    (set_local $21
+    (set_local $23
      (f64.mul
       (f64.const 1.4426950216293335)
-      (get_local $20)
+      (get_local $22)
      )
     )
-    (set_local $22
+    (set_local $24
      (f64.sub
       (f64.mul
-       (get_local $20)
+       (get_local $22)
        (f64.const 1.9259629911266175e-08)
       )
       (f64.mul
-       (get_local $23)
+       (get_local $25)
        (f64.const 1.4426950408889634)
       )
      )
     )
-    (set_local $15
+    (set_local $17
      (f64.add
-      (get_local $21)
-      (get_local $22)
+      (get_local $23)
+      (get_local $24)
      )
     )
-    (set_local $15
+    (set_local $17
      (f64.reinterpret/i64
       (i64.and
        (i64.reinterpret/f64
-        (get_local $15)
+        (get_local $17)
        )
        (i64.const -4294967296)
       )
      )
     )
-    (set_local $16
+    (set_local $18
      (f64.sub
-      (get_local $22)
+      (get_local $24)
       (f64.sub
-       (get_local $15)
-       (get_local $21)
+       (get_local $17)
+       (get_local $23)
       )
      )
     )
    )
    (block
-    (set_local $25
+    (set_local $27
      (i32.const 0)
     )
     (if
@@ -5562,15 +5450,15 @@
       (i32.const 1048576)
      )
      (block
-      (set_local $12
+      (set_local $14
        (f64.mul
-        (get_local $12)
+        (get_local $14)
         (f64.const 9007199254740992)
        )
       )
-      (set_local $25
+      (set_local $27
        (i32.sub
-        (get_local $25)
+        (get_local $27)
         (i32.const 53)
        )
       )
@@ -5578,7 +5466,7 @@
        (i32.wrap/i64
         (i64.shr_u
          (i64.reinterpret/f64
-          (get_local $12)
+          (get_local $14)
          )
          (i64.const 32)
         )
@@ -5586,9 +5474,9 @@
       )
      )
     )
-    (set_local $25
+    (set_local $27
      (i32.add
-      (get_local $25)
+      (get_local $27)
       (i32.sub
        (i32.shr_s
         (get_local $7)
@@ -5598,7 +5486,7 @@
       )
      )
     )
-    (set_local $24
+    (set_local $26
      (i32.and
       (get_local $7)
       (i32.const 1048575)
@@ -5606,13 +5494,13 @@
     )
     (set_local $7
      (i32.or
-      (get_local $24)
+      (get_local $26)
       (i32.const 1072693248)
      )
     )
     (if
      (i32.le_s
-      (get_local $24)
+      (get_local $26)
       (i32.const 235662)
      )
      (set_local $11
@@ -5620,7 +5508,7 @@
      )
      (if
       (i32.lt_s
-       (get_local $24)
+       (get_local $26)
        (i32.const 767610)
       )
       (set_local $11
@@ -5630,9 +5518,9 @@
        (set_local $11
         (i32.const 0)
        )
-       (set_local $25
+       (set_local $27
         (i32.add
-         (get_local $25)
+         (get_local $27)
          (i32.const 1)
         )
        )
@@ -5645,12 +5533,12 @@
       )
      )
     )
-    (set_local $12
+    (set_local $14
      (f64.reinterpret/i64
       (i64.or
        (i64.and
         (i64.reinterpret/f64
-         (get_local $12)
+         (get_local $14)
         )
         (i64.const 4294967295)
        )
@@ -5663,48 +5551,48 @@
       )
      )
     )
-    (set_local $32
+    (set_local $34
      (select
       (f64.const 1.5)
       (f64.const 1)
       (get_local $11)
      )
     )
-    (set_local $21
+    (set_local $23
      (f64.sub
-      (get_local $12)
-      (get_local $32)
+      (get_local $14)
+      (get_local $34)
      )
     )
-    (set_local $22
+    (set_local $24
      (f64.div
       (f64.const 1)
       (f64.add
-       (get_local $12)
-       (get_local $32)
+       (get_local $14)
+       (get_local $34)
       )
      )
     )
-    (set_local $26
+    (set_local $28
      (f64.mul
-      (get_local $21)
-      (get_local $22)
+      (get_local $23)
+      (get_local $24)
      )
     )
-    (set_local $28
-     (get_local $26)
+    (set_local $30
+     (get_local $28)
     )
-    (set_local $28
+    (set_local $30
      (f64.reinterpret/i64
       (i64.and
        (i64.reinterpret/f64
-        (get_local $28)
+        (get_local $30)
        )
        (i64.const -4294967296)
       )
      )
     )
-    (set_local $30
+    (set_local $32
      (f64.reinterpret/i64
       (i64.shl
        (i64.extend_s/i32
@@ -5729,65 +5617,65 @@
       )
      )
     )
-    (set_local $31
+    (set_local $33
      (f64.sub
-      (get_local $12)
+      (get_local $14)
       (f64.sub
-       (get_local $30)
        (get_local $32)
+       (get_local $34)
+      )
+     )
+    )
+    (set_local $31
+     (f64.mul
+      (get_local $24)
+      (f64.sub
+       (f64.sub
+        (get_local $23)
+        (f64.mul
+         (get_local $30)
+         (get_local $32)
+        )
+       )
+       (f64.mul
+        (get_local $30)
+        (get_local $33)
+       )
       )
      )
     )
     (set_local $29
      (f64.mul
-      (get_local $22)
-      (f64.sub
-       (f64.sub
-        (get_local $21)
-        (f64.mul
-         (get_local $28)
-         (get_local $30)
-        )
-       )
-       (f64.mul
-        (get_local $28)
-        (get_local $31)
-       )
-      )
+      (get_local $28)
+      (get_local $28)
      )
     )
-    (set_local $27
-     (f64.mul
-      (get_local $26)
-      (get_local $26)
-     )
-    )
-    (set_local $19
+    (set_local $21
      (f64.mul
       (f64.mul
-       (get_local $27)
-       (get_local $27)
+       (get_local $29)
+       (get_local $29)
       )
       (f64.add
        (f64.const 0.5999999999999946)
        (f64.mul
-        (get_local $27)
+        (get_local $29)
         (f64.add
          (f64.const 0.4285714285785502)
          (f64.mul
-          (get_local $27)
+          (get_local $29)
           (f64.add
            (f64.const 0.33333332981837743)
            (f64.mul
-            (get_local $27)
+            (get_local $29)
             (f64.add
              (f64.const 0.272728123808534)
              (f64.mul
-              (get_local $27)
+              (get_local $29)
               (f64.add
                (f64.const 0.23066074577556175)
                (f64.mul
-                (get_local $27)
+                (get_local $29)
                 (f64.const 0.20697501780033842)
                )
               )
@@ -5801,76 +5689,147 @@
       )
      )
     )
-    (set_local $19
+    (set_local $21
      (f64.add
-      (get_local $19)
+      (get_local $21)
       (f64.mul
-       (get_local $29)
+       (get_local $31)
        (f64.add
+        (get_local $30)
         (get_local $28)
-        (get_local $26)
        )
       )
      )
     )
-    (set_local $27
+    (set_local $29
      (f64.mul
-      (get_local $28)
-      (get_local $28)
+      (get_local $30)
+      (get_local $30)
      )
     )
-    (set_local $30
+    (set_local $32
      (f64.add
       (f64.add
        (f64.const 3)
-       (get_local $27)
+       (get_local $29)
       )
-      (get_local $19)
+      (get_local $21)
      )
     )
-    (set_local $30
+    (set_local $32
      (f64.reinterpret/i64
       (i64.and
        (i64.reinterpret/f64
-        (get_local $30)
+        (get_local $32)
        )
        (i64.const -4294967296)
       )
      )
     )
-    (set_local $31
+    (set_local $33
      (f64.sub
-      (get_local $19)
+      (get_local $21)
       (f64.sub
        (f64.sub
-        (get_local $30)
+        (get_local $32)
         (f64.const 3)
        )
-       (get_local $27)
+       (get_local $29)
       )
      )
     )
-    (set_local $21
+    (set_local $23
      (f64.mul
-      (get_local $28)
       (get_local $30)
+      (get_local $32)
+     )
+    )
+    (set_local $24
+     (f64.add
+      (f64.mul
+       (get_local $31)
+       (get_local $32)
+      )
+      (f64.mul
+       (get_local $33)
+       (get_local $28)
+      )
+     )
+    )
+    (set_local $19
+     (f64.add
+      (get_local $23)
+      (get_local $24)
+     )
+    )
+    (set_local $19
+     (f64.reinterpret/i64
+      (i64.and
+       (i64.reinterpret/f64
+        (get_local $19)
+       )
+       (i64.const -4294967296)
+      )
+     )
+    )
+    (set_local $20
+     (f64.sub
+      (get_local $24)
+      (f64.sub
+       (get_local $19)
+       (get_local $23)
+      )
+     )
+    )
+    (set_local $35
+     (f64.mul
+      (f64.const 0.9617967009544373)
+      (get_local $19)
+     )
+    )
+    (set_local $36
+     (select
+      (f64.const 1.350039202129749e-08)
+      (f64.const 0)
+      (get_local $11)
+     )
+    )
+    (set_local $37
+     (f64.add
+      (f64.add
+       (f64.mul
+        (f64.const -7.028461650952758e-09)
+        (get_local $19)
+       )
+       (f64.mul
+        (get_local $20)
+        (f64.const 0.9617966939259756)
+       )
+      )
+      (get_local $36)
      )
     )
     (set_local $22
-     (f64.add
-      (f64.mul
-       (get_local $29)
-       (get_local $30)
-      )
-      (f64.mul
-       (get_local $31)
-       (get_local $26)
-      )
+     (f64.convert_s/i32
+      (get_local $27)
+     )
+    )
+    (set_local $38
+     (select
+      (f64.const 0.5849624872207642)
+      (f64.const 0)
+      (get_local $11)
      )
     )
     (set_local $17
      (f64.add
-      (get_local $21)
+      (f64.add
+       (f64.add
+        (get_local $35)
+        (get_local $37)
+       )
+       (get_local $38)
+      )
       (get_local $22)
      )
     )
@@ -5886,138 +5845,67 @@
     )
     (set_local $18
      (f64.sub
-      (get_local $22)
-      (f64.sub
-       (get_local $17)
-       (get_local $21)
-      )
-     )
-    )
-    (set_local $33
-     (f64.mul
-      (f64.const 0.9617967009544373)
-      (get_local $17)
-     )
-    )
-    (set_local $34
-     (select
-      (f64.const 1.350039202129749e-08)
-      (f64.const 0)
-      (get_local $11)
-     )
-    )
-    (set_local $35
-     (f64.add
-      (f64.add
-       (f64.mul
-        (f64.const -7.028461650952758e-09)
-        (get_local $17)
-       )
-       (f64.mul
-        (get_local $18)
-        (f64.const 0.9617966939259756)
-       )
-      )
-      (get_local $34)
-     )
-    )
-    (set_local $20
-     (f64.convert_s/i32
-      (get_local $25)
-     )
-    )
-    (set_local $36
-     (select
-      (f64.const 0.5849624872207642)
-      (f64.const 0)
-      (get_local $11)
-     )
-    )
-    (set_local $15
-     (f64.add
-      (f64.add
-       (f64.add
-        (get_local $33)
-        (get_local $35)
-       )
-       (get_local $36)
-      )
-      (get_local $20)
-     )
-    )
-    (set_local $15
-     (f64.reinterpret/i64
-      (i64.and
-       (i64.reinterpret/f64
-        (get_local $15)
-       )
-       (i64.const -4294967296)
-      )
-     )
-    )
-    (set_local $16
-     (f64.sub
-      (get_local $35)
+      (get_local $37)
       (f64.sub
        (f64.sub
         (f64.sub
-         (get_local $15)
-         (get_local $20)
+         (get_local $17)
+         (get_local $22)
         )
-        (get_local $36)
+        (get_local $38)
        )
-       (get_local $33)
+       (get_local $35)
       )
      )
     )
    )
   )
-  (set_local $37
+  (set_local $39
    (get_local $1)
   )
-  (set_local $37
+  (set_local $39
    (f64.reinterpret/i64
     (i64.and
      (i64.reinterpret/f64
-      (get_local $37)
+      (get_local $39)
      )
      (i64.const -4294967296)
     )
    )
   )
-  (set_local $18
+  (set_local $20
    (f64.add
     (f64.mul
      (f64.sub
       (get_local $1)
-      (get_local $37)
+      (get_local $39)
      )
-     (get_local $15)
+     (get_local $17)
     )
     (f64.mul
      (get_local $1)
-     (get_local $16)
+     (get_local $18)
     )
    )
   )
-  (set_local $17
+  (set_local $19
    (f64.mul
-    (get_local $37)
-    (get_local $15)
+    (get_local $39)
+    (get_local $17)
    )
   )
-  (set_local $13
+  (set_local $15
    (f64.add
-    (get_local $18)
-    (get_local $17)
+    (get_local $20)
+    (get_local $19)
    )
   )
   (set_local $2
    (i64.reinterpret/f64
-    (get_local $13)
+    (get_local $15)
    )
   )
-  (set_local $24
+  (set_local $26
    (i32.wrap/i64
     (i64.shr_u
      (get_local $2)
@@ -6025,14 +5913,14 @@
     )
    )
   )
-  (set_local $38
+  (set_local $40
    (i32.wrap/i64
     (get_local $2)
    )
   )
   (if
    (i32.ge_s
-    (get_local $24)
+    (get_local $26)
     (i32.const 1083179008)
    )
    (block
@@ -6040,17 +5928,17 @@
      (i32.ne
       (i32.or
        (i32.sub
-        (get_local $24)
+        (get_local $26)
         (i32.const 1083179008)
        )
-       (get_local $38)
+       (get_local $40)
       )
       (i32.const 0)
      )
      (return
       (f64.mul
        (f64.mul
-        (get_local $14)
+        (get_local $16)
         (f64.const 1.e+300)
        )
        (f64.const 1.e+300)
@@ -6060,18 +5948,18 @@
     (if
      (f64.gt
       (f64.add
-       (get_local $18)
+       (get_local $20)
        (f64.const 8.008566259537294e-17)
       )
       (f64.sub
-       (get_local $13)
-       (get_local $17)
+       (get_local $15)
+       (get_local $19)
       )
      )
      (return
       (f64.mul
        (f64.mul
-        (get_local $14)
+        (get_local $16)
         (f64.const 1.e+300)
        )
        (f64.const 1.e+300)
@@ -6082,7 +5970,7 @@
    (if
     (i32.ge_s
      (i32.and
-      (get_local $24)
+      (get_local $26)
       (i32.const 2147483647)
      )
      (i32.const 1083231232)
@@ -6092,17 +5980,17 @@
       (i32.ne
        (i32.or
         (i32.sub
-         (get_local $24)
+         (get_local $26)
          (i32.const -1064252416)
         )
-        (get_local $38)
+        (get_local $40)
        )
        (i32.const 0)
       )
       (return
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1e-300)
         )
         (f64.const 1e-300)
@@ -6111,16 +5999,16 @@
      )
      (if
       (f64.le
-       (get_local $18)
+       (get_local $20)
        (f64.sub
-        (get_local $13)
-        (get_local $17)
+        (get_local $15)
+        (get_local $19)
        )
       )
       (return
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1e-300)
         )
         (f64.const 1e-300)
@@ -6130,33 +6018,33 @@
     )
    )
   )
-  (set_local $38
+  (set_local $40
    (i32.and
-    (get_local $24)
+    (get_local $26)
     (i32.const 2147483647)
    )
   )
   (set_local $11
    (i32.sub
     (i32.shr_s
-     (get_local $38)
+     (get_local $40)
      (i32.const 20)
     )
     (i32.const 1023)
    )
   )
-  (set_local $25
+  (set_local $27
    (i32.const 0)
   )
   (if
    (i32.gt_s
-    (get_local $38)
+    (get_local $40)
     (i32.const 1071644672)
    )
    (block
-    (set_local $25
+    (set_local $27
      (i32.add
-      (get_local $24)
+      (get_local $26)
       (i32.shr_s
        (i32.const 1048576)
        (i32.add
@@ -6170,7 +6058,7 @@
      (i32.sub
       (i32.shr_s
        (i32.and
-        (get_local $25)
+        (get_local $27)
         (i32.const 2147483647)
        )
        (i32.const 20)
@@ -6178,15 +6066,15 @@
       (i32.const 1023)
      )
     )
-    (set_local $20
+    (set_local $22
      (f64.const 0)
     )
-    (set_local $20
+    (set_local $22
      (f64.reinterpret/i64
       (i64.shl
        (i64.extend_s/i32
         (i32.and
-         (get_local $25)
+         (get_local $27)
          (i32.xor
           (i32.shr_s
            (i32.const 1048575)
@@ -6200,11 +6088,11 @@
       )
      )
     )
-    (set_local $25
+    (set_local $27
      (i32.shr_s
       (i32.or
        (i32.and
-        (get_local $25)
+        (get_local $27)
         (i32.const 1048575)
        )
        (i32.const 1048576)
@@ -6217,106 +6105,106 @@
     )
     (if
      (i32.lt_s
-      (get_local $24)
+      (get_local $26)
       (i32.const 0)
      )
-     (set_local $25
+     (set_local $27
       (i32.sub
        (i32.const 0)
-       (get_local $25)
+       (get_local $27)
       )
      )
     )
-    (set_local $17
+    (set_local $19
      (f64.sub
-      (get_local $17)
-      (get_local $20)
+      (get_local $19)
+      (get_local $22)
      )
     )
    )
   )
-  (set_local $20
+  (set_local $22
    (f64.add
-    (get_local $18)
-    (get_local $17)
+    (get_local $20)
+    (get_local $19)
    )
   )
-  (set_local $20
+  (set_local $22
    (f64.reinterpret/i64
     (i64.and
      (i64.reinterpret/f64
-      (get_local $20)
+      (get_local $22)
      )
      (i64.const -4294967296)
     )
    )
   )
-  (set_local $21
+  (set_local $23
    (f64.mul
-    (get_local $20)
+    (get_local $22)
     (f64.const 0.6931471824645996)
    )
   )
-  (set_local $22
+  (set_local $24
    (f64.add
     (f64.mul
      (f64.sub
-      (get_local $18)
+      (get_local $20)
       (f64.sub
-       (get_local $20)
-       (get_local $17)
+       (get_local $22)
+       (get_local $19)
       )
      )
      (f64.const 0.6931471805599453)
     )
     (f64.mul
-     (get_local $20)
+     (get_local $22)
      (f64.const -1.904654299957768e-09)
     )
    )
   )
-  (set_local $13
+  (set_local $15
    (f64.add
-    (get_local $21)
-    (get_local $22)
+    (get_local $23)
+    (get_local $24)
    )
   )
-  (set_local $23
+  (set_local $25
    (f64.sub
-    (get_local $22)
+    (get_local $24)
     (f64.sub
-     (get_local $13)
-     (get_local $21)
+     (get_local $15)
+     (get_local $23)
     )
    )
   )
-  (set_local $20
+  (set_local $22
    (f64.mul
-    (get_local $13)
-    (get_local $13)
+    (get_local $15)
+    (get_local $15)
    )
   )
-  (set_local $15
+  (set_local $17
    (f64.sub
-    (get_local $13)
+    (get_local $15)
     (f64.mul
-     (get_local $20)
+     (get_local $22)
      (f64.add
       (f64.const 0.16666666666666602)
       (f64.mul
-       (get_local $20)
+       (get_local $22)
        (f64.add
         (f64.const -2.7777777777015593e-03)
         (f64.mul
-         (get_local $20)
+         (get_local $22)
          (f64.add
           (f64.const 6.613756321437934e-05)
           (f64.mul
-           (get_local $20)
+           (get_local $22)
            (f64.add
             (f64.const -1.6533902205465252e-06)
             (f64.mul
-             (get_local $20)
+             (get_local $22)
              (f64.const 4.1381367970572385e-08)
             )
            )
@@ -6329,51 +6217,51 @@
     )
    )
   )
-  (set_local $19
+  (set_local $21
    (f64.sub
     (f64.div
      (f64.mul
-      (get_local $13)
       (get_local $15)
+      (get_local $17)
      )
      (f64.sub
-      (get_local $15)
+      (get_local $17)
       (f64.const 2)
      )
     )
     (f64.add
-     (get_local $23)
+     (get_local $25)
      (f64.mul
-      (get_local $13)
-      (get_local $23)
+      (get_local $15)
+      (get_local $25)
      )
     )
    )
   )
-  (set_local $13
+  (set_local $15
    (f64.sub
     (f64.const 1)
     (f64.sub
-     (get_local $19)
-     (get_local $13)
+     (get_local $21)
+     (get_local $15)
     )
    )
   )
-  (set_local $24
+  (set_local $26
    (i32.wrap/i64
     (i64.shr_u
      (i64.reinterpret/f64
-      (get_local $13)
+      (get_local $15)
      )
      (i64.const 32)
     )
    )
   )
-  (set_local $24
+  (set_local $26
    (i32.add
-    (get_local $24)
+    (get_local $26)
     (i32.shl
-     (get_local $25)
+     (get_local $27)
      (i32.const 20)
     )
    )
@@ -6381,29 +6269,29 @@
   (if
    (i32.le_s
     (i32.shr_s
-     (get_local $24)
+     (get_local $26)
      (i32.const 20)
     )
     (i32.const 0)
    )
-   (set_local $13
+   (set_local $15
     (call $~lib/math/NativeMath.scalbn
-     (get_local $13)
-     (get_local $25)
+     (get_local $15)
+     (get_local $27)
     )
    )
-   (set_local $13
+   (set_local $15
     (f64.reinterpret/i64
      (i64.or
       (i64.and
        (i64.reinterpret/f64
-        (get_local $13)
+        (get_local $15)
        )
        (i64.const 4294967295)
       )
       (i64.shl
        (i64.extend_s/i32
-        (get_local $24)
+        (get_local $26)
        )
        (i64.const 32)
       )
@@ -6412,245 +6300,80 @@
    )
   )
   (f64.mul
-   (get_local $14)
-   (get_local $13)
+   (get_local $16)
+   (get_local $15)
   )
  )
- (func $std/libm/pow (; 48 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/pow (; 47 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (call $~lib/math/NativeMath.pow
    (get_local $0)
    (get_local $1)
   )
  )
- (func $~lib/math/NativeMath.round (; 49 ;) (type $FF) (param $0 f64) (result f64)
-  (local $1 i64)
-  (local $2 i32)
-  (local $3 f64)
-  (set_local $1
-   (i64.reinterpret/f64
-    (get_local $0)
-   )
-  )
-  (set_local $2
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $1)
-      (i64.const 52)
-     )
-     (i64.const 2047)
-    )
-   )
-  )
-  (if
-   (i32.ge_s
-    (get_local $2)
-    (i32.add
-     (i32.const 1023)
-     (i32.const 52)
-    )
-   )
-   (return
-    (get_local $0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $2)
-    (i32.sub
-     (i32.const 1023)
-     (i32.const 1)
-    )
-   )
-   (return
-    (f64.mul
-     (f64.const 0)
-     (get_local $0)
-    )
-   )
-  )
-  (if
-   (i64.ne
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (block
-    (set_local $3
+ (func $std/libm/round (; 48 ;) (type $FF) (param $0 f64) (result f64)
+  (block $~lib/math/NativeMath.round|inlined.0 (result f64)
+   (f64.copysign
+    (f64.floor
      (f64.add
-      (f64.sub
-       (f64.sub
-        (f64.const 4503599627370496)
-        (get_local $0)
-       )
-       (f64.const 4503599627370496)
-      )
       (get_local $0)
-     )
-    )
-    (if
-     (f64.ge
-      (get_local $3)
       (f64.const 0.5)
      )
-     (set_local $3
-      (f64.add
-       (f64.sub
-        (get_local $0)
-        (get_local $3)
-       )
-       (f64.const 1)
-      )
-     )
-     (if
-      (f64.lt
-       (get_local $3)
-       (f64.const -0.5)
-      )
-      (set_local $3
-       (f64.sub
-        (f64.sub
-         (get_local $0)
-         (get_local $3)
-        )
-        (f64.const 1)
-       )
-      )
-      (set_local $3
-       (f64.sub
-        (get_local $0)
-        (get_local $3)
-       )
-      )
-     )
-    )
-   )
-   (block
-    (set_local $3
-     (f64.sub
-      (f64.sub
-       (f64.add
-        (get_local $0)
-        (f64.const 4503599627370496)
-       )
-       (f64.const 4503599627370496)
-      )
-      (get_local $0)
-     )
-    )
-    (if
-     (f64.gt
-      (get_local $3)
-      (f64.const 0.5)
-     )
-     (set_local $3
-      (f64.sub
-       (f64.add
-        (get_local $3)
-        (get_local $0)
-       )
-       (f64.const 1)
-      )
-     )
-     (if
-      (f64.le
-       (get_local $3)
-       (f64.const -0.5)
-      )
-      (set_local $3
-       (f64.add
-        (f64.add
-         (get_local $3)
-         (get_local $0)
-        )
-        (f64.const 1)
-       )
-      )
-      (set_local $3
-       (f64.add
-        (get_local $3)
-        (get_local $0)
-       )
-      )
-     )
-    )
-   )
-  )
-  (get_local $3)
- )
- (func $std/libm/round (; 50 ;) (type $FF) (param $0 f64) (result f64)
-  (call $~lib/math/NativeMath.round
-   (get_local $0)
-  )
- )
- (func $std/libm/sign (; 51 ;) (type $FF) (param $0 f64) (result f64)
-  (block $~lib/math/NativeMath.sign|inlined.0 (result f64)
-   (if (result f64)
-    (f64.gt
-     (f64.abs
-      (get_local $0)
-     )
-     (f64.const 0)
-    )
-    (f64.copysign
-     (f64.const 1)
-     (get_local $0)
     )
     (get_local $0)
    )
   )
  )
- (func $~lib/math/NativeMath.sin (; 52 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sign (; 49 ;) (type $FF) (param $0 f64) (result f64)
+  (block $~lib/math/NativeMath.sign|inlined.0 (result f64)
+   (br $~lib/math/NativeMath.sign|inlined.0
+    (if (result f64)
+     (f64.gt
+      (get_local $0)
+      (f64.const 0)
+     )
+     (f64.const 1)
+     (if (result f64)
+      (f64.lt
+       (get_local $0)
+       (f64.const 0)
+      )
+      (f64.const -1)
+      (get_local $0)
+     )
+    )
+   )
+  )
+ )
+ (func $~lib/math/NativeMath.sin (; 50 ;) (type $FF) (param $0 f64) (result f64)
   (unreachable)
   (f64.const 0)
  )
- (func $std/libm/sin (; 53 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sin (; 51 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.sin
    (get_local $0)
   )
  )
- (func $~lib/math/NativeMath.sinh (; 54 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sinh (; 52 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
-  (local $3 f64)
-  (local $4 i32)
+  (local $3 i32)
+  (local $4 f64)
   (local $5 f64)
-  (set_local $1
-   (i64.reinterpret/f64
-    (get_local $0)
-   )
-  )
-  (set_local $2
-   (f64.const 0.5)
-  )
-  (if
-   (i64.ne
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (set_local $2
-    (f64.neg
-     (get_local $2)
-    )
-   )
-  )
+  (local $6 f64)
   (set_local $1
    (i64.and
-    (get_local $1)
+    (i64.reinterpret/f64
+     (get_local $0)
+    )
     (i64.const 9223372036854775807)
    )
   )
-  (set_local $3
+  (set_local $2
    (f64.reinterpret/i64
     (get_local $1)
    )
   )
-  (set_local $4
+  (set_local $3
    (i32.wrap/i64
     (i64.shr_u
      (get_local $1)
@@ -6658,26 +6381,32 @@
     )
    )
   )
+  (set_local $5
+   (f64.copysign
+    (f64.const 0.5)
+    (get_local $0)
+   )
+  )
   (if
    (i32.lt_u
-    (get_local $4)
+    (get_local $3)
     (i32.const 1082535490)
    )
    (block
-    (set_local $5
+    (set_local $4
      (call $~lib/math/NativeMath.expm1
-      (get_local $3)
+      (get_local $2)
      )
     )
     (if
      (i32.lt_u
-      (get_local $4)
+      (get_local $3)
       (i32.const 1072693248)
      )
      (block
       (if
        (i32.lt_u
-        (get_local $4)
+        (get_local $3)
         (i32.sub
          (i32.const 1072693248)
          (i32.shl
@@ -6692,19 +6421,19 @@
       )
       (return
        (f64.mul
-        (get_local $2)
+        (get_local $5)
         (f64.sub
          (f64.mul
           (f64.const 2)
-          (get_local $5)
+          (get_local $4)
          )
          (f64.div
           (f64.mul
-           (get_local $5)
-           (get_local $5)
+           (get_local $4)
+           (get_local $4)
           )
           (f64.add
-           (get_local $5)
+           (get_local $4)
            (f64.const 1)
           )
          )
@@ -6715,13 +6444,13 @@
     )
     (return
      (f64.mul
-      (get_local $2)
+      (get_local $5)
       (f64.add
-       (get_local $5)
+       (get_local $4)
        (f64.div
-        (get_local $5)
+        (get_local $4)
         (f64.add
-         (get_local $5)
+         (get_local $4)
          (f64.const 1)
         )
        )
@@ -6730,56 +6459,78 @@
     )
    )
   )
-  (set_local $5
+  (set_local $4
    (f64.mul
     (f64.mul
      (f64.const 2)
-     (get_local $2)
+     (get_local $5)
     )
-    (call $~lib/math/expo2
-     (get_local $3)
+    (block $~lib/math/expo2|inlined.1 (result f64)
+     (set_local $6
+      (f64.reinterpret/i64
+       (i64.shl
+        (i64.extend_u/i32
+         (i32.shl
+          (i32.add
+           (i32.const 1023)
+           (i32.div_u
+            (i32.const 2043)
+            (i32.const 2)
+           )
+          )
+          (i32.const 20)
+         )
+        )
+        (i64.const 32)
+       )
+      )
+     )
+     (f64.mul
+      (f64.mul
+       (call $~lib/math/NativeMath.exp
+        (f64.sub
+         (get_local $2)
+         (f64.const 1416.0996898839683)
+        )
+       )
+       (get_local $6)
+      )
+      (get_local $6)
+     )
     )
    )
   )
-  (get_local $5)
+  (get_local $4)
  )
- (func $std/libm/sinh (; 55 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sinh (; 53 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.sinh
    (get_local $0)
   )
  )
- (func $std/libm/sqrt (; 56 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sqrt (; 54 ;) (type $FF) (param $0 f64) (result f64)
   (block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
    (f64.sqrt
     (get_local $0)
    )
   )
  )
- (func $~lib/math/NativeMath.tan (; 57 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tan (; 55 ;) (type $FF) (param $0 f64) (result f64)
   (unreachable)
   (f64.const 0)
  )
- (func $std/libm/tan (; 58 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/tan (; 56 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.tan
    (get_local $0)
   )
  )
- (func $~lib/math/NativeMath.tanh (; 59 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tanh (; 57 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
-  (local $2 i32)
+  (local $2 f64)
   (local $3 i32)
   (local $4 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
-   )
-  )
-  (set_local $2
-   (i32.wrap/i64
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
    )
   )
   (set_local $1
@@ -6788,7 +6539,7 @@
     (i64.const 9223372036854775807)
    )
   )
-  (set_local $0
+  (set_local $2
    (f64.reinterpret/i64
     (get_local $1)
    )
@@ -6816,7 +6567,7 @@
       (f64.const 1)
       (f64.div
        (f64.const 0)
-       (get_local $0)
+       (get_local $2)
       )
      )
     )
@@ -6825,7 +6576,7 @@
       (call $~lib/math/NativeMath.expm1
        (f64.mul
         (f64.const 2)
-        (get_local $0)
+        (get_local $2)
        )
       )
      )
@@ -6853,7 +6604,7 @@
       (call $~lib/math/NativeMath.expm1
        (f64.mul
         (f64.const 2)
-        (get_local $0)
+        (get_local $2)
        )
       )
      )
@@ -6877,7 +6628,7 @@
        (call $~lib/math/NativeMath.expm1
         (f64.mul
          (f64.const -2)
-         (get_local $0)
+         (get_local $2)
         )
        )
       )
@@ -6894,31 +6645,28 @@
       )
      )
      (set_local $4
-      (get_local $0)
+      (get_local $2)
      )
     )
    )
   )
-  (if (result f64)
-   (get_local $2)
-   (f64.neg
-    (get_local $4)
-   )
+  (f64.copysign
    (get_local $4)
+   (get_local $0)
   )
  )
- (func $std/libm/tanh (; 60 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/tanh (; 58 ;) (type $FF) (param $0 f64) (result f64)
   (call $~lib/math/NativeMath.tanh
    (get_local $0)
   )
  )
- (func $std/libm/trunc (; 61 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/trunc (; 59 ;) (type $FF) (param $0 f64) (result f64)
   (block $~lib/math/NativeMath.trunc|inlined.0 (result f64)
    (f64.trunc
     (get_local $0)
    )
   )
  )
- (func $null (; 62 ;) (type $v)
+ (func $null (; 60 ;) (type $v)
  )
 )
