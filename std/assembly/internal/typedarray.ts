@@ -63,8 +63,30 @@ export abstract class TypedArray<T,V> {
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
 
+  fill(value: V, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    var buffer = this.buffer;
+    var byteOffset = this.byteOffset;
+    var len = this.length;
+    start = start < 0 ? max(len + start, 0) : min(start, len);
+    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+    if (sizeof<T>() == 1) {
+      if (start < end) {
+        memory.fill(
+          changetype<usize>(buffer) + start + byteOffset + AB_HEADER_SIZE,
+          <u8>value,
+          <usize>(end - start)
+        );
+      }
+    } else {
+      for (; start < end; ++start) {
+        storeUnsafeWithOffset<T,V>(buffer, start, value, byteOffset);
+      }
+    }
+    return this;
+  }
+
   @inline
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): TypedArray<T,V> {
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): TypedArray<T,V> {
     var length = this.length;
     if (begin < 0) begin = max(length + begin, 0);
     else begin = min(begin, length);
