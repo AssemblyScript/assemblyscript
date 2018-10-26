@@ -6,10 +6,10 @@
     "build": "tsc --project ./src --outDir . --diagnostics"
   },
   "peerDependencies": {
-    "tslint": "^5.9.1"
+    "tslint": "^5.11.0"
   },
   "devDependencies": {
-    "typescript": "^2.7.2"
+    "typescript": "^3.1.2"
   },
   "files": [
     "base.json",

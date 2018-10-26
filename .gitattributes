@@ -1,3 +1,4 @@
 bin/* text eol=lf
 dist/* binary
 scripts/*.sh eol=lf
+lib/binaryen.js binary

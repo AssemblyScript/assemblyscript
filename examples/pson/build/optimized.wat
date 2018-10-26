@@ -6,6 +6,9 @@
  (type $Fv (func (param f64)))
  (type $i (func (result i32)))
  (type $I (func (result i64)))
+ (memory $0 0)
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (import "pson" "onNull" (func $assembly/pson/onNull))
  (import "pson" "onTrue" (func $assembly/pson/onTrue))
  (import "pson" "onFalse" (func $assembly/pson/onFalse))
@@ -21,8 +24,8 @@
  (import "pson" "onString" (func $assembly/pson/onString (param i32 i32)))
  (import "pson" "onBinary" (func $assembly/pson/onBinary (param i32 i32)))
  (global $assembly/pson/offset (mut i32) (i32.const 0))
- (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "onNull" (func $assembly/pson/onNull))
  (export "onTrue" (func $assembly/pson/onTrue))
  (export "onFalse" (func $assembly/pson/onFalse))
@@ -38,7 +41,7 @@
  (export "onString" (func $assembly/pson/onString))
  (export "onBinary" (func $assembly/pson/onBinary))
  (export "decode" (func $assembly/pson/decode))
- (func $assembly/pson/readVarint32 (; 14 ;) (type $i) (result i32)
+ (func $assembly/pson/readVarint32 (; 14 ;) (; has Stack IR ;) (type $i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -103,7 +106,7 @@
   ;;@ assembly/pson.ts:140:9
   (get_local $0)
  )
- (func $assembly/pson/readVarint64 (; 15 ;) (type $I) (result i64)
+ (func $assembly/pson/readVarint64 (; 15 ;) (; has Stack IR ;) (type $I) (result i64)
   (local $0 i64)
   (local $1 i32)
   (local $2 i64)
@@ -169,7 +172,7 @@
   ;;@ assembly/pson.ts:151:9
   (get_local $0)
  )
- (func $assembly/pson/decodeValue (; 16 ;) (type $v)
+ (func $assembly/pson/decodeValue (; 16 ;) (; has Stack IR ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -535,7 +538,7 @@
    )
   )
  )
- (func $assembly/pson/decode (; 17 ;) (type $iv) (param $0 i32)
+ (func $assembly/pson/decode (; 17 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
   ;;@ assembly/pson.ts:40:2
   (set_global $assembly/pson/offset
    ;;@ assembly/pson.ts:40:11
@@ -567,5 +570,8 @@
    ;;@ assembly/pson.ts:42:24
    (unreachable)
   )
+ )
+ (func $null (; 18 ;) (; has Stack IR ;) (type $v)
+  (nop)
  )
 )

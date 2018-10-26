@@ -5,7 +5,10 @@
  (type $v (func))
  (type $FUNCSIG$dd (func (param f64) (result f64)))
  (memory $0 0)
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
  (func $~lib/math/NativeMath.log (; 0 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
@@ -487,6 +490,55 @@
       (br $repeat|2)
      )
     )
+    (set_local $2
+     (if (result i32)
+      (call $~lib/builtins/isFinite<f64>
+       (tee_local $6
+        (f64.div
+         (call $~lib/math/NativeMath.log
+          (call $~lib/math/NativeMath.log
+           (f64.sqrt
+            (f64.add
+             (f64.mul
+              (get_local $4)
+              (get_local $4)
+             )
+             (f64.mul
+              (get_local $5)
+              (get_local $5)
+             )
+            )
+           )
+          )
+         )
+         (f64.const 0.6931471805599453)
+        )
+       )
+      )
+      (i32.trunc_u/f64
+       (f64.mul
+        (f64.const 2047)
+        (call $../../examples/mandelbrot/assembly/index/clamp<f64>
+         (f64.div
+          (f64.sub
+           (f64.convert_u/i32
+            (i32.add
+             (get_local $2)
+             (i32.const 1)
+            )
+           )
+           (get_local $6)
+          )
+          (f64.convert_u/i32
+           (get_local $3)
+          )
+         )
+        )
+       )
+      )
+      (i32.const 2047)
+     )
+    )
     (i32.store16
      (i32.shl
       (i32.add
@@ -498,55 +550,7 @@
       )
       (i32.const 1)
      )
-     (tee_local $2
-      (if (result i32)
-       (call $~lib/builtins/isFinite<f64>
-        (tee_local $6
-         (f64.div
-          (call $~lib/math/NativeMath.log
-           (call $~lib/math/NativeMath.log
-            (f64.sqrt
-             (f64.add
-              (f64.mul
-               (get_local $4)
-               (get_local $4)
-              )
-              (f64.mul
-               (get_local $5)
-               (get_local $5)
-              )
-             )
-            )
-           )
-          )
-          (f64.const 0.6931471805599453)
-         )
-        )
-       )
-       (i32.trunc_u/f64
-        (f64.mul
-         (f64.const 2047)
-         (call $../../examples/mandelbrot/assembly/index/clamp<f64>
-          (f64.div
-           (f64.sub
-            (f64.convert_u/i32
-             (i32.add
-              (get_local $2)
-              (i32.const 1)
-             )
-            )
-            (get_local $6)
-           )
-           (f64.convert_u/i32
-            (get_local $3)
-           )
-          )
-         )
-        )
-       )
-       (i32.const 2047)
-      )
-     )
+     (get_local $2)
     )
     (set_local $7
      (i32.add

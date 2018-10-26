@@ -19,46 +19,52 @@
  (type $F (func (result f64)))
  (type $Iv (func (param i64)))
  (type $II (func (param i64) (result i64)))
+ (type $ii (func (param i32) (result i32)))
  (type $f (func (result f32)))
  (type $IiI (func (param i64 i32) (result i64)))
  (type $v (func))
+ (memory $0 1)
+ (data (i32.const 8) "\0b\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s\00")
+ (data (i32.const 40) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
+ (table 1 anyfunc)
+ (elem (i32.const 0) $null)
+ (import "Math" "E" (global $~lib/bindings/Math/E f64))
+ (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
+ (import "Math" "LN10" (global $~lib/bindings/Math/LN10 f64))
+ (import "Math" "LOG2E" (global $~lib/bindings/Math/LOG2E f64))
+ (import "Math" "PI" (global $~lib/bindings/Math/PI f64))
+ (import "Math" "SQRT1_2" (global $~lib/bindings/Math/SQRT1_2 f64))
+ (import "Math" "SQRT2" (global $~lib/bindings/Math/SQRT2 f64))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (import "JSMath" "E" (global $~lib/math/JSMath.E f64))
- (import "JSMath" "LN2" (global $~lib/math/JSMath.LN2 f64))
- (import "JSMath" "LN10" (global $~lib/math/JSMath.LN10 f64))
- (import "JSMath" "LOG2E" (global $~lib/math/JSMath.LOG2E f64))
- (import "JSMath" "PI" (global $~lib/math/JSMath.PI f64))
- (import "JSMath" "SQRT1_2" (global $~lib/math/JSMath.SQRT1_2 f64))
- (import "JSMath" "SQRT2" (global $~lib/math/JSMath.SQRT2 f64))
- (import "JSMath" "abs" (func $~lib/math/JSMath.abs (param f64) (result f64)))
- (import "JSMath" "acos" (func $~lib/math/JSMath.acos (param f64) (result f64)))
- (import "JSMath" "acosh" (func $~lib/math/JSMath.acosh (param f64) (result f64)))
- (import "JSMath" "asin" (func $~lib/math/JSMath.asin (param f64) (result f64)))
- (import "JSMath" "asinh" (func $~lib/math/JSMath.asinh (param f64) (result f64)))
- (import "JSMath" "atan" (func $~lib/math/JSMath.atan (param f64) (result f64)))
- (import "JSMath" "atanh" (func $~lib/math/JSMath.atanh (param f64) (result f64)))
- (import "JSMath" "atan2" (func $~lib/math/JSMath.atan2 (param f64 f64) (result f64)))
- (import "JSMath" "cbrt" (func $~lib/math/JSMath.cbrt (param f64) (result f64)))
- (import "JSMath" "ceil" (func $~lib/math/JSMath.ceil (param f64) (result f64)))
- (import "JSMath" "cosh" (func $~lib/math/JSMath.cosh (param f64) (result f64)))
- (import "JSMath" "exp" (func $~lib/math/JSMath.exp (param f64) (result f64)))
- (import "JSMath" "expm1" (func $~lib/math/JSMath.expm1 (param f64) (result f64)))
- (import "JSMath" "floor" (func $~lib/math/JSMath.floor (param f64) (result f64)))
- (import "JSMath" "hypot" (func $~lib/math/JSMath.hypot (param f64 f64) (result f64)))
- (import "JSMath" "log" (func $~lib/math/JSMath.log (param f64) (result f64)))
- (import "JSMath" "log10" (func $~lib/math/JSMath.log10 (param f64) (result f64)))
- (import "JSMath" "log1p" (func $~lib/math/JSMath.log1p (param f64) (result f64)))
- (import "JSMath" "log2" (func $~lib/math/JSMath.log2 (param f64) (result f64)))
- (import "JSMath" "max" (func $~lib/math/JSMath.max (param f64 f64) (result f64)))
- (import "JSMath" "min" (func $~lib/math/JSMath.min (param f64 f64) (result f64)))
- (import "JSOp" "mod" (func $std/math/JSOp.mod (param f64 f64) (result f64)))
- (import "JSMath" "pow" (func $~lib/math/JSMath.pow (param f64 f64) (result f64)))
- (import "JSMath" "random" (func $~lib/math/JSMath.random (result f64)))
- (import "JSMath" "sign" (func $~lib/math/JSMath.sign (param f64) (result f64)))
- (import "JSMath" "sinh" (func $~lib/math/JSMath.sinh (param f64) (result f64)))
- (import "JSMath" "sqrt" (func $~lib/math/JSMath.sqrt (param f64) (result f64)))
- (import "JSMath" "tanh" (func $~lib/math/JSMath.tanh (param f64) (result f64)))
- (import "JSMath" "trunc" (func $~lib/math/JSMath.trunc (param f64) (result f64)))
+ (import "Math" "abs" (func $~lib/bindings/Math/abs (param f64) (result f64)))
+ (import "Math" "acos" (func $~lib/bindings/Math/acos (param f64) (result f64)))
+ (import "Math" "acosh" (func $~lib/bindings/Math/acosh (param f64) (result f64)))
+ (import "Math" "asin" (func $~lib/bindings/Math/asin (param f64) (result f64)))
+ (import "Math" "asinh" (func $~lib/bindings/Math/asinh (param f64) (result f64)))
+ (import "Math" "atan" (func $~lib/bindings/Math/atan (param f64) (result f64)))
+ (import "Math" "atanh" (func $~lib/bindings/Math/atanh (param f64) (result f64)))
+ (import "Math" "atan2" (func $~lib/bindings/Math/atan2 (param f64 f64) (result f64)))
+ (import "Math" "cbrt" (func $~lib/bindings/Math/cbrt (param f64) (result f64)))
+ (import "Math" "ceil" (func $~lib/bindings/Math/ceil (param f64) (result f64)))
+ (import "Math" "cosh" (func $~lib/bindings/Math/cosh (param f64) (result f64)))
+ (import "Math" "exp" (func $~lib/bindings/Math/exp (param f64) (result f64)))
+ (import "Math" "expm1" (func $~lib/bindings/Math/expm1 (param f64) (result f64)))
+ (import "Math" "floor" (func $~lib/bindings/Math/floor (param f64) (result f64)))
+ (import "Math" "hypot" (func $~lib/bindings/Math/hypot (param f64 f64) (result f64)))
+ (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
+ (import "Math" "log10" (func $~lib/bindings/Math/log10 (param f64) (result f64)))
+ (import "Math" "log1p" (func $~lib/bindings/Math/log1p (param f64) (result f64)))
+ (import "Math" "log2" (func $~lib/bindings/Math/log2 (param f64) (result f64)))
+ (import "Math" "max" (func $~lib/bindings/Math/max (param f64 f64) (result f64)))
+ (import "Math" "min" (func $~lib/bindings/Math/min (param f64 f64) (result f64)))
+ (import "math" "mod" (func $std/math/mod (param f64 f64) (result f64)))
+ (import "Math" "pow" (func $~lib/bindings/Math/pow (param f64 f64) (result f64)))
+ (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
+ (import "Math" "sign" (func $~lib/bindings/Math/sign (param f64) (result f64)))
+ (import "Math" "sinh" (func $~lib/bindings/Math/sinh (param f64) (result f64)))
+ (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
+ (import "Math" "tanh" (func $~lib/bindings/Math/tanh (param f64) (result f64)))
+ (import "Math" "trunc" (func $~lib/bindings/Math/trunc (param f64) (result f64)))
  (global $std/math/js i32 (i32.const 1))
  (global $std/math/INEXACT i32 (i32.const 1))
  (global $std/math/INVALID i32 (i32.const 2))
@@ -82,18 +88,14 @@
  (global $~lib/math/NativeMathf.SQRT2 f32 (f32.const 1.4142135381698608))
  (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
- (global $~lib/math/random_state0 (mut i64) (i64.const 0))
- (global $~lib/math/random_state1 (mut i64) (i64.const 0))
- (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
- (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
+ (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
+ (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
+ (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
+ (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
  (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 68))
- (table 1 1 anyfunc)
- (elem (i32.const 0) $null)
- (memory $0 1)
- (data (i32.const 8) "\0b\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s\00")
- (data (i32.const 40) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $~lib/builtins/isNaN<f64> (; 30 ;) (type $Fi) (param $0 f64) (result i32)
   (f64.ne
@@ -160,6 +162,8 @@
  )
  (func $~lib/math/NativeMath.scalbn (; 34 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
+  (local $3 i32)
+  (local $4 i32)
   (set_local $2
    (get_local $0)
   )
@@ -194,18 +198,20 @@
        )
       )
       (set_local $1
-       (i32.sub
-        (get_local $1)
-        (i32.const 1023)
-       )
-      )
-      (if
-       (i32.gt_s
-        (get_local $1)
-        (i32.const 1023)
-       )
-       (set_local $1
-        (i32.const 1023)
+       (select
+        (tee_local $3
+         (i32.sub
+          (get_local $1)
+          (i32.const 1023)
+         )
+        )
+        (tee_local $4
+         (i32.const 1023)
+        )
+        (i32.lt_s
+         (get_local $3)
+         (get_local $4)
+        )
        )
       )
      )
@@ -220,13 +226,19 @@
      (set_local $2
       (f64.mul
        (get_local $2)
-       (f64.const 2.2250738585072014e-308)
+       (f64.mul
+        (f64.const 2.2250738585072014e-308)
+        (f64.const 9007199254740992)
+       )
       )
      )
      (set_local $1
       (i32.add
        (get_local $1)
-       (i32.const 1022)
+       (i32.sub
+        (i32.const 1022)
+        (i32.const 53)
+       )
       )
      )
      (if
@@ -238,22 +250,30 @@
        (set_local $2
         (f64.mul
          (get_local $2)
-         (f64.const 2.2250738585072014e-308)
+         (f64.mul
+          (f64.const 2.2250738585072014e-308)
+          (f64.const 9007199254740992)
+         )
         )
        )
        (set_local $1
-        (i32.add
-         (get_local $1)
-         (i32.const 1022)
-        )
-       )
-       (if
-        (i32.lt_s
-         (get_local $1)
-         (i32.const -1022)
-        )
-        (set_local $1
-         (i32.const -1022)
+        (select
+         (tee_local $3
+          (i32.sub
+           (i32.add
+            (get_local $1)
+            (i32.const 1022)
+           )
+           (i32.const 53)
+          )
+         )
+         (tee_local $4
+          (i32.const -1022)
+         )
+         (i32.gt_s
+          (get_local $3)
+          (get_local $4)
+         )
         )
        )
       )
@@ -457,6 +477,8 @@
  )
  (func $~lib/math/NativeMathf.scalbn (; 41 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
+  (local $3 i32)
+  (local $4 i32)
   (set_local $2
    (get_local $0)
   )
@@ -491,18 +513,20 @@
        )
       )
       (set_local $1
-       (i32.sub
-        (get_local $1)
-        (i32.const 127)
-       )
-      )
-      (if
-       (i32.gt_s
-        (get_local $1)
-        (i32.const 127)
-       )
-       (set_local $1
-        (i32.const 127)
+       (select
+        (tee_local $3
+         (i32.sub
+          (get_local $1)
+          (i32.const 127)
+         )
+        )
+        (tee_local $4
+         (i32.const 127)
+        )
+        (i32.lt_s
+         (get_local $3)
+         (get_local $4)
+        )
        )
       )
      )
@@ -517,13 +541,19 @@
      (set_local $2
       (f32.mul
        (get_local $2)
-       (f32.const 1.1754943508222875e-38)
+       (f32.mul
+        (f32.const 1.1754943508222875e-38)
+        (f32.const 16777216)
+       )
       )
      )
      (set_local $1
       (i32.add
        (get_local $1)
-       (i32.const 126)
+       (i32.sub
+        (i32.const 126)
+        (i32.const 24)
+       )
       )
      )
      (if
@@ -535,22 +565,30 @@
        (set_local $2
         (f32.mul
          (get_local $2)
-         (f32.const 1.1754943508222875e-38)
+         (f32.mul
+          (f32.const 1.1754943508222875e-38)
+          (f32.const 16777216)
+         )
         )
        )
        (set_local $1
-        (i32.add
-         (get_local $1)
-         (i32.const 126)
-        )
-       )
-       (if
-        (i32.lt_s
-         (get_local $1)
-         (i32.const -126)
-        )
-        (set_local $1
-         (i32.const -126)
+        (select
+         (tee_local $3
+          (i32.sub
+           (i32.add
+            (get_local $1)
+            (i32.const 126)
+           )
+           (i32.const 24)
+          )
+         )
+         (tee_local $4
+          (i32.const -126)
+         )
+         (i32.gt_s
+          (get_local $3)
+          (get_local $4)
+         )
         )
        )
       )
@@ -736,7 +774,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.abs
+     (call $~lib/bindings/Math/abs
       (get_local $0)
      )
      (get_local $1)
@@ -962,12 +1000,12 @@
    )
    (block
     (set_local $6
-     (f64.mul
-      (f64.add
-       (f64.const 1)
-       (get_local $0)
-      )
+     (f64.add
       (f64.const 0.5)
+      (f64.mul
+       (get_local $0)
+       (f64.const 0.5)
+      )
      )
     )
     (set_local $4
@@ -1001,12 +1039,12 @@
    )
   )
   (set_local $6
-   (f64.mul
-    (f64.sub
-     (f64.const 1)
-     (get_local $0)
-    )
+   (f64.sub
     (f64.const 0.5)
+    (f64.mul
+     (get_local $0)
+     (f64.const 0.5)
+    )
    )
   )
   (set_local $4
@@ -1079,7 +1117,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.acos
+     (call $~lib/bindings/Math/acos
       (get_local $0)
      )
      (get_local $1)
@@ -1234,12 +1272,12 @@
    )
    (block
     (set_local $3
-     (f32.mul
-      (f32.add
-       (f32.const 1)
-       (get_local $0)
-      )
+     (f32.add
       (f32.const 0.5)
+      (f32.mul
+       (get_local $0)
+       (f32.const 0.5)
+      )
      )
     )
     (set_local $5
@@ -1273,12 +1311,12 @@
    )
   )
   (set_local $3
-   (f32.mul
-    (f32.sub
-     (f32.const 1)
-     (get_local $0)
-    )
+   (f32.sub
     (f32.const 0.5)
+    (f32.mul
+     (get_local $0)
+     (f32.const 0.5)
+    )
    )
   )
   (set_local $5
@@ -2110,7 +2148,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.acosh
+     (call $~lib/bindings/Math/acosh
       (get_local $0)
      )
      (get_local $1)
@@ -2662,6 +2700,7 @@
  (func $~lib/math/NativeMathf.acosh (; 60 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 f32)
   (set_local $1
    (i32.reinterpret/f32
     (get_local $0)
@@ -2684,30 +2723,23 @@
      )
     )
    )
-   (return
-    (call $~lib/math/NativeMathf.log1p
-     (f32.add
-      (f32.sub
-       (get_local $0)
-       (f32.const 1)
-      )
-      (f32.sqrt
-       (f32.add
+   (block
+    (set_local $3
+     (f32.sub
+      (get_local $0)
+      (f32.const 1)
+     )
+    )
+    (return
+     (call $~lib/math/NativeMathf.log1p
+      (f32.add
+       (get_local $3)
+       (f32.sqrt
         (f32.mul
-         (f32.sub
-          (get_local $0)
-          (f32.const 1)
-         )
-         (f32.sub
-          (get_local $0)
-          (f32.const 1)
-         )
-        )
-        (f32.mul
-         (f32.const 2)
-         (f32.sub
-          (get_local $0)
-          (f32.const 1)
+         (get_local $3)
+         (f32.add
+          (get_local $3)
+          (f32.const 2)
          )
         )
        )
@@ -2883,14 +2915,14 @@
    )
   )
   (set_local $4
-   (f64.mul
-    (f64.sub
-     (f64.const 1)
+   (f64.sub
+    (f64.const 0.5)
+    (f64.mul
      (f64.abs
       (get_local $0)
      )
+     (f64.const 0.5)
     )
-    (f64.const 0.5)
    )
   )
   (set_local $5
@@ -3024,7 +3056,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.asin
+     (call $~lib/bindings/Math/asin
       (get_local $0)
      )
      (get_local $1)
@@ -3036,19 +3068,19 @@
   )
  )
  (func $~lib/math/NativeMathf.asin (; 64 ;) (type $ff) (param $0 f32) (result f32)
-  (local $1 i32)
+  (local $1 f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f32)
   (local $5 f64)
   (set_local $1
-   (i32.reinterpret/f32
-    (get_local $0)
-   )
+   (get_local $0)
   )
   (set_local $2
    (i32.and
-    (get_local $1)
+    (i32.reinterpret/f32
+     (get_local $0)
+    )
     (i32.const 2147483647)
    )
   )
@@ -3125,14 +3157,14 @@
    )
   )
   (set_local $4
-   (f32.mul
-    (f32.sub
-     (f32.const 1)
+   (f32.sub
+    (f32.const 0.5)
+    (f32.mul
      (f32.abs
       (get_local $0)
      )
+     (f32.const 0.5)
     )
-    (f32.const 0.5)
    )
   )
   (set_local $5
@@ -3167,18 +3199,10 @@
     )
    )
   )
-  (if
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
-   (return
-    (f32.neg
-     (get_local $0)
-    )
-   )
+  (f32.copysign
+   (get_local $0)
+   (get_local $1)
   )
-  (get_local $0)
  )
  (func $std/math/test_asinf (; 65 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
@@ -3193,7 +3217,7 @@
  (func $~lib/math/NativeMath.asinh (; 66 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i64)
+  (local $3 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -3209,20 +3233,11 @@
    )
   )
   (set_local $3
-   (i64.shr_u
-    (get_local $1)
-    (i64.const 63)
-   )
-  )
-  (set_local $1
-   (i64.and
-    (get_local $1)
-    (i64.const 9223372036854775807)
-   )
-  )
-  (set_local $0
    (f64.reinterpret/i64
-    (get_local $1)
+    (i64.and
+     (get_local $1)
+     (i64.const 9223372036854775807)
+    )
    )
   )
   (if
@@ -3233,10 +3248,10 @@
      (i64.const 26)
     )
    )
-   (set_local $0
+   (set_local $3
     (f64.add
      (call $~lib/math/NativeMath.log
-      (get_local $0)
+      (get_local $3)
      )
      (f64.const 0.6931471805599453)
     )
@@ -3249,12 +3264,12 @@
       (i64.const 1)
      )
     )
-    (set_local $0
+    (set_local $3
      (call $~lib/math/NativeMath.log
       (f64.add
        (f64.mul
         (f64.const 2)
-        (get_local $0)
+        (get_local $3)
        )
        (f64.div
         (f64.const 1)
@@ -3262,13 +3277,13 @@
          (f64.sqrt
           (f64.add
            (f64.mul
-            (get_local $0)
-            (get_local $0)
+            (get_local $3)
+            (get_local $3)
            )
            (f64.const 1)
           )
          )
-         (get_local $0)
+         (get_local $3)
         )
        )
       )
@@ -3282,21 +3297,21 @@
        (i64.const 26)
       )
      )
-     (set_local $0
+     (set_local $3
       (call $~lib/math/NativeMath.log1p
        (f64.add
-        (get_local $0)
+        (get_local $3)
         (f64.div
          (f64.mul
-          (get_local $0)
-          (get_local $0)
+          (get_local $3)
+          (get_local $3)
          )
          (f64.add
           (f64.sqrt
            (f64.add
             (f64.mul
-             (get_local $0)
-             (get_local $0)
+             (get_local $3)
+             (get_local $3)
             )
             (f64.const 1)
            )
@@ -3310,14 +3325,8 @@
     )
    )
   )
-  (if (result f64)
-   (i64.ne
-    (get_local $3)
-    (i64.const 0)
-   )
-   (f64.neg
-    (get_local $0)
-   )
+  (f64.copysign
+   (get_local $3)
    (get_local $0)
   )
  )
@@ -3342,7 +3351,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.asinh
+     (call $~lib/bindings/Math/asinh
       (get_local $0)
      )
      (get_local $1)
@@ -3355,36 +3364,23 @@
  )
  (func $~lib/math/NativeMathf.asinh (; 68 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
+  (local $2 f32)
   (set_local $1
-   (i32.reinterpret/f32
-    (get_local $0)
-   )
-  )
-  (set_local $2
    (i32.and
-    (get_local $1)
+    (i32.reinterpret/f32
+     (get_local $0)
+    )
     (i32.const 2147483647)
    )
   )
-  (set_local $3
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
-  )
-  (set_local $1
-   (get_local $2)
-  )
-  (set_local $0
+  (set_local $2
    (f32.reinterpret/i32
     (get_local $1)
    )
   )
   (if
    (i32.ge_u
-    (get_local $2)
+    (get_local $1)
     (i32.add
      (i32.const 1065353216)
      (i32.shl
@@ -3393,17 +3389,17 @@
      )
     )
    )
-   (set_local $0
+   (set_local $2
     (f32.add
      (call $~lib/math/NativeMathf.log
-      (get_local $0)
+      (get_local $2)
      )
      (f32.const 0.6931471824645996)
     )
    )
    (if
     (i32.ge_u
-     (get_local $2)
+     (get_local $1)
      (i32.add
       (i32.const 1065353216)
       (i32.shl
@@ -3412,12 +3408,12 @@
       )
      )
     )
-    (set_local $0
+    (set_local $2
      (call $~lib/math/NativeMathf.log
       (f32.add
        (f32.mul
         (f32.const 2)
-        (get_local $0)
+        (get_local $2)
        )
        (f32.div
         (f32.const 1)
@@ -3425,13 +3421,13 @@
          (f32.sqrt
           (f32.add
            (f32.mul
-            (get_local $0)
-            (get_local $0)
+            (get_local $2)
+            (get_local $2)
            )
            (f32.const 1)
           )
          )
-         (get_local $0)
+         (get_local $2)
         )
        )
       )
@@ -3439,7 +3435,7 @@
     )
     (if
      (i32.ge_u
-      (get_local $2)
+      (get_local $1)
       (i32.sub
        (i32.const 1065353216)
        (i32.shl
@@ -3448,21 +3444,21 @@
        )
       )
      )
-     (set_local $0
+     (set_local $2
       (call $~lib/math/NativeMathf.log1p
        (f32.add
-        (get_local $0)
+        (get_local $2)
         (f32.div
          (f32.mul
-          (get_local $0)
-          (get_local $0)
+          (get_local $2)
+          (get_local $2)
          )
          (f32.add
           (f32.sqrt
            (f32.add
             (f32.mul
-             (get_local $0)
-             (get_local $0)
+             (get_local $2)
+             (get_local $2)
             )
             (f32.const 1)
            )
@@ -3476,11 +3472,8 @@
     )
    )
   )
-  (if (result f32)
-   (get_local $3)
-   (f32.neg
-    (get_local $0)
-   )
+  (f32.copysign
+   (get_local $2)
    (get_local $0)
   )
  )
@@ -3496,13 +3489,14 @@
  )
  (func $~lib/math/NativeMath.atan (; 70 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
-  (local $2 i32)
+  (local $2 f64)
   (local $3 f64)
   (local $4 i32)
   (local $5 f64)
   (local $6 f64)
   (local $7 f64)
-  (local $8 i32)
+  (local $8 f64)
+  (local $9 i32)
   (set_local $1
    (i32.wrap/i64
     (i64.shr_u
@@ -3514,10 +3508,7 @@
    )
   )
   (set_local $2
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
+   (get_local $0)
   )
   (set_local $1
    (i32.and
@@ -3548,12 +3539,9 @@
      )
     )
     (return
-     (if (result f64)
-      (get_local $2)
-      (f64.neg
-       (get_local $3)
-      )
+     (f64.copysign
       (get_local $3)
+      (get_local $2)
      )
     )
    )
@@ -3749,6 +3737,15 @@
     )
    )
   )
+  (set_local $8
+   (f64.mul
+    (get_local $0)
+    (f64.add
+     (get_local $6)
+     (get_local $7)
+    )
+   )
+  )
   (if
    (i32.lt_s
     (get_local $4)
@@ -3757,13 +3754,7 @@
    (return
     (f64.sub
      (get_local $0)
-     (f64.mul
-      (get_local $0)
-      (f64.add
-       (get_local $6)
-       (get_local $7)
-      )
-     )
+     (get_local $8)
     )
    )
   )
@@ -3773,30 +3764,30 @@
      (block $case2|0
       (block $case1|0
        (block $case0|0
-        (set_local $8
+        (set_local $9
          (get_local $4)
         )
         (br_if $case0|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 0)
          )
         )
         (br_if $case1|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 1)
          )
         )
         (br_if $case2|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 2)
          )
         )
         (br_if $case3|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 3)
          )
         )
@@ -3808,13 +3799,7 @@
           (f64.const 0.4636476090008061)
           (f64.sub
            (f64.sub
-            (f64.mul
-             (get_local $0)
-             (f64.add
-              (get_local $6)
-              (get_local $7)
-             )
-            )
+            (get_local $8)
             (f64.const 2.2698777452961687e-17)
            )
            (get_local $0)
@@ -3830,13 +3815,7 @@
          (f64.const 0.7853981633974483)
          (f64.sub
           (f64.sub
-           (f64.mul
-            (get_local $0)
-            (f64.add
-             (get_local $6)
-             (get_local $7)
-            )
-           )
+           (get_local $8)
            (f64.const 3.061616997868383e-17)
           )
           (get_local $0)
@@ -3852,13 +3831,7 @@
         (f64.const 0.982793723247329)
         (f64.sub
          (f64.sub
-          (f64.mul
-           (get_local $0)
-           (f64.add
-            (get_local $6)
-            (get_local $7)
-           )
-          )
+          (get_local $8)
           (f64.const 1.3903311031230998e-17)
          )
          (get_local $0)
@@ -3874,13 +3847,7 @@
        (f64.const 1.5707963267948966)
        (f64.sub
         (f64.sub
-         (f64.mul
-          (get_local $0)
-          (f64.add
-           (get_local $6)
-           (get_local $7)
-          )
-         )
+         (get_local $8)
          (f64.const 6.123233995736766e-17)
         )
         (get_local $0)
@@ -3892,12 +3859,9 @@
    )
    (unreachable)
   )
-  (if (result f64)
-   (get_local $2)
-   (f64.neg
-    (get_local $3)
-   )
+  (f64.copysign
    (get_local $3)
+   (get_local $2)
   )
  )
  (func $std/math/test_atan (; 71 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
@@ -3921,7 +3885,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.atan
+     (call $~lib/bindings/Math/atan
       (get_local $0)
      )
      (get_local $1)
@@ -3934,23 +3898,21 @@
  )
  (func $~lib/math/NativeMathf.atan (; 72 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
-  (local $2 i32)
+  (local $2 f32)
   (local $3 f32)
   (local $4 i32)
   (local $5 f32)
   (local $6 f32)
   (local $7 f32)
-  (local $8 i32)
+  (local $8 f32)
+  (local $9 i32)
   (set_local $1
    (i32.reinterpret/f32
     (get_local $0)
    )
   )
   (set_local $2
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
+   (get_local $0)
   )
   (set_local $1
    (i32.and
@@ -3979,12 +3941,9 @@
      )
     )
     (return
-     (if (result f32)
-      (get_local $2)
-      (f32.neg
-       (get_local $3)
-      )
+     (f32.copysign
       (get_local $3)
+      (get_local $2)
      )
     )
    )
@@ -4144,6 +4103,15 @@
     )
    )
   )
+  (set_local $8
+   (f32.mul
+    (get_local $0)
+    (f32.add
+     (get_local $6)
+     (get_local $7)
+    )
+   )
+  )
   (if
    (i32.lt_s
     (get_local $4)
@@ -4152,13 +4120,7 @@
    (return
     (f32.sub
      (get_local $0)
-     (f32.mul
-      (get_local $0)
-      (f32.add
-       (get_local $6)
-       (get_local $7)
-      )
-     )
+     (get_local $8)
     )
    )
   )
@@ -4168,30 +4130,30 @@
      (block $case2|0
       (block $case1|0
        (block $case0|0
-        (set_local $8
+        (set_local $9
          (get_local $4)
         )
         (br_if $case0|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 0)
          )
         )
         (br_if $case1|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 1)
          )
         )
         (br_if $case2|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 2)
          )
         )
         (br_if $case3|0
          (i32.eq
-          (get_local $8)
+          (get_local $9)
           (i32.const 3)
          )
         )
@@ -4203,13 +4165,7 @@
           (f32.const 0.46364760398864746)
           (f32.sub
            (f32.sub
-            (f32.mul
-             (get_local $0)
-             (f32.add
-              (get_local $6)
-              (get_local $7)
-             )
-            )
+            (get_local $8)
             (f32.const 5.01215824399992e-09)
            )
            (get_local $0)
@@ -4225,13 +4181,7 @@
          (f32.const 0.7853981256484985)
          (f32.sub
           (f32.sub
-           (f32.mul
-            (get_local $0)
-            (f32.add
-             (get_local $6)
-             (get_local $7)
-            )
-           )
+           (get_local $8)
            (f32.const 3.774894707930798e-08)
           )
           (get_local $0)
@@ -4247,13 +4197,7 @@
         (f32.const 0.9827936887741089)
         (f32.sub
          (f32.sub
-          (f32.mul
-           (get_local $0)
-           (f32.add
-            (get_local $6)
-            (get_local $7)
-           )
-          )
+          (get_local $8)
           (f32.const 3.447321716976148e-08)
          )
          (get_local $0)
@@ -4269,13 +4213,7 @@
        (f32.const 1.570796251296997)
        (f32.sub
         (f32.sub
-         (f32.mul
-          (get_local $0)
-          (f32.add
-           (get_local $6)
-           (get_local $7)
-          )
-         )
+         (get_local $8)
          (f32.const 7.549789415861596e-08)
         )
         (get_local $0)
@@ -4287,12 +4225,9 @@
    )
    (unreachable)
   )
-  (if (result f32)
-   (get_local $2)
-   (f32.neg
-    (get_local $3)
-   )
+  (f32.copysign
    (get_local $3)
+   (get_local $2)
   )
  )
  (func $std/math/test_atanf (; 73 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
@@ -4402,15 +4337,9 @@
     )
    )
   )
-  (if (result f64)
-   (i64.ne
-    (get_local $3)
-    (i64.const 0)
-   )
-   (f64.neg
-    (get_local $4)
-   )
+  (f64.copysign
    (get_local $4)
+   (get_local $0)
   )
  )
  (func $std/math/test_atanh (; 75 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
@@ -4434,7 +4363,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.atanh
+     (call $~lib/bindings/Math/atanh
       (get_local $0)
      )
      (get_local $1)
@@ -4447,17 +4376,10 @@
  )
  (func $~lib/math/NativeMathf.atanh (; 76 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 f32)
+  (local $2 f32)
   (set_local $1
    (i32.reinterpret/f32
     (get_local $0)
-   )
-  )
-  (set_local $2
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
    )
   )
   (set_local $1
@@ -4466,7 +4388,7 @@
     (i32.const 2147483647)
    )
   )
-  (set_local $3
+  (set_local $2
    (f32.reinterpret/i32
     (get_local $1)
    )
@@ -4493,26 +4415,23 @@
       )
      )
     )
-    (set_local $3
+    (set_local $2
      (f32.mul
       (f32.const 0.5)
       (call $~lib/math/NativeMathf.log1p
-       (f32.add
+       (f32.mul
         (f32.mul
          (f32.const 2)
-         (get_local $3)
+         (get_local $2)
         )
-        (f32.div
-         (f32.mul
-          (f32.mul
-           (f32.const 2)
-           (get_local $3)
+        (f32.add
+         (f32.const 1)
+         (f32.div
+          (get_local $2)
+          (f32.sub
+           (f32.const 1)
+           (get_local $2)
           )
-          (get_local $3)
-         )
-         (f32.sub
-          (f32.const 1)
-          (get_local $3)
          )
         )
        )
@@ -4520,17 +4439,17 @@
      )
     )
    )
-   (set_local $3
+   (set_local $2
     (f32.mul
      (f32.const 0.5)
      (call $~lib/math/NativeMathf.log1p
       (f32.mul
        (f32.const 2)
        (f32.div
-        (get_local $3)
+        (get_local $2)
         (f32.sub
          (f32.const 1)
-         (get_local $3)
+         (get_local $2)
         )
        )
       )
@@ -4538,12 +4457,9 @@
     )
    )
   )
-  (if (result f32)
+  (f32.copysign
    (get_local $2)
-   (f32.neg
-    (get_local $3)
-   )
-   (get_local $3)
+   (get_local $0)
   )
  )
  (func $std/math/test_atanhf (; 77 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
@@ -4741,12 +4657,12 @@
      )
      (f64.div
       (f64.neg
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
       (f64.const 2)
      )
      (f64.div
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
       (f64.const 2)
      )
     )
@@ -4798,7 +4714,7 @@
         )
         (return
          (f64.div
-          (f64.const 3.141592653589793)
+          (get_global $~lib/math/NativeMath.PI)
           (f64.const 4)
          )
         )
@@ -4806,7 +4722,7 @@
        (return
         (f64.div
          (f64.neg
-          (f64.const 3.141592653589793)
+          (get_global $~lib/math/NativeMath.PI)
          )
          (f64.const 4)
         )
@@ -4816,7 +4732,7 @@
        (f64.div
         (f64.mul
          (f64.const 3)
-         (f64.const 3.141592653589793)
+         (get_global $~lib/math/NativeMath.PI)
         )
         (f64.const 4)
        )
@@ -4826,7 +4742,7 @@
       (f64.div
        (f64.mul
         (f64.const -3)
-        (f64.const 3.141592653589793)
+        (get_global $~lib/math/NativeMath.PI)
        )
        (f64.const 4)
       )
@@ -4875,12 +4791,12 @@
        )
       )
       (return
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
      )
      (return
       (f64.neg
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
      )
     )
@@ -4914,12 +4830,12 @@
      )
      (f64.div
       (f64.neg
-       (f64.const 3.141592653589793)
+       (get_global $~lib/math/NativeMath.PI)
       )
       (f64.const 2)
      )
      (f64.div
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
       (f64.const 2)
      )
     )
@@ -5005,7 +4921,7 @@
     )
     (return
      (f64.sub
-      (f64.const 3.141592653589793)
+      (get_global $~lib/math/NativeMath.PI)
       (f64.sub
        (get_local $9)
        (f64.const 1.2246467991473532e-16)
@@ -5019,7 +4935,7 @@
       (get_local $9)
       (f64.const 1.2246467991473532e-16)
      )
-     (f64.const 3.141592653589793)
+     (get_global $~lib/math/NativeMath.PI)
     )
    )
   )
@@ -5048,7 +4964,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.atan2
+     (call $~lib/bindings/Math/atan2
       (get_local $0)
       (get_local $1)
      )
@@ -5737,7 +5653,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.cbrt
+     (call $~lib/bindings/Math/cbrt
       (get_local $0)
      )
      (get_local $1)
@@ -5953,7 +5869,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.ceil
+     (call $~lib/bindings/Math/ceil
       (get_local $0)
      )
      (get_local $1)
@@ -6044,15 +5960,10 @@
       (get_local $0)
       (f64.const 709.782712893384)
      )
-     (block
-      (set_local $0
-       (f64.mul
-        (get_local $0)
-        (f64.const 8988465674311579538646525e283)
-       )
-      )
-      (return
+     (return
+      (f64.mul
        (get_local $0)
+       (f64.const 8988465674311579538646525e283)
       )
      )
     )
@@ -6067,82 +5978,51 @@
     (i32.const 1071001154)
    )
    (block
-    (if
-     (i32.lt_u
-      (get_local $2)
-      (i32.const 1072734898)
-     )
-     (if
-      (i32.eqz
-       (get_local $4)
-      )
-      (block
-       (set_local $7
-        (f64.sub
-         (get_local $0)
-         (f64.const 0.6931471803691238)
-        )
-       )
-       (set_local $8
-        (f64.const 1.9082149292705877e-10)
-       )
-       (set_local $3
+    (set_local $3
+     (select
+      (i32.sub
+       (i32.const 1)
+       (i32.shl
+        (get_local $4)
         (i32.const 1)
        )
       )
-      (block
-       (set_local $7
-        (f64.add
+      (i32.trunc_s/f64
+       (f64.add
+        (f64.mul
+         (f64.const 1.4426950408889634)
          (get_local $0)
-         (f64.const 0.6931471803691238)
+        )
+        (f64.copysign
+         (f64.const 0.5)
+         (get_local $0)
         )
        )
-       (set_local $8
-        (f64.neg
-         (f64.const 1.9082149292705877e-10)
-        )
-       )
-       (set_local $3
-        (i32.const -1)
-       )
+      )
+      (i32.lt_u
+       (get_local $2)
+       (i32.const 1072734898)
       )
      )
-     (block
-      (set_local $3
-       (i32.trunc_s/f64
-        (f64.add
-         (f64.mul
-          (f64.const 1.4426950408889634)
-          (get_local $0)
-         )
-         (if (result f64)
-          (get_local $4)
-          (f64.const -0.5)
-          (f64.const 0.5)
-         )
-        )
-       )
+    )
+    (set_local $6
+     (f64.convert_s/i32
+      (get_local $3)
+     )
+    )
+    (set_local $7
+     (f64.sub
+      (get_local $0)
+      (f64.mul
+       (get_local $6)
+       (f64.const 0.6931471803691238)
       )
-      (set_local $6
-       (f64.convert_s/i32
-        (get_local $3)
-       )
-      )
-      (set_local $7
-       (f64.sub
-        (get_local $0)
-        (f64.mul
-         (get_local $6)
-         (f64.const 0.6931471803691238)
-        )
-       )
-      )
-      (set_local $8
-       (f64.mul
-        (get_local $6)
-        (f64.const 1.9082149292705877e-10)
-       )
-      )
+     )
+    )
+    (set_local $8
+     (f64.mul
+      (get_local $6)
+      (f64.const 1.9082149292705877e-10)
      )
     )
     (set_local $0
@@ -6415,47 +6295,42 @@
     (i64.const 52)
    )
   )
+  (set_local $14
+   (f64.reinterpret/i64
+    (get_local $1)
+   )
+  )
   (if
    (i32.lt_s
     (get_local $3)
     (i32.const 20)
    )
    (set_local $14
-    (f64.mul
-     (f64.add
-      (f64.sub
-       (get_local $0)
-       (get_local $12)
-      )
-      (f64.sub
-       (f64.const 1)
-       (f64.reinterpret/i64
-        (get_local $1)
-       )
-      )
+    (f64.sub
+     (f64.sub
+      (f64.const 1)
+      (get_local $14)
      )
-     (get_local $13)
+     (get_local $12)
     )
    )
    (set_local $14
-    (f64.mul
+    (f64.sub
+     (f64.const 1)
      (f64.add
-      (f64.sub
-       (get_local $0)
-       (f64.add
-        (get_local $12)
-        (f64.reinterpret/i64
-         (get_local $1)
-        )
-       )
-      )
-      (f64.const 1)
+      (get_local $12)
+      (get_local $14)
      )
-     (get_local $13)
     )
    )
   )
-  (get_local $14)
+  (f64.mul
+   (f64.add
+    (get_local $0)
+    (get_local $14)
+   )
+   (get_local $13)
+  )
  )
  (func $~lib/math/NativeMath.exp (; 89 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
@@ -6563,11 +6438,11 @@
      )
      (set_local $5
       (i32.sub
-       (i32.sub
-        (i32.const 1)
+       (i32.const 1)
+       (i32.shl
         (get_local $2)
+        (i32.const 1)
        )
-       (get_local $2)
       )
      )
     )
@@ -6687,44 +6562,11 @@
    (get_local $5)
   )
  )
- (func $~lib/math/expo2 (; 90 ;) (type $FF) (param $0 f64) (result f64)
-  (local $1 f64)
-  (set_local $1
-   (f64.reinterpret/i64
-    (i64.shl
-     (i64.extend_u/i32
-      (i32.shl
-       (i32.add
-        (i32.const 1023)
-        (i32.div_u
-         (i32.const 2043)
-         (i32.const 2)
-        )
-       )
-       (i32.const 20)
-      )
-     )
-     (i64.const 32)
-    )
-   )
-  )
-  (f64.mul
-   (f64.mul
-    (call $~lib/math/NativeMath.exp
-     (f64.sub
-      (get_local $0)
-      (f64.const 1416.0996898839683)
-     )
-    )
-    (get_local $1)
-   )
-   (get_local $1)
-  )
- )
- (func $~lib/math/NativeMath.cosh (; 91 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cosh (; 90 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 f64)
+  (local $4 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
@@ -6783,10 +6625,10 @@
         (get_local $3)
         (get_local $3)
        )
-       (f64.mul
+       (f64.add
         (f64.const 2)
-        (f64.add
-         (f64.const 1)
+        (f64.mul
+         (f64.const 2)
          (get_local $3)
         )
        )
@@ -6821,13 +6663,43 @@
    )
   )
   (set_local $3
-   (call $~lib/math/expo2
-    (get_local $0)
+   (block $~lib/math/expo2|inlined.0 (result f64)
+    (set_local $4
+     (f64.reinterpret/i64
+      (i64.shl
+       (i64.extend_u/i32
+        (i32.shl
+         (i32.add
+          (i32.const 1023)
+          (i32.div_u
+           (i32.const 2043)
+           (i32.const 2)
+          )
+         )
+         (i32.const 20)
+        )
+       )
+       (i64.const 32)
+      )
+     )
+    )
+    (f64.mul
+     (f64.mul
+      (call $~lib/math/NativeMath.exp
+       (f64.sub
+        (get_local $0)
+        (f64.const 1416.0996898839683)
+       )
+      )
+      (get_local $4)
+     )
+     (get_local $4)
+    )
    )
   )
   (get_local $3)
  )
- (func $std/math/test_cosh (; 92 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_cosh (; 91 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -6848,7 +6720,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.cosh
+     (call $~lib/bindings/Math/cosh
       (get_local $0)
      )
      (get_local $1)
@@ -6859,7 +6731,7 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMathf.expm1 (; 93 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.expm1 (; 92 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6941,82 +6813,51 @@
     (i32.const 1051816472)
    )
    (block
-    (if
-     (i32.lt_u
-      (get_local $2)
-      (i32.const 1065686418)
-     )
-     (if
-      (i32.eqz
-       (get_local $3)
-      )
-      (block
-       (set_local $7
-        (f32.sub
-         (get_local $0)
-         (f32.const 0.6931381225585938)
-        )
-       )
-       (set_local $8
-        (f32.const 9.05800061445916e-06)
-       )
-       (set_local $6
+    (set_local $6
+     (select
+      (i32.sub
+       (i32.const 1)
+       (i32.shl
+        (get_local $3)
         (i32.const 1)
        )
       )
-      (block
-       (set_local $7
-        (f32.add
+      (i32.trunc_s/f32
+       (f32.add
+        (f32.mul
+         (f32.const 1.4426950216293335)
          (get_local $0)
-         (f32.const 0.6931381225585938)
+        )
+        (f32.copysign
+         (f32.const 0.5)
+         (get_local $0)
         )
        )
-       (set_local $8
-        (f32.neg
-         (f32.const 9.05800061445916e-06)
-        )
-       )
-       (set_local $6
-        (i32.const -1)
-       )
+      )
+      (i32.lt_u
+       (get_local $2)
+       (i32.const 1065686418)
       )
      )
-     (block
-      (set_local $6
-       (i32.trunc_s/f32
-        (f32.add
-         (f32.mul
-          (f32.const 1.4426950216293335)
-          (get_local $0)
-         )
-         (if (result f32)
-          (get_local $3)
-          (f32.const -0.5)
-          (f32.const 0.5)
-         )
-        )
-       )
+    )
+    (set_local $5
+     (f32.convert_s/i32
+      (get_local $6)
+     )
+    )
+    (set_local $7
+     (f32.sub
+      (get_local $0)
+      (f32.mul
+       (get_local $5)
+       (f32.const 0.6931381225585938)
       )
-      (set_local $5
-       (f32.convert_s/i32
-        (get_local $6)
-       )
-      )
-      (set_local $7
-       (f32.sub
-        (get_local $0)
-        (f32.mul
-         (get_local $5)
-         (f32.const 0.6931381225585938)
-        )
-       )
-      )
-      (set_local $8
-       (f32.mul
-        (get_local $5)
-        (f32.const 9.05800061445916e-06)
-       )
-      )
+     )
+    )
+    (set_local $8
+     (f32.mul
+      (get_local $5)
+      (f32.const 9.05800061445916e-06)
      )
     )
     (set_local $0
@@ -7270,58 +7111,52 @@
     (i32.const 23)
    )
   )
+  (set_local $14
+   (f32.reinterpret/i32
+    (get_local $1)
+   )
+  )
   (if
    (i32.lt_s
     (get_local $6)
-    (i32.const 23)
+    (i32.const 20)
    )
    (set_local $14
-    (f32.mul
-     (f32.add
-      (f32.sub
-       (get_local $0)
-       (get_local $12)
-      )
-      (f32.sub
-       (f32.const 1)
-       (f32.reinterpret/i32
-        (get_local $1)
-       )
-      )
+    (f32.sub
+     (f32.sub
+      (f32.const 1)
+      (get_local $14)
      )
-     (get_local $13)
+     (get_local $12)
     )
    )
    (set_local $14
-    (f32.mul
+    (f32.sub
+     (f32.const 1)
      (f32.add
-      (f32.sub
-       (get_local $0)
-       (f32.add
-        (get_local $12)
-        (f32.reinterpret/i32
-         (get_local $1)
-        )
-       )
-      )
-      (f32.const 1)
+      (get_local $12)
+      (get_local $14)
      )
-     (get_local $13)
     )
    )
   )
-  (get_local $14)
+  (f32.mul
+   (f32.add
+    (get_local $0)
+    (get_local $14)
+   )
+   (get_local $13)
+  )
  )
- (func $~lib/math/NativeMathf.exp (; 94 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.exp (; 93 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
+  (local $3 f32)
   (local $4 f32)
-  (local $5 f32)
-  (local $6 i32)
+  (local $5 i32)
+  (local $6 f32)
   (local $7 f32)
   (local $8 f32)
-  (local $9 f32)
   (set_local $1
    (i32.reinterpret/f32
     (get_local $0)
@@ -7344,19 +7179,14 @@
     (get_local $1)
     (i32.const 1118743632)
    )
-   (block
+   (if
+    (i32.ge_u
+     (get_local $1)
+     (i32.const 1118925336)
+    )
     (if
-     (if (result i32)
-      (tee_local $3
-       (i32.ge_u
-        (get_local $1)
-        (i32.const 1118925336)
-       )
-      )
-      (i32.eqz
-       (get_local $2)
-      )
-      (get_local $3)
+     (i32.eqz
+      (get_local $2)
      )
      (block
       (set_local $0
@@ -7369,18 +7199,14 @@
        (get_local $0)
       )
      )
-    )
-    (if
-     (if (result i32)
-      (get_local $2)
+     (if
       (i32.ge_u
        (get_local $1)
        (i32.const 1120924085)
       )
-      (get_local $2)
-     )
-     (return
-      (f32.const 0)
+      (return
+       (f32.const 0)
+      )
      )
     )
    )
@@ -7396,7 +7222,7 @@
       (get_local $1)
       (i32.const 1065686418)
      )
-     (set_local $6
+     (set_local $5
       (i32.trunc_s/f32
        (f32.add
         (f32.mul
@@ -7410,39 +7236,39 @@
        )
       )
      )
-     (set_local $6
+     (set_local $5
       (i32.sub
-       (i32.sub
-        (i32.const 1)
+       (i32.const 1)
+       (i32.shl
         (get_local $2)
+        (i32.const 1)
        )
-       (get_local $2)
       )
      )
     )
-    (set_local $4
+    (set_local $3
      (f32.sub
       (get_local $0)
       (f32.mul
        (f32.convert_s/i32
-        (get_local $6)
+        (get_local $5)
        )
        (f32.const 0.693145751953125)
       )
      )
     )
-    (set_local $5
+    (set_local $4
      (f32.mul
       (f32.convert_s/i32
-       (get_local $6)
+       (get_local $5)
       )
       (f32.const 1.428606765330187e-06)
      )
     )
     (set_local $0
      (f32.sub
+      (get_local $3)
       (get_local $4)
-      (get_local $5)
      )
     )
    )
@@ -7452,13 +7278,13 @@
      (i32.const 956301312)
     )
     (block
-     (set_local $6
+     (set_local $5
       (i32.const 0)
      )
-     (set_local $4
+     (set_local $3
       (get_local $0)
      )
-     (set_local $5
+     (set_local $4
       (f32.const 0)
      )
     )
@@ -7470,28 +7296,28 @@
     )
    )
   )
-  (set_local $7
+  (set_local $6
    (f32.mul
     (get_local $0)
     (get_local $0)
    )
   )
-  (set_local $8
+  (set_local $7
    (f32.sub
     (get_local $0)
     (f32.mul
-     (get_local $7)
+     (get_local $6)
      (f32.add
       (f32.const 0.16666625440120697)
       (f32.mul
-       (get_local $7)
+       (get_local $6)
        (f32.const -2.7667332906275988e-03)
       )
      )
     )
    )
   )
-  (set_local $9
+  (set_local $8
    (f32.add
     (f32.const 1)
     (f32.add
@@ -7499,63 +7325,34 @@
       (f32.div
        (f32.mul
         (get_local $0)
-        (get_local $8)
+        (get_local $7)
        )
        (f32.sub
         (f32.const 2)
-        (get_local $8)
+        (get_local $7)
        )
       )
-      (get_local $5)
+      (get_local $4)
      )
-     (get_local $4)
+     (get_local $3)
     )
    )
   )
   (if
    (i32.eq
-    (get_local $6)
+    (get_local $5)
     (i32.const 0)
    )
    (return
-    (get_local $9)
+    (get_local $8)
    )
   )
   (call $~lib/math/NativeMathf.scalbn
-   (get_local $9)
-   (get_local $6)
+   (get_local $8)
+   (get_local $5)
   )
  )
- (func $~lib/math/expo2f (; 95 ;) (type $ff) (param $0 f32) (result f32)
-  (local $1 f32)
-  (set_local $1
-   (f32.reinterpret/i32
-    (i32.shl
-     (i32.add
-      (i32.const 127)
-      (i32.div_u
-       (i32.const 235)
-       (i32.const 2)
-      )
-     )
-     (i32.const 23)
-    )
-   )
-  )
-  (f32.mul
-   (f32.mul
-    (call $~lib/math/NativeMathf.exp
-     (f32.sub
-      (get_local $0)
-      (f32.const 162.88958740234375)
-     )
-    )
-    (get_local $1)
-   )
-   (get_local $1)
-  )
- )
- (func $~lib/math/NativeMathf.cosh (; 96 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cosh (; 94 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (set_local $1
@@ -7608,10 +7405,10 @@
         (get_local $2)
         (get_local $2)
        )
-       (f32.mul
+       (f32.add
         (f32.const 2)
-        (f32.add
-         (f32.const 1)
+        (f32.mul
+         (f32.const 2)
          (get_local $2)
         )
        )
@@ -7632,24 +7429,49 @@
      )
     )
     (return
-     (f32.mul
-      (f32.const 0.5)
-      (f32.add
+     (f32.add
+      (f32.mul
+       (f32.const 0.5)
        (get_local $2)
-       (f32.div
-        (f32.const 1)
-        (get_local $2)
-       )
+      )
+      (f32.div
+       (f32.const 0.5)
+       (get_local $2)
       )
      )
     )
    )
   )
-  (call $~lib/math/expo2f
-   (get_local $0)
+  (block $~lib/math/expo2f|inlined.0 (result f32)
+   (set_local $2
+    (f32.reinterpret/i32
+     (i32.shl
+      (i32.add
+       (i32.const 127)
+       (i32.div_u
+        (i32.const 235)
+        (i32.const 2)
+       )
+      )
+      (i32.const 23)
+     )
+    )
+   )
+   (f32.mul
+    (f32.mul
+     (call $~lib/math/NativeMathf.exp
+      (f32.sub
+       (get_local $0)
+       (f32.const 162.88958740234375)
+      )
+     )
+     (get_local $2)
+    )
+    (get_local $2)
+   )
   )
  )
- (func $std/math/test_coshf (; 97 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_coshf (; 95 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.cosh
     (get_local $0)
@@ -7659,7 +7481,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_exp (; 98 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_exp (; 96 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -7680,7 +7502,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.exp
+     (call $~lib/bindings/Math/exp
       (get_local $0)
      )
      (get_local $1)
@@ -7691,7 +7513,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_expf (; 99 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_expf (; 97 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.exp
     (get_local $0)
@@ -7701,7 +7523,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_expm1 (; 100 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_expm1 (; 98 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -7722,7 +7544,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.expm1
+     (call $~lib/bindings/Math/expm1
       (get_local $0)
      )
      (get_local $1)
@@ -7733,7 +7555,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_expm1f (; 101 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_expm1f (; 99 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.expm1
     (get_local $0)
@@ -7743,7 +7565,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_floor (; 102 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_floor (; 100 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -7766,7 +7588,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.floor
+     (call $~lib/bindings/Math/floor
       (get_local $0)
      )
      (get_local $1)
@@ -7777,7 +7599,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_floorf (; 103 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_floorf (; 101 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (block $~lib/math/NativeMathf.floor|inlined.0 (result f32)
     (f32.floor
@@ -7789,7 +7611,7 @@
    (get_local $3)
   )
  )
- (func $~lib/math/NativeMath.hypot (; 104 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.hypot (; 102 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -7995,24 +7817,21 @@
   )
   (set_local $13
    (f64.add
-    (f64.add
-     (f64.sub
-      (f64.mul
-       (get_local $10)
-       (get_local $10)
-      )
-      (get_local $12)
-     )
+    (f64.sub
      (f64.mul
+      (get_local $10)
+      (get_local $10)
+     )
+     (get_local $12)
+    )
+    (f64.mul
+     (f64.add
       (f64.mul
        (f64.const 2)
        (get_local $10)
       )
       (get_local $11)
      )
-    )
-    (f64.mul
-     (get_local $11)
      (get_local $11)
     )
    )
@@ -8046,24 +7865,21 @@
   )
   (set_local $15
    (f64.add
-    (f64.add
-     (f64.sub
-      (f64.mul
-       (get_local $10)
-       (get_local $10)
-      )
-      (get_local $14)
-     )
+    (f64.sub
      (f64.mul
+      (get_local $10)
+      (get_local $10)
+     )
+     (get_local $14)
+    )
+    (f64.mul
+     (f64.add
       (f64.mul
        (f64.const 2)
        (get_local $10)
       )
       (get_local $11)
      )
-    )
-    (f64.mul
-     (get_local $11)
      (get_local $11)
     )
    )
@@ -8084,7 +7900,7 @@
    )
   )
  )
- (func $std/math/test_hypot (; 105 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_hypot (; 103 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (if (result i32)
    (tee_local $5
@@ -8106,7 +7922,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.hypot
+     (call $~lib/bindings/Math/hypot
       (get_local $0)
       (get_local $1)
      )
@@ -8118,7 +7934,7 @@
    (get_local $5)
   )
  )
- (func $~lib/math/NativeMathf.hypot (; 106 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.hypot (; 104 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8310,7 +8126,7 @@
    )
   )
  )
- (func $std/math/test_hypotf (; 107 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_hypotf (; 105 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.hypot
     (get_local $0)
@@ -8321,7 +8137,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_log (; 108 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log (; 106 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -8342,7 +8158,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.log
+     (call $~lib/bindings/Math/log
       (get_local $0)
      )
      (get_local $1)
@@ -8353,7 +8169,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_logf (; 109 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_logf (; 107 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.log
     (get_local $0)
@@ -8363,7 +8179,7 @@
    (get_local $3)
   )
  )
- (func $~lib/math/NativeMath.log10 (; 110 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log10 (; 108 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -8732,15 +8548,12 @@
     )
    )
   )
-  (set_local $15
-   (get_local $9)
-  )
   (f64.add
    (get_local $18)
-   (get_local $15)
+   (get_local $9)
   )
  )
- (func $std/math/test_log10 (; 111 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log10 (; 109 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -8761,7 +8574,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.log10
+     (call $~lib/bindings/Math/log10
       (get_local $0)
      )
      (get_local $1)
@@ -8772,7 +8585,7 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMathf.log10 (; 112 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log10 (; 110 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9058,7 +8871,7 @@
    )
   )
  )
- (func $std/math/test_log10f (; 113 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log10f (; 111 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.log10
     (get_local $0)
@@ -9068,7 +8881,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_log1p (; 114 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log1p (; 112 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -9089,7 +8902,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.log1p
+     (call $~lib/bindings/Math/log1p
       (get_local $0)
      )
      (get_local $1)
@@ -9100,7 +8913,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_log1pf (; 115 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log1pf (; 113 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.log1p
     (get_local $0)
@@ -9110,7 +8923,7 @@
    (get_local $3)
   )
  )
- (func $~lib/math/NativeMath.log2 (; 116 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log2 (; 114 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -9474,7 +9287,7 @@
    (get_local $15)
   )
  )
- (func $std/math/test_log2 (; 117 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log2 (; 115 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -9495,7 +9308,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.log2
+     (call $~lib/bindings/Math/log2
       (get_local $0)
      )
      (get_local $1)
@@ -9506,7 +9319,7 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMathf.log2 (; 118 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log2 (; 116 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9784,7 +9597,7 @@
    (get_local $15)
   )
  )
- (func $std/math/test_log2f (; 119 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log2f (; 117 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.log2
     (get_local $0)
@@ -9794,7 +9607,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_max (; 120 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_max (; 118 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (if (result i32)
    (tee_local $5
@@ -9818,7 +9631,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.max
+     (call $~lib/bindings/Math/max
       (get_local $0)
       (get_local $1)
      )
@@ -9830,7 +9643,7 @@
    (get_local $5)
   )
  )
- (func $std/math/test_maxf (; 121 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_maxf (; 119 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
    (block $~lib/math/NativeMathf.max|inlined.0 (result f32)
     (f32.max
@@ -9843,7 +9656,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_min (; 122 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_min (; 120 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (if (result i32)
    (tee_local $5
@@ -9867,7 +9680,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.min
+     (call $~lib/bindings/Math/min
       (get_local $0)
       (get_local $1)
      )
@@ -9879,7 +9692,7 @@
    (get_local $5)
   )
  )
- (func $std/math/test_minf (; 123 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_minf (; 121 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
    (block $~lib/math/NativeMathf.min|inlined.0 (result f32)
     (f32.min
@@ -9892,14 +9705,17 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMath.mod (; 124 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 122 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i64)
+  (local $4 i64)
+  (local $5 i64)
+  (local $6 i64)
+  (local $7 i64)
+  (local $8 i32)
+  (local $9 i64)
+  (local $10 i64)
+  (local $11 i64)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -9911,65 +9727,59 @@
    )
   )
   (set_local $4
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $2)
-      (i64.const 52)
-     )
-     (i64.const 2047)
+   (i64.and
+    (i64.shr_u
+     (get_local $2)
+     (i64.const 52)
     )
+    (i64.const 2047)
    )
   )
   (set_local $5
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $3)
-      (i64.const 52)
-     )
-     (i64.const 2047)
+   (i64.and
+    (i64.shr_u
+     (get_local $3)
+     (i64.const 52)
     )
+    (i64.const 2047)
    )
   )
   (set_local $6
-   (i32.wrap/i64
-    (i64.shr_u
-     (get_local $2)
-     (i64.const 63)
-    )
+   (i64.shr_u
+    (get_local $2)
+    (i64.const 63)
+   )
+  )
+  (set_local $7
+   (i64.shl
+    (get_local $3)
+    (i64.const 1)
    )
   )
   (if
    (i32.and
     (if (result i32)
-     (i32.and
-      (tee_local $7
-       (if (result i32)
-        (tee_local $7
-         (i64.eq
-          (i64.shl
-           (get_local $3)
-           (i64.const 1)
-          )
-          (i64.const 0)
-         )
-        )
-        (get_local $7)
-        (block $~lib/builtins/isNaN<f64>|inlined.1 (result i32)
-         (f64.ne
-          (get_local $1)
-          (get_local $1)
-         )
+     (tee_local $8
+      (if (result i32)
+       (tee_local $8
+        (i64.eq
+         (get_local $7)
+         (i64.const 0)
         )
        )
+       (get_local $8)
+       (i64.eq
+        (get_local $4)
+        (i64.const 2047)
+       )
       )
-      (i32.const 1)
      )
-     (get_local $7)
-     (i32.eq
-      (get_local $4)
-      (i32.const 2047)
+     (get_local $8)
+     (block $~lib/builtins/isNaN<f64>|inlined.1 (result i32)
+      (f64.ne
+       (get_local $1)
+       (get_local $1)
+      )
      )
     )
     (i32.const 1)
@@ -9987,28 +9797,22 @@
     )
    )
   )
+  (set_local $9
+   (i64.shl
+    (get_local $2)
+    (i64.const 1)
+   )
+  )
   (if
    (i64.le_u
-    (i64.shl
-     (get_local $2)
-     (i64.const 1)
-    )
-    (i64.shl
-     (get_local $3)
-     (i64.const 1)
-    )
+    (get_local $9)
+    (get_local $7)
    )
    (block
     (if
      (i64.eq
-      (i64.shl
-       (get_local $2)
-       (i64.const 1)
-      )
-      (i64.shl
-       (get_local $3)
-       (i64.const 1)
-      )
+      (get_local $9)
+      (get_local $7)
      )
      (return
       (f64.mul
@@ -10023,54 +9827,30 @@
    )
   )
   (if
-   (i32.eqz
+   (i64.eqz
     (get_local $4)
    )
    (block
-    (block $break|0
-     (set_local $8
-      (i64.shl
-       (get_local $2)
-       (i64.const 12)
-      )
-     )
-     (loop $repeat|0
-      (br_if $break|0
-       (i32.eqz
-        (i64.eqz
-         (i64.shr_u
-          (get_local $8)
-          (i64.const 63)
-         )
-        )
-       )
-      )
-      (set_local $4
-       (i32.sub
-        (get_local $4)
-        (i32.const 1)
-       )
-      )
-      (set_local $8
+    (set_local $4
+     (i64.sub
+      (get_local $4)
+      (i64.clz
        (i64.shl
-        (get_local $8)
-        (i64.const 1)
+        (get_local $2)
+        (i64.const 12)
        )
       )
-      (br $repeat|0)
      )
     )
     (set_local $2
      (i64.shl
       (get_local $2)
-      (i64.extend_s/i32
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $4)
-        )
-        (i32.const 1)
+      (i64.add
+       (i64.sub
+        (i64.const 0)
+        (get_local $4)
        )
+       (i64.const 1)
       )
      )
     )
@@ -10097,54 +9877,30 @@
    )
   )
   (if
-   (i32.eqz
+   (i64.eqz
     (get_local $5)
    )
    (block
-    (block $break|1
-     (set_local $8
-      (i64.shl
-       (get_local $3)
-       (i64.const 12)
-      )
-     )
-     (loop $repeat|1
-      (br_if $break|1
-       (i32.eqz
-        (i64.eqz
-         (i64.shr_u
-          (get_local $8)
-          (i64.const 63)
-         )
-        )
-       )
-      )
-      (set_local $5
-       (i32.sub
-        (get_local $5)
-        (i32.const 1)
-       )
-      )
-      (set_local $8
+    (set_local $5
+     (i64.sub
+      (get_local $5)
+      (i64.clz
        (i64.shl
-        (get_local $8)
-        (i64.const 1)
+        (get_local $3)
+        (i64.const 12)
        )
       )
-      (br $repeat|1)
      )
     )
     (set_local $3
      (i64.shl
       (get_local $3)
-      (i64.extend_s/i32
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $5)
-        )
-        (i32.const 1)
+      (i64.add
+       (i64.sub
+        (i64.const 0)
+        (get_local $5)
        )
+       (i64.const 1)
       )
      )
     )
@@ -10170,18 +9926,18 @@
     )
    )
   )
-  (block $break|2
-   (loop $repeat|2
-    (br_if $break|2
+  (block $break|0
+   (loop $repeat|0
+    (br_if $break|0
      (i32.eqz
-      (i32.gt_s
+      (i64.gt_s
        (get_local $4)
        (get_local $5)
       )
      )
     )
     (block
-     (set_local $8
+     (set_local $10
       (i64.sub
        (get_local $2)
        (get_local $3)
@@ -10190,14 +9946,14 @@
      (if
       (i64.eqz
        (i64.shr_u
-        (get_local $8)
+        (get_local $10)
         (i64.const 63)
        )
       )
       (block
        (if
         (i64.eqz
-         (get_local $8)
+         (get_local $10)
         )
         (return
          (f64.mul
@@ -10207,7 +9963,7 @@
         )
        )
        (set_local $2
-        (get_local $8)
+        (get_local $10)
        )
       )
      )
@@ -10219,15 +9975,15 @@
      )
     )
     (set_local $4
-     (i32.sub
+     (i64.sub
       (get_local $4)
-      (i32.const 1)
+      (i64.const 1)
      )
     )
-    (br $repeat|2)
+    (br $repeat|0)
    )
   )
-  (set_local $8
+  (set_local $10
    (i64.sub
     (get_local $2)
     (get_local $3)
@@ -10236,14 +9992,14 @@
   (if
    (i64.eqz
     (i64.shr_u
-     (get_local $8)
+     (get_local $10)
      (i64.const 63)
     )
    )
    (block
     (if
      (i64.eqz
-      (get_local $8)
+      (get_local $10)
      )
      (return
       (f64.mul
@@ -10253,41 +10009,34 @@
      )
     )
     (set_local $2
-     (get_local $8)
+     (get_local $10)
     )
    )
   )
-  (block $break|3
-   (loop $repeat|3
-    (br_if $break|3
-     (i32.eqz
-      (i64.eqz
-       (i64.shr_u
-        (get_local $2)
-        (i64.const 52)
-       )
-      )
-     )
+  (set_local $11
+   (i64.clz
+    (i64.shl
+     (get_local $2)
+     (i64.const 11)
     )
-    (set_local $4
-     (i32.sub
-      (get_local $4)
-      (i32.const 1)
-     )
-    )
-    (set_local $2
-     (i64.shl
-      (get_local $2)
-      (i64.const 1)
-     )
-    )
-    (br $repeat|3)
+   )
+  )
+  (set_local $4
+   (i64.sub
+    (get_local $4)
+    (get_local $11)
+   )
+  )
+  (set_local $2
+   (i64.shl
+    (get_local $2)
+    (get_local $11)
    )
   )
   (if
-   (i32.gt_s
+   (i64.gt_s
     (get_local $4)
-    (i32.const 0)
+    (i64.const 0)
    )
    (block
     (set_local $2
@@ -10303,9 +10052,7 @@
      (i64.or
       (get_local $2)
       (i64.shl
-       (i64.extend_s/i32
-        (get_local $4)
-       )
+       (get_local $4)
        (i64.const 52)
       )
      )
@@ -10314,14 +10061,12 @@
    (set_local $2
     (i64.shr_u
      (get_local $2)
-     (i64.extend_s/i32
-      (i32.add
-       (i32.sub
-        (i32.const 0)
-        (get_local $4)
-       )
-       (i32.const 1)
+     (i64.add
+      (i64.sub
+       (i64.const 0)
+       (get_local $4)
       )
+      (i64.const 1)
      )
     )
    )
@@ -10330,9 +10075,7 @@
    (i64.or
     (get_local $2)
     (i64.shl
-     (i64.extend_s/i32
-      (get_local $6)
-     )
+     (get_local $6)
      (i64.const 63)
     )
    )
@@ -10341,7 +10084,7 @@
    (get_local $2)
   )
  )
- (func $std/math/test_mod (; 125 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_mod (; 123 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (if (result i32)
    (tee_local $5
@@ -10363,7 +10106,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $std/math/JSOp.mod
+     (call $std/math/mod
       (get_local $0)
       (get_local $1)
      )
@@ -10375,7 +10118,7 @@
    (get_local $5)
   )
  )
- (func $~lib/math/NativeMathf.mod (; 126 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 124 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10383,6 +10126,9 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
   (set_local $2
    (i32.reinterpret/f32
     (get_local $0)
@@ -10417,36 +10163,36 @@
     (i32.const -2147483648)
    )
   )
+  (set_local $7
+   (i32.shl
+    (get_local $3)
+    (i32.const 1)
+   )
+  )
   (if
    (i32.and
     (if (result i32)
-     (i32.and
-      (tee_local $7
-       (if (result i32)
-        (tee_local $7
-         (i32.eq
-          (i32.shl
-           (get_local $3)
-           (i32.const 1)
-          )
-          (i32.const 0)
-         )
-        )
-        (get_local $7)
-        (block $~lib/builtins/isNaN<f32>|inlined.1 (result i32)
-         (f32.ne
-          (get_local $1)
-          (get_local $1)
-         )
+     (tee_local $8
+      (if (result i32)
+       (tee_local $8
+        (i32.eq
+         (get_local $7)
+         (i32.const 0)
         )
        )
+       (get_local $8)
+       (i32.eq
+        (get_local $4)
+        (i32.const 255)
+       )
       )
-      (i32.const 1)
      )
-     (get_local $7)
-     (i32.eq
-      (get_local $4)
-      (i32.const 255)
+     (get_local $8)
+     (block $~lib/builtins/isNaN<f32>|inlined.1 (result i32)
+      (f32.ne
+       (get_local $1)
+       (get_local $1)
+      )
      )
     )
     (i32.const 1)
@@ -10464,28 +10210,22 @@
     )
    )
   )
+  (set_local $9
+   (i32.shl
+    (get_local $2)
+    (i32.const 1)
+   )
+  )
   (if
    (i32.le_u
-    (i32.shl
-     (get_local $2)
-     (i32.const 1)
-    )
-    (i32.shl
-     (get_local $3)
-     (i32.const 1)
-    )
+    (get_local $9)
+    (get_local $7)
    )
    (block
     (if
      (i32.eq
-      (i32.shl
-       (get_local $2)
-       (i32.const 1)
-      )
-      (i32.shl
-       (get_local $3)
-       (i32.const 1)
-      )
+      (get_local $9)
+      (get_local $7)
      )
      (return
       (f32.mul
@@ -10504,37 +10244,15 @@
     (get_local $4)
    )
    (block
-    (block $break|0
-     (set_local $8
-      (i32.shl
-       (get_local $2)
-       (i32.const 9)
-      )
-     )
-     (loop $repeat|0
-      (br_if $break|0
-       (i32.eqz
-        (i32.eqz
-         (i32.shr_u
-          (get_local $8)
-          (i32.const 31)
-         )
-        )
-       )
-      )
-      (set_local $4
-       (i32.sub
-        (get_local $4)
-        (i32.const 1)
-       )
-      )
-      (set_local $8
+    (set_local $4
+     (i32.sub
+      (get_local $4)
+      (i32.clz
        (i32.shl
-        (get_local $8)
-        (i32.const 1)
+        (get_local $2)
+        (i32.const 9)
        )
       )
-      (br $repeat|0)
      )
     )
     (set_local $2
@@ -10576,37 +10294,15 @@
     (get_local $5)
    )
    (block
-    (block $break|1
-     (set_local $8
-      (i32.shl
-       (get_local $3)
-       (i32.const 9)
-      )
-     )
-     (loop $repeat|1
-      (br_if $break|1
-       (i32.eqz
-        (i32.eqz
-         (i32.shr_u
-          (get_local $8)
-          (i32.const 31)
-         )
-        )
-       )
-      )
-      (set_local $5
-       (i32.sub
-        (get_local $5)
-        (i32.const 1)
-       )
-      )
-      (set_local $8
+    (set_local $5
+     (i32.sub
+      (get_local $5)
+      (i32.clz
        (i32.shl
-        (get_local $8)
-        (i32.const 1)
+        (get_local $3)
+        (i32.const 9)
        )
       )
-      (br $repeat|1)
      )
     )
     (set_local $3
@@ -10643,9 +10339,9 @@
     )
    )
   )
-  (block $break|2
-   (loop $repeat|2
-    (br_if $break|2
+  (block $break|0
+   (loop $repeat|0
+    (br_if $break|0
      (i32.eqz
       (i32.gt_s
        (get_local $4)
@@ -10654,7 +10350,7 @@
      )
     )
     (block
-     (set_local $8
+     (set_local $10
       (i32.sub
        (get_local $2)
        (get_local $3)
@@ -10663,14 +10359,14 @@
      (if
       (i32.eqz
        (i32.shr_u
-        (get_local $8)
+        (get_local $10)
         (i32.const 31)
        )
       )
       (block
        (if
         (i32.eqz
-         (get_local $8)
+         (get_local $10)
         )
         (return
          (f32.mul
@@ -10680,7 +10376,7 @@
         )
        )
        (set_local $2
-        (get_local $8)
+        (get_local $10)
        )
       )
      )
@@ -10697,10 +10393,10 @@
       (i32.const 1)
      )
     )
-    (br $repeat|2)
+    (br $repeat|0)
    )
   )
-  (set_local $8
+  (set_local $10
    (i32.sub
     (get_local $2)
     (get_local $3)
@@ -10709,14 +10405,14 @@
   (if
    (i32.eqz
     (i32.shr_u
-     (get_local $8)
+     (get_local $10)
      (i32.const 31)
     )
    )
    (block
     (if
      (i32.eqz
-      (get_local $8)
+      (get_local $10)
      )
      (return
       (f32.mul
@@ -10726,35 +10422,28 @@
      )
     )
     (set_local $2
-     (get_local $8)
+     (get_local $10)
     )
    )
   )
-  (block $break|3
-   (loop $repeat|3
-    (br_if $break|3
-     (i32.eqz
-      (i32.eqz
-       (i32.shr_u
-        (get_local $2)
-        (i32.const 23)
-       )
-      )
-     )
+  (set_local $11
+   (i32.clz
+    (i32.shl
+     (get_local $2)
+     (i32.const 8)
     )
-    (set_local $4
-     (i32.sub
-      (get_local $4)
-      (i32.const 1)
-     )
-    )
-    (set_local $2
-     (i32.shl
-      (get_local $2)
-      (i32.const 1)
-     )
-    )
-    (br $repeat|3)
+   )
+  )
+  (set_local $4
+   (i32.sub
+    (get_local $4)
+    (get_local $11)
+   )
+  )
+  (set_local $2
+   (i32.shl
+    (get_local $2)
+    (get_local $11)
    )
   )
   (if
@@ -10805,7 +10494,7 @@
    (get_local $2)
   )
  )
- (func $std/math/test_modf (; 127 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_modf (; 125 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.mod
     (get_local $0)
@@ -10816,7 +10505,7 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMath.pow (; 128 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 126 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -10827,8 +10516,8 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 f64)
-  (local $13 f64)
+  (local $12 i32)
+  (local $13 i32)
   (local $14 f64)
   (local $15 f64)
   (local $16 f64)
@@ -10839,10 +10528,10 @@
   (local $21 f64)
   (local $22 f64)
   (local $23 f64)
-  (local $24 i32)
-  (local $25 i32)
-  (local $26 f64)
-  (local $27 f64)
+  (local $24 f64)
+  (local $25 f64)
+  (local $26 i32)
+  (local $27 i32)
   (local $28 f64)
   (local $29 f64)
   (local $30 f64)
@@ -10853,7 +10542,9 @@
   (local $35 f64)
   (local $36 f64)
   (local $37 f64)
-  (local $38 i32)
+  (local $38 f64)
+  (local $39 f64)
+  (local $40 i32)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -11002,78 +10693,49 @@
         (i32.const 1023)
        )
       )
-      (if
-       (i32.gt_s
+      (set_local $9
+       (i32.sub
+        (select
+         (i32.const 52)
+         (i32.const 20)
+         (i32.gt_s
+          (get_local $11)
+          (i32.const 20)
+         )
+        )
         (get_local $11)
-        (i32.const 20)
        )
-       (block
-        (set_local $9
-         (i32.shr_u
-          (get_local $6)
-          (i32.sub
-           (i32.const 52)
-           (get_local $11)
-          )
-         )
-        )
-        (if
-         (i32.eq
-          (i32.shl
-           (get_local $9)
-           (i32.sub
-            (i32.const 52)
-            (get_local $11)
-           )
-          )
-          (get_local $6)
-         )
-         (set_local $10
-          (i32.sub
-           (i32.const 2)
-           (i32.and
-            (get_local $9)
-            (i32.const 1)
-           )
-          )
-         )
+      )
+      (set_local $12
+       (select
+        (get_local $6)
+        (get_local $8)
+        (i32.gt_s
+         (get_local $11)
+         (i32.const 20)
         )
        )
-       (if
-        (i32.eq
-         (get_local $6)
-         (i32.const 0)
+      )
+      (set_local $13
+       (i32.shr_s
+        (get_local $12)
+        (get_local $9)
+       )
+      )
+      (if
+       (i32.eq
+        (i32.shl
+         (get_local $13)
+         (get_local $9)
         )
-        (block
-         (set_local $9
-          (i32.shr_s
-           (get_local $8)
-           (i32.sub
-            (i32.const 20)
-            (get_local $11)
-           )
-          )
-         )
-         (if
-          (i32.eq
-           (i32.shl
-            (get_local $9)
-            (i32.sub
-             (i32.const 20)
-             (get_local $11)
-            )
-           )
-           (get_local $8)
-          )
-          (set_local $10
-           (i32.sub
-            (i32.const 2)
-            (i32.and
-             (get_local $9)
-             (i32.const 1)
-            )
-           )
-          )
+        (get_local $12)
+       )
+       (set_local $10
+        (i32.sub
+         (i32.const 2)
+         (i32.and
+          (get_local $13)
+          (i32.const 1)
          )
         )
        )
@@ -11194,7 +10856,7 @@
     )
    )
   )
-  (set_local $12
+  (set_local $14
    (f64.abs
     (get_local $0)
    )
@@ -11206,40 +10868,40 @@
    )
    (if
     (if (result i32)
-     (tee_local $9
+     (tee_local $13
       (if (result i32)
-       (tee_local $9
+       (tee_local $13
         (i32.eq
          (get_local $7)
          (i32.const 2146435072)
         )
        )
-       (get_local $9)
+       (get_local $13)
        (i32.eq
         (get_local $7)
         (i32.const 0)
        )
       )
      )
-     (get_local $9)
+     (get_local $13)
      (i32.eq
       (get_local $7)
       (i32.const 1072693248)
      )
     )
     (block
-     (set_local $13
-      (get_local $12)
+     (set_local $15
+      (get_local $14)
      )
      (if
       (i32.lt_s
        (get_local $5)
        (i32.const 0)
       )
-      (set_local $13
+      (set_local $15
        (f64.div
         (f64.const 1)
-        (get_local $13)
+        (get_local $15)
        )
       )
      )
@@ -11259,15 +10921,15 @@
         )
         (i32.const 0)
        )
-       (set_local $13
+       (set_local $15
         (f64.div
          (f64.sub
-          (get_local $13)
-          (get_local $13)
+          (get_local $15)
+          (get_local $15)
          )
          (f64.sub
-          (get_local $13)
-          (get_local $13)
+          (get_local $15)
+          (get_local $15)
          )
         )
        )
@@ -11276,21 +10938,21 @@
          (get_local $10)
          (i32.const 1)
         )
-        (set_local $13
+        (set_local $15
          (f64.neg
-          (get_local $13)
+          (get_local $15)
          )
         )
        )
       )
      )
      (return
-      (get_local $13)
+      (get_local $15)
      )
     )
    )
   )
-  (set_local $14
+  (set_local $16
    (f64.const 1)
   )
   (if
@@ -11322,7 +10984,7 @@
       (get_local $10)
       (i32.const 1)
      )
-     (set_local $14
+     (set_local $16
       (f64.const -1)
      )
     )
@@ -11399,14 +11061,14 @@
        )
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1.e+300)
         )
         (f64.const 1.e+300)
        )
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1e-300)
         )
         (f64.const 1e-300)
@@ -11427,14 +11089,14 @@
        )
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1.e+300)
         )
         (f64.const 1.e+300)
        )
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1e-300)
         )
         (f64.const 1e-300)
@@ -11442,26 +11104,26 @@
       )
      )
     )
-    (set_local $20
+    (set_local $22
      (f64.sub
-      (get_local $12)
+      (get_local $14)
       (f64.const 1)
      )
     )
-    (set_local $23
+    (set_local $25
      (f64.mul
       (f64.mul
-       (get_local $20)
-       (get_local $20)
+       (get_local $22)
+       (get_local $22)
       )
       (f64.sub
        (f64.const 0.5)
        (f64.mul
-        (get_local $20)
+        (get_local $22)
         (f64.sub
          (f64.const 0.3333333333333333)
          (f64.mul
-          (get_local $20)
+          (get_local $22)
           (f64.const 0.25)
          )
         )
@@ -11469,52 +11131,52 @@
       )
      )
     )
-    (set_local $21
+    (set_local $23
      (f64.mul
       (f64.const 1.4426950216293335)
-      (get_local $20)
+      (get_local $22)
      )
     )
-    (set_local $22
+    (set_local $24
      (f64.sub
       (f64.mul
-       (get_local $20)
+       (get_local $22)
        (f64.const 1.9259629911266175e-08)
       )
       (f64.mul
-       (get_local $23)
+       (get_local $25)
        (f64.const 1.4426950408889634)
       )
      )
     )
-    (set_local $15
+    (set_local $17
      (f64.add
-      (get_local $21)
-      (get_local $22)
+      (get_local $23)
+      (get_local $24)
      )
     )
-    (set_local $15
+    (set_local $17
      (f64.reinterpret/i64
       (i64.and
        (i64.reinterpret/f64
-        (get_local $15)
+        (get_local $17)
        )
        (i64.const -4294967296)
       )
      )
     )
-    (set_local $16
+    (set_local $18
      (f64.sub
-      (get_local $22)
+      (get_local $24)
       (f64.sub
-       (get_local $15)
-       (get_local $21)
+       (get_local $17)
+       (get_local $23)
       )
      )
     )
    )
    (block
-    (set_local $25
+    (set_local $27
      (i32.const 0)
     )
     (if
@@ -11523,15 +11185,15 @@
       (i32.const 1048576)
      )
      (block
-      (set_local $12
+      (set_local $14
        (f64.mul
-        (get_local $12)
+        (get_local $14)
         (f64.const 9007199254740992)
        )
       )
-      (set_local $25
+      (set_local $27
        (i32.sub
-        (get_local $25)
+        (get_local $27)
         (i32.const 53)
        )
       )
@@ -11539,7 +11201,7 @@
        (i32.wrap/i64
         (i64.shr_u
          (i64.reinterpret/f64
-          (get_local $12)
+          (get_local $14)
          )
          (i64.const 32)
         )
@@ -11547,9 +11209,9 @@
       )
      )
     )
-    (set_local $25
+    (set_local $27
      (i32.add
-      (get_local $25)
+      (get_local $27)
       (i32.sub
        (i32.shr_s
         (get_local $7)
@@ -11559,7 +11221,7 @@
       )
      )
     )
-    (set_local $24
+    (set_local $26
      (i32.and
       (get_local $7)
       (i32.const 1048575)
@@ -11567,13 +11229,13 @@
     )
     (set_local $7
      (i32.or
-      (get_local $24)
+      (get_local $26)
       (i32.const 1072693248)
      )
     )
     (if
      (i32.le_s
-      (get_local $24)
+      (get_local $26)
       (i32.const 235662)
      )
      (set_local $11
@@ -11581,7 +11243,7 @@
      )
      (if
       (i32.lt_s
-       (get_local $24)
+       (get_local $26)
        (i32.const 767610)
       )
       (set_local $11
@@ -11591,9 +11253,9 @@
        (set_local $11
         (i32.const 0)
        )
-       (set_local $25
+       (set_local $27
         (i32.add
-         (get_local $25)
+         (get_local $27)
          (i32.const 1)
         )
        )
@@ -11606,12 +11268,12 @@
       )
      )
     )
-    (set_local $12
+    (set_local $14
      (f64.reinterpret/i64
       (i64.or
        (i64.and
         (i64.reinterpret/f64
-         (get_local $12)
+         (get_local $14)
         )
         (i64.const 4294967295)
        )
@@ -11624,48 +11286,48 @@
       )
      )
     )
-    (set_local $32
+    (set_local $34
      (select
       (f64.const 1.5)
       (f64.const 1)
       (get_local $11)
      )
     )
-    (set_local $21
+    (set_local $23
      (f64.sub
-      (get_local $12)
-      (get_local $32)
+      (get_local $14)
+      (get_local $34)
      )
     )
-    (set_local $22
+    (set_local $24
      (f64.div
       (f64.const 1)
       (f64.add
-       (get_local $12)
-       (get_local $32)
+       (get_local $14)
+       (get_local $34)
       )
      )
     )
-    (set_local $26
+    (set_local $28
      (f64.mul
-      (get_local $21)
-      (get_local $22)
+      (get_local $23)
+      (get_local $24)
      )
     )
-    (set_local $28
-     (get_local $26)
+    (set_local $30
+     (get_local $28)
     )
-    (set_local $28
+    (set_local $30
      (f64.reinterpret/i64
       (i64.and
        (i64.reinterpret/f64
-        (get_local $28)
+        (get_local $30)
        )
        (i64.const -4294967296)
       )
      )
     )
-    (set_local $30
+    (set_local $32
      (f64.reinterpret/i64
       (i64.shl
        (i64.extend_s/i32
@@ -11690,65 +11352,65 @@
       )
      )
     )
-    (set_local $31
+    (set_local $33
      (f64.sub
-      (get_local $12)
+      (get_local $14)
       (f64.sub
-       (get_local $30)
        (get_local $32)
+       (get_local $34)
+      )
+     )
+    )
+    (set_local $31
+     (f64.mul
+      (get_local $24)
+      (f64.sub
+       (f64.sub
+        (get_local $23)
+        (f64.mul
+         (get_local $30)
+         (get_local $32)
+        )
+       )
+       (f64.mul
+        (get_local $30)
+        (get_local $33)
+       )
       )
      )
     )
     (set_local $29
      (f64.mul
-      (get_local $22)
-      (f64.sub
-       (f64.sub
-        (get_local $21)
-        (f64.mul
-         (get_local $28)
-         (get_local $30)
-        )
-       )
-       (f64.mul
-        (get_local $28)
-        (get_local $31)
-       )
-      )
+      (get_local $28)
+      (get_local $28)
      )
     )
-    (set_local $27
-     (f64.mul
-      (get_local $26)
-      (get_local $26)
-     )
-    )
-    (set_local $19
+    (set_local $21
      (f64.mul
       (f64.mul
-       (get_local $27)
-       (get_local $27)
+       (get_local $29)
+       (get_local $29)
       )
       (f64.add
        (f64.const 0.5999999999999946)
        (f64.mul
-        (get_local $27)
+        (get_local $29)
         (f64.add
          (f64.const 0.4285714285785502)
          (f64.mul
-          (get_local $27)
+          (get_local $29)
           (f64.add
            (f64.const 0.33333332981837743)
            (f64.mul
-            (get_local $27)
+            (get_local $29)
             (f64.add
              (f64.const 0.272728123808534)
              (f64.mul
-              (get_local $27)
+              (get_local $29)
               (f64.add
                (f64.const 0.23066074577556175)
                (f64.mul
-                (get_local $27)
+                (get_local $29)
                 (f64.const 0.20697501780033842)
                )
               )
@@ -11762,76 +11424,147 @@
       )
      )
     )
-    (set_local $19
+    (set_local $21
      (f64.add
-      (get_local $19)
+      (get_local $21)
       (f64.mul
-       (get_local $29)
+       (get_local $31)
        (f64.add
+        (get_local $30)
         (get_local $28)
-        (get_local $26)
        )
       )
      )
     )
-    (set_local $27
+    (set_local $29
      (f64.mul
-      (get_local $28)
-      (get_local $28)
+      (get_local $30)
+      (get_local $30)
      )
     )
-    (set_local $30
+    (set_local $32
      (f64.add
       (f64.add
        (f64.const 3)
-       (get_local $27)
+       (get_local $29)
       )
-      (get_local $19)
+      (get_local $21)
      )
     )
-    (set_local $30
+    (set_local $32
      (f64.reinterpret/i64
       (i64.and
        (i64.reinterpret/f64
-        (get_local $30)
+        (get_local $32)
        )
        (i64.const -4294967296)
       )
      )
     )
-    (set_local $31
+    (set_local $33
      (f64.sub
-      (get_local $19)
+      (get_local $21)
       (f64.sub
        (f64.sub
-        (get_local $30)
+        (get_local $32)
         (f64.const 3)
        )
-       (get_local $27)
+       (get_local $29)
       )
      )
     )
-    (set_local $21
+    (set_local $23
      (f64.mul
-      (get_local $28)
       (get_local $30)
+      (get_local $32)
+     )
+    )
+    (set_local $24
+     (f64.add
+      (f64.mul
+       (get_local $31)
+       (get_local $32)
+      )
+      (f64.mul
+       (get_local $33)
+       (get_local $28)
+      )
+     )
+    )
+    (set_local $19
+     (f64.add
+      (get_local $23)
+      (get_local $24)
+     )
+    )
+    (set_local $19
+     (f64.reinterpret/i64
+      (i64.and
+       (i64.reinterpret/f64
+        (get_local $19)
+       )
+       (i64.const -4294967296)
+      )
+     )
+    )
+    (set_local $20
+     (f64.sub
+      (get_local $24)
+      (f64.sub
+       (get_local $19)
+       (get_local $23)
+      )
+     )
+    )
+    (set_local $35
+     (f64.mul
+      (f64.const 0.9617967009544373)
+      (get_local $19)
+     )
+    )
+    (set_local $36
+     (select
+      (f64.const 1.350039202129749e-08)
+      (f64.const 0)
+      (get_local $11)
+     )
+    )
+    (set_local $37
+     (f64.add
+      (f64.add
+       (f64.mul
+        (f64.const -7.028461650952758e-09)
+        (get_local $19)
+       )
+       (f64.mul
+        (get_local $20)
+        (f64.const 0.9617966939259756)
+       )
+      )
+      (get_local $36)
      )
     )
     (set_local $22
-     (f64.add
-      (f64.mul
-       (get_local $29)
-       (get_local $30)
-      )
-      (f64.mul
-       (get_local $31)
-       (get_local $26)
-      )
+     (f64.convert_s/i32
+      (get_local $27)
+     )
+    )
+    (set_local $38
+     (select
+      (f64.const 0.5849624872207642)
+      (f64.const 0)
+      (get_local $11)
      )
     )
     (set_local $17
      (f64.add
-      (get_local $21)
+      (f64.add
+       (f64.add
+        (get_local $35)
+        (get_local $37)
+       )
+       (get_local $38)
+      )
       (get_local $22)
      )
     )
@@ -11847,138 +11580,67 @@
     )
     (set_local $18
      (f64.sub
-      (get_local $22)
-      (f64.sub
-       (get_local $17)
-       (get_local $21)
-      )
-     )
-    )
-    (set_local $33
-     (f64.mul
-      (f64.const 0.9617967009544373)
-      (get_local $17)
-     )
-    )
-    (set_local $34
-     (select
-      (f64.const 1.350039202129749e-08)
-      (f64.const 0)
-      (get_local $11)
-     )
-    )
-    (set_local $35
-     (f64.add
-      (f64.add
-       (f64.mul
-        (f64.const -7.028461650952758e-09)
-        (get_local $17)
-       )
-       (f64.mul
-        (get_local $18)
-        (f64.const 0.9617966939259756)
-       )
-      )
-      (get_local $34)
-     )
-    )
-    (set_local $20
-     (f64.convert_s/i32
-      (get_local $25)
-     )
-    )
-    (set_local $36
-     (select
-      (f64.const 0.5849624872207642)
-      (f64.const 0)
-      (get_local $11)
-     )
-    )
-    (set_local $15
-     (f64.add
-      (f64.add
-       (f64.add
-        (get_local $33)
-        (get_local $35)
-       )
-       (get_local $36)
-      )
-      (get_local $20)
-     )
-    )
-    (set_local $15
-     (f64.reinterpret/i64
-      (i64.and
-       (i64.reinterpret/f64
-        (get_local $15)
-       )
-       (i64.const -4294967296)
-      )
-     )
-    )
-    (set_local $16
-     (f64.sub
-      (get_local $35)
+      (get_local $37)
       (f64.sub
        (f64.sub
         (f64.sub
-         (get_local $15)
-         (get_local $20)
+         (get_local $17)
+         (get_local $22)
         )
-        (get_local $36)
+        (get_local $38)
        )
-       (get_local $33)
+       (get_local $35)
       )
      )
     )
    )
   )
-  (set_local $37
+  (set_local $39
    (get_local $1)
   )
-  (set_local $37
+  (set_local $39
    (f64.reinterpret/i64
     (i64.and
      (i64.reinterpret/f64
-      (get_local $37)
+      (get_local $39)
      )
      (i64.const -4294967296)
     )
    )
   )
-  (set_local $18
+  (set_local $20
    (f64.add
     (f64.mul
      (f64.sub
       (get_local $1)
-      (get_local $37)
+      (get_local $39)
      )
-     (get_local $15)
+     (get_local $17)
     )
     (f64.mul
      (get_local $1)
-     (get_local $16)
+     (get_local $18)
     )
    )
   )
-  (set_local $17
+  (set_local $19
    (f64.mul
-    (get_local $37)
-    (get_local $15)
+    (get_local $39)
+    (get_local $17)
    )
   )
-  (set_local $13
+  (set_local $15
    (f64.add
-    (get_local $18)
-    (get_local $17)
+    (get_local $20)
+    (get_local $19)
    )
   )
   (set_local $2
    (i64.reinterpret/f64
-    (get_local $13)
+    (get_local $15)
    )
   )
-  (set_local $24
+  (set_local $26
    (i32.wrap/i64
     (i64.shr_u
      (get_local $2)
@@ -11986,14 +11648,14 @@
     )
    )
   )
-  (set_local $38
+  (set_local $40
    (i32.wrap/i64
     (get_local $2)
    )
   )
   (if
    (i32.ge_s
-    (get_local $24)
+    (get_local $26)
     (i32.const 1083179008)
    )
    (block
@@ -12001,17 +11663,17 @@
      (i32.ne
       (i32.or
        (i32.sub
-        (get_local $24)
+        (get_local $26)
         (i32.const 1083179008)
        )
-       (get_local $38)
+       (get_local $40)
       )
       (i32.const 0)
      )
      (return
       (f64.mul
        (f64.mul
-        (get_local $14)
+        (get_local $16)
         (f64.const 1.e+300)
        )
        (f64.const 1.e+300)
@@ -12021,18 +11683,18 @@
     (if
      (f64.gt
       (f64.add
-       (get_local $18)
+       (get_local $20)
        (f64.const 8.008566259537294e-17)
       )
       (f64.sub
-       (get_local $13)
-       (get_local $17)
+       (get_local $15)
+       (get_local $19)
       )
      )
      (return
       (f64.mul
        (f64.mul
-        (get_local $14)
+        (get_local $16)
         (f64.const 1.e+300)
        )
        (f64.const 1.e+300)
@@ -12043,7 +11705,7 @@
    (if
     (i32.ge_s
      (i32.and
-      (get_local $24)
+      (get_local $26)
       (i32.const 2147483647)
      )
      (i32.const 1083231232)
@@ -12053,17 +11715,17 @@
       (i32.ne
        (i32.or
         (i32.sub
-         (get_local $24)
+         (get_local $26)
          (i32.const -1064252416)
         )
-        (get_local $38)
+        (get_local $40)
        )
        (i32.const 0)
       )
       (return
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1e-300)
         )
         (f64.const 1e-300)
@@ -12072,16 +11734,16 @@
      )
      (if
       (f64.le
-       (get_local $18)
+       (get_local $20)
        (f64.sub
-        (get_local $13)
-        (get_local $17)
+        (get_local $15)
+        (get_local $19)
        )
       )
       (return
        (f64.mul
         (f64.mul
-         (get_local $14)
+         (get_local $16)
          (f64.const 1e-300)
         )
         (f64.const 1e-300)
@@ -12091,33 +11753,33 @@
     )
    )
   )
-  (set_local $38
+  (set_local $40
    (i32.and
-    (get_local $24)
+    (get_local $26)
     (i32.const 2147483647)
    )
   )
   (set_local $11
    (i32.sub
     (i32.shr_s
-     (get_local $38)
+     (get_local $40)
      (i32.const 20)
     )
     (i32.const 1023)
    )
   )
-  (set_local $25
+  (set_local $27
    (i32.const 0)
   )
   (if
    (i32.gt_s
-    (get_local $38)
+    (get_local $40)
     (i32.const 1071644672)
    )
    (block
-    (set_local $25
+    (set_local $27
      (i32.add
-      (get_local $24)
+      (get_local $26)
       (i32.shr_s
        (i32.const 1048576)
        (i32.add
@@ -12131,7 +11793,7 @@
      (i32.sub
       (i32.shr_s
        (i32.and
-        (get_local $25)
+        (get_local $27)
         (i32.const 2147483647)
        )
        (i32.const 20)
@@ -12139,15 +11801,15 @@
       (i32.const 1023)
      )
     )
-    (set_local $20
+    (set_local $22
      (f64.const 0)
     )
-    (set_local $20
+    (set_local $22
      (f64.reinterpret/i64
       (i64.shl
        (i64.extend_s/i32
         (i32.and
-         (get_local $25)
+         (get_local $27)
          (i32.xor
           (i32.shr_s
            (i32.const 1048575)
@@ -12161,11 +11823,11 @@
       )
      )
     )
-    (set_local $25
+    (set_local $27
      (i32.shr_s
       (i32.or
        (i32.and
-        (get_local $25)
+        (get_local $27)
         (i32.const 1048575)
        )
        (i32.const 1048576)
@@ -12178,106 +11840,106 @@
     )
     (if
      (i32.lt_s
-      (get_local $24)
+      (get_local $26)
       (i32.const 0)
      )
-     (set_local $25
+     (set_local $27
       (i32.sub
        (i32.const 0)
-       (get_local $25)
+       (get_local $27)
       )
      )
     )
-    (set_local $17
+    (set_local $19
      (f64.sub
-      (get_local $17)
-      (get_local $20)
+      (get_local $19)
+      (get_local $22)
      )
     )
    )
   )
-  (set_local $20
+  (set_local $22
    (f64.add
-    (get_local $18)
-    (get_local $17)
+    (get_local $20)
+    (get_local $19)
    )
   )
-  (set_local $20
+  (set_local $22
    (f64.reinterpret/i64
     (i64.and
      (i64.reinterpret/f64
-      (get_local $20)
+      (get_local $22)
      )
      (i64.const -4294967296)
     )
    )
   )
-  (set_local $21
+  (set_local $23
    (f64.mul
-    (get_local $20)
+    (get_local $22)
     (f64.const 0.6931471824645996)
    )
   )
-  (set_local $22
+  (set_local $24
    (f64.add
     (f64.mul
      (f64.sub
-      (get_local $18)
+      (get_local $20)
       (f64.sub
-       (get_local $20)
-       (get_local $17)
+       (get_local $22)
+       (get_local $19)
       )
      )
      (f64.const 0.6931471805599453)
     )
     (f64.mul
-     (get_local $20)
+     (get_local $22)
      (f64.const -1.904654299957768e-09)
     )
    )
   )
-  (set_local $13
+  (set_local $15
    (f64.add
-    (get_local $21)
-    (get_local $22)
+    (get_local $23)
+    (get_local $24)
    )
   )
-  (set_local $23
+  (set_local $25
    (f64.sub
-    (get_local $22)
+    (get_local $24)
     (f64.sub
-     (get_local $13)
-     (get_local $21)
+     (get_local $15)
+     (get_local $23)
     )
    )
   )
-  (set_local $20
+  (set_local $22
    (f64.mul
-    (get_local $13)
-    (get_local $13)
+    (get_local $15)
+    (get_local $15)
    )
   )
-  (set_local $15
+  (set_local $17
    (f64.sub
-    (get_local $13)
+    (get_local $15)
     (f64.mul
-     (get_local $20)
+     (get_local $22)
      (f64.add
       (f64.const 0.16666666666666602)
       (f64.mul
-       (get_local $20)
+       (get_local $22)
        (f64.add
         (f64.const -2.7777777777015593e-03)
         (f64.mul
-         (get_local $20)
+         (get_local $22)
          (f64.add
           (f64.const 6.613756321437934e-05)
           (f64.mul
-           (get_local $20)
+           (get_local $22)
            (f64.add
             (f64.const -1.6533902205465252e-06)
             (f64.mul
-             (get_local $20)
+             (get_local $22)
              (f64.const 4.1381367970572385e-08)
             )
            )
@@ -12290,51 +11952,51 @@
     )
    )
   )
-  (set_local $19
+  (set_local $21
    (f64.sub
     (f64.div
      (f64.mul
-      (get_local $13)
       (get_local $15)
+      (get_local $17)
      )
      (f64.sub
-      (get_local $15)
+      (get_local $17)
       (f64.const 2)
      )
     )
     (f64.add
-     (get_local $23)
+     (get_local $25)
      (f64.mul
-      (get_local $13)
-      (get_local $23)
+      (get_local $15)
+      (get_local $25)
      )
     )
    )
   )
-  (set_local $13
+  (set_local $15
    (f64.sub
     (f64.const 1)
     (f64.sub
-     (get_local $19)
-     (get_local $13)
+     (get_local $21)
+     (get_local $15)
     )
    )
   )
-  (set_local $24
+  (set_local $26
    (i32.wrap/i64
     (i64.shr_u
      (i64.reinterpret/f64
-      (get_local $13)
+      (get_local $15)
      )
      (i64.const 32)
     )
    )
   )
-  (set_local $24
+  (set_local $26
    (i32.add
-    (get_local $24)
+    (get_local $26)
     (i32.shl
-     (get_local $25)
+     (get_local $27)
      (i32.const 20)
     )
    )
@@ -12342,29 +12004,29 @@
   (if
    (i32.le_s
     (i32.shr_s
-     (get_local $24)
+     (get_local $26)
      (i32.const 20)
     )
     (i32.const 0)
    )
-   (set_local $13
+   (set_local $15
     (call $~lib/math/NativeMath.scalbn
-     (get_local $13)
-     (get_local $25)
+     (get_local $15)
+     (get_local $27)
     )
    )
-   (set_local $13
+   (set_local $15
     (f64.reinterpret/i64
      (i64.or
       (i64.and
        (i64.reinterpret/f64
-        (get_local $13)
+        (get_local $15)
        )
        (i64.const 4294967295)
       )
       (i64.shl
        (i64.extend_s/i32
-        (get_local $24)
+        (get_local $26)
        )
        (i64.const 32)
       )
@@ -12373,11 +12035,11 @@
    )
   )
   (f64.mul
-   (get_local $14)
-   (get_local $13)
+   (get_local $16)
+   (get_local $15)
   )
  )
- (func $std/math/test_pow (; 129 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_pow (; 127 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 i32)
   (if (result i32)
    (tee_local $5
@@ -12399,7 +12061,7 @@
     )
     (get_local $5)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.pow
+     (call $~lib/bindings/Math/pow
       (get_local $0)
       (get_local $1)
      )
@@ -12411,7 +12073,7 @@
    (get_local $5)
   )
  )
- (func $~lib/math/NativeMathf.pow (; 130 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 128 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13729,7 +13391,7 @@
    (get_local $11)
   )
  )
- (func $std/math/test_powf (; 131 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_powf (; 129 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.pow
     (get_local $0)
@@ -13740,7 +13402,7 @@
    (get_local $4)
   )
  )
- (func $~lib/math/murmurHash3 (; 132 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (; 130 ;) (type $II) (param $0 i64) (result i64)
   (set_local $0
    (i64.xor
     (get_local $0)
@@ -13782,7 +13444,58 @@
   )
   (get_local $0)
  )
- (func $~lib/math/NativeMath.seedRandom (; 133 ;) (type $Iv) (param $0 i64)
+ (func $~lib/math/splitMix32 (; 131 ;) (type $ii) (param $0 i32) (result i32)
+  (set_local $0
+   (i32.add
+    (get_local $0)
+    (i32.const 1831565813)
+   )
+  )
+  (set_local $0
+   (i32.mul
+    (i32.xor
+     (get_local $0)
+     (i32.shr_u
+      (get_local $0)
+      (i32.const 15)
+     )
+    )
+    (i32.or
+     (get_local $0)
+     (i32.const 1)
+    )
+   )
+  )
+  (set_local $0
+   (i32.xor
+    (get_local $0)
+    (i32.add
+     (get_local $0)
+     (i32.mul
+      (i32.xor
+       (get_local $0)
+       (i32.shr_u
+        (get_local $0)
+        (i32.const 7)
+       )
+      )
+      (i32.or
+       (get_local $0)
+       (i32.const 61)
+      )
+     )
+    )
+   )
+  )
+  (i32.xor
+   (get_local $0)
+   (i32.shr_u
+    (get_local $0)
+    (i32.const 14)
+   )
+  )
+ )
+ (func $~lib/math/NativeMath.seedRandom (; 132 ;) (type $Iv) (param $0 i64)
   (if
    (i64.eqz
     (get_local $0)
@@ -13791,7 +13504,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1000)
+     (i32.const 955)
      (i32.const 4)
     )
     (unreachable)
@@ -13800,18 +13513,33 @@
   (set_global $~lib/math/random_seeded
    (i32.const 1)
   )
-  (set_global $~lib/math/random_state0
+  (set_global $~lib/math/random_state0_64
    (call $~lib/math/murmurHash3
     (get_local $0)
    )
   )
-  (set_global $~lib/math/random_state1
+  (set_global $~lib/math/random_state1_64
    (call $~lib/math/murmurHash3
-    (get_global $~lib/math/random_state0)
+    (i64.xor
+     (get_global $~lib/math/random_state0_64)
+     (i64.const -1)
+    )
+   )
+  )
+  (set_global $~lib/math/random_state0_32
+   (call $~lib/math/splitMix32
+    (i32.wrap/i64
+     (get_local $0)
+    )
+   )
+  )
+  (set_global $~lib/math/random_state1_32
+   (call $~lib/math/splitMix32
+    (get_global $~lib/math/random_state0_32)
    )
   )
  )
- (func $~lib/math/NativeMath.random (; 134 ;) (type $F) (result f64)
+ (func $~lib/math/NativeMath.random (; 133 ;) (type $F) (result f64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i64)
@@ -13823,19 +13551,19 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 1007)
+     (i32.const 964)
      (i32.const 24)
     )
     (unreachable)
    )
   )
   (set_local $0
-   (get_global $~lib/math/random_state0)
+   (get_global $~lib/math/random_state0_64)
   )
   (set_local $1
-   (get_global $~lib/math/random_state1)
+   (get_global $~lib/math/random_state1_64)
   )
-  (set_global $~lib/math/random_state0
+  (set_global $~lib/math/random_state0_64
    (get_local $1)
   )
   (set_local $0
@@ -13871,7 +13599,7 @@
     )
    )
   )
-  (set_global $~lib/math/random_state1
+  (set_global $~lib/math/random_state1_64
    (get_local $0)
   )
   (set_local $2
@@ -13893,374 +13621,143 @@
    (f64.const 1)
   )
  )
- (func $~lib/math/NativeMathf.random (; 135 ;) (type $f) (result f32)
-  (local $0 f32)
-  (block $break|0
-   (loop $continue|0
-    (set_local $0
-     (f32.demote/f64
-      (call $~lib/math/NativeMath.random)
-     )
-    )
-    (br_if $continue|0
-     (f32.eq
-      (get_local $0)
-      (f32.const 1)
-     )
-    )
-   )
-  )
-  (get_local $0)
- )
- (func $~lib/math/NativeMath.round (; 136 ;) (type $FF) (param $0 f64) (result f64)
-  (local $1 i64)
-  (local $2 i32)
-  (local $3 f64)
-  (set_local $1
-   (i64.reinterpret/f64
-    (get_local $0)
-   )
-  )
-  (set_local $2
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $1)
-      (i64.const 52)
-     )
-     (i64.const 2047)
-    )
-   )
-  )
-  (if
-   (i32.ge_s
-    (get_local $2)
-    (i32.add
-     (i32.const 1023)
-     (i32.const 52)
-    )
-   )
-   (return
-    (get_local $0)
-   )
-  )
-  (if
-   (i32.lt_s
-    (get_local $2)
-    (i32.sub
-     (i32.const 1023)
-     (i32.const 1)
-    )
-   )
-   (return
-    (f64.mul
-     (f64.const 0)
-     (get_local $0)
-    )
-   )
-  )
-  (if
-   (i64.ne
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (block
-    (set_local $3
-     (f64.add
-      (f64.sub
-       (f64.sub
-        (f64.const 4503599627370496)
-        (get_local $0)
-       )
-       (f64.const 4503599627370496)
-      )
-      (get_local $0)
-     )
-    )
-    (if
-     (f64.ge
-      (get_local $3)
-      (f64.const 0.5)
-     )
-     (set_local $3
-      (f64.add
-       (f64.sub
-        (get_local $0)
-        (get_local $3)
-       )
-       (f64.const 1)
-      )
-     )
-     (if
-      (f64.lt
-       (get_local $3)
-       (f64.const -0.5)
-      )
-      (set_local $3
-       (f64.sub
-        (f64.sub
-         (get_local $0)
-         (get_local $3)
-        )
-        (f64.const 1)
-       )
-      )
-      (set_local $3
-       (f64.sub
-        (get_local $0)
-        (get_local $3)
-       )
-      )
-     )
-    )
-   )
-   (block
-    (set_local $3
-     (f64.sub
-      (f64.sub
-       (f64.add
-        (get_local $0)
-        (f64.const 4503599627370496)
-       )
-       (f64.const 4503599627370496)
-      )
-      (get_local $0)
-     )
-    )
-    (if
-     (f64.gt
-      (get_local $3)
-      (f64.const 0.5)
-     )
-     (set_local $3
-      (f64.sub
-       (f64.add
-        (get_local $3)
-        (get_local $0)
-       )
-       (f64.const 1)
-      )
-     )
-     (if
-      (f64.le
-       (get_local $3)
-       (f64.const -0.5)
-      )
-      (set_local $3
-       (f64.add
-        (f64.add
-         (get_local $3)
-         (get_local $0)
-        )
-        (f64.const 1)
-       )
-      )
-      (set_local $3
-       (f64.add
-        (get_local $3)
-        (get_local $0)
-       )
-      )
-     )
-    )
-   )
-  )
-  (get_local $3)
- )
- (func $std/math/test_round (; 137 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (call $std/math/check<f64>
-   (call $~lib/math/NativeMath.round
-    (get_local $0)
-   )
-   (get_local $1)
-   (get_local $2)
-   (get_local $3)
-  )
- )
- (func $~lib/math/NativeMathf.round (; 138 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.random (; 134 ;) (type $f) (result f32)
+  (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 f32)
-  (set_local $1
-   (i32.reinterpret/f32
-    (get_local $0)
+  (if
+   (i32.eqz
+    (get_global $~lib/math/random_seeded)
    )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 40)
+     (i32.const 2023)
+     (i32.const 24)
+    )
+    (unreachable)
+   )
+  )
+  (set_local $0
+   (get_global $~lib/math/random_state0_32)
+  )
+  (set_local $1
+   (get_global $~lib/math/random_state1_32)
   )
   (set_local $2
-   (i32.and
-    (i32.shr_u
-     (get_local $1)
-     (i32.const 23)
+   (i32.mul
+    (i32.rotl
+     (i32.mul
+      (get_local $0)
+      (i32.const -1640531525)
+     )
+     (i32.const 5)
     )
-    (i32.const 255)
+    (i32.const 5)
    )
   )
-  (if
-   (i32.ge_s
-    (get_local $2)
-    (i32.add
-     (i32.const 127)
-     (i32.const 23)
-    )
-   )
-   (return
+  (set_local $1
+   (i32.xor
+    (get_local $1)
     (get_local $0)
    )
   )
-  (if
-   (i32.lt_s
-    (get_local $2)
-    (i32.sub
-     (i32.const 127)
-     (i32.const 1)
+  (set_global $~lib/math/random_state0_32
+   (i32.xor
+    (i32.xor
+     (i32.rotl
+      (get_local $0)
+      (i32.const 26)
+     )
+     (get_local $1)
+    )
+    (i32.shl
+     (get_local $1)
+     (i32.const 9)
     )
    )
-   (return
-    (f32.mul
-     (f32.const 0)
+  )
+  (set_global $~lib/math/random_state1_32
+   (i32.rotl
+    (get_local $1)
+    (i32.const 13)
+   )
+  )
+  (f32.sub
+   (f32.reinterpret/i32
+    (i32.or
+     (i32.shr_u
+      (get_local $2)
+      (i32.const 9)
+     )
+     (i32.shl
+      (i32.const 127)
+      (i32.const 23)
+     )
+    )
+   )
+   (f32.const 1)
+  )
+ )
+ (func $std/math/test_round (; 135 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+  (call $std/math/check<f64>
+   (block $~lib/math/NativeMath.round|inlined.0 (result f64)
+    (f64.copysign
+     (f64.floor
+      (f64.add
+       (get_local $0)
+       (f64.const 0.5)
+      )
+     )
      (get_local $0)
     )
-   )
-  )
-  (if
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
-   (block
-    (set_local $3
-     (f32.add
-      (f32.sub
-       (f32.sub
-        (f32.const 8388608)
-        (get_local $0)
-       )
-       (f32.const 8388608)
-      )
-      (get_local $0)
-     )
-    )
-    (if
-     (f32.ge
-      (get_local $3)
-      (f32.const 0.5)
-     )
-     (set_local $3
-      (f32.add
-       (f32.sub
-        (get_local $0)
-        (get_local $3)
-       )
-       (f32.const 1)
-      )
-     )
-     (if
-      (f32.lt
-       (get_local $3)
-       (f32.const -0.5)
-      )
-      (set_local $3
-       (f32.sub
-        (f32.sub
-         (get_local $0)
-         (get_local $3)
-        )
-        (f32.const 1)
-       )
-      )
-      (set_local $3
-       (f32.sub
-        (get_local $0)
-        (get_local $3)
-       )
-      )
-     )
-    )
-   )
-   (block
-    (set_local $3
-     (f32.sub
-      (f32.sub
-       (f32.add
-        (get_local $0)
-        (f32.const 8388608)
-       )
-       (f32.const 8388608)
-      )
-      (get_local $0)
-     )
-    )
-    (if
-     (f32.gt
-      (get_local $3)
-      (f32.const 0.5)
-     )
-     (set_local $3
-      (f32.sub
-       (f32.add
-        (get_local $3)
-        (get_local $0)
-       )
-       (f32.const 1)
-      )
-     )
-     (if
-      (f32.le
-       (get_local $3)
-       (f32.const -0.5)
-      )
-      (set_local $3
-       (f32.add
-        (f32.add
-         (get_local $3)
-         (get_local $0)
-        )
-        (f32.const 1)
-       )
-      )
-      (set_local $3
-       (f32.add
-        (get_local $3)
-        (get_local $0)
-       )
-      )
-     )
-    )
-   )
-  )
-  (get_local $3)
- )
- (func $std/math/test_roundf (; 139 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
-  (call $std/math/check<f32>
-   (call $~lib/math/NativeMathf.round
-    (get_local $0)
    )
    (get_local $1)
    (get_local $2)
    (get_local $3)
   )
  )
- (func $std/math/test_sign (; 140 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_roundf (; 136 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+  (call $std/math/check<f32>
+   (block $~lib/math/NativeMathf.round|inlined.0 (result f32)
+    (f32.copysign
+     (f32.floor
+      (f32.add
+       (get_local $0)
+       (f32.const 0.5)
+      )
+     )
+     (get_local $0)
+    )
+   )
+   (get_local $1)
+   (get_local $2)
+   (get_local $3)
+  )
+ )
+ (func $std/math/test_sign (; 137 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
     (call $std/math/check<f64>
      (block $~lib/math/NativeMath.sign|inlined.0 (result f64)
-      (if (result f64)
-       (f64.gt
-        (f64.abs
+      (br $~lib/math/NativeMath.sign|inlined.0
+       (if (result f64)
+        (f64.gt
+         (get_local $0)
+         (f64.const 0)
+        )
+        (f64.const 1)
+        (if (result f64)
+         (f64.lt
+          (get_local $0)
+          (f64.const 0)
+         )
+         (f64.const -1)
          (get_local $0)
         )
-        (f64.const 0)
        )
-       (f64.copysign
-        (f64.const 1)
-        (get_local $0)
-       )
-       (get_local $0)
       )
      )
      (get_local $1)
@@ -14276,7 +13773,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.sign
+     (call $~lib/bindings/Math/sign
       (get_local $0)
      )
      (get_local $1)
@@ -14287,21 +13784,25 @@
    (get_local $4)
   )
  )
- (func $std/math/test_signf (; 141 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_signf (; 138 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (block $~lib/math/NativeMathf.sign|inlined.0 (result f32)
-    (if (result f32)
-     (f32.gt
-      (f32.abs
+    (br $~lib/math/NativeMathf.sign|inlined.0
+     (if (result f32)
+      (f32.gt
+       (get_local $0)
+       (f32.const 0)
+      )
+      (f32.const 1)
+      (if (result f32)
+       (f32.lt
+        (get_local $0)
+        (f32.const 0)
+       )
+       (f32.const -1)
        (get_local $0)
       )
-      (f32.const 0)
      )
-     (f32.copysign
-      (f32.const 1)
-      (get_local $0)
-     )
-     (get_local $0)
     )
    )
    (get_local $1)
@@ -14309,17 +13810,19 @@
    (get_local $3)
   )
  )
- (func $~lib/math/NativeMath.rem (; 142 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.rem (; 139 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
-  (local $4 i32)
-  (local $5 i32)
+  (local $4 i64)
+  (local $5 i64)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
-  (local $10 i64)
-  (local $11 i32)
+  (local $10 i32)
+  (local $11 i64)
+  (local $12 i64)
+  (local $13 f64)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -14331,25 +13834,21 @@
    )
   )
   (set_local $4
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $2)
-      (i64.const 52)
-     )
-     (i64.const 2047)
+   (i64.and
+    (i64.shr_u
+     (get_local $2)
+     (i64.const 52)
     )
+    (i64.const 2047)
    )
   )
   (set_local $5
-   (i32.wrap/i64
-    (i64.and
-     (i64.shr_u
-      (get_local $3)
-      (i64.const 52)
-     )
-     (i64.const 2047)
+   (i64.and
+    (i64.shr_u
+     (get_local $3)
+     (i64.const 52)
     )
+    (i64.const 2047)
    )
   )
   (set_local $6
@@ -14382,15 +13881,15 @@
        )
       )
       (get_local $8)
-      (call $~lib/builtins/isNaN<f64>
-       (get_local $1)
+      (i64.eq
+       (get_local $4)
+       (i64.const 2047)
       )
      )
     )
     (get_local $8)
-    (i32.eq
-     (get_local $4)
-     (i32.const 2047)
+    (call $~lib/builtins/isNaN<f64>
+     (get_local $1)
     )
    )
    (return
@@ -14422,58 +13921,30 @@
    (get_local $2)
   )
   (if
-   (i32.eqz
+   (i64.eqz
     (get_local $4)
    )
    (block
-    (block $break|0
-     (set_local $10
-      (i64.shl
-       (get_local $9)
-       (i64.const 12)
-      )
-     )
-     (loop $repeat|0
-      (br_if $break|0
-       (i32.eqz
-        (i64.eq
-         (i64.shr_u
-          (get_local $10)
-          (i64.const 63)
-         )
-         (i64.const 0)
-        )
+    (set_local $4
+     (i64.sub
+      (get_local $4)
+      (i64.clz
+       (i64.shl
+        (get_local $9)
+        (i64.const 12)
        )
       )
-      (nop)
-      (block
-       (set_local $4
-        (i32.sub
-         (get_local $4)
-         (i32.const 1)
-        )
-       )
-       (set_local $10
-        (i64.shl
-         (get_local $10)
-         (i64.const 1)
-        )
-       )
-      )
-      (br $repeat|0)
      )
     )
     (set_local $9
      (i64.shl
       (get_local $9)
-      (i64.extend_s/i32
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $4)
-        )
-        (i32.const 1)
+      (i64.add
+       (i64.sub
+        (i64.const 0)
+        (get_local $4)
        )
+       (i64.const 1)
       )
      )
     )
@@ -14500,58 +13971,30 @@
    )
   )
   (if
-   (i32.eqz
+   (i64.eqz
     (get_local $5)
    )
    (block
-    (block $break|1
-     (set_local $10
-      (i64.shl
-       (get_local $3)
-       (i64.const 12)
-      )
-     )
-     (loop $repeat|1
-      (br_if $break|1
-       (i32.eqz
-        (i64.eq
-         (i64.shr_u
-          (get_local $10)
-          (i64.const 63)
-         )
-         (i64.const 0)
-        )
+    (set_local $5
+     (i64.sub
+      (get_local $5)
+      (i64.clz
+       (i64.shl
+        (get_local $3)
+        (i64.const 12)
        )
       )
-      (nop)
-      (block
-       (set_local $5
-        (i32.sub
-         (get_local $5)
-         (i32.const 1)
-        )
-       )
-       (set_local $10
-        (i64.shl
-         (get_local $10)
-         (i64.const 1)
-        )
-       )
-      )
-      (br $repeat|1)
      )
     )
     (set_local $3
      (i64.shl
       (get_local $3)
-      (i64.extend_s/i32
-       (i32.add
-        (i32.sub
-         (i32.const 0)
-         (get_local $5)
-        )
-        (i32.const 1)
+      (i64.add
+       (i64.sub
+        (i64.const 0)
+        (get_local $5)
        )
+       (i64.const 1)
       )
      )
     )
@@ -14577,44 +14020,44 @@
     )
    )
   )
-  (set_local $11
+  (set_local $10
    (i32.const 0)
   )
-  (block $break|2
-   (loop $continue|2
+  (block $break|0
+   (loop $continue|0
     (if
-     (i32.lt_s
+     (i64.lt_s
       (get_local $4)
       (get_local $5)
      )
      (block
       (if
-       (i32.eq
-        (i32.add
+       (i64.eq
+        (i64.add
          (get_local $4)
-         (i32.const 1)
+         (i64.const 1)
         )
         (get_local $5)
        )
-       (br $break|2)
+       (br $break|0)
       )
       (return
        (get_local $0)
       )
      )
     )
-    (block $break|3
-     (loop $repeat|3
-      (br_if $break|3
+    (block $break|1
+     (loop $repeat|1
+      (br_if $break|1
        (i32.eqz
-        (i32.gt_s
+        (i64.gt_s
          (get_local $4)
          (get_local $5)
         )
        )
       )
       (block
-       (set_local $10
+       (set_local $11
         (i64.sub
          (get_local $9)
          (get_local $3)
@@ -14623,18 +14066,18 @@
        (if
         (i64.eq
          (i64.shr_u
-          (get_local $10)
+          (get_local $11)
           (i64.const 63)
          )
          (i64.const 0)
         )
         (block
          (set_local $9
-          (get_local $10)
+          (get_local $11)
          )
-         (set_local $11
+         (set_local $10
           (i32.add
-           (get_local $11)
+           (get_local $10)
            (i32.const 1)
           )
          )
@@ -14646,23 +14089,23 @@
          (i64.const 1)
         )
        )
-       (set_local $11
+       (set_local $10
         (i32.shl
-         (get_local $11)
+         (get_local $10)
          (i32.const 1)
         )
        )
       )
       (set_local $4
-       (i32.sub
+       (i64.sub
         (get_local $4)
-        (i32.const 1)
+        (i64.const 1)
        )
       )
-      (br $repeat|3)
+      (br $repeat|1)
      )
     )
-    (set_local $10
+    (set_local $11
      (i64.sub
       (get_local $9)
       (get_local $3)
@@ -14671,18 +14114,18 @@
     (if
      (i64.eq
       (i64.shr_u
-       (get_local $10)
+       (get_local $11)
        (i64.const 63)
       )
       (i64.const 0)
      )
      (block
       (set_local $9
-       (get_local $10)
+       (get_local $11)
       )
-      (set_local $11
+      (set_local $10
        (i32.add
-        (get_local $11)
+        (get_local $10)
         (i32.const 1)
        )
       )
@@ -14694,48 +14137,39 @@
       (i64.const 0)
      )
      (set_local $4
-      (i32.const -60)
+      (i64.const -60)
      )
-     (block $break|4
-      (loop $repeat|4
-       (br_if $break|4
-        (i32.eqz
-         (i64.eq
-          (i64.shr_u
-           (get_local $9)
-           (i64.const 52)
-          )
-          (i64.const 0)
-         )
+     (block
+      (set_local $12
+       (i64.clz
+        (i64.shl
+         (get_local $9)
+         (i64.const 11)
         )
        )
-       (nop)
-       (block
-        (set_local $9
-         (i64.shl
-          (get_local $9)
-          (i64.const 1)
-         )
-        )
-        (set_local $4
-         (i32.sub
-          (get_local $4)
-          (i32.const 1)
-         )
-        )
+      )
+      (set_local $4
+       (i64.sub
+        (get_local $4)
+        (get_local $12)
        )
-       (br $repeat|4)
+      )
+      (set_local $9
+       (i64.shl
+        (get_local $9)
+        (get_local $12)
+       )
       )
      )
     )
-    (br $break|2)
+    (br $break|0)
    )
    (unreachable)
   )
   (if
-   (i32.gt_s
+   (i64.gt_s
     (get_local $4)
-    (i32.const 0)
+    (i64.const 0)
    )
    (block
     (set_local $9
@@ -14751,9 +14185,7 @@
      (i64.or
       (get_local $9)
       (i64.shl
-       (i64.extend_s/i32
-        (get_local $4)
-       )
+       (get_local $4)
        (i64.const 52)
       )
      )
@@ -14762,14 +14194,12 @@
    (set_local $9
     (i64.shr_u
      (get_local $9)
-     (i64.extend_s/i32
-      (i32.add
-       (i32.sub
-        (i32.const 0)
-        (get_local $4)
-       )
-       (i32.const 1)
+     (i64.add
+      (i64.sub
+       (i64.const 0)
+       (get_local $4)
       )
+      (i64.const 1)
      )
     )
    )
@@ -14787,10 +14217,16 @@
     )
    )
   )
+  (set_local $13
+   (f64.add
+    (get_local $0)
+    (get_local $0)
+   )
+  )
   (if
    (if (result i32)
     (tee_local $8
-     (i32.eq
+     (i64.eq
       (get_local $4)
       (get_local $5)
      )
@@ -14798,10 +14234,10 @@
     (get_local $8)
     (if (result i32)
      (tee_local $8
-      (i32.eq
-       (i32.add
+      (i64.eq
+       (i64.add
         (get_local $4)
-        (i32.const 1)
+        (i64.const 1)
        )
        (get_local $5)
       )
@@ -14809,10 +14245,7 @@
      (if (result i32)
       (tee_local $8
        (f64.gt
-        (f64.mul
-         (f64.const 2)
-         (get_local $0)
-        )
+        (get_local $13)
         (get_local $1)
        )
       )
@@ -14820,15 +14253,12 @@
       (if (result i32)
        (tee_local $8
         (f64.eq
-         (f64.mul
-          (f64.const 2)
-          (get_local $0)
-         )
+         (get_local $13)
          (get_local $1)
         )
        )
        (i32.and
-        (get_local $11)
+        (get_local $10)
         (i32.const 1)
        )
        (get_local $8)
@@ -14837,18 +14267,10 @@
      (get_local $8)
     )
    )
-   (block
-    (set_local $0
-     (f64.sub
-      (get_local $0)
-      (get_local $1)
-     )
-    )
-    (set_local $11
-     (i32.add
-      (get_local $11)
-      (i32.const 1)
-     )
+   (set_local $0
+    (f64.sub
+     (get_local $0)
+     (get_local $1)
     )
    )
   )
@@ -14860,7 +14282,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_rem (; 143 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_rem (; 140 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (call $std/math/check<f64>
    (call $~lib/math/NativeMath.rem
     (get_local $0)
@@ -14871,7 +14293,7 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMathf.rem (; 144 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.rem (; 141 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14922,14 +14344,14 @@
     (i32.const 31)
    )
   )
-  (set_local $9
+  (set_local $8
    (get_local $2)
   )
   (if
    (if (result i32)
-    (tee_local $10
+    (tee_local $9
      (if (result i32)
-      (tee_local $10
+      (tee_local $9
        (i32.eq
         (i32.shl
          (get_local $3)
@@ -14938,16 +14360,16 @@
         (i32.const 0)
        )
       )
-      (get_local $10)
-      (call $~lib/builtins/isNaN<f32>
-       (get_local $1)
+      (get_local $9)
+      (i32.eq
+       (get_local $4)
+       (i32.const 255)
       )
      )
     )
-    (get_local $10)
-    (i32.eq
-     (get_local $4)
-     (i32.const 255)
+    (get_local $9)
+    (call $~lib/builtins/isNaN<f32>
+     (get_local $1)
     )
    )
    (return
@@ -14980,46 +14402,20 @@
     (get_local $4)
    )
    (block
-    (block $break|0
-     (set_local $8
-      (i32.shl
-       (get_local $9)
-       (i32.const 9)
-      )
-     )
-     (loop $repeat|0
-      (br_if $break|0
-       (i32.eqz
-        (i32.eq
-         (i32.shr_u
-          (get_local $8)
-          (i32.const 31)
-         )
-         (i32.const 0)
-        )
+    (set_local $4
+     (i32.sub
+      (get_local $4)
+      (i32.clz
+       (i32.shl
+        (get_local $8)
+        (i32.const 9)
        )
       )
-      (nop)
-      (block
-       (set_local $4
-        (i32.sub
-         (get_local $4)
-         (i32.const 1)
-        )
-       )
-       (set_local $8
-        (i32.shl
-         (get_local $8)
-         (i32.const 1)
-        )
-       )
-      )
-      (br $repeat|0)
      )
     )
-    (set_local $9
+    (set_local $8
      (i32.shl
-      (get_local $9)
+      (get_local $8)
       (i32.add
        (i32.sub
         (i32.const 0)
@@ -15031,18 +14427,18 @@
     )
    )
    (block
-    (set_local $9
+    (set_local $8
      (i32.and
-      (get_local $9)
+      (get_local $8)
       (i32.shr_u
        (i32.const -1)
        (i32.const 9)
       )
      )
     )
-    (set_local $9
+    (set_local $8
      (i32.or
-      (get_local $9)
+      (get_local $8)
       (i32.shl
        (i32.const 1)
        (i32.const 23)
@@ -15056,41 +14452,15 @@
     (get_local $5)
    )
    (block
-    (block $break|1
-     (set_local $8
-      (i32.shl
-       (get_local $3)
-       (i32.const 9)
-      )
-     )
-     (loop $repeat|1
-      (br_if $break|1
-       (i32.eqz
-        (i32.eq
-         (i32.shr_u
-          (get_local $8)
-          (i32.const 31)
-         )
-         (i32.const 0)
-        )
+    (set_local $5
+     (i32.sub
+      (get_local $5)
+      (i32.clz
+       (i32.shl
+        (get_local $3)
+        (i32.const 9)
        )
       )
-      (nop)
-      (block
-       (set_local $5
-        (i32.sub
-         (get_local $5)
-         (i32.const 1)
-        )
-       )
-       (set_local $8
-        (i32.shl
-         (get_local $8)
-         (i32.const 1)
-        )
-       )
-      )
-      (br $repeat|1)
      )
     )
     (set_local $3
@@ -15127,11 +14497,11 @@
     )
    )
   )
-  (set_local $11
+  (set_local $10
    (i32.const 0)
   )
-  (block $break|2
-   (loop $continue|2
+  (block $break|0
+   (loop $continue|0
     (if
      (i32.lt_s
       (get_local $4)
@@ -15146,16 +14516,16 @@
         )
         (get_local $5)
        )
-       (br $break|2)
+       (br $break|0)
       )
       (return
        (get_local $0)
       )
      )
     )
-    (block $break|3
-     (loop $repeat|3
-      (br_if $break|3
+    (block $break|1
+     (loop $repeat|1
+      (br_if $break|1
        (i32.eqz
         (i32.gt_s
          (get_local $4)
@@ -15164,41 +14534,41 @@
        )
       )
       (block
-       (set_local $8
+       (set_local $9
         (i32.sub
-         (get_local $9)
+         (get_local $8)
          (get_local $3)
         )
        )
        (if
         (i32.eq
          (i32.shr_u
-          (get_local $8)
+          (get_local $9)
           (i32.const 31)
          )
          (i32.const 0)
         )
         (block
-         (set_local $9
-          (get_local $8)
+         (set_local $8
+          (get_local $9)
          )
-         (set_local $11
+         (set_local $10
           (i32.add
-           (get_local $11)
+           (get_local $10)
            (i32.const 1)
           )
          )
         )
        )
-       (set_local $9
+       (set_local $8
         (i32.shl
-         (get_local $9)
+         (get_local $8)
          (i32.const 1)
         )
        )
-       (set_local $11
+       (set_local $10
         (i32.shl
-         (get_local $11)
+         (get_local $10)
          (i32.const 1)
         )
        )
@@ -15209,30 +14579,30 @@
         (i32.const 1)
        )
       )
-      (br $repeat|3)
+      (br $repeat|1)
      )
     )
-    (set_local $8
+    (set_local $9
      (i32.sub
-      (get_local $9)
+      (get_local $8)
       (get_local $3)
      )
     )
     (if
      (i32.eq
       (i32.shr_u
-       (get_local $8)
+       (get_local $9)
        (i32.const 31)
       )
       (i32.const 0)
      )
      (block
-      (set_local $9
-       (get_local $8)
+      (set_local $8
+       (get_local $9)
       )
-      (set_local $11
+      (set_local $10
        (i32.add
-        (get_local $11)
+        (get_local $10)
         (i32.const 1)
        )
       )
@@ -15240,45 +14610,36 @@
     )
     (if
      (i32.eq
-      (get_local $9)
+      (get_local $8)
       (i32.const 0)
      )
      (set_local $4
       (i32.const -30)
      )
-     (block $break|4
-      (loop $repeat|4
-       (br_if $break|4
-        (i32.eqz
-         (i32.eq
-          (i32.shr_u
-           (get_local $9)
-           (i32.const 23)
-          )
-          (i32.const 0)
-         )
+     (block
+      (set_local $11
+       (i32.clz
+        (i32.shl
+         (get_local $8)
+         (i32.const 8)
         )
        )
-       (nop)
-       (block
-        (set_local $9
-         (i32.shl
-          (get_local $9)
-          (i32.const 1)
-         )
-        )
-        (set_local $4
-         (i32.sub
-          (get_local $4)
-          (i32.const 1)
-         )
-        )
+      )
+      (set_local $4
+       (i32.sub
+        (get_local $4)
+        (get_local $11)
        )
-       (br $repeat|4)
+      )
+      (set_local $8
+       (i32.shl
+        (get_local $8)
+        (get_local $11)
+       )
       )
      )
     )
-    (br $break|2)
+    (br $break|0)
    )
    (unreachable)
   )
@@ -15288,18 +14649,18 @@
     (i32.const 0)
    )
    (block
-    (set_local $9
+    (set_local $8
      (i32.sub
-      (get_local $9)
+      (get_local $8)
       (i32.shl
        (i32.const 1)
        (i32.const 23)
       )
      )
     )
-    (set_local $9
+    (set_local $8
      (i32.or
-      (get_local $9)
+      (get_local $8)
       (i32.shl
        (get_local $4)
        (i32.const 23)
@@ -15307,9 +14668,9 @@
      )
     )
    )
-   (set_local $9
+   (set_local $8
     (i32.shr_u
-     (get_local $9)
+     (get_local $8)
      (i32.add
       (i32.sub
        (i32.const 0)
@@ -15322,7 +14683,7 @@
   )
   (set_local $0
    (f32.reinterpret/i32
-    (get_local $9)
+    (get_local $8)
    )
   )
   (if
@@ -15335,15 +14696,15 @@
   )
   (if
    (if (result i32)
-    (tee_local $10
+    (tee_local $9
      (i32.eq
       (get_local $4)
       (get_local $5)
      )
     )
-    (get_local $10)
+    (get_local $9)
     (if (result i32)
-     (tee_local $10
+     (tee_local $9
       (i32.eq
        (i32.add
         (get_local $4)
@@ -15353,7 +14714,7 @@
       )
      )
      (if (result i32)
-      (tee_local $10
+      (tee_local $9
        (f32.gt
         (f32.mul
          (f32.const 2)
@@ -15362,9 +14723,9 @@
         (get_local $1)
        )
       )
-      (get_local $10)
+      (get_local $9)
       (if (result i32)
-       (tee_local $10
+       (tee_local $9
         (f32.eq
          (f32.mul
           (f32.const 2)
@@ -15374,13 +14735,13 @@
         )
        )
        (i32.and
-        (get_local $11)
+        (get_local $10)
         (i32.const 1)
        )
-       (get_local $10)
+       (get_local $9)
       )
      )
-     (get_local $10)
+     (get_local $9)
     )
    )
    (block
@@ -15390,9 +14751,9 @@
       (get_local $1)
      )
     )
-    (set_local $11
+    (set_local $10
      (i32.add
-      (get_local $11)
+      (get_local $10)
       (i32.const 1)
      )
     )
@@ -15406,7 +14767,7 @@
    (get_local $0)
   )
  )
- (func $std/math/test_remf (; 145 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_remf (; 142 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.rem
     (get_local $0)
@@ -15417,46 +14778,27 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMath.sinh (; 146 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sinh (; 143 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
-  (local $3 f64)
-  (local $4 i32)
+  (local $3 i32)
+  (local $4 f64)
   (local $5 f64)
-  (set_local $1
-   (i64.reinterpret/f64
-    (get_local $0)
-   )
-  )
-  (set_local $2
-   (f64.const 0.5)
-  )
-  (if
-   (i64.ne
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
-    (i64.const 0)
-   )
-   (set_local $2
-    (f64.neg
-     (get_local $2)
-    )
-   )
-  )
+  (local $6 f64)
   (set_local $1
    (i64.and
-    (get_local $1)
+    (i64.reinterpret/f64
+     (get_local $0)
+    )
     (i64.const 9223372036854775807)
    )
   )
-  (set_local $3
+  (set_local $2
    (f64.reinterpret/i64
     (get_local $1)
    )
   )
-  (set_local $4
+  (set_local $3
    (i32.wrap/i64
     (i64.shr_u
      (get_local $1)
@@ -15464,26 +14806,32 @@
     )
    )
   )
+  (set_local $5
+   (f64.copysign
+    (f64.const 0.5)
+    (get_local $0)
+   )
+  )
   (if
    (i32.lt_u
-    (get_local $4)
+    (get_local $3)
     (i32.const 1082535490)
    )
    (block
-    (set_local $5
+    (set_local $4
      (call $~lib/math/NativeMath.expm1
-      (get_local $3)
+      (get_local $2)
      )
     )
     (if
      (i32.lt_u
-      (get_local $4)
+      (get_local $3)
       (i32.const 1072693248)
      )
      (block
       (if
        (i32.lt_u
-        (get_local $4)
+        (get_local $3)
         (i32.sub
          (i32.const 1072693248)
          (i32.shl
@@ -15498,19 +14846,19 @@
       )
       (return
        (f64.mul
-        (get_local $2)
+        (get_local $5)
         (f64.sub
          (f64.mul
           (f64.const 2)
-          (get_local $5)
+          (get_local $4)
          )
          (f64.div
           (f64.mul
-           (get_local $5)
-           (get_local $5)
+           (get_local $4)
+           (get_local $4)
           )
           (f64.add
-           (get_local $5)
+           (get_local $4)
            (f64.const 1)
           )
          )
@@ -15521,13 +14869,13 @@
     )
     (return
      (f64.mul
-      (get_local $2)
+      (get_local $5)
       (f64.add
-       (get_local $5)
+       (get_local $4)
        (f64.div
-        (get_local $5)
+        (get_local $4)
         (f64.add
-         (get_local $5)
+         (get_local $4)
          (f64.const 1)
         )
        )
@@ -15536,20 +14884,50 @@
     )
    )
   )
-  (set_local $5
+  (set_local $4
    (f64.mul
     (f64.mul
      (f64.const 2)
-     (get_local $2)
+     (get_local $5)
     )
-    (call $~lib/math/expo2
-     (get_local $3)
+    (block $~lib/math/expo2|inlined.1 (result f64)
+     (set_local $6
+      (f64.reinterpret/i64
+       (i64.shl
+        (i64.extend_u/i32
+         (i32.shl
+          (i32.add
+           (i32.const 1023)
+           (i32.div_u
+            (i32.const 2043)
+            (i32.const 2)
+           )
+          )
+          (i32.const 20)
+         )
+        )
+        (i64.const 32)
+       )
+      )
+     )
+     (f64.mul
+      (f64.mul
+       (call $~lib/math/NativeMath.exp
+        (f64.sub
+         (get_local $2)
+         (f64.const 1416.0996898839683)
+        )
+       )
+       (get_local $6)
+      )
+      (get_local $6)
+     )
     )
    )
   )
-  (get_local $5)
+  (get_local $4)
  )
- (func $std/math/test_sinh (; 147 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sinh (; 144 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -15570,7 +14948,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.sinh
+     (call $~lib/bindings/Math/sinh
       (get_local $0)
      )
      (get_local $1)
@@ -15581,39 +14959,29 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMathf.sinh (; 148 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sinh (; 145 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
   (local $4 f32)
-  (set_local $1
-   (i32.reinterpret/f32
-    (get_local $0)
-   )
-  )
-  (set_local $2
-   (f32.const 0.5)
-  )
-  (if
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
-   )
-   (set_local $2
-    (f32.neg
-     (get_local $2)
-    )
-   )
-  )
+  (local $5 f32)
   (set_local $1
    (i32.and
-    (get_local $1)
+    (i32.reinterpret/f32
+     (get_local $0)
+    )
     (i32.const 2147483647)
    )
   )
-  (set_local $3
+  (set_local $2
    (f32.reinterpret/i32
     (get_local $1)
+   )
+  )
+  (set_local $4
+   (f32.copysign
+    (f32.const 0.5)
+    (get_local $0)
    )
   )
   (if
@@ -15622,9 +14990,9 @@
     (i32.const 1118925335)
    )
    (block
-    (set_local $4
+    (set_local $3
      (call $~lib/math/NativeMathf.expm1
-      (get_local $3)
+      (get_local $2)
      )
     )
     (if
@@ -15650,19 +15018,19 @@
       )
       (return
        (f32.mul
-        (get_local $2)
+        (get_local $4)
         (f32.sub
          (f32.mul
           (f32.const 2)
-          (get_local $4)
+          (get_local $3)
          )
          (f32.div
           (f32.mul
-           (get_local $4)
-           (get_local $4)
+           (get_local $3)
+           (get_local $3)
           )
           (f32.add
-           (get_local $4)
+           (get_local $3)
            (f32.const 1)
           )
          )
@@ -15673,13 +15041,13 @@
     )
     (return
      (f32.mul
-      (get_local $2)
+      (get_local $4)
       (f32.add
-       (get_local $4)
+       (get_local $3)
        (f32.div
-        (get_local $4)
+        (get_local $3)
         (f32.add
-         (get_local $4)
+         (get_local $3)
          (f32.const 1)
         )
        )
@@ -15688,20 +15056,45 @@
     )
    )
   )
-  (set_local $4
+  (set_local $3
    (f32.mul
     (f32.mul
      (f32.const 2)
-     (get_local $2)
+     (get_local $4)
     )
-    (call $~lib/math/expo2f
-     (get_local $3)
+    (block $~lib/math/expo2f|inlined.1 (result f32)
+     (set_local $5
+      (f32.reinterpret/i32
+       (i32.shl
+        (i32.add
+         (i32.const 127)
+         (i32.div_u
+          (i32.const 235)
+          (i32.const 2)
+         )
+        )
+        (i32.const 23)
+       )
+      )
+     )
+     (f32.mul
+      (f32.mul
+       (call $~lib/math/NativeMathf.exp
+        (f32.sub
+         (get_local $2)
+         (f32.const 162.88958740234375)
+        )
+       )
+       (get_local $5)
+      )
+      (get_local $5)
+     )
     )
    )
   )
-  (get_local $4)
+  (get_local $3)
  )
- (func $std/math/test_sinhf (; 149 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sinhf (; 146 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.sinh
     (get_local $0)
@@ -15711,7 +15104,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_sqrt (; 150 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sqrt (; 147 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -15734,7 +15127,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.sqrt
+     (call $~lib/bindings/Math/sqrt
       (get_local $0)
      )
      (get_local $1)
@@ -15745,7 +15138,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_sqrtf (; 151 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sqrtf (; 148 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (block $~lib/math/NativeMathf.sqrt|inlined.0 (result f32)
     (f32.sqrt
@@ -15757,22 +15150,14 @@
    (get_local $3)
   )
  )
- (func $~lib/math/NativeMath.tanh (; 152 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tanh (; 149 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
-  (local $2 i32)
+  (local $2 f64)
   (local $3 i32)
   (local $4 f64)
   (set_local $1
    (i64.reinterpret/f64
     (get_local $0)
-   )
-  )
-  (set_local $2
-   (i32.wrap/i64
-    (i64.shr_u
-     (get_local $1)
-     (i64.const 63)
-    )
    )
   )
   (set_local $1
@@ -15781,7 +15166,7 @@
     (i64.const 9223372036854775807)
    )
   )
-  (set_local $0
+  (set_local $2
    (f64.reinterpret/i64
     (get_local $1)
    )
@@ -15809,7 +15194,7 @@
       (f64.const 1)
       (f64.div
        (f64.const 0)
-       (get_local $0)
+       (get_local $2)
       )
      )
     )
@@ -15818,7 +15203,7 @@
       (call $~lib/math/NativeMath.expm1
        (f64.mul
         (f64.const 2)
-        (get_local $0)
+        (get_local $2)
        )
       )
      )
@@ -15846,7 +15231,7 @@
       (call $~lib/math/NativeMath.expm1
        (f64.mul
         (f64.const 2)
-        (get_local $0)
+        (get_local $2)
        )
       )
      )
@@ -15870,7 +15255,7 @@
        (call $~lib/math/NativeMath.expm1
         (f64.mul
          (f64.const -2)
-         (get_local $0)
+         (get_local $2)
         )
        )
       )
@@ -15887,20 +15272,17 @@
       )
      )
      (set_local $4
-      (get_local $0)
+      (get_local $2)
      )
     )
    )
   )
-  (if (result f64)
-   (get_local $2)
-   (f64.neg
-    (get_local $4)
-   )
+  (f64.copysign
    (get_local $4)
+   (get_local $0)
   )
  )
- (func $std/math/test_tanh (; 153 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_tanh (; 150 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -15921,7 +15303,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.tanh
+     (call $~lib/bindings/Math/tanh
       (get_local $0)
      )
      (get_local $1)
@@ -15932,19 +15314,13 @@
    (get_local $4)
   )
  )
- (func $~lib/math/NativeMathf.tanh (; 154 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tanh (; 151 ;) (type $ff) (param $0 f32) (result f32)
   (local $1 i32)
-  (local $2 i32)
+  (local $2 f32)
   (local $3 f32)
   (set_local $1
    (i32.reinterpret/f32
     (get_local $0)
-   )
-  )
-  (set_local $2
-   (i32.shr_u
-    (get_local $1)
-    (i32.const 31)
    )
   )
   (set_local $1
@@ -15953,7 +15329,7 @@
     (i32.const 2147483647)
    )
   )
-  (set_local $0
+  (set_local $2
    (f32.reinterpret/i32
     (get_local $1)
    )
@@ -15973,7 +15349,7 @@
       (f32.const 1)
       (f32.div
        (f32.const 0)
-       (get_local $0)
+       (get_local $2)
       )
      )
     )
@@ -15982,7 +15358,7 @@
       (call $~lib/math/NativeMathf.expm1
        (f32.mul
         (f32.const 2)
-        (get_local $0)
+        (get_local $2)
        )
       )
      )
@@ -16010,7 +15386,7 @@
       (call $~lib/math/NativeMathf.expm1
        (f32.mul
         (f32.const 2)
-        (get_local $0)
+        (get_local $2)
        )
       )
      )
@@ -16034,7 +15410,7 @@
        (call $~lib/math/NativeMathf.expm1
         (f32.mul
          (f32.const -2)
-         (get_local $0)
+         (get_local $2)
         )
        )
       )
@@ -16051,20 +15427,17 @@
       )
      )
      (set_local $3
-      (get_local $0)
+      (get_local $2)
      )
     )
    )
   )
-  (if (result f32)
-   (get_local $2)
-   (f32.neg
-    (get_local $3)
-   )
+  (f32.copysign
    (get_local $3)
+   (get_local $0)
   )
  )
- (func $std/math/test_tanhf (; 155 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_tanhf (; 152 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (call $~lib/math/NativeMathf.tanh
     (get_local $0)
@@ -16074,7 +15447,7 @@
    (get_local $3)
   )
  )
- (func $std/math/test_trunc (; 156 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_trunc (; 153 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 i32)
   (if (result i32)
    (tee_local $4
@@ -16097,7 +15470,7 @@
     )
     (get_local $4)
     (call $std/math/check<f64>
-     (call $~lib/math/JSMath.trunc
+     (call $~lib/bindings/Math/trunc
       (get_local $0)
      )
      (get_local $1)
@@ -16108,7 +15481,7 @@
    (get_local $4)
   )
  )
- (func $std/math/test_truncf (; 157 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_truncf (; 154 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (call $std/math/check<f32>
    (block $~lib/math/NativeMathf.trunc|inlined.0 (result f32)
     (f32.trunc
@@ -16120,7 +15493,7 @@
    (get_local $3)
   )
  )
- (func $~lib/math/ipow64 (; 158 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 155 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -16434,7 +15807,7 @@
   )
   (get_local $2)
  )
- (func $start (; 159 ;) (type $v)
+ (func $start (; 156 ;) (type $v)
   (local $0 i32)
   (local $1 f64)
   (local $2 i32)
@@ -16478,7 +15851,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.E)
-     (get_global $~lib/math/JSMath.E)
+     (get_global $~lib/bindings/Math/E)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16497,7 +15870,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.LN2)
-     (get_global $~lib/math/JSMath.LN2)
+     (get_global $~lib/bindings/Math/LN2)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16516,7 +15889,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.LN10)
-     (get_global $~lib/math/JSMath.LN10)
+     (get_global $~lib/bindings/Math/LN10)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16535,7 +15908,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.LOG2E)
-     (get_global $~lib/math/JSMath.LOG2E)
+     (get_global $~lib/bindings/Math/LOG2E)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16554,7 +15927,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.PI)
-     (get_global $~lib/math/JSMath.PI)
+     (get_global $~lib/bindings/Math/PI)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16573,7 +15946,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.SQRT1_2)
-     (get_global $~lib/math/JSMath.SQRT1_2)
+     (get_global $~lib/bindings/Math/SQRT1_2)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16592,7 +15965,7 @@
    (i32.eqz
     (call $std/math/check<f64>
      (get_global $~lib/math/NativeMath.SQRT2)
-     (get_global $~lib/math/JSMath.SQRT2)
+     (get_global $~lib/bindings/Math/SQRT2)
      (f64.const 0)
      (i32.const 0)
     )
@@ -16612,7 +15985,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.E)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.E)
+      (get_global $~lib/bindings/Math/E)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16633,7 +16006,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.LN2)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.LN2)
+      (get_global $~lib/bindings/Math/LN2)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16654,7 +16027,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.LN10)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.LN10)
+      (get_global $~lib/bindings/Math/LN10)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16675,7 +16048,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.LOG2E)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.LOG2E)
+      (get_global $~lib/bindings/Math/LOG2E)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16696,7 +16069,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.PI)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.PI)
+      (get_global $~lib/bindings/Math/PI)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16717,7 +16090,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.SQRT1_2)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.SQRT1_2)
+      (get_global $~lib/bindings/Math/SQRT1_2)
      )
      (f32.const 0)
      (i32.const 0)
@@ -16738,7 +16111,7 @@
     (call $std/math/check<f32>
      (get_global $~lib/math/NativeMathf.SQRT2)
      (f32.demote/f64
-      (get_global $~lib/math/JSMath.SQRT2)
+      (get_global $~lib/bindings/Math/SQRT2)
      )
      (f32.const 0)
      (i32.const 0)
@@ -40219,7 +39592,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1998)
+     (i32.const 1996)
      (i32.const 0)
     )
     (unreachable)
@@ -40239,7 +39612,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1999)
+     (i32.const 1997)
      (i32.const 0)
     )
     (unreachable)
@@ -40259,7 +39632,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2000)
+     (i32.const 1998)
      (i32.const 0)
     )
     (unreachable)
@@ -40279,7 +39652,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2001)
+     (i32.const 1999)
      (i32.const 0)
     )
     (unreachable)
@@ -40299,7 +39672,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2002)
+     (i32.const 2000)
      (i32.const 0)
     )
     (unreachable)
@@ -40319,7 +39692,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2003)
+     (i32.const 2001)
      (i32.const 0)
     )
     (unreachable)
@@ -40339,7 +39712,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2004)
+     (i32.const 2002)
      (i32.const 0)
     )
     (unreachable)
@@ -40359,7 +39732,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2005)
+     (i32.const 2003)
      (i32.const 0)
     )
     (unreachable)
@@ -40379,7 +39752,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2006)
+     (i32.const 2004)
      (i32.const 0)
     )
     (unreachable)
@@ -40399,7 +39772,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2007)
+     (i32.const 2005)
      (i32.const 0)
     )
     (unreachable)
@@ -40411,6 +39784,46 @@
      (f64.const 0)
      (f64.const 1)
      (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2008)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2009)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 0.5)
+     (f64.const 1)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40428,9 +39841,9 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const -0)
+     (f64.const -0.5)
      (f64.const 1)
-     (f64.const -0)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40448,9 +39861,9 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const 0.5)
      (f64.const 1)
-     (f64.const 0.5)
+     (f64.const 1)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40468,9 +39881,9 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const -0.5)
+     (f64.const -1)
      (f64.const 1)
-     (f64.const -0.5)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40488,9 +39901,9 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
+     (f64.const 1.5)
      (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40508,9 +39921,9 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const -1)
+     (f64.const -1.5)
      (f64.const 1)
-     (f64.const -0)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40528,9 +39941,9 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const 1.5)
+     (f64.const 2)
      (f64.const 1)
-     (f64.const 0.5)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40548,46 +39961,6 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const -1.5)
-     (f64.const 1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2017)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 2)
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2018)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
      (f64.const -2)
      (f64.const 1)
      (f64.const -0)
@@ -40599,7 +39972,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2019)
+     (i32.const 2017)
      (i32.const 0)
     )
     (unreachable)
@@ -40619,7 +39992,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2020)
+     (i32.const 2018)
      (i32.const 0)
     )
     (unreachable)
@@ -40641,7 +40014,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2021)
+     (i32.const 2019)
      (i32.const 0)
     )
     (unreachable)
@@ -40653,6 +40026,46 @@
      (f64.const nan:0x8000000000000)
      (f64.const 1)
      (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2020)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 0)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2021)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -0)
+     (f64.const -1)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40670,9 +40083,9 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const 0)
+     (f64.const 0.5)
      (f64.const -1)
-     (f64.const 0)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40690,9 +40103,9 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const -0)
+     (f64.const -0.5)
      (f64.const -1)
-     (f64.const -0)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40702,46 +40115,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2024)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 0.5)
-     (f64.const -1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2025)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0.5)
-     (f64.const -1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2026)
      (i32.const 0)
     )
     (unreachable)
@@ -40761,7 +40134,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2027)
+     (i32.const 2025)
      (i32.const 0)
     )
     (unreachable)
@@ -40781,7 +40154,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2028)
+     (i32.const 2026)
      (i32.const 0)
     )
     (unreachable)
@@ -40801,7 +40174,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2029)
+     (i32.const 2027)
      (i32.const 0)
     )
     (unreachable)
@@ -40821,7 +40194,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2030)
+     (i32.const 2028)
      (i32.const 0)
     )
     (unreachable)
@@ -40841,7 +40214,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2031)
+     (i32.const 2029)
      (i32.const 0)
     )
     (unreachable)
@@ -40861,7 +40234,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2032)
+     (i32.const 2030)
      (i32.const 0)
     )
     (unreachable)
@@ -40881,7 +40254,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2033)
+     (i32.const 2031)
      (i32.const 0)
     )
     (unreachable)
@@ -40894,6 +40267,46 @@
       (f64.const inf)
      )
      (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2032)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const nan:0x8000000000000)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2033)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 0)
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (get_global $std/math/INVALID)
@@ -40912,11 +40325,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const nan:0x8000000000000)
-     (f64.const -1)
+     (f64.const 0)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -40933,10 +40346,10 @@
    (i32.eqz
     (call $std/math/test_mod
      (f64.const 0)
+     (f64.const inf)
      (f64.const 0)
-     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -40953,10 +40366,12 @@
    (i32.eqz
     (call $std/math/test_mod
      (f64.const 0)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (f64.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -40973,8 +40388,8 @@
    (i32.eqz
     (call $std/math/test_mod
      (f64.const 0)
-     (f64.const inf)
-     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -40992,13 +40407,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
+     (f64.const -0)
      (f64.const 0)
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -41014,11 +40427,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const 0)
+     (f64.const -0)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -41026,46 +40439,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2040)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2041)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2042)
      (i32.const 0)
     )
     (unreachable)
@@ -41085,7 +40458,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2043)
+     (i32.const 2041)
      (i32.const 0)
     )
     (unreachable)
@@ -41107,7 +40480,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2044)
+     (i32.const 2042)
      (i32.const 0)
     )
     (unreachable)
@@ -41127,7 +40500,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2045)
+     (i32.const 2043)
      (i32.const 0)
     )
     (unreachable)
@@ -41137,6 +40510,46 @@
    (i32.eqz
     (call $std/math/test_mod
      (f64.const 1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2044)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2045)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const inf)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -41156,7 +40569,9 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -41176,11 +40591,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const inf)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -41188,48 +40603,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2048)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2049)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2050)
      (i32.const 0)
     )
     (unreachable)
@@ -41249,7 +40622,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2051)
+     (i32.const 2049)
      (i32.const 0)
     )
     (unreachable)
@@ -41269,7 +40642,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2052)
+     (i32.const 2050)
      (i32.const 0)
     )
     (unreachable)
@@ -41282,6 +40655,46 @@
       (f64.const inf)
      )
      (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2051)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2052)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const 2)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (get_global $std/math/INVALID)
@@ -41300,11 +40713,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const nan:0x8000000000000)
-     (f64.const -0)
+     (f64.const inf)
+     (f64.const -0.5)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -41321,10 +40734,10 @@
    (i32.eqz
     (call $std/math/test_mod
      (f64.const inf)
-     (f64.const 2)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -41340,8 +40753,10 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const -0.5)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 2)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (get_global $std/math/INVALID)
@@ -41360,11 +40775,13 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0.5)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -41383,10 +40800,10 @@
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 2)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -41402,13 +40819,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -41424,9 +40839,7 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const 1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -41446,7 +40859,7 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const nan:0x8000000000000)
+     (f64.const -1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -41467,8 +40880,8 @@
    (i32.eqz
     (call $std/math/test_mod
      (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.const inf)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -41487,8 +40900,8 @@
    (i32.eqz
     (call $std/math/test_mod
      (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.const inf)
+     (f64.const -1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -41506,11 +40919,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const 1)
      (f64.const inf)
-     (f64.const 1)
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -41526,11 +40939,13 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const inf)
-     (f64.const -1)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -41546,11 +40961,13 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.const 1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -41566,13 +40983,13 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
+     (f64.const -1)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.const -1)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -41588,13 +41005,13 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const 1)
+     (f64.const inf)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 1)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -41610,13 +41027,15 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const -1)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -41632,13 +41051,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.const inf)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
+     (f64.const 1.75)
+     (f64.const 0.5)
+     (f64.const 0.25)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -41654,15 +41071,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
+     (f64.const -1.75)
+     (f64.const 0.5)
+     (f64.const -0.25)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -41679,7 +41092,7 @@
    (i32.eqz
     (call $std/math/test_mod
      (f64.const 1.75)
-     (f64.const 0.5)
+     (f64.const -0.5)
      (f64.const 0.25)
      (f64.const 0)
      (i32.const 0)
@@ -41699,7 +41112,7 @@
    (i32.eqz
     (call $std/math/test_mod
      (f64.const -1.75)
-     (f64.const 0.5)
+     (f64.const -0.5)
      (f64.const -0.25)
      (f64.const 0)
      (i32.const 0)
@@ -41710,46 +41123,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2073)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 1.75)
-     (f64.const -0.5)
-     (f64.const 0.25)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2074)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -1.75)
-     (f64.const -0.5)
-     (f64.const -0.25)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2075)
      (i32.const 0)
     )
     (unreachable)
@@ -41769,7 +41142,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2084)
+     (i32.const 2082)
      (i32.const 0)
     )
     (unreachable)
@@ -41789,7 +41162,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2085)
+     (i32.const 2083)
      (i32.const 0)
     )
     (unreachable)
@@ -41809,7 +41182,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2086)
+     (i32.const 2084)
      (i32.const 0)
     )
     (unreachable)
@@ -41829,7 +41202,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2087)
+     (i32.const 2085)
      (i32.const 0)
     )
     (unreachable)
@@ -41849,7 +41222,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2088)
+     (i32.const 2086)
      (i32.const 0)
     )
     (unreachable)
@@ -41869,7 +41242,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2089)
+     (i32.const 2087)
      (i32.const 0)
     )
     (unreachable)
@@ -41889,7 +41262,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2090)
+     (i32.const 2088)
      (i32.const 0)
     )
     (unreachable)
@@ -41909,7 +41282,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2091)
+     (i32.const 2089)
      (i32.const 0)
     )
     (unreachable)
@@ -41929,7 +41302,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2092)
+     (i32.const 2090)
      (i32.const 0)
     )
     (unreachable)
@@ -41949,7 +41322,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2093)
+     (i32.const 2091)
      (i32.const 0)
     )
     (unreachable)
@@ -41961,6 +41334,46 @@
      (f32.const 0)
      (f32.const 1)
      (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2094)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2095)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 0.5)
+     (f32.const 1)
+     (f32.const 0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -41978,9 +41391,9 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const -0)
+     (f32.const -0.5)
      (f32.const 1)
-     (f32.const -0)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -41998,9 +41411,9 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const 0.5)
      (f32.const 1)
-     (f32.const 0.5)
+     (f32.const 1)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -42018,9 +41431,9 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const -0.5)
+     (f32.const -1)
      (f32.const 1)
-     (f32.const -0.5)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -42038,9 +41451,9 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
+     (f32.const 1.5)
      (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
+     (f32.const 0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -42058,9 +41471,9 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const -1)
+     (f32.const -1.5)
      (f32.const 1)
-     (f32.const -0)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -42078,9 +41491,9 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const 1.5)
+     (f32.const 2)
      (f32.const 1)
-     (f32.const 0.5)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -42098,46 +41511,6 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const -1.5)
-     (f32.const 1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2103)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 2)
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2104)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
      (f32.const -2)
      (f32.const 1)
      (f32.const -0)
@@ -42149,7 +41522,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2105)
+     (i32.const 2103)
      (i32.const 0)
     )
     (unreachable)
@@ -42169,7 +41542,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2106)
+     (i32.const 2104)
      (i32.const 0)
     )
     (unreachable)
@@ -42191,7 +41564,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2107)
+     (i32.const 2105)
      (i32.const 0)
     )
     (unreachable)
@@ -42203,6 +41576,46 @@
      (f32.const nan:0x400000)
      (f32.const 1)
      (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2106)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 0)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2107)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -0)
+     (f32.const -1)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -42220,9 +41633,9 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const 0)
+     (f32.const 0.5)
      (f32.const -1)
-     (f32.const 0)
+     (f32.const 0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -42240,9 +41653,9 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const -0)
+     (f32.const -0.5)
      (f32.const -1)
-     (f32.const -0)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -42252,46 +41665,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2110)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 0.5)
-     (f32.const -1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2111)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0.5)
-     (f32.const -1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2112)
      (i32.const 0)
     )
     (unreachable)
@@ -42311,7 +41684,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2113)
+     (i32.const 2111)
      (i32.const 0)
     )
     (unreachable)
@@ -42331,7 +41704,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2114)
+     (i32.const 2112)
      (i32.const 0)
     )
     (unreachable)
@@ -42351,7 +41724,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2115)
+     (i32.const 2113)
      (i32.const 0)
     )
     (unreachable)
@@ -42371,7 +41744,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2116)
+     (i32.const 2114)
      (i32.const 0)
     )
     (unreachable)
@@ -42391,7 +41764,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2117)
+     (i32.const 2115)
      (i32.const 0)
     )
     (unreachable)
@@ -42411,7 +41784,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2118)
+     (i32.const 2116)
      (i32.const 0)
     )
     (unreachable)
@@ -42431,7 +41804,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2119)
+     (i32.const 2117)
      (i32.const 0)
     )
     (unreachable)
@@ -42444,6 +41817,46 @@
       (f32.const inf)
      )
      (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2118)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const nan:0x400000)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2119)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 0)
+     (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
      (get_global $std/math/INVALID)
@@ -42462,11 +41875,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const nan:0x400000)
-     (f32.const -1)
+     (f32.const 0)
+     (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -42483,10 +41896,10 @@
    (i32.eqz
     (call $std/math/test_modf
      (f32.const 0)
+     (f32.const inf)
      (f32.const 0)
-     (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -42503,10 +41916,12 @@
    (i32.eqz
     (call $std/math/test_modf
      (f32.const 0)
-     (f32.const -0)
-     (f32.const nan:0x400000)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (f32.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -42523,8 +41938,8 @@
    (i32.eqz
     (call $std/math/test_modf
      (f32.const 0)
-     (f32.const inf)
-     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -42542,13 +41957,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
+     (f32.const -0)
      (f32.const 0)
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -42564,11 +41977,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const 0)
+     (f32.const -0)
+     (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -42576,46 +41989,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2126)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2127)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2128)
      (i32.const 0)
     )
     (unreachable)
@@ -42635,7 +42008,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2129)
+     (i32.const 2127)
      (i32.const 0)
     )
     (unreachable)
@@ -42657,7 +42030,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2130)
+     (i32.const 2128)
      (i32.const 0)
     )
     (unreachable)
@@ -42677,7 +42050,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2131)
+     (i32.const 2129)
      (i32.const 0)
     )
     (unreachable)
@@ -42687,6 +42060,46 @@
    (i32.eqz
     (call $std/math/test_modf
      (f32.const 1)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2130)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2131)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const inf)
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -42706,7 +42119,9 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -42726,11 +42141,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const inf)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -42738,48 +42153,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2134)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2135)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2136)
      (i32.const 0)
     )
     (unreachable)
@@ -42799,7 +42172,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2137)
+     (i32.const 2135)
      (i32.const 0)
     )
     (unreachable)
@@ -42819,7 +42192,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2138)
+     (i32.const 2136)
      (i32.const 0)
     )
     (unreachable)
@@ -42832,6 +42205,46 @@
       (f32.const inf)
      )
      (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2137)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2138)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const 2)
      (f32.const nan:0x400000)
      (f32.const 0)
      (get_global $std/math/INVALID)
@@ -42850,11 +42263,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const nan:0x400000)
-     (f32.const -0)
+     (f32.const inf)
+     (f32.const -0.5)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -42871,10 +42284,10 @@
    (i32.eqz
     (call $std/math/test_modf
      (f32.const inf)
-     (f32.const 2)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -42890,8 +42303,10 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const -0.5)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 2)
      (f32.const nan:0x400000)
      (f32.const 0)
      (get_global $std/math/INVALID)
@@ -42910,11 +42325,13 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0.5)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -42933,10 +42350,10 @@
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 2)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -42952,13 +42369,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0.5)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -42974,9 +42389,7 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const 1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -42996,7 +42409,7 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const nan:0x400000)
+     (f32.const -1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -43017,8 +42430,8 @@
    (i32.eqz
     (call $std/math/test_modf
      (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+     (f32.const inf)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -43037,8 +42450,8 @@
    (i32.eqz
     (call $std/math/test_modf
      (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+     (f32.const inf)
+     (f32.const -1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -43056,11 +42469,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const 1)
      (f32.const inf)
-     (f32.const 1)
+     (f32.const inf)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -43076,11 +42489,13 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const inf)
-     (f32.const -1)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -43096,11 +42511,13 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.const 1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -43116,13 +42533,13 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
+     (f32.const -1)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.const -1)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -43138,13 +42555,13 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const 1)
+     (f32.const inf)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 1)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -43160,13 +42577,15 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const -1)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -43182,13 +42601,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.const inf)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
+     (f32.const 1.75)
+     (f32.const 0.5)
+     (f32.const 0.25)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -43204,15 +42621,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
+     (f32.const -1.75)
+     (f32.const 0.5)
+     (f32.const -0.25)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -43229,7 +42642,7 @@
    (i32.eqz
     (call $std/math/test_modf
      (f32.const 1.75)
-     (f32.const 0.5)
+     (f32.const -0.5)
      (f32.const 0.25)
      (f32.const 0)
      (i32.const 0)
@@ -43249,7 +42662,7 @@
    (i32.eqz
     (call $std/math/test_modf
      (f32.const -1.75)
-     (f32.const 0.5)
+     (f32.const -0.5)
      (f32.const -0.25)
      (f32.const 0)
      (i32.const 0)
@@ -43260,46 +42673,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2159)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 1.75)
-     (f32.const -0.5)
-     (f32.const 0.25)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2160)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -1.75)
-     (f32.const -0.5)
-     (f32.const -0.25)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2161)
      (i32.const 0)
     )
     (unreachable)
@@ -43319,7 +42692,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2173)
+     (i32.const 2171)
      (i32.const 0)
     )
     (unreachable)
@@ -43339,7 +42712,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2174)
+     (i32.const 2172)
      (i32.const 0)
     )
     (unreachable)
@@ -43359,7 +42732,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2175)
+     (i32.const 2173)
      (i32.const 0)
     )
     (unreachable)
@@ -43379,7 +42752,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2176)
+     (i32.const 2174)
      (i32.const 0)
     )
     (unreachable)
@@ -43399,7 +42772,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2177)
+     (i32.const 2175)
      (i32.const 0)
     )
     (unreachable)
@@ -43419,7 +42792,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2178)
+     (i32.const 2176)
      (i32.const 0)
     )
     (unreachable)
@@ -43439,7 +42812,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2179)
+     (i32.const 2177)
      (i32.const 0)
     )
     (unreachable)
@@ -43459,7 +42832,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2180)
+     (i32.const 2178)
      (i32.const 0)
     )
     (unreachable)
@@ -43479,7 +42852,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2181)
+     (i32.const 2179)
      (i32.const 0)
     )
     (unreachable)
@@ -43499,7 +42872,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2182)
+     (i32.const 2180)
      (i32.const 0)
     )
     (unreachable)
@@ -43519,7 +42892,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2185)
+     (i32.const 2183)
      (i32.const 0)
     )
     (unreachable)
@@ -43539,7 +42912,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2186)
+     (i32.const 2184)
      (i32.const 0)
     )
     (unreachable)
@@ -43559,7 +42932,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2187)
+     (i32.const 2185)
      (i32.const 0)
     )
     (unreachable)
@@ -43579,7 +42952,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2188)
+     (i32.const 2186)
      (i32.const 0)
     )
     (unreachable)
@@ -43599,7 +42972,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2189)
+     (i32.const 2187)
      (i32.const 0)
     )
     (unreachable)
@@ -43619,7 +42992,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2190)
+     (i32.const 2188)
      (i32.const 0)
     )
     (unreachable)
@@ -43639,7 +43012,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2191)
+     (i32.const 2189)
      (i32.const 0)
     )
     (unreachable)
@@ -43659,7 +43032,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2192)
+     (i32.const 2190)
      (i32.const 0)
     )
     (unreachable)
@@ -43679,7 +43052,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2193)
+     (i32.const 2191)
      (i32.const 0)
     )
     (unreachable)
@@ -43699,7 +43072,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2194)
+     (i32.const 2192)
      (i32.const 0)
     )
     (unreachable)
@@ -43719,7 +43092,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2195)
+     (i32.const 2193)
      (i32.const 0)
     )
     (unreachable)
@@ -43739,7 +43112,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2196)
+     (i32.const 2194)
      (i32.const 0)
     )
     (unreachable)
@@ -43759,7 +43132,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2197)
+     (i32.const 2195)
      (i32.const 0)
     )
     (unreachable)
@@ -43781,7 +43154,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2198)
+     (i32.const 2196)
      (i32.const 0)
     )
     (unreachable)
@@ -43801,7 +43174,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2199)
+     (i32.const 2197)
      (i32.const 0)
     )
     (unreachable)
@@ -43821,7 +43194,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2200)
+     (i32.const 2198)
      (i32.const 0)
     )
     (unreachable)
@@ -43841,7 +43214,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2201)
+     (i32.const 2199)
      (i32.const 0)
     )
     (unreachable)
@@ -43861,7 +43234,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2202)
+     (i32.const 2200)
      (i32.const 0)
     )
     (unreachable)
@@ -43881,7 +43254,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2203)
+     (i32.const 2201)
      (i32.const 0)
     )
     (unreachable)
@@ -43901,47 +43274,47 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
+     (i32.const 2202)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0)
+     (f64.const 0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2203)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
      (i32.const 2204)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2205)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2206)
      (i32.const 0)
     )
     (unreachable)
@@ -43961,7 +43334,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2207)
+     (i32.const 2205)
      (i32.const 0)
     )
     (unreachable)
@@ -43972,6 +43345,48 @@
     (call $std/math/test_pow
      (f64.const -0)
      (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (get_global $std/math/DIVBYZERO)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2206)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0)
+     (f64.const -2)
+     (f64.const inf)
+     (f64.const 0)
+     (get_global $std/math/DIVBYZERO)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2207)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0)
+     (f64.const -3)
      (f64.neg
       (f64.const inf)
      )
@@ -43993,7 +43408,7 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const -0)
-     (f64.const -2)
+     (f64.const -4)
      (f64.const inf)
      (f64.const 0)
      (get_global $std/math/DIVBYZERO)
@@ -44013,12 +43428,12 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const -0)
-     (f64.const -3)
      (f64.neg
       (f64.const inf)
      )
+     (f64.const inf)
      (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
+     (i32.const 0)
     )
    )
    (block
@@ -44034,11 +43449,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const -4)
-     (f64.const inf)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -44054,11 +43469,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -0)
-     (f64.neg
-      (f64.const inf)
-     )
      (f64.const inf)
+     (f64.const 0)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44076,7 +43489,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const nan:0x8000000000000)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const 0)
      (f64.const 1)
      (f64.const 0)
@@ -44096,7 +43511,7 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const inf)
+     (f64.const 1)
      (f64.const 0)
      (f64.const 1)
      (f64.const 0)
@@ -44116,9 +43531,7 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const -1)
      (f64.const 0)
      (f64.const 1)
      (f64.const 0)
@@ -44138,7 +43551,7 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 1)
+     (f64.const -0.5)
      (f64.const 0)
      (f64.const 1)
      (f64.const 0)
@@ -44158,46 +43571,6 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2217)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0.5)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2218)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
      (f64.const nan:0x8000000000000)
      (f64.const -0)
      (f64.const 1)
@@ -44209,7 +43582,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2219)
+     (i32.const 2217)
      (i32.const 0)
     )
     (unreachable)
@@ -44229,7 +43602,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2220)
+     (i32.const 2218)
      (i32.const 0)
     )
     (unreachable)
@@ -44251,7 +43624,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2221)
+     (i32.const 2219)
      (i32.const 0)
     )
     (unreachable)
@@ -44261,6 +43634,46 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const 1)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2220)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2221)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0.5)
      (f64.const -0)
      (f64.const 1)
      (f64.const 0)
@@ -44281,8 +43694,8 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const -1)
-     (f64.const -0)
-     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44300,9 +43713,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -0.5)
-     (f64.const -0)
-     (f64.const 1)
+     (f64.const -1)
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44321,7 +43734,9 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const -1)
-     (f64.const nan:0x8000000000000)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
@@ -44341,8 +43756,8 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const -1)
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.const 2)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44361,10 +43776,8 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const -1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
+     (f64.const -1)
+     (f64.const -1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44383,7 +43796,7 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const -1)
-     (f64.const 2)
+     (f64.const -2)
      (f64.const 1)
      (f64.const 0)
      (i32.const 0)
@@ -44403,7 +43816,7 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const -1)
-     (f64.const -1)
+     (f64.const -3)
      (f64.const -1)
      (f64.const 0)
      (i32.const 0)
@@ -44423,10 +43836,10 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const -1)
-     (f64.const -2)
-     (f64.const 1)
+     (f64.const 0.5)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -44442,9 +43855,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const -3)
-     (f64.const -1)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44462,11 +43875,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const 0.5)
+     (f64.const 1)
+     (f64.const inf)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -44483,7 +43896,9 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const 1)
-     (f64.const nan:0x8000000000000)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
@@ -44503,8 +43918,8 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const 1)
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.const 3)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44523,10 +43938,8 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const 1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
+     (f64.const 0.5)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44545,7 +43958,7 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const 1)
-     (f64.const 3)
+     (f64.const -0.5)
      (f64.const 1)
      (f64.const 0)
      (i32.const 0)
@@ -44565,46 +43978,6 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const 1)
-     (f64.const 0.5)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2237)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 1)
-     (f64.const -0.5)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2238)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 1)
      (f64.const -3)
      (f64.const 1)
      (f64.const 0)
@@ -44615,7 +43988,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2239)
+     (i32.const 2237)
      (i32.const 0)
     )
     (unreachable)
@@ -44635,7 +44008,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2240)
+     (i32.const 2238)
      (i32.const 0)
     )
     (unreachable)
@@ -44655,7 +44028,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2241)
+     (i32.const 2239)
      (i32.const 0)
     )
     (unreachable)
@@ -44675,7 +44048,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2242)
+     (i32.const 2240)
      (i32.const 0)
     )
     (unreachable)
@@ -44695,7 +44068,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2243)
+     (i32.const 2241)
      (i32.const 0)
     )
     (unreachable)
@@ -44715,7 +44088,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2244)
+     (i32.const 2242)
      (i32.const 0)
     )
     (unreachable)
@@ -44737,7 +44110,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2245)
+     (i32.const 2243)
      (i32.const 0)
     )
     (unreachable)
@@ -44749,6 +44122,48 @@
      (f64.const -0.5)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2244)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 0.5)
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2245)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 0.5)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const inf)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44767,8 +44182,8 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const 0.5)
-     (f64.const inf)
-     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44786,10 +44201,8 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 0.5)
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const 1.5)
+     (f64.const inf)
      (f64.const inf)
      (f64.const 0)
      (i32.const 0)
@@ -44808,9 +44221,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 0.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.const 1.5)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44829,8 +44244,8 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const 1.5)
-     (f64.const inf)
-     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44848,11 +44263,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 1.5)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44870,9 +44283,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 1.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const inf)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44891,46 +44304,6 @@
    (i32.eqz
     (call $std/math/test_pow
      (f64.const inf)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2253)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2254)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const inf)
      (f64.neg
       (f64.const inf)
      )
@@ -44943,7 +44316,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2255)
+     (i32.const 2253)
      (i32.const 0)
     )
     (unreachable)
@@ -44963,7 +44336,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2256)
+     (i32.const 2254)
      (i32.const 0)
     )
     (unreachable)
@@ -44983,7 +44356,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2257)
+     (i32.const 2255)
      (i32.const 0)
     )
     (unreachable)
@@ -45003,7 +44376,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2258)
+     (i32.const 2256)
      (i32.const 0)
     )
     (unreachable)
@@ -45023,7 +44396,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2259)
+     (i32.const 2257)
      (i32.const 0)
     )
     (unreachable)
@@ -45043,7 +44416,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2260)
+     (i32.const 2258)
      (i32.const 0)
     )
     (unreachable)
@@ -45063,7 +44436,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2261)
+     (i32.const 2259)
      (i32.const 0)
     )
     (unreachable)
@@ -45075,6 +44448,50 @@
      (f64.const inf)
      (f64.const -2)
      (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2260)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2261)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const inf)
+     (f64.const inf)
      (f64.const 0)
      (i32.const 0)
     )
@@ -45095,8 +44512,10 @@
      (f64.neg
       (f64.const inf)
      )
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -45117,8 +44536,10 @@
      (f64.neg
       (f64.const inf)
      )
-     (f64.const inf)
-     (f64.const inf)
+     (f64.const 3)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const 0)
      (i32.const 0)
     )
@@ -45139,10 +44560,8 @@
      (f64.neg
       (f64.const inf)
      )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
+     (f64.const 2)
+     (f64.const inf)
      (f64.const 0)
      (i32.const 0)
     )
@@ -45163,7 +44582,7 @@
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 3)
+     (f64.const 1)
      (f64.neg
       (f64.const inf)
      )
@@ -45187,7 +44606,7 @@
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 2)
+     (f64.const 0.5)
      (f64.const inf)
      (f64.const 0)
      (i32.const 0)
@@ -45209,52 +44628,6 @@
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2268)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0.5)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2269)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
      (f64.const -0.5)
      (f64.const 0)
      (f64.const 0)
@@ -45265,7 +44638,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2270)
+     (i32.const 2268)
      (i32.const 0)
     )
     (unreachable)
@@ -45287,7 +44660,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2271)
+     (i32.const 2269)
      (i32.const 0)
     )
     (unreachable)
@@ -45309,7 +44682,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2272)
+     (i32.const 2270)
      (i32.const 0)
     )
     (unreachable)
@@ -45329,7 +44702,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2273)
+     (i32.const 2271)
      (i32.const 0)
     )
     (unreachable)
@@ -45349,7 +44722,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2274)
+     (i32.const 2272)
      (i32.const 0)
     )
     (unreachable)
@@ -45369,7 +44742,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2275)
+     (i32.const 2273)
      (i32.const 0)
     )
     (unreachable)
@@ -45389,7 +44762,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2276)
+     (i32.const 2274)
      (i32.const 0)
     )
     (unreachable)
@@ -45409,7 +44782,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2285)
+     (i32.const 2283)
      (i32.const 0)
     )
     (unreachable)
@@ -45429,7 +44802,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2286)
+     (i32.const 2284)
      (i32.const 0)
     )
     (unreachable)
@@ -45449,7 +44822,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2287)
+     (i32.const 2285)
      (i32.const 0)
     )
     (unreachable)
@@ -45469,7 +44842,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2288)
+     (i32.const 2286)
      (i32.const 0)
     )
     (unreachable)
@@ -45489,7 +44862,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2289)
+     (i32.const 2287)
      (i32.const 0)
     )
     (unreachable)
@@ -45509,7 +44882,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2290)
+     (i32.const 2288)
      (i32.const 0)
     )
     (unreachable)
@@ -45529,7 +44902,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2291)
+     (i32.const 2289)
      (i32.const 0)
     )
     (unreachable)
@@ -45549,7 +44922,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2292)
+     (i32.const 2290)
      (i32.const 0)
     )
     (unreachable)
@@ -45569,7 +44942,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2293)
+     (i32.const 2291)
      (i32.const 0)
     )
     (unreachable)
@@ -45589,7 +44962,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2294)
+     (i32.const 2292)
      (i32.const 0)
     )
     (unreachable)
@@ -45609,7 +44982,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2297)
+     (i32.const 2295)
      (i32.const 0)
     )
     (unreachable)
@@ -45629,7 +45002,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2298)
+     (i32.const 2296)
      (i32.const 0)
     )
     (unreachable)
@@ -45649,7 +45022,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2299)
+     (i32.const 2297)
      (i32.const 0)
     )
     (unreachable)
@@ -45669,7 +45042,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2300)
+     (i32.const 2298)
      (i32.const 0)
     )
     (unreachable)
@@ -45689,7 +45062,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2301)
+     (i32.const 2299)
      (i32.const 0)
     )
     (unreachable)
@@ -45709,7 +45082,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2302)
+     (i32.const 2300)
      (i32.const 0)
     )
     (unreachable)
@@ -45729,7 +45102,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2303)
+     (i32.const 2301)
      (i32.const 0)
     )
     (unreachable)
@@ -45749,7 +45122,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2304)
+     (i32.const 2302)
      (i32.const 0)
     )
     (unreachable)
@@ -45769,7 +45142,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2305)
+     (i32.const 2303)
      (i32.const 0)
     )
     (unreachable)
@@ -45789,7 +45162,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2306)
+     (i32.const 2304)
      (i32.const 0)
     )
     (unreachable)
@@ -45809,7 +45182,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2307)
+     (i32.const 2305)
      (i32.const 0)
     )
     (unreachable)
@@ -45829,7 +45202,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2308)
+     (i32.const 2306)
      (i32.const 0)
     )
     (unreachable)
@@ -45849,7 +45222,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2309)
+     (i32.const 2307)
      (i32.const 0)
     )
     (unreachable)
@@ -45871,7 +45244,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2310)
+     (i32.const 2308)
      (i32.const 0)
     )
     (unreachable)
@@ -45891,7 +45264,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2311)
+     (i32.const 2309)
      (i32.const 0)
     )
     (unreachable)
@@ -45911,7 +45284,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2312)
+     (i32.const 2310)
      (i32.const 0)
     )
     (unreachable)
@@ -45931,7 +45304,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2313)
+     (i32.const 2311)
      (i32.const 0)
     )
     (unreachable)
@@ -45951,7 +45324,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2314)
+     (i32.const 2312)
      (i32.const 0)
     )
     (unreachable)
@@ -45971,7 +45344,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2315)
+     (i32.const 2313)
      (i32.const 0)
     )
     (unreachable)
@@ -45991,47 +45364,47 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
+     (i32.const 2314)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0)
+     (f32.const 0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2315)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
      (i32.const 2316)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2317)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2318)
      (i32.const 0)
     )
     (unreachable)
@@ -46051,7 +45424,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2319)
+     (i32.const 2317)
      (i32.const 0)
     )
     (unreachable)
@@ -46062,6 +45435,48 @@
     (call $std/math/test_powf
      (f32.const -0)
      (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (get_global $std/math/DIVBYZERO)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2318)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0)
+     (f32.const -2)
+     (f32.const inf)
+     (f32.const 0)
+     (get_global $std/math/DIVBYZERO)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2319)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0)
+     (f32.const -3)
      (f32.neg
       (f32.const inf)
      )
@@ -46083,7 +45498,7 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const -0)
-     (f32.const -2)
+     (f32.const -4)
      (f32.const inf)
      (f32.const 0)
      (get_global $std/math/DIVBYZERO)
@@ -46103,12 +45518,12 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const -0)
-     (f32.const -3)
      (f32.neg
       (f32.const inf)
      )
+     (f32.const inf)
      (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
+     (i32.const 0)
     )
    )
    (block
@@ -46124,11 +45539,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const -4)
-     (f32.const inf)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -46144,11 +45559,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -0)
-     (f32.neg
-      (f32.const inf)
-     )
      (f32.const inf)
+     (f32.const 0)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46166,7 +45579,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const nan:0x400000)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const 0)
      (f32.const 1)
      (f32.const 0)
@@ -46186,7 +45601,7 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const inf)
+     (f32.const 1)
      (f32.const 0)
      (f32.const 1)
      (f32.const 0)
@@ -46206,9 +45621,7 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const -1)
      (f32.const 0)
      (f32.const 1)
      (f32.const 0)
@@ -46228,7 +45641,7 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 1)
+     (f32.const -0.5)
      (f32.const 0)
      (f32.const 1)
      (f32.const 0)
@@ -46248,46 +45661,6 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2329)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0.5)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2330)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
      (f32.const nan:0x400000)
      (f32.const -0)
      (f32.const 1)
@@ -46299,7 +45672,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2331)
+     (i32.const 2329)
      (i32.const 0)
     )
     (unreachable)
@@ -46319,7 +45692,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2332)
+     (i32.const 2330)
      (i32.const 0)
     )
     (unreachable)
@@ -46341,7 +45714,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2333)
+     (i32.const 2331)
      (i32.const 0)
     )
     (unreachable)
@@ -46351,6 +45724,46 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const 1)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2332)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2333)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0.5)
      (f32.const -0)
      (f32.const 1)
      (f32.const 0)
@@ -46371,8 +45784,8 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const -1)
-     (f32.const -0)
-     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46390,9 +45803,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -0.5)
-     (f32.const -0)
-     (f32.const 1)
+     (f32.const -1)
+     (f32.const inf)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46411,7 +45824,9 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const -1)
-     (f32.const nan:0x400000)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
@@ -46431,8 +45846,8 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const -1)
-     (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.const 2)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46451,10 +45866,8 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const -1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
+     (f32.const -1)
+     (f32.const -1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46473,7 +45886,7 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const -1)
-     (f32.const 2)
+     (f32.const -2)
      (f32.const 1)
      (f32.const 0)
      (i32.const 0)
@@ -46493,7 +45906,7 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const -1)
-     (f32.const -1)
+     (f32.const -3)
      (f32.const -1)
      (f32.const 0)
      (i32.const 0)
@@ -46513,10 +45926,10 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const -1)
-     (f32.const -2)
-     (f32.const 1)
+     (f32.const 0.5)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -46532,9 +45945,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const -3)
-     (f32.const -1)
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46552,11 +45965,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const 0.5)
+     (f32.const 1)
+     (f32.const inf)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -46573,7 +45986,9 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const 1)
-     (f32.const nan:0x400000)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
@@ -46593,8 +46008,8 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const 1)
-     (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.const 3)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46613,10 +46028,8 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const 1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
+     (f32.const 0.5)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46635,7 +46048,7 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const 1)
-     (f32.const 3)
+     (f32.const -0.5)
      (f32.const 1)
      (f32.const 0)
      (i32.const 0)
@@ -46655,46 +46068,6 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const 1)
-     (f32.const 0.5)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2349)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 1)
-     (f32.const -0.5)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2350)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 1)
      (f32.const -3)
      (f32.const 1)
      (f32.const 0)
@@ -46705,7 +46078,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2351)
+     (i32.const 2349)
      (i32.const 0)
     )
     (unreachable)
@@ -46725,7 +46098,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2352)
+     (i32.const 2350)
      (i32.const 0)
     )
     (unreachable)
@@ -46745,7 +46118,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2353)
+     (i32.const 2351)
      (i32.const 0)
     )
     (unreachable)
@@ -46765,7 +46138,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2354)
+     (i32.const 2352)
      (i32.const 0)
     )
     (unreachable)
@@ -46785,7 +46158,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2355)
+     (i32.const 2353)
      (i32.const 0)
     )
     (unreachable)
@@ -46805,7 +46178,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2356)
+     (i32.const 2354)
      (i32.const 0)
     )
     (unreachable)
@@ -46827,7 +46200,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2357)
+     (i32.const 2355)
      (i32.const 0)
     )
     (unreachable)
@@ -46839,6 +46212,48 @@
      (f32.const -0.5)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2356)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 0.5)
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2357)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 0.5)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const inf)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46857,8 +46272,8 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const 0.5)
-     (f32.const inf)
-     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46876,10 +46291,8 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 0.5)
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const 1.5)
+     (f32.const inf)
      (f32.const inf)
      (f32.const 0)
      (i32.const 0)
@@ -46898,9 +46311,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 0.5)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+     (f32.const 1.5)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46919,8 +46334,8 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const 1.5)
-     (f32.const inf)
-     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46938,11 +46353,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 1.5)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46960,9 +46373,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 1.5)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const inf)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46981,46 +46394,6 @@
    (i32.eqz
     (call $std/math/test_powf
      (f32.const inf)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2365)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2366)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const inf)
      (f32.neg
       (f32.const inf)
      )
@@ -47033,7 +46406,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2367)
+     (i32.const 2365)
      (i32.const 0)
     )
     (unreachable)
@@ -47053,7 +46426,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2368)
+     (i32.const 2366)
      (i32.const 0)
     )
     (unreachable)
@@ -47073,7 +46446,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2369)
+     (i32.const 2367)
      (i32.const 0)
     )
     (unreachable)
@@ -47093,7 +46466,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2370)
+     (i32.const 2368)
      (i32.const 0)
     )
     (unreachable)
@@ -47113,7 +46486,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2371)
+     (i32.const 2369)
      (i32.const 0)
     )
     (unreachable)
@@ -47133,7 +46506,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2372)
+     (i32.const 2370)
      (i32.const 0)
     )
     (unreachable)
@@ -47153,7 +46526,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2373)
+     (i32.const 2371)
      (i32.const 0)
     )
     (unreachable)
@@ -47165,6 +46538,50 @@
      (f32.const inf)
      (f32.const -2)
      (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2372)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2373)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const inf)
+     (f32.const inf)
      (f32.const 0)
      (i32.const 0)
     )
@@ -47185,8 +46602,10 @@
      (f32.neg
       (f32.const inf)
      )
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -47207,8 +46626,10 @@
      (f32.neg
       (f32.const inf)
      )
-     (f32.const inf)
-     (f32.const inf)
+     (f32.const 3)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const 0)
      (i32.const 0)
     )
@@ -47229,10 +46650,8 @@
      (f32.neg
       (f32.const inf)
      )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
+     (f32.const 2)
+     (f32.const inf)
      (f32.const 0)
      (i32.const 0)
     )
@@ -47253,7 +46672,7 @@
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 3)
+     (f32.const 1)
      (f32.neg
       (f32.const inf)
      )
@@ -47277,7 +46696,7 @@
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 2)
+     (f32.const 0.5)
      (f32.const inf)
      (f32.const 0)
      (i32.const 0)
@@ -47299,52 +46718,6 @@
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2380)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0.5)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2381)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
      (f32.const -0.5)
      (f32.const 0)
      (f32.const 0)
@@ -47355,7 +46728,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2382)
+     (i32.const 2380)
      (i32.const 0)
     )
     (unreachable)
@@ -47377,7 +46750,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2383)
+     (i32.const 2381)
      (i32.const 0)
     )
     (unreachable)
@@ -47399,7 +46772,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2384)
+     (i32.const 2382)
      (i32.const 0)
     )
     (unreachable)
@@ -47419,7 +46792,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2385)
+     (i32.const 2383)
      (i32.const 0)
     )
     (unreachable)
@@ -47439,7 +46812,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2386)
+     (i32.const 2384)
      (i32.const 0)
     )
     (unreachable)
@@ -47459,7 +46832,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2387)
+     (i32.const 2385)
      (i32.const 0)
     )
     (unreachable)
@@ -47479,7 +46852,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2388)
+     (i32.const 2386)
      (i32.const 0)
     )
     (unreachable)
@@ -47487,7 +46860,7 @@
   )
   (call $~lib/math/NativeMath.seedRandom
    (i64.reinterpret/f64
-    (call $~lib/math/JSMath.random)
+    (call $~lib/bindings/Math/random)
    )
   )
   (block $break|0
@@ -47529,7 +46902,7 @@
        (call $~lib/env/abort
         (i32.const 0)
         (i32.const 8)
-        (i32.const 2397)
+        (i32.const 2395)
         (i32.const 2)
        )
        (unreachable)
@@ -47548,7 +46921,7 @@
   (block $~lib/math/NativeMathf.seedRandom|inlined.0
    (set_local $3
     (i64.reinterpret/f64
-     (call $~lib/math/JSMath.random)
+     (call $~lib/bindings/Math/random)
     )
    )
    (call $~lib/math/NativeMath.seedRandom
@@ -47594,7 +46967,7 @@
        (call $~lib/env/abort
         (i32.const 0)
         (i32.const 8)
-        (i32.const 2405)
+        (i32.const 2403)
         (i32.const 2)
        )
        (unreachable)
@@ -47623,7 +46996,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2419)
+     (i32.const 2417)
      (i32.const 0)
     )
     (unreachable)
@@ -47642,7 +47015,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2420)
+     (i32.const 2418)
      (i32.const 0)
     )
     (unreachable)
@@ -47661,7 +47034,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2421)
+     (i32.const 2419)
      (i32.const 0)
     )
     (unreachable)
@@ -47680,7 +47053,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2422)
+     (i32.const 2420)
      (i32.const 0)
     )
     (unreachable)
@@ -47699,7 +47072,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2423)
+     (i32.const 2421)
      (i32.const 0)
     )
     (unreachable)
@@ -47718,7 +47091,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2424)
+     (i32.const 2422)
      (i32.const 0)
     )
     (unreachable)
@@ -47737,7 +47110,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2425)
+     (i32.const 2423)
      (i32.const 0)
     )
     (unreachable)
@@ -47756,7 +47129,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2426)
+     (i32.const 2424)
      (i32.const 0)
     )
     (unreachable)
@@ -47775,7 +47148,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2427)
+     (i32.const 2425)
      (i32.const 0)
     )
     (unreachable)
@@ -47794,7 +47167,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2428)
+     (i32.const 2426)
      (i32.const 0)
     )
     (unreachable)
@@ -47805,6 +47178,48 @@
     (call $std/math/test_round
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2429)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_round
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2430)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_round
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const 0)
      (i32.const 0)
     )
@@ -47822,8 +47237,8 @@
   (if
    (i32.eqz
     (call $std/math/test_round
-     (f64.const inf)
-     (f64.const inf)
+     (f64.const 0)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -47841,12 +47256,8 @@
   (if
    (i32.eqz
     (call $std/math/test_round
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const -0)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -47864,8 +47275,8 @@
   (if
    (i32.eqz
     (call $std/math/test_round
-     (f64.const 0)
-     (f64.const 0)
+     (f64.const 1)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -47883,8 +47294,8 @@
   (if
    (i32.eqz
     (call $std/math/test_round
-     (f64.const -0)
-     (f64.const -0)
+     (f64.const -1)
+     (f64.const -1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -47894,44 +47305,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2435)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_round
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2436)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_round
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2437)
      (i32.const 0)
     )
     (unreachable)
@@ -47950,7 +47323,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2438)
+     (i32.const 2436)
      (i32.const 0)
     )
     (unreachable)
@@ -47969,7 +47342,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2439)
+     (i32.const 2437)
      (i32.const 0)
     )
     (unreachable)
@@ -47988,7 +47361,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2440)
+     (i32.const 2438)
      (i32.const 0)
     )
     (unreachable)
@@ -48007,7 +47380,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2441)
+     (i32.const 2439)
      (i32.const 0)
     )
     (unreachable)
@@ -48026,7 +47399,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2442)
+     (i32.const 2440)
      (i32.const 0)
     )
     (unreachable)
@@ -48045,7 +47418,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2443)
+     (i32.const 2441)
      (i32.const 0)
     )
     (unreachable)
@@ -48064,7 +47437,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2444)
+     (i32.const 2442)
      (i32.const 0)
     )
     (unreachable)
@@ -48083,7 +47456,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2445)
+     (i32.const 2443)
      (i32.const 0)
     )
     (unreachable)
@@ -48102,7 +47475,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2446)
+     (i32.const 2444)
      (i32.const 0)
     )
     (unreachable)
@@ -48121,7 +47494,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2447)
+     (i32.const 2445)
      (i32.const 0)
     )
     (unreachable)
@@ -48140,7 +47513,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2456)
+     (i32.const 2454)
      (i32.const 0)
     )
     (unreachable)
@@ -48159,7 +47532,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2457)
+     (i32.const 2455)
      (i32.const 0)
     )
     (unreachable)
@@ -48178,7 +47551,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2458)
+     (i32.const 2456)
      (i32.const 0)
     )
     (unreachable)
@@ -48197,7 +47570,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2459)
+     (i32.const 2457)
      (i32.const 0)
     )
     (unreachable)
@@ -48216,7 +47589,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2460)
+     (i32.const 2458)
      (i32.const 0)
     )
     (unreachable)
@@ -48235,7 +47608,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2461)
+     (i32.const 2459)
      (i32.const 0)
     )
     (unreachable)
@@ -48254,7 +47627,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2462)
+     (i32.const 2460)
      (i32.const 0)
     )
     (unreachable)
@@ -48273,7 +47646,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2463)
+     (i32.const 2461)
      (i32.const 0)
     )
     (unreachable)
@@ -48292,7 +47665,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2464)
+     (i32.const 2462)
      (i32.const 0)
     )
     (unreachable)
@@ -48311,7 +47684,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2465)
+     (i32.const 2463)
      (i32.const 0)
     )
     (unreachable)
@@ -48322,6 +47695,48 @@
     (call $std/math/test_roundf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2466)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_roundf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2467)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_roundf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const 0)
      (i32.const 0)
     )
@@ -48339,8 +47754,8 @@
   (if
    (i32.eqz
     (call $std/math/test_roundf
-     (f32.const inf)
-     (f32.const inf)
+     (f32.const 0)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -48358,12 +47773,8 @@
   (if
    (i32.eqz
     (call $std/math/test_roundf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const -0)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -48381,8 +47792,8 @@
   (if
    (i32.eqz
     (call $std/math/test_roundf
-     (f32.const 0)
-     (f32.const 0)
+     (f32.const 1)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -48400,8 +47811,8 @@
   (if
    (i32.eqz
     (call $std/math/test_roundf
-     (f32.const -0)
-     (f32.const -0)
+     (f32.const -1)
+     (f32.const -1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -48411,44 +47822,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2472)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_roundf
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2473)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_roundf
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2474)
      (i32.const 0)
     )
     (unreachable)
@@ -48467,7 +47840,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2475)
+     (i32.const 2473)
      (i32.const 0)
     )
     (unreachable)
@@ -48486,7 +47859,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2476)
+     (i32.const 2474)
      (i32.const 0)
     )
     (unreachable)
@@ -48505,7 +47878,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2477)
+     (i32.const 2475)
      (i32.const 0)
     )
     (unreachable)
@@ -48524,7 +47897,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2478)
+     (i32.const 2476)
      (i32.const 0)
     )
     (unreachable)
@@ -48543,7 +47916,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2479)
+     (i32.const 2477)
      (i32.const 0)
     )
     (unreachable)
@@ -48562,7 +47935,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2480)
+     (i32.const 2478)
      (i32.const 0)
     )
     (unreachable)
@@ -48581,7 +47954,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2481)
+     (i32.const 2479)
      (i32.const 0)
     )
     (unreachable)
@@ -48600,7 +47973,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2482)
+     (i32.const 2480)
      (i32.const 0)
     )
     (unreachable)
@@ -48619,7 +47992,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2483)
+     (i32.const 2481)
      (i32.const 0)
     )
     (unreachable)
@@ -48638,7 +48011,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2484)
+     (i32.const 2482)
      (i32.const 0)
     )
     (unreachable)
@@ -48649,6 +48022,44 @@
     (call $std/math/test_sign
      (f64.const 0)
      (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2493)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sign
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2494)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sign
+     (f64.const 1)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -48658,44 +48069,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2495)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sign
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2496)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sign
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2497)
      (i32.const 0)
     )
     (unreachable)
@@ -48714,7 +48087,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2498)
+     (i32.const 2496)
      (i32.const 0)
     )
     (unreachable)
@@ -48733,7 +48106,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2499)
+     (i32.const 2497)
      (i32.const 0)
     )
     (unreachable)
@@ -48752,7 +48125,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2500)
+     (i32.const 2498)
      (i32.const 0)
     )
     (unreachable)
@@ -48771,7 +48144,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2501)
+     (i32.const 2499)
      (i32.const 0)
     )
     (unreachable)
@@ -48792,7 +48165,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2502)
+     (i32.const 2500)
      (i32.const 0)
     )
     (unreachable)
@@ -48811,7 +48184,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2503)
+     (i32.const 2501)
      (i32.const 0)
     )
     (unreachable)
@@ -48822,6 +48195,44 @@
     (call $std/math/test_signf
      (f32.const 0)
      (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2509)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_signf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2510)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_signf
+     (f32.const 1)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -48831,44 +48242,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2511)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_signf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2512)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_signf
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2513)
      (i32.const 0)
     )
     (unreachable)
@@ -48887,7 +48260,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2514)
+     (i32.const 2512)
      (i32.const 0)
     )
     (unreachable)
@@ -48906,7 +48279,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2515)
+     (i32.const 2513)
      (i32.const 0)
     )
     (unreachable)
@@ -48925,7 +48298,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2516)
+     (i32.const 2514)
      (i32.const 0)
     )
     (unreachable)
@@ -48944,7 +48317,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2517)
+     (i32.const 2515)
      (i32.const 0)
     )
     (unreachable)
@@ -48965,7 +48338,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2518)
+     (i32.const 2516)
      (i32.const 0)
     )
     (unreachable)
@@ -48984,7 +48357,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2519)
+     (i32.const 2517)
      (i32.const 0)
     )
     (unreachable)
@@ -49004,7 +48377,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2530)
+     (i32.const 2528)
      (i32.const 0)
     )
     (unreachable)
@@ -49024,7 +48397,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2531)
+     (i32.const 2529)
      (i32.const 0)
     )
     (unreachable)
@@ -49044,7 +48417,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2532)
+     (i32.const 2530)
      (i32.const 0)
     )
     (unreachable)
@@ -49064,7 +48437,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2533)
+     (i32.const 2531)
      (i32.const 0)
     )
     (unreachable)
@@ -49084,7 +48457,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2534)
+     (i32.const 2532)
      (i32.const 0)
     )
     (unreachable)
@@ -49104,7 +48477,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2535)
+     (i32.const 2533)
      (i32.const 0)
     )
     (unreachable)
@@ -49124,7 +48497,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2536)
+     (i32.const 2534)
      (i32.const 0)
     )
     (unreachable)
@@ -49144,7 +48517,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2537)
+     (i32.const 2535)
      (i32.const 0)
     )
     (unreachable)
@@ -49164,7 +48537,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2538)
+     (i32.const 2536)
      (i32.const 0)
     )
     (unreachable)
@@ -49184,7 +48557,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2539)
+     (i32.const 2537)
      (i32.const 0)
     )
     (unreachable)
@@ -49196,6 +48569,46 @@
      (f64.const 0)
      (f64.const 1)
      (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2540)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2541)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0.5)
+     (f64.const 1)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49213,9 +48626,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const -0)
+     (f64.const -0.5)
      (f64.const 1)
-     (f64.const -0)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49233,9 +48646,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const 0.5)
      (f64.const 1)
-     (f64.const 0.5)
+     (f64.const 1)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49253,9 +48666,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const -0.5)
+     (f64.const -1)
      (f64.const 1)
-     (f64.const -0.5)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49273,9 +48686,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
+     (f64.const 1.5)
      (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49293,9 +48706,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const -1)
+     (f64.const -1.5)
      (f64.const 1)
-     (f64.const -0)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49313,9 +48726,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const 1.5)
+     (f64.const 2)
      (f64.const 1)
-     (f64.const -0.5)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49333,46 +48746,6 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const -1.5)
-     (f64.const 1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2549)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 2)
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2550)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
      (f64.const -2)
      (f64.const 1)
      (f64.const -0)
@@ -49384,7 +48757,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2551)
+     (i32.const 2549)
      (i32.const 0)
     )
     (unreachable)
@@ -49404,7 +48777,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2552)
+     (i32.const 2550)
      (i32.const 0)
     )
     (unreachable)
@@ -49426,7 +48799,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2553)
+     (i32.const 2551)
      (i32.const 0)
     )
     (unreachable)
@@ -49438,6 +48811,46 @@
      (f64.const nan:0x8000000000000)
      (f64.const 1)
      (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2552)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2553)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const -1)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49455,9 +48868,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const 0)
+     (f64.const 0.5)
      (f64.const -1)
-     (f64.const 0)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49475,9 +48888,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const -0)
+     (f64.const -0.5)
      (f64.const -1)
-     (f64.const -0)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49487,46 +48900,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2556)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 0.5)
-     (f64.const -1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2557)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0.5)
-     (f64.const -1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2558)
      (i32.const 0)
     )
     (unreachable)
@@ -49546,7 +48919,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2559)
+     (i32.const 2557)
      (i32.const 0)
     )
     (unreachable)
@@ -49566,7 +48939,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2560)
+     (i32.const 2558)
      (i32.const 0)
     )
     (unreachable)
@@ -49586,7 +48959,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2561)
+     (i32.const 2559)
      (i32.const 0)
     )
     (unreachable)
@@ -49606,7 +48979,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2562)
+     (i32.const 2560)
      (i32.const 0)
     )
     (unreachable)
@@ -49626,7 +48999,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2563)
+     (i32.const 2561)
      (i32.const 0)
     )
     (unreachable)
@@ -49646,7 +49019,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2564)
+     (i32.const 2562)
      (i32.const 0)
     )
     (unreachable)
@@ -49666,7 +49039,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2565)
+     (i32.const 2563)
      (i32.const 0)
     )
     (unreachable)
@@ -49679,6 +49052,46 @@
       (f64.const inf)
      )
      (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2564)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2565)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (get_global $std/math/INVALID)
@@ -49697,11 +49110,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const nan:0x8000000000000)
-     (f64.const -1)
+     (f64.const 0)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -49718,10 +49131,10 @@
    (i32.eqz
     (call $std/math/test_rem
      (f64.const 0)
+     (f64.const inf)
      (f64.const 0)
-     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -49738,10 +49151,12 @@
    (i32.eqz
     (call $std/math/test_rem
      (f64.const 0)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (f64.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -49758,8 +49173,8 @@
    (i32.eqz
     (call $std/math/test_rem
      (f64.const 0)
-     (f64.const inf)
-     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -49777,13 +49192,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
+     (f64.const -0)
      (f64.const 0)
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -49799,11 +49212,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const 0)
+     (f64.const -0)
+     (f64.const -0)
      (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -49811,46 +49224,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2572)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2573)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2574)
      (i32.const 0)
     )
     (unreachable)
@@ -49870,7 +49243,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2575)
+     (i32.const 2573)
      (i32.const 0)
     )
     (unreachable)
@@ -49892,7 +49265,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2576)
+     (i32.const 2574)
      (i32.const 0)
     )
     (unreachable)
@@ -49912,7 +49285,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2577)
+     (i32.const 2575)
      (i32.const 0)
     )
     (unreachable)
@@ -49922,6 +49295,46 @@
    (i32.eqz
     (call $std/math/test_rem
      (f64.const 1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2576)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2577)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -49941,7 +49354,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -49961,11 +49376,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const inf)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -49973,48 +49388,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2580)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2581)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2582)
      (i32.const 0)
     )
     (unreachable)
@@ -50034,7 +49407,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2583)
+     (i32.const 2581)
      (i32.const 0)
     )
     (unreachable)
@@ -50054,7 +49427,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2584)
+     (i32.const 2582)
      (i32.const 0)
     )
     (unreachable)
@@ -50067,6 +49440,46 @@
       (f64.const inf)
      )
      (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2583)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2584)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const 2)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (get_global $std/math/INVALID)
@@ -50085,11 +49498,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const nan:0x8000000000000)
-     (f64.const -0)
+     (f64.const inf)
+     (f64.const -0.5)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -50106,10 +49519,10 @@
    (i32.eqz
     (call $std/math/test_rem
      (f64.const inf)
-     (f64.const 2)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -50125,8 +49538,10 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const -0.5)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 2)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (get_global $std/math/INVALID)
@@ -50145,11 +49560,13 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0.5)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -50168,10 +49585,10 @@
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 2)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -50187,13 +49604,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -50209,9 +49624,7 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const 1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -50231,7 +49644,7 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const nan:0x8000000000000)
+     (f64.const -1)
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
@@ -50252,8 +49665,8 @@
    (i32.eqz
     (call $std/math/test_rem
      (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.const inf)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -50272,8 +49685,8 @@
    (i32.eqz
     (call $std/math/test_rem
      (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.const inf)
+     (f64.const -1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -50291,11 +49704,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const 1)
      (f64.const inf)
-     (f64.const 1)
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -50311,11 +49724,13 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const inf)
-     (f64.const -1)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -50331,11 +49746,13 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.const 1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -50351,13 +49768,13 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
+     (f64.const -1)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.const -1)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -50373,13 +49790,13 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const 1)
+     (f64.const inf)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 1)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -50395,13 +49812,15 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const -1)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -50417,13 +49836,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const inf)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
+     (f64.const 1.75)
+     (f64.const 0.5)
+     (f64.const -0.25)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -50439,15 +49856,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
+     (f64.const -1.75)
+     (f64.const 0.5)
+     (f64.const 0.25)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -50464,7 +49877,7 @@
    (i32.eqz
     (call $std/math/test_rem
      (f64.const 1.75)
-     (f64.const 0.5)
+     (f64.const -0.5)
      (f64.const -0.25)
      (f64.const 0)
      (i32.const 0)
@@ -50484,7 +49897,7 @@
    (i32.eqz
     (call $std/math/test_rem
      (f64.const -1.75)
-     (f64.const 0.5)
+     (f64.const -0.5)
      (f64.const 0.25)
      (f64.const 0)
      (i32.const 0)
@@ -50495,46 +49908,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2605)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 1.75)
-     (f64.const -0.5)
-     (f64.const -0.25)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2606)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -1.75)
-     (f64.const -0.5)
-     (f64.const 0.25)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2607)
      (i32.const 0)
     )
     (unreachable)
@@ -50554,7 +49927,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2608)
+     (i32.const 2606)
      (i32.const 0)
     )
     (unreachable)
@@ -50574,7 +49947,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2617)
+     (i32.const 2615)
      (i32.const 0)
     )
     (unreachable)
@@ -50594,7 +49967,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2618)
+     (i32.const 2616)
      (i32.const 0)
     )
     (unreachable)
@@ -50614,7 +49987,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2619)
+     (i32.const 2617)
      (i32.const 0)
     )
     (unreachable)
@@ -50634,7 +50007,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2620)
+     (i32.const 2618)
      (i32.const 0)
     )
     (unreachable)
@@ -50654,7 +50027,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2621)
+     (i32.const 2619)
      (i32.const 0)
     )
     (unreachable)
@@ -50674,7 +50047,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2622)
+     (i32.const 2620)
      (i32.const 0)
     )
     (unreachable)
@@ -50694,7 +50067,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2623)
+     (i32.const 2621)
      (i32.const 0)
     )
     (unreachable)
@@ -50714,7 +50087,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2624)
+     (i32.const 2622)
      (i32.const 0)
     )
     (unreachable)
@@ -50734,7 +50107,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2625)
+     (i32.const 2623)
      (i32.const 0)
     )
     (unreachable)
@@ -50754,7 +50127,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2626)
+     (i32.const 2624)
      (i32.const 0)
     )
     (unreachable)
@@ -50766,6 +50139,46 @@
      (f32.const 0)
      (f32.const 1)
      (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2627)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2628)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0.5)
+     (f32.const 1)
+     (f32.const 0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -50783,9 +50196,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const -0)
+     (f32.const -0.5)
      (f32.const 1)
-     (f32.const -0)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -50803,9 +50216,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const 0.5)
      (f32.const 1)
-     (f32.const 0.5)
+     (f32.const 1)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -50823,9 +50236,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const -0.5)
+     (f32.const -1)
      (f32.const 1)
-     (f32.const -0.5)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -50843,9 +50256,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
+     (f32.const 1.5)
      (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -50863,9 +50276,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const -1)
+     (f32.const -1.5)
      (f32.const 1)
-     (f32.const -0)
+     (f32.const 0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -50883,9 +50296,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const 1.5)
+     (f32.const 2)
      (f32.const 1)
-     (f32.const -0.5)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -50903,46 +50316,6 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const -1.5)
-     (f32.const 1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2636)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 2)
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2637)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
      (f32.const -2)
      (f32.const 1)
      (f32.const -0)
@@ -50954,7 +50327,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2638)
+     (i32.const 2636)
      (i32.const 0)
     )
     (unreachable)
@@ -50974,7 +50347,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2639)
+     (i32.const 2637)
      (i32.const 0)
     )
     (unreachable)
@@ -50996,7 +50369,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2640)
+     (i32.const 2638)
      (i32.const 0)
     )
     (unreachable)
@@ -51008,6 +50381,46 @@
      (f32.const nan:0x400000)
      (f32.const 1)
      (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2639)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2640)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const -1)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -51025,9 +50438,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const 0)
+     (f32.const 0.5)
      (f32.const -1)
-     (f32.const 0)
+     (f32.const 0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -51045,9 +50458,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const -0)
+     (f32.const -0.5)
      (f32.const -1)
-     (f32.const -0)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -51057,46 +50470,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2643)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 0.5)
-     (f32.const -1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2644)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0.5)
-     (f32.const -1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2645)
      (i32.const 0)
     )
     (unreachable)
@@ -51116,7 +50489,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2646)
+     (i32.const 2644)
      (i32.const 0)
     )
     (unreachable)
@@ -51136,7 +50509,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2647)
+     (i32.const 2645)
      (i32.const 0)
     )
     (unreachable)
@@ -51156,7 +50529,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2648)
+     (i32.const 2646)
      (i32.const 0)
     )
     (unreachable)
@@ -51176,7 +50549,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2649)
+     (i32.const 2647)
      (i32.const 0)
     )
     (unreachable)
@@ -51196,7 +50569,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2650)
+     (i32.const 2648)
      (i32.const 0)
     )
     (unreachable)
@@ -51216,7 +50589,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2651)
+     (i32.const 2649)
      (i32.const 0)
     )
     (unreachable)
@@ -51236,7 +50609,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2652)
+     (i32.const 2650)
      (i32.const 0)
     )
     (unreachable)
@@ -51249,6 +50622,46 @@
       (f32.const inf)
      )
      (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2651)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2652)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
      (get_global $std/math/INVALID)
@@ -51267,11 +50680,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const nan:0x400000)
-     (f32.const -1)
+     (f32.const 0)
+     (f32.const -0)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -51288,10 +50701,10 @@
    (i32.eqz
     (call $std/math/test_remf
      (f32.const 0)
+     (f32.const inf)
      (f32.const 0)
-     (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -51308,10 +50721,12 @@
    (i32.eqz
     (call $std/math/test_remf
      (f32.const 0)
-     (f32.const -0)
-     (f32.const nan:0x400000)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (f32.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -51328,8 +50743,8 @@
    (i32.eqz
     (call $std/math/test_remf
      (f32.const 0)
-     (f32.const inf)
-     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -51347,13 +50762,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
+     (f32.const -0)
      (f32.const 0)
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -51369,11 +50782,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const 0)
+     (f32.const -0)
+     (f32.const -0)
      (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -51381,46 +50794,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2659)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2660)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2661)
      (i32.const 0)
     )
     (unreachable)
@@ -51440,7 +50813,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2662)
+     (i32.const 2660)
      (i32.const 0)
     )
     (unreachable)
@@ -51462,7 +50835,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2663)
+     (i32.const 2661)
      (i32.const 0)
     )
     (unreachable)
@@ -51482,7 +50855,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2664)
+     (i32.const 2662)
      (i32.const 0)
     )
     (unreachable)
@@ -51492,6 +50865,46 @@
    (i32.eqz
     (call $std/math/test_remf
      (f32.const 1)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2663)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2664)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -51511,7 +50924,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -51531,11 +50946,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const inf)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -51543,48 +50958,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2667)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2668)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2669)
      (i32.const 0)
     )
     (unreachable)
@@ -51604,7 +50977,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2670)
+     (i32.const 2668)
      (i32.const 0)
     )
     (unreachable)
@@ -51624,7 +50997,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2671)
+     (i32.const 2669)
      (i32.const 0)
     )
     (unreachable)
@@ -51637,6 +51010,46 @@
       (f32.const inf)
      )
      (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2670)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2671)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const 2)
      (f32.const nan:0x400000)
      (f32.const 0)
      (get_global $std/math/INVALID)
@@ -51655,11 +51068,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const nan:0x400000)
-     (f32.const -0)
+     (f32.const inf)
+     (f32.const -0.5)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -51676,10 +51089,10 @@
    (i32.eqz
     (call $std/math/test_remf
      (f32.const inf)
-     (f32.const 2)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -51695,8 +51108,10 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const -0.5)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 2)
      (f32.const nan:0x400000)
      (f32.const 0)
      (get_global $std/math/INVALID)
@@ -51715,11 +51130,13 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0.5)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -51738,10 +51155,10 @@
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 2)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -51757,13 +51174,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0.5)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -51779,9 +51194,7 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const 1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -51801,7 +51214,7 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const nan:0x400000)
+     (f32.const -1)
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
@@ -51822,8 +51235,8 @@
    (i32.eqz
     (call $std/math/test_remf
      (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+     (f32.const inf)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -51842,8 +51255,8 @@
    (i32.eqz
     (call $std/math/test_remf
      (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+     (f32.const inf)
+     (f32.const -1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -51861,11 +51274,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const 1)
      (f32.const inf)
-     (f32.const 1)
+     (f32.const inf)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -51881,11 +51294,13 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const inf)
-     (f32.const -1)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -51901,11 +51316,13 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.const 1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -51921,13 +51338,13 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
+     (f32.const -1)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.const -1)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -51943,13 +51360,13 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const 1)
+     (f32.const inf)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 1)
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -51965,13 +51382,15 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const -1)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -51987,13 +51406,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const inf)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
+     (f32.const 1.75)
+     (f32.const 0.5)
+     (f32.const -0.25)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -52009,15 +51426,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
+     (f32.const -1.75)
+     (f32.const 0.5)
+     (f32.const 0.25)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -52034,7 +51447,7 @@
    (i32.eqz
     (call $std/math/test_remf
      (f32.const 1.75)
-     (f32.const 0.5)
+     (f32.const -0.5)
      (f32.const -0.25)
      (f32.const 0)
      (i32.const 0)
@@ -52054,7 +51467,7 @@
    (i32.eqz
     (call $std/math/test_remf
      (f32.const -1.75)
-     (f32.const 0.5)
+     (f32.const -0.5)
      (f32.const 0.25)
      (f32.const 0)
      (i32.const 0)
@@ -52073,46 +51486,6 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const 1.75)
-     (f32.const -0.5)
-     (f32.const -0.25)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2693)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -1.75)
-     (f32.const -0.5)
-     (f32.const 0.25)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2694)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
      (f32.const 5.877471754111438e-39)
      (f32.const inf)
      (f32.const 5.877471754111438e-39)
@@ -52124,7 +51497,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2695)
+     (i32.const 2693)
      (i32.const 0)
     )
     (unreachable)
@@ -52143,7 +51516,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2760)
+     (i32.const 2758)
      (i32.const 0)
     )
     (unreachable)
@@ -52162,7 +51535,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2761)
+     (i32.const 2759)
      (i32.const 0)
     )
     (unreachable)
@@ -52181,7 +51554,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2762)
+     (i32.const 2760)
      (i32.const 0)
     )
     (unreachable)
@@ -52200,7 +51573,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2763)
+     (i32.const 2761)
      (i32.const 0)
     )
     (unreachable)
@@ -52219,7 +51592,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2764)
+     (i32.const 2762)
      (i32.const 0)
     )
     (unreachable)
@@ -52238,7 +51611,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2765)
+     (i32.const 2763)
      (i32.const 0)
     )
     (unreachable)
@@ -52257,7 +51630,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2766)
+     (i32.const 2764)
      (i32.const 0)
     )
     (unreachable)
@@ -52276,7 +51649,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2767)
+     (i32.const 2765)
      (i32.const 0)
     )
     (unreachable)
@@ -52295,7 +51668,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2768)
+     (i32.const 2766)
      (i32.const 0)
     )
     (unreachable)
@@ -52314,7 +51687,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2769)
+     (i32.const 2767)
      (i32.const 0)
     )
     (unreachable)
@@ -52325,6 +51698,44 @@
     (call $std/math/test_sinh
      (f64.const 0)
      (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2770)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinh
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2771)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinh
+     (f64.const inf)
+     (f64.const inf)
      (f64.const 0)
      (i32.const 0)
     )
@@ -52342,8 +51753,12 @@
   (if
    (i32.eqz
     (call $std/math/test_sinh
-     (f64.const -0)
-     (f64.const -0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const 0)
      (i32.const 0)
     )
@@ -52361,8 +51776,8 @@
   (if
    (i32.eqz
     (call $std/math/test_sinh
-     (f64.const inf)
-     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -52372,48 +51787,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2774)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinh
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2775)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinh
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2776)
      (i32.const 0)
     )
     (unreachable)
@@ -52432,7 +51805,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2785)
+     (i32.const 2783)
      (i32.const 0)
     )
     (unreachable)
@@ -52451,7 +51824,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2786)
+     (i32.const 2784)
      (i32.const 0)
     )
     (unreachable)
@@ -52470,7 +51843,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2787)
+     (i32.const 2785)
      (i32.const 0)
     )
     (unreachable)
@@ -52489,7 +51862,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2788)
+     (i32.const 2786)
      (i32.const 0)
     )
     (unreachable)
@@ -52508,7 +51881,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2789)
+     (i32.const 2787)
      (i32.const 0)
     )
     (unreachable)
@@ -52527,7 +51900,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2790)
+     (i32.const 2788)
      (i32.const 0)
     )
     (unreachable)
@@ -52546,7 +51919,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2791)
+     (i32.const 2789)
      (i32.const 0)
     )
     (unreachable)
@@ -52565,7 +51938,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2792)
+     (i32.const 2790)
      (i32.const 0)
     )
     (unreachable)
@@ -52584,7 +51957,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2793)
+     (i32.const 2791)
      (i32.const 0)
     )
     (unreachable)
@@ -52603,7 +51976,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2794)
+     (i32.const 2792)
      (i32.const 0)
     )
     (unreachable)
@@ -52614,6 +51987,44 @@
     (call $std/math/test_sinhf
      (f32.const 0)
      (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2795)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2796)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const inf)
+     (f32.const inf)
      (f32.const 0)
      (i32.const 0)
     )
@@ -52631,8 +52042,12 @@
   (if
    (i32.eqz
     (call $std/math/test_sinhf
-     (f32.const -0)
-     (f32.const -0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const 0)
      (i32.const 0)
     )
@@ -52650,8 +52065,8 @@
   (if
    (i32.eqz
     (call $std/math/test_sinhf
-     (f32.const inf)
-     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -52661,48 +52076,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2799)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2800)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2801)
      (i32.const 0)
     )
     (unreachable)
@@ -52721,7 +52094,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2813)
+     (i32.const 2811)
      (i32.const 0)
     )
     (unreachable)
@@ -52740,7 +52113,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2814)
+     (i32.const 2812)
      (i32.const 0)
     )
     (unreachable)
@@ -52759,7 +52132,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2815)
+     (i32.const 2813)
      (i32.const 0)
     )
     (unreachable)
@@ -52778,7 +52151,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2816)
+     (i32.const 2814)
      (i32.const 0)
     )
     (unreachable)
@@ -52797,7 +52170,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2817)
+     (i32.const 2815)
      (i32.const 0)
     )
     (unreachable)
@@ -52816,7 +52189,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2818)
+     (i32.const 2816)
      (i32.const 0)
     )
     (unreachable)
@@ -52835,7 +52208,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2819)
+     (i32.const 2817)
      (i32.const 0)
     )
     (unreachable)
@@ -52854,7 +52227,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2820)
+     (i32.const 2818)
      (i32.const 0)
     )
     (unreachable)
@@ -52873,7 +52246,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2821)
+     (i32.const 2819)
      (i32.const 0)
     )
     (unreachable)
@@ -52892,7 +52265,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2822)
+     (i32.const 2820)
      (i32.const 0)
     )
     (unreachable)
@@ -52911,7 +52284,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2825)
+     (i32.const 2823)
      (i32.const 0)
     )
     (unreachable)
@@ -52930,7 +52303,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2826)
+     (i32.const 2824)
      (i32.const 0)
     )
     (unreachable)
@@ -52951,6 +52324,44 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
+     (i32.const 2825)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2826)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
      (i32.const 2827)
      (i32.const 0)
     )
@@ -52960,8 +52371,8 @@
   (if
    (i32.eqz
     (call $std/math/test_sqrt
-     (f64.const 0)
-     (f64.const 0)
+     (f64.const 1)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -52971,44 +52382,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2828)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2829)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2830)
      (i32.const 0)
     )
     (unreachable)
@@ -53027,7 +52400,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2831)
+     (i32.const 2829)
      (i32.const 0)
     )
     (unreachable)
@@ -53046,7 +52419,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2832)
+     (i32.const 2830)
      (i32.const 0)
     )
     (unreachable)
@@ -53065,7 +52438,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2833)
+     (i32.const 2831)
      (i32.const 0)
     )
     (unreachable)
@@ -53084,7 +52457,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2834)
+     (i32.const 2832)
      (i32.const 0)
     )
     (unreachable)
@@ -53103,7 +52476,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2835)
+     (i32.const 2833)
      (i32.const 0)
     )
     (unreachable)
@@ -53122,7 +52495,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2836)
+     (i32.const 2834)
      (i32.const 0)
     )
     (unreachable)
@@ -53141,7 +52514,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2837)
+     (i32.const 2835)
      (i32.const 0)
     )
     (unreachable)
@@ -53153,6 +52526,44 @@
      (f64.const 1.9999999999999998)
      (f64.const 1.414213562373095)
      (f64.const -0.21107041835784912)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2836)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const 1.0000000000000002)
+     (f64.const 1)
+     (f64.const -0.5)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2837)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const 2.0000000000000004)
+     (f64.const 1.4142135623730951)
+     (f64.const -0.27173060178756714)
      (get_global $std/math/INEXACT)
     )
    )
@@ -53188,9 +52599,9 @@
   (if
    (i32.eqz
     (call $std/math/test_sqrt
-     (f64.const 2.0000000000000004)
-     (f64.const 1.4142135623730951)
-     (f64.const -0.27173060178756714)
+     (f64.const 0.9999999999999999)
+     (f64.const 0.9999999999999999)
+     (f64.const -0.5)
      (get_global $std/math/INEXACT)
     )
    )
@@ -53199,44 +52610,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2840)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const 1.0000000000000002)
-     (f64.const 1)
-     (f64.const -0.5)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2841)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const 0.9999999999999999)
-     (f64.const 0.9999999999999999)
-     (f64.const -0.5)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2842)
      (i32.const 0)
     )
     (unreachable)
@@ -53255,7 +52628,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2843)
+     (i32.const 2841)
      (i32.const 0)
     )
     (unreachable)
@@ -53274,7 +52647,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2844)
+     (i32.const 2842)
      (i32.const 0)
     )
     (unreachable)
@@ -53293,7 +52666,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2845)
+     (i32.const 2843)
      (i32.const 0)
     )
     (unreachable)
@@ -53312,7 +52685,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2846)
+     (i32.const 2844)
      (i32.const 0)
     )
     (unreachable)
@@ -53331,7 +52704,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2847)
+     (i32.const 2845)
      (i32.const 0)
     )
     (unreachable)
@@ -53350,7 +52723,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2848)
+     (i32.const 2846)
      (i32.const 0)
     )
     (unreachable)
@@ -53369,7 +52742,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2849)
+     (i32.const 2847)
      (i32.const 0)
     )
     (unreachable)
@@ -53388,7 +52761,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2850)
+     (i32.const 2848)
      (i32.const 0)
     )
     (unreachable)
@@ -53407,7 +52780,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2851)
+     (i32.const 2849)
      (i32.const 0)
     )
     (unreachable)
@@ -53426,7 +52799,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2852)
+     (i32.const 2850)
      (i32.const 0)
     )
     (unreachable)
@@ -53445,7 +52818,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2853)
+     (i32.const 2851)
      (i32.const 0)
     )
     (unreachable)
@@ -53464,7 +52837,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2854)
+     (i32.const 2852)
      (i32.const 0)
     )
     (unreachable)
@@ -53483,7 +52856,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2855)
+     (i32.const 2853)
      (i32.const 0)
     )
     (unreachable)
@@ -53502,7 +52875,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2856)
+     (i32.const 2854)
      (i32.const 0)
     )
     (unreachable)
@@ -53521,7 +52894,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2857)
+     (i32.const 2855)
      (i32.const 0)
     )
     (unreachable)
@@ -53540,7 +52913,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2858)
+     (i32.const 2856)
      (i32.const 0)
     )
     (unreachable)
@@ -53559,7 +52932,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2859)
+     (i32.const 2857)
      (i32.const 0)
     )
     (unreachable)
@@ -53578,7 +52951,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2860)
+     (i32.const 2858)
      (i32.const 0)
     )
     (unreachable)
@@ -53597,7 +52970,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2861)
+     (i32.const 2859)
      (i32.const 0)
     )
     (unreachable)
@@ -53616,7 +52989,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2862)
+     (i32.const 2860)
      (i32.const 0)
     )
     (unreachable)
@@ -53635,7 +53008,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2863)
+     (i32.const 2861)
      (i32.const 0)
     )
     (unreachable)
@@ -53654,7 +53027,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2864)
+     (i32.const 2862)
      (i32.const 0)
     )
     (unreachable)
@@ -53673,7 +53046,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2865)
+     (i32.const 2863)
      (i32.const 0)
     )
     (unreachable)
@@ -53692,7 +53065,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2866)
+     (i32.const 2864)
      (i32.const 0)
     )
     (unreachable)
@@ -53711,7 +53084,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2867)
+     (i32.const 2865)
      (i32.const 0)
     )
     (unreachable)
@@ -53730,7 +53103,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2868)
+     (i32.const 2866)
      (i32.const 0)
     )
     (unreachable)
@@ -53749,7 +53122,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2869)
+     (i32.const 2867)
      (i32.const 0)
     )
     (unreachable)
@@ -53768,7 +53141,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2870)
+     (i32.const 2868)
      (i32.const 0)
     )
     (unreachable)
@@ -53787,7 +53160,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2871)
+     (i32.const 2869)
      (i32.const 0)
     )
     (unreachable)
@@ -53806,7 +53179,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2872)
+     (i32.const 2870)
      (i32.const 0)
     )
     (unreachable)
@@ -53825,7 +53198,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2873)
+     (i32.const 2871)
      (i32.const 0)
     )
     (unreachable)
@@ -53844,7 +53217,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2874)
+     (i32.const 2872)
      (i32.const 0)
     )
     (unreachable)
@@ -53863,7 +53236,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2875)
+     (i32.const 2873)
      (i32.const 0)
     )
     (unreachable)
@@ -53882,7 +53255,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2876)
+     (i32.const 2874)
      (i32.const 0)
     )
     (unreachable)
@@ -53901,7 +53274,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2877)
+     (i32.const 2875)
      (i32.const 0)
     )
     (unreachable)
@@ -53920,7 +53293,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2878)
+     (i32.const 2876)
      (i32.const 0)
     )
     (unreachable)
@@ -53939,7 +53312,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2879)
+     (i32.const 2877)
      (i32.const 0)
     )
     (unreachable)
@@ -53958,7 +53331,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2880)
+     (i32.const 2878)
      (i32.const 0)
     )
     (unreachable)
@@ -53977,7 +53350,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2881)
+     (i32.const 2879)
      (i32.const 0)
     )
     (unreachable)
@@ -53996,7 +53369,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2882)
+     (i32.const 2880)
      (i32.const 0)
     )
     (unreachable)
@@ -54015,7 +53388,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2883)
+     (i32.const 2881)
      (i32.const 0)
     )
     (unreachable)
@@ -54034,7 +53407,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2884)
+     (i32.const 2882)
      (i32.const 0)
     )
     (unreachable)
@@ -54053,7 +53426,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2885)
+     (i32.const 2883)
      (i32.const 0)
     )
     (unreachable)
@@ -54072,7 +53445,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2886)
+     (i32.const 2884)
      (i32.const 0)
     )
     (unreachable)
@@ -54091,7 +53464,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2887)
+     (i32.const 2885)
      (i32.const 0)
     )
     (unreachable)
@@ -54110,7 +53483,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2888)
+     (i32.const 2886)
      (i32.const 0)
     )
     (unreachable)
@@ -54129,7 +53502,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2889)
+     (i32.const 2887)
      (i32.const 0)
     )
     (unreachable)
@@ -54148,7 +53521,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2890)
+     (i32.const 2888)
      (i32.const 0)
     )
     (unreachable)
@@ -54167,7 +53540,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2891)
+     (i32.const 2889)
      (i32.const 0)
     )
     (unreachable)
@@ -54186,7 +53559,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2892)
+     (i32.const 2890)
      (i32.const 0)
     )
     (unreachable)
@@ -54205,7 +53578,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2893)
+     (i32.const 2891)
      (i32.const 0)
     )
     (unreachable)
@@ -54224,7 +53597,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2894)
+     (i32.const 2892)
      (i32.const 0)
     )
     (unreachable)
@@ -54243,7 +53616,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2895)
+     (i32.const 2893)
      (i32.const 0)
     )
     (unreachable)
@@ -54262,7 +53635,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2896)
+     (i32.const 2894)
      (i32.const 0)
     )
     (unreachable)
@@ -54281,7 +53654,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2897)
+     (i32.const 2895)
      (i32.const 0)
     )
     (unreachable)
@@ -54300,7 +53673,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2898)
+     (i32.const 2896)
      (i32.const 0)
     )
     (unreachable)
@@ -54319,7 +53692,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2907)
+     (i32.const 2905)
      (i32.const 0)
     )
     (unreachable)
@@ -54338,7 +53711,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2908)
+     (i32.const 2906)
      (i32.const 0)
     )
     (unreachable)
@@ -54357,7 +53730,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2909)
+     (i32.const 2907)
      (i32.const 0)
     )
     (unreachable)
@@ -54376,7 +53749,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2910)
+     (i32.const 2908)
      (i32.const 0)
     )
     (unreachable)
@@ -54395,7 +53768,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2911)
+     (i32.const 2909)
      (i32.const 0)
     )
     (unreachable)
@@ -54414,7 +53787,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2912)
+     (i32.const 2910)
      (i32.const 0)
     )
     (unreachable)
@@ -54433,7 +53806,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2913)
+     (i32.const 2911)
      (i32.const 0)
     )
     (unreachable)
@@ -54452,7 +53825,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2914)
+     (i32.const 2912)
      (i32.const 0)
     )
     (unreachable)
@@ -54471,7 +53844,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2915)
+     (i32.const 2913)
      (i32.const 0)
     )
     (unreachable)
@@ -54490,7 +53863,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2916)
+     (i32.const 2914)
      (i32.const 0)
     )
     (unreachable)
@@ -54509,7 +53882,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2919)
+     (i32.const 2917)
      (i32.const 0)
     )
     (unreachable)
@@ -54528,7 +53901,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2920)
+     (i32.const 2918)
      (i32.const 0)
     )
     (unreachable)
@@ -54549,6 +53922,44 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
+     (i32.const 2919)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrtf
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2920)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrtf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
      (i32.const 2921)
      (i32.const 0)
     )
@@ -54558,8 +53969,8 @@
   (if
    (i32.eqz
     (call $std/math/test_sqrtf
-     (f32.const 0)
-     (f32.const 0)
+     (f32.const 1)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -54569,44 +53980,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 2922)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrtf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2923)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrtf
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2924)
      (i32.const 0)
     )
     (unreachable)
@@ -54625,7 +53998,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2925)
+     (i32.const 2923)
      (i32.const 0)
     )
     (unreachable)
@@ -54644,7 +54017,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2926)
+     (i32.const 2924)
      (i32.const 0)
     )
     (unreachable)
@@ -54663,7 +54036,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2927)
+     (i32.const 2925)
      (i32.const 0)
     )
     (unreachable)
@@ -54682,7 +54055,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2928)
+     (i32.const 2926)
      (i32.const 0)
     )
     (unreachable)
@@ -54701,7 +54074,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2929)
+     (i32.const 2927)
      (i32.const 0)
     )
     (unreachable)
@@ -54720,7 +54093,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2930)
+     (i32.const 2928)
      (i32.const 0)
     )
     (unreachable)
@@ -54739,7 +54112,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2931)
+     (i32.const 2929)
      (i32.const 0)
     )
     (unreachable)
@@ -54758,7 +54131,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2932)
+     (i32.const 2930)
      (i32.const 0)
     )
     (unreachable)
@@ -54777,7 +54150,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2933)
+     (i32.const 2931)
      (i32.const 0)
     )
     (unreachable)
@@ -54796,7 +54169,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2934)
+     (i32.const 2932)
      (i32.const 0)
     )
     (unreachable)
@@ -54815,7 +54188,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2935)
+     (i32.const 2933)
      (i32.const 0)
     )
     (unreachable)
@@ -54834,7 +54207,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2936)
+     (i32.const 2934)
      (i32.const 0)
     )
     (unreachable)
@@ -54853,7 +54226,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2937)
+     (i32.const 2935)
      (i32.const 0)
     )
     (unreachable)
@@ -54872,7 +54245,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2938)
+     (i32.const 2936)
      (i32.const 0)
     )
     (unreachable)
@@ -54891,7 +54264,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2939)
+     (i32.const 2937)
      (i32.const 0)
     )
     (unreachable)
@@ -54910,7 +54283,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2940)
+     (i32.const 2938)
      (i32.const 0)
     )
     (unreachable)
@@ -54929,7 +54302,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3005)
+     (i32.const 3003)
      (i32.const 0)
     )
     (unreachable)
@@ -54948,7 +54321,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3006)
+     (i32.const 3004)
      (i32.const 0)
     )
     (unreachable)
@@ -54967,7 +54340,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3007)
+     (i32.const 3005)
      (i32.const 0)
     )
     (unreachable)
@@ -54986,7 +54359,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3008)
+     (i32.const 3006)
      (i32.const 0)
     )
     (unreachable)
@@ -55005,7 +54378,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3009)
+     (i32.const 3007)
      (i32.const 0)
     )
     (unreachable)
@@ -55024,7 +54397,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3010)
+     (i32.const 3008)
      (i32.const 0)
     )
     (unreachable)
@@ -55043,7 +54416,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3011)
+     (i32.const 3009)
      (i32.const 0)
     )
     (unreachable)
@@ -55062,7 +54435,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3012)
+     (i32.const 3010)
      (i32.const 0)
     )
     (unreachable)
@@ -55081,7 +54454,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3013)
+     (i32.const 3011)
      (i32.const 0)
     )
     (unreachable)
@@ -55100,7 +54473,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3014)
+     (i32.const 3012)
      (i32.const 0)
     )
     (unreachable)
@@ -55119,7 +54492,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3017)
+     (i32.const 3015)
      (i32.const 0)
     )
     (unreachable)
@@ -55138,7 +54511,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3018)
+     (i32.const 3016)
      (i32.const 0)
     )
     (unreachable)
@@ -55157,7 +54530,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3019)
+     (i32.const 3017)
      (i32.const 0)
     )
     (unreachable)
@@ -55178,7 +54551,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3020)
+     (i32.const 3018)
      (i32.const 0)
     )
     (unreachable)
@@ -55197,7 +54570,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3021)
+     (i32.const 3019)
      (i32.const 0)
     )
     (unreachable)
@@ -55216,7 +54589,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3030)
+     (i32.const 3028)
      (i32.const 0)
     )
     (unreachable)
@@ -55235,7 +54608,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3031)
+     (i32.const 3029)
      (i32.const 0)
     )
     (unreachable)
@@ -55254,7 +54627,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3032)
+     (i32.const 3030)
      (i32.const 0)
     )
     (unreachable)
@@ -55273,7 +54646,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3033)
+     (i32.const 3031)
      (i32.const 0)
     )
     (unreachable)
@@ -55292,7 +54665,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3034)
+     (i32.const 3032)
      (i32.const 0)
     )
     (unreachable)
@@ -55311,7 +54684,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3035)
+     (i32.const 3033)
      (i32.const 0)
     )
     (unreachable)
@@ -55330,7 +54703,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3036)
+     (i32.const 3034)
      (i32.const 0)
     )
     (unreachable)
@@ -55349,7 +54722,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3037)
+     (i32.const 3035)
      (i32.const 0)
     )
     (unreachable)
@@ -55368,7 +54741,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3038)
+     (i32.const 3036)
      (i32.const 0)
     )
     (unreachable)
@@ -55387,7 +54760,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3039)
+     (i32.const 3037)
      (i32.const 0)
     )
     (unreachable)
@@ -55406,7 +54779,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3042)
+     (i32.const 3040)
      (i32.const 0)
     )
     (unreachable)
@@ -55425,7 +54798,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3043)
+     (i32.const 3041)
      (i32.const 0)
     )
     (unreachable)
@@ -55444,7 +54817,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3044)
+     (i32.const 3042)
      (i32.const 0)
     )
     (unreachable)
@@ -55465,7 +54838,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3045)
+     (i32.const 3043)
      (i32.const 0)
     )
     (unreachable)
@@ -55484,7 +54857,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3046)
+     (i32.const 3044)
      (i32.const 0)
     )
     (unreachable)
@@ -55503,7 +54876,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3058)
+     (i32.const 3056)
      (i32.const 0)
     )
     (unreachable)
@@ -55522,7 +54895,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3059)
+     (i32.const 3057)
      (i32.const 0)
     )
     (unreachable)
@@ -55541,7 +54914,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3060)
+     (i32.const 3058)
      (i32.const 0)
     )
     (unreachable)
@@ -55560,7 +54933,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3061)
+     (i32.const 3059)
      (i32.const 0)
     )
     (unreachable)
@@ -55579,7 +54952,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3062)
+     (i32.const 3060)
      (i32.const 0)
     )
     (unreachable)
@@ -55598,7 +54971,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3063)
+     (i32.const 3061)
      (i32.const 0)
     )
     (unreachable)
@@ -55617,7 +54990,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3064)
+     (i32.const 3062)
      (i32.const 0)
     )
     (unreachable)
@@ -55636,7 +55009,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3065)
+     (i32.const 3063)
      (i32.const 0)
     )
     (unreachable)
@@ -55655,7 +55028,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3066)
+     (i32.const 3064)
      (i32.const 0)
     )
     (unreachable)
@@ -55674,7 +55047,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3067)
+     (i32.const 3065)
      (i32.const 0)
     )
     (unreachable)
@@ -55685,6 +55058,48 @@
     (call $std/math/test_trunc
      (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3068)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3069)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const 0)
      (i32.const 0)
     )
@@ -55702,8 +55117,8 @@
   (if
    (i32.eqz
     (call $std/math/test_trunc
-     (f64.const inf)
-     (f64.const inf)
+     (f64.const 0)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -55721,12 +55136,8 @@
   (if
    (i32.eqz
     (call $std/math/test_trunc
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const -0)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -55744,8 +55155,8 @@
   (if
    (i32.eqz
     (call $std/math/test_trunc
-     (f64.const 0)
-     (f64.const 0)
+     (f64.const 1)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -55763,8 +55174,8 @@
   (if
    (i32.eqz
     (call $std/math/test_trunc
-     (f64.const -0)
-     (f64.const -0)
+     (f64.const -1)
+     (f64.const -1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -55774,44 +55185,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 3074)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3075)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3076)
      (i32.const 0)
     )
     (unreachable)
@@ -55830,7 +55203,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3077)
+     (i32.const 3075)
      (i32.const 0)
     )
     (unreachable)
@@ -55849,7 +55222,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3078)
+     (i32.const 3076)
      (i32.const 0)
     )
     (unreachable)
@@ -55868,7 +55241,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3079)
+     (i32.const 3077)
      (i32.const 0)
     )
     (unreachable)
@@ -55887,7 +55260,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3080)
+     (i32.const 3078)
      (i32.const 0)
     )
     (unreachable)
@@ -55906,7 +55279,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3081)
+     (i32.const 3079)
      (i32.const 0)
     )
     (unreachable)
@@ -55925,7 +55298,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3082)
+     (i32.const 3080)
      (i32.const 0)
     )
     (unreachable)
@@ -55944,7 +55317,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3083)
+     (i32.const 3081)
      (i32.const 0)
     )
     (unreachable)
@@ -55963,7 +55336,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3084)
+     (i32.const 3082)
      (i32.const 0)
     )
     (unreachable)
@@ -55982,7 +55355,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3093)
+     (i32.const 3091)
      (i32.const 0)
     )
     (unreachable)
@@ -56001,7 +55374,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3094)
+     (i32.const 3092)
      (i32.const 0)
     )
     (unreachable)
@@ -56020,7 +55393,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3095)
+     (i32.const 3093)
      (i32.const 0)
     )
     (unreachable)
@@ -56039,7 +55412,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3096)
+     (i32.const 3094)
      (i32.const 0)
     )
     (unreachable)
@@ -56058,7 +55431,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3097)
+     (i32.const 3095)
      (i32.const 0)
     )
     (unreachable)
@@ -56077,7 +55450,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3098)
+     (i32.const 3096)
      (i32.const 0)
     )
     (unreachable)
@@ -56096,7 +55469,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3099)
+     (i32.const 3097)
      (i32.const 0)
     )
     (unreachable)
@@ -56115,7 +55488,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3100)
+     (i32.const 3098)
      (i32.const 0)
     )
     (unreachable)
@@ -56134,7 +55507,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3101)
+     (i32.const 3099)
      (i32.const 0)
     )
     (unreachable)
@@ -56153,7 +55526,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3102)
+     (i32.const 3100)
      (i32.const 0)
     )
     (unreachable)
@@ -56164,6 +55537,48 @@
     (call $std/math/test_truncf
      (f32.const nan:0x400000)
      (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3103)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_truncf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3104)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_truncf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const 0)
      (i32.const 0)
     )
@@ -56181,8 +55596,8 @@
   (if
    (i32.eqz
     (call $std/math/test_truncf
-     (f32.const inf)
-     (f32.const inf)
+     (f32.const 0)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -56200,12 +55615,8 @@
   (if
    (i32.eqz
     (call $std/math/test_truncf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const -0)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -56223,8 +55634,8 @@
   (if
    (i32.eqz
     (call $std/math/test_truncf
-     (f32.const 0)
-     (f32.const 0)
+     (f32.const 1)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -56242,8 +55653,8 @@
   (if
    (i32.eqz
     (call $std/math/test_truncf
-     (f32.const -0)
-     (f32.const -0)
+     (f32.const -1)
+     (f32.const -1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -56253,44 +55664,6 @@
      (i32.const 0)
      (i32.const 8)
      (i32.const 3109)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_truncf
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3110)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_truncf
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3111)
      (i32.const 0)
     )
     (unreachable)
@@ -56309,7 +55682,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3112)
+     (i32.const 3110)
      (i32.const 0)
     )
     (unreachable)
@@ -56328,7 +55701,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3113)
+     (i32.const 3111)
      (i32.const 0)
     )
     (unreachable)
@@ -56347,7 +55720,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3114)
+     (i32.const 3112)
      (i32.const 0)
     )
     (unreachable)
@@ -56366,7 +55739,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3115)
+     (i32.const 3113)
      (i32.const 0)
     )
     (unreachable)
@@ -56385,7 +55758,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3116)
+     (i32.const 3114)
      (i32.const 0)
     )
     (unreachable)
@@ -56404,7 +55777,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3117)
+     (i32.const 3115)
      (i32.const 0)
     )
     (unreachable)
@@ -56423,7 +55796,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3118)
+     (i32.const 3116)
      (i32.const 0)
     )
     (unreachable)
@@ -56442,7 +55815,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3119)
+     (i32.const 3117)
      (i32.const 0)
     )
     (unreachable)
@@ -56462,7 +55835,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3123)
+     (i32.const 3121)
      (i32.const 0)
     )
     (unreachable)
@@ -56482,7 +55855,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3124)
+     (i32.const 3122)
      (i32.const 0)
     )
     (unreachable)
@@ -56502,7 +55875,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3125)
+     (i32.const 3123)
      (i32.const 0)
     )
     (unreachable)
@@ -56522,7 +55895,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3126)
+     (i32.const 3124)
      (i32.const 0)
     )
     (unreachable)
@@ -56534,6 +55907,46 @@
      (call $~lib/math/ipow64
       (i64.const 1)
       (i32.const 0)
+     )
+     (i64.const 1)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3126)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i64.eq
+     (call $~lib/math/ipow64
+      (i64.const 1)
+      (i32.const 1)
+     )
+     (i64.const 1)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3127)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i64.eq
+     (call $~lib/math/ipow64
+      (i64.const 1)
+      (i32.const 2)
      )
      (i64.const 1)
     )
@@ -56553,7 +55966,7 @@
     (i64.eq
      (call $~lib/math/ipow64
       (i64.const 1)
-      (i32.const 1)
+      (i32.const 3)
      )
      (i64.const 1)
     )
@@ -56572,28 +55985,8 @@
    (i32.eqz
     (i64.eq
      (call $~lib/math/ipow64
-      (i64.const 1)
-      (i32.const 2)
-     )
-     (i64.const 1)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3130)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (i64.eq
-     (call $~lib/math/ipow64
-      (i64.const 1)
-      (i32.const 3)
+      (i64.const 2)
+      (i32.const 0)
      )
      (i64.const 1)
     )
@@ -56613,26 +56006,6 @@
     (i64.eq
      (call $~lib/math/ipow64
       (i64.const 2)
-      (i32.const 0)
-     )
-     (i64.const 1)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3133)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (i64.eq
-     (call $~lib/math/ipow64
-      (i64.const 2)
       (i32.const 1)
      )
      (i64.const 2)
@@ -56642,7 +56015,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3134)
+     (i32.const 3132)
      (i32.const 0)
     )
     (unreachable)
@@ -56662,7 +56035,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3135)
+     (i32.const 3133)
      (i32.const 0)
     )
     (unreachable)
@@ -56682,7 +56055,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3136)
+     (i32.const 3134)
      (i32.const 0)
     )
     (unreachable)
@@ -56694,6 +56067,46 @@
      (call $~lib/math/ipow64
       (i64.const -1)
       (i32.const 0)
+     )
+     (i64.const 1)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3136)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i64.eq
+     (call $~lib/math/ipow64
+      (i64.const -1)
+      (i32.const 1)
+     )
+     (i64.const -1)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3137)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (i64.eq
+     (call $~lib/math/ipow64
+      (i64.const -1)
+      (i32.const 2)
      )
      (i64.const 1)
     )
@@ -56713,46 +56126,6 @@
     (i64.eq
      (call $~lib/math/ipow64
       (i64.const -1)
-      (i32.const 1)
-     )
-     (i64.const -1)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3139)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (i64.eq
-     (call $~lib/math/ipow64
-      (i64.const -1)
-      (i32.const 2)
-     )
-     (i64.const 1)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3140)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (i64.eq
-     (call $~lib/math/ipow64
-      (i64.const -1)
       (i32.const 3)
      )
      (i64.const -1)
@@ -56762,7 +56135,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3141)
+     (i32.const 3139)
      (i32.const 0)
     )
     (unreachable)
@@ -56782,7 +56155,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3143)
+     (i32.const 3141)
      (i32.const 0)
     )
     (unreachable)
@@ -56802,7 +56175,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3144)
+     (i32.const 3142)
      (i32.const 0)
     )
     (unreachable)
@@ -56822,7 +56195,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3145)
+     (i32.const 3143)
      (i32.const 0)
     )
     (unreachable)
@@ -56842,7 +56215,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3146)
+     (i32.const 3144)
      (i32.const 0)
     )
     (unreachable)
@@ -56862,7 +56235,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3148)
+     (i32.const 3146)
      (i32.const 0)
     )
     (unreachable)
@@ -56882,7 +56255,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3149)
+     (i32.const 3147)
      (i32.const 0)
     )
     (unreachable)
@@ -56902,7 +56275,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3150)
+     (i32.const 3148)
      (i32.const 0)
     )
     (unreachable)
@@ -56922,7 +56295,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3151)
+     (i32.const 3149)
      (i32.const 0)
     )
     (unreachable)
@@ -56942,7 +56315,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3152)
+     (i32.const 3150)
      (i32.const 0)
     )
     (unreachable)
@@ -56962,7 +56335,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3153)
+     (i32.const 3151)
      (i32.const 0)
     )
     (unreachable)
@@ -56982,7 +56355,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3154)
+     (i32.const 3152)
      (i32.const 0)
     )
     (unreachable)
@@ -57008,13 +56381,13 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3156)
+     (i32.const 3154)
      (i32.const 0)
     )
     (unreachable)
    )
   )
  )
- (func $null (; 160 ;) (type $v)
+ (func $null (; 157 ;) (type $v)
  )
 )

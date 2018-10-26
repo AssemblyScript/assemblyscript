@@ -1,8 +1,7 @@
 const js = true;
 
-declare namespace JSOp {
-  export function mod(x: f64, y: f64): f64;
-}
+@external("math", "mod")
+export declare function mod(x: f64, y: f64): f64;
 
 function check<T>(actual: T, expected: T): bool {
   if (isNaN(expected)) return isNaN(actual);
@@ -14,7 +13,7 @@ function check<T>(actual: T, expected: T): bool {
 
 function test_fmod(left: f64, right: f64, expected: f64): bool {
   return  check<f64>(         left % right , expected) &&
-  (!js || check<f64>(JSOp.mod(left , right), expected));
+  (!js || check<f64>(mod(left , right), expected));
 }
 
 // sanity
