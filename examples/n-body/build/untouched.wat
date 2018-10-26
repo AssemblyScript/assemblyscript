@@ -1693,9 +1693,9 @@
         (set_local $19
          ;;@ assembly/index.ts:129:23
          (block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
-          ;;@ ~lib/math.ts:1031:30
+          ;;@ ~lib/math.ts:1016:30
           (f64.sqrt
-           ;;@ ~lib/math.ts:1031:29
+           ;;@ ~lib/math.ts:1016:29
            (get_local $18)
           )
          )
@@ -2157,9 +2157,9 @@
             )
            )
           )
-          ;;@ ~lib/math.ts:1031:30
+          ;;@ ~lib/math.ts:1016:30
           (f64.sqrt
-           ;;@ ~lib/math.ts:1031:29
+           ;;@ ~lib/math.ts:1016:29
            (get_local $18)
           )
          )
