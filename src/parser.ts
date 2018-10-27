@@ -769,6 +769,9 @@ export class Parser extends DiagnosticEmitter {
     }
     var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     var flags = parentFlags;
+    if (tn.skip(Token.EXCLAMATION)) {
+      flags |= CommonFlags.DEFINITE_ASSIGNMENT;
+    }
 
     var type: CommonTypeNode | null = null;
     if (tn.skip(Token.COLON)) {
@@ -800,13 +803,19 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
     }
+    var range = Range.join(identifier.range, tn.range());
+    if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) && initializer) {
+      this.error(
+        DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
+        range);
+    }
     return Node.createVariableDeclaration(
       identifier,
       type,
       initializer,
       parentDecorators,
       flags,
-      Range.join(identifier.range, tn.range())
+      range
     );
   }
 
@@ -1926,6 +1935,15 @@ export class Parser extends DiagnosticEmitter {
       }
 
       let type: CommonTypeNode | null = null;
+      if (tn.skip(Token.QUESTION)) {
+        this.error(
+          DiagnosticCode.Optional_properties_are_not_supported,
+          tn.range(startPos, tn.pos)
+        );
+      }
+      if (tn.skip(Token.EXCLAMATION)) {
+        flags |= CommonFlags.DEFINITE_ASSIGNMENT;
+      }
       if (tn.skip(Token.COLON)) {
         type = this.parseType(tn);
         if (!type) return null;
@@ -1940,13 +1958,20 @@ export class Parser extends DiagnosticEmitter {
         initializer = this.parseExpression(tn);
         if (!initializer) return null;
       }
+      let range = tn.range(startPos, tn.pos);
+      if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) && ((flags & CommonFlags.STATIC) || isInterface || initializer)) {
+        this.error(
+          DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
+          range
+        );
+      }
       let retField = Node.createFieldDeclaration(
         name,
         type,
         initializer,
         decorators,
         flags,
-        tn.range(startPos, tn.pos)
+        range
       );
       tn.skip(Token.SEMICOLON);
       return retField;

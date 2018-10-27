@@ -10,6 +10,23 @@ assert(Uint64Array.BYTES_PER_ELEMENT == 8);
 assert(Float32Array.BYTES_PER_ELEMENT == 4);
 assert(Float64Array.BYTES_PER_ELEMENT == 8);
 
+
+function isInt8ArrayEqual(a: Int8Array, b: Array<i8>): bool {
+  if (a.length != b.length) return false;
+  for (let i = 0, len = a.length; i < len; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
+}
+
+function isInt32ArrayEqual(a: Int32Array, b: Array<i32>): bool {
+  if (a.length != b.length) return false;
+  for (let i = 0, len = a.length; i < len; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
+}
+
 import "allocator/arena";
 
 function testInstantiate(len: i32): void {
@@ -114,6 +131,62 @@ clampedArr[2] = 256;
 assert(clampedArr[0] == 0);
 assert(clampedArr[1] == 2);
 assert(clampedArr[2] == 255);
+
+var arr8 = new Int8Array(5);
+arr8[0] = 1;
+arr8[1] = 2;
+arr8[2] = 3;
+arr8[3] = 4;
+arr8[4] = 5;
+
+arr8.fill(1, 1, 3);
+assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 1, 4, 5]));
+
+arr8.fill(0);
+assert(isInt8ArrayEqual(arr8, <i8[]>[0, 0, 0, 0, 0]));
+
+arr8.fill(1, 0, -3);
+assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 0, 0]));
+
+arr8.fill(2, -2);
+assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 2, 2]));
+
+arr8.fill(0, 1, 0);
+assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 2, 2]));
+
+var sub8 = arr8.subarray(1, 4);
+sub8.fill(0);
+assert(sub8.length == 3);
+assert(isInt8ArrayEqual(sub8, <i8[]>[0, 0, 0]));
+assert(isInt8ArrayEqual(arr8, <i8[]>[1, 0, 0, 0, 2]));
+
+var arr32 = new Int32Array(5);
+arr32[0] = 1;
+arr32[1] = 2;
+arr32[2] = 3;
+arr32[3] = 4;
+arr32[4] = 5;
+
+arr32.fill(1, 1, 3);
+assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 1, 4, 5]));
+
+arr32.fill(0);
+assert(isInt32ArrayEqual(arr32, <i32[]>[0, 0, 0, 0, 0]));
+
+arr32.fill(1, 0, -3);
+assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 0, 0]));
+
+arr32.fill(2, -2);
+assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 2, 2]));
+
+arr32.fill(0, 1, 0);
+assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 2, 2]));
+
+var sub32 = arr32.subarray(1, 4);
+sub32.fill(0);
+assert(sub32.length == 3);
+assert(isInt32ArrayEqual(sub32, <i32[]>[0, 0, 0]));
+assert(isInt32ArrayEqual(arr32, <i32[]>[1, 0, 0, 0, 2]));
 
 import { MAX_BLENGTH } from "internal/arraybuffer";
 
