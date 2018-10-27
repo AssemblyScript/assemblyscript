@@ -2230,7 +2230,7 @@ export namespace NativeMathf {
       }
       if (uxi == 0) ex = -30;
       else {
-        let shift = <i32>builtin_clz<u32>(uxi << 8);
+        let shift = builtin_clz<i32>(uxi << 8);
         ex -= shift;
         uxi <<= shift;
       }
