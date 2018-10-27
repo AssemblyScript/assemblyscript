@@ -9715,7 +9715,6 @@
   (local $8 i32)
   (local $9 i64)
   (local $10 i64)
-  (local $11 i64)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -9927,79 +9926,68 @@
    )
   )
   (block $break|0
-   (loop $repeat|0
-    (br_if $break|0
-     (i32.eqz
-      (i64.gt_s
-       (get_local $4)
-       (get_local $5)
-      )
+   (loop $continue|0
+    (if
+     (i64.gt_s
+      (get_local $4)
+      (get_local $5)
      )
-    )
-    (block
-     (set_local $10
-      (i64.sub
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if
-      (i64.eqz
-       (i64.shr_u
-        (get_local $10)
-        (i64.const 63)
-       )
-      )
+     (block
       (block
        (if
-        (i64.eqz
-         (get_local $10)
+        (i64.ge_u
+         (get_local $2)
+         (get_local $3)
         )
-        (return
-         (f64.mul
-          (f64.const 0)
-          (get_local $0)
+        (block
+         (if
+          (i64.eq
+           (get_local $2)
+           (get_local $3)
+          )
+          (return
+           (f64.mul
+            (f64.const 0)
+            (get_local $0)
+           )
+          )
+         )
+         (set_local $2
+          (i64.sub
+           (get_local $2)
+           (get_local $3)
+          )
          )
         )
        )
        (set_local $2
-        (get_local $10)
+        (i64.shl
+         (get_local $2)
+         (i64.const 1)
+        )
+       )
+       (set_local $4
+        (i64.sub
+         (get_local $4)
+         (i64.const 1)
+        )
        )
       )
-     )
-     (set_local $2
-      (i64.shl
-       (get_local $2)
-       (i64.const 1)
-      )
+      (br $continue|0)
      )
     )
-    (set_local $4
-     (i64.sub
-      (get_local $4)
-      (i64.const 1)
-     )
-    )
-    (br $repeat|0)
-   )
-  )
-  (set_local $10
-   (i64.sub
-    (get_local $2)
-    (get_local $3)
    )
   )
   (if
-   (i64.eqz
-    (i64.shr_u
-     (get_local $10)
-     (i64.const 63)
-    )
+   (i64.ge_u
+    (get_local $2)
+    (get_local $3)
    )
    (block
     (if
-     (i64.eqz
-      (get_local $10)
+     (i64.eq
+      (get_local $2)
+      (get_local $3)
      )
      (return
       (f64.mul
@@ -10009,11 +9997,14 @@
      )
     )
     (set_local $2
-     (get_local $10)
+     (i64.sub
+      (get_local $2)
+      (get_local $3)
+     )
     )
    )
   )
-  (set_local $11
+  (set_local $10
    (i64.clz
     (i64.shl
      (get_local $2)
@@ -10024,13 +10015,13 @@
   (set_local $4
    (i64.sub
     (get_local $4)
-    (get_local $11)
+    (get_local $10)
    )
   )
   (set_local $2
    (i64.shl
     (get_local $2)
-    (get_local $11)
+    (get_local $10)
    )
   )
   (if
@@ -10128,7 +10119,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   (set_local $2
    (i32.reinterpret/f32
     (get_local $0)
@@ -10340,79 +10330,68 @@
    )
   )
   (block $break|0
-   (loop $repeat|0
-    (br_if $break|0
-     (i32.eqz
-      (i32.gt_s
-       (get_local $4)
-       (get_local $5)
-      )
+   (loop $continue|0
+    (if
+     (i32.gt_s
+      (get_local $4)
+      (get_local $5)
      )
-    )
-    (block
-     (set_local $10
-      (i32.sub
-       (get_local $2)
-       (get_local $3)
-      )
-     )
-     (if
-      (i32.eqz
-       (i32.shr_u
-        (get_local $10)
-        (i32.const 31)
-       )
-      )
+     (block
       (block
        (if
-        (i32.eqz
-         (get_local $10)
+        (i32.ge_u
+         (get_local $2)
+         (get_local $3)
         )
-        (return
-         (f32.mul
-          (f32.const 0)
-          (get_local $0)
+        (block
+         (if
+          (i32.eq
+           (get_local $2)
+           (get_local $3)
+          )
+          (return
+           (f32.mul
+            (f32.const 0)
+            (get_local $0)
+           )
+          )
+         )
+         (set_local $2
+          (i32.sub
+           (get_local $2)
+           (get_local $3)
+          )
          )
         )
        )
        (set_local $2
-        (get_local $10)
+        (i32.shl
+         (get_local $2)
+         (i32.const 1)
+        )
+       )
+       (set_local $4
+        (i32.sub
+         (get_local $4)
+         (i32.const 1)
+        )
        )
       )
-     )
-     (set_local $2
-      (i32.shl
-       (get_local $2)
-       (i32.const 1)
-      )
+      (br $continue|0)
      )
     )
-    (set_local $4
-     (i32.sub
-      (get_local $4)
-      (i32.const 1)
-     )
-    )
-    (br $repeat|0)
-   )
-  )
-  (set_local $10
-   (i32.sub
-    (get_local $2)
-    (get_local $3)
    )
   )
   (if
-   (i32.eqz
-    (i32.shr_u
-     (get_local $10)
-     (i32.const 31)
-    )
+   (i32.ge_u
+    (get_local $2)
+    (get_local $3)
    )
    (block
     (if
-     (i32.eqz
-      (get_local $10)
+     (i32.eq
+      (get_local $2)
+      (get_local $3)
      )
      (return
       (f32.mul
@@ -10422,11 +10401,14 @@
      )
     )
     (set_local $2
-     (get_local $10)
+     (i32.sub
+      (get_local $2)
+      (get_local $3)
+     )
     )
    )
   )
-  (set_local $11
+  (set_local $10
    (i32.clz
     (i32.shl
      (get_local $2)
@@ -10437,13 +10419,13 @@
   (set_local $4
    (i32.sub
     (get_local $4)
-    (get_local $11)
+    (get_local $10)
    )
   )
   (set_local $2
    (i32.shl
     (get_local $2)
-    (get_local $11)
+    (get_local $10)
    )
   )
   (if
@@ -13633,7 +13615,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2022)
+     (i32.const 2018)
      (i32.const 24)
     )
     (unreachable)
@@ -13820,8 +13802,7 @@
   (local $8 i64)
   (local $9 i32)
   (local $10 i64)
-  (local $11 i64)
-  (local $12 f64)
+  (local $11 f64)
   (set_local $2
    (i64.reinterpret/f64
     (get_local $0)
@@ -14038,81 +14019,69 @@
      )
     )
     (block $break|1
-     (loop $repeat|1
-      (br_if $break|1
-       (i32.eqz
-        (i64.gt_s
-         (get_local $4)
-         (get_local $5)
-        )
+     (loop $continue|1
+      (if
+       (i64.gt_s
+        (get_local $4)
+        (get_local $5)
        )
-      )
-      (block
-       (set_local $10
-        (i64.sub
-         (get_local $8)
-         (get_local $3)
-        )
-       )
-       (if
-        (i64.eq
-         (i64.shr_u
-          (get_local $10)
-          (i64.const 63)
-         )
-         (i64.const 0)
-        )
+       (block
         (block
+         (if
+          (i64.ge_u
+           (get_local $8)
+           (get_local $3)
+          )
+          (block
+           (set_local $8
+            (i64.sub
+             (get_local $8)
+             (get_local $3)
+            )
+           )
+           (set_local $9
+            (i32.add
+             (get_local $9)
+             (i32.const 1)
+            )
+           )
+          )
+         )
          (set_local $8
-          (get_local $10)
+          (i64.shl
+           (get_local $8)
+           (i64.const 1)
+          )
          )
          (set_local $9
-          (i32.add
+          (i32.shl
            (get_local $9)
            (i32.const 1)
           )
          )
+         (set_local $4
+          (i64.sub
+           (get_local $4)
+           (i64.const 1)
+          )
+         )
         )
-       )
-       (set_local $8
-        (i64.shl
-         (get_local $8)
-         (i64.const 1)
-        )
-       )
-       (set_local $9
-        (i32.shl
-         (get_local $9)
-         (i32.const 1)
-        )
+        (br $continue|1)
        )
       )
-      (set_local $4
-       (i64.sub
-        (get_local $4)
-        (i64.const 1)
-       )
-      )
-      (br $repeat|1)
-     )
-    )
-    (set_local $10
-     (i64.sub
-      (get_local $8)
-      (get_local $3)
      )
     )
     (if
-     (i64.eq
-      (i64.shr_u
-       (get_local $10)
-       (i64.const 63)
-      )
-      (i64.const 0)
+     (i64.ge_u
+      (get_local $8)
+      (get_local $3)
      )
      (block
       (set_local $8
-       (get_local $10)
+       (i64.sub
+        (get_local $8)
+        (get_local $3)
+       )
       )
       (set_local $9
        (i32.add
@@ -14131,7 +14100,7 @@
       (i64.const -60)
      )
      (block
-      (set_local $11
+      (set_local $10
        (i64.clz
         (i64.shl
          (get_local $8)
@@ -14142,13 +14111,13 @@
       (set_local $4
        (i64.sub
         (get_local $4)
-        (get_local $11)
+        (get_local $10)
        )
       )
       (set_local $8
        (i64.shl
         (get_local $8)
-        (get_local $11)
+        (get_local $10)
        )
       )
      )
@@ -14205,7 +14174,7 @@
     (get_local $1)
    )
   )
-  (set_local $12
+  (set_local $11
    (f64.add
     (get_local $0)
     (get_local $0)
@@ -14233,7 +14202,7 @@
      (if (result i32)
       (tee_local $7
        (f64.gt
-        (get_local $12)
+        (get_local $11)
         (get_local $1)
        )
       )
@@ -14241,7 +14210,7 @@
       (if (result i32)
        (tee_local $7
         (f64.eq
-         (get_local $12)
+         (get_local $11)
          (get_local $1)
         )
        )
@@ -14290,8 +14259,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
-  (local $11 f32)
+  (local $10 f32)
   (set_local $2
    (i32.reinterpret/f32
     (get_local $0)
@@ -14506,81 +14474,69 @@
      )
     )
     (block $break|1
-     (loop $repeat|1
-      (br_if $break|1
-       (i32.eqz
-        (i32.gt_s
-         (get_local $4)
-         (get_local $5)
-        )
+     (loop $continue|1
+      (if
+       (i32.gt_s
+        (get_local $4)
+        (get_local $5)
        )
-      )
-      (block
-       (set_local $8
-        (i32.sub
-         (get_local $7)
-         (get_local $3)
-        )
-       )
-       (if
-        (i32.eq
-         (i32.shr_u
-          (get_local $8)
-          (i32.const 31)
-         )
-         (i32.const 0)
-        )
+       (block
         (block
+         (if
+          (i32.ge_u
+           (get_local $7)
+           (get_local $3)
+          )
+          (block
+           (set_local $7
+            (i32.sub
+             (get_local $7)
+             (get_local $3)
+            )
+           )
+           (set_local $9
+            (i32.add
+             (get_local $9)
+             (i32.const 1)
+            )
+           )
+          )
+         )
          (set_local $7
-          (get_local $8)
+          (i32.shl
+           (get_local $7)
+           (i32.const 1)
+          )
          )
          (set_local $9
-          (i32.add
+          (i32.shl
            (get_local $9)
            (i32.const 1)
           )
          )
+         (set_local $4
+          (i32.sub
+           (get_local $4)
+           (i32.const 1)
+          )
+         )
         )
-       )
-       (set_local $7
-        (i32.shl
-         (get_local $7)
-         (i32.const 1)
-        )
-       )
-       (set_local $9
-        (i32.shl
-         (get_local $9)
-         (i32.const 1)
-        )
+        (br $continue|1)
        )
       )
-      (set_local $4
-       (i32.sub
-        (get_local $4)
-        (i32.const 1)
-       )
-      )
-      (br $repeat|1)
-     )
-    )
-    (set_local $8
-     (i32.sub
-      (get_local $7)
-      (get_local $3)
      )
     )
     (if
-     (i32.eq
-      (i32.shr_u
-       (get_local $8)
-       (i32.const 31)
-      )
-      (i32.const 0)
+     (i32.ge_u
+      (get_local $7)
+      (get_local $3)
      )
      (block
       (set_local $7
-       (get_local $8)
+       (i32.sub
+        (get_local $7)
+        (get_local $3)
+       )
       )
       (set_local $9
        (i32.add
@@ -14599,7 +14555,7 @@
       (i32.const -30)
      )
      (block
-      (set_local $10
+      (set_local $8
        (i32.clz
         (i32.shl
          (get_local $7)
@@ -14610,13 +14566,13 @@
       (set_local $4
        (i32.sub
         (get_local $4)
-        (get_local $10)
+        (get_local $8)
        )
       )
       (set_local $7
        (i32.shl
         (get_local $7)
-        (get_local $10)
+        (get_local $8)
        )
       )
      )
@@ -14673,7 +14629,7 @@
     (get_local $1)
    )
   )
-  (set_local $11
+  (set_local $10
    (f32.add
     (get_local $0)
     (get_local $0)
@@ -14701,7 +14657,7 @@
      (if (result i32)
       (tee_local $8
        (f32.gt
-        (get_local $11)
+        (get_local $10)
         (get_local $1)
        )
       )
@@ -14709,7 +14665,7 @@
       (if (result i32)
        (tee_local $8
         (f32.eq
-         (get_local $11)
+         (get_local $10)
          (get_local $1)
         )
        )
