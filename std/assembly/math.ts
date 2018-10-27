@@ -1137,7 +1137,6 @@ export namespace NativeMath {
     var ex = <i64>(ux >> 52 & 0x7FF);
     var ey = <i64>(uy >> 52 & 0x7FF);
     var sx = <i32>(ux >> 63);
-    var sy = <i32>(uy >> 63);
     if (uy << 1 == 0 || ex == 0x7FF || isNaN(y)) return (x * y) / (x * y);
     if (ux << 1 == 0) return x;
     var uxi = ux;
@@ -1162,7 +1161,7 @@ export namespace NativeMath {
         return x;
       }
       let i: u64;
-      for (; ex > ey; ex--) {
+      for (; ex > ey; --ex) {
         i = uxi - uy;
         if (i >> 63 == 0) {
           uxi = i;
@@ -1192,7 +1191,7 @@ export namespace NativeMath {
       uxi >>= -ex + 1;
     }
     x = reinterpret<f64>(uxi);
-    if (sy) y = -y;
+    y = builtin_abs<f64>(y);
     var x2 = x + x;
     if (ex == ey || (ex + 1 == ey && (x2 > y || (x2 == y && <bool>(q & 1))))) {
       x -= y;
@@ -2191,7 +2190,6 @@ export namespace NativeMathf {
     var ex = <i32>(ux >> 23 & 0xFF);
     var ey = <i32>(uy >> 23 & 0xFF);
     var sx = <i32>(ux >> 31);
-    var sy = <i32>(uy >> 31);
     var uxi = ux;
     if (uy << 1 == 0 || ex == 0xFF || isNaN(y)) return (x * y) / (x * y);
     if (ux << 1 == 0) return x;
@@ -2216,11 +2214,11 @@ export namespace NativeMathf {
         return x;
       }
       let i: u32;
-      for (; ex > ey; ex--) {
+      for (; ex > ey; --ex) {
         i = uxi - uy;
         if (i >> 31 == 0) {
           uxi = i;
-          q++;
+          ++q;
         }
         uxi <<= 1;
         q <<= 1;
@@ -2228,11 +2226,11 @@ export namespace NativeMathf {
       i = uxi - uy;
       if (i >> 31 == 0) {
         uxi = i;
-        q++;
+        ++q;
       }
       if (uxi == 0) ex = -30;
       else {
-        let shift = <i32>builtin_clz<u32>(uxi << 8);
+        let shift = builtin_clz<i32>(uxi << 8);
         ex -= shift;
         uxi <<= shift;
       }
@@ -2246,10 +2244,11 @@ export namespace NativeMathf {
       uxi >>= -ex + 1;
     }
     x = reinterpret<f32>(uxi);
-    if (sy) y = -y;
-    if (ex == ey || (ex + 1 == ey && (<f32>2 * x > y || (<f32>2 * x == y && <bool>(q & 1))))) {
+    y = builtin_abs<f32>(y);
+    var x2 = x + x;
+    if (ex == ey || (ex + 1 == ey && (<f32>x2 > y || (<f32>x2 == y && <bool>(q & 1))))) {
       x -= y;
-      q++;
+      // q++;
     }
     return sx ? -x : x;
   }
