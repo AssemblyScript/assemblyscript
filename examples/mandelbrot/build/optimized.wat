@@ -305,7 +305,7 @@
          ;;@ assembly/index.ts:40:4
          (tee_local $6
           ;;@ assembly/index.ts:40:15
-          (f64.div
+          (f64.mul
            ;;@ assembly/index.ts:40:20
            (call $~lib/bindings/Math/log
             ;;@ assembly/index.ts:40:29
@@ -328,7 +328,12 @@
             )
            )
            ;;@ assembly/index.ts:40:66
-           (get_global $~lib/bindings/Math/LN2)
+           (f64.div
+            ;;@ assembly/index.ts:40:67
+            (f64.const 1)
+            ;;@ assembly/index.ts:40:73
+            (get_global $~lib/bindings/Math/LN2)
+           )
           )
          )
          (get_local $6)
