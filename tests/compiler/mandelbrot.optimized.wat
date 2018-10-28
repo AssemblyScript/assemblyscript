@@ -300,9 +300,10 @@
   (local $10 f64)
   (local $11 f64)
   (local $12 f64)
-  (set_local $11
+  (local $13 f64)
+  (set_local $6
    (f64.div
-    (tee_local $6
+    (tee_local $9
      (f64.convert_u/i32
       (get_local $1)
      )
@@ -310,7 +311,7 @@
     (f64.const 1.6)
    )
   )
-  (set_local $9
+  (set_local $11
    (f64.mul
     (f64.sub
      (f64.convert_u/i32
@@ -327,13 +328,13 @@
       )
      )
     )
-    (tee_local $12
+    (tee_local $10
      (f64.div
       (f64.const 10)
       (f64.min
        (f64.mul
         (f64.const 3)
-        (get_local $6)
+        (get_local $9)
        )
        (f64.mul
         (f64.const 4)
@@ -341,6 +342,29 @@
        )
       )
      )
+    )
+   )
+  )
+  (set_local $13
+   (f64.mul
+    (get_local $6)
+    (get_local $10)
+   )
+  )
+  (set_local $0
+   (i32.shl
+    (i32.mul
+     (get_local $0)
+     (get_local $1)
+    )
+    (i32.const 1)
+   )
+  )
+  (set_local $9
+   (f64.div
+    (f64.const 1)
+    (f64.convert_u/i32
+     (get_local $3)
     )
    )
   )
@@ -352,15 +376,15 @@
       (get_local $1)
      )
     )
-    (set_local $10
-     (f64.mul
-      (f64.sub
+    (set_local $12
+     (f64.sub
+      (f64.mul
        (f64.convert_u/i32
         (get_local $7)
        )
-       (get_local $11)
+       (get_local $10)
       )
-      (get_local $12)
+      (get_local $13)
      )
     )
     (set_local $4
@@ -402,7 +426,7 @@
            )
            (get_local $5)
           )
-          (get_local $9)
+          (get_local $11)
          )
         )
         (set_local $4
@@ -411,7 +435,7 @@
            (get_local $6)
            (get_local $8)
           )
-          (get_local $10)
+          (get_local $12)
          )
         )
         (br_if $break|1
@@ -463,7 +487,7 @@
           (get_local $5)
          )
         )
-        (get_local $10)
+        (get_local $12)
        )
       )
       (set_local $5
@@ -475,7 +499,7 @@
          )
          (get_local $5)
         )
-        (get_local $9)
+        (get_local $11)
        )
       )
       (set_local $4
@@ -494,7 +518,7 @@
      (if (result i32)
       (call $~lib/builtins/isFinite<f64>
        (tee_local $6
-        (f64.div
+        (f64.mul
          (call $~lib/math/NativeMath.log
           (call $~lib/math/NativeMath.log
            (f64.sqrt
@@ -511,7 +535,7 @@
            )
           )
          )
-         (f64.const 0.6931471805599453)
+         (f64.const 1.4426950408889634)
         )
        )
       )
@@ -519,7 +543,7 @@
        (f64.mul
         (f64.const 2047)
         (call $../../examples/mandelbrot/assembly/index/clamp<f64>
-         (f64.div
+         (f64.mul
           (f64.sub
            (f64.convert_u/i32
             (i32.add
@@ -529,9 +553,7 @@
            )
            (get_local $6)
           )
-          (f64.convert_u/i32
-           (get_local $3)
-          )
+          (get_local $9)
          )
         )
        )
@@ -540,15 +562,12 @@
      )
     )
     (i32.store16
-     (i32.shl
-      (i32.add
-       (i32.mul
-        (get_local $0)
-        (get_local $1)
-       )
+     (i32.add
+      (get_local $0)
+      (i32.shl
        (get_local $7)
+       (i32.const 1)
       )
-      (i32.const 1)
      )
      (get_local $2)
     )
