@@ -48,7 +48,7 @@ var argb = new Uint32Array(imageData.data.buffer);
 fetch("build/optimized.wasm")
 .then(response => response.arrayBuffer())
 .then(buffer => WebAssembly.instantiate(buffer, {
-  env: { memory: memory },
+  env: { memory },
   Math
 }))
 .then(module => {
@@ -56,7 +56,9 @@ fetch("build/optimized.wasm")
   var computeLine = exports.computeLine;
   var updateLine = function(y) {
     var yx = y * width;
-    for (let x = 0; x < width; ++x) argb[yx + x] = colors[mem[yx + x]];
+    for (let x = 0; x < width; ++x) {
+      argb[yx + x] = colors[mem[yx + x]];
+    }
   };
 
   // Compute an initial balanced version of the set.

@@ -21,21 +21,9 @@
   (local $10 f64)
   (local $11 f64)
   (local $12 f64)
-  ;;@ assembly/index.ts:8:2
-  (set_local $11
-   ;;@ assembly/index.ts:8:19
-   (f64.div
-    (tee_local $6
-     (f64.convert_u/i32
-      (get_local $1)
-     )
-    )
-    ;;@ assembly/index.ts:8:27
-    (f64.const 1.6)
-   )
-  )
+  (local $13 f64)
   ;;@ assembly/index.ts:11:2
-  (set_local $9
+  (set_local $11
    ;;@ assembly/index.ts:11:18
    (f64.mul
     (f64.sub
@@ -57,7 +45,7 @@
      )
     )
     ;;@ assembly/index.ts:10:2
-    (tee_local $12
+    (tee_local $10
      ;;@ assembly/index.ts:10:14
      (f64.div
       (f64.const 10)
@@ -66,7 +54,11 @@
        ;;@ assembly/index.ts:10:25
        (f64.mul
         (f64.const 3)
-        (get_local $6)
+        (tee_local $9
+         (f64.convert_u/i32
+          (get_local $1)
+         )
+        )
        )
        ;;@ assembly/index.ts:10:36
        (f64.mul
@@ -79,71 +71,106 @@
    )
   )
   ;;@ assembly/index.ts:12:2
+  (set_local $13
+   ;;@ assembly/index.ts:12:25
+   (f64.mul
+    ;;@ assembly/index.ts:8:19
+    (f64.div
+     (get_local $9)
+     ;;@ assembly/index.ts:8:27
+     (f64.const 1.6)
+    )
+    (get_local $10)
+   )
+  )
+  ;;@ assembly/index.ts:13:2
+  (set_local $0
+   ;;@ assembly/index.ts:13:14
+   (i32.shl
+    (i32.mul
+     (get_local $0)
+     (get_local $1)
+    )
+    ;;@ assembly/index.ts:13:29
+    (i32.const 1)
+   )
+  )
+  ;;@ assembly/index.ts:14:2
+  (set_local $9
+   ;;@ assembly/index.ts:14:17
+   (f64.div
+    (f64.const 1)
+    (f64.convert_u/i32
+     (get_local $3)
+    )
+   )
+  )
+  ;;@ assembly/index.ts:16:2
   (block $break|0
    (loop $repeat|0
     (br_if $break|0
-     ;;@ assembly/index.ts:12:23
+     ;;@ assembly/index.ts:16:23
      (i32.ge_u
       (get_local $8)
       (get_local $1)
      )
     )
-    ;;@ assembly/index.ts:13:4
-    (set_local $10
-     ;;@ assembly/index.ts:13:15
-     (f64.mul
-      (f64.sub
+    ;;@ assembly/index.ts:17:4
+    (set_local $12
+     ;;@ assembly/index.ts:17:15
+     (f64.sub
+      (f64.mul
        (f64.convert_u/i32
         (get_local $8)
        )
-       (get_local $11)
+       (get_local $10)
       )
-      (get_local $12)
+      (get_local $13)
      )
     )
     (set_local $4
-     ;;@ assembly/index.ts:16:13
+     ;;@ assembly/index.ts:20:13
      (f64.const 0)
     )
     (set_local $5
-     ;;@ assembly/index.ts:16:23
+     ;;@ assembly/index.ts:20:23
      (f64.const 0)
     )
-    ;;@ assembly/index.ts:17:4
+    ;;@ assembly/index.ts:21:4
     (set_local $2
-     ;;@ assembly/index.ts:17:25
+     ;;@ assembly/index.ts:21:25
      (i32.const 0)
     )
-    ;;@ assembly/index.ts:18:4
+    ;;@ assembly/index.ts:22:4
     (block $break|1
      (loop $continue|1
       (if
-       ;;@ assembly/index.ts:18:11
+       ;;@ assembly/index.ts:22:11
        (f64.le
         (f64.add
          (tee_local $6
-          ;;@ assembly/index.ts:18:19
+          ;;@ assembly/index.ts:22:19
           (f64.mul
            (get_local $4)
            (get_local $4)
           )
          )
-         ;;@ assembly/index.ts:18:30
+         ;;@ assembly/index.ts:22:30
          (tee_local $7
-          ;;@ assembly/index.ts:18:38
+          ;;@ assembly/index.ts:22:38
           (f64.mul
            (get_local $5)
            (get_local $5)
           )
          )
         )
-        ;;@ assembly/index.ts:18:50
+        ;;@ assembly/index.ts:22:50
         (f64.const 4)
        )
        (block
-        ;;@ assembly/index.ts:20:6
+        ;;@ assembly/index.ts:24:6
         (set_local $5
-         ;;@ assembly/index.ts:20:11
+         ;;@ assembly/index.ts:24:11
          (f64.add
           (f64.mul
            (f64.mul
@@ -152,29 +179,29 @@
            )
            (get_local $5)
           )
-          (get_local $9)
+          (get_local $11)
          )
         )
-        ;;@ assembly/index.ts:21:6
+        ;;@ assembly/index.ts:25:6
         (set_local $4
-         ;;@ assembly/index.ts:19:18
+         ;;@ assembly/index.ts:23:18
          (f64.add
           (f64.sub
            (get_local $6)
            (get_local $7)
           )
-          (get_local $10)
+          (get_local $12)
          )
         )
-        ;;@ assembly/index.ts:22:30
+        ;;@ assembly/index.ts:26:30
         (br_if $break|1
-         ;;@ assembly/index.ts:22:10
+         ;;@ assembly/index.ts:26:10
          (i32.ge_u
           (get_local $2)
           (get_local $3)
          )
         )
-        ;;@ assembly/index.ts:23:6
+        ;;@ assembly/index.ts:27:6
         (set_local $2
          (i32.add
           (get_local $2)
@@ -186,15 +213,15 @@
       )
      )
     )
-    ;;@ assembly/index.ts:27:4
+    ;;@ assembly/index.ts:31:4
     (block $break|2
-     ;;@ assembly/index.ts:27:9
+     ;;@ assembly/index.ts:31:9
      (set_local $6
-      ;;@ assembly/index.ts:27:29
+      ;;@ assembly/index.ts:31:29
       (f64.min
-       ;;@ assembly/index.ts:27:33
+       ;;@ assembly/index.ts:31:33
        (f64.const 8)
-       ;;@ assembly/index.ts:27:36
+       ;;@ assembly/index.ts:31:36
        (f64.convert_u/i32
         (get_local $3)
        )
@@ -203,7 +230,7 @@
      (loop $repeat|2
       (br_if $break|2
        (i32.eqz
-        ;;@ assembly/index.ts:27:44
+        ;;@ assembly/index.ts:31:44
         (f64.lt
          (f64.convert_u/i32
           (get_local $2)
@@ -212,27 +239,27 @@
         )
        )
       )
-      ;;@ assembly/index.ts:28:6
+      ;;@ assembly/index.ts:32:6
       (set_local $7
-       ;;@ assembly/index.ts:28:18
+       ;;@ assembly/index.ts:32:18
        (f64.add
         (f64.sub
          (f64.mul
           (get_local $4)
           (get_local $4)
          )
-         ;;@ assembly/index.ts:28:28
+         ;;@ assembly/index.ts:32:28
          (f64.mul
           (get_local $5)
           (get_local $5)
          )
         )
-        (get_local $10)
+        (get_local $12)
        )
       )
-      ;;@ assembly/index.ts:29:6
+      ;;@ assembly/index.ts:33:6
       (set_local $5
-       ;;@ assembly/index.ts:29:11
+       ;;@ assembly/index.ts:33:11
        (f64.add
         (f64.mul
          (f64.mul
@@ -241,14 +268,14 @@
          )
          (get_local $5)
         )
-        (get_local $9)
+        (get_local $11)
        )
       )
-      ;;@ assembly/index.ts:30:6
+      ;;@ assembly/index.ts:34:6
       (set_local $4
        (get_local $7)
       )
-      ;;@ assembly/index.ts:27:71
+      ;;@ assembly/index.ts:31:71
       (set_local $2
        (i32.add
         (get_local $2)
@@ -258,43 +285,40 @@
       (br $repeat|2)
      )
     )
-    ;;@ assembly/index.ts:40:4
+    ;;@ assembly/index.ts:44:4
     (i32.store16
-     ;;@ assembly/index.ts:40:15
-     (i32.shl
-      (i32.add
-       ;;@ assembly/index.ts:40:16
-       (i32.mul
-        (get_local $0)
-        (get_local $1)
-       )
+     ;;@ assembly/index.ts:44:15
+     (i32.add
+      (get_local $0)
+      ;;@ assembly/index.ts:44:23
+      (i32.shl
        (get_local $8)
+       ;;@ assembly/index.ts:44:29
+       (i32.const 1)
       )
-      ;;@ assembly/index.ts:40:34
-      (i32.const 1)
      )
      (tee_local $2
-      ;;@ assembly/index.ts:37:15
+      ;;@ assembly/index.ts:41:15
       (if (result i32)
        (f64.eq
         (f64.sub
-         ;;@ assembly/index.ts:36:4
+         ;;@ assembly/index.ts:40:4
          (tee_local $6
-          ;;@ assembly/index.ts:36:15
+          ;;@ assembly/index.ts:40:15
           (f64.div
-           ;;@ assembly/index.ts:36:20
+           ;;@ assembly/index.ts:40:20
            (call $~lib/bindings/Math/log
-            ;;@ assembly/index.ts:36:29
+            ;;@ assembly/index.ts:40:29
             (call $~lib/bindings/Math/log
-             ;;@ assembly/index.ts:36:38
+             ;;@ assembly/index.ts:40:38
              (call $~lib/bindings/Math/sqrt
-              ;;@ assembly/index.ts:36:43
+              ;;@ assembly/index.ts:40:43
               (f64.add
                (f64.mul
                 (get_local $4)
                 (get_local $4)
                )
-               ;;@ assembly/index.ts:36:53
+               ;;@ assembly/index.ts:40:53
                (f64.mul
                 (get_local $5)
                 (get_local $5)
@@ -303,7 +327,7 @@
              )
             )
            )
-           ;;@ assembly/index.ts:36:66
+           ;;@ assembly/index.ts:40:66
            (get_global $~lib/bindings/Math/LN2)
           )
          )
@@ -311,29 +335,27 @@
         )
         (f64.const 0)
        )
-       ;;@ assembly/index.ts:38:8
+       ;;@ assembly/index.ts:42:8
        (i32.trunc_u/f64
-        ;;@ assembly/index.ts:38:14
+        ;;@ assembly/index.ts:42:14
         (f64.mul
          (f64.const 2047)
          (f64.min
           (f64.max
-           ;;@ assembly/index.ts:38:39
-           (f64.div
+           ;;@ assembly/index.ts:42:39
+           (f64.mul
             (f64.sub
              (f64.convert_u/i32
-              ;;@ assembly/index.ts:38:40
+              ;;@ assembly/index.ts:42:40
               (i32.add
                (get_local $2)
-               ;;@ assembly/index.ts:38:52
+               ;;@ assembly/index.ts:42:52
                (i32.const 1)
               )
              )
              (get_local $6)
             )
-            (f64.convert_u/i32
-             (get_local $3)
-            )
+            (get_local $9)
            )
            (f64.const 0)
           )
@@ -345,7 +367,7 @@
       )
      )
     )
-    ;;@ assembly/index.ts:12:34
+    ;;@ assembly/index.ts:16:34
     (set_local $8
      (i32.add
       (get_local $8)

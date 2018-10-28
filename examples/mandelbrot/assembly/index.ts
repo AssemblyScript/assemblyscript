@@ -9,8 +9,12 @@ export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
   var translateY = height / 2.0;
   var scale = 10.0 / min(3 * width, 4 * height);
   var imaginary = (y - translateY) * scale;
+  var scaledTranslateX = translateX * scale;
+  var pitch = (y * width) << 1;
+  var invLimit = 1.0 / limit;
+
   for (let x: u32 = 0; x < width; ++x) {
-    let real = (x - translateX) * scale;
+    let real = x * scale - scaledTranslateX;
 
     // Iterate until either the escape radius or iteration limit is exceeded
     let ix = 0.0, iy = 0.0, ixSq: f64, iySq: f64;
@@ -35,9 +39,9 @@ export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
     // see also: http://linas.org/art-gallery/escape/escape.html
     let frac = Math.log(Math.log(Math.sqrt(ix * ix + iy * iy))) / Math.LN2;
     let icol = isFinite(frac)
-      ? <u32>((NUM_COLORS - 1) * clamp((iteration + 1 - frac) / limit, 0.0, 1.0))
+      ? <u32>((NUM_COLORS - 1) * clamp((iteration + 1 - frac) * invLimit, 0.0, 1.0))
       : NUM_COLORS - 1;
-    store<u16>((y * width + x) << 1, icol);
+    store<u16>(pitch + (x << 1), icol);
   }
 }
 
