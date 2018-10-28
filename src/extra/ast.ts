@@ -990,6 +990,9 @@ export class ASTBuilder {
     this.serializeAccessModifiers(node);
     this.visitIdentifierExpression(node.name);
     var sb = this.sb;
+    if (node.flags & CommonFlags.DEFINITE_ASSIGNMENT) {
+      sb.push("!");
+    }
     var type = node.type;
     if (type) {
       sb.push(": ");
@@ -1376,6 +1379,9 @@ export class ASTBuilder {
     this.visitIdentifierExpression(node.name);
     var type = node.type;
     var sb = this.sb;
+    if (node.flags & CommonFlags.DEFINITE_ASSIGNMENT) {
+      sb.push("!");
+    }
     if (type) {
       sb.push(": ");
       this.visitTypeNode(type);

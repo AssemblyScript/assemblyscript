@@ -24,6 +24,7 @@ import {
 
 // TODO: sin, cos, tan
 
+/** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
   const                   // see: musl/src/math/asin.c and SUN COPYRIGHT NOTICE above
     pS0 = reinterpret<f64>(0x3FC5555555555555), //  1.66666666666666657415e-01
@@ -41,6 +42,7 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
   return p / q;
 }
 
+@inline /** @internal */
 function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
   const                       // see: musl/src/math/__expo2.c
     k    = <u32>2043,
@@ -50,9 +52,12 @@ function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
 }
 
 var random_seeded = false;
-var random_state0: u64;
-var random_state1: u64;
+var random_state0_64: u64;
+var random_state1_64: u64;
+var random_state0_32: u32;
+var random_state1_32: u32;
 
+/** @internal */
 function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanche
   h ^= h >> 33;                     // see: https://github.com/aappleby/smhasher
   h *= 0xFF51AFD7ED558CCD;
@@ -60,6 +65,14 @@ function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanc
   h *= 0xC4CEB9FE1A85EC53;
   h ^= h >> 33;
   return h;
+}
+
+/** @internal */
+function splitMix32(h: u32): u32 {
+  h += 0x6D2B79F5;
+  h  = (h ^ (h >> 15)) * (h | 1);
+  h ^= h + (h ^ (h >> 7)) * (h | 61);
+  return h ^ (h >> 14);
 }
 
 export namespace NativeMath {
@@ -99,12 +112,14 @@ export namespace NativeMath {
     }
     var s: f64, w: f64, z: f64;
     if (hx >> 31) {
-      z = (1.0 + x) * 0.5;
+      // z = (1.0 + x) * 0.5;
+      z = 0.5 + x * 0.5;
       s = builtin_sqrt<f64>(z);
       w = R(z) * s - pio2_lo;
       return 2 * (pio2_hi - (s + w));
     }
-    z = (1.0 - x) * 0.5;
+    // z = (1.0 - x) * 0.5;
+    z = 0.5 - x * 0.5;
     s = builtin_sqrt<f64>(z);
     var df = reinterpret<f64>(reinterpret<u64>(s) & 0xFFFFFFFF00000000);
     var c = (z - df * df) / (s + df);
@@ -136,7 +151,8 @@ export namespace NativeMath {
       if (ix < 0x3E500000 && ix >= 0x00100000) return x;
       return x + x * R(x * x);
     }
-    var z = (1.0 - builtin_abs<f64>(x)) * 0.5;
+    // var z = (1.0 - builtin_abs<f64>(x)) * 0.5;
+    var z = 0.5 - builtin_abs<f64>(x) * 0.5;
     var s = builtin_sqrt<f64>(z);
     var r = R(z);
     if (ix >= 0x3FEF3333) x = pio2_hi - (2 * (s + s * r) - pio2_lo);
@@ -153,13 +169,11 @@ export namespace NativeMath {
     const c = reinterpret<f64>(0x3FE62E42FEFA39EF); // 0.693147180559945309417232121458176568
     var u = reinterpret<u64>(x);
     var e = u >> 52 & 0x7FF;
-    var s = u >> 63;
-    u &= 0x7FFFFFFFFFFFFFFF;
-    x = reinterpret<f64>(u);
-    if (e >= 0x3FF + 26) x = log(x) + c;
-    else if (e >= 0x3FF + 1) x = log(2 * x + 1 / (builtin_sqrt<f64>(x * x + 1) + x));
-    else if (e >= 0x3FF - 26) x = log1p(x + x * x / (builtin_sqrt<f64>(x * x + 1) + 1));
-    return s ? -x : x;
+    var y = reinterpret<f64>(u & 0x7FFFFFFFFFFFFFFF);
+    if (e >= 0x3FF + 26) y = log(y) + c;
+    else if (e >= 0x3FF + 1)  y =   log(2 * y + 1 / (builtin_sqrt<f64>(y * y + 1) + y));
+    else if (e >= 0x3FF - 26) y = log1p(y + y * y / (builtin_sqrt<f64>(y * y + 1) + 1));
+    return builtin_copysign(y, x);
   }
 
   export function atan(x: f64): f64 { // see musl/src/math/atan.c and SUN COPYRIGHT NOTICE above
@@ -185,13 +199,13 @@ export namespace NativeMath {
       aT10      = reinterpret<f64>(0x3F90AD3AE322DA11), //  1.62858201153657823623e-02
       Ox1p_120f = reinterpret<f32>(0x03800000);
     var ix = <u32>(reinterpret<u64>(x) >> 32);
-    var sign_ = ix >> 31;
+    var sx = x;
     ix &= 0x7FFFFFFF;
     var z: f64;
     if (ix >= 0x44100000) {
       if (isNaN(x)) return x;
       z = atanhi3 + Ox1p_120f;
-      return sign_ ? -z : z;
+      return builtin_copysign<f64>(z, sx);
     }
     var id: i32;
     if (ix < 0x3FDC0000) {
@@ -221,15 +235,16 @@ export namespace NativeMath {
     var w = z * z;
     var s1 = z * (aT0 + w * (aT2 + w * (aT4 + w * (aT6 + w * (aT8 + w * aT10)))));
     var s2 = w * (aT1 + w * (aT3 + w * (aT5 + w * (aT7 + w * aT9))));
-    if (id < 0) return x - x * (s1 + s2);
+    var s3 = x * (s1 + s2);
+    if (id < 0) return x - s3;
     switch (id) {
-      case 0: { z = atanhi0 - (x * (s1 + s2) - atanlo0 - x); break; }
-      case 1: { z = atanhi1 - (x * (s1 + s2) - atanlo1 - x); break; }
-      case 2: { z = atanhi2 - (x * (s1 + s2) - atanlo2 - x); break; }
-      case 3: { z = atanhi3 - (x * (s1 + s2) - atanlo3 - x); break; }
+      case 0: { z = atanhi0 - ((s3 - atanlo0) - x); break; }
+      case 1: { z = atanhi1 - ((s3 - atanlo1) - x); break; }
+      case 2: { z = atanhi2 - ((s3 - atanlo2) - x); break; }
+      case 3: { z = atanhi3 - ((s3 - atanlo3) - x); break; }
       default: unreachable();
     }
-    return sign_ ? -z : z;
+    return builtin_copysign<f64>(z, sx);
   }
 
   export function atanh(x: f64): f64 { // see: musl/src/math/atanh.c
@@ -243,13 +258,11 @@ export namespace NativeMath {
     } else {
       y = 0.5 * log1p(2 * (y / (1 - y)));
     }
-    return s ? -y : y;
+    return builtin_copysign<f64>(y, x);
   }
 
   export function atan2(y: f64, x: f64): f64 { // see: musl/src/math/atan2.c and SUN COPYRIGHT NOTICE above
-    const
-      pi    = reinterpret<f64>(0x400921FB54442D18), // 3.1415926535897931160E+00
-      pi_lo = reinterpret<f64>(0x3CA1A62633145C07); // 1.2246467991473531772E-16
+    const pi_lo = reinterpret<f64>(0x3CA1A62633145C07); // 1.2246467991473531772E-16
     if (isNaN(x) || isNaN(y)) return x + y;
     var u = reinterpret<u64>(x);
     var ix = <u32>(u >> 32);
@@ -269,33 +282,33 @@ export namespace NativeMath {
         case 3: return -PI;
       }
     }
-    if ((ix | lx) == 0) return m & 1 ? -pi / 2 : pi / 2;
+    if ((ix | lx) == 0) return m & 1 ? -PI / 2 : PI / 2;
     if (ix == 0x7FF00000) {
       if (iy == 0x7FF00000) {
         switch (m) {
-          case 0: return  pi / 4;
-          case 1: return -pi / 4;
-          case 2: return  3 * pi / 4;
-          case 3: return -3 * pi / 4;
+          case 0: return  PI / 4;
+          case 1: return -PI / 4;
+          case 2: return  3 * PI / 4;
+          case 3: return -3 * PI / 4;
         }
       } else {
         switch (m) {
           case 0: return  0.0;
           case 1: return -0.0;
-          case 2: return  pi;
-          case 3: return -pi;
+          case 2: return  PI;
+          case 3: return -PI;
         }
       }
     }
     var z: f64;
-    if (ix + (64 << 20) < iy || iy == 0x7FF00000) return m & 1 ? -pi / 2 : pi / 2;
+    if (ix + (64 << 20) < iy || iy == 0x7FF00000) return m & 1 ? -PI / 2 : PI / 2;
     if ((m & 2) && iy + (64 << 20) < ix) z = 0;
     else z = atan(builtin_abs<f64>(y / x));
     switch (m) {
       case 0: return  z;
       case 1: return -z;
-      case 2: return pi - (z - pi_lo);
-      case 3: return (z - pi_lo) - pi;
+      case 2: return PI - (z - pi_lo);
+      case 3: return (z - pi_lo) - PI;
     }
     unreachable();
     return 0;
@@ -360,7 +373,8 @@ export namespace NativeMath {
     if (w < 0x3FE62E42) {
       if (w < 0x3FF00000 - (26 << 20)) return 1;
       t = expm1(x);
-      return 1 + t * t / (2 * (1 + t));
+      // return 1 + t * t / (2 * (1 + t));
+      return 1 + t * t / (2 + 2 * t);
     }
     if (w < 0x40862E42) {
       t = exp(x);
@@ -395,12 +409,12 @@ export namespace NativeMath {
       if (x < underflow) return 0;
     }
     var hi: f64, lo: f64 = 0;
-    var k: i32 = 0;
+    var k = 0;
     if (hx > 0x3FD62E42) {
       if (hx >= 0x3FF0A2B2) {
         k = <i32>(invln2 * x + builtin_copysign<f64>(0.5, x));
       } else {
-        k = 1 - sign_ - sign_;
+        k = 1 - (sign_ << 1);
       }
       hi = x - k * ln2hi;
       lo = k * ln2lo;
@@ -433,30 +447,18 @@ export namespace NativeMath {
     if (hx >= 0x4043687A) {
       if (isNaN(x)) return x;
       if (sign_) return -1;
-      if (x > o_threshold) {
-        x *= Ox1p1023;
-        return x;
-      }
+      if (x > o_threshold) return x * Ox1p1023;
     }
     var c = 0.0, t: f64;
     if (hx > 0x3FD62E42) {
-      let hi: f64, lo: f64;
-      if (hx < 0x3FF0A2B2) {
-        if (!sign_) {
-          hi = x - ln2_hi;
-          lo = ln2_lo;
-          k =  1;
-        } else {
-          hi = x + ln2_hi;
-          lo = -ln2_lo;
-          k = -1;
-        }
-      } else {
-        k  = <i32>(invln2 * x + (sign_ ? -0.5 : 0.5));
-        t  = <f64>k;
-        hi = x - t * ln2_hi;
-        lo = t * ln2_lo;
-      }
+      k = select<i32>(
+        1 - (sign_ << 1),
+        <i32>(invln2 * x + builtin_copysign<f64>(0.5, x)),
+        hx < 0x3FF0A2B2
+      );
+      t = <f64>k;
+      let hi = x - t * ln2_hi;
+      let lo = t * ln2_lo;
       x = hi - lo;
       c = (hi - x) - lo;
     } else if (hx < 0x3C900000) return x;
@@ -483,9 +485,10 @@ export namespace NativeMath {
       return y - 1.0;
     }
     u = (0x3FF - k) << 52;
-    if (k < 20) y = (x - e + (1 - reinterpret<f64>(u))) * twopk;
-    else y = (x - (e + reinterpret<f64>(u)) + 1) * twopk;
-    return y;
+    y = reinterpret<f64>(u);
+    if (k < 20) y = (1 - y) - e;
+    else y = 1 - (e + y);
+    return (x + y) * twopk;
   }
 
   @inline
@@ -533,12 +536,12 @@ export namespace NativeMath {
     var h = x - c + c;
     var l = x - h;
     var hx = x * x;
-    var lx = h * h - hx + 2 * h * l + l * l;
+    var lx = h * h - hx + (2 * h + l) * l;
     c = y * SPLIT;
     h = y - c + c;
     l = y - h;
     var hy = y * y;
-    var ly = h * h - hy + 2 * h * l + l * l;
+    var ly = h * h - hy + (2 * h + l) * l;
     return z * builtin_sqrt(ly + lx + hy + hx);
   }
 
@@ -563,7 +566,7 @@ export namespace NativeMath {
     var k = 0;
     if (hx < 0x00100000 || <bool>(hx >> 31)) {
       if (u << 1 == 0) return -1 / (x * x);
-      if (hx >> 31)     return (x - x) / 0.0;
+      if (hx >> 31)    return (x - x) / 0.0;
       k -= 54;
       x *= Ox1p54;
       u = reinterpret<u64>(x);
@@ -637,8 +640,7 @@ export namespace NativeMath {
     var val_lo = dk * log10_2lo + (lo + hi) * ivln10lo + lo * ivln10hi;
     w = y + val_hi;
     val_lo += (y - w) + val_hi;
-    val_hi = w;
-    return val_lo + val_hi;
+    return val_lo + w;
   }
 
   export function log1p(x: f64): f64 { // see: musl/src/math/log1p.c and SUN COPYRIGHT NOTICE above
@@ -781,7 +783,8 @@ export namespace NativeMath {
       cp_l    = reinterpret<f64>(0xBE3E2FE0145B01F5), // -7.02846165095275826516e-09
       ivln2   = reinterpret<f64>(0x3FF71547652B82FE), //  1.44269504088896338700e+00
       ivln2_h = reinterpret<f64>(0x3FF7154760000000), //  1.44269502162933349609e+00
-      ivln2_l = reinterpret<f64>(0x3E54AE0BF85DDF44); //  1.92596299112661746887e-08
+      ivln2_l = reinterpret<f64>(0x3E54AE0BF85DDF44), //  1.92596299112661746887e-08
+      inv3    = reinterpret<f64>(0x3FD5555555555555); //  0.3333333333333333333333
     var u_ = reinterpret<u64>(x);
     var hx = <i32>(u_ >> 32);
     var lx = <u32>u_;
@@ -801,13 +804,10 @@ export namespace NativeMath {
       if (iy >= 0x43400000) yisint = 2;
       else if (iy >= 0x3FF00000) {
         k = (iy >> 20) - 0x3FF;
-        if (k > 20) {
-          let jj = ly >> (52 - k);
-          if ((jj << (52 - k)) == ly) yisint = 2 - (jj & 1);
-        } else if (ly == 0) {
-          let jj = iy >> (20 - k);
-          if ((jj << (20 - k)) == iy) yisint = 2 - (jj & 1);
-        }
+        let offset = select<i32>(52, 20, k > 20) - k;
+        let Ly = select<i32>(ly, iy, k > 20);
+        let jj = Ly >> offset;
+        if ((jj << offset) == Ly) yisint = 2 - (jj & 1);
       }
     }
     if (ly == 0) {
@@ -852,7 +852,7 @@ export namespace NativeMath {
       if (ix < 0x3FEFFFFF) return hy < 0 ? s * huge * huge : s * tiny * tiny;
       if (ix > 0x3FF00000) return hy > 0 ? s * huge * huge : s * tiny * tiny;
       t = ax - 1.0;
-      w = (t * t) * (0.5 - t * (0.3333333333333333333333 - t * 0.25));
+      w = (t * t) * (0.5 - t * (inv3 - t * 0.25));
       u = ivln2_h * t;
       v = t * ivln2_l - w * ivln2;
       t1 = u + v;
@@ -877,7 +877,7 @@ export namespace NativeMath {
         ix -= 0x00100000;
       }
       ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xFFFFFFFF | (<u64>ix << 32));
-      let bp = select<f64>(1.5, 1.0, k);
+      let bp = select<f64>(1.5, 1.0, k); // k ? 1.5 : 1.0
       u = ax - bp;
       v = 1.0 / (ax + bp);
       ss = u * v;
@@ -954,51 +954,38 @@ export namespace NativeMath {
   export function seedRandom(value: i64): void {
     assert(value);
     random_seeded = true;
-    random_state0 = murmurHash3(value);
-    random_state1 = murmurHash3(random_state0);
+    random_state0_64 = murmurHash3(value);
+    random_state1_64 = murmurHash3(~random_state0_64);
+    random_state0_32 = splitMix32(<u32>value);
+    random_state1_32 = splitMix32(random_state0_32);
   }
 
   export function random(): f64 { // see: v8/src/base/random-number-generator.cc
     if (!random_seeded) throw new Error("PRNG must be seeded.");
-    var s1 = random_state0;
-    var s0 = random_state1;
-    random_state0 = s0;
+    var s1 = random_state0_64;
+    var s0 = random_state1_64;
+    random_state0_64 = s0;
     s1 ^= s1 << 23;
     s1 ^= s1 >> 17;
     s1 ^= s0;
     s1 ^= s0 >> 26;
-    random_state1 = s1;
+    random_state1_64 = s1;
     var r = ((s0 + s1) & 0x000FFFFFFFFFFFFF) | 0x3FF0000000000000;
     return reinterpret<f64>(r) - 1;
   }
 
-  export function round(x: f64): f64 { // see: musl/src/math/round.c
-    const toint = 1.0 / f64.EPSILON;
-    var ux = reinterpret<u64>(x);
-    var e = <i32>(ux >> 52 & 0x7FF);
-    if (e >= 0x3FF + 52) return x;
-    if (e < 0x3FF - 1) return 0 * x;
-    var y: f64;
-    if (ux >> 63) {
-      // FIXME: JS always rounds fractional 0.5 towards +Infinity
-      // and there certainly is a smarter way to do this.
-      y = toint - x - toint + x;
-      if (y >= 0.5) y = x - y + 1;
-      else if (y < -0.5) y = x - y - 1;
-      else y = x - y;
-    } else {
-      y = x + toint - toint - x;
-      if (y > 0.5) y = y + x - 1;
-      else if (y <= -0.5) y = y + x + 1;
-      else y = y + x;
-    }
-    return y;
+  @inline
+  export function round(x: f64): f64 {
+    return builtin_copysign<f64>(builtin_floor<f64>(x + 0.5), x);
   }
 
   @inline
   export function sign(x: f64): f64 {
-    // return x > 0 ? 1 : x < 0 ? -1 : x;
-    return builtin_abs<f64>(x) > 0 ? builtin_copysign<f64>(1, x) : x;
+    if (ASC_SHRINK_LEVEL > 0) {
+      return builtin_abs(x) > 0 ? builtin_copysign<f64>(1, x) : x;
+    } else {
+      return x > 0 ? 1 : x < 0 ? -1 : x;
+    }
   }
 
   export function sin(x: f64): f64 { // TODO
@@ -1007,13 +994,11 @@ export namespace NativeMath {
   }
 
   export function sinh(x: f64): f64 { // see: musl/src/math/sinh.c
-    var u = reinterpret<u64>(x);
-    var h = 0.5;
-    if (u >> 63) h = -h;
-    u &=  0x7FFFFFFFFFFFFFFF;
+    var u = reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF;
     var absx = reinterpret<f64>(u);
     var w = <u32>(u >> 32);
     var t: f64;
+    var h = builtin_copysign(0.5, x);
     if (w < 0x40862E42) {
       t = expm1(absx);
       if (w < 0x3FF00000) {
@@ -1038,26 +1023,25 @@ export namespace NativeMath {
 
   export function tanh(x: f64): f64 { // see: musl/src/math/tanh.c
     var u = reinterpret<u64>(x);
-    var sign_ = <i32>(u >> 63);
     u &= 0x7FFFFFFFFFFFFFFF;
-    x = reinterpret<f64>(u);
+    var y = reinterpret<f64>(u);
     var w = <u32>(u >> 32);
     var t: f64;
     if (w > 0x3FE193EA) {
       if (w > 0x40340000) {
-        t = 1 - 0 / x;
+        t = 1 - 0 / y;
       } else {
-        t = expm1(2 * x);
+        t = expm1(2 * y);
         t = 1 - 2 / (t + 2);
       }
     } else if (w > 0x3FD058AE) {
-      t = expm1(2 * x);
+      t = expm1(2 * y);
       t = t / (t + 2);
     } else if (w >= 0x00100000) {
-      t = expm1(-2 * x);
+      t = expm1(-2 * y);
       t = -t / (t + 2);
-    } else t = x;
-    return sign_ ? -t : t;
+    } else t = y;
+    return builtin_copysign<f64>(t, x);
   }
 
   @inline
@@ -1066,8 +1050,9 @@ export namespace NativeMath {
   }
 
   /** @internal */
-  export function scalbn(x: f64, n: i32): f64 { // see: musl/src/math/scalbn.c
+  export function scalbn(x: f64, n: i32): f64 { // see: https://git.musl-libc.org/cgit/musl/tree/src/math/scalbn.c
     const
+      Ox1p53    = reinterpret<f64>(0x4340000000000000),
       Ox1p1023  = reinterpret<f64>(0x7FE0000000000000),
       Ox1p_1022 = reinterpret<f64>(0x0010000000000000);
     var y = x;
@@ -1076,16 +1061,16 @@ export namespace NativeMath {
       n -= 1023;
       if (n > 1023) {
         y *= Ox1p1023;
-        n -= 1023;
-        if (n > 1023) n = 1023;
+        n = builtin_min<i32>(n - 1023, 1023);
       }
     } else if (n < -1022) {
-      y *= Ox1p_1022;
-      n += 1022;
+      /* make sure final n < -53 to avoid double
+		   rounding in the subnormal range */
+      y *= Ox1p_1022 * Ox1p53;
+      n += 1022 - 53;
       if (n < -1022) {
-        y *= Ox1p_1022;
-        n += 1022;
-        if (n < -1022) n = -1022;
+        y *= Ox1p_1022 * Ox1p53;
+        n = builtin_max<i32>(n + 1022 - 53, -1022);
       }
     }
     return y * reinterpret<f64>(<u64>(0x3FF + n) << 52);
@@ -1094,29 +1079,31 @@ export namespace NativeMath {
   export function mod(x: f64, y: f64): f64 { // see: musl/src/math/fmod.c
     var ux = reinterpret<u64>(x);
     var uy = reinterpret<u64>(y);
-    var ex = <i32>(ux >> 52 & 0x7FF);
-    var ey = <i32>(uy >> 52 & 0x7FF);
-    var sx = <i32>(ux >> 63);
-    if (uy << 1 == 0 || isNaN<f64>(y) || ex == 0x7FF) return (x * y) / (x * y);
-    if (ux << 1 <= uy << 1) {
-      if (ux << 1 == uy << 1) return 0 * x;
+    var ex = <i64>(ux >> 52 & 0x7FF);
+    var ey = <i64>(uy >> 52 & 0x7FF);
+    var sx = ux >> 63;
+    var uy1 = uy << 1;
+    if (uy1 == 0 || ex == 0x7FF || isNaN<f64>(y)) return (x * y) / (x * y);
+    var ux1 = ux << 1;
+    if (ux1 <= uy1) {
+      if (ux1 == uy1) return 0 * x;
       return x;
     }
-    var i: u64;
     if (!ex) {
-      for (i = ux << 12; !(i >> 63); i <<= 1) --ex;
+      ex -= builtin_clz<i64>(ux << 12);
       ux <<= -ex + 1;
     } else {
       ux &= <u64>-1 >> 12;
       ux |= 1 << 52;
     }
     if (!ey) {
-      for (i = uy << 12; !(i >> 63); i <<= 1) --ey;
+      ey -= builtin_clz<i64>(uy << 12);
       uy <<= -ey + 1;
     } else {
       uy &= <u64>-1 >> 12;
       uy |= 1 << 52;
     }
+    var i: u64;
     for (; ex > ey; ex--) {
       i = ux - uy;
       if (!(i >> 63)) {
@@ -1130,37 +1117,38 @@ export namespace NativeMath {
       if (!i) return 0 * x;
       ux = i;
     }
-    for (; !(ux >> 52); ux <<= 1) --ex;
+    // for (; !(ux >> 52); ux <<= 1) --ex;
+    var shift = builtin_clz<i64>(ux << 11);
+    ex -= shift;
+    ux <<= shift;
     if (ex > 0) {
       ux -= 1 << 52;
-      ux |= <u64>ex << 52;
+      ux |= ex << 52;
     } else {
       ux >>= -ex + 1;
     }
-    ux |= <u64>sx << 63;
+    ux |= sx << 63;
     return reinterpret<f64>(ux);
   }
 
   export function rem(x: f64, y: f64): f64 { // see: musl/src/math/remquo.c
     var ux = reinterpret<u64>(x);
     var uy = reinterpret<u64>(y);
-    var ex = <i32>(ux >> 52 & 0x7FF);
-    var ey = <i32>(uy >> 52 & 0x7FF);
+    var ex = <i64>(ux >> 52 & 0x7FF);
+    var ey = <i64>(uy >> 52 & 0x7FF);
     var sx = <i32>(ux >> 63);
-    var sy = <i32>(uy >> 63);
-    if (uy << 1 == 0 || isNaN(y) || ex == 0x7FF) return (x * y) / (x * y);
+    if (uy << 1 == 0 || ex == 0x7FF || isNaN(y)) return (x * y) / (x * y);
     if (ux << 1 == 0) return x;
     var uxi = ux;
-    var i: u64;
     if (!ex) {
-      for (i = uxi << 12; i >> 63 == 0; ex--, i <<= 1) {}
+      ex -= builtin_clz<i64>(uxi << 12);
       uxi <<= -ex + 1;
     } else {
       uxi &= <u64>-1 >> 12;
       uxi |= 1 << 52;
     }
     if (!ey) {
-      for (i = uy << 12; i >> 63 == 0; ey--, i <<= 1) {}
+      ey -= builtin_clz<i64>(uy << 12);
       uy <<= -ey + 1;
     } else {
       uy &= <u64>-1 >> 12;
@@ -1172,7 +1160,8 @@ export namespace NativeMath {
         if (ex + 1 == ey) break; // goto end
         return x;
       }
-      for (; ex > ey; ex--) {
+      let i: u64;
+      for (; ex > ey; --ex) {
         i = uxi - uy;
         if (i >> 63 == 0) {
           uxi = i;
@@ -1187,26 +1176,32 @@ export namespace NativeMath {
         ++q;
       }
       if (uxi == 0) ex = -60;
-      else for (; uxi >> 52 == 0; uxi <<= 1, ex--) {}
+      else {
+        let shift = builtin_clz<i64>(uxi << 11);
+        ex -= shift;
+        uxi <<= shift;
+      }
       break;
     } while (false);
   // end:
     if (ex > 0) {
       uxi -= 1 << 52;
-      uxi |= <u64>ex << 52;
+      uxi |= ex << 52;
     } else {
       uxi >>= -ex + 1;
     }
     x = reinterpret<f64>(uxi);
-    if (sy) y = -y;
-    if (ex == ey || (ex + 1 == ey && (2.0 * x > y || (2.0 * x == y && <bool>(q & 1))))) {
+    y = builtin_abs<f64>(y);
+    var x2 = x + x;
+    if (ex == ey || (ex + 1 == ey && (x2 > y || (x2 == y && <bool>(q & 1))))) {
       x -= y;
-      ++q;
+      // ++q;
     }
     return sx ? -x : x;
   }
 }
 
+/** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   const                    // see: musl/src/math/asinf.c and SUN COPYRIGHT NOTICE above
     pS0 = reinterpret<f32>(0x3E2AAA75), //  1.6666586697e-01f
@@ -1218,6 +1213,7 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   return p / q;
 }
 
+@inline /** @internal */
 function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   const                        // see: musl/src/math/__expo2f.c
     k    = <u32>235,
@@ -1262,12 +1258,14 @@ export namespace NativeMathf {
     }
     var z: f32, w: f32, s: f32;
     if (hx >> 31) {
-      z = (1 + x) * 0.5;
+      // z = (1 + x) * 0.5;
+      z = 0.5 + x * 0.5;
       s = builtin_sqrt<f32>(z);
       w = Rf(z) * s - pio2_lo;
       return 2 * (pio2_hi - (s + w));
     }
-    z = (1 - x) * 0.5;
+    // z = (1 - x) * 0.5;
+    z = 0.5 - x * 0.5;
     s = builtin_sqrt<f32>(z);
     hx = reinterpret<u32>(s);
     var df = reinterpret<f32>(hx & 0xFFFFF000);
@@ -1280,7 +1278,10 @@ export namespace NativeMathf {
     const s = reinterpret<f32>(0x3F317218); // 0.693147180559945309417232121458176568f
     var u = reinterpret<u32>(x);
     var a = u & 0x7FFFFFFF;
-    if (a < 0x3F800000 + (1 << 23)) return log1p(x - 1 + builtin_sqrt((x - 1) * (x - 1) + 2 * (x - 1)));
+    if (a < 0x3F800000 + (1 << 23)) {
+      let xm1 = x - 1;
+      return log1p(xm1 + builtin_sqrt(xm1 * (xm1 + 2)));
+    }
     if (a < 0x3F800000 + (12 << 23)) return log(2 * x - 1 / (x + builtin_sqrt<f32>(x * x - 1)));
     return log(x) + s;
   }
@@ -1289,34 +1290,31 @@ export namespace NativeMathf {
     const
       pio2      = reinterpret<f32>(0x3FC90FDB), // 1.570796326794896558e+00f
       Ox1p_120f = reinterpret<f32>(0x03800000);
-    var hx = reinterpret<u32>(x);
-    var ix = hx & 0x7FFFFFFF;
-    if (ix >= 0x3F800000) {
-      if (ix == 0x3F800000) return x * pio2 + Ox1p_120f;
+    var sx = x;
+    var hx = reinterpret<u32>(x) & 0x7FFFFFFF;
+    if (hx >= 0x3F800000) {
+      if (hx == 0x3F800000) return x * pio2 + Ox1p_120f;
       return 0 / (x - x);
     }
-    if (ix < 0x3F000000) {
-      if (ix < 0x39800000 && ix >= 0x00800000) return x;
+    if (hx < 0x3F000000) {
+      if (hx < 0x39800000 && hx >= 0x00800000) return x;
       return x + x * Rf(x * x);
     }
-    var z: f32 = (1 - builtin_abs<f32>(x)) * 0.5;
+    // var z: f32 = (1 - builtin_abs<f32>(x)) * 0.5;
+    var z: f32 = 0.5 - builtin_abs<f32>(x) * 0.5;
     var s = builtin_sqrt<f64>(z); // sic
     x = <f32>(pio2 - 2 * (s + s * Rf(z)));
-    if (hx >> 31) return -x;
-    return x;
+    return builtin_copysign(x, sx);
   }
 
   export function asinh(x: f32): f32 { // see: musl/src/math/asinhf.c
     const c = reinterpret<f32>(0x3F317218); // 0.693147180559945309417232121458176568f
-    var u = reinterpret<u32>(x);
-    var i = u & 0x7FFFFFFF;
-    var s = <u32>(u >> 31);
-    u = i;
-    x = reinterpret<f32>(u);
-    if (i >= 0x3F800000 + (12 << 23)) x = log(x) + c;
-    else if (i >= 0x3F800000 + (1 << 23)) x = log(2 * x + 1 / (builtin_sqrt<f32>(x * x + 1) + x));
-    else if (i >= 0x3F800000 - (12 << 23)) x = log1p(x + x * x / (builtin_sqrt<f32>(x * x + 1) + 1));
-    return s ? -x : x;
+    var u = reinterpret<u32>(x) & 0x7FFFFFFF;
+    var y = reinterpret<f32>(u);
+    if (u >= 0x3F800000 + (12 << 23)) y = log(y) + c;
+    else if (u >= 0x3F800000 + (1 << 23))  y =   log(2 * y + 1 / (builtin_sqrt<f32>(y * y + 1) + y));
+    else if (u >= 0x3F800000 - (12 << 23)) y = log1p(y + y * y / (builtin_sqrt<f32>(y * y + 1) + 1));
+    return builtin_copysign(y, x);
   }
 
   export function atan(x: f32): f32 { // see: musl/src/math/atanf.c and SUN COPYRIGHT NOTICE above
@@ -1336,13 +1334,13 @@ export namespace NativeMathf {
       aT4       = reinterpret<f32>(0x3D7CAC25), //  6.1687607318e-02f
       Ox1p_120f = reinterpret<f32>(0x03800000);
     var ix = reinterpret<u32>(x);
-    var sig = <u32>(ix >> 31);
+    var sx = x;
     ix &= 0x7FFFFFFF;
     var z: f32;
     if (ix >= 0x4C800000) {
       if (isNaN(x)) return x;
       z = atanhi3 + Ox1p_120f;
-      return sig ? -z : z;
+      return builtin_copysign(z, sx);
     }
     var id: i32;
     if (ix < 0x3EE00000) {
@@ -1372,26 +1370,26 @@ export namespace NativeMathf {
     var w = z * z;
     var s1 = z * (aT0 + w * (aT2 + w * aT4));
     var s2 = w * (aT1 + w * aT3);
-    if (id < 0) return x - x * (s1 + s2);
+    var s3 = x * (s1 + s2);
+    if (id < 0) return x - s3;
     switch (id) {
-      case 0: { z = atanhi0 - ((x * (s1 + s2) - atanlo0) - x); break; }
-      case 1: { z = atanhi1 - ((x * (s1 + s2) - atanlo1) - x); break; }
-      case 2: { z = atanhi2 - ((x * (s1 + s2) - atanlo2) - x); break; }
-      case 3: { z = atanhi3 - ((x * (s1 + s2) - atanlo3) - x); break; }
+      case 0: { z = atanhi0 - ((s3 - atanlo0) - x); break; }
+      case 1: { z = atanhi1 - ((s3 - atanlo1) - x); break; }
+      case 2: { z = atanhi2 - ((s3 - atanlo2) - x); break; }
+      case 3: { z = atanhi3 - ((s3 - atanlo3) - x); break; }
       default: unreachable();
     }
-    return sig ? -z : z;
+    return builtin_copysign(z, sx);
   }
 
   export function atanh(x: f32): f32 { // see: musl/src/math/atanhf.c
     var u = reinterpret<u32>(x);
-    var s = <u32>(u >> 31);
     u &= 0x7FFFFFFF;
     var y = reinterpret<f32>(u);
     if (u < 0x3F800000 - (1 << 23)) {
-      if (u >= 0x3F800000 - (32 << 23)) y = 0.5 * log1p(2 * y + 2 * y * y / (1 - y));
+      if (u >= 0x3F800000 - (32 << 23)) y = 0.5 * log1p(2 * y * (1.0 + y / (1 - y)));
     } else y = 0.5 * log1p(2 * (y / (1 - y)));
-    return s ? -y : y;
+    return builtin_copysign(y, x);
   }
 
   export function atan2(y: f32, x: f32): f32 { // see: musl/src/math/atan2f.c and SUN COPYRIGHT NOTICE above
@@ -1463,12 +1461,12 @@ export namespace NativeMathf {
     }
     u &= 0x80000000;
     u |= hx;
-    var T = <f64>reinterpret<f32>(u);
-    var r = T * T * T;
-    T = T * (<f64>x + x + r) / (x + r + r);
-    r = T * T * T;
-    T = T * (<f64>x + x + r) / (x + r + r);
-    return <f32>T;
+    var t = <f64>reinterpret<f32>(u);
+    var r = t * t * t;
+    t = t * (<f64>x + x + r) / (x + r + r);
+    r = t * t * t;
+    t = t * (<f64>x + x + r) / (x + r + r);
+    return <f32>t;
   }
 
   @inline
@@ -1493,11 +1491,13 @@ export namespace NativeMathf {
     if (u < 0x3F317217) {
       if (u < 0x3F800000 - (12 << 23)) return 1;
       let t = expm1(x);
-      return 1 + t * t / (2 * (1 + t));
+      // return 1 + t * t / (2 * (1 + t));
+      return 1 + t * t / (2 + 2 * t);
     }
     if (u < 0x42B17217) {
       let t = exp(x);
-      return 0.5 * (t + 1 / t);
+      // return 0.5 * (t + 1 / t);
+      return 0.5 * t + 0.5 / t;
     }
     return expo2f(x);
   }
@@ -1519,11 +1519,14 @@ export namespace NativeMathf {
     var sign_ = <i32>(hx >> 31);
     hx &= 0x7FFFFFFF;
     if (hx >= 0x42AEAC50) {
-      if (hx >= 0x42B17218 && !sign_) {
-        x *= Ox1p127f;
-        return x;
+      if (hx >= 0x42B17218) {
+        if (!sign_) {
+          x *= Ox1p127f;
+          return x;
+        } else {
+          if (hx >= 0x42CFF1B5) return 0;
+        }
       }
-      if (sign_ && hx >= 0x42CFF1B5) return 0;
     }
     var hi: f32, lo: f32;
     var k: i32;
@@ -1531,7 +1534,7 @@ export namespace NativeMathf {
       if (hx > 0x3F851592) {
         k = <i32>(invln2 * x + builtin_copysign<f32>(0.5, x));
       } else {
-        k = 1 - sign_ - sign_;
+        k = 1 - (sign_ << 1);
       }
       hi = x - <f32>k * ln2hi;
       lo = <f32>k * ln2lo;
@@ -1572,23 +1575,14 @@ export namespace NativeMathf {
     }
     var c: f32 = 0.0, t: f32, k: i32;
     if (hx > 0x3EB17218) {
-      let hi: f32, lo: f32;
-      if (hx < 0x3F851592) {
-        if (!sign_) {
-          hi = x - ln2_hi;
-          lo = ln2_lo;
-          k =  1;
-        } else {
-          hi = x + ln2_hi;
-          lo = -ln2_lo;
-          k = -1;
-        }
-      } else {
-        k  = <i32>(invln2 * x + (sign_ ? -0.5 : 0.5));
-        t  = <f32>k;
-        hi = x - t * ln2_hi;
-        lo = t * ln2_lo;
-      }
+      k = select<i32>(
+        1 - (sign_ << 1),
+        <i32>(invln2 * x + builtin_copysign<f32>(0.5, x)),
+        hx < 0x3F851592
+      );
+      t = <f32>k;
+      let hi = x - t * ln2_hi;
+      let lo = t * ln2_lo;
       x = hi - lo;
       c = (hi - x) - lo;
     } else if (hx < 0x33000000) {
@@ -1617,9 +1611,10 @@ export namespace NativeMathf {
       return y - 1.0;
     }
     u = (0x7F - k) << 23;
-    if (k < 23) y = (x - e + (1 - reinterpret<f32>(u))) * twopk;
-    else y = (x - (e + reinterpret<f32>(u)) + 1) * twopk;
-    return y;
+    y = reinterpret<f32>(u);
+    if (k < 20) y = (1 - y) - e;
+    else y = 1 - (e + y);
+    return (x + y) * twopk;
   }
 
   @inline
@@ -1646,11 +1641,11 @@ export namespace NativeMathf {
     if (ux >= 0xFF << 23 || uy == 0 || ux - uy >= 25 << 23) return x + y;
     var z: f32 = 1;
     if (ux >= (0x7F + 60) << 23) {
-      z = Ox1p90f;
+      z  = Ox1p90f;
       x *= Ox1p_90f;
       y *= Ox1p_90f;
     } else if (uy < (0x7F - 60) << 23) {
-      z = Ox1p_90f;
+      z  = Ox1p_90f;
       x *= Ox1p90f;
       y *= Ox1p90f;
     }
@@ -1862,7 +1857,8 @@ export namespace NativeMathf {
       cp_l    = reinterpret<f32>(0xB8F623C6), // -1.1736857402e-04
       ivln2   = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+00
       ivln2_h = reinterpret<f32>(0x3FB8AA00), //  1.4426879883e+00
-      ivln2_l = reinterpret<f32>(0x36ECA570); //  7.0526075433e-06
+      ivln2_l = reinterpret<f32>(0x36ECA570), //  7.0526075433e-06
+      inv3    = reinterpret<f32>(0x3EAAAAAB);  // 0.333333333333
     var hx = reinterpret<i32>(x);
     var hy = reinterpret<i32>(y);
     var ix = hx & 0x7FFFFFFF;
@@ -1911,7 +1907,7 @@ export namespace NativeMathf {
       if (ix < 0x3F7FFFF8) return hy < 0 ? sn * huge * huge : sn * tiny * tiny;
       if (ix > 0x3F800007) return hy > 0 ? sn * huge * huge : sn * tiny * tiny;
       t = ax - 1;
-      w = (t * t) * (0.5 - t * (0.333333333333 - t * 0.25));
+      w = (t * t) * (0.5 - t * (inv3 - t * 0.25));
       u = ivln2_h * t;
       v = t * ivln2_l - w * ivln2;
       t1 = u + v;
@@ -1937,7 +1933,7 @@ export namespace NativeMathf {
         ix -= 0x00800000;
       }
       ax = reinterpret<f32>(ix);
-      let bp = select<f32>(1.5, 1.0, k);
+      let bp = select<f32>(1.5, 1.0, k); // k ? 1.5 : 1.0
       u = ax - bp;
       v = 1.0 / (ax + bp);
       s = u * v;
@@ -1953,13 +1949,13 @@ export namespace NativeMathf {
       r += s_l * (s_h + s);
       s2 = s_h * s_h;
       t_h = 3.0 + s2 + r;
-      is = reinterpret<u32>(t_h);
+      is  = reinterpret<u32>(t_h);
       t_h = reinterpret<f32>(is & 0xFFFFF000);
       t_l = r - ((t_h - 3.0) - s2);
       u = s_h * t_h;
       v = s_l * t_h + t_l * s;
       p_h = u + v;
-      is = reinterpret<u32>(p_h);
+      is  = reinterpret<u32>(p_h);
       p_h = reinterpret<f32>(is & 0xFFFFF000);
       p_l = v - (p_h - u);
       let z_h = cp_h * p_h;
@@ -2021,39 +2017,33 @@ export namespace NativeMathf {
     NativeMath.seedRandom(value);
   }
 
+  // Using xoroshiro64starstar from http://xoshiro.di.unimi.it/xoroshiro64starstar.c
   export function random(): f32 {
-    var f: f32; // FIXME: demoting from f64 to f32 might yield 1.0f
-    do f = <f32>NativeMath.random(); while (f == 1.0);
-    return f;
+    if (!random_seeded) throw new Error("PRNG must be seeded.");
+
+    var s0 = random_state0_32;
+    var s1 = random_state1_32;
+    var r  = rotl<u32>(s0 * 0x9E3779BB, 5) * 5;
+
+    s1 ^= s0;
+    random_state0_32 = rotl<u32>(s0, 26) ^ s1 ^ (s1 << 9);
+    random_state1_32 = rotl<u32>(s1, 13);
+
+    return reinterpret<f32>((r >> 9) | (127 << 23)) - 1.0;
   }
 
-  export function round(x: f32): f32 { // see: musl/src/math/roundf.c
-    const toint = <f32>1.0 / f32.EPSILON;
-    var ux = reinterpret<u32>(x);
-    var e = <i32>(ux >> 23 & 0xFF);
-    if (e >= 0x7F + 23) return x;
-    if (e < 0x7F - 1) return 0 * x;
-    var y: f32;
-    if (ux >> 31) {
-      // FIXME: JS always rounds fractional 0.5 towards +Infinity
-      // and there certainly is a smarter way to do this.
-      y = toint - x - toint + x;
-      if (y >= 0.5) y = x - y + 1;
-      else if (y < -0.5) y = x - y - 1;
-      else y = x - y;
-    } else {
-      y = x + toint - toint - x;
-      if (y > 0.5) y = y + x - 1;
-      else if (y <= -0.5) y = y + x + 1;
-      else y = y + x;
-    }
-    return y;
+  @inline
+  export function round(x: f32): f32 {
+    return builtin_copysign<f32>(builtin_floor<f32>(x + 0.5), x);
   }
 
   @inline
   export function sign(x: f32): f32 {
-    // return x > 0 ? 1 : x < 0 ? -1 : x;
-    return builtin_abs<f32>(x) > 0 ? builtin_copysign<f32>(1, x) : x;
+    if (ASC_SHRINK_LEVEL > 0) {
+      return builtin_abs(x) > 0 ? builtin_copysign<f32>(1, x) : x;
+    } else {
+      return x > 0 ? 1 : x < 0 ? -1 : x;
+    }
   }
 
   export function sin(x: f32): f32 { // TODO
@@ -2062,12 +2052,10 @@ export namespace NativeMathf {
   }
 
   export function sinh(x: f32): f32 { // see: musl/src/math/sinhf.c
-    var u = reinterpret<u32>(x);
-    var h: f32 = 0.5;
-    if (u >> 31) h = -h;
-    u &= 0x7FFFFFFF;
+    var u = reinterpret<u32>(x) & 0x7FFFFFFF;
     var absx = reinterpret<f32>(u);
     var t: f32;
+    var h = builtin_copysign<f32>(0.5, x);
     if (u < 0x42B17217) {
       t = expm1(absx);
       if (u < 0x3F800000) {
@@ -2092,24 +2080,23 @@ export namespace NativeMathf {
 
   export function tanh(x: f32): f32 { // see: musl/src/math/tanhf.c
     var u = reinterpret<u32>(x);
-    var sig = u >> 31;
     u &= 0x7FFFFFFF;
-    x = reinterpret<f32>(u);
+    var y = reinterpret<f32>(u);
     var t: f32;
     if (u > 0x3F0C9F54) {
-      if (u > 0x41200000) t = 1 + 0 / x;
+      if (u > 0x41200000) t = 1 + 0 / y;
       else {
-        t = expm1(2 * x);
+        t = expm1(2 * y);
         t = 1 - 2 / (t + 2);
       }
     } else if (u > 0x3E82C578) {
-      t = expm1(2 * x);
+      t = expm1(2 * y);
       t = t / (t + 2);
     } else if (u >= 0x00800000) {
-      t = expm1(-2 * x);
+      t = expm1(-2 * y);
       t = -t / (t + 2);
-    } else t = x;
-    return sig ? -t : t;
+    } else t = y;
+    return builtin_copysign<f32>(t, x);
   }
 
   @inline
@@ -2118,8 +2105,9 @@ export namespace NativeMathf {
   }
 
   /** @internal */
-  export function scalbn(x: f32, n: i32): f32 { // see: musl/src/math/scalbnf.c
+  export function scalbn(x: f32, n: i32): f32 { // see: https://git.musl-libc.org/cgit/musl/tree/src/math/scalbnf.c
     const
+      Ox1p24f   = reinterpret<f32>(0x4B800000),
       Ox1p127f  = reinterpret<f32>(0x7F000000),
       Ox1p_126f = reinterpret<f32>(0x00800000);
     var y = x;
@@ -2128,16 +2116,14 @@ export namespace NativeMathf {
       n -= 127;
       if (n > 127) {
         y *= Ox1p127f;
-        n -= 127;
-        if (n > 127) n = 127;
+        n = builtin_min<i32>(n - 127, 127);
       }
     } else if (n < -126) {
-      y *= Ox1p_126f;
-      n += 126;
+      y *= Ox1p_126f * Ox1p24f;
+      n += 126 - 24;
       if (n < -126) {
-        y *= Ox1p_126f;
-        n += 126;
-        if (n < -126) n = -126;
+        y *= Ox1p_126f * Ox1p24f;
+        n = builtin_max<i32>(n + 126 - 24, -126);
       }
     }
     return y * reinterpret<f32>(<u32>(0x7F + n) << 23);
@@ -2149,26 +2135,28 @@ export namespace NativeMathf {
     var ex = <i32>(ux >> 23 & 0xFF);
     var ey = <i32>(uy >> 23 & 0xFF);
     var sx = ux & 0x80000000;
-    if (uy << 1 == 0 || isNaN<f32>(y) || ex == 0xFF) return (x * y) / (x * y);
-    if (ux << 1 <= uy << 1) {
-      if (ux << 1 == uy << 1) return 0 * x;
+    var uy1 = uy << 1;
+    if (uy1 == 0 || ex == 0xFF || isNaN<f32>(y)) return (x * y) / (x * y);
+    var ux1 = ux << 1;
+    if (ux1 <= uy1) {
+      if (ux1 == uy1) return 0 * x;
       return x;
     }
-    var i: u32;
     if (!ex) {
-      for (i = ux << 9; !(i >> 31); i <<= 1) --ex;
+      ex -= builtin_clz<u32>(ux << 9);
       ux <<= -ex + 1;
     } else {
       ux &= <u32>-1 >> 9;
       ux |= 1 << 23;
     }
     if (!ey) {
-      for (i = uy << 9; !(i >> 31); i <<= 1) --ey;
+      ey -= builtin_clz<u32>(uy << 9);
       uy <<= -ey + 1;
     } else {
       uy &= <u32>-1 >> 9;
       uy |= 1 << 23;
     }
+    var i: u32;
     for (; ex > ey; --ex) {
       i = ux - uy;
       if (!(i >> 31)) {
@@ -2182,7 +2170,10 @@ export namespace NativeMathf {
       if (!i) return 0 * x;
       ux = i;
     }
-    for (; !(ux >> 23); ux <<= 1) --ex;
+    // for (; !(ux >> 23); ux <<= 1) --ex;
+    var shift = <i32>builtin_clz<u32>(ux << 8);
+    ex -= shift;
+    ux <<= shift;
     if (ex > 0) {
       ux -= 1 << 23;
       ux |= <u32>ex << 23;
@@ -2199,20 +2190,18 @@ export namespace NativeMathf {
     var ex = <i32>(ux >> 23 & 0xFF);
     var ey = <i32>(uy >> 23 & 0xFF);
     var sx = <i32>(ux >> 31);
-    var sy = <i32>(uy >> 31);
-    var i: u32;
     var uxi = ux;
-    if (uy << 1 == 0 || isNaN(y) || ex == 0xFF) return (x * y) / (x * y);
+    if (uy << 1 == 0 || ex == 0xFF || isNaN(y)) return (x * y) / (x * y);
     if (ux << 1 == 0) return x;
     if (!ex) {
-      for (i = uxi << 9; i >> 31 == 0; ex--, i <<= 1) {}
+      ex -= builtin_clz<u32>(uxi << 9);
       uxi <<= -ex + 1;
     } else {
       uxi &= <u32>-1 >> 9;
       uxi |= 1 << 23;
     }
     if (!ey) {
-      for (i = uy << 9; i >> 31 == 0; ey--, i <<= 1) {}
+      ey -= builtin_clz<u32>(uy << 9);
       uy <<= -ey + 1;
     } else {
       uy &= <u32>-1 >> 9;
@@ -2224,11 +2213,12 @@ export namespace NativeMathf {
         if (ex + 1 == ey) break; // goto end
         return x;
       }
-      for (; ex > ey; ex--) {
+      let i: u32;
+      for (; ex > ey; --ex) {
         i = uxi - uy;
         if (i >> 31 == 0) {
           uxi = i;
-          q++;
+          ++q;
         }
         uxi <<= 1;
         q <<= 1;
@@ -2236,10 +2226,14 @@ export namespace NativeMathf {
       i = uxi - uy;
       if (i >> 31 == 0) {
         uxi = i;
-        q++;
+        ++q;
       }
       if (uxi == 0) ex = -30;
-      else for (; uxi >> 23 == 0; uxi <<= 1, ex--) {}
+      else {
+        let shift = builtin_clz<i32>(uxi << 8);
+        ex -= shift;
+        uxi <<= shift;
+      }
       break;
     } while (false);
   // end
@@ -2250,10 +2244,11 @@ export namespace NativeMathf {
       uxi >>= -ex + 1;
     }
     x = reinterpret<f32>(uxi);
-    if (sy) y = -y;
-    if (ex == ey || (ex + 1 == ey && (<f32>2 * x > y || (<f32>2 * x == y && <bool>(q & 1))))) {
+    y = builtin_abs<f32>(y);
+    var x2 = x + x;
+    if (ex == ey || (ex + 1 == ey && (<f32>x2 > y || (<f32>x2 == y && <bool>(q & 1))))) {
       x -= y;
-      q++;
+      // q++;
     }
     return sx ? -x : x;
   }

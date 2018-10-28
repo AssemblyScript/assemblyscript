@@ -44,6 +44,9 @@ assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 0, 0]));
 arr8.fill(2, -2);
 assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 2, 2]));
 
+arr8.fill(0, 1, 0);
+assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 2, 2]));
+
 var arr32: u32[] = [1, 2, 3, 4, 5];
 
 arr32.fill(1, 1, 3);
@@ -56,6 +59,9 @@ arr32.fill(1, 0, -3);
 assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 0, 0]));
 
 arr32.fill(2, -2);
+assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 2, 2]));
+
+arr32.fill(0, 1, 0);
 assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 2, 2]));
 
 // Array#push/pop //////////////////////////////////////////////////////////////////////////////////
