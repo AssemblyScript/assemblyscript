@@ -3516,6 +3516,24 @@
     (i32.const 2)
    )
   )
+  (set_global $std/operator-overloading/ais1
+   (call $std/operator-overloading/Tester#constructor
+    (i32.add
+     (i32.load
+      (tee_local $0
+       (get_global $std/operator-overloading/ais1)
+      )
+     )
+     (i32.const 1)
+    )
+    (i32.add
+     (i32.load offset=4
+      (get_local $0)
+     )
+     (i32.const 1)
+    )
+   )
+  )
   (set_global $std/operator-overloading/ais2
    (call $std/operator-overloading/Tester#constructor
     (i32.const 2)
@@ -3552,7 +3570,7 @@
      (i32.load
       (get_global $std/operator-overloading/ais)
      )
-     (i32.const 3)
+     (i32.const 4)
     )
    )
    (set_local $1
@@ -3560,7 +3578,7 @@
      (i32.load offset=4
       (get_global $std/operator-overloading/ais)
      )
-     (i32.const 5)
+     (i32.const 6)
     )
    )
   )
@@ -3572,7 +3590,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 308)
+     (i32.const 314)
      (i32.const 0)
     )
     (unreachable)
@@ -3582,6 +3600,24 @@
    (call $std/operator-overloading/Tester#constructor
     (i32.const 1)
     (i32.const 2)
+   )
+  )
+  (set_global $std/operator-overloading/aii1
+   (call $std/operator-overloading/Tester#constructor
+    (i32.add
+     (i32.load
+      (tee_local $1
+       (get_global $std/operator-overloading/aii1)
+      )
+     )
+     (i32.const 1)
+    )
+    (i32.add
+     (i32.load offset=4
+      (get_local $1)
+     )
+     (i32.const 1)
+    )
    )
   )
   (set_global $std/operator-overloading/aii2
@@ -3620,7 +3656,7 @@
      (i32.load
       (get_global $std/operator-overloading/aii)
      )
-     (i32.const 3)
+     (i32.const 4)
     )
    )
    (set_local $0
@@ -3628,7 +3664,7 @@
      (i32.load offset=4
       (get_global $std/operator-overloading/aii)
      )
-     (i32.const 5)
+     (i32.const 6)
     )
    )
   )
@@ -3640,7 +3676,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 322)
+     (i32.const 334)
      (i32.const 0)
     )
     (unreachable)

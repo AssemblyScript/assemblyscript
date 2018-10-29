@@ -301,11 +301,17 @@ class TesterInlineStatic {
   static add(a: TesterInlineStatic, b: TesterInlineStatic): TesterInlineStatic {
     return new TesterInlineStatic(a.x + b.x, a.y + b.y);
   }
+
+  @inline @operator.postfix('++')
+  static postInc(a: TesterInlineStatic): TesterInlineStatic {
+    return new TesterInlineStatic(a.x + 1, a.y + 1);
+  }
 }
 var ais1 = new TesterInlineStatic(1, 2);
+ais1++; // 2, 3
 var ais2 = new TesterInlineStatic(2, 3);
 var ais  = ais1 + ais2;
-assert(ais.x == 3 && ais.y == 5);
+assert(ais.x == 4 && ais.y == 6);
 
 // check inlined instance
 class TesterInlineInstance {
@@ -315,8 +321,14 @@ class TesterInlineInstance {
   add(b: TesterInlineInstance): TesterInlineInstance {
     return new TesterInlineInstance(this.x + b.x, this.y + b.y);
   }
+
+  @inline @operator.postfix('++')
+  postInc(): TesterInlineInstance {
+    return new TesterInlineInstance(this.x + 1, this.y + 1);
+  }
 }
 var aii1 = new TesterInlineInstance(1, 2);
+aii1++; // 2, 3
 var aii2 = new TesterInlineInstance(2, 3);
 var aii  = aii1 + aii2;
-assert(aii.x == 3 && aii.y == 5);
+assert(aii.x == 4 && aii.y == 6);

@@ -3803,6 +3803,28 @@
     (i32.const 2)
    )
   )
+  (set_global $std/operator-overloading/ais1
+   (block $std/operator-overloading/TesterInlineStatic.postInc|inlined.0 (result i32)
+    (set_local $0
+     (get_global $std/operator-overloading/ais1)
+    )
+    (call $std/operator-overloading/TesterInlineStatic#constructor
+     (i32.const 0)
+     (i32.add
+      (i32.load
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+     (i32.add
+      (i32.load offset=4
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
+   )
+  )
   (set_global $std/operator-overloading/ais2
    (call $std/operator-overloading/TesterInlineStatic#constructor
     (i32.const 0)
@@ -3847,14 +3869,14 @@
        (i32.load
         (get_global $std/operator-overloading/ais)
        )
-       (i32.const 3)
+       (i32.const 4)
       )
      )
      (i32.eq
       (i32.load offset=4
        (get_global $std/operator-overloading/ais)
       )
-      (i32.const 5)
+      (i32.const 6)
      )
      (get_local $1)
     )
@@ -3863,7 +3885,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 308)
+     (i32.const 314)
      (i32.const 0)
     )
     (unreachable)
@@ -3874,6 +3896,28 @@
     (i32.const 0)
     (i32.const 1)
     (i32.const 2)
+   )
+  )
+  (set_global $std/operator-overloading/aii1
+   (block $std/operator-overloading/TesterInlineInstance#postInc|inlined.0 (result i32)
+    (set_local $1
+     (get_global $std/operator-overloading/aii1)
+    )
+    (call $std/operator-overloading/TesterInlineInstance#constructor
+     (i32.const 0)
+     (i32.add
+      (i32.load
+       (get_local $1)
+      )
+      (i32.const 1)
+     )
+     (i32.add
+      (i32.load offset=4
+       (get_local $1)
+      )
+      (i32.const 1)
+     )
+    )
    )
   )
   (set_global $std/operator-overloading/aii2
@@ -3920,14 +3964,14 @@
        (i32.load
         (get_global $std/operator-overloading/aii)
        )
-       (i32.const 3)
+       (i32.const 4)
       )
      )
      (i32.eq
       (i32.load offset=4
        (get_global $std/operator-overloading/aii)
       )
-      (i32.const 5)
+      (i32.const 6)
      )
      (get_local $0)
     )
@@ -3936,7 +3980,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 322)
+     (i32.const 334)
      (i32.const 0)
     )
     (unreachable)
