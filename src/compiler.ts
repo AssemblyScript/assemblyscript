@@ -6886,22 +6886,13 @@ export class Compiler extends DiagnosticEmitter {
     if (getExpressionId(getValue) == ExpressionId.Unreachable) return getValue;
     var currentType = this.currentType;
 
-    var op: BinaryOp;
+    var op: BinaryOp = -1;
     var nativeType: NativeType;
     var nativeOne: ExpressionRef;
+    var expr: ExpressionRef | null = null;
 
     switch (expression.operator) {
       case Token.PLUS_PLUS: {
-
-        // TODO: check operator overload
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return this.module.createUnreachable();
-        }
-
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -6915,7 +6906,27 @@ export class Compiler extends DiagnosticEmitter {
             nativeOne = module.createI32(1);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: {
+            // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.POSTFIX_INC);
+                if (overload) {
+                  let options = this.options;
+                  nativeOne = currentType.toNativeOne(module);
+                  nativeType = options.nativeSizeType;
+                  expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
+                  break;
+                }
+              }
+              this.error(
+                DiagnosticCode.Operation_not_supported,
+                expression.range
+              );
+              return module.createUnreachable();
+            }
+          }
           case TypeKind.ISIZE: {
             let options = this.options;
             op = options.isWasm64
@@ -6952,16 +6963,6 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
-
-        // TODO: check operator overload
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return this.module.createUnreachable();
-        }
-
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -6975,7 +6976,27 @@ export class Compiler extends DiagnosticEmitter {
             nativeOne = module.createI32(1);
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: {
+            // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.POSTFIX_DEC);
+                if (overload) {
+                  let options = this.options;
+                  nativeOne = currentType.toNativeOne(module);
+                  nativeType = options.nativeSizeType;
+                  expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
+                  break;
+                }
+              }
+              this.error(
+                DiagnosticCode.Operation_not_supported,
+                expression.range
+              );
+              return module.createUnreachable();
+            }
+          }
           case TypeKind.ISIZE: {
             let options = this.options;
             op = options.isWasm64
@@ -7020,10 +7041,10 @@ export class Compiler extends DiagnosticEmitter {
     // simplify if dropped anyway
     if (contextualType == Type.void) {
       return this.compileAssignmentWithValue(expression.operand,
-        module.createBinary(op,
+        !expr ? module.createBinary(op,
           getValue,
           nativeOne
-        ),
+        ) : expr,
         false
       );
     }
@@ -7031,10 +7052,10 @@ export class Compiler extends DiagnosticEmitter {
     // otherwise use a temp local for the intermediate value (always possibly overflows)
     var tempLocal = currentFunction.getTempLocal(currentType, false);
     var setValue = this.compileAssignmentWithValue(expression.operand,
-      module.createBinary(op,
+      !expr ? module.createBinary(op,
         this.module.createGetLocal(tempLocal.index, nativeType),
         nativeOne
-      ),
+      ) : expr,
       false
     );
     this.currentType = assert(tempLocal).type;

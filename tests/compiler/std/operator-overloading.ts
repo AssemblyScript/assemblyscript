@@ -128,6 +128,20 @@ class Tester {
     --this.y;
     return this;
   }
+
+  @operator.postfix('++')
+  postInc(): this {
+    this.x++;
+    this.y++;
+    return this;
+  }
+
+  @operator.postfix('--')
+  postDec(): this {
+    this.x--;
+    this.y--;
+    return this;
+  }
 }
 
 // check additional
@@ -271,6 +285,14 @@ var incdec = new Tester(0, 1);
 assert(incdec.x == 1 && incdec.y == 2);
 
 --incdec;
+assert(incdec.x == 0 && incdec.y == 1);
+
+incdec = new Tester(0, 1);
+
+incdec++;
+assert(incdec.x == 1 && incdec.y == 2);
+
+incdec--;
 assert(incdec.x == 0 && incdec.y == 1);
 
 // check inlined static
