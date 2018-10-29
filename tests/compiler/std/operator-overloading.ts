@@ -130,17 +130,19 @@ class Tester {
   }
 
   @operator.postfix('++')
-  postInc(): this {
+  postInc(): Tester {
+    var value = new Tester(this.x, this.y);
     this.x++;
     this.y++;
-    return this;
+    return value;
   }
 
   @operator.postfix('--')
-  postDec(): this {
+  postDec(): Tester {
+    var value = new Tester(this.x, this.y);
     this.x--;
     this.y--;
-    return this;
+    return value;
   }
 }
 
