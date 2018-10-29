@@ -78,12 +78,11 @@
    )
    (set_local $1
     (block (result i32)
-     (set_local $2
-      (get_local $0)
-     )
      (set_local $0
       (i32.add
-       (get_local $2)
+       (tee_local $2
+        (get_local $0)
+       )
        (i32.const 1)
       )
      )
@@ -115,12 +114,11 @@
    )
    (set_local $1
     (block (result i32)
-     (set_local $2
-      (get_local $0)
-     )
      (set_local $0
       (i32.sub
-       (get_local $2)
+       (tee_local $2
+        (get_local $0)
+       )
        (i32.const 1)
       )
      )
@@ -361,12 +359,11 @@
    )
    (set_local $0
     (block (result i32)
-     (set_local $2
-      (get_local $1)
-     )
      (set_local $1
       (i32.add
-       (get_local $2)
+       (tee_local $2
+        (get_local $1)
+       )
        (i32.const 1)
       )
      )
@@ -398,12 +395,11 @@
    )
    (set_local $0
     (block (result i32)
-     (set_local $2
-      (get_local $1)
-     )
      (set_local $1
       (i32.sub
-       (get_local $2)
+       (tee_local $2
+        (get_local $1)
+       )
        (i32.const 1)
       )
      )
@@ -638,12 +634,11 @@
    )
    (set_local $1
     (block (result i32)
-     (set_local $2
-      (get_local $0)
-     )
      (set_local $0
       (i32.sub
-       (get_local $2)
+       (tee_local $2
+        (get_local $0)
+       )
        (i32.const 1)
       )
      )
@@ -672,12 +667,11 @@
    )
    (set_local $1
     (block (result i32)
-     (set_local $2
-      (get_local $0)
-     )
      (set_local $0
       (i32.add
-       (get_local $2)
+       (tee_local $2
+        (get_local $0)
+       )
        (i32.const 1)
       )
      )
@@ -894,12 +888,11 @@
    )
    (set_local $0
     (block (result i32)
-     (set_local $2
-      (get_local $1)
-     )
      (set_local $1
       (i32.sub
-       (get_local $2)
+       (tee_local $2
+        (get_local $1)
+       )
        (i32.const 1)
       )
      )
@@ -928,12 +921,11 @@
    )
    (set_local $0
     (block (result i32)
-     (set_local $2
-      (get_local $1)
-     )
      (set_local $1
       (i32.add
-       (get_local $2)
+       (tee_local $2
+        (get_local $1)
+       )
        (i32.const 1)
       )
      )
