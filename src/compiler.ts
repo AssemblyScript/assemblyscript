@@ -6882,19 +6882,29 @@ export class Compiler extends DiagnosticEmitter {
       ConversionKind.NONE,
       WrapMode.NONE
     );
+
     // shortcut if compiling the getter already failed
     if (getExpressionId(getValue) == ExpressionId.Unreachable) return getValue;
+
     var currentType = this.currentType;
 
-    var op: BinaryOp;
-    var nativeType: NativeType;
-    var nativeOne: ExpressionRef;
+    // if the value isn't dropped, a temp. local is required to remember the original value
+    var tempLocal: Local | null = null;
+    if (contextualType != Type.void) {
+      tempLocal = currentFunction.getTempLocal(currentType, false);
+      getValue = module.createTeeLocal(
+        tempLocal.index,
+        getValue
+      );
+    }
+
+    var calcValue: ExpressionRef;
 
     switch (expression.operator) {
       case Token.PLUS_PLUS: {
 
         // TODO: check operator overload
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
+        if (currentType.is(TypeFlags.REFERENCE)) {
           this.error(
             DiagnosticCode.Operation_not_supported,
             expression.range
@@ -6910,38 +6920,48 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.U32:
           case TypeKind.BOOL: {
-            op = BinaryOp.AddI32;
-            nativeType = NativeType.I32;
-            nativeOne = module.createI32(1);
+            calcValue = module.createBinary(
+              BinaryOp.AddI32,
+              getValue,
+              module.createI32(1)
+            );
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             let options = this.options;
-            op = options.isWasm64
-              ? BinaryOp.AddI64
-              : BinaryOp.AddI32;
-            nativeType = options.nativeSizeType;
-            nativeOne = currentType.toNativeOne(module);
+            calcValue = module.createBinary(
+              options.isWasm64
+                ? BinaryOp.AddI64
+                : BinaryOp.AddI32,
+              getValue,
+              currentType.toNativeOne(module)
+            );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            op = BinaryOp.AddI64;
-            nativeType = NativeType.I64;
-            nativeOne = module.createI64(1);
+            calcValue = module.createBinary(
+              BinaryOp.AddI64,
+              getValue,
+              module.createI64(1)
+            );
             break;
           }
           case TypeKind.F32: {
-            op = BinaryOp.AddF32;
-            nativeType = NativeType.F32;
-            nativeOne = module.createF32(1);
+            calcValue = module.createBinary(
+              BinaryOp.AddF32,
+              getValue,
+              module.createF32(1)
+            );
             break;
           }
           case TypeKind.F64: {
-            op = BinaryOp.AddF64;
-            nativeType = NativeType.F64;
-            nativeOne = module.createF64(1);
+            calcValue = module.createBinary(
+              BinaryOp.AddF64,
+              getValue,
+              module.createF64(1)
+            );
             break;
           }
           default: {
@@ -6970,38 +6990,48 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.U32:
           case TypeKind.BOOL: {
-            op = BinaryOp.SubI32;
-            nativeType = NativeType.I32;
-            nativeOne = module.createI32(1);
+            calcValue = module.createBinary(
+              BinaryOp.SubI32,
+              getValue,
+              module.createI32(1)
+            );
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE:
           case TypeKind.ISIZE: {
             let options = this.options;
-            op = options.isWasm64
-              ? BinaryOp.SubI64
-              : BinaryOp.SubI32;
-            nativeType = options.nativeSizeType;
-            nativeOne = currentType.toNativeOne(module);
+            calcValue = module.createBinary(
+              options.isWasm64
+                ? BinaryOp.SubI64
+                : BinaryOp.SubI32,
+              getValue,
+              currentType.toNativeOne(module)
+            );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            op = BinaryOp.SubI64;
-            nativeType = NativeType.I64;
-            nativeOne = module.createI64(1);
+            calcValue = module.createBinary(
+              BinaryOp.SubI64,
+              getValue,
+              module.createI64(1)
+            );
             break;
           }
           case TypeKind.F32: {
-            op = BinaryOp.SubF32;
-            nativeType = NativeType.F32;
-            nativeOne = module.createF32(1);
+            calcValue = module.createBinary(
+              BinaryOp.SubF32,
+              getValue,
+              module.createF32(1)
+            );
             break;
           }
           case TypeKind.F64: {
-            op = BinaryOp.SubF64;
-            nativeType = NativeType.F64;
-            nativeOne = module.createF64(1);
+            calcValue = module.createBinary(
+              BinaryOp.SubF64,
+              getValue,
+              module.createF64(1)
+            );
             break;
           }
           default: {
@@ -7018,33 +7048,25 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // simplify if dropped anyway
-    if (contextualType == Type.void) {
+    if (!tempLocal) {
+      this.currentType = Type.void;
       return this.compileAssignmentWithValue(expression.operand,
-        module.createBinary(op,
-          getValue,
-          nativeOne
-        ),
+        calcValue,
         false
       );
     }
 
-    // otherwise use a temp local for the intermediate value (always possibly overflows)
-    var tempLocal = currentFunction.getTempLocal(currentType, false);
+    // otherwise use the temp. local for the intermediate value (always possibly overflows)
     var setValue = this.compileAssignmentWithValue(expression.operand,
-      module.createBinary(op,
-        this.module.createGetLocal(tempLocal.index, nativeType),
-        nativeOne
-      ),
+      calcValue, // also tees getValue to tempLocal
       false
     );
-    this.currentType = assert(tempLocal).type;
-    currentFunction.freeTempLocal(<Local>tempLocal);
-
-    var localIndex = (<Local>tempLocal).index;
+    this.currentType = tempLocal.type;
+    currentFunction.freeTempLocal(tempLocal);
+    var nativeType = tempLocal.type.toNativeType();
     return module.createBlock(null, [
-      module.createSetLocal(localIndex, getValue),
       setValue,
-      module.createGetLocal(localIndex, nativeType)
+      module.createGetLocal(tempLocal.index, nativeType)
     ], nativeType); // result of 'x++' / 'x--' might overflow
   }
 

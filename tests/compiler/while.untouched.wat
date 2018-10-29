@@ -224,12 +224,11 @@
      (if (result i32)
       (tee_local $0
        (block (result i32)
-        (set_local $0
-         (get_global $while/n)
-        )
         (set_global $while/n
          (i32.sub
-          (get_local $0)
+          (tee_local $0
+           (get_global $while/n)
+          )
           (i32.const 1)
          )
         )

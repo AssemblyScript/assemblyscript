@@ -2866,12 +2866,11 @@
             (set_local $8
              (i32.add
               (block (result i32)
-               (set_local $8
-                (get_local $6)
-               )
                (set_local $6
                 (i32.sub
-                 (get_local $8)
+                 (tee_local $8
+                  (get_local $6)
+                 )
                  (i32.const 1)
                 )
                )
