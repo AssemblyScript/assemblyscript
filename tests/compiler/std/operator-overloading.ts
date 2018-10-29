@@ -131,18 +131,12 @@ class Tester {
 
   @operator.postfix('++')
   postInc(): Tester {
-    var value = new Tester(this.x, this.y);
-    this.x++;
-    this.y++;
-    return value;
+    return new Tester(this.x + 1, this.y + 1);
   }
 
   @operator.postfix('--')
   postDec(): Tester {
-    var value = new Tester(this.x, this.y);
-    this.x--;
-    this.y--;
-    return value;
+    return new Tester(this.x - 1, this.y - 1);
   }
 }
 
@@ -291,10 +285,12 @@ assert(incdec.x == 0 && incdec.y == 1);
 
 incdec = new Tester(0, 1);
 
-incdec++;
+var tmp = incdec++;
+assert(tmp.x == 0 && tmp.y == 1);
 assert(incdec.x == 1 && incdec.y == 2);
 
-incdec--;
+tmp = incdec--;
+assert(tmp.x == 1 && tmp.y == 2);
 assert(incdec.x == 0 && incdec.y == 1);
 
 // check inlined static
