@@ -7079,9 +7079,11 @@ export class Compiler extends DiagnosticEmitter {
     this.currentType = tempLocal.type;
     currentFunction.freeTempLocal(tempLocal);
     var nativeType = tempLocal.type.toNativeType();
-    var getLocal   = module.createGetLocal(tempLocal.index, nativeType);
 
-    return module.createBlock(null, [setValue, getLocal], nativeType); // result of 'x++' / 'x--' might overflow
+    return module.createBlock(null, [
+      setValue,
+      module.createGetLocal(tempLocal.index, nativeType)
+    ], nativeType); // result of 'x++' / 'x--' might overflow
   }
 
   compileUnaryPrefixExpression(
