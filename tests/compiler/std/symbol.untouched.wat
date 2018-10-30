@@ -54,12 +54,11 @@
   (local $2 i32)
   (set_local $2
    (block (result i32)
-    (set_local $1
-     (get_global $~lib/symbol/nextId)
-    )
     (set_global $~lib/symbol/nextId
      (i32.add
-      (get_local $1)
+      (tee_local $1
+       (get_global $~lib/symbol/nextId)
+      )
       (i32.const 1)
      )
     )
@@ -1389,15 +1388,14 @@
       )
       (i32.mul
        (block (result i32)
-        (set_local $6
-         (i32.load offset=16
-          (get_local $0)
-         )
-        )
         (i32.store offset=16
          (get_local $0)
          (i32.add
-          (get_local $6)
+          (tee_local $6
+           (i32.load offset=16
+            (get_local $0)
+           )
+          )
           (i32.const 1)
          )
         )
@@ -1866,15 +1864,14 @@
       )
       (i32.mul
        (block (result i32)
-        (set_local $6
-         (i32.load offset=16
-          (get_local $0)
-         )
-        )
         (i32.store offset=16
          (get_local $0)
          (i32.add
-          (get_local $6)
+          (tee_local $6
+           (i32.load offset=16
+            (get_local $0)
+           )
+          )
           (i32.const 1)
          )
         )
@@ -1966,12 +1963,11 @@
   )
   (set_local $2
    (block (result i32)
-    (set_local $1
-     (get_global $~lib/symbol/nextId)
-    )
     (set_global $~lib/symbol/nextId
      (i32.add
-      (get_local $1)
+      (tee_local $1
+       (get_global $~lib/symbol/nextId)
+      )
       (i32.const 1)
      )
     )

@@ -78,12 +78,11 @@
     (nop)
     (br_if $continue|1
      (block (result i32)
-      (set_local $0
-       (get_global $do/n)
-      )
       (set_global $do/n
        (i32.sub
-        (get_local $0)
+        (tee_local $0
+         (get_global $do/n)
+        )
         (i32.const 1)
        )
       )

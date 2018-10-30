@@ -18,12 +18,11 @@
   (block
    (set_global $comma/b
     (block (result i32)
-     (set_local $0
-      (get_global $comma/a)
-     )
      (set_global $comma/a
       (i32.add
-       (get_local $0)
+       (tee_local $0
+        (get_global $comma/a)
+       )
        (i32.const 1)
       )
      )
