@@ -6902,16 +6902,6 @@ export class Compiler extends DiagnosticEmitter {
 
     switch (expression.operator) {
       case Token.PLUS_PLUS: {
-
-        // TODO: check operator overload
-        if (currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return this.module.createUnreachable();
-        }
-
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -6927,7 +6917,24 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
           }
-          case TypeKind.USIZE:
+          case TypeKind.USIZE: {
+            // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.POSTFIX_INC);
+                if (overload) {
+                  calcValue = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
+                  break;
+                }
+              }
+              this.error(
+                DiagnosticCode.Operation_not_supported,
+                expression.range
+              );
+              return module.createUnreachable();
+            }
+          }
           case TypeKind.ISIZE: {
             let options = this.options;
             calcValue = module.createBinary(
@@ -6972,16 +6979,6 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
-
-        // TODO: check operator overload
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return this.module.createUnreachable();
-        }
-
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -6997,7 +6994,24 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
           }
-          case TypeKind.USIZE:
+          case TypeKind.USIZE: {
+            // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.POSTFIX_DEC);
+                if (overload) {
+                  calcValue = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
+                  break;
+                }
+              }
+              this.error(
+                DiagnosticCode.Operation_not_supported,
+                expression.range
+              );
+              return module.createUnreachable();
+            }
+          }
           case TypeKind.ISIZE: {
             let options = this.options;
             calcValue = module.createBinary(
@@ -7061,9 +7075,11 @@ export class Compiler extends DiagnosticEmitter {
       calcValue, // also tees getValue to tempLocal
       false
     );
+
     this.currentType = tempLocal.type;
     currentFunction.freeTempLocal(tempLocal);
     var nativeType = tempLocal.type.toNativeType();
+
     return module.createBlock(null, [
       setValue,
       module.createGetLocal(tempLocal.index, nativeType)

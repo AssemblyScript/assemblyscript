@@ -78,6 +78,7 @@
  (global $std/operator-overloading/excl (mut i32) (i32.const 0))
  (global $std/operator-overloading/bres (mut i32) (i32.const 0))
  (global $std/operator-overloading/incdec (mut i32) (i32.const 0))
+ (global $std/operator-overloading/tmp (mut i32) (i32.const 0))
  (global $std/operator-overloading/ais1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/ais2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/ais (mut i32) (i32.const 0))
@@ -2404,7 +2405,41 @@
   )
   (get_local $0)
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 30 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/Tester#postInc (; 30 ;) (type $ii) (param $0 i32) (result i32)
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.add
+    (i32.load
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+   (i32.add
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
+ )
+ (func $std/operator-overloading/Tester#postDec (; 31 ;) (type $ii) (param $0 i32) (result i32)
+  (call $std/operator-overloading/Tester#constructor
+   (i32.const 0)
+   (i32.sub
+    (i32.load
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+   (i32.sub
+    (i32.load offset=4
+     (get_local $0)
+    )
+    (i32.const 1)
+   )
+  )
+ )
+ (func $std/operator-overloading/TesterInlineStatic#constructor (; 32 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (tee_local $0
    (if (result i32)
@@ -2431,7 +2466,7 @@
    )
   )
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 31 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 33 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (tee_local $0
    (if (result i32)
@@ -2458,7 +2493,7 @@
    )
   )
  )
- (func $start (; 32 ;) (type $v)
+ (func $start (; 34 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (set_global $~lib/allocator/arena/startOffset
@@ -2520,7 +2555,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 137)
+     (i32.const 147)
      (i32.const 0)
     )
     (unreachable)
@@ -2570,7 +2605,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 143)
+     (i32.const 153)
      (i32.const 0)
     )
     (unreachable)
@@ -2620,7 +2655,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 149)
+     (i32.const 159)
      (i32.const 0)
     )
     (unreachable)
@@ -2670,7 +2705,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 155)
+     (i32.const 165)
      (i32.const 0)
     )
     (unreachable)
@@ -2720,7 +2755,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 161)
+     (i32.const 171)
      (i32.const 0)
     )
     (unreachable)
@@ -2770,7 +2805,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 167)
+     (i32.const 177)
      (i32.const 0)
     )
     (unreachable)
@@ -2820,7 +2855,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 173)
+     (i32.const 183)
      (i32.const 0)
     )
     (unreachable)
@@ -2870,7 +2905,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 179)
+     (i32.const 189)
      (i32.const 0)
     )
     (unreachable)
@@ -2920,7 +2955,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 185)
+     (i32.const 195)
      (i32.const 0)
     )
     (unreachable)
@@ -2957,7 +2992,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 191)
+     (i32.const 201)
      (i32.const 0)
     )
     (unreachable)
@@ -2994,7 +3029,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 197)
+     (i32.const 207)
      (i32.const 0)
     )
     (unreachable)
@@ -3017,7 +3052,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 201)
+     (i32.const 211)
      (i32.const 0)
     )
     (unreachable)
@@ -3040,7 +3075,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 205)
+     (i32.const 215)
      (i32.const 0)
     )
     (unreachable)
@@ -3077,7 +3112,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 211)
+     (i32.const 221)
      (i32.const 0)
     )
     (unreachable)
@@ -3114,7 +3149,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 217)
+     (i32.const 227)
      (i32.const 0)
     )
     (unreachable)
@@ -3151,7 +3186,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 223)
+     (i32.const 233)
      (i32.const 0)
     )
     (unreachable)
@@ -3188,7 +3223,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 229)
+     (i32.const 239)
      (i32.const 0)
     )
     (unreachable)
@@ -3231,7 +3266,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 234)
+     (i32.const 244)
      (i32.const 0)
     )
     (unreachable)
@@ -3274,7 +3309,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 239)
+     (i32.const 249)
      (i32.const 0)
     )
     (unreachable)
@@ -3317,7 +3352,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 244)
+     (i32.const 254)
      (i32.const 0)
     )
     (unreachable)
@@ -3363,7 +3398,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 249)
+     (i32.const 259)
      (i32.const 0)
     )
     (unreachable)
@@ -3415,7 +3450,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 254)
+     (i32.const 264)
      (i32.const 0)
     )
     (unreachable)
@@ -3467,7 +3502,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 259)
+     (i32.const 269)
      (i32.const 0)
     )
     (unreachable)
@@ -3510,7 +3545,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 264)
+     (i32.const 274)
      (i32.const 0)
     )
     (unreachable)
@@ -3527,7 +3562,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 265)
+     (i32.const 275)
      (i32.const 0)
     )
     (unreachable)
@@ -3569,7 +3604,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 271)
+     (i32.const 281)
      (i32.const 0)
     )
     (unreachable)
@@ -3604,7 +3639,158 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 274)
+     (i32.const 284)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/incdec
+   (call $std/operator-overloading/Tester#constructor
+    (i32.const 0)
+    (i32.const 0)
+    (i32.const 1)
+   )
+  )
+  (set_global $std/operator-overloading/tmp
+   (block (result i32)
+    (set_global $std/operator-overloading/incdec
+     (call $std/operator-overloading/Tester#postInc
+      (tee_local $0
+       (get_global $std/operator-overloading/incdec)
+      )
+     )
+    )
+    (get_local $0)
+   )
+  )
+  (if
+   (i32.eqz
+    (if (result i32)
+     (tee_local $0
+      (i32.eq
+       (i32.load
+        (get_global $std/operator-overloading/tmp)
+       )
+       (i32.const 0)
+      )
+     )
+     (i32.eq
+      (i32.load offset=4
+       (get_global $std/operator-overloading/tmp)
+      )
+      (i32.const 1)
+     )
+     (get_local $0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 289)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (if (result i32)
+     (tee_local $0
+      (i32.eq
+       (i32.load
+        (get_global $std/operator-overloading/incdec)
+       )
+       (i32.const 1)
+      )
+     )
+     (i32.eq
+      (i32.load offset=4
+       (get_global $std/operator-overloading/incdec)
+      )
+      (i32.const 2)
+     )
+     (get_local $0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 290)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (set_global $std/operator-overloading/tmp
+   (block (result i32)
+    (set_global $std/operator-overloading/incdec
+     (call $std/operator-overloading/Tester#postDec
+      (tee_local $0
+       (get_global $std/operator-overloading/incdec)
+      )
+     )
+    )
+    (get_local $0)
+   )
+  )
+  (if
+   (i32.eqz
+    (if (result i32)
+     (tee_local $0
+      (i32.eq
+       (i32.load
+        (get_global $std/operator-overloading/tmp)
+       )
+       (i32.const 1)
+      )
+     )
+     (i32.eq
+      (i32.load offset=4
+       (get_global $std/operator-overloading/tmp)
+      )
+      (i32.const 2)
+     )
+     (get_local $0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 293)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (if (result i32)
+     (tee_local $0
+      (i32.eq
+       (i32.load
+        (get_global $std/operator-overloading/incdec)
+       )
+       (i32.const 0)
+      )
+     )
+     (i32.eq
+      (i32.load offset=4
+       (get_global $std/operator-overloading/incdec)
+      )
+      (i32.const 1)
+     )
+     (get_local $0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 294)
      (i32.const 0)
     )
     (unreachable)
@@ -3615,6 +3801,28 @@
     (i32.const 0)
     (i32.const 1)
     (i32.const 2)
+   )
+  )
+  (set_global $std/operator-overloading/ais1
+   (block $std/operator-overloading/TesterInlineStatic.postInc|inlined.0 (result i32)
+    (set_local $0
+     (get_global $std/operator-overloading/ais1)
+    )
+    (call $std/operator-overloading/TesterInlineStatic#constructor
+     (i32.const 0)
+     (i32.add
+      (i32.load
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+     (i32.add
+      (i32.load offset=4
+       (get_local $0)
+      )
+      (i32.const 1)
+     )
+    )
    )
   )
   (set_global $std/operator-overloading/ais2
@@ -3661,14 +3869,14 @@
        (i32.load
         (get_global $std/operator-overloading/ais)
        )
-       (i32.const 3)
+       (i32.const 4)
       )
      )
      (i32.eq
       (i32.load offset=4
        (get_global $std/operator-overloading/ais)
       )
-      (i32.const 5)
+      (i32.const 6)
      )
      (get_local $1)
     )
@@ -3677,7 +3885,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 288)
+     (i32.const 314)
      (i32.const 0)
     )
     (unreachable)
@@ -3688,6 +3896,28 @@
     (i32.const 0)
     (i32.const 1)
     (i32.const 2)
+   )
+  )
+  (set_global $std/operator-overloading/aii1
+   (block $std/operator-overloading/TesterInlineInstance#postInc|inlined.0 (result i32)
+    (set_local $1
+     (get_global $std/operator-overloading/aii1)
+    )
+    (call $std/operator-overloading/TesterInlineInstance#constructor
+     (i32.const 0)
+     (i32.add
+      (i32.load
+       (get_local $1)
+      )
+      (i32.const 1)
+     )
+     (i32.add
+      (i32.load offset=4
+       (get_local $1)
+      )
+      (i32.const 1)
+     )
+    )
    )
   )
   (set_global $std/operator-overloading/aii2
@@ -3734,14 +3964,14 @@
        (i32.load
         (get_global $std/operator-overloading/aii)
        )
-       (i32.const 3)
+       (i32.const 4)
       )
      )
      (i32.eq
       (i32.load offset=4
        (get_global $std/operator-overloading/aii)
       )
-      (i32.const 5)
+      (i32.const 6)
      )
      (get_local $0)
     )
@@ -3750,13 +3980,13 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 302)
+     (i32.const 334)
      (i32.const 0)
     )
     (unreachable)
    )
   )
  )
- (func $null (; 33 ;) (type $v)
+ (func $null (; 35 ;) (type $v)
  )
 )
