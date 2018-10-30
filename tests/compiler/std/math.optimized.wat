@@ -5011,6 +5011,7 @@
   (local $6 i32)
   (local $7 i64)
   (local $8 f64)
+  (local $9 f64)
   (set_local $6
    (i32.wrap/i64
     (i64.shr_u
@@ -5143,38 +5144,51 @@
    )
   )
   (set_local $1
-   (f64.add
-    (f64.const 1)
-    (f64.mul
-     (tee_local $2
-      (f64.mul
-       (get_local $0)
-       (tee_local $8
-        (f64.mul
-         (f64.const 0.5)
-         (get_local $0)
-        )
+   (f64.mul
+    (tee_local $2
+     (f64.mul
+      (get_local $0)
+      (tee_local $8
+       (f64.mul
+        (f64.const 0.5)
+        (get_local $0)
        )
       )
      )
-     (f64.add
-      (f64.const -0.03333333333333313)
-      (f64.mul
-       (get_local $2)
+    )
+    (get_local $2)
+   )
+  )
+  (set_local $1
+   (f64.sub
+    (f64.const 3)
+    (f64.mul
+     (tee_local $9
+      (f64.add
        (f64.add
-        (f64.const 1.5873015872548146e-03)
+        (f64.const 1)
         (f64.mul
          (get_local $2)
+         (f64.const -0.03333333333333313)
+        )
+       )
+       (f64.mul
+        (get_local $1)
+        (f64.add
          (f64.add
-          (f64.const -7.93650757867488e-05)
+          (f64.const 1.5873015872548146e-03)
           (f64.mul
            (get_local $2)
-           (f64.add
-            (f64.const 4.008217827329362e-06)
-            (f64.mul
-             (get_local $2)
-             (f64.const -2.0109921818362437e-07)
-            )
+           (f64.const -7.93650757867488e-05)
+          )
+         )
+         (f64.mul
+          (get_local $1)
+          (f64.add
+           (f64.const 4.008217827329362e-06)
+           (f64.mul
+            (get_local $2)
+            (f64.const -2.0109921818362437e-07)
            )
           )
          )
@@ -5182,6 +5196,7 @@
        )
       )
      )
+     (get_local $8)
     )
    )
   )
@@ -5190,16 +5205,8 @@
     (get_local $2)
     (f64.div
      (f64.sub
+      (get_local $9)
       (get_local $1)
-      (tee_local $1
-       (f64.sub
-        (f64.const 3)
-        (f64.mul
-         (get_local $1)
-         (get_local $8)
-        )
-       )
-      )
      )
      (f64.sub
       (f64.const 6)
@@ -5410,11 +5417,13 @@
  )
  (func $~lib/math/NativeMath.exp (; 89 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 f64)
+  (local $2 f64)
+  (local $3 i32)
   (local $4 f64)
-  (local $5 i32)
-  (set_local $5
+  (local $5 f64)
+  (local $6 f64)
+  (local $7 i32)
+  (set_local $7
    (i32.shr_u
     (tee_local $1
      (i32.wrap/i64
@@ -5478,13 +5487,13 @@
    )
    (set_local $0
     (f64.sub
-     (tee_local $4
+     (tee_local $5
       (f64.sub
        (get_local $0)
        (f64.mul
         (tee_local $0
          (f64.convert_s/i32
-          (tee_local $2
+          (tee_local $3
            (if (result i32)
             (i32.ge_u
              (get_local $1)
@@ -5505,7 +5514,7 @@
             (i32.sub
              (i32.const 1)
              (i32.shl
-              (get_local $5)
+              (get_local $7)
               (i32.const 1)
              )
             )
@@ -5517,7 +5526,7 @@
        )
       )
      )
-     (tee_local $3
+     (tee_local $4
       (f64.mul
        (get_local $0)
        (f64.const 1.9082149292705877e-10)
@@ -5525,7 +5534,7 @@
      )
     )
    )
-   (set_local $4
+   (set_local $5
     (if (result f64)
      (i32.gt_u
       (get_local $1)
@@ -5541,6 +5550,17 @@
     )
    )
   )
+  (set_local $6
+   (f64.mul
+    (tee_local $2
+     (f64.mul
+      (get_local $0)
+      (get_local $0)
+     )
+    )
+    (get_local $2)
+   )
+  )
   (set_local $0
    (f64.add
     (f64.const 1)
@@ -5552,33 +5572,28 @@
         (tee_local $0
          (f64.sub
           (get_local $0)
-          (f64.mul
-           (tee_local $0
-            (f64.mul
-             (get_local $0)
-             (get_local $0)
-            )
-           )
-           (f64.add
+          (f64.add
+           (f64.mul
+            (get_local $2)
             (f64.const 0.16666666666666602)
-            (f64.mul
-             (get_local $0)
+           )
+           (f64.mul
+            (get_local $6)
+            (f64.add
              (f64.add
               (f64.const -2.7777777777015593e-03)
               (f64.mul
-               (get_local $0)
-               (f64.add
-                (f64.const 6.613756321437934e-05)
-                (f64.mul
-                 (get_local $0)
-                 (f64.add
-                  (f64.const -1.6533902205465252e-06)
-                  (f64.mul
-                   (get_local $0)
-                   (f64.const 4.1381367970572385e-08)
-                  )
-                 )
-                )
+               (get_local $2)
+               (f64.const 6.613756321437934e-05)
+              )
+             )
+             (f64.mul
+              (get_local $6)
+              (f64.add
+               (f64.const -1.6533902205465252e-06)
+               (f64.mul
+                (get_local $2)
+                (f64.const 4.1381367970572385e-08)
                )
               )
              )
@@ -5593,15 +5608,15 @@
         (get_local $0)
        )
       )
-      (get_local $3)
+      (get_local $4)
      )
-     (get_local $4)
+     (get_local $5)
     )
    )
   )
   (if
    (i32.eqz
-    (get_local $2)
+    (get_local $3)
    )
    (return
     (get_local $0)
@@ -5609,7 +5624,7 @@
   )
   (call $~lib/math/NativeMath.scalbn
    (get_local $0)
-   (get_local $2)
+   (get_local $3)
   )
  )
  (func $~lib/math/NativeMath.cosh (; 90 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
@@ -11627,7 +11642,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 955)
+     (i32.const 959)
      (i32.const 4)
     )
     (unreachable)
@@ -11673,7 +11688,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 964)
+     (i32.const 968)
      (i32.const 24)
     )
     (unreachable)
@@ -11742,7 +11757,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 40)
-     (i32.const 2018)
+     (i32.const 2022)
      (i32.const 24)
     )
     (unreachable)

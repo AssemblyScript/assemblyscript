@@ -423,7 +423,9 @@ export namespace NativeMath {
       hi = x;
     } else return 1.0 + x;
     var xx = x * x;
-    var c = x - xx * (P1 + xx * (P2 + xx * (P3 + xx * (P4 + xx * P5))));
+    // var c = x - xx * (P1 + xx * (P2 + xx * (P3 + xx * (P4 + xx * P5))));
+    var xx2 = xx * xx;
+    var c = x - (xx * P1 + xx2 * ((P2 + xx * P3) + xx2 * (P4 + xx * P5)));
     var y = 1.0 + (x * c / (2 - c) - lo + hi);
     if (k == 0) return y;
     return scalbn(y, k);
@@ -464,7 +466,9 @@ export namespace NativeMath {
     } else if (hx < 0x3C900000) return x;
     var hfx = 0.5 * x;
     var hxs = x * hfx;
-    var r1 = 1.0 + hxs * (Q1 + hxs * (Q2 + hxs * (Q3 + hxs * (Q4 + hxs * Q5))));
+    // var r1 = 1.0 + hxs * (Q1 + hxs * (Q2 + hxs * (Q3 + hxs * (Q4 + hxs * Q5))));
+    var hxs2 = hxs * hxs;
+    var r1 = (1.0 + hxs * Q1) + hxs2 * ((Q2 + hxs * Q3) + hxs2 * (Q4 + hxs * Q5));
     t = 3.0 - r1 * hfx;
     var e = hxs * ((r1 - t) / (6.0 - x * t));
     if (k == 0) return x - (x * e - hxs);
