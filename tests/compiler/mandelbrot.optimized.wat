@@ -520,8 +520,9 @@
        (tee_local $6
         (f64.mul
          (call $~lib/math/NativeMath.log
-          (call $~lib/math/NativeMath.log
-           (f64.sqrt
+          (f64.mul
+           (f64.const 0.5)
+           (call $~lib/math/NativeMath.log
             (f64.add
              (f64.mul
               (get_local $4)

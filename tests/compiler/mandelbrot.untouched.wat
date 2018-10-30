@@ -582,22 +582,18 @@
      (set_local $18
       (f64.mul
        (call $~lib/math/NativeMath.log
-        (call $~lib/math/NativeMath.log
-         (block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
-          (set_local $18
-           (f64.add
-            (f64.mul
-             (get_local $13)
-             (get_local $13)
-            )
-            (f64.mul
-             (get_local $14)
-             (get_local $14)
-            )
+        (f64.mul
+         (f64.const 0.5)
+         (call $~lib/math/NativeMath.log
+          (f64.add
+           (f64.mul
+            (get_local $13)
+            (get_local $13)
            )
-          )
-          (f64.sqrt
-           (get_local $18)
+           (f64.mul
+            (get_local $14)
+            (get_local $14)
+           )
           )
          )
         )
