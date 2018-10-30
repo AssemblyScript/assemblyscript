@@ -1103,19 +1103,17 @@ export namespace NativeMath {
       uy &= <u64>-1 >> 12;
       uy |= 1 << 52;
     }
-    var i: u64;
-    for (; ex > ey; ex--) {
-      i = ux - uy;
-      if (!(i >> 63)) {
-        if (!i) return 0 * x;
-        ux = i;
+    while (ex > ey) {
+      if (ux >= uy) {
+        if (ux == uy) return 0 * x;
+        ux -= uy;
       }
       ux <<= 1;
+      --ex;
     }
-    i = ux - uy;
-    if (!(i >> 63)) {
-      if (!i) return 0 * x;
-      ux = i;
+    if (ux >= uy) {
+      if (ux == uy) return 0 * x;
+      ux -= uy;
     }
     // for (; !(ux >> 52); ux <<= 1) --ex;
     var shift = builtin_clz<i64>(ux << 11);
@@ -1160,19 +1158,17 @@ export namespace NativeMath {
         if (ex + 1 == ey) break; // goto end
         return x;
       }
-      let i: u64;
-      for (; ex > ey; --ex) {
-        i = uxi - uy;
-        if (i >> 63 == 0) {
-          uxi = i;
+      while (ex > ey) {
+        if (uxi >= uy) {
+          uxi -= uy;
           ++q;
         }
         uxi <<= 1;
         q <<= 1;
+        --ex;
       }
-      i = uxi - uy;
-      if (i >> 63 == 0) {
-        uxi = i;
+      if (uxi >= uy) {
+        uxi -= uy;
         ++q;
       }
       if (uxi == 0) ex = -60;
@@ -2156,19 +2152,17 @@ export namespace NativeMathf {
       uy &= <u32>-1 >> 9;
       uy |= 1 << 23;
     }
-    var i: u32;
-    for (; ex > ey; --ex) {
-      i = ux - uy;
-      if (!(i >> 31)) {
-        if (!i) return 0 * x;
-        ux = i;
+    while (ex > ey) {
+      if (ux >= uy) {
+        if (ux == uy) return 0 * x;
+        ux -= uy;
       }
       ux <<= 1;
+      --ex;
     }
-    i = ux - uy;
-    if (!(i >> 31)) {
-      if (!i) return 0 * x;
-      ux = i;
+    if (ux >= uy) {
+      if (ux == uy) return 0 * x;
+      ux -= uy;
     }
     // for (; !(ux >> 23); ux <<= 1) --ex;
     var shift = <i32>builtin_clz<u32>(ux << 8);
@@ -2213,19 +2207,17 @@ export namespace NativeMathf {
         if (ex + 1 == ey) break; // goto end
         return x;
       }
-      let i: u32;
-      for (; ex > ey; --ex) {
-        i = uxi - uy;
-        if (i >> 31 == 0) {
-          uxi = i;
+      while (ex > ey) {
+        if (uxi >= uy) {
+          uxi -= uy;
           ++q;
         }
         uxi <<= 1;
         q <<= 1;
+        --ex;
       }
-      i = uxi - uy;
-      if (i >> 31 == 0) {
-        uxi = i;
+      if (uxi >= uy) {
+        uxi -= uy;
         ++q;
       }
       if (uxi == 0) ex = -30;
