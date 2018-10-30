@@ -6,12 +6,11 @@
  (table 1 anyfunc)
  (elem (i32.const 0) $null)
  (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
- (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
  (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "computeLine" (func $assembly/index/computeLine))
- (func $assembly/index/computeLine (; 2 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $assembly/index/computeLine (; 1 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
@@ -308,17 +307,18 @@
           (f64.mul
            ;;@ assembly/index.ts:40:20
            (call $~lib/bindings/Math/log
-            ;;@ assembly/index.ts:40:29
-            (call $~lib/bindings/Math/log
-             ;;@ assembly/index.ts:40:38
-             (call $~lib/bindings/Math/sqrt
-              ;;@ assembly/index.ts:40:43
+            ;;@ assembly/index.ts:40:24
+            (f64.mul
+             (f64.const 0.5)
+             ;;@ assembly/index.ts:40:35
+             (call $~lib/bindings/Math/log
+              ;;@ assembly/index.ts:40:39
               (f64.add
                (f64.mul
                 (get_local $4)
                 (get_local $4)
                )
-               ;;@ assembly/index.ts:40:53
+               ;;@ assembly/index.ts:40:49
                (f64.mul
                 (get_local $5)
                 (get_local $5)
@@ -327,11 +327,11 @@
              )
             )
            )
-           ;;@ assembly/index.ts:40:66
+           ;;@ assembly/index.ts:40:61
            (f64.div
-            ;;@ assembly/index.ts:40:67
+            ;;@ assembly/index.ts:40:62
             (f64.const 1)
-            ;;@ assembly/index.ts:40:73
+            ;;@ assembly/index.ts:40:68
             (get_global $~lib/bindings/Math/LN2)
            )
           )
@@ -383,7 +383,7 @@
    )
   )
  )
- (func $null (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 2 ;) (; has Stack IR ;) (type $v)
   (nop)
  )
 )

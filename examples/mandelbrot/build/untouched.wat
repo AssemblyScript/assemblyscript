@@ -8,14 +8,13 @@
  (table 1 anyfunc)
  (elem (i32.const 0) $null)
  (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
- (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
  (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
  (global $assembly/index/NUM_COLORS i32 (i32.const 2048))
  (global $HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "computeLine" (func $assembly/index/computeLine))
- (func $~lib/builtins/isFinite<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
   ;;@ ~lib/builtins.ts:16:78
   (f64.eq
    ;;@ ~lib/builtins.ts:16:61
@@ -28,7 +27,7 @@
    (f64.const 0)
   )
  )
- (func $assembly/index/clamp<f64> (; 3 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
+ (func $assembly/index/clamp<f64> (; 2 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
   ;;@ assembly/index.ts:51:43
   (f64.min
    ;;@ assembly/index.ts:51:13
@@ -42,7 +41,7 @@
    (get_local $2)
   )
  )
- (func $assembly/index/computeLine (; 4 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $assembly/index/computeLine (; 3 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
@@ -387,32 +386,33 @@
       (f64.mul
        ;;@ assembly/index.ts:40:20
        (call $~lib/bindings/Math/log
-        ;;@ assembly/index.ts:40:29
-        (call $~lib/bindings/Math/log
-         ;;@ assembly/index.ts:40:38
-         (call $~lib/bindings/Math/sqrt
-          ;;@ assembly/index.ts:40:43
+        ;;@ assembly/index.ts:40:24
+        (f64.mul
+         (f64.const 0.5)
+         ;;@ assembly/index.ts:40:35
+         (call $~lib/bindings/Math/log
+          ;;@ assembly/index.ts:40:39
           (f64.add
            (f64.mul
             (get_local $13)
-            ;;@ assembly/index.ts:40:48
+            ;;@ assembly/index.ts:40:44
             (get_local $13)
            )
-           ;;@ assembly/index.ts:40:53
+           ;;@ assembly/index.ts:40:49
            (f64.mul
             (get_local $14)
-            ;;@ assembly/index.ts:40:58
+            ;;@ assembly/index.ts:40:54
             (get_local $14)
            )
           )
          )
         )
        )
-       ;;@ assembly/index.ts:40:66
+       ;;@ assembly/index.ts:40:61
        (f64.div
-        ;;@ assembly/index.ts:40:67
+        ;;@ assembly/index.ts:40:62
         (f64.const 1)
-        ;;@ assembly/index.ts:40:73
+        ;;@ assembly/index.ts:40:68
         (get_global $~lib/bindings/Math/LN2)
        )
       )
@@ -500,6 +500,6 @@
    )
   )
  )
- (func $null (; 5 ;) (type $v)
+ (func $null (; 4 ;) (type $v)
  )
 )
