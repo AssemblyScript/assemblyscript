@@ -1,7 +1,7 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
- (memory $0 0)
+ (memory $0 0 65535)
  (table 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $export/a i32 (i32.const 1))
@@ -22,41 +22,34 @@
  (export "rerenamed_sub" (func $export/mul))
  (export "renamed_ns.two" (func $export/ns.two))
  (start $start)
- (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.add
-   (get_local $0)
-   (get_local $1)
-  )
+ (func $export/add (; 0 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  get_local $0
+  get_local $1
+  i32.add
  )
- (func $export/sub (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.sub
-   (get_local $0)
-   (get_local $1)
-  )
+ (func $export/sub (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  get_local $0
+  get_local $1
+  i32.sub
  )
- (func $export/mul (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.mul
-   (get_local $0)
-   (get_local $1)
-  )
+ (func $export/mul (; 2 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  get_local $0
+  get_local $1
+  i32.mul
  )
- (func $export/ns.two (; 3 ;) (type $v)
-  (nop)
+ (func $export/ns.two (; 3 ;) (; has Stack IR ;) (type $v)
+  nop
  )
- (func $start (; 4 ;) (type $v)
-  (drop
-   (i32.add
-    (call $export/add
-     (i32.const 1)
-     (i32.const 2)
-    )
-    (call $export/mul
-     (i32.const 3)
-     (i32.const 4)
-    )
-   )
-  )
+ (func $start (; 4 ;) (; has Stack IR ;) (type $v)
+  i32.const 1
+  i32.const 2
+  call $export/add
+  i32.const 3
+  i32.const 4
+  call $export/mul
+  i32.add
+  drop
  )
- (func $null (; 5 ;) (type $v)
+ (func $null (; 5 ;) (; has Stack IR ;) (type $v)
  )
 )

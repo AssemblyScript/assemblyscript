@@ -1,7 +1,7 @@
 (module
  (type $v (func))
  (type $FUNCSIG$i (func (result i32)))
- (memory $0 0)
+ (memory $0 0 65535)
  (table 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $export/a i32 (i32.const 1))
@@ -14,20 +14,18 @@
  (export "renamed_renamed_b" (global $export/b))
  (start $start)
  (func $export/add (; 0 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
-  (i32.const 3)
+  i32.const 3
  )
  (func $export/mul (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
-  (i32.const 12)
+  i32.const 12
  )
  (func $start (; 2 ;) (; has Stack IR ;) (type $v)
-  (drop
-   (call $export/add)
-  )
-  (drop
-   (call $export/mul)
-  )
+  call $export/add
+  drop
+  call $export/mul
+  drop
  )
  (func $null (; 3 ;) (; has Stack IR ;) (type $v)
-  (nop)
+  nop
  )
 )

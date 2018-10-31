@@ -1,7 +1,7 @@
 (module
  (type $iiFFFFFv (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $v (func))
- (memory $0 1)
+ (memory $0 1 65535)
  (data (i32.const 8) "\0d\00\00\00z\00e\00r\00o\00_\00i\00m\00p\00l\00i\00c\00i\00t\00")
  (data (i32.const 40) "\0d\00\00\00z\00e\00r\00o\00_\00e\00x\00p\00l\00i\00c\00i\00t\00")
  (data (i32.const 72) "\07\00\00\00o\00n\00e\00_\00i\00n\00t\00")
@@ -18,93 +18,81 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/trace/main))
- (func $std/trace/main (; 1 ;) (type $v)
-  (if
-   (i32.eqz
-    (get_global $~started)
-   )
-   (block
-    (call $start)
-    (set_global $~started
-     (i32.const 1)
-    )
-   )
-  )
+ (func $std/trace/main (; 1 ;) (; has Stack IR ;) (type $v)
+  get_global $~started
+  i32.eqz
+  if
+   call $start
+   i32.const 1
+   set_global $~started
+  end
  )
- (func $start (; 2 ;) (type $v)
-  (call $~lib/env/trace
-   (i32.const 8)
-   (i32.const 0)
-   (f64.const 0)
-   (f64.const 0)
-   (f64.const 0)
-   (f64.const 0)
-   (f64.const 0)
-  )
-  (call $~lib/env/trace
-   (i32.const 40)
-   (i32.const 0)
-   (f64.const 0)
-   (f64.const 0)
-   (f64.const 0)
-   (f64.const 0)
-   (f64.const 0)
-  )
-  (call $~lib/env/trace
-   (i32.const 72)
-   (i32.const 1)
-   (f64.const 1)
-   (f64.const 0)
-   (f64.const 0)
-   (f64.const 0)
-   (f64.const 0)
-  )
-  (call $~lib/env/trace
-   (i32.const 96)
-   (i32.const 2)
-   (f64.const 1)
-   (f64.const 2)
-   (f64.const 0)
-   (f64.const 0)
-   (f64.const 0)
-  )
-  (call $~lib/env/trace
-   (i32.const 120)
-   (i32.const 3)
-   (f64.const 1)
-   (f64.const 2)
-   (f64.const 3)
-   (f64.const 0)
-   (f64.const 0)
-  )
-  (call $~lib/env/trace
-   (i32.const 144)
-   (i32.const 4)
-   (f64.const 1)
-   (f64.const 2)
-   (f64.const 3)
-   (f64.const 4)
-   (f64.const 0)
-  )
-  (call $~lib/env/trace
-   (i32.const 168)
-   (i32.const 5)
-   (f64.const 1)
-   (f64.const 2)
-   (f64.const 3)
-   (f64.const 4)
-   (f64.const 5)
-  )
-  (call $~lib/env/trace
-   (i32.const 192)
-   (i32.const 5)
-   (f64.const 1.1)
-   (f64.const 2.2)
-   (f64.const 3.3)
-   (f64.const 4.4)
-   (f64.const 5.5)
-  )
+ (func $start (; 2 ;) (; has Stack IR ;) (type $v)
+  i32.const 8
+  i32.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  call $~lib/env/trace
+  i32.const 40
+  i32.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  call $~lib/env/trace
+  i32.const 72
+  i32.const 1
+  f64.const 1
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  call $~lib/env/trace
+  i32.const 96
+  i32.const 2
+  f64.const 1
+  f64.const 2
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  call $~lib/env/trace
+  i32.const 120
+  i32.const 3
+  f64.const 1
+  f64.const 2
+  f64.const 3
+  f64.const 0
+  f64.const 0
+  call $~lib/env/trace
+  i32.const 144
+  i32.const 4
+  f64.const 1
+  f64.const 2
+  f64.const 3
+  f64.const 4
+  f64.const 0
+  call $~lib/env/trace
+  i32.const 168
+  i32.const 5
+  f64.const 1
+  f64.const 2
+  f64.const 3
+  f64.const 4
+  f64.const 5
+  call $~lib/env/trace
+  i32.const 192
+  i32.const 5
+  f64.const 1.1
+  f64.const 2.2
+  f64.const 3.3
+  f64.const 4.4
+  f64.const 5.5
+  call $~lib/env/trace
  )
- (func $null (; 3 ;) (type $v)
+ (func $null (; 3 ;) (; has Stack IR ;) (type $v)
  )
 )
