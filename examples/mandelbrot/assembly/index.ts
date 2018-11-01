@@ -20,9 +20,8 @@ export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
     let ix = 0.0, iy = 0.0, ixSq: f64, iySq: f64;
     let iteration: u32 = 0;
     while ((ixSq = ix * ix) + (iySq = iy * iy) <= 4.0) {
-      let ixNew = ixSq - iySq + real;
-      iy = 2.0 * ix * iy + imaginary;
-      ix = ixNew;
+      iy = 2 * ix * iy + imaginary;
+      ix = ixSq - iySq + real;
       if (iteration >= limit) break;
       ++iteration;
     }
