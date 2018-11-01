@@ -1181,6 +1181,85 @@ assert(test_exp(-1.0397214889526365, 0.353553136702178472, 0.252727240324020386,
 assert(test_exp(1.03972101211547852, 2.82842780717661224, -0.418413937091827393, INEXACT));
 assert(test_exp(1.03972148895263672, 2.82842915587641164, -0.226183772087097168, INEXACT));
 
+// some vectors from crlibm
+assert(test_exp( f64.MIN_VALUE, 1.0, 0.0, INEXACT)); // smallest denorm positive
+assert(test_exp(-f64.MIN_VALUE, 1.0, 0.0, INEXACT)); // smallest denorm negative
+
+assert(test_exp(
+  reinterpret<f64>(0x40862E42FEFA39EF),
+  reinterpret<f64>(0x7FEFFFFFFFFFFF2A),
+  reinterpret<f64>(0xBFBB0E2640000000),
+  INEXACT
+));
+
+assert(test_exp(reinterpret<f64>(0x40862E42FEFA39F0), Infinity, 0.0, INEXACT | OVERFLOW));
+assert(test_exp(
+  reinterpret<f64>(0xC0874910D52D3051),
+  f64.MIN_VALUE,
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT | UNDERFLOW
+));
+
+assert(test_exp(
+  reinterpret<f64>(0xC0874910D52D3052),
+  0.0,
+  reinterpret<f64>(0xBFE0000000000000),
+  INEXACT | UNDERFLOW
+));
+
+assert(test_exp(
+  reinterpret<f64>(0xC086232BDD7ABCD2),
+  reinterpret<f64>(0x001000000000007C),
+  reinterpret<f64>(0x3FD0C013E0000000),
+  INEXACT
+));
+
+assert(test_exp(
+  reinterpret<f64>(0xC086232BDD7ABCD3),
+  reinterpret<f64>(0x000FFFFFFFFFFE7C),
+  reinterpret<f64>(0x000FFFFFFFFFFE7C),
+  INEXACT | UNDERFLOW
+));
+
+assert(test_exp(
+  reinterpret<f64>(0x3FE005AE04256BAB),
+  reinterpret<f64>(0x3FFA65D89ABF3D1F),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 5.006933289508784801213892023952e-01
+
+assert(test_exp(
+  reinterpret<f64>(0x3FE41C9E095CD545),
+  reinterpret<f64>(0x3FFDFF1D425DE879),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 6.284933264602520219810344315192e-01
+
+assert(test_exp(
+  reinterpret<f64>(0x3FEACCFBE46B4EF0),
+  reinterpret<f64>(0x40027C2E4BC1EE70),
+  reinterpret<f64>(0xBFE0000000000000),
+  INEXACT
+)); // 8.375224553405740124389922129922e-01
+assert(test_exp(
+  reinterpret<f64>(0x3FEB3738E335EA89),
+  reinterpret<f64>(0x4002B9F331610FB0),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 8.504909932810998940411195690103e-01
+assert(test_exp(
+  reinterpret<f64>(0x3FFA083788425AB6),
+  reinterpret<f64>(0x40145ABE6A4C4281),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 1.627006084692465659458093796275e+00
+assert(test_exp(
+  reinterpret<f64>(0x3FFACA7AE8DA5A7B),
+  reinterpret<f64>(0x401557D4ACD7E557),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 1.674433621961411544631914694037e+00
+
 // Mathf.exp ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_expf(value: f32, expected: f32, error: f32, flags: i32): bool {
