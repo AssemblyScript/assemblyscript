@@ -1260,6 +1260,62 @@ assert(test_exp(
   INEXACT
 )); // 1.674433621961411544631914694037e+00
 
+assert(test_exp(
+  reinterpret<f64>(0x401AA1B465630FA4),
+  reinterpret<f64>(0x4088576653F47E5E),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 6.657914718791207775439033866860e+00
+
+assert(test_exp(
+  reinterpret<f64>(0x40260BB5FB993B99),
+  reinterpret<f64>(0x40EDE96D34FCCCFE),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 1.102287279363172167734319373267e+01
+
+assert(test_exp(
+  reinterpret<f64>(0x4026D2883E37B4D7),
+  reinterpret<f64>(0x40F60D75C9585CA5),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 1.141119570188531717747082439018e+01
+
+assert(test_exp(
+  reinterpret<f64>(0x402796C771AF1E4B),
+  reinterpret<f64>(0x41002D419F8E15F2),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 1.179449038756060552657345397165e+01
+
+assert(test_exp(
+  reinterpret<f64>(0x4079CD6B6D99965B),
+  reinterpret<f64>(0x65284208270E2E4C),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 4.128387275695328639812942128628e+02
+
+assert(test_exp(
+  reinterpret<f64>(0x407FEE02D3D0EC9A),
+  reinterpret<f64>(0x6E006CCF59E5ED14),
+  reinterpret<f64>(0xBFE0000000000000),
+  INEXACT
+)); // 5.108756902848341496792272664607e+02
+
+assert(test_exp(
+  reinterpret<f64>(0xBD1DF00000000070),
+  reinterpret<f64>(0x3FEFFFFFFFFFFF11),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // -2.658984143977285255283151746406e-14
+
+assert(test_exp(
+  reinterpret<f64>(0xBD1E900000000075),
+  reinterpret<f64>(0x3FEFFFFFFFFFFF0B),
+  reinterpret<f64>(0xBFE0000000000000),
+  INEXACT
+)); // -2.714495295208544660026143771835e-14
+
 // Mathf.exp ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_expf(value: f32, expected: f32, error: f32, flags: i32): bool {

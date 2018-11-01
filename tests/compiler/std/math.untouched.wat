@@ -28185,6 +28185,206 @@
   )
   (if
    (i32.eqz
+    (call $std/math/test_exp
+     (f64.reinterpret/i64
+      (i64.const 4619182163989041060)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4650062712266849886)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4602678819172646912)
+     )
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1263)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_exp
+     (f64.reinterpret/i64
+      (i64.const 4622394943780502425)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4678652243157503230)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4602678819172646912)
+     )
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1270)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_exp
+     (f64.reinterpret/i64
+      (i64.const 4622613550143616215)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4680943662238555301)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4602678819172646912)
+     )
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1277)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_exp
+     (f64.reinterpret/i64
+      (i64.const 4622829325869063755)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4683793372338329074)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4602678819172646912)
+     )
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1284)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_exp
+     (f64.reinterpret/i64
+      (i64.const 4645970351893354075)
+     )
+     (f64.reinterpret/i64
+      (i64.const 7289148599681560140)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4602678819172646912)
+     )
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1291)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_exp
+     (f64.reinterpret/i64
+      (i64.const 4647695036380671130)
+     )
+     (f64.reinterpret/i64
+      (i64.const 7926454981994343700)
+     )
+     (f64.reinterpret/i64
+      (i64.const -4620693217682128896)
+     )
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1298)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_exp
+     (f64.reinterpret/i64
+      (i64.const -4819432143425896336)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4607182418800017169)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4602678819172646912)
+     )
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1305)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_exp
+     (f64.reinterpret/i64
+      (i64.const -4819256221565452171)
+     )
+     (f64.reinterpret/i64
+      (i64.const 4607182418800017163)
+     )
+     (f64.reinterpret/i64
+      (i64.const -4620693217682128896)
+     )
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1312)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
     (call $std/math/test_expf
      (f32.const -8.066848754882812)
      (f32.const 3.1377049162983894e-04)
@@ -28196,7 +28396,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1270)
+     (i32.const 1326)
      (i32.const 0)
     )
     (unreachable)
@@ -28215,7 +28415,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1271)
+     (i32.const 1327)
      (i32.const 0)
     )
     (unreachable)
@@ -28234,7 +28434,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1272)
+     (i32.const 1328)
      (i32.const 0)
     )
     (unreachable)
@@ -28253,7 +28453,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1273)
+     (i32.const 1329)
      (i32.const 0)
     )
     (unreachable)
@@ -28272,7 +28472,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1274)
+     (i32.const 1330)
      (i32.const 0)
     )
     (unreachable)
@@ -28291,7 +28491,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1275)
+     (i32.const 1331)
      (i32.const 0)
     )
     (unreachable)
@@ -28310,7 +28510,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1276)
+     (i32.const 1332)
      (i32.const 0)
     )
     (unreachable)
@@ -28329,7 +28529,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1277)
+     (i32.const 1333)
      (i32.const 0)
     )
     (unreachable)
@@ -28348,7 +28548,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1278)
+     (i32.const 1334)
      (i32.const 0)
     )
     (unreachable)
@@ -28367,7 +28567,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1279)
+     (i32.const 1335)
      (i32.const 0)
     )
     (unreachable)
@@ -28386,7 +28586,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1282)
+     (i32.const 1338)
      (i32.const 0)
     )
     (unreachable)
@@ -28405,7 +28605,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1283)
+     (i32.const 1339)
      (i32.const 0)
     )
     (unreachable)
@@ -28424,7 +28624,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1284)
+     (i32.const 1340)
      (i32.const 0)
     )
     (unreachable)
@@ -28443,7 +28643,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1285)
+     (i32.const 1341)
      (i32.const 0)
     )
     (unreachable)
@@ -28462,7 +28662,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1286)
+     (i32.const 1342)
      (i32.const 0)
     )
     (unreachable)
@@ -28483,7 +28683,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1287)
+     (i32.const 1343)
      (i32.const 0)
     )
     (unreachable)
@@ -28502,7 +28702,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1288)
+     (i32.const 1344)
      (i32.const 0)
     )
     (unreachable)
@@ -28521,7 +28721,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1289)
+     (i32.const 1345)
      (i32.const 0)
     )
     (unreachable)
@@ -28543,7 +28743,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1290)
+     (i32.const 1346)
      (i32.const 0)
     )
     (unreachable)
@@ -28565,7 +28765,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1291)
+     (i32.const 1347)
      (i32.const 0)
     )
     (unreachable)
@@ -28587,7 +28787,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1292)
+     (i32.const 1348)
      (i32.const 0)
     )
     (unreachable)
@@ -28606,7 +28806,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1293)
+     (i32.const 1349)
      (i32.const 0)
     )
     (unreachable)
@@ -28625,7 +28825,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1294)
+     (i32.const 1350)
      (i32.const 0)
     )
     (unreachable)
@@ -28644,7 +28844,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1295)
+     (i32.const 1351)
      (i32.const 0)
     )
     (unreachable)
@@ -28663,7 +28863,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1307)
+     (i32.const 1363)
      (i32.const 0)
     )
     (unreachable)
@@ -28682,7 +28882,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1308)
+     (i32.const 1364)
      (i32.const 0)
     )
     (unreachable)
@@ -28701,7 +28901,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1309)
+     (i32.const 1365)
      (i32.const 0)
     )
     (unreachable)
@@ -28720,7 +28920,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1310)
+     (i32.const 1366)
      (i32.const 0)
     )
     (unreachable)
@@ -28739,7 +28939,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1311)
+     (i32.const 1367)
      (i32.const 0)
     )
     (unreachable)
@@ -28758,7 +28958,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1312)
+     (i32.const 1368)
      (i32.const 0)
     )
     (unreachable)
@@ -28777,7 +28977,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1313)
+     (i32.const 1369)
      (i32.const 0)
     )
     (unreachable)
@@ -28796,7 +28996,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1314)
+     (i32.const 1370)
      (i32.const 0)
     )
     (unreachable)
@@ -28815,7 +29015,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1315)
+     (i32.const 1371)
      (i32.const 0)
     )
     (unreachable)
@@ -28834,7 +29034,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1316)
+     (i32.const 1372)
      (i32.const 0)
     )
     (unreachable)
@@ -28853,7 +29053,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1319)
+     (i32.const 1375)
      (i32.const 0)
     )
     (unreachable)
@@ -28872,7 +29072,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1320)
+     (i32.const 1376)
      (i32.const 0)
     )
     (unreachable)
@@ -28891,7 +29091,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1321)
+     (i32.const 1377)
      (i32.const 0)
     )
     (unreachable)
@@ -28910,643 +29110,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1322)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1323)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1324)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1325)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1
-     (f64.const 2.225073858507201e-308)
-     (f64.const 2.225073858507201e-308)
-     (f64.const 0)
-     (i32.or
-      (get_global $std/math/INEXACT)
-      (get_global $std/math/UNDERFLOW)
-     )
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1326)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1
-     (f64.const -2.225073858507201e-308)
-     (f64.const -2.225073858507201e-308)
-     (f64.const 0)
-     (i32.or
-      (get_global $std/math/INEXACT)
-      (get_global $std/math/UNDERFLOW)
-     )
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1327)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const -8.066848754882812)
-     (f32.const -0.9996862411499023)
-     (f32.const -0.19532723724842072)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1336)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const 4.345239639282227)
-     (f32.const 76.11051177978516)
-     (f32.const -0.2875460684299469)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1337)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const -8.381433486938477)
-     (f32.const -0.9997709393501282)
-     (f32.const -0.34686920046806335)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1338)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const -6.531673431396484)
-     (f32.const -0.9985434412956238)
-     (f32.const -0.1281939446926117)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1339)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const 9.267057418823242)
-     (f32.const 10582.5634765625)
-     (f32.const 0.45962104201316833)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1340)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const 0.6619858741760254)
-     (f32.const 0.9386383891105652)
-     (f32.const -0.28634780645370483)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1341)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const -0.40660393238067627)
-     (f32.const -0.3340921103954315)
-     (f32.const 0.23410017788410187)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1342)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const 0.5617597699165344)
-     (f32.const 0.7537559866905212)
-     (f32.const -0.11289017647504807)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1343)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const 0.7741522789001465)
-     (f32.const 1.168752908706665)
-     (f32.const 0.4912493824958801)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1344)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const -0.6787636876106262)
-     (f32.const -0.49275627732276917)
-     (f32.const 0.20514154434204102)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1345)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1348)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1349)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const 1)
-     (f32.const 1.718281865119934)
-     (f32.const 0.3075338304042816)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1350)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const -1)
-     (f32.const -0.6321205496788025)
-     (f32.const 0.15350742638111115)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1351)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1352)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1353)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_expm1f
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1354)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const -8.06684839057968)
-     (f64.const -9)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1366)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const 4.345239849338305)
-     (f64.const 4)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1367)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const -8.38143342755525)
-     (f64.const -9)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1368)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const -6.531673581913484)
-     (f64.const -7)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1369)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const 9.267056966972586)
-     (f64.const 9)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1370)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const 0.6619858980995045)
-     (f64.const 0)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1371)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const -0.4066039223853553)
-     (f64.const -1)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1372)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const 0.5617597462207241)
-     (f64.const 0)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1373)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const 0.7741522965913037)
-     (f64.const 0)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1374)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const -0.6787637026394024)
-     (f64.const -1)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1375)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_floor
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 1378)
      (i32.const 0)
     )
@@ -29555,7 +29118,7 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_floor
+    (call $std/math/test_expm1
      (f64.const inf)
      (f64.const inf)
      (f64.const 0)
@@ -29574,13 +29137,11 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_floor
+    (call $std/math/test_expm1
      (f64.neg
       (f64.const inf)
      )
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const -1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -29597,9 +29158,9 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_floor
-     (f64.const 0)
-     (f64.const 0)
+    (call $std/math/test_expm1
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -29616,11 +29177,14 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_floor
-     (f64.const -0)
-     (f64.const -0)
+    (call $std/math/test_expm1
+     (f64.const 2.225073858507201e-308)
+     (f64.const 2.225073858507201e-308)
      (f64.const 0)
-     (i32.const 0)
+     (i32.or
+      (get_global $std/math/INEXACT)
+      (get_global $std/math/UNDERFLOW)
+     )
     )
    )
    (block
@@ -29635,6 +29199,642 @@
   )
   (if
    (i32.eqz
+    (call $std/math/test_expm1
+     (f64.const -2.225073858507201e-308)
+     (f64.const -2.225073858507201e-308)
+     (f64.const 0)
+     (i32.or
+      (get_global $std/math/INEXACT)
+      (get_global $std/math/UNDERFLOW)
+     )
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1383)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const -8.066848754882812)
+     (f32.const -0.9996862411499023)
+     (f32.const -0.19532723724842072)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1392)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const 4.345239639282227)
+     (f32.const 76.11051177978516)
+     (f32.const -0.2875460684299469)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1393)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const -8.381433486938477)
+     (f32.const -0.9997709393501282)
+     (f32.const -0.34686920046806335)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1394)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const -6.531673431396484)
+     (f32.const -0.9985434412956238)
+     (f32.const -0.1281939446926117)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1395)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const 9.267057418823242)
+     (f32.const 10582.5634765625)
+     (f32.const 0.45962104201316833)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1396)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const 0.6619858741760254)
+     (f32.const 0.9386383891105652)
+     (f32.const -0.28634780645370483)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1397)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const -0.40660393238067627)
+     (f32.const -0.3340921103954315)
+     (f32.const 0.23410017788410187)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1398)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const 0.5617597699165344)
+     (f32.const 0.7537559866905212)
+     (f32.const -0.11289017647504807)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1399)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const 0.7741522789001465)
+     (f32.const 1.168752908706665)
+     (f32.const 0.4912493824958801)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1400)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const -0.6787636876106262)
+     (f32.const -0.49275627732276917)
+     (f32.const 0.20514154434204102)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1401)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1404)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1405)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const 1)
+     (f32.const 1.718281865119934)
+     (f32.const 0.3075338304042816)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1406)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const -1)
+     (f32.const -0.6321205496788025)
+     (f32.const 0.15350742638111115)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1407)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1408)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1409)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_expm1f
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1410)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const -8.06684839057968)
+     (f64.const -9)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1422)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const 4.345239849338305)
+     (f64.const 4)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1423)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const -8.38143342755525)
+     (f64.const -9)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1424)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const -6.531673581913484)
+     (f64.const -7)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1425)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const 9.267056966972586)
+     (f64.const 9)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1426)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const 0.6619858980995045)
+     (f64.const 0)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1427)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const -0.4066039223853553)
+     (f64.const -1)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1428)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const 0.5617597462207241)
+     (f64.const 0)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1429)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const 0.7741522965913037)
+     (f64.const 0)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1430)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const -0.6787637026394024)
+     (f64.const -1)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1431)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1434)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1435)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1436)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1437)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_floor
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1438)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
     (call $std/math/test_floor
      (f64.const 1)
      (f64.const 1)
@@ -29646,7 +29846,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1383)
+     (i32.const 1439)
      (i32.const 0)
     )
     (unreachable)
@@ -29665,7 +29865,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1384)
+     (i32.const 1440)
      (i32.const 0)
     )
     (unreachable)
@@ -29684,7 +29884,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1385)
+     (i32.const 1441)
      (i32.const 0)
     )
     (unreachable)
@@ -29703,7 +29903,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1386)
+     (i32.const 1442)
      (i32.const 0)
     )
     (unreachable)
@@ -29722,7 +29922,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1387)
+     (i32.const 1443)
      (i32.const 0)
     )
     (unreachable)
@@ -29741,7 +29941,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1388)
+     (i32.const 1444)
      (i32.const 0)
     )
     (unreachable)
@@ -29760,7 +29960,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1389)
+     (i32.const 1445)
      (i32.const 0)
     )
     (unreachable)
@@ -29779,7 +29979,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1390)
+     (i32.const 1446)
      (i32.const 0)
     )
     (unreachable)
@@ -29798,7 +29998,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1391)
+     (i32.const 1447)
      (i32.const 0)
     )
     (unreachable)
@@ -29817,7 +30017,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1392)
+     (i32.const 1448)
      (i32.const 0)
     )
     (unreachable)
@@ -29836,7 +30036,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1401)
+     (i32.const 1457)
      (i32.const 0)
     )
     (unreachable)
@@ -29855,7 +30055,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1402)
+     (i32.const 1458)
      (i32.const 0)
     )
     (unreachable)
@@ -29874,7 +30074,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1403)
+     (i32.const 1459)
      (i32.const 0)
     )
     (unreachable)
@@ -29893,7 +30093,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1404)
+     (i32.const 1460)
      (i32.const 0)
     )
     (unreachable)
@@ -29912,7 +30112,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1405)
+     (i32.const 1461)
      (i32.const 0)
     )
     (unreachable)
@@ -29931,7 +30131,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1406)
+     (i32.const 1462)
      (i32.const 0)
     )
     (unreachable)
@@ -29950,7 +30150,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1407)
+     (i32.const 1463)
      (i32.const 0)
     )
     (unreachable)
@@ -29969,7 +30169,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1408)
+     (i32.const 1464)
      (i32.const 0)
     )
     (unreachable)
@@ -29988,7 +30188,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1409)
+     (i32.const 1465)
      (i32.const 0)
     )
     (unreachable)
@@ -30007,7 +30207,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1410)
+     (i32.const 1466)
      (i32.const 0)
     )
     (unreachable)
@@ -30026,7 +30226,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1413)
+     (i32.const 1469)
      (i32.const 0)
     )
     (unreachable)
@@ -30045,7 +30245,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1414)
+     (i32.const 1470)
      (i32.const 0)
     )
     (unreachable)
@@ -30068,7 +30268,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1415)
+     (i32.const 1471)
      (i32.const 0)
     )
     (unreachable)
@@ -30087,7 +30287,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1416)
+     (i32.const 1472)
      (i32.const 0)
     )
     (unreachable)
@@ -30106,7 +30306,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1417)
+     (i32.const 1473)
      (i32.const 0)
     )
     (unreachable)
@@ -30125,7 +30325,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1418)
+     (i32.const 1474)
      (i32.const 0)
     )
     (unreachable)
@@ -30144,7 +30344,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1419)
+     (i32.const 1475)
      (i32.const 0)
     )
     (unreachable)
@@ -30163,7 +30363,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1420)
+     (i32.const 1476)
      (i32.const 0)
     )
     (unreachable)
@@ -30182,7 +30382,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1421)
+     (i32.const 1477)
      (i32.const 0)
     )
     (unreachable)
@@ -30201,7 +30401,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1422)
+     (i32.const 1478)
      (i32.const 0)
     )
     (unreachable)
@@ -30220,7 +30420,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1423)
+     (i32.const 1479)
      (i32.const 0)
     )
     (unreachable)
@@ -30239,7 +30439,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1424)
+     (i32.const 1480)
      (i32.const 0)
     )
     (unreachable)
@@ -30258,7 +30458,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1425)
+     (i32.const 1481)
      (i32.const 0)
     )
     (unreachable)
@@ -30277,7 +30477,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1426)
+     (i32.const 1482)
      (i32.const 0)
     )
     (unreachable)
@@ -30296,7 +30496,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1427)
+     (i32.const 1483)
      (i32.const 0)
     )
     (unreachable)
@@ -30316,7 +30516,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1439)
+     (i32.const 1495)
      (i32.const 0)
     )
     (unreachable)
@@ -30336,7 +30536,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1440)
+     (i32.const 1496)
      (i32.const 0)
     )
     (unreachable)
@@ -30356,7 +30556,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1441)
+     (i32.const 1497)
      (i32.const 0)
     )
     (unreachable)
@@ -30376,7 +30576,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1442)
+     (i32.const 1498)
      (i32.const 0)
     )
     (unreachable)
@@ -30396,7 +30596,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1443)
+     (i32.const 1499)
      (i32.const 0)
     )
     (unreachable)
@@ -30416,7 +30616,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1444)
+     (i32.const 1500)
      (i32.const 0)
     )
     (unreachable)
@@ -30436,7 +30636,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1445)
+     (i32.const 1501)
      (i32.const 0)
     )
     (unreachable)
@@ -30456,7 +30656,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1446)
+     (i32.const 1502)
      (i32.const 0)
     )
     (unreachable)
@@ -30476,7 +30676,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1447)
+     (i32.const 1503)
      (i32.const 0)
     )
     (unreachable)
@@ -30496,7 +30696,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1448)
+     (i32.const 1504)
      (i32.const 0)
     )
     (unreachable)
@@ -30516,7 +30716,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1451)
+     (i32.const 1507)
      (i32.const 0)
     )
     (unreachable)
@@ -30536,7 +30736,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1452)
+     (i32.const 1508)
      (i32.const 0)
     )
     (unreachable)
@@ -30556,7 +30756,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1453)
+     (i32.const 1509)
      (i32.const 0)
     )
     (unreachable)
@@ -30576,7 +30776,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1454)
+     (i32.const 1510)
      (i32.const 0)
     )
     (unreachable)
@@ -30596,7 +30796,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1455)
+     (i32.const 1511)
      (i32.const 0)
     )
     (unreachable)
@@ -30616,7 +30816,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1456)
+     (i32.const 1512)
      (i32.const 0)
     )
     (unreachable)
@@ -30636,7 +30836,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1457)
+     (i32.const 1513)
      (i32.const 0)
     )
     (unreachable)
@@ -30656,7 +30856,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1458)
+     (i32.const 1514)
      (i32.const 0)
     )
     (unreachable)
@@ -30676,7 +30876,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1459)
+     (i32.const 1515)
      (i32.const 0)
     )
     (unreachable)
@@ -30696,7 +30896,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1460)
+     (i32.const 1516)
      (i32.const 0)
     )
     (unreachable)
@@ -30716,7 +30916,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1461)
+     (i32.const 1517)
      (i32.const 0)
     )
     (unreachable)
@@ -30736,7 +30936,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1462)
+     (i32.const 1518)
      (i32.const 0)
     )
     (unreachable)
@@ -30756,7 +30956,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1463)
+     (i32.const 1519)
      (i32.const 0)
     )
     (unreachable)
@@ -30778,7 +30978,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1464)
+     (i32.const 1520)
      (i32.const 0)
     )
     (unreachable)
@@ -30800,7 +31000,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1465)
+     (i32.const 1521)
      (i32.const 0)
     )
     (unreachable)
@@ -30822,7 +31022,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1466)
+     (i32.const 1522)
      (i32.const 0)
     )
     (unreachable)
@@ -30844,7 +31044,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1467)
+     (i32.const 1523)
      (i32.const 0)
     )
     (unreachable)
@@ -30864,7 +31064,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1468)
+     (i32.const 1524)
      (i32.const 0)
     )
     (unreachable)
@@ -30884,7 +31084,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1469)
+     (i32.const 1525)
      (i32.const 0)
     )
     (unreachable)
@@ -30904,7 +31104,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1478)
+     (i32.const 1534)
      (i32.const 0)
     )
     (unreachable)
@@ -30924,7 +31124,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1479)
+     (i32.const 1535)
      (i32.const 0)
     )
     (unreachable)
@@ -30944,7 +31144,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1480)
+     (i32.const 1536)
      (i32.const 0)
     )
     (unreachable)
@@ -30964,7 +31164,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1481)
+     (i32.const 1537)
      (i32.const 0)
     )
     (unreachable)
@@ -30984,7 +31184,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1482)
+     (i32.const 1538)
      (i32.const 0)
     )
     (unreachable)
@@ -31004,7 +31204,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1483)
+     (i32.const 1539)
      (i32.const 0)
     )
     (unreachable)
@@ -31024,7 +31224,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1484)
+     (i32.const 1540)
      (i32.const 0)
     )
     (unreachable)
@@ -31044,7 +31244,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1485)
+     (i32.const 1541)
      (i32.const 0)
     )
     (unreachable)
@@ -31064,7 +31264,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1486)
+     (i32.const 1542)
      (i32.const 0)
     )
     (unreachable)
@@ -31084,7 +31284,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1487)
+     (i32.const 1543)
      (i32.const 0)
     )
     (unreachable)
@@ -31104,7 +31304,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1490)
+     (i32.const 1546)
      (i32.const 0)
     )
     (unreachable)
@@ -31124,7 +31324,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1491)
+     (i32.const 1547)
      (i32.const 0)
     )
     (unreachable)
@@ -31144,7 +31344,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1492)
+     (i32.const 1548)
      (i32.const 0)
     )
     (unreachable)
@@ -31164,7 +31364,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1493)
+     (i32.const 1549)
      (i32.const 0)
     )
     (unreachable)
@@ -31184,7 +31384,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1494)
+     (i32.const 1550)
      (i32.const 0)
     )
     (unreachable)
@@ -31204,7 +31404,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1495)
+     (i32.const 1551)
      (i32.const 0)
     )
     (unreachable)
@@ -31224,7 +31424,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1496)
+     (i32.const 1552)
      (i32.const 0)
     )
     (unreachable)
@@ -31244,7 +31444,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1497)
+     (i32.const 1553)
      (i32.const 0)
     )
     (unreachable)
@@ -31264,7 +31464,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1498)
+     (i32.const 1554)
      (i32.const 0)
     )
     (unreachable)
@@ -31284,7 +31484,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1499)
+     (i32.const 1555)
      (i32.const 0)
     )
     (unreachable)
@@ -31304,7 +31504,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1500)
+     (i32.const 1556)
      (i32.const 0)
     )
     (unreachable)
@@ -31324,7 +31524,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1501)
+     (i32.const 1557)
      (i32.const 0)
     )
     (unreachable)
@@ -31344,7 +31544,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1502)
+     (i32.const 1558)
      (i32.const 0)
     )
     (unreachable)
@@ -31366,7 +31566,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1503)
+     (i32.const 1559)
      (i32.const 0)
     )
     (unreachable)
@@ -31388,7 +31588,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1504)
+     (i32.const 1560)
      (i32.const 0)
     )
     (unreachable)
@@ -31410,7 +31610,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1505)
+     (i32.const 1561)
      (i32.const 0)
     )
     (unreachable)
@@ -31432,7 +31632,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1506)
+     (i32.const 1562)
      (i32.const 0)
     )
     (unreachable)
@@ -31452,7 +31652,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1507)
+     (i32.const 1563)
      (i32.const 0)
     )
     (unreachable)
@@ -31472,7 +31672,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1508)
+     (i32.const 1564)
      (i32.const 0)
     )
     (unreachable)
@@ -31491,7 +31691,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1520)
+     (i32.const 1576)
      (i32.const 0)
     )
     (unreachable)
@@ -31510,7 +31710,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1521)
+     (i32.const 1577)
      (i32.const 0)
     )
     (unreachable)
@@ -31529,7 +31729,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1522)
+     (i32.const 1578)
      (i32.const 0)
     )
     (unreachable)
@@ -31548,7 +31748,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1523)
+     (i32.const 1579)
      (i32.const 0)
     )
     (unreachable)
@@ -31567,7 +31767,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1524)
+     (i32.const 1580)
      (i32.const 0)
     )
     (unreachable)
@@ -31586,7 +31786,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1525)
+     (i32.const 1581)
      (i32.const 0)
     )
     (unreachable)
@@ -31605,7 +31805,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1526)
+     (i32.const 1582)
      (i32.const 0)
     )
     (unreachable)
@@ -31624,7 +31824,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1527)
+     (i32.const 1583)
      (i32.const 0)
     )
     (unreachable)
@@ -31643,7 +31843,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1528)
+     (i32.const 1584)
      (i32.const 0)
     )
     (unreachable)
@@ -31656,651 +31856,6 @@
      (f64.const nan:0x8000000000000)
      (f64.const 0)
      (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1529)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log
-     (f64.const 0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1532)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log
-     (f64.const -0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1533)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log
-     (f64.const -7.888609052210118e-31)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1534)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1535)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1536)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1537)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1538)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1539)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const 0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1548)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const -0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1549)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const -7.888609052210118e-31)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1550)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1551)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1552)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1553)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1554)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1555)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const 0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1558)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const -0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1559)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const -7.888609052210118e-31)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1560)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1561)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1562)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1563)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1564)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_logf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1565)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log10
-     (f64.const -8.06684839057968)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1577)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log10
-     (f64.const 4.345239849338305)
-     (f64.const 0.6380137537120029)
-     (f64.const -0.2088824063539505)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1578)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log10
-     (f64.const -8.38143342755525)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1579)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log10
-     (f64.const -6.531673581913484)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1580)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log10
-     (f64.const 9.267056966972586)
-     (f64.const 0.9669418327487274)
-     (f64.const -0.06120431795716286)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1581)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log10
-     (f64.const 0.6619858980995045)
-     (f64.const -0.17915126198447093)
-     (f64.const 0.39090874791145325)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1582)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log10
-     (f64.const -0.4066039223853553)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1583)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log10
-     (f64.const 0.5617597462207241)
-     (f64.const -0.25044938407454437)
-     (f64.const -0.3046841621398926)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1584)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_log10
-     (f64.const 0.7741522965913037)
-     (f64.const -0.11117359349943837)
-     (f64.const -0.31503361463546753)
-     (get_global $std/math/INEXACT)
     )
    )
    (block
@@ -32315,18 +31870,20 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_log10
-     (f64.const -0.6787637026394024)
-     (f64.const nan:0x8000000000000)
+    (call $std/math/test_log
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1586)
+     (i32.const 1588)
      (i32.const 0)
     )
     (unreachable)
@@ -32334,8 +31891,8 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_log10
-     (f64.const 0)
+    (call $std/math/test_log
+     (f64.const -0)
      (f64.neg
       (f64.const inf)
      )
@@ -32355,6 +31912,649 @@
   )
   (if
    (i32.eqz
+    (call $std/math/test_log
+     (f64.const -7.888609052210118e-31)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1590)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1591)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1592)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1593)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1594)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1595)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const 0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (get_global $std/math/DIVBYZERO)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1604)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const -0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (get_global $std/math/DIVBYZERO)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1605)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const -7.888609052210118e-31)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1606)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1607)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1608)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1609)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1610)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1611)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const 0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (get_global $std/math/DIVBYZERO)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1614)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const -0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (get_global $std/math/DIVBYZERO)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1615)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const -7.888609052210118e-31)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1616)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1617)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1618)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1619)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1620)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_logf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1621)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const -8.06684839057968)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1633)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const 4.345239849338305)
+     (f64.const 0.6380137537120029)
+     (f64.const -0.2088824063539505)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1634)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const -8.38143342755525)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1635)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const -6.531673581913484)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1636)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const 9.267056966972586)
+     (f64.const 0.9669418327487274)
+     (f64.const -0.06120431795716286)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1637)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const 0.6619858980995045)
+     (f64.const -0.17915126198447093)
+     (f64.const 0.39090874791145325)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1638)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const -0.4066039223853553)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1639)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const 0.5617597462207241)
+     (f64.const -0.25044938407454437)
+     (f64.const -0.3046841621398926)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1640)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const 0.7741522965913037)
+     (f64.const -0.11117359349943837)
+     (f64.const -0.31503361463546753)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1641)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const -0.6787637026394024)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1642)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_log10
+     (f64.const 0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (get_global $std/math/DIVBYZERO)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1645)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
     (call $std/math/test_log10
      (f64.const -0)
      (f64.neg
@@ -32368,7 +32568,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1590)
+     (i32.const 1646)
      (i32.const 0)
     )
     (unreachable)
@@ -32387,7 +32587,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1591)
+     (i32.const 1647)
      (i32.const 0)
     )
     (unreachable)
@@ -32406,7 +32606,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1592)
+     (i32.const 1648)
      (i32.const 0)
     )
     (unreachable)
@@ -32425,7 +32625,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1593)
+     (i32.const 1649)
      (i32.const 0)
     )
     (unreachable)
@@ -32444,7 +32644,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1594)
+     (i32.const 1650)
      (i32.const 0)
     )
     (unreachable)
@@ -32465,7 +32665,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1595)
+     (i32.const 1651)
      (i32.const 0)
     )
     (unreachable)
@@ -32484,7 +32684,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1596)
+     (i32.const 1652)
      (i32.const 0)
     )
     (unreachable)
@@ -32503,7 +32703,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1605)
+     (i32.const 1661)
      (i32.const 0)
     )
     (unreachable)
@@ -32522,7 +32722,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1606)
+     (i32.const 1662)
      (i32.const 0)
     )
     (unreachable)
@@ -32541,7 +32741,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1607)
+     (i32.const 1663)
      (i32.const 0)
     )
     (unreachable)
@@ -32560,7 +32760,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1608)
+     (i32.const 1664)
      (i32.const 0)
     )
     (unreachable)
@@ -32579,7 +32779,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1609)
+     (i32.const 1665)
      (i32.const 0)
     )
     (unreachable)
@@ -32598,7 +32798,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1610)
+     (i32.const 1666)
      (i32.const 0)
     )
     (unreachable)
@@ -32617,7 +32817,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1611)
+     (i32.const 1667)
      (i32.const 0)
     )
     (unreachable)
@@ -32636,7 +32836,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1612)
+     (i32.const 1668)
      (i32.const 0)
     )
     (unreachable)
@@ -32655,7 +32855,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1613)
+     (i32.const 1669)
      (i32.const 0)
     )
     (unreachable)
@@ -32674,7 +32874,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1614)
+     (i32.const 1670)
      (i32.const 0)
     )
     (unreachable)
@@ -32695,7 +32895,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1617)
+     (i32.const 1673)
      (i32.const 0)
     )
     (unreachable)
@@ -32716,7 +32916,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1618)
+     (i32.const 1674)
      (i32.const 0)
     )
     (unreachable)
@@ -32735,7 +32935,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1619)
+     (i32.const 1675)
      (i32.const 0)
     )
     (unreachable)
@@ -32754,7 +32954,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1620)
+     (i32.const 1676)
      (i32.const 0)
     )
     (unreachable)
@@ -32773,7 +32973,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1621)
+     (i32.const 1677)
      (i32.const 0)
     )
     (unreachable)
@@ -32792,7 +32992,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1622)
+     (i32.const 1678)
      (i32.const 0)
     )
     (unreachable)
@@ -32813,7 +33013,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1623)
+     (i32.const 1679)
      (i32.const 0)
     )
     (unreachable)
@@ -32832,7 +33032,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1624)
+     (i32.const 1680)
      (i32.const 0)
     )
     (unreachable)
@@ -32851,7 +33051,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1636)
+     (i32.const 1692)
      (i32.const 0)
     )
     (unreachable)
@@ -32870,7 +33070,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1637)
+     (i32.const 1693)
      (i32.const 0)
     )
     (unreachable)
@@ -32889,7 +33089,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1638)
+     (i32.const 1694)
      (i32.const 0)
     )
     (unreachable)
@@ -32908,7 +33108,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1639)
+     (i32.const 1695)
      (i32.const 0)
     )
     (unreachable)
@@ -32927,7 +33127,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1640)
+     (i32.const 1696)
      (i32.const 0)
     )
     (unreachable)
@@ -32946,7 +33146,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1641)
+     (i32.const 1697)
      (i32.const 0)
     )
     (unreachable)
@@ -32965,7 +33165,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1642)
+     (i32.const 1698)
      (i32.const 0)
     )
     (unreachable)
@@ -32984,7 +33184,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1643)
+     (i32.const 1699)
      (i32.const 0)
     )
     (unreachable)
@@ -33003,7 +33203,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1644)
+     (i32.const 1700)
      (i32.const 0)
     )
     (unreachable)
@@ -33022,7 +33222,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1645)
+     (i32.const 1701)
      (i32.const 0)
     )
     (unreachable)
@@ -33041,7 +33241,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1648)
+     (i32.const 1704)
      (i32.const 0)
     )
     (unreachable)
@@ -33060,7 +33260,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1649)
+     (i32.const 1705)
      (i32.const 0)
     )
     (unreachable)
@@ -33079,7 +33279,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1650)
+     (i32.const 1706)
      (i32.const 0)
     )
     (unreachable)
@@ -33098,7 +33298,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1651)
+     (i32.const 1707)
      (i32.const 0)
     )
     (unreachable)
@@ -33119,7 +33319,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1652)
+     (i32.const 1708)
      (i32.const 0)
     )
     (unreachable)
@@ -33138,7 +33338,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1653)
+     (i32.const 1709)
      (i32.const 0)
     )
     (unreachable)
@@ -33159,7 +33359,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1654)
+     (i32.const 1710)
      (i32.const 0)
     )
     (unreachable)
@@ -33178,7 +33378,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1655)
+     (i32.const 1711)
      (i32.const 0)
     )
     (unreachable)
@@ -33197,7 +33397,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1664)
+     (i32.const 1720)
      (i32.const 0)
     )
     (unreachable)
@@ -33216,7 +33416,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1665)
+     (i32.const 1721)
      (i32.const 0)
     )
     (unreachable)
@@ -33235,7 +33435,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1666)
+     (i32.const 1722)
      (i32.const 0)
     )
     (unreachable)
@@ -33254,7 +33454,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1667)
+     (i32.const 1723)
      (i32.const 0)
     )
     (unreachable)
@@ -33273,7 +33473,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1668)
+     (i32.const 1724)
      (i32.const 0)
     )
     (unreachable)
@@ -33292,7 +33492,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1669)
+     (i32.const 1725)
      (i32.const 0)
     )
     (unreachable)
@@ -33311,7 +33511,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1670)
+     (i32.const 1726)
      (i32.const 0)
     )
     (unreachable)
@@ -33330,7 +33530,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1671)
+     (i32.const 1727)
      (i32.const 0)
     )
     (unreachable)
@@ -33349,7 +33549,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1672)
+     (i32.const 1728)
      (i32.const 0)
     )
     (unreachable)
@@ -33368,7 +33568,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1673)
+     (i32.const 1729)
      (i32.const 0)
     )
     (unreachable)
@@ -33387,7 +33587,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1676)
+     (i32.const 1732)
      (i32.const 0)
     )
     (unreachable)
@@ -33406,7 +33606,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1677)
+     (i32.const 1733)
      (i32.const 0)
     )
     (unreachable)
@@ -33425,7 +33625,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1678)
+     (i32.const 1734)
      (i32.const 0)
     )
     (unreachable)
@@ -33444,7 +33644,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1679)
+     (i32.const 1735)
      (i32.const 0)
     )
     (unreachable)
@@ -33465,7 +33665,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1680)
+     (i32.const 1736)
      (i32.const 0)
     )
     (unreachable)
@@ -33484,7 +33684,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1681)
+     (i32.const 1737)
      (i32.const 0)
     )
     (unreachable)
@@ -33505,7 +33705,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1682)
+     (i32.const 1738)
      (i32.const 0)
     )
     (unreachable)
@@ -33524,7 +33724,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1683)
+     (i32.const 1739)
      (i32.const 0)
     )
     (unreachable)
@@ -33546,7 +33746,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1684)
+     (i32.const 1740)
      (i32.const 0)
     )
     (unreachable)
@@ -33565,7 +33765,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1696)
+     (i32.const 1752)
      (i32.const 0)
     )
     (unreachable)
@@ -33584,7 +33784,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1697)
+     (i32.const 1753)
      (i32.const 0)
     )
     (unreachable)
@@ -33603,7 +33803,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1698)
+     (i32.const 1754)
      (i32.const 0)
     )
     (unreachable)
@@ -33622,7 +33822,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1699)
+     (i32.const 1755)
      (i32.const 0)
     )
     (unreachable)
@@ -33641,7 +33841,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1700)
+     (i32.const 1756)
      (i32.const 0)
     )
     (unreachable)
@@ -33660,7 +33860,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1701)
+     (i32.const 1757)
      (i32.const 0)
     )
     (unreachable)
@@ -33679,7 +33879,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1702)
+     (i32.const 1758)
      (i32.const 0)
     )
     (unreachable)
@@ -33698,7 +33898,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1703)
+     (i32.const 1759)
      (i32.const 0)
     )
     (unreachable)
@@ -33717,7 +33917,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1704)
+     (i32.const 1760)
      (i32.const 0)
     )
     (unreachable)
@@ -33736,7 +33936,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1705)
+     (i32.const 1761)
      (i32.const 0)
     )
     (unreachable)
@@ -33757,7 +33957,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1708)
+     (i32.const 1764)
      (i32.const 0)
     )
     (unreachable)
@@ -33778,7 +33978,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1709)
+     (i32.const 1765)
      (i32.const 0)
     )
     (unreachable)
@@ -33797,7 +33997,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1710)
+     (i32.const 1766)
      (i32.const 0)
     )
     (unreachable)
@@ -33816,7 +34016,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1711)
+     (i32.const 1767)
      (i32.const 0)
     )
     (unreachable)
@@ -33835,7 +34035,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1712)
+     (i32.const 1768)
      (i32.const 0)
     )
     (unreachable)
@@ -33854,7 +34054,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1713)
+     (i32.const 1769)
      (i32.const 0)
     )
     (unreachable)
@@ -33875,7 +34075,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1714)
+     (i32.const 1770)
      (i32.const 0)
     )
     (unreachable)
@@ -33894,7 +34094,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1715)
+     (i32.const 1771)
      (i32.const 0)
     )
     (unreachable)
@@ -33913,7 +34113,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1724)
+     (i32.const 1780)
      (i32.const 0)
     )
     (unreachable)
@@ -33932,7 +34132,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1725)
+     (i32.const 1781)
      (i32.const 0)
     )
     (unreachable)
@@ -33951,7 +34151,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1726)
+     (i32.const 1782)
      (i32.const 0)
     )
     (unreachable)
@@ -33970,7 +34170,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1727)
+     (i32.const 1783)
      (i32.const 0)
     )
     (unreachable)
@@ -33989,7 +34189,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1728)
+     (i32.const 1784)
      (i32.const 0)
     )
     (unreachable)
@@ -34008,7 +34208,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1729)
+     (i32.const 1785)
      (i32.const 0)
     )
     (unreachable)
@@ -34027,7 +34227,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1730)
+     (i32.const 1786)
      (i32.const 0)
     )
     (unreachable)
@@ -34046,7 +34246,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1731)
+     (i32.const 1787)
      (i32.const 0)
     )
     (unreachable)
@@ -34065,7 +34265,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1732)
+     (i32.const 1788)
      (i32.const 0)
     )
     (unreachable)
@@ -34084,7 +34284,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1733)
+     (i32.const 1789)
      (i32.const 0)
     )
     (unreachable)
@@ -34105,7 +34305,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1736)
+     (i32.const 1792)
      (i32.const 0)
     )
     (unreachable)
@@ -34126,7 +34326,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1737)
+     (i32.const 1793)
      (i32.const 0)
     )
     (unreachable)
@@ -34145,7 +34345,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1738)
+     (i32.const 1794)
      (i32.const 0)
     )
     (unreachable)
@@ -34164,7 +34364,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1739)
+     (i32.const 1795)
      (i32.const 0)
     )
     (unreachable)
@@ -34183,7 +34383,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1740)
+     (i32.const 1796)
      (i32.const 0)
     )
     (unreachable)
@@ -34202,7 +34402,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1741)
+     (i32.const 1797)
      (i32.const 0)
     )
     (unreachable)
@@ -34223,7 +34423,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1742)
+     (i32.const 1798)
      (i32.const 0)
     )
     (unreachable)
@@ -34242,7 +34442,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1743)
+     (i32.const 1799)
      (i32.const 0)
     )
     (unreachable)
@@ -34254,1104 +34454,6 @@
      (f64.const -8.06684839057968)
      (f64.const 4.535662560676869)
      (f64.const 4.535662560676869)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1755)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 4.345239849338305)
-     (f64.const -8.88799136300345)
-     (f64.const 4.345239849338305)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1756)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -8.38143342755525)
-     (f64.const -2.763607337379588)
-     (f64.const -2.763607337379588)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1757)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -6.531673581913484)
-     (f64.const 4.567535276842744)
-     (f64.const 4.567535276842744)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1758)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 9.267056966972586)
-     (f64.const 4.811392084359796)
-     (f64.const 9.267056966972586)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1759)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -6.450045556060236)
-     (f64.const 0.6620717923376739)
-     (f64.const 0.6620717923376739)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1760)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 7.858890253041697)
-     (f64.const 0.05215452675006225)
-     (f64.const 7.858890253041697)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1761)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0.792054511984896)
-     (f64.const 7.67640268511754)
-     (f64.const 7.67640268511754)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1762)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 0.615702673197924)
-     (f64.const 2.0119025790324803)
-     (f64.const 2.0119025790324803)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1763)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0.5587586823609152)
-     (f64.const 0.03223983060263804)
-     (f64.const 0.03223983060263804)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1764)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1767)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1768)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 0.5)
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1769)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0.5)
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1770)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1771)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -1)
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1772)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const inf)
-     (f64.const 1)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1773)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1774)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const nan:0x8000000000000)
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1775)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 0)
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1776)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0)
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1777)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 0.5)
-     (f64.const -1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1778)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0.5)
-     (f64.const -1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1779)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 1)
-     (f64.const -1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1780)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1781)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const inf)
-     (f64.const -1)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1782)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1783)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const nan:0x8000000000000)
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1784)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1785)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 0)
-     (f64.const -0)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1786)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 0)
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1787)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1788)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1789)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0)
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1790)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1791)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0)
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1792)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1793)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1794)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1795)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1796)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const inf)
-     (f64.const 0)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1797)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1798)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1799)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1800)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const inf)
-     (f64.const -0)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1801)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1802)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const nan:0x8000000000000)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1803)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const inf)
-     (f64.const 2)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1804)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const inf)
-     (f64.const -0.5)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1805)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1806)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 2)
-     (f64.const 2)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1807)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0.5)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1808)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1809)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1810)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35369,9 +34471,9 @@
   (if
    (i32.eqz
     (call $std/math/test_max
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.const 4.345239849338305)
+     (f64.const -8.88799136300345)
+     (f64.const 4.345239849338305)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35389,9 +34491,9 @@
   (if
    (i32.eqz
     (call $std/math/test_max
-     (f64.const 1)
-     (f64.const inf)
-     (f64.const inf)
+     (f64.const -8.38143342755525)
+     (f64.const -2.763607337379588)
+     (f64.const -2.763607337379588)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35409,9 +34511,9 @@
   (if
    (i32.eqz
     (call $std/math/test_max
-     (f64.const -1)
-     (f64.const inf)
-     (f64.const inf)
+     (f64.const -6.531673581913484)
+     (f64.const 4.567535276842744)
+     (f64.const 4.567535276842744)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35429,9 +34531,9 @@
   (if
    (i32.eqz
     (call $std/math/test_max
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const inf)
+     (f64.const 9.267056966972586)
+     (f64.const 4.811392084359796)
+     (f64.const 9.267056966972586)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35449,11 +34551,9 @@
   (if
    (i32.eqz
     (call $std/math/test_max
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const inf)
-     (f64.const inf)
+     (f64.const -6.450045556060236)
+     (f64.const 0.6620717923376739)
+     (f64.const 0.6620717923376739)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35471,11 +34571,9 @@
   (if
    (i32.eqz
     (call $std/math/test_max
-     (f64.const 1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 1)
+     (f64.const 7.858890253041697)
+     (f64.const 0.05215452675006225)
+     (f64.const 7.858890253041697)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35493,11 +34591,9 @@
   (if
    (i32.eqz
     (call $std/math/test_max
-     (f64.const -1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -1)
+     (f64.const -0.792054511984896)
+     (f64.const 7.67640268511754)
+     (f64.const 7.67640268511754)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35515,11 +34611,9 @@
   (if
    (i32.eqz
     (call $std/math/test_max
-     (f64.const inf)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const inf)
+     (f64.const 0.615702673197924)
+     (f64.const 2.0119025790324803)
+     (f64.const 2.0119025790324803)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35537,15 +34631,9 @@
   (if
    (i32.eqz
     (call $std/math/test_max
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const -0.5587586823609152)
+     (f64.const 0.03223983060263804)
+     (f64.const 0.03223983060263804)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35563,49 +34651,9 @@
   (if
    (i32.eqz
     (call $std/math/test_max
-     (f64.const 1.75)
-     (f64.const 0.5)
-     (f64.const 1.75)
      (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1821)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const -1.75)
-     (f64.const 0.5)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1822)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_max
-     (f64.const 1.75)
-     (f64.const -0.5)
-     (f64.const 1.75)
+     (f64.const 1)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -35623,6 +34671,1158 @@
   (if
    (i32.eqz
     (call $std/math/test_max
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1824)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 0.5)
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1825)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -0.5)
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1826)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1827)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -1)
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1828)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1829)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1830)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const nan:0x8000000000000)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1831)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 0)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1832)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -0)
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1833)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 0.5)
+     (f64.const -1)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1834)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -0.5)
+     (f64.const -1)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1835)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 1)
+     (f64.const -1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1836)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1837)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const inf)
+     (f64.const -1)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1838)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1839)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const nan:0x8000000000000)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1840)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1841)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 0)
+     (f64.const -0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1842)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 0)
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1843)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1844)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1845)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -0)
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1846)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1847)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -0)
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1848)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1849)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1850)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1851)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1852)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1853)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1854)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1855)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1856)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const inf)
+     (f64.const -0)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1857)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1858)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1859)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const inf)
+     (f64.const 2)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1860)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const inf)
+     (f64.const -0.5)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1861)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1862)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 2)
+     (f64.const 2)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1863)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0.5)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1864)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1865)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1866)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1867)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1868)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 1)
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1869)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -1)
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1870)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1871)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1872)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1873)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1874)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const inf)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1875)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1876)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 1.75)
+     (f64.const 0.5)
+     (f64.const 1.75)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1877)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const -1.75)
+     (f64.const 0.5)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1878)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
+     (f64.const 1.75)
+     (f64.const -0.5)
+     (f64.const 1.75)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1879)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_max
      (f64.const -1.75)
      (f64.const -0.5)
      (f64.const -0.5)
@@ -35634,7 +35834,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1824)
+     (i32.const 1880)
      (i32.const 0)
     )
     (unreachable)
@@ -35654,7 +35854,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1833)
+     (i32.const 1889)
      (i32.const 0)
     )
     (unreachable)
@@ -35674,7 +35874,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1834)
+     (i32.const 1890)
      (i32.const 0)
     )
     (unreachable)
@@ -35694,7 +35894,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1835)
+     (i32.const 1891)
      (i32.const 0)
     )
     (unreachable)
@@ -35714,7 +35914,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1836)
+     (i32.const 1892)
      (i32.const 0)
     )
     (unreachable)
@@ -35734,7 +35934,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1837)
+     (i32.const 1893)
      (i32.const 0)
     )
     (unreachable)
@@ -35754,7 +35954,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1838)
+     (i32.const 1894)
      (i32.const 0)
     )
     (unreachable)
@@ -35774,7 +35974,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1839)
+     (i32.const 1895)
      (i32.const 0)
     )
     (unreachable)
@@ -35794,7 +35994,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1840)
+     (i32.const 1896)
      (i32.const 0)
     )
     (unreachable)
@@ -35814,7 +36014,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1841)
+     (i32.const 1897)
      (i32.const 0)
     )
     (unreachable)
@@ -35834,1118 +36034,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1842)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1845)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1846)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 0.5)
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1847)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -0.5)
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1848)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1849)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -1)
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1850)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const inf)
-     (f32.const 1)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1851)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1852)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const nan:0x400000)
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1853)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 0)
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1854)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -0)
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1855)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 0.5)
-     (f32.const -1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1856)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -0.5)
-     (f32.const -1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1857)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 1)
-     (f32.const -1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1858)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1859)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const inf)
-     (f32.const -1)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1860)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1861)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const nan:0x400000)
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1862)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1863)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 0)
-     (f32.const -0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1864)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 0)
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1865)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1866)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1867)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -0)
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1868)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1869)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -0)
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1870)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1871)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1872)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1873)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1874)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const inf)
-     (f32.const 0)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1875)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1876)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1877)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1878)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const inf)
-     (f32.const -0)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1879)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1880)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const nan:0x400000)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1881)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const inf)
-     (f32.const 2)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1882)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const inf)
-     (f32.const -0.5)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1883)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const inf)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1884)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 2)
-     (f32.const 2)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1885)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0.5)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1886)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1887)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1888)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1889)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1890)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 1)
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1891)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -1)
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1892)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1893)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1894)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1895)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1896)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const inf)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1897)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 1898)
      (i32.const 0)
     )
@@ -36955,49 +36043,9 @@
   (if
    (i32.eqz
     (call $std/math/test_maxf
-     (f32.const 1.75)
-     (f32.const 0.5)
-     (f32.const 1.75)
      (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1899)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const -1.75)
-     (f32.const 0.5)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1900)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_maxf
-     (f32.const 1.75)
-     (f32.const -0.5)
-     (f32.const 1.75)
+     (f32.const 1)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -37015,6 +36063,1158 @@
   (if
    (i32.eqz
     (call $std/math/test_maxf
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1902)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 0.5)
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1903)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -0.5)
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1904)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1905)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -1)
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1906)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1907)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1908)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const nan:0x400000)
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1909)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 0)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1910)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -0)
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1911)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 0.5)
+     (f32.const -1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1912)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -0.5)
+     (f32.const -1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1913)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 1)
+     (f32.const -1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1914)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1915)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const inf)
+     (f32.const -1)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1916)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1917)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const nan:0x400000)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1918)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1919)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 0)
+     (f32.const -0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1920)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 0)
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1921)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1922)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1923)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -0)
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1924)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1925)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -0)
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1926)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1927)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1928)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1929)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1930)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1931)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1932)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1933)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1934)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const inf)
+     (f32.const -0)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1935)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1936)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1937)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const inf)
+     (f32.const 2)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1938)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const inf)
+     (f32.const -0.5)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1939)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1940)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 2)
+     (f32.const 2)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1941)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0.5)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1942)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1943)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1944)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1945)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1946)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 1)
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1947)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -1)
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1948)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1949)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1950)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1951)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1952)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const inf)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1953)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1954)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 1.75)
+     (f32.const 0.5)
+     (f32.const 1.75)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1955)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const -1.75)
+     (f32.const 0.5)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1956)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
+     (f32.const 1.75)
+     (f32.const -0.5)
+     (f32.const 1.75)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1957)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_maxf
      (f32.const -1.75)
      (f32.const -0.5)
      (f32.const -0.5)
@@ -37026,7 +37226,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1902)
+     (i32.const 1958)
      (i32.const 0)
     )
     (unreachable)
@@ -37046,7 +37246,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1914)
+     (i32.const 1970)
      (i32.const 0)
     )
     (unreachable)
@@ -37066,7 +37266,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1915)
+     (i32.const 1971)
      (i32.const 0)
     )
     (unreachable)
@@ -37086,7 +37286,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1916)
+     (i32.const 1972)
      (i32.const 0)
     )
     (unreachable)
@@ -37106,7 +37306,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1917)
+     (i32.const 1973)
      (i32.const 0)
     )
     (unreachable)
@@ -37126,7 +37326,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1918)
+     (i32.const 1974)
      (i32.const 0)
     )
     (unreachable)
@@ -37146,7 +37346,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1919)
+     (i32.const 1975)
      (i32.const 0)
     )
     (unreachable)
@@ -37166,7 +37366,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1920)
+     (i32.const 1976)
      (i32.const 0)
     )
     (unreachable)
@@ -37186,7 +37386,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1921)
+     (i32.const 1977)
      (i32.const 0)
     )
     (unreachable)
@@ -37206,7 +37406,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1922)
+     (i32.const 1978)
      (i32.const 0)
     )
     (unreachable)
@@ -37226,1142 +37426,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1923)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1926)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1927)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 0.5)
-     (f64.const 1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1928)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -0.5)
-     (f64.const 1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1929)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1930)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -1)
-     (f64.const 1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1931)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const inf)
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1932)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1933)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const nan:0x8000000000000)
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1934)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 0)
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1935)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -0)
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1936)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 0.5)
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1937)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -0.5)
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1938)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 1)
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1939)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1940)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const inf)
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1941)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1942)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const nan:0x8000000000000)
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1943)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1944)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 0)
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1945)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 0)
-     (f64.const inf)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1946)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1947)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1948)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -0)
-     (f64.const 0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1949)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1950)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -0)
-     (f64.const inf)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1951)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1952)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1953)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1954)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1955)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const inf)
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1956)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1957)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1958)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1959)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const inf)
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1960)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1961)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const nan:0x8000000000000)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1962)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const inf)
-     (f64.const 2)
-     (f64.const 2)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1963)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const inf)
-     (f64.const -0.5)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1964)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1965)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 2)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1966)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0.5)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1967)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1968)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1969)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1970)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1971)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 1)
-     (f64.const inf)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1972)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -1)
-     (f64.const inf)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1973)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1974)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const inf)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1975)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1976)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1977)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const inf)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1978)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 1979)
      (i32.const 0)
     )
@@ -38371,49 +37435,9 @@
   (if
    (i32.eqz
     (call $std/math/test_min
-     (f64.const 1.75)
-     (f64.const 0.5)
-     (f64.const 0.5)
      (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1980)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const -1.75)
-     (f64.const 0.5)
-     (f64.const -1.75)
+     (f64.const 1)
      (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 1981)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_min
-     (f64.const 1.75)
-     (f64.const -0.5)
-     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -38431,6 +37455,1182 @@
   (if
    (i32.eqz
     (call $std/math/test_min
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1983)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 0.5)
+     (f64.const 1)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1984)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -0.5)
+     (f64.const 1)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1985)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1986)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -1)
+     (f64.const 1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1987)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1988)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1989)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const nan:0x8000000000000)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1990)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 0)
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1991)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -0)
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1992)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 0.5)
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1993)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -0.5)
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1994)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 1)
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1995)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1996)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const inf)
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1997)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1998)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const nan:0x8000000000000)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 1999)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2000)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 0)
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2001)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 0)
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2002)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2003)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2004)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -0)
+     (f64.const 0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2005)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2006)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -0)
+     (f64.const inf)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2007)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2008)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2009)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2010)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2011)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2012)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2013)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2014)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2015)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const inf)
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2016)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2017)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2018)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const inf)
+     (f64.const 2)
+     (f64.const 2)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2019)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const inf)
+     (f64.const -0.5)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2020)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2021)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 2)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2022)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0.5)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2023)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2024)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2025)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2026)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2027)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 1)
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2028)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -1)
+     (f64.const inf)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2029)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2030)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const inf)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2031)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2032)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2033)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const inf)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2034)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2035)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 1.75)
+     (f64.const 0.5)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2036)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const -1.75)
+     (f64.const 0.5)
+     (f64.const -1.75)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2037)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
+     (f64.const 1.75)
+     (f64.const -0.5)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2038)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_min
      (f64.const -1.75)
      (f64.const -0.5)
      (f64.const -1.75)
@@ -38442,7 +38642,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1983)
+     (i32.const 2039)
      (i32.const 0)
     )
     (unreachable)
@@ -38462,7 +38662,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1992)
+     (i32.const 2048)
      (i32.const 0)
     )
     (unreachable)
@@ -38482,7 +38682,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1993)
+     (i32.const 2049)
      (i32.const 0)
     )
     (unreachable)
@@ -38502,7 +38702,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1994)
+     (i32.const 2050)
      (i32.const 0)
     )
     (unreachable)
@@ -38522,7 +38722,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1995)
+     (i32.const 2051)
      (i32.const 0)
     )
     (unreachable)
@@ -38542,7 +38742,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1996)
+     (i32.const 2052)
      (i32.const 0)
     )
     (unreachable)
@@ -38562,7 +38762,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1997)
+     (i32.const 2053)
      (i32.const 0)
     )
     (unreachable)
@@ -38582,7 +38782,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1998)
+     (i32.const 2054)
      (i32.const 0)
     )
     (unreachable)
@@ -38602,7 +38802,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 1999)
+     (i32.const 2055)
      (i32.const 0)
     )
     (unreachable)
@@ -38622,7 +38822,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2000)
+     (i32.const 2056)
      (i32.const 0)
     )
     (unreachable)
@@ -38642,1142 +38842,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2001)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2004)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2005)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 0.5)
-     (f32.const 1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2006)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -0.5)
-     (f32.const 1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2007)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2008)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -1)
-     (f32.const 1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2009)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const inf)
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2010)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2011)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const nan:0x400000)
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2012)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 0)
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2013)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -0)
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2014)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 0.5)
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2015)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -0.5)
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2016)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 1)
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2017)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2018)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const inf)
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2019)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2020)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const nan:0x400000)
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2021)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2022)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 0)
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2023)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 0)
-     (f32.const inf)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2024)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2025)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2026)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -0)
-     (f32.const 0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2027)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2028)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -0)
-     (f32.const inf)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2029)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2030)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2031)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2032)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2033)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const inf)
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2034)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2035)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2036)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2037)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const inf)
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2038)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2039)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const nan:0x400000)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2040)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const inf)
-     (f32.const 2)
-     (f32.const 2)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2041)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const inf)
-     (f32.const -0.5)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2042)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const inf)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2043)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 2)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2044)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0.5)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2045)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2046)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2047)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2048)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2049)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 1)
-     (f32.const inf)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2050)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -1)
-     (f32.const inf)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2051)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2052)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const inf)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2053)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2054)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2055)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const inf)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2056)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 2057)
      (i32.const 0)
     )
@@ -39787,49 +38851,9 @@
   (if
    (i32.eqz
     (call $std/math/test_minf
-     (f32.const 1.75)
-     (f32.const 0.5)
-     (f32.const 0.5)
      (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2058)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const -1.75)
-     (f32.const 0.5)
-     (f32.const -1.75)
+     (f32.const 1)
      (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2059)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_minf
-     (f32.const 1.75)
-     (f32.const -0.5)
-     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -39847,6 +38871,1182 @@
   (if
    (i32.eqz
     (call $std/math/test_minf
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2061)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 0.5)
+     (f32.const 1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2062)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -0.5)
+     (f32.const 1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2063)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2064)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -1)
+     (f32.const 1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2065)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2066)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2067)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const nan:0x400000)
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2068)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 0)
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2069)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -0)
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2070)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 0.5)
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2071)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -0.5)
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2072)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 1)
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2073)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2074)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const inf)
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2075)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2076)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const nan:0x400000)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2077)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2078)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 0)
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2079)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 0)
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2080)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2081)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2082)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -0)
+     (f32.const 0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2083)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2084)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -0)
+     (f32.const inf)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2085)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2086)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2087)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2088)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2089)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2090)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2091)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2092)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2093)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const inf)
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2094)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2095)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2096)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const inf)
+     (f32.const 2)
+     (f32.const 2)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2097)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const inf)
+     (f32.const -0.5)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2098)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2099)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 2)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2100)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0.5)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2101)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2102)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2103)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2104)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2105)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 1)
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2106)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -1)
+     (f32.const inf)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2107)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2108)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const inf)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2109)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2110)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2111)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const inf)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2112)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2113)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 1.75)
+     (f32.const 0.5)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2114)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const -1.75)
+     (f32.const 0.5)
+     (f32.const -1.75)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2115)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
+     (f32.const 1.75)
+     (f32.const -0.5)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2116)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_minf
      (f32.const -1.75)
      (f32.const -0.5)
      (f32.const -1.75)
@@ -39858,7 +40058,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2061)
+     (i32.const 2117)
      (i32.const 0)
     )
     (unreachable)
@@ -39878,7 +40078,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2075)
+     (i32.const 2131)
      (i32.const 0)
     )
     (unreachable)
@@ -39898,7 +40098,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2076)
+     (i32.const 2132)
      (i32.const 0)
     )
     (unreachable)
@@ -39918,7 +40118,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2077)
+     (i32.const 2133)
      (i32.const 0)
     )
     (unreachable)
@@ -39938,7 +40138,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2078)
+     (i32.const 2134)
      (i32.const 0)
     )
     (unreachable)
@@ -39958,7 +40158,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2079)
+     (i32.const 2135)
      (i32.const 0)
     )
     (unreachable)
@@ -39978,7 +40178,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2080)
+     (i32.const 2136)
      (i32.const 0)
     )
     (unreachable)
@@ -39998,7 +40198,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2081)
+     (i32.const 2137)
      (i32.const 0)
     )
     (unreachable)
@@ -40018,7 +40218,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2082)
+     (i32.const 2138)
      (i32.const 0)
     )
     (unreachable)
@@ -40038,7 +40238,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2083)
+     (i32.const 2139)
      (i32.const 0)
     )
     (unreachable)
@@ -40058,1104 +40258,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2084)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2087)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2088)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 0.5)
-     (f64.const 1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2089)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0.5)
-     (f64.const 1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2090)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2091)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -1)
-     (f64.const 1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2092)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 1.5)
-     (f64.const 1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2093)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -1.5)
-     (f64.const 1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2094)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 2)
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2095)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -2)
-     (f64.const 1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2096)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2097)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2098)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const nan:0x8000000000000)
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2099)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 0)
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2100)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0)
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2101)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 0.5)
-     (f64.const -1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2102)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0.5)
-     (f64.const -1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2103)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 1)
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2104)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2105)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 1.5)
-     (f64.const -1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2106)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -1.5)
-     (f64.const -1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2107)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 2)
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2108)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -2)
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2109)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2110)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2111)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const nan:0x8000000000000)
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2112)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2113)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 0)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2114)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 0)
-     (f64.const inf)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2115)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2116)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2117)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2118)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2119)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0)
-     (f64.const inf)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2120)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2121)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2122)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2123)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2124)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2125)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2126)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2127)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2128)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2129)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2130)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const nan:0x8000000000000)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2131)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const 2)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2132)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const -0.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2133)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2134)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 2)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2135)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2136)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2137)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2138)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2139)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 2140)
      (i32.const 0)
     )
@@ -41165,51 +40267,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
+     (f64.const 0)
      (f64.const 1)
-     (f64.const inf)
-     (f64.const 1)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2141)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const -1)
-     (f64.const inf)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2142)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_mod
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -41225,13 +40287,11 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const -0)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -41247,11 +40307,9 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
+     (f64.const 0.5)
      (f64.const 1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 1)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -41269,6 +40327,1148 @@
   (if
    (i32.eqz
     (call $std/math/test_mod
+     (f64.const -0.5)
+     (f64.const 1)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2146)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 1)
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2147)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const 1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2148)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 1.5)
+     (f64.const 1)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2149)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1.5)
+     (f64.const 1)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2150)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 2)
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2151)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -2)
+     (f64.const 1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2152)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2153)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2154)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const nan:0x8000000000000)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2155)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 0)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2156)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -0)
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2157)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 0.5)
+     (f64.const -1)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2158)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -0.5)
+     (f64.const -1)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2159)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 1)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2160)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2161)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 1.5)
+     (f64.const -1)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2162)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1.5)
+     (f64.const -1)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2163)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 2)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2164)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -2)
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2165)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2166)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2167)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const nan:0x8000000000000)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2168)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2169)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 0)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2170)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 0)
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2171)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2172)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2173)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -0)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2174)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2175)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -0)
+     (f64.const inf)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2176)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2177)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2178)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2179)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2180)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2181)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2182)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2183)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2184)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2185)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2186)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2187)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const 2)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2188)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const -0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2189)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2190)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 2)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2191)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2192)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2193)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2194)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2195)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2196)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 1)
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2197)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const -1)
+     (f64.const inf)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2198)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2199)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2200)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
+     (f64.const 1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2201)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_mod
      (f64.const -1)
      (f64.neg
       (f64.const inf)
@@ -41282,7 +41482,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2146)
+     (i32.const 2202)
      (i32.const 0)
     )
     (unreachable)
@@ -41304,7 +41504,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2147)
+     (i32.const 2203)
      (i32.const 0)
     )
     (unreachable)
@@ -41328,7 +41528,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2148)
+     (i32.const 2204)
      (i32.const 0)
     )
     (unreachable)
@@ -41348,7 +41548,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2149)
+     (i32.const 2205)
      (i32.const 0)
     )
     (unreachable)
@@ -41368,7 +41568,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2150)
+     (i32.const 2206)
      (i32.const 0)
     )
     (unreachable)
@@ -41388,7 +41588,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2151)
+     (i32.const 2207)
      (i32.const 0)
     )
     (unreachable)
@@ -41408,7 +41608,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2152)
+     (i32.const 2208)
      (i32.const 0)
     )
     (unreachable)
@@ -41428,7 +41628,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2161)
+     (i32.const 2217)
      (i32.const 0)
     )
     (unreachable)
@@ -41448,7 +41648,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2162)
+     (i32.const 2218)
      (i32.const 0)
     )
     (unreachable)
@@ -41468,7 +41668,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2163)
+     (i32.const 2219)
      (i32.const 0)
     )
     (unreachable)
@@ -41488,7 +41688,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2164)
+     (i32.const 2220)
      (i32.const 0)
     )
     (unreachable)
@@ -41508,7 +41708,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2165)
+     (i32.const 2221)
      (i32.const 0)
     )
     (unreachable)
@@ -41528,7 +41728,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2166)
+     (i32.const 2222)
      (i32.const 0)
     )
     (unreachable)
@@ -41548,7 +41748,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2167)
+     (i32.const 2223)
      (i32.const 0)
     )
     (unreachable)
@@ -41568,7 +41768,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2168)
+     (i32.const 2224)
      (i32.const 0)
     )
     (unreachable)
@@ -41588,7 +41788,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2169)
+     (i32.const 2225)
      (i32.const 0)
     )
     (unreachable)
@@ -41608,1104 +41808,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2170)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2173)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2174)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 0.5)
-     (f32.const 1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2175)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0.5)
-     (f32.const 1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2176)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2177)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -1)
-     (f32.const 1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2178)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 1.5)
-     (f32.const 1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2179)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -1.5)
-     (f32.const 1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2180)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 2)
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2181)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -2)
-     (f32.const 1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2182)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2183)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2184)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const nan:0x400000)
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2185)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 0)
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2186)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0)
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2187)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 0.5)
-     (f32.const -1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2188)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0.5)
-     (f32.const -1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2189)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 1)
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2190)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2191)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 1.5)
-     (f32.const -1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2192)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -1.5)
-     (f32.const -1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2193)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 2)
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2194)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -2)
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2195)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2196)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2197)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const nan:0x400000)
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2198)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2199)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 0)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2200)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 0)
-     (f32.const inf)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2201)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2202)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2203)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2204)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2205)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0)
-     (f32.const inf)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2206)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2207)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2208)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2209)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2210)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2211)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2212)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2213)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2214)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2215)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2216)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const nan:0x400000)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2217)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const 2)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2218)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const -0.5)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2219)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2220)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 2)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2221)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0.5)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2222)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2223)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2224)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2225)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 2226)
      (i32.const 0)
     )
@@ -42715,51 +41817,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
+     (f32.const 0)
      (f32.const 1)
-     (f32.const inf)
-     (f32.const 1)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2227)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const -1)
-     (f32.const inf)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2228)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_modf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -42775,13 +41837,11 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const -0)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -42797,11 +41857,9 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
+     (f32.const 0.5)
      (f32.const 1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 1)
+     (f32.const 0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -42819,6 +41877,1148 @@
   (if
    (i32.eqz
     (call $std/math/test_modf
+     (f32.const -0.5)
+     (f32.const 1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2232)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 1)
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2233)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const 1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2234)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 1.5)
+     (f32.const 1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2235)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1.5)
+     (f32.const 1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2236)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 2)
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2237)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -2)
+     (f32.const 1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2238)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2239)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2240)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const nan:0x400000)
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2241)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 0)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2242)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -0)
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2243)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 0.5)
+     (f32.const -1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2244)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -0.5)
+     (f32.const -1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2245)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 1)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2246)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2247)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 1.5)
+     (f32.const -1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2248)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1.5)
+     (f32.const -1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2249)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 2)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2250)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -2)
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2251)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2252)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2253)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const nan:0x400000)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2254)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2255)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 0)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2256)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 0)
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2257)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2258)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2259)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -0)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2260)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2261)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -0)
+     (f32.const inf)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2262)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2263)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2264)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2265)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2266)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2267)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2268)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2269)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2270)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2271)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2272)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2273)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const 2)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2274)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const -0.5)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2275)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2276)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 2)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2277)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0.5)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2278)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2279)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2280)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2281)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2282)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 1)
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2283)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const -1)
+     (f32.const inf)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2284)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2285)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2286)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
+     (f32.const 1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2287)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_modf
      (f32.const -1)
      (f32.neg
       (f32.const inf)
@@ -42832,7 +43032,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2232)
+     (i32.const 2288)
      (i32.const 0)
     )
     (unreachable)
@@ -42854,7 +43054,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2233)
+     (i32.const 2289)
      (i32.const 0)
     )
     (unreachable)
@@ -42878,7 +43078,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2234)
+     (i32.const 2290)
      (i32.const 0)
     )
     (unreachable)
@@ -42898,7 +43098,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2235)
+     (i32.const 2291)
      (i32.const 0)
     )
     (unreachable)
@@ -42918,7 +43118,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2236)
+     (i32.const 2292)
      (i32.const 0)
     )
     (unreachable)
@@ -42938,7 +43138,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2237)
+     (i32.const 2293)
      (i32.const 0)
     )
     (unreachable)
@@ -42958,7 +43158,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2238)
+     (i32.const 2294)
      (i32.const 0)
     )
     (unreachable)
@@ -42978,7 +43178,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2250)
+     (i32.const 2306)
      (i32.const 0)
     )
     (unreachable)
@@ -42998,7 +43198,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2251)
+     (i32.const 2307)
      (i32.const 0)
     )
     (unreachable)
@@ -43018,7 +43218,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2252)
+     (i32.const 2308)
      (i32.const 0)
     )
     (unreachable)
@@ -43038,7 +43238,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2253)
+     (i32.const 2309)
      (i32.const 0)
     )
     (unreachable)
@@ -43058,7 +43258,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2254)
+     (i32.const 2310)
      (i32.const 0)
     )
     (unreachable)
@@ -43078,7 +43278,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2255)
+     (i32.const 2311)
      (i32.const 0)
     )
     (unreachable)
@@ -43098,7 +43298,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2256)
+     (i32.const 2312)
      (i32.const 0)
     )
     (unreachable)
@@ -43118,7 +43318,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2257)
+     (i32.const 2313)
      (i32.const 0)
     )
     (unreachable)
@@ -43138,7 +43338,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2258)
+     (i32.const 2314)
      (i32.const 0)
     )
     (unreachable)
@@ -43158,1102 +43358,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2259)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2262)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const inf)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2263)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const 3)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2264)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const 2)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2265)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2266)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const 0.5)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2267)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2268)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2269)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const -0.5)
-     (f64.const inf)
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2270)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const -1)
-     (f64.const inf)
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2271)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const -2)
-     (f64.const inf)
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2272)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const -3)
-     (f64.const inf)
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2273)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.const -4)
-     (f64.const inf)
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2274)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2275)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2276)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const inf)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2277)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const 3)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2278)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const 2)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2279)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2280)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const 0.5)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2281)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2282)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2283)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const -0.5)
-     (f64.const inf)
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2284)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const -1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2285)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const -2)
-     (f64.const inf)
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2286)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const -3)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2287)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.const -4)
-     (f64.const inf)
-     (f64.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2288)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2289)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2290)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2291)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2292)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2293)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2294)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0.5)
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2295)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const nan:0x8000000000000)
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2296)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2297)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2298)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 1)
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2299)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2300)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0.5)
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2301)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2302)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2303)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2304)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const 2)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2305)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2306)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const -2)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2307)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const -3)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2308)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -1)
-     (f64.const 0.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2309)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2310)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 1)
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2311)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2312)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 1)
-     (f64.const 3)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2313)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 1)
-     (f64.const 0.5)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2314)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const 1)
-     (f64.const -0.5)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 2315)
      (i32.const 0)
     )
@@ -44263,51 +43367,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 1)
-     (f64.const -3)
-     (f64.const 1)
      (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2316)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0.5)
-     (f64.const 0.5)
+     (f64.const nan:0x8000000000000)
      (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 8)
-     (i32.const 2317)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_pow
-     (f64.const -0.5)
-     (f64.const 1.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -44323,9 +43387,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -0.5)
-     (f64.const 2)
-     (f64.const 0.25)
+     (f64.const 0)
+     (f64.const inf)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44343,9 +43407,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -0.5)
+     (f64.const 0)
      (f64.const 3)
-     (f64.const -0.125)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44363,8 +43427,8 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -0.5)
-     (f64.const inf)
+     (f64.const 0)
+     (f64.const 2)
      (f64.const 0)
      (f64.const 0)
      (i32.const 0)
@@ -44383,11 +43447,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -0.5)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const inf)
+     (f64.const 0)
+     (f64.const 1)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44405,9 +43467,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const -0.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (f64.const 0.5)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44425,9 +43487,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 0.5)
-     (f64.const inf)
      (f64.const 0)
+     (f64.const 0)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44445,11 +43507,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 0.5)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const inf)
+     (f64.const 0)
+     (f64.const -0)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44467,11 +43527,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 0.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (f64.const -0.5)
+     (f64.const inf)
+     (f64.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -44487,11 +43547,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 1.5)
-     (f64.const inf)
+     (f64.const 0)
+     (f64.const -1)
      (f64.const inf)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -44507,13 +43567,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 1.5)
-     (f64.neg
-      (f64.const inf)
-     )
      (f64.const 0)
+     (f64.const -2)
+     (f64.const inf)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -44529,11 +43587,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const 1.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (f64.const -3)
+     (f64.const inf)
+     (f64.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -44549,11 +43607,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
      (f64.const 0)
-     (i32.const 0)
+     (f64.const -4)
+     (f64.const inf)
+     (f64.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -44569,8 +43627,10 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const inf)
+     (f64.const 0)
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const inf)
      (f64.const 0)
      (i32.const 0)
@@ -44589,11 +43649,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const inf)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44611,9 +43669,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
+     (f64.const -0)
      (f64.const inf)
-     (f64.const 3)
-     (f64.const inf)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44631,9 +43689,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const 2)
-     (f64.const inf)
+     (f64.const -0)
+     (f64.const 3)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44651,9 +43709,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const 1)
-     (f64.const inf)
+     (f64.const -0)
+     (f64.const 2)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44671,9 +43729,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const 0.5)
-     (f64.const inf)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const -0)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44691,8 +43749,8 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const -0.5)
+     (f64.const -0)
+     (f64.const 0.5)
      (f64.const 0)
      (f64.const 0)
      (i32.const 0)
@@ -44711,9 +43769,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const -1)
+     (f64.const -0)
      (f64.const 0)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44731,9 +43789,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.const inf)
-     (f64.const -2)
-     (f64.const 0)
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44751,13 +43809,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const -0.5)
+     (f64.const inf)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -44773,13 +43829,13 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
+     (f64.const -0)
+     (f64.const -1)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const inf)
-     (f64.const inf)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -44795,15 +43851,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const -0)
+     (f64.const -2)
+     (f64.const inf)
      (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -44819,15 +43871,13 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 3)
+     (f64.const -0)
+     (f64.const -3)
      (f64.neg
       (f64.const inf)
      )
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -44843,13 +43893,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 2)
+     (f64.const -0)
+     (f64.const -4)
      (f64.const inf)
      (f64.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -44865,13 +43913,11 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
+     (f64.const -0)
      (f64.neg
       (f64.const inf)
      )
-     (f64.const 1)
-     (f64.neg
-      (f64.const inf)
-     )
+     (f64.const inf)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44889,11 +43935,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0.5)
-     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44911,11 +43955,9 @@
   (if
    (i32.eqz
     (call $std/math/test_pow
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0.5)
+     (f64.const inf)
      (f64.const 0)
+     (f64.const 1)
      (f64.const 0)
      (i32.const 0)
     )
@@ -44936,6 +43978,1164 @@
      (f64.neg
       (f64.const inf)
      )
+     (f64.const 0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2348)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2349)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2350)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0.5)
+     (f64.const 0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2351)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2352)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2353)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2354)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2355)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2356)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0.5)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2357)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2358)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2359)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2360)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.const 2)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2361)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2362)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.const -2)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2363)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.const -3)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2364)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -1)
+     (f64.const 0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2365)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2366)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1)
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2367)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2368)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1)
+     (f64.const 3)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2369)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1)
+     (f64.const 0.5)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2370)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1)
+     (f64.const -0.5)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2371)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1)
+     (f64.const -3)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2372)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0.5)
+     (f64.const 0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2373)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0.5)
+     (f64.const 1.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2374)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0.5)
+     (f64.const 2)
+     (f64.const 0.25)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2375)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0.5)
+     (f64.const 3)
+     (f64.const -0.125)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2376)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0.5)
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2377)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0.5)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2378)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const -0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2379)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 0.5)
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2380)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 0.5)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2381)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2382)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1.5)
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2383)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1.5)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2384)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const 1.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2385)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2386)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2387)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2388)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.const 3)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2389)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.const 2)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2390)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2391)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.const 0.5)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2392)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.const -0.5)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2393)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2394)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.const inf)
+     (f64.const -2)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2395)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2396)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2397)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2398)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 3)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2399)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 2)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2400)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2401)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0.5)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2402)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0.5)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2403)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_pow
+     (f64.neg
+      (f64.const inf)
+     )
      (f64.const -1)
      (f64.const -0)
      (f64.const 0)
@@ -44946,7 +45146,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2348)
+     (i32.const 2404)
      (i32.const 0)
     )
     (unreachable)
@@ -44968,7 +45168,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2349)
+     (i32.const 2405)
      (i32.const 0)
     )
     (unreachable)
@@ -44988,7 +45188,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2350)
+     (i32.const 2406)
      (i32.const 0)
     )
     (unreachable)
@@ -45008,7 +45208,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2351)
+     (i32.const 2407)
      (i32.const 0)
     )
     (unreachable)
@@ -45028,7 +45228,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2352)
+     (i32.const 2408)
      (i32.const 0)
     )
     (unreachable)
@@ -45048,7 +45248,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2353)
+     (i32.const 2409)
      (i32.const 0)
     )
     (unreachable)
@@ -45068,7 +45268,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2362)
+     (i32.const 2418)
      (i32.const 0)
     )
     (unreachable)
@@ -45088,7 +45288,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2363)
+     (i32.const 2419)
      (i32.const 0)
     )
     (unreachable)
@@ -45108,7 +45308,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2364)
+     (i32.const 2420)
      (i32.const 0)
     )
     (unreachable)
@@ -45128,7 +45328,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2365)
+     (i32.const 2421)
      (i32.const 0)
     )
     (unreachable)
@@ -45148,7 +45348,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2366)
+     (i32.const 2422)
      (i32.const 0)
     )
     (unreachable)
@@ -45168,7 +45368,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2367)
+     (i32.const 2423)
      (i32.const 0)
     )
     (unreachable)
@@ -45188,7 +45388,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2368)
+     (i32.const 2424)
      (i32.const 0)
     )
     (unreachable)
@@ -45208,7 +45408,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2369)
+     (i32.const 2425)
      (i32.const 0)
     )
     (unreachable)
@@ -45228,7 +45428,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2370)
+     (i32.const 2426)
      (i32.const 0)
     )
     (unreachable)
@@ -45248,1102 +45448,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2371)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2374)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const inf)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2375)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const 3)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2376)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const 2)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2377)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2378)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const 0.5)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2379)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2380)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2381)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const -0.5)
-     (f32.const inf)
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2382)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const -1)
-     (f32.const inf)
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2383)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const -2)
-     (f32.const inf)
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2384)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const -3)
-     (f32.const inf)
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2385)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.const -4)
-     (f32.const inf)
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2386)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2387)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2388)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const inf)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2389)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const 3)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2390)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const 2)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2391)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2392)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const 0.5)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2393)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2394)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2395)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const -0.5)
-     (f32.const inf)
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2396)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const -1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2397)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const -2)
-     (f32.const inf)
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2398)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const -3)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2399)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.const -4)
-     (f32.const inf)
-     (f32.const 0)
-     (get_global $std/math/DIVBYZERO)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2400)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2401)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2402)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2403)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2404)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2405)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2406)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0.5)
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2407)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const nan:0x400000)
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2408)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2409)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2410)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 1)
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2411)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2412)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0.5)
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2413)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2414)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const inf)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2415)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2416)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const 2)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2417)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2418)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const -2)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2419)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const -3)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2420)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -1)
-     (f32.const 0.5)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2421)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2422)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 1)
-     (f32.const inf)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2423)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2424)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 1)
-     (f32.const 3)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2425)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 1)
-     (f32.const 0.5)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2426)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const 1)
-     (f32.const -0.5)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 2427)
      (i32.const 0)
     )
@@ -46353,51 +45457,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 1)
-     (f32.const -3)
-     (f32.const 1)
      (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2428)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0.5)
-     (f32.const 0.5)
+     (f32.const nan:0x400000)
      (f32.const nan:0x400000)
      (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 8)
-     (i32.const 2429)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_powf
-     (f32.const -0.5)
-     (f32.const 1.5)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -46413,9 +45477,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -0.5)
-     (f32.const 2)
-     (f32.const 0.25)
+     (f32.const 0)
+     (f32.const inf)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46433,9 +45497,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -0.5)
+     (f32.const 0)
      (f32.const 3)
-     (f32.const -0.125)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46453,8 +45517,8 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -0.5)
-     (f32.const inf)
+     (f32.const 0)
+     (f32.const 2)
      (f32.const 0)
      (f32.const 0)
      (i32.const 0)
@@ -46473,11 +45537,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -0.5)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const inf)
+     (f32.const 0)
+     (f32.const 1)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46495,9 +45557,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const -0.5)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+     (f32.const 0)
+     (f32.const 0.5)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46515,9 +45577,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 0.5)
-     (f32.const inf)
      (f32.const 0)
+     (f32.const 0)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46535,11 +45597,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 0.5)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const inf)
+     (f32.const 0)
+     (f32.const -0)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46557,11 +45617,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 0.5)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (f32.const -0.5)
+     (f32.const inf)
+     (f32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -46577,11 +45637,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 1.5)
-     (f32.const inf)
+     (f32.const 0)
+     (f32.const -1)
      (f32.const inf)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -46597,13 +45657,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 1.5)
-     (f32.neg
-      (f32.const inf)
-     )
      (f32.const 0)
+     (f32.const -2)
+     (f32.const inf)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -46619,11 +45677,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const 1.5)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (f32.const -3)
+     (f32.const inf)
+     (f32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -46639,11 +45697,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
      (f32.const 0)
-     (i32.const 0)
+     (f32.const -4)
+     (f32.const inf)
+     (f32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -46659,8 +45717,10 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const inf)
+     (f32.const 0)
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const inf)
      (f32.const 0)
      (i32.const 0)
@@ -46679,11 +45739,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const inf)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46701,9 +45759,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
+     (f32.const -0)
      (f32.const inf)
-     (f32.const 3)
-     (f32.const inf)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46721,9 +45779,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const 2)
-     (f32.const inf)
+     (f32.const -0)
+     (f32.const 3)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46741,9 +45799,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const 1)
-     (f32.const inf)
+     (f32.const -0)
+     (f32.const 2)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46761,9 +45819,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const 0.5)
-     (f32.const inf)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const -0)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46781,8 +45839,8 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const -0.5)
+     (f32.const -0)
+     (f32.const 0.5)
      (f32.const 0)
      (f32.const 0)
      (i32.const 0)
@@ -46801,9 +45859,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const -1)
+     (f32.const -0)
      (f32.const 0)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46821,9 +45879,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.const inf)
-     (f32.const -2)
-     (f32.const 0)
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46841,13 +45899,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const -0.5)
+     (f32.const inf)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -46863,13 +45919,13 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
+     (f32.const -0)
+     (f32.const -1)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const inf)
-     (f32.const inf)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -46885,15 +45941,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const -0)
+     (f32.const -2)
+     (f32.const inf)
      (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -46909,15 +45961,13 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 3)
+     (f32.const -0)
+     (f32.const -3)
      (f32.neg
       (f32.const inf)
      )
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -46933,13 +45983,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 2)
+     (f32.const -0)
+     (f32.const -4)
      (f32.const inf)
      (f32.const 0)
-     (i32.const 0)
+     (get_global $std/math/DIVBYZERO)
     )
    )
    (block
@@ -46955,13 +46003,11 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
+     (f32.const -0)
      (f32.neg
       (f32.const inf)
      )
-     (f32.const 1)
-     (f32.neg
-      (f32.const inf)
-     )
+     (f32.const inf)
      (f32.const 0)
      (i32.const 0)
     )
@@ -46979,11 +46025,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0.5)
-     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -47001,11 +46045,9 @@
   (if
    (i32.eqz
     (call $std/math/test_powf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0.5)
+     (f32.const inf)
      (f32.const 0)
+     (f32.const 1)
      (f32.const 0)
      (i32.const 0)
     )
@@ -47026,6 +46068,1164 @@
      (f32.neg
       (f32.const inf)
      )
+     (f32.const 0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2460)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2461)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2462)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0.5)
+     (f32.const 0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2463)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2464)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2465)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2466)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2467)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2468)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0.5)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2469)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2470)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2471)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2472)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.const 2)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2473)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2474)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.const -2)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2475)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.const -3)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2476)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -1)
+     (f32.const 0.5)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2477)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2478)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1)
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2479)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2480)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1)
+     (f32.const 3)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2481)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1)
+     (f32.const 0.5)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2482)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1)
+     (f32.const -0.5)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2483)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1)
+     (f32.const -3)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2484)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0.5)
+     (f32.const 0.5)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2485)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0.5)
+     (f32.const 1.5)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2486)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0.5)
+     (f32.const 2)
+     (f32.const 0.25)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2487)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0.5)
+     (f32.const 3)
+     (f32.const -0.125)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2488)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0.5)
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2489)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0.5)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2490)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const -0.5)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2491)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 0.5)
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2492)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 0.5)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2493)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 0.5)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2494)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1.5)
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2495)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1.5)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2496)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const 1.5)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2497)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2498)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2499)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2500)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.const 3)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2501)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.const 2)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2502)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2503)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.const 0.5)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2504)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.const -0.5)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2505)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2506)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.const inf)
+     (f32.const -2)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2507)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2508)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2509)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2510)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 3)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2511)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 2)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2512)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2513)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0.5)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2514)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0.5)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2515)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_powf
+     (f32.neg
+      (f32.const inf)
+     )
      (f32.const -1)
      (f32.const -0)
      (f32.const 0)
@@ -47036,7 +47236,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2460)
+     (i32.const 2516)
      (i32.const 0)
     )
     (unreachable)
@@ -47058,7 +47258,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2461)
+     (i32.const 2517)
      (i32.const 0)
     )
     (unreachable)
@@ -47078,7 +47278,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2462)
+     (i32.const 2518)
      (i32.const 0)
     )
     (unreachable)
@@ -47098,7 +47298,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2463)
+     (i32.const 2519)
      (i32.const 0)
     )
     (unreachable)
@@ -47118,7 +47318,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2464)
+     (i32.const 2520)
      (i32.const 0)
     )
     (unreachable)
@@ -47138,7 +47338,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2465)
+     (i32.const 2521)
      (i32.const 0)
     )
     (unreachable)
@@ -47188,7 +47388,7 @@
        (call $~lib/env/abort
         (i32.const 0)
         (i32.const 8)
-        (i32.const 2474)
+        (i32.const 2530)
         (i32.const 2)
        )
        (unreachable)
@@ -47253,7 +47453,7 @@
        (call $~lib/env/abort
         (i32.const 0)
         (i32.const 8)
-        (i32.const 2482)
+        (i32.const 2538)
         (i32.const 2)
        )
        (unreachable)
@@ -47282,7 +47482,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2496)
+     (i32.const 2552)
      (i32.const 0)
     )
     (unreachable)
@@ -47301,7 +47501,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2497)
+     (i32.const 2553)
      (i32.const 0)
     )
     (unreachable)
@@ -47320,7 +47520,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2498)
+     (i32.const 2554)
      (i32.const 0)
     )
     (unreachable)
@@ -47339,7 +47539,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2499)
+     (i32.const 2555)
      (i32.const 0)
     )
     (unreachable)
@@ -47358,7 +47558,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2500)
+     (i32.const 2556)
      (i32.const 0)
     )
     (unreachable)
@@ -47377,7 +47577,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2501)
+     (i32.const 2557)
      (i32.const 0)
     )
     (unreachable)
@@ -47396,7 +47596,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2502)
+     (i32.const 2558)
      (i32.const 0)
     )
     (unreachable)
@@ -47415,7 +47615,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2503)
+     (i32.const 2559)
      (i32.const 0)
     )
     (unreachable)
@@ -47434,7 +47634,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2504)
+     (i32.const 2560)
      (i32.const 0)
     )
     (unreachable)
@@ -47453,7 +47653,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2505)
+     (i32.const 2561)
      (i32.const 0)
     )
     (unreachable)
@@ -47472,7 +47672,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2508)
+     (i32.const 2564)
      (i32.const 0)
     )
     (unreachable)
@@ -47491,7 +47691,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2509)
+     (i32.const 2565)
      (i32.const 0)
     )
     (unreachable)
@@ -47514,7 +47714,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2510)
+     (i32.const 2566)
      (i32.const 0)
     )
     (unreachable)
@@ -47533,7 +47733,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2511)
+     (i32.const 2567)
      (i32.const 0)
     )
     (unreachable)
@@ -47552,7 +47752,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2512)
+     (i32.const 2568)
      (i32.const 0)
     )
     (unreachable)
@@ -47571,7 +47771,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2513)
+     (i32.const 2569)
      (i32.const 0)
     )
     (unreachable)
@@ -47590,7 +47790,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2514)
+     (i32.const 2570)
      (i32.const 0)
     )
     (unreachable)
@@ -47609,7 +47809,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2515)
+     (i32.const 2571)
      (i32.const 0)
     )
     (unreachable)
@@ -47628,7 +47828,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2516)
+     (i32.const 2572)
      (i32.const 0)
     )
     (unreachable)
@@ -47647,7 +47847,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2517)
+     (i32.const 2573)
      (i32.const 0)
     )
     (unreachable)
@@ -47666,7 +47866,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2518)
+     (i32.const 2574)
      (i32.const 0)
     )
     (unreachable)
@@ -47685,7 +47885,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2519)
+     (i32.const 2575)
      (i32.const 0)
     )
     (unreachable)
@@ -47704,7 +47904,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2520)
+     (i32.const 2576)
      (i32.const 0)
     )
     (unreachable)
@@ -47723,7 +47923,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2521)
+     (i32.const 2577)
      (i32.const 0)
     )
     (unreachable)
@@ -47742,7 +47942,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2522)
+     (i32.const 2578)
      (i32.const 0)
     )
     (unreachable)
@@ -47761,7 +47961,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2523)
+     (i32.const 2579)
      (i32.const 0)
     )
     (unreachable)
@@ -47780,7 +47980,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2524)
+     (i32.const 2580)
      (i32.const 0)
     )
     (unreachable)
@@ -47799,7 +47999,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2533)
+     (i32.const 2589)
      (i32.const 0)
     )
     (unreachable)
@@ -47818,7 +48018,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2534)
+     (i32.const 2590)
      (i32.const 0)
     )
     (unreachable)
@@ -47837,7 +48037,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2535)
+     (i32.const 2591)
      (i32.const 0)
     )
     (unreachable)
@@ -47856,7 +48056,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2536)
+     (i32.const 2592)
      (i32.const 0)
     )
     (unreachable)
@@ -47875,7 +48075,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2537)
+     (i32.const 2593)
      (i32.const 0)
     )
     (unreachable)
@@ -47894,7 +48094,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2538)
+     (i32.const 2594)
      (i32.const 0)
     )
     (unreachable)
@@ -47913,7 +48113,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2539)
+     (i32.const 2595)
      (i32.const 0)
     )
     (unreachable)
@@ -47932,7 +48132,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2540)
+     (i32.const 2596)
      (i32.const 0)
     )
     (unreachable)
@@ -47951,7 +48151,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2541)
+     (i32.const 2597)
      (i32.const 0)
     )
     (unreachable)
@@ -47970,7 +48170,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2542)
+     (i32.const 2598)
      (i32.const 0)
     )
     (unreachable)
@@ -47989,7 +48189,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2545)
+     (i32.const 2601)
      (i32.const 0)
     )
     (unreachable)
@@ -48008,7 +48208,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2546)
+     (i32.const 2602)
      (i32.const 0)
     )
     (unreachable)
@@ -48031,7 +48231,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2547)
+     (i32.const 2603)
      (i32.const 0)
     )
     (unreachable)
@@ -48050,7 +48250,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2548)
+     (i32.const 2604)
      (i32.const 0)
     )
     (unreachable)
@@ -48069,7 +48269,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2549)
+     (i32.const 2605)
      (i32.const 0)
     )
     (unreachable)
@@ -48088,7 +48288,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2550)
+     (i32.const 2606)
      (i32.const 0)
     )
     (unreachable)
@@ -48107,7 +48307,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2551)
+     (i32.const 2607)
      (i32.const 0)
     )
     (unreachable)
@@ -48126,7 +48326,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2552)
+     (i32.const 2608)
      (i32.const 0)
     )
     (unreachable)
@@ -48145,7 +48345,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2553)
+     (i32.const 2609)
      (i32.const 0)
     )
     (unreachable)
@@ -48164,7 +48364,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2554)
+     (i32.const 2610)
      (i32.const 0)
     )
     (unreachable)
@@ -48183,7 +48383,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2555)
+     (i32.const 2611)
      (i32.const 0)
     )
     (unreachable)
@@ -48202,7 +48402,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2556)
+     (i32.const 2612)
      (i32.const 0)
     )
     (unreachable)
@@ -48221,7 +48421,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2557)
+     (i32.const 2613)
      (i32.const 0)
     )
     (unreachable)
@@ -48240,7 +48440,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2558)
+     (i32.const 2614)
      (i32.const 0)
     )
     (unreachable)
@@ -48259,7 +48459,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2559)
+     (i32.const 2615)
      (i32.const 0)
     )
     (unreachable)
@@ -48278,7 +48478,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2560)
+     (i32.const 2616)
      (i32.const 0)
     )
     (unreachable)
@@ -48297,7 +48497,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2561)
+     (i32.const 2617)
      (i32.const 0)
     )
     (unreachable)
@@ -48316,7 +48516,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2572)
+     (i32.const 2628)
      (i32.const 0)
     )
     (unreachable)
@@ -48335,7 +48535,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2573)
+     (i32.const 2629)
      (i32.const 0)
     )
     (unreachable)
@@ -48354,7 +48554,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2574)
+     (i32.const 2630)
      (i32.const 0)
     )
     (unreachable)
@@ -48373,7 +48573,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2575)
+     (i32.const 2631)
      (i32.const 0)
     )
     (unreachable)
@@ -48392,7 +48592,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2576)
+     (i32.const 2632)
      (i32.const 0)
     )
     (unreachable)
@@ -48411,7 +48611,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2577)
+     (i32.const 2633)
      (i32.const 0)
     )
     (unreachable)
@@ -48430,7 +48630,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2578)
+     (i32.const 2634)
      (i32.const 0)
     )
     (unreachable)
@@ -48451,7 +48651,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2579)
+     (i32.const 2635)
      (i32.const 0)
     )
     (unreachable)
@@ -48470,7 +48670,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2580)
+     (i32.const 2636)
      (i32.const 0)
     )
     (unreachable)
@@ -48489,7 +48689,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2588)
+     (i32.const 2644)
      (i32.const 0)
     )
     (unreachable)
@@ -48508,7 +48708,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2589)
+     (i32.const 2645)
      (i32.const 0)
     )
     (unreachable)
@@ -48527,7 +48727,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2590)
+     (i32.const 2646)
      (i32.const 0)
     )
     (unreachable)
@@ -48546,7 +48746,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2591)
+     (i32.const 2647)
      (i32.const 0)
     )
     (unreachable)
@@ -48565,7 +48765,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2592)
+     (i32.const 2648)
      (i32.const 0)
     )
     (unreachable)
@@ -48584,7 +48784,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2593)
+     (i32.const 2649)
      (i32.const 0)
     )
     (unreachable)
@@ -48603,7 +48803,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2594)
+     (i32.const 2650)
      (i32.const 0)
     )
     (unreachable)
@@ -48624,7 +48824,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2595)
+     (i32.const 2651)
      (i32.const 0)
     )
     (unreachable)
@@ -48643,7 +48843,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2596)
+     (i32.const 2652)
      (i32.const 0)
     )
     (unreachable)
@@ -48663,7 +48863,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2607)
+     (i32.const 2663)
      (i32.const 0)
     )
     (unreachable)
@@ -48683,7 +48883,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2608)
+     (i32.const 2664)
      (i32.const 0)
     )
     (unreachable)
@@ -48703,7 +48903,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2609)
+     (i32.const 2665)
      (i32.const 0)
     )
     (unreachable)
@@ -48723,7 +48923,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2610)
+     (i32.const 2666)
      (i32.const 0)
     )
     (unreachable)
@@ -48743,7 +48943,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2611)
+     (i32.const 2667)
      (i32.const 0)
     )
     (unreachable)
@@ -48763,7 +48963,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2612)
+     (i32.const 2668)
      (i32.const 0)
     )
     (unreachable)
@@ -48783,7 +48983,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2613)
+     (i32.const 2669)
      (i32.const 0)
     )
     (unreachable)
@@ -48803,7 +49003,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2614)
+     (i32.const 2670)
      (i32.const 0)
     )
     (unreachable)
@@ -48823,7 +49023,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2615)
+     (i32.const 2671)
      (i32.const 0)
     )
     (unreachable)
@@ -48843,1104 +49043,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2616)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 0)
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2619)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0)
-     (f64.const 1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2620)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 0.5)
-     (f64.const 1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2621)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0.5)
-     (f64.const 1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2622)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 1)
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2623)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -1)
-     (f64.const 1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2624)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 1.5)
-     (f64.const 1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2625)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -1.5)
-     (f64.const 1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2626)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 2)
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2627)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -2)
-     (f64.const 1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2628)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2629)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2630)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const nan:0x8000000000000)
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2631)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 0)
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2632)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0)
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2633)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 0.5)
-     (f64.const -1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2634)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0.5)
-     (f64.const -1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2635)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 1)
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2636)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -1)
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2637)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 1.5)
-     (f64.const -1)
-     (f64.const -0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2638)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -1.5)
-     (f64.const -1)
-     (f64.const 0.5)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2639)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 2)
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2640)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -2)
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2641)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2642)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2643)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const nan:0x8000000000000)
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2644)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2645)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 0)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2646)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 0)
-     (f64.const inf)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2647)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2648)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2649)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2650)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2651)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0)
-     (f64.const inf)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2652)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2653)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2654)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 1)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2655)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -1)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2656)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2657)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2658)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2659)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -1)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2660)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2661)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2662)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const nan:0x8000000000000)
-     (f64.const -0)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2663)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const 2)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2664)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const -0.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2665)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2666)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 2)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2667)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -0.5)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2668)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2669)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2670)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const 1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2671)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -1)
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 2672)
      (i32.const 0)
     )
@@ -49950,51 +49052,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
+     (f64.const 0)
      (f64.const 1)
-     (f64.const inf)
-     (f64.const 1)
+     (f64.const 0)
      (f64.const 0)
      (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2673)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const -1)
-     (f64.const inf)
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2674)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_rem
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -50010,13 +49072,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const inf)
-     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const 1)
+     (f64.const -0)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -50032,11 +49092,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
+     (f64.const 0.5)
      (f64.const 1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 1)
+     (f64.const 0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -50054,11 +49112,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const -1)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -1)
+     (f64.const -0.5)
+     (f64.const 1)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -50076,13 +49132,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const inf)
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
+     (f64.const 1)
+     (f64.const 1)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (f64.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -50098,15 +49152,11 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
+     (f64.const -1)
+     (f64.const 1)
+     (f64.const -0)
      (f64.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -50122,9 +49172,9 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
-     (f64.const 1.75)
-     (f64.const 0.5)
-     (f64.const -0.25)
+     (f64.const 1.5)
+     (f64.const 1)
+     (f64.const -0.5)
      (f64.const 0)
      (i32.const 0)
     )
@@ -50142,6 +49192,1156 @@
   (if
    (i32.eqz
     (call $std/math/test_rem
+     (f64.const -1.5)
+     (f64.const 1)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2682)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 2)
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2683)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -2)
+     (f64.const 1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2684)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2685)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2686)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2687)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2688)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2689)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0.5)
+     (f64.const -1)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2690)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0.5)
+     (f64.const -1)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2691)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2692)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2693)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1.5)
+     (f64.const -1)
+     (f64.const -0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2694)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1.5)
+     (f64.const -1)
+     (f64.const 0.5)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2695)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 2)
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2696)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -2)
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2697)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2698)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2699)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2700)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2701)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2702)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2703)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2704)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2705)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2706)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2707)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const inf)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2708)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2709)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2710)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2711)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2712)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2713)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2714)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2715)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2716)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2717)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2718)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const -0)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2719)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const 2)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2720)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const -0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2721)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2722)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 2)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2723)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -0.5)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2724)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2725)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2726)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2727)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2728)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2729)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.const inf)
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2730)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2731)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const inf)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2732)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2733)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const -1)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2734)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const inf)
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2735)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2736)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
+     (f64.const 1.75)
+     (f64.const 0.5)
+     (f64.const -0.25)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2737)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_rem
      (f64.const -1.75)
      (f64.const 0.5)
      (f64.const 0.25)
@@ -50153,7 +50353,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2682)
+     (i32.const 2738)
      (i32.const 0)
     )
     (unreachable)
@@ -50173,7 +50373,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2683)
+     (i32.const 2739)
      (i32.const 0)
     )
     (unreachable)
@@ -50193,7 +50393,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2684)
+     (i32.const 2740)
      (i32.const 0)
     )
     (unreachable)
@@ -50213,7 +50413,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2685)
+     (i32.const 2741)
      (i32.const 0)
     )
     (unreachable)
@@ -50233,7 +50433,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2694)
+     (i32.const 2750)
      (i32.const 0)
     )
     (unreachable)
@@ -50253,7 +50453,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2695)
+     (i32.const 2751)
      (i32.const 0)
     )
     (unreachable)
@@ -50273,7 +50473,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2696)
+     (i32.const 2752)
      (i32.const 0)
     )
     (unreachable)
@@ -50293,7 +50493,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2697)
+     (i32.const 2753)
      (i32.const 0)
     )
     (unreachable)
@@ -50313,7 +50513,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2698)
+     (i32.const 2754)
      (i32.const 0)
     )
     (unreachable)
@@ -50333,7 +50533,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2699)
+     (i32.const 2755)
      (i32.const 0)
     )
     (unreachable)
@@ -50353,7 +50553,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2700)
+     (i32.const 2756)
      (i32.const 0)
     )
     (unreachable)
@@ -50373,7 +50573,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2701)
+     (i32.const 2757)
      (i32.const 0)
     )
     (unreachable)
@@ -50393,7 +50593,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2702)
+     (i32.const 2758)
      (i32.const 0)
     )
     (unreachable)
@@ -50413,1104 +50613,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2703)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 0)
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2706)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0)
-     (f32.const 1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2707)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 0.5)
-     (f32.const 1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2708)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0.5)
-     (f32.const 1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2709)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 1)
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2710)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -1)
-     (f32.const 1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2711)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 1.5)
-     (f32.const 1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2712)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -1.5)
-     (f32.const 1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2713)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 2)
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2714)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -2)
-     (f32.const 1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2715)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2716)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2717)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const nan:0x400000)
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2718)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 0)
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2719)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0)
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2720)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 0.5)
-     (f32.const -1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2721)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0.5)
-     (f32.const -1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2722)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 1)
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2723)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -1)
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2724)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 1.5)
-     (f32.const -1)
-     (f32.const -0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2725)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -1.5)
-     (f32.const -1)
-     (f32.const 0.5)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2726)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 2)
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2727)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -2)
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2728)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2729)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2730)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const nan:0x400000)
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2731)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2732)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 0)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2733)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 0)
-     (f32.const inf)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2734)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2735)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2736)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2737)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2738)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0)
-     (f32.const inf)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2739)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2740)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2741)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 1)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2742)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -1)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2743)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2744)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2745)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2746)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -1)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2747)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2748)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2749)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const nan:0x400000)
-     (f32.const -0)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2750)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const 2)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2751)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const -0.5)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2752)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2753)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 2)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2754)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -0.5)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2755)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2756)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2757)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const 1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2758)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -1)
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 2759)
      (i32.const 0)
     )
@@ -51520,51 +50622,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
+     (f32.const 0)
      (f32.const 1)
-     (f32.const inf)
-     (f32.const 1)
+     (f32.const 0)
      (f32.const 0)
      (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2760)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const -1)
-     (f32.const inf)
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2761)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_remf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (get_global $std/math/INVALID)
     )
    )
    (block
@@ -51580,13 +50642,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const inf)
-     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const 1)
+     (f32.const -0)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -51602,11 +50662,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
+     (f32.const 0.5)
      (f32.const 1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 1)
+     (f32.const 0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -51624,11 +50682,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const -1)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -1)
+     (f32.const -0.5)
+     (f32.const 1)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -51646,13 +50702,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const inf)
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
+     (f32.const 1)
+     (f32.const 1)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (f32.const 0)
+     (i32.const 0)
     )
    )
    (block
@@ -51668,15 +50722,11 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const nan:0x400000)
+     (f32.const -1)
+     (f32.const 1)
+     (f32.const -0)
      (f32.const 0)
-     (get_global $std/math/INVALID)
+     (i32.const 0)
     )
    )
    (block
@@ -51692,9 +50742,9 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
-     (f32.const 1.75)
-     (f32.const 0.5)
-     (f32.const -0.25)
+     (f32.const 1.5)
+     (f32.const 1)
+     (f32.const -0.5)
      (f32.const 0)
      (i32.const 0)
     )
@@ -51712,6 +50762,1156 @@
   (if
    (i32.eqz
     (call $std/math/test_remf
+     (f32.const -1.5)
+     (f32.const 1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2769)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 2)
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2770)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -2)
+     (f32.const 1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2771)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2772)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2773)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2774)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2775)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2776)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0.5)
+     (f32.const -1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2777)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0.5)
+     (f32.const -1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2778)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2779)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2780)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1.5)
+     (f32.const -1)
+     (f32.const -0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2781)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1.5)
+     (f32.const -1)
+     (f32.const 0.5)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2782)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 2)
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2783)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -2)
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2784)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2785)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2786)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2787)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2788)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2789)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2790)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2791)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2792)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2793)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2794)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const inf)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2795)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2796)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2797)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2798)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2799)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2800)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2801)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2802)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2803)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2804)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2805)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const -0)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2806)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const 2)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2807)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const -0.5)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2808)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2809)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 2)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2810)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -0.5)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2811)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2812)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2813)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2814)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2815)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2816)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.const inf)
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2817)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2818)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const inf)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2819)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2820)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const -1)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2821)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const inf)
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2822)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2823)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
+     (f32.const 1.75)
+     (f32.const 0.5)
+     (f32.const -0.25)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2824)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_remf
      (f32.const -1.75)
      (f32.const 0.5)
      (f32.const 0.25)
@@ -51723,7 +51923,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2769)
+     (i32.const 2825)
      (i32.const 0)
     )
     (unreachable)
@@ -51743,7 +51943,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2770)
+     (i32.const 2826)
      (i32.const 0)
     )
     (unreachable)
@@ -51763,7 +51963,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2771)
+     (i32.const 2827)
      (i32.const 0)
     )
     (unreachable)
@@ -51783,7 +51983,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2772)
+     (i32.const 2828)
      (i32.const 0)
     )
     (unreachable)
@@ -51802,7 +52002,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2837)
+     (i32.const 2893)
      (i32.const 0)
     )
     (unreachable)
@@ -51821,7 +52021,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2838)
+     (i32.const 2894)
      (i32.const 0)
     )
     (unreachable)
@@ -51840,7 +52040,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2839)
+     (i32.const 2895)
      (i32.const 0)
     )
     (unreachable)
@@ -51859,7 +52059,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2840)
+     (i32.const 2896)
      (i32.const 0)
     )
     (unreachable)
@@ -51878,7 +52078,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2841)
+     (i32.const 2897)
      (i32.const 0)
     )
     (unreachable)
@@ -51897,7 +52097,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2842)
+     (i32.const 2898)
      (i32.const 0)
     )
     (unreachable)
@@ -51916,7 +52116,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2843)
+     (i32.const 2899)
      (i32.const 0)
     )
     (unreachable)
@@ -51935,7 +52135,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2844)
+     (i32.const 2900)
      (i32.const 0)
     )
     (unreachable)
@@ -51954,7 +52154,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2845)
+     (i32.const 2901)
      (i32.const 0)
     )
     (unreachable)
@@ -51973,603 +52173,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2846)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinh
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2849)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinh
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2850)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinh
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2851)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinh
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2852)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinh
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2853)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const -8.066848754882812)
-     (f32.const -1593.521240234375)
-     (f32.const 0.1671663224697113)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2862)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const 4.345239639282227)
-     (f32.const 38.548770904541016)
-     (f32.const -0.49340328574180603)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2863)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const -8.381433486938477)
-     (f32.const -2182.630859375)
-     (f32.const 0.0849970355629921)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2864)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const -6.531673431396484)
-     (f32.const -343.2723388671875)
-     (f32.const 0.0704190656542778)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2865)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const 9.267057418823242)
-     (f32.const 5291.78125)
-     (f32.const -0.44362515211105347)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2866)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const 0.6619858741760254)
-     (f32.const 0.7114062309265137)
-     (f32.const 0.058103885501623154)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2867)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const -0.40660393238067627)
-     (f32.const -0.4179006516933441)
-     (f32.const 0.39349499344825745)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2868)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const 0.5617597699165344)
-     (f32.const 0.5917755961418152)
-     (f32.const -0.4183797240257263)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2869)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const 0.7741522789001465)
-     (f32.const 0.8538292050361633)
-     (f32.const 0.45992106199264526)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2870)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const -0.6787636876106262)
-     (f32.const -0.7320976257324219)
-     (f32.const -0.48159059882164)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2871)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2874)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2875)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const inf)
-     (f32.const inf)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2876)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2877)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sinhf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2878)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const -8.06684839057968)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2890)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const 4.345239849338305)
-     (f64.const 2.0845238903256313)
-     (f64.const -0.07180261611938477)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2891)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const -8.38143342755525)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2892)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const -6.531673581913484)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2893)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const 9.267056966972586)
-     (f64.const 3.0441841217266385)
-     (f64.const -0.01546262577176094)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2894)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const 0.6619858980995045)
-     (f64.const 0.8136251582267503)
-     (f64.const -0.08618157356977463)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2895)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const -0.4066039223853553)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2896)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const 0.5617597462207241)
-     (f64.const 0.7495063350104014)
-     (f64.const -0.0981396734714508)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2897)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const 0.7741522965913037)
-     (f64.const 0.879859248170583)
-     (f64.const -0.37124353647232056)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2898)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const -0.6787637026394024)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2899)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 2902)
      (i32.const 0)
     )
@@ -52578,47 +52181,7 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2903)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (get_global $std/math/INVALID)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 2904)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_sqrt
+    (call $std/math/test_sinh
      (f64.const 0)
      (f64.const 0)
      (f64.const 0)
@@ -52637,7 +52200,7 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_sqrt
+    (call $std/math/test_sinh
      (f64.const -0)
      (f64.const -0)
      (f64.const 0)
@@ -52656,6 +52219,643 @@
   )
   (if
    (i32.eqz
+    (call $std/math/test_sinh
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2907)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinh
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2908)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinh
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2909)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const -8.066848754882812)
+     (f32.const -1593.521240234375)
+     (f32.const 0.1671663224697113)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2918)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const 4.345239639282227)
+     (f32.const 38.548770904541016)
+     (f32.const -0.49340328574180603)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2919)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const -8.381433486938477)
+     (f32.const -2182.630859375)
+     (f32.const 0.0849970355629921)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2920)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const -6.531673431396484)
+     (f32.const -343.2723388671875)
+     (f32.const 0.0704190656542778)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2921)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const 9.267057418823242)
+     (f32.const 5291.78125)
+     (f32.const -0.44362515211105347)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2922)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const 0.6619858741760254)
+     (f32.const 0.7114062309265137)
+     (f32.const 0.058103885501623154)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2923)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const -0.40660393238067627)
+     (f32.const -0.4179006516933441)
+     (f32.const 0.39349499344825745)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2924)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const 0.5617597699165344)
+     (f32.const 0.5917755961418152)
+     (f32.const -0.4183797240257263)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2925)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const 0.7741522789001465)
+     (f32.const 0.8538292050361633)
+     (f32.const 0.45992106199264526)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2926)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const -0.6787636876106262)
+     (f32.const -0.7320976257324219)
+     (f32.const -0.48159059882164)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2927)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2930)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2931)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const inf)
+     (f32.const inf)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2932)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2933)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sinhf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2934)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const -8.06684839057968)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2946)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const 4.345239849338305)
+     (f64.const 2.0845238903256313)
+     (f64.const -0.07180261611938477)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2947)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const -8.38143342755525)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2948)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const -6.531673581913484)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2949)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const 9.267056966972586)
+     (f64.const 3.0441841217266385)
+     (f64.const -0.01546262577176094)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2950)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const 0.6619858980995045)
+     (f64.const 0.8136251582267503)
+     (f64.const -0.08618157356977463)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2951)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const -0.4066039223853553)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2952)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const 0.5617597462207241)
+     (f64.const 0.7495063350104014)
+     (f64.const -0.0981396734714508)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2953)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const 0.7741522965913037)
+     (f64.const 0.879859248170583)
+     (f64.const -0.37124353647232056)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2954)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const -0.6787637026394024)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2955)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2958)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2959)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (get_global $std/math/INVALID)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2960)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2961)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_sqrt
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 2962)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
     (call $std/math/test_sqrt
      (f64.const 1)
      (f64.const 1)
@@ -52667,7 +52867,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2907)
+     (i32.const 2963)
      (i32.const 0)
     )
     (unreachable)
@@ -52686,7 +52886,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2908)
+     (i32.const 2964)
      (i32.const 0)
     )
     (unreachable)
@@ -52705,7 +52905,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2909)
+     (i32.const 2965)
      (i32.const 0)
     )
     (unreachable)
@@ -52724,7 +52924,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2910)
+     (i32.const 2966)
      (i32.const 0)
     )
     (unreachable)
@@ -52743,7 +52943,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2911)
+     (i32.const 2967)
      (i32.const 0)
     )
     (unreachable)
@@ -52762,7 +52962,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2912)
+     (i32.const 2968)
      (i32.const 0)
     )
     (unreachable)
@@ -52781,7 +52981,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2913)
+     (i32.const 2969)
      (i32.const 0)
     )
     (unreachable)
@@ -52800,7 +53000,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2914)
+     (i32.const 2970)
      (i32.const 0)
     )
     (unreachable)
@@ -52819,7 +53019,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2915)
+     (i32.const 2971)
      (i32.const 0)
     )
     (unreachable)
@@ -52838,7 +53038,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2916)
+     (i32.const 2972)
      (i32.const 0)
     )
     (unreachable)
@@ -52857,7 +53057,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2917)
+     (i32.const 2973)
      (i32.const 0)
     )
     (unreachable)
@@ -52876,7 +53076,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2918)
+     (i32.const 2974)
      (i32.const 0)
     )
     (unreachable)
@@ -52895,7 +53095,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2919)
+     (i32.const 2975)
      (i32.const 0)
     )
     (unreachable)
@@ -52914,7 +53114,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2920)
+     (i32.const 2976)
      (i32.const 0)
     )
     (unreachable)
@@ -52933,7 +53133,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2921)
+     (i32.const 2977)
      (i32.const 0)
     )
     (unreachable)
@@ -52952,7 +53152,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2922)
+     (i32.const 2978)
      (i32.const 0)
     )
     (unreachable)
@@ -52971,7 +53171,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2923)
+     (i32.const 2979)
      (i32.const 0)
     )
     (unreachable)
@@ -52990,7 +53190,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2924)
+     (i32.const 2980)
      (i32.const 0)
     )
     (unreachable)
@@ -53009,7 +53209,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2925)
+     (i32.const 2981)
      (i32.const 0)
     )
     (unreachable)
@@ -53028,7 +53228,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2926)
+     (i32.const 2982)
      (i32.const 0)
     )
     (unreachable)
@@ -53047,7 +53247,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2927)
+     (i32.const 2983)
      (i32.const 0)
     )
     (unreachable)
@@ -53066,7 +53266,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2928)
+     (i32.const 2984)
      (i32.const 0)
     )
     (unreachable)
@@ -53085,7 +53285,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2929)
+     (i32.const 2985)
      (i32.const 0)
     )
     (unreachable)
@@ -53104,7 +53304,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2930)
+     (i32.const 2986)
      (i32.const 0)
     )
     (unreachable)
@@ -53123,7 +53323,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2931)
+     (i32.const 2987)
      (i32.const 0)
     )
     (unreachable)
@@ -53142,7 +53342,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2932)
+     (i32.const 2988)
      (i32.const 0)
     )
     (unreachable)
@@ -53161,7 +53361,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2933)
+     (i32.const 2989)
      (i32.const 0)
     )
     (unreachable)
@@ -53180,7 +53380,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2934)
+     (i32.const 2990)
      (i32.const 0)
     )
     (unreachable)
@@ -53199,7 +53399,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2935)
+     (i32.const 2991)
      (i32.const 0)
     )
     (unreachable)
@@ -53218,7 +53418,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2936)
+     (i32.const 2992)
      (i32.const 0)
     )
     (unreachable)
@@ -53237,7 +53437,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2937)
+     (i32.const 2993)
      (i32.const 0)
     )
     (unreachable)
@@ -53256,7 +53456,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2938)
+     (i32.const 2994)
      (i32.const 0)
     )
     (unreachable)
@@ -53275,7 +53475,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2939)
+     (i32.const 2995)
      (i32.const 0)
     )
     (unreachable)
@@ -53294,7 +53494,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2940)
+     (i32.const 2996)
      (i32.const 0)
     )
     (unreachable)
@@ -53313,7 +53513,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2941)
+     (i32.const 2997)
      (i32.const 0)
     )
     (unreachable)
@@ -53332,7 +53532,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2942)
+     (i32.const 2998)
      (i32.const 0)
     )
     (unreachable)
@@ -53351,7 +53551,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2943)
+     (i32.const 2999)
      (i32.const 0)
     )
     (unreachable)
@@ -53370,7 +53570,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2944)
+     (i32.const 3000)
      (i32.const 0)
     )
     (unreachable)
@@ -53389,7 +53589,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2945)
+     (i32.const 3001)
      (i32.const 0)
     )
     (unreachable)
@@ -53408,7 +53608,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2946)
+     (i32.const 3002)
      (i32.const 0)
     )
     (unreachable)
@@ -53427,7 +53627,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2947)
+     (i32.const 3003)
      (i32.const 0)
     )
     (unreachable)
@@ -53446,7 +53646,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2948)
+     (i32.const 3004)
      (i32.const 0)
     )
     (unreachable)
@@ -53465,7 +53665,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2949)
+     (i32.const 3005)
      (i32.const 0)
     )
     (unreachable)
@@ -53484,7 +53684,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2950)
+     (i32.const 3006)
      (i32.const 0)
     )
     (unreachable)
@@ -53503,7 +53703,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2951)
+     (i32.const 3007)
      (i32.const 0)
     )
     (unreachable)
@@ -53522,7 +53722,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2952)
+     (i32.const 3008)
      (i32.const 0)
     )
     (unreachable)
@@ -53541,7 +53741,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2953)
+     (i32.const 3009)
      (i32.const 0)
     )
     (unreachable)
@@ -53560,7 +53760,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2954)
+     (i32.const 3010)
      (i32.const 0)
     )
     (unreachable)
@@ -53579,7 +53779,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2955)
+     (i32.const 3011)
      (i32.const 0)
     )
     (unreachable)
@@ -53598,7 +53798,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2956)
+     (i32.const 3012)
      (i32.const 0)
     )
     (unreachable)
@@ -53617,7 +53817,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2957)
+     (i32.const 3013)
      (i32.const 0)
     )
     (unreachable)
@@ -53636,7 +53836,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2958)
+     (i32.const 3014)
      (i32.const 0)
     )
     (unreachable)
@@ -53655,7 +53855,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2959)
+     (i32.const 3015)
      (i32.const 0)
     )
     (unreachable)
@@ -53674,7 +53874,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2960)
+     (i32.const 3016)
      (i32.const 0)
     )
     (unreachable)
@@ -53693,7 +53893,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2961)
+     (i32.const 3017)
      (i32.const 0)
     )
     (unreachable)
@@ -53712,7 +53912,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2962)
+     (i32.const 3018)
      (i32.const 0)
     )
     (unreachable)
@@ -53731,7 +53931,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2963)
+     (i32.const 3019)
      (i32.const 0)
     )
     (unreachable)
@@ -53750,7 +53950,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2964)
+     (i32.const 3020)
      (i32.const 0)
     )
     (unreachable)
@@ -53769,7 +53969,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2965)
+     (i32.const 3021)
      (i32.const 0)
     )
     (unreachable)
@@ -53788,7 +53988,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2966)
+     (i32.const 3022)
      (i32.const 0)
     )
     (unreachable)
@@ -53807,7 +54007,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2967)
+     (i32.const 3023)
      (i32.const 0)
     )
     (unreachable)
@@ -53826,7 +54026,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2968)
+     (i32.const 3024)
      (i32.const 0)
     )
     (unreachable)
@@ -53845,7 +54045,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2969)
+     (i32.const 3025)
      (i32.const 0)
     )
     (unreachable)
@@ -53864,7 +54064,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2970)
+     (i32.const 3026)
      (i32.const 0)
     )
     (unreachable)
@@ -53883,7 +54083,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2971)
+     (i32.const 3027)
      (i32.const 0)
     )
     (unreachable)
@@ -53902,7 +54102,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2972)
+     (i32.const 3028)
      (i32.const 0)
     )
     (unreachable)
@@ -53921,7 +54121,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2973)
+     (i32.const 3029)
      (i32.const 0)
     )
     (unreachable)
@@ -53940,7 +54140,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2974)
+     (i32.const 3030)
      (i32.const 0)
     )
     (unreachable)
@@ -53959,7 +54159,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2975)
+     (i32.const 3031)
      (i32.const 0)
     )
     (unreachable)
@@ -53978,7 +54178,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2984)
+     (i32.const 3040)
      (i32.const 0)
     )
     (unreachable)
@@ -53997,7 +54197,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2985)
+     (i32.const 3041)
      (i32.const 0)
     )
     (unreachable)
@@ -54016,7 +54216,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2986)
+     (i32.const 3042)
      (i32.const 0)
     )
     (unreachable)
@@ -54035,7 +54235,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2987)
+     (i32.const 3043)
      (i32.const 0)
     )
     (unreachable)
@@ -54054,7 +54254,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2988)
+     (i32.const 3044)
      (i32.const 0)
     )
     (unreachable)
@@ -54073,7 +54273,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2989)
+     (i32.const 3045)
      (i32.const 0)
     )
     (unreachable)
@@ -54092,7 +54292,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2990)
+     (i32.const 3046)
      (i32.const 0)
     )
     (unreachable)
@@ -54111,7 +54311,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2991)
+     (i32.const 3047)
      (i32.const 0)
     )
     (unreachable)
@@ -54130,7 +54330,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2992)
+     (i32.const 3048)
      (i32.const 0)
     )
     (unreachable)
@@ -54149,7 +54349,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2993)
+     (i32.const 3049)
      (i32.const 0)
     )
     (unreachable)
@@ -54168,7 +54368,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2996)
+     (i32.const 3052)
      (i32.const 0)
     )
     (unreachable)
@@ -54187,7 +54387,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2997)
+     (i32.const 3053)
      (i32.const 0)
     )
     (unreachable)
@@ -54208,7 +54408,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2998)
+     (i32.const 3054)
      (i32.const 0)
     )
     (unreachable)
@@ -54227,7 +54427,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 2999)
+     (i32.const 3055)
      (i32.const 0)
     )
     (unreachable)
@@ -54246,7 +54446,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3000)
+     (i32.const 3056)
      (i32.const 0)
     )
     (unreachable)
@@ -54265,7 +54465,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3001)
+     (i32.const 3057)
      (i32.const 0)
     )
     (unreachable)
@@ -54284,7 +54484,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3002)
+     (i32.const 3058)
      (i32.const 0)
     )
     (unreachable)
@@ -54303,7 +54503,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3003)
+     (i32.const 3059)
      (i32.const 0)
     )
     (unreachable)
@@ -54322,7 +54522,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3004)
+     (i32.const 3060)
      (i32.const 0)
     )
     (unreachable)
@@ -54341,7 +54541,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3005)
+     (i32.const 3061)
      (i32.const 0)
     )
     (unreachable)
@@ -54360,7 +54560,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3006)
+     (i32.const 3062)
      (i32.const 0)
     )
     (unreachable)
@@ -54379,7 +54579,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3007)
+     (i32.const 3063)
      (i32.const 0)
     )
     (unreachable)
@@ -54398,7 +54598,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3008)
+     (i32.const 3064)
      (i32.const 0)
     )
     (unreachable)
@@ -54417,7 +54617,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3009)
+     (i32.const 3065)
      (i32.const 0)
     )
     (unreachable)
@@ -54436,7 +54636,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3010)
+     (i32.const 3066)
      (i32.const 0)
     )
     (unreachable)
@@ -54455,7 +54655,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3011)
+     (i32.const 3067)
      (i32.const 0)
     )
     (unreachable)
@@ -54474,7 +54674,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3012)
+     (i32.const 3068)
      (i32.const 0)
     )
     (unreachable)
@@ -54493,7 +54693,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3013)
+     (i32.const 3069)
      (i32.const 0)
     )
     (unreachable)
@@ -54512,7 +54712,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3014)
+     (i32.const 3070)
      (i32.const 0)
     )
     (unreachable)
@@ -54531,7 +54731,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3015)
+     (i32.const 3071)
      (i32.const 0)
     )
     (unreachable)
@@ -54550,7 +54750,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3016)
+     (i32.const 3072)
      (i32.const 0)
     )
     (unreachable)
@@ -54569,7 +54769,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3017)
+     (i32.const 3073)
      (i32.const 0)
     )
     (unreachable)
@@ -54588,7 +54788,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3082)
+     (i32.const 3138)
      (i32.const 0)
     )
     (unreachable)
@@ -54607,7 +54807,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3083)
+     (i32.const 3139)
      (i32.const 0)
     )
     (unreachable)
@@ -54626,7 +54826,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3084)
+     (i32.const 3140)
      (i32.const 0)
     )
     (unreachable)
@@ -54645,7 +54845,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3085)
+     (i32.const 3141)
      (i32.const 0)
     )
     (unreachable)
@@ -54664,7 +54864,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3086)
+     (i32.const 3142)
      (i32.const 0)
     )
     (unreachable)
@@ -54683,7 +54883,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3087)
+     (i32.const 3143)
      (i32.const 0)
     )
     (unreachable)
@@ -54702,7 +54902,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3088)
+     (i32.const 3144)
      (i32.const 0)
     )
     (unreachable)
@@ -54721,7 +54921,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3089)
+     (i32.const 3145)
      (i32.const 0)
     )
     (unreachable)
@@ -54740,7 +54940,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3090)
+     (i32.const 3146)
      (i32.const 0)
     )
     (unreachable)
@@ -54759,599 +54959,6 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3091)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanh
-     (f64.const 0)
-     (f64.const 0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3094)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanh
-     (f64.const -0)
-     (f64.const -0)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3095)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanh
-     (f64.const inf)
-     (f64.const 1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3096)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanh
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const -1)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3097)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanh
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3098)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const -8.066848754882812)
-     (f32.const -0.9999998211860657)
-     (f32.const -0.3034979999065399)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3107)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const 4.345239639282227)
-     (f32.const 0.9996637105941772)
-     (f32.const 0.2154078334569931)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3108)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const -8.381433486938477)
-     (f32.const -0.9999998807907104)
-     (f32.const 0.23912210762500763)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3109)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const -6.531673431396484)
-     (f32.const -0.999995768070221)
-     (f32.const -0.18844597041606903)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3110)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const 9.267057418823242)
-     (f32.const 1)
-     (f32.const 0.1497807800769806)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3111)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const 0.6619858741760254)
-     (f32.const 0.5796834826469421)
-     (f32.const -0.05590476095676422)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3112)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const -0.40660393238067627)
-     (f32.const -0.38558530807495117)
-     (f32.const 0.349787175655365)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3113)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const 0.5617597699165344)
-     (f32.const 0.5092819333076477)
-     (f32.const -0.1528785079717636)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3114)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const 0.7741522789001465)
-     (f32.const 0.6493374705314636)
-     (f32.const 0.4317026138305664)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3115)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const -0.6787636876106262)
-     (f32.const -0.5907150506973267)
-     (f32.const 0.4079873859882355)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3116)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const 0)
-     (f32.const 0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3119)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const -0)
-     (f32.const -0)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3120)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const inf)
-     (f32.const 1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3121)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.neg
-      (f32.const inf)
-     )
-     (f32.const -1)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3122)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_tanhf
-     (f32.const nan:0x400000)
-     (f32.const nan:0x400000)
-     (f32.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3123)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const -8.06684839057968)
-     (f64.const -8)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3135)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const 4.345239849338305)
-     (f64.const 4)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3136)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const -8.38143342755525)
-     (f64.const -8)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3137)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const -6.531673581913484)
-     (f64.const -6)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3138)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const 9.267056966972586)
-     (f64.const 9)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3139)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const 0.6619858980995045)
-     (f64.const 0)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3140)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const -0.4066039223853553)
-     (f64.const -0)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3141)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const 0.5617597462207241)
-     (f64.const 0)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3142)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const 0.7741522965913037)
-     (f64.const 0)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3143)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const -0.6787637026394024)
-     (f64.const -0)
-     (f64.const 0)
-     (get_global $std/math/INEXACT)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3144)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const nan:0x8000000000000)
-     (f64.const nan:0x8000000000000)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
      (i32.const 3147)
      (i32.const 0)
     )
@@ -55360,49 +54967,7 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_trunc
-     (f64.const inf)
-     (f64.const inf)
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3148)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.neg
-      (f64.const inf)
-     )
-     (f64.const 0)
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 8)
-     (i32.const 3149)
-     (i32.const 0)
-    )
-    (unreachable)
-   )
-  )
-  (if
-   (i32.eqz
-    (call $std/math/test_trunc
+    (call $std/math/test_tanh
      (f64.const 0)
      (f64.const 0)
      (f64.const 0)
@@ -55421,7 +54986,7 @@
   )
   (if
    (i32.eqz
-    (call $std/math/test_trunc
+    (call $std/math/test_tanh
      (f64.const -0)
      (f64.const -0)
      (f64.const 0)
@@ -55440,6 +55005,641 @@
   )
   (if
    (i32.eqz
+    (call $std/math/test_tanh
+     (f64.const inf)
+     (f64.const 1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3152)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanh
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const -1)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3153)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanh
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3154)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const -8.066848754882812)
+     (f32.const -0.9999998211860657)
+     (f32.const -0.3034979999065399)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3163)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const 4.345239639282227)
+     (f32.const 0.9996637105941772)
+     (f32.const 0.2154078334569931)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3164)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const -8.381433486938477)
+     (f32.const -0.9999998807907104)
+     (f32.const 0.23912210762500763)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3165)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const -6.531673431396484)
+     (f32.const -0.999995768070221)
+     (f32.const -0.18844597041606903)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3166)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const 9.267057418823242)
+     (f32.const 1)
+     (f32.const 0.1497807800769806)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3167)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const 0.6619858741760254)
+     (f32.const 0.5796834826469421)
+     (f32.const -0.05590476095676422)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3168)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const -0.40660393238067627)
+     (f32.const -0.38558530807495117)
+     (f32.const 0.349787175655365)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3169)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const 0.5617597699165344)
+     (f32.const 0.5092819333076477)
+     (f32.const -0.1528785079717636)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3170)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const 0.7741522789001465)
+     (f32.const 0.6493374705314636)
+     (f32.const 0.4317026138305664)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3171)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const -0.6787636876106262)
+     (f32.const -0.5907150506973267)
+     (f32.const 0.4079873859882355)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3172)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const 0)
+     (f32.const 0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3175)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const -0)
+     (f32.const -0)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3176)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const inf)
+     (f32.const 1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3177)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.neg
+      (f32.const inf)
+     )
+     (f32.const -1)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3178)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_tanhf
+     (f32.const nan:0x400000)
+     (f32.const nan:0x400000)
+     (f32.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3179)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const -8.06684839057968)
+     (f64.const -8)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3191)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const 4.345239849338305)
+     (f64.const 4)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3192)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const -8.38143342755525)
+     (f64.const -8)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3193)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const -6.531673581913484)
+     (f64.const -6)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3194)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const 9.267056966972586)
+     (f64.const 9)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3195)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const 0.6619858980995045)
+     (f64.const 0)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3196)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const -0.4066039223853553)
+     (f64.const -0)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3197)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const 0.5617597462207241)
+     (f64.const 0)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3198)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const 0.7741522965913037)
+     (f64.const 0)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3199)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const -0.6787637026394024)
+     (f64.const -0)
+     (f64.const 0)
+     (get_global $std/math/INEXACT)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3200)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const nan:0x8000000000000)
+     (f64.const nan:0x8000000000000)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3203)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const inf)
+     (f64.const inf)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3204)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.neg
+      (f64.const inf)
+     )
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3205)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const 0)
+     (f64.const 0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3206)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
+    (call $std/math/test_trunc
+     (f64.const -0)
+     (f64.const -0)
+     (f64.const 0)
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 8)
+     (i32.const 3207)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.eqz
     (call $std/math/test_trunc
      (f64.const 1)
      (f64.const 1)
@@ -55451,7 +55651,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3152)
+     (i32.const 3208)
      (i32.const 0)
     )
     (unreachable)
@@ -55470,7 +55670,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3153)
+     (i32.const 3209)
      (i32.const 0)
     )
     (unreachable)
@@ -55489,7 +55689,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3154)
+     (i32.const 3210)
      (i32.const 0)
     )
     (unreachable)
@@ -55508,7 +55708,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3155)
+     (i32.const 3211)
      (i32.const 0)
     )
     (unreachable)
@@ -55527,7 +55727,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3156)
+     (i32.const 3212)
      (i32.const 0)
     )
     (unreachable)
@@ -55546,7 +55746,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3157)
+     (i32.const 3213)
      (i32.const 0)
     )
     (unreachable)
@@ -55565,7 +55765,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3158)
+     (i32.const 3214)
      (i32.const 0)
     )
     (unreachable)
@@ -55584,7 +55784,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3159)
+     (i32.const 3215)
      (i32.const 0)
     )
     (unreachable)
@@ -55603,7 +55803,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3160)
+     (i32.const 3216)
      (i32.const 0)
     )
     (unreachable)
@@ -55622,7 +55822,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3161)
+     (i32.const 3217)
      (i32.const 0)
     )
     (unreachable)
@@ -55641,7 +55841,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3170)
+     (i32.const 3226)
      (i32.const 0)
     )
     (unreachable)
@@ -55660,7 +55860,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3171)
+     (i32.const 3227)
      (i32.const 0)
     )
     (unreachable)
@@ -55679,7 +55879,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3172)
+     (i32.const 3228)
      (i32.const 0)
     )
     (unreachable)
@@ -55698,7 +55898,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3173)
+     (i32.const 3229)
      (i32.const 0)
     )
     (unreachable)
@@ -55717,7 +55917,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3174)
+     (i32.const 3230)
      (i32.const 0)
     )
     (unreachable)
@@ -55736,7 +55936,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3175)
+     (i32.const 3231)
      (i32.const 0)
     )
     (unreachable)
@@ -55755,7 +55955,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3176)
+     (i32.const 3232)
      (i32.const 0)
     )
     (unreachable)
@@ -55774,7 +55974,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3177)
+     (i32.const 3233)
      (i32.const 0)
     )
     (unreachable)
@@ -55793,7 +55993,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3178)
+     (i32.const 3234)
      (i32.const 0)
     )
     (unreachable)
@@ -55812,7 +56012,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3179)
+     (i32.const 3235)
      (i32.const 0)
     )
     (unreachable)
@@ -55831,7 +56031,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3182)
+     (i32.const 3238)
      (i32.const 0)
     )
     (unreachable)
@@ -55850,7 +56050,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3183)
+     (i32.const 3239)
      (i32.const 0)
     )
     (unreachable)
@@ -55873,7 +56073,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3184)
+     (i32.const 3240)
      (i32.const 0)
     )
     (unreachable)
@@ -55892,7 +56092,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3185)
+     (i32.const 3241)
      (i32.const 0)
     )
     (unreachable)
@@ -55911,7 +56111,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3186)
+     (i32.const 3242)
      (i32.const 0)
     )
     (unreachable)
@@ -55930,7 +56130,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3187)
+     (i32.const 3243)
      (i32.const 0)
     )
     (unreachable)
@@ -55949,7 +56149,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3188)
+     (i32.const 3244)
      (i32.const 0)
     )
     (unreachable)
@@ -55968,7 +56168,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3189)
+     (i32.const 3245)
      (i32.const 0)
     )
     (unreachable)
@@ -55987,7 +56187,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3190)
+     (i32.const 3246)
      (i32.const 0)
     )
     (unreachable)
@@ -56006,7 +56206,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3191)
+     (i32.const 3247)
      (i32.const 0)
     )
     (unreachable)
@@ -56025,7 +56225,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3192)
+     (i32.const 3248)
      (i32.const 0)
     )
     (unreachable)
@@ -56044,7 +56244,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3193)
+     (i32.const 3249)
      (i32.const 0)
     )
     (unreachable)
@@ -56063,7 +56263,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3194)
+     (i32.const 3250)
      (i32.const 0)
     )
     (unreachable)
@@ -56082,7 +56282,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3195)
+     (i32.const 3251)
      (i32.const 0)
     )
     (unreachable)
@@ -56101,7 +56301,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3196)
+     (i32.const 3252)
      (i32.const 0)
     )
     (unreachable)
@@ -56121,7 +56321,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3200)
+     (i32.const 3256)
      (i32.const 0)
     )
     (unreachable)
@@ -56141,7 +56341,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3201)
+     (i32.const 3257)
      (i32.const 0)
     )
     (unreachable)
@@ -56161,7 +56361,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3202)
+     (i32.const 3258)
      (i32.const 0)
     )
     (unreachable)
@@ -56181,7 +56381,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3203)
+     (i32.const 3259)
      (i32.const 0)
     )
     (unreachable)
@@ -56201,7 +56401,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3205)
+     (i32.const 3261)
      (i32.const 0)
     )
     (unreachable)
@@ -56221,7 +56421,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3206)
+     (i32.const 3262)
      (i32.const 0)
     )
     (unreachable)
@@ -56241,7 +56441,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3207)
+     (i32.const 3263)
      (i32.const 0)
     )
     (unreachable)
@@ -56261,7 +56461,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3208)
+     (i32.const 3264)
      (i32.const 0)
     )
     (unreachable)
@@ -56281,7 +56481,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3210)
+     (i32.const 3266)
      (i32.const 0)
     )
     (unreachable)
@@ -56301,7 +56501,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3211)
+     (i32.const 3267)
      (i32.const 0)
     )
     (unreachable)
@@ -56321,7 +56521,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3212)
+     (i32.const 3268)
      (i32.const 0)
     )
     (unreachable)
@@ -56341,7 +56541,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3213)
+     (i32.const 3269)
      (i32.const 0)
     )
     (unreachable)
@@ -56361,7 +56561,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3215)
+     (i32.const 3271)
      (i32.const 0)
     )
     (unreachable)
@@ -56381,7 +56581,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3216)
+     (i32.const 3272)
      (i32.const 0)
     )
     (unreachable)
@@ -56401,7 +56601,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3217)
+     (i32.const 3273)
      (i32.const 0)
     )
     (unreachable)
@@ -56421,7 +56621,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3218)
+     (i32.const 3274)
      (i32.const 0)
     )
     (unreachable)
@@ -56441,7 +56641,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3220)
+     (i32.const 3276)
      (i32.const 0)
     )
     (unreachable)
@@ -56461,7 +56661,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3221)
+     (i32.const 3277)
      (i32.const 0)
     )
     (unreachable)
@@ -56481,7 +56681,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3222)
+     (i32.const 3278)
      (i32.const 0)
     )
     (unreachable)
@@ -56501,7 +56701,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3223)
+     (i32.const 3279)
      (i32.const 0)
     )
     (unreachable)
@@ -56521,7 +56721,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3225)
+     (i32.const 3281)
      (i32.const 0)
     )
     (unreachable)
@@ -56541,7 +56741,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3226)
+     (i32.const 3282)
      (i32.const 0)
     )
     (unreachable)
@@ -56561,7 +56761,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3227)
+     (i32.const 3283)
      (i32.const 0)
     )
     (unreachable)
@@ -56581,7 +56781,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3228)
+     (i32.const 3284)
      (i32.const 0)
     )
     (unreachable)
@@ -56601,7 +56801,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3229)
+     (i32.const 3285)
      (i32.const 0)
     )
     (unreachable)
@@ -56621,7 +56821,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3230)
+     (i32.const 3286)
      (i32.const 0)
     )
     (unreachable)
@@ -56641,7 +56841,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3231)
+     (i32.const 3287)
      (i32.const 0)
     )
     (unreachable)
@@ -56667,7 +56867,7 @@
     (call $~lib/env/abort
      (i32.const 0)
      (i32.const 8)
-     (i32.const 3233)
+     (i32.const 3289)
      (i32.const 0)
     )
     (unreachable)
