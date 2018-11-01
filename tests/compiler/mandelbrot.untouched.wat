@@ -1,7 +1,6 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $FF (func (param f64) (result f64)))
- (type $Fi (func (param f64) (result i32)))
  (type $FFFF (func (param f64 f64 f64) (result f64)))
  (type $v (func))
  (memory $0 0)
@@ -314,16 +313,7 @@
    )
   )
  )
- (func $~lib/builtins/isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
-  (f64.eq
-   (f64.sub
-    (get_local $0)
-    (get_local $0)
-   )
-   (f64.const 0)
-  )
- )
- (func $../../examples/mandelbrot/assembly/index/clamp<f64> (; 2 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
+ (func $../../examples/mandelbrot/assembly/index/clamp<f64> (; 1 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
   (f64.min
    (f64.max
     (get_local $0)
@@ -332,7 +322,7 @@
    (get_local $2)
   )
  )
- (func $../../examples/mandelbrot/assembly/index/computeLine (; 3 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
@@ -582,65 +572,73 @@
        (br $repeat|2)
       )
      )
+     (set_local $20
+      (i32.sub
+       (get_global $../../examples/mandelbrot/assembly/index/NUM_COLORS)
+       (i32.const 1)
+      )
+     )
      (set_local $18
-      (f64.mul
-       (call $~lib/math/NativeMath.log
-        (f64.mul
-         (f64.const 0.5)
-         (call $~lib/math/NativeMath.log
-          (f64.add
-           (f64.mul
-            (get_local $13)
-            (get_local $13)
-           )
-           (f64.mul
-            (get_local $14)
-            (get_local $14)
-           )
-          )
-         )
-        )
+      (f64.add
+       (f64.mul
+        (get_local $13)
+        (get_local $13)
        )
-       (f64.div
-        (f64.const 1)
-        (get_global $~lib/math/NativeMath.LN2)
+       (f64.mul
+        (get_local $14)
+        (get_local $14)
        )
       )
      )
-     (set_local $20
-      (if (result i32)
-       (call $~lib/builtins/isFinite<f64>
-        (get_local $18)
-       )
-       (i32.trunc_u/f64
+     (if
+      (f64.gt
+       (get_local $18)
+       (f64.const 1)
+      )
+      (block
+       (set_local $19
         (f64.mul
-         (f64.convert_s/i32
-          (i32.sub
-           (get_global $../../examples/mandelbrot/assembly/index/NUM_COLORS)
-           (i32.const 1)
-          )
-         )
-         (call $../../examples/mandelbrot/assembly/index/clamp<f64>
+         (call $~lib/math/NativeMath.log
           (f64.mul
-           (f64.sub
-            (f64.convert_u/i32
-             (i32.add
-              (get_local $17)
-              (i32.const 1)
-             )
-            )
+           (f64.const 0.5)
+           (call $~lib/math/NativeMath.log
             (get_local $18)
            )
-           (get_local $10)
           )
-          (f64.const 0)
+         )
+         (f64.div
           (f64.const 1)
+          (get_global $~lib/math/NativeMath.LN2)
          )
         )
        )
-       (i32.sub
-        (get_global $../../examples/mandelbrot/assembly/index/NUM_COLORS)
-        (i32.const 1)
+       (set_local $20
+        (i32.trunc_u/f64
+         (f64.mul
+          (f64.convert_s/i32
+           (i32.sub
+            (get_global $../../examples/mandelbrot/assembly/index/NUM_COLORS)
+            (i32.const 1)
+           )
+          )
+          (call $../../examples/mandelbrot/assembly/index/clamp<f64>
+           (f64.mul
+            (f64.sub
+             (f64.convert_u/i32
+              (i32.add
+               (get_local $17)
+               (i32.const 1)
+              )
+             )
+             (get_local $19)
+            )
+            (get_local $10)
+           )
+           (f64.const 0)
+           (f64.const 1)
+          )
+         )
+        )
        )
       )
      )
@@ -665,6 +663,6 @@
    )
   )
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 3 ;) (type $v)
  )
 )

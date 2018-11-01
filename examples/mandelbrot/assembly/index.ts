@@ -36,11 +36,13 @@ export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
     // Iteration count is a discrete value in the range [0, limit] here, but we'd like it to be
     // normalized in the range [0, 2047] so it maps to the gradient computed in JS.
     // see also: http://linas.org/art-gallery/escape/escape.html
-    let frac = Math.log(0.5 * Math.log(ix * ix + iy * iy)) * (1.0 / Math.LN2);
-    let icol = isFinite(frac)
-      ? <u32>((NUM_COLORS - 1) * clamp((iteration + 1 - frac) * invLimit, 0.0, 1.0))
-      : NUM_COLORS - 1;
-    store<u16>(pitch + (x << 1), icol);
+    let col = NUM_COLORS - 1;
+    let sqd = ix * ix + iy * iy;
+    if (sqd > 1.0) {
+      let frac = Math.log(0.5 * Math.log(sqd)) * (1.0 / Math.LN2);
+      col = <u32>((NUM_COLORS - 1) * clamp((iteration + 1 - frac) * invLimit, 0.0, 1.0));
+    }
+    store<u16>(pitch + (x << 1), col);
   }
 }
 
