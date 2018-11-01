@@ -10,8 +10,10 @@ export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
   var scale      = 10.0 / min(3 * width, 4 * height);
   var imaginary  = (y - translateY) * scale;
   var realOffset = translateX * scale;
-  var pitch      = (y * width) << 1;
+  var stride     = (y * width) << 1;
   var invLimit   = 1.0 / limit;
+
+  var minIterations = min(8, limit);
 
   for (let x: u32 = 0; x < width; ++x) {
     let real = x * scale - realOffset;
@@ -27,7 +29,7 @@ export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
     }
 
     // Do a few extra iterations for quick escapes to reduce error margin
-    for (let minIterations = min(8, limit); iteration < minIterations; ++iteration) {
+    for (; iteration < minIterations; ++iteration) {
       let ixNew = ix * ix - iy * iy + real;
       iy = 2.0 * ix * iy + imaginary;
       ix = ixNew;
@@ -42,7 +44,7 @@ export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
       let frac = Math.log(0.5 * Math.log(sqd)) * (1.0 / Math.LN2);
       col = <u32>((NUM_COLORS - 1) * clamp((iteration + 1 - frac) * invLimit, 0.0, 1.0));
     }
-    store<u16>(pitch + (x << 1), col);
+    store<u16>(stride + (x << 1), col);
   }
 }
 

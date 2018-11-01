@@ -285,16 +285,17 @@
   (local $5 f64)
   (local $6 f64)
   (local $7 i32)
-  (local $8 f64)
-  (local $9 i32)
+  (local $8 i32)
+  (local $9 f64)
   (local $10 f64)
   (local $11 f64)
   (local $12 f64)
   (local $13 f64)
   (local $14 f64)
-  (set_local $6
+  (local $15 f64)
+  (set_local $10
    (f64.mul
-    (tee_local $10
+    (tee_local $9
      (f64.convert_u/i32
       (get_local $1)
      )
@@ -308,7 +309,7 @@
      (f64.convert_u/i32
       (get_local $0)
      )
-     (tee_local $8
+     (tee_local $5
       (f64.mul
        (tee_local $4
         (f64.convert_u/i32
@@ -325,7 +326,7 @@
       (f64.min
        (f64.mul
         (f64.const 3)
-        (get_local $10)
+        (get_local $9)
        )
        (f64.mul
         (f64.const 4)
@@ -338,7 +339,7 @@
   )
   (set_local $14
    (f64.mul
-    (get_local $6)
+    (get_local $10)
     (get_local $11)
    )
   )
@@ -351,19 +352,27 @@
     (i32.const 1)
    )
   )
-  (set_local $10
+  (set_local $15
    (f64.div
     (f64.const 1)
-    (f64.convert_u/i32
-     (get_local $3)
+    (tee_local $5
+     (f64.convert_u/i32
+      (get_local $3)
+     )
     )
+   )
+  )
+  (set_local $9
+   (f64.min
+    (f64.const 8)
+    (get_local $5)
    )
   )
   (block $break|0
    (loop $repeat|0
     (br_if $break|0
      (i32.ge_u
-      (get_local $9)
+      (get_local $8)
       (get_local $1)
      )
     )
@@ -371,7 +380,7 @@
      (f64.sub
       (f64.mul
        (f64.convert_u/i32
-        (get_local $9)
+        (get_local $8)
        )
        (get_local $11)
       )
@@ -381,7 +390,7 @@
     (set_local $4
      (f64.const 0)
     )
-    (set_local $5
+    (set_local $6
      (f64.const 0)
     )
     (set_local $7
@@ -392,30 +401,30 @@
       (if
        (f64.le
         (f64.add
-         (tee_local $6
+         (tee_local $10
           (f64.mul
            (get_local $4)
            (get_local $4)
           )
          )
-         (tee_local $8
+         (tee_local $5
           (f64.mul
-           (get_local $5)
-           (get_local $5)
+           (get_local $6)
+           (get_local $6)
           )
          )
         )
         (f64.const 4)
        )
        (block
-        (set_local $5
+        (set_local $6
          (f64.add
           (f64.mul
            (f64.mul
             (f64.const 2)
             (get_local $4)
            )
-           (get_local $5)
+           (get_local $6)
           )
           (get_local $12)
          )
@@ -423,8 +432,8 @@
         (set_local $4
          (f64.add
           (f64.sub
-           (get_local $6)
-           (get_local $8)
+           (get_local $10)
+           (get_local $5)
           )
           (get_local $13)
          )
@@ -447,14 +456,6 @@
      )
     )
     (block $break|2
-     (set_local $6
-      (f64.min
-       (f64.const 8)
-       (f64.convert_u/i32
-        (get_local $3)
-       )
-      )
-     )
      (loop $repeat|2
       (br_if $break|2
        (i32.eqz
@@ -462,11 +463,11 @@
          (f64.convert_u/i32
           (get_local $7)
          )
-         (get_local $6)
+         (get_local $9)
         )
        )
       )
-      (set_local $8
+      (set_local $5
        (f64.add
         (f64.sub
          (f64.mul
@@ -474,27 +475,27 @@
           (get_local $4)
          )
          (f64.mul
-          (get_local $5)
-          (get_local $5)
+          (get_local $6)
+          (get_local $6)
          )
         )
         (get_local $13)
        )
       )
-      (set_local $5
+      (set_local $6
        (f64.add
         (f64.mul
          (f64.mul
           (f64.const 2)
           (get_local $4)
          )
-         (get_local $5)
+         (get_local $6)
         )
         (get_local $12)
        )
       )
       (set_local $4
-       (get_local $8)
+       (get_local $5)
       )
       (set_local $7
        (i32.add
@@ -510,27 +511,27 @@
     )
     (if
      (f64.gt
-      (tee_local $6
+      (tee_local $5
        (f64.add
         (f64.mul
          (get_local $4)
          (get_local $4)
         )
         (f64.mul
-         (get_local $5)
-         (get_local $5)
+         (get_local $6)
+         (get_local $6)
         )
        )
       )
       (f64.const 1)
      )
      (block
-      (set_local $8
+      (set_local $5
        (call $~lib/math/NativeMath.log
         (f64.mul
          (f64.const 0.5)
          (call $~lib/math/NativeMath.log
-          (get_local $6)
+          (get_local $5)
          )
         )
        )
@@ -549,11 +550,11 @@
              )
             )
             (f64.mul
-             (get_local $8)
+             (get_local $5)
              (f64.const 1.4426950408889634)
             )
            )
-           (get_local $10)
+           (get_local $15)
           )
          )
         )
@@ -565,15 +566,15 @@
      (i32.add
       (get_local $0)
       (i32.shl
-       (get_local $9)
+       (get_local $8)
        (i32.const 1)
       )
      )
      (get_local $2)
     )
-    (set_local $9
+    (set_local $8
      (i32.add
-      (get_local $9)
+      (get_local $8)
       (i32.const 1)
      )
     )
