@@ -302,13 +302,13 @@
   (local $12 f64)
   (local $13 f64)
   (set_local $6
-   (f64.div
+   (f64.mul
     (tee_local $9
      (f64.convert_u/i32
       (get_local $1)
      )
     )
-    (f64.const 1.6)
+    (f64.const 0.625)
    )
   )
   (set_local $11
@@ -318,13 +318,13 @@
       (get_local $0)
      )
      (tee_local $8
-      (f64.div
+      (f64.mul
        (tee_local $4
         (f64.convert_u/i32
          (get_local $2)
         )
        )
-       (f64.const 2)
+       (f64.const 0.5)
       )
      )
     )

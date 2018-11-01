@@ -351,19 +351,25 @@
   (local $19 f64)
   (local $20 i32)
   (set_local $4
-   (f64.div
+   (f64.mul
     (f64.convert_u/i32
      (get_local $1)
     )
-    (f64.const 1.6)
+    (f64.div
+     (f64.const 1)
+     (f64.const 1.6)
+    )
    )
   )
   (set_local $5
-   (f64.div
+   (f64.mul
     (f64.convert_u/i32
      (get_local $2)
     )
-    (f64.const 2)
+    (f64.div
+     (f64.const 1)
+     (f64.const 2)
+    )
    )
   )
   (set_local $6
@@ -475,15 +481,6 @@
         )
         (block
          (block
-          (set_local $18
-           (f64.add
-            (f64.sub
-             (get_local $15)
-             (get_local $16)
-            )
-            (get_local $12)
-           )
-          )
           (set_local $14
            (f64.add
             (f64.mul
@@ -497,7 +494,13 @@
            )
           )
           (set_local $13
-           (get_local $18)
+           (f64.add
+            (f64.sub
+             (get_local $15)
+             (get_local $16)
+            )
+            (get_local $12)
+           )
           )
           (if
            (i32.ge_u
