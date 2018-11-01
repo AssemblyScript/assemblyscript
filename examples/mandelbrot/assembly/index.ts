@@ -5,16 +5,16 @@ const NUM_COLORS = 2048;
 
 /** Computes a single line in the rectangle `width` x `height`. */
 export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
-  var translateX = width / 1.6;
-  var translateY = height / 2.0;
-  var scale = 10.0 / min(3 * width, 4 * height);
-  var imaginary = (y - translateY) * scale;
-  var scaledTranslateX = translateX * scale;
-  var pitch = (y * width) << 1;
-  var invLimit = 1.0 / limit;
+  var translateX = width  * (1.0 / 1.6);
+  var translateY = height * (1.0 / 2.0);
+  var scale      = 10.0 / min(3 * width, 4 * height);
+  var imaginary  = (y - translateY) * scale;
+  var realOffset = translateX * scale;
+  var pitch      = (y * width) << 1;
+  var invLimit   = 1.0 / limit;
 
   for (let x: u32 = 0; x < width; ++x) {
-    let real = x * scale - scaledTranslateX;
+    let real = x * scale - realOffset;
 
     // Iterate until either the escape radius or iteration limit is exceeded
     let ix = 0.0, iy = 0.0, ixSq: f64, iySq: f64;

@@ -23,7 +23,7 @@
   (local $13 f64)
   ;;@ assembly/index.ts:11:2
   (set_local $11
-   ;;@ assembly/index.ts:11:18
+   ;;@ assembly/index.ts:11:19
    (f64.mul
     (f64.sub
      (f64.convert_u/i32
@@ -32,25 +32,24 @@
      ;;@ assembly/index.ts:9:2
      (tee_local $7
       ;;@ assembly/index.ts:9:19
-      (f64.div
+      (f64.mul
        (tee_local $4
         (f64.convert_u/i32
          (get_local $2)
         )
        )
-       ;;@ assembly/index.ts:9:28
-       (f64.const 2)
+       (f64.const 0.5)
       )
      )
     )
     ;;@ assembly/index.ts:10:2
     (tee_local $10
-     ;;@ assembly/index.ts:10:14
+     ;;@ assembly/index.ts:10:19
      (f64.div
       (f64.const 10)
-      ;;@ assembly/index.ts:10:21
+      ;;@ assembly/index.ts:10:26
       (f64.min
-       ;;@ assembly/index.ts:10:25
+       ;;@ assembly/index.ts:10:30
        (f64.mul
         (f64.const 3)
         (tee_local $9
@@ -59,7 +58,7 @@
          )
         )
        )
-       ;;@ assembly/index.ts:10:36
+       ;;@ assembly/index.ts:10:41
        (f64.mul
         (f64.const 4)
         (get_local $4)
@@ -71,32 +70,31 @@
   )
   ;;@ assembly/index.ts:12:2
   (set_local $13
-   ;;@ assembly/index.ts:12:25
+   ;;@ assembly/index.ts:12:19
    (f64.mul
     ;;@ assembly/index.ts:8:19
-    (f64.div
+    (f64.mul
      (get_local $9)
-     ;;@ assembly/index.ts:8:27
-     (f64.const 1.6)
+     (f64.const 0.625)
     )
     (get_local $10)
    )
   )
   ;;@ assembly/index.ts:13:2
   (set_local $0
-   ;;@ assembly/index.ts:13:14
+   ;;@ assembly/index.ts:13:19
    (i32.shl
     (i32.mul
      (get_local $0)
      (get_local $1)
     )
-    ;;@ assembly/index.ts:13:29
+    ;;@ assembly/index.ts:13:34
     (i32.const 1)
    )
   )
   ;;@ assembly/index.ts:14:2
   (set_local $9
-   ;;@ assembly/index.ts:14:17
+   ;;@ assembly/index.ts:14:19
    (f64.div
     (f64.const 1)
     (f64.convert_u/i32
