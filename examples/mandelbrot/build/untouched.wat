@@ -14,16 +14,16 @@
  (export "table" (table $0))
  (export "computeLine" (func $assembly/index/computeLine))
  (func $assembly/index/clamp<f64> (; 1 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
-  ;;@ assembly/index.ts:54:43
+  ;;@ assembly/index.ts:55:43
   (f64.min
-   ;;@ assembly/index.ts:54:13
+   ;;@ assembly/index.ts:55:13
    (f64.max
-    ;;@ assembly/index.ts:54:17
+    ;;@ assembly/index.ts:55:17
     (get_local $0)
-    ;;@ assembly/index.ts:54:24
+    ;;@ assembly/index.ts:55:24
     (get_local $1)
    )
-   ;;@ assembly/index.ts:54:35
+   ;;@ assembly/index.ts:55:35
    (get_local $2)
   )
  )
@@ -252,13 +252,13 @@
             (f64.mul
              (f64.mul
               (f64.const 2)
-              ;;@ assembly/index.ts:25:15
+              ;;@ assembly/index.ts:25:17
               (get_local $14)
              )
-             ;;@ assembly/index.ts:25:20
+             ;;@ assembly/index.ts:25:22
              (get_local $15)
             )
-            ;;@ assembly/index.ts:25:25
+            ;;@ assembly/index.ts:25:27
             (get_local $7)
            )
           )
@@ -302,173 +302,173 @@
      )
      ;;@ assembly/index.ts:32:4
      (block $break|2
-      (loop $repeat|2
-       (br_if $break|2
-        (i32.eqz
-         ;;@ assembly/index.ts:32:11
-         (f64.lt
-          (f64.convert_u/i32
-           (get_local $18)
-          )
-          ;;@ assembly/index.ts:32:23
-          (get_local $11)
+      (loop $continue|2
+       (if
+        ;;@ assembly/index.ts:32:11
+        (f64.lt
+         (f64.convert_u/i32
+          (get_local $18)
          )
+         ;;@ assembly/index.ts:32:23
+         (get_local $11)
+        )
+        (block
+         ;;@ assembly/index.ts:32:38
+         (block
+          ;;@ assembly/index.ts:33:6
+          (set_local $19
+           ;;@ assembly/index.ts:33:18
+           (f64.add
+            (f64.sub
+             (f64.mul
+              (get_local $14)
+              ;;@ assembly/index.ts:33:23
+              (get_local $14)
+             )
+             ;;@ assembly/index.ts:33:28
+             (f64.mul
+              (get_local $15)
+              ;;@ assembly/index.ts:33:33
+              (get_local $15)
+             )
+            )
+            ;;@ assembly/index.ts:33:38
+            (get_local $13)
+           )
+          )
+          ;;@ assembly/index.ts:34:6
+          (set_local $15
+           ;;@ assembly/index.ts:34:11
+           (f64.add
+            (f64.mul
+             (f64.mul
+              (f64.const 2)
+              ;;@ assembly/index.ts:34:17
+              (get_local $14)
+             )
+             ;;@ assembly/index.ts:34:22
+             (get_local $15)
+            )
+            ;;@ assembly/index.ts:34:27
+            (get_local $7)
+           )
+          )
+          ;;@ assembly/index.ts:35:6
+          (set_local $14
+           ;;@ assembly/index.ts:35:11
+           (get_local $19)
+          )
+          ;;@ assembly/index.ts:36:6
+          (set_local $18
+           (i32.add
+            ;;@ assembly/index.ts:36:8
+            (get_local $18)
+            (i32.const 1)
+           )
+          )
+         )
+         (br $continue|2)
         )
        )
-       ;;@ assembly/index.ts:32:51
-       (block
-        ;;@ assembly/index.ts:33:6
-        (set_local $19
-         ;;@ assembly/index.ts:33:18
-         (f64.add
-          (f64.sub
-           (f64.mul
-            (get_local $14)
-            ;;@ assembly/index.ts:33:23
-            (get_local $14)
-           )
-           ;;@ assembly/index.ts:33:28
-           (f64.mul
-            (get_local $15)
-            ;;@ assembly/index.ts:33:33
-            (get_local $15)
-           )
-          )
-          ;;@ assembly/index.ts:33:38
-          (get_local $13)
-         )
-        )
-        ;;@ assembly/index.ts:34:6
-        (set_local $15
-         ;;@ assembly/index.ts:34:11
-         (f64.add
-          (f64.mul
-           (f64.mul
-            (f64.const 2)
-            ;;@ assembly/index.ts:34:17
-            (get_local $14)
-           )
-           ;;@ assembly/index.ts:34:22
-           (get_local $15)
-          )
-          ;;@ assembly/index.ts:34:27
-          (get_local $7)
-         )
-        )
-        ;;@ assembly/index.ts:35:6
-        (set_local $14
-         ;;@ assembly/index.ts:35:11
-         (get_local $19)
-        )
-       )
-       ;;@ assembly/index.ts:32:38
-       (set_local $18
-        (i32.add
-         ;;@ assembly/index.ts:32:40
-         (get_local $18)
-         (i32.const 1)
-        )
-       )
-       (br $repeat|2)
-      )
-     )
-     ;;@ assembly/index.ts:41:4
-     (set_local $20
-      ;;@ assembly/index.ts:41:14
-      (i32.sub
-       (get_global $assembly/index/NUM_COLORS)
-       ;;@ assembly/index.ts:41:27
-       (i32.const 1)
       )
      )
      ;;@ assembly/index.ts:42:4
-     (set_local $19
+     (set_local $20
       ;;@ assembly/index.ts:42:14
+      (i32.sub
+       (get_global $assembly/index/NUM_COLORS)
+       ;;@ assembly/index.ts:42:27
+       (i32.const 1)
+      )
+     )
+     ;;@ assembly/index.ts:43:4
+     (set_local $19
+      ;;@ assembly/index.ts:43:14
       (f64.add
        (f64.mul
         (get_local $14)
-        ;;@ assembly/index.ts:42:19
+        ;;@ assembly/index.ts:43:19
         (get_local $14)
        )
-       ;;@ assembly/index.ts:42:24
+       ;;@ assembly/index.ts:43:24
        (f64.mul
         (get_local $15)
-        ;;@ assembly/index.ts:42:29
+        ;;@ assembly/index.ts:43:29
         (get_local $15)
        )
       )
      )
-     ;;@ assembly/index.ts:43:4
+     ;;@ assembly/index.ts:44:4
      (if
-      ;;@ assembly/index.ts:43:8
+      ;;@ assembly/index.ts:44:8
       (f64.gt
        (get_local $19)
-       ;;@ assembly/index.ts:43:14
+       ;;@ assembly/index.ts:44:14
        (f64.const 1)
       )
-      ;;@ assembly/index.ts:43:19
+      ;;@ assembly/index.ts:44:19
       (block
-       ;;@ assembly/index.ts:44:6
+       ;;@ assembly/index.ts:45:6
        (set_local $21
-        ;;@ assembly/index.ts:44:17
+        ;;@ assembly/index.ts:45:17
         (f64.mul
-         ;;@ assembly/index.ts:44:22
+         ;;@ assembly/index.ts:45:22
          (call $~lib/bindings/Math/log
-          ;;@ assembly/index.ts:44:26
+          ;;@ assembly/index.ts:45:26
           (f64.mul
            (f64.const 0.5)
-           ;;@ assembly/index.ts:44:37
+           ;;@ assembly/index.ts:45:37
            (call $~lib/bindings/Math/log
-            ;;@ assembly/index.ts:44:41
+            ;;@ assembly/index.ts:45:41
             (get_local $19)
            )
           )
          )
-         ;;@ assembly/index.ts:44:49
+         ;;@ assembly/index.ts:45:49
          (f64.div
-          ;;@ assembly/index.ts:44:50
+          ;;@ assembly/index.ts:45:50
           (f64.const 1)
-          ;;@ assembly/index.ts:44:56
+          ;;@ assembly/index.ts:45:56
           (get_global $~lib/bindings/Math/LN2)
          )
         )
        )
-       ;;@ assembly/index.ts:45:6
+       ;;@ assembly/index.ts:46:6
        (set_local $20
-        ;;@ assembly/index.ts:45:12
+        ;;@ assembly/index.ts:46:12
         (i32.trunc_u/f64
-         ;;@ assembly/index.ts:45:18
+         ;;@ assembly/index.ts:46:18
          (f64.mul
           (f64.convert_s/i32
            (i32.sub
-            ;;@ assembly/index.ts:45:19
+            ;;@ assembly/index.ts:46:19
             (get_global $assembly/index/NUM_COLORS)
-            ;;@ assembly/index.ts:45:32
+            ;;@ assembly/index.ts:46:32
             (i32.const 1)
            )
           )
-          ;;@ assembly/index.ts:45:37
+          ;;@ assembly/index.ts:46:37
           (call $assembly/index/clamp<f64>
-           ;;@ assembly/index.ts:45:43
+           ;;@ assembly/index.ts:46:43
            (f64.mul
             (f64.sub
              (f64.convert_u/i32
-              ;;@ assembly/index.ts:45:44
+              ;;@ assembly/index.ts:46:44
               (i32.add
                (get_local $18)
-               ;;@ assembly/index.ts:45:56
+               ;;@ assembly/index.ts:46:56
                (i32.const 1)
               )
              )
-             ;;@ assembly/index.ts:45:60
+             ;;@ assembly/index.ts:46:60
              (get_local $21)
             )
-            ;;@ assembly/index.ts:45:68
+            ;;@ assembly/index.ts:46:68
             (get_local $10)
            )
-           ;;@ assembly/index.ts:45:78
+           ;;@ assembly/index.ts:46:78
            (f64.const 0)
-           ;;@ assembly/index.ts:45:83
+           ;;@ assembly/index.ts:46:83
            (f64.const 1)
           )
          )
@@ -476,20 +476,20 @@
        )
       )
      )
-     ;;@ assembly/index.ts:47:4
+     ;;@ assembly/index.ts:48:4
      (i32.store16
-      ;;@ assembly/index.ts:47:15
+      ;;@ assembly/index.ts:48:15
       (i32.add
        (get_local $9)
-       ;;@ assembly/index.ts:47:24
+       ;;@ assembly/index.ts:48:24
        (i32.shl
-        ;;@ assembly/index.ts:47:25
+        ;;@ assembly/index.ts:48:25
         (get_local $12)
-        ;;@ assembly/index.ts:47:30
+        ;;@ assembly/index.ts:48:30
         (i32.const 1)
        )
       )
-      ;;@ assembly/index.ts:47:34
+      ;;@ assembly/index.ts:48:34
       (get_local $20)
      )
     )

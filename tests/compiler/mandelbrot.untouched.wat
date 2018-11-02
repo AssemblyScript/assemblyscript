@@ -521,56 +521,56 @@
       )
      )
      (block $break|2
-      (loop $repeat|2
-       (br_if $break|2
-        (i32.eqz
-         (f64.lt
-          (f64.convert_u/i32
-           (get_local $18)
-          )
-          (get_local $11)
+      (loop $continue|2
+       (if
+        (f64.lt
+         (f64.convert_u/i32
+          (get_local $18)
          )
+         (get_local $11)
+        )
+        (block
+         (block
+          (set_local $19
+           (f64.add
+            (f64.sub
+             (f64.mul
+              (get_local $14)
+              (get_local $14)
+             )
+             (f64.mul
+              (get_local $15)
+              (get_local $15)
+             )
+            )
+            (get_local $13)
+           )
+          )
+          (set_local $15
+           (f64.add
+            (f64.mul
+             (f64.mul
+              (f64.const 2)
+              (get_local $14)
+             )
+             (get_local $15)
+            )
+            (get_local $7)
+           )
+          )
+          (set_local $14
+           (get_local $19)
+          )
+          (set_local $18
+           (i32.add
+            (get_local $18)
+            (i32.const 1)
+           )
+          )
+         )
+         (br $continue|2)
         )
        )
-       (block
-        (set_local $19
-         (f64.add
-          (f64.sub
-           (f64.mul
-            (get_local $14)
-            (get_local $14)
-           )
-           (f64.mul
-            (get_local $15)
-            (get_local $15)
-           )
-          )
-          (get_local $13)
-         )
-        )
-        (set_local $15
-         (f64.add
-          (f64.mul
-           (f64.mul
-            (f64.const 2)
-            (get_local $14)
-           )
-           (get_local $15)
-          )
-          (get_local $7)
-         )
-        )
-        (set_local $14
-         (get_local $19)
-        )
-       )
-       (set_local $18
-        (i32.add
-         (get_local $18)
-         (i32.const 1)
-        )
-       )
-       (br $repeat|2)
       )
      )
      (set_local $20

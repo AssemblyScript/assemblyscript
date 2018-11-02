@@ -455,55 +455,53 @@
       )
      )
     )
-    (block $break|2
-     (loop $repeat|2
-      (br_if $break|2
-       (i32.eqz
-        (f64.lt
-         (f64.convert_u/i32
-          (get_local $7)
-         )
-         (get_local $9)
-        )
-       )
-      )
-      (set_local $5
-       (f64.add
-        (f64.sub
-         (f64.mul
-          (get_local $4)
-          (get_local $4)
-         )
-         (f64.mul
-          (get_local $6)
-          (get_local $6)
-         )
-        )
-        (get_local $13)
-       )
-      )
-      (set_local $6
-       (f64.add
-        (f64.mul
-         (f64.mul
-          (f64.const 2)
-          (get_local $4)
-         )
-         (get_local $6)
-        )
-        (get_local $12)
-       )
-      )
-      (set_local $4
-       (get_local $5)
-      )
-      (set_local $7
-       (i32.add
+    (loop $continue|2
+     (if
+      (f64.lt
+       (f64.convert_u/i32
         (get_local $7)
-        (i32.const 1)
        )
+       (get_local $9)
       )
-      (br $repeat|2)
+      (block
+       (set_local $5
+        (f64.add
+         (f64.sub
+          (f64.mul
+           (get_local $4)
+           (get_local $4)
+          )
+          (f64.mul
+           (get_local $6)
+           (get_local $6)
+          )
+         )
+         (get_local $13)
+        )
+       )
+       (set_local $6
+        (f64.add
+         (f64.mul
+          (f64.mul
+           (f64.const 2)
+           (get_local $4)
+          )
+          (get_local $6)
+         )
+         (get_local $12)
+        )
+       )
+       (set_local $4
+        (get_local $5)
+       )
+       (set_local $7
+        (i32.add
+         (get_local $7)
+         (i32.const 1)
+        )
+       )
+       (br $continue|2)
+      )
      )
     )
     (set_local $2

@@ -22,17 +22,18 @@ export function computeLine(y: u32, width: u32, height: u32, limit: u32): void {
     let ix = 0.0, iy = 0.0, ixSq: f64, iySq: f64;
     let iteration: u32 = 0;
     while ((ixSq = ix * ix) + (iySq = iy * iy) <= 4.0) {
-      iy = 2 * ix * iy + imaginary;
+      iy = 2.0 * ix * iy + imaginary;
       ix = ixSq - iySq + real;
       if (iteration >= limit) break;
       ++iteration;
     }
 
     // Do a few extra iterations for quick escapes to reduce error margin
-    for (; iteration < minIterations; ++iteration) {
+    while (iteration < minIterations) {
       let ixNew = ix * ix - iy * iy + real;
       iy = 2.0 * ix * iy + imaginary;
       ix = ixNew;
+      ++iteration;
     }
 
     // Iteration count is a discrete value in the range [0, limit] here, but we'd like it to be
