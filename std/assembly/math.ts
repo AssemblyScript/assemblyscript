@@ -422,10 +422,10 @@ export namespace NativeMath {
     } else if (hx > 0x3E300000) {
       hi = x;
     } else return 1.0 + x;
-    var xps = x * x;
+    var xs = x * x;
     // var c = x - xp2 * (P1 + xp2 * (P2 + xp2 * (P3 + xp2 * (P4 + xp2 * P5))));
-    var xpq = xps * xps;
-    var c = x - (xps * P1 + xpq * ((P2 + xps * P3) + xpq * (P4 + xps * P5)));
+    var xq = xs * xs;
+    var c = x - (xs * P1 + xq * ((P2 + xs * P3) + xq * (P4 + xs * P5)));
     var y = 1.0 + (x * c / (2 - c) - lo + hi);
     if (k == 0) return y;
     return scalbn(y, k);
