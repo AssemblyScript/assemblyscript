@@ -6,11 +6,11 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $v (func))
- (memory $0 1 65535)
- (data (i32.const 8) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
@@ -89,7 +89,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -168,12 +168,12 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $std/operator-overloading/Tester#constructor (; 3 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/Tester#constructor (; 3 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $0
   if (result i32)
@@ -195,7 +195,7 @@
   end
   tee_local $0
  )
- (func $std/operator-overloading/Tester.add (; 4 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.add (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -209,7 +209,7 @@
   i32.add
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.sub (; 5 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.sub (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -223,7 +223,7 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.mul (; 6 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.mul (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -237,7 +237,7 @@
   i32.mul
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.div (; 7 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.div (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -251,7 +251,7 @@
   i32.div_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.mod (; 8 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.mod (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -265,7 +265,7 @@
   i32.rem_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $~lib/math/NativeMath.scalbn (; 9 ;) (; has Stack IR ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 9 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -356,7 +356,7 @@
   f64.reinterpret/i64
   f64.mul
  )
- (func $~lib/math/NativeMath.pow (; 10 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 10 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -1443,7 +1443,7 @@
   get_local $15
   f64.mul
  )
- (func $std/operator-overloading/Tester.pow (; 11 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.pow (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1463,7 +1463,7 @@
   i32.trunc_s/f64
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.and (; 12 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.and (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1477,7 +1477,7 @@
   i32.and
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.or (; 13 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.or (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1491,7 +1491,7 @@
   i32.or
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.xor (; 14 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.xor (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1505,7 +1505,7 @@
   i32.xor
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.equals (; 15 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.equals (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -1523,7 +1523,7 @@
    get_local $2
   end
  )
- (func $std/operator-overloading/Tester.notEquals (; 16 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.notEquals (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -1541,7 +1541,7 @@
    get_local $2
   end
  )
- (func $std/operator-overloading/Tester.greater (; 17 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.greater (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -1559,7 +1559,7 @@
    get_local $2
   end
  )
- (func $std/operator-overloading/Tester.greaterEquals (; 18 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.greaterEquals (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -1577,7 +1577,7 @@
    get_local $2
   end
  )
- (func $std/operator-overloading/Tester.less (; 19 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.less (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -1595,7 +1595,7 @@
    get_local $2
   end
  )
- (func $std/operator-overloading/Tester.lessEquals (; 20 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.lessEquals (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -1613,7 +1613,7 @@
    get_local $2
   end
  )
- (func $std/operator-overloading/Tester.shr (; 21 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shr (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1625,7 +1625,7 @@
   i32.shr_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.shu (; 22 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shu (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1637,7 +1637,7 @@
   i32.shr_u
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.shl (; 23 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shl (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1649,7 +1649,7 @@
   i32.shl
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.pos (; 24 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.pos (; 24 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1657,7 +1657,7 @@
   i32.load offset=4
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.neg (; 25 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.neg (; 25 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   i32.const 0
   get_local $0
@@ -1669,7 +1669,7 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.not (; 26 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.not (; 26 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1681,7 +1681,7 @@
   i32.xor
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.excl (; 27 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.excl (; 27 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   i32.load
@@ -1695,7 +1695,7 @@
    get_local $1
   end
  )
- (func $std/operator-overloading/Tester#inc (; 28 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#inc (; 28 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   get_local $0
   i32.load
@@ -1710,7 +1710,7 @@
   i32.store offset=4
   get_local $0
  )
- (func $std/operator-overloading/Tester#dec (; 29 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#dec (; 29 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   get_local $0
   i32.load
@@ -1725,7 +1725,7 @@
   i32.store offset=4
   get_local $0
  )
- (func $std/operator-overloading/Tester#postInc (; 30 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#postInc (; 30 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1737,7 +1737,7 @@
   i32.add
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester#postDec (; 31 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#postDec (; 31 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   get_local $0
   i32.load
@@ -1749,7 +1749,7 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 32 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (; 32 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $0
   if (result i32)
@@ -1771,7 +1771,7 @@
   end
   tee_local $0
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 33 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 33 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $0
   if (result i32)
@@ -1793,7 +1793,7 @@
   end
   tee_local $0
  )
- (func $start (; 34 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 34 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   get_global $HEAP_BASE
@@ -2854,6 +2854,6 @@
    unreachable
   end
  )
- (func $null (; 35 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 35 ;) (type $v)
  )
 )

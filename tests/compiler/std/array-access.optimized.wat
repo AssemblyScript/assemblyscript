@@ -5,12 +5,12 @@
  (type $v (func))
  (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (memory $0 1 65535)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
  (data (i32.const 16) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
  (data (i32.const 48) "\04\00\00\00n\00u\00l\00l")
- (table 1 anyfunc)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "i32ArrayArrayElementAccess" (func $std/array-access/i32ArrayArrayElementAccess))
@@ -18,7 +18,7 @@
  (export "stringArrayMethodCall" (func $std/array-access/stringArrayMethodCall))
  (export "stringArrayArrayPropertyAccess" (func $std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
- (func $~lib/array/Array<Array<i32>>#__get (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $1
   get_local $0
   i32.load
@@ -39,20 +39,20 @@
   end
   tee_local $0
  )
- (func $std/array-access/i32ArrayArrayElementAccess (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/i32ArrayArrayElementAccess (; 2 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 0
   call $~lib/array/Array<Array<i32>>#__get
   i32.const 1
   call $~lib/array/Array<Array<i32>>#__get
  )
- (func $std/array-access/stringArrayPropertyAccess (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayPropertyAccess (; 3 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 0
   call $~lib/array/Array<Array<i32>>#__get
   i32.load
  )
- (func $~lib/internal/string/compareUnsafe (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 4 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   get_local $0
   get_local $1
@@ -92,7 +92,7 @@
   end
   get_local $4
  )
- (func $~lib/string/String#startsWith (; 5 ;) (; has Stack IR ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#startsWith (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -132,13 +132,13 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $std/array-access/stringArrayMethodCall (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayMethodCall (; 6 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 0
   call $~lib/array/Array<Array<i32>>#__get
   call $~lib/string/String#startsWith
  )
- (func $std/array-access/stringArrayArrayPropertyAccess (; 7 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayPropertyAccess (; 7 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 0
   call $~lib/array/Array<Array<i32>>#__get
@@ -146,7 +146,7 @@
   call $~lib/array/Array<Array<i32>>#__get
   i32.load
  )
- (func $std/array-access/stringArrayArrayMethodCall (; 8 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayMethodCall (; 8 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 0
   call $~lib/array/Array<Array<i32>>#__get
@@ -154,7 +154,7 @@
   call $~lib/array/Array<Array<i32>>#__get
   call $~lib/string/String#startsWith
  )
- (func $null (; 9 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 9 ;) (type $v)
   nop
  )
 )

@@ -4,13 +4,13 @@
  (type $Fi (func (param f64) (result i32)))
  (type $v (func))
  (type $FUNCSIG$dd (func (param f64) (result f64)))
- (memory $0 0 65535)
- (table 1 anyfunc)
+ (memory $0 0)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
- (func $~lib/math/NativeMath.log (; 0 ;) (; has Stack IR ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log (; 0 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -188,21 +188,21 @@
   f64.mul
   f64.add
  )
- (func $~lib/builtins/isFinite<f64> (; 1 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
   get_local $0
   get_local $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $../../examples/mandelbrot/assembly/index/clamp<f64> (; 2 ;) (; has Stack IR ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $../../examples/mandelbrot/assembly/index/clamp<f64> (; 2 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   get_local $0
   f64.const 0
   f64.max
   f64.const 1
   f64.min
  )
- (func $../../examples/mandelbrot/assembly/index/computeLine (; 3 ;) (; has Stack IR ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/mandelbrot/assembly/index/computeLine (; 3 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
@@ -391,7 +391,7 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 4 ;) (type $v)
   nop
  )
 )

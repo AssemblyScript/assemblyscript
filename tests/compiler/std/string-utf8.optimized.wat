@@ -6,7 +6,8 @@
  (type $v (func))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
- (memory $0 1 65535)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
  (data (i32.const 8) "\06\00\00\00\01\d87\dch\00i\00R\d8b\df")
  (data (i32.const 24) "\12\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00-\00u\00t\00f\008\00.\00t\00s")
  (data (i32.const 72) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
@@ -15,9 +16,8 @@
  (data (i32.const 168) "\02\00\00\00h\00i")
  (data (i32.const 176) "\02\00\00\00R\d8b\df")
  (data (i32.const 184) "\01")
- (table 1 anyfunc)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/string-utf8/str (mut i32) (i32.const 8))
@@ -26,7 +26,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/string/String#get:lengthUTF8 (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:lengthUTF8 (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -127,7 +127,7 @@
   end
   get_local $1
  )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -189,7 +189,7 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/string/String#toUTF8 (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#toUTF8 (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -386,7 +386,7 @@
   i32.store8
   get_local $5
  )
- (func $~lib/internal/string/allocateUnsafe (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   i32.const 0
@@ -419,7 +419,7 @@
   i32.store
   get_local $1
  )
- (func $~lib/internal/memory/memcpy (; 5 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1323,7 +1323,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 6 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -1523,10 +1523,10 @@
    end
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 7 ;) (; has Stack IR ;) (type $FUNCSIG$v)
+ (func $~lib/allocator/arena/__memory_free (; 7 ;) (type $FUNCSIG$v)
   nop
  )
- (func $~lib/string/String.fromUTF8 (; 8 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.fromUTF8 (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1795,7 +1795,7 @@
   call $~lib/allocator/arena/__memory_free
   get_local $0
  )
- (func $~lib/internal/string/compareUnsafe (; 9 ;) (; has Stack IR ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 9 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -1832,7 +1832,7 @@
   end
   get_local $4
  )
- (func $~lib/string/String.__eq (; 10 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   get_local $1
@@ -1871,7 +1871,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $start (; 11 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 11 ;) (type $v)
   i32.const 192
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
@@ -2117,7 +2117,7 @@
   end
   call $~lib/allocator/arena/__memory_free
  )
- (func $null (; 12 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 12 ;) (type $v)
   nop
  )
 )

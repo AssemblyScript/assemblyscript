@@ -2,16 +2,16 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
- (memory $0 1 65535)
- (data (i32.const 8) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $memset/dest (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $memset/memset (; 1 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $memset/memset (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -242,7 +242,7 @@
   end
   get_local $3
  )
- (func $start (; 2 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 2 ;) (type $v)
   i32.const 32
   set_global $memset/dest
   get_global $memset/dest
@@ -338,7 +338,7 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 3 ;) (type $v)
   nop
  )
 )

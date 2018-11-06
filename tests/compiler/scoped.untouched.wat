@@ -1,8 +1,8 @@
 (module
  (type $iv (func (param i32)))
  (type $v (func))
- (memory $0 0 65535)
- (table 1 anyfunc)
+ (memory $0 0)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $scoped/aGlobal (mut i32) (i32.const 1))
  (global $scoped/aConstant i32 (i32.const 3))
@@ -11,14 +11,14 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $scoped/fn (; 0 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $scoped/fn (; 0 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   i32.const 0
   set_local $1
   get_local $0
   set_local $1
  )
- (func $start (; 1 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 1 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -71,6 +71,6 @@
   i32.const 42
   call $scoped/fn
  )
- (func $null (; 2 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 2 ;) (type $v)
  )
 )

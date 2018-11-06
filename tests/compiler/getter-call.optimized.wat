@@ -3,8 +3,8 @@
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
  (type $FUNCSIG$i (func (result i32)))
- (memory $0 0 65535)
- (table 2 anyfunc)
+ (memory $0 0)
+ (table $0 2 anyfunc)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -13,7 +13,7 @@
  (export "table" (table $0))
  (export "test" (func $getter-call/test))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -75,17 +75,17 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/memory/memory.allocate (; 1 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   call $~lib/allocator/arena/__memory_allocate
  )
- (func $getter-call/C#get:x~anonymous|1 (; 2 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $getter-call/C#get:x~anonymous|1 (; 2 ;) (type $i) (result i32)
   i32.const 42
  )
- (func $getter-call/C#get:x (; 3 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $getter-call/C#get:x (; 3 ;) (type $FUNCSIG$i) (result i32)
   i32.const 1
  )
- (func $getter-call/test (; 4 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $getter-call/test (; 4 ;) (type $i) (result i32)
   (local $0 i32)
   call $~lib/memory/memory.allocate
   set_local $0
@@ -94,13 +94,13 @@
   call $getter-call/C#get:x
   call_indirect (type $i)
  )
- (func $start (; 5 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 5 ;) (type $v)
   i32.const 8
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
  )
- (func $null (; 6 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 6 ;) (type $v)
   nop
  )
 )

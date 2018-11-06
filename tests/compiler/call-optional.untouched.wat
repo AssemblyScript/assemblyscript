@@ -2,25 +2,25 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
- (memory $0 1 65535)
- (data (i32.const 8) "\10\00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s\00")
- (table 2 anyfunc)
- (elem (i32.const 0) $null $call-optional/opt|trampoline)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\10\00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s\00")
+ (table $0 2 anyfunc)
+ (elem (i32.const 0) $null $call-optional/opt|trampoline)
  (global $~argc (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 1))
  (global $HEAP_BASE i32 (i32.const 44))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $call-optional/opt (; 1 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $call-optional/opt (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
   get_local $2
   i32.add
  )
- (func $call-optional/opt|trampoline (; 2 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $call-optional/opt|trampoline (; 2 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -43,7 +43,7 @@
   get_local $2
   call $call-optional/opt
  )
- (func $start (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 3 ;) (type $v)
   block (result i32)
    i32.const 1
    set_global $~argc
@@ -158,6 +158,6 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 4 ;) (type $v)
  )
 )

@@ -5,12 +5,12 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $v (func))
- (memory $0 1 65535)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d\00")
  (data (i32.const 40) "\11\00\00\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
- (table 1 anyfunc)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
@@ -22,7 +22,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -101,12 +101,12 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/string/compareUnsafe (; 3 ;) (; has Stack IR ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 3 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -159,7 +159,7 @@
   end
   get_local $5
  )
- (func $~lib/string/String.__eq (; 4 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -203,7 +203,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $object-literal/bar (; 5 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $object-literal/bar (; 5 ;) (type $iv) (param $0 i32)
   get_local $0
   i32.load
   i32.const 1
@@ -231,7 +231,7 @@
    unreachable
   end
  )
- (func $object-literal/bar2 (; 6 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $object-literal/bar2 (; 6 ;) (type $iv) (param $0 i32)
   get_local $0
   i32.load
   i32.const 2
@@ -246,7 +246,7 @@
    unreachable
   end
  )
- (func $object-literal/Foo2#test (; 7 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $object-literal/Foo2#test (; 7 ;) (type $iv) (param $0 i32)
   get_local $0
   i32.load
   i32.const 3
@@ -261,7 +261,7 @@
    unreachable
   end
  )
- (func $start (; 8 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 8 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -309,6 +309,6 @@
   end
   call $object-literal/Foo2#test
  )
- (func $null (; 9 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 9 ;) (type $v)
  )
 )

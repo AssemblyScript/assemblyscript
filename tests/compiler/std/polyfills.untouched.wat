@@ -3,17 +3,17 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $II (func (param i64) (result i64)))
  (type $v (func))
- (memory $0 1 65535)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
  (data (i32.const 8) "\11\00\00\00~\00l\00i\00b\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
  (data (i32.const 48) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
- (table 1 anyfunc)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $HEAP_BASE i32 (i32.const 84))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/polyfills/bswap16<u16> (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<u16> (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 2
   i32.const 1
@@ -76,7 +76,7 @@
   end
   get_local $0
  )
- (func $~lib/polyfills/bswap<u16> (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 2
   i32.const 1
@@ -118,7 +118,7 @@
   call $~lib/polyfills/bswap16<u16>
   return
  )
- (func $~lib/polyfills/bswap16<i16> (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<i16> (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 2
   i32.const 1
@@ -183,7 +183,7 @@
   end
   get_local $0
  )
- (func $~lib/polyfills/bswap<i16> (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 2
   i32.const 1
@@ -225,7 +225,7 @@
   call $~lib/polyfills/bswap16<i16>
   return
  )
- (func $~lib/polyfills/bswap<u32> (; 5 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u32> (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 4
   i32.const 1
@@ -276,7 +276,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<i32> (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i32> (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 4
   i32.const 1
@@ -327,7 +327,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<u64> (; 7 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 7 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
@@ -403,7 +403,7 @@
   i64.rotr
   return
  )
- (func $~lib/polyfills/bswap<i64> (; 8 ;) (; has Stack IR ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<i64> (; 8 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
@@ -479,7 +479,7 @@
   i64.rotr
   return
  )
- (func $~lib/polyfills/bswap<usize> (; 9 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<usize> (; 9 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 4
   i32.const 1
@@ -530,7 +530,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<isize> (; 10 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<isize> (; 10 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 4
   i32.const 1
@@ -581,7 +581,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap16<u32> (; 11 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<u32> (; 11 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 4
   i32.const 1
@@ -642,7 +642,7 @@
   end
   get_local $0
  )
- (func $~lib/polyfills/bswap16<i32> (; 12 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<i32> (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 4
   i32.const 1
@@ -703,7 +703,7 @@
   end
   get_local $0
  )
- (func $start (; 13 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 13 ;) (type $v)
   i32.const 43707
   call $~lib/polyfills/bswap<u16>
   i32.const 65535
@@ -881,6 +881,6 @@
    unreachable
   end
  )
- (func $null (; 14 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 14 ;) (type $v)
  )
 )

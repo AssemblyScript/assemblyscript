@@ -1,7 +1,7 @@
 (module
  (type $v (func))
- (memory $0 0 65535)
- (table 1 anyfunc)
+ (memory $0 0)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
@@ -33,7 +33,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 0 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 0 ;) (type $v)
   get_global $~lib/builtins/i8.MIN_VALUE
   drop
   get_global $~lib/builtins/i8.MAX_VALUE
@@ -87,6 +87,6 @@
   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
   drop
  )
- (func $null (; 1 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 1 ;) (type $v)
  )
 )

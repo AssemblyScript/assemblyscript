@@ -2,8 +2,8 @@
  (type $v (func))
  (type $FUNCSIG$dd (func (param f64) (result f64)))
  (type $FUNCSIG$ff (func (param f32) (result f32)))
- (memory $0 0 65535)
- (table 1 anyfunc)
+ (memory $0 0)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
@@ -13,7 +13,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/math/NativeMath.pow (; 0 ;) (; has Stack IR ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 0 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i64)
   (local $3 i32)
@@ -69,7 +69,7 @@
   end
   get_local $0
  )
- (func $~lib/math/NativeMathf.mod (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 1 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -221,7 +221,7 @@
   get_local $0
   f32.mul
  )
- (func $~lib/math/NativeMathf.pow (; 2 ;) (; has Stack IR ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 2 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -246,7 +246,7 @@
   end
   get_local $0
  )
- (func $~lib/math/NativeMath.mod (; 3 ;) (; has Stack IR ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 3 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -404,7 +404,7 @@
   get_local $0
   f64.mul
  )
- (func $start (; 4 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 4 ;) (type $v)
   get_global $binary/i
   i32.const 1
   i32.rem_s
@@ -740,7 +740,7 @@
   call $~lib/math/NativeMath.pow
   set_global $binary/F
  )
- (func $null (; 5 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 5 ;) (type $v)
   nop
  )
 )

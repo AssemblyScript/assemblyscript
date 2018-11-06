@@ -2,8 +2,8 @@
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
  (type $FUNCSIG$i (func (result i32)))
- (memory $0 0 65535)
- (table 1 anyfunc)
+ (memory $0 0)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -11,7 +11,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -73,11 +73,11 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/memory/memory.allocate (; 1 ;) (type $FUNCSIG$i) (result i32)
   i32.const 8
   call $~lib/allocator/arena/__memory_allocate
  )
- (func $std/new/AClass#constructor (; 2 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $std/new/AClass#constructor (; 2 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   call $~lib/memory/memory.allocate
   tee_local $0
@@ -97,7 +97,7 @@
   f32.store offset=4
   get_local $0
  )
- (func $start (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 3 ;) (type $v)
   i32.const 8
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
@@ -105,7 +105,7 @@
   call $std/new/AClass#constructor
   set_global $std/new/aClass
  )
- (func $null (; 4 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 4 ;) (type $v)
   nop
  )
 )

@@ -3,15 +3,15 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (type $FUNCSIG$i (func (result i32)))
- (memory $0 1 65535)
- (data (i32.const 8) "\t\00\00\00s\00w\00i\00t\00c\00h\00.\00t\00s")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\t\00\00\00s\00w\00i\00t\00c\00h\00.\00t\00s")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $switch/doSwitch (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $switch/doSwitch (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   block $case4|0
    block $case2|0
@@ -41,7 +41,7 @@
   end
   i32.const 23
  )
- (func $switch/doSwitchDefaultOmitted (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchDefaultOmitted (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case2|0
@@ -68,7 +68,7 @@
   end
   i32.const 0
  )
- (func $switch/doSwitchBreakCase (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchBreakCase (; 3 ;) (type $ii) (param $0 i32) (result i32)
   block $break|0
    get_local $0
    i32.const 1
@@ -79,7 +79,7 @@
   end
   i32.const 1
  )
- (func $switch/doSwitchBreakDefault (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchBreakDefault (; 4 ;) (type $ii) (param $0 i32) (result i32)
   block $break|0
    block $case1|0
     get_local $0
@@ -94,7 +94,7 @@
   end
   i32.const 2
  )
- (func $switch/doSwitchFallThroughCase (; 5 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchFallThroughCase (; 5 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 1
   i32.ne
@@ -104,7 +104,7 @@
   end
   i32.const 1
  )
- (func $switch/doSwitchFallThroughDefault (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchFallThroughDefault (; 6 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 1
   i32.eq
@@ -114,10 +114,10 @@
   end
   i32.const 2
  )
- (func $switch/doSwitchEmpty (; 7 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $switch/doSwitchEmpty (; 7 ;) (type $FUNCSIG$i) (result i32)
   i32.const 2
  )
- (func $start (; 8 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 8 ;) (type $v)
   i32.const 0
   call $switch/doSwitch
   if
@@ -464,7 +464,7 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 9 ;) (type $v)
   nop
  )
 )

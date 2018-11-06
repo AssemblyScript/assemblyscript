@@ -3,11 +3,11 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (type $ii (func (param i32) (result i32)))
- (memory $0 1 65535)
- (data (i32.const 8) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
- (table 2 anyfunc)
- (elem (i32.const 0) $null $inlining/test_funcs~anonymous|1)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
+ (table $0 2 anyfunc)
+ (elem (i32.const 0) $null $inlining/test_funcs~anonymous|1)
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~argc (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 36))
@@ -15,15 +15,15 @@
  (export "table" (table $0))
  (export "test" (func $inlining/test))
  (start $start)
- (func $inlining/test (; 1 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $inlining/test (; 1 ;) (type $i) (result i32)
   get_global $inlining/constantGlobal
   i32.const 2
   i32.add
  )
- (func $inlining/test_funcs~anonymous|1 (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $inlining/test_funcs~anonymous|1 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
  )
- (func $inlining/test_funcs (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $inlining/test_funcs (; 3 ;) (type $v)
   (local $0 f32)
   (local $1 f64)
   (local $2 i32)
@@ -279,7 +279,7 @@
    unreachable
   end
  )
- (func $start (; 4 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 4 ;) (type $v)
   call $inlining/test
   i32.const 3
   i32.eq
@@ -294,6 +294,6 @@
   end
   call $inlining/test_funcs
  )
- (func $null (; 5 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 5 ;) (type $v)
  )
 )

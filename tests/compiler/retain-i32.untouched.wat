@@ -2,11 +2,11 @@
  (type $iiv (func (param i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
- (memory $0 1 65535)
- (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
@@ -22,7 +22,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $retain-i32/test (; 1 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $retain-i32/test (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   i32.add
@@ -332,7 +332,7 @@
    unreachable
   end
  )
- (func $start (; 2 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 2 ;) (type $v)
   (local $0 i32)
   i32.const 0
   get_global $~lib/builtins/i8.MAX_VALUE
@@ -792,6 +792,6 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 3 ;) (type $v)
  )
 )

@@ -6,25 +6,25 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $ifff (func (param i32 f32 f32) (result f32)))
  (type $v (func))
- (memory $0 1 65535)
- (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s\00")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s\00")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $class/Animal.ONE (mut i32) (i32.const 1))
  (global $HEAP_BASE i32 (i32.const 28))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $class/test))
  (start $start)
- (func $class/Animal.add (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $class/Animal.add (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
   get_global $class/Animal.ONE
   i32.add
  )
- (func $class/Animal.sub<f32> (; 2 ;) (; has Stack IR ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $class/Animal.sub<f32> (; 2 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   get_local $0
   get_local $1
   f32.sub
@@ -32,14 +32,14 @@
   f32.convert_s/i32
   f32.add
  )
- (func $class/Animal<f64>#instanceAdd (; 3 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $class/Animal<f64>#instanceAdd (; 3 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $1
   get_local $2
   i32.add
   get_global $class/Animal.ONE
   i32.add
  )
- (func $class/Animal<f64>#instanceSub<f32> (; 4 ;) (; has Stack IR ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
+ (func $class/Animal<f64>#instanceSub<f32> (; 4 ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
   get_local $1
   get_local $2
   f32.sub
@@ -47,7 +47,7 @@
   f32.convert_s/i32
   f32.add
  )
- (func $class/test (; 5 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $class/test (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -92,7 +92,7 @@
   set_local $2
   get_local $2
  )
- (func $start (; 6 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 6 ;) (type $v)
   i32.const 4
   i32.const 4
   i32.eq
@@ -116,6 +116,6 @@
   call $class/Animal.sub<f32>
   drop
  )
- (func $null (; 7 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 7 ;) (type $v)
  )
 )

@@ -2,8 +2,8 @@
  (type $ifi (func (param i32 f32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
- (memory $0 0 65535)
- (table 1 anyfunc)
+ (memory $0 0)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
@@ -16,7 +16,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -95,12 +95,12 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $std/new/AClass#constructor (; 2 ;) (; has Stack IR ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $std/new/AClass#constructor (; 2 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   get_local $0
   get_local $0
@@ -131,7 +131,7 @@
   f32.store offset=4
   get_local $0
  )
- (func $start (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 3 ;) (type $v)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
   i32.add
@@ -147,6 +147,6 @@
   call $std/new/AClass#constructor
   set_global $std/new/aClass
  )
- (func $null (; 4 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 4 ;) (type $v)
  )
 )

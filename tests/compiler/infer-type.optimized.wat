@@ -4,9 +4,9 @@
  (type $I (func (result i64)))
  (type $f (func (result f32)))
  (type $F (func (result f64)))
- (memory $0 1 65535)
+ (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s")
- (table 1 anyfunc)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $infer-type/locals)
  (global $infer-type/ri (mut i32) (i32.const 0))
  (global $infer-type/rI (mut i64) (i64.const 0))
@@ -15,22 +15,22 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $infer-type/locals (; 0 ;) (; has Stack IR ;) (type $v)
+ (func $infer-type/locals (; 0 ;) (type $v)
   nop
  )
- (func $infer-type/reti (; 1 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $infer-type/reti (; 1 ;) (type $i) (result i32)
   i32.const 0
  )
- (func $infer-type/retI (; 2 ;) (; has Stack IR ;) (type $I) (result i64)
+ (func $infer-type/retI (; 2 ;) (type $I) (result i64)
   i64.const 0
  )
- (func $infer-type/retf (; 3 ;) (; has Stack IR ;) (type $f) (result f32)
+ (func $infer-type/retf (; 3 ;) (type $f) (result f32)
   f32.const 0
  )
- (func $infer-type/refF (; 4 ;) (; has Stack IR ;) (type $F) (result f64)
+ (func $infer-type/refF (; 4 ;) (type $F) (result f64)
   f64.const 0
  )
- (func $start (; 5 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 5 ;) (type $v)
   (local $0 i32)
   call $infer-type/locals
   call $infer-type/reti

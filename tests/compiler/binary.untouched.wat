@@ -4,8 +4,8 @@
  (type $fff (func (param f32 f32) (result f32)))
  (type $fif (func (param f32 i32) (result f32)))
  (type $v (func))
- (memory $0 0 65535)
- (table 1 anyfunc)
+ (memory $0 0)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
@@ -17,7 +17,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/math/NativeMath.scalbn (; 0 ;) (; has Stack IR ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 0 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -108,7 +108,7 @@
   f64.reinterpret/i64
   f64.mul
  )
- (func $~lib/math/NativeMath.pow (; 1 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 1 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -1195,7 +1195,7 @@
   get_local $15
   f64.mul
  )
- (func $~lib/math/NativeMathf.mod (; 2 ;) (; has Stack IR ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 2 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1448,7 +1448,7 @@
   get_local $2
   f32.reinterpret/i32
  )
- (func $~lib/math/NativeMathf.scalbn (; 3 ;) (; has Stack IR ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/NativeMathf.scalbn (; 3 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -1538,7 +1538,7 @@
   f32.reinterpret/i32
   f32.mul
  )
- (func $~lib/math/NativeMathf.pow (; 4 ;) (; has Stack IR ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 4 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2476,7 +2476,7 @@
   get_local $11
   f32.mul
  )
- (func $~lib/math/NativeMath.mod (; 5 ;) (; has Stack IR ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 5 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -2731,7 +2731,7 @@
   get_local $2
   f64.reinterpret/i64
  )
- (func $start (; 6 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 6 ;) (type $v)
   get_global $binary/i
   i32.const 1
   i32.lt_s
@@ -3339,6 +3339,6 @@
   call $~lib/math/NativeMath.pow
   set_global $binary/F
  )
- (func $null (; 7 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 7 ;) (type $v)
  )
 )

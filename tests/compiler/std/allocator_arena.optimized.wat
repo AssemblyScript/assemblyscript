@@ -7,11 +7,11 @@
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
- (memory $0 1 65535)
- (data (i32.const 8) "\16\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\16\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr1 (mut i32) (i32.const 0))
@@ -20,7 +20,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -70,7 +70,7 @@
   set_global $~lib/allocator/arena/offset
   get_local $0
  )
- (func $~lib/internal/memory/memset (; 2 ;) (; has Stack IR ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/internal/memory/memset (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -263,7 +263,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 3 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1167,7 +1167,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/internal/memory/memmove (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1370,7 +1370,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcmp (; 5 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/memory/memcmp (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 42
@@ -1424,14 +1424,14 @@
   end
   tee_local $0
  )
- (func $~lib/allocator/arena/__memory_free (; 6 ;) (; has Stack IR ;) (type $FUNCSIG$v)
+ (func $~lib/allocator/arena/__memory_free (; 6 ;) (type $FUNCSIG$v)
   nop
  )
- (func $~lib/allocator/arena/__memory_reset (; 7 ;) (; has Stack IR ;) (type $v)
+ (func $~lib/allocator/arena/__memory_reset (; 7 ;) (type $v)
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
  )
- (func $start (; 8 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 8 ;) (type $v)
   i32.const 56
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
@@ -1550,7 +1550,7 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 9 ;) (type $v)
   nop
  )
 )

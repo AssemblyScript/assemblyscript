@@ -2,11 +2,11 @@
  (type $i (func (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
- (memory $0 1 65535)
- (data (i32.const 8) "\06\00\00\00a\00b\00i\00.\00t\00s\00")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\06\00\00\00a\00b\00i\00.\00t\00s\00")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $abi/condition (mut i32) (i32.const 0))
  (global $abi/y (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 24))
@@ -16,27 +16,27 @@
  (export "exportedExported" (func $abi/exportedExported))
  (export "exportedInternal" (func $abi/exportedInternal))
  (start $start)
- (func $abi/exported (; 1 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $abi/exported (; 1 ;) (type $i) (result i32)
   i32.const 128
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
  )
- (func $abi/exportedExported (; 2 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $abi/exportedExported (; 2 ;) (type $i) (result i32)
   call $abi/exported
  )
- (func $abi/internal (; 3 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $abi/internal (; 3 ;) (type $i) (result i32)
   i32.const 128
  )
- (func $abi/exportedInternal (; 4 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $abi/exportedInternal (; 4 ;) (type $i) (result i32)
   call $abi/internal
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
  )
- (func $start (; 5 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 5 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   call $abi/internal
@@ -211,6 +211,6 @@
    end
   end
  )
- (func $null (; 6 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 6 ;) (type $v)
  )
 )

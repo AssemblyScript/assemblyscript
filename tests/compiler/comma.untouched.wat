@@ -1,18 +1,18 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
- (memory $0 1 65535)
- (data (i32.const 8) "\08\00\00\00c\00o\00m\00m\00a\00.\00t\00s\00")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\08\00\00\00c\00o\00m\00m\00a\00.\00t\00s\00")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 28))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 1 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   block
@@ -204,6 +204,6 @@
    drop
   end
  )
- (func $null (; 2 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 2 ;) (type $v)
  )
 )

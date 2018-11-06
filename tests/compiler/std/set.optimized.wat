@@ -21,19 +21,19 @@
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (memory $0 1 65535)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (data (i32.const 56) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (data (i32.const 120) "\n\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
- (table 1 anyfunc)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -95,11 +95,11 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (type $FUNCSIG$i) (result i32)
   i32.const 24
   call $~lib/allocator/arena/__memory_allocate
  )
- (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   get_local $0
@@ -109,7 +109,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   i32.const 1073741816
@@ -130,7 +130,7 @@
   i32.store
   get_local $1
  )
- (func $~lib/internal/memory/memset (; 5 ;) (; has Stack IR ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/internal/memory/memset (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   get_local $1
   i32.eqz
@@ -349,7 +349,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 6 ;) (; has Stack IR ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.const 1073741816
@@ -378,7 +378,7 @@
   end
   get_local $2
  )
- (func $~lib/set/Set<i8>#clear (; 7 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/set/Set<i8>#clear (; 7 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   i32.const 16
   i32.const 0
@@ -407,7 +407,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i8>#constructor (; 8 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<i8>#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   call $~lib/memory/memory.allocate
   tee_local $0
@@ -432,14 +432,14 @@
   call $~lib/set/Set<i8>#clear
   get_local $0
  )
- (func $~lib/internal/hash/hash8 (; 9 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash8 (; 9 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const -2128831035
   i32.xor
   i32.const 16777619
   i32.mul
  )
- (func $~lib/internal/hash/hash<i8> (; 10 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash<i8> (; 10 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 24
   i32.shl
@@ -447,7 +447,7 @@
   i32.shr_s
   call $~lib/internal/hash/hash8
  )
- (func $~lib/set/Set<i8>#find (; 11 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i8>#find (; 11 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.load
   get_local $2
@@ -492,7 +492,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i8>#has (; 12 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i8>#has (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $1
   call $~lib/internal/hash/hash<i8>
@@ -504,7 +504,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i8>#rehash (; 13 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>#rehash (; 13 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -609,7 +609,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i8>#add (; 14 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>#add (; 14 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -696,11 +696,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i8>#get:size (; 15 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i8>#get:size (; 15 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load offset=20
  )
- (func $~lib/set/Set<i8>#delete (; 16 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i8>#delete (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   set_local $2
@@ -770,7 +770,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i8> (; 17 ;) (; has Stack IR ;) (type $v)
+ (func $std/set/test<i8> (; 17 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -1029,13 +1029,13 @@
    unreachable
   end
  )
- (func $~lib/internal/hash/hash<u8> (; 18 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash<u8> (; 18 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 255
   i32.and
   call $~lib/internal/hash/hash8
  )
- (func $~lib/set/Set<u8>#has (; 19 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u8>#has (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $1
   call $~lib/internal/hash/hash<u8>
@@ -1047,7 +1047,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u8>#rehash (; 20 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#rehash (; 20 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1152,7 +1152,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u8>#add (; 21 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#add (; 21 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1239,7 +1239,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<u8>#delete (; 22 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u8>#delete (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   set_local $2
@@ -1307,7 +1307,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u8> (; 23 ;) (; has Stack IR ;) (type $v)
+ (func $std/set/test<u8> (; 23 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -1566,7 +1566,7 @@
    unreachable
   end
  )
- (func $~lib/internal/hash/hash16 (; 24 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash16 (; 24 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 255
   i32.and
@@ -1581,7 +1581,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/internal/hash/hash<i16> (; 25 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash<i16> (; 25 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 16
   i32.shl
@@ -1589,7 +1589,7 @@
   i32.shr_s
   call $~lib/internal/hash/hash16
  )
- (func $~lib/set/Set<i16>#find (; 26 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i16>#find (; 26 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.load
   get_local $2
@@ -1634,7 +1634,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i16>#has (; 27 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i16>#has (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $1
   call $~lib/internal/hash/hash<i16>
@@ -1646,7 +1646,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i16>#rehash (; 28 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#rehash (; 28 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1751,7 +1751,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i16>#add (; 29 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#add (; 29 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1838,7 +1838,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i16>#delete (; 30 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i16>#delete (; 30 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   set_local $2
@@ -1908,7 +1908,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i16> (; 31 ;) (; has Stack IR ;) (type $v)
+ (func $std/set/test<i16> (; 31 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -2167,13 +2167,13 @@
    unreachable
   end
  )
- (func $~lib/internal/hash/hash<u16> (; 32 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash<u16> (; 32 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 65535
   i32.and
   call $~lib/internal/hash/hash16
  )
- (func $~lib/set/Set<u16>#has (; 33 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u16>#has (; 33 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $1
   call $~lib/internal/hash/hash<u16>
@@ -2185,7 +2185,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u16>#rehash (; 34 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#rehash (; 34 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2290,7 +2290,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u16>#add (; 35 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#add (; 35 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2377,7 +2377,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<u16>#delete (; 36 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u16>#delete (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   set_local $2
@@ -2445,7 +2445,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u16> (; 37 ;) (; has Stack IR ;) (type $v)
+ (func $std/set/test<u16> (; 37 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -2704,7 +2704,7 @@
    unreachable
   end
  )
- (func $~lib/internal/hash/hash32 (; 38 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 38 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 255
   i32.and
@@ -2735,11 +2735,11 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/internal/hash/hash<i32> (; 39 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash<i32> (; 39 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/internal/hash/hash32
  )
- (func $~lib/set/Set<i32>#find (; 40 ;) (; has Stack IR ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i32>#find (; 40 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.load
   get_local $2
@@ -2782,7 +2782,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i32>#has (; 41 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#has (; 41 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $1
   call $~lib/internal/hash/hash<i32>
@@ -2794,7 +2794,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i32>#rehash (; 42 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#rehash (; 42 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2899,7 +2899,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i32>#add (; 43 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#add (; 43 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2986,7 +2986,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i32>#delete (; 44 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#delete (; 44 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   set_local $2
@@ -3052,7 +3052,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i32> (; 45 ;) (; has Stack IR ;) (type $v)
+ (func $std/set/test<i32> (; 45 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -3311,7 +3311,7 @@
    unreachable
   end
  )
- (func $std/set/test<u32> (; 46 ;) (; has Stack IR ;) (type $v)
+ (func $std/set/test<u32> (; 46 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -3570,7 +3570,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<i64>#clear (; 47 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/set/Set<i64>#clear (; 47 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   i32.const 16
   i32.const 0
@@ -3599,7 +3599,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i64>#constructor (; 48 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<i64>#constructor (; 48 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   call $~lib/memory/memory.allocate
   tee_local $0
@@ -3624,7 +3624,7 @@
   call $~lib/set/Set<i64>#clear
   get_local $0
  )
- (func $~lib/internal/hash/hash64 (; 49 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash64 (; 49 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   get_local $0
   i32.wrap/i64
@@ -3690,11 +3690,11 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/internal/hash/hash<i64> (; 50 ;) (; has Stack IR ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash<i64> (; 50 ;) (type $Ii) (param $0 i64) (result i32)
   get_local $0
   call $~lib/internal/hash/hash64
  )
- (func $~lib/set/Set<i64>#find (; 51 ;) (; has Stack IR ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i64>#find (; 51 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   get_local $0
   i32.load
   get_local $2
@@ -3737,7 +3737,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i64>#has (; 52 ;) (; has Stack IR ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<i64>#has (; 52 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   get_local $1
   call $~lib/internal/hash/hash<i64>
@@ -3749,7 +3749,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i64>#rehash (; 53 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i64>#rehash (; 53 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3854,7 +3854,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i64>#add (; 54 ;) (; has Stack IR ;) (type $iIv) (param $0 i32) (param $1 i64)
+ (func $~lib/set/Set<i64>#add (; 54 ;) (type $iIv) (param $0 i32) (param $1 i64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3941,7 +3941,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i64>#delete (; 55 ;) (; has Stack IR ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<i64>#delete (; 55 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -4008,7 +4008,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i64> (; 56 ;) (; has Stack IR ;) (type $v)
+ (func $std/set/test<i64> (; 56 ;) (type $v)
   (local $0 i64)
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
@@ -4267,7 +4267,7 @@
    unreachable
   end
  )
- (func $std/set/test<u64> (; 57 ;) (; has Stack IR ;) (type $v)
+ (func $std/set/test<u64> (; 57 ;) (type $v)
   (local $0 i64)
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
@@ -4526,12 +4526,12 @@
    unreachable
   end
  )
- (func $~lib/internal/hash/hash<f32> (; 58 ;) (; has Stack IR ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/internal/hash/hash<f32> (; 58 ;) (type $fi) (param $0 f32) (result i32)
   get_local $0
   i32.reinterpret/f32
   call $~lib/internal/hash/hash32
  )
- (func $~lib/set/Set<f32>#find (; 59 ;) (; has Stack IR ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<f32>#find (; 59 ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   get_local $0
   i32.load
   get_local $2
@@ -4574,7 +4574,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f32>#has (; 60 ;) (; has Stack IR ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#has (; 60 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   get_local $1
   call $~lib/internal/hash/hash<f32>
@@ -4586,7 +4586,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f32>#rehash (; 61 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f32>#rehash (; 61 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4692,7 +4692,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f32>#add (; 62 ;) (; has Stack IR ;) (type $ifv) (param $0 i32) (param $1 f32)
+ (func $~lib/set/Set<f32>#add (; 62 ;) (type $ifv) (param $0 i32) (param $1 f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4779,7 +4779,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<f32>#delete (; 63 ;) (; has Stack IR ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#delete (; 63 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -4847,7 +4847,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<f32> (; 64 ;) (; has Stack IR ;) (type $v)
+ (func $std/set/test<f32> (; 64 ;) (type $v)
   (local $0 f32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -5110,12 +5110,12 @@
    unreachable
   end
  )
- (func $~lib/internal/hash/hash<f64> (; 65 ;) (; has Stack IR ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/hash/hash<f64> (; 65 ;) (type $Fi) (param $0 f64) (result i32)
   get_local $0
   i64.reinterpret/f64
   call $~lib/internal/hash/hash64
  )
- (func $~lib/set/Set<f64>#find (; 66 ;) (; has Stack IR ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<f64>#find (; 66 ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   get_local $0
   i32.load
   get_local $2
@@ -5158,7 +5158,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f64>#has (; 67 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#has (; 67 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   get_local $1
   call $~lib/internal/hash/hash<f64>
@@ -5170,7 +5170,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f64>#rehash (; 68 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f64>#rehash (; 68 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5276,7 +5276,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f64>#add (; 69 ;) (; has Stack IR ;) (type $iFv) (param $0 i32) (param $1 f64)
+ (func $~lib/set/Set<f64>#add (; 69 ;) (type $iFv) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5363,7 +5363,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<f64>#delete (; 70 ;) (; has Stack IR ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#delete (; 70 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -5431,7 +5431,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<f64> (; 71 ;) (; has Stack IR ;) (type $v)
+ (func $std/set/test<f64> (; 71 ;) (type $v)
   (local $0 f64)
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
@@ -5694,7 +5694,7 @@
    unreachable
   end
  )
- (func $start (; 72 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 72 ;) (type $v)
   i32.const 144
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
@@ -5710,7 +5710,7 @@
   call $std/set/test<f32>
   call $std/set/test<f64>
  )
- (func $null (; 73 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 73 ;) (type $v)
   nop
  )
 )

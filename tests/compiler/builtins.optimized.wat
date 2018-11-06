@@ -2,12 +2,12 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiv (func (param i32 i32)))
  (type $v (func))
- (memory $0 1 65535)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
  (data (i32.const 40) "\01\00\00\001")
- (table 2 anyfunc)
+ (table $0 2 anyfunc)
  (elem (i32.const 0) $builtins/test $start~anonymous|1)
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
@@ -21,13 +21,13 @@
  (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $start~anonymous|1 (; 1 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $start~anonymous|1 (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
   nop
  )
- (func $builtins/test (; 2 ;) (; has Stack IR ;) (type $v)
+ (func $builtins/test (; 2 ;) (type $v)
   nop
  )
- (func $start (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 3 ;) (type $v)
   i32.const 31
   set_global $builtins/i
   i32.const 0

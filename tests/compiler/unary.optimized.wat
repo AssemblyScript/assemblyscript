@@ -1,7 +1,7 @@
 (module
  (type $v (func))
- (memory $0 0 65535)
- (table 1 anyfunc)
+ (memory $0 0)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $unary/i (mut i32) (i32.const 0))
  (global $unary/I (mut i64) (i64.const 0))
@@ -10,7 +10,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 0 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 0 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   (local $2 f32)
@@ -234,7 +234,7 @@
   get_local $3
   set_global $unary/F
  )
- (func $null (; 1 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 1 ;) (type $v)
   nop
  )
 )

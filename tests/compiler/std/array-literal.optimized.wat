@@ -6,7 +6,8 @@
  (type $v (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$i (func (result i32)))
- (memory $0 1 65535)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
  (data (i32.const 8) "\03")
  (data (i32.const 17) "\01\02")
  (data (i32.const 24) "\08\00\00\00\03")
@@ -17,9 +18,8 @@
  (data (i32.const 128) "x")
  (data (i32.const 136) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 168) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (table 1 anyfunc)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 128))
@@ -31,7 +31,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/array/Array<i8>#__get (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $1
   get_local $0
   i32.load
@@ -48,7 +48,7 @@
   end
   tee_local $0
  )
- (func $~lib/array/Array<i32>#__get (; 2 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $1
   get_local $0
   i32.load
@@ -69,7 +69,7 @@
   end
   tee_local $0
  )
- (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   get_local $0
@@ -79,7 +79,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -141,7 +141,7 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 5 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   i32.const 1073741816
@@ -162,11 +162,11 @@
   i32.store
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/allocator/arena/__memory_allocate
  )
- (func $~lib/internal/memory/memset (; 7 ;) (; has Stack IR ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/internal/memory/memset (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   get_local $1
   i32.eqz
@@ -385,7 +385,7 @@
    end
   end
  )
- (func $~lib/array/Array<i8>#constructor (; 8 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<i8>#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 3
@@ -412,7 +412,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/array/Array<i8>#__unchecked_set (; 9 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i8>#__unchecked_set (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $0
   i32.load
   get_local $1
@@ -420,7 +420,7 @@
   get_local $2
   i32.store8 offset=8
  )
- (func $~lib/array/Array<i32>#constructor (; 10 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<i32>#constructor (; 10 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 12
@@ -447,7 +447,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/array/Array<i32>#__unchecked_set (; 11 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__unchecked_set (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $0
   i32.load
   get_local $1
@@ -457,11 +457,11 @@
   get_local $2
   i32.store offset=8
  )
- (func $std/array-literal/RefWithCtor#constructor (; 12 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
+ (func $std/array-literal/RefWithCtor#constructor (; 12 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   call $~lib/memory/memory.allocate
  )
- (func $start (; 13 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 13 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 232
@@ -806,7 +806,7 @@
    unreachable
   end
  )
- (func $null (; 14 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 14 ;) (type $v)
   nop
  )
 )

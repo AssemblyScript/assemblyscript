@@ -7,11 +7,11 @@
  (type $iif (func (param i32 i32) (result f32)))
  (type $ifv (func (param i32 f32)))
  (type $v (func))
- (memory $0 1 65535)
- (data (i32.const 8) "\0e\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s\00")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\0e\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s\00")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $std/pointer/one (mut i32) (i32.const 0))
  (global $std/pointer/two (mut i32) (i32.const 0))
  (global $std/pointer/add (mut i32) (i32.const 0))
@@ -22,10 +22,10 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $std/pointer/Pointer<Entry>#constructor (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/pointer/Pointer<Entry>#constructor (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $1
  )
- (func $~lib/internal/memory/memset (; 2 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -279,7 +279,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 3 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1480,7 +1480,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 4 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   get_local $0
   get_local $1
@@ -1707,7 +1707,7 @@
    end
   end
  )
- (func $std/pointer/Pointer<Entry>#set:value (; 5 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/pointer/Pointer<Entry>#set:value (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   get_local $1
@@ -1731,10 +1731,10 @@
    call $~lib/internal/memory/memmove
   end
  )
- (func $std/pointer/Pointer<f32>#constructor (; 6 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/pointer/Pointer<f32>#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $1
  )
- (func $std/pointer/Pointer<f32>#set (; 7 ;) (; has Stack IR ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $std/pointer/Pointer<f32>#set (; 7 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
   get_local $0
   get_local $1
   i32.const 4
@@ -1743,7 +1743,7 @@
   get_local $2
   f32.store
  )
- (func $std/pointer/Pointer<f32>#get (; 8 ;) (; has Stack IR ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
+ (func $std/pointer/Pointer<f32>#get (; 8 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   get_local $0
   get_local $1
   i32.const 4
@@ -1751,12 +1751,12 @@
   i32.add
   f32.load
  )
- (func $std/pointer/Pointer<f32>#set:value (; 9 ;) (; has Stack IR ;) (type $ifv) (param $0 i32) (param $1 f32)
+ (func $std/pointer/Pointer<f32>#set:value (; 9 ;) (type $ifv) (param $0 i32) (param $1 f32)
   get_local $0
   get_local $1
   f32.store
  )
- (func $start (; 10 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 10 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 f32)
@@ -2320,6 +2320,6 @@
    unreachable
   end
  )
- (func $null (; 11 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 11 ;) (type $v)
  )
 )

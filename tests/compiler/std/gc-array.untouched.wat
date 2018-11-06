@@ -7,14 +7,14 @@
  (type $iiiv (func (param i32 i32 i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
- (memory $0 1 65535)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
  (data (i32.const 8) "\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 32) "\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00")
  (data (i32.const 56) "\00\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 104) "\00\00\00\00\00\00\00\00\05\00\00\00\00\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (table 7 anyfunc)
+ (table $0 7 anyfunc)
  (elem (i32.const 0) $null $~lib/arraybuffer/ArrayBuffer~gc $~lib/array/Array<Foo>~gc $~lib/collector/itcm/__gc_mark $std/gc-array/Foo~gc $~lib/string/String~gc $~lib/internal/arraybuffer/__gc)
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
@@ -41,7 +41,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-array/main))
- (func $~lib/arraybuffer/ArrayBuffer~gc (; 1 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~gc (; 1 ;) (type $iv) (param $0 i32)
   get_local $0
   i32.eqz
   if
@@ -50,13 +50,13 @@
   get_local $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/collector/itcm/ManagedObject#get:color (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:color (; 2 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load
   i32.const 3
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#get:next (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:next (; 3 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load
   i32.const 3
@@ -64,7 +64,7 @@
   i32.xor
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#set:next (; 4 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:next (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   get_local $0
@@ -74,7 +74,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/ManagedObject#unlink (; 5 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#unlink (; 5 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -90,7 +90,7 @@
   get_local $1
   call $~lib/collector/itcm/ManagedObject#set:next
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 6 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 6 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   get_local $0
   i32.load offset=4
@@ -108,7 +108,7 @@
   get_local $1
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 7 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 7 ;) (type $iv) (param $0 i32)
   get_local $0
   get_global $~lib/collector/itcm/iter
   i32.eq
@@ -133,7 +133,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/__gc_mark (; 8 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/__gc_mark (; 8 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   get_local $0
   if
@@ -153,7 +153,7 @@
    end
   end
  )
- (func $~lib/array/Array<Foo>~gc (; 9 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/array/Array<Foo>~gc (; 9 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -191,7 +191,7 @@
    end
   end
  )
- (func $~lib/allocator/arena/__memory_allocate (; 10 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 10 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -270,7 +270,7 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/collector/itcm/ManagedObjectList#clear (; 11 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#clear (; 11 ;) (type $iv) (param $0 i32)
   get_local $0
   get_local $0
   i32.store
@@ -278,7 +278,7 @@
   get_local $0
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#set:color (; 12 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:color (; 12 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $0
   i32.load
@@ -290,10 +290,10 @@
   i32.or
   i32.store
  )
- (func $~lib/allocator/arena/__memory_free (; 13 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 13 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/collector/itcm/step (; 14 ;) (; has Stack IR ;) (type $v)
+ (func $~lib/collector/itcm/step (; 14 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   block $break|0
@@ -455,7 +455,7 @@
    unreachable
   end
  )
- (func $~lib/collector/itcm/__gc_collect (; 15 ;) (; has Stack IR ;) (type $v)
+ (func $~lib/collector/itcm/__gc_collect (; 15 ;) (type $v)
   (local $0 i32)
   block $break|0
    block $case1|0
@@ -487,11 +487,11 @@
    end
   end
  )
- (func $~lib/gc/gc.collect (; 16 ;) (; has Stack IR ;) (type $v)
+ (func $~lib/gc/gc.collect (; 16 ;) (type $v)
   call $~lib/collector/itcm/__gc_collect
   return
  )
- (func $~lib/collector/itcm/__gc_allocate (; 17 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/collector/itcm/__gc_allocate (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -528,7 +528,7 @@
    i32.add
   end
  )
- (func $std/gc-array/Foo~gc (; 18 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $std/gc-array/Foo~gc (; 18 ;) (type $iv) (param $0 i32)
   get_local $0
   i32.eqz
   if
@@ -537,7 +537,7 @@
   get_local $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/string/String~gc (; 19 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/string/String~gc (; 19 ;) (type $iv) (param $0 i32)
   get_local $0
   i32.eqz
   if
@@ -546,7 +546,7 @@
   get_local $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/internal/arraybuffer/computeSize (; 20 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 20 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   get_local $0
@@ -558,7 +558,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/internal/memory/memset (; 21 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 21 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -812,10 +812,10 @@
    end
   end
  )
- (func $~lib/internal/arraybuffer/__gc (; 22 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~lib/internal/arraybuffer/__gc (; 22 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 23 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 23 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
@@ -839,7 +839,7 @@
   i32.store
   get_local $1
  )
- (func $~lib/internal/memory/memcpy (; 24 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 24 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2040,7 +2040,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 25 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 25 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   get_local $0
   get_local $1
@@ -2267,7 +2267,7 @@
    end
   end
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 26 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2383,7 +2383,7 @@
   end
   get_local $0
  )
- (func $~lib/collector/itcm/__gc_link (; 27 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/__gc_link (; 27 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   block $~lib/collector/itcm/refToObj|inlined.1 (result i32)
@@ -2415,7 +2415,7 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/array/Array<Foo>#__set (; 28 ;) (; has Stack IR ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Foo>#__set (; 28 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -2471,7 +2471,7 @@
   get_local $2
   call $~lib/collector/itcm/__gc_link
  )
- (func $std/gc-array/main (; 29 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $std/gc-array/main (; 29 ;) (type $i) (result i32)
   get_global $~started
   i32.eqz
   if
@@ -2481,7 +2481,7 @@
   end
   i32.const 0
  )
- (func $start (; 30 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 30 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2532,9 +2532,9 @@
   call $~lib/array/Array<Foo>#__set
   call $~lib/gc/gc.collect
  )
- (func $null (; 31 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 31 ;) (type $v)
  )
- (func $~iterateRoots (; 32 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
+ (func $~iterateRoots (; 32 ;) (type $iv) (param $0 i32)
   get_global $std/gc-array/arr
   get_local $0
   call_indirect (type $iv)

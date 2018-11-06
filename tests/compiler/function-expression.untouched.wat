@@ -3,11 +3,11 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (type $i (func (result i32)))
- (memory $0 1 65535)
- (data (i32.const 8) "\16\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
- (table 5 anyfunc)
- (elem (i32.const 0) $null $start~anonymous|1 $start~anonymous|2 $start~someName|3 $start~anonymous|4)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\16\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
+ (table $0 5 anyfunc)
+ (elem (i32.const 0) $null $start~anonymous|1 $start~anonymous|2 $start~someName|3 $start~anonymous|4)
  (global $function-expression/f1 (mut i32) (i32.const 1))
  (global $~argc (mut i32) (i32.const 0))
  (global $function-expression/f2 (mut i32) (i32.const 2))
@@ -17,19 +17,19 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start~anonymous|1 (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $start~anonymous|1 (; 1 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
  )
- (func $start~anonymous|2 (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $start~anonymous|2 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
  )
- (func $start~someName|3 (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $start~someName|3 (; 3 ;) (type $v)
   nop
  )
- (func $start~anonymous|4 (; 4 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $start~anonymous|4 (; 4 ;) (type $i) (result i32)
   i32.const 1
  )
- (func $start (; 5 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 5 ;) (type $v)
   block (result i32)
    i32.const 1
    set_global $~argc
@@ -90,6 +90,6 @@
    unreachable
   end
  )
- (func $null (; 6 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 6 ;) (type $v)
  )
 )

@@ -239,11 +239,8 @@ export class Module {
 
   private cachedByValue: usize;
 
-  /** Maximum number of pages when targeting WASM32. */
-  static readonly MAX_MEMORY_WASM32: Index = 0xffff;
-
-  /** Maximum number of pages when targeting WASM64. */
-  static readonly MAX_MEMORY_WASM64: Index = 0xffff; // TODO
+  /** Maximum memory size. */
+  static readonly MAX_MEMORY: Index = -1;
 
   static create(): Module {
     var module = new Module();

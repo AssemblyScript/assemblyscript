@@ -1,8 +1,8 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
- (memory $0 0 65535)
- (table 1 anyfunc)
+ (memory $0 0)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
@@ -25,7 +25,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -104,12 +104,12 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $std/constructor/EmptyCtor#constructor (; 2 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/EmptyCtor#constructor (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   if (result i32)
@@ -125,7 +125,7 @@
   end
   tee_local $0
  )
- (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   if (result i32)
@@ -144,7 +144,7 @@
   end
   tee_local $0
  )
- (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 4 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   if (result i32)
@@ -163,7 +163,7 @@
   end
   tee_local $0
  )
- (func $std/constructor/CtorReturns#constructor (; 5 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorReturns#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   block $~lib/memory/memory.allocate|inlined.0 (result i32)
    i32.const 0
@@ -173,7 +173,7 @@
    br $~lib/memory/memory.allocate|inlined.0
   end
  )
- (func $std/constructor/CtorConditionallyReturns#constructor (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorConditionallyReturns#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_global $std/constructor/b
   if
@@ -200,7 +200,7 @@
   end
   tee_local $0
  )
- (func $std/constructor/CtorAllocates#constructor (; 7 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorAllocates#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   if (result i32)
@@ -218,7 +218,7 @@
   drop
   get_local $0
  )
- (func $std/constructor/CtorConditionallyAllocates#constructor (; 8 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorConditionallyAllocates#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_global $std/constructor/b
   if
@@ -251,7 +251,7 @@
   end
   tee_local $0
  )
- (func $start (; 9 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 9 ;) (type $v)
   (local $0 i32)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
@@ -312,6 +312,6 @@
   call $std/constructor/CtorConditionallyAllocates#constructor
   set_global $std/constructor/ctorConditionallyAllocates
  )
- (func $null (; 10 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 10 ;) (type $v)
  )
 )

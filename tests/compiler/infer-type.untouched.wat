@@ -5,11 +5,11 @@
  (type $f (func (result f32)))
  (type $F (func (result f64)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (memory $0 1 65535)
- (data (i32.const 8) "\0d\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s\00")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\0d\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s\00")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $infer-type/i i32 (i32.const 10))
  (global $infer-type/I i64 (i64.const 4294967296))
  (global $infer-type/F f64 (f64.const 1.5))
@@ -23,7 +23,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $infer-type/locals (; 1 ;) (; has Stack IR ;) (type $v)
+ (func $infer-type/locals (; 1 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   (local $2 f64)
@@ -43,19 +43,19 @@
   get_global $infer-type/F
   set_local $5
  )
- (func $infer-type/reti (; 2 ;) (; has Stack IR ;) (type $i) (result i32)
+ (func $infer-type/reti (; 2 ;) (type $i) (result i32)
   i32.const 0
  )
- (func $infer-type/retI (; 3 ;) (; has Stack IR ;) (type $I) (result i64)
+ (func $infer-type/retI (; 3 ;) (type $I) (result i64)
   i64.const 0
  )
- (func $infer-type/retf (; 4 ;) (; has Stack IR ;) (type $f) (result f32)
+ (func $infer-type/retf (; 4 ;) (type $f) (result f32)
   f32.const 0
  )
- (func $infer-type/refF (; 5 ;) (; has Stack IR ;) (type $F) (result f64)
+ (func $infer-type/refF (; 5 ;) (type $F) (result f64)
   f64.const 0
  )
- (func $start (; 6 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 6 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   get_global $infer-type/i
@@ -126,6 +126,6 @@
    unreachable
   end
  )
- (func $null (; 7 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 7 ;) (type $v)
  )
 )

@@ -1,19 +1,19 @@
 (module
  (type $v (func))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (memory $0 1 65535)
- (data (i32.const 8) "\n\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
- (table 1 anyfunc)
- (elem (i32.const 0) $null)
  (import "declare" "externalConstant" (global $declare/externalConstant i32))
  (import "declare" "my.externalConstant" (global $declare/my.externalConstant i32))
  (import "declare" "externalFunction" (func $declare/externalFunction))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "declare" "my.externalFunction" (func $declare/my.externalFunction))
+ (memory $0 1)
+ (data (i32.const 8) "\n\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 3 ;) (; has Stack IR ;) (type $v)
+ (func $start (; 3 ;) (type $v)
   call $declare/externalFunction
   get_global $declare/externalConstant
   i32.const 1
@@ -39,7 +39,7 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (; has Stack IR ;) (type $v)
+ (func $null (; 4 ;) (type $v)
   nop
  )
 )
