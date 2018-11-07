@@ -177,7 +177,7 @@
        (i32.const 8)
       )
       (i32.and
-       (i32.shr_u
+       (i32.shr_s
         (i32.shr_s
          (i32.shl
           (get_local $0)
@@ -873,7 +873,7 @@
            (i32.const 8)
           )
           (i32.and
-           (i32.shr_u
+           (i32.shr_s
             (i32.shr_s
              (i32.shl
               (get_local $0)
@@ -1038,7 +1038,7 @@
           (i32.const 65280)
          )
          (i32.and
-          (i32.shr_u
+          (i32.shr_s
            (get_local $0)
            (i32.const 8)
           )

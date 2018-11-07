@@ -28,9 +28,9 @@ export function bswap16<T>(value: T): T {
   assert((sizeof<T>() & (sizeof<T>() - 1)) == 0 && sizeof<T>() <= 4);
 
   if (sizeof<T>() == 2) {
-    return <T>((value << 8) | ((value >>> 8) & <T>0x00FF));
+    return <T>((value << 8) | ((value >> 8) & <T>0x00FF));
   } else if (sizeof<T>() == 4) {
-    return <T>(((value << 8) & <T>0xFF00) | ((value >>> 8) & <T>0x00FF) | (value & <T>0xFFFF0000));
+    return <T>(((value << 8) & <T>0xFF00) | ((value >> 8) & <T>0x00FF) | (value & <T>0xFFFF0000));
   }
   return value;
 }
