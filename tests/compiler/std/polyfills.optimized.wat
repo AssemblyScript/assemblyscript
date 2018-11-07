@@ -22,189 +22,132 @@
   (i64.const -2464388556401798912)
  )
  (func $start (; 4 ;) (; has Stack IR ;) (type $v)
-  (local $0 i32)
-  (block $folding-inner0
-   (if
-    (i32.ne
-     (i32.and
-      (call $~lib/polyfills/bswap<u16>)
-      (i32.const 65535)
-     )
-     (i32.const 48042)
+  (if
+   (i32.ne
+    (i32.and
+     (call $~lib/polyfills/bswap<u16>)
+     (i32.const 65535)
     )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 4)
-      (i32.const 0)
-     )
-     (unreachable)
-    )
+    (i32.const 48042)
    )
-   (if
-    (i32.ne
-     (i32.and
-      (call $~lib/polyfills/bswap<u16>)
-      (i32.const 65535)
-     )
-     (i32.const 48042)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 5)
-      (i32.const 0)
-     )
-     (unreachable)
-    )
-   )
-   (if
-    (i32.ne
-     (call $~lib/polyfills/bswap<u32>)
-     (i32.const -573785174)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 8)
-      (i32.const 0)
-     )
-     (unreachable)
-    )
-   )
-   (if
-    (i32.ne
-     (call $~lib/polyfills/bswap<u32>)
-     (i32.const -573785174)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 9)
-      (i32.const 0)
-     )
-     (unreachable)
-    )
-   )
-   (if
-    (i64.ne
-     (call $~lib/polyfills/bswap<u64>)
-     (i64.const -2464388556401798912)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 12)
-      (i32.const 0)
-     )
-     (unreachable)
-    )
-   )
-   (if
-    (i64.ne
-     (call $~lib/polyfills/bswap<u64>)
-     (i64.const -2464388556401798912)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 13)
-      (i32.const 0)
-     )
-     (unreachable)
-    )
-   )
-   (if
-    (i32.ne
-     (call $~lib/polyfills/bswap<u32>)
-     (i32.const -573785174)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 16)
-      (i32.const 0)
-     )
-     (unreachable)
-    )
-   )
-   (if
-    (i32.ne
-     (call $~lib/polyfills/bswap<u32>)
-     (i32.const -573785174)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 48)
-      (i32.const 17)
-      (i32.const 0)
-     )
-     (unreachable)
-    )
-   )
-   (if
-    (i32.eqz
-     (tee_local $0
-      (i32.const 1)
-     )
-    )
-    (set_local $0
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 4)
      (i32.const 0)
     )
+    (unreachable)
    )
-   (if
-    (i32.eqz
-     (get_local $0)
+  )
+  (if
+   (i32.ne
+    (i32.and
+     (call $~lib/polyfills/bswap<u16>)
+     (i32.const 65535)
     )
-    (br $folding-inner0)
+    (i32.const 48042)
    )
-   (if
-    (i32.eqz
-     (tee_local $0
-      (i32.const 1)
-     )
-    )
-    (set_local $0
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 5)
      (i32.const 0)
     )
+    (unreachable)
    )
-   (if
-    (i32.eqz
-     (get_local $0)
-    )
-    (br $folding-inner0)
-   )
-   (if
-    (i32.eqz
-     (tee_local $0
-      (i32.const 1)
-     )
-    )
-    (br $folding-inner0)
-   )
-   (if
-    (i32.eqz
-     (i32.const 1)
-    )
-    (br $folding-inner0)
-   )
-   (return)
   )
-  (call $~lib/env/abort
-   (i32.const 0)
-   (i32.const 8)
-   (i32.const 28)
-   (i32.const 2)
+  (if
+   (i32.ne
+    (call $~lib/polyfills/bswap<u32>)
+    (i32.const -573785174)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 8)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
   )
-  (unreachable)
+  (if
+   (i32.ne
+    (call $~lib/polyfills/bswap<u32>)
+    (i32.const -573785174)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 9)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i64.ne
+    (call $~lib/polyfills/bswap<u64>)
+    (i64.const -2464388556401798912)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 12)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i64.ne
+    (call $~lib/polyfills/bswap<u64>)
+    (i64.const -2464388556401798912)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 13)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/polyfills/bswap<u32>)
+    (i32.const -573785174)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 16)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
+  (if
+   (i32.ne
+    (call $~lib/polyfills/bswap<u32>)
+    (i32.const -573785174)
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 48)
+     (i32.const 17)
+     (i32.const 0)
+    )
+    (unreachable)
+   )
+  )
  )
  (func $null (; 5 ;) (; has Stack IR ;) (type $v)
   (nop)

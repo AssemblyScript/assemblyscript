@@ -1,5 +1,5 @@
 export function bswap<T>(value: T): T {
-  assert(sizeof<T>() == 1 || sizeof<T>() == 2 || sizeof<T>() == 4 || sizeof<T>() == 8);
+  assert((sizeof<T>() & (sizeof<T>() - 1)) == 0 && sizeof<T>() <= 8);
 
   if (sizeof<T>() == 2) {
     return bswap16<T>(value);
@@ -25,7 +25,7 @@ export function bswap<T>(value: T): T {
 
 @inline
 export function bswap16<T>(value: T): T {
-  assert(sizeof<T>() == 1 || sizeof<T>() == 2 || sizeof<T>() == 4);
+  assert((sizeof<T>() & (sizeof<T>() - 1)) == 0 && sizeof<T>() <= 4);
 
   if (sizeof<T>() == 2) {
     return <T>((value << 8) | ((value >>> 8) & <T>0x00FF));
