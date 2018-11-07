@@ -23,10 +23,13 @@ export function bswap<T>(value: T): T {
   return value;
 }
 
+@inline
 export function bswap16<T>(value: T): T {
   assert(sizeof<T>() == 1 || sizeof<T>() == 2 || sizeof<T>() == 4);
 
-  if (sizeof<T>() == 2 || sizeof<T>() == 4) {
+  if (sizeof<T>() == 2) {
+    return <T>((value << 8) | (value >> 8));
+  } else if (sizeof<T>() == 4) {
     return <T>(((value << 8) & <T>0xFF00) | ((value >> 8) & <T>0x00FF) | (value & <T>0xFFFF0000));
   }
   return value;
