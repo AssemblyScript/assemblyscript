@@ -2,7 +2,7 @@
  (type $i (func (result i32)))
  (type $v (func))
  (memory $0 0)
- (table 1 anyfunc)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
@@ -37,21 +37,18 @@
  (export "SelfReference.ZERO" (global $enum/SelfReference.ZERO))
  (export "SelfReference.ONE" (global $enum/SelfReference.ONE))
  (start $start)
- (func $enum/getZero (; 0 ;) (; has Stack IR ;) (type $i) (result i32)
-  (i32.const 0)
+ (func $enum/getZero (; 0 ;) (type $i) (result i32)
+  i32.const 0
  )
- (func $start (; 1 ;) (; has Stack IR ;) (type $v)
-  (set_global $enum/NonConstant.ZERO
-   (call $enum/getZero)
-  )
-  (set_global $enum/NonConstant.ONE
-   (i32.add
-    (call $enum/getZero)
-    (i32.const 1)
-   )
-  )
+ (func $start (; 1 ;) (type $v)
+  call $enum/getZero
+  set_global $enum/NonConstant.ZERO
+  call $enum/getZero
+  i32.const 1
+  i32.add
+  set_global $enum/NonConstant.ONE
  )
- (func $null (; 2 ;) (; has Stack IR ;) (type $v)
-  (nop)
+ (func $null (; 2 ;) (type $v)
+  nop
  )
 )

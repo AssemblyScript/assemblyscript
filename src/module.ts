@@ -239,12 +239,6 @@ export class Module {
 
   private cachedByValue: usize;
 
-  /** Maximum number of pages when targeting WASM32. */
-  static readonly MAX_MEMORY_WASM32: Index = 0xffff;
-
-  /** Maximum number of pages when targeting WASM64. */
-  static readonly MAX_MEMORY_WASM64: Index = 0xffff; // TODO
-
   static create(): Module {
     var module = new Module();
     module.ref = _BinaryenModuleCreate();
@@ -823,6 +817,9 @@ export class Module {
       memory.free(cStr1);
     }
   }
+
+  /** Unlimited memory constant. */
+  static readonly UNLIMITED_MEMORY: Index = <Index>-1;
 
   setMemory(
     initial: Index,

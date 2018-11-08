@@ -5,7 +5,9 @@
 declare namespace binaryen {
   class Module {
     constructor(ref: number);
+    runPasses(passes: string[]): void;
     emitText(): string;
+    emitStackIR(optimize?: boolean): string;
     emitAsmjs(): string;
   }
 }
