@@ -21,7 +21,7 @@ export class Uint8Array extends TypedArray<u8,u32> {
 export class Uint8ClampedArray extends TypedArray<u8,u32> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
-  @operator("[]=")
+  @inline @operator("[]=")
   protected __set(index: i32, value: i32): void {
     super.__set(index, max(min(value, 255), 0));
   }
