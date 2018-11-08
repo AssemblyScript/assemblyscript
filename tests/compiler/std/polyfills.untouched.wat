@@ -14,22 +14,9 @@
  (export "table" (table $0))
  (start $start)
  (func $~lib/polyfills/bswap<u8> (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   i32.const 1
-  i32.const 1
-  i32.const 1
-  i32.sub
-  i32.and
-  i32.const 0
-  i32.eq
-  tee_local $1
-  if (result i32)
-   i32.const 1
-   i32.const 8
-   i32.le_u
-  else   
-   get_local $1
-  end
+  i32.const 8
+  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -42,22 +29,9 @@
   get_local $0
  )
  (func $~lib/polyfills/bswap<i8> (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   i32.const 1
-  i32.const 1
-  i32.const 1
-  i32.sub
-  i32.and
-  i32.const 0
-  i32.eq
-  tee_local $1
-  if (result i32)
-   i32.const 1
-   i32.const 8
-   i32.le_u
-  else   
-   get_local $1
-  end
+  i32.const 8
+  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -70,22 +44,9 @@
   get_local $0
  )
  (func $~lib/polyfills/bswap<u16> (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   i32.const 2
-  i32.const 2
-  i32.const 1
-  i32.sub
-  i32.and
-  i32.const 0
-  i32.eq
-  tee_local $1
-  if (result i32)
-   i32.const 2
-   i32.const 8
-   i32.le_u
-  else   
-   get_local $1
-  end
+  i32.const 8
+  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -109,22 +70,9 @@
   return
  )
  (func $~lib/polyfills/bswap<i16> (; 4 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   i32.const 2
-  i32.const 2
-  i32.const 1
-  i32.sub
-  i32.and
-  i32.const 0
-  i32.eq
-  tee_local $1
-  if (result i32)
-   i32.const 2
-   i32.const 8
-   i32.le_u
-  else   
-   get_local $1
-  end
+  i32.const 8
+  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -150,22 +98,9 @@
   return
  )
  (func $~lib/polyfills/bswap<u32> (; 5 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   i32.const 4
-  i32.const 4
-  i32.const 1
-  i32.sub
-  i32.and
-  i32.const 0
-  i32.eq
-  tee_local $1
-  if (result i32)
-   i32.const 4
-   i32.const 8
-   i32.le_u
-  else   
-   get_local $1
-  end
+  i32.const 8
+  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -189,22 +124,9 @@
   return
  )
  (func $~lib/polyfills/bswap<i32> (; 6 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   i32.const 4
-  i32.const 4
-  i32.const 1
-  i32.sub
-  i32.and
-  i32.const 0
-  i32.eq
-  tee_local $1
-  if (result i32)
-   i32.const 4
-   i32.const 8
-   i32.le_u
-  else   
-   get_local $1
-  end
+  i32.const 8
+  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -228,25 +150,12 @@
   return
  )
  (func $~lib/polyfills/bswap<u64> (; 7 ;) (type $II) (param $0 i64) (result i64)
-  (local $1 i32)
+  (local $1 i64)
   (local $2 i64)
   (local $3 i64)
-  (local $4 i64)
   i32.const 8
   i32.const 8
-  i32.const 1
-  i32.sub
-  i32.and
-  i32.const 0
-  i32.eq
-  tee_local $1
-  if (result i32)
-   i32.const 8
-   i32.const 8
-   i32.le_u
-  else   
-   get_local $1
-  end
+  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -261,56 +170,43 @@
   i64.shr_u
   i64.const 71777214294589695
   i64.and
-  set_local $2
+  set_local $1
   get_local $0
   i64.const 71777214294589695
   i64.and
   i64.const 8
   i64.shl
-  set_local $3
+  set_local $2
+  get_local $1
   get_local $2
-  get_local $3
   i64.or
-  set_local $4
-  get_local $4
+  set_local $3
+  get_local $3
   i64.const 16
   i64.shr_u
   i64.const 281470681808895
   i64.and
-  set_local $2
-  get_local $4
+  set_local $1
+  get_local $3
   i64.const 281470681808895
   i64.and
   i64.const 16
   i64.shl
-  set_local $3
+  set_local $2
+  get_local $1
   get_local $2
-  get_local $3
   i64.or
   i64.const 32
   i64.rotr
   return
  )
  (func $~lib/polyfills/bswap<i64> (; 8 ;) (type $II) (param $0 i64) (result i64)
-  (local $1 i32)
+  (local $1 i64)
   (local $2 i64)
   (local $3 i64)
-  (local $4 i64)
   i32.const 8
   i32.const 8
-  i32.const 1
-  i32.sub
-  i32.and
-  i32.const 0
-  i32.eq
-  tee_local $1
-  if (result i32)
-   i32.const 8
-   i32.const 8
-   i32.le_u
-  else   
-   get_local $1
-  end
+  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -325,53 +221,40 @@
   i64.shr_u
   i64.const 71777214294589695
   i64.and
-  set_local $2
+  set_local $1
   get_local $0
   i64.const 71777214294589695
   i64.and
   i64.const 8
   i64.shl
-  set_local $3
+  set_local $2
+  get_local $1
   get_local $2
-  get_local $3
   i64.or
-  set_local $4
-  get_local $4
+  set_local $3
+  get_local $3
   i64.const 16
   i64.shr_u
   i64.const 281470681808895
   i64.and
-  set_local $2
-  get_local $4
+  set_local $1
+  get_local $3
   i64.const 281470681808895
   i64.and
   i64.const 16
   i64.shl
-  set_local $3
+  set_local $2
+  get_local $1
   get_local $2
-  get_local $3
   i64.or
   i64.const 32
   i64.rotr
   return
  )
  (func $~lib/polyfills/bswap<usize> (; 9 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   i32.const 4
-  i32.const 4
-  i32.const 1
-  i32.sub
-  i32.and
-  i32.const 0
-  i32.eq
-  tee_local $1
-  if (result i32)
-   i32.const 4
-   i32.const 8
-   i32.le_u
-  else   
-   get_local $1
-  end
+  i32.const 8
+  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -395,22 +278,9 @@
   return
  )
  (func $~lib/polyfills/bswap<isize> (; 10 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   i32.const 4
-  i32.const 4
-  i32.const 1
-  i32.sub
-  i32.and
-  i32.const 0
-  i32.eq
-  tee_local $1
-  if (result i32)
-   i32.const 4
-   i32.const 8
-   i32.le_u
-  else   
-   get_local $1
-  end
+  i32.const 8
+  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -435,7 +305,6 @@
  )
  (func $start (; 11 ;) (type $v)
   (local $0 i32)
-  (local $1 i32)
   i32.const 170
   call $~lib/polyfills/bswap<u8>
   i32.const 255
@@ -590,20 +459,8 @@
    i32.const 170
    set_local $0
    i32.const 1
-   i32.const 1
-   i32.const 1
-   i32.sub
-   i32.and
-   i32.const 0
-   i32.eq
-   tee_local $1
-   if (result i32)
-    i32.const 1
-    i32.const 4
-    i32.le_u
-   else    
-    get_local $1
-   end
+   i32.const 4
+   i32.le_u
    i32.eqz
    if
     i32.const 0
@@ -632,20 +489,8 @@
    i32.const 170
    set_local $0
    i32.const 1
-   i32.const 1
-   i32.const 1
-   i32.sub
-   i32.and
-   i32.const 0
-   i32.eq
-   tee_local $1
-   if (result i32)
-    i32.const 1
-    i32.const 4
-    i32.le_u
-   else    
-    get_local $1
-   end
+   i32.const 4
+   i32.le_u
    i32.eqz
    if
     i32.const 0
@@ -680,20 +525,8 @@
    i32.const 43707
    set_local $0
    i32.const 2
-   i32.const 2
-   i32.const 1
-   i32.sub
-   i32.and
-   i32.const 0
-   i32.eq
-   tee_local $1
-   if (result i32)
-    i32.const 2
-    i32.const 4
-    i32.le_u
-   else    
-    get_local $1
-   end
+   i32.const 4
+   i32.le_u
    i32.eqz
    if
     i32.const 0
@@ -731,20 +564,8 @@
    i32.const 43707
    set_local $0
    i32.const 2
-   i32.const 2
-   i32.const 1
-   i32.sub
-   i32.and
-   i32.const 0
-   i32.eq
-   tee_local $1
-   if (result i32)
-    i32.const 2
-    i32.const 4
-    i32.le_u
-   else    
-    get_local $1
-   end
+   i32.const 4
+   i32.le_u
    i32.eqz
    if
     i32.const 0
@@ -793,19 +614,7 @@
    set_local $0
    i32.const 4
    i32.const 4
-   i32.const 1
-   i32.sub
-   i32.and
-   i32.const 0
-   i32.eq
-   tee_local $1
-   if (result i32)
-    i32.const 4
-    i32.const 4
-    i32.le_u
-   else    
-    get_local $1
-   end
+   i32.le_u
    i32.eqz
    if
     i32.const 0
@@ -848,19 +657,7 @@
    set_local $0
    i32.const 4
    i32.const 4
-   i32.const 1
-   i32.sub
-   i32.and
-   i32.const 0
-   i32.eq
-   tee_local $1
-   if (result i32)
-    i32.const 4
-    i32.const 4
-    i32.le_u
-   else    
-    get_local $1
-   end
+   i32.le_u
    i32.eqz
    if
     i32.const 0
