@@ -5,8 +5,7 @@
  (type $FUNCSIG$j (func (result i64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\11\00\00\00~\00l\00i\00b\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s")
- (data (i32.const 48) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s")
+ (data (i32.const 8) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s")
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
@@ -32,7 +31,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 4
    i32.const 0
    call $~lib/env/abort
@@ -45,7 +44,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 5
    i32.const 0
    call $~lib/env/abort
@@ -58,7 +57,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 8
    i32.const 0
    call $~lib/env/abort
@@ -71,7 +70,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 9
    i32.const 0
    call $~lib/env/abort
@@ -82,7 +81,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 12
    i32.const 0
    call $~lib/env/abort
@@ -93,7 +92,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 13
    i32.const 0
    call $~lib/env/abort
@@ -104,7 +103,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 16
    i32.const 0
    call $~lib/env/abort
@@ -115,7 +114,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 17
    i32.const 0
    call $~lib/env/abort
@@ -126,7 +125,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 20
    i32.const 0
    call $~lib/env/abort
@@ -137,7 +136,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 21
    i32.const 0
    call $~lib/env/abort

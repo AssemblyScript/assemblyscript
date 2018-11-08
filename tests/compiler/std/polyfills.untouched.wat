@@ -5,51 +5,22 @@
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\11\00\00\00~\00l\00i\00b\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
- (data (i32.const 48) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
+ (data (i32.const 8) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 84))
+ (global $HEAP_BASE i32 (i32.const 44))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
  (func $~lib/polyfills/bswap<u8> (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 2
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
   get_local $0
+  return
  )
  (func $~lib/polyfills/bswap<i8> (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 2
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
   get_local $0
+  return
  )
  (func $~lib/polyfills/bswap<u16> (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 2
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
   get_local $0
   i32.const 8
   i32.shl
@@ -64,16 +35,6 @@
   return
  )
  (func $~lib/polyfills/bswap<i16> (; 4 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 2
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
   get_local $0
   i32.const 8
   i32.shl
@@ -90,16 +51,6 @@
   return
  )
  (func $~lib/polyfills/bswap<u32> (; 5 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 2
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
   get_local $0
   i32.const -16711936
   i32.and
@@ -114,16 +65,6 @@
   return
  )
  (func $~lib/polyfills/bswap<i32> (; 6 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 2
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
   get_local $0
   i32.const -16711936
   i32.and
@@ -141,16 +82,6 @@
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 2
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
   get_local $0
   i64.const 8
   i64.shr_u
@@ -190,16 +121,6 @@
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 2
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
   get_local $0
   i64.const 8
   i64.shr_u
@@ -236,16 +157,6 @@
   return
  )
  (func $~lib/polyfills/bswap<usize> (; 9 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 2
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
   get_local $0
   i32.const -16711936
   i32.and
@@ -260,16 +171,6 @@
   return
  )
  (func $~lib/polyfills/bswap<isize> (; 10 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 2
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
   get_local $0
   i32.const -16711936
   i32.and
@@ -294,7 +195,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 4
    i32.const 0
    call $~lib/env/abort
@@ -315,7 +216,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 5
    i32.const 0
    call $~lib/env/abort
@@ -330,7 +231,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 8
    i32.const 0
    call $~lib/env/abort
@@ -351,7 +252,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 9
    i32.const 0
    call $~lib/env/abort
@@ -364,7 +265,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 12
    i32.const 0
    call $~lib/env/abort
@@ -377,7 +278,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 13
    i32.const 0
    call $~lib/env/abort
@@ -390,7 +291,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 16
    i32.const 0
    call $~lib/env/abort
@@ -403,7 +304,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 17
    i32.const 0
    call $~lib/env/abort
@@ -416,7 +317,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 20
    i32.const 0
    call $~lib/env/abort
@@ -429,7 +330,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 21
    i32.const 0
    call $~lib/env/abort
@@ -438,24 +339,8 @@
   block $~lib/polyfills/bswap16<u8>|inlined.0 (result i32)
    i32.const 170
    set_local $0
-   i32.const 1
-   if (result i32)
-    i32.const 1
-    i32.const 4
-    i32.le_u
-   else    
-    i32.const 1
-   end
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 8
-    i32.const 28
-    i32.const 2
-    call $~lib/env/abort
-    unreachable
-   end
    get_local $0
+   br $~lib/polyfills/bswap16<u8>|inlined.0
   end
   i32.const 255
   i32.and
@@ -464,7 +349,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 24
    i32.const 0
    call $~lib/env/abort
@@ -473,24 +358,8 @@
   block $~lib/polyfills/bswap16<i8>|inlined.0 (result i32)
    i32.const 170
    set_local $0
-   i32.const 1
-   if (result i32)
-    i32.const 1
-    i32.const 4
-    i32.le_u
-   else    
-    i32.const 1
-   end
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 8
-    i32.const 28
-    i32.const 2
-    call $~lib/env/abort
-    unreachable
-   end
    get_local $0
+   br $~lib/polyfills/bswap16<i8>|inlined.0
   end
   i32.const 24
   i32.shl
@@ -505,7 +374,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 25
    i32.const 0
    call $~lib/env/abort
@@ -514,23 +383,6 @@
   block $~lib/polyfills/bswap16<u16>|inlined.0 (result i32)
    i32.const 43707
    set_local $0
-   i32.const 1
-   if (result i32)
-    i32.const 2
-    i32.const 4
-    i32.le_u
-   else    
-    i32.const 1
-   end
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 8
-    i32.const 28
-    i32.const 2
-    call $~lib/env/abort
-    unreachable
-   end
    get_local $0
    i32.const 8
    i32.shl
@@ -549,7 +401,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 28
    i32.const 0
    call $~lib/env/abort
@@ -558,23 +410,6 @@
   block $~lib/polyfills/bswap16<i16>|inlined.0 (result i32)
    i32.const 43707
    set_local $0
-   i32.const 1
-   if (result i32)
-    i32.const 2
-    i32.const 4
-    i32.le_u
-   else    
-    i32.const 1
-   end
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 8
-    i32.const 28
-    i32.const 2
-    call $~lib/env/abort
-    unreachable
-   end
    get_local $0
    i32.const 8
    i32.shl
@@ -603,7 +438,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 29
    i32.const 0
    call $~lib/env/abort
@@ -612,23 +447,6 @@
   block $~lib/polyfills/bswap16<u32>|inlined.0 (result i32)
    i32.const -7820613
    set_local $0
-   i32.const 1
-   if (result i32)
-    i32.const 4
-    i32.const 4
-    i32.le_u
-   else    
-    i32.const 1
-   end
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 8
-    i32.const 28
-    i32.const 2
-    call $~lib/env/abort
-    unreachable
-   end
    get_local $0
    i32.const 8
    i32.shl
@@ -651,7 +469,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 32
    i32.const 0
    call $~lib/env/abort
@@ -660,23 +478,6 @@
   block $~lib/polyfills/bswap16<i32>|inlined.0 (result i32)
    i32.const -7820613
    set_local $0
-   i32.const 1
-   if (result i32)
-    i32.const 4
-    i32.const 4
-    i32.le_u
-   else    
-    i32.const 1
-   end
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 8
-    i32.const 28
-    i32.const 2
-    call $~lib/env/abort
-    unreachable
-   end
    get_local $0
    i32.const 8
    i32.shl
@@ -699,7 +500,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 48
+   i32.const 8
    i32.const 33
    i32.const 0
    call $~lib/env/abort
