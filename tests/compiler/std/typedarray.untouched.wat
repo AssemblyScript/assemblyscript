@@ -1175,7 +1175,7 @@
    get_local $1
    i32.load offset=8
    i32.const 0
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1224,7 +1224,7 @@
    get_local $2
    i32.load offset=8
    i32.const 0
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1273,7 +1273,7 @@
    get_local $3
    i32.load offset=8
    i32.const 0
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1322,7 +1322,7 @@
    get_local $4
    i32.load offset=8
    i32.const 1
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1371,7 +1371,7 @@
    get_local $5
    i32.load offset=8
    i32.const 1
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1420,7 +1420,7 @@
    get_local $6
    i32.load offset=8
    i32.const 2
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1469,7 +1469,7 @@
    get_local $7
    i32.load offset=8
    i32.const 2
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1518,7 +1518,7 @@
    get_local $8
    i32.load offset=8
    i32.const 3
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1567,7 +1567,7 @@
    get_local $9
    i32.load offset=8
    i32.const 3
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1616,7 +1616,7 @@
    get_local $10
    i32.load offset=8
    i32.const 2
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1665,7 +1665,7 @@
    get_local $11
    i32.load offset=8
    i32.const 3
-   i32.shr_s
+   i32.shr_u
   end
   get_local $0
   i32.eq
@@ -1756,7 +1756,7 @@
    get_local $0
    i32.load offset=8
    i32.const 2
-   i32.shr_s
+   i32.shr_u
   end
   set_local $3
   get_local $1
@@ -1887,7 +1887,7 @@
    get_local $0
    i32.load offset=8
    i32.const 3
-   i32.shr_s
+   i32.shr_u
   end
   set_local $3
   get_local $1
@@ -2537,7 +2537,7 @@
    get_local $0
    i32.load offset=8
    i32.const 3
-   i32.shr_s
+   i32.shr_u
   end
   set_local $3
   get_local $3
@@ -2868,7 +2868,7 @@
    get_local $0
    i32.load offset=8
    i32.const 0
-   i32.shr_s
+   i32.shr_u
   end
   set_local $6
   get_local $2
@@ -3007,7 +3007,7 @@
    get_local $0
    i32.load offset=8
    i32.const 0
-   i32.shr_s
+   i32.shr_u
   end
   block $~lib/array/Array<i8>#get:length|inlined.1 (result i32)
    get_local $1
@@ -3026,7 +3026,7 @@
      get_local $0
      i32.load offset=8
      i32.const 0
-     i32.shr_s
+     i32.shr_u
     end
     set_local $3
    end
@@ -3098,7 +3098,7 @@
    get_local $0
    i32.load offset=8
    i32.const 0
-   i32.shr_s
+   i32.shr_u
   end
   set_local $3
   get_local $1
@@ -3202,7 +3202,7 @@
    get_local $0
    i32.load offset=8
    i32.const 2
-   i32.shr_s
+   i32.shr_u
   end
   set_local $6
   get_local $2
@@ -3313,7 +3313,7 @@
    get_local $0
    i32.load offset=8
    i32.const 2
-   i32.shr_s
+   i32.shr_u
   end
   block $~lib/array/Array<i32>#get:length|inlined.1 (result i32)
    get_local $1
@@ -3332,7 +3332,7 @@
      get_local $0
      i32.load offset=8
      i32.const 2
-     i32.shr_s
+     i32.shr_u
     end
     set_local $3
    end
@@ -3558,7 +3558,7 @@
    get_local $0
    i32.load offset=8
    i32.const 2
-   i32.shr_s
+   i32.shr_u
   end
   i32.const 3
   i32.eq
@@ -3652,7 +3652,7 @@
    get_local $0
    i32.load offset=8
    i32.const 2
-   i32.shr_s
+   i32.shr_u
   end
   i32.const 1
   i32.eq
@@ -3756,7 +3756,7 @@
    get_local $0
    i32.load offset=8
    i32.const 3
-   i32.shr_s
+   i32.shr_u
   end
   i32.const 4
   i32.eq
@@ -4058,7 +4058,7 @@
    get_local $0
    i32.load offset=8
    i32.const 0
-   i32.shr_s
+   i32.shr_u
   end
   i32.const 3
   i32.eq
@@ -4264,7 +4264,7 @@
    get_local $0
    i32.load offset=8
    i32.const 2
-   i32.shr_s
+   i32.shr_u
   end
   i32.const 3
   i32.eq

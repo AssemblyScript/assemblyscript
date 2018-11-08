@@ -32,7 +32,7 @@ export abstract class TypedArray<T,V> {
 
   @inline
   get length(): i32 {
-    return this.byteLength >> alignof<T>();
+    return this.byteLength >>> alignof<T>();
   }
 
   @operator("[]")

@@ -715,7 +715,7 @@
   get_local $1
   i32.load offset=8
   i32.const 1
-  i32.shr_s
+  i32.shr_u
   get_local $0
   i32.ne
   if
@@ -755,7 +755,7 @@
   get_local $1
   i32.load offset=8
   i32.const 1
-  i32.shr_s
+  i32.shr_u
   get_local $0
   i32.ne
   if
@@ -795,7 +795,7 @@
   get_local $1
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   get_local $0
   i32.ne
   if
@@ -835,7 +835,7 @@
   get_local $1
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   get_local $0
   i32.ne
   if
@@ -875,7 +875,7 @@
   get_local $1
   i32.load offset=8
   i32.const 3
-  i32.shr_s
+  i32.shr_u
   get_local $0
   i32.ne
   if
@@ -915,7 +915,7 @@
   get_local $1
   i32.load offset=8
   i32.const 3
-  i32.shr_s
+  i32.shr_u
   get_local $0
   i32.ne
   if
@@ -955,7 +955,7 @@
   get_local $1
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   get_local $0
   i32.ne
   if
@@ -995,7 +995,7 @@
   get_local $1
   i32.load offset=8
   i32.const 3
-  i32.shr_s
+  i32.shr_u
   get_local $0
   i32.ne
   if
@@ -1067,7 +1067,7 @@
   get_local $0
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   tee_local $2
   i32.const 1
   get_local $2
@@ -1157,7 +1157,7 @@
   get_local $0
   i32.load offset=8
   i32.const 3
-  i32.shr_s
+  i32.shr_u
   tee_local $1
   i32.const 2
   get_local $1
@@ -1604,7 +1604,7 @@
   get_local $0
   i32.load offset=8
   i32.const 3
-  i32.shr_s
+  i32.shr_u
   tee_local $4
   i32.const 1
   i32.le_s
@@ -2065,7 +2065,7 @@
   get_local $0
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   set_local $4
   get_local $2
   i32.const 0
@@ -2168,7 +2168,7 @@
   get_local $0
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   get_local $1
   i32.load offset=4
   i32.ne
@@ -2180,7 +2180,7 @@
    get_local $0
    i32.load offset=8
    i32.const 2
-   i32.shr_s
+   i32.shr_u
    set_local $3
    loop $repeat|0
     get_local $2
@@ -2268,7 +2268,7 @@
   get_global $std/typedarray/arr
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -2347,7 +2347,7 @@
   get_global $std/typedarray/arr
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   i32.const 1
   i32.ne
   if
@@ -2436,7 +2436,7 @@
   get_global $std/typedarray/af64
   i32.load offset=8
   i32.const 3
-  i32.shr_s
+  i32.shr_u
   i32.const 4
   i32.ne
   if
@@ -2890,7 +2890,7 @@
   get_global $std/typedarray/sub32
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   i32.const 3
   i32.ne
   if
