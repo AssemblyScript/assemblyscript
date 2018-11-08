@@ -397,7 +397,7 @@ export class Compiler extends DiagnosticEmitter {
       : 0;
     module.setMemory(
       numPages,
-      Module.MAX_MEMORY,
+      Module.UNLIMITED_MEMORY,
       this.memorySegments,
       options.target,
       "memory"

@@ -239,9 +239,6 @@ export class Module {
 
   private cachedByValue: usize;
 
-  /** Maximum memory size. */
-  static readonly MAX_MEMORY: Index = -1;
-
   static create(): Module {
     var module = new Module();
     module.ref = _BinaryenModuleCreate();
@@ -820,6 +817,9 @@ export class Module {
       memory.free(cStr1);
     }
   }
+
+  /** Unlimited memory constant. */
+  static readonly UNLIMITED_MEMORY: Index = <Index>-1;
 
   setMemory(
     initial: Index,
