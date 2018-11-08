@@ -37,9 +37,8 @@ export abstract class TypedArray<T,V> {
 
   @operator("[]")
   protected __get(index: i32): T {
-    var byteOffset = this.byteOffset;
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    return loadUnsafeWithOffset<T,T>(this.buffer, index, byteOffset);
+    return loadUnsafeWithOffset<T,T>(this.buffer, index, this.byteOffset);
   }
 
   @inline @operator("{}")
@@ -49,9 +48,8 @@ export abstract class TypedArray<T,V> {
 
   @operator("[]=")
   protected __set(index: i32, value: V): void {
-    var byteOffset = this.byteOffset;
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    storeUnsafeWithOffset<T,V>(this.buffer, index, value, byteOffset);
+    storeUnsafeWithOffset<T,V>(this.buffer, index, value, this.byteOffset);
   }
 
   @inline @operator("{}=")

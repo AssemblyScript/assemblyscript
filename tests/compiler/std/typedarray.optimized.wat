@@ -1008,10 +1008,6 @@
   end
  )
  (func $~lib/internal/typedarray/TypedArray<i32,i32>#__set (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  get_local $0
-  i32.load offset=4
-  set_local $3
   get_local $1
   get_local $0
   i32.load offset=8
@@ -1021,14 +1017,15 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 53
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
   end
   get_local $0
   i32.load
-  get_local $3
+  get_local $0
+  i32.load offset=4
   i32.add
   get_local $1
   i32.const 2
@@ -1038,10 +1035,6 @@
   i32.store offset=8
  )
  (func $~lib/internal/typedarray/TypedArray<i32,i32>#__get (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  get_local $0
-  i32.load offset=4
-  set_local $2
   get_local $1
   get_local $0
   i32.load offset=8
@@ -1051,14 +1044,15 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 41
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
   end
   get_local $0
   i32.load
-  get_local $2
+  get_local $0
+  i32.load offset=4
   i32.add
   get_local $1
   i32.const 2
@@ -1129,10 +1123,6 @@
   get_local $2
  )
  (func $~lib/internal/typedarray/TypedArray<f64,f64>#__set (; 14 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
-  (local $3 i32)
-  get_local $0
-  i32.load offset=4
-  set_local $3
   get_local $1
   get_local $0
   i32.load offset=8
@@ -1142,14 +1132,15 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 53
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
   end
   get_local $0
   i32.load
-  get_local $3
+  get_local $0
+  i32.load offset=4
   i32.add
   get_local $1
   i32.const 3
@@ -1730,10 +1721,6 @@
   call $~lib/internal/typedarray/TypedArray<f64,f64>#sort
  )
  (func $~lib/internal/typedarray/TypedArray<f64,f64>#__get (; 22 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
-  (local $2 i32)
-  get_local $0
-  i32.load offset=4
-  set_local $2
   get_local $1
   get_local $0
   i32.load offset=8
@@ -1743,14 +1730,15 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 41
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
   end
   get_local $0
   i32.load
-  get_local $2
+  get_local $0
+  i32.load offset=4
   i32.add
   get_local $1
   i32.const 3
@@ -1759,10 +1747,6 @@
   f64.load offset=8
  )
  (func $~lib/internal/typedarray/TypedArray<u8,u32>#__set (; 23 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  get_local $0
-  i32.load offset=4
-  set_local $3
   get_local $1
   get_local $0
   i32.load offset=8
@@ -1770,14 +1754,15 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 53
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
   end
   get_local $0
   i32.load
-  get_local $3
+  get_local $0
+  i32.load offset=4
   i32.add
   get_local $1
   i32.add
@@ -1803,10 +1788,6 @@
   call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
  )
  (func $~lib/internal/typedarray/TypedArray<u8,u32>#__get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  get_local $0
-  i32.load offset=4
-  set_local $2
   get_local $1
   get_local $0
   i32.load offset=8
@@ -1814,14 +1795,15 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 41
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
   end
   get_local $0
   i32.load
-  get_local $2
+  get_local $0
+  i32.load offset=4
   i32.add
   get_local $1
   i32.add
@@ -1905,10 +1887,6 @@
   get_local $0
  )
  (func $~lib/internal/typedarray/TypedArray<i8,i32>#__get (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  get_local $0
-  i32.load offset=4
-  set_local $2
   get_local $1
   get_local $0
   i32.load offset=8
@@ -1916,14 +1894,15 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 41
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
   end
   get_local $0
   i32.load
-  get_local $2
+  get_local $0
+  i32.load offset=4
   i32.add
   get_local $1
   i32.add
