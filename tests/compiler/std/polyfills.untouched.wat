@@ -15,8 +15,6 @@
  (start $start)
  (func $~lib/polyfills/bswap<u8> (; 1 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
-  i32.const 8
-  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -30,8 +28,6 @@
  )
  (func $~lib/polyfills/bswap<i8> (; 2 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
-  i32.const 8
-  i32.le_u
   i32.eqz
   if
    i32.const 0
@@ -44,9 +40,7 @@
   get_local $0
  )
  (func $~lib/polyfills/bswap<u16> (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 2
-  i32.const 8
-  i32.le_u
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -70,9 +64,7 @@
   return
  )
  (func $~lib/polyfills/bswap<i16> (; 4 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 2
-  i32.const 8
-  i32.le_u
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -98,9 +90,7 @@
   return
  )
  (func $~lib/polyfills/bswap<u32> (; 5 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 4
-  i32.const 8
-  i32.le_u
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -124,9 +114,7 @@
   return
  )
  (func $~lib/polyfills/bswap<i32> (; 6 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 4
-  i32.const 8
-  i32.le_u
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -153,9 +141,7 @@
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
-  i32.const 8
-  i32.const 8
-  i32.le_u
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -204,9 +190,7 @@
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
-  i32.const 8
-  i32.const 8
-  i32.le_u
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -252,9 +236,7 @@
   return
  )
  (func $~lib/polyfills/bswap<usize> (; 9 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 4
-  i32.const 8
-  i32.le_u
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -278,9 +260,7 @@
   return
  )
  (func $~lib/polyfills/bswap<isize> (; 10 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 4
-  i32.const 8
-  i32.le_u
+  i32.const 1
   i32.eqz
   if
    i32.const 0
@@ -459,8 +439,13 @@
    i32.const 170
    set_local $0
    i32.const 1
-   i32.const 4
-   i32.le_u
+   if (result i32)
+    i32.const 1
+    i32.const 4
+    i32.le_u
+   else    
+    i32.const 1
+   end
    i32.eqz
    if
     i32.const 0
@@ -489,8 +474,13 @@
    i32.const 170
    set_local $0
    i32.const 1
-   i32.const 4
-   i32.le_u
+   if (result i32)
+    i32.const 1
+    i32.const 4
+    i32.le_u
+   else    
+    i32.const 1
+   end
    i32.eqz
    if
     i32.const 0
@@ -524,9 +514,14 @@
   block $~lib/polyfills/bswap16<u16>|inlined.0 (result i32)
    i32.const 43707
    set_local $0
-   i32.const 2
-   i32.const 4
-   i32.le_u
+   i32.const 1
+   if (result i32)
+    i32.const 2
+    i32.const 4
+    i32.le_u
+   else    
+    i32.const 1
+   end
    i32.eqz
    if
     i32.const 0
@@ -563,9 +558,14 @@
   block $~lib/polyfills/bswap16<i16>|inlined.0 (result i32)
    i32.const 43707
    set_local $0
-   i32.const 2
-   i32.const 4
-   i32.le_u
+   i32.const 1
+   if (result i32)
+    i32.const 2
+    i32.const 4
+    i32.le_u
+   else    
+    i32.const 1
+   end
    i32.eqz
    if
     i32.const 0
@@ -612,9 +612,14 @@
   block $~lib/polyfills/bswap16<u32>|inlined.0 (result i32)
    i32.const -7820613
    set_local $0
-   i32.const 4
-   i32.const 4
-   i32.le_u
+   i32.const 1
+   if (result i32)
+    i32.const 4
+    i32.const 4
+    i32.le_u
+   else    
+    i32.const 1
+   end
    i32.eqz
    if
     i32.const 0
@@ -655,9 +660,14 @@
   block $~lib/polyfills/bswap16<i32>|inlined.0 (result i32)
    i32.const -7820613
    set_local $0
-   i32.const 4
-   i32.const 4
-   i32.le_u
+   i32.const 1
+   if (result i32)
+    i32.const 4
+    i32.const 4
+    i32.le_u
+   else    
+    i32.const 1
+   end
    i32.eqz
    if
     i32.const 0
