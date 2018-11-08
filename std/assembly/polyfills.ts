@@ -2,7 +2,7 @@ export function bswap<T>(value: T): T {
   assert((sizeof<T>() & (sizeof<T>() - 1)) == 0 && sizeof<T>() <= 8);
 
   if (sizeof<T>() == 2) {
-    return bswap16<T>(value);
+    return <T>((value << 8) | ((value >> 8) & <T>0x00FF));
   }
   if (sizeof<T>() == 4) {
     return <T>(
@@ -11,9 +11,9 @@ export function bswap<T>(value: T): T {
     );
   }
   if (sizeof<T>() == 8) {
-    let a: u64 = (<u64>value >> 8) & 0x00FF00FF00FF00FF;
-    let b: u64 = (<u64>value & 0x00FF00FF00FF00FF) << 8;
-    let v: u64 = a | b;
+    let a = (<u64>value >> 8) & 0x00FF00FF00FF00FF;
+    let b = (<u64>value & 0x00FF00FF00FF00FF) << 8;
+    let v = a | b;
 
     a = (v >> 16) & 0x0000FFFF0000FFFF;
     b = (v & 0x0000FFFF0000FFFF) << 16;
