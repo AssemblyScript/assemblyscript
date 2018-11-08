@@ -32,14 +32,13 @@ export abstract class TypedArray<T,V> {
 
   @inline
   get length(): i32 {
-    return (this.byteLength - this.byteOffset) >> alignof<T>();
+    return this.byteLength >> alignof<T>();
   }
 
   @operator("[]")
   protected __get(index: i32): T {
     var byteOffset = this.byteOffset;
-    var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();
-    if (<u32>index >= <u32>elementLength) throw new Error("Index out of bounds");
+    if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
     return loadUnsafeWithOffset<T,T>(this.buffer, index, byteOffset);
   }
 
@@ -51,8 +50,7 @@ export abstract class TypedArray<T,V> {
   @operator("[]=")
   protected __set(index: i32, value: V): void {
     var byteOffset = this.byteOffset;
-    var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();
-    if (<u32>index >= <u32>elementLength) throw new Error("Index out of bounds");
+    if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
     storeUnsafeWithOffset<T,V>(this.buffer, index, value, byteOffset);
   }
 
@@ -95,7 +93,7 @@ export abstract class TypedArray<T,V> {
     var slice = memory.allocate(offsetof<this>());
     store<usize>(slice, this.buffer, offsetof<this>("buffer"));
     store<i32>(slice, begin << alignof<T>(), offsetof<this>("byteOffset"));
-    store<i32>(slice, end << alignof<T>(), offsetof<this>("byteLength"));
+    store<i32>(slice, (end - begin) << alignof<T>(), offsetof<this>("byteLength"));
     return changetype<this>(slice);
   }
 

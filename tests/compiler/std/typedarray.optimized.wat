@@ -604,9 +604,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   get_local $0
   i32.ne
   if
@@ -643,9 +640,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   get_local $0
   i32.ne
   if
@@ -682,9 +676,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   get_local $0
   i32.ne
   if
@@ -723,9 +714,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   i32.const 1
   i32.shr_s
   get_local $0
@@ -766,9 +754,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   i32.const 1
   i32.shr_s
   get_local $0
@@ -809,9 +794,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   i32.const 2
   i32.shr_s
   get_local $0
@@ -852,9 +834,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   i32.const 2
   i32.shr_s
   get_local $0
@@ -895,9 +874,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   i32.const 3
   i32.shr_s
   get_local $0
@@ -938,9 +914,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   i32.const 3
   i32.shr_s
   get_local $0
@@ -981,9 +954,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   i32.const 2
   i32.shr_s
   get_local $0
@@ -1024,9 +994,6 @@
   end
   get_local $1
   i32.load offset=8
-  get_local $1
-  i32.load offset=4
-  i32.sub
   i32.const 3
   i32.shr_s
   get_local $0
@@ -1042,21 +1009,20 @@
  )
  (func $~lib/internal/typedarray/TypedArray<i32,i32>#__set (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  get_local $0
+  i32.load offset=4
+  set_local $3
   get_local $1
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  tee_local $3
-  i32.sub
   i32.const 2
   i32.shr_u
   i32.ge_u
   if
    i32.const 0
    i32.const 48
-   i32.const 55
-   i32.const 42
+   i32.const 53
+   i32.const 63
    call $~lib/env/abort
    unreachable
   end
@@ -1073,21 +1039,20 @@
  )
  (func $~lib/internal/typedarray/TypedArray<i32,i32>#__get (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  get_local $0
+  i32.load offset=4
+  set_local $2
   get_local $1
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  tee_local $2
-  i32.sub
   i32.const 2
   i32.shr_u
   i32.ge_u
   if
    i32.const 0
    i32.const 48
-   i32.const 42
-   i32.const 42
+   i32.const 41
+   i32.const 63
    call $~lib/env/abort
    unreachable
   end
@@ -1107,9 +1072,6 @@
   i32.const 1
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   i32.const 2
   i32.shr_s
   tee_local $2
@@ -1159,6 +1121,8 @@
   i32.store offset=4
   get_local $2
   get_local $1
+  get_local $3
+  i32.sub
   i32.const 2
   i32.shl
   i32.store offset=8
@@ -1166,21 +1130,20 @@
  )
  (func $~lib/internal/typedarray/TypedArray<f64,f64>#__set (; 14 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
+  get_local $0
+  i32.load offset=4
+  set_local $3
   get_local $1
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  tee_local $3
-  i32.sub
   i32.const 3
   i32.shr_u
   i32.ge_u
   if
    i32.const 0
    i32.const 48
-   i32.const 55
-   i32.const 42
+   i32.const 53
+   i32.const 63
    call $~lib/env/abort
    unreachable
   end
@@ -1202,9 +1165,6 @@
   i32.const 2
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   i32.const 3
   i32.shr_s
   tee_local $1
@@ -1239,6 +1199,8 @@
   i32.store offset=4
   get_local $1
   get_local $3
+  get_local $2
+  i32.sub
   i32.const 3
   i32.shl
   i32.store offset=8
@@ -1650,9 +1612,6 @@
   set_local $2
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   i32.const 3
   i32.shr_s
   tee_local $4
@@ -1772,21 +1731,20 @@
  )
  (func $~lib/internal/typedarray/TypedArray<f64,f64>#__get (; 22 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
+  get_local $0
+  i32.load offset=4
+  set_local $2
   get_local $1
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  tee_local $2
-  i32.sub
   i32.const 3
   i32.shr_u
   i32.ge_u
   if
    i32.const 0
    i32.const 48
-   i32.const 42
-   i32.const 42
+   i32.const 41
+   i32.const 63
    call $~lib/env/abort
    unreachable
   end
@@ -1802,19 +1760,18 @@
  )
  (func $~lib/internal/typedarray/TypedArray<u8,u32>#__set (; 23 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  get_local $0
+  i32.load offset=4
+  set_local $3
   get_local $1
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  tee_local $3
-  i32.sub
   i32.ge_u
   if
    i32.const 0
    i32.const 48
-   i32.const 55
-   i32.const 42
+   i32.const 53
+   i32.const 63
    call $~lib/env/abort
    unreachable
   end
@@ -1847,19 +1804,18 @@
  )
  (func $~lib/internal/typedarray/TypedArray<u8,u32>#__get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  get_local $0
+  i32.load offset=4
+  set_local $2
   get_local $1
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  tee_local $2
-  i32.sub
   i32.ge_u
   if
    i32.const 0
    i32.const 48
-   i32.const 42
-   i32.const 42
+   i32.const 41
+   i32.const 63
    call $~lib/env/abort
    unreachable
   end
@@ -1884,9 +1840,6 @@
   set_local $7
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   set_local $4
   get_local $2
   i32.const 0
@@ -1953,19 +1906,18 @@
  )
  (func $~lib/internal/typedarray/TypedArray<i8,i32>#__get (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  get_local $0
+  i32.load offset=4
+  set_local $2
   get_local $1
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  tee_local $2
-  i32.sub
   i32.ge_u
   if
    i32.const 0
    i32.const 48
-   i32.const 42
-   i32.const 42
+   i32.const 41
+   i32.const 63
    call $~lib/env/abort
    unreachable
   end
@@ -2001,9 +1953,6 @@
   (local $5 i32)
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   get_local $1
   i32.load offset=4
   i32.ne
@@ -2014,9 +1963,6 @@
   block $break|0
    get_local $0
    i32.load offset=8
-   get_local $0
-   i32.load offset=4
-   i32.sub
    set_local $3
    loop $repeat|0
     get_local $2
@@ -2091,9 +2037,6 @@
   i32.const 1
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   tee_local $1
   i32.const 1
   get_local $1
@@ -2124,6 +2067,8 @@
   i32.store offset=4
   get_local $1
   get_local $3
+  get_local $2
+  i32.sub
   i32.store offset=8
   get_local $1
  )
@@ -2140,9 +2085,6 @@
   set_local $7
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   i32.const 2
   i32.shr_s
   set_local $4
@@ -2246,9 +2188,6 @@
   (local $5 i32)
   get_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   i32.const 2
   i32.shr_s
   get_local $1
@@ -2261,9 +2200,6 @@
   block $break|0
    get_local $0
    i32.load offset=8
-   get_local $0
-   i32.load offset=4
-   i32.sub
    i32.const 2
    i32.shr_s
    set_local $3
@@ -2351,11 +2287,7 @@
   i32.const 3
   call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
   get_global $std/typedarray/arr
-  tee_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   i32.const 2
   i32.shr_s
   i32.const 3
@@ -2434,11 +2366,7 @@
   call $~lib/typedarray/Int32Array#subarray
   set_global $std/typedarray/arr
   get_global $std/typedarray/arr
-  tee_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   i32.const 2
   i32.shr_s
   i32.const 1
@@ -2465,7 +2393,7 @@
   end
   get_global $std/typedarray/arr
   i32.load offset=8
-  i32.const 8
+  i32.const 4
   i32.ne
   if
    i32.const 0
@@ -2527,11 +2455,7 @@
   call $~lib/typedarray/Float64Array#subarray
   set_global $std/typedarray/af64
   get_global $std/typedarray/af64
-  tee_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   i32.const 3
   i32.shr_s
   i32.const 4
@@ -2540,6 +2464,30 @@
    i32.const 0
    i32.const 8
    i32.const 122
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/af64
+  i32.load offset=4
+  i32.const 16
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 123
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/af64
+  i32.load offset=8
+  i32.const 32
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 124
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2586,7 +2534,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 124
+   i32.const 126
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2614,7 +2562,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 131
+   i32.const 133
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2629,7 +2577,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 132
+   i32.const 134
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2644,7 +2592,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 133
+   i32.const 135
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2685,7 +2633,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 143
+   i32.const 145
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2704,7 +2652,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 146
+   i32.const 148
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2722,7 +2670,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 149
+   i32.const 151
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2741,7 +2689,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 152
+   i32.const 154
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2759,7 +2707,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 155
+   i32.const 157
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2775,17 +2723,37 @@
   call $~lib/internal/typedarray/TypedArray<i8,i32>#fill|trampoline
   drop
   get_global $std/typedarray/sub8
-  tee_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   i32.const 3
   i32.ne
   if
    i32.const 0
    i32.const 8
-   i32.const 159
+   i32.const 161
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/sub8
+  i32.load offset=4
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 162
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/sub8
+  i32.load offset=8
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 163
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2797,7 +2765,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 160
+   i32.const 164
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2809,7 +2777,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 161
+   i32.const 165
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2850,7 +2818,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 171
+   i32.const 175
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2869,7 +2837,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 174
+   i32.const 178
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2887,7 +2855,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 177
+   i32.const 181
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2906,7 +2874,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 180
+   i32.const 184
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2924,7 +2892,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 183
+   i32.const 187
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2941,11 +2909,7 @@
   call $~lib/internal/typedarray/TypedArray<i32,i32>#fill|trampoline
   drop
   get_global $std/typedarray/sub32
-  tee_local $0
   i32.load offset=8
-  get_local $0
-  i32.load offset=4
-  i32.sub
   i32.const 2
   i32.shr_s
   i32.const 3
@@ -2953,7 +2917,31 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 187
+   i32.const 191
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/sub32
+  i32.load offset=4
+  i32.const 4
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 192
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/sub32
+  i32.load offset=8
+  i32.const 12
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 193
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2965,7 +2953,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 188
+   i32.const 194
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2977,7 +2965,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 189
+   i32.const 195
    i32.const 0
    call $~lib/env/abort
    unreachable
