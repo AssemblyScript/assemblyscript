@@ -8,41 +8,41 @@ Object.defineProperties(
   globalScope["i8"] = function i8(value) { return value << 24 >> 24; }
 , {
   "MIN_VALUE": { value: -128, writable: false },
-  "MAX_VALUE": { value: 127, writable: false }
+  "MAX_VALUE": { value:  127, writable: false }
 });
 
 Object.defineProperties(
   globalScope["i16"] = function i16(value) { return value << 16 >> 16; }
 , {
   "MIN_VALUE": { value: -32768, writable: false },
-  "MAX_VALUE": { value: 32767, writable: false }
+  "MAX_VALUE": { value:  32767, writable: false }
 });
 
 Object.defineProperties(
   globalScope["i32"] = globalScope["isize"] = function i32(value) { return value | 0; }
 , {
   "MIN_VALUE": { value: -2147483648, writable: false },
-  "MAX_VALUE": { value: 2147483647, writable: false }
+  "MAX_VALUE": { value:  2147483647, writable: false }
 });
 
 Object.defineProperties(
   globalScope["u8"] = function u8(value) { return value & 0xff; }
 , {
-  "MIN_VALUE": { value: 0, writable: false },
+  "MIN_VALUE": { value:   0, writable: false },
   "MAX_VALUE": { value: 255, writable: false }
 });
 
 Object.defineProperties(
   globalScope["u16"] = function u16(value) { return value & 0xffff; }
 , {
-  "MIN_VALUE": { value: 0, writable: false },
+  "MIN_VALUE": { value:     0, writable: false },
   "MAX_VALUE": { value: 65535, writable: false }
 });
 
 Object.defineProperties(
   globalScope["u32"] = globalScope["usize"] = function u32(value) { return value >>> 0; }
 , {
-  "MIN_VALUE": { value: 0, writable: false },
+  "MIN_VALUE": { value:          0, writable: false },
   "MAX_VALUE": { value: 4294967295, writable: false }
 });
 
@@ -56,23 +56,29 @@ Object.defineProperties(
 Object.defineProperties(
   globalScope["f32"] = function f32(value) { return Math.fround(value); }
 , {
-  "MIN_VALUE": { value: Math.fround(-3.40282347e+38), writable: false },
-  "MAX_VALUE": { value: Math.fround(3.40282347e+38), writable: false },
-  "MIN_POSITIVE_VALUE": { value: Math.fround(1.175494351e-38), writable: false },
-  "MIN_SAFE_INTEGER": { value: -16777215, writable: false },
-  "MAX_SAFE_INTEGER": { value: 16777215, writable: false },
-  "EPSILON": { value: Math.fround(1.19209290e-07), writable: false }
+  "EPSILON":   { value: Math.fround(1.1920929e-07), writable: false },
+  "MIN_VALUE": { value: Math.fround(1.4012985e-45), writable: false },
+  "MAX_VALUE": { value: Math.fround(3.4028235e+38), writable: false },
+  "MIN_NORMAL_VALUE":  { value:  Math.fround(1.17549435e-38), writable: false },
+  "MIN_SAFE_INTEGER":  { value: -16777215, writable: false },
+  "MAX_SAFE_INTEGER":  { value:  16777215, writable: false },
+  "POSITIVE_INFINITY": { value:  Infinity, writable: false },
+  "NEGATIVE_INFINITY": { value: -Infinity, writable: false },
+  "NaN": { value: NaN, writable: false }
 });
 
 Object.defineProperties(
   globalScope["f64"] = function f64(value) { return +value; }
 , {
-  "MIN_VALUE": { value: -1.7976931348623157e+308, writable: false },
+  "EPSILON":   { value: 2.2204460492503131e-16,  writable: false },
+  "MIN_VALUE": { value:                  5e-324, writable: false },
   "MAX_VALUE": { value: 1.7976931348623157e+308, writable: false },
-  "MIN_POSITIVE_VALUE": { value: 2.2250738585072014e-308 , writable: false },
-  "MIN_SAFE_INTEGER": { value: -9007199254740991, writable: false },
-  "MAX_SAFE_INTEGER": { value: 9007199254740991, writable: false },
-  "EPSILON": { value: 2.2204460492503131e-16, writable: false }
+  "MIN_NORMAL_VALUE":  { value: 2.2250738585072014e-308 , writable: false },
+  "MIN_SAFE_INTEGER":  { value: -9007199254740991, writable: false },
+  "MAX_SAFE_INTEGER":  { value:  9007199254740991, writable: false },
+  "POSITIVE_INFINITY": { value:  Infinity, writable: false },
+  "NEGATIVE_INFINITY": { value: -Infinity, writable: false },
+  "NaN": { value: NaN, writable: false }
 });
 
 globalScope["clz"] = Math.clz32;

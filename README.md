@@ -93,7 +93,7 @@ $> npm run clean
 Linting potential changes:
 
 ```
-$> npm run lint
+$> npm run check
 ```
 
 Running the [tests](./tests):
