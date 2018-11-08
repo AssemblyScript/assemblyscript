@@ -95,7 +95,7 @@ export abstract class TypedArray<T,V> {
     var slice = memory.allocate(offsetof<this>());
     store<usize>(slice, this.buffer, offsetof<this>("buffer"));
     store<i32>(slice, begin << alignof<T>(), offsetof<this>("byteOffset"));
-    store<i32>(slice, end << alignof<T>(), offsetof<this>("byteLength"));
+    store<i32>(slice, (end - begin) << alignof<T>(), offsetof<this>("byteLength"));
     return changetype<this>(slice);
   }
 
