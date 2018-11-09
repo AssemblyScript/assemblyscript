@@ -397,9 +397,7 @@ export class Compiler extends DiagnosticEmitter {
       : 0;
     module.setMemory(
       numPages,
-      this.options.isWasm64
-        ? Module.MAX_MEMORY_WASM64
-        : Module.MAX_MEMORY_WASM32,
+      Module.UNLIMITED_MEMORY,
       this.memorySegments,
       options.target,
       "memory"

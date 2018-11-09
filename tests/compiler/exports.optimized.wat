@@ -5,9 +5,8 @@
  (type $iiv (func (param i32 i32)))
  (type $iv (func (param i32)))
  (type $v (func))
- (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
- (table 1 anyfunc)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -47,198 +46,148 @@
  (export "vehicles.Car#openDoors" (func $exports/Car#openDoors))
  (export "outer.inner.a" (global $exports/outer.inner.a))
  (start $start)
- (func $exports/add (; 0 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.add
-   (get_local $0)
-   (get_local $1)
-  )
+ (func $exports/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  get_local $0
+  get_local $1
+  i32.add
  )
- (func $exports/subOpt (; 1 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (i32.sub
-   (get_local $0)
-   (get_local $1)
-  )
+ (func $exports/subOpt (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  get_local $0
+  get_local $1
+  i32.sub
  )
- (func $exports/Car.getNumTires (; 2 ;) (; has Stack IR ;) (type $i) (result i32)
-  (i32.const 4)
+ (func $exports/Car.getNumTires (; 2 ;) (type $i) (result i32)
+  i32.const 4
  )
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (if
-   (i32.gt_u
-    (get_local $0)
-    (i32.const 1073741824)
-   )
-   (unreachable)
-  )
-  (if
-   (i32.gt_u
-    (tee_local $2
-     (i32.and
-      (i32.add
-       (i32.add
-        (tee_local $1
-         (get_global $~lib/allocator/arena/offset)
-        )
-        (select
-         (get_local $0)
-         (i32.const 1)
-         (i32.gt_u
-          (get_local $0)
-          (i32.const 1)
-         )
-        )
-       )
-       (i32.const 7)
-      )
-      (i32.const -8)
-     )
-    )
-    (i32.shl
-     (tee_local $3
-      (current_memory)
-     )
-     (i32.const 16)
-    )
-   )
-   (if
-    (i32.lt_s
-     (grow_memory
-      (select
-       (get_local $3)
-       (tee_local $0
-        (i32.shr_u
-         (i32.and
-          (i32.add
-           (i32.sub
-            (get_local $2)
-            (get_local $1)
-           )
-           (i32.const 65535)
-          )
-          (i32.const -65536)
-         )
-         (i32.const 16)
-        )
-       )
-       (i32.gt_s
-        (get_local $3)
-        (get_local $0)
-       )
-      )
-     )
-     (i32.const 0)
-    )
-    (if
-     (i32.lt_s
-      (grow_memory
-       (get_local $0)
-      )
-      (i32.const 0)
-     )
-     (unreachable)
-    )
-   )
-  )
-  (set_global $~lib/allocator/arena/offset
-   (get_local $2)
-  )
-  (get_local $1)
+  get_local $0
+  i32.const 1073741824
+  i32.gt_u
+  if
+   unreachable
+  end
+  get_global $~lib/allocator/arena/offset
+  tee_local $1
+  get_local $0
+  i32.const 1
+  get_local $0
+  i32.const 1
+  i32.gt_u
+  select
+  i32.add
+  i32.const 7
+  i32.add
+  i32.const -8
+  i32.and
+  tee_local $2
+  current_memory
+  tee_local $3
+  i32.const 16
+  i32.shl
+  i32.gt_u
+  if
+   get_local $3
+   get_local $2
+   get_local $1
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   tee_local $0
+   get_local $3
+   get_local $0
+   i32.gt_s
+   select
+   grow_memory
+   i32.const 0
+   i32.lt_s
+   if
+    get_local $0
+    grow_memory
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  get_local $2
+  set_global $~lib/allocator/arena/offset
+  get_local $1
  )
- (func $~lib/memory/memory.allocate (; 4 ;) (; has Stack IR ;) (type $FUNCSIG$i) (result i32)
-  (call $~lib/allocator/arena/__memory_allocate
-   (i32.const 4)
-  )
+ (func $exports/Car#get:numDoors (; 4 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.load
  )
- (func $exports/Car#constructor (; 5 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (if
-   (i32.eqz
-    (get_local $0)
-   )
-   (i32.store
-    (tee_local $0
-     (call $~lib/memory/memory.allocate)
-    )
-    (get_local $1)
-   )
-  )
-  (i32.store
-   (get_local $0)
-   (get_local $1)
-  )
-  (get_local $0)
+ (func $exports/Car#set:numDoors (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  get_local $0
+  get_local $1
+  i32.store
  )
- (func $exports/Car#get:numDoors (; 6 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
-  (i32.load
-   (get_local $0)
-  )
+ (func $exports/Car#openDoors (; 6 ;) (type $iv) (param $0 i32)
+  nop
  )
- (func $exports/Car#set:numDoors (; 7 ;) (; has Stack IR ;) (type $iiv) (param $0 i32) (param $1 i32)
-  (i32.store
-   (get_local $0)
-   (get_local $1)
-  )
+ (func $start (; 7 ;) (type $v)
+  i32.const 8
+  set_global $~lib/allocator/arena/startOffset
+  get_global $~lib/allocator/arena/startOffset
+  set_global $~lib/allocator/arena/offset
  )
- (func $exports/Car#openDoors (; 8 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
-  (nop)
+ (func $null (; 8 ;) (type $v)
+  nop
  )
- (func $start (; 9 ;) (; has Stack IR ;) (type $v)
-  (set_global $~lib/allocator/arena/startOffset
-   (i32.const 8)
-  )
-  (set_global $~lib/allocator/arena/offset
-   (get_global $~lib/allocator/arena/startOffset)
-  )
+ (func $exports/subOpt|trampoline (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     get_global $~argc
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   set_local $1
+  end
+  get_local $0
+  get_local $1
+  i32.sub
  )
- (func $null (; 10 ;) (; has Stack IR ;) (type $v)
-  (nop)
+ (func $~setargc (; 10 ;) (type $iv) (param $0 i32)
+  get_local $0
+  set_global $~argc
  )
- (func $exports/subOpt|trampoline (; 11 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $outOfRange
-     (br_table $0of1 $1of1 $outOfRange
-      (i32.sub
-       (get_global $~argc)
-       (i32.const 1)
-      )
-     )
-    )
-    (unreachable)
-   )
-   (set_local $1
-    (i32.const 0)
-   )
-  )
-  (call $exports/subOpt
-   (get_local $0)
-   (get_local $1)
-  )
- )
- (func $~setargc (; 12 ;) (; has Stack IR ;) (type $iv) (param $0 i32)
-  (set_global $~argc
-   (get_local $0)
-  )
- )
- (func $exports/Car#constructor|trampoline (; 13 ;) (; has Stack IR ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (block $1of1
-   (block $0of1
-    (block $outOfRange
-     (br_table $0of1 $1of1 $outOfRange
-      (get_global $~argc)
-     )
-    )
-    (unreachable)
-   )
-   (set_local $1
-    (i32.const 2)
-   )
-  )
-  (call $exports/Car#constructor
-   (get_local $0)
-   (get_local $1)
-  )
+ (func $exports/Car#constructor|trampoline (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     get_global $~argc
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 2
+   set_local $1
+  end
+  get_local $0
+  i32.eqz
+  if
+   i32.const 4
+   call $~lib/allocator/arena/__memory_allocate
+   tee_local $0
+   get_local $1
+   i32.store
+  end
+  get_local $0
+  get_local $1
+  i32.store
+  get_local $0
  )
 )
