@@ -1695,7 +1695,6 @@
     return
    end
   end
-  f64.const 1
   get_local $0
   f64.const 0.5
   get_local $0
@@ -1703,12 +1702,22 @@
   tee_local $8
   f64.mul
   tee_local $2
-  f64.const -0.03333333333333313
   get_local $2
+  f64.mul
+  set_local $1
+  f64.const 3
+  f64.const 1
+  get_local $2
+  f64.const -0.03333333333333313
+  f64.mul
+  f64.add
+  get_local $1
   f64.const 1.5873015872548146e-03
   get_local $2
   f64.const -7.93650757867488e-05
-  get_local $2
+  f64.mul
+  f64.add
+  get_local $1
   f64.const 4.008217827329362e-06
   get_local $2
   f64.const -2.0109921818362437e-07
@@ -1718,20 +1727,14 @@
   f64.add
   f64.mul
   f64.add
-  f64.mul
-  f64.add
-  f64.mul
-  f64.add
   tee_local $9
-  set_local $1
-  get_local $2
-  get_local $9
-  f64.const 3
-  get_local $1
   get_local $8
   f64.mul
   f64.sub
-  tee_local $1
+  set_local $1
+  get_local $2
+  get_local $9
+  get_local $1
   f64.sub
   f64.const 6
   get_local $0
@@ -1954,10 +1957,12 @@
  )
  (func $~lib/math/NativeMath.exp (; 25 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 f64)
-  (local $4 i32)
+  (local $2 f64)
+  (local $3 i32)
+  (local $4 f64)
   (local $5 f64)
+  (local $6 i32)
+  (local $7 f64)
   get_local $0
   i64.reinterpret/f64
   i64.const 32
@@ -1966,7 +1971,7 @@
   tee_local $1
   i32.const 31
   i32.shr_u
-  set_local $4
+  set_local $6
   get_local $1
   i32.const 2147483647
   i32.and
@@ -2017,22 +2022,22 @@
     i32.trunc_s/f64
    else    
     i32.const 1
-    get_local $4
+    get_local $6
     i32.const 1
     i32.shl
     i32.sub
    end
-   tee_local $2
+   tee_local $3
    f64.convert_s/i32
    tee_local $0
    f64.const 0.6931471803691238
    f64.mul
    f64.sub
-   tee_local $3
+   tee_local $4
    get_local $0
    f64.const 1.9082149292705877e-10
    f64.mul
-   tee_local $5
+   tee_local $7
    f64.sub
    set_local $0
   else   
@@ -2046,23 +2051,30 @@
     return
    end
    get_local $0
-   set_local $3
+   set_local $4
   end
-  f64.const 1
-  get_local $0
-  get_local $0
   get_local $0
   get_local $0
   f64.mul
-  tee_local $0
+  tee_local $2
+  get_local $2
+  f64.mul
+  set_local $5
+  f64.const 1
+  get_local $0
+  get_local $0
+  get_local $2
   f64.const 0.16666666666666602
-  get_local $0
+  f64.mul
+  get_local $5
   f64.const -2.7777777777015593e-03
-  get_local $0
+  get_local $2
   f64.const 6.613756321437934e-05
-  get_local $0
+  f64.mul
+  f64.add
+  get_local $5
   f64.const -1.6533902205465252e-06
-  get_local $0
+  get_local $2
   f64.const 4.1381367970572385e-08
   f64.mul
   f64.add
@@ -2070,9 +2082,6 @@
   f64.add
   f64.mul
   f64.add
-  f64.mul
-  f64.add
-  f64.mul
   f64.sub
   tee_local $0
   f64.mul
@@ -2080,20 +2089,20 @@
   get_local $0
   f64.sub
   f64.div
-  get_local $5
+  get_local $7
   f64.sub
-  get_local $3
+  get_local $4
   f64.add
   f64.add
   set_local $0
-  get_local $2
+  get_local $3
   i32.eqz
   if
    get_local $0
    return
   end
   get_local $0
-  get_local $2
+  get_local $3
   call $~lib/math/NativeMath.scalbn
  )
  (func $~lib/math/NativeMath.cosh (; 26 ;) (type $FF) (param $0 f64) (result f64)

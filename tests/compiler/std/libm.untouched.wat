@@ -1950,7 +1950,8 @@
   (local $12 f64)
   (local $13 f64)
   (local $14 f64)
-  (local $15 i32)
+  (local $15 f64)
+  (local $16 i32)
   get_local $0
   i64.reinterpret/f64
   set_local $1
@@ -2057,14 +2058,22 @@
   get_local $9
   f64.mul
   set_local $10
+  get_local $10
+  get_local $10
+  f64.mul
+  set_local $11
   f64.const 1
   get_local $10
   f64.const -0.03333333333333313
-  get_local $10
+  f64.mul
+  f64.add
+  get_local $11
   f64.const 1.5873015872548146e-03
   get_local $10
   f64.const -7.93650757867488e-05
-  get_local $10
+  f64.mul
+  f64.add
+  get_local $11
   f64.const 4.008217827329362e-06
   get_local $10
   f64.const -2.0109921818362437e-07
@@ -2074,19 +2083,15 @@
   f64.add
   f64.mul
   f64.add
-  f64.mul
-  f64.add
-  f64.mul
-  f64.add
-  set_local $11
+  set_local $12
   f64.const 3
-  get_local $11
+  get_local $12
   get_local $9
   f64.mul
   f64.sub
   set_local $6
   get_local $10
-  get_local $11
+  get_local $12
   get_local $6
   f64.sub
   f64.const 6
@@ -2096,14 +2101,14 @@
   f64.sub
   f64.div
   f64.mul
-  set_local $12
+  set_local $13
   get_local $3
   i32.const 0
   i32.eq
   if
    get_local $0
    get_local $0
-   get_local $12
+   get_local $13
    f64.mul
    get_local $10
    f64.sub
@@ -2111,24 +2116,24 @@
    return
   end
   get_local $0
-  get_local $12
+  get_local $13
   get_local $5
   f64.sub
   f64.mul
   get_local $5
   f64.sub
-  set_local $12
-  get_local $12
+  set_local $13
+  get_local $13
   get_local $10
   f64.sub
-  set_local $12
+  set_local $13
   get_local $3
   i32.const -1
   i32.eq
   if
    f64.const 0.5
    get_local $0
-   get_local $12
+   get_local $13
    f64.sub
    f64.mul
    f64.const 0.5
@@ -2144,7 +2149,7 @@
    f64.lt
    if
     f64.const -2
-    get_local $12
+    get_local $13
     get_local $0
     f64.const 0.5
     f64.add
@@ -2155,7 +2160,7 @@
    f64.const 1
    f64.const 2
    get_local $0
-   get_local $12
+   get_local $13
    f64.sub
    f64.mul
    f64.add
@@ -2170,13 +2175,13 @@
   set_local $1
   get_local $1
   f64.reinterpret/i64
-  set_local $13
+  set_local $14
   get_local $3
   i32.const 0
   i32.lt_s
-  tee_local $15
+  tee_local $16
   if (result i32)
-   get_local $15
+   get_local $16
   else   
    get_local $3
    i32.const 56
@@ -2184,28 +2189,28 @@
   end
   if
    get_local $0
-   get_local $12
+   get_local $13
    f64.sub
    f64.const 1
    f64.add
-   set_local $14
+   set_local $15
    get_local $3
    i32.const 1024
    i32.eq
    if
-    get_local $14
+    get_local $15
     f64.const 2
     f64.mul
     f64.const 8988465674311579538646525e283
     f64.mul
-    set_local $14
+    set_local $15
    else    
+    get_local $15
     get_local $14
-    get_local $13
     f64.mul
-    set_local $14
+    set_local $15
    end
-   get_local $14
+   get_local $15
    f64.const 1
    f64.sub
    return
@@ -2219,29 +2224,29 @@
   set_local $1
   get_local $1
   f64.reinterpret/i64
-  set_local $14
+  set_local $15
   get_local $3
   i32.const 20
   i32.lt_s
   if
    f64.const 1
-   get_local $14
+   get_local $15
    f64.sub
-   get_local $12
+   get_local $13
    f64.sub
-   set_local $14
+   set_local $15
   else   
    f64.const 1
-   get_local $12
-   get_local $14
+   get_local $13
+   get_local $15
    f64.add
    f64.sub
-   set_local $14
+   set_local $15
   end
   get_local $0
-  get_local $14
+  get_local $15
   f64.add
-  get_local $13
+  get_local $14
   f64.mul
  )
  (func $~lib/math/NativeMath.scalbn (; 26 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
@@ -2344,6 +2349,7 @@
   (local $6 f64)
   (local $7 f64)
   (local $8 f64)
+  (local $9 f64)
   get_local $0
   i64.reinterpret/f64
   i64.const 32
@@ -2450,14 +2456,21 @@
   get_local $0
   f64.mul
   set_local $6
+  get_local $6
+  get_local $6
+  f64.mul
+  set_local $7
   get_local $0
   get_local $6
   f64.const 0.16666666666666602
-  get_local $6
+  f64.mul
+  get_local $7
   f64.const -2.7777777777015593e-03
   get_local $6
   f64.const 6.613756321437934e-05
-  get_local $6
+  f64.mul
+  f64.add
+  get_local $7
   f64.const -1.6533902205465252e-06
   get_local $6
   f64.const 4.1381367970572385e-08
@@ -2467,17 +2480,14 @@
   f64.add
   f64.mul
   f64.add
-  f64.mul
-  f64.add
-  f64.mul
   f64.sub
-  set_local $7
+  set_local $8
   f64.const 1
   get_local $0
-  get_local $7
+  get_local $8
   f64.mul
   f64.const 2
-  get_local $7
+  get_local $8
   f64.sub
   f64.div
   get_local $4
@@ -2485,15 +2495,15 @@
   get_local $3
   f64.add
   f64.add
-  set_local $8
+  set_local $9
   get_local $5
   i32.const 0
   i32.eq
   if
-   get_local $8
+   get_local $9
    return
   end
-  get_local $8
+  get_local $9
   get_local $5
   call $~lib/math/NativeMath.scalbn
  )
