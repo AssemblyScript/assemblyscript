@@ -2,7 +2,7 @@ language: node_js
 notifications:
   email: false
 before_install: npm config set progress=false && npm i -g npm@latest --no-audit
-install: npm i --no-audit
+install: npm ci --no-audit
 cache:
   directories:
   - node_modules

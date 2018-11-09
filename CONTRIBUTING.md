@@ -42,7 +42,7 @@ Instructions are similar to those for bug reports. Please provide the following 
 
 Before submitting your pull request, please make sure that the following conditions are met:
 
-* Your new code **adheres to the code style** through running `npm run lint`.
+* Your new code **adheres to the code style** through running `npm run check`.
 * Your new code **passes all existing and new tests** through running `npm run test:pr`.
 * Your PR **excludes distribution files** in `dist/**`.
 * You appended yourself to the **list of contributors** in the [NOTICE](./NOTICE) file.

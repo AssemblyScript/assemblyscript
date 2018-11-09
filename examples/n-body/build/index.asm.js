@@ -447,7 +447,7 @@ function asmFunc(global, env, buffer) {
   pagesToAdd = pagesToAdd | 0;
   var oldPages = __wasm_current_memory() | 0;
   var newPages = oldPages + pagesToAdd | 0;
-  if ((oldPages < newPages) && (newPages < 65535)) {
+  if ((oldPages < newPages) && (newPages < 65536)) {
    var newBuffer = new ArrayBuffer(Math_imul(newPages, 65536));
    var newHEAP8 = new global.Int8Array(newBuffer);
    newHEAP8.set(HEAP8);

@@ -81,13 +81,13 @@
     ],
     "type": "s"
   },
-  "noTreeShaking": {
-    "description": "Disables compiler-level tree-shaking, compiling everything.",
+  "debug": {
+    "description": "Enables debug information in emitted binaries.",
     "type": "b",
     "default": false
   },
-  "noDebug": {
-    "description": "Disables maintaining of debug information in binaries.",
+  "noTreeShaking": {
+    "description": "Disables compiler-level tree-shaking, compiling everything.",
     "type": "b",
     "default": false
   },

@@ -86,6 +86,7 @@ tests.forEach(filename => {
     "--baseDir", basedir,
     "--validate",
     "--measure",
+    "--debug",
     "--textFile" // -> stdout
   ], {
     stdout: stdout,
@@ -136,9 +137,9 @@ tests.forEach(filename => {
       filename,
       "--baseDir", basedir,
       "--validate",
-      "-O3",
       "--measure",
-      "--binaryFile" // -> stdout
+      "--binaryFile", // -> stdout
+      "-O3"
     ];
     if (args.create) cmd.push(
       "--textFile", basename + ".optimized.wat"

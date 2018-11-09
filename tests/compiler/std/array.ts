@@ -102,6 +102,49 @@ assert(arr[0] == 43);
 assert(arr[1] == 44);
 assert(arr[2] == 45);
 
+// Array#concat ///////////////////////////////////////////////////////////////////////////////////
+
+var other = new Array<i32>();
+
+var out = arr.concat(other);
+assert(internalCapacity<i32>(arr) == 3);
+assert(arr.length == 3);
+assert(out.length == 3);
+
+out.concat([]);
+assert(internalCapacity<i32>(arr) == 3);
+
+assert(out[0] == 43);
+assert(out[1] == 44);
+assert(out[2] == 45);
+
+other.push(46);
+other.push(47);
+
+out = arr.concat(other);
+
+assert(internalCapacity<i32>(arr) == 3);
+assert(other.length == 2);
+assert(out.length == 5);
+assert(out[0] == 43);
+assert(out[1] == 44);
+assert(out[2] == 45);
+assert(out[3] == 46);
+assert(out[4] == 47);
+
+out.pop();
+assert(out.length == 4);
+
+out = arr.concat(null);
+assert(out.length == 3);
+assert(out[2] == 45);
+
+var source: i32[] = [];
+assert(source.length == 0);
+out = source.concat(arr);
+assert(out.length == 3);
+assert(source.length == 0);
+
 // Array#unshift ///////////////////////////////////////////////////////////////////////////////////
 
 arr.unshift(42);
