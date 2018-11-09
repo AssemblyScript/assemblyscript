@@ -58,6 +58,10 @@
  (global $std/typedarray/sub8 (mut i32) (i32.const 0))
  (global $std/typedarray/arr32 (mut i32) (i32.const 0))
  (global $std/typedarray/sub32 (mut i32) (i32.const 0))
+ (global $std/typedarray/multisubarr (mut i32) (i32.const 0))
+ (global $std/typedarray/multisubarr1 (mut i32) (i32.const 0))
+ (global $std/typedarray/multisubarr2 (mut i32) (i32.const 0))
+ (global $std/typedarray/multisubarr3 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -1103,9 +1107,12 @@
   i32.load
   i32.store
   get_local $2
+  get_local $0
+  i32.load offset=4
   get_local $3
   i32.const 2
   i32.shl
+  i32.add
   i32.store offset=4
   get_local $2
   get_local $1
@@ -1178,9 +1185,12 @@
   i32.load
   i32.store
   get_local $1
+  get_local $0
+  i32.load offset=4
   get_local $2
   i32.const 3
   i32.shl
+  i32.add
   i32.store offset=4
   get_local $1
   get_local $3
@@ -1955,47 +1965,64 @@
   get_local $3
   call $~lib/internal/typedarray/TypedArray<i8,i32>#fill
  )
- (func $~lib/typedarray/Int8Array#subarray (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $~lib/typedarray/Int8Array#subarray (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 1
   get_local $0
   i32.load offset=8
-  tee_local $1
+  tee_local $2
   i32.const 1
-  get_local $1
-  i32.lt_s
-  select
-  set_local $2
-  i32.const 4
-  get_local $1
-  i32.const 4
-  get_local $1
-  i32.lt_s
-  select
-  tee_local $1
   get_local $2
-  get_local $1
-  get_local $2
-  i32.gt_s
+  i32.lt_s
   select
   set_local $3
+  get_local $1
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   get_local $2
+   get_local $1
+   i32.add
+   tee_local $2
+   get_local $3
+   get_local $2
+   get_local $3
+   i32.gt_s
+   select
+  else   
+   get_local $1
+   get_local $2
+   get_local $1
+   get_local $2
+   i32.lt_s
+   select
+   tee_local $2
+   get_local $3
+   get_local $2
+   get_local $3
+   i32.gt_s
+   select
+  end
+  set_local $1
   i32.const 12
   call $~lib/allocator/arena/__memory_allocate
-  tee_local $1
+  tee_local $2
   get_local $0
   i32.load
   i32.store
-  get_local $1
   get_local $2
+  get_local $0
+  i32.load offset=4
+  get_local $3
+  i32.add
   i32.store offset=4
+  get_local $2
   get_local $1
   get_local $3
-  get_local $2
   i32.sub
   i32.store offset=8
-  get_local $1
+  get_local $2
  )
  (func $~lib/internal/typedarray/TypedArray<i32,i32>#fill (; 27 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -2647,6 +2674,7 @@
    unreachable
   end
   get_global $std/typedarray/arr8
+  i32.const 4
   call $~lib/typedarray/Int8Array#subarray
   set_global $std/typedarray/sub8
   i32.const 1
@@ -2907,6 +2935,198 @@
   i32.const 134217727
   call $~lib/internal/typedarray/TypedArray<i64,i64>#constructor
   drop
+  i32.const 6
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#constructor
+  set_global $std/typedarray/multisubarr
+  get_global $std/typedarray/multisubarr
+  i32.const 0
+  i32.const 1
+  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 1
+  i32.const 2
+  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 2
+  i32.const 3
+  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 3
+  i32.const 4
+  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 4
+  i32.const 5
+  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 5
+  i32.const 6
+  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 6
+  call $~lib/typedarray/Int8Array#subarray
+  set_global $std/typedarray/multisubarr1
+  get_global $std/typedarray/multisubarr1
+  i32.const 0
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
+  i32.const 255
+  i32.and
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 212
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr1
+  i32.load offset=8
+  i32.const 5
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 213
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr1
+  i32.load offset=4
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 214
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr1
+  i32.load offset=8
+  i32.const 5
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 215
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr1
+  i32.const 5
+  call $~lib/typedarray/Int8Array#subarray
+  set_global $std/typedarray/multisubarr2
+  get_global $std/typedarray/multisubarr2
+  i32.const 0
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
+  i32.const 255
+  i32.and
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 218
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr2
+  i32.load offset=8
+  i32.const 4
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 219
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr2
+  i32.load offset=4
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 220
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr2
+  i32.load offset=8
+  i32.const 4
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 221
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr2
+  i32.const 4
+  call $~lib/typedarray/Int8Array#subarray
+  set_global $std/typedarray/multisubarr3
+  get_global $std/typedarray/multisubarr3
+  i32.const 0
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
+  i32.const 255
+  i32.and
+  i32.const 4
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 224
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr3
+  i32.load offset=8
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 225
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr3
+  i32.load offset=4
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 226
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr3
+  i32.load offset=8
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 227
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
  (func $null (; 31 ;) (type $v)
   nop
