@@ -29,7 +29,7 @@ Add a script to your `package.json`:
 Now, to check your sources, run:
 
 ```
-$> npm run lint
+$> npm run check
 ```
 
 If you are using [Visual Studio Code](https://code.visualstudio.com/), there's also a [TSLint extension](https://marketplace.visualstudio.com/items?itemName=eg2.tslint) that highlights issues as you type.

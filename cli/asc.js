@@ -505,7 +505,7 @@ exports.main = function main(argv, options, callback) {
 
   module.setOptimizeLevel(optimizeLevel);
   module.setShrinkLevel(shrinkLevel);
-  module.setDebugInfo(!args.noDebug);
+  module.setDebugInfo(args.debug);
 
   var runPasses = [];
   if (args.runPasses) {

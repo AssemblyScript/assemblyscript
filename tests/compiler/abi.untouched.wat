@@ -2,11 +2,11 @@
  (type $i (func (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\06\00\00\00a\00b\00i\00.\00t\00s\00")
- (table 1 anyfunc)
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (global $abi/condition (mut i32) (i32.const 0))
  (global $abi/y (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 24))
@@ -17,274 +17,199 @@
  (export "exportedInternal" (func $abi/exportedInternal))
  (start $start)
  (func $abi/exported (; 1 ;) (type $i) (result i32)
-  (i32.shr_s
-   (i32.shl
-    (i32.const 128)
-    (i32.const 24)
-   )
-   (i32.const 24)
-  )
+  i32.const 128
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
  )
  (func $abi/exportedExported (; 2 ;) (type $i) (result i32)
-  (call $abi/exported)
+  call $abi/exported
  )
  (func $abi/internal (; 3 ;) (type $i) (result i32)
-  (i32.const 128)
+  i32.const 128
  )
  (func $abi/exportedInternal (; 4 ;) (type $i) (result i32)
-  (i32.shr_s
-   (i32.shl
-    (call $abi/internal)
-    (i32.const 24)
-   )
-   (i32.const 24)
-  )
+  call $abi/internal
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
  )
  (func $start (; 5 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
-  (drop
-   (call $abi/internal)
-  )
-  (set_global $abi/condition
-   (i32.eqz
-    (i32.const 0)
-   )
-  )
-  (block
-   (set_local $0
-    (i32.const 256)
-   )
-   (if
-    (i32.eqz
-     (i32.eqz
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-     )
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 8)
-      (i32.const 32)
-      (i32.const 2)
-     )
-     (unreachable)
-    )
-   )
-  )
-  (block
-   (set_local $0
-    (i32.const 256)
-   )
-   (if
-    (get_global $abi/condition)
-    (set_local $0
-     (i32.div_s
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.const 2)
-     )
-    )
-    (set_local $0
-     (i32.div_s
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.const 2)
-     )
-    )
-   )
-   (if
-    (i32.eqz
-     (i32.eqz
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-     )
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 8)
-      (i32.const 45)
-      (i32.const 2)
-     )
-     (unreachable)
-    )
-   )
-  )
-  (block
-   (set_local $0
-    (i32.const 256)
-   )
-   (if
-    (get_global $abi/condition)
-    (set_local $0
-     (i32.shr_s
-      (i32.shr_s
-       (i32.shl
-        (get_local $0)
-        (i32.const 24)
-       )
-       (i32.const 24)
-      )
-      (i32.const 24)
-     )
-    )
-    (set_local $0
-     (i32.and
-      (get_local $0)
-      (i32.const 127)
-     )
-    )
-   )
-   (if
-    (i32.eqz
-     (i32.eqz
-      (get_local $0)
-     )
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 8)
-      (i32.const 58)
-      (i32.const 2)
-     )
-     (unreachable)
-    )
-   )
-  )
-  (block
-   (set_global $abi/y
-    (i32.shr_s
-     (i32.shl
-      (i32.const 256)
-      (i32.const 24)
-     )
-     (i32.const 24)
-    )
-   )
-   (if
-    (i32.eqz
-     (i32.eqz
-      (get_global $abi/y)
-     )
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 8)
-      (i32.const 65)
-      (i32.const 2)
-     )
-     (unreachable)
-    )
-   )
-  )
-  (block
-   (set_local $0
-    (i32.ctz
-     (i32.const 2)
-    )
-   )
-   (if
-    (i32.eqz
-     (i32.and
-      (get_local $0)
-      (i32.const 1)
-     )
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 8)
-      (i32.const 72)
-      (i32.const 2)
-     )
-     (unreachable)
-    )
-   )
-   (set_local $0
-    (i32.clz
-     (i32.const 1)
-    )
-   )
-   (if
-    (i32.eqz
-     (i32.and
-      (get_local $0)
-      (i32.const 1)
-     )
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 8)
-      (i32.const 74)
-      (i32.const 2)
-     )
-     (unreachable)
-    )
-   )
-   (set_local $1
-    (i32.ctz
-     (i32.const 2)
-    )
-   )
-   (if
-    (i32.eqz
-     (get_local $1)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 8)
-      (i32.const 77)
-      (i32.const 2)
-     )
-     (unreachable)
-    )
-   )
-   (set_local $1
-    (i32.clz
-     (i32.const 1)
-    )
-   )
-   (if
-    (i32.eqz
-     (get_local $1)
-    )
-    (block
-     (call $~lib/env/abort
-      (i32.const 0)
-      (i32.const 8)
-      (i32.const 79)
-      (i32.const 2)
-     )
-     (unreachable)
-    )
-   )
-  )
+  call $abi/internal
+  drop
+  i32.const 0
+  i32.eqz
+  set_global $abi/condition
+  block
+   i32.const 256
+   set_local $0
+   get_local $0
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
+   i32.eqz
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 8
+    i32.const 32
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+  end
+  block
+   i32.const 256
+   set_local $0
+   get_global $abi/condition
+   if
+    get_local $0
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const 2
+    i32.div_s
+    set_local $0
+   else    
+    get_local $0
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const 2
+    i32.div_s
+    set_local $0
+   end
+   get_local $0
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
+   i32.eqz
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 8
+    i32.const 45
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+  end
+  block
+   i32.const 256
+   set_local $0
+   get_global $abi/condition
+   if
+    get_local $0
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const 24
+    i32.shr_s
+    set_local $0
+   else    
+    get_local $0
+    i32.const 127
+    i32.and
+    set_local $0
+   end
+   get_local $0
+   i32.eqz
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 8
+    i32.const 58
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+  end
+  block
+   i32.const 256
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
+   set_global $abi/y
+   get_global $abi/y
+   i32.eqz
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 8
+    i32.const 65
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+  end
+  block
+   i32.const 2
+   i32.ctz
+   set_local $0
+   get_local $0
+   i32.const 1
+   i32.and
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 8
+    i32.const 72
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+   i32.const 1
+   i32.clz
+   set_local $0
+   get_local $0
+   i32.const 1
+   i32.and
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 8
+    i32.const 74
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+   i32.const 2
+   i32.ctz
+   set_local $1
+   get_local $1
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 8
+    i32.const 77
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+   i32.const 1
+   i32.clz
+   set_local $1
+   get_local $1
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 8
+    i32.const 79
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+  end
  )
  (func $null (; 6 ;) (type $v)
  )

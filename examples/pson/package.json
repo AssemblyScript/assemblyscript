@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
-    "asbuild:untouched": "asc assembly/pson.ts -b build/untouched.wasm -t build/untouched.wat --validate --sourceMap --measure",
+    "asbuild:untouched": "asc assembly/pson.ts -b build/untouched.wasm -t build/untouched.wat --validate --sourceMap --debug --measure",
     "asbuild:optimized": "asc -O assembly/pson.ts -b build/optimized.wasm -t build/optimized.wat --validate --sourceMap --measure",
     "test": "node tests"
   },
