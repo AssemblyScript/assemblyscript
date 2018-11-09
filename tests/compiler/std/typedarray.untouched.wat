@@ -74,6 +74,10 @@
  (global $std/typedarray/arr32 (mut i32) (i32.const 0))
  (global $std/typedarray/sub32 (mut i32) (i32.const 0))
  (global $std/typedarray/MAX_F64LENGTH i32 (i32.const 134217727))
+ (global $std/typedarray/multisubarr (mut i32) (i32.const 0))
+ (global $std/typedarray/multisubarr1 (mut i32) (i32.const 0))
+ (global $std/typedarray/multisubarr2 (mut i32) (i32.const 0))
+ (global $std/typedarray/multisubarr3 (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 624))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -1831,9 +1835,12 @@
   i32.load
   i32.store
   get_local $4
+  get_local $0
+  i32.load offset=4
   get_local $1
   i32.const 2
   i32.shl
+  i32.add
   i32.store offset=4
   get_local $4
   get_local $2
@@ -1962,9 +1969,12 @@
   i32.load
   i32.store
   get_local $4
+  get_local $0
+  i32.load offset=4
   get_local $1
   i32.const 3
   i32.shl
+  i32.add
   i32.store offset=4
   get_local $4
   get_local $2
@@ -3173,9 +3183,12 @@
   i32.load
   i32.store
   get_local $4
+  get_local $0
+  i32.load offset=4
   get_local $1
   i32.const 0
   i32.shl
+  i32.add
   i32.store offset=4
   get_local $4
   get_local $2
@@ -4335,6 +4348,238 @@
   get_global $std/typedarray/MAX_F64LENGTH
   call $~lib/internal/typedarray/TypedArray<f64,f64>#constructor
   drop
+  i32.const 0
+  i32.const 6
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#constructor
+  set_global $std/typedarray/multisubarr
+  get_global $std/typedarray/multisubarr
+  i32.const 0
+  i32.const 1
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 1
+  i32.const 2
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 2
+  i32.const 3
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 3
+  i32.const 4
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 4
+  i32.const 5
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 5
+  i32.const 6
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  get_global $std/typedarray/multisubarr
+  i32.const 1
+  i32.const 6
+  call $~lib/typedarray/Int8Array#subarray
+  set_global $std/typedarray/multisubarr1
+  get_global $std/typedarray/multisubarr1
+  i32.const 0
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 212
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.7 (result i32)
+   get_global $std/typedarray/multisubarr1
+   set_local $0
+   get_local $0
+   i32.load offset=8
+   i32.const 0
+   i32.shr_u
+  end
+  i32.const 5
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 213
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr1
+  i32.load offset=4
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 214
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr1
+  i32.load offset=8
+  i32.const 5
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 215
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr1
+  i32.const 1
+  i32.const 5
+  call $~lib/typedarray/Int8Array#subarray
+  set_global $std/typedarray/multisubarr2
+  get_global $std/typedarray/multisubarr2
+  i32.const 0
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 218
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.8 (result i32)
+   get_global $std/typedarray/multisubarr2
+   set_local $0
+   get_local $0
+   i32.load offset=8
+   i32.const 0
+   i32.shr_u
+  end
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 219
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr2
+  i32.load offset=4
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 220
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr2
+  i32.load offset=8
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 221
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr2
+  i32.const 1
+  i32.const 4
+  call $~lib/typedarray/Int8Array#subarray
+  set_global $std/typedarray/multisubarr3
+  get_global $std/typedarray/multisubarr3
+  i32.const 0
+  call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 224
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.9 (result i32)
+   get_global $std/typedarray/multisubarr3
+   set_local $0
+   get_local $0
+   i32.load offset=8
+   i32.const 0
+   i32.shr_u
+  end
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 225
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr3
+  i32.load offset=4
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 226
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/typedarray/multisubarr3
+  i32.load offset=8
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 227
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
  (func $null (; 44 ;) (type $v)
  )
