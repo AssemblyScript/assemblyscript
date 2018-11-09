@@ -1,8 +1,6 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
  (type $v (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$i (func (result i32)))
@@ -31,55 +29,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/array/Array<i8>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $1
-  get_local $0
-  i32.load
-  tee_local $0
-  i32.load
-  i32.lt_u
-  if (result i32)
-   get_local $0
-   get_local $1
-   i32.add
-   i32.load8_s offset=8
-  else   
-   unreachable
-  end
-  tee_local $0
- )
- (func $~lib/array/Array<i32>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $1
-  get_local $0
-  i32.load
-  tee_local $0
-  i32.load
-  i32.const 2
-  i32.shr_u
-  i32.lt_u
-  if (result i32)
-   get_local $0
-   get_local $1
-   i32.const 2
-   i32.shl
-   i32.add
-   i32.load offset=8
-  else   
-   unreachable
-  end
-  tee_local $0
- )
- (func $~lib/internal/arraybuffer/computeSize (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
-  i32.const 32
-  get_local $0
-  i32.const 7
-  i32.add
-  i32.clz
-  i32.sub
-  i32.shl
- )
- (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -141,7 +91,7 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   i32.const 1073741816
@@ -154,19 +104,21 @@
    call $~lib/env/abort
    unreachable
   end
+  i32.const 1
+  i32.const 32
   get_local $0
-  call $~lib/internal/arraybuffer/computeSize
+  i32.const 7
+  i32.add
+  i32.clz
+  i32.sub
+  i32.shl
   call $~lib/allocator/arena/__memory_allocate
   tee_local $1
   get_local $0
   i32.store
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
-  call $~lib/allocator/arena/__memory_allocate
- )
- (func $~lib/internal/memory/memset (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/internal/memory/memset (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   get_local $1
   i32.eqz
@@ -385,14 +337,14 @@
    end
   end
  )
- (func $~lib/array/Array<i8>#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<i8>#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 3
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $1
   i32.const 8
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__memory_allocate
   tee_local $0
   i32.const 0
   i32.store
@@ -412,22 +364,14 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/array/Array<i8>#__unchecked_set (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  get_local $0
-  i32.load
-  get_local $1
-  i32.add
-  get_local $2
-  i32.store8 offset=8
- )
- (func $~lib/array/Array<i32>#constructor (; 10 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/array/Array<i32>#constructor (; 5 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 12
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $1
   i32.const 8
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__memory_allocate
   tee_local $0
   i32.const 0
   i32.store
@@ -447,21 +391,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/array/Array<i32>#__unchecked_set (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  get_local $0
-  i32.load
-  get_local $1
-  i32.const 2
-  i32.shl
-  i32.add
-  get_local $2
-  i32.store offset=8
- )
- (func $std/array-literal/RefWithCtor#constructor (; 12 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 0
-  call $~lib/memory/memory.allocate
- )
- (func $start (; 13 ;) (type $v)
+ (func $start (; 6 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 232
@@ -480,9 +410,19 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 24
   i32.const 0
-  call $~lib/array/Array<i8>#__get
+  i32.const 24
+  i32.load
+  tee_local $0
+  i32.load
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.load8_s offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.const 255
   i32.and
   if
@@ -493,9 +433,21 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 24
   i32.const 1
-  call $~lib/array/Array<i8>#__get
+  i32.const 24
+  i32.load
+  tee_local $0
+  i32.load
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 1
+   i32.add
+   i32.load8_s offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.const 255
   i32.and
   i32.const 1
@@ -508,9 +460,21 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 24
   i32.const 2
-  call $~lib/array/Array<i8>#__get
+  i32.const 24
+  i32.load
+  tee_local $0
+  i32.load
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 2
+   i32.add
+   i32.load8_s offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.const 255
   i32.and
   i32.const 2
@@ -535,9 +499,21 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 112
   i32.const 0
-  call $~lib/array/Array<i32>#__get
+  i32.const 112
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   if
    i32.const 0
    i32.const 32
@@ -546,9 +522,23 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 112
   i32.const 1
-  call $~lib/array/Array<i32>#__get
+  i32.const 112
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 4
+   i32.add
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.const 1
   i32.ne
   if
@@ -559,9 +549,23 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 112
   i32.const 2
-  call $~lib/array/Array<i32>#__get
+  i32.const 112
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 8
+   i32.add
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.const 2
   i32.ne
   if
@@ -584,25 +588,29 @@
   end
   call $~lib/array/Array<i8>#constructor
   tee_local $0
-  i32.const 0
+  i32.load
   get_global $std/array-literal/i
-  call $~lib/array/Array<i8>#__unchecked_set
-  get_global $std/array-literal/i
-  i32.const 1
-  i32.add
-  set_global $std/array-literal/i
-  get_local $0
-  i32.const 1
-  get_global $std/array-literal/i
-  call $~lib/array/Array<i8>#__unchecked_set
+  i32.store8 offset=8
   get_global $std/array-literal/i
   i32.const 1
   i32.add
   set_global $std/array-literal/i
   get_local $0
+  i32.load
+  i32.const 1
+  i32.add
+  get_global $std/array-literal/i
+  i32.store8 offset=8
+  get_global $std/array-literal/i
+  i32.const 1
+  i32.add
+  set_global $std/array-literal/i
+  get_local $0
+  i32.load
   i32.const 2
+  i32.add
   get_global $std/array-literal/i
-  call $~lib/array/Array<i8>#__unchecked_set
+  i32.store8 offset=8
   get_local $0
   set_global $std/array-literal/dynamicArrayI8
   get_global $std/array-literal/dynamicArrayI8
@@ -617,9 +625,19 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/array-literal/dynamicArrayI8
   i32.const 0
-  call $~lib/array/Array<i8>#__get
+  get_global $std/array-literal/dynamicArrayI8
+  i32.load
+  tee_local $0
+  i32.load
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.load8_s offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.const 255
   i32.and
   if
@@ -630,9 +648,21 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/array-literal/dynamicArrayI8
   i32.const 1
-  call $~lib/array/Array<i8>#__get
+  get_global $std/array-literal/dynamicArrayI8
+  i32.load
+  tee_local $0
+  i32.load
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 1
+   i32.add
+   i32.load8_s offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.const 255
   i32.and
   i32.const 1
@@ -645,9 +675,21 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/array-literal/dynamicArrayI8
   i32.const 2
-  call $~lib/array/Array<i8>#__get
+  get_global $std/array-literal/dynamicArrayI8
+  i32.load
+  tee_local $0
+  i32.load
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 2
+   i32.add
+   i32.load8_s offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.const 255
   i32.and
   i32.const 2
@@ -664,25 +706,29 @@
   set_global $std/array-literal/i
   call $~lib/array/Array<i32>#constructor
   tee_local $0
-  i32.const 0
+  i32.load
   get_global $std/array-literal/i
-  call $~lib/array/Array<i32>#__unchecked_set
-  get_global $std/array-literal/i
-  i32.const 1
-  i32.add
-  set_global $std/array-literal/i
-  get_local $0
-  i32.const 1
-  get_global $std/array-literal/i
-  call $~lib/array/Array<i32>#__unchecked_set
+  i32.store offset=8
   get_global $std/array-literal/i
   i32.const 1
   i32.add
   set_global $std/array-literal/i
   get_local $0
-  i32.const 2
+  i32.load
+  i32.const 4
+  i32.add
   get_global $std/array-literal/i
-  call $~lib/array/Array<i32>#__unchecked_set
+  i32.store offset=8
+  get_global $std/array-literal/i
+  i32.const 1
+  i32.add
+  set_global $std/array-literal/i
+  get_local $0
+  i32.load
+  i32.const 8
+  i32.add
+  get_global $std/array-literal/i
+  i32.store offset=8
   get_local $0
   set_global $std/array-literal/dynamicArrayI32
   get_global $std/array-literal/dynamicArrayI32
@@ -697,9 +743,21 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/array-literal/dynamicArrayI32
   i32.const 0
-  call $~lib/array/Array<i32>#__get
+  get_global $std/array-literal/dynamicArrayI32
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   if
    i32.const 0
    i32.const 32
@@ -708,9 +766,23 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/array-literal/dynamicArrayI32
   i32.const 1
-  call $~lib/array/Array<i32>#__get
+  get_global $std/array-literal/dynamicArrayI32
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 4
+   i32.add
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.const 1
   i32.ne
   if
@@ -721,9 +793,23 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/array-literal/dynamicArrayI32
   i32.const 2
-  call $~lib/array/Array<i32>#__get
+  get_global $std/array-literal/dynamicArrayI32
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 8
+   i32.add
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.const 2
   i32.ne
   if
@@ -735,29 +821,33 @@
    unreachable
   end
   call $~lib/array/Array<i32>#constructor
+  set_local $0
+  i32.const 0
+  call $~lib/allocator/arena/__memory_allocate
   set_local $1
-  i32.const 0
-  call $~lib/memory/memory.allocate
-  set_local $0
-  get_local $1
-  i32.const 0
   get_local $0
-  call $~lib/array/Array<i32>#__unchecked_set
+  i32.load
+  get_local $1
+  i32.store offset=8
   i32.const 0
-  call $~lib/memory/memory.allocate
-  set_local $0
-  get_local $1
-  i32.const 1
+  call $~lib/allocator/arena/__memory_allocate
+  set_local $1
   get_local $0
-  call $~lib/array/Array<i32>#__unchecked_set
+  i32.load
+  i32.const 4
+  i32.add
+  get_local $1
+  i32.store offset=8
   i32.const 0
-  call $~lib/memory/memory.allocate
-  set_local $0
-  get_local $1
-  i32.const 2
+  call $~lib/allocator/arena/__memory_allocate
+  set_local $1
   get_local $0
-  call $~lib/array/Array<i32>#__unchecked_set
+  i32.load
+  i32.const 8
+  i32.add
   get_local $1
+  i32.store offset=8
+  get_local $0
   set_global $std/array-literal/dynamicArrayRef
   get_global $std/array-literal/dynamicArrayRef
   i32.load offset=4
@@ -773,24 +863,31 @@
   end
   call $~lib/array/Array<i32>#constructor
   set_local $0
-  call $std/array-literal/RefWithCtor#constructor
-  set_local $1
-  get_local $0
   i32.const 0
-  get_local $1
-  call $~lib/array/Array<i32>#__unchecked_set
-  call $std/array-literal/RefWithCtor#constructor
+  call $~lib/allocator/arena/__memory_allocate
   set_local $1
   get_local $0
-  i32.const 1
+  i32.load
   get_local $1
-  call $~lib/array/Array<i32>#__unchecked_set
-  call $std/array-literal/RefWithCtor#constructor
+  i32.store offset=8
+  i32.const 0
+  call $~lib/allocator/arena/__memory_allocate
   set_local $1
   get_local $0
-  i32.const 2
+  i32.load
+  i32.const 4
+  i32.add
   get_local $1
-  call $~lib/array/Array<i32>#__unchecked_set
+  i32.store offset=8
+  i32.const 0
+  call $~lib/allocator/arena/__memory_allocate
+  set_local $1
+  get_local $0
+  i32.load
+  i32.const 8
+  i32.add
+  get_local $1
+  i32.store offset=8
   get_local $0
   set_global $std/array-literal/dynamicArrayRefWithCtor
   get_global $std/array-literal/dynamicArrayRefWithCtor
@@ -806,7 +903,7 @@
    unreachable
   end
  )
- (func $null (; 14 ;) (type $v)
+ (func $null (; 7 ;) (type $v)
   nop
  )
 )

@@ -48,10 +48,7 @@
   end
   get_local $2
  )
- (func $std/hash/check (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
- )
- (func $~lib/internal/hash/hash32 (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 1 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 255
   i32.and
@@ -82,7 +79,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/internal/hash/hash64 (; 3 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash64 (; 2 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   get_local $0
   i32.wrap/i64
@@ -148,77 +145,60 @@
   i32.const 16777619
   i32.mul
  )
- (func $start (; 4 ;) (type $v)
+ (func $start (; 3 ;) (type $v)
   i32.const 0
   call $~lib/internal/hash/hashStr
-  call $std/hash/check
   drop
   i32.const 8
   call $~lib/internal/hash/hashStr
-  call $std/hash/check
   drop
   i32.const 16
   call $~lib/internal/hash/hashStr
-  call $std/hash/check
   drop
   i32.const 24
   call $~lib/internal/hash/hashStr
-  call $std/hash/check
   drop
   i32.const 32
   call $~lib/internal/hash/hashStr
-  call $std/hash/check
   drop
   i32.const 0
   call $~lib/internal/hash/hash32
-  call $std/hash/check
   drop
   i32.const 1065353216
   call $~lib/internal/hash/hash32
-  call $std/hash/check
   drop
   i32.const 1066192077
   call $~lib/internal/hash/hash32
-  call $std/hash/check
   drop
   i32.const 0
   call $~lib/internal/hash/hash32
-  call $std/hash/check
   drop
   i32.const 2139095040
   call $~lib/internal/hash/hash32
-  call $std/hash/check
   drop
   i32.const 2143289344
   call $~lib/internal/hash/hash32
-  call $std/hash/check
   drop
   i64.const 0
   call $~lib/internal/hash/hash64
-  call $std/hash/check
   drop
   i64.const 4607182418800017408
   call $~lib/internal/hash/hash64
-  call $std/hash/check
   drop
   i64.const 4607632778762754458
   call $~lib/internal/hash/hash64
-  call $std/hash/check
   drop
   i64.const 0
   call $~lib/internal/hash/hash64
-  call $std/hash/check
   drop
   i64.const 9218868437227405312
   call $~lib/internal/hash/hash64
-  call $std/hash/check
   drop
   i64.const 9221120237041090560
   call $~lib/internal/hash/hash64
-  call $std/hash/check
   drop
  )
- (func $null (; 5 ;) (type $v)
+ (func $null (; 4 ;) (type $v)
   nop
  )
 )

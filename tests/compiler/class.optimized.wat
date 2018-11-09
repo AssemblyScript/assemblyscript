@@ -1,33 +1,14 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
- (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$f (func (result f32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s")
  (table $0 1 anyfunc)
- (elem (i32.const 0) $null)
- (global $class/Animal.ONE (mut i32) (i32.const 1))
+ (elem (i32.const 0) $start)
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $class/test))
- (start $start)
- (func $class/Animal.add (; 0 ;) (type $FUNCSIG$i) (result i32)
-  get_global $class/Animal.ONE
-  i32.const 3
-  i32.add
- )
- (func $class/Animal.sub<f32> (; 1 ;) (type $FUNCSIG$f) (result f32)
-  f32.const -1
-  get_global $class/Animal.ONE
-  f32.convert_s/i32
-  f32.add
- )
- (func $class/test (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  call $class/Animal.add
-  drop
-  call $class/Animal.sub<f32>
-  drop
+ (func $class/test (; 0 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load
   drop
@@ -48,13 +29,7 @@
   i32.store8 offset=6
   get_local $0
  )
- (func $start (; 3 ;) (type $v)
-  call $class/Animal.add
-  drop
-  call $class/Animal.sub<f32>
-  drop
- )
- (func $null (; 4 ;) (type $v)
+ (func $start (; 1 ;) (type $v)
   nop
  )
 )

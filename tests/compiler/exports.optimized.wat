@@ -5,7 +5,6 @@
  (type $iiv (func (param i32 i32)))
  (type $iv (func (param i32)))
  (type $v (func))
- (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
@@ -122,46 +121,28 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 4 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 4
-  call $~lib/allocator/arena/__memory_allocate
- )
- (func $exports/Car#constructor (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  i32.eqz
-  if
-   call $~lib/memory/memory.allocate
-   tee_local $0
-   get_local $1
-   i32.store
-  end
-  get_local $0
-  get_local $1
-  i32.store
-  get_local $0
- )
- (func $exports/Car#get:numDoors (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $exports/Car#get:numDoors (; 4 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load
  )
- (func $exports/Car#set:numDoors (; 7 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   i32.store
  )
- (func $exports/Car#openDoors (; 8 ;) (type $iv) (param $0 i32)
+ (func $exports/Car#openDoors (; 6 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $start (; 9 ;) (type $v)
+ (func $start (; 7 ;) (type $v)
   i32.const 8
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
  )
- (func $null (; 10 ;) (type $v)
+ (func $null (; 8 ;) (type $v)
   nop
  )
- (func $exports/subOpt|trampoline (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt|trampoline (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -177,13 +158,13 @@
   end
   get_local $0
   get_local $1
-  call $exports/subOpt
+  i32.sub
  )
- (func $~setargc (; 12 ;) (type $iv) (param $0 i32)
+ (func $~setargc (; 10 ;) (type $iv) (param $0 i32)
   get_local $0
   set_global $~argc
  )
- (func $exports/Car#constructor|trampoline (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -196,7 +177,17 @@
    set_local $1
   end
   get_local $0
+  i32.eqz
+  if
+   i32.const 4
+   call $~lib/allocator/arena/__memory_allocate
+   tee_local $0
+   get_local $1
+   i32.store
+  end
+  get_local $0
   get_local $1
-  call $exports/Car#constructor
+  i32.store
+  get_local $0
  )
 )

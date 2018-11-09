@@ -2,7 +2,6 @@
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
- (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 2 anyfunc)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
@@ -75,32 +74,25 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 0
-  call $~lib/allocator/arena/__memory_allocate
- )
- (func $getter-call/C#get:x~anonymous|1 (; 2 ;) (type $i) (result i32)
+ (func $getter-call/C#get:x~anonymous|1 (; 1 ;) (type $i) (result i32)
   i32.const 42
  )
- (func $getter-call/C#get:x (; 3 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 1
- )
- (func $getter-call/test (; 4 ;) (type $i) (result i32)
-  (local $0 i32)
-  call $~lib/memory/memory.allocate
-  set_local $0
+ (func $getter-call/test (; 2 ;) (type $i) (result i32)
+  i32.const 0
+  call $~lib/allocator/arena/__memory_allocate
+  drop
   i32.const 0
   set_global $~argc
-  call $getter-call/C#get:x
+  i32.const 1
   call_indirect (type $i)
  )
- (func $start (; 5 ;) (type $v)
+ (func $start (; 3 ;) (type $v)
   i32.const 8
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
  )
- (func $null (; 6 ;) (type $v)
+ (func $null (; 4 ;) (type $v)
   nop
  )
 )

@@ -1,7 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
- (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
@@ -83,102 +82,83 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
-  call $~lib/allocator/arena/__memory_allocate
- )
- (func $std/constructor/EmptyCtor#constructor (; 2 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 0
-  call $~lib/memory/memory.allocate
- )
- (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 3 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  i32.const 4
-  call $~lib/memory/memory.allocate
-  tee_local $0
-  i32.const 1
-  i32.store
-  get_local $0
- )
- (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  i32.const 4
-  call $~lib/memory/memory.allocate
-  tee_local $0
-  i32.const 0
-  i32.store
-  get_local $0
- )
- (func $std/constructor/CtorReturns#constructor (; 5 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 0
-  call $~lib/allocator/arena/__memory_allocate
- )
- (func $std/constructor/CtorConditionallyReturns#constructor (; 6 ;) (type $FUNCSIG$i) (result i32)
-  get_global $std/constructor/b
-  if
-   i32.const 0
-   call $~lib/allocator/arena/__memory_allocate
-   return
-  end
-  i32.const 0
-  call $~lib/memory/memory.allocate
- )
- (func $std/constructor/CtorConditionallyAllocates#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  get_global $std/constructor/b
-  if
-   i32.const 0
-   call $~lib/memory/memory.allocate
-   set_local $0
-  end
-  get_local $0
-  i32.eqz
-  if
-   i32.const 0
-   call $~lib/memory/memory.allocate
-   set_local $0
-  end
-  get_local $0
- )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 1 ;) (type $v)
   (local $0 i32)
   i32.const 8
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
-  call $std/constructor/EmptyCtor#constructor
+  i32.const 0
+  call $~lib/allocator/arena/__memory_allocate
   set_global $std/constructor/emptyCtor
-  call $std/constructor/EmptyCtorWithFieldInit#constructor
+  i32.const 4
+  call $~lib/allocator/arena/__memory_allocate
+  tee_local $0
+  i32.const 1
+  i32.store
+  get_local $0
   set_global $std/constructor/emptyCtorWithFieldInit
-  call $std/constructor/EmptyCtorWithFieldNoInit#constructor
+  i32.const 4
+  call $~lib/allocator/arena/__memory_allocate
+  tee_local $0
+  i32.const 0
+  i32.store
+  get_local $0
   set_global $std/constructor/emptyCtorWithFieldNoInit
   i32.const 0
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__memory_allocate
   set_global $std/constructor/none
   i32.const 4
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__memory_allocate
   tee_local $0
   i32.const 1
   i32.store
   get_local $0
   set_global $std/constructor/justFieldInit
   i32.const 4
-  call $~lib/memory/memory.allocate
+  call $~lib/allocator/arena/__memory_allocate
   tee_local $0
   i32.const 0
   i32.store
   get_local $0
   set_global $std/constructor/justFieldNoInit
-  call $std/constructor/CtorReturns#constructor
+  i32.const 0
+  call $~lib/allocator/arena/__memory_allocate
   set_global $std/constructor/ctorReturns
-  call $std/constructor/CtorConditionallyReturns#constructor
+  block $__inlined_func$std/constructor/CtorConditionallyReturns#constructor (result i32)
+   get_global $std/constructor/b
+   if
+    i32.const 0
+    call $~lib/allocator/arena/__memory_allocate
+    br $__inlined_func$std/constructor/CtorConditionallyReturns#constructor
+   end
+   i32.const 0
+   call $~lib/allocator/arena/__memory_allocate
+  end
+  tee_local $0
   set_global $std/constructor/ctorConditionallyReturns
-  call $std/constructor/EmptyCtor#constructor
+  i32.const 0
+  call $~lib/allocator/arena/__memory_allocate
   set_global $std/constructor/ctorAllocates
-  call $std/constructor/CtorConditionallyAllocates#constructor
+  i32.const 0
+  set_local $0
+  get_global $std/constructor/b
+  if
+   i32.const 0
+   call $~lib/allocator/arena/__memory_allocate
+   set_local $0
+  end
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   call $~lib/allocator/arena/__memory_allocate
+   set_local $0
+  end
+  get_local $0
   set_global $std/constructor/ctorConditionallyAllocates
  )
- (func $null (; 9 ;) (type $v)
+ (func $null (; 2 ;) (type $v)
   nop
  )
 )

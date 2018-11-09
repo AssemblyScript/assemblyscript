@@ -1,9 +1,7 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $FF (func (param f64) (result f64)))
- (type $Fi (func (param f64) (result i32)))
  (type $v (func))
- (type $FUNCSIG$dd (func (param f64) (result f64)))
  (memory $0 0)
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
@@ -188,26 +186,12 @@
   f64.mul
   f64.add
  )
- (func $~lib/builtins/isFinite<f64> (; 1 ;) (type $Fi) (param $0 f64) (result i32)
-  get_local $0
-  get_local $0
-  f64.sub
-  f64.const 0
-  f64.eq
- )
- (func $../../examples/mandelbrot/assembly/index/clamp<f64> (; 2 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
-  get_local $0
-  f64.const 0
-  f64.max
-  f64.const 1
-  f64.min
- )
- (func $../../examples/mandelbrot/assembly/index/computeLine (; 3 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/mandelbrot/assembly/index/computeLine (; 1 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
-  (local $7 i32)
-  (local $8 f64)
+  (local $7 f64)
+  (local $8 i32)
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
@@ -225,7 +209,7 @@
   tee_local $4
   f64.const 2
   f64.div
-  tee_local $8
+  tee_local $7
   f64.sub
   f64.const 10
   f64.const 3
@@ -241,11 +225,11 @@
   set_local $9
   block $break|0
    loop $repeat|0
-    get_local $7
+    get_local $8
     get_local $1
     i32.ge_u
     br_if $break|0
-    get_local $7
+    get_local $8
     f64.convert_u/i32
     get_local $11
     f64.sub
@@ -267,7 +251,7 @@
       get_local $5
       get_local $5
       f64.mul
-      tee_local $8
+      tee_local $7
       f64.add
       f64.const 4
       f64.le
@@ -281,7 +265,7 @@
        f64.add
        set_local $5
        get_local $6
-       get_local $8
+       get_local $7
        f64.sub
        get_local $10
        f64.add
@@ -320,7 +304,7 @@
       f64.sub
       get_local $10
       f64.add
-      set_local $8
+      set_local $7
       f64.const 2
       get_local $4
       f64.mul
@@ -329,7 +313,7 @@
       get_local $9
       f64.add
       set_local $5
-      get_local $8
+      get_local $7
       set_local $4
       get_local $2
       i32.const 1
@@ -340,6 +324,13 @@
      end
      unreachable
     end
+    get_local $0
+    get_local $1
+    i32.mul
+    get_local $8
+    i32.add
+    i32.const 1
+    i32.shl
     get_local $4
     get_local $4
     f64.mul
@@ -353,7 +344,10 @@
     f64.const 0.6931471805599453
     f64.div
     tee_local $6
-    call $~lib/builtins/isFinite<f64>
+    get_local $6
+    f64.sub
+    f64.const 0
+    f64.eq
     if (result i32)
      f64.const 2047
      get_local $2
@@ -365,33 +359,28 @@
      get_local $3
      f64.convert_u/i32
      f64.div
-     call $../../examples/mandelbrot/assembly/index/clamp<f64>
+     f64.const 0
+     f64.max
+     f64.const 1
+     f64.min
      f64.mul
      i32.trunc_u/f64
     else     
      i32.const 2047
     end
-    set_local $2
-    get_local $0
-    get_local $1
-    i32.mul
-    get_local $7
-    i32.add
-    i32.const 1
-    i32.shl
-    get_local $2
+    tee_local $2
     i32.store16
-    get_local $7
+    get_local $8
     i32.const 1
     i32.add
-    set_local $7
+    set_local $8
     br $repeat|0
     unreachable
    end
    unreachable
   end
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 2 ;) (type $v)
   nop
  )
 )

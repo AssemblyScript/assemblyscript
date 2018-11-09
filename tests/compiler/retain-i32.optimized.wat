@@ -1,7 +1,6 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
- (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s")
@@ -12,34 +11,8 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $retain-i32/test (; 1 ;) (type $FUNCSIG$v)
-  nop
- )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 1 ;) (type $v)
   (local $0 i32)
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
-  call $retain-i32/test
   block $break|0
    i32.const -128
    set_local $0
@@ -48,18 +21,6 @@
     i32.const 255
     i32.gt_s
     br_if $break|0
-    call $retain-i32/test
-    call $retain-i32/test
-    call $retain-i32/test
-    call $retain-i32/test
-    call $retain-i32/test
-    call $retain-i32/test
-    call $retain-i32/test
-    call $retain-i32/test
-    call $retain-i32/test
-    call $retain-i32/test
-    call $retain-i32/test
-    call $retain-i32/test
     get_local $0
     i32.const 1
     i32.add
@@ -300,7 +261,7 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $v)
+ (func $null (; 2 ;) (type $v)
   nop
  )
 )

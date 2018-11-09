@@ -37,17 +37,6 @@
   end
  )
  (func $start (; 4 ;) (type $v)
-  call $inlining/test
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 10
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
   call $inlining/test_funcs
  )
  (func $null (; 5 ;) (type $v)

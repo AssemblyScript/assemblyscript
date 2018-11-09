@@ -8,7 +8,6 @@
  (export "table" (table $0))
  (export "fib" (func $recursive/fib))
  (func $recursive/fib (; 0 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   get_local $0
   i32.const 1
   i32.le_s
@@ -20,14 +19,10 @@
   i32.const 1
   i32.sub
   call $recursive/fib
-  set_local $1
   get_local $0
   i32.const 2
   i32.sub
   call $recursive/fib
-  set_local $0
-  get_local $1
-  get_local $0
   i32.add
  )
  (func $null (; 1 ;) (type $v)

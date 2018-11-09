@@ -13,17 +13,14 @@
   get_global $~started
   i32.eqz
   if
-   call $start
+   i32.const 1
+   set_global $main/code
    i32.const 1
    set_global $~started
   end
   get_global $main/code
  )
- (func $start (; 1 ;) (type $v)
-  i32.const 1
-  set_global $main/code
- )
- (func $null (; 2 ;) (type $v)
+ (func $null (; 1 ;) (type $v)
   nop
  )
 )
