@@ -90,7 +90,7 @@ export abstract class TypedArray<T,V> {
     else end = max(min(end, length), begin);
     var slice = memory.allocate(offsetof<this>());
     store<usize>(slice, this.buffer, offsetof<this>("buffer"));
-    store<i32>(slice, begin << alignof<T>(), offsetof<this>("byteOffset"));
+    store<i32>(slice, this.byteOffset + (begin << alignof<T>()), offsetof<this>("byteOffset"));
     store<i32>(slice, (end - begin) << alignof<T>(), offsetof<this>("byteLength"));
     return changetype<this>(slice);
   }

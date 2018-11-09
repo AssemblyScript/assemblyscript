@@ -199,3 +199,29 @@ import { MAX_BLENGTH } from "internal/arraybuffer";
 const MAX_F64LENGTH = <u32>MAX_BLENGTH >> alignof<f64>();
 new Float64Array(MAX_F64LENGTH); // 1GB
 // new Float64Array(MAX_F64 + 1); // throws
+
+var multisubarr = new Int8Array(6);
+multisubarr[0] = 1;
+multisubarr[1] = 2;
+multisubarr[2] = 3;
+multisubarr[3] = 4;
+multisubarr[4] = 5;
+multisubarr[5] = 6;
+
+var multisubarr1 = multisubarr.subarray(1, 6);
+assert(multisubarr1[0] === 2);
+assert(multisubarr1.length === 5);
+assert(multisubarr1.byteOffset === 1);
+assert(multisubarr1.byteLength === 5);
+
+var multisubarr2 = multisubarr1.subarray(1, 5);
+assert(multisubarr2[0] === 3);
+assert(multisubarr2.length === 4);
+assert(multisubarr2.byteOffset === 2);
+assert(multisubarr2.byteLength === 4);
+
+var multisubarr3 = multisubarr2.subarray(1, 4);
+assert(multisubarr3[0] === 4);
+assert(multisubarr3.length === 3);
+assert(multisubarr3.byteOffset === 3);
+assert(multisubarr3.byteLength === 3);
