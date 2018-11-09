@@ -104,7 +104,7 @@ assert(arr[2] == 3);
 arr = arr.subarray(1, 2);
 assert(arr.length == 1);
 assert(arr.byteOffset == 1 * sizeof<i32>());
-assert(arr.byteLength == 2 * sizeof<i32>());
+assert(arr.byteLength == 1 * sizeof<i32>());
 assert(arr[0] == 2);
 
 var af64 = new Float64Array(8);
@@ -120,6 +120,8 @@ af64[6] = 3;
 af64[7] = 8;
 af64 = af64.subarray(2, 6);
 assert(af64.length == 4);
+assert(af64.byteOffset == 2 * sizeof<f64>());
+assert(af64.byteLength == 4 * sizeof<f64>());
 af64.sort();
 assert(af64[0] == 4 && af64[1] == 5 && af64[2] == 6 && af64[3] == 7);
 
@@ -157,6 +159,8 @@ assert(isInt8ArrayEqual(arr8, <i8[]>[1, 1, 0, 2, 2]));
 var sub8 = arr8.subarray(1, 4);
 sub8.fill(0);
 assert(sub8.length == 3);
+assert(sub8.byteOffset == 1);
+assert(sub8.byteLength == 3);
 assert(isInt8ArrayEqual(sub8, <i8[]>[0, 0, 0]));
 assert(isInt8ArrayEqual(arr8, <i8[]>[1, 0, 0, 0, 2]));
 
@@ -185,6 +189,8 @@ assert(isInt32ArrayEqual(arr32, <i32[]>[1, 1, 0, 2, 2]));
 var sub32 = arr32.subarray(1, 4);
 sub32.fill(0);
 assert(sub32.length == 3);
+assert(sub32.byteOffset == 1 * sizeof<i32>());
+assert(sub32.byteLength == 3 * sizeof<i32>());
 assert(isInt32ArrayEqual(sub32, <i32[]>[0, 0, 0]));
 assert(isInt32ArrayEqual(arr32, <i32[]>[1, 0, 0, 0, 2]));
 
@@ -193,3 +199,29 @@ import { MAX_BLENGTH } from "internal/arraybuffer";
 const MAX_F64LENGTH = <u32>MAX_BLENGTH >> alignof<f64>();
 new Float64Array(MAX_F64LENGTH); // 1GB
 // new Float64Array(MAX_F64 + 1); // throws
+
+var multisubarr = new Int8Array(6);
+multisubarr[0] = 1;
+multisubarr[1] = 2;
+multisubarr[2] = 3;
+multisubarr[3] = 4;
+multisubarr[4] = 5;
+multisubarr[5] = 6;
+
+var multisubarr1 = multisubarr.subarray(1, 6);
+assert(multisubarr1[0] === 2);
+assert(multisubarr1.length === 5);
+assert(multisubarr1.byteOffset === 1);
+assert(multisubarr1.byteLength === 5);
+
+var multisubarr2 = multisubarr1.subarray(1, 5);
+assert(multisubarr2[0] === 3);
+assert(multisubarr2.length === 4);
+assert(multisubarr2.byteOffset === 2);
+assert(multisubarr2.byteLength === 4);
+
+var multisubarr3 = multisubarr2.subarray(1, 4);
+assert(multisubarr3[0] === 4);
+assert(multisubarr3.length === 3);
+assert(multisubarr3.byteOffset === 3);
+assert(multisubarr3.byteLength === 3);

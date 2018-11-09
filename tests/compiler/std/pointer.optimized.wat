@@ -1,11 +1,7 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiv (func (param i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $iifv (func (param i32 i32 f32)))
- (type $iif (func (param i32 i32) (result f32)))
  (type $v (func))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -22,10 +18,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $std/pointer/Pointer<Entry>#constructor (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  get_local $0
- )
- (func $~lib/internal/memory/memset (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/internal/memory/memset (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   get_local $0
   i32.const 0
@@ -69,7 +62,7 @@
   i32.const 0
   i32.store8
  )
- (func $~lib/internal/memory/memcpy (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -973,7 +966,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/internal/memory/memmove (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1176,45 +1169,12 @@
    end
   end
  )
- (func $std/pointer/Pointer<Entry>#set:value (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  get_local $1
-  if
-   get_local $0
-   get_local $1
-   call $~lib/internal/memory/memmove
-  else   
-   get_local $0
-   call $~lib/internal/memory/memset
-  end
- )
- (func $std/pointer/Pointer<f32>#set (; 6 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
-  get_local $0
-  get_local $1
-  i32.const 2
-  i32.shl
-  i32.add
-  get_local $2
-  f32.store
- )
- (func $std/pointer/Pointer<f32>#get (; 7 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
-  get_local $0
-  get_local $1
-  i32.const 2
-  i32.shl
-  i32.add
-  f32.load
- )
- (func $std/pointer/Pointer<f32>#set:value (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
-  get_local $0
-  f32.const 1.399999976158142
-  f32.store
- )
- (func $start (; 9 ;) (type $v)
+ (func $start (; 4 ;) (type $v)
+  (local $0 i32)
+  (local $1 i32)
   i32.const 8
-  call $std/pointer/Pointer<Entry>#constructor
   set_global $std/pointer/one
   i32.const 24
-  call $std/pointer/Pointer<Entry>#constructor
   set_global $std/pointer/two
   get_global $std/pointer/one
   i32.const 8
@@ -1392,8 +1352,17 @@
    unreachable
   end
   get_global $std/pointer/one
+  set_local $0
   get_global $std/pointer/two
-  call $std/pointer/Pointer<Entry>#set:value
+  tee_local $1
+  if
+   get_local $0
+   get_local $1
+   call $~lib/internal/memory/memmove
+  else   
+   get_local $0
+   call $~lib/internal/memory/memset
+  end
   get_global $std/pointer/one
   get_global $std/pointer/two
   i32.eq
@@ -1430,19 +1399,17 @@
    unreachable
   end
   i32.const 0
-  call $std/pointer/Pointer<Entry>#constructor
   set_global $std/pointer/buf
   get_global $std/pointer/buf
-  i32.const 0
   f32.const 1.100000023841858
-  call $std/pointer/Pointer<f32>#set
+  f32.store
   get_global $std/pointer/buf
-  i32.const 1
+  i32.const 4
+  i32.add
   f32.const 1.2000000476837158
-  call $std/pointer/Pointer<f32>#set
+  f32.store
   get_global $std/pointer/buf
-  i32.const 0
-  call $std/pointer/Pointer<f32>#get
+  f32.load
   f32.const 1.100000023841858
   f32.ne
   if
@@ -1454,8 +1421,9 @@
    unreachable
   end
   get_global $std/pointer/buf
-  i32.const 1
-  call $std/pointer/Pointer<f32>#get
+  i32.const 4
+  i32.add
+  f32.load
   f32.const 1.2000000476837158
   f32.ne
   if
@@ -1522,8 +1490,9 @@
   f32.const 1.2999999523162842
   f32.store
   get_global $std/pointer/buf
-  i32.const 2
-  call $std/pointer/Pointer<f32>#get
+  i32.const 8
+  i32.add
+  f32.load
   f32.const 1.2999999523162842
   f32.ne
   if
@@ -1561,7 +1530,8 @@
    unreachable
   end
   get_global $std/pointer/buf
-  call $std/pointer/Pointer<f32>#set:value
+  f32.const 1.399999976158142
+  f32.store
   get_global $std/pointer/buf
   f32.load
   f32.const 1.399999976158142
@@ -1587,7 +1557,7 @@
    unreachable
   end
  )
- (func $null (; 10 ;) (type $v)
+ (func $null (; 5 ;) (type $v)
   nop
  )
 )

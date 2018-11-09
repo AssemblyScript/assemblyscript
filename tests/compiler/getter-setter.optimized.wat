@@ -1,7 +1,5 @@
 (module
- (type $i (func (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iv (func (param i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -12,15 +10,8 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $getter-setter/Foo.get:bar (; 1 ;) (type $i) (result i32)
+ (func $start (; 1 ;) (type $v)
   get_global $getter-setter/Foo._bar
- )
- (func $getter-setter/Foo.set:bar (; 2 ;) (type $iv) (param $0 i32)
-  get_local $0
-  set_global $getter-setter/Foo._bar
- )
- (func $start (; 3 ;) (type $v)
-  call $getter-setter/Foo.get:bar
   if
    i32.const 0
    i32.const 8
@@ -30,8 +21,8 @@
    unreachable
   end
   i32.const 1
-  call $getter-setter/Foo.set:bar
-  call $getter-setter/Foo.get:bar
+  set_global $getter-setter/Foo._bar
+  get_global $getter-setter/Foo._bar
   i32.const 1
   i32.ne
   if
@@ -43,8 +34,8 @@
    unreachable
   end
   i32.const 2
-  call $getter-setter/Foo.set:bar
-  call $getter-setter/Foo.get:bar
+  set_global $getter-setter/Foo._bar
+  get_global $getter-setter/Foo._bar
   i32.const 2
   i32.ne
   if
@@ -56,7 +47,7 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 2 ;) (type $v)
   nop
  )
 )

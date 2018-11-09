@@ -1,6 +1,5 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
@@ -18,8 +17,9 @@
  (export "stringArrayMethodCall" (func $std/array-access/stringArrayMethodCall))
  (export "stringArrayArrayPropertyAccess" (func $std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
- (func $~lib/array/Array<Array<i32>>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $1
+ (func $std/array-access/i32ArrayArrayElementAccess (; 1 ;) (type $ii) (param $0 i32) (result i32)
+  i32.const 1
+  i32.const 0
   get_local $0
   i32.load
   tee_local $0
@@ -29,9 +29,20 @@
   i32.lt_u
   if (result i32)
    get_local $0
-   get_local $1
-   i32.const 2
-   i32.shl
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 4
    i32.add
    i32.load offset=8
   else   
@@ -39,20 +50,25 @@
   end
   tee_local $0
  )
- (func $std/array-access/i32ArrayArrayElementAccess (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
+ (func $std/array-access/stringArrayPropertyAccess (; 2 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
-  i32.const 1
-  call $~lib/array/Array<Array<i32>>#__get
- )
- (func $std/array-access/stringArrayPropertyAccess (; 3 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
-  i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.load
  )
- (func $~lib/internal/string/compareUnsafe (; 4 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 3 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   get_local $0
   get_local $1
@@ -92,7 +108,7 @@
   end
   get_local $4
  )
- (func $~lib/string/String#startsWith (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#startsWith (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -132,29 +148,93 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $std/array-access/stringArrayMethodCall (; 6 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
+ (func $std/array-access/stringArrayMethodCall (; 5 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
+  get_local $0
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   call $~lib/string/String#startsWith
  )
- (func $std/array-access/stringArrayArrayPropertyAccess (; 7 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
-  i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
+ (func $std/array-access/stringArrayArrayPropertyAccess (; 6 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
-  call $~lib/array/Array<Array<i32>>#__get
+  i32.const 0
+  get_local $0
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 4
+   i32.add
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   i32.load
  )
- (func $std/array-access/stringArrayArrayMethodCall (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
-  i32.const 0
-  call $~lib/array/Array<Array<i32>>#__get
+ (func $std/array-access/stringArrayArrayMethodCall (; 7 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
-  call $~lib/array/Array<Array<i32>>#__get
+  i32.const 0
+  get_local $0
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
+  i32.load
+  tee_local $0
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   get_local $0
+   i32.const 4
+   i32.add
+   i32.load offset=8
+  else   
+   unreachable
+  end
+  tee_local $0
   call $~lib/string/String#startsWith
  )
- (func $null (; 9 ;) (type $v)
+ (func $null (; 8 ;) (type $v)
   nop
  )
 )

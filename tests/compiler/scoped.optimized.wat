@@ -1,16 +1,12 @@
 (module
  (type $v (func))
- (type $FUNCSIG$v (func))
  (memory $0 0)
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $scoped/fn (; 0 ;) (type $FUNCSIG$v)
-  nop
- )
- (func $start (; 1 ;) (type $v)
+ (func $start (; 0 ;) (type $v)
   (local $0 i32)
   block $break|0
    loop $repeat|0
@@ -44,9 +40,8 @@
    end
    unreachable
   end
-  call $scoped/fn
  )
- (func $null (; 2 ;) (type $v)
+ (func $null (; 1 ;) (type $v)
   nop
  )
 )

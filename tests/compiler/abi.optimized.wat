@@ -12,28 +12,13 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "exported" (func $abi/exported))
- (export "exportedExported" (func $abi/exportedExported))
- (export "exportedInternal" (func $abi/exportedInternal))
+ (export "exportedExported" (func $abi/exported))
+ (export "exportedInternal" (func $abi/exported))
  (start $start)
  (func $abi/exported (; 1 ;) (type $i) (result i32)
   i32.const -128
  )
- (func $abi/exportedExported (; 2 ;) (type $i) (result i32)
-  call $abi/exported
- )
- (func $abi/internal (; 3 ;) (type $i) (result i32)
-  i32.const 128
- )
- (func $abi/exportedInternal (; 4 ;) (type $i) (result i32)
-  call $abi/internal
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
- )
- (func $start (; 5 ;) (type $v)
-  call $abi/internal
-  drop
+ (func $start (; 2 ;) (type $v)
   i32.const 1
   set_global $abi/condition
   i32.const 0
@@ -48,7 +33,7 @@
    unreachable
   end
  )
- (func $null (; 6 ;) (type $v)
+ (func $null (; 3 ;) (type $v)
   nop
  )
 )

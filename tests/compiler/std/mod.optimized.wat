@@ -2,12 +2,10 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FFFi (func (param f64 f64 f64) (result i32)))
  (type $FFi (func (param f64 f64) (result i32)))
- (type $Fi (func (param f64) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $fffi (func (param f32 f32 f32) (result i32)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $ffi (func (param f32 f32) (result i32)))
- (type $fi (func (param f32) (result i32)))
  (type $v (func))
  (import "math" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -228,17 +226,14 @@
   get_local $0
   f64.mul
  )
- (func $~lib/builtins/isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
-  get_local $0
-  get_local $0
-  f64.ne
- )
- (func $std/mod/check<f64> (; 4 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
+ (func $std/mod/check<f64> (; 3 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   get_local $1
-  call $~lib/builtins/isNaN<f64>
+  get_local $1
+  f64.ne
   if
    get_local $0
-   call $~lib/builtins/isNaN<f64>
+   get_local $0
+   f64.ne
    return
   end
   get_local $1
@@ -258,7 +253,7 @@
   get_local $1
   f64.eq
  )
- (func $std/mod/test_fmod (; 5 ;) (type $FFFi) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $std/mod/test_fmod (; 4 ;) (type $FFFi) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   (local $3 i32)
   get_local $0
   get_local $1
@@ -270,14 +265,13 @@
    get_local $0
    get_local $1
    call $std/mod/mod
-   tee_local $0
    get_local $2
    call $std/mod/check<f64>
    set_local $3
   end
   get_local $3
  )
- (func $~lib/math/NativeMathf.mod (; 6 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 5 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -476,17 +470,14 @@
   get_local $0
   f32.mul
  )
- (func $~lib/builtins/isNaN<f32> (; 7 ;) (type $fi) (param $0 f32) (result i32)
-  get_local $0
-  get_local $0
-  f32.ne
- )
- (func $std/mod/check<f32> (; 8 ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
+ (func $std/mod/check<f32> (; 6 ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
   get_local $1
-  call $~lib/builtins/isNaN<f32>
+  get_local $1
+  f32.ne
   if
    get_local $0
-   call $~lib/builtins/isNaN<f32>
+   get_local $0
+   f32.ne
    return
   end
   get_local $1
@@ -506,14 +497,14 @@
   get_local $1
   f32.eq
  )
- (func $std/mod/test_fmodf (; 9 ;) (type $fffi) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/mod/test_fmodf (; 7 ;) (type $fffi) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   get_local $0
   get_local $1
   call $~lib/math/NativeMathf.mod
   get_local $2
   call $std/mod/check<f32>
  )
- (func $start (; 10 ;) (type $v)
+ (func $start (; 8 ;) (type $v)
   f64.const 3
   f64.const 2
   f64.const 1
@@ -2270,7 +2261,7 @@
    unreachable
   end
  )
- (func $null (; 11 ;) (type $v)
+ (func $null (; 9 ;) (type $v)
   nop
  )
 )

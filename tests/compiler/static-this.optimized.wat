@@ -1,5 +1,4 @@
 (module
- (type $i (func (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -11,11 +10,8 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $static-this/Foo.getBar (; 1 ;) (type $i) (result i32)
+ (func $start (; 1 ;) (type $v)
   get_global $static-this/Foo.bar
- )
- (func $start (; 2 ;) (type $v)
-  call $static-this/Foo.getBar
   i32.const 42
   i32.ne
   if
@@ -27,7 +23,7 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $v)
+ (func $null (; 2 ;) (type $v)
   nop
  )
 )

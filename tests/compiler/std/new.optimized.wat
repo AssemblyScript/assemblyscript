@@ -73,13 +73,10 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/new/AClass#constructor (; 1 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
   i32.const 8
   call $~lib/allocator/arena/__memory_allocate
- )
- (func $std/new/AClass#constructor (; 2 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  call $~lib/memory/memory.allocate
   tee_local $0
   i32.const 1
   i32.store
@@ -97,7 +94,7 @@
   f32.store offset=4
   get_local $0
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 2 ;) (type $v)
   i32.const 8
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
@@ -105,7 +102,7 @@
   call $std/new/AClass#constructor
   set_global $std/new/aClass
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 3 ;) (type $v)
   nop
  )
 )
