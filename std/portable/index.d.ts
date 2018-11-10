@@ -244,6 +244,7 @@ declare class ArrayBuffer {
 }
 
 declare class Array<T> {
+
   static isArray<U>(value: any): value is Array<any>;
 
   [key: number]: T;

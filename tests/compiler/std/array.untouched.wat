@@ -2872,7 +2872,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 233
+   i32.const 236
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -2986,6 +2986,7 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
   get_local $0
   i32.load
   set_local $4
@@ -3105,8 +3106,6 @@
    get_local $6
   end
   if
-   i32.const -1
-   set_local $12
    get_local $9
    get_local $11
    i32.const 1
@@ -3119,48 +3118,73 @@
    i32.sub
    i32.add
    set_local $8
-  end
-  block $break|0
-   loop $continue|0
-    get_local $11
-    i32.const 0
-    i32.gt_s
-    if
-     block
-      block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.1
-       block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.2 (result i32)
+   block $break|0
+    loop $continue|0
+     get_local $11
+     i32.const 0
+     i32.gt_s
+     if
+      block
+       block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.1
+        block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.2 (result i32)
+         get_local $4
+         get_local $9
+         i32.const 2
+         i32.shl
+         i32.add
+         i32.load offset=8
+        end
+        set_local $6
         get_local $4
-        get_local $9
+        get_local $8
         i32.const 2
         i32.shl
         i32.add
-        i32.load offset=8
+        get_local $6
+        i32.store offset=8
        end
-       set_local $6
-       get_local $4
+       get_local $9
+       i32.const 1
+       i32.sub
+       set_local $9
        get_local $8
-       i32.const 2
-       i32.shl
-       i32.add
-       get_local $6
-       i32.store offset=8
+       i32.const 1
+       i32.sub
+       set_local $8
+       get_local $11
+       i32.const 1
+       i32.sub
+       set_local $11
       end
-      get_local $9
-      get_local $12
-      i32.add
-      set_local $9
-      get_local $8
-      get_local $12
-      i32.add
-      set_local $8
-      get_local $11
-      i32.const 1
-      i32.sub
-      set_local $11
+      br $continue|0
      end
-     br $continue|0
     end
    end
+  else   
+   get_local $4
+   get_global $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   get_local $8
+   i32.const 2
+   i32.shl
+   i32.add
+   set_local $6
+   get_local $4
+   get_global $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   get_local $9
+   i32.const 2
+   i32.shl
+   i32.add
+   set_local $7
+   get_local $11
+   i32.const 2
+   i32.shl
+   set_local $13
+   get_local $6
+   get_local $7
+   get_local $13
+   call $~lib/internal/memory/memmove
   end
   get_local $0
  )
@@ -3276,7 +3300,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 323
+    i32.const 326
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -3296,7 +3320,7 @@
    get_local $2
    i32.store
   end
-  block $~lib/memory/memory.copy|inlined.3
+  block $~lib/memory/memory.copy|inlined.4
    get_local $2
    get_global $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -3351,7 +3375,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 294
+   i32.const 297
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3374,7 +3398,7 @@
   i32.const 1
   i32.sub
   set_local $5
-  block $~lib/memory/memory.copy|inlined.4
+  block $~lib/memory/memory.copy|inlined.5
    get_local $2
    get_global $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -3615,7 +3639,7 @@
   get_local $0
   i32.load
   set_local $6
-  block $~lib/memory/memory.copy|inlined.5
+  block $~lib/memory/memory.copy|inlined.6
    get_local $6
    get_global $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -5452,7 +5476,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6240,7 +6264,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7050,7 +7074,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7730,7 +7754,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8417,7 +8441,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8880,7 +8904,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9374,7 +9398,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -11722,7 +11746,7 @@
     i32.shl
     i32.add
     set_local $4
-    block $~lib/memory/memory.copy|inlined.7
+    block $~lib/memory/memory.copy|inlined.8
      get_local $4
      get_global $~lib/internal/string/HEADER_SIZE
      i32.add
@@ -11772,7 +11796,7 @@
      get_local $3
      i32.sub
      set_local $4
-     block $~lib/memory/memory.copy|inlined.8
+     block $~lib/memory/memory.copy|inlined.9
       get_local $0
       get_global $~lib/internal/string/HEADER_SIZE
       i32.add
@@ -11887,7 +11911,7 @@
       i32.const 1
       i32.shl
       set_local $7
-      block $~lib/memory/memory.copy|inlined.9
+      block $~lib/memory/memory.copy|inlined.10
        get_local $0
        get_global $~lib/internal/string/HEADER_SIZE
        i32.add
@@ -12531,7 +12555,7 @@
     get_local $3
     select
     set_local $5
-    block $~lib/memory/memory.copy|inlined.10
+    block $~lib/memory/memory.copy|inlined.11
      get_local $0
      get_global $~lib/internal/string/HEADER_SIZE
      i32.add

@@ -2325,7 +2325,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 233
+   i32.const 236
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -2434,7 +2434,7 @@
    get_local $1
    tee_local $4
    get_local $5
-   get_local $4
+   get_local $1
    get_local $5
    i32.lt_s
    select
@@ -2457,7 +2457,7 @@
    get_local $2
    tee_local $4
    get_local $5
-   get_local $4
+   get_local $2
    get_local $5
    i32.lt_s
    select
@@ -2480,7 +2480,7 @@
    get_local $3
    tee_local $4
    get_local $5
-   get_local $4
+   get_local $3
    get_local $5
    i32.lt_s
    select
@@ -2498,8 +2498,6 @@
   i32.lt_s
   select
   set_local $3
-  i32.const 1
-  set_local $5
   get_local $2
   get_local $1
   i32.lt_s
@@ -2514,8 +2512,6 @@
   end
   get_local $4
   if
-   i32.const -1
-   set_local $5
    get_local $2
    get_local $3
    i32.const 1
@@ -2527,38 +2523,57 @@
    get_local $4
    i32.add
    set_local $1
-  end
-  loop $continue|0
-   get_local $3
-   i32.const 0
-   i32.gt_s
-   if
-    get_local $6
-    get_local $1
-    i32.const 2
-    i32.shl
-    i32.add
-    get_local $6
-    get_local $2
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load offset=8
-    i32.store offset=8
-    get_local $2
-    get_local $5
-    i32.add
-    set_local $2
-    get_local $1
-    get_local $5
-    i32.add
-    set_local $1
+   loop $continue|0
     get_local $3
-    i32.const 1
-    i32.sub
-    set_local $3
-    br $continue|0
+    i32.const 0
+    i32.gt_s
+    if
+     get_local $6
+     get_local $1
+     i32.const 2
+     i32.shl
+     i32.add
+     get_local $6
+     get_local $2
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load offset=8
+     i32.store offset=8
+     get_local $2
+     i32.const 1
+     i32.sub
+     set_local $2
+     get_local $1
+     i32.const 1
+     i32.sub
+     set_local $1
+     get_local $3
+     i32.const 1
+     i32.sub
+     set_local $3
+     br $continue|0
+    end
    end
+  else   
+   get_local $6
+   i32.const 8
+   i32.add
+   get_local $1
+   i32.const 2
+   i32.shl
+   i32.add
+   get_local $6
+   i32.const 8
+   i32.add
+   get_local $2
+   i32.const 2
+   i32.shl
+   i32.add
+   get_local $3
+   i32.const 2
+   i32.shl
+   call $~lib/internal/memory/memmove
   end
   get_local $0
  )
@@ -2610,7 +2625,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 323
+    i32.const 326
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -2661,7 +2676,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 294
+   i32.const 297
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -4105,7 +4120,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4694,7 +4709,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5284,7 +5299,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5689,7 +5704,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 386
+   i32.const 389
    i32.const 4
    call $~lib/env/abort
    unreachable

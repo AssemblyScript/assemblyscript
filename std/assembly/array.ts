@@ -215,15 +215,18 @@ export class Array<T> {
     var count = min(last - from, len - to);
     var dir = 1;
     if (from < to && to < (from + count)) {
-      dir  = -1;
       from += count - 1;
       to   += count - 1;
-    }
-    while (count > 0) {
-      storeUnsafe<T,T>(buffer, to, loadUnsafe<T,T>(buffer, from));
-      from += dir;
-      to += dir;
-      --count;
+      while (count > 0) {
+        storeUnsafe<T,T>(buffer, to, loadUnsafe<T,T>(buffer, from));
+        --from, --to, --count;
+      }
+    } else {
+      memory.copy(
+        changetype<usize>(buffer) + HEADER_SIZE + (<usize>to << alignof<T>()),
+        changetype<usize>(buffer) + HEADER_SIZE + (<usize>from << alignof<T>()),
+        <usize>count << alignof<T>()
+      );
     }
     return this;
   }
