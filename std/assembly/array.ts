@@ -28,8 +28,8 @@ import {
 } from "./internal/number";
 
 @inline
-function mix<T>(a: T, b: T): T {
-  return a < 0 ? max<T>(b + a, 0) : min<T>(a, b);
+function mix<T extends number>(a: T, b: T): T {
+  return <T>(a < 0 ? max<T>(b + a, 0) : min<T>(a, b));
 }
 
 export class Array<T> {

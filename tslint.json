@@ -33,7 +33,8 @@
         "check-type-operator",
         "check-preblock"
       ]
-    }
+    },
+    "restrict-plus-operands": false
   },
   "jsRules": {
     "max-line-length": {
