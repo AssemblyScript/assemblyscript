@@ -28,6 +28,17 @@ function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
 
 var arr = new Array<i32>();
 
+// Array.isArray ///////////////////////////////////////////////////////////////////////////////////
+
+class P {}
+var num = 1;
+var Null: i32[] | null = null;
+assert(Array.isArray(Null) == false);
+assert(Array.isArray(arr) == true);
+assert(Array.isArray(new P()) == false);
+// assert(Array.isArray(new Uint8Array(1)) == false); fail
+assert(Array.isArray(num) == false);
+
 // Array#fill //////////////////////////////////////////////////////////////////////////////////////
 
 var arr8: u8[] = [1, 2, 3, 4, 5];

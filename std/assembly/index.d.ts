@@ -433,11 +433,15 @@ declare class Float64Array extends TypedArray<f64> {}
 
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {
+
+  static isArray<U>(value: any): value is Array<any>;
+
   [key: number]: T;
   /** Current length of the array. */
   length: i32;
   /** Constructs a new array. */
   constructor(capacity?: i32);
+
   fill(value: T, start?: i32, end?: i32): this;
   every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   findIndex(predicate: (element: T, index: i32, array?: Array<T>) => bool): i32;

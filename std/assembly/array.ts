@@ -32,6 +32,10 @@ export class Array<T> {
   /* @internal */ buffer_: ArrayBuffer;
   /* @internal */ length_: i32;
 
+  @inline static isArray<U>(value: U): bool {
+    return isArray(value) && value !== null;
+  }
+
   constructor(length: i32 = 0) {
     const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
     if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");

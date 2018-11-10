@@ -31,11 +31,11 @@
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 40) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 104) "\05\00\00\00\00\00\00\00\01\02\03\04\05\00\00\00")
- (data (i32.const 120) "h\00\00\00\05\00\00\00")
- (data (i32.const 128) "\05\00\00\00\00\00\00\00\01\01\01\04\05\00\00\00")
- (data (i32.const 144) "\80\00\00\00\05\00\00\00")
- (data (i32.const 152) "\0c\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 104) "\0c\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 136) "\05\00\00\00\00\00\00\00\01\02\03\04\05\00\00\00")
+ (data (i32.const 152) "\88\00\00\00\05\00\00\00")
+ (data (i32.const 160) "\05\00\00\00\00\00\00\00\01\01\01\04\05\00\00\00")
+ (data (i32.const 176) "\a0\00\00\00\05\00\00\00")
  (data (i32.const 184) "\05\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 200) "\b8\00\00\00\05\00\00\00")
  (data (i32.const 208) "\05\00\00\00\00\00\00\00\01\01\00\00\00\00\00\00")
@@ -226,7 +226,9 @@
  (global $~lib/internal/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
- (global $std/array/arr8 (mut i32) (i32.const 120))
+ (global $std/array/num (mut i32) (i32.const 1))
+ (global $std/array/Null (mut i32) (i32.const 0))
+ (global $std/array/arr8 (mut i32) (i32.const 152))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/array/arr32 (mut i32) (i32.const 312))
@@ -698,7 +700,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 37
+   i32.const 41
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -748,7 +750,47 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<u8>#fill (; 8 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/array/Array.isArray<Array<i32> | null> (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  i32.const 1
+  if (result i32)
+   get_local $0
+   i32.const 0
+   i32.ne
+  else   
+   i32.const 1
+  end
+ )
+ (func $~lib/array/Array.isArray<Array<i32>> (; 9 ;) (type $ii) (param $0 i32) (result i32)
+  i32.const 1
+  if (result i32)
+   get_local $0
+   i32.const 0
+   i32.ne
+  else   
+   i32.const 1
+  end
+ )
+ (func $~lib/array/Array.isArray<P> (; 10 ;) (type $ii) (param $0 i32) (result i32)
+  i32.const 0
+  if (result i32)
+   get_local $0
+   i32.const 0
+   i32.ne
+  else   
+   i32.const 0
+  end
+ )
+ (func $~lib/array/Array.isArray<i32> (; 11 ;) (type $ii) (param $0 i32) (result i32)
+  i32.const 0
+  if (result i32)
+   get_local $0
+   i32.const 0
+   i32.ne
+  else   
+   i32.const 0
+  end
+ )
+ (func $~lib/array/Array<u8>#fill (; 12 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -830,7 +872,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<u8>#__get (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#__get (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -852,7 +894,7 @@
    unreachable
   end
  )
- (func $std/array/isArraysEqual<u8> (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<u8> (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $2
   i32.eqz
@@ -915,7 +957,7 @@
   end
   i32.const 1
  )
- (func $~lib/array/Array<u8>#fill|trampoline (; 11 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/array/Array<u8>#fill|trampoline (; 15 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -939,7 +981,7 @@
   get_local $3
   call $~lib/array/Array<u8>#fill
  )
- (func $~lib/array/Array<u32>#fill (; 12 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/array/Array<u32>#fill (; 16 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1027,7 +1069,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<u32>#__get (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#__get (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -1049,7 +1091,7 @@
    unreachable
   end
  )
- (func $std/array/isArraysEqual<u32> (; 14 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<u32> (; 18 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $2
   i32.eqz
@@ -1108,7 +1150,7 @@
   end
   i32.const 1
  )
- (func $~lib/array/Array<u32>#fill|trampoline (; 15 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/array/Array<u32>#fill|trampoline (; 19 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -1132,7 +1174,7 @@
   get_local $3
   call $~lib/array/Array<u32>#fill
  )
- (func $std/array/internalCapacity<i32> (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/internalCapacity<i32> (; 20 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   i32.load
@@ -1142,7 +1184,7 @@
   i32.const 2
   i32.shr_s
  )
- (func $~lib/internal/memory/memcpy (; 17 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 21 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2343,7 +2385,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 22 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   get_local $0
   get_local $1
@@ -2570,7 +2612,7 @@
    end
   end
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2686,7 +2728,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<i32>#push (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#push (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2716,7 +2758,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 174
+    i32.const 178
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -2745,7 +2787,7 @@
   end
   get_local $5
  )
- (func $~lib/array/Array<i32>#__get (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -2767,7 +2809,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<i32>#pop (; 22 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#pop (; 26 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2781,7 +2823,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 205
+   i32.const 209
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -2808,7 +2850,7 @@
   i32.store offset=4
   get_local $4
  )
- (func $~lib/array/Array<i32>#concat (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#concat (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2885,7 +2927,7 @@
   end
   get_local $5
  )
- (func $~lib/array/Array<i32>#unshift (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#unshift (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2918,7 +2960,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 295
+    i32.const 299
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -2976,7 +3018,7 @@
   i32.store offset=4
   get_local $5
  )
- (func $~lib/array/Array<i32>#shift (; 25 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#shift (; 29 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2993,7 +3035,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 266
+   i32.const 270
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3052,7 +3094,7 @@
   i32.store offset=4
   get_local $4
  )
- (func $~lib/array/Array<i32>#reverse (; 26 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#reverse (; 30 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3132,7 +3174,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<i32>#indexOf (; 27 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#indexOf (; 31 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3206,7 +3248,7 @@
   end
   i32.const -1
  )
- (func $~lib/array/Array<i32>#splice (; 28 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#splice (; 32 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3291,7 +3333,7 @@
   i32.sub
   i32.store offset=4
  )
- (func $~lib/array/Array<i32>#__set (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 33 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -3312,7 +3354,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 101
+    i32.const 105
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -3344,12 +3386,12 @@
    i32.store offset=8
   end
  )
- (func $start~anonymous|1 (; 30 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|1 (; 34 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 0
   i32.eq
  )
- (func $~lib/array/Array<i32>#findIndex (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#findIndex (; 35 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3413,17 +3455,17 @@
   end
   i32.const -1
  )
- (func $start~anonymous|2 (; 32 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|2 (; 36 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 1
   i32.eq
  )
- (func $start~anonymous|3 (; 33 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|3 (; 37 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 100
   i32.eq
  )
- (func $start~anonymous|4 (; 34 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|4 (; 38 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -3432,12 +3474,12 @@
   i32.const 100
   i32.eq
  )
- (func $start~anonymous|5 (; 35 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|5 (; 39 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 100
   i32.eq
  )
- (func $start~anonymous|6 (; 36 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|6 (; 40 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -3445,12 +3487,12 @@
   i32.const 100
   i32.eq
  )
- (func $start~anonymous|7 (; 37 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|7 (; 41 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 0
   i32.ge_s
  )
- (func $~lib/array/Array<i32>#every (; 38 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#every (; 42 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3515,12 +3557,12 @@
   end
   i32.const 1
  )
- (func $start~anonymous|8 (; 39 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|8 (; 43 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 0
   i32.le_s
  )
- (func $start~anonymous|9 (; 40 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|9 (; 44 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -3529,12 +3571,12 @@
   i32.const 10
   i32.lt_s
  )
- (func $start~anonymous|10 (; 41 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|10 (; 45 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 10
   i32.lt_s
  )
- (func $start~anonymous|11 (; 42 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|11 (; 46 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -3542,12 +3584,12 @@
   i32.const 3
   i32.lt_s
  )
- (func $start~anonymous|12 (; 43 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|12 (; 47 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 3
   i32.ge_s
  )
- (func $~lib/array/Array<i32>#some (; 44 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#some (; 48 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3611,12 +3653,12 @@
   end
   i32.const 0
  )
- (func $start~anonymous|13 (; 45 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|13 (; 49 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const -1
   i32.le_s
  )
- (func $start~anonymous|14 (; 46 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|14 (; 50 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -3625,12 +3667,12 @@
   i32.const 10
   i32.gt_s
  )
- (func $start~anonymous|15 (; 47 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|15 (; 51 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 10
   i32.gt_s
  )
- (func $start~anonymous|16 (; 48 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|16 (; 52 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -3638,13 +3680,13 @@
   i32.const 3
   i32.gt_s
  )
- (func $start~anonymous|17 (; 49 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|17 (; 53 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_global $std/array/i
   get_local $0
   i32.add
   set_global $std/array/i
  )
- (func $~lib/array/Array<i32>#forEach (; 50 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#forEach (; 54 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3701,7 +3743,7 @@
    unreachable
   end
  )
- (func $start~anonymous|18 (; 51 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|18 (; 55 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -3711,13 +3753,13 @@
   i32.add
   set_global $std/array/i
  )
- (func $start~anonymous|19 (; 52 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|19 (; 56 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_global $std/array/i
   get_local $0
   i32.add
   set_global $std/array/i
  )
- (func $start~anonymous|20 (; 53 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|20 (; 57 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -3726,11 +3768,11 @@
   i32.add
   set_global $std/array/i
  )
- (func $start~anonymous|21 (; 54 ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $start~anonymous|21 (; 58 ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   get_local $0
   f32.convert_s/i32
  )
- (func $~lib/array/Array<f32>#constructor (; 55 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#constructor (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3741,7 +3783,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 37
+   i32.const 41
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -3791,7 +3833,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<i32>#map<f32> (; 56 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#map<f32> (; 60 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3867,7 +3909,7 @@
   end
   get_local $4
  )
- (func $~lib/array/Array<f32>#__get (; 57 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (; 61 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -3889,7 +3931,7 @@
    unreachable
   end
  )
- (func $start~anonymous|22 (; 58 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|22 (; 62 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -3900,7 +3942,7 @@
   set_global $std/array/i
   get_local $0
  )
- (func $~lib/array/Array<i32>#map<i32> (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#map<i32> (; 63 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3975,14 +4017,14 @@
   end
   get_local $4
  )
- (func $start~anonymous|23 (; 60 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|23 (; 64 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_global $std/array/i
   get_local $0
   i32.add
   set_global $std/array/i
   get_local $0
  )
- (func $start~anonymous|24 (; 61 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|24 (; 65 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -3992,12 +4034,12 @@
   set_global $std/array/i
   get_local $0
  )
- (func $start~anonymous|25 (; 62 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|25 (; 66 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 2
   i32.ge_s
  )
- (func $~lib/array/Array<i32>#filter (; 63 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#filter (; 67 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4070,7 +4112,7 @@
   end
   get_local $4
  )
- (func $start~anonymous|26 (; 64 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|26 (; 68 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -4083,7 +4125,7 @@
   i32.const 2
   i32.ge_s
  )
- (func $start~anonymous|27 (; 65 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|27 (; 69 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_global $std/array/i
   get_local $0
   i32.add
@@ -4092,7 +4134,7 @@
   i32.const 2
   i32.ge_s
  )
- (func $start~anonymous|28 (; 66 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|28 (; 70 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4104,12 +4146,12 @@
   i32.const 2
   i32.ge_s
  )
- (func $start~anonymous|29 (; 67 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|29 (; 71 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/array/Array<i32>#reduce<i32> (; 68 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduce<i32> (; 72 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4172,12 +4214,12 @@
   end
   get_local $3
  )
- (func $start~anonymous|30 (; 69 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|30 (; 73 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $start~anonymous|31 (; 70 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|31 (; 74 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   i32.const 1
   i32.and
@@ -4189,7 +4231,7 @@
    i32.gt_s
   end
  )
- (func $~lib/array/Array<i32>#reduce<bool> (; 71 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduce<bool> (; 75 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4252,7 +4294,7 @@
   end
   get_local $3
  )
- (func $start~anonymous|32 (; 72 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|32 (; 76 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   i32.const 1
   i32.and
@@ -4264,7 +4306,7 @@
    i32.gt_s
   end
  )
- (func $start~anonymous|33 (; 73 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|33 (; 77 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $3
   i32.const 1
   call $~lib/array/Array<i32>#push
@@ -4273,12 +4315,12 @@
   get_local $1
   i32.add
  )
- (func $start~anonymous|34 (; 74 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|34 (; 78 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $start~anonymous|35 (; 75 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|35 (; 79 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $3
   call $~lib/array/Array<i32>#pop
   drop
@@ -4286,12 +4328,12 @@
   get_local $1
   i32.add
  )
- (func $start~anonymous|36 (; 76 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|36 (; 80 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/array/Array<i32>#reduceRight<i32> (; 77 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduceRight<i32> (; 81 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4341,12 +4383,12 @@
   end
   get_local $3
  )
- (func $start~anonymous|37 (; 78 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|37 (; 82 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $start~anonymous|38 (; 79 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|38 (; 83 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   i32.const 1
   i32.and
@@ -4358,7 +4400,7 @@
    i32.gt_s
   end
  )
- (func $~lib/array/Array<i32>#reduceRight<bool> (; 80 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduceRight<bool> (; 84 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4408,7 +4450,7 @@
   end
   get_local $3
  )
- (func $start~anonymous|39 (; 81 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|39 (; 85 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   i32.const 1
   i32.and
@@ -4420,7 +4462,7 @@
    i32.gt_s
   end
  )
- (func $start~anonymous|40 (; 82 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|40 (; 86 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $3
   i32.const 1
   call $~lib/array/Array<i32>#push
@@ -4429,12 +4471,12 @@
   get_local $1
   i32.add
  )
- (func $start~anonymous|41 (; 83 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|41 (; 87 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $start~anonymous|42 (; 84 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|42 (; 88 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $3
   call $~lib/array/Array<i32>#pop
   drop
@@ -4442,7 +4484,7 @@
   get_local $1
   i32.add
  )
- (func $~lib/math/murmurHash3 (; 85 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (; 89 ;) (type $II) (param $0 i64) (result i64)
   get_local $0
   get_local $0
   i64.const 33
@@ -4471,7 +4513,7 @@
   set_local $0
   get_local $0
  )
- (func $~lib/math/splitMix32 (; 86 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/math/splitMix32 (; 90 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 1831565813
   i32.add
@@ -4506,7 +4548,7 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/math/NativeMath.seedRandom (; 87 ;) (type $Iv) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 91 ;) (type $Iv) (param $0 i64)
   get_local $0
   i64.eqz
   if
@@ -4535,7 +4577,7 @@
   call $~lib/math/splitMix32
   set_global $~lib/math/random_state1_32
  )
- (func $~lib/internal/array/insertionSort<f32> (; 88 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<f32> (; 92 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 f32)
   (local $6 i32)
@@ -4649,10 +4691,10 @@
    unreachable
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 89 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 93 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/internal/array/weakHeapSort<f32> (; 90 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/weakHeapSort<f32> (; 94 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -5083,7 +5125,7 @@
    f32.store offset=8
   end
  )
- (func $~lib/array/Array<f32>#sort (; 91 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#sort (; 95 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5094,7 +5136,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 358
+   i32.const 362
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5194,7 +5236,7 @@
   get_local $0
   return
  )
- (func $~lib/array/Array<f32>#sort|trampoline~anonymous|43 (; 92 ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
+ (func $~lib/array/Array<f32>#sort|trampoline~anonymous|43 (; 96 ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -5227,7 +5269,7 @@
   i32.lt_s
   i32.sub
  )
- (func $~lib/array/Array<f32>#sort|trampoline (; 93 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#sort|trampoline (; 97 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -5246,12 +5288,12 @@
   get_local $1
   call $~lib/array/Array<f32>#sort
  )
- (func $~lib/builtins/isNaN<f32> (; 94 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/builtins/isNaN<f32> (; 98 ;) (type $fi) (param $0 f32) (result i32)
   get_local $0
   get_local $0
   f32.ne
  )
- (func $std/array/isArraysEqual<f32> (; 95 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<f32> (; 99 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $2
   i32.eqz
@@ -5326,7 +5368,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/array/insertionSort<f64> (; 96 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<f64> (; 100 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 f64)
   (local $6 i32)
@@ -5440,7 +5482,7 @@
    unreachable
   end
  )
- (func $~lib/internal/array/weakHeapSort<f64> (; 97 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/weakHeapSort<f64> (; 101 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -5871,7 +5913,7 @@
    f64.store offset=8
   end
  )
- (func $~lib/array/Array<f64>#sort (; 98 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#sort (; 102 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5882,7 +5924,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 358
+   i32.const 362
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5982,7 +6024,7 @@
   get_local $0
   return
  )
- (func $~lib/array/Array<f64>#sort|trampoline~anonymous|44 (; 99 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/array/Array<f64>#sort|trampoline~anonymous|44 (; 103 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   get_local $0
@@ -6015,7 +6057,7 @@
   i64.lt_s
   i32.sub
  )
- (func $~lib/array/Array<f64>#sort|trampoline (; 100 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#sort|trampoline (; 104 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -6034,7 +6076,7 @@
   get_local $1
   call $~lib/array/Array<f64>#sort
  )
- (func $~lib/array/Array<f64>#__get (; 101 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (; 105 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   get_local $0
   i32.load
@@ -6056,12 +6098,12 @@
    unreachable
   end
  )
- (func $~lib/builtins/isNaN<f64> (; 102 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 106 ;) (type $Fi) (param $0 f64) (result i32)
   get_local $0
   get_local $0
   f64.ne
  )
- (func $std/array/isArraysEqual<f64> (; 103 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<f64> (; 107 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $2
   i32.eqz
@@ -6136,7 +6178,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/array/insertionSort<i32> (; 104 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<i32> (; 108 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -6250,7 +6292,7 @@
    unreachable
   end
  )
- (func $~lib/internal/array/weakHeapSort<i32> (; 105 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/weakHeapSort<i32> (; 109 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -6681,7 +6723,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i32>#sort (; 106 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort (; 110 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6692,7 +6734,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 358
+   i32.const 362
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6792,12 +6834,12 @@
   get_local $0
   return
  )
- (func $~lib/array/Array<i32>#sort|trampoline~anonymous|45 (; 107 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort|trampoline~anonymous|45 (; 111 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   i32.sub
  )
- (func $~lib/array/Array<i32>#sort|trampoline (; 108 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort|trampoline (; 112 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -6816,7 +6858,7 @@
   get_local $1
   call $~lib/array/Array<i32>#sort
  )
- (func $std/array/isArraysEqual<i32> (; 109 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<i32> (; 113 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $2
   i32.eqz
@@ -6875,7 +6917,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/array/insertionSort<u32> (; 110 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<u32> (; 114 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -6989,7 +7031,7 @@
    unreachable
   end
  )
- (func $~lib/internal/array/weakHeapSort<u32> (; 111 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/weakHeapSort<u32> (; 115 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -7420,7 +7462,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<u32>#sort (; 112 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort (; 116 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7431,7 +7473,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 358
+   i32.const 362
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7531,7 +7573,7 @@
   get_local $0
   return
  )
- (func $~lib/array/Array<u32>#sort|trampoline~anonymous|46 (; 113 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort|trampoline~anonymous|46 (; 117 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   i32.gt_u
@@ -7540,7 +7582,7 @@
   i32.lt_u
   i32.sub
  )
- (func $~lib/array/Array<u32>#sort|trampoline (; 114 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort|trampoline (; 118 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -7559,7 +7601,7 @@
   get_local $1
   call $~lib/array/Array<u32>#sort
  )
- (func $std/array/createReverseOrderedArray (; 115 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedArray (; 119 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 0
@@ -7600,7 +7642,7 @@
   end
   get_local $1
  )
- (func $~lib/math/NativeMath.random (; 116 ;) (type $F) (result f64)
+ (func $~lib/math/NativeMath.random (; 120 ;) (type $F) (result f64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i64)
@@ -7657,7 +7699,7 @@
   f64.const 1
   f64.sub
  )
- (func $std/array/createRandomOrderedArray (; 117 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomOrderedArray (; 121 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 0
@@ -7698,12 +7740,12 @@
   end
   get_local $1
  )
- (func $std/array/assertSortedDefault<i32>~anonymous|47 (; 118 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/assertSortedDefault<i32>~anonymous|47 (; 122 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   i32.sub
  )
- (func $std/array/isSorted<i32> (; 119 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<i32> (; 123 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -7753,7 +7795,7 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<i32> (; 120 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<i32> (; 124 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   call $~lib/array/Array<i32>#sort
@@ -7762,14 +7804,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 688
+   i32.const 104
+   i32.const 699
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/array/assertSortedDefault<i32> (; 121 ;) (type $iv) (param $0 i32)
+ (func $std/array/assertSortedDefault<i32> (; 125 ;) (type $iv) (param $0 i32)
   get_local $0
   block $~lib/internal/array/defaultComparator<i32>|inlined.1 (result i32)
    i32.const 47
@@ -7777,27 +7819,27 @@
   end
   call $std/array/assertSorted<i32>
  )
- (func $start~anonymous|48 (; 122 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|48 (; 126 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   i32.sub
  )
- (func $start~anonymous|49 (; 123 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|49 (; 127 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $1
   get_local $0
   i32.sub
  )
- (func $start~anonymous|50 (; 124 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|50 (; 128 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   i32.sub
  )
- (func $start~anonymous|51 (; 125 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|51 (; 129 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $1
   get_local $0
   i32.sub
  )
- (func $~lib/array/Array<Array<i32>>#constructor (; 126 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#constructor (; 130 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7808,7 +7850,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 37
+   i32.const 41
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -7858,7 +7900,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<Array<i32>>#__set (; 127 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Array<i32>>#__set (; 131 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -7879,7 +7921,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 101
+    i32.const 105
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -7911,7 +7953,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<Array<i32>>#__get (; 128 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#__get (; 132 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -7933,7 +7975,7 @@
    unreachable
   end
  )
- (func $std/array/createReverseOrderedNestedArray (; 129 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedNestedArray (; 133 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 0
@@ -7984,7 +8026,7 @@
   end
   get_local $1
  )
- (func $start~anonymous|52 (; 130 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|52 (; 134 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   i32.const 0
   call $~lib/array/Array<i32>#__get
@@ -7993,7 +8035,7 @@
   call $~lib/array/Array<i32>#__get
   i32.sub
  )
- (func $~lib/internal/array/insertionSort<Array<i32>> (; 131 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<Array<i32>> (; 135 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -8107,7 +8149,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<Array<i32>>#sort (; 132 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#sort (; 136 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8118,7 +8160,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 358
+   i32.const 362
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8207,7 +8249,7 @@
   get_local $0
   return
  )
- (func $std/array/isSorted<Array<i32>> (; 133 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<Array<i32>> (; 137 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -8257,7 +8299,7 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<Array<i32>> (; 134 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<Array<i32>> (; 138 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   call $~lib/array/Array<Array<i32>>#sort
@@ -8266,14 +8308,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 688
+   i32.const 104
+   i32.const 699
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/array/Array<Proxy<i32>>#constructor (; 135 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Proxy<i32>>#constructor (; 139 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8284,7 +8326,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 37
+   i32.const 41
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -8334,7 +8376,7 @@
   end
   get_local $0
  )
- (func $std/array/Proxy<i32>#constructor (; 136 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/Proxy<i32>#constructor (; 140 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   if (result i32)
@@ -8353,7 +8395,7 @@
   end
   tee_local $0
  )
- (func $~lib/array/Array<Proxy<i32>>#__set (; 137 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Proxy<i32>>#__set (; 141 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -8374,7 +8416,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 101
+    i32.const 105
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -8406,7 +8448,7 @@
    i32.store offset=8
   end
  )
- (func $std/array/createReverseOrderedElementsArray (; 138 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedElementsArray (; 142 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 0
@@ -8449,14 +8491,14 @@
   end
   get_local $1
  )
- (func $start~anonymous|53 (; 139 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|53 (; 143 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   i32.load
   get_local $1
   i32.load
   i32.sub
  )
- (func $~lib/internal/array/insertionSort<Proxy<i32>> (; 140 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<Proxy<i32>> (; 144 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -8570,7 +8612,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<Proxy<i32>>#sort (; 141 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Proxy<i32>>#sort (; 145 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8581,7 +8623,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 358
+   i32.const 362
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8670,7 +8712,7 @@
   get_local $0
   return
  )
- (func $~lib/array/Array<Proxy<i32>>#__get (; 142 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Proxy<i32>>#__get (; 146 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -8692,7 +8734,7 @@
    unreachable
   end
  )
- (func $std/array/isSorted<Proxy<i32>> (; 143 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<Proxy<i32>> (; 147 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -8742,7 +8784,7 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<Proxy<i32>> (; 144 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<Proxy<i32>> (; 148 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   call $~lib/array/Array<Proxy<i32>>#sort
@@ -8751,14 +8793,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 688
+   i32.const 104
+   i32.const 699
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/internal/string/compareUnsafe (; 145 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 149 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -8811,7 +8853,7 @@
   end
   get_local $5
  )
- (func $~lib/string/String.__gt (; 146 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gt (; 150 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8876,7 +8918,7 @@
   i32.const 0
   i32.gt_s
  )
- (func $~lib/string/String.__lt (; 147 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lt (; 151 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8941,7 +8983,7 @@
   i32.const 0
   i32.lt_s
  )
- (func $start~anonymous|54 (; 148 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|54 (; 152 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   call $~lib/string/String.__gt
@@ -8950,7 +8992,7 @@
   call $~lib/string/String.__lt
   i32.sub
  )
- (func $~lib/internal/array/insertionSort<String> (; 149 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<String> (; 153 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -9064,7 +9106,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<String>#sort (; 150 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#sort (; 154 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9075,7 +9117,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 358
+   i32.const 362
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9164,7 +9206,7 @@
   get_local $0
   return
  )
- (func $~lib/array/Array<String>#__get (; 151 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#__get (; 155 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -9186,7 +9228,7 @@
    unreachable
   end
  )
- (func $std/array/isSorted<String> (; 152 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/isSorted<String> (; 156 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -9236,7 +9278,7 @@
   end
   i32.const 1
  )
- (func $std/array/assertSorted<String> (; 153 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<String> (; 157 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   call $~lib/array/Array<String>#sort
@@ -9245,14 +9287,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 688
+   i32.const 104
+   i32.const 699
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $~lib/string/String.__eq (; 154 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 158 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -9296,13 +9338,13 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $~lib/string/String.__ne (; 155 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__ne (; 159 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   call $~lib/string/String.__eq
   i32.eqz
  )
- (func $std/array/isArraysEqual<String> (; 156 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<String> (; 160 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $2
   i32.eqz
@@ -9361,7 +9403,7 @@
   end
   i32.const 1
  )
- (func $~lib/array/Array<String>#constructor (; 157 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#constructor (; 161 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9372,7 +9414,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 37
+   i32.const 41
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -9422,7 +9464,7 @@
   end
   get_local $0
  )
- (func $~lib/internal/string/allocateUnsafe (; 158 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 162 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -9462,7 +9504,7 @@
   i32.store
   get_local $2
  )
- (func $~lib/string/String#charAt (; 159 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#charAt (; 163 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.const 0
@@ -9497,7 +9539,7 @@
   i32.store16 offset=4
   get_local $2
  )
- (func $~lib/internal/string/copyUnsafe (; 160 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 164 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -9526,7 +9568,7 @@
   get_local $7
   call $~lib/internal/memory/memmove
  )
- (func $~lib/string/String#concat (; 161 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 165 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9584,7 +9626,7 @@
   call $~lib/internal/string/copyUnsafe
   get_local $5
  )
- (func $~lib/string/String.__concat (; 162 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 166 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   i32.eqz
   if
@@ -9595,7 +9637,7 @@
   get_local $1
   call $~lib/string/String#concat
  )
- (func $std/array/createRandomString (; 163 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomString (; 167 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -9637,7 +9679,7 @@
   end
   get_local $1
  )
- (func $~lib/array/Array<String>#__set (; 164 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<String>#__set (; 168 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -9658,7 +9700,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 101
+    i32.const 105
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -9690,7 +9732,7 @@
    i32.store offset=8
   end
  )
- (func $std/array/createRandomStringArray (; 165 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomStringArray (; 169 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 0
@@ -9728,7 +9770,7 @@
   end
   get_local $1
  )
- (func $start~anonymous|55 (; 166 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|55 (; 170 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   call $~lib/string/String.__gt
@@ -9737,7 +9779,7 @@
   call $~lib/string/String.__lt
   i32.sub
  )
- (func $~lib/string/String#substring (; 167 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (; 171 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9847,7 +9889,7 @@
   call $~lib/internal/string/copyUnsafe
   get_local $10
  )
- (func $~lib/array/Array<bool>#join (; 168 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<bool>#join (; 172 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10051,7 +10093,7 @@
   get_local $12
   return
  )
- (func $~lib/internal/number/decimalCount32 (; 169 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/decimalCount32 (; 173 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   i32.const 100000
@@ -10120,7 +10162,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/utoa32_lut (; 170 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 174 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -10273,7 +10315,7 @@
    i32.store16 offset=4
   end
  )
- (func $~lib/internal/number/itoa32 (; 171 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa32 (; 175 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -10316,12 +10358,12 @@
   end
   get_local $3
  )
- (func $~lib/internal/number/itoa<i32> (; 172 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i32> (; 176 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/internal/number/itoa32
   return
  )
- (func $~lib/internal/number/itoa_stream<i32> (; 173 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<i32> (; 177 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -10371,7 +10413,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<i32>#join (; 174 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#join (; 178 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10538,7 +10580,7 @@
   get_local $11
   return
  )
- (func $~lib/internal/number/utoa32 (; 175 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/utoa32 (; 179 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -10561,12 +10603,12 @@
   end
   get_local $2
  )
- (func $~lib/internal/number/itoa<u32> (; 176 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u32> (; 180 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/internal/number/utoa32
   return
  )
- (func $~lib/internal/number/itoa_stream<u32> (; 177 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<u32> (; 181 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $0
   get_local $1
@@ -10596,7 +10638,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<u32>#join (; 178 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#join (; 182 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10763,14 +10805,14 @@
   get_local $11
   return
  )
- (func $~lib/builtins/isFinite<f64> (; 179 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 183 ;) (type $Fi) (param $0 f64) (result i32)
   get_local $0
   get_local $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $~lib/internal/number/genDigits (; 180 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/number/genDigits (; 184 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -11322,7 +11364,7 @@
   end
   get_local $15
  )
- (func $~lib/internal/number/prettify (; 181 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/prettify (; 185 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -11676,7 +11718,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/dtoa_core (; 182 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/internal/number/dtoa_core (; 186 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i64)
   (local $4 i32)
@@ -12106,7 +12148,7 @@
   get_local $2
   i32.add
  )
- (func $~lib/internal/number/dtoa (; 183 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/number/dtoa (; 187 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -12172,7 +12214,7 @@
   end
   get_local $3
  )
- (func $~lib/internal/number/dtoa_stream (; 184 ;) (type $iiFi) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
+ (func $~lib/internal/number/dtoa_stream (; 188 ;) (type $iiFi) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -12256,7 +12298,7 @@
   get_local $2
   call $~lib/internal/number/dtoa_core
  )
- (func $~lib/array/Array<f64>#join (; 185 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#join (; 189 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f64)
@@ -12423,7 +12465,7 @@
   get_local $11
   return
  )
- (func $~lib/array/Array<String>#join (; 186 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#join (; 190 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12603,7 +12645,7 @@
   get_local $9
   return
  )
- (func $std/array/Ref#constructor (; 187 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/Ref#constructor (; 191 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   if (result i32)
@@ -12619,7 +12661,7 @@
   end
   tee_local $0
  )
- (func $~lib/array/Array<Ref>#constructor (; 188 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref>#constructor (; 192 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12630,7 +12672,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 37
+   i32.const 41
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -12680,7 +12722,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<Ref>#__unchecked_set (; 189 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref>#__unchecked_set (; 193 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   get_local $0
   i32.load
@@ -12693,7 +12735,7 @@
   get_local $2
   i32.store offset=8
  )
- (func $~lib/array/Array<Ref>#join (; 190 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref>#join (; 194 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12860,7 +12902,7 @@
   get_local $11
   return
  )
- (func $~lib/internal/number/itoa<i8> (; 191 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i8> (; 195 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 24
   i32.shl
@@ -12869,7 +12911,7 @@
   call $~lib/internal/number/itoa32
   return
  )
- (func $~lib/internal/number/itoa_stream<i8> (; 192 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<i8> (; 196 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -12938,7 +12980,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<i8>#join (; 193 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#join (; 197 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13105,14 +13147,14 @@
   get_local $11
   return
  )
- (func $~lib/internal/number/itoa<u16> (; 194 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u16> (; 198 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 65535
   i32.and
   call $~lib/internal/number/utoa32
   return
  )
- (func $~lib/internal/number/itoa_stream<u16> (; 195 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<u16> (; 199 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -13151,7 +13193,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<u16>#join (; 196 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u16>#join (; 200 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13318,7 +13360,7 @@
   get_local $11
   return
  )
- (func $~lib/internal/number/decimalCount64 (; 197 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/decimalCount64 (; 201 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   get_local $0
   i64.const 1000000000000000
@@ -13387,7 +13429,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/utoa64_lut (; 198 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/internal/number/utoa64_lut (; 202 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
@@ -13525,7 +13567,7 @@
   get_local $2
   call $~lib/internal/number/utoa32_lut
  )
- (func $~lib/internal/number/utoa64 (; 199 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/utoa64 (; 203 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -13571,12 +13613,12 @@
   end
   get_local $1
  )
- (func $~lib/internal/number/itoa<u64> (; 200 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa<u64> (; 204 ;) (type $Ii) (param $0 i64) (result i32)
   get_local $0
   call $~lib/internal/number/utoa64
   return
  )
- (func $~lib/internal/number/itoa_stream<u64> (; 201 ;) (type $iiIi) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/internal/number/itoa_stream<u64> (; 205 ;) (type $iiIi) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -13626,7 +13668,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<u64>#join (; 202 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u64>#join (; 206 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i64)
@@ -13793,7 +13835,7 @@
   get_local $11
   return
  )
- (func $~lib/internal/number/itoa64 (; 203 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa64 (; 207 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -13861,12 +13903,12 @@
   end
   get_local $2
  )
- (func $~lib/internal/number/itoa<i64> (; 204 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa<i64> (; 208 ;) (type $Ii) (param $0 i64) (result i32)
   get_local $0
   call $~lib/internal/number/itoa64
   return
  )
- (func $~lib/internal/number/itoa_stream<i64> (; 205 ;) (type $iiIi) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/internal/number/itoa_stream<i64> (; 209 ;) (type $iiIi) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -13938,7 +13980,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<i64>#join (; 206 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i64>#join (; 210 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i64)
@@ -14105,7 +14147,7 @@
   get_local $11
   return
  )
- (func $~lib/array/Array<Array<i32>>#join (; 207 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#join (; 211 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14227,14 +14269,14 @@
   get_local $3
   return
  )
- (func $~lib/internal/number/itoa<u8> (; 208 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u8> (; 212 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 255
   i32.and
   call $~lib/internal/number/utoa32
   return
  )
- (func $~lib/internal/number/itoa_stream<u8> (; 209 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<u8> (; 213 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -14273,7 +14315,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<u8>#join (; 210 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#join (; 214 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14440,7 +14482,7 @@
   get_local $11
   return
  )
- (func $~lib/array/Array<Array<u8>>#join (; 211 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<u8>>#join (; 215 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14562,7 +14604,7 @@
   get_local $3
   return
  )
- (func $~lib/array/Array<Array<u32>>#join (; 212 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<u32>>#join (; 216 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14684,7 +14726,7 @@
   get_local $3
   return
  )
- (func $~lib/array/Array<Array<Array<u32>>>#join (; 213 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<Array<u32>>>#join (; 217 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14806,7 +14848,7 @@
   get_local $3
   return
  )
- (func $start (; 214 ;) (type $v)
+ (func $start (; 218 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -14825,6 +14867,63 @@
   i32.const 0
   call $~lib/array/Array<i32>#constructor
   set_global $std/array/arr
+  get_global $std/array/Null
+  call $~lib/array/Array.isArray<Array<i32> | null>
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 36
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/arr
+  call $~lib/array/Array.isArray<Array<i32>>
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 37
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block (result i32)
+   i32.const 0
+   call $~lib/memory/memory.allocate
+   set_local $0
+   get_local $0
+  end
+  call $~lib/array/Array.isArray<P>
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 38
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/num
+  call $~lib/array/Array.isArray<i32>
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 40
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
   get_global $std/array/arr8
   i32.const 1
   i32.const 1
@@ -14832,14 +14931,14 @@
   call $~lib/array/Array<u8>#fill
   drop
   get_global $std/array/arr8
-  i32.const 144
+  i32.const 176
   i32.const 0
   call $std/array/isArraysEqual<u8>
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 36
+   i32.const 104
+   i32.const 47
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -14861,8 +14960,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 39
+   i32.const 104
+   i32.const 50
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -14880,8 +14979,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 42
+   i32.const 104
+   i32.const 53
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -14903,8 +15002,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 45
+   i32.const 104
+   i32.const 56
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -14922,8 +15021,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 48
+   i32.const 104
+   i32.const 59
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -14941,8 +15040,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 53
+   i32.const 104
+   i32.const 64
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -14964,8 +15063,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 56
+   i32.const 104
+   i32.const 67
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -14983,8 +15082,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 59
+   i32.const 104
+   i32.const 70
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15006,8 +15105,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 62
+   i32.const 104
+   i32.const 73
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15025,8 +15124,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 65
+   i32.const 104
+   i32.const 76
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15042,8 +15141,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 69
+   i32.const 104
+   i32.const 80
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15055,8 +15154,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 70
+   i32.const 104
+   i32.const 81
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15073,8 +15172,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 74
+   i32.const 104
+   i32.const 85
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15090,8 +15189,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 75
+   i32.const 104
+   i32.const 86
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15103,8 +15202,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 76
+   i32.const 104
+   i32.const 87
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15118,8 +15217,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 80
+   i32.const 104
+   i32.const 91
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15135,8 +15234,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 81
+   i32.const 104
+   i32.const 92
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15148,8 +15247,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 82
+   i32.const 104
+   i32.const 93
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15169,8 +15268,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 86
+   i32.const 104
+   i32.const 97
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15182,8 +15281,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 87
+   i32.const 104
+   i32.const 98
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15196,8 +15295,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 88
+   i32.const 104
+   i32.const 99
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15217,8 +15316,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 92
+   i32.const 104
+   i32.const 103
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15230,8 +15329,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 93
+   i32.const 104
+   i32.const 104
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15244,8 +15343,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 94
+   i32.const 104
+   i32.const 105
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15258,8 +15357,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 95
+   i32.const 104
+   i32.const 106
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15279,8 +15378,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 99
+   i32.const 104
+   i32.const 110
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15292,8 +15391,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 100
+   i32.const 104
+   i32.const 111
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15306,8 +15405,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 101
+   i32.const 104
+   i32.const 112
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15320,8 +15419,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 102
+   i32.const 104
+   i32.const 113
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15334,8 +15433,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 103
+   i32.const 104
+   i32.const 114
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15355,8 +15454,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 110
+   i32.const 104
+   i32.const 121
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15372,8 +15471,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 111
+   i32.const 104
+   i32.const 122
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15389,8 +15488,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 112
+   i32.const 104
+   i32.const 123
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15406,8 +15505,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 115
+   i32.const 104
+   i32.const 126
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15420,8 +15519,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 117
+   i32.const 104
+   i32.const 128
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15434,8 +15533,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 118
+   i32.const 104
+   i32.const 129
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15448,8 +15547,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 119
+   i32.const 104
+   i32.const 130
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15473,8 +15572,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 126
+   i32.const 104
+   i32.const 137
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15490,8 +15589,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 127
+   i32.const 104
+   i32.const 138
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15507,8 +15606,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 128
+   i32.const 104
+   i32.const 139
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15521,8 +15620,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 129
+   i32.const 104
+   i32.const 140
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15535,8 +15634,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 130
+   i32.const 104
+   i32.const 141
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15549,8 +15648,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 131
+   i32.const 104
+   i32.const 142
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15563,8 +15662,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 132
+   i32.const 104
+   i32.const 143
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15577,8 +15676,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 133
+   i32.const 104
+   i32.const 144
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15597,8 +15696,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 136
+   i32.const 104
+   i32.const 147
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15618,8 +15717,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 139
+   i32.const 104
+   i32.const 150
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15632,8 +15731,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 140
+   i32.const 104
+   i32.const 151
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15649,8 +15748,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 143
+   i32.const 104
+   i32.const 154
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15670,8 +15769,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 145
+   i32.const 104
+   i32.const 156
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15687,8 +15786,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 146
+   i32.const 104
+   i32.const 157
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15708,8 +15807,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 152
+   i32.const 104
+   i32.const 163
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15721,8 +15820,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 153
+   i32.const 104
+   i32.const 164
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15735,8 +15834,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 154
+   i32.const 104
+   i32.const 165
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15749,8 +15848,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 155
+   i32.const 104
+   i32.const 166
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15763,8 +15862,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 156
+   i32.const 104
+   i32.const 167
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15777,8 +15876,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 157
+   i32.const 104
+   i32.const 168
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15798,8 +15897,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 161
+   i32.const 104
+   i32.const 172
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15811,8 +15910,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 162
+   i32.const 104
+   i32.const 173
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15825,8 +15924,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 163
+   i32.const 104
+   i32.const 174
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15839,8 +15938,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 164
+   i32.const 104
+   i32.const 175
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15853,8 +15952,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 165
+   i32.const 104
+   i32.const 176
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15867,8 +15966,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 166
+   i32.const 104
+   i32.const 177
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15881,8 +15980,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 167
+   i32.const 104
+   i32.const 178
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15896,8 +15995,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 173
+   i32.const 104
+   i32.const 184
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15913,8 +16012,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 174
+   i32.const 104
+   i32.const 185
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15926,8 +16025,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 175
+   i32.const 104
+   i32.const 186
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15940,8 +16039,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 176
+   i32.const 104
+   i32.const 187
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15954,8 +16053,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 177
+   i32.const 104
+   i32.const 188
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15968,8 +16067,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 178
+   i32.const 104
+   i32.const 189
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15982,8 +16081,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 179
+   i32.const 104
+   i32.const 190
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -15997,8 +16096,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 183
+   i32.const 104
+   i32.const 194
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16014,8 +16113,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 184
+   i32.const 104
+   i32.const 195
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16027,8 +16126,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 185
+   i32.const 104
+   i32.const 196
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16041,8 +16140,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 186
+   i32.const 104
+   i32.const 197
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16055,8 +16154,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 187
+   i32.const 104
+   i32.const 198
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16069,8 +16168,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 188
+   i32.const 104
+   i32.const 199
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16089,8 +16188,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 194
+   i32.const 104
+   i32.const 205
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16102,8 +16201,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 195
+   i32.const 104
+   i32.const 206
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16116,8 +16215,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 196
+   i32.const 104
+   i32.const 207
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16130,8 +16229,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 197
+   i32.const 104
+   i32.const 208
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16144,8 +16243,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 198
+   i32.const 104
+   i32.const 209
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16169,8 +16268,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 207
+   i32.const 104
+   i32.const 218
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16186,8 +16285,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 211
+   i32.const 104
+   i32.const 222
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16203,8 +16302,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 215
+   i32.const 104
+   i32.const 226
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16220,8 +16319,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 219
+   i32.const 104
+   i32.const 230
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16237,8 +16336,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 223
+   i32.const 104
+   i32.const 234
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16254,8 +16353,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 227
+   i32.const 104
+   i32.const 238
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16271,8 +16370,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 231
+   i32.const 104
+   i32.const 242
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16288,8 +16387,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 235
+   i32.const 104
+   i32.const 246
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16305,8 +16404,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 239
+   i32.const 104
+   i32.const 250
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16322,8 +16421,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 243
+   i32.const 104
+   i32.const 254
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16351,8 +16450,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 249
+   i32.const 104
+   i32.const 260
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16380,8 +16479,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 253
+   i32.const 104
+   i32.const 264
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16409,8 +16508,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 257
+   i32.const 104
+   i32.const 268
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16438,8 +16537,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 261
+   i32.const 104
+   i32.const 272
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16467,8 +16566,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 265
+   i32.const 104
+   i32.const 276
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16496,8 +16595,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 269
+   i32.const 104
+   i32.const 280
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16525,8 +16624,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 273
+   i32.const 104
+   i32.const 284
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16554,8 +16653,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 277
+   i32.const 104
+   i32.const 288
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16583,8 +16682,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 281
+   i32.const 104
+   i32.const 292
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16612,8 +16711,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 285
+   i32.const 104
+   i32.const 296
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16633,8 +16732,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 289
+   i32.const 104
+   i32.const 300
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16646,8 +16745,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 290
+   i32.const 104
+   i32.const 301
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16660,8 +16759,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 291
+   i32.const 104
+   i32.const 302
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16674,8 +16773,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 292
+   i32.const 104
+   i32.const 303
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16706,8 +16805,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 302
+   i32.const 104
+   i32.const 313
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16722,8 +16821,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 305
+   i32.const 104
+   i32.const 316
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16738,8 +16837,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 308
+   i32.const 104
+   i32.const 319
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16754,8 +16853,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 316
+   i32.const 104
+   i32.const 327
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16771,8 +16870,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 317
+   i32.const 104
+   i32.const 328
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16787,8 +16886,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 319
+   i32.const 104
+   i32.const 330
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16815,8 +16914,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 332
+   i32.const 104
+   i32.const 343
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16832,8 +16931,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 333
+   i32.const 104
+   i32.const 344
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16856,8 +16955,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 341
+   i32.const 104
+   i32.const 352
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16872,8 +16971,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 344
+   i32.const 104
+   i32.const 355
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16888,8 +16987,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 352
+   i32.const 104
+   i32.const 363
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16905,8 +17004,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 353
+   i32.const 104
+   i32.const 364
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16921,8 +17020,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 355
+   i32.const 104
+   i32.const 366
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16949,8 +17048,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 368
+   i32.const 104
+   i32.const 379
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16966,8 +17065,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 369
+   i32.const 104
+   i32.const 380
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -16990,8 +17089,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 377
+   i32.const 104
+   i32.const 388
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17006,8 +17105,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 380
+   i32.const 104
+   i32.const 391
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17022,8 +17121,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 388
+   i32.const 104
+   i32.const 399
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17039,8 +17138,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 389
+   i32.const 104
+   i32.const 400
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17055,8 +17154,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 391
+   i32.const 104
+   i32.const 402
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17083,8 +17182,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 404
+   i32.const 104
+   i32.const 415
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17100,8 +17199,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 405
+   i32.const 104
+   i32.const 416
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17125,8 +17224,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 414
+   i32.const 104
+   i32.const 425
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17142,8 +17241,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 423
+   i32.const 104
+   i32.const 434
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17159,8 +17258,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 424
+   i32.const 104
+   i32.const 435
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17176,8 +17275,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 427
+   i32.const 104
+   i32.const 438
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17205,8 +17304,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 441
+   i32.const 104
+   i32.const 452
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17222,8 +17321,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 442
+   i32.const 104
+   i32.const 453
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17251,8 +17350,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 451
+   i32.const 104
+   i32.const 462
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17268,8 +17367,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 452
+   i32.const 104
+   i32.const 463
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17286,8 +17385,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 461
+   i32.const 104
+   i32.const 472
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17303,8 +17402,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 462
+   i32.const 104
+   i32.const 473
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17321,8 +17420,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 469
+   i32.const 104
+   i32.const 480
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17351,8 +17450,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 484
+   i32.const 104
+   i32.const 495
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17368,8 +17467,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 485
+   i32.const 104
+   i32.const 496
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17397,8 +17496,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 493
+   i32.const 104
+   i32.const 504
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17415,8 +17514,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 502
+   i32.const 104
+   i32.const 513
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17432,8 +17531,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 503
+   i32.const 104
+   i32.const 514
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17450,8 +17549,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 510
+   i32.const 104
+   i32.const 521
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17480,8 +17579,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 525
+   i32.const 104
+   i32.const 536
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17497,8 +17596,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 526
+   i32.const 104
+   i32.const 537
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17522,8 +17621,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 534
+   i32.const 104
+   i32.const 545
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17539,8 +17638,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 538
+   i32.const 104
+   i32.const 549
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17558,8 +17657,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 541
+   i32.const 104
+   i32.const 552
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17577,8 +17676,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 544
+   i32.const 104
+   i32.const 555
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17594,8 +17693,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 552
+   i32.const 104
+   i32.const 563
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17611,8 +17710,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 553
+   i32.const 104
+   i32.const 564
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17628,8 +17727,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 555
+   i32.const 104
+   i32.const 566
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17657,8 +17756,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 568
+   i32.const 104
+   i32.const 579
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17674,8 +17773,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 569
+   i32.const 104
+   i32.const 580
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17699,8 +17798,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 577
+   i32.const 104
+   i32.const 588
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17716,8 +17815,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 581
+   i32.const 104
+   i32.const 592
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17735,8 +17834,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 584
+   i32.const 104
+   i32.const 595
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17754,8 +17853,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 587
+   i32.const 104
+   i32.const 598
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17771,8 +17870,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 595
+   i32.const 104
+   i32.const 606
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17788,8 +17887,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 596
+   i32.const 104
+   i32.const 607
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17805,8 +17904,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 598
+   i32.const 104
+   i32.const 609
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17834,8 +17933,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 611
+   i32.const 104
+   i32.const 622
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17851,8 +17950,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 612
+   i32.const 104
+   i32.const 623
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17891,8 +17990,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 699
+   i32.const 104
+   i32.const 710
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17912,8 +18011,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 703
+   i32.const 104
+   i32.const 714
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17933,8 +18032,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 707
+   i32.const 104
+   i32.const 718
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17954,8 +18053,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 711
+   i32.const 104
+   i32.const 722
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -17986,8 +18085,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 731
+   i32.const 104
+   i32.const 742
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18001,8 +18100,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 734
+   i32.const 104
+   i32.const 745
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18016,8 +18115,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 737
+   i32.const 104
+   i32.const 748
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18031,8 +18130,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 740
+   i32.const 104
+   i32.const 751
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18046,8 +18145,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 743
+   i32.const 104
+   i32.const 754
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18061,8 +18160,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 746
+   i32.const 104
+   i32.const 757
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18076,8 +18175,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 749
+   i32.const 104
+   i32.const 760
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18124,8 +18223,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 778
+   i32.const 104
+   i32.const 789
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18144,8 +18243,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 787
+   i32.const 104
+   i32.const 798
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18158,8 +18257,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 788
+   i32.const 104
+   i32.const 799
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18172,8 +18271,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 789
+   i32.const 104
+   i32.const 800
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18186,8 +18285,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 790
+   i32.const 104
+   i32.const 801
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18200,8 +18299,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 791
+   i32.const 104
+   i32.const 802
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18214,8 +18313,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 792
+   i32.const 104
+   i32.const 803
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18250,8 +18349,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 794
+   i32.const 104
+   i32.const 805
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18268,8 +18367,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 798
+   i32.const 104
+   i32.const 809
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18286,8 +18385,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 799
+   i32.const 104
+   i32.const 810
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18304,8 +18403,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 800
+   i32.const 104
+   i32.const 811
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18322,8 +18421,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 801
+   i32.const 104
+   i32.const 812
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18340,8 +18439,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 803
+   i32.const 104
+   i32.const 814
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18358,8 +18457,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 804
+   i32.const 104
+   i32.const 815
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18376,8 +18475,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 805
+   i32.const 104
+   i32.const 816
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18394,8 +18493,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 806
+   i32.const 104
+   i32.const 817
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18412,8 +18511,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 807
+   i32.const 104
+   i32.const 818
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18430,8 +18529,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 808
+   i32.const 104
+   i32.const 819
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18448,8 +18547,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 811
+   i32.const 104
+   i32.const 822
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18466,8 +18565,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 814
+   i32.const 104
+   i32.const 825
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -18484,13 +18583,13 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 152
-   i32.const 817
+   i32.const 104
+   i32.const 828
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
  )
- (func $null (; 215 ;) (type $v)
+ (func $null (; 219 ;) (type $v)
  )
 )
