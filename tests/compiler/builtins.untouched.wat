@@ -1952,6 +1952,15 @@
    f32.abs
    get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    f32.le
+   tee_local $0
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -1973,6 +1982,15 @@
    f32.abs
    get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    f32.le
+   tee_local $0
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -1994,6 +2012,15 @@
    f32.abs
    get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    f32.le
+   tee_local $0
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2015,6 +2042,15 @@
    f32.abs
    get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    f32.le
+   tee_local $0
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2036,6 +2072,15 @@
    f32.abs
    get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    f32.le
+   tee_local $0
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2057,6 +2102,15 @@
    f32.abs
    get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    f32.le
+   tee_local $0
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2078,6 +2132,15 @@
    f32.abs
    get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    f32.le
+   tee_local $0
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2101,6 +2164,15 @@
    f32.abs
    get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    f32.le
+   tee_local $0
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2111,6 +2183,36 @@
    i32.const 0
    i32.const 8
    i32.const 325
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/f32.isSafeInteger|inlined.8 (result i32)
+   f32.const 0.5
+   set_local $4
+   get_local $4
+   f32.abs
+   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
+   f32.le
+   tee_local $0
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
+  end
+  i32.const 1
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 326
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2145,7 +2247,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 326
+   i32.const 327
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2180,7 +2282,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 327
+   i32.const 328
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2215,7 +2317,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 328
+   i32.const 329
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2250,7 +2352,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 329
+   i32.const 330
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2285,7 +2387,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 330
+   i32.const 331
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2320,7 +2422,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 331
+   i32.const 332
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2355,7 +2457,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 332
+   i32.const 333
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2390,7 +2492,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 333
+   i32.const 334
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2425,7 +2527,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 334
+   i32.const 335
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2460,7 +2562,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 335
+   i32.const 336
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2495,7 +2597,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 336
+   i32.const 337
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2507,7 +2609,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 338
+   i32.const 339
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2519,7 +2621,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 339
+   i32.const 340
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2531,7 +2633,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 340
+   i32.const 341
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2543,7 +2645,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 341
+   i32.const 342
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2555,7 +2657,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 342
+   i32.const 343
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2567,7 +2669,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 343
+   i32.const 344
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2585,7 +2687,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 344
+   i32.const 345
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2599,6 +2701,15 @@
    f64.abs
    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    f64.le
+   tee_local $0
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2608,7 +2719,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 345
+   i32.const 346
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2620,27 +2731,15 @@
    f64.abs
    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    f64.le
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 346
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isSafeInteger|inlined.2 (result i32)
-   f64.const 0
-   set_local $5
-   get_local $5
-   f64.abs
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.le
+   tee_local $0
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2655,13 +2754,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f64.isSafeInteger|inlined.3 (result i32)
-   f64.const -0
+  block $~lib/builtins/f64.isSafeInteger|inlined.2 (result i32)
+   f64.const 0
    set_local $5
    get_local $5
    f64.abs
    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    f64.le
+   tee_local $0
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2676,17 +2784,26 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f64.isSafeInteger|inlined.4 (result i32)
-   f64.const nan:0x8000000000000
+  block $~lib/builtins/f64.isSafeInteger|inlined.3 (result i32)
+   f64.const -0
    set_local $5
    get_local $5
    f64.abs
    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    f64.le
+   tee_local $0
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
-  i32.const 0
+  i32.const 1
   i32.eq
   i32.eqz
   if
@@ -2697,13 +2814,22 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f64.isSafeInteger|inlined.5 (result i32)
-   f64.const inf
+  block $~lib/builtins/f64.isSafeInteger|inlined.4 (result i32)
+   f64.const nan:0x8000000000000
    set_local $5
    get_local $5
    f64.abs
    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    f64.le
+   tee_local $0
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2718,6 +2844,36 @@
    call $~lib/env/abort
    unreachable
   end
+  block $~lib/builtins/f64.isSafeInteger|inlined.5 (result i32)
+   f64.const inf
+   set_local $5
+   get_local $5
+   f64.abs
+   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+   f64.le
+   tee_local $0
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
+  end
+  i32.const 1
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 351
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
   block $~lib/builtins/f64.isSafeInteger|inlined.6 (result i32)
    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    set_local $5
@@ -2725,6 +2881,15 @@
    f64.abs
    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    f64.le
+   tee_local $0
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2734,7 +2899,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 351
+   i32.const 352
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2748,6 +2913,15 @@
    f64.abs
    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    f64.le
+   tee_local $0
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
   end
   i32.const 1
   i32.and
@@ -2757,7 +2931,37 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 352
+   i32.const 353
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/f64.isSafeInteger|inlined.8 (result i32)
+   f64.const 0.5
+   set_local $5
+   get_local $5
+   f64.abs
+   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+   f64.le
+   tee_local $0
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
+  end
+  i32.const 1
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 354
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2792,7 +2996,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 353
+   i32.const 355
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2827,7 +3031,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 354
+   i32.const 356
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2862,7 +3066,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 355
+   i32.const 357
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2897,7 +3101,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 356
+   i32.const 358
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2932,7 +3136,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 357
+   i32.const 359
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2967,7 +3171,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 358
+   i32.const 360
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3002,7 +3206,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 359
+   i32.const 361
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3037,7 +3241,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 360
+   i32.const 362
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3072,7 +3276,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 361
+   i32.const 363
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3107,7 +3311,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 362
+   i32.const 364
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3142,7 +3346,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 363
+   i32.const 365
    i32.const 0
    call $~lib/env/abort
    unreachable
