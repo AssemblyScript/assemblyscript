@@ -236,10 +236,6 @@ declare namespace u16 {
   export const MIN_VALUE: u16;
   /** Largest representable value. */
   export const MAX_VALUE: u16;
-  /** Determines whether the provided value is a number that is a safe integer. */
-  export function isSafeInteger(value: u16): bool;
-  /** Determines whether the passed value is an integer. */
-  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
 declare function u32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
@@ -248,10 +244,6 @@ declare namespace u32 {
   export const MIN_VALUE: u32;
   /** Largest representable value. */
   export const MAX_VALUE: u32;
-  /** Determines whether the provided value is a number that is a safe integer. */
-  export function isSafeInteger(value: u32): bool;
-  /** Determines whether the passed value is an integer. */
-  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
 declare function u64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -294,10 +286,18 @@ declare namespace f32 {
   export function load(offset: usize, constantOffset?: usize): f32;
   /** Stores a 32-bit float to memory. */
   export function store(offset: usize, value: f32, constantOffset?: usize): void;
-  /** Determines whether the provided value is a number that is a safe integer. */
+  /** Returns a boolean value that indicates whether a value is the reserved value NaN (not a number). */
+  export function isNaN(value: f32): bool;
+  /** Returns true if passed value is finite. */
+  export function isFinite(value: f32): bool;
+  /** Returns true if the value passed is a safe integer. */
   export function isSafeInteger(value: f32): bool;
-  /** Determines whether the passed value is an integer. */
+  /** Returns true if the value passed is an integer, false otherwise. */
   export function isInteger(value: f32): bool;
+  /** Converts a string to a floating-point number. */
+  export function parseFloat(string: string): f32;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f64;
@@ -318,10 +318,18 @@ declare namespace f64 {
   export function load(offset: usize, constantOffset?: usize): f64;
   /** Stores a 64-bit float to memory. */
   export function store(offset: usize, value: f64, constantOffset?: usize): void;
-  /** Determines whether the provided value is a number that is a safe integer. */
+  /** Returns a boolean value that indicates whether a value is the reserved value NaN (not a number). */
+  export function isNaN(value: f32): bool;
+  /** Returns true if passed value is finite. */
+  export function isFinite(value: f32): bool;
+  /** Returns true if the value passed is a safe integer. */
   export function isSafeInteger(value: f64): bool;
-  /** Determines whether the passed value is an integer. */
+  /** Returns true if the value passed is an integer, false otherwise. */
   export function isInteger(value: f64): bool;
+  /** Converts a string to a floating-point number. */
+  export function parseFloat(string: string): f64;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): f64;
 }
 
 // User-defined diagnostic macros
