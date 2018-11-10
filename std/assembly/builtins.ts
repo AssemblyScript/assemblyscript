@@ -46,8 +46,6 @@
 export namespace i8 {
   export const MIN_VALUE: i8 = -128;
   export const MAX_VALUE: i8 =  127;
-  @inline export function isSafeInteger(value: i8): bool { return true }
-  @inline export function isInteger<T>(value: T): bool { return isInteger<T>(value) }
   @inline export function parseInt(value: string): i8 { return <i8>parseI32(value) }
   @inline export function parseFloat(value: string): i8 { return <i8>parseFloat(value) }
 }
@@ -56,8 +54,6 @@ export namespace i8 {
 export namespace i16 {
   export const MIN_VALUE: i16 = -32768;
   export const MAX_VALUE: i16 =  32767;
-  @inline export function isSafeInteger(value: i16): bool { return true }
-  @inline export function isInteger<T>(value: T): bool { return isInteger<T>(value) }
   @inline export function parseInt(value: string): i16 { return <i16>parseI32(value) }
   @inline export function parseFloat(value: string): i16 { return <i16>parseFloat(value) }
 }
@@ -121,8 +117,6 @@ export namespace isize {
   export const MAX_VALUE: isize = sizeof<i32>() == sizeof<isize>()
     ? 2147483647
     : <isize>9223372036854775807;
-  @inline export function isSafeInteger(value: usize): bool { return true }
-  @inline export function isInteger<T>(value: T): bool { return isInteger<T>(value) }
   @inline export function parseInt(value: string): isize { return <isize>parseI64(value) }
   @inline export function parseFloat(value: string): isize { return <isize>parseFloat(value) }
 }
@@ -131,8 +125,6 @@ export namespace isize {
 export namespace u8 {
   export const MIN_VALUE: u8 = 0;
   export const MAX_VALUE: u8 = 255;
-  @inline export function isSafeInteger(value: usize): bool { return true }
-  @inline export function isInteger<T>(value: T): bool { return isInteger<T>(value) }
   @inline export function parseInt(value: string): u8 { return <u8>parseI32(value) }
   @inline export function parseFloat(value: string): u8 { return <u8>parseFloat(value) }
 }
@@ -141,8 +133,6 @@ export namespace u8 {
 export namespace u16 {
   export const MIN_VALUE: u16 = 0;
   export const MAX_VALUE: u16 = 65535;
-  @inline export function isSafeInteger(value: usize): bool { return true }
-  @inline export function isInteger<T>(value: T): bool { return isInteger<T>(value) }
   @inline export function parseInt(value: string): u16 { return <u16>parseI32(value) }
   @inline export function parseFloat(value: string): u16 { return <u16>parseFloat(value) }
 }
@@ -151,8 +141,6 @@ export namespace u16 {
 export namespace u32 {
   export const MIN_VALUE: u32 = 0;
   export const MAX_VALUE: u32 = 4294967295;
-  @inline export function isSafeInteger(value: usize): bool { return true }
-  @inline export function isInteger<T>(value: T): bool { return isInteger<T>(value) }
   @inline export function parseInt(value: string): u32 { return <u32>parseI32(value) }
   @inline export function parseFloat(value: string): u32 { return <u32>parseFloat(value) }
 }
@@ -161,8 +149,6 @@ export namespace u32 {
 export namespace u64 {
   export const MIN_VALUE: u64 = 0;
   export const MAX_VALUE: u64 = 18446744073709551615;
-  @inline export function isSafeInteger(value: usize): bool { return true }
-  @inline export function isInteger<T>(value: T): bool { return isInteger<T>(value) }
   @inline export function parseInt(value: string): u64 { return <u64>parseI64(value) }
   @inline export function parseFloat(value: string): u64 { return <u64>parseFloat(value) }
 }
@@ -173,8 +159,6 @@ export namespace usize {
   export const MAX_VALUE: usize = sizeof<u32>() == sizeof<usize>()
     ? 4294967295
     : <usize>18446744073709551615;
-  @inline export function isSafeInteger(value: usize): bool { return true }
-  @inline export function isInteger<T>(value: T): bool { return isInteger<T>(value) }
   @inline export function parseInt(value: string): usize { return <usize>parseI64(value) }
   @inline export function parseFloat(value: string): usize { return <usize>parseFloat(value) }
 }
@@ -211,7 +195,7 @@ export namespace f32 {
   @inline  export function isNaN(value: f32): bool { return isNaN<f32>(value) }
   @inline  export function isFinite(value: f32): bool { return isFinite<f32>(value) }
   @inline  export function isSafeInteger(value: f32): bool { return abs(value) <= f32.MAX_SAFE_INTEGER }
-  @inline  export function isInteger<T>(value: T): bool { return isInteger<T>(value) }
+  @inline  export function isInteger(value: f32): bool { return isFinite<f32>(value) && trunc<f32>(value) == value }
   @inline  export function parseInt(value: string): f32 { return <f32>parseI64(value) }
   @inline  export function parseFloat(value: string): f32 { return <f32>parseFloat(value) }
 }
@@ -242,7 +226,7 @@ export namespace f64 {
   @inline  export function isNaN(value: f64): bool { return isNaN<f64>(value) }
   @inline  export function isFinite(value: f64): bool { return isFinite<f64>(value) }
   @inline  export function isSafeInteger(value: f64): bool { return abs(value) <= f64.MAX_SAFE_INTEGER }
-  @inline  export function isInteger<T>(value: T): bool { return isInteger<T>(value) }
+  @inline  export function isInteger(value: f64): bool { return isFinite<f64>(value) && trunc<f64>(value) == value }
   @inline  export function parseInt(value: string): f64 { return <f64>parseI64(value) }
   @inline  export function parseFloat(value: string): f64 { return parseFloat(value) }
 }
