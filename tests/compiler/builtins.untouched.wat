@@ -2009,6 +2009,27 @@
    unreachable
   end
   block $~lib/builtins/f32.isSafeInteger|inlined.3 (result i32)
+   f32.const -0
+   set_local $4
+   get_local $4
+   f32.abs
+   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
+   f32.le
+  end
+  i32.const 1
+  i32.and
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 321
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/f32.isSafeInteger|inlined.4 (result i32)
    f32.const nan:0x400000
    set_local $4
    get_local $4
@@ -2024,12 +2045,12 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 321
+   i32.const 322
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f32.isSafeInteger|inlined.4 (result i32)
+  block $~lib/builtins/f32.isSafeInteger|inlined.5 (result i32)
    get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    set_local $4
    get_local $4
@@ -2045,12 +2066,12 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 322
+   i32.const 323
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f32.isSafeInteger|inlined.5 (result i32)
+  block $~lib/builtins/f32.isSafeInteger|inlined.6 (result i32)
    get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    f32.const 1
    f32.add
@@ -2068,7 +2089,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 323
+   i32.const 324
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2103,13 +2124,13 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 324
+   i32.const 325
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   block $~lib/builtins/f32.isInteger|inlined.1 (result i32)
-   f32.const nan:0x400000
+   f32.const -0
    set_local $4
    block $~lib/builtins/isFinite<f32>|inlined.9 (result i32)
     get_local $4
@@ -2132,42 +2153,7 @@
   end
   i32.const 1
   i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 325
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.2 (result i32)
-   f32.const inf
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.10 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
   i32.const 1
-  i32.and
-  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -2178,10 +2164,10 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f32.isInteger|inlined.3 (result i32)
-   get_global $~lib/builtins/f32.EPSILON
+  block $~lib/builtins/f32.isInteger|inlined.2 (result i32)
+   f32.const nan:0x400000
    set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.11 (result i32)
+   block $~lib/builtins/isFinite<f32>|inlined.10 (result i32)
     get_local $4
     get_local $4
     f32.sub
@@ -2213,8 +2199,43 @@
    call $~lib/env/abort
    unreachable
   end
+  block $~lib/builtins/f32.isInteger|inlined.3 (result i32)
+   f32.const inf
+   set_local $4
+   block $~lib/builtins/isFinite<f32>|inlined.11 (result i32)
+    get_local $4
+    get_local $4
+    f32.sub
+    f32.const 0
+    f32.eq
+   end
+   tee_local $0
+   i32.const 1
+   i32.and
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
+  end
+  i32.const 1
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 328
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
   block $~lib/builtins/f32.isInteger|inlined.4 (result i32)
-   f32.const 1
+   get_global $~lib/builtins/f32.EPSILON
    set_local $4
    block $~lib/builtins/isFinite<f32>|inlined.12 (result i32)
     get_local $4
@@ -2237,42 +2258,7 @@
   end
   i32.const 1
   i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 328
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.5 (result i32)
-   f32.const -1
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.13 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -2283,10 +2269,10 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f32.isInteger|inlined.6 (result i32)
-   get_global $~lib/builtins/f32.MIN_SAFE_INTEGER
+  block $~lib/builtins/f32.isInteger|inlined.5 (result i32)
+   f32.const 1
    set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.14 (result i32)
+   block $~lib/builtins/isFinite<f32>|inlined.13 (result i32)
     get_local $4
     get_local $4
     f32.sub
@@ -2318,10 +2304,10 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f32.isInteger|inlined.7 (result i32)
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
+  block $~lib/builtins/f32.isInteger|inlined.6 (result i32)
+   f32.const -1
    set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.15 (result i32)
+   block $~lib/builtins/isFinite<f32>|inlined.14 (result i32)
     get_local $4
     get_local $4
     f32.sub
@@ -2353,8 +2339,43 @@
    call $~lib/env/abort
    unreachable
   end
+  block $~lib/builtins/f32.isInteger|inlined.7 (result i32)
+   get_global $~lib/builtins/f32.MIN_SAFE_INTEGER
+   set_local $4
+   block $~lib/builtins/isFinite<f32>|inlined.15 (result i32)
+    get_local $4
+    get_local $4
+    f32.sub
+    f32.const 0
+    f32.eq
+   end
+   tee_local $0
+   i32.const 1
+   i32.and
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
+  end
+  i32.const 1
+  i32.and
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 332
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
   block $~lib/builtins/f32.isInteger|inlined.8 (result i32)
-   f32.const 0.5
+   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
    set_local $4
    block $~lib/builtins/isFinite<f32>|inlined.16 (result i32)
     get_local $4
@@ -2377,19 +2398,19 @@
   end
   i32.const 1
   i32.and
-  i32.const 0
+  i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 8
-   i32.const 332
+   i32.const 333
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   block $~lib/builtins/f32.isInteger|inlined.9 (result i32)
-   f32.const -1.5
+   f32.const 0.5
    set_local $4
    block $~lib/builtins/isFinite<f32>|inlined.17 (result i32)
     get_local $4
@@ -2418,7 +2439,42 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 333
+   i32.const 334
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/f32.isInteger|inlined.10 (result i32)
+   f32.const -1.5
+   set_local $4
+   block $~lib/builtins/isFinite<f32>|inlined.18 (result i32)
+    get_local $4
+    get_local $4
+    f32.sub
+    f32.const 0
+    f32.eq
+   end
+   tee_local $0
+   i32.const 1
+   i32.and
+   if (result i32)
+    get_local $4
+    f32.trunc
+    get_local $4
+    f32.eq
+   else    
+    get_local $0
+   end
+  end
+  i32.const 1
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 335
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2430,7 +2486,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 335
+   i32.const 337
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2442,7 +2498,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 336
+   i32.const 338
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2454,7 +2510,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 337
+   i32.const 339
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2466,7 +2522,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 338
+   i32.const 340
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2478,7 +2534,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 339
+   i32.const 341
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2490,7 +2546,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 340
+   i32.const 342
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2508,7 +2564,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 341
+   i32.const 343
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2531,7 +2587,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 342
+   i32.const 344
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2552,7 +2608,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 343
+   i32.const 345
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2573,12 +2629,33 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 344
+   i32.const 346
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   block $~lib/builtins/f64.isSafeInteger|inlined.3 (result i32)
+   f64.const -0
+   set_local $5
+   get_local $5
+   f64.abs
+   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+   f64.le
+  end
+  i32.const 1
+  i32.and
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 347
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/f64.isSafeInteger|inlined.4 (result i32)
    f64.const nan:0x8000000000000
    set_local $5
    get_local $5
@@ -2594,12 +2671,12 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 345
+   i32.const 348
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f64.isSafeInteger|inlined.4 (result i32)
+  block $~lib/builtins/f64.isSafeInteger|inlined.5 (result i32)
    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    set_local $5
    get_local $5
@@ -2615,12 +2692,12 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 346
+   i32.const 349
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f64.isSafeInteger|inlined.5 (result i32)
+  block $~lib/builtins/f64.isSafeInteger|inlined.6 (result i32)
    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    f64.const 1
    f64.add
@@ -2638,7 +2715,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 347
+   i32.const 350
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2673,120 +2750,15 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 348
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.1 (result i32)
-   f64.const nan:0x8000000000000
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.9 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 349
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.2 (result i32)
-   f64.const inf
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.10 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 350
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.3 (result i32)
-   get_global $~lib/builtins/f64.EPSILON
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.11 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
    i32.const 351
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/f64.isInteger|inlined.4 (result i32)
-   f64.const 1
+  block $~lib/builtins/f64.isInteger|inlined.1 (result i32)
+   f64.const -0
    set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.12 (result i32)
+   block $~lib/builtins/isFinite<f64>|inlined.9 (result i32)
     get_local $5
     get_local $5
     f64.sub
@@ -2818,8 +2790,113 @@
    call $~lib/env/abort
    unreachable
   end
+  block $~lib/builtins/f64.isInteger|inlined.2 (result i32)
+   f64.const nan:0x8000000000000
+   set_local $5
+   block $~lib/builtins/isFinite<f64>|inlined.10 (result i32)
+    get_local $5
+    get_local $5
+    f64.sub
+    f64.const 0
+    f64.eq
+   end
+   tee_local $0
+   i32.const 1
+   i32.and
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
+  end
+  i32.const 1
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 353
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/f64.isInteger|inlined.3 (result i32)
+   f64.const inf
+   set_local $5
+   block $~lib/builtins/isFinite<f64>|inlined.11 (result i32)
+    get_local $5
+    get_local $5
+    f64.sub
+    f64.const 0
+    f64.eq
+   end
+   tee_local $0
+   i32.const 1
+   i32.and
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
+  end
+  i32.const 1
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 354
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/f64.isInteger|inlined.4 (result i32)
+   get_global $~lib/builtins/f64.EPSILON
+   set_local $5
+   block $~lib/builtins/isFinite<f64>|inlined.12 (result i32)
+    get_local $5
+    get_local $5
+    f64.sub
+    f64.const 0
+    f64.eq
+   end
+   tee_local $0
+   i32.const 1
+   i32.and
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
+  end
+  i32.const 1
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 355
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
   block $~lib/builtins/f64.isInteger|inlined.5 (result i32)
-   f64.const -1
+   f64.const 1
    set_local $5
    block $~lib/builtins/isFinite<f64>|inlined.13 (result i32)
     get_local $5
@@ -2848,13 +2925,13 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 353
+   i32.const 356
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   block $~lib/builtins/f64.isInteger|inlined.6 (result i32)
-   get_global $~lib/builtins/f64.MIN_SAFE_INTEGER
+   f64.const -1
    set_local $5
    block $~lib/builtins/isFinite<f64>|inlined.14 (result i32)
     get_local $5
@@ -2883,13 +2960,13 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 354
+   i32.const 357
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   block $~lib/builtins/f64.isInteger|inlined.7 (result i32)
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+   get_global $~lib/builtins/f64.MIN_SAFE_INTEGER
    set_local $5
    block $~lib/builtins/isFinite<f64>|inlined.15 (result i32)
     get_local $5
@@ -2918,13 +2995,13 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 355
+   i32.const 358
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   block $~lib/builtins/f64.isInteger|inlined.8 (result i32)
-   f64.const 0.5
+   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
    set_local $5
    block $~lib/builtins/isFinite<f64>|inlined.16 (result i32)
     get_local $5
@@ -2947,19 +3024,19 @@
   end
   i32.const 1
   i32.and
-  i32.const 0
+  i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 8
-   i32.const 356
+   i32.const 359
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   block $~lib/builtins/f64.isInteger|inlined.9 (result i32)
-   f64.const -1.5
+   f64.const 0.5
    set_local $5
    block $~lib/builtins/isFinite<f64>|inlined.17 (result i32)
     get_local $5
@@ -2988,7 +3065,42 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 357
+   i32.const 360
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/f64.isInteger|inlined.10 (result i32)
+   f64.const -1.5
+   set_local $5
+   block $~lib/builtins/isFinite<f64>|inlined.18 (result i32)
+    get_local $5
+    get_local $5
+    f64.sub
+    f64.const 0
+    f64.eq
+   end
+   tee_local $0
+   i32.const 1
+   i32.and
+   if (result i32)
+    get_local $5
+    f64.trunc
+    get_local $5
+    f64.eq
+   else    
+    get_local $0
+   end
+  end
+  i32.const 1
+  i32.and
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 361
    i32.const 0
    call $~lib/env/abort
    unreachable
