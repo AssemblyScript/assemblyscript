@@ -190,7 +190,7 @@ export namespace f32 {
   @builtin export declare function trunc(value: f32): f32;
   @inline  export function isNaN(value: f32): bool { return isNaN<f32>(value) }
   @inline  export function isFinite(value: f32): bool { return isFinite<f32>(value) }
-  @inline  export function isSafeInteger(value: f32): bool { return abs(value) <= f32.MAX_SAFE_INTEGER }
+  @inline  export function isSafeInteger(value: f32): bool { return abs<f32>(value) <= f32.MAX_SAFE_INTEGER }
   @inline  export function isInteger(value: f32): bool { return isFinite<f32>(value) && trunc<f32>(value) == value }
   @inline  export function parseInt(value: string, radix: i32 = 0): f32 { return <f32>parseI64(value, radix) }
   @inline  export function parseFloat(value: string): f32 { return <f32>parseFloat(value) }
@@ -221,7 +221,7 @@ export namespace f64 {
   @builtin export declare function trunc(value: f64): f64;
   @inline  export function isNaN(value: f64): bool { return isNaN<f64>(value) }
   @inline  export function isFinite(value: f64): bool { return isFinite<f64>(value) }
-  @inline  export function isSafeInteger(value: f64): bool { return abs(value) <= f64.MAX_SAFE_INTEGER }
+  @inline  export function isSafeInteger(value: f64): bool { return abs<f64>(value) <= f64.MAX_SAFE_INTEGER }
   @inline  export function isInteger(value: f64): bool { return isFinite<f64>(value) && trunc<f64>(value) == value }
   @inline  export function parseInt(value: string, radix: i32 = 0): f64 { return <f64>parseI64(value, radix) }
   @inline  export function parseFloat(value: string): f64 { return parseFloat(value) }

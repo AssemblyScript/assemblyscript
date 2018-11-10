@@ -156,6 +156,10 @@ declare namespace i8 {
   export const MIN_VALUE: i8;
   /** Largest representable value. */
   export const MAX_VALUE: i8;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): i8;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): i8;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
 declare function i16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
@@ -164,6 +168,10 @@ declare namespace i16 {
   export const MIN_VALUE: i16;
   /** Largest representable value. */
   export const MAX_VALUE: i16;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): i16;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): i16;
 }
 /** Converts any other numeric value to a 32-bit signed integer. */
 declare function i32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
@@ -188,6 +196,10 @@ declare namespace i32 {
   export function store16(offset: usize, value: i32, constantOffset?: usize): void;
   /** Stores a 32-bit integer to memory. */
   export function store(offset: usize, value: i32, constantOffset?: usize): void;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): i32;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): i32;
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
 declare function i64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -218,6 +230,10 @@ declare namespace i64 {
   export function store32(offset: usize, value: i64, constantOffset?: usize): void;
   /** Stores a 64-bit integer to memory. */
   export function store(offset: usize, value: i64, constantOffset?: usize): void;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): i64;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): i64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
 declare var isize: i32 | i64;
@@ -228,6 +244,10 @@ declare namespace u8 {
   export const MIN_VALUE: u8;
   /** Largest representable value. */
   export const MAX_VALUE: u8;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): u8;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
 declare function u16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
@@ -236,6 +256,10 @@ declare namespace u16 {
   export const MIN_VALUE: u16;
   /** Largest representable value. */
   export const MAX_VALUE: u16;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): u16;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
 declare function u32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
@@ -244,6 +268,10 @@ declare namespace u32 {
   export const MIN_VALUE: u32;
   /** Largest representable value. */
   export const MAX_VALUE: u32;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): u64;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
 declare function u64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -252,6 +280,10 @@ declare namespace u64 {
   export const MIN_VALUE: u64;
   /** Largest representable value. */
   export const MAX_VALUE: u64;
+  /** Converts a string to a floating-point number. */
+  export function parseFloat(string: string): u64;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
 declare var usize: u32 | u64;
