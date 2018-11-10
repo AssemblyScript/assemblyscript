@@ -213,7 +213,6 @@ export class Array<T> {
     var from  = start < 0 ? max(len + start, 0) : min(start, len);
     var last  = end < 0 ? max(len + end, 0) : min(end, len);
     var count = min(last - from, len - to);
-    var dir = 1;
     if (from < to && to < (from + count)) {
       from += count - 1;
       to   += count - 1;

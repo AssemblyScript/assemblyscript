@@ -2872,7 +2872,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 236
+   i32.const 235
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -2986,7 +2986,6 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
   get_local $0
   i32.load
   set_local $4
@@ -3090,8 +3089,6 @@
   i32.lt_s
   select
   set_local $11
-  i32.const 1
-  set_local $12
   get_local $9
   get_local $8
   i32.lt_s
@@ -3180,10 +3177,10 @@
    get_local $11
    i32.const 2
    i32.shl
-   set_local $13
+   set_local $12
    get_local $6
    get_local $7
-   get_local $13
+   get_local $12
    call $~lib/internal/memory/memmove
   end
   get_local $0
@@ -3300,7 +3297,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 326
+    i32.const 325
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -3375,7 +3372,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 297
+   i32.const 296
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -5476,7 +5473,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 389
+   i32.const 388
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6264,7 +6261,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 389
+   i32.const 388
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7074,7 +7071,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 389
+   i32.const 388
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7754,7 +7751,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 389
+   i32.const 388
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8441,7 +8438,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 389
+   i32.const 388
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8904,7 +8901,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 389
+   i32.const 388
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9398,7 +9395,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 389
+   i32.const 388
    i32.const 4
    call $~lib/env/abort
    unreachable
