@@ -186,20 +186,24 @@ export class Array<T> {
   }
 
   concat(items: Array<T>): Array<T> {
-    var thisLen: isize = this.length_;
-    var otherLen = (items == null) ? 0 : items.length_;
-    var outLen =  thisLen + otherLen;
-    var out: Array<T> = new Array<T>(outLen);
+    var thisLen = this.length_;
+    var otherLen = items === null ? 0 : items.length_;
+    var outLen = thisLen + otherLen;
+    var out = new Array<T>(outLen);
 
     if (thisLen) {
-      memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE,
-      changetype<usize>(this.buffer_) + HEADER_SIZE,
-      <usize>(thisLen << alignof<T>()));
+      memory.copy(
+        changetype<usize>(out.buffer_)  + HEADER_SIZE,
+        changetype<usize>(this.buffer_) + HEADER_SIZE,
+        <usize>thisLen << alignof<T>()
+      );
     }
     if (otherLen) {
-      memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE + <usize>(thisLen << alignof<T>()),
-      changetype<usize>(items.buffer_) + HEADER_SIZE,
-      <usize>(otherLen << alignof<T>()));
+      memory.copy(
+        changetype<usize>(out.buffer_)   + HEADER_SIZE + (<usize>thisLen << alignof<T>()),
+        changetype<usize>(items.buffer_) + HEADER_SIZE,
+        <usize>otherLen << alignof<T>()
+      );
     }
     return out;
   }
