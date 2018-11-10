@@ -114,6 +114,10 @@ declare namespace i8 {
   export const MIN_VALUE: i8;
   /** Largest representable value. */
   export const MAX_VALUE: i8;
+  /** Determines whether the provided value is a number that is a safe integer. */
+  export function isSafeInteger(value: i8): bool;
+  /** Determines whether the passed value is an integer. */
+  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
 declare function i16(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
@@ -122,6 +126,10 @@ declare namespace i16 {
   export const MIN_VALUE: i16;
   /** Largest representable value. */
   export const MAX_VALUE: i16;
+  /** Determines whether the provided value is a number that is a safe integer. */
+  export function isSafeInteger(value: i16): bool;
+  /** Determines whether the passed value is an integer. */
+  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to a 32-bit signed integer. */
 declare function i32(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i32;
@@ -130,6 +138,10 @@ declare namespace i32 {
   export const MIN_VALUE: i32;
   /** Largest representable value. */
   export const MAX_VALUE: i32;
+  /** Determines whether the provided value is a number that is a safe integer. */
+  export function isSafeInteger(value: i32): bool;
+  /** Determines whether the passed value is an integer. */
+  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
 declare function isize(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): isize;
@@ -138,6 +150,10 @@ declare namespace isize {
   export const MIN_VALUE: isize;
   /** Largest representable value. */
   export const MAX_VALUE: isize;
+  /** Determines whether the provided value is a number that is a safe integer. */
+  export function isSafeInteger(value: isize): bool;
+  /** Determines whether the passed value is an integer. */
+  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to an 8-bit unsigned integer. */
 declare function u8(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
@@ -146,6 +162,10 @@ declare namespace u8 {
   export const MIN_VALUE: u8;
   /** Largest representable value. */
   export const MAX_VALUE: u8;
+  /** Determines whether the provided value is a number that is a safe integer. */
+  export function isSafeInteger(value: u8): bool;
+  /** Determines whether the passed value is an integer. */
+  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
 declare function u16(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
@@ -154,6 +174,10 @@ declare namespace u16 {
   export const MIN_VALUE: u16;
   /** Largest representable value. */
   export const MAX_VALUE: u16;
+  /** Determines whether the provided value is a number that is a safe integer. */
+  export function isSafeInteger(value: u16): bool;
+  /** Determines whether the passed value is an integer. */
+  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
 declare function u32(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i32;
@@ -162,6 +186,10 @@ declare namespace u32 {
   export const MIN_VALUE: u32;
   /** Largest representable value. */
   export const MAX_VALUE: u32;
+  /** Determines whether the provided value is a number that is a safe integer. */
+  export function isSafeInteger(value: u32): bool;
+  /** Determines whether the passed value is an integer. */
+  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
 declare function usize(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): isize;
@@ -170,6 +198,10 @@ declare namespace usize {
   export const MIN_VALUE: usize;
   /** Largest representable value. */
   export const MAX_VALUE: usize;
+  /** Determines whether the provided value is a number that is a safe integer. */
+  export function isSafeInteger(value: usize): bool;
+  /** Determines whether the passed value is an integer. */
+  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to a 1-bit unsigned integer. */
 declare function bool(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): bool;
@@ -194,6 +226,10 @@ declare namespace f32 {
   export const MAX_SAFE_INTEGER: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
+  /** Determines whether the provided value is a number that is a safe integer. */
+  export function isSafeInteger(value: f32): bool;
+  /** Determines whether the passed value is an integer. */
+  export function isInteger<T>(value: T): bool;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): f64;
@@ -210,6 +246,10 @@ declare namespace f64 {
   export const MAX_SAFE_INTEGER: f64;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
+  /** Determines whether the provided value is a number that is a safe integer. */
+  export function isSafeInteger(value: f64): bool;
+  /** Determines whether the passed value is an integer. */
+  export function isInteger<T>(value: T): bool;
 }
 
 // Polyfills

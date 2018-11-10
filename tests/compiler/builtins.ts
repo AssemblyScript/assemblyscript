@@ -315,6 +315,12 @@ assert(f32.MIN_SAFE_INTEGER == -16777215);
 assert(f32.MAX_SAFE_INTEGER == 16777215);
 assert(f32.EPSILON == 1.19209290e-07);
 assert(isNaN<f32>(f32.NaN));
+assert(f32.isSafeInteger(f32.MIN_SAFE_INTEGER - 1) == false);
+assert(f32.isSafeInteger(f32.MIN_SAFE_INTEGER) == true);
+assert(f32.isSafeInteger(0) == true);
+assert(f32.isSafeInteger(NaN) == false);
+assert(f32.isSafeInteger(f32.MAX_SAFE_INTEGER) == true);
+assert(f32.isSafeInteger(f32.MAX_SAFE_INTEGER + 1) == false);
 assert(f64.MIN_NORMAL_VALUE == 2.2250738585072014e-308);
 assert(f64.MIN_VALUE == 5e-324);
 assert(f64.MAX_VALUE == 1.7976931348623157e+308);
@@ -322,6 +328,12 @@ assert(f64.MIN_SAFE_INTEGER == -9007199254740991);
 assert(f64.MAX_SAFE_INTEGER == 9007199254740991);
 assert(f64.EPSILON == 2.2204460492503131e-16);
 assert(isNaN<f64>(f64.NaN));
+assert(f64.isSafeInteger(f64.MIN_SAFE_INTEGER - 1) == false);
+assert(f64.isSafeInteger(f64.MIN_SAFE_INTEGER) == true);
+assert(f64.isSafeInteger(0) == true);
+assert(f64.isSafeInteger(NaN) == false);
+assert(f64.isSafeInteger(f64.MAX_SAFE_INTEGER) == true);
+assert(f64.isSafeInteger(f64.MAX_SAFE_INTEGER + 1) == false);
 
 // inline-assembler
 
