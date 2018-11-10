@@ -657,6 +657,27 @@ declare const Math: IMath<f64>;
 /** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
 declare const Mathf: IMath<f32>;
 
+declare class Date {
+  /** Returns the UTC timestamp in milliseconds of the specified date. */
+  static UTC(
+    year: i32,
+    month: i32,
+    day: i32,
+    hour: i32,
+    minute: i32,
+    second: i32,
+    millisecond: i32
+  ): i64;
+  /** Returns the current UTC timestamp in milliseconds. */
+  static now(): i64;
+  /** Constructs a new date object from an UTC timestamp in milliseconds. */
+  constructor(value: i64);
+  /** Returns the UTC timestamp of this date in milliseconds. */
+  getTime(): i64;
+  /** Sets the UTC timestamp of this date in milliseconds. */
+  setTime(value: i64): void;
+}
+
 /** Environmental tracing function for debugging purposes. */
 declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
 

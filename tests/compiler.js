@@ -192,7 +192,8 @@ tests.forEach(filename => {
             math: {
               mod: function(a, b) { return a % b; }
             },
-            Math: Math,
+            Math,
+            Date,
 
             // tests/declare
             declare: {

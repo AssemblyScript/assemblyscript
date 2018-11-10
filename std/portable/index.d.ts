@@ -424,6 +424,27 @@ declare const Math: IMath;
 declare const Mathf: IMath;
 declare const JSMath: IMath;
 
+declare class Date {
+  /** Returns the UTC timestamp in milliseconds of the specified date. */
+  static UTC(
+    year: i32,
+    month: i32,
+    day: i32,
+    hour: i32,
+    minute: i32,
+    second: i32,
+    millisecond: i32
+  ): number;
+  /** Returns the current UTC timestamp in milliseconds. */
+  static now(): number;
+  /** Constructs a new date object from an UTC timestamp in milliseconds. */
+  constructor(value: number);
+  /** Returns the UTC timestamp of this date in milliseconds. */
+  getTime(): number;
+  /** Sets the UTC timestamp of this date in milliseconds. */
+  setTime(value: number): void;
+}
+
 declare namespace console {
   /** @deprecated */
   function log(message: string): void;
