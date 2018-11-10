@@ -204,6 +204,30 @@ export class Array<T> {
     return out;
   }
 
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
+    var buffer = this.buffer_;
+    var len = this.length_;
+    end = min(end, len);
+
+    var to    = target < 0 ? max(len + target, 0) : min(target, len);
+    var from  = start < 0 ? max(len + start, 0) : min(start, len);
+    var last  = end < 0 ? max(len + end, 0) : min(end, len);
+    var count = min(last - from, len - to);
+    var dir = 1;
+    if (from < to && to < (from + count)) {
+      dir  = -1;
+      from += count - 1;
+      to   += count - 1;
+    }
+    while (count > 0) {
+      storeUnsafe<T,T>(buffer, to, loadUnsafe<T,T>(buffer, from));
+      from += dir;
+      to += dir;
+      --count;
+    }
+    return this;
+  }
+
   pop(): T {
     var length = this.length_;
     if (length < 1) throw new RangeError("Array is empty");
