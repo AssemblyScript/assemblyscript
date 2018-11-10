@@ -27,6 +27,11 @@ import {
   MAX_DOUBLE_LENGTH
 } from "./internal/number";
 
+@inline
+function mix<T>(a: T, b: T): T {
+  return a < 0 ? max<T>(b + a, 0) : min<T>(a, b);
+}
+
 export class Array<T> {
 
   /* @internal */ buffer_: ArrayBuffer;
@@ -120,8 +125,10 @@ export class Array<T> {
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
     var buffer = this.buffer_;
     var len    = this.length_;
-    start = start < 0 ? max(len + start, 0) : min(start, len);
-    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+
+    start = mix<i32>(start, len);
+    end   = mix<i32>(end,   len);
+
     if (sizeof<T>() == 1) {
       if (start < end) {
         memory.fill(
@@ -211,16 +218,17 @@ export class Array<T> {
   copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
     var buffer = this.buffer_;
     var len = this.length_;
-    end = min(end, len);
 
-    var to    = target < 0 ? max(len + target, 0) : min(target, len);
-    var from  = start < 0 ? max(len + start, 0) : min(start, len);
-    var last  = end < 0 ? max(len + end, 0) : min(end, len);
-    var count = min(last - from, len - to);
+        end   = min<i32>(end,    len);
+    var to    = mix<i32>(target, len);
+    var from  = mix<i32>(start,  len);
+    var last  = mix<i32>(end,    len);
+    var count = min<i32>(last - from, len - to);
+
     if (from < to && to < (from + count)) {
       from += count - 1;
       to   += count - 1;
-      while (count > 0) {
+      while (count) {
         storeUnsafe<T,T>(buffer, to, loadUnsafe<T,T>(buffer, from));
         --from, --to, --count;
       }
@@ -343,12 +351,10 @@ export class Array<T> {
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
-    var length = this.length_;
-    if (begin < 0) begin = max(length + begin, 0);
-    else if (begin > length) begin = length;
-    if (end < 0) end = length + end; // no need to clamp
-    else if (end > length) end = length;
-    if (end < begin) end = begin;    // ^
+    var len = this.length_;
+    begin = mix<i32>(begin, len);
+    end   = mix<i32>(end,   len);
+    if (end < begin) end = begin;
     var newLength = end - begin;
     assert(newLength >= 0);
     var sliced = new Array<T>(newLength);
@@ -365,7 +371,7 @@ export class Array<T> {
   splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): void {
     if (deleteCount < 1) return;
     var length = this.length_;
-    if (start < 0) start = max(length + start, 0);
+    if (start < 0) start = max<i32>(length + start, 0);
     if (start >= length) return;
     deleteCount = min(deleteCount, length - start);
     var buffer = this.buffer_;

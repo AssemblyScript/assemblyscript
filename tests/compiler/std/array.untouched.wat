@@ -749,7 +749,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 41
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -850,54 +850,58 @@
   get_local $0
   i32.load offset=4
   set_local $5
-  get_local $2
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   get_local $5
+  block $~lib/array/mix<i32>|inlined.0 (result i32)
    get_local $2
-   i32.add
-   tee_local $6
    i32.const 0
-   tee_local $7
-   get_local $6
-   get_local $7
-   i32.gt_s
-   select
-  else   
-   get_local $2
-   tee_local $6
-   get_local $5
-   tee_local $7
-   get_local $6
-   get_local $7
    i32.lt_s
-   select
+   if (result i32)
+    get_local $5
+    get_local $2
+    i32.add
+    tee_local $6
+    i32.const 0
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.gt_s
+    select
+   else    
+    get_local $2
+    tee_local $6
+    get_local $5
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.lt_s
+    select
+   end
   end
   set_local $2
-  get_local $3
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   get_local $5
+  block $~lib/array/mix<i32>|inlined.1 (result i32)
    get_local $3
-   i32.add
-   tee_local $6
    i32.const 0
-   tee_local $7
-   get_local $6
-   get_local $7
-   i32.gt_s
-   select
-  else   
-   get_local $3
-   tee_local $6
-   get_local $5
-   tee_local $7
-   get_local $6
-   get_local $7
    i32.lt_s
-   select
+   if (result i32)
+    get_local $5
+    get_local $3
+    i32.add
+    tee_local $6
+    i32.const 0
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.gt_s
+    select
+   else    
+    get_local $3
+    tee_local $6
+    get_local $5
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.lt_s
+    select
+   end
   end
   set_local $3
   get_local $2
@@ -1041,54 +1045,58 @@
   get_local $0
   i32.load offset=4
   set_local $5
-  get_local $2
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   get_local $5
+  block $~lib/array/mix<i32>|inlined.2 (result i32)
    get_local $2
-   i32.add
-   tee_local $6
    i32.const 0
-   tee_local $7
-   get_local $6
-   get_local $7
-   i32.gt_s
-   select
-  else   
-   get_local $2
-   tee_local $6
-   get_local $5
-   tee_local $7
-   get_local $6
-   get_local $7
    i32.lt_s
-   select
+   if (result i32)
+    get_local $5
+    get_local $2
+    i32.add
+    tee_local $6
+    i32.const 0
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.gt_s
+    select
+   else    
+    get_local $2
+    tee_local $6
+    get_local $5
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.lt_s
+    select
+   end
   end
   set_local $2
-  get_local $3
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   get_local $5
+  block $~lib/array/mix<i32>|inlined.3 (result i32)
    get_local $3
-   i32.add
-   tee_local $6
    i32.const 0
-   tee_local $7
-   get_local $6
-   get_local $7
-   i32.gt_s
-   select
-  else   
-   get_local $3
-   tee_local $6
-   get_local $5
-   tee_local $7
-   get_local $6
-   get_local $7
    i32.lt_s
-   select
+   if (result i32)
+    get_local $5
+    get_local $3
+    i32.add
+    tee_local $6
+    i32.const 0
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.gt_s
+    select
+   else    
+    get_local $3
+    tee_local $6
+    get_local $5
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.lt_s
+    select
+   end
   end
   set_local $3
   block $break|0
@@ -2807,7 +2815,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 178
+    i32.const 185
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -2872,7 +2880,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 239
+   i32.const 247
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3001,79 +3009,85 @@
   i32.lt_s
   select
   set_local $3
-  get_local $1
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   get_local $5
+  block $~lib/array/mix<i32>|inlined.4 (result i32)
    get_local $1
-   i32.add
-   tee_local $6
    i32.const 0
-   tee_local $7
-   get_local $6
-   get_local $7
-   i32.gt_s
-   select
-  else   
-   get_local $1
-   tee_local $6
-   get_local $5
-   tee_local $7
-   get_local $6
-   get_local $7
    i32.lt_s
-   select
+   if (result i32)
+    get_local $5
+    get_local $1
+    i32.add
+    tee_local $6
+    i32.const 0
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.gt_s
+    select
+   else    
+    get_local $1
+    tee_local $6
+    get_local $5
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.lt_s
+    select
+   end
   end
   set_local $8
-  get_local $2
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   get_local $5
+  block $~lib/array/mix<i32>|inlined.5 (result i32)
    get_local $2
-   i32.add
-   tee_local $6
    i32.const 0
-   tee_local $7
-   get_local $6
-   get_local $7
-   i32.gt_s
-   select
-  else   
-   get_local $2
-   tee_local $6
-   get_local $5
-   tee_local $7
-   get_local $6
-   get_local $7
    i32.lt_s
-   select
+   if (result i32)
+    get_local $5
+    get_local $2
+    i32.add
+    tee_local $6
+    i32.const 0
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.gt_s
+    select
+   else    
+    get_local $2
+    tee_local $6
+    get_local $5
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.lt_s
+    select
+   end
   end
   set_local $9
-  get_local $3
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   get_local $5
+  block $~lib/array/mix<i32>|inlined.6 (result i32)
    get_local $3
-   i32.add
-   tee_local $6
    i32.const 0
-   tee_local $7
-   get_local $6
-   get_local $7
-   i32.gt_s
-   select
-  else   
-   get_local $3
-   tee_local $6
-   get_local $5
-   tee_local $7
-   get_local $6
-   get_local $7
    i32.lt_s
-   select
+   if (result i32)
+    get_local $5
+    get_local $3
+    i32.add
+    tee_local $6
+    i32.const 0
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.gt_s
+    select
+   else    
+    get_local $3
+    tee_local $6
+    get_local $5
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.lt_s
+    select
+   end
   end
   set_local $10
   get_local $10
@@ -3118,8 +3132,6 @@
    block $break|0
     loop $continue|0
      get_local $11
-     i32.const 0
-     i32.gt_s
      if
       block
        block $~lib/internal/arraybuffer/storeUnsafe<i32,i32>|inlined.1
@@ -3297,7 +3309,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 329
+    i32.const 337
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -3372,7 +3384,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 300
+   i32.const 308
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3691,7 +3703,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 105
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -4120,7 +4132,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 41
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -5473,7 +5485,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 392
+   i32.const 398
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6261,7 +6273,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 392
+   i32.const 398
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7071,7 +7083,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 392
+   i32.const 398
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7751,7 +7763,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 392
+   i32.const 398
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8128,7 +8140,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 41
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -8199,7 +8211,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 105
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -8438,7 +8450,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 392
+   i32.const 398
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8604,7 +8616,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 41
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -8694,7 +8706,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 105
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -8901,7 +8913,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 392
+   i32.const 398
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9395,7 +9407,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 392
+   i32.const 398
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9692,7 +9704,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 41
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -9978,7 +9990,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 105
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -12950,7 +12962,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 41
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
