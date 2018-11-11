@@ -1,10 +1,10 @@
 (module
- (type $iiiiiiiF (func (param i32 i32 i32 i32 i32 i32 i32) (result f64)))
+ (type $iiiiiiFF (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $F (func (result f64)))
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
- (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 i32) (result f64)))
+ (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
  (memory $0 1)
@@ -93,7 +93,7 @@
   i32.const 0
   i32.const 0
   i32.const 0
-  i32.const 0
+  f64.const 0
   call $~lib/bindings/Date/UTC
   i64.trunc_s/f64
   i64.const 0
@@ -112,7 +112,7 @@
   i32.const 0
   i32.const 0
   i32.const 0
-  i32.const 0
+  f64.const 0
   call $~lib/bindings/Date/UTC
   i64.trunc_s/f64
   i64.const 0
@@ -131,7 +131,7 @@
   i32.const 11
   i32.const 0
   i32.const 0
-  i32.const 1
+  f64.const 1
   call $~lib/bindings/Date/UTC
   i64.trunc_s/f64
   set_global $std/date/creationTime

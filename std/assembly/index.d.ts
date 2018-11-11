@@ -675,7 +675,7 @@ declare class Date {
   /** Returns the UTC timestamp of this date in milliseconds. */
   getTime(): i64;
   /** Sets the UTC timestamp of this date in milliseconds. */
-  setTime(value: i64): void;
+  setTime(value: i64): i64;
 }
 
 /** Environmental tracing function for debugging purposes. */

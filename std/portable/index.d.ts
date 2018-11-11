@@ -442,7 +442,7 @@ declare class Date {
   /** Returns the UTC timestamp of this date in milliseconds. */
   getTime(): number;
   /** Sets the UTC timestamp of this date in milliseconds. */
-  setTime(value: number): void;
+  setTime(value: number): number;
 }
 
 declare namespace console {

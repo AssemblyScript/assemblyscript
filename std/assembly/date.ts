@@ -12,9 +12,9 @@ export class Date {
     hour: i32 = 0,
     minute: i32 = 0,
     second: i32 = 0,
-    millisecond: i32 = 0
+    millisecond: i64 = 0
   ): i64 {
-    return <i64>Date_UTC(year, month, day, hour, minute, second, millisecond);
+    return <i64>Date_UTC(year, month, day, hour, minute, second, <f64>millisecond);
   }
 
   @inline static now(): i64 {
@@ -31,7 +31,8 @@ export class Date {
     return this.value;
   }
 
-  setTime(value: i64): void {
+  setTime(value: i64): i64 {
     this.value = value;
+    return value;
   }
 }

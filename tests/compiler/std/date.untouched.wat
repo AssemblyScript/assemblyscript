@@ -1,13 +1,13 @@
 (module
- (type $iiiiiiiF (func (param i32 i32 i32 i32 i32 i32 i32) (result f64)))
+ (type $iiiiiiFF (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $F (func (result f64)))
  (type $iIi (func (param i32 i64) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iI (func (param i32) (result i64)))
- (type $iIv (func (param i32 i64)))
+ (type $iII (func (param i32 i64) (result i64)))
  (type $v (func))
- (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 i32) (result f64)))
+ (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
  (memory $0 1)
@@ -136,10 +136,11 @@
   get_local $0
   i64.load
  )
- (func $~lib/date/Date#setTime (; 7 ;) (type $iIv) (param $0 i32) (param $1 i64)
+ (func $~lib/date/Date#setTime (; 7 ;) (type $iII) (param $0 i32) (param $1 i64) (result i64)
   get_local $0
   get_local $1
   i64.store
+  get_local $1
  )
  (func $start (; 8 ;) (type $v)
   (local $0 i32)
@@ -148,7 +149,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
+  (local $6 i64)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
   i32.add
@@ -172,7 +173,7 @@
    set_local $4
    i32.const 0
    set_local $5
-   i32.const 0
+   i64.const 0
    set_local $6
    get_local $0
    get_local $1
@@ -181,6 +182,7 @@
    get_local $4
    get_local $5
    get_local $6
+   f64.convert_s/i64
    call $~lib/bindings/Date/UTC
    i64.trunc_s/f64
   end
@@ -197,12 +199,10 @@
   end
   block $~lib/date/Date.UTC|inlined.1 (result i64)
    i32.const 1970
-   set_local $6
-   i32.const 0
    set_local $5
-   i32.const 1
-   set_local $4
    i32.const 0
+   set_local $4
+   i32.const 1
    set_local $3
    i32.const 0
    set_local $2
@@ -210,13 +210,16 @@
    set_local $1
    i32.const 0
    set_local $0
-   get_local $6
+   i64.const 0
+   set_local $6
    get_local $5
    get_local $4
    get_local $3
    get_local $2
    get_local $1
    get_local $0
+   get_local $6
+   f64.convert_s/i64
    call $~lib/bindings/Date/UTC
    i64.trunc_s/f64
   end
@@ -244,7 +247,7 @@
    set_local $4
    i32.const 0
    set_local $5
-   i32.const 1
+   i64.const 1
    set_local $6
    get_local $0
    get_local $1
@@ -253,6 +256,7 @@
    get_local $4
    get_local $5
    get_local $6
+   f64.convert_s/i64
    call $~lib/bindings/Date/UTC
    i64.trunc_s/f64
   end
@@ -306,6 +310,7 @@
   i64.const 1
   i64.add
   call $~lib/date/Date#setTime
+  drop
   get_global $std/date/date
   call $~lib/date/Date#getTime
   get_global $std/date/creationTime
