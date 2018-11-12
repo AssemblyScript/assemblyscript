@@ -65,8 +65,8 @@ assert(view.getInt32(2, false) === 1486848613);
 assert(view.getInt32(3, false) === -1618844349);
 assert(view.getInt32(4, false) === -2107292833);
 
-assert(view.getInt64(0, true) === 6864441868736323830)
-assert(view.getInt64(0, false) === -657428103485373601)
+assert(view.getInt64(0, true) === 6864441868736323830);
+assert(view.getInt64(0, false) === -657428103485373601);
 
 assert(view.getUint8(0) === 246);
 assert(view.getUint8(1) === 224);
@@ -105,59 +105,59 @@ assert(view.getUint32(2, false) === 1486848613);
 assert(view.getUint32(3, false) === 2676122947);
 assert(view.getUint32(4, false) === 2187674463);
 
-assert(view.getUint64(0, true) === 6864441868736323830)
-assert(view.getUint64(0, false) === 17789315970224178015)
+assert(view.getUint64(0, true) === 6864441868736323830);
+assert(view.getUint64(0, false) === 17789315970224178015);
 
-view.setFloat32(0, 1.5976661625240943e-18, true)
-assert(view.getFloat32(0, true) === 1.5976661625240943e-18)
+view.setFloat32(0, 1.5976661625240943e-18, true);
+assert(view.getFloat32(0, true) === 1.5976661625240943e-18);
 
-view.setFloat32(0, 1.9762819733816963e+21, false)
-assert(view.getFloat32(0, false) === 1.9762819733816963e+21)
+view.setFloat32(0, 1.9762819733816963e+21, false);
+assert(view.getFloat32(0, false) === 1.9762819733816963e+21);
 
-view.setFloat64(0, -1.094252199637739e+148, true)
-assert(view.getFloat64(0, true) === -1.094252199637739e+148)
+view.setFloat64(0, -1.094252199637739e+148, true);
+assert(view.getFloat64(0, true) === -1.094252199637739e+148);
 
-view.setFloat64(0, 6.022586634778589e-103, false)
-assert(view.getFloat64(0, false) === 6.022586634778589e-103)
+view.setFloat64(0, 6.022586634778589e-103, false);
+assert(view.getFloat64(0, false) === 6.022586634778589e-103);
 
-view.setInt8(0, 108)
-assert(view.getInt8(0) === 108)
+view.setInt8(0, 108);
+assert(view.getInt8(0) === 108);
 
-view.setInt16(0, -13360, true)
-assert(view.getInt16(0, true) === -13360)
+view.setInt16(0, -13360, true);
+assert(view.getInt16(0, true) === -13360);
 
-view.setInt16(0, 14689, false)
-assert(view.getInt16(0, false) === 14689)
+view.setInt16(0, 14689, false);
+assert(view.getInt16(0, false) === 14689);
 
-view.setInt32(0, 1204680201, true)
-assert(view.getInt32(0, true) === 1204680201)
+view.setInt32(0, 1204680201, true);
+assert(view.getInt32(0, true) === 1204680201);
 
-view.setInt32(0, 660673230, false)
-assert(view.getInt32(0, false) === 660673230)
+view.setInt32(0, 660673230, false);
+assert(view.getInt32(0, false) === 660673230);
 
-view.setInt64(0, -3290739641816099749, true)
-assert(view.getInt64(0, true) === -3290739641816099749)
+view.setInt64(0, -3290739641816099749, true);
+assert(view.getInt64(0, true) === -3290739641816099749);
 
-view.setInt64(0, 8178932412950708047, false)
-assert(view.getInt64(0, false) === 8178932412950708047)
+view.setInt64(0, 8178932412950708047, false);
+assert(view.getInt64(0, false) === 8178932412950708047);
 
-view.setUint8(0, 238)
-assert(view.getUint8(0) === 238)
+view.setUint8(0, 238);
+assert(view.getUint8(0) === 238);
 
-view.setUint16(0, 58856, true)
-assert(view.getUint16(0, true) === 58856)
+view.setUint16(0, 58856, true);
+assert(view.getUint16(0, true) === 58856);
 
-view.setUint16(0, 60400, false)
-assert(view.getUint16(0, false) === 60400)
+view.setUint16(0, 60400, false);
+assert(view.getUint16(0, false) === 60400);
 
-view.setUint32(0, 3448161552, true)
-assert(view.getUint32(0, true) === 3448161552)
+view.setUint32(0, 3448161552, true);
+assert(view.getUint32(0, true) === 3448161552);
 
-view.setUint32(0, 2784175665, false)
-assert(view.getUint32(0, false) === 2784175665)
+view.setUint32(0, 2784175665, false);
+assert(view.getUint32(0, false) === 2784175665);
 
-view.setUint64(0, 2334704782995986958, true)
-assert(view.getUint64(0, true) === 2334704782995986958)
+view.setUint64(0, 2334704782995986958, true);
+assert(view.getUint64(0, true) === 2334704782995986958);
 
-view.setUint64(0, 11323557176419695287, false)
-assert(view.getUint64(0, false) === 11323557176419695287)
+view.setUint64(0, 11323557176419695287, false);
+assert(view.getUint64(0, false) === 11323557176419695287);

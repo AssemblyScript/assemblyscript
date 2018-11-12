@@ -184,7 +184,7 @@ tests.forEach(filename => {
                 console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
               },
               trace: function(msg, n) {
-                console.log("  " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
+                console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
               },
               externalFunction: function() { },
               externalConstant: 1
