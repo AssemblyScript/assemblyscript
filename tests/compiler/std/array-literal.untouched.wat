@@ -507,18 +507,16 @@
   get_local $0
   get_local $1
   i32.store offset=4
-  block $~lib/memory/memory.fill|inlined.0
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
  )
  (func $~lib/array/Array<i8>#__unchecked_set (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -581,18 +579,16 @@
   get_local $0
   get_local $1
   i32.store offset=4
-  block $~lib/memory/memory.fill|inlined.1
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
  )
  (func $~lib/array/Array<i32>#__unchecked_set (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -655,18 +651,16 @@
   get_local $0
   get_local $1
   i32.store offset=4
-  block $~lib/memory/memory.fill|inlined.2
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
  )
  (func $~lib/array/Array<Ref>#__unchecked_set (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -745,18 +739,16 @@
   get_local $0
   get_local $1
   i32.store offset=4
-  block $~lib/memory/memory.fill|inlined.3
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
  )
  (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 16 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)

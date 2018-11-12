@@ -214,10 +214,8 @@
    call $~lib/env/abort
    unreachable
   end
-  block $inlining/func_iv|inlined.0
-   i32.const 0
-   set_local $2
-  end
+  i32.const 0
+  set_local $2
   block (result i32)
    i32.const 1
    set_global $~argc

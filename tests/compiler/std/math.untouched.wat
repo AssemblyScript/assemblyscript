@@ -34704,7 +34704,7 @@
    end
    unreachable
   end
-  block $~lib/math/NativeMathf.seedRandom|inlined.0
+  block
    call $~lib/bindings/Math/random
    i64.reinterpret/f64
    set_local $3

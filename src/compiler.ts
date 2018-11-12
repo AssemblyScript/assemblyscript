@@ -5492,7 +5492,11 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.createUnreachable();
     }
-    return module.createBlock(returnLabel, body, returnType.toNativeType());
+    return flow.is(FlowFlags.RETURNS)
+      ? module.createBlock(returnLabel, body, returnType.toNativeType())
+      : body.length > 1
+        ? module.createBlock(null, body, returnType.toNativeType())
+        : body[0];
   }
 
   /** Gets the trampoline for the specified function. */
