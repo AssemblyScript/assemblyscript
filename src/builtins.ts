@@ -1808,6 +1808,8 @@ export function compileCall(
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
+
+      let type: Type;
       if (
         typeArguments[0].is(TypeFlags.INTEGER) &&
         (
@@ -1822,7 +1824,11 @@ export function compileCall(
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
+        type = typeArguments[0];
+      } else {
+        type = compiler.currentType;
       }
+
       let offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
       if (offset < 0) { // reported in evaluateConstantOffset
         return module.createUnreachable();
@@ -1839,11 +1845,8 @@ export function compileCall(
       compiler.currentType = typeArguments[0];
       if (RMWOp !== null) {
         return module.createAtomicRMW(
-          RMWOp, typeArguments[0].byteSize, offset, arg0, arg1,
-          contextualType.size > typeArguments[0].size
-          ? (compiler.currentType = contextualType).toNativeType()
-          : (compiler.currentType = typeArguments[0]).toNativeType(),
-          );
+          RMWOp, typeArguments[0].byteSize, offset, arg0, arg1, type.toNativeType()
+        );
       } else {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
@@ -1902,6 +1905,8 @@ export function compileCall(
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
+
+      let type: Type;
       if (
         typeArguments[0].is(TypeFlags.INTEGER) &&
         (
@@ -1923,17 +1928,18 @@ export function compileCall(
           WrapMode.NONE, // still clears garbage bits
           operands[2]
         );
+        type = typeArguments[0];
+      } else {
+        type = compiler.currentType;
       }
+
       let offset = operands.length == 4 ? evaluateConstantOffset(compiler, operands[3]) : 0; // reports
       if (offset < 0) { // reported in evaluateConstantOffset
         return module.createUnreachable();
       }
       compiler.currentType = typeArguments[0];
       return module.createAtomicCmpxchg(
-        typeArguments[0].byteSize, offset, arg0, arg1, arg2,
-        contextualType.size > typeArguments[0].size
-        ? (compiler.currentType = contextualType).toNativeType()
-        : (compiler.currentType = typeArguments[0]).toNativeType(),
+        typeArguments[0].byteSize, offset, arg0, arg1, arg2, type.toNativeType()
       );
     }
     case "sizeof": { // sizeof<T!>() -> usize
