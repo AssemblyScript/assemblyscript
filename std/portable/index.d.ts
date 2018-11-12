@@ -440,9 +440,10 @@ interface RegExp {}
 interface IArguments {}
 
 declare class Error {
-  constructor(message: string);
-  message: string;
+  name: string;
   stack: string | null;
+  message: string;
+  constructor(message: string);
   toString(): string;
 }
 
