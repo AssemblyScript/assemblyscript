@@ -441,7 +441,7 @@ interface IArguments {}
 
 declare class Error {
   name: string;
-  stack: string | null;
+  stack?: string;
   message: string;
   constructor(message: string);
   toString(): string;

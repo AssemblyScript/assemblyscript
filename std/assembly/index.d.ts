@@ -621,7 +621,7 @@ declare class Error {
   message: string;
 
   /** Stack trace. */
-  stack: string | null;
+  stack?: string;
 
   /** Constructs a new error, optionally with a message. */
   constructor(message?: string);

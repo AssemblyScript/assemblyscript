@@ -1,7 +1,7 @@
 export class Error {
 
   name: string = "Error";
-  stack: string | null = null; // TODO
+  stack: string = ""; // TODO
 
   constructor(
     public message: string = ""
