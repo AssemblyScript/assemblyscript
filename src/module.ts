@@ -34,7 +34,6 @@ export enum ExpressionId {
   Break = _BinaryenBreakId(),
   Switch = _BinaryenSwitchId(),
   Call = _BinaryenCallId(),
-  CallImport = _BinaryenCallImportId(),
   CallIndirect = _BinaryenCallIndirectId(),
   GetLocal = _BinaryenGetLocalId(),
   SetLocal = _BinaryenSetLocalId(),
@@ -204,10 +203,8 @@ export enum BinaryOp {
 }
 
 export enum HostOp {
-  PageSize = _BinaryenPageSize(),
   CurrentMemory = _BinaryenCurrentMemory(),
   GrowMemory = _BinaryenGrowMemory(),
-  HasFeature = _BinaryenHasFeature(),
 
   // see: https://github.com/WebAssembly/bulk-memory-operations
   // MoveMemory
@@ -241,12 +238,6 @@ export class Module {
   ref: ModuleRef;
 
   private cachedByValue: usize;
-
-  /** Maximum number of pages when targeting WASM32. */
-  static readonly MAX_MEMORY_WASM32: Index = 0xffff;
-
-  /** Maximum number of pages when targeting WASM64. */
-  static readonly MAX_MEMORY_WASM64: Index = 0xffff; // TODO
 
   static create(): Module {
     var module = new Module();
@@ -598,21 +589,6 @@ export class Module {
     }
   }
 
-  createCallImport(
-    target: string,
-    operands: ExpressionRef[] | null,
-    returnType: NativeType
-  ): ExpressionRef {
-    var cStr = allocString(target);
-    var cArr = allocPtrArray(operands);
-    try {
-      return _BinaryenCallImport(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
-    } finally {
-      memory.free(cArr);
-      memory.free(cStr);
-    }
-  }
-
   createCallIndirect(
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
@@ -643,6 +619,17 @@ export class Module {
     var cStr = allocString(name);
     try {
       return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
+    } finally {
+      memory.free(cStr);
+    }
+  }
+
+  removeGlobal(
+    name: string
+  ): void {
+    var cStr = allocString(name);
+    try {
+      _BinaryenRemoveGlobal(this.ref, cStr);
     } finally {
       memory.free(cStr);
     }
@@ -831,14 +818,8 @@ export class Module {
     }
   }
 
-  removeImport(internalName: string): void {
-    var cStr = allocString(internalName);
-    try {
-      _BinaryenRemoveImport(this.ref, cStr);
-    } finally {
-      memory.free(cStr);
-    }
-  }
+  /** Unlimited memory constant. */
+  static readonly UNLIMITED_MEMORY: Index = <Index>-1;
 
   setMemory(
     initial: Index,
@@ -875,12 +856,22 @@ export class Module {
     }
   }
 
-  setFunctionTable(funcs: FunctionRef[]): void {
-    var cArr = allocPtrArray(funcs);
+  setFunctionTable(
+    initial: Index,
+    maximum: Index,
+    funcs: string[]
+  ): void {
+    var numNames = funcs.length;
+    var names = new Array<usize>(numNames);
+    for (let i = 0; i < numNames; ++i) {
+      names[i] = allocString(funcs[i]);
+    }
+    var cArr = allocI32Array(names);
     try {
-      _BinaryenSetFunctionTable(this.ref, cArr, funcs.length);
+      _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames);
     } finally {
       memory.free(cArr);
+      for (let i = numNames; i >= 0; --i) memory.free(names[i]);
     }
   }
 

@@ -10,7 +10,70 @@ function internalCapacity<T>(array: Array<T>): i32 {
   return buffer.byteLength >> alignof<T>();
 }
 
+// Checks if two arrays are equal
+function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
+  if (!len) {
+    len = a.length;
+    if (len != b.length) return false;
+    if (a === b) return true;
+  }
+  for (let i = 0; i < len; i++) {
+    if (isFloat<T>()) {
+      if (isNaN(a[i]) == isNaN(b[i])) continue;
+    }
+    if (a[i] != b[i]) return false;
+  }
+  return true;
+}
+
 var arr = new Array<i32>();
+
+// Array.isArray ///////////////////////////////////////////////////////////////////////////////////
+
+class P {}
+var num = 1;
+var Null: i32[] | null = null;
+assert(Array.isArray(Null) == false);
+assert(Array.isArray(arr) == true);
+assert(Array.isArray(new P()) == false);
+// assert(Array.isArray(new Uint8Array(1)) == false); fail
+assert(Array.isArray(num) == false);
+
+// Array#fill //////////////////////////////////////////////////////////////////////////////////////
+
+var arr8: u8[] = [1, 2, 3, 4, 5];
+
+arr8.fill(1, 1, 3);
+assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 1, 4, 5]));
+
+arr8.fill(0);
+assert(isArraysEqual<u8>(arr8, <u8[]>[0, 0, 0, 0, 0]));
+
+arr8.fill(1, 0, -3);
+assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 0, 0]));
+
+arr8.fill(2, -2);
+assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 2, 2]));
+
+arr8.fill(0, 1, 0);
+assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 2, 2]));
+
+var arr32: u32[] = [1, 2, 3, 4, 5];
+
+arr32.fill(1, 1, 3);
+assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 1, 4, 5]));
+
+arr32.fill(0);
+assert(isArraysEqual<u32>(arr32, <u32[]>[0, 0, 0, 0, 0]));
+
+arr32.fill(1, 0, -3);
+assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 0, 0]));
+
+arr32.fill(2, -2);
+assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 2, 2]));
+
+arr32.fill(0, 1, 0);
+assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 2, 2]));
 
 // Array#push/pop //////////////////////////////////////////////////////////////////////////////////
 
@@ -49,6 +112,77 @@ assert(internalCapacity<i32>(arr) == 3);
 assert(arr[0] == 43);
 assert(arr[1] == 44);
 assert(arr[2] == 45);
+
+// Array#concat ///////////////////////////////////////////////////////////////////////////////////
+
+var other = new Array<i32>();
+
+var out = arr.concat(other);
+assert(internalCapacity<i32>(arr) == 3);
+assert(arr.length == 3);
+assert(out.length == 3);
+
+out.concat([]);
+assert(internalCapacity<i32>(arr) == 3);
+
+assert(out[0] == 43);
+assert(out[1] == 44);
+assert(out[2] == 45);
+
+other.push(46);
+other.push(47);
+
+out = arr.concat(other);
+
+assert(internalCapacity<i32>(arr) == 3);
+assert(other.length == 2);
+assert(out.length == 5);
+assert(out[0] == 43);
+assert(out[1] == 44);
+assert(out[2] == 45);
+assert(out[3] == 46);
+assert(out[4] == 47);
+
+out.pop();
+assert(out.length == 4);
+
+out = arr.concat(null);
+assert(out.length == 3);
+assert(out[2] == 45);
+
+var source: i32[] = [];
+assert(source.length == 0);
+out = source.concat(arr);
+assert(out.length == 3);
+assert(source.length == 0);
+
+// Array#copyWithin ////////////////////////////////////////////////////////////////////////////////
+
+var cwArr: i32[];
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, 3), <i32[]>[4, 5, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 3), <i32[]>[1, 4, 5, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 2), <i32[]>[1, 3, 4, 5, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(2, 2), <i32[]>[1, 2, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, 3, 4), <i32[]>[4, 2, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 3, 4), <i32[]>[1, 4, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 2, 4), <i32[]>[1, 3, 4, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, -2), <i32[]>[4, 5, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, -2, -1), <i32[]>[4, 2, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3, -2), <i32[]>[1, 3, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3, -1), <i32[]>[1, 3, 4, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3), <i32[]>[1, 3, 4, 5, 5]));
 
 // Array#unshift ///////////////////////////////////////////////////////////////////////////////////
 
@@ -531,21 +665,6 @@ function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = defaultCo
   return true;
 }
 
-// Checks if two arrays are equal
-function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
-  if (!len) {
-    if (a.length != b.length) return false;
-    len = a.length;
-  }
-  for (let i = 0; i < len; i++) {
-    if (isFloat<T>()) {
-      if (isNaN(a[i]) && isNaN(a[i]) == isNaN(b[i])) continue;
-    }
-    if (a[i] != b[i]) return false;
-  }
-  return true;
-}
-
 function createReverseOrderedArray(size: i32): Array<i32> {
   var arr = new Array<i32>(size);
   for (let i = 0; i < arr.length; i++) {
@@ -699,3 +818,39 @@ assert(isArraysEqual<string>(randomStringsActual, randomStringsExpected));
 
 var randomStrings400 = createRandomStringArray(400);
 assertSorted<string>(randomStrings400, (a: string, b: string): i32 => <i32>(a > b) - <i32>(a < b));
+
+// Array#join //////////////////////////////////////////////////////////////////////////////////////
+
+class Ref { constructor() {} }
+
+assert((<bool[]>[true, false]).join() == "true,false");
+assert((<i32[]>[1,-2,-3]).join("") == "1-2-3");
+assert((<u32[]>[1, 2, 3]).join("-") == "1-2-3");
+assert((<i32[]>[i32.MIN_VALUE, i32.MIN_VALUE]).join("__") == "-2147483648__-2147483648");
+assert((<f64[]>[0.0, 1.0, -2.0, NaN, -Infinity, Infinity]).join(", ") == "0.0, 1.0, -2.0, NaN, -Infinity, Infinity");
+assert((<string[]>["", "1", null]).join("") == "1");
+var refArr: Ref[] = [new Ref(), null, new Ref()];
+assert(refArr.join() == "[object Object],,[object Object]");
+
+// Array#toString //////////////////////////////////////////////////////////////////////////////////
+
+assert(reversed0.toString() == "");
+assert(reversed1.toString() == "1");
+assert(reversed2.toString() == "1,2");
+assert(reversed4.toString() == "0,1,2,3");
+
+assert((<i8[]>[1, -1, 0]).toString() == "1,-1,0");
+assert((<u16[]>[1, 0xFFFF, 0]).toString() == "1,65535,0");
+assert((<u64[]>[1, 0xFFFFFFFFFFFFFFFF, 0]).toString() == "1,18446744073709551615,0");
+assert((<i64[]>[-1, -1234567890123456, 0, i64.MAX_VALUE]).toString() == "-1,-1234567890123456,0,9223372036854775807");
+assert(randomStringsExpected.toString() == ",a,a,ab,b,ba,");
+assert((<string[]>["1", "2", null, "4"]).toString() == "1,2,,4");
+
+var subarr32: i32[][] = [[1,2], [3,4]];
+assert(subarr32.toString() == "1,2,3,4");
+
+var subarr8: u8[][] = [[1,2], [3,4]];
+assert(subarr8.toString() == "1,2,3,4");
+
+var subarrU32: u32[][][] = [[[1]]];
+assert(subarrU32.toString() == "1");

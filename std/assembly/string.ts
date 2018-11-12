@@ -10,6 +10,10 @@ import {
   parse
 } from "./internal/string";
 
+import {
+  storeUnsafe as storeUnsafeArray
+} from "./internal/arraybuffer";
+
 @sealed
 export class String {
 
@@ -17,7 +21,6 @@ export class String {
 
   // TODO Add and handle second argument
   static fromCharCode(code: i32): String {
-    if (!code) return changetype<String>("\0");
     var out = allocateUnsafe(1);
     store<u16>(
       changetype<usize>(out),
@@ -28,8 +31,7 @@ export class String {
   }
 
   static fromCodePoint(code: i32): String {
-    assert(<u32>code <= 0x10FFFF); // Invalid code point range
-    if (!code) return changetype<String>("\0");
+    assert(<u32>code <= 0x10FFFF);
     var sur = code > 0xFFFF;
     var out = allocateUnsafe(<i32>sur + 1);
     if (!sur) {
@@ -202,6 +204,7 @@ export class String {
     return compareUnsafe(left, 0, right, 0, length) <= 0;
   }
 
+  @inline
   includes(searchString: String, position: i32 = 0): bool {
     return this.indexOf(searchString, position) != -1;
   }
@@ -305,7 +308,17 @@ export class String {
     return out;
   }
 
+  @inline
   trimLeft(): String {
+    return this.trimStart();
+  }
+
+  @inline
+  trimRight(): String {
+    return this.trimEnd();
+  }
+
+  trimStart(): String {
     assert(this !== null);
     var start: isize = 0;
     var len: isize = this.length;
@@ -325,7 +338,7 @@ export class String {
     return out;
   }
 
-  trimRight(): String {
+  trimEnd(): String {
     assert(this !== null);
     var len: isize = this.length;
     while (
@@ -392,11 +405,66 @@ export class String {
       throw new RangeError("Invalid count value");
     }
 
-    if (count === 0 || !length) return changetype<String>("");
-    if (count === 1) return this;
+    if (count == 0 || !length) return changetype<String>("");
+    if (count == 1) return this;
 
     var result = allocateUnsafe(length * count);
     repeatUnsafe(result, 0, this, count);
+    return result;
+  }
+
+  split(separator: String = null, limit: i32 = i32.MAX_VALUE): String[] {
+    assert(this !== null);
+    if (!limit) return new Array<String>();
+    if (separator === null) return <String[]>[this];
+    var length: isize = this.length;
+    var sepLen: isize = separator.length;
+    if (limit < 0) limit = i32.MAX_VALUE;
+    if (!sepLen) {
+      if (!length) return new Array<String>();
+      // split by chars
+      length = min<isize>(length, <isize>limit);
+      let result = new Array<String>(length);
+      let buffer = <ArrayBuffer>result.buffer_;
+      for (let i: isize = 0; i < length; ++i) {
+        let char = allocateUnsafe(1);
+        store<u16>(
+          changetype<usize>(char),
+          load<u16>(
+            changetype<usize>(this) + (<usize>i << 1),
+            HEADER_SIZE
+          ),
+          HEADER_SIZE
+        );
+        storeUnsafeArray<String,String>(buffer, i, char);
+      }
+      return result;
+    } else if (!length) {
+      return <String[]>[changetype<String>("")];
+    }
+    var result = new Array<String>();
+    var end = 0, start = 0, i = 0;
+    while ((end = this.indexOf(separator, start)) != -1) {
+      let len = end - start;
+      if (len > 0) {
+        let out = allocateUnsafe(len);
+        copyUnsafe(out, 0, this, start, len);
+        result.push(out);
+      } else {
+        result.push(changetype<String>(""));
+      }
+      if (++i == limit) return result;
+      start = end + sepLen;
+    }
+    if (!start) return <String[]>[this];
+    var len = length - start;
+    if (len > 0) {
+      let out = allocateUnsafe(len);
+      copyUnsafe(out, 0, this, start, len);
+      result.push(out);
+    } else {
+      result.push(changetype<String>(""));
+    }
     return result;
   }
 
@@ -426,6 +494,49 @@ export class String {
       }
     }
     return len;
+  }
+
+  static fromUTF8(ptr: usize, len: usize): String {
+    if (len < 1) return changetype<String>("");
+    var ptrPos = <usize>0;
+    var buf = memory.allocate(<usize>len << 1);
+    var bufPos = <usize>0;
+    while (ptrPos < len) {
+      let cp = <u32>load<u8>(ptr + ptrPos++);
+      if (cp < 128) {
+        store<u16>(buf + bufPos, cp);
+        bufPos += 2;
+      } else if (cp > 191 && cp < 224) {
+        assert(ptrPos + 1 <= len);
+        store<u16>(buf + bufPos, (cp & 31) << 6 | load<u8>(ptr + ptrPos++) & 63);
+        bufPos += 2;
+      } else if (cp > 239 && cp < 365) {
+        assert(ptrPos + 3 <= len);
+        cp = (
+          (cp                       &  7) << 18 |
+          (load<u8>(ptr + ptrPos++) & 63) << 12 |
+          (load<u8>(ptr + ptrPos++) & 63) << 6  |
+           load<u8>(ptr + ptrPos++) & 63
+        ) - 0x10000;
+        store<u16>(buf + bufPos, 0xD800 + (cp >> 10));
+        bufPos += 2;
+        store<u16>(buf + bufPos, 0xDC00 + (cp & 1023));
+        bufPos += 2;
+      } else {
+        assert(ptrPos + 2 <= len);
+        store<u16>(buf + bufPos,
+          (cp                       & 15) << 12 |
+          (load<u8>(ptr + ptrPos++) & 63) << 6  |
+           load<u8>(ptr + ptrPos++) & 63
+        );
+        bufPos += 2;
+      }
+    }
+    assert(ptrPos == len);
+    var str = allocateUnsafe(<u32>(bufPos >> 1));
+    memory.copy(changetype<usize>(str) + HEADER_SIZE, buf, bufPos);
+    memory.free(buf);
+    return str;
   }
 
   toUTF8(): usize {

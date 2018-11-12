@@ -170,7 +170,6 @@ export class Decompiler {
       }
       case ExpressionId.Switch:
       case ExpressionId.Call:
-      case ExpressionId.CallImport:
       case ExpressionId.CallIndirect: {
         throw new Error("not implemented");
       }

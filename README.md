@@ -2,6 +2,8 @@
 =================
 
 [![Build Status](https://travis-ci.org/AssemblyScript/assemblyscript.svg?branch=master)](https://travis-ci.org/AssemblyScript/assemblyscript)
+[![Backers on Open Collective](https://opencollective.com/assemblyscript/tiers/backer/badge.svg)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/assemblyscript/tiers/sponsor/badge.svg)](#sponsors)
 
 **AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) (basically JavaScript with types) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
 
@@ -58,7 +60,7 @@ Examples
 * **[Conway's Game of Life](./examples/game-of-life)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/game-of-life/index.html) | [fiddle](https://webassembly.studio/?f=gvuw4enb3qk) ]<br />
   Continuously updates the cellular automaton and visualizes its state on a canvas.
 
-* **[Mandelbrot Set](./examples/mandelbrot)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/mandelbrot/index.html) | [fiddle](https://webassembly.studio/?f=pne1undq5g) ]<br />
+* **[Mandelbrot Set](./examples/mandelbrot)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/mandelbrot/index.html) | [fiddle](https://webassembly.studio/?f=m6hbiw9wyq) ]<br />
   Renders the Mandelbrot set to a canvas.
 
 * **[i64 polyfill](./examples/i64-polyfill)**<br />
@@ -91,7 +93,7 @@ $> npm run clean
 Linting potential changes:
 
 ```
-$> npm run lint
+$> npm run check
 ```
 
 Running the [tests](./tests):
@@ -105,3 +107,45 @@ Running everything in order (lint, clean, test, build, test):
 ```
 $> npm run all
 ```
+
+Contributing
+------------
+
+This project exists thanks to all the people who [contribute](CONTRIBUTING.md).
+
+<a href="https://github.com/AssemblyScript/assemblyscript/graphs/contributors"><img src="https://opencollective.com/assemblyscript/contributors.svg?width=890&button=false" /></a>
+
+Sponsoring
+----------
+
+The core team members and most contributors do this open source work in their free time. If you use AssemblyScript for a serious task or plan to do so, and you'd like us to invest more time on it, [please donate](https://opencollective.com/assemblyscript).
+
+This is how we use the donations:
+
+* Allow the core team to work on AssemblyScript
+* Thank contributors if they invested a large amount of time in contributing
+* Support projects in the ecosystem that are of great value for us or users
+* Fees for money handling
+
+### Sponsors
+
+[Become a sponsor](https://opencollective.com/assemblyscript#sponsor) and get your logo on our README on Github with a link to your site.
+
+<a href="https://opencollective.com/assemblyscript/tiers/sponsor/0/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/assemblyscript/tiers/sponsor/1/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/assemblyscript/tiers/sponsor/2/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/assemblyscript/tiers/sponsor/3/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/assemblyscript/tiers/sponsor/4/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/assemblyscript/tiers/sponsor/5/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/assemblyscript/tiers/sponsor/6/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/assemblyscript/tiers/sponsor/7/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/assemblyscript/tiers/sponsor/8/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/assemblyscript/tiers/sponsor/9/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/9/avatar.svg"></a>
+
+### Backers
+
+[Become a backer](https://opencollective.com/assemblyscript#backer) and get your image on our README on Github with a link to your site.
+
+<a href="https://opencollective.com/assemblyscript#backers" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/backer.svg?width=890"></a>
+
+Thank you for your support!

@@ -61,17 +61,32 @@ Instances are automatically populated with useful utility:
   A 64-bit float view on the memory.
 
 * **newString**(str: `string`): `number`<br />
-  Allocates a new string in the module's memory and returns its pointer. Requires `allocate_memory` to be exported from your module's entry file, i.e.:
-
-  ```js
-  import "allocator/tlsf";
-  export { memory };
-  ```
+  Allocates a new string in the module's memory and returns its pointer.<sup>2</sup>
 
 * **getString**(ptr: `number`): `string`<br />
   Gets a string from the module's memory by its pointer.
 
-<sup>1</sup> This feature has not yet landed in any VM as of this writing.
+* **newArray**(view: `TypedArray`, length?: `number`, unsafe?: `boolean`): `number`<br />
+  Copies a typed array into the module's memory and returns its pointer.<sup>2</sup>
+
+* **newArray**(ctor: `TypedArrayConstructor`, length: `number`, unsafe?: `boolean`): `number`<br />
+  Creates a typed array in the module's memory and returns its pointer.<sup>2</sup>
+
+* **getArray**(ctor: `TypedArrayConstructor`, ptr: `number`): `TypedArray`<br />
+  Gets a view on a typed array in the module's memory by its pointer.
+
+* **freeArray**(ptr: `number`): `void`<br />
+  Frees a typed array in the module's memory. Must not be accessed anymore afterwards.
+
+* **getFunction**(ptr: `number`): `function`<br />
+  Gets a function by its pointer.
+
+* **newFunction**(fn: `function`): `number`<br />
+  Creates a new function in the module's table and returns its pointer. Note that only actual
+  WebAssembly functions, i.e. as exported by the module, are supported.
+
+<sup>1</sup> This feature has not yet landed in any VM as of this writing.<br />
+<sup>2</sup> Requires that memory utilities have been exported through `export { memory }` within the entry file.
 
 Examples
 --------
@@ -80,7 +95,7 @@ Examples
 
 ```js
 // From a module provided as a buffer, i.e. as returned by fs.readFileSync
-const myModule = loader.instatiateBuffer(fs.readFileSync("myModule.wasm"), myImports);
+const myModule = loader.instantiateBuffer(fs.readFileSync("myModule.wasm"), myImports);
 
 // From a response object, i.e. as returned by window.fetch
 const myModule = await loader.instantiateStreaming(fetch("myModule.wasm"), myImports);
@@ -118,19 +133,24 @@ myModule.F64[ptrToFloat64 >>> 3] = newValue;
 
 **Note:** Make sure to reference the views as shown above as these will automatically be updated when the module's memory grows.
 
-### Allocating/obtaining strings to/from memory
+### Working with strings and arrays
+
+Strings and arrays cannot yet flow in and out of WebAssembly naturally, hence it is necessary to create them in the module's memory using the `newString` and `newArray` helpers. Afterwards, instead of passing the string or array directly, the resulting reference (pointer) is provided instead:
 
 ```js
-// Allocating a string, i.e. to be passed to an export expecting one
 var str = "Hello world!";
 var ptr = module.newString(str);
 
-// Disposing a string that is no longer needed (requires free_memory to be exported)
-module.memory.free(ptr);
+// ... do something with ptr, i.e. call a WebAssembly export ...
+```
 
-// Obtaining a string, i.e. as returned by an export
+Similarly, when a string or array is returned from a WebAssembly function, a reference (pointer) is received on the JS side and the `getString` and `getArray` helpers can be used to obtain their values:
+
+```js
 var ptrToString = ...;
 var str = module.getString(ptrToString);
+
+// ... do something with str ...
 ```
 
 ### Usage with TypeScript definitions produced by the compiler

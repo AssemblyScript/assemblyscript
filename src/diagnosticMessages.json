@@ -20,6 +20,8 @@
   "Optional parameter must have an initializer.": 215,
   "Constructor of class '{0}' must not require any arguments.": 216,
   "Function '{0}' cannot be inlined into itself.": 217,
+  "Cannot access method '{0}' without calling it as it requires 'this' to be set.": 218,
+  "Optional properties are not supported.": 219,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,
@@ -73,6 +75,7 @@
   "Decorators are not valid here.": 1206,
   "'abstract' modifier can only appear on a class, method, or property declaration.": 1242,
   "Method '{0}' cannot have an implementation because it is marked abstract.": 1245,
+  "A definite assignment assertion '!' is not permitted in this context.": 1255,
   "A class may only extend another class.": 1311,
   "A parameter property cannot be declared using a rest parameter.": 1317,
 

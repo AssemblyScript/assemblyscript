@@ -156,6 +156,10 @@ declare namespace i8 {
   export const MIN_VALUE: i8;
   /** Largest representable value. */
   export const MAX_VALUE: i8;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): i8;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): i8;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
 declare function i16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
@@ -164,6 +168,10 @@ declare namespace i16 {
   export const MIN_VALUE: i16;
   /** Largest representable value. */
   export const MAX_VALUE: i16;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): i16;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): i16;
 }
 /** Converts any other numeric value to a 32-bit signed integer. */
 declare function i32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
@@ -188,6 +196,10 @@ declare namespace i32 {
   export function store16(offset: usize, value: i32, constantOffset?: usize): void;
   /** Stores a 32-bit integer to memory. */
   export function store(offset: usize, value: i32, constantOffset?: usize): void;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): i32;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): i32;
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
 declare function i64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -218,6 +230,10 @@ declare namespace i64 {
   export function store32(offset: usize, value: i64, constantOffset?: usize): void;
   /** Stores a 64-bit integer to memory. */
   export function store(offset: usize, value: i64, constantOffset?: usize): void;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): i64;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): i64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
 declare var isize: i32 | i64;
@@ -228,6 +244,10 @@ declare namespace u8 {
   export const MIN_VALUE: u8;
   /** Largest representable value. */
   export const MAX_VALUE: u8;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): u8;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
 declare function u16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
@@ -236,6 +256,10 @@ declare namespace u16 {
   export const MIN_VALUE: u16;
   /** Largest representable value. */
   export const MAX_VALUE: u16;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): u16;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
 declare function u32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
@@ -244,6 +268,10 @@ declare namespace u32 {
   export const MIN_VALUE: u32;
   /** Largest representable value. */
   export const MAX_VALUE: u32;
+  /** Converts a string to a floating-point number and cast to target integer after. */
+  export function parseFloat(string: string): u64;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
 declare function u64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -252,6 +280,10 @@ declare namespace u64 {
   export const MIN_VALUE: u64;
   /** Largest representable value. */
   export const MAX_VALUE: u64;
+  /** Converts a string to a floating-point number. */
+  export function parseFloat(string: string): u64;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
 declare var usize: u32 | u64;
@@ -286,6 +318,18 @@ declare namespace f32 {
   export function load(offset: usize, constantOffset?: usize): f32;
   /** Stores a 32-bit float to memory. */
   export function store(offset: usize, value: f32, constantOffset?: usize): void;
+  /** Returns a boolean value that indicates whether a value is the reserved value NaN (not a number). */
+  export function isNaN(value: f32): bool;
+  /** Returns true if passed value is finite. */
+  export function isFinite(value: f32): bool;
+  /** Returns true if the value passed is a safe integer. */
+  export function isSafeInteger(value: f32): bool;
+  /** Returns true if the value passed is an integer, false otherwise. */
+  export function isInteger(value: f32): bool;
+  /** Converts a string to a floating-point number. */
+  export function parseFloat(string: string): f32;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f64;
@@ -306,6 +350,18 @@ declare namespace f64 {
   export function load(offset: usize, constantOffset?: usize): f64;
   /** Stores a 64-bit float to memory. */
   export function store(offset: usize, value: f64, constantOffset?: usize): void;
+  /** Returns a boolean value that indicates whether a value is the reserved value NaN (not a number). */
+  export function isNaN(value: f32): bool;
+  /** Returns true if passed value is finite. */
+  export function isFinite(value: f32): bool;
+  /** Returns true if the value passed is a safe integer. */
+  export function isSafeInteger(value: f64): bool;
+  /** Returns true if the value passed is an integer, false otherwise. */
+  export function isInteger(value: f64): bool;
+  /** Converts a string to a floating-point number. */
+  export function parseFloat(string: string): f64;
+  /** Converts A string to an integer. */
+  export function parseInt(string: string, radix?: i32): f64;
 }
 
 // User-defined diagnostic macros
@@ -372,10 +428,64 @@ declare namespace table {
 declare class ArrayBuffer {
   /** The size, in bytes, of the array. */
   readonly byteLength: i32;
+  /** Unsafe pointer to the start of the data in memory. */
+  readonly data: usize;
   /** Constructs a new array buffer of the given length in bytes. */
   constructor(length: i32, unsafe?: bool);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
   slice(begin?: i32, end?: i32): ArrayBuffer;
+}
+
+/** The `DataView` view provides a low-level interface for reading and writing multiple number types in a binary `ArrayBuffer`, without having to care about the platform's endianness. */
+declare class DataView {
+  /** The `buffer` accessor property represents the `ArrayBuffer` or `SharedArrayBuffer` referenced by the `DataView` at construction time. */
+  readonly buffer: ArrayBuffer;
+  /** The `byteLength` accessor property represents the length (in bytes) of this view from the start of its `ArrayBuffer` or `SharedArrayBuffer`. */
+  readonly byteLength: i32;
+  /** The `byteOffset` accessor property represents the offset (in bytes) of this view from the start of its `ArrayBuffer` or `SharedArrayBuffer`. */
+  readonly byteOffset: i32;
+  /** Constructs a new `DataView` with the given properties */
+  constructor(buffer: ArrayBuffer, byteOffset?: i32, byteLength?: i32);
+  /** The `getFloat32()` method gets a signed 32-bit float (float) at the specified byte offset from the start of the `DataView`. */
+  getFloat32(byteOffset: i32, littleEndian?: boolean): f32
+  /** The `getFloat64()` method gets a signed 64-bit float (double) at the specified byte offset from the start of the `DataView`. */
+  getFloat64(byteOffset: i32, littleEndian?: boolean): f64
+  /** The `getInt8()` method gets a signed 8-bit integer (byte) at the specified byte offset from the start of the `DataView`. */
+  getInt8(byteOffset: i32): i8
+  /** The `getInt16()` method gets a signed 16-bit integer (short) at the specified byte offset from the start of the `DataView`. */
+  getInt16(byteOffset: i32, littleEndian?: boolean): i16
+  /** The `getInt32()` method gets a signed 32-bit integer (long) at the specified byte offset from the start of the `DataView`. */
+  getInt32(byteOffset: i32, littleEndian?: boolean): i32
+  /** The `getInt64()` method gets a signed 64-bit integer (long long) at the specified byte offset from the start of the `DataView`. */
+  getInt64(byteOffset: i32, littleEndian?: boolean): i64
+  /** The `getUint8()` method gets an unsigned 8-bit integer (unsigned byte) at the specified byte offset from the start of the `DataView`. */
+  getUint8(byteOffset: i32): u8
+  /** The `getUint16()` method gets an unsigned 16-bit integer (unsigned short) at the specified byte offset from the start of the `DataView`. */
+  getUint16(byteOffset: i32, littleEndian?: boolean): u16
+  /** The `getUint32()` method gets an unsigned 32-bit integer (unsigned long) at the specified byte offset from the start of the `DataView`. */
+  getUint32(byteOffset: i32, littleEndian?: boolean): u32
+  /** The `getUint64()` method gets an unsigned 64-bit integer (unsigned long long) at the specified byte offset from the start of the `DataView`. */
+  getUint64(byteOffset: i32, littleEndian?: boolean): u64
+  /** The `setFloat32()` method stores a signed 32-bit float (float) value at the specified byte offset from the start of the `DataView`. */
+  setFloat32(byteOffset: i32, value: f32, littleEndian?: boolean): void
+  /** The `setFloat64()` method stores a signed 64-bit float (double) value at the specified byte offset from the start of the `DataView`. */
+  setFloat64(byteOffset: i32, value: f64, littleEndian?: boolean): void
+  /** The `setInt8()` method stores a signed 8-bit integer (byte) value at the specified byte offset from the start of the `DataView`. */
+  setInt8(byteOffset: i32, value: i8): void
+  /** The `setInt16()` method stores a signed 16-bit integer (short) value at the specified byte offset from the start of the `DataView`. */
+  setInt16(byteOffset: i32, value: i16, littleEndian?: boolean): void
+  /** The `setInt32()` method stores a signed 32-bit integer (long) value at the specified byte offset from the start of the `DataView`. */
+  setInt32(byteOffset: i32, value: i32, littleEndian?: boolean): void
+  /** The `setInt64()` method stores a signed 64-bit integer (long long) value at the specified byte offset from the start of the `DataView`. */
+  setInt64(byteOffset: i32, value: i64, littleEndian?: boolean): void
+  /** The `setUint8()` method stores an unsigned 8-bit integer (byte) value at the specified byte offset from the start of the `DataView`. */
+  setUint8(byteOffset: i32, value: u8): void
+  /** The `setUint16()` method stores an unsigned 16-bit integer (unsigned short) value at the specified byte offset from the start of the `DataView`. */
+  setUint16(byteOffset: i32, value: u16, littleEndian?: boolean): void
+  /** The `setUint32()` method stores an unsigned 32-bit integer (unsigned long) value at the specified byte offset from the start of the `DataView`. */
+  setUint32(byteOffset: i32, value: u32, littleEndian?: boolean): void
+  /** The `setUint64()` method stores an unsigned 64-bit integer (unsigned long long) value at the specified byte offset from the start of the `DataView`. */
+  setUint64(byteOffset: i32, value: u64, littleEndian?: boolean): void
 }
 
 /** Interface for a typed view on an array buffer. */
@@ -431,17 +541,24 @@ declare class Float64Array extends TypedArray<f64> {}
 
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {
+
+  static isArray<U>(value: any): value is Array<any>;
+
   [key: number]: T;
   /** Current length of the array. */
   length: i32;
   /** Constructs a new array. */
   constructor(capacity?: i32);
+
+  fill(value: T, start?: i32, end?: i32): this;
   every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   findIndex(predicate: (element: T, index: i32, array?: Array<T>) => bool): i32;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
-  push(element: T): void;
+  push(element: T): i32;
+  concat(items: T[]): T[];
+  copyWithin(target: i32, start: i32, end?: i32): this;
   pop(): T;
   forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void;
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U>;
@@ -453,14 +570,10 @@ declare class Array<T> {
   unshift(element: T): i32;
   slice(from: i32, to?: i32): T[];
   splice(start: i32, deleteCount?: i32): void;
-  reverse(): T[];
   sort(comparator?: (a: T, b: T) => i32): this;
-}
-
-/** Class representing a C-like array of values of type `T` with limited capabilities. */
-declare class CArray<T> {
-  [key: number]: T;
-  private constructor();
+  join(separator?: string): string;
+  reverse(): T[];
+  toString(): string;
 }
 
 /** Class representing a sequence of characters. */
@@ -487,10 +600,14 @@ declare class String {
   trim(): string;
   trimLeft(): string;
   trimRight(): string;
+  trimStart(): string;
+  trimEnd(): string;
   padStart(targetLength: i32, padString?: string): string;
   padEnd(targetLength: i32, padString?: string): string;
   repeat(count?: i32): string;
+  split(separator?: string, limit?: i32): string[];
   toString(): string;
+  static fromUTF8(ptr: usize, len: usize): string;
   toUTF8(): usize;
 }
 
@@ -524,6 +641,7 @@ declare class Map<K,V> {
   readonly size: i32;
   has(key: K): bool;
   set(key: K, value: V): void;
+  get(key: K): V;
   delete(key: K): bool;
   clear(): void;
 }
@@ -651,6 +769,27 @@ declare const NativeMathf: INativeMath<f32>;
 declare const Math: IMath<f64>;
 /** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
 declare const Mathf: IMath<f32>;
+
+declare class Date {
+  /** Returns the UTC timestamp in milliseconds of the specified date. */
+  static UTC(
+    year: i32,
+    month: i32,
+    day: i32,
+    hour: i32,
+    minute: i32,
+    second: i32,
+    millisecond: i32
+  ): i64;
+  /** Returns the current UTC timestamp in milliseconds. */
+  static now(): i64;
+  /** Constructs a new date object from an UTC timestamp in milliseconds. */
+  constructor(value: i64);
+  /** Returns the UTC timestamp of this date in milliseconds. */
+  getTime(): i64;
+  /** Sets the UTC timestamp of this date in milliseconds. */
+  setTime(value: i64): i64;
+}
 
 /** Environmental tracing function for debugging purposes. */
 declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;

@@ -1,18 +1,16 @@
 (module
  (type $i (func (result i32)))
- (type $ii (func (param i32) (result i32)))
+ (type $v (func))
  (memory $0 0)
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (export "test" (func $new-without-allocator/test))
- (func $~lib/memory/memory.allocate (; 0 ;) (; has Stack IR ;) (type $ii) (param $0 i32) (result i32)
-  (unreachable)
+ (func $new-without-allocator/test (; 0 ;) (type $i) (result i32)
+  unreachable
  )
- (func $new-without-allocator/test (; 1 ;) (; has Stack IR ;) (type $i) (result i32)
-  (drop
-   (call $~lib/memory/memory.allocate
-    (i32.const 0)
-   )
-  )
-  (i32.const 3)
+ (func $null (; 1 ;) (type $v)
+  nop
  )
 )

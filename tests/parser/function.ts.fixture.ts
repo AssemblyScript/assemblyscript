@@ -1,5 +1,5 @@
 function simple(): void {}
-function typeparams<T, V extends T>(a: V | null = null): void {}
+function typeparams<T, V extends T>(a?: V | null = null): void {}
 @decorator()
 function withdecorator(): void {}
 function withthis(this: i32): i32 {

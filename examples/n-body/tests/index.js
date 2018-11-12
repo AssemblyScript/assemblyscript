@@ -5,9 +5,10 @@ const nbodyAS = require("../assembly/index.js");
 const nbodyRS = require("../rust/index.js");
 
 // Load ASMJS version
-var src = fs.readFileSync(__dirname + "/../build/index.asm.js", "utf8");
+var src = fs.readFileSync(__dirname + "/../build/index.asm.js", "utf8")
+            .replace(/const retasmFunc[^$]*$/g, "");
 
-const nbodyAsmJS = eval("0," + src)({
+const nbodyAsmJS = eval(src + ";asmFunc")({
   Int8Array,
   Int16Array,
   Int32Array,

@@ -36,44 +36,46 @@ export enum CommonFlags {
   GET = 1 << 11,
   /** Has a `set` modifier. */
   SET = 1 << 12,
+  /** Has a definite assignment assertion `!` as in `x!: i32;`. */
+  DEFINITE_ASSIGNMENT = 1 << 13,
 
   // Extended modifiers usually derived from basic modifiers
 
   /** Is ambient, that is either declared or nested in a declared element. */
-  AMBIENT = 1 << 13,
+  AMBIENT = 1 << 14,
   /** Is generic. */
-  GENERIC = 1 << 14,
+  GENERIC = 1 << 15,
   /** Is part of a generic context. */
-  GENERIC_CONTEXT = 1 << 15,
+  GENERIC_CONTEXT = 1 << 16,
   /** Is an instance member. */
-  INSTANCE = 1 << 16,
+  INSTANCE = 1 << 17,
   /** Is a constructor. */
-  CONSTRUCTOR = 1 << 17,
+  CONSTRUCTOR = 1 << 18,
   /** Is an arrow function. */
-  ARROW = 1 << 18,
+  ARROW = 1 << 19,
   /** Is a module export. */
-  MODULE_EXPORT = 1 << 19,
+  MODULE_EXPORT = 1 << 20,
   /** Is a module import. */
-  MODULE_IMPORT = 1 << 20,
+  MODULE_IMPORT = 1 << 21,
 
   // Compilation states
 
   /** Is compiled. */
-  COMPILED = 1 << 21,
+  COMPILED = 1 << 22,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 22,
+  INLINED = 1 << 23,
   /** Is scoped. */
-  SCOPED = 1 << 23,
+  SCOPED = 1 << 24,
   /** Is a trampoline. */
-  TRAMPOLINE = 1 << 24,
+  TRAMPOLINE = 1 << 25,
   /** Is a virtual method. */
-  VIRTUAL = 1 << 25,
+  VIRTUAL = 1 << 26,
   /** Is the main function. */
-  MAIN = 1 << 26,
+  MAIN = 1 << 27,
 
   // Other
 
-  QUOTED = 1 << 27
+  QUOTED = 1 << 28
 }
 
 /** Path delimiter inserted between file system levels. */

@@ -230,7 +230,7 @@ exports.main = function main(argv, options, callback) {
   var parser = null;
 
   // Include library files
-  if (!args.noLib) { // bundled
+  if (!args.noLib) {
     Object.keys(exports.libraryFiles).forEach(libPath => {
       if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
       stats.parseCount++;
@@ -242,6 +242,16 @@ exports.main = function main(argv, options, callback) {
           parser
         );
       });
+    });
+  } else { // always include builtins
+    stats.parseCount++;
+    stats.parseTime += measure(() => {
+      parser = assemblyscript.parseFile(
+        exports.libraryFiles["builtins"],
+        exports.libraryPrefix + "builtins.ts",
+        false,
+        parser
+      );
     });
   }
   const customLibDirs = [];
@@ -495,7 +505,7 @@ exports.main = function main(argv, options, callback) {
 
   module.setOptimizeLevel(optimizeLevel);
   module.setShrinkLevel(shrinkLevel);
-  module.setDebugInfo(!args.noDebug);
+  module.setDebugInfo(args.debug);
 
   var runPasses = [];
   if (args.runPasses) {

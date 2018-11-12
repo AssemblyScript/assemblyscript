@@ -1,5 +1,8 @@
 (module
  (type $v (func))
+ (memory $0 0)
+ (table $0 1 anyfunc)
+ (elem (i32.const 0) $null)
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i16.MIN_VALUE i32 (i32.const -32768))
@@ -27,87 +30,63 @@
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $HEAP_BASE i32 (i32.const 8))
- (memory $0 0)
  (export "memory" (memory $0))
+ (export "table" (table $0))
  (start $start)
  (func $start (; 0 ;) (type $v)
-  (drop
-   (get_global $~lib/builtins/i8.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/i8.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/i16.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/i16.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/i32.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/i32.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/i64.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/i64.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/isize.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/isize.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/u8.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/u8.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/u16.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/u16.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/u32.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/u32.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/u64.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/u64.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/usize.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/usize.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/bool.MIN_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/bool.MAX_VALUE)
-  )
-  (drop
-   (get_global $~lib/builtins/f32.MIN_SAFE_INTEGER)
-  )
-  (drop
-   (get_global $~lib/builtins/f32.MAX_SAFE_INTEGER)
-  )
-  (drop
-   (get_global $~lib/builtins/f64.MIN_SAFE_INTEGER)
-  )
-  (drop
-   (get_global $~lib/builtins/f64.MAX_SAFE_INTEGER)
-  )
+  get_global $~lib/builtins/i8.MIN_VALUE
+  drop
+  get_global $~lib/builtins/i8.MAX_VALUE
+  drop
+  get_global $~lib/builtins/i16.MIN_VALUE
+  drop
+  get_global $~lib/builtins/i16.MAX_VALUE
+  drop
+  get_global $~lib/builtins/i32.MIN_VALUE
+  drop
+  get_global $~lib/builtins/i32.MAX_VALUE
+  drop
+  get_global $~lib/builtins/i64.MIN_VALUE
+  drop
+  get_global $~lib/builtins/i64.MAX_VALUE
+  drop
+  get_global $~lib/builtins/isize.MIN_VALUE
+  drop
+  get_global $~lib/builtins/isize.MAX_VALUE
+  drop
+  get_global $~lib/builtins/u8.MIN_VALUE
+  drop
+  get_global $~lib/builtins/u8.MAX_VALUE
+  drop
+  get_global $~lib/builtins/u16.MIN_VALUE
+  drop
+  get_global $~lib/builtins/u16.MAX_VALUE
+  drop
+  get_global $~lib/builtins/u32.MIN_VALUE
+  drop
+  get_global $~lib/builtins/u32.MAX_VALUE
+  drop
+  get_global $~lib/builtins/u64.MIN_VALUE
+  drop
+  get_global $~lib/builtins/u64.MAX_VALUE
+  drop
+  get_global $~lib/builtins/usize.MIN_VALUE
+  drop
+  get_global $~lib/builtins/usize.MAX_VALUE
+  drop
+  get_global $~lib/builtins/bool.MIN_VALUE
+  drop
+  get_global $~lib/builtins/bool.MAX_VALUE
+  drop
+  get_global $~lib/builtins/f32.MIN_SAFE_INTEGER
+  drop
+  get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
+  drop
+  get_global $~lib/builtins/f64.MIN_SAFE_INTEGER
+  drop
+  get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+  drop
+ )
+ (func $null (; 1 ;) (type $v)
  )
 )

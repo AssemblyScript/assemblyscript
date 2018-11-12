@@ -28,6 +28,8 @@ export enum DiagnosticCode {
   Optional_parameter_must_have_an_initializer = 215,
   Constructor_of_class_0_must_not_require_any_arguments = 216,
   Function_0_cannot_be_inlined_into_itself = 217,
+  Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set = 218,
+  Optional_properties_are_not_supported = 219,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -80,6 +82,7 @@ export enum DiagnosticCode {
   Decorators_are_not_valid_here = 1206,
   _abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration = 1242,
   Method_0_cannot_have_an_implementation_because_it_is_marked_abstract = 1245,
+  A_definite_assignment_assertion_is_not_permitted_in_this_context = 1255,
   A_class_may_only_extend_another_class = 1311,
   A_parameter_property_cannot_be_declared_using_a_rest_parameter = 1317,
   Duplicate_identifier_0 = 2300,
@@ -147,6 +150,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 215: return "Optional parameter must have an initializer.";
     case 216: return "Constructor of class '{0}' must not require any arguments.";
     case 217: return "Function '{0}' cannot be inlined into itself.";
+    case 218: return "Cannot access method '{0}' without calling it as it requires 'this' to be set.";
+    case 219: return "Optional properties are not supported.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
@@ -199,6 +204,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1206: return "Decorators are not valid here.";
     case 1242: return "'abstract' modifier can only appear on a class, method, or property declaration.";
     case 1245: return "Method '{0}' cannot have an implementation because it is marked abstract.";
+    case 1255: return "A definite assignment assertion '!' is not permitted in this context.";
     case 1311: return "A class may only extend another class.";
     case 1317: return "A parameter property cannot be declared using a rest parameter.";
     case 2300: return "Duplicate identifier '{0}'.";

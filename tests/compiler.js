@@ -81,11 +81,12 @@ tests.forEach(filename => {
   // TODO: also save stdout/stderr and diff it (-> expected failures)
 
   // Build unoptimized
-  asc.main( [
+  asc.main([
     filename,
     "--baseDir", basedir,
     "--validate",
     "--measure",
+    "--debug",
     "--textFile" // -> stdout
   ], {
     stdout: stdout,
@@ -136,9 +137,9 @@ tests.forEach(filename => {
       filename,
       "--baseDir", basedir,
       "--validate",
-      "-O3",
       "--measure",
-      "--binaryFile" // -> stdout
+      "--binaryFile", // -> stdout
+      "-O3"
     ];
     if (args.create) cmd.push(
       "--textFile", basename + ".optimized.wat"
@@ -183,33 +184,32 @@ tests.forEach(filename => {
                 console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
               },
               trace: function(msg, n) {
-                console.log("  " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
+                console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
               },
               externalFunction: function() { },
               externalConstant: 1
             },
-            JSOp: {
+            math: {
               mod: function(a, b) { return a % b; }
             },
-            JSMath: Math,
+            Math,
+            Date,
 
             // tests/declare
             declare: {
               externalFunction: function() { },
-              externalConstant: 1
-            },
-            my: {
-              externalFunction: function() { },
-              externalConstant: 2
+              externalConstant: 1,
+              "my.externalFunction": function() { },
+              "my.externalConstant": 2
             },
 
             // tests/external
             external: {
               foo: function() {},
+              "foo.bar": function() {},
               bar: function() {}
             },
             foo: {
-              bar: function() {},
               baz: function() {},
               "var": 3
             }

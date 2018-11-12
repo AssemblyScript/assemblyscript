@@ -353,7 +353,8 @@ export class ASTBuilder {
       return;
     }
     var typeNode = <TypeNode>node;
-    this.visitIdentifierExpression(<IdentifierExpression>typeNode.name);
+    assert(typeNode.name.text.length);
+    this.visitIdentifierExpression(typeNode.name);
     var typeArguments = typeNode.typeArguments;
     if (typeArguments) {
       let numTypeArguments = typeArguments.length;
@@ -989,6 +990,9 @@ export class ASTBuilder {
     this.serializeAccessModifiers(node);
     this.visitIdentifierExpression(node.name);
     var sb = this.sb;
+    if (node.flags & CommonFlags.DEFINITE_ASSIGNMENT) {
+      sb.push("!");
+    }
     var type = node.type;
     if (type) {
       sb.push(": ");
@@ -1081,22 +1085,24 @@ export class ASTBuilder {
     var returnType = signature.returnType;
     if (node.is(CommonFlags.ARROW)) {
       if (body) {
-        if (returnType) {
+        if (isTypeOmitted(returnType)) {
+          sb.push(")");
+        } else {
           sb.push("): ");
           this.visitTypeNode(returnType);
         }
         sb.push(" => ");
         this.visitNode(body);
       } else {
-        if (returnType) {
-          sb.push(" => ");
-          this.visitTypeNode(returnType);
-        } else {
-          sb.push(" => void");
-        }
+        assert(!isTypeOmitted(returnType));
+        sb.push(" => ");
+        this.visitTypeNode(returnType);
       }
     } else {
-      if (returnType && !node.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.SET)) {
+      if (
+        !isTypeOmitted(returnType) &&
+        !node.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.SET)
+      ) {
         sb.push("): ");
         this.visitTypeNode(returnType);
       } else {
@@ -1373,6 +1379,9 @@ export class ASTBuilder {
     this.visitIdentifierExpression(node.name);
     var type = node.type;
     var sb = this.sb;
+    if (node.flags & CommonFlags.DEFINITE_ASSIGNMENT) {
+      sb.push("!");
+    }
     if (type) {
       sb.push(": ");
       this.visitTypeNode(type);
@@ -1454,12 +1463,11 @@ export class ASTBuilder {
     var type = node.type;
     var initializer = node.initializer;
     if (type) {
-      if (kind == ParameterKind.OPTIONAL && !initializer) {
-        sb.push("?: ");
-      } else {
+      if (kind == ParameterKind.OPTIONAL) sb.push("?");
+      if (!isTypeOmitted(type)) {
         sb.push(": ");
+        this.visitTypeNode(type);
       }
-      this.visitTypeNode(type);
     }
     if (initializer) {
       sb.push(" = ");
@@ -1502,4 +1510,8 @@ export class ASTBuilder {
     this.sb = [];
     return ret;
   }
+}
+
+function isTypeOmitted(type: CommonTypeNode): bool {
+  return type.kind == NodeKind.TYPE && !changetype<TypeNode>(type).name.text.length;
 }

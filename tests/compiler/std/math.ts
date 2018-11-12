@@ -1181,6 +1181,141 @@ assert(test_exp(-1.0397214889526365, 0.353553136702178472, 0.252727240324020386,
 assert(test_exp(1.03972101211547852, 2.82842780717661224, -0.418413937091827393, INEXACT));
 assert(test_exp(1.03972148895263672, 2.82842915587641164, -0.226183772087097168, INEXACT));
 
+// some vectors from crlibm
+assert(test_exp( f64.MIN_VALUE, 1.0, 0.0, INEXACT)); // smallest denorm positive
+assert(test_exp(-f64.MIN_VALUE, 1.0, 0.0, INEXACT)); // smallest denorm negative
+
+assert(test_exp(
+  reinterpret<f64>(0x40862E42FEFA39EF),
+  reinterpret<f64>(0x7FEFFFFFFFFFFF2A),
+  reinterpret<f64>(0xBFBB0E2640000000),
+  INEXACT
+));
+
+assert(test_exp(reinterpret<f64>(0x40862E42FEFA39F0), Infinity, 0.0, INEXACT | OVERFLOW));
+assert(test_exp(
+  reinterpret<f64>(0xC0874910D52D3051),
+  f64.MIN_VALUE,
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT | UNDERFLOW
+));
+
+assert(test_exp(
+  reinterpret<f64>(0xC0874910D52D3052),
+  0.0,
+  reinterpret<f64>(0xBFE0000000000000),
+  INEXACT | UNDERFLOW
+));
+
+assert(test_exp(
+  reinterpret<f64>(0xC086232BDD7ABCD2),
+  reinterpret<f64>(0x001000000000007C),
+  reinterpret<f64>(0x3FD0C013E0000000),
+  INEXACT
+));
+
+assert(test_exp(
+  reinterpret<f64>(0xC086232BDD7ABCD3),
+  reinterpret<f64>(0x000FFFFFFFFFFE7C),
+  reinterpret<f64>(0x000FFFFFFFFFFE7C),
+  INEXACT | UNDERFLOW
+));
+
+assert(test_exp(
+  reinterpret<f64>(0x3FE005AE04256BAB),
+  reinterpret<f64>(0x3FFA65D89ABF3D1F),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 5.006933289508784801213892023952e-01
+
+assert(test_exp(
+  reinterpret<f64>(0x3FE41C9E095CD545),
+  reinterpret<f64>(0x3FFDFF1D425DE879),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 6.284933264602520219810344315192e-01
+
+assert(test_exp(
+  reinterpret<f64>(0x3FEACCFBE46B4EF0),
+  reinterpret<f64>(0x40027C2E4BC1EE70),
+  reinterpret<f64>(0xBFE0000000000000),
+  INEXACT
+)); // 8.375224553405740124389922129922e-01
+assert(test_exp(
+  reinterpret<f64>(0x3FEB3738E335EA89),
+  reinterpret<f64>(0x4002B9F331610FB0),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 8.504909932810998940411195690103e-01
+assert(test_exp(
+  reinterpret<f64>(0x3FFA083788425AB6),
+  reinterpret<f64>(0x40145ABE6A4C4281),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 1.627006084692465659458093796275e+00
+assert(test_exp(
+  reinterpret<f64>(0x3FFACA7AE8DA5A7B),
+  reinterpret<f64>(0x401557D4ACD7E557),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 1.674433621961411544631914694037e+00
+
+assert(test_exp(
+  reinterpret<f64>(0x401AA1B465630FA4),
+  reinterpret<f64>(0x4088576653F47E5E),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 6.657914718791207775439033866860e+00
+
+assert(test_exp(
+  reinterpret<f64>(0x40260BB5FB993B99),
+  reinterpret<f64>(0x40EDE96D34FCCCFE),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 1.102287279363172167734319373267e+01
+
+assert(test_exp(
+  reinterpret<f64>(0x4026D2883E37B4D7),
+  reinterpret<f64>(0x40F60D75C9585CA5),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 1.141119570188531717747082439018e+01
+
+assert(test_exp(
+  reinterpret<f64>(0x402796C771AF1E4B),
+  reinterpret<f64>(0x41002D419F8E15F2),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 1.179449038756060552657345397165e+01
+
+assert(test_exp(
+  reinterpret<f64>(0x4079CD6B6D99965B),
+  reinterpret<f64>(0x65284208270E2E4C),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // 4.128387275695328639812942128628e+02
+
+assert(test_exp(
+  reinterpret<f64>(0x407FEE02D3D0EC9A),
+  reinterpret<f64>(0x6E006CCF59E5ED14),
+  reinterpret<f64>(0xBFE0000000000000),
+  INEXACT
+)); // 5.108756902848341496792272664607e+02
+
+assert(test_exp(
+  reinterpret<f64>(0xBD1DF00000000070),
+  reinterpret<f64>(0x3FEFFFFFFFFFFF11),
+  reinterpret<f64>(0x3FE0000000000000),
+  INEXACT
+)); // -2.658984143977285255283151746406e-14
+
+assert(test_exp(
+  reinterpret<f64>(0xBD1E900000000075),
+  reinterpret<f64>(0x3FEFFFFFFFFFFF0B),
+  reinterpret<f64>(0xBFE0000000000000),
+  INEXACT
+)); // -2.714495295208544660026143771835e-14
+
 // Mathf.exp ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_expf(value: f32, expected: f32, error: f32, flags: i32): bool {
@@ -1985,13 +2120,11 @@ assert(test_minf(-1.75, -0.5, -1.75, 0.0, 0));
 // Math.mod
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-declare namespace JSOp {
-  export function mod(x: f64, y: f64): f64;
-}
+declare function mod(x: f64, y: f64): f64;
 
 function test_mod(left: f64, right: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.mod(left, right), expected, error, flags) &&
-  (!js || check<f64>(      JSOp.mod(left, right), expected, error, flags));
+  (!js || check<f64>(           mod(left, right), expected, error, flags));
 }
 
 // sanity
@@ -3117,3 +3250,40 @@ assert(test_truncf(0.9999923706, 0.0, 0.0, INEXACT));
 assert(test_truncf(-0.9999923706, -0.0, 0.0, INEXACT));
 assert(test_truncf(7.888609052e-31, 0.0, 0.0, INEXACT));
 assert(test_truncf(-7.888609052e-31, -0.0, 0.0, INEXACT));
+
+// ipow64 /////////////////////////////////////////////////////////////////////////////////////
+
+assert(ipow64(0, 0) == 1);
+assert(ipow64(0, 1) == 0);
+assert(ipow64(0, 2) == 0);
+assert(ipow64(0, 3) == 0);
+
+assert(ipow64(1, 0) == 1);
+assert(ipow64(1, 1) == 1);
+assert(ipow64(1, 2) == 1);
+assert(ipow64(1, 3) == 1);
+
+assert(ipow64(2, 0) == 1);
+assert(ipow64(2, 1) == 2);
+assert(ipow64(2, 2) == 4);
+assert(ipow64(2, 3) == 8);
+
+assert(ipow64(-1, 0) ==  1);
+assert(ipow64(-1, 1) == -1);
+assert(ipow64(-1, 2) ==  1);
+assert(ipow64(-1, 3) == -1);
+
+assert(ipow64(-2, 0) ==  1);
+assert(ipow64(-2, 1) == -2);
+assert(ipow64(-2, 2) ==  4);
+assert(ipow64(-2, 3) == -8);
+
+assert(ipow64(3,  40) ==  12157665459056928801);
+assert(ipow64(3,  41) == -420491770248316829);  // should overflow
+assert(ipow64(3,  42) == -1261475310744950487); // should overflow
+assert(ipow64(3,  43) == -3784425932234851461); // should overflow
+assert(ipow64(3,  63) == -3237885987332494933); // should overflow
+assert(ipow64(3,  64) ==  8733086111712066817); // should overflow
+assert(ipow64(3, 128) == -9204772141784466943); // should overflow
+
+assert(ipow64(57055, 3) + ipow64(339590, 3) == 39347712995520375); // add Buterin's twit example

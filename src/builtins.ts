@@ -2959,7 +2959,7 @@ export function compileAbort(
 
   compiler.currentType = Type.void;
   return module.createBlock(null, [
-    module.createCallImport(
+    module.createCall(
       abortInstance.internalName, [
         messageArg,
         filenameArg,
@@ -3078,7 +3078,7 @@ export function ensureGCHook(
   // remember the function index so we don't recurse infinitely
   var functionTable = compiler.functionTable;
   var gcHookIndex = functionTable.length;
-  functionTable.push(0);
+  functionTable.push("<placeholder>");
   classInstance.gcHookIndex = gcHookIndex;
 
   // if the class extends a base class, call its hook first (calls mark)
@@ -3133,11 +3133,13 @@ export function ensureGCHook(
   }
 
   // add the function to the module and return its table index
-  functionTable[gcHookIndex] = module.addFunction(
-    classInstance.internalName + "~gc",
+  var funcName = classInstance.internalName + "~gc";
+  module.addFunction(
+    funcName,
     compiler.ensureFunctionType(null, Type.void, options.usizeType),
     null,
     module.createBlock(null, body)
   );
+  functionTable[gcHookIndex] = funcName;
   return gcHookIndex;
 }

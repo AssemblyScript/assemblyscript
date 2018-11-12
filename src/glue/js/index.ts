@@ -14,7 +14,7 @@ import "./i64";
 import { Module } from "../../module";
 
 Module.prototype.toText = function(this: Module) {
-  return new binaryen.Module(this.ref).emitText();
+  return new binaryen.Module(this.ref).emitStackIR();
 };
 
 Module.prototype.toAsmjs = function(this: Module) {
