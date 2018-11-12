@@ -4,7 +4,15 @@ var stringToId: Map<string, usize>;
 var idToString: Map<usize, string>;
 var nextId: usize = 12; // Symbol.unscopables + 1
 
-@unmanaged export class symbol {}
+@unmanaged export class symbol {
+  toString(): string {
+    var id = changetype<usize>(this);
+    if (idToString !== null && idToString.has(id)) {
+      return "Symbol(" + idToString.get(id) + ")";
+    }
+    return "Symbol()";
+  }
+}
 
 type Symbol = symbol;
 

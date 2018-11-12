@@ -22,6 +22,9 @@ var key4 = Symbol.keyFor(sym4);
 assert(key3 == "123");
 assert(key3 == key4);
 
+assert(Symbol().toString() == "Symbol()");
+assert(sym3.toString() == "Symbol(123)");
+
 Symbol.hasInstance;
 Symbol.concatSpreadable;
 // ...
