@@ -2220,7 +2220,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block
+  block $std/pointer/Pointer<f32>#set|inlined.0
    get_global $std/pointer/buf
    set_local $0
    i32.const 2

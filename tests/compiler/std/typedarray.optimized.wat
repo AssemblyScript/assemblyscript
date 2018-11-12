@@ -1561,18 +1561,17 @@
   get_local $0
   get_local $1
   i32.add
-  tee_local $2
+  tee_local $0
   i32.const 8
   i32.add
+  tee_local $1
   f64.load offset=8
   set_local $7
-  get_local $2
-  i32.const 8
-  i32.add
-  get_local $2
+  get_local $1
+  get_local $0
   f64.load offset=8
   f64.store offset=8
-  get_local $2
+  get_local $0
   get_local $7
   f64.store offset=8
  )
@@ -1627,12 +1626,13 @@
     get_local $3
     get_local $2
     i32.add
-    tee_local $1
     i32.const 8
     i32.add
     get_local $6
     f64.store offset=8
-    get_local $1
+    get_local $3
+    get_local $2
+    i32.add
     get_local $5
     f64.store offset=8
    end

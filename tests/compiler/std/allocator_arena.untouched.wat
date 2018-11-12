@@ -1888,7 +1888,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block
+  block $~lib/memory/memory.fill|inlined.0
    get_global $std/allocator_arena/ptr1
    set_local $0
    i32.const 18
@@ -1933,7 +1933,7 @@
    end
    unreachable
   end
-  block
+  block $~lib/memory/memory.copy|inlined.0
    get_global $std/allocator_arena/ptr2
    set_local $2
    get_global $std/allocator_arena/ptr1

@@ -438,16 +438,18 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  get_local $3
-  get_global $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  set_local $4
-  i32.const 0
-  set_local $5
-  get_local $4
-  get_local $5
-  get_local $2
-  call $~lib/internal/memory/memset
+  block $~lib/memory/memory.fill|inlined.0
+   get_local $3
+   get_global $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   set_local $4
+   i32.const 0
+   set_local $5
+   get_local $4
+   get_local $5
+   get_local $2
+   call $~lib/internal/memory/memset
+  end
   get_local $0
   if (result i32)
    get_local $0
@@ -497,21 +499,23 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  i32.load
-  set_local $3
-  get_local $0
-  i32.load offset=4
-  set_local $4
-  get_local $3
-  get_local $4
-  i32.add
-  get_local $1
-  i32.const 0
-  i32.shl
-  i32.add
-  get_local $2
-  i32.store8 offset=8
+  block $~lib/internal/arraybuffer/storeUnsafeWithOffset<u8,u32>|inlined.0
+   get_local $0
+   i32.load
+   set_local $3
+   get_local $0
+   i32.load offset=4
+   set_local $4
+   get_local $3
+   get_local $4
+   i32.add
+   get_local $1
+   i32.const 0
+   i32.shl
+   i32.add
+   get_local $2
+   i32.store8 offset=8
+  end
  )
  (func $~lib/dataview/DataView#constructor (; 8 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -602,31 +606,33 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  i32.const 4
-  set_local $3
-  get_local $0
-  i32.load offset=8
-  set_local $4
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $5
-  if (result i32)
-   get_local $5
-  else   
+  block $~lib/dataview/checkOffset|inlined.0
+   i32.const 4
+   set_local $3
+   get_local $0
+   i32.load offset=8
+   set_local $4
    get_local $1
-   get_local $3
-   i32.add
-   get_local $4
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $5
+   if (result i32)
+    get_local $5
+   else    
+    get_local $1
+    get_local $3
+    i32.add
+    get_local $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $2
   i32.const 1
@@ -696,31 +702,33 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  i32.const 8
-  set_local $3
-  get_local $0
-  i32.load offset=8
-  set_local $4
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $5
-  if (result i32)
-   get_local $5
-  else   
+  block $~lib/dataview/checkOffset|inlined.1
+   i32.const 8
+   set_local $3
+   get_local $0
+   i32.load offset=8
+   set_local $4
    get_local $1
-   get_local $3
-   i32.add
-   get_local $4
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $5
+   if (result i32)
+    get_local $5
+   else    
+    get_local $1
+    get_local $3
+    i32.add
+    get_local $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $2
   i32.const 1
@@ -751,31 +759,33 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 1
-  set_local $2
-  get_local $0
-  i32.load offset=8
-  set_local $3
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $4
-  if (result i32)
-   get_local $4
-  else   
+  block $~lib/dataview/checkOffset|inlined.2
+   i32.const 1
+   set_local $2
+   get_local $0
+   i32.load offset=8
+   set_local $3
    get_local $1
-   get_local $2
-   i32.add
-   get_local $3
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $4
+   if (result i32)
+    get_local $4
+   else    
+    get_local $1
+    get_local $2
+    i32.add
+    get_local $3
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -807,31 +817,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 2
-  set_local $3
-  get_local $0
-  i32.load offset=8
-  set_local $4
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $5
-  if (result i32)
-   get_local $5
-  else   
+  block $~lib/dataview/checkOffset|inlined.3
+   i32.const 2
+   set_local $3
+   get_local $0
+   i32.load offset=8
+   set_local $4
    get_local $1
-   get_local $3
-   i32.add
-   get_local $4
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $5
+   if (result i32)
+    get_local $5
+   else    
+    get_local $1
+    get_local $3
+    i32.add
+    get_local $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -871,31 +883,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 4
-  set_local $3
-  get_local $0
-  i32.load offset=8
-  set_local $4
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $5
-  if (result i32)
-   get_local $5
-  else   
+  block $~lib/dataview/checkOffset|inlined.4
+   i32.const 4
+   set_local $3
+   get_local $0
+   i32.load offset=8
+   set_local $4
    get_local $1
-   get_local $3
-   i32.add
-   get_local $4
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $5
+   if (result i32)
+    get_local $5
+   else    
+    get_local $1
+    get_local $3
+    i32.add
+    get_local $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -960,31 +974,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i64)
-  i32.const 8
-  set_local $3
-  get_local $0
-  i32.load offset=8
-  set_local $4
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $5
-  if (result i32)
-   get_local $5
-  else   
+  block $~lib/dataview/checkOffset|inlined.5
+   i32.const 8
+   set_local $3
+   get_local $0
+   i32.load offset=8
+   set_local $4
    get_local $1
-   get_local $3
-   i32.add
-   get_local $4
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $5
+   if (result i32)
+    get_local $5
+   else    
+    get_local $1
+    get_local $3
+    i32.add
+    get_local $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1009,31 +1025,33 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 1
-  set_local $2
-  get_local $0
-  i32.load offset=8
-  set_local $3
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $4
-  if (result i32)
-   get_local $4
-  else   
+  block $~lib/dataview/checkOffset|inlined.6
+   i32.const 1
+   set_local $2
+   get_local $0
+   i32.load offset=8
+   set_local $3
    get_local $1
-   get_local $2
-   i32.add
-   get_local $3
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $4
+   if (result i32)
+    get_local $4
+   else    
+    get_local $1
+    get_local $2
+    i32.add
+    get_local $3
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1063,31 +1081,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 2
-  set_local $3
-  get_local $0
-  i32.load offset=8
-  set_local $4
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $5
-  if (result i32)
-   get_local $5
-  else   
+  block $~lib/dataview/checkOffset|inlined.7
+   i32.const 2
+   set_local $3
+   get_local $0
+   i32.load offset=8
+   set_local $4
    get_local $1
-   get_local $3
-   i32.add
-   get_local $4
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $5
+   if (result i32)
+    get_local $5
+   else    
+    get_local $1
+    get_local $3
+    i32.add
+    get_local $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1113,31 +1133,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 4
-  set_local $3
-  get_local $0
-  i32.load offset=8
-  set_local $4
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $5
-  if (result i32)
-   get_local $5
-  else   
+  block $~lib/dataview/checkOffset|inlined.8
+   i32.const 4
+   set_local $3
+   get_local $0
+   i32.load offset=8
+   set_local $4
    get_local $1
-   get_local $3
-   i32.add
-   get_local $4
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $5
+   if (result i32)
+    get_local $5
+   else    
+    get_local $1
+    get_local $3
+    i32.add
+    get_local $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1163,31 +1185,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i64)
-  i32.const 8
-  set_local $3
-  get_local $0
-  i32.load offset=8
-  set_local $4
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $5
-  if (result i32)
-   get_local $5
-  else   
+  block $~lib/dataview/checkOffset|inlined.9
+   i32.const 8
+   set_local $3
+   get_local $0
+   i32.load offset=8
+   set_local $4
    get_local $1
-   get_local $3
-   i32.add
-   get_local $4
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $5
+   if (result i32)
+    get_local $5
+   else    
+    get_local $1
+    get_local $3
+    i32.add
+    get_local $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1212,31 +1236,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 4
-  set_local $4
-  get_local $0
-  i32.load offset=8
-  set_local $5
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $6
-  if (result i32)
-   get_local $6
-  else   
+  block $~lib/dataview/checkOffset|inlined.10
+   i32.const 4
+   set_local $4
+   get_local $0
+   i32.load offset=8
+   set_local $5
    get_local $1
-   get_local $4
-   i32.add
-   get_local $5
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $6
+   if (result i32)
+    get_local $6
+   else    
+    get_local $1
+    get_local $4
+    i32.add
+    get_local $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $3
   i32.const 1
@@ -1269,31 +1295,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 8
-  set_local $4
-  get_local $0
-  i32.load offset=8
-  set_local $5
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $6
-  if (result i32)
-   get_local $6
-  else   
+  block $~lib/dataview/checkOffset|inlined.11
+   i32.const 8
+   set_local $4
+   get_local $0
+   i32.load offset=8
+   set_local $5
    get_local $1
-   get_local $4
-   i32.add
-   get_local $5
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $6
+   if (result i32)
+    get_local $6
+   else    
+    get_local $1
+    get_local $4
+    i32.add
+    get_local $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $3
   i32.const 1
@@ -1326,31 +1354,33 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  i32.const 1
-  set_local $3
-  get_local $0
-  i32.load offset=8
-  set_local $4
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $5
-  if (result i32)
-   get_local $5
-  else   
+  block $~lib/dataview/checkOffset|inlined.12
+   i32.const 1
+   set_local $3
+   get_local $0
+   i32.load offset=8
+   set_local $4
    get_local $1
-   get_local $3
-   i32.add
-   get_local $4
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $5
+   if (result i32)
+    get_local $5
+   else    
+    get_local $1
+    get_local $3
+    i32.add
+    get_local $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1366,31 +1396,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 2
-  set_local $4
-  get_local $0
-  i32.load offset=8
-  set_local $5
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $6
-  if (result i32)
-   get_local $6
-  else   
+  block $~lib/dataview/checkOffset|inlined.13
+   i32.const 2
+   set_local $4
+   get_local $0
+   i32.load offset=8
+   set_local $5
    get_local $1
-   get_local $4
-   i32.add
-   get_local $5
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $6
+   if (result i32)
+    get_local $6
+   else    
+    get_local $1
+    get_local $4
+    i32.add
+    get_local $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1414,31 +1446,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 4
-  set_local $4
-  get_local $0
-  i32.load offset=8
-  set_local $5
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $6
-  if (result i32)
-   get_local $6
-  else   
+  block $~lib/dataview/checkOffset|inlined.14
+   i32.const 4
+   set_local $4
+   get_local $0
+   i32.load offset=8
+   set_local $5
    get_local $1
-   get_local $4
-   i32.add
-   get_local $5
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $6
+   if (result i32)
+    get_local $6
+   else    
+    get_local $1
+    get_local $4
+    i32.add
+    get_local $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1462,31 +1496,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 8
-  set_local $4
-  get_local $0
-  i32.load offset=8
-  set_local $5
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $6
-  if (result i32)
-   get_local $6
-  else   
+  block $~lib/dataview/checkOffset|inlined.15
+   i32.const 8
+   set_local $4
+   get_local $0
+   i32.load offset=8
+   set_local $5
    get_local $1
-   get_local $4
-   i32.add
-   get_local $5
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $6
+   if (result i32)
+    get_local $6
+   else    
+    get_local $1
+    get_local $4
+    i32.add
+    get_local $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1510,31 +1546,33 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  i32.const 1
-  set_local $3
-  get_local $0
-  i32.load offset=8
-  set_local $4
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $5
-  if (result i32)
-   get_local $5
-  else   
+  block $~lib/dataview/checkOffset|inlined.16
+   i32.const 1
+   set_local $3
+   get_local $0
+   i32.load offset=8
+   set_local $4
    get_local $1
-   get_local $3
-   i32.add
-   get_local $4
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $5
+   if (result i32)
+    get_local $5
+   else    
+    get_local $1
+    get_local $3
+    i32.add
+    get_local $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1550,31 +1588,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 2
-  set_local $4
-  get_local $0
-  i32.load offset=8
-  set_local $5
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $6
-  if (result i32)
-   get_local $6
-  else   
+  block $~lib/dataview/checkOffset|inlined.17
+   i32.const 2
+   set_local $4
+   get_local $0
+   i32.load offset=8
+   set_local $5
    get_local $1
-   get_local $4
-   i32.add
-   get_local $5
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $6
+   if (result i32)
+    get_local $6
+   else    
+    get_local $1
+    get_local $4
+    i32.add
+    get_local $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1598,31 +1638,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 4
-  set_local $4
-  get_local $0
-  i32.load offset=8
-  set_local $5
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $6
-  if (result i32)
-   get_local $6
-  else   
+  block $~lib/dataview/checkOffset|inlined.18
+   i32.const 4
+   set_local $4
+   get_local $0
+   i32.load offset=8
+   set_local $5
    get_local $1
-   get_local $4
-   i32.add
-   get_local $5
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $6
+   if (result i32)
+    get_local $6
+   else    
+    get_local $1
+    get_local $4
+    i32.add
+    get_local $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load
@@ -1646,31 +1688,33 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 8
-  set_local $4
-  get_local $0
-  i32.load offset=8
-  set_local $5
-  get_local $1
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  tee_local $6
-  if (result i32)
-   get_local $6
-  else   
+  block $~lib/dataview/checkOffset|inlined.19
+   i32.const 8
+   set_local $4
+   get_local $0
+   i32.load offset=8
+   set_local $5
    get_local $1
-   get_local $4
-   i32.add
-   get_local $5
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   i32.const 136
-   i32.const 184
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   tee_local $6
+   if (result i32)
+    get_local $6
+   else    
+    get_local $1
+    get_local $4
+    i32.add
+    get_local $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   get_local $0
   i32.load

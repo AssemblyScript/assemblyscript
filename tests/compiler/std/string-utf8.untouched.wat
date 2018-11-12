@@ -2223,14 +2223,16 @@
   i32.shr_u
   call $~lib/internal/string/allocateUnsafe
   set_local $7
-  get_local $7
-  get_global $~lib/internal/string/HEADER_SIZE
-  i32.add
-  set_local $3
-  get_local $3
-  get_local $4
-  get_local $5
-  call $~lib/internal/memory/memmove
+  block $~lib/memory/memory.copy|inlined.0
+   get_local $7
+   get_global $~lib/internal/string/HEADER_SIZE
+   i32.add
+   set_local $3
+   get_local $3
+   get_local $4
+   get_local $5
+   call $~lib/internal/memory/memmove
+  end
   block $~lib/memory/memory.free|inlined.0
    block
     get_local $4

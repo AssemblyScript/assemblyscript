@@ -4699,7 +4699,11 @@
     i32.const 1
     i32.shl
     call $~lib/internal/memory/memmove
-    get_local $3
+    get_local $0
+    get_local $4
+    i32.const 1
+    i32.shl
+    i32.add
     i32.const 46
     i32.store16 offset=4
     get_local $1

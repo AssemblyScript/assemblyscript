@@ -2666,7 +2666,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   get_local $0
   i32.load offset=4
   tee_local $1
@@ -2697,10 +2696,11 @@
   tee_local $1
   i32.const 2
   i32.shl
-  tee_local $4
   call $~lib/internal/memory/memmove
   get_local $2
-  get_local $4
+  get_local $1
+  i32.const 2
+  i32.shl
   i32.add
   i32.const 0
   i32.store offset=8
@@ -4097,12 +4097,11 @@
   get_local $0
   i32.const 4
   i32.add
-  tee_local $2
+  tee_local $1
   f32.load offset=8
   set_local $6
-  get_local $2
+  get_local $1
   get_local $0
-  tee_local $1
   f32.load offset=8
   f32.store offset=8
   get_local $0
@@ -4687,12 +4686,11 @@
   get_local $0
   i32.const 8
   i32.add
-  tee_local $2
+  tee_local $1
   f64.load offset=8
   set_local $6
-  get_local $2
+  get_local $1
   get_local $0
-  tee_local $1
   f64.load offset=8
   f64.store offset=8
   get_local $0
@@ -5049,27 +5047,27 @@
    get_local $1
    i32.const 1
    i32.sub
-   set_local $4
+   set_local $3
    loop $repeat|0
-    get_local $4
+    get_local $3
     i32.const 0
     i32.le_s
     br_if $break|0
-    get_local $4
-    set_local $3
+    get_local $3
+    set_local $4
     loop $continue|1
-     get_local $3
+     get_local $4
      i32.const 1
      i32.and
      get_local $7
-     get_local $3
+     get_local $4
      i32.const 6
      i32.shr_s
      i32.const 2
      i32.shl
      i32.add
      i32.load
-     get_local $3
+     get_local $4
      i32.const 1
      i32.shr_s
      i32.const 31
@@ -5079,15 +5077,15 @@
      i32.and
      i32.eq
      if
-      get_local $3
+      get_local $4
       i32.const 1
       i32.shr_s
-      set_local $3
+      set_local $4
       br $continue|1
      end
     end
     get_local $0
-    get_local $3
+    get_local $4
     i32.const 1
     i32.shr_s
     tee_local $5
@@ -5095,9 +5093,9 @@
     i32.shl
     i32.add
     i32.load offset=8
-    set_local $3
+    set_local $4
     get_local $0
-    get_local $4
+    get_local $3
     i32.const 2
     i32.shl
     i32.add
@@ -5105,7 +5103,7 @@
     set_local $6
     i32.const 2
     set_global $~argc
-    get_local $3
+    get_local $4
     get_local $6
     get_local $2
     call_indirect (type $iii)
@@ -5113,7 +5111,7 @@
     i32.lt_s
     if
      get_local $7
-     get_local $4
+     get_local $3
      i32.const 5
      i32.shr_s
      i32.const 2
@@ -5123,18 +5121,18 @@
      get_local $8
      i32.load
      i32.const 1
-     get_local $4
+     get_local $3
      i32.const 31
      i32.and
      i32.shl
      i32.xor
      i32.store
      get_local $0
-     get_local $4
+     get_local $3
      i32.const 2
      i32.shl
      i32.add
-     get_local $3
+     get_local $4
      i32.store offset=8
      get_local $0
      get_local $5
@@ -5144,10 +5142,10 @@
      get_local $6
      i32.store offset=8
     end
-    get_local $4
+    get_local $3
     i32.const 1
     i32.sub
-    set_local $4
+    set_local $3
     br $repeat|0
     unreachable
    end
@@ -5157,9 +5155,9 @@
    get_local $1
    i32.const 1
    i32.sub
-   set_local $4
+   set_local $3
    loop $repeat|2
-    get_local $4
+    get_local $3
     i32.const 2
     i32.lt_s
     br_if $break|2
@@ -5168,7 +5166,7 @@
     set_local $6
     get_local $0
     get_local $0
-    get_local $4
+    get_local $3
     i32.const 2
     i32.shl
     i32.add
@@ -5199,11 +5197,11 @@
      i32.const 1
      i32.and
      i32.add
-     tee_local $3
-     get_local $4
+     tee_local $4
+     get_local $3
      i32.lt_s
      if
-      get_local $3
+      get_local $4
       set_local $5
       br $continue|3
      end
@@ -5222,11 +5220,11 @@
       i32.shl
       i32.add
       i32.load offset=8
-      set_local $3
+      set_local $4
       i32.const 2
       set_global $~argc
       get_local $6
-      get_local $3
+      get_local $4
       get_local $2
       call_indirect (type $iii)
       i32.const 0
@@ -5257,7 +5255,7 @@
        get_local $6
        i32.store offset=8
        get_local $0
-       get_local $3
+       get_local $4
        i32.store offset=8
       end
       get_local $5
@@ -5267,10 +5265,10 @@
       br $continue|4
      end
     end
-    get_local $4
+    get_local $3
     i32.const 1
     i32.sub
-    set_local $4
+    set_local $3
     br $repeat|2
     unreachable
    end
@@ -5279,12 +5277,11 @@
   get_local $0
   i32.const 4
   i32.add
-  tee_local $3
+  tee_local $2
   i32.load offset=8
   set_local $1
-  get_local $3
+  get_local $2
   get_local $0
-  tee_local $2
   i32.load offset=8
   i32.store offset=8
   get_local $0
@@ -7578,7 +7575,11 @@
     i32.const 1
     i32.shl
     call $~lib/internal/memory/memmove
-    get_local $3
+    get_local $0
+    get_local $4
+    i32.const 1
+    i32.shl
+    i32.add
     i32.const 46
     i32.store16 offset=4
     get_local $1

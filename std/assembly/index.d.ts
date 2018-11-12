@@ -621,14 +621,20 @@ declare class Error {
   message: string;
 
   /** Stack trace. */
-  stack: string;
+  stack: string | null;
 
   /** Constructs a new error, optionally with a message. */
   constructor(message?: string);
+
+  /** Method returns a string representing the specified Error class. */
+  toString(): string;
 }
 
 /** Class for indicating an error when a value is not in the set or range of allowed values. */
 declare class RangeError extends Error { }
+
+/** Class for indicating an error when a value is not of the expected type. */
+declare class TypeError extends Error { }
 
 interface Boolean {}
 interface Function {}
