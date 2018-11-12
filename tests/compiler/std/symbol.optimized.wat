@@ -2387,88 +2387,91 @@
   (local $1 i32)
   (local $2 i32)
   block $break|0
-   block $case10|0
-    block $case9|0
-     block $case8|0
-      block $case7|0
-       block $case6|0
-        block $case5|0
-         block $case4|0
-          block $case3|0
-           block $case2|0
-            block $case1|0
-             get_local $0
-             tee_local $2
-             i32.const 1
-             i32.ne
-             if
-              block $tablify|0
-               get_local $2
-               i32.const 2
-               i32.sub
-               br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $tablify|0
+   block $case11|0
+    block $case10|0
+     block $case9|0
+      block $case8|0
+       block $case7|0
+        block $case6|0
+         block $case5|0
+          block $case4|0
+           block $case3|0
+            block $case2|0
+             block $case1|0
+              get_local $0
+              tee_local $2
+              i32.const 1
+              i32.ne
+              if
+               block $tablify|0
+                get_local $2
+                i32.const 2
+                i32.sub
+                br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $tablify|0
+               end
+               br $case11|0
               end
+              i32.const 168
+              set_local $1
               br $break|0
              end
-             i32.const 168
+             i32.const 200
              set_local $1
              br $break|0
             end
-            i32.const 200
+            i32.const 240
             set_local $1
             br $break|0
            end
-           i32.const 240
+           i32.const 264
            set_local $1
            br $break|0
           end
-          i32.const 264
+          i32.const 280
           set_local $1
           br $break|0
          end
-         i32.const 280
+         i32.const 304
          set_local $1
          br $break|0
         end
-        i32.const 304
+        i32.const 320
         set_local $1
         br $break|0
        end
-       i32.const 320
+       i32.const 344
        set_local $1
        br $break|0
       end
-      i32.const 344
+      i32.const 360
       set_local $1
       br $break|0
      end
-     i32.const 360
+     i32.const 392
      set_local $1
      br $break|0
     end
-    i32.const 392
+    i32.const 424
     set_local $1
     br $break|0
    end
-   i32.const 424
-   set_local $1
-  end
-  get_global $~lib/symbol/idToString
-  i32.const 0
-  i32.ne
-  tee_local $2
-  if
    get_global $~lib/symbol/idToString
-   get_local $0
-   call $~lib/map/Map<usize,String>#has
-   set_local $2
-  end
-  get_local $2
-  if
-   get_global $~lib/symbol/idToString
-   get_local $0
-   call $~lib/map/Map<usize,String>#get
-   set_local $1
+   i32.const 0
+   i32.ne
+   tee_local $2
+   if
+    get_global $~lib/symbol/idToString
+    get_local $0
+    call $~lib/map/Map<usize,String>#has
+    set_local $2
+   end
+   get_local $2
+   if
+    get_global $~lib/symbol/idToString
+    get_local $0
+    call $~lib/map/Map<usize,String>#get
+    set_local $1
+   end
   end
   get_local $1
   if (result i32)

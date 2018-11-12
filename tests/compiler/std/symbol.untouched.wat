@@ -3112,67 +3112,76 @@
   i32.const 0
   set_local $2
   block $break|0
-   block $case10|0
-    block $case9|0
-     block $case8|0
-      block $case7|0
-       block $case6|0
-        block $case5|0
-         block $case4|0
-          block $case3|0
-           block $case2|0
-            block $case1|0
-             block $case0|0
-              get_local $1
-              set_local $3
-              get_local $3
-              i32.const 1
-              i32.eq
-              br_if $case0|0
-              get_local $3
-              i32.const 2
-              i32.eq
-              br_if $case1|0
-              get_local $3
-              i32.const 3
-              i32.eq
-              br_if $case2|0
-              get_local $3
-              i32.const 4
-              i32.eq
-              br_if $case3|0
-              get_local $3
-              i32.const 5
-              i32.eq
-              br_if $case4|0
-              get_local $3
-              i32.const 6
-              i32.eq
-              br_if $case5|0
-              get_local $3
-              i32.const 7
-              i32.eq
-              br_if $case6|0
-              get_local $3
-              i32.const 8
-              i32.eq
-              br_if $case7|0
-              get_local $3
-              i32.const 9
-              i32.eq
-              br_if $case8|0
-              get_local $3
-              i32.const 10
-              i32.eq
-              br_if $case9|0
-              get_local $3
-              i32.const 11
-              i32.eq
-              br_if $case10|0
-              br $break|0
+   block $case11|0
+    block $case10|0
+     block $case9|0
+      block $case8|0
+       block $case7|0
+        block $case6|0
+         block $case5|0
+          block $case4|0
+           block $case3|0
+            block $case2|0
+             block $case1|0
+              block $case0|0
+               get_local $1
+               set_local $3
+               get_local $3
+               i32.const 1
+               i32.eq
+               br_if $case0|0
+               get_local $3
+               i32.const 2
+               i32.eq
+               br_if $case1|0
+               get_local $3
+               i32.const 3
+               i32.eq
+               br_if $case2|0
+               get_local $3
+               i32.const 4
+               i32.eq
+               br_if $case3|0
+               get_local $3
+               i32.const 5
+               i32.eq
+               br_if $case4|0
+               get_local $3
+               i32.const 6
+               i32.eq
+               br_if $case5|0
+               get_local $3
+               i32.const 7
+               i32.eq
+               br_if $case6|0
+               get_local $3
+               i32.const 8
+               i32.eq
+               br_if $case7|0
+               get_local $3
+               i32.const 9
+               i32.eq
+               br_if $case8|0
+               get_local $3
+               i32.const 10
+               i32.eq
+               br_if $case9|0
+               get_local $3
+               i32.const 11
+               i32.eq
+               br_if $case10|0
+               br $case11|0
+              end
+              block
+               i32.const 168
+               set_local $2
+               br $break|0
+               unreachable
+              end
+              unreachable
              end
              block
-              i32.const 168
+              i32.const 200
               set_local $2
               br $break|0
               unreachable
@@ -3180,7 +3189,7 @@
              unreachable
             end
             block
-             i32.const 200
+             i32.const 240
              set_local $2
              br $break|0
              unreachable
@@ -3188,7 +3197,7 @@
             unreachable
            end
            block
-            i32.const 240
+            i32.const 264
             set_local $2
             br $break|0
             unreachable
@@ -3196,7 +3205,7 @@
            unreachable
           end
           block
-           i32.const 264
+           i32.const 280
            set_local $2
            br $break|0
            unreachable
@@ -3204,7 +3213,7 @@
           unreachable
          end
          block
-          i32.const 280
+          i32.const 304
           set_local $2
           br $break|0
           unreachable
@@ -3212,7 +3221,7 @@
          unreachable
         end
         block
-         i32.const 304
+         i32.const 320
          set_local $2
          br $break|0
          unreachable
@@ -3220,7 +3229,7 @@
         unreachable
        end
        block
-        i32.const 320
+        i32.const 344
         set_local $2
         br $break|0
         unreachable
@@ -3228,7 +3237,7 @@
        unreachable
       end
       block
-       i32.const 344
+       i32.const 360
        set_local $2
        br $break|0
        unreachable
@@ -3236,7 +3245,7 @@
       unreachable
      end
      block
-      i32.const 360
+      i32.const 392
       set_local $2
       br $break|0
       unreachable
@@ -3244,7 +3253,7 @@
      unreachable
     end
     block
-     i32.const 392
+     i32.const 424
      set_local $2
      br $break|0
      unreachable
@@ -3252,29 +3261,27 @@
     unreachable
    end
    block
-    i32.const 424
-    set_local $2
+    get_global $~lib/symbol/idToString
+    i32.const 0
+    i32.ne
+    tee_local $3
+    if (result i32)
+     get_global $~lib/symbol/idToString
+     get_local $1
+     call $~lib/map/Map<usize,String>#has
+    else     
+     get_local $3
+    end
+    if
+     get_global $~lib/symbol/idToString
+     get_local $1
+     call $~lib/map/Map<usize,String>#get
+     set_local $2
+    end
     br $break|0
     unreachable
    end
    unreachable
-  end
-  get_global $~lib/symbol/idToString
-  i32.const 0
-  i32.ne
-  tee_local $3
-  if (result i32)
-   get_global $~lib/symbol/idToString
-   get_local $1
-   call $~lib/map/Map<usize,String>#has
-  else   
-   get_local $3
-  end
-  if
-   get_global $~lib/symbol/idToString
-   get_local $1
-   call $~lib/map/Map<usize,String>#get
-   set_local $2
   end
   get_local $2
   if (result i32)

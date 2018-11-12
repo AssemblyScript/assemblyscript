@@ -20,8 +20,11 @@ var nextId: usize = 12; // Symbol.unscopables + 1
       case 9:  { str = "toPrimitive"; break; }
       case 10: { str = "toStringTag"; break; }
       case 11: { str = "unscopables"; break; }
+      default: {
+        if (idToString !== null && idToString.has(id)) str = idToString.get(id);
+        break;
+      }
     }
-    if (idToString !== null && idToString.has(id)) str = idToString.get(id);
     return str ? "Symbol(" + str + ")"  : "Symbol()";
   }
 }
