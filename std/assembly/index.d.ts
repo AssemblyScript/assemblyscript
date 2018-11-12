@@ -652,6 +652,7 @@ declare class Map<K,V> {
   get(key: K): V;
   delete(key: K): bool;
   clear(): void;
+  toString(): string;
 }
 
 declare class Set<T> {
@@ -660,6 +661,7 @@ declare class Set<T> {
   add(value: T): void;
   delete(value: T): bool;
   clear(): void;
+  toString(): string;
 }
 
 interface SymbolConstructor {

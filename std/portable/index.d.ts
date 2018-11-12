@@ -457,6 +457,7 @@ declare class Set<T> {
   add(value: T): void;
   delete(value: T): bool;
   clear(): void;
+  toString(): string;
   [Symbol.iterator](): Iterator<T>;
 }
 
@@ -471,6 +472,7 @@ declare class Map<K,V> {
   keys(): Iterable<K>;
   values(): Iterable<V>;
   delete(key: K): bool;
+  toString(): string;
   [Symbol.iterator](): Iterator<[K,V]>;
 }
 
