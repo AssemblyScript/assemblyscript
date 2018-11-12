@@ -344,9 +344,13 @@ declare class DataView {
 }
 
 declare class Array<T> {
+
+  static isArray<U>(value: any): value is Array<any>;
+
   [key: number]: T;
   length: i32;
   constructor(capacity?: i32);
+
   fill(value: T, start?: i32, end?: i32): this;
   every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   findIndex(predicate: (element: T, index: i32, array?: Array<T>) => bool): i32;
@@ -355,6 +359,7 @@ declare class Array<T> {
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
   push(element: T): i32;
   concat(items: T[]): T[];
+  copyWithin(target: i32, start: i32, end?: i32): this;
   pop(): T;
   forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void;
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U>;
