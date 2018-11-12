@@ -480,7 +480,6 @@ interface SymbolConstructor {
   (description?: string | null): symbol;
   for(key: string): symbol;
   keyFor(sym: symbol): string | null;
-  toString(): string;
   readonly iterator: symbol;
 }
 declare const Symbol: SymbolConstructor;
