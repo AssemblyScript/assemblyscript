@@ -11,6 +11,11 @@ type int = i32;
 declare function logf(arg: float): void;
 declare function logi(arg: i32): void;
 
+declare namespace FastMath {
+    function cos(x: f64): f64;
+    function sin(x: f64): f64;
+}
+
 export function GET_MEMORY_TOP(): usize {
     return allocator_get_offset();
 }
@@ -19,9 +24,13 @@ export function SET_MEMORY_TOP(offset: usize): void {
     allocator_set_offset(GET_MEMORY_TOP(), offset);
 }
 
+export function seedRandom(value: f64): void {
+    NativeMath.seedRandom(reinterpret<u64>(value));
+}
+
 function rand(): float {
-    // return <float>NativeMath.random();
-    return JSMath.random();
+    return <float>NativeMath.random();
+    // return JSMath.random();
 }
 
 export class Vec {
@@ -176,7 +185,7 @@ class Ray {
 enum Refl_t {
     DIFF = 0x0,
     SPEC = 0x1,
-    REFR = 0x2
+    REFR = 0x2,
 } // material types, used in radiance()
 
 class Sphere {
@@ -377,7 +386,7 @@ function radiance(r: Ray, depth: int, f: Vec, locals: Locals): Vec {
 
     if (obj.refl == Refl_t.DIFF) {
         // Ideal DIFFUSE reflection
-        let r1: float = 2 * Math.PI * rand();
+        let r1: float = 2 * <float>Math.PI * rand();
         let r2: float = rand();
         let r2s: float = sqrt<float>(r2);
         let w: Vec = nl;
@@ -390,8 +399,8 @@ function radiance(r: Ray, depth: int, f: Vec, locals: Locals): Vec {
         }
         let v: Vec = w.mod2(u, locals.loc6);
         let d: Vec = u
-            .multScalar_in(JSMath.cos(r1) * r2s)
-            .add_in(v.multScalar_in(JSMath.sin(r1) * r2s))
+            .multScalar_in(<float>FastMath.cos(r1) * r2s)
+            .add_in(v.multScalar_in(<float>FastMath.sin(r1) * r2s))
             .add_in(w.multScalar_in(sqrt<float>(1.0 - r2)))
             .norm_in();
         let ray = locals.loc_r1.set(x, d);
@@ -414,8 +423,8 @@ function radiance(r: Ray, depth: int, f: Vec, locals: Locals): Vec {
     r.d.sub(d, true);
     var reflRay: Ray = locals.loc_r1.set(x, d); // Ideal dielectric REFRACTION
     var into: bool = n.dot(nl) > 0; // Ray from outside going in?
-    var nc: float = 1,
-        nt = 1.5;
+    var nc: float = 1;
+    var nt: float = 1.5;
     var nnt: float = into ? nc / nt : nt / nc;
     var ddn: float = r.d.dot(nl);
     var cos2t: float = 0;
@@ -433,15 +442,15 @@ function radiance(r: Ray, depth: int, f: Vec, locals: Locals): Vec {
         .multScalar2(nnt, locals.loc9)
         .sub_in(n1)
         .norm_in();
-    var a: float = nt - nc,
-        b = nt + nc,
-        R0 = (a * a) / (b * b),
-        c = 1 - (into ? -ddn : tdir.dot(n));
-    var Re: float = R0 + (1 - R0) * c * c * c * c * c,
-        Tr = 1 - Re,
-        P = 0.25 + 0.5 * Re,
-        RP = Re / P,
-        TP = Tr / (1 - P);
+    var a: float = nt - nc;
+    var b: float = nt + nc;
+    var R0: float = (a * a) / (b * b);
+    var c: float = 1 - (into ? -ddn : tdir.dot(n));
+    var Re: float = R0 + (1 - R0) * c * c * c * c * c;
+    var Tr: float = 1 - Re;
+    var P: float = 0.25 + 0.5 * Re;
+    var RP: float = Re / P;
+    var TP: float = Tr / (1 - P);
     var ray = locals.loc_r1.set(x, tdir);
 
     var rad: Vec = locals.loc10.set(0, 0, 0);
@@ -460,6 +469,13 @@ function radiance(r: Ray, depth: int, f: Vec, locals: Locals): Vec {
     f.mul_in(rad);
     return f.add_in(obj.e);
 }
+
+// export function render(locals: Locals, samps: int, ox: int, oy: int, w: int, h: int, subIterations: int): void {
+//     // Loop over image rows
+//     for (let __k: int = 0; __k < subIterations; __k++) {
+//         _render(locals, samps, ox, oy, w, h);
+//     }
+// }
 
 export function render(locals: Locals, samps: int, ox: int, oy: int, w: int, h: int): void {
     // Loop over image rows

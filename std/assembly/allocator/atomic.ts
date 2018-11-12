@@ -2,7 +2,8 @@ import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
 
 var startOffset: usize = (HEAP_BASE + AL_MASK) & ~AL_MASK;
 var offset_ptr: usize = startOffset;
-store<usize>(offset_ptr, (HEAP_BASE + 4 + AL_MASK) & ~AL_MASK);
+var TOP = (HEAP_BASE + 8 + AL_MASK) & ~AL_MASK;
+store<usize>(offset_ptr, TOP);
 
 @global export function allocator_get_offset(): usize {
   return Atomic.load<usize>(offset_ptr);
