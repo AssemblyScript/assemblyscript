@@ -7,7 +7,7 @@ var nextId: usize = 12; // Symbol.unscopables + 1
 @unmanaged export class symbol {
   toString(): string {
     var id = changetype<usize>(this);
-    var str: string | null = null;
+    var str = "";
     switch (id) {
       case 1:  { str = "hasInstance"; break; }
       case 2:  { str = "isConcatSpreadable"; break; }
@@ -25,7 +25,7 @@ var nextId: usize = 12; // Symbol.unscopables + 1
         break;
       }
     }
-    return str ? "Symbol(" + str + ")"  : "Symbol()";
+    return "Symbol(" + str + ")";
   }
 }
 

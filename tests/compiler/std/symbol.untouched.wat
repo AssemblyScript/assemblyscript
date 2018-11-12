@@ -15,21 +15,21 @@
  (data (i32.const 24) "\0d\00\00\00s\00t\00d\00/\00s\00y\00m\00b\00o\00l\00.\00t\00s\00")
  (data (i32.const 56) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (data (i32.const 104) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 168) "\0b\00\00\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00")
- (data (i32.const 200) "\12\00\00\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00")
- (data (i32.const 240) "\08\00\00\00i\00s\00R\00e\00g\00E\00x\00p\00")
- (data (i32.const 264) "\05\00\00\00m\00a\00t\00c\00h\00")
- (data (i32.const 280) "\07\00\00\00r\00e\00p\00l\00a\00c\00e\00")
- (data (i32.const 304) "\06\00\00\00s\00e\00a\00r\00c\00h\00")
- (data (i32.const 320) "\07\00\00\00s\00p\00e\00c\00i\00e\00s\00")
- (data (i32.const 344) "\05\00\00\00s\00p\00l\00i\00t\00")
- (data (i32.const 360) "\0b\00\00\00t\00o\00P\00r\00i\00m\00i\00t\00i\00v\00e\00")
- (data (i32.const 392) "\0b\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00T\00a\00g\00")
- (data (i32.const 424) "\0b\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s\00")
- (data (i32.const 456) "\07\00\00\00S\00y\00m\00b\00o\00l\00(\00")
- (data (i32.const 480) "\04\00\00\00n\00u\00l\00l\00")
- (data (i32.const 496) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 528) "\00\00\00\00")
+ (data (i32.const 168) "\00\00\00\00")
+ (data (i32.const 176) "\0b\00\00\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00")
+ (data (i32.const 208) "\12\00\00\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00")
+ (data (i32.const 248) "\08\00\00\00i\00s\00R\00e\00g\00E\00x\00p\00")
+ (data (i32.const 272) "\05\00\00\00m\00a\00t\00c\00h\00")
+ (data (i32.const 288) "\07\00\00\00r\00e\00p\00l\00a\00c\00e\00")
+ (data (i32.const 312) "\06\00\00\00s\00e\00a\00r\00c\00h\00")
+ (data (i32.const 328) "\07\00\00\00s\00p\00e\00c\00i\00e\00s\00")
+ (data (i32.const 352) "\05\00\00\00s\00p\00l\00i\00t\00")
+ (data (i32.const 368) "\0b\00\00\00t\00o\00P\00r\00i\00m\00i\00t\00i\00v\00e\00")
+ (data (i32.const 400) "\0b\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00T\00a\00g\00")
+ (data (i32.const 432) "\0b\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s\00")
+ (data (i32.const 464) "\07\00\00\00S\00y\00m\00b\00o\00l\00(\00")
+ (data (i32.const 488) "\04\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 504) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
  (data (i32.const 536) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
  (data (i32.const 592) "\01\00\00\00)\00")
  (data (i32.const 600) "\08\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00")
@@ -3045,7 +3045,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 496
+   i32.const 504
    i32.const 110
    i32.const 4
    call $~lib/env/abort
@@ -3055,7 +3055,7 @@
   i32.const 0
   i32.eq
   if
-   i32.const 480
+   i32.const 488
    set_local $1
   end
   get_local $0
@@ -3072,7 +3072,7 @@
   i32.const 0
   i32.eq
   if
-   i32.const 528
+   i32.const 168
    return
   end
   get_local $4
@@ -3096,7 +3096,7 @@
   get_local $0
   i32.eqz
   if
-   i32.const 480
+   i32.const 488
    set_local $0
   end
   get_local $0
@@ -3109,7 +3109,7 @@
   (local $3 i32)
   get_local $0
   set_local $1
-  i32.const 0
+  i32.const 168
   set_local $2
   block $break|0
    block $case11|0
@@ -3173,7 +3173,7 @@
                br $case11|0
               end
               block
-               i32.const 168
+               i32.const 176
                set_local $2
                br $break|0
                unreachable
@@ -3181,7 +3181,7 @@
               unreachable
              end
              block
-              i32.const 200
+              i32.const 208
               set_local $2
               br $break|0
               unreachable
@@ -3189,7 +3189,7 @@
              unreachable
             end
             block
-             i32.const 240
+             i32.const 248
              set_local $2
              br $break|0
              unreachable
@@ -3197,7 +3197,7 @@
             unreachable
            end
            block
-            i32.const 264
+            i32.const 272
             set_local $2
             br $break|0
             unreachable
@@ -3205,7 +3205,7 @@
            unreachable
           end
           block
-           i32.const 280
+           i32.const 288
            set_local $2
            br $break|0
            unreachable
@@ -3213,7 +3213,7 @@
           unreachable
          end
          block
-          i32.const 304
+          i32.const 312
           set_local $2
           br $break|0
           unreachable
@@ -3221,7 +3221,7 @@
          unreachable
         end
         block
-         i32.const 320
+         i32.const 328
          set_local $2
          br $break|0
          unreachable
@@ -3229,7 +3229,7 @@
         unreachable
        end
        block
-        i32.const 344
+        i32.const 352
         set_local $2
         br $break|0
         unreachable
@@ -3237,7 +3237,7 @@
        unreachable
       end
       block
-       i32.const 360
+       i32.const 368
        set_local $2
        br $break|0
        unreachable
@@ -3245,7 +3245,7 @@
       unreachable
      end
      block
-      i32.const 392
+      i32.const 400
       set_local $2
       br $break|0
       unreachable
@@ -3253,7 +3253,7 @@
      unreachable
     end
     block
-     i32.const 424
+     i32.const 432
      set_local $2
      br $break|0
      unreachable
@@ -3283,16 +3283,11 @@
    end
    unreachable
   end
+  i32.const 464
   get_local $2
-  if (result i32)
-   i32.const 456
-   get_local $2
-   call $~lib/string/String.__concat
-   i32.const 592
-   call $~lib/string/String.__concat
-  else   
-   i32.const 600
-  end
+  call $~lib/string/String.__concat
+  i32.const 592
+  call $~lib/string/String.__concat
  )
  (func $start (; 35 ;) (type $v)
   get_global $HEAP_BASE
