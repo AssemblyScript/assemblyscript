@@ -484,18 +484,16 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  block $~lib/memory/memory.fill|inlined.0
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
   if (result i32)
    get_local $0
@@ -551,18 +549,16 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  block $~lib/memory/memory.fill|inlined.1
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
   if (result i32)
    get_local $0
@@ -618,18 +614,16 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  block $~lib/memory/memory.fill|inlined.2
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
   if (result i32)
    get_local $0
@@ -685,18 +679,16 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  block $~lib/memory/memory.fill|inlined.3
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
   if (result i32)
    get_local $0
@@ -752,18 +744,16 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  block $~lib/memory/memory.fill|inlined.4
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
   if (result i32)
    get_local $0
@@ -819,18 +809,16 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  block $~lib/memory/memory.fill|inlined.5
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
   if (result i32)
    get_local $0
@@ -886,18 +874,16 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  block $~lib/memory/memory.fill|inlined.6
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
   if (result i32)
    get_local $0
@@ -953,18 +939,16 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  block $~lib/memory/memory.fill|inlined.7
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
   if (result i32)
    get_local $0
@@ -1020,18 +1004,16 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  block $~lib/memory/memory.fill|inlined.8
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
   if (result i32)
    get_local $0
@@ -1087,18 +1069,16 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  block $~lib/memory/memory.fill|inlined.9
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
   if (result i32)
    get_local $0
@@ -1700,23 +1680,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/arraybuffer/storeUnsafeWithOffset<i32,i32>|inlined.0
-   get_local $0
-   i32.load
-   set_local $3
-   get_local $0
-   i32.load offset=4
-   set_local $4
-   get_local $3
-   get_local $4
-   i32.add
-   get_local $1
-   i32.const 2
-   i32.shl
-   i32.add
-   get_local $2
-   i32.store offset=8
-  end
+  get_local $0
+  i32.load
+  set_local $3
+  get_local $0
+  i32.load offset=4
+  set_local $4
+  get_local $3
+  get_local $4
+  i32.add
+  get_local $1
+  i32.const 2
+  i32.shl
+  i32.add
+  get_local $2
+  i32.store offset=8
  )
  (func $~lib/internal/typedarray/TypedArray<i32,i32>#__get (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -1868,23 +1846,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.0
-   get_local $0
-   i32.load
-   set_local $3
-   get_local $0
-   i32.load offset=4
-   set_local $4
-   get_local $3
-   get_local $4
-   i32.add
-   get_local $1
-   i32.const 3
-   i32.shl
-   i32.add
-   get_local $2
-   f64.store offset=8
-  end
+  get_local $0
+  i32.load
+  set_local $3
+  get_local $0
+  i32.load offset=4
+  set_local $4
+  get_local $3
+  get_local $4
+  i32.add
+  get_local $1
+  i32.const 3
+  i32.shl
+  i32.add
+  get_local $2
+  f64.store offset=8
  )
  (func $~lib/typedarray/Float64Array#subarray (; 21 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -2073,21 +2049,19 @@
        end
       end
      end
-     block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.4
-      get_local $6
-      i32.const 1
-      i32.add
-      set_local $8
-      get_local $0
-      get_local $1
-      i32.add
-      get_local $8
-      i32.const 3
-      i32.shl
-      i32.add
-      get_local $5
-      f64.store offset=8
-     end
+     get_local $6
+     i32.const 1
+     i32.add
+     set_local $8
+     get_local $0
+     get_local $1
+     i32.add
+     get_local $8
+     i32.const 3
+     i32.shl
+     i32.add
+     get_local $5
+     f64.store offset=8
     end
     get_local $4
     i32.const 1
@@ -2126,14 +2100,12 @@
    br $~lib/memory/memory.allocate|inlined.3
   end
   set_local $5
-  block $~lib/memory/memory.fill|inlined.10
-   i32.const 0
-   set_local $6
-   get_local $5
-   get_local $6
-   get_local $4
-   call $~lib/internal/memory/memset
-  end
+  i32.const 0
+  set_local $6
+  get_local $5
+  get_local $6
+  get_local $4
+  call $~lib/internal/memory/memset
   block $break|0
    get_local $2
    i32.const 1
@@ -2238,28 +2210,24 @@
       i32.shl
       i32.xor
       i32.store
-      block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.5
-       get_local $0
-       get_local $1
-       i32.add
-       get_local $6
-       i32.const 3
-       i32.shl
-       i32.add
-       get_local $9
-       f64.store offset=8
-      end
-      block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.6
-       get_local $0
-       get_local $1
-       i32.add
-       get_local $8
-       i32.const 3
-       i32.shl
-       i32.add
-       get_local $10
-       f64.store offset=8
-      end
+      get_local $0
+      get_local $1
+      i32.add
+      get_local $6
+      i32.const 3
+      i32.shl
+      i32.add
+      get_local $9
+      f64.store offset=8
+      get_local $0
+      get_local $1
+      i32.add
+      get_local $8
+      i32.const 3
+      i32.shl
+      i32.add
+      get_local $10
+      f64.store offset=8
      end
     end
     get_local $6
@@ -2296,31 +2264,9 @@
       f64.load offset=8
      end
      set_local $10
-     block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.7
-      i32.const 0
-      set_local $8
-      block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.7 (result f64)
-       get_local $0
-       get_local $1
-       i32.add
-       get_local $6
-       i32.const 3
-       i32.shl
-       i32.add
-       f64.load offset=8
-      end
-      set_local $9
-      get_local $0
-      get_local $1
-      i32.add
-      get_local $8
-      i32.const 3
-      i32.shl
-      i32.add
-      get_local $9
-      f64.store offset=8
-     end
-     block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.8
+     i32.const 0
+     set_local $8
+     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.7 (result f64)
       get_local $0
       get_local $1
       i32.add
@@ -2328,9 +2274,27 @@
       i32.const 3
       i32.shl
       i32.add
-      get_local $10
-      f64.store offset=8
+      f64.load offset=8
      end
+     set_local $9
+     get_local $0
+     get_local $1
+     i32.add
+     get_local $8
+     i32.const 3
+     i32.shl
+     i32.add
+     get_local $9
+     f64.store offset=8
+     get_local $0
+     get_local $1
+     i32.add
+     get_local $6
+     i32.const 3
+     i32.shl
+     i32.add
+     get_local $10
+     f64.store offset=8
      i32.const 1
      set_local $8
      block $break|3
@@ -2427,30 +2391,26 @@
           i32.shl
           i32.xor
           i32.store
-          block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.9
-           get_local $0
-           get_local $1
-           i32.add
-           get_local $8
-           i32.const 3
-           i32.shl
-           i32.add
-           get_local $10
-           f64.store offset=8
-          end
-          block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.10
-           i32.const 0
-           set_local $11
-           get_local $0
-           get_local $1
-           i32.add
-           get_local $11
-           i32.const 3
-           i32.shl
-           i32.add
-           get_local $9
-           f64.store offset=8
-          end
+          get_local $0
+          get_local $1
+          i32.add
+          get_local $8
+          i32.const 3
+          i32.shl
+          i32.add
+          get_local $10
+          f64.store offset=8
+          i32.const 0
+          set_local $11
+          get_local $0
+          get_local $1
+          i32.add
+          get_local $11
+          i32.const 3
+          i32.shl
+          i32.add
+          get_local $9
+          f64.store offset=8
          end
          get_local $8
          i32.const 1
@@ -2493,45 +2453,41 @@
    f64.load offset=8
   end
   set_local $12
-  block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.11
-   i32.const 1
-   set_local $6
-   block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.11 (result f64)
-    i32.const 0
-    set_local $7
-    get_local $0
-    get_local $1
-    i32.add
-    get_local $7
-    i32.const 3
-    i32.shl
-    i32.add
-    f64.load offset=8
-   end
-   set_local $10
-   get_local $0
-   get_local $1
-   i32.add
-   get_local $6
-   i32.const 3
-   i32.shl
-   i32.add
-   get_local $10
-   f64.store offset=8
-  end
-  block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.12
+  i32.const 1
+  set_local $6
+  block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.11 (result f64)
    i32.const 0
-   set_local $6
+   set_local $7
    get_local $0
    get_local $1
    i32.add
-   get_local $6
+   get_local $7
    i32.const 3
    i32.shl
    i32.add
-   get_local $12
-   f64.store offset=8
+   f64.load offset=8
   end
+  set_local $10
+  get_local $0
+  get_local $1
+  i32.add
+  get_local $6
+  i32.const 3
+  i32.shl
+  i32.add
+  get_local $10
+  f64.store offset=8
+  i32.const 0
+  set_local $6
+  get_local $0
+  get_local $1
+  i32.add
+  get_local $6
+  i32.const 3
+  i32.shl
+  i32.add
+  get_local $12
+  f64.store offset=8
  )
  (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2601,32 +2557,28 @@
    i32.const 0
    i32.lt_s
    if
-    block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.1
-     i32.const 1
-     set_local $5
-     get_local $4
-     get_local $2
-     i32.add
-     get_local $5
-     i32.const 3
-     i32.shl
-     i32.add
-     get_local $7
-     f64.store offset=8
-    end
-    block $~lib/internal/arraybuffer/storeUnsafeWithOffset<f64,f64>|inlined.2
-     i32.const 0
-     set_local $5
-     get_local $4
-     get_local $2
-     i32.add
-     get_local $5
-     i32.const 3
-     i32.shl
-     i32.add
-     get_local $6
-     f64.store offset=8
-    end
+    i32.const 1
+    set_local $5
+    get_local $4
+    get_local $2
+    i32.add
+    get_local $5
+    i32.const 3
+    i32.shl
+    i32.add
+    get_local $7
+    f64.store offset=8
+    i32.const 0
+    set_local $5
+    get_local $4
+    get_local $2
+    i32.add
+    get_local $5
+    i32.const 3
+    i32.shl
+    i32.add
+    get_local $6
+    f64.store offset=8
    end
    get_local $0
    return
@@ -2753,23 +2705,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/arraybuffer/storeUnsafeWithOffset<u8,u32>|inlined.0
-   get_local $0
-   i32.load
-   set_local $3
-   get_local $0
-   i32.load offset=4
-   set_local $4
-   get_local $3
-   get_local $4
-   i32.add
-   get_local $1
-   i32.const 0
-   i32.shl
-   i32.add
-   get_local $2
-   i32.store8 offset=8
-  end
+  get_local $0
+  i32.load
+  set_local $3
+  get_local $0
+  i32.load offset=4
+  set_local $4
+  get_local $3
+  get_local $4
+  i32.add
+  get_local $1
+  i32.const 0
+  i32.shl
+  i32.add
+  get_local $2
+  i32.store8 offset=8
  )
  (func $~lib/typedarray/Uint8ClampedArray#__set (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -2844,23 +2794,21 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/arraybuffer/storeUnsafeWithOffset<i8,i32>|inlined.0
-   get_local $0
-   i32.load
-   set_local $3
-   get_local $0
-   i32.load offset=4
-   set_local $4
-   get_local $3
-   get_local $4
-   i32.add
-   get_local $1
-   i32.const 0
-   i32.shl
-   i32.add
-   get_local $2
-   i32.store8 offset=8
-  end
+  get_local $0
+  i32.load
+  set_local $3
+  get_local $0
+  i32.load offset=4
+  set_local $4
+  get_local $3
+  get_local $4
+  i32.add
+  get_local $1
+  i32.const 0
+  i32.shl
+  i32.add
+  get_local $2
+  i32.store8 offset=8
  )
  (func $~lib/internal/typedarray/TypedArray<i8,i32>#fill (; 33 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -3275,17 +3223,15 @@
     i32.lt_s
     i32.eqz
     br_if $break|0
-    block $~lib/internal/arraybuffer/storeUnsafeWithOffset<i32,i32>|inlined.1
-     get_local $4
-     get_local $5
-     i32.add
-     get_local $2
-     i32.const 2
-     i32.shl
-     i32.add
-     get_local $1
-     i32.store offset=8
-    end
+    get_local $4
+    get_local $5
+    i32.add
+    get_local $2
+    i32.const 2
+    i32.shl
+    i32.add
+    get_local $1
+    i32.store offset=8
     get_local $2
     i32.const 1
     i32.add

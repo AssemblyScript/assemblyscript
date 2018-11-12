@@ -2302,60 +2302,54 @@
     get_local $0
     get_local $1
     i32.store
-    block $~lib/memory/memory.fill|inlined.0
-     get_local $0
-     get_global $~lib/internal/arraybuffer/HEADER_SIZE
-     i32.add
-     get_local $2
-     i32.add
-     set_local $3
-     i32.const 0
-     set_local $4
-     get_local $1
-     get_local $2
-     i32.sub
-     set_local $5
-     get_local $3
-     get_local $4
-     get_local $5
-     call $~lib/internal/memory/memset
-    end
+    get_local $0
+    get_global $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+    get_local $2
+    i32.add
+    set_local $3
+    i32.const 0
+    set_local $4
+    get_local $1
+    get_local $2
+    i32.sub
+    set_local $5
+    get_local $3
+    get_local $4
+    get_local $5
+    call $~lib/internal/memory/memset
    else    
     get_local $1
     call $~lib/internal/arraybuffer/allocateUnsafe
     set_local $5
-    block $~lib/memory/memory.copy|inlined.0
-     get_local $5
-     get_global $~lib/internal/arraybuffer/HEADER_SIZE
-     i32.add
-     set_local $4
-     get_local $0
-     get_global $~lib/internal/arraybuffer/HEADER_SIZE
-     i32.add
-     set_local $3
-     get_local $4
-     get_local $3
-     get_local $2
-     call $~lib/internal/memory/memmove
-    end
-    block $~lib/memory/memory.fill|inlined.1
-     get_local $5
-     get_global $~lib/internal/arraybuffer/HEADER_SIZE
-     i32.add
-     get_local $2
-     i32.add
-     set_local $3
-     i32.const 0
-     set_local $4
-     get_local $1
-     get_local $2
-     i32.sub
-     set_local $6
-     get_local $3
-     get_local $4
-     get_local $6
-     call $~lib/internal/memory/memset
-    end
+    get_local $5
+    get_global $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+    set_local $4
+    get_local $0
+    get_global $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+    set_local $3
+    get_local $4
+    get_local $3
+    get_local $2
+    call $~lib/internal/memory/memmove
+    get_local $5
+    get_global $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+    get_local $2
+    i32.add
+    set_local $3
+    i32.const 0
+    set_local $4
+    get_local $1
+    get_local $2
+    i32.sub
+    set_local $6
+    get_local $3
+    get_local $4
+    get_local $6
+    call $~lib/internal/memory/memset
     get_local $5
     return
    end
@@ -2458,15 +2452,13 @@
    i32.add
    i32.store offset=4
   end
-  block $~lib/internal/arraybuffer/storeUnsafe<Foo,Foo>|inlined.0
-   get_local $3
-   get_local $1
-   i32.const 2
-   i32.shl
-   i32.add
-   get_local $2
-   i32.store offset=8
-  end
+  get_local $3
+  get_local $1
+  i32.const 2
+  i32.shl
+  i32.add
+  get_local $2
+  i32.store offset=8
   get_local $0
   get_local $2
   call $~lib/collector/itcm/__gc_link

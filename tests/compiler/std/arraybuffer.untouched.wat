@@ -1939,22 +1939,20 @@
   get_local $6
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $7
-  block $~lib/memory/memory.copy|inlined.0
-   get_local $7
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   get_local $0
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   get_local $1
-   i32.add
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $6
-   call $~lib/internal/memory/memmove
-  end
+  get_local $7
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  get_local $0
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  get_local $1
+  i32.add
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $6
+  call $~lib/internal/memory/memmove
   get_local $7
  )
  (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
