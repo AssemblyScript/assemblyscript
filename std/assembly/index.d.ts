@@ -665,6 +665,18 @@ declare class Set<T> {
 }
 
 interface SymbolConstructor {
+  hasInstance: symbol;
+  isConcatSpreadable: symbol;
+  isRegExp: symbol;
+  iterator: symbol;
+  match: symbol;
+  replace: symbol;
+  search: symbol;
+  species: symbol;
+  split: symbol;
+  toPrimitive: symbol;
+  toStringTag: symbol;
+  unscopables: symbol;
   (description?: string | null): symbol;
   for(key: string): symbol;
   keyFor(sym: symbol): string | null;

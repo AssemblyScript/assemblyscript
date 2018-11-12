@@ -18,13 +18,26 @@
  (data (i32.const 24) "\0d\00\00\00s\00t\00d\00/\00s\00y\00m\00b\00o\00l\00.\00t\00s")
  (data (i32.const 56) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (data (i32.const 104) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 168) "\07\00\00\00S\00y\00m\00b\00o\00l\00(")
- (data (i32.const 192) "\04\00\00\00n\00u\00l\00l")
- (data (i32.const 208) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 248) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 304) "\01\00\00\00)")
- (data (i32.const 312) "\08\00\00\00S\00y\00m\00b\00o\00l\00(\00)")
- (data (i32.const 336) "\0b\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)")
+ (data (i32.const 168) "\0b\00\00\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e")
+ (data (i32.const 200) "\12\00\00\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e")
+ (data (i32.const 240) "\08\00\00\00i\00s\00R\00e\00g\00E\00x\00p")
+ (data (i32.const 264) "\05\00\00\00m\00a\00t\00c\00h")
+ (data (i32.const 280) "\07\00\00\00r\00e\00p\00l\00a\00c\00e")
+ (data (i32.const 304) "\06\00\00\00s\00e\00a\00r\00c\00h")
+ (data (i32.const 320) "\07\00\00\00s\00p\00e\00c\00i\00e\00s")
+ (data (i32.const 344) "\05\00\00\00s\00p\00l\00i\00t")
+ (data (i32.const 360) "\0b\00\00\00t\00o\00P\00r\00i\00m\00i\00t\00i\00v\00e")
+ (data (i32.const 392) "\0b\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00T\00a\00g")
+ (data (i32.const 424) "\0b\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s")
+ (data (i32.const 456) "\07\00\00\00S\00y\00m\00b\00o\00l\00(")
+ (data (i32.const 480) "\04\00\00\00n\00u\00l\00l")
+ (data (i32.const 496) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 536) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 592) "\01\00\00\00)")
+ (data (i32.const 600) "\08\00\00\00S\00y\00m\00b\00o\00l\00(\00)")
+ (data (i32.const 624) "\0b\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)")
+ (data (i32.const 656) "\13\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)")
+ (data (i32.const 704) "\1a\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)")
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -40,6 +53,8 @@
  (global $std/symbol/key2 (mut i32) (i32.const 0))
  (global $std/symbol/key3 (mut i32) (i32.const 0))
  (global $std/symbol/key4 (mut i32) (i32.const 0))
+ (global $std/symbol/hasInstance (mut i32) (i32.const 0))
+ (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -1173,7 +1188,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 248
+   i32.const 536
    i32.const 14
    i32.const 2
    call $~lib/env/abort
@@ -2318,7 +2333,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 208
+   i32.const 496
    i32.const 110
    i32.const 4
    call $~lib/env/abort
@@ -2327,7 +2342,7 @@
   get_local $1
   i32.eqz
   if
-   i32.const 192
+   i32.const 480
    set_local $1
   end
   get_local $0
@@ -2340,7 +2355,7 @@
   tee_local $2
   i32.eqz
   if
-   i32.const 240
+   i32.const 528
    return
   end
   get_local $2
@@ -2361,7 +2376,7 @@
   get_local $0
   i32.eqz
   if
-   i32.const 192
+   i32.const 480
    set_local $0
   end
   get_local $0
@@ -2370,32 +2385,106 @@
  )
  (func $~lib/symbol/symbol#toString (; 27 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
+  block $break|0
+   block $case10|0
+    block $case9|0
+     block $case8|0
+      block $case7|0
+       block $case6|0
+        block $case5|0
+         block $case4|0
+          block $case3|0
+           block $case2|0
+            block $case1|0
+             get_local $0
+             tee_local $2
+             i32.const 1
+             i32.ne
+             if
+              block $tablify|0
+               get_local $2
+               i32.const 2
+               i32.sub
+               br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $tablify|0
+              end
+              br $break|0
+             end
+             i32.const 168
+             set_local $1
+             br $break|0
+            end
+            i32.const 200
+            set_local $1
+            br $break|0
+           end
+           i32.const 240
+           set_local $1
+           br $break|0
+          end
+          i32.const 264
+          set_local $1
+          br $break|0
+         end
+         i32.const 280
+         set_local $1
+         br $break|0
+        end
+        i32.const 304
+        set_local $1
+        br $break|0
+       end
+       i32.const 320
+       set_local $1
+       br $break|0
+      end
+      i32.const 344
+      set_local $1
+      br $break|0
+     end
+     i32.const 360
+     set_local $1
+     br $break|0
+    end
+    i32.const 392
+    set_local $1
+    br $break|0
+   end
+   i32.const 424
+   set_local $1
+  end
   get_global $~lib/symbol/idToString
   i32.const 0
   i32.ne
-  tee_local $1
+  tee_local $2
   if
    get_global $~lib/symbol/idToString
    get_local $0
    call $~lib/map/Map<usize,String>#has
-   set_local $1
+   set_local $2
   end
-  get_local $1
+  get_local $2
   if
-   i32.const 168
    get_global $~lib/symbol/idToString
    get_local $0
    call $~lib/map/Map<usize,String>#get
-   call $~lib/string/String.__concat
-   i32.const 304
-   call $~lib/string/String.__concat
-   return
+   set_local $1
   end
-  i32.const 312
+  get_local $1
+  if (result i32)
+   i32.const 456
+   get_local $1
+   call $~lib/string/String.__concat
+   i32.const 592
+   call $~lib/string/String.__concat
+  else   
+   i32.const 600
+  end
+  tee_local $0
  )
  (func $start (; 28 ;) (type $v)
   (local $0 i32)
-  i32.const 368
+  i32.const 760
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
@@ -2515,7 +2604,7 @@
   end
   get_local $0
   call $~lib/symbol/symbol#toString
-  i32.const 312
+  i32.const 600
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2528,13 +2617,43 @@
   end
   get_global $std/symbol/sym3
   call $~lib/symbol/symbol#toString
-  i32.const 336
+  i32.const 624
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 24
    i32.const 26
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  set_global $std/symbol/hasInstance
+  i32.const 2
+  set_global $std/symbol/isConcatSpreadable
+  get_global $std/symbol/hasInstance
+  call $~lib/symbol/symbol#toString
+  i32.const 656
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 30
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/symbol/isConcatSpreadable
+  call $~lib/symbol/symbol#toString
+  i32.const 704
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 31
    i32.const 0
    call $~lib/env/abort
    unreachable
