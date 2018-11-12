@@ -350,7 +350,6 @@ export class Array<T> {
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
-    var len = this.length_;
     var length = this.length_;
     if (begin < 0) begin = max(length + begin, 0);
     else if (begin > length) begin = length;
