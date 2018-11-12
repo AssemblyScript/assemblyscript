@@ -5496,7 +5496,9 @@ export class Compiler extends DiagnosticEmitter {
       ? module.createBlock(returnLabel, body, returnType.toNativeType())
       : body.length > 1
         ? module.createBlock(null, body, returnType.toNativeType())
-        : body[0];
+        : body.length
+          ? body[0]
+          : module.createNop();
   }
 
   /** Gets the trampoline for the specified function. */
