@@ -6,6 +6,8 @@ export class Valid<T> {
   static set staticSetter(v: i32) {}
   instanceField: i32;
   static staticField: i32;
+  static void: i32;
+  void: i32 = Valid.void;
 }
 export class Invalid<T> {
 
