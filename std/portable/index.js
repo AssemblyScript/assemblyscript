@@ -210,7 +210,7 @@ globalScope["isString"] = function isString(arg) {
 
 globalScope["isArray"] = Array.isArray;
 
-globalScope["unchecked"] = function(expr) {
+globalScope["unchecked"] = function unchecked(expr) {
   return expr;
 };
 
@@ -223,6 +223,9 @@ globalScope["fmodf"] = function fmodf(x, y) {
 };
 
 globalScope["JSMath"] = Math;
+globalScope["JSMath"].signbit = function signbit(x) {
+  return (x = +x) != x ? x : x == 0 ? 1 / x == Infinity : x > 0;
+}
 
 globalScope["memory"] = (() => {
   var HEAP = new Uint8Array(0);

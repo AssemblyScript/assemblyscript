@@ -517,6 +517,7 @@ interface IMath {
   random(): f64;
   round(x: f64): f64;
   sign(x: f64): f64;
+  signbit(x: f64): bool;
   sin(x: f64): f64;
   sinh(x: f64): f64;
   sqrt(x: f64): f64;

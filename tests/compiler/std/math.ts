@@ -33,15 +33,11 @@
 const js = true; // also test, and thus compare to, JS math?
 
 // these flags are unused, but kept in case these might just so happen to become useful
-const INEXACT = 1 << 0;
-const INVALID = 1 << 1;
+const INEXACT   = 1 << 0;
+const INVALID   = 1 << 1;
 const DIVBYZERO = 1 << 2;
 const UNDERFLOW = 1 << 3;
-const OVERFLOW = 1 << 4;
-
-function signbit(d: f64): i32 {
-  return <i32>(reinterpret<u64>(d) >> 63);
-}
+const OVERFLOW  = 1 << 4;
 
 function eulp(x: f64): i32 {
   var u = reinterpret<u64>(x);
@@ -54,7 +50,7 @@ function ulperr(got: f64, want: f64, dwant: f64): f64 {
   const Ox1p1023  = reinterpret<f64>(0x7FE0000000000000);
   if (isNaN(got) && isNaN(want)) return 0;
   if (got == want) {
-    if (signbit(got) == signbit(want)) return dwant;
+    if (NativeMath.signbit(got) == NativeMath.signbit(want)) return dwant;
     return Infinity;
   }
   if (!isFinite(got)) {
@@ -62,10 +58,6 @@ function ulperr(got: f64, want: f64, dwant: f64): f64 {
     want *= 0.5;
   }
   return NativeMath.scalbn(got - want, -eulp(want)) + dwant;
-}
-
-function signbitf(f: f32): i32 {
-  return <i32>(reinterpret<u32>(f) >> 31);
 }
 
 function eulpf(x: f32): i32 {
@@ -79,7 +71,7 @@ function ulperrf(got: f32, want: f32, dwant: f32): f32 {
   const Ox1p127f = reinterpret<f32>(0x7F000000);
   if (isNaN(got) && isNaN(want)) return 0;
   if (got == want) {
-    if (signbitf(got) == signbitf(want)) return dwant;
+    if (NativeMathf.signbit(got) == NativeMathf.signbit(want)) return dwant;
     return Infinity;
   }
   if (!isFinite(got)) {
@@ -2650,6 +2642,30 @@ assert(test_signf(-2.0, -1.0, 0.0, 0));
 assert(test_signf(Infinity, 1.0, 0.0, 0));
 assert(test_signf(-Infinity, -1.0, 0.0, 0));
 assert(test_signf(NaN, NaN, 0.0, 0));
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Math.signbit
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+assert(NativeMath.signbit(0.0)  == false);
+assert(NativeMath.signbit(-0.0) == true);
+assert(NativeMath.signbit(1.0)  == false);
+assert(NativeMath.signbit(-1.0) == true);
+assert(NativeMath.signbit(NaN)  == false);
+assert(NativeMath.signbit(+Infinity) == false);
+assert(NativeMath.signbit(-Infinity) == true);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Mathf.signbit
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+assert(NativeMathf.signbit(0.0)  == false);
+assert(NativeMathf.signbit(-0.0) == true);
+assert(NativeMathf.signbit(1.0)  == false);
+assert(NativeMathf.signbit(-1.0) == true);
+assert(NativeMathf.signbit(NaN)  == false);
+assert(NativeMathf.signbit(+Infinity) == false);
+assert(NativeMathf.signbit(-Infinity) == true);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.rem
