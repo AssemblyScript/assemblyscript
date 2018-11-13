@@ -994,7 +994,7 @@ export namespace NativeMath {
 
   @inline
   export function signbit(x: f64): bool {
-    return <bool>(reinterpret<u64>(x) >>> 63);
+    return reinterpret<u64>(x) >>> 63 != 0;
   }
 
   export function sin(x: f64): f64 { // TODO
