@@ -439,16 +439,33 @@ interface RegExp {}
 
 interface IArguments {}
 
+/** Class for representing a runtime error. Base class of all errors. */
 declare class Error {
+
+  /** Error name. */
   name: string;
-  stack?: string;
+
+  /** Message provided on construction. */
   message: string;
-  constructor(message: string);
+
+  /** Stack trace. */
+  stack?: string;
+
+  /** Constructs a new error, optionally with a message. */
+  constructor(message?: string);
+
+  /** Method returns a string representing the specified Error class. */
   toString(): string;
 }
 
+/** Class for indicating an error when a value is not in the set or range of allowed values. */
 declare class RangeError extends Error { }
+
+/** Class for indicating an error when a value is not of the expected type. */
 declare class TypeError  extends Error { }
+
+/** Class for indicating an error when trying to interpret syntactically invalid code. */
+declare class SyntaxError extends Error { }
 
 declare class Set<T> {
   constructor(entries?: T[]);

@@ -1,6 +1,6 @@
 export class Error {
 
-  name: string = "Error";
+  name: string  = "Error";
   stack: string = ""; // TODO
 
   constructor(
@@ -26,5 +26,12 @@ export class TypeError extends Error {
   constructor(message: string = "") {
     super(message);
     this.name = "TypeError";
+  }
+}
+
+export class SyntaxError extends Error {
+  constructor(message: string = "") {
+    super(message);
+    this.name = "SyntaxError";
   }
 }

@@ -638,6 +638,9 @@ declare class RangeError extends Error { }
 /** Class for indicating an error when a value is not of the expected type. */
 declare class TypeError extends Error { }
 
+/** Class for indicating an error when trying to interpret syntactically invalid code. */
+declare class SyntaxError extends Error { }
+
 interface Boolean {}
 interface Function {}
 interface IArguments {}
