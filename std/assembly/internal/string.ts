@@ -110,6 +110,7 @@ export function repeatUnsafe(dest: String, destOffset: usize, src: String, count
 // Helpers
 
 export const enum CharCode {
+  PERCENT = 0x25,
   PLUS = 0x2B,
   MINUS = 0x2D,
   DOT = 0x2E,
