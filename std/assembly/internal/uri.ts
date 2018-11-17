@@ -57,42 +57,42 @@ export function URL_SAFE(): u8[] {
   return table;
 }
 
-export function escape(buffer: usize, source: usize, table: u8[], len: isize): bool {
+export function escapeUnsafe(dest: usize, source: usize, table: u8[], len: isize): bool {
   const HEX_CHARS: u8[] = [
     0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
     0x41, 0x42, 0x43, 0x44, 0x45, 0x46
   ];
 
-  var hexStr0: u16  = CharCode.PERCENT; // %
-  var hexStr12: u32 = 0;
-
+  var hex0: u16 = CharCode.PERCENT; // %
   var i: isize = 0, org: isize, offset: usize = 0;
   while (i < len) {
     org = i;
-    let ch = source[i];
-    while (i < len && table[ch] != 0) ++i;
+    let ch = load<u16>(source + (i << 1), HEADER_SIZE);
+    while (i < len && ch <= 127 && table[ch] != 0) {
+      ++i;
+      ch = load<u16>(source + (i << 1), HEADER_SIZE);
+    }
     if (i > org) {
       if (!org) {
         if (i >= len) return false;
-        // reallocUnsafe(buffer, len * 12 / 10);
+        // reallocUnsafe(dest, len * 12 / 10);
       }
-      // gh_buf_put(buffer, source + org, i - org);
+      let size = <usize>(i - org) << 1;
       memory.copy(
-        buffer + HEADER_SIZE + (offset << 1),
+        dest   + HEADER_SIZE + offset,
         source + HEADER_SIZE + <usize>(org << 1),
-        <usize>(i - org) << 1
+        size
       );
-      offset += <usize>(i - org);
+      offset += size;
     }
     /* escaping */
     if (i >= len) break;
 
-    hexStr12 = HEX_CHARS[(ch >>> 4) & 0x0F] | (HEX_CHARS[ch & 0x0F] << 16);
-    // gh_buf_put(buffer, hexStr0)
-    // gh_buf_put(buffer, hexStr12);
-    store<u16>(buffer + (offset << 1), hexStr0,  HEADER_SIZE);
-    store<u32>(buffer + (offset << 1), hexStr12, HEADER_SIZE + 2);
-    offset += 3;
+    ch = load<u16>(source + (i << 1), HEADER_SIZE);
+    let hex1 = <u32>HEX_CHARS[(ch >>> 4) & 0x0F] | (<u32>HEX_CHARS[ch & 0x0F] << 16);
+    store<u16>(dest + offset, hex0, HEADER_SIZE + 0);
+    store<u32>(dest + offset, hex1, HEADER_SIZE + 2);
+    offset += 3 << 1;
     ++i;
   }
   return true;
