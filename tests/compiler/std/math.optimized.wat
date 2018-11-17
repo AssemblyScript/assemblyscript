@@ -180,8 +180,7 @@
    i64.reinterpret/f64
    i64.const 63
    i64.shr_u
-   i64.const 0
-   i64.ne
+   i32.wrap/i64
    get_local $0
    get_local $0
    f64.eq
@@ -190,8 +189,7 @@
    i64.reinterpret/f64
    i64.const 63
    i64.shr_u
-   i64.const 0
-   i64.ne
+   i32.wrap/i64
    get_local $1
    get_local $1
    f64.eq
