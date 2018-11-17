@@ -227,7 +227,7 @@ globalScope["fmodf"] = function fmodf(x, y) {
 
 globalScope["JSMath"] = Math;
 globalScope["JSMath"].signbit = function signbit(x) {
-  F64[0] = x; return Boolean(U64[1] >>> 31);
+  F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
 }
 
 globalScope["memory"] = (() => {
