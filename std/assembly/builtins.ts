@@ -52,6 +52,8 @@ export namespace Atomic {
   @builtin export declare function xor<T>(ptr: usize, value: T, constantOffset?: usize): T;
   @builtin export declare function xchg<T>(ptr: usize, value: T, constantOffset?: usize): T;
   @builtin export declare function cmpxchg<T>(ptr: usize, expected:T, replacement: T, constantOffset?: usize): T;
+  @builtin export declare function wait<T>(ptr: usize, expected:T, timeout:i64): i32;
+  @builtin export declare function wake<T>(ptr: usize, count: u32): u32;
 }
 
 @builtin export declare function i8(value: void): i8;
@@ -100,6 +102,8 @@ export namespace i32 {
     @builtin export declare function store8(offset: usize, value: i32, constantOffset?: usize): void;
     @builtin export declare function store16(offset: usize, value: i32, constantOffset?: usize): void;
     @builtin export declare function store(offset: usize, value: i32, constantOffset?: usize): void;
+    @builtin export declare function wait(ptr: usize, expected:i32, timeout:i64): i32;
+    @builtin export declare function wake(ptr: usize, count:u32): u32;
 
     namespace rmw8_u {
       @builtin export declare function add(offset: usize, value: i32, constantOffset?: usize): i32
@@ -166,6 +170,8 @@ export namespace i64 {
     @builtin export declare function store8(offset: usize, value: i64, constantOffset?: usize): void;
     @builtin export declare function store16(offset: usize, value: i64, constantOffset?: usize): void;
     @builtin export declare function store(offset: usize, value: i64, constantOffset?: usize): void;
+    @builtin export declare function wait(ptr: usize, expected:i64, timeout:i64): i32;
+    @builtin export declare function wake(ptr: usize, count:u32): u32;
 
     namespace rmw8_u {
       @builtin export declare function add(offset: usize, value: i64, constantOffset?: usize): i64

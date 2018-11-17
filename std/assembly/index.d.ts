@@ -239,6 +239,9 @@ declare namespace i32 {
     export function store16(offset: usize, value: i32, constantOffset?: usize): void;
     /** Atomically stores a 32-bit integer to memory. */
     export function store(offset: usize, value: i32, constantOffset?: usize): void;
+    
+    export function wait(offset: usize, value: i32, timeout: i64): i32;
+    export function wake(offset: usize, count: u32): u32;
 
     namespace rmw8_u {
       export function add(offset: usize, value: i32, constantOffset?: usize): i32
@@ -328,6 +331,9 @@ declare namespace i64 {
     export function store32(offset: usize, value: i64, constantOffset?: usize): void;
     /** Atomically stores a 64-bit integer to memory. */
     export function store(offset: usize, value: i64, constantOffset?: usize): void;
+    
+    export function wait(offset: usize, value: i64, timeout: i64): i32;
+    export function wake(offset: usize, count: u32): u32;
 
     namespace rmw8_u {
       export function add(offset: usize, value: i64, constantOffset?: usize): i64
