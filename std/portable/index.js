@@ -4,6 +4,9 @@ var globalScope = typeof window !== "undefined" && window || typeof global !== "
 
 globalScope.ASC_TARGET = 0;
 
+var F64 = new Float64Array(1);
+var U64 = new Uint32Array(F64.buffer);
+
 Object.defineProperties(
   globalScope["i8"] = function i8(value) { return value << 24 >> 24; }
 , {
@@ -224,7 +227,7 @@ globalScope["fmodf"] = function fmodf(x, y) {
 
 globalScope["JSMath"] = Math;
 globalScope["JSMath"].signbit = function signbit(x) {
-  return (x = +x) != x ? x : x == 0 ? 1 / x == Infinity : x > 0;
+  F64[0] = x; return Boolean(U64[1] >>> 31);
 }
 
 globalScope["memory"] = (() => {
