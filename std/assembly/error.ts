@@ -1,12 +1,11 @@
 export class Error {
 
-  name: string = "Error";
-  message: string;
+  name: string  = "Error";
   stack: string = ""; // TODO
 
-  constructor(message: string = "") {
-    this.message = message;
-  }
+  constructor(
+    public message: string = ""
+  ) {}
 
   toString(): string {
     var message = this.message;
@@ -27,5 +26,12 @@ export class TypeError extends Error {
   constructor(message: string = "") {
     super(message);
     this.name = "TypeError";
+  }
+}
+
+export class SyntaxError extends Error {
+  constructor(message: string = "") {
+    super(message);
+    this.name = "SyntaxError";
   }
 }
