@@ -297,6 +297,8 @@ declare class ArrayBuffer {
   constructor(length: i32);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
   slice(begin?: i32, end?: i32): ArrayBuffer;
+  /** Returns a string representation of ArrayBuffer. */
+  toString(): string;
 }
 
 /** The `DataView` view provides a low-level interface for reading and writing multiple number types in a binary `ArrayBuffer`, without having to care about the platform's endianness. */
@@ -310,37 +312,39 @@ declare class DataView {
   /** Constructs a new `DataView` with the given properties */
   constructor(buffer: ArrayBuffer, byteOffset?: i32, byteLength?: i32);
   /** The `getFloat32()` method gets a signed 32-bit float (float) at the specified byte offset from the start of the `DataView`. */
-  getFloat32(byteOffset: i32, littleEndian?: boolean): f32
+  getFloat32(byteOffset: i32, littleEndian?: boolean): f32;
   /** The `getFloat64()` method gets a signed 64-bit float (double) at the specified byte offset from the start of the `DataView`. */
-  getFloat64(byteOffset: i32, littleEndian?: boolean): f64
+  getFloat64(byteOffset: i32, littleEndian?: boolean): f64;
   /** The `getInt8()` method gets a signed 8-bit integer (byte) at the specified byte offset from the start of the `DataView`. */
-  getInt8(byteOffset: i32): i8
+  getInt8(byteOffset: i32): i8;
   /** The `getInt16()` method gets a signed 16-bit integer (short) at the specified byte offset from the start of the `DataView`. */
-  getInt16(byteOffset: i32, littleEndian?: boolean): i16
+  getInt16(byteOffset: i32, littleEndian?: boolean): i16;
   /** The `getInt32()` method gets a signed 32-bit integer (long) at the specified byte offset from the start of the `DataView`. */
-  getInt32(byteOffset: i32, littleEndian?: boolean): i32
+  getInt32(byteOffset: i32, littleEndian?: boolean): i32;
   /** The `getUint8()` method gets an unsigned 8-bit integer (unsigned byte) at the specified byte offset from the start of the `DataView`. */
-  getUint8(byteOffset: i32): u8
+  getUint8(byteOffset: i32): u8;
   /** The `getUint16()` method gets an unsigned 16-bit integer (unsigned short) at the specified byte offset from the start of the `DataView`. */
-  getUint16(byteOffset: i32, littleEndian?: boolean): u16
+  getUint16(byteOffset: i32, littleEndian?: boolean): u16;
   /** The `getUint32()` method gets an unsigned 32-bit integer (unsigned long) at the specified byte offset from the start of the `DataView`. */
-  getUint32(byteOffset: i32, littleEndian?: boolean): u32
+  getUint32(byteOffset: i32, littleEndian?: boolean): u32;
   /** The `setFloat32()` method stores a signed 32-bit float (float) value at the specified byte offset from the start of the `DataView`. */
-  setFloat32(byteOffset: i32, value: f32, littleEndian?: boolean): void
+  setFloat32(byteOffset: i32, value: f32, littleEndian?: boolean): void;
   /** The `setFloat64()` method stores a signed 64-bit float (double) value at the specified byte offset from the start of the `DataView`. */
-  setFloat64(byteOffset: i32, value: f64, littleEndian?: boolean): void
+  setFloat64(byteOffset: i32, value: f64, littleEndian?: boolean): void;
   /** The `setInt8()` method stores a signed 8-bit integer (byte) value at the specified byte offset from the start of the `DataView`. */
-  setInt8(byteOffset: i32, value: i8): void
+  setInt8(byteOffset: i32, value: i8): void;
   /** The `setInt16()` method stores a signed 16-bit integer (short) value at the specified byte offset from the start of the `DataView`. */
-  setInt16(byteOffset: i32, value: i16, littleEndian?: boolean): void
+  setInt16(byteOffset: i32, value: i16, littleEndian?: boolean): void;
   /** The `setInt32()` method stores a signed 32-bit integer (long) value at the specified byte offset from the start of the `DataView`. */
-  setInt32(byteOffset: i32, value: i32, littleEndian?: boolean): void
+  setInt32(byteOffset: i32, value: i32, littleEndian?: boolean): void;
   /** The `setUint8()` method stores an unsigned 8-bit integer (byte) value at the specified byte offset from the start of the `DataView`. */
-  setUint8(byteOffset: i32, value: u8): void
+  setUint8(byteOffset: i32, value: u8): void;
   /** The `setUint16()` method stores an unsigned 16-bit integer (unsigned short) value at the specified byte offset from the start of the `DataView`. */
-  setUint16(byteOffset: i32, value: u16, littleEndian?: boolean): void
+  setUint16(byteOffset: i32, value: u16, littleEndian?: boolean): void;
   /** The `setUint32()` method stores an unsigned 32-bit integer (unsigned long) value at the specified byte offset from the start of the `DataView`. */
-  setUint32(byteOffset: i32, value: u32, littleEndian?: boolean): void
+  setUint32(byteOffset: i32, value: u32, littleEndian?: boolean): void;
+  /** Returns a string representation of DataView. */
+  toString(): string;
 }
 
 declare class Array<T> {
@@ -436,11 +440,33 @@ interface RegExp {}
 
 interface IArguments {}
 
+/** Class for representing a runtime error. Base class of all errors. */
 declare class Error {
-  constructor(message: string);
+
+  /** Error name. */
+  name: string;
+
+  /** Message provided on construction. */
   message: string;
-  stack: string | null;
+
+  /** Stack trace. */
+  stack?: string;
+
+  /** Constructs a new error, optionally with a message. */
+  constructor(message?: string);
+
+  /** Method returns a string representing the specified Error class. */
+  toString(): string;
 }
+
+/** Class for indicating an error when a value is not in the set or range of allowed values. */
+declare class RangeError extends Error { }
+
+/** Class for indicating an error when a value is not of the expected type. */
+declare class TypeError  extends Error { }
+
+/** Class for indicating an error when trying to interpret syntactically invalid code. */
+declare class SyntaxError extends Error { }
 
 declare class Set<T> {
   constructor(entries?: T[]);
@@ -449,6 +475,7 @@ declare class Set<T> {
   add(value: T): void;
   delete(value: T): bool;
   clear(): void;
+  toString(): string;
   [Symbol.iterator](): Iterator<T>;
 }
 
@@ -463,14 +490,26 @@ declare class Map<K,V> {
   keys(): Iterable<K>;
   values(): Iterable<V>;
   delete(key: K): bool;
+  toString(): string;
   [Symbol.iterator](): Iterator<[K,V]>;
 }
 
 interface SymbolConstructor {
+  readonly hasInstance: symbol;
+  readonly isConcatSpreadable: symbol;
+  readonly isRegExp: symbol;
+  readonly iterator: symbol;
+  readonly match: symbol;
+  readonly replace: symbol;
+  readonly search: symbol;
+  readonly species: symbol;
+  readonly split: symbol;
+  readonly toPrimitive: symbol;
+  readonly toStringTag: symbol;
+  readonly unscopables: symbol;
   (description?: string | null): symbol;
   for(key: string): symbol;
   keyFor(sym: symbol): string | null;
-  readonly iterator: symbol;
 }
 declare const Symbol: SymbolConstructor;
 

@@ -177,6 +177,10 @@ export class DataView {
       HEADER_SIZE
     );
   }
+
+  toString(): string {
+    return "[object DataView]";
+  }
 }
 
 @inline function checkOffset(byteOffset: i32, n: i32, byteLength: i32): void {

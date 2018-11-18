@@ -30,4 +30,8 @@ export class ArrayBuffer {
     memory.copy(changetype<usize>(buffer) + HEADER_SIZE, changetype<usize>(this) + HEADER_SIZE + begin, newLen);
     return buffer;
   }
+
+  toString(): string {
+    return "[object ArrayBuffer]";
+  }
 }
