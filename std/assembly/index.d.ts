@@ -762,6 +762,8 @@ interface IMath<T> {
   round(x: T): T;
   /** Returns the sign of `x`, indicating whether the number is positive, negative or zero. */
   sign(x: T): T;
+  /** Returns whether the sign bit of `x` is set */
+  signbit(x: T): bool;
   /** Returns the sine of `x`. */
   sin(x: T): T;
   /** Returns the hyperbolic sine of `x`. */
