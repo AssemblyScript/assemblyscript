@@ -992,6 +992,13 @@ export namespace NativeMath {
     }
   }
 
+  @inline
+  export function signbit(x: f64): bool {
+    // In ECMAScript all NaN values are indistinguishable from each other
+    // so we need handle NaN and negative NaN in similar way
+    return <bool>(<i32>(reinterpret<u64>(x) >>> 63) & (x == x));
+  }
+
   export function sin(x: f64): f64 { // TODO
     unreachable();
     return 0;
@@ -2044,6 +2051,11 @@ export namespace NativeMathf {
     } else {
       return x > 0 ? 1 : x < 0 ? -1 : x;
     }
+  }
+
+  @inline
+  export function signbit(x: f32): bool {
+    return <bool>((reinterpret<u32>(x) >>> 31) & (x == x));
   }
 
   export function sin(x: f32): f32 { // TODO
