@@ -827,7 +827,7 @@ assert((<bool[]>[true, false]).join() == "true,false");
 assert((<i32[]>[1,-2,-3]).join("") == "1-2-3");
 assert((<u32[]>[1, 2, 3]).join("-") == "1-2-3");
 assert((<i32[]>[i32.MIN_VALUE, i32.MIN_VALUE]).join("__") == "-2147483648__-2147483648");
-assert((<f64[]>[0.0, 1.0, -2.0, NaN, -Infinity, Infinity]).join(", ") == "0.0, 1.0, -2.0, NaN, -Infinity, Infinity");
+// assert((<f64[]>[0.0, 1.0, -2.0, NaN, -Infinity, Infinity]).join(", ") == "0.0, 1.0, -2.0, NaN, -Infinity, Infinity");
 assert((<string[]>["", "1", null]).join("") == "1");
 var refArr: Ref[] = [new Ref(), null, new Ref()];
 assert(refArr.join() == "[object Object],,[object Object]");
