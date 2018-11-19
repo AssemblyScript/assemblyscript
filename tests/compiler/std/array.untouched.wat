@@ -8967,11 +8967,11 @@
       i32.sub
       set_local $4
       get_local $6
-      i32.const 1
+      i32.const 2
       i32.add
       set_local $6
       get_local $7
-      i32.const 1
+      i32.const 2
       i32.add
       set_local $7
      end
@@ -12300,6 +12300,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   get_local $0
   get_local $1
   i32.const 1
@@ -12358,13 +12359,17 @@
     get_global $~lib/internal/string/HEADER_SIZE
     i32.add
     set_local $6
+    get_local $5
+    get_global $~lib/internal/string/HEADER_SIZE
+    i32.add
+    set_local $7
     get_local $4
     i32.const 1
     i32.shl
-    set_local $7
+    set_local $8
     get_local $6
-    get_local $5
     get_local $7
+    get_local $8
     call $~lib/internal/memory/memmove
     get_local $4
     return

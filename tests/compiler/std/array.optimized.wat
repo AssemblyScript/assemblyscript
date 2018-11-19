@@ -5851,11 +5851,11 @@
     i32.sub
     set_local $2
     get_local $3
-    i32.const 1
+    i32.const 2
     i32.add
     set_local $3
     get_local $1
-    i32.const 1
+    i32.const 2
     i32.add
     set_local $1
     br $continue|0
@@ -8127,7 +8127,6 @@
   get_local $1
  )
  (func $~lib/internal/number/dtoa_stream (; 123 ;) (type $iiFi) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
-  (local $3 i32)
   get_local $0
   get_local $1
   i32.const 1
@@ -8172,25 +8171,27 @@
     i32.const 3
     return
    else    
-    get_local $2
-    f64.const 0
-    f64.lt
-    tee_local $3
-    i32.const 8
-    i32.add
-    set_local $1
     get_local $0
     i32.const 4
     i32.add
+    tee_local $1
     i32.const 3824
     i32.const 3848
-    get_local $3
+    get_local $2
+    f64.const 0
+    f64.lt
+    tee_local $0
     select
-    get_local $1
+    i32.const 4
+    i32.add
+    get_local $0
+    i32.const 8
+    i32.add
+    tee_local $0
     i32.const 1
     i32.shl
     call $~lib/internal/memory/memmove
-    get_local $1
+    get_local $0
     return
    end
    unreachable
