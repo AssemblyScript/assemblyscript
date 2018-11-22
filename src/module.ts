@@ -14,6 +14,8 @@ export type ExpressionRef = usize;
 export type GlobalRef = usize;
 export type ImportRef = usize;
 export type ExportRef = usize;
+export type RelooperRef = usize;
+export type RelooperBlockRef = usize;
 export type Index = u32;
 
 export const enum NativeType {
@@ -1331,7 +1333,7 @@ export class Relooper {
   static create(module: Module): Relooper {
     var relooper = new Relooper();
     relooper.module = module;
-    relooper.ref = _RelooperCreate();
+    relooper.ref = _RelooperCreate(module.ref);
     return relooper;
   }
 
@@ -1341,7 +1343,12 @@ export class Relooper {
     return _RelooperAddBlock(this.ref, code);
   }
 
-  addBranch(from: RelooperBlockRef, to: RelooperBlockRef, condition: ExpressionRef = 0, code: ExpressionRef = 0): void {
+  addBranch(
+    from: RelooperBlockRef,
+    to: RelooperBlockRef,
+    condition: ExpressionRef = 0,
+    code: ExpressionRef = 0
+  ): void {
     _RelooperAddBranch(from, to, condition, code);
   }
 
@@ -1349,7 +1356,12 @@ export class Relooper {
     return _RelooperAddBlockWithSwitch(this.ref, code, condition);
   }
 
-  addBranchForSwitch(from: RelooperBlockRef, to: RelooperBlockRef, indexes: i32[], code: ExpressionRef = 0): void {
+  addBranchForSwitch(
+    from: RelooperBlockRef,
+    to: RelooperBlockRef,
+    indexes: i32[],
+    code: ExpressionRef = 0
+  ): void {
     var cArr = allocI32Array(indexes);
     try {
       _RelooperAddBranchForSwitch(from, to, cArr, indexes.length, code);
@@ -1359,7 +1371,7 @@ export class Relooper {
   }
 
   renderAndDispose(entry: RelooperBlockRef, labelHelper: Index): ExpressionRef {
-    return _RelooperRenderAndDispose(this.ref, entry, labelHelper, this.module.ref);
+    return _RelooperRenderAndDispose(this.ref, entry, labelHelper);
   }
 }
 
