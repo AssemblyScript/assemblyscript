@@ -1,69 +1,69 @@
-var i: i32 = 0;
-var I: i64 = 0;
-var f: f32 = 0;
-var F: f64 = 0;
+var i: i32 = 1;
+var I: i64 = 1;
+var f: f32 = 1;
+var F: f64 = 1;
 
-i8(i);
-i8(I);
-i8(f);
-i8(F);
+assert(i8(i));
+assert(i8(I));
+assert(i8(f));
+assert(i8(F));
 
-i16(i);
-i16(I);
-i16(f);
-i16(F);
+assert(i16(i));
+assert(i16(I));
+assert(i16(f));
+assert(i16(F));
 
-i32(i);
-i32(I);
-i32(f);
-i32(F);
+assert(i32(i));
+assert(i32(I));
+assert(i32(f));
+assert(i32(F));
 
-i64(i);
-i64(I);
-i64(f);
-i64(F);
+assert(i64(i));
+assert(i64(I));
+assert(i64(f));
+assert(i64(F));
 
-isize(i);
-isize(I);
-isize(f);
-isize(F);
+assert(isize(i));
+assert(isize(I));
+assert(isize(f));
+assert(isize(F));
 
-u8(i);
-u8(I);
-u8(f);
-u8(F);
+assert(u8(i));
+assert(u8(I));
+assert(u8(f));
+assert(u8(F));
 
-u16(i);
-u16(I);
-u16(f);
-u16(F);
+assert(u16(i));
+assert(u16(I));
+assert(u16(f));
+assert(u16(F));
 
-u32(i);
-u32(I);
-u32(f);
-u32(F);
+assert(u32(i));
+assert(u32(I));
+assert(u32(f));
+assert(u32(F));
 
-u64(i);
-u64(I);
-u64(f);
-u64(F);
+assert(u64(i));
+assert(u64(I));
+assert(u64(f));
+assert(u64(F));
 
-usize(i);
-usize(I);
-usize(f);
-usize(F);
+assert(usize(i));
+assert(usize(I));
+assert(usize(f));
+assert(usize(F));
 
-bool(i);
-bool(I);
-bool(f);
-bool(F);
+assert(bool(i));
+assert(bool(I));
+assert(bool(f));
+assert(bool(F));
 
-f32(i);
-f32(I);
-f32(f);
-f32(F);
+assert(f32(i));
+assert(f32(I));
+assert(f32(f));
+assert(f32(F));
 
-f64(i);
-f64(I);
-f64(f);
-f64(F);
+assert(f64(i));
+assert(f64(I));
+assert(f64(f));
+assert(f64(F));

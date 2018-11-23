@@ -33,9 +33,8 @@
    unreachable
   end
   get_global $bool/I
-  i32.wrap/i64
-  i32.const 0
-  i32.ne
+  i64.const 0
+  i64.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -62,9 +61,8 @@
    unreachable
   end
   get_global $bool/U
-  i32.wrap/i64
-  i32.const 0
-  i32.ne
+  i64.const 0
+  i64.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -77,9 +75,8 @@
    unreachable
   end
   get_global $bool/f
-  i32.trunc_u/f32
-  i32.const 0
-  i32.ne
+  f32.const 0
+  f32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -92,9 +89,8 @@
    unreachable
   end
   get_global $bool/F
-  i32.trunc_u/f64
-  i32.const 0
-  i32.ne
+  f64.const 0
+  f64.ne
   i32.const 1
   i32.eq
   i32.eqz

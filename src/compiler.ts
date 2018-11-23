@@ -2560,7 +2560,10 @@ export class Compiler extends DiagnosticEmitter {
 
         // f32 to int
         if (fromType.kind == TypeKind.F32) {
-          if (toType.is(TypeFlags.SIGNED)) {
+          if (toType == Type.bool) {
+            expr = module.createBinary(BinaryOp.NeF32, expr, module.createF32(0));
+            wrapMode = WrapMode.NONE;
+          } else if (toType.is(TypeFlags.SIGNED)) {
             if (toType.is(TypeFlags.LONG)) {
               expr = module.createUnary(UnaryOp.TruncF32ToI64, expr);
             } else {
@@ -2576,7 +2579,10 @@ export class Compiler extends DiagnosticEmitter {
 
         // f64 to int
         } else {
-          if (toType.is(TypeFlags.SIGNED)) {
+          if (toType == Type.bool) {
+            expr = module.createBinary(BinaryOp.NeF64, expr, module.createF64(0));
+            wrapMode = WrapMode.NONE;
+          } else if (toType.is(TypeFlags.SIGNED)) {
             if (toType.is(TypeFlags.LONG)) {
               expr = module.createUnary(UnaryOp.TruncF64ToI64, expr);
             } else {
@@ -2643,7 +2649,10 @@ export class Compiler extends DiagnosticEmitter {
       if (fromType.is(TypeFlags.LONG)) {
 
         // i64 to i32 or smaller
-        if (!toType.is(TypeFlags.LONG)) {
+        if (toType == Type.bool) {
+          expr = module.createBinary(BinaryOp.NeI64, expr, module.createI64(0));
+          wrapMode = WrapMode.NONE;
+        } else if (!toType.is(TypeFlags.LONG)) {
           expr = module.createUnary(UnaryOp.WrapI64, expr); // discards upper bits
         }
 
