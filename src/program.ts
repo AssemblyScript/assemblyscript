@@ -101,7 +101,8 @@ import {
   getBlockName,
   getConstValueF32,
   getConstValueF64,
-  getConstValueI64Low
+  getConstValueI64Low,
+  getGetGlobalName
 } from "./module";
 
 import {
@@ -3314,7 +3315,7 @@ export class Flow {
   /**
    * Tests if an expression can possibly overflow in the context of this flow. Assumes that the
    * expression might already have overflown and returns `false` only if the operation neglects
-   * any possibly combination of garbage bits being present.
+   * any possible combination of garbage bits being present.
    */
   canOverflow(expr: ExpressionRef, type: Type): bool {
     // TODO: the following catches most common and a few uncommon cases, but there are additional
@@ -3336,13 +3337,18 @@ export class Flow {
       }
 
       // overflows if the value does
-      case ExpressionId.SetLocal: {
+      case ExpressionId.SetLocal: { // tee
         assert(isTeeLocal(expr));
         return this.canOverflow(getSetLocalValue(expr), type);
       }
 
-      // never overflows because globals are wrapped on set
-      case ExpressionId.GetGlobal: return false;
+      // overflows if the conversion does (globals are wrapped on set)
+      case ExpressionId.GetGlobal: {
+        // TODO: this is inefficient because it has to read a string
+        let global = assert(this.currentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
+        assert(global.kind == ElementKind.GLOBAL);
+        return canConversionOverflow(assert((<Global>global).type), type);
+      }
 
       case ExpressionId.Binary: {
         switch (getBinaryOp(expr)) {
@@ -3567,9 +3573,7 @@ export class Flow {
 
 /** Tests if a conversion from one type to another can technically overflow. */
 function canConversionOverflow(fromType: Type, toType: Type): bool {
-  var fromSize = fromType.byteSize;
-  var toSize = toType.byteSize;
   return !fromType.is(TypeFlags.INTEGER) // non-i32 locals or returns
-      || fromSize > toSize
+      || fromType.size > toType.size
       || fromType.is(TypeFlags.SIGNED) != toType.is(TypeFlags.SIGNED);
 }

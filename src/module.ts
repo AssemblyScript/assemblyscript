@@ -1171,6 +1171,10 @@ export function isTeeLocal(expr: ExpressionRef): bool {
   return _BinaryenSetLocalIsTee(expr);
 }
 
+export function getGetGlobalName(expr: ExpressionRef): string | null {
+  return readString(_BinaryenGetGlobalGetName(expr));
+}
+
 export function getBinaryOp(expr: ExpressionRef): BinaryOp {
   return _BinaryenBinaryGetOp(expr);
 }

@@ -484,8 +484,6 @@
    unreachable
   end
   get_local $2
-  i32.const 1
-  i32.and
   if (result f32)
    get_local $0
    i32.load
@@ -559,8 +557,6 @@
    unreachable
   end
   get_local $1
-  i32.const 1
-  i32.and
   if (result f64)
    get_local $0
    i32.load
@@ -654,8 +650,6 @@
   i32.load16_s offset=8
   set_local $0
   get_local $2
-  i32.const 1
-  i32.and
   i32.eqz
   if
    get_local $0
@@ -711,8 +705,6 @@
   i32.load offset=8
   set_local $0
   get_local $2
-  i32.const 1
-  i32.and
   i32.eqz
   if
    get_local $0
@@ -752,8 +744,6 @@
   i64.load offset=8
   set_local $2
   get_local $1
-  i32.const 1
-  i32.and
   i32.eqz
   if
    get_local $2
@@ -837,8 +827,6 @@
   i32.load16_u offset=8
   set_local $0
   get_local $2
-  i32.const 1
-  i32.and
   i32.eqz
   if
    get_local $0
@@ -869,8 +857,6 @@
    unreachable
   end
   get_local $2
-  i32.const 1
-  i32.and
   if
    get_local $0
    i32.load
@@ -915,8 +901,6 @@
    unreachable
   end
   get_local $2
-  i32.const 1
-  i32.and
   if
    get_local $0
    i32.load
@@ -978,8 +962,6 @@
   i32.add
   set_local $0
   get_local $2
-  i32.const 1
-  i32.and
   i32.eqz
   if
    get_local $1
@@ -1019,8 +1001,6 @@
   i32.add
   set_local $0
   get_local $2
-  i32.const 1
-  i32.and
   i32.eqz
   if
    get_local $1
@@ -1060,8 +1040,6 @@
   i32.add
   set_local $0
   get_local $2
-  i32.const 1
-  i32.and
   i32.eqz
   if
    get_local $1
@@ -1092,8 +1070,6 @@
   i32.add
   set_local $0
   get_local $2
-  i32.const 1
-  i32.and
   i32.eqz
   if
    get_local $1

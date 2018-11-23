@@ -185,6 +185,8 @@
    get_local $0
    f64.eq
    i32.and
+   i32.const 0
+   i32.ne
    get_local $1
    i64.reinterpret/f64
    i64.const 63
@@ -194,6 +196,8 @@
    get_local $1
    f64.eq
    i32.and
+   i32.const 0
+   i32.ne
    i32.eq
    if
     get_local $2
@@ -381,6 +385,8 @@
    get_local $0
    f32.eq
    i32.and
+   i32.const 0
+   i32.ne
    get_local $1
    i32.reinterpret/f32
    i32.const 31
@@ -389,6 +395,8 @@
    get_local $1
    f32.eq
    i32.and
+   i32.const 0
+   i32.ne
    i32.eq
    if
     get_local $2
@@ -2326,13 +2334,10 @@
       block $case1|0
        get_local $2
        if
-        block $tablify|0
-         get_local $2
-         i32.const 1
-         i32.sub
-         br_table $case1|0 $case2|0 $case3|0 $tablify|0
-        end
-        br $case4|0
+        get_local $2
+        i32.const 1
+        i32.sub
+        br_table $case1|0 $case2|0 $case3|0 $case4|0
        end
        f64.const 0.4636476090008061
        get_local $1
@@ -2544,13 +2549,10 @@
       block $case1|0
        get_local $1
        if
-        block $tablify|0
-         get_local $1
-         i32.const 1
-         i32.sub
-         br_table $case1|0 $case2|0 $case3|0 $tablify|0
-        end
-        br $case4|0
+        get_local $1
+        i32.const 1
+        i32.sub
+        br_table $case1|0 $case2|0 $case3|0 $case4|0
        end
        f32.const 0.46364760398864746
        get_local $2
@@ -2865,13 +2867,10 @@
         block $case1|1
          get_local $3
          if
-          block $tablify|00
-           get_local $3
-           i32.const 1
-           i32.sub
-           br_table $case1|1 $case2|1 $case3|1 $tablify|00
-          end
-          br $break|1
+          get_local $3
+          i32.const 1
+          i32.sub
+          br_table $case1|1 $case2|1 $case3|1 $break|1
          end
          f64.const 0.7853981633974483
          return
@@ -2892,13 +2891,10 @@
         block $case1|2
          get_local $3
          if
-          block $tablify|01
-           get_local $3
-           i32.const 1
-           i32.sub
-           br_table $case1|2 $case2|2 $case3|2 $tablify|01
-          end
-          br $break|2
+          get_local $3
+          i32.const 1
+          i32.sub
+          br_table $case1|2 $case2|2 $case3|2 $break|2
          end
          f64.const 0
          return
@@ -2959,13 +2955,10 @@
        get_local $3
        tee_local $2
        if
-        block $tablify|02
-         get_local $2
-         i32.const 1
-         i32.sub
-         br_table $case1|3 $case2|3 $case3|3 $tablify|02
-        end
-        br $break|3
+        get_local $2
+        i32.const 1
+        i32.sub
+        br_table $case1|3 $case2|3 $case3|3 $break|3
        end
        get_local $0
        return
@@ -3120,13 +3113,10 @@
         block $case1|1
          get_local $3
          if
-          block $tablify|00
-           get_local $3
-           i32.const 1
-           i32.sub
-           br_table $case1|1 $case2|1 $case3|1 $tablify|00
-          end
-          br $break|1
+          get_local $3
+          i32.const 1
+          i32.sub
+          br_table $case1|1 $case2|1 $case3|1 $break|1
          end
          f32.const 0.7853981852531433
          return
@@ -3147,13 +3137,10 @@
         block $case1|2
          get_local $3
          if
-          block $tablify|01
-           get_local $3
-           i32.const 1
-           i32.sub
-           br_table $case1|2 $case2|2 $case3|2 $tablify|01
-          end
-          br $break|2
+          get_local $3
+          i32.const 1
+          i32.sub
+          br_table $case1|2 $case2|2 $case3|2 $break|2
          end
          f32.const 0
          return
@@ -3214,13 +3201,10 @@
        get_local $3
        tee_local $2
        if
-        block $tablify|02
-         get_local $2
-         i32.const 1
-         i32.sub
-         br_table $case1|3 $case2|3 $case3|3 $tablify|02
-        end
-        br $break|3
+        get_local $2
+        i32.const 1
+        i32.sub
+        br_table $case1|3 $case2|3 $case3|3 $break|3
        end
        get_local $0
        return
@@ -6089,8 +6073,6 @@
     set_local $5
    end
    get_local $5
-   i32.const 1
-   i32.and
    if
     get_local $0
     get_local $1

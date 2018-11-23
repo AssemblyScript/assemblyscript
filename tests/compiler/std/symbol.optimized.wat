@@ -383,8 +383,6 @@
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
   get_local $1
-  i32.const 1
-  i32.and
   i32.eqz
   if
    get_local $2
@@ -2405,13 +2403,10 @@
               i32.const 1
               i32.ne
               if
-               block $tablify|0
-                get_local $2
-                i32.const 2
-                i32.sub
-                br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $tablify|0
-               end
-               br $case11|0
+               get_local $2
+               i32.const 2
+               i32.sub
+               br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $case11|0
               end
               i32.const 176
               set_local $1

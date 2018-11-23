@@ -56,20 +56,18 @@
    end
    unreachable
   end
-  block $break|2
-   loop $repeat|2
-    get_global $for/i
-    i32.const 0
-    i32.le_s
-    br_if $break|2
+  loop $repeat|2
+   get_global $for/i
+   i32.const 0
+   i32.le_s
+   i32.eqz
+   if
     get_global $for/i
     i32.const 1
     i32.sub
     set_global $for/i
     br $repeat|2
-    unreachable
    end
-   unreachable
   end
   get_global $for/i
   if
@@ -80,20 +78,18 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   loop $repeat|3
-    get_global $for/i
-    i32.const 10
-    i32.eq
-    br_if $break|3
+  loop $repeat|3
+   get_global $for/i
+   i32.const 10
+   i32.eq
+   i32.eqz
+   if
     get_global $for/i
     i32.const 1
     i32.add
     set_global $for/i
     br $repeat|3
-    unreachable
    end
-   unreachable
   end
   loop $repeat|4
    get_global $for/i

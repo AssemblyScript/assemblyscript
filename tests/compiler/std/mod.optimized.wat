@@ -322,8 +322,6 @@
     set_local $5
    end
    get_local $5
-   i32.const 1
-   i32.and
    if
     get_local $0
     get_local $1

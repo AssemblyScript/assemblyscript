@@ -258,8 +258,8 @@
     f64.eq
     i32.and
    end
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    block $~lib/math/NativeMath.signbit|inlined.3 (result i32)
     get_local $1
     i64.reinterpret/f64
@@ -271,8 +271,8 @@
     f64.eq
     i32.and
    end
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    i32.eq
    if
     get_local $2
@@ -493,8 +493,8 @@
     f32.eq
     i32.and
    end
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    block $~lib/math/NativeMathf.signbit|inlined.3 (result i32)
     get_local $1
     i32.reinterpret/f32
@@ -505,8 +505,8 @@
     f32.eq
     i32.and
    end
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    i32.eq
    if
     get_local $2
@@ -7089,8 +7089,8 @@
    get_local $1
    f64.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if
    get_local $0
    get_local $1
@@ -7373,8 +7373,8 @@
    get_local $1
    f32.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if
    get_local $0
    get_local $1
@@ -35810,8 +35810,8 @@
    f64.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -35836,8 +35836,8 @@
    f64.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -35862,8 +35862,8 @@
    f64.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -35888,8 +35888,8 @@
    f64.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -35914,8 +35914,8 @@
    f64.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -35941,8 +35941,8 @@
    f64.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -35967,8 +35967,8 @@
    f64.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -35994,8 +35994,8 @@
    f64.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -36019,8 +36019,8 @@
    f32.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -36044,8 +36044,8 @@
    f32.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -36069,8 +36069,8 @@
    f32.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -36094,8 +36094,8 @@
    f32.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -36119,8 +36119,8 @@
    f32.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -36145,8 +36145,8 @@
    f32.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -36170,8 +36170,8 @@
    f32.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -36196,8 +36196,8 @@
    f32.eq
    i32.and
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz

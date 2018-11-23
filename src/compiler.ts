@@ -7521,9 +7521,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.BOOL: {
         if (flow.canOverflow(expr, type)) {
-          expr = module.createBinary(BinaryOp.AndI32,
+          // bool is special in that it compares to 0 instead of masking with 0x1
+          expr = module.createBinary(BinaryOp.NeI32,
             expr,
-            module.createI32(0x1)
+            module.createI32(0)
           );
         }
         break;

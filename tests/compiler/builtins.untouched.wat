@@ -576,8 +576,8 @@
    get_local $4
    f32.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -596,8 +596,8 @@
    get_local $4
    f32.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -618,8 +618,8 @@
    f32.const 0
    f32.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -640,8 +640,8 @@
    f32.const 0
    f32.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -663,8 +663,8 @@
    f32.const 0
    f32.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -685,8 +685,8 @@
    f32.const 0
    f32.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -739,8 +739,8 @@
    get_local $4
    f32.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $builtins/b
   block $~lib/builtins/isFinite<f32>|inlined.4 (result i32)
    f32.const 1.25
@@ -751,8 +751,8 @@
    f32.const 0
    f32.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $builtins/b
   f64.const nan:0x8000000000000
   drop
@@ -799,8 +799,8 @@
    get_local $5
    f64.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -819,8 +819,8 @@
    get_local $5
    f64.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -841,8 +841,8 @@
    f64.const 0
    f64.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -863,8 +863,8 @@
    f64.const 0
    f64.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -886,8 +886,8 @@
    f64.const 0
    f64.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -908,8 +908,8 @@
    f64.const 0
    f64.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -962,8 +962,8 @@
    get_local $5
    f64.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $builtins/b
   block $~lib/builtins/isFinite<f64>|inlined.4 (result i32)
    f64.const 1.25
@@ -974,8 +974,8 @@
    f64.const 0
    f64.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $builtins/b
   i32.const 8
   i32.load
@@ -1452,8 +1452,8 @@
    get_local $4
    f32.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1470,8 +1470,8 @@
    get_local $5
    f64.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1490,8 +1490,8 @@
    f32.const 0
    f32.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -1511,8 +1511,8 @@
    f32.const 0
    f32.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -1532,8 +1532,8 @@
    f64.const 0
    f64.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -1553,8 +1553,8 @@
    f64.const 0
    f64.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -1574,8 +1574,8 @@
    f32.const 0
    f32.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1594,8 +1594,8 @@
    f64.const 0
    f64.eq
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1932,8 +1932,8 @@
    get_local $4
    f32.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1962,8 +1962,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -1992,8 +1992,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2022,8 +2022,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2052,8 +2052,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2082,8 +2082,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2112,8 +2112,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2142,8 +2142,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2174,8 +2174,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2204,8 +2204,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2228,8 +2228,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2239,8 +2239,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2263,8 +2263,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2274,8 +2274,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2298,8 +2298,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2309,8 +2309,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2333,8 +2333,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2344,8 +2344,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2368,8 +2368,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2379,8 +2379,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2403,8 +2403,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2414,8 +2414,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2438,8 +2438,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2449,8 +2449,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2473,8 +2473,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2484,8 +2484,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2508,8 +2508,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2519,8 +2519,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2543,8 +2543,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2554,8 +2554,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2578,8 +2578,8 @@
     f32.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $4
     f32.trunc
@@ -2589,8 +2589,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2681,8 +2681,8 @@
    get_local $5
    f64.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -2711,8 +2711,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2741,8 +2741,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2771,8 +2771,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2801,8 +2801,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2831,8 +2831,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2861,8 +2861,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2891,8 +2891,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -2923,8 +2923,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2953,8 +2953,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -2977,8 +2977,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -2988,8 +2988,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -3012,8 +3012,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -3023,8 +3023,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -3047,8 +3047,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -3058,8 +3058,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -3082,8 +3082,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -3093,8 +3093,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -3117,8 +3117,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -3128,8 +3128,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -3152,8 +3152,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -3163,8 +3163,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -3187,8 +3187,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -3198,8 +3198,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -3222,8 +3222,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -3233,8 +3233,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -3257,8 +3257,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -3268,8 +3268,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -3292,8 +3292,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -3303,8 +3303,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -3327,8 +3327,8 @@
     f64.eq
    end
    tee_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    if (result i32)
     get_local $5
     f64.trunc
@@ -3338,8 +3338,8 @@
     get_local $0
    end
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
