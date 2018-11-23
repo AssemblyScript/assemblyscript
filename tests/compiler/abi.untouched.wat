@@ -157,8 +157,8 @@
    i32.ctz
    set_local $0
    get_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    i32.eqz
    if
     i32.const 0
@@ -172,8 +172,8 @@
    i32.clz
    set_local $0
    get_local $0
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    i32.eqz
    if
     i32.const 0

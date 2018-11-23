@@ -13,6 +13,8 @@
   i32.store8
   i32.const 0
   i32.load8_u
+  i32.const 0
+  i32.ne
  )
  (func $null (; 1 ;) (type $v)
   nop

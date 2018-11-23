@@ -3743,8 +3743,8 @@
      get_local $1
      call_indirect (type $iiii)
     end
-    i32.const 1
-    i32.and
+    i32.const 0
+    i32.ne
     if
      get_local $3
      return
@@ -3844,8 +3844,8 @@
      get_local $1
      call_indirect (type $iiii)
     end
-    i32.const 1
-    i32.and
+    i32.const 0
+    i32.ne
     i32.eqz
     if
      i32.const 0
@@ -3941,8 +3941,8 @@
      get_local $1
      call_indirect (type $iiii)
     end
-    i32.const 1
-    i32.and
+    i32.const 0
+    i32.ne
     if
      i32.const 1
      return
@@ -4395,8 +4395,8 @@
       get_local $1
       call_indirect (type $iiii)
      end
-     i32.const 1
-     i32.and
+     i32.const 0
+     i32.ne
      if
       get_local $4
       get_local $6
@@ -4524,8 +4524,8 @@
  )
  (func $start~anonymous|31 (; 77 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $0
   else   
@@ -4599,8 +4599,8 @@
  )
  (func $start~anonymous|32 (; 79 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $0
   else   
@@ -4693,8 +4693,8 @@
  )
  (func $start~anonymous|38 (; 86 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $0
   else   
@@ -4755,8 +4755,8 @@
  )
  (func $start~anonymous|39 (; 88 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $0
   else   
@@ -10058,8 +10058,8 @@
     i32.add
     i32.load8_u offset=8
    end
-   i32.const 1
-   i32.and
+   i32.const 0
+   i32.ne
    select
    return
   end
@@ -10099,8 +10099,8 @@
      set_local $4
      i32.const 4
      get_local $4
-     i32.const 1
-     i32.and
+     i32.const 0
+     i32.ne
      i32.eqz
      i32.add
      set_local $8
@@ -10109,8 +10109,8 @@
      i32.const 2800
      i32.const 2816
      get_local $4
-     i32.const 1
-     i32.and
+     i32.const 0
+     i32.ne
      select
      i32.const 0
      get_local $8
@@ -10153,8 +10153,8 @@
   set_local $4
   i32.const 4
   get_local $4
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   i32.add
   set_local $8
@@ -10163,8 +10163,8 @@
   i32.const 2800
   i32.const 2816
   get_local $4
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   select
   i32.const 0
   get_local $8
@@ -16724,8 +16724,8 @@
    i32.const 0
    i32.ge_s
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/includes
   get_global $std/array/includes
   i32.const 1
@@ -16753,8 +16753,8 @@
    i32.const 0
    i32.ge_s
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/includes
   get_global $std/array/includes
   i32.const 1
@@ -16782,8 +16782,8 @@
    i32.const 0
    i32.ge_s
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/includes
   get_global $std/array/includes
   i32.const 0
@@ -16811,8 +16811,8 @@
    i32.const 0
    i32.ge_s
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/includes
   get_global $std/array/includes
   i32.const 0
@@ -16840,8 +16840,8 @@
    i32.const 0
    i32.ge_s
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/includes
   get_global $std/array/includes
   i32.const 1
@@ -16869,8 +16869,8 @@
    i32.const 0
    i32.ge_s
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/includes
   get_global $std/array/includes
   i32.const 1
@@ -16898,8 +16898,8 @@
    i32.const 0
    i32.ge_s
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/includes
   get_global $std/array/includes
   i32.const 1
@@ -16927,8 +16927,8 @@
    i32.const 0
    i32.ge_s
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/includes
   get_global $std/array/includes
   i32.const 1
@@ -16956,8 +16956,8 @@
    i32.const 0
    i32.ge_s
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/includes
   get_global $std/array/includes
   i32.const 1
@@ -16985,8 +16985,8 @@
    i32.const 0
    i32.ge_s
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/includes
   get_global $std/array/includes
   i32.const 1
@@ -17931,8 +17931,8 @@
   i32.const 31
   i32.const 0
   call $~lib/array/Array<i32>#reduce<bool>
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/boolVal
   get_global $std/array/boolVal
   i32.const 1
@@ -17950,8 +17950,8 @@
   i32.const 32
   i32.const 0
   call $~lib/array/Array<i32>#reduce<bool>
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/boolVal
   get_global $std/array/boolVal
   i32.const 0
@@ -18108,8 +18108,8 @@
   i32.const 38
   i32.const 0
   call $~lib/array/Array<i32>#reduceRight<bool>
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/boolVal
   get_global $std/array/boolVal
   i32.const 1
@@ -18127,8 +18127,8 @@
   i32.const 39
   i32.const 0
   call $~lib/array/Array<i32>#reduceRight<bool>
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   set_global $std/array/boolVal
   get_global $std/array/boolVal
   i32.const 0

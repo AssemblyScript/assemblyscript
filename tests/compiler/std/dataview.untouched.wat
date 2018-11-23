@@ -629,8 +629,8 @@
    unreachable
   end
   get_local $2
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result f32)
    get_local $0
    i32.load
@@ -723,8 +723,8 @@
    unreachable
   end
   get_local $2
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result f64)
    get_local $0
    i32.load
@@ -843,8 +843,8 @@
   i32.load16_s offset=8
   set_local $6
   get_local $2
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $6
   else   
@@ -907,8 +907,8 @@
   i32.load offset=8
   set_local $6
   get_local $2
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $6
   else   
@@ -996,8 +996,8 @@
   i64.load offset=8
   set_local $6
   get_local $2
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i64)
    get_local $6
   else   
@@ -1099,8 +1099,8 @@
   i32.load16_u offset=8
   set_local $6
   get_local $2
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $6
   else   
@@ -1149,8 +1149,8 @@
   i32.load offset=8
   set_local $6
   get_local $2
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $6
   else   
@@ -1199,8 +1199,8 @@
   i64.load offset=8
   set_local $6
   get_local $2
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i64)
    get_local $6
   else   
@@ -1239,8 +1239,8 @@
    unreachable
   end
   get_local $3
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if
    get_local $0
    i32.load
@@ -1296,8 +1296,8 @@
    unreachable
   end
   get_local $3
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if
    get_local $0
    i32.load
@@ -1400,8 +1400,8 @@
   get_local $1
   i32.add
   get_local $3
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $2
   else   
@@ -1448,8 +1448,8 @@
   get_local $1
   i32.add
   get_local $3
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $2
   else   
@@ -1496,8 +1496,8 @@
   get_local $1
   i32.add
   get_local $3
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i64)
    get_local $2
   else   
@@ -1584,8 +1584,8 @@
   get_local $1
   i32.add
   get_local $3
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $2
   else   
@@ -1632,8 +1632,8 @@
   get_local $1
   i32.add
   get_local $3
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i32)
    get_local $2
   else   
@@ -1680,8 +1680,8 @@
   get_local $1
   i32.add
   get_local $3
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if (result i64)
    get_local $2
   else   

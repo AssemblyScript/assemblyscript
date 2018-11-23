@@ -593,8 +593,8 @@
   get_local $4
   i32.sub
   set_local $3
-  block $break|0
-   loop $repeat|0
+  loop $repeat|0
+   block $break|0
     get_local $2
     get_local $3
     i32.gt_s
@@ -615,9 +615,7 @@
      return
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   i32.const -1
  )
@@ -1736,24 +1734,20 @@
      block $case3|0
       block $case2|0
        block $case1|0
-        block $case0|0
-         get_local $2
-         i32.load
-         tee_local $6
-         set_local $5
-         get_local $6
-         i32.eqz
-         br_if $break|0
-         block $tablify|0
-          get_local $5
-          i32.const 1
-          i32.sub
-          br_table $case1|0 $case2|0 $case3|0 $case4|0 $tablify|0
-         end
-         br $case5|0
-         unreachable
+        get_local $2
+        i32.load
+        tee_local $6
+        set_local $5
+        get_local $6
+        i32.eqz
+        br_if $break|0
+        block $tablify|0
+         get_local $5
+         i32.const 1
+         i32.sub
+         br_table $case1|0 $case2|0 $case3|0 $case4|0 $tablify|0
         end
-        unreachable
+        br $case5|0
        end
        get_local $2
        i32.load16_u offset=4
@@ -2460,8 +2454,8 @@
    end
    set_local $1
   end
-  block $break|1
-   loop $continue|1
+  loop $continue|1
+   block $break|1
     get_local $4
     tee_local $0
     i32.const 1
@@ -2612,8 +2606,8 @@
    f64.const 1
   end
   set_local $6
-  block $break|0
-   loop $continue|0
+  loop $continue|0
+   block $break|0
     get_local $3
     tee_local $0
     i32.const 1
@@ -2633,8 +2627,8 @@
       set_local $1
       f64.const 0.1
       set_local $5
-      block $break|1
-       loop $continue|1
+      loop $continue|1
+       block $break|1
         get_local $3
         tee_local $0
         i32.const 1
@@ -4252,13 +4246,10 @@
                i32.const 10
                i32.ne
                if
-                block $tablify|0
-                 get_local $2
-                 i32.const 1
-                 i32.sub
-                 br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $tablify|0
-                end
-                br $case10|1
+                get_local $2
+                i32.const 1
+                i32.sub
+                br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $case10|1
                end
                get_local $7
                i32.const 1000000000
