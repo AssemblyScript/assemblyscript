@@ -8,20 +8,18 @@
  (start $start)
  (func $start (; 0 ;) (type $v)
   (local $0 i32)
-  block $break|0
-   loop $repeat|0
-    get_local $0
-    i32.const 1
-    i32.ge_s
-    br_if $break|0
+  loop $repeat|0
+   get_local $0
+   i32.const 1
+   i32.ge_s
+   i32.eqz
+   if
     get_local $0
     i32.const 1
     i32.add
     set_local $0
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
   block $break|1
    i32.const 0

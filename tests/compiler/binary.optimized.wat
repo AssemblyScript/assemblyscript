@@ -97,8 +97,6 @@
     set_local $3
    end
    get_local $3
-   i32.const 1
-   i32.and
    if
     get_local $0
     get_local $0
@@ -655,27 +653,25 @@
   get_global $binary/f
   call $~lib/math/NativeMathf.mod
   set_global $binary/f
-  block $__inlined_func$~lib/math/NativeMathf.pow0
-   get_global $binary/f
-   tee_local $0
-   i32.reinterpret/f32
-   i32.const 2147483647
-   i32.and
-   i32.const 2139095040
-   i32.gt_s
-   tee_local $1
-   i32.eqz
-   if
-    i32.const 0
-    set_local $1
-   end
-   get_local $1
-   if
-    get_local $0
-    f32.const 1
-    f32.add
-    set_local $0
-   end
+  get_global $binary/f
+  tee_local $0
+  i32.reinterpret/f32
+  i32.const 2147483647
+  i32.and
+  i32.const 2139095040
+  i32.gt_s
+  tee_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  if
+   get_local $0
+   f32.const 1
+   f32.add
+   set_local $0
   end
   get_local $0
   set_global $binary/f
@@ -690,27 +686,25 @@
   get_global $binary/f
   call $~lib/math/NativeMathf.mod
   set_global $binary/f
-  block $__inlined_func$~lib/math/NativeMathf.pow2
-   get_global $binary/f
-   tee_local $0
-   i32.reinterpret/f32
-   i32.const 2147483647
-   i32.and
-   i32.const 2139095040
-   i32.gt_s
-   tee_local $1
-   i32.eqz
-   if
-    i32.const 0
-    set_local $1
-   end
-   get_local $1
-   if
-    get_local $0
-    f32.const 1
-    f32.add
-    set_local $0
-   end
+  get_global $binary/f
+  tee_local $0
+  i32.reinterpret/f32
+  i32.const 2147483647
+  i32.and
+  i32.const 2139095040
+  i32.gt_s
+  tee_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  if
+   get_local $0
+   f32.const 1
+   f32.add
+   set_local $0
   end
   get_local $0
   set_global $binary/f

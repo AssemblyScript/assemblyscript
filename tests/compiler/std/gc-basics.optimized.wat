@@ -186,13 +186,10 @@
       get_global $~lib/collector/itcm/state
       tee_local $0
       if
-       block $tablify|0
-        get_local $0
-        i32.const 1
-        i32.sub
-        br_table $case1|0 $case2|0 $case3|0 $tablify|0
-       end
-       br $break|0
+       get_local $0
+       i32.const 1
+       i32.sub
+       br_table $case1|0 $case2|0 $case3|0 $break|0
       end
       i32.const 16
       call $~lib/allocator/arena/__memory_allocate

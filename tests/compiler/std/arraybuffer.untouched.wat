@@ -419,8 +419,8 @@
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
   get_local $2
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    get_local $3
