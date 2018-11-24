@@ -28,6 +28,17 @@ function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
 
 var arr = new Array<i32>();
 
+// Array.isArray ///////////////////////////////////////////////////////////////////////////////////
+
+class P {}
+var num = 1;
+var Null: i32[] | null = null;
+assert(Array.isArray(Null) == false);
+assert(Array.isArray(arr) == true);
+assert(Array.isArray(new P()) == false);
+// assert(Array.isArray(new Uint8Array(1)) == false); fail
+assert(Array.isArray(num) == false);
+
 // Array#fill //////////////////////////////////////////////////////////////////////////////////////
 
 var arr8: u8[] = [1, 2, 3, 4, 5];
@@ -144,6 +155,34 @@ assert(source.length == 0);
 out = source.concat(arr);
 assert(out.length == 3);
 assert(source.length == 0);
+
+// Array#copyWithin ////////////////////////////////////////////////////////////////////////////////
+
+var cwArr: i32[];
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, 3), <i32[]>[4, 5, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 3), <i32[]>[1, 4, 5, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 2), <i32[]>[1, 3, 4, 5, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(2, 2), <i32[]>[1, 2, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, 3, 4), <i32[]>[4, 2, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 3, 4), <i32[]>[1, 4, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 2, 4), <i32[]>[1, 3, 4, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, -2), <i32[]>[4, 5, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, -2, -1), <i32[]>[4, 2, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3, -2), <i32[]>[1, 3, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3, -1), <i32[]>[1, 3, 4, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3), <i32[]>[1, 3, 4, 5, 5]));
 
 // Array#unshift ///////////////////////////////////////////////////////////////////////////////////
 

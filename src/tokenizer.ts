@@ -356,7 +356,8 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     case Token.NAMESPACE:
     case Token.READONLY:
     case Token.SET:
-    case Token.TYPE: return true;
+    case Token.TYPE:
+    case Token.VOID: return true;
     default: return false;
   }
 }
@@ -972,12 +973,8 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.nextToken;
   }
 
-  skipIdentifier(): bool {
-    return this.skip(Token.IDENTIFIER, IdentifierHandling.PREFER);
-  }
-
-  skipIdentifierName(): bool {
-    return this.skip(Token.IDENTIFIER, IdentifierHandling.ALWAYS);
+  skipIdentifier(identifierHandling: IdentifierHandling = IdentifierHandling.PREFER): bool {
+    return this.skip(Token.IDENTIFIER, identifierHandling);
   }
 
   skip(token: Token, identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): bool {

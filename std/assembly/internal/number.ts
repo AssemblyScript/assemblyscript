@@ -689,7 +689,7 @@ export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
       let sign = <i32>(value < 0);
       let len  = 8 + sign;
       let source = changetype<usize>(select<String>("-Infinity", "Infinity", sign));
-      memory.copy(buffer + STRING_HEADER_SIZE, source, len << 1);
+      memory.copy(buffer + STRING_HEADER_SIZE, source + STRING_HEADER_SIZE, len << 1);
       return len;
     }
   }

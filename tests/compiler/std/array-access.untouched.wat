@@ -143,11 +143,11 @@
       i32.sub
       set_local $4
       get_local $6
-      i32.const 1
+      i32.const 2
       i32.add
       set_local $6
       get_local $7
-      i32.const 1
+      i32.const 2
       i32.add
       set_local $7
      end

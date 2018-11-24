@@ -61,105 +61,111 @@
  (data (i32.const 624) "\08\00\00\00.\001\00f\00o\00o\00b\00a\00r")
  (data (i32.const 648) "\01\00\00\00b")
  (data (i32.const 656) "\02\00\00\00a\00b")
- (data (i32.const 664) "\02\00\00\00b\00a")
- (data (i32.const 672) "\02\00\00\00a\00a")
- (data (i32.const 680) "\03\00\00\00a\00a\00a")
- (data (i32.const 696) "\08\00\00\00a\00b\00a\00b\00a\00b\00a\00b")
- (data (i32.const 720) "\05\00\00\00a\00a\00a\00a\00a")
- (data (i32.const 736) "\06\00\00\00a\00a\00a\00a\00a\00a")
- (data (i32.const 752) "\07\00\00\00a\00a\00a\00a\00a\00a\00a")
- (data (i32.const 776) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 808) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 872) "\04")
- (data (i32.const 881) "\01")
- (data (i32.const 888) "h\03\00\00\01")
- (data (i32.const 896) "\05\00\00\00a\00,\00b\00,\00c")
- (data (i32.const 912) "\01\00\00\00.")
- (data (i32.const 920) "\01\00\00\00c")
- (data (i32.const 928) "\07\00\00\00a\00,\00 \00b\00,\00 \00c")
- (data (i32.const 952) "\02\00\00\00,\00 ")
- (data (i32.const 960) "\06\00\00\00a\00,\00b\00,\00,\00c")
- (data (i32.const 976) "\06\00\00\00,\00a\00,\00b\00,\00c")
- (data (i32.const 992) "\06\00\00\00a\00,\00b\00,\00c\00,")
- (data (i32.const 1008) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009")
- (data (i32.const 1520) "\f0\03\00\00d")
- (data (i32.const 1528) "\01\00\00\008")
- (data (i32.const 1536) "\05\00\00\00-\001\000\000\000")
- (data (i32.const 1552) "\04\00\00\001\002\003\004")
- (data (i32.const 1568) "\05\00\00\001\002\003\004\005")
- (data (i32.const 1584) "\06\00\00\001\002\003\004\005\006")
- (data (i32.const 1600) "\07\00\00\001\001\001\001\001\001\001")
- (data (i32.const 1624) "\07\00\00\001\002\003\004\005\006\007")
- (data (i32.const 1648) "\n\00\00\002\001\004\007\004\008\003\006\004\006")
- (data (i32.const 1672) "\n\00\00\002\001\004\007\004\008\003\006\004\007")
- (data (i32.const 1696) "\0b\00\00\00-\002\001\004\007\004\008\003\006\004\008")
- (data (i32.const 1728) "\02\00\00\00-\001")
- (data (i32.const 1736) "\04\00\00\001\000\000\000")
- (data (i32.const 1752) "\n\00\00\002\001\004\007\004\008\003\006\004\008")
- (data (i32.const 1776) "\n\00\00\004\002\009\004\009\006\007\002\009\005")
- (data (i32.const 1800) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009")
- (data (i32.const 2312) "\08\07\00\00d")
- (data (i32.const 2320) "\08\00\00\009\009\009\009\009\009\009\009")
- (data (i32.const 2344) "\t\00\00\001\000\000\000\000\000\000\000\000")
- (data (i32.const 2368) "\0b\00\00\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 2400) "\0c\00\00\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 2432) "\0f\00\00\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 2472) "\10\00\00\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 2512) "\11\00\00\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 2552) "\14\00\00\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005")
- (data (i32.const 2600) "\05\00\00\00-\001\002\003\004")
- (data (i32.const 2616) "\0b\00\00\00-\004\002\009\004\009\006\007\002\009\005")
- (data (i32.const 2648) "\0c\00\00\00-\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 2680) "\0d\00\00\00-\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 2712) "\10\00\00\00-\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 2752) "\12\00\00\00-\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
- (data (i32.const 2792) "\13\00\00\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\007")
- (data (i32.const 2840) "\14\00\00\00-\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\008")
- (data (i32.const 2888) "\03\00\00\000\00.\000")
- (data (i32.const 2904) "\03\00\00\00N\00a\00N")
- (data (i32.const 2920) "\t\00\00\00-\00I\00n\00f\00i\00n\00i\00t\00y")
- (data (i32.const 2944) "\08\00\00\00I\00n\00f\00i\00n\00i\00t\00y")
- (data (i32.const 2968) "\b8\02\00\00\00\00\00\00\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\0dXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
- (data (i32.const 3992) "\98\0b\00\00W")
- (data (i32.const 4000) "\ae\00\00\00\00\00\00\00<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
- (data (i32.const 4256) "\a0\0f\00\00W")
- (data (i32.const 4264) "(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
- (data (i32.const 4328) "\a8\10\00\00\n")
- (data (i32.const 4336) "\15\00\00\002\00.\002\002\000\004\004\006\000\004\009\002\005\000\003\001\003\00e\00-\001\006")
- (data (i32.const 4384) "\16\00\00\00-\002\00.\002\002\000\004\004\006\000\004\009\002\005\000\003\001\003\00e\00-\001\006")
- (data (i32.const 4432) "\17\00\00\001\00.\007\009\007\006\009\003\001\003\004\008\006\002\003\001\005\007\00e\00+\003\000\008")
- (data (i32.const 4488) "\18\00\00\00-\001\00.\007\009\007\006\009\003\001\003\004\008\006\002\003\001\005\007\00e\00+\003\000\008")
- (data (i32.const 4544) "\16\00\00\004\00.\001\008\005\005\008\000\004\009\006\008\002\001\003\005\007\00e\00+\002\009\008")
- (data (i32.const 4592) "\17\00\00\002\00.\002\002\005\000\007\003\008\005\008\005\000\007\002\000\001\004\00e\00-\003\000\008")
- (data (i32.const 4648) "\15\00\00\002\00.\009\008\000\002\003\002\002\003\008\007\006\009\005\003\001\002\00e\00-\008")
- (data (i32.const 4696) "\14\00\00\00-\002\001\000\009\008\000\008\008\009\008\006\009\005\009\006\003\000\00.\000")
- (data (i32.const 4744) "\0d\00\00\004\00.\009\004\000\006\005\006\00e\00-\003\001\008")
- (data (i32.const 4776) "\12\00\00\009\000\006\000\008\000\001\001\005\003\004\003\003\006\000\000\00.\000")
- (data (i32.const 4816) "\15\00\00\004\007\000\008\003\005\006\000\002\004\007\001\001\005\001\002\000\000\000\00.\000")
- (data (i32.const 4864) "\15\00\00\009\004\000\009\003\004\000\000\001\002\005\006\008\002\004\008\000\000\000\00.\000")
- (data (i32.const 4912) "\06\00\00\005\00e\00-\003\002\004")
- (data (i32.const 4928) "\03\00\00\001\00.\000")
- (data (i32.const 4944) "\04\00\00\00-\001\00.\000")
- (data (i32.const 4960) "\04\00\00\00-\000\00.\001")
- (data (i32.const 4976) "\t\00\00\001\000\000\000\000\000\000\00.\000")
- (data (i32.const 5000) "\08\00\00\000\00.\000\000\000\000\000\001")
- (data (i32.const 5024) "\n\00\00\00-\001\000\000\000\000\000\000\00.\000")
- (data (i32.const 5048) "\t\00\00\00-\000\00.\000\000\000\000\000\001")
- (data (i32.const 5072) "\n\00\00\001\000\000\000\000\000\000\000\00.\000")
- (data (i32.const 5096) "\04\00\00\001\00e\00-\007")
- (data (i32.const 5112) "\06\00\00\001\00e\00+\003\000\008")
- (data (i32.const 5128) "\07\00\00\00-\001\00e\00+\003\000\008")
- (data (i32.const 5152) "\06\00\00\001\00e\00-\003\000\008")
- (data (i32.const 5168) "\07\00\00\00-\001\00e\00-\003\000\008")
- (data (i32.const 5192) "\06\00\00\001\00e\00-\003\002\003")
- (data (i32.const 5208) "\07\00\00\00-\001\00e\00-\003\002\003")
- (data (i32.const 5232) "\0c\00\00\004\002\009\004\009\006\007\002\007\002\00.\000")
- (data (i32.const 5264) "\15\00\00\001\00.\002\003\001\002\001\004\005\006\007\003\004\005\006\002\003\004\00e\00-\008")
- (data (i32.const 5312) "\19\00\00\00-\000\00.\000\000\000\000\000\001\000\004\007\001\009\007\005\005\001\001\009\006\005\009\007\006")
- (data (i32.const 5368) "\11\00\00\005\005\005\005\005\005\005\005\005\00.\005\005\005\005\005\005\006")
- (data (i32.const 5408) "\12\00\00\000\00.\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009")
- (data (i32.const 5448) "\05\00\00\001\002\00.\003\004")
- (data (i32.const 5464) "\13\00\00\000\00.\003\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\004")
+ (data (i32.const 664) "\04\00\00\00k\00e\00y\001")
+ (data (i32.const 680) "\04\00\00\00k\00e\00y\002")
+ (data (i32.const 696) "\03\00\00\00k\00e\001")
+ (data (i32.const 712) "\03\00\00\00k\00e\002")
+ (data (i32.const 728) "\05\00\00\00k\00e\00y\001\002")
+ (data (i32.const 744) "\05\00\00\00k\00e\00y\001\001")
+ (data (i32.const 760) "\07\00\00\00\a40\ed0\cf0\cb0\db0\d80\c80")
+ (data (i32.const 784) "\07\00\00\00\a60\f00\ce0\aa0\af0\e40\de0")
+ (data (i32.const 808) "\0b\00\00\00D\00\19 f\00h\00u\00a\00s\00c\00a\00i\00l")
+ (data (i32.const 840) "\n\00\00\00D\00\19 \1f\1eu\00a\00s\00c\00a\00i\00l")
+ (data (i32.const 864) "\02\00\00\00b\00a")
+ (data (i32.const 872) "\02\00\00\00a\00a")
+ (data (i32.const 880) "\03\00\00\00a\00a\00a")
+ (data (i32.const 896) "\08\00\00\00a\00b\00a\00b\00a\00b\00a\00b")
+ (data (i32.const 920) "\05\00\00\00a\00a\00a\00a\00a")
+ (data (i32.const 936) "\06\00\00\00a\00a\00a\00a\00a\00a")
+ (data (i32.const 952) "\07\00\00\00a\00a\00a\00a\00a\00a\00a")
+ (data (i32.const 976) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 1008) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 1072) "\04")
+ (data (i32.const 1081) "\01")
+ (data (i32.const 1088) "0\04\00\00\01")
+ (data (i32.const 1096) "\05\00\00\00a\00,\00b\00,\00c")
+ (data (i32.const 1112) "\01\00\00\00.")
+ (data (i32.const 1120) "\01\00\00\00c")
+ (data (i32.const 1128) "\07\00\00\00a\00,\00 \00b\00,\00 \00c")
+ (data (i32.const 1152) "\02\00\00\00,\00 ")
+ (data (i32.const 1160) "\06\00\00\00a\00,\00b\00,\00,\00c")
+ (data (i32.const 1176) "\06\00\00\00,\00a\00,\00b\00,\00c")
+ (data (i32.const 1192) "\06\00\00\00a\00,\00b\00,\00c\00,")
+ (data (i32.const 1208) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009")
+ (data (i32.const 1720) "\b8\04\00\00d")
+ (data (i32.const 1728) "\01\00\00\008")
+ (data (i32.const 1736) "\05\00\00\00-\001\000\000\000")
+ (data (i32.const 1752) "\04\00\00\001\002\003\004")
+ (data (i32.const 1768) "\05\00\00\001\002\003\004\005")
+ (data (i32.const 1784) "\06\00\00\001\002\003\004\005\006")
+ (data (i32.const 1800) "\07\00\00\001\001\001\001\001\001\001")
+ (data (i32.const 1824) "\07\00\00\001\002\003\004\005\006\007")
+ (data (i32.const 1848) "\n\00\00\002\001\004\007\004\008\003\006\004\006")
+ (data (i32.const 1872) "\n\00\00\002\001\004\007\004\008\003\006\004\007")
+ (data (i32.const 1896) "\0b\00\00\00-\002\001\004\007\004\008\003\006\004\008")
+ (data (i32.const 1928) "\02\00\00\00-\001")
+ (data (i32.const 1936) "\04\00\00\001\000\000\000")
+ (data (i32.const 1952) "\n\00\00\002\001\004\007\004\008\003\006\004\008")
+ (data (i32.const 1976) "\n\00\00\004\002\009\004\009\006\007\002\009\005")
+ (data (i32.const 2000) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009")
+ (data (i32.const 2512) "\d0\07\00\00d")
+ (data (i32.const 2520) "\08\00\00\009\009\009\009\009\009\009\009")
+ (data (i32.const 2544) "\t\00\00\001\000\000\000\000\000\000\000\000")
+ (data (i32.const 2568) "\0b\00\00\006\008\007\001\009\004\007\006\007\003\005")
+ (data (i32.const 2600) "\0c\00\00\008\006\008\007\001\009\004\007\006\007\003\005")
+ (data (i32.const 2632) "\0f\00\00\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
+ (data (i32.const 2672) "\10\00\00\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
+ (data (i32.const 2712) "\11\00\00\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
+ (data (i32.const 2752) "\14\00\00\001\008\004\004\006\007\004\004\000\007\003\007\000\009\005\005\001\006\001\005")
+ (data (i32.const 2800) "\05\00\00\00-\001\002\003\004")
+ (data (i32.const 2816) "\0b\00\00\00-\004\002\009\004\009\006\007\002\009\005")
+ (data (i32.const 2848) "\0c\00\00\00-\006\008\007\001\009\004\007\006\007\003\005")
+ (data (i32.const 2880) "\0d\00\00\00-\008\006\008\007\001\009\004\007\006\007\003\005")
+ (data (i32.const 2912) "\10\00\00\00-\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
+ (data (i32.const 2952) "\12\00\00\00-\001\009\009\009\009\008\006\008\007\001\009\004\007\006\007\003\005")
+ (data (i32.const 2992) "\13\00\00\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\007")
+ (data (i32.const 3040) "\14\00\00\00-\009\002\002\003\003\007\002\000\003\006\008\005\004\007\007\005\008\000\008")
+ (data (i32.const 3088) "\03\00\00\000\00.\000")
+ (data (i32.const 3104) "\03\00\00\00N\00a\00N")
+ (data (i32.const 3120) "\t\00\00\00-\00I\00n\00f\00i\00n\00i\00t\00y")
+ (data (i32.const 3144) "\08\00\00\00I\00n\00f\00i\00n\00i\00t\00y")
+ (data (i32.const 3168) "\b8\02\00\00\00\00\00\00\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\0dXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
+ (data (i32.const 4192) "`\0c\00\00W")
+ (data (i32.const 4200) "\ae\00\00\00\00\00\00\00<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
+ (data (i32.const 4456) "h\10\00\00W")
+ (data (i32.const 4464) "(\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
+ (data (i32.const 4528) "p\11\00\00\n")
+ (data (i32.const 4536) "\15\00\00\002\00.\002\002\000\004\004\006\000\004\009\002\005\000\003\001\003\00e\00-\001\006")
+ (data (i32.const 4584) "\16\00\00\00-\002\00.\002\002\000\004\004\006\000\004\009\002\005\000\003\001\003\00e\00-\001\006")
+ (data (i32.const 4632) "\17\00\00\001\00.\007\009\007\006\009\003\001\003\004\008\006\002\003\001\005\007\00e\00+\003\000\008")
+ (data (i32.const 4688) "\18\00\00\00-\001\00.\007\009\007\006\009\003\001\003\004\008\006\002\003\001\005\007\00e\00+\003\000\008")
+ (data (i32.const 4744) "\16\00\00\004\00.\001\008\005\005\008\000\004\009\006\008\002\001\003\005\007\00e\00+\002\009\008")
+ (data (i32.const 4792) "\17\00\00\002\00.\002\002\005\000\007\003\008\005\008\005\000\007\002\000\001\004\00e\00-\003\000\008")
+ (data (i32.const 4848) "\0d\00\00\004\00.\009\004\000\006\005\006\00e\00-\003\001\008")
+ (data (i32.const 4880) "\12\00\00\009\000\006\000\008\000\001\001\005\003\004\003\003\006\000\000\00.\000")
+ (data (i32.const 4920) "\15\00\00\004\007\000\008\003\005\006\000\002\004\007\001\001\005\001\002\000\000\000\00.\000")
+ (data (i32.const 4968) "\15\00\00\009\004\000\009\003\004\000\000\001\002\005\006\008\002\004\008\000\000\000\00.\000")
+ (data (i32.const 5016) "\06\00\00\005\00e\00-\003\002\004")
+ (data (i32.const 5032) "\03\00\00\001\00.\000")
+ (data (i32.const 5048) "\04\00\00\00-\001\00.\000")
+ (data (i32.const 5064) "\04\00\00\00-\000\00.\001")
+ (data (i32.const 5080) "\t\00\00\001\000\000\000\000\000\000\00.\000")
+ (data (i32.const 5104) "\08\00\00\000\00.\000\000\000\000\000\001")
+ (data (i32.const 5128) "\n\00\00\00-\001\000\000\000\000\000\000\00.\000")
+ (data (i32.const 5152) "\t\00\00\00-\000\00.\000\000\000\000\000\001")
+ (data (i32.const 5176) "\n\00\00\001\000\000\000\000\000\000\000\00.\000")
+ (data (i32.const 5200) "\04\00\00\001\00e\00-\007")
+ (data (i32.const 5216) "\06\00\00\001\00e\00+\003\000\008")
+ (data (i32.const 5232) "\07\00\00\00-\001\00e\00+\003\000\008")
+ (data (i32.const 5256) "\06\00\00\001\00e\00-\003\000\008")
+ (data (i32.const 5272) "\07\00\00\00-\001\00e\00-\003\000\008")
+ (data (i32.const 5296) "\06\00\00\001\00e\00-\003\002\003")
+ (data (i32.const 5312) "\07\00\00\00-\001\00e\00-\003\002\003")
+ (data (i32.const 5336) "\0c\00\00\004\002\009\004\009\006\007\002\007\002\00.\000")
+ (data (i32.const 5368) "\15\00\00\001\00.\002\003\001\002\001\004\005\006\007\003\004\005\006\002\003\004\00e\00-\008")
+ (data (i32.const 5416) "\11\00\00\005\005\005\005\005\005\005\005\005\00.\005\005\005\005\005\005\006")
+ (data (i32.const 5456) "\12\00\00\000\00.\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009\009")
+ (data (i32.const 5496) "\05\00\00\001\002\00.\003\004")
  (data (i32.const 5512) "\12\00\00\000\00.\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003")
  (data (i32.const 5552) "\17\00\00\001\002\003\004\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\00.\000")
  (data (i32.const 5608) "\t\00\00\001\00.\002\003\004\00e\00+\002\001")
@@ -169,8 +175,6 @@
  (data (i32.const 5704) "\08\00\00\001\00.\001\00e\00+\001\002\008")
  (data (i32.const 5728) "\07\00\00\001\00.\001\00e\00-\006\004")
  (data (i32.const 5752) "\0b\00\00\000\00.\000\000\000\000\003\005\006\008\009")
- (data (i32.const 5784) "\16\00\00\003\00.\004\000\002\008\002\003\004\006\006\003\008\005\002\008\008\006\00e\00+\003\008")
- (data (i32.const 5832) "\15\00\00\001\00.\001\009\002\000\009\002\008\009\005\005\000\007\008\001\002\005\00e\00-\007")
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -346,11 +350,11 @@
     i32.sub
     set_local $3
     get_local $1
-    i32.const 1
+    i32.const 2
     i32.add
     set_local $1
     get_local $2
-    i32.const 1
+    i32.const 2
     i32.add
     set_local $2
     br $continue|0
@@ -589,8 +593,8 @@
   get_local $4
   i32.sub
   set_local $3
-  block $break|0
-   loop $repeat|0
+  loop $repeat|0
+   block $break|0
     get_local $2
     get_local $3
     i32.gt_s
@@ -611,9 +615,7 @@
      return
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   i32.const -1
  )
@@ -1732,24 +1734,20 @@
      block $case3|0
       block $case2|0
        block $case1|0
-        block $case0|0
-         get_local $2
-         i32.load
-         tee_local $6
-         set_local $5
-         get_local $6
-         i32.eqz
-         br_if $break|0
-         block $tablify|0
-          get_local $5
-          i32.const 1
-          i32.sub
-          br_table $case1|0 $case2|0 $case3|0 $case4|0 $tablify|0
-         end
-         br $case5|0
-         unreachable
+        get_local $2
+        i32.load
+        tee_local $6
+        set_local $5
+        get_local $6
+        i32.eqz
+        br_if $break|0
+        block $tablify|0
+         get_local $5
+         i32.const 1
+         i32.sub
+         br_table $case1|0 $case2|0 $case3|0 $case4|0 $tablify|0
         end
-        unreachable
+        br $case5|0
        end
        get_local $2
        i32.load16_u offset=4
@@ -2456,8 +2454,8 @@
    end
    set_local $1
   end
-  block $break|1
-   loop $continue|1
+  loop $continue|1
+   block $break|1
     get_local $4
     tee_local $0
     i32.const 1
@@ -2608,8 +2606,8 @@
    f64.const 1
   end
   set_local $6
-  block $break|0
-   loop $continue|0
+  loop $continue|0
+   block $break|0
     get_local $3
     tee_local $0
     i32.const 1
@@ -2629,8 +2627,8 @@
       set_local $1
       f64.const 0.1
       set_local $5
-      block $break|1
-       loop $continue|1
+      loop $continue|1
+       block $break|1
         get_local $3
         tee_local $0
         i32.const 1
@@ -3070,7 +3068,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 808
+   i32.const 1008
    i32.const 23
    i32.const 2
    call $~lib/env/abort
@@ -3318,8 +3316,8 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 776
-   i32.const 37
+   i32.const 976
+   i32.const 45
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -3366,7 +3364,7 @@
    i32.gt_s
    if
     i32.const 0
-    i32.const 808
+    i32.const 1008
     i32.const 37
     i32.const 4
     call $~lib/env/abort
@@ -3429,7 +3427,7 @@
     i32.lt_s
     if
      i32.const 0
-     i32.const 808
+     i32.const 1008
      i32.const 61
      i32.const 4
      call $~lib/env/abort
@@ -3466,8 +3464,8 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 776
-    i32.const 174
+    i32.const 976
+    i32.const 184
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -3549,7 +3547,7 @@
    get_local $3
    i32.eqz
    if
-    i32.const 888
+    i32.const 1088
     return
    end
   else   
@@ -3781,7 +3779,7 @@
  (func $~lib/internal/number/utoa32_lut (; 41 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 1520
+  i32.const 1720
   i32.load
   set_local $3
   loop $continue|0
@@ -4004,7 +4002,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 2312
+  i32.const 2512
   i32.load
   set_local $3
   loop $continue|0
@@ -4224,7 +4222,7 @@
   tee_local $7
   call $~lib/internal/number/decimalCount32
   set_local $9
-  i32.const 4328
+  i32.const 4528
   i32.load
   set_local $12
   loop $continue|0
@@ -4248,13 +4246,10 @@
                i32.const 10
                i32.ne
                if
-                block $tablify|0
-                 get_local $2
-                 i32.const 1
-                 i32.sub
-                 br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $tablify|0
-                end
-                br $case10|1
+                get_local $2
+                i32.const 1
+                i32.sub
+                br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $case10|1
                end
                get_local $7
                i32.const 1000000000
@@ -4699,11 +4694,7 @@
     i32.const 1
     i32.shl
     call $~lib/internal/memory/memmove
-    get_local $0
-    get_local $4
-    i32.const 1
-    i32.shl
-    i32.add
+    get_local $3
     i32.const 46
     i32.store16 offset=4
     get_local $1
@@ -4996,10 +4987,10 @@
   i32.shl
   i32.sub
   set_global $~lib/internal/number/_K
-  i32.const 4256
+  i32.const 4456
   i32.load
   set_local $4
-  i32.const 3992
+  i32.const 4192
   i32.load
   get_local $5
   i32.const 3
@@ -5287,7 +5278,7 @@
   f64.const 0
   f64.eq
   if
-   i32.const 2888
+   i32.const 3088
    return
   end
   get_local $0
@@ -5300,11 +5291,11 @@
    get_local $0
    f64.ne
    if
-    i32.const 2904
+    i32.const 3104
     return
    end
-   i32.const 2920
-   i32.const 2944
+   i32.const 3120
+   i32.const 3144
    get_local $0
    f64.const 0
    f64.lt
@@ -5336,7 +5327,7 @@
  (func $start (; 53 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
-  i32.const 5880
+  i32.const 5784
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
@@ -6251,9 +6242,21 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 648
+  get_global $std/string/nullStr
+  i32.const 256
+  call $~lib/string/String.__ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 99
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
   i32.const 280
-  call $~lib/string/String.__gt
+  i32.const 648
+  call $~lib/string/String.__ne
   i32.eqz
   if
    i32.const 0
@@ -6263,9 +6266,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 664
   i32.const 280
-  call $~lib/string/String.__gt
+  i32.const 280
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -6276,8 +6279,8 @@
    unreachable
   end
   i32.const 664
-  i32.const 672
-  call $~lib/string/String.__gte
+  i32.const 680
+  call $~lib/string/String.__ne
   i32.eqz
   if
    i32.const 0
@@ -6288,8 +6291,8 @@
    unreachable
   end
   i32.const 664
-  i32.const 656
-  call $~lib/string/String.__gt
+  i32.const 664
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -6299,9 +6302,10 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 664
-  i32.const 656
-  call $~lib/string/String.__lt
+  i32.const 696
+  i32.const 712
+  call $~lib/string/String.__ne
+  i32.eqz
   if
    i32.const 0
    i32.const 48
@@ -6310,9 +6314,22 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 648
-  get_global $std/string/nullStr
-  call $~lib/string/String.__lt
+  i32.const 728
+  i32.const 744
+  call $~lib/string/String.__ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 105
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 760
+  i32.const 760
+  call $~lib/string/String.__eq
+  i32.eqz
   if
    i32.const 0
    i32.const 48
@@ -6321,9 +6338,10 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/string/nullStr
-  i32.const 648
-  call $~lib/string/String.__lt
+  i32.const 760
+  i32.const 784
+  call $~lib/string/String.__ne
+  i32.eqz
   if
    i32.const 0
    i32.const 48
@@ -6332,21 +6350,21 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 288
-  i32.const 256
-  call $~lib/string/String.__gt
+  i32.const 808
+  i32.const 840
+  call $~lib/string/String.__ne
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 109
+   i32.const 108
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
-  i32.const 256
-  i32.const 288
-  call $~lib/string/String.__lt
+  i32.const 648
+  i32.const 280
+  call $~lib/string/String.__gt
   i32.eqz
   if
    i32.const 0
@@ -6356,9 +6374,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 288
-  i32.const 256
-  call $~lib/string/String.__gte
+  i32.const 864
+  i32.const 280
+  call $~lib/string/String.__gt
   i32.eqz
   if
    i32.const 0
@@ -6368,8 +6386,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 288
-  call $~lib/string/String.__lte
+  i32.const 864
+  i32.const 872
+  call $~lib/string/String.__gte
   i32.eqz
   if
    i32.const 0
@@ -6379,9 +6398,10 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 288
-  i32.const 256
-  call $~lib/string/String.__lt
+  i32.const 864
+  i32.const 656
+  call $~lib/string/String.__gt
+  i32.eqz
   if
    i32.const 0
    i32.const 48
@@ -6390,13 +6410,104 @@
    call $~lib/env/abort
    unreachable
   end
+  i32.const 864
+  i32.const 656
+  call $~lib/string/String.__lt
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 114
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 648
+  get_global $std/string/nullStr
+  call $~lib/string/String.__lt
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 116
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/string/nullStr
+  i32.const 648
+  call $~lib/string/String.__lt
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 117
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 288
+  i32.const 256
+  call $~lib/string/String.__gt
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 119
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 256
+  i32.const 288
+  call $~lib/string/String.__lt
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 120
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 288
+  i32.const 256
+  call $~lib/string/String.__gte
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 121
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 288
+  call $~lib/string/String.__lte
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 122
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 288
+  i32.const 256
+  call $~lib/string/String.__lt
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 123
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
   i32.const 256
   i32.const 288
   call $~lib/string/String.__gt
   if
    i32.const 0
    i32.const 48
-   i32.const 114
+   i32.const 124
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -6407,7 +6518,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 115
+   i32.const 125
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -6418,7 +6529,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 116
+   i32.const 126
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -6430,7 +6541,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 117
+   i32.const 127
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -6441,7 +6552,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 118
+   i32.const 128
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -6462,7 +6573,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 122
+   i32.const 132
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -6474,7 +6585,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 124
+   i32.const 134
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -6488,7 +6599,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 126
+   i32.const 136
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -6502,7 +6613,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 127
+   i32.const 137
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -6516,7 +6627,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 128
+   i32.const 138
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -6524,119 +6635,8 @@
   i32.const 280
   i32.const 2
   call $~lib/string/String#repeat
-  i32.const 672
+  i32.const 872
   call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 129
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 280
-  i32.const 3
-  call $~lib/string/String#repeat
-  i32.const 680
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 130
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 656
-  i32.const 4
-  call $~lib/string/String#repeat
-  i32.const 696
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 131
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 280
-  i32.const 5
-  call $~lib/string/String#repeat
-  i32.const 720
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 132
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 280
-  i32.const 6
-  call $~lib/string/String#repeat
-  i32.const 736
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 133
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 280
-  i32.const 7
-  call $~lib/string/String#repeat
-  i32.const 752
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 134
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 0
-  set_global $~argc
-  i32.const 256
-  i32.const 0
-  call $~lib/string/String#split|trampoline
-  set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 1
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 256
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -6646,14 +6646,26 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
-  set_global $~argc
-  i32.const 256
-  i32.const 256
-  call $~lib/string/String#split|trampoline
-  set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
+  i32.const 280
+  i32.const 3
+  call $~lib/string/String#repeat
+  i32.const 880
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 140
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 656
+  i32.const 4
+  call $~lib/string/String#repeat
+  i32.const 896
+  call $~lib/string/String.__eq
+  i32.eqz
   if
    i32.const 0
    i32.const 48
@@ -6662,10 +6674,52 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 1
+  i32.const 280
+  i32.const 5
+  call $~lib/string/String#repeat
+  i32.const 920
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 142
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 280
+  i32.const 6
+  call $~lib/string/String#repeat
+  i32.const 936
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 143
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 280
+  i32.const 7
+  call $~lib/string/String#repeat
+  i32.const 952
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 144
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 0
   set_global $~argc
   i32.const 256
-  i32.const 432
+  i32.const 0
   call $~lib/string/String#split|trampoline
   set_global $std/string/sa
   get_global $std/string/sa
@@ -6690,221 +6744,6 @@
    end
    tee_local $0
    i32.const 256
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 143
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1
-  set_global $~argc
-  i32.const 896
-  i32.const 912
-  call $~lib/string/String#split|trampoline
-  set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 1
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 896
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 145
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1
-  set_global $~argc
-  i32.const 896
-  i32.const 432
-  call $~lib/string/String#split|trampoline
-  set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 3
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 2
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 8
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 920
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 147
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1
-  set_global $~argc
-  i32.const 928
-  i32.const 952
-  call $~lib/string/String#split|trampoline
-  set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 3
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 2
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 8
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 920
    call $~lib/string/String.__eq
    set_local $0
   end
@@ -6920,106 +6759,12 @@
   end
   i32.const 1
   set_global $~argc
-  i32.const 960
-  i32.const 432
+  i32.const 256
+  i32.const 256
   call $~lib/string/String#split|trampoline
   set_global $std/string/sa
   get_global $std/string/sa
   i32.load offset=4
-  i32.const 4
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 2
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 8
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 256
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 3
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 12
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 920
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  i32.eqz
   if
    i32.const 0
    i32.const 48
@@ -7030,13 +6775,13 @@
   end
   i32.const 1
   set_global $~argc
-  i32.const 976
+  i32.const 256
   i32.const 432
   call $~lib/string/String#split|trampoline
   set_global $std/string/sa
   get_global $std/string/sa
   i32.load offset=4
-  i32.const 4
+  i32.const 1
   i32.eq
   tee_local $0
   if
@@ -7056,75 +6801,6 @@
    end
    tee_local $0
    i32.const 256
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 2
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 8
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 3
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 12
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 920
    call $~lib/string/String.__eq
    set_local $0
   end
@@ -7140,7 +6816,222 @@
   end
   i32.const 1
   set_global $~argc
-  i32.const 992
+  i32.const 1096
+  i32.const 1112
+  call $~lib/string/String#split|trampoline
+  set_global $std/string/sa
+  get_global $std/string/sa
+  i32.load offset=4
+  i32.const 1
+  i32.eq
+  tee_local $0
+  if
+   i32.const 0
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 1096
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 155
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  set_global $~argc
+  i32.const 1096
+  i32.const 432
+  call $~lib/string/String#split|trampoline
+  set_global $std/string/sa
+  get_global $std/string/sa
+  i32.load offset=4
+  i32.const 3
+  i32.eq
+  tee_local $0
+  if
+   i32.const 0
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 280
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  if
+   i32.const 1
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.const 4
+    i32.add
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 648
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  if
+   i32.const 2
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.const 8
+    i32.add
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 1120
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 157
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  set_global $~argc
+  i32.const 1128
+  i32.const 1152
+  call $~lib/string/String#split|trampoline
+  set_global $std/string/sa
+  get_global $std/string/sa
+  i32.load offset=4
+  i32.const 3
+  i32.eq
+  tee_local $0
+  if
+   i32.const 0
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 280
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  if
+   i32.const 1
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.const 4
+    i32.add
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 648
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  if
+   i32.const 2
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.const 8
+    i32.add
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 1120
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 159
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  set_global $~argc
+  i32.const 1160
   i32.const 432
   call $~lib/string/String#split|trampoline
   set_global $std/string/sa
@@ -7211,7 +7102,227 @@
     unreachable
    end
    tee_local $0
-   i32.const 920
+   i32.const 256
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  if
+   i32.const 3
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.const 12
+    i32.add
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 1120
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 161
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  set_global $~argc
+  i32.const 1176
+  i32.const 432
+  call $~lib/string/String#split|trampoline
+  set_global $std/string/sa
+  get_global $std/string/sa
+  i32.load offset=4
+  i32.const 4
+  i32.eq
+  tee_local $0
+  if
+   i32.const 0
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 256
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  if
+   i32.const 1
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.const 4
+    i32.add
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 280
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  if
+   i32.const 2
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.const 8
+    i32.add
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 648
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  if
+   i32.const 3
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.const 12
+    i32.add
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 1120
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 163
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  set_global $~argc
+  i32.const 1192
+  i32.const 432
+  call $~lib/string/String#split|trampoline
+  set_global $std/string/sa
+  get_global $std/string/sa
+  i32.load offset=4
+  i32.const 4
+  i32.eq
+  tee_local $0
+  if
+   i32.const 0
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 280
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  if
+   i32.const 1
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.const 4
+    i32.add
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 648
+   call $~lib/string/String.__eq
+   set_local $0
+  end
+  get_local $0
+  if
+   i32.const 2
+   get_global $std/string/sa
+   i32.load
+   tee_local $0
+   i32.load
+   i32.const 2
+   i32.shr_u
+   i32.lt_u
+   if (result i32)
+    get_local $0
+    i32.const 8
+    i32.add
+    i32.load offset=8
+   else    
+    unreachable
+   end
+   tee_local $0
+   i32.const 1120
    call $~lib/string/String.__eq
    set_local $0
   end
@@ -7243,7 +7354,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 155
+   i32.const 165
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -7321,7 +7432,7 @@
     unreachable
    end
    tee_local $0
-   i32.const 920
+   i32.const 1120
    call $~lib/string/String.__eq
    set_local $0
   end
@@ -7330,7 +7441,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 157
+   i32.const 167
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -7345,7 +7456,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 159
+   i32.const 169
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -7385,12 +7496,12 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 161
+   i32.const 171
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
-  i32.const 896
+  i32.const 1096
   i32.const 432
   i32.const 1
   call $~lib/string/String#split
@@ -7425,7 +7536,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 163
+   i32.const 173
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -7502,7 +7613,7 @@
     unreachable
    end
    tee_local $0
-   i32.const 920
+   i32.const 1120
    call $~lib/string/String.__eq
    set_local $0
   end
@@ -7511,7 +7622,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 165
+   i32.const 175
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -7588,7 +7699,7 @@
     unreachable
    end
    tee_local $0
-   i32.const 920
+   i32.const 1120
    call $~lib/string/String.__eq
    set_local $0
   end
@@ -7597,12 +7708,12 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 167
+   i32.const 177
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
-  i32.const 896
+  i32.const 1096
   i32.const 432
   i32.const -1
   call $~lib/string/String#split
@@ -7674,7 +7785,7 @@
     unreachable
    end
    tee_local $0
-   i32.const 920
+   i32.const 1120
    call $~lib/string/String.__eq
    set_local $0
   end
@@ -7683,7 +7794,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 169
+   i32.const 179
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -7696,7 +7807,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 171
+   i32.const 181
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -7709,20 +7820,20 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 172
+   i32.const 182
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 8
   call $~lib/internal/number/itoa32
-  i32.const 1528
+  i32.const 1728
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 173
+   i32.const 183
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -7735,137 +7846,137 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 174
+   i32.const 184
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const -1000
   call $~lib/internal/number/itoa32
-  i32.const 1536
+  i32.const 1736
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 175
+   i32.const 185
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 1234
   call $~lib/internal/number/itoa32
-  i32.const 1552
+  i32.const 1752
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 176
+   i32.const 186
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 12345
   call $~lib/internal/number/itoa32
-  i32.const 1568
+  i32.const 1768
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 177
+   i32.const 187
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 123456
   call $~lib/internal/number/itoa32
-  i32.const 1584
+  i32.const 1784
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 178
+   i32.const 188
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 1111111
   call $~lib/internal/number/itoa32
-  i32.const 1600
+  i32.const 1800
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 179
+   i32.const 189
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 1234567
   call $~lib/internal/number/itoa32
-  i32.const 1624
+  i32.const 1824
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 180
+   i32.const 190
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 2147483646
   call $~lib/internal/number/itoa32
-  i32.const 1648
+  i32.const 1848
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 181
+   i32.const 191
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 2147483647
   call $~lib/internal/number/itoa32
-  i32.const 1672
+  i32.const 1872
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 182
+   i32.const 192
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const -2147483648
   call $~lib/internal/number/itoa32
-  i32.const 1696
+  i32.const 1896
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 183
+   i32.const 193
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const -1
   call $~lib/internal/number/itoa32
-  i32.const 1728
+  i32.const 1928
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
-   i32.const 184
+   i32.const 194
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -7878,131 +7989,14 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 186
+   i32.const 196
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   i32.const 1000
   call $~lib/internal/number/utoa32
-  i32.const 1736
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 187
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 2147483647
-  call $~lib/internal/number/utoa32
-  i32.const 1672
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 188
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const -2147483648
-  call $~lib/internal/number/utoa32
-  i32.const 1752
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 189
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const -1
-  call $~lib/internal/number/utoa32
-  i32.const 1776
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 190
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i64.const 0
-  call $~lib/internal/number/utoa64
-  i32.const 480
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 192
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i64.const 1234
-  call $~lib/internal/number/utoa64
-  i32.const 1552
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 193
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i64.const 99999999
-  call $~lib/internal/number/utoa64
-  i32.const 2320
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 194
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i64.const 100000000
-  call $~lib/internal/number/utoa64
-  i32.const 2344
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 195
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i64.const 4294967295
-  call $~lib/internal/number/utoa64
-  i32.const 1776
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 196
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i64.const 68719476735
-  call $~lib/internal/number/utoa64
-  i32.const 2368
+  i32.const 1936
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8013,9 +8007,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const 868719476735
-  call $~lib/internal/number/utoa64
-  i32.const 2400
+  i32.const 2147483647
+  call $~lib/internal/number/utoa32
+  i32.const 1872
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8026,9 +8020,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const 999868719476735
-  call $~lib/internal/number/utoa64
-  i32.const 2432
+  i32.const -2147483648
+  call $~lib/internal/number/utoa32
+  i32.const 1952
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8039,9 +8033,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const 9999868719476735
-  call $~lib/internal/number/utoa64
-  i32.const 2472
+  i32.const -1
+  call $~lib/internal/number/utoa32
+  i32.const 1976
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8052,22 +8046,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const 19999868719476735
+  i64.const 0
   call $~lib/internal/number/utoa64
-  i32.const 2512
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 201
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i64.const -1
-  call $~lib/internal/number/utoa64
-  i32.const 2552
+  i32.const 480
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8078,9 +8059,22 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const 0
-  call $~lib/internal/number/itoa64
-  i32.const 480
+  i64.const 1234
+  call $~lib/internal/number/utoa64
+  i32.const 1752
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 203
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i64.const 99999999
+  call $~lib/internal/number/utoa64
+  i32.const 2520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8091,9 +8085,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const -1234
-  call $~lib/internal/number/itoa64
-  i32.const 2600
+  i64.const 100000000
+  call $~lib/internal/number/utoa64
+  i32.const 2544
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8105,8 +8099,8 @@
    unreachable
   end
   i64.const 4294967295
-  call $~lib/internal/number/itoa64
-  i32.const 1776
+  call $~lib/internal/number/utoa64
+  i32.const 1976
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8117,9 +8111,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const -4294967295
-  call $~lib/internal/number/itoa64
-  i32.const 2616
+  i64.const 68719476735
+  call $~lib/internal/number/utoa64
+  i32.const 2568
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8130,9 +8124,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const 68719476735
-  call $~lib/internal/number/itoa64
-  i32.const 2368
+  i64.const 868719476735
+  call $~lib/internal/number/utoa64
+  i32.const 2600
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8143,9 +8137,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const -68719476735
-  call $~lib/internal/number/itoa64
-  i32.const 2648
+  i64.const 999868719476735
+  call $~lib/internal/number/utoa64
+  i32.const 2632
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8156,9 +8150,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const -868719476735
-  call $~lib/internal/number/itoa64
-  i32.const 2680
+  i64.const 9999868719476735
+  call $~lib/internal/number/utoa64
+  i32.const 2672
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8169,8 +8163,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const -999868719476735
-  call $~lib/internal/number/itoa64
+  i64.const 19999868719476735
+  call $~lib/internal/number/utoa64
   i32.const 2712
   call $~lib/string/String.__eq
   i32.eqz
@@ -8182,8 +8176,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const -19999868719476735
-  call $~lib/internal/number/itoa64
+  i64.const -1
+  call $~lib/internal/number/utoa64
   i32.const 2752
   call $~lib/string/String.__eq
   i32.eqz
@@ -8195,22 +8189,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i64.const 9223372036854775807
+  i64.const 0
   call $~lib/internal/number/itoa64
-  i32.const 2792
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 213
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i64.const -9223372036854775808
-  call $~lib/internal/number/itoa64
-  i32.const 2840
+  i32.const 480
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8221,9 +8202,35 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 0
-  call $~lib/internal/number/dtoa
-  i32.const 2888
+  i64.const -1234
+  call $~lib/internal/number/itoa64
+  i32.const 2800
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 215
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i64.const 4294967295
+  call $~lib/internal/number/itoa64
+  i32.const 1976
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 216
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i64.const -4294967295
+  call $~lib/internal/number/itoa64
+  i32.const 2816
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8234,9 +8241,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const -0
-  call $~lib/internal/number/dtoa
-  i32.const 2888
+  i64.const 68719476735
+  call $~lib/internal/number/itoa64
+  i32.const 2568
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8247,9 +8254,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const nan:0x8000000000000
-  call $~lib/internal/number/dtoa
-  i32.const 2904
+  i64.const -68719476735
+  call $~lib/internal/number/itoa64
+  i32.const 2848
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8260,9 +8267,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const inf
-  call $~lib/internal/number/dtoa
-  i32.const 2944
+  i64.const -868719476735
+  call $~lib/internal/number/itoa64
+  i32.const 2880
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8273,9 +8280,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const -inf
-  call $~lib/internal/number/dtoa
-  i32.const 2920
+  i64.const -999868719476735
+  call $~lib/internal/number/itoa64
+  i32.const 2912
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8286,9 +8293,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 2.220446049250313e-16
-  call $~lib/internal/number/dtoa
-  i32.const 4336
+  i64.const -19999868719476735
+  call $~lib/internal/number/itoa64
+  i32.const 2952
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8299,9 +8306,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const -2.220446049250313e-16
-  call $~lib/internal/number/dtoa
-  i32.const 4384
+  i64.const 9223372036854775807
+  call $~lib/internal/number/itoa64
+  i32.const 2992
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8312,9 +8319,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 1797693134862315708145274e284
-  call $~lib/internal/number/dtoa
-  i32.const 4432
+  i64.const -9223372036854775808
+  call $~lib/internal/number/itoa64
+  i32.const 3040
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8325,35 +8332,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const -1797693134862315708145274e284
+  f64.const 0
   call $~lib/internal/number/dtoa
-  i32.const 4488
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 225
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const 4185580496821356722454785e274
-  call $~lib/internal/number/dtoa
-  i32.const 4544
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 226
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const 2.2250738585072014e-308
-  call $~lib/internal/number/dtoa
-  i32.const 4592
+  i32.const 3088
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8364,9 +8345,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 2.9802322387695312e-08
+  f64.const -0
   call $~lib/internal/number/dtoa
-  i32.const 4648
+  i32.const 3088
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8377,9 +8358,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const -21098088986959632
+  f64.const nan:0x8000000000000
   call $~lib/internal/number/dtoa
-  i32.const 4696
+  i32.const 3104
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8390,9 +8371,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 4.940656e-318
+  f64.const inf
   call $~lib/internal/number/dtoa
-  i32.const 4744
+  i32.const 3144
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8403,9 +8384,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 9060801153433600
+  f64.const -inf
   call $~lib/internal/number/dtoa
-  i32.const 4776
+  i32.const 3120
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8416,9 +8397,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 4708356024711512064
+  f64.const 2.220446049250313e-16
   call $~lib/internal/number/dtoa
-  i32.const 4816
+  i32.const 4536
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8429,9 +8410,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 9409340012568248320
+  f64.const -2.220446049250313e-16
   call $~lib/internal/number/dtoa
-  i32.const 4864
+  i32.const 4584
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8442,9 +8423,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 5e-324
+  f64.const 1797693134862315708145274e284
   call $~lib/internal/number/dtoa
-  i32.const 4912
+  i32.const 4632
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8455,15 +8436,119 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 1
+  f64.const -1797693134862315708145274e284
   call $~lib/internal/number/dtoa
-  i32.const 4928
+  i32.const 4688
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 235
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 4185580496821356722454785e274
+  call $~lib/internal/number/dtoa
+  i32.const 4744
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 236
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 2.2250738585072014e-308
+  call $~lib/internal/number/dtoa
+  i32.const 4792
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 237
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 4.940656e-318
+  call $~lib/internal/number/dtoa
+  i32.const 4848
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
    i32.const 240
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 9060801153433600
+  call $~lib/internal/number/dtoa
+  i32.const 4880
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 241
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 4708356024711512064
+  call $~lib/internal/number/dtoa
+  i32.const 4920
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 242
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 9409340012568248320
+  call $~lib/internal/number/dtoa
+  i32.const 4968
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 243
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 5e-324
+  call $~lib/internal/number/dtoa
+  i32.const 5016
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 244
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 1
+  call $~lib/internal/number/dtoa
+  i32.const 5032
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 250
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -8476,118 +8561,14 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 241
+   i32.const 251
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
   f64.const -1
   call $~lib/internal/number/dtoa
-  i32.const 4944
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 242
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const -0.1
-  call $~lib/internal/number/dtoa
-  i32.const 4960
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 243
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const 1e6
-  call $~lib/internal/number/dtoa
-  i32.const 4976
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 245
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const 1e-06
-  call $~lib/internal/number/dtoa
-  i32.const 5000
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 246
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const -1e6
-  call $~lib/internal/number/dtoa
-  i32.const 5024
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 247
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const -1e-06
-  call $~lib/internal/number/dtoa
   i32.const 5048
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 248
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const 1e7
-  call $~lib/internal/number/dtoa
-  i32.const 5072
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 249
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const 1e-07
-  call $~lib/internal/number/dtoa
-  i32.const 5096
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 250
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const 1.e+308
-  call $~lib/internal/number/dtoa
-  i32.const 5112
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8598,9 +8579,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const -1.e+308
+  f64.const -0.1
   call $~lib/internal/number/dtoa
-  i32.const 5128
+  i32.const 5064
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8611,22 +8592,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const inf
+  f64.const 1e6
   call $~lib/internal/number/dtoa
-  i32.const 2944
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 254
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const -inf
-  call $~lib/internal/number/dtoa
-  i32.const 2920
+  i32.const 5080
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8637,9 +8605,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 1e-308
+  f64.const 1e-06
   call $~lib/internal/number/dtoa
-  i32.const 5152
+  i32.const 5104
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8650,9 +8618,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const -1e-308
+  f64.const -1e6
   call $~lib/internal/number/dtoa
-  i32.const 5168
+  i32.const 5128
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8663,9 +8631,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 1e-323
+  f64.const -1e-06
   call $~lib/internal/number/dtoa
-  i32.const 5192
+  i32.const 5152
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8676,9 +8644,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const -1e-323
+  f64.const 1e7
   call $~lib/internal/number/dtoa
-  i32.const 5208
+  i32.const 5176
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8689,9 +8657,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 0
+  f64.const 1e-07
   call $~lib/internal/number/dtoa
-  i32.const 2888
+  i32.const 5200
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8702,9 +8670,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 4294967272
+  f64.const 1.e+308
   call $~lib/internal/number/dtoa
-  i32.const 5232
+  i32.const 5216
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8715,9 +8683,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 1.2312145673456234e-08
+  f64.const -1.e+308
   call $~lib/internal/number/dtoa
-  i32.const 5264
+  i32.const 5232
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8728,9 +8696,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const -1.0471975511965976e-06
+  f64.const inf
   call $~lib/internal/number/dtoa
-  i32.const 5312
+  i32.const 3144
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8741,9 +8709,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 555555555.5555556
+  f64.const -inf
   call $~lib/internal/number/dtoa
-  i32.const 5368
+  i32.const 3120
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8754,9 +8722,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 0.9999999999999999
+  f64.const 1e-308
   call $~lib/internal/number/dtoa
-  i32.const 5408
+  i32.const 5256
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8767,9 +8735,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 1
+  f64.const -1e-308
   call $~lib/internal/number/dtoa
-  i32.const 4928
+  i32.const 5272
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8780,9 +8748,9 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 12.34
+  f64.const 1e-323
   call $~lib/internal/number/dtoa
-  i32.const 5448
+  i32.const 5296
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8793,15 +8761,106 @@
    call $~lib/env/abort
    unreachable
   end
-  f64.const 0.30000000000000004
+  f64.const -1e-323
   call $~lib/internal/number/dtoa
-  i32.const 5464
+  i32.const 5312
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 48
    i32.const 269
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 0
+  call $~lib/internal/number/dtoa
+  i32.const 3088
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 270
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 4294967272
+  call $~lib/internal/number/dtoa
+  i32.const 5336
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 272
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 1.2312145673456234e-08
+  call $~lib/internal/number/dtoa
+  i32.const 5368
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 273
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 555555555.5555556
+  call $~lib/internal/number/dtoa
+  i32.const 5416
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 275
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 0.9999999999999999
+  call $~lib/internal/number/dtoa
+  i32.const 5456
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 276
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 1
+  call $~lib/internal/number/dtoa
+  i32.const 5032
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 277
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 12.34
+  call $~lib/internal/number/dtoa
+  i32.const 5496
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 278
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -8814,7 +8873,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 270
+   i32.const 280
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -8827,7 +8886,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 271
+   i32.const 281
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -8840,7 +8899,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 272
+   i32.const 282
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -8853,7 +8912,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 273
+   i32.const 283
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -8866,7 +8925,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 274
+   i32.const 284
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -8879,7 +8938,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 275
+   i32.const 285
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -8892,7 +8951,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 276
+   i32.const 286
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -8905,7 +8964,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 277
+   i32.const 287
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -8918,33 +8977,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 278
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const 3402823466385288598117041e14
-  call $~lib/internal/number/dtoa
-  i32.const 5784
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 280
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const 1.1920928955078125e-07
-  call $~lib/internal/number/dtoa
-  i32.const 5832
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 48
-   i32.const 281
+   i32.const 288
    i32.const 0
    call $~lib/env/abort
    unreachable

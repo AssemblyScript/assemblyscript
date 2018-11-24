@@ -1250,8 +1250,8 @@
    get_local $1
    f32.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if
    get_local $0
    get_local $1
@@ -2531,8 +2531,8 @@
    get_local $1
    f64.ne
   end
-  i32.const 1
-  i32.and
+  i32.const 0
+  i32.ne
   if
    get_local $0
    get_local $1

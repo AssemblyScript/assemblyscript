@@ -27,10 +27,18 @@ import {
   MAX_DOUBLE_LENGTH
 } from "./internal/number";
 
+import {
+  isArray as builtin_isArray
+} from "./builtins";
+
 export class Array<T> {
 
   /* @internal */ buffer_: ArrayBuffer;
   /* @internal */ length_: i32;
+
+  @inline static isArray<U>(value: U): bool {
+    return builtin_isArray(value) && value !== null;
+  }
 
   constructor(length: i32 = 0) {
     const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
@@ -116,8 +124,10 @@ export class Array<T> {
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
     var buffer = this.buffer_;
     var len    = this.length_;
+
     start = start < 0 ? max(len + start, 0) : min(start, len);
     end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+
     if (sizeof<T>() == 1) {
       if (start < end) {
         memory.fill(
@@ -182,22 +192,53 @@ export class Array<T> {
   }
 
   concat(items: Array<T>): Array<T> {
-    var thisLen: isize = this.length_;
-    var otherLen = (items == null) ? 0 : items.length_;
-    var outLen =  thisLen + otherLen;
-    var out: Array<T> = new Array<T>(outLen);
+    var thisLen = this.length_;
+    var otherLen = items === null ? 0 : items.length_;
+    var outLen = thisLen + otherLen;
+    var out = new Array<T>(outLen);
 
     if (thisLen) {
-      memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE,
-      changetype<usize>(this.buffer_) + HEADER_SIZE,
-      <usize>(thisLen << alignof<T>()));
+      memory.copy(
+        changetype<usize>(out.buffer_)  + HEADER_SIZE,
+        changetype<usize>(this.buffer_) + HEADER_SIZE,
+        <usize>thisLen << alignof<T>()
+      );
     }
     if (otherLen) {
-      memory.copy(changetype<usize>(out.buffer_) + HEADER_SIZE + <usize>(thisLen << alignof<T>()),
-      changetype<usize>(items.buffer_) + HEADER_SIZE,
-      <usize>(otherLen << alignof<T>()));
+      memory.copy(
+        changetype<usize>(out.buffer_)   + HEADER_SIZE + (<usize>thisLen << alignof<T>()),
+        changetype<usize>(items.buffer_) + HEADER_SIZE,
+        <usize>otherLen << alignof<T>()
+      );
     }
     return out;
+  }
+
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
+    var buffer = this.buffer_;
+    var len = this.length_;
+
+        end   = min<i32>(end, len);
+    var to    = target < 0 ? max(len + target, 0) : min(target, len);
+    var from  = start < 0 ? max(len + start, 0) : min(start, len);
+    var last  = end < 0 ? max(len + end, 0) : min(end, len);
+    var count = min(last - from, len - to);
+
+    if (from < to && to < (from + count)) {
+      from += count - 1;
+      to   += count - 1;
+      while (count) {
+        storeUnsafe<T,T>(buffer, to, loadUnsafe<T,T>(buffer, from));
+        --from, --to, --count;
+      }
+    } else {
+      memory.copy(
+        changetype<usize>(buffer) + HEADER_SIZE + (<usize>to << alignof<T>()),
+        changetype<usize>(buffer) + HEADER_SIZE + (<usize>from << alignof<T>()),
+        <usize>count << alignof<T>()
+      );
+    }
+    return this;
   }
 
   pop(): T {

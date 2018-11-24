@@ -244,12 +244,11 @@
   get_local $6
   f64.min
   set_local $9
-  block $break|0
-   loop $repeat|0
-    get_local $8
-    get_local $1
-    i32.ge_u
-    br_if $break|0
+  loop $repeat|0
+   get_local $8
+   get_local $1
+   i32.lt_u
+   if
     get_local $8
     f64.convert_u/i32
     get_local $10
@@ -263,20 +262,20 @@
     set_local $5
     i32.const 0
     set_local $7
-    block $break|1
-     loop $continue|1
-      get_local $4
-      get_local $4
-      f64.mul
-      tee_local $15
-      get_local $5
-      get_local $5
-      f64.mul
-      tee_local $6
-      f64.add
-      f64.const 4
-      f64.le
-      if
+    loop $continue|1
+     get_local $4
+     get_local $4
+     f64.mul
+     tee_local $15
+     get_local $5
+     get_local $5
+     f64.mul
+     tee_local $6
+     f64.add
+     f64.const 4
+     f64.le
+     if
+      block $break|1
        f64.const 2
        get_local $4
        f64.mul
@@ -384,9 +383,7 @@
     i32.add
     set_local $8
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
  )
  (func $null (; 2 ;) (type $v)

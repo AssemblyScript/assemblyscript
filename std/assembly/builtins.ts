@@ -46,12 +46,16 @@
 export namespace i8 {
   export const MIN_VALUE: i8 = -128;
   export const MAX_VALUE: i8 =  127;
+  @inline export function parseInt(value: string, radix: i32 = 0): i8 { return <i8>parseI32(value, radix) }
+  @inline export function parseFloat(value: string): i8 { return <i8>parseFloat(value) }
 }
 
 @builtin export declare function i16(value: void): i16;
 export namespace i16 {
   export const MIN_VALUE: i16 = -32768;
   export const MAX_VALUE: i16 =  32767;
+  @inline export function parseInt(value: string, radix: i32 = 0): i16 { return <i16>parseI32(value, radix) }
+  @inline export function parseFloat(value: string): i16 { return <i16>parseFloat(value) }
 }
 
 @builtin export declare function i32(value: void): i32;
@@ -72,6 +76,8 @@ export namespace i32 {
   @builtin export declare function store8(offset: usize, value: i32, constantOffset?: usize): void;
   @builtin export declare function store16(offset: usize, value: i32, constantOffset?: usize): void;
   @builtin export declare function store(offset: usize, value: i32, constantOffset?: usize): void;
+  @inline export function parseInt(value: string, radix: i32 = 0): i32 { return <i32>parseI32(value, radix) }
+  @inline export function parseFloat(value: string): i32 { return <i32>parseFloat(value) }
 }
 
 @builtin export declare function i64(value: void): i64;
@@ -95,6 +101,8 @@ export namespace i64 {
   @builtin export declare function store16(offset: usize, value: i64, constantOffset?: usize): void;
   @builtin export declare function store32(offset: usize, value: i64, constantOffset?: usize): void;
   @builtin export declare function store(offset: usize, value: i64, constantOffset?: usize): void;
+  @inline export function parseInt(value: string, radix: i32 = 0): i64 { return <i64>parseI64(value, radix) }
+  @inline export function parseFloat(value: string): i64 { return <i64>parseFloat(value) }
 }
 
 @builtin export declare function isize(value: void): isize;
@@ -105,30 +113,40 @@ export namespace isize {
   export const MAX_VALUE: isize = sizeof<i32>() == sizeof<isize>()
     ? 2147483647
     : <isize>9223372036854775807;
+  @inline export function parseInt(value: string, radix: i32 = 0): isize { return <isize>parseI64(value, radix) }
+  @inline export function parseFloat(value: string): isize { return <isize>parseFloat(value) }
 }
 
 @builtin export declare function u8(value: void): u8;
 export namespace u8 {
   export const MIN_VALUE: u8 = 0;
   export const MAX_VALUE: u8 = 255;
+  @inline export function parseInt(value: string, radix: i32 = 0): u8 { return <u8>parseI32(value, radix) }
+  @inline export function parseFloat(value: string): u8 { return <u8>parseFloat(value) }
 }
 
 @builtin export declare function u16(value: void): u16;
 export namespace u16 {
   export const MIN_VALUE: u16 = 0;
   export const MAX_VALUE: u16 = 65535;
+  @inline export function parseInt(value: string, radix: i32 = 0): u16 { return <u16>parseI32(value, radix) }
+  @inline export function parseFloat(value: string): u16 { return <u16>parseFloat(value) }
 }
 
 @builtin export declare function u32(value: void): u32;
 export namespace u32 {
   export const MIN_VALUE: u32 = 0;
   export const MAX_VALUE: u32 = 4294967295;
+  @inline export function parseInt(value: string, radix: i32 = 0): u32 { return <u32>parseI32(value, radix) }
+  @inline export function parseFloat(value: string): u32 { return <u32>parseFloat(value) }
 }
 
 @builtin export declare function u64(value: void): u64;
 export namespace u64 {
   export const MIN_VALUE: u64 = 0;
   export const MAX_VALUE: u64 = 18446744073709551615;
+  @inline export function parseInt(value: string, radix: i32 = 0): u64 { return <u64>parseI64(value, radix) }
+  @inline export function parseFloat(value: string): u64 { return <u64>parseFloat(value) }
 }
 
 @builtin export declare function usize(value: void): usize;
@@ -137,6 +155,8 @@ export namespace usize {
   export const MAX_VALUE: usize = sizeof<u32>() == sizeof<usize>()
     ? 4294967295
     : <usize>18446744073709551615;
+  @inline export function parseInt(value: string, radix: i32 = 0): usize { return <usize>parseI64(value, radix) }
+  @inline export function parseFloat(value: string): usize { return <usize>parseFloat(value) }
 }
 
 @builtin export declare function bool(value: void): bool;
@@ -168,6 +188,12 @@ export namespace f32 {
   @builtin export declare function sqrt(value: f32): f32;
   @builtin export declare function store(offset: usize, value: f32, constantOffset?: usize): void;
   @builtin export declare function trunc(value: f32): f32;
+  @inline  export function isNaN(value: f32): bool { return isNaN<f32>(value) }
+  @inline  export function isFinite(value: f32): bool { return isFinite<f32>(value) }
+  @inline  export function isSafeInteger(value: f32): bool { return abs<f32>(value) <= f32.MAX_SAFE_INTEGER && trunc<f32>(value) == value }
+  @inline  export function isInteger(value: f32): bool { return isFinite<f32>(value) && trunc<f32>(value) == value }
+  @inline  export function parseInt(value: string, radix: i32 = 0): f32 { return <f32>parseI64(value, radix) }
+  @inline  export function parseFloat(value: string): f32 { return <f32>parseFloat(value) }
 }
 
 @builtin export declare function f64(value: void): f64;
@@ -193,6 +219,12 @@ export namespace f64 {
   @builtin export declare function sqrt(value: f64): f64;
   @builtin export declare function store(offset: usize, value: f64, constantOffset?: usize): void;
   @builtin export declare function trunc(value: f64): f64;
+  @inline  export function isNaN(value: f64): bool { return isNaN<f64>(value) }
+  @inline  export function isFinite(value: f64): bool { return isFinite<f64>(value) }
+  @inline  export function isSafeInteger(value: f64): bool { return abs<f64>(value) <= f64.MAX_SAFE_INTEGER && trunc<f64>(value) == value }
+  @inline  export function isInteger(value: f64): bool { return isFinite<f64>(value) && trunc<f64>(value) == value }
+  @inline  export function parseInt(value: string, radix: i32 = 0): f64 { return <f64>parseI64(value, radix) }
+  @inline  export function parseFloat(value: string): f64 { return parseFloat(value) }
 }
 
 @builtin export declare function start(): void;
