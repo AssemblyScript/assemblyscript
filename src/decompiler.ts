@@ -71,7 +71,7 @@ export class Decompiler {
     return decompiler.finish();
   }
 
-  static fromBuffer(buffer:Uint8Array): Module {
+  static fromBuffer(buffer: Uint8Array): Module {
     return Module.createFrom(buffer);
   }
 
@@ -125,11 +125,11 @@ export class Decompiler {
         // this.push("{\n");
         k = getBlockChildCount(expr);
         for (i = 0; i < k; ++i) {
-          if (this.depth == 0 && i == k-1){
+          if (this.depth == 0 && i == k - 1) {
             this.push("\t return ");
             this.decompileExpression(getBlockChild(expr, i));
-            this.push(";\n")
-          }else {
+            this.push(";\n");
+          } else {
             this.decompileExpression(getBlockChild(expr, i));
           }
         }
@@ -179,24 +179,26 @@ export class Decompiler {
         }
         return;
       }
-      case ExpressionId.Switch:{
+      case ExpressionId.Switch: {
         throw new Error("not implemented Call and switch");
       }
-      case ExpressionId.Call:
-      case ExpressionId.CallIndirect: {
-        var funcName = (getCallTarget(expr) || "");
-        funcName = funcName.endsWith(";")? funcName.substring(0,funcName.length-1): funcName;
+      case ExpressionId.Call: {
+        let funcName = (getCallTarget(expr) || "");
+        funcName = funcName.endsWith(";") ? funcName.substring(0,funcName.length - 1 ) : funcName;
         this.push(funcName);
-        this.push('(');
+        this.push("(");
         let argc = _BinaryenCallGetNumOperands(expr);
-        for (let i:isize = 0; i< argc; i++){
+        for (let i: isize = 0; i < argc; i++) {
           this.decompileExpression(_BinaryenCallGetOperand(expr,i));
-          if (i< argc-1){
+          if (i < argc - 1) {
             this.push(", ");
           }
         }
         this.push(")");
         return;
+      }
+      case ExpressionId.CallIndirect: {
+        throw new Error("CallIndirect Not implmented.");
       }
       case ExpressionId.GetLocal: {
         this.push("$");
@@ -218,13 +220,9 @@ export class Decompiler {
       case ExpressionId.SetGlobal: {
         this.push(readString(_BinaryenSetGlobalGetName(expr)) || "<lhs of global>");
         this.push(" = ");
-        try {
-          let RHS = getSetGlobalValue(expr);
-          this.decompileExpression(RHS);
+        let RHS = getSetGlobalValue(expr);
+        this.decompileExpression(RHS);
         this.push(";\n");
-        }catch (e){
-          this.push("value didn't compile");
-        }
         return;
       }
       case ExpressionId.Load: {
@@ -899,14 +897,14 @@ export class Decompiler {
     throw new Error("not implemented");
   }
 
-  private decompileNestedExpression(expr: ExpressionId){
+  private decompileNestedExpression(expr: ExpressionId): void {
     this.push("{");
-    this.depth+=1;
+    this.depth++;
     this.startLine();
     // console.log( getExpressionId(expr).toString(10));
     this.decompileExpression(expr);
-    this.depth-=1;
-    if ( getExpressionId(expr) != ExpressionId.Block && this.depth>0){
+    this.depth--;
+    if ( getExpressionId(expr) != ExpressionId.Block && this.depth > 0) {
       this.push(";");
     }
     this.startLine();
@@ -917,8 +915,8 @@ export class Decompiler {
     // mostly here so we can add debugging if necessary
     this.text.push(text);
   }
-  private startLine(): void{
-    this.text.push("\n"+"    ".repeat(this.depth))
+  private startLine(): void {
+    this.text.push("\n" + "    ".repeat(this.depth));
   }
 
   finish(): string {
