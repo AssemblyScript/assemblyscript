@@ -23,9 +23,15 @@ asc.main([
         "--baseDir",`${__dirname}/decompiler`,
         "-b", "untouched.wasm",
         "-t", "untouched.wat",
+        "--tsdFile", "index.d.ts",
         "--sourceMap",
         "--validate",
-        "--measure"
+        "--debug",
+        "--measure",
+        "-O0",
+        "--shrinkLevel", "0",
+        "--optimizeLevel", "0",
+
       ], () => {
 
 var Decompiler = require("../src/decompiler").Decompiler;
