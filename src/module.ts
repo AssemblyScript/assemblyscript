@@ -1304,7 +1304,14 @@ export function getHostOperand(expr: ExpressionRef, index: Index): ExpressionRef
 export function getHostName(expr: ExpressionRef): string | null {
   return readString(_BinaryenHostGetNameOperand(expr));
 }
+// globals
+export function getSetGlobalValue(expr: ExpressionRef): ExpressionRef {
+  return _BinaryenSetGlobalGetValue(expr);
+}
 
+export function getGlobalGetName(expr: ExpressionRef):string | null {
+  return readString(_BinaryenGetGlobalGetName(expr));
+}
 // functions
 
 export function getFunctionBody(func: FunctionRef): ExpressionRef {

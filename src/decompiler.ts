@@ -54,7 +54,11 @@ import {
   getDropValue,
   getReturnValue,
   getHostOp,
-  getHostOperand
+  getHostOperand,
+  getCallTarget,
+  getSetGlobalValue,
+  readString,
+  getGlobalGetName,
 } from "./module";
 
 // TODO :-)
@@ -67,8 +71,13 @@ export class Decompiler {
     return decompiler.finish();
   }
 
+  static fromBuffer(buffer:Uint8Array): Module {
+    return Module.createFrom(buffer);
+  }
+
   text: string[] = [];
   functionId: i32 = 0;
+  depth: i32 = 0;
 
   constructor() { }
 
@@ -93,13 +102,10 @@ export class Decompiler {
     this.push("): ");
     this.push(nativeTypeToType(getFunctionResultType(func)));
     this.push(" ");
-    if (getExpressionId(body) != ExpressionId.Block) {
-      this.push("{\n");
-    }
-    this.decompileExpression(body);
-    if (getExpressionId(body) != ExpressionId.Block) {
-      this.push("\n}\n");
-    }
+    this.push("{\n");
+    this.depth = -1;
+    this.decompileNestedExpression(body);
+    this.push("\n}\n");
     ++this.functionId;
   }
 
@@ -117,24 +123,34 @@ export class Decompiler {
           this.push(string);
           this.push(": ");
         }
-        this.push("{\n");
+        // this.push("{\n");
         k = getBlockChildCount(expr);
         for (i = 0; i < k; ++i) {
-          this.decompileExpression(getBlockChild(expr, i));
+          if (this.depth == 0 && i == k-1){
+            this.push("\t return ");
+            this.decompileExpression(getBlockChild(expr, i));
+            this.push(";\n")
+          }else{
+            this.decompileNestedExpression(getBlockChild(expr, i));
+          }
         }
-        this.push("}\n");
+        // this.push("}\n");
         return;
       }
       case ExpressionId.If: {
         if (type == NativeType.None) {
           this.push("if (");
           this.decompileExpression(getIfCondition(expr));
-          this.push(") ");
-          this.decompileExpression(getIfTrue(expr));
+          this.push("){\n ");
+          this.decompileNestedExpression(getIfTrue(expr));
+          this.push("}");
           if (nested = getIfFalse(expr)) {
-            this.push(" else ");
+            this.push(" else {\n");
             this.decompileExpression(nested);
+            this.startLine();
+            this.push("}");
           }
+          this.push("\n");
         } else {
           this.decompileExpression(getIfCondition(expr));
           this.push(" ? ");
@@ -168,10 +184,24 @@ export class Decompiler {
         }
         return;
       }
-      case ExpressionId.Switch:
+      case ExpressionId.Switch:{
+        throw new Error("not implemented Call and switch");
+      }
       case ExpressionId.Call:
       case ExpressionId.CallIndirect: {
-        throw new Error("not implemented");
+        var funcName = (getCallTarget(expr) || "");
+        funcName = funcName.endsWith(";")? funcName.substring(0,funcName.length-1): funcName;
+        this.push(funcName);
+        this.push('(');
+        let argc = _BinaryenCallGetNumOperands(expr);
+        for (let i:isize = 0; i< argc; i++){
+          this.decompileExpression(_BinaryenCallGetOperand(expr,i));
+          if (i< argc-1){
+            this.push(", ");
+          }
+        }
+        this.push(")");
+        return;
       }
       case ExpressionId.GetLocal: {
         this.push("$");
@@ -185,9 +215,22 @@ export class Decompiler {
         this.decompileExpression(getSetLocalValue(expr));
         return;
       }
-      case ExpressionId.GetGlobal:
+      case ExpressionId.GetGlobal: {
+          this.push(getGlobalGetName(expr) || "_global");
+        return;
+
+      }
       case ExpressionId.SetGlobal: {
-        throw new Error("not implemented");
+        this.push(readString(_BinaryenSetGlobalGetName(expr)) || "<lhs of global>");
+        this.push(" = ");
+        try {
+          let RHS = getSetGlobalValue(expr);
+          this.decompileExpression(RHS);
+        this.push(";\n");
+        }catch (e){
+          this.push("value didn't compile");
+        }
+        return;
       }
       case ExpressionId.Load: {
         this.push("load<");
@@ -861,9 +904,19 @@ export class Decompiler {
     throw new Error("not implemented");
   }
 
+  private decompileNestedExpression(expr: ExpressionId){
+    this.depth+=1;
+    this.startLine();
+    this.decompileExpression(expr);
+    this.depth-=1;
+  }
+
   private push(text: string): void {
     // mostly here so we can add debugging if necessary
     this.text.push(text);
+  }
+  private startLine(): void{
+    this.text.push("    ".repeat(this.depth))
   }
 
   finish(): string {

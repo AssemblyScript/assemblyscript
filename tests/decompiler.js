@@ -1,5 +1,5 @@
-var binaryen = global.Binaryen = require("../lib/binaryen");
-
+var binaryen = global.Binaryen = require("binaryen");
+let asc = require("../cli/asc");
 require("ts-node").register({ project: require("path").join(__dirname, "..", "src", "tsconfig.json") });
 require("../src/glue/js");
 
@@ -18,8 +18,22 @@ var fn = mod.addFunction("main", ftype, [],
 
 mod.validate();
 mod.emitText();
+asc.main([
+        "index.ts",
+        "--baseDir",`${__dirname}/decompiler`,
+        "-b", "untouched.wasm",
+        "-t", "untouched.wat",
+        "--sourceMap",
+        "--validate",
+        "--measure"
+      ], () => {
 
 var Decompiler = require("../src/decompiler").Decompiler;
 var decompiler = new Decompiler();
-decompiler.decompileFunction(fn);
+let fs = require("fs");
+var mod = binaryen.readBinary(fs.readFileSync(`${__dirname}/decompiler/untouched.wasm`));
+// console.log(mod.ref);
+decompiler.decompileFunction(mod.getFunction("index/foo"));
 console.log(decompiler.finish());
+
+});
