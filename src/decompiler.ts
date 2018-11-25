@@ -102,10 +102,9 @@ export class Decompiler {
     this.push("): ");
     this.push(nativeTypeToType(getFunctionResultType(func)));
     this.push(" ");
-    this.push("{\n");
-    this.depth = -1;
+    this.depth = 0;
     this.decompileNestedExpression(body);
-    this.push("\n}\n");
+    this.push("\n");
     ++this.functionId;
   }
 
@@ -130,8 +129,8 @@ export class Decompiler {
             this.push("\t return ");
             this.decompileExpression(getBlockChild(expr, i));
             this.push(";\n")
-          }else{
-            this.decompileNestedExpression(getBlockChild(expr, i));
+          }else {
+            this.decompileExpression(getBlockChild(expr, i));
           }
         }
         // this.push("}\n");
@@ -141,16 +140,12 @@ export class Decompiler {
         if (type == NativeType.None) {
           this.push("if (");
           this.decompileExpression(getIfCondition(expr));
-          this.push("){\n ");
+          this.push(") ");
           this.decompileNestedExpression(getIfTrue(expr));
-          this.push("}");
           if (nested = getIfFalse(expr)) {
-            this.push(" else {\n");
-            this.decompileExpression(nested);
-            this.startLine();
-            this.push("}");
+            this.push(" else ");
+            this.decompileNestedExpression(nested);
           }
-          this.push("\n");
         } else {
           this.decompileExpression(getIfCondition(expr));
           this.push(" ? ");
@@ -172,7 +167,7 @@ export class Decompiler {
       case ExpressionId.Break: {
         if (nested = getBreakCondition(expr)) {
           this.push("if (");
-          this.decompileExpression(nested);
+          this.decompileNestedExpression(nested);
           this.push(") ");
         }
         if ((string = getBreakName(expr)) != null) {
@@ -905,10 +900,17 @@ export class Decompiler {
   }
 
   private decompileNestedExpression(expr: ExpressionId){
+    this.push("{");
     this.depth+=1;
     this.startLine();
+    // console.log( getExpressionId(expr).toString(10));
     this.decompileExpression(expr);
     this.depth-=1;
+    if ( getExpressionId(expr) != ExpressionId.Block && this.depth>0){
+      this.push(";");
+    }
+    this.startLine();
+    this.push("}");
   }
 
   private push(text: string): void {
@@ -916,7 +918,7 @@ export class Decompiler {
     this.text.push(text);
   }
   private startLine(): void{
-    this.text.push("    ".repeat(this.depth))
+    this.text.push("\n"+"    ".repeat(this.depth))
   }
 
   finish(): string {

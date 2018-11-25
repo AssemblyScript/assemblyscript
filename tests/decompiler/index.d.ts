@@ -8,7 +8,10 @@ declare module ASModule {
   type f32 = number;
   type f64 = number;
   type bool = any;
-  function foo(bid: i32): i32;
-  function highestBid(): i32;
+  class Test {
+    constructor(i: i32);
+    i: i32;
+    _if(i: i32): void;
+  }
 }
 export default ASModule;

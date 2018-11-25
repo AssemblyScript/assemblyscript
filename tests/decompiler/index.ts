@@ -1,25 +1,17 @@
 import "allocator/arena";
 
-let bids = new Array<i32>(1);
-let highest = 0;
-
-
-export function foo(bid: i32): i32 {
-  bids.push(bid);
-  if (bid > highest){
-    highest = bid;
-    if (highest >= bid){
-      if(bid == highest){
-        return bid
-      }
+// @external("Test")
+export class Test {
+  constructor(public i:i32){
+  }
+  _if(i:i32): void{
+    if (this.i < i){
+      this.i = i;
+    } else{
+      this.i = this.i + 1;
     }
   }
-  return highest;
 }
 
-export function highestBid(): i32 {
-  return highest;
-}
-
-foo(10);
-foo(11);
+let t = new Test(2);
+t._if(1);
