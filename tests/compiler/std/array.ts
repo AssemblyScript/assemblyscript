@@ -330,6 +330,17 @@ assert(internalCapacity<i32>(arr) == 5);
 assert(arr[0] == 44);
 assert(arr[1] == 42);
 
+// Array#splice ////////////////////////////////////////////////////////////////////////////////////
+
+var sarr: i32[] = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(0), <i32[]>[1, 2, 3, 4, 5]));
+// assert(sarr.length == 0);
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(2, 2), <i32[]>[3, 4]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 5]));
+// assert(sarr.length == 3);
+
 // Array#findIndex /////////////////////////////////////////////////////////////////////////////////
 
 arr[0] = 0;

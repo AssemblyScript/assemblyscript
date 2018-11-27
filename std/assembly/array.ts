@@ -369,19 +369,28 @@ export class Array<T> {
     return sliced;
   }
 
-  splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): void {
-    if (deleteCount < 1) return;
+  splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): Array<T> {
+    if (deleteCount < 1) return new Array<T>();
     var length = this.length_;
     if (start < 0) start = max(length + start, 0);
-    if (start >= length) return;
+    if (start >= length) return new Array<T>();
     deleteCount = min(deleteCount, length - start);
-    var buffer = this.buffer_;
+    var buffer  = this.buffer_;
+    var spliced = new Array<T>(deleteCount);
+    var source  = changetype<usize>(buffer) + HEADER_SIZE + (<usize>start << alignof<T>());
+    var size    = <usize>deleteCount << alignof<T>();
     memory.copy(
-      changetype<usize>(buffer) + HEADER_SIZE + (<usize>start << alignof<T>()),
+      changetype<usize>(spliced.buffer_) + HEADER_SIZE,
+      source,
+      size
+    );
+    memory.copy(
+      source,
       changetype<usize>(buffer) + HEADER_SIZE + (<usize>(start + deleteCount) << alignof<T>()),
-      <usize>deleteCount << alignof<T>()
+      size
     );
     this.length_ = length - deleteCount;
+    return spliced;
   }
 
   reverse(): Array<T> {
