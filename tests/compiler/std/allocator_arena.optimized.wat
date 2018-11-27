@@ -1445,14 +1445,13 @@
   end
   get_global $std/allocator_arena/ptr1
   call $~lib/internal/memory/memset
-  block $break|0
-   i32.const 0
-   set_global $std/allocator_arena/i
-   loop $repeat|0
-    get_global $std/allocator_arena/i
-    i32.const 42
-    i32.ge_u
-    br_if $break|0
+  i32.const 0
+  set_global $std/allocator_arena/i
+  loop $repeat|0
+   get_global $std/allocator_arena/i
+   i32.const 42
+   i32.lt_u
+   if
     get_global $std/allocator_arena/ptr1
     get_global $std/allocator_arena/i
     i32.add
@@ -1474,21 +1473,18 @@
      br $repeat|0
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_global $std/allocator_arena/ptr2
   get_global $std/allocator_arena/ptr1
   call $~lib/internal/memory/memmove
-  block $break|1
-   i32.const 0
-   set_global $std/allocator_arena/i
-   loop $repeat|1
-    get_global $std/allocator_arena/i
-    i32.const 42
-    i32.ge_u
-    br_if $break|1
+  i32.const 0
+  set_global $std/allocator_arena/i
+  loop $repeat|1
+   get_global $std/allocator_arena/i
+   i32.const 42
+   i32.lt_u
+   if
     get_global $std/allocator_arena/ptr2
     get_global $std/allocator_arena/i
     i32.add
@@ -1510,9 +1506,7 @@
      br $repeat|1
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_global $std/allocator_arena/ptr1
   get_global $std/allocator_arena/ptr2

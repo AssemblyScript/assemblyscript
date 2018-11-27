@@ -15,9 +15,9 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
+  get_local $0
+  set_local $3
   block $folding-inner0
-   get_local $0
-   set_local $3
    get_local $2
    i32.eqz
    br_if $folding-inner0

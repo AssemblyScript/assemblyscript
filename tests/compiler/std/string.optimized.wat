@@ -1729,25 +1729,22 @@
   (local $6 i32)
   (local $7 i64)
   block $break|0
+   get_local $2
+   i32.load
+   tee_local $6
+   set_local $5
+   get_local $6
+   i32.eqz
+   br_if $break|0
    block $case5|0
     block $case4|0
      block $case3|0
       block $case2|0
        block $case1|0
-        get_local $2
-        i32.load
-        tee_local $6
-        set_local $5
-        get_local $6
-        i32.eqz
-        br_if $break|0
-        block $tablify|0
-         get_local $5
-         i32.const 1
-         i32.sub
-         br_table $case1|0 $case2|0 $case3|0 $case4|0 $tablify|0
-        end
-        br $case5|0
+        get_local $5
+        i32.const 1
+        i32.sub
+        br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0
        end
        get_local $2
        i32.load16_u offset=4
@@ -1758,10 +1755,10 @@
        i32.shl
        i32.add
        set_local $4
-       block $break|1
-        i32.const 0
-        set_local $0
-        loop $repeat|1
+       i32.const 0
+       set_local $0
+       loop $repeat|1
+        block $break|1
          get_local $0
          get_local $3
          i32.ge_s
@@ -1778,9 +1775,7 @@
          i32.add
          set_local $0
          br $repeat|1
-         unreachable
         end
-        unreachable
        end
        br $break|0
       end
@@ -1793,10 +1788,10 @@
       i32.shl
       i32.add
       set_local $5
-      block $break|2
-       i32.const 0
-       set_local $0
-       loop $repeat|2
+      i32.const 0
+      set_local $0
+      loop $repeat|2
+       block $break|2
         get_local $0
         get_local $3
         i32.ge_s
@@ -1813,9 +1808,7 @@
         i32.add
         set_local $0
         br $repeat|2
-        unreachable
        end
-       unreachable
       end
       br $break|0
      end
@@ -1831,10 +1824,10 @@
      i32.shl
      i32.add
      set_local $0
-     block $break|3
-      i32.const 0
-      set_local $1
-      loop $repeat|3
+     i32.const 0
+     set_local $1
+     loop $repeat|3
+      block $break|3
        get_local $1
        get_local $3
        i32.ge_s
@@ -1858,9 +1851,7 @@
        i32.add
        set_local $1
        br $repeat|3
-       unreachable
       end
-      unreachable
      end
      br $break|0
     end
@@ -1873,8 +1864,8 @@
     i32.shl
     i32.add
     set_local $0
-    block $break|4
-     loop $repeat|4
+    loop $repeat|4
+     block $break|4
       get_local $4
       get_local $3
       i32.ge_s
@@ -1891,9 +1882,7 @@
       i32.add
       set_local $4
       br $repeat|4
-      unreachable
      end
-     unreachable
     end
     br $break|0
    end
@@ -1909,17 +1898,17 @@
    i32.const 4
    i32.add
    set_local $5
-   block $break|5
-    i32.const 0
-    set_local $1
-    get_local $6
-    i32.const 1
-    i32.shl
-    tee_local $0
-    get_local $3
-    i32.mul
-    set_local $2
-    loop $repeat|5
+   i32.const 0
+   set_local $1
+   get_local $6
+   i32.const 1
+   i32.shl
+   tee_local $0
+   get_local $3
+   i32.mul
+   set_local $2
+   loop $repeat|5
+    block $break|5
      get_local $1
      get_local $2
      i32.ge_s
@@ -1935,9 +1924,7 @@
      i32.add
      set_local $1
      br $repeat|5
-     unreachable
     end
-    unreachable
    end
   end
  )
@@ -2220,24 +2207,24 @@
    i32.const -1
    return
   end
-  block $break|0
-   get_local $2
-   i32.const 0
-   get_local $2
-   i32.const 0
-   i32.gt_s
-   select
-   tee_local $2
-   get_local $3
-   get_local $4
-   i32.sub
-   tee_local $3
-   get_local $2
-   get_local $3
-   i32.lt_s
-   select
-   set_local $2
-   loop $repeat|0
+  get_local $2
+  i32.const 0
+  get_local $2
+  i32.const 0
+  i32.gt_s
+  select
+  tee_local $2
+  get_local $3
+  get_local $4
+  i32.sub
+  tee_local $3
+  get_local $2
+  get_local $3
+  i32.lt_s
+  select
+  set_local $2
+  loop $repeat|0
+   block $break|0
     get_local $2
     i32.const 0
     i32.lt_s
@@ -2258,9 +2245,7 @@
      return
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   i32.const -1
  )
@@ -3570,14 +3555,13 @@
    tee_local $4
    i32.load
    set_local $7
-   block $break|0
-    i32.const 0
-    set_local $2
-    loop $repeat|0
-     get_local $2
-     get_local $3
-     i32.ge_s
-     br_if $break|0
+   i32.const 0
+   set_local $2
+   loop $repeat|0
+    get_local $2
+    get_local $3
+    i32.lt_s
+    if
      i32.const 1
      call $~lib/internal/string/allocateUnsafe
      tee_local $1
@@ -3600,9 +3584,7 @@
      i32.add
      set_local $2
      br $repeat|0
-     unreachable
     end
-    unreachable
    end
    get_local $4
    return
@@ -4630,10 +4612,10 @@
   end
   get_local $3
   if (result i32)
-   block $break|0
-    get_local $1
-    set_local $3
-    loop $repeat|0
+   get_local $1
+   set_local $3
+   loop $repeat|0
+    block $break|0
      get_local $3
      get_local $4
      i32.ge_s
@@ -4650,9 +4632,7 @@
      i32.add
      set_local $3
      br $repeat|0
-     unreachable
     end
-    unreachable
    end
    get_local $0
    get_local $4
@@ -4733,10 +4713,10 @@
      get_local $0
      i32.const 3014704
      i32.store offset=4
-     block $break|1
-      i32.const 2
-      set_local $2
-      loop $repeat|1
+     i32.const 2
+     set_local $2
+     loop $repeat|1
+      block $break|1
        get_local $2
        get_local $3
        i32.ge_s
@@ -4753,9 +4733,7 @@
        i32.add
        set_local $2
        br $repeat|1
-       unreachable
       end
-      unreachable
      end
      get_local $1
      get_local $3

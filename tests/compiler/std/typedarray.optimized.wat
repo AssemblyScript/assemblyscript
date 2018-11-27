@@ -1312,16 +1312,15 @@
   i32.const 0
   get_local $4
   call $~lib/internal/memory/memset
-  block $break|0
-   get_local $2
-   i32.const 1
-   i32.sub
-   set_local $5
-   loop $repeat|0
-    get_local $5
-    i32.const 0
-    i32.le_s
-    br_if $break|0
+  get_local $2
+  i32.const 1
+  i32.sub
+  set_local $5
+  loop $repeat|0
+   get_local $5
+   i32.const 0
+   i32.gt_s
+   if
     get_local $5
     set_local $4
     loop $continue|1
@@ -1422,20 +1421,17 @@
     i32.sub
     set_local $5
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
-  block $break|2
-   get_local $2
-   i32.const 1
-   i32.sub
-   set_local $5
-   loop $repeat|2
-    get_local $5
-    i32.const 2
-    i32.lt_s
-    br_if $break|2
+  get_local $2
+  i32.const 1
+  i32.sub
+  set_local $5
+  loop $repeat|2
+   get_local $5
+   i32.const 2
+   i32.ge_s
+   if
     get_local $0
     get_local $1
     i32.add
@@ -1554,9 +1550,7 @@
     i32.sub
     set_local $5
     br $repeat|2
-    unreachable
    end
-   unreachable
   end
   get_local $0
   get_local $1
@@ -1878,7 +1872,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   get_local $0
   i32.load offset=8
   get_local $1
@@ -1888,21 +1881,19 @@
    i32.const 0
    return
   end
-  block $break|0
-   get_local $0
-   i32.load offset=8
-   set_local $4
-   loop $repeat|0
-    get_local $2
-    get_local $4
-    i32.ge_s
-    br_if $break|0
+  get_local $0
+  i32.load offset=8
+  set_local $4
+  loop $repeat|0
+   get_local $2
+   get_local $4
+   i32.lt_s
+   if
     get_local $0
     get_local $2
     call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
     i32.const 255
     i32.and
-    set_local $5
     get_local $2
     get_local $1
     i32.load
@@ -1917,9 +1908,7 @@
     else     
      unreachable
     end
-    set_local $3
-    get_local $5
-    get_local $3
+    tee_local $3
     i32.const 255
     i32.and
     i32.ne
@@ -1934,9 +1923,7 @@
      br $repeat|0
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   i32.const 1
  )
@@ -2114,7 +2101,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   get_local $0
   i32.load offset=8
   i32.const 2
@@ -2126,21 +2112,19 @@
    i32.const 0
    return
   end
-  block $break|0
-   get_local $0
-   i32.load offset=8
-   i32.const 2
-   i32.shr_u
-   set_local $4
-   loop $repeat|0
-    get_local $2
-    get_local $4
-    i32.ge_s
-    br_if $break|0
+  get_local $0
+  i32.load offset=8
+  i32.const 2
+  i32.shr_u
+  set_local $4
+  loop $repeat|0
+   get_local $2
+   get_local $4
+   i32.lt_s
+   if
     get_local $0
     get_local $2
     call $~lib/internal/typedarray/TypedArray<i32,i32>#__get
-    set_local $5
     get_local $2
     get_local $1
     i32.load
@@ -2159,9 +2143,7 @@
     else     
      unreachable
     end
-    set_local $3
-    get_local $5
-    get_local $3
+    tee_local $3
     i32.ne
     if
      i32.const 0
@@ -2174,9 +2156,7 @@
      br $repeat|0
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   i32.const 1
  )

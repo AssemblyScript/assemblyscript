@@ -281,19 +281,17 @@
       end
      end
     end
-    block $break|2
-     f64.const 8
-     get_local $3
+    f64.const 8
+    get_local $3
+    f64.convert_u/i32
+    f64.min
+    set_local $6
+    loop $repeat|2
+     get_local $2
      f64.convert_u/i32
-     f64.min
-     set_local $6
-     loop $repeat|2
-      get_local $2
-      f64.convert_u/i32
-      get_local $6
-      f64.lt
-      i32.eqz
-      br_if $break|2
+     get_local $6
+     f64.lt
+     if
       get_local $4
       get_local $4
       f64.mul
@@ -319,9 +317,7 @@
       i32.add
       set_local $2
       br $repeat|2
-      unreachable
      end
-     unreachable
     end
     get_local $0
     get_local $1

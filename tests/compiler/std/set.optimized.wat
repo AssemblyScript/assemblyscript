@@ -805,14 +805,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   i32.const 50
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    i32.const 100
-    i32.ge_s
-    br_if $break|1
+  i32.const 50
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   i32.const 100
+   i32.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i8>#has
@@ -846,9 +845,7 @@
      unreachable
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -862,14 +859,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|2
-   i32.const 0
-   set_local $0
-   loop $repeat|2
-    get_local $0
-    i32.const 50
-    i32.ge_s
-    br_if $break|2
+  i32.const 0
+  set_local $0
+  loop $repeat|2
+   get_local $0
+   i32.const 50
+   i32.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i8>#has
@@ -904,9 +900,7 @@
      br $repeat|2
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -920,14 +914,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   i32.const 0
-   set_local $0
-   loop $repeat|3
-    get_local $0
-    i32.const 50
-    i32.ge_s
-    br_if $break|3
+  i32.const 0
+  set_local $0
+  loop $repeat|3
+   get_local $0
+   i32.const 50
+   i32.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i8>#has
@@ -976,9 +969,7 @@
      br $repeat|3
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -1341,14 +1332,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   i32.const 50
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    i32.const 100
-    i32.ge_u
-    br_if $break|1
+  i32.const 50
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   i32.const 100
+   i32.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<u8>#has
@@ -1382,9 +1372,7 @@
      unreachable
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -1398,14 +1386,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|2
-   i32.const 0
-   set_local $0
-   loop $repeat|2
-    get_local $0
-    i32.const 50
-    i32.ge_u
-    br_if $break|2
+  i32.const 0
+  set_local $0
+  loop $repeat|2
+   get_local $0
+   i32.const 50
+   i32.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<u8>#has
@@ -1440,9 +1427,7 @@
      br $repeat|2
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -1456,14 +1441,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   i32.const 0
-   set_local $0
-   loop $repeat|3
-    get_local $0
-    i32.const 50
-    i32.ge_u
-    br_if $break|3
+  i32.const 0
+  set_local $0
+  loop $repeat|3
+   get_local $0
+   i32.const 50
+   i32.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<u8>#has
@@ -1512,9 +1496,7 @@
      br $repeat|3
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -1965,14 +1947,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   i32.const 50
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    i32.const 100
-    i32.ge_s
-    br_if $break|1
+  i32.const 50
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   i32.const 100
+   i32.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i16>#has
@@ -2006,9 +1987,7 @@
      unreachable
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -2022,14 +2001,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|2
-   i32.const 0
-   set_local $0
-   loop $repeat|2
-    get_local $0
-    i32.const 50
-    i32.ge_s
-    br_if $break|2
+  i32.const 0
+  set_local $0
+  loop $repeat|2
+   get_local $0
+   i32.const 50
+   i32.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i16>#has
@@ -2064,9 +2042,7 @@
      br $repeat|2
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -2080,14 +2056,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   i32.const 0
-   set_local $0
-   loop $repeat|3
-    get_local $0
-    i32.const 50
-    i32.ge_s
-    br_if $break|3
+  i32.const 0
+  set_local $0
+  loop $repeat|3
+   get_local $0
+   i32.const 50
+   i32.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i16>#has
@@ -2136,9 +2111,7 @@
      br $repeat|3
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -2538,14 +2511,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   i32.const 50
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    i32.const 100
-    i32.ge_u
-    br_if $break|1
+  i32.const 50
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   i32.const 100
+   i32.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<u16>#has
@@ -2579,9 +2551,7 @@
      unreachable
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -2595,14 +2565,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|2
-   i32.const 0
-   set_local $0
-   loop $repeat|2
-    get_local $0
-    i32.const 50
-    i32.ge_u
-    br_if $break|2
+  i32.const 0
+  set_local $0
+  loop $repeat|2
+   get_local $0
+   i32.const 50
+   i32.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<u16>#has
@@ -2637,9 +2606,7 @@
      br $repeat|2
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -2653,14 +2620,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   i32.const 0
-   set_local $0
-   loop $repeat|3
-    get_local $0
-    i32.const 50
-    i32.ge_u
-    br_if $break|3
+  i32.const 0
+  set_local $0
+  loop $repeat|3
+   get_local $0
+   i32.const 50
+   i32.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<u16>#has
@@ -2709,9 +2675,7 @@
      br $repeat|3
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -3130,14 +3094,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   i32.const 50
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    i32.const 100
-    i32.ge_s
-    br_if $break|1
+  i32.const 50
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   i32.const 100
+   i32.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i32>#has
@@ -3171,9 +3134,7 @@
      unreachable
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -3187,14 +3148,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|2
-   i32.const 0
-   set_local $0
-   loop $repeat|2
-    get_local $0
-    i32.const 50
-    i32.ge_s
-    br_if $break|2
+  i32.const 0
+  set_local $0
+  loop $repeat|2
+   get_local $0
+   i32.const 50
+   i32.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i32>#has
@@ -3229,9 +3189,7 @@
      br $repeat|2
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -3245,14 +3203,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   i32.const 0
-   set_local $0
-   loop $repeat|3
-    get_local $0
-    i32.const 50
-    i32.ge_s
-    br_if $break|3
+  i32.const 0
+  set_local $0
+  loop $repeat|3
+   get_local $0
+   i32.const 50
+   i32.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i32>#has
@@ -3301,9 +3258,7 @@
      br $repeat|3
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -3386,14 +3341,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   i32.const 50
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    i32.const 100
-    i32.ge_u
-    br_if $break|1
+  i32.const 50
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   i32.const 100
+   i32.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i32>#has
@@ -3427,9 +3381,7 @@
      unreachable
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -3443,14 +3395,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|2
-   i32.const 0
-   set_local $0
-   loop $repeat|2
-    get_local $0
-    i32.const 50
-    i32.ge_u
-    br_if $break|2
+  i32.const 0
+  set_local $0
+  loop $repeat|2
+   get_local $0
+   i32.const 50
+   i32.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i32>#has
@@ -3485,9 +3436,7 @@
      br $repeat|2
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -3501,14 +3450,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   i32.const 0
-   set_local $0
-   loop $repeat|3
-    get_local $0
-    i32.const 50
-    i32.ge_u
-    br_if $break|3
+  i32.const 0
+  set_local $0
+  loop $repeat|3
+   get_local $0
+   i32.const 50
+   i32.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i32>#has
@@ -3557,9 +3505,7 @@
      br $repeat|3
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4064,14 +4010,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   i64.const 50
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    i64.const 100
-    i64.ge_s
-    br_if $break|1
+  i64.const 50
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   i64.const 100
+   i64.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i64>#has
@@ -4105,9 +4050,7 @@
      unreachable
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4121,14 +4064,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|2
-   i64.const 0
-   set_local $0
-   loop $repeat|2
-    get_local $0
-    i64.const 50
-    i64.ge_s
-    br_if $break|2
+  i64.const 0
+  set_local $0
+  loop $repeat|2
+   get_local $0
+   i64.const 50
+   i64.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i64>#has
@@ -4163,9 +4105,7 @@
      br $repeat|2
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4179,14 +4119,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   i64.const 0
-   set_local $0
-   loop $repeat|3
-    get_local $0
-    i64.const 50
-    i64.ge_s
-    br_if $break|3
+  i64.const 0
+  set_local $0
+  loop $repeat|3
+   get_local $0
+   i64.const 50
+   i64.lt_s
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i64>#has
@@ -4235,9 +4174,7 @@
      br $repeat|3
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4320,14 +4257,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   i64.const 50
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    i64.const 100
-    i64.ge_u
-    br_if $break|1
+  i64.const 50
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   i64.const 100
+   i64.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i64>#has
@@ -4361,9 +4297,7 @@
      unreachable
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4377,14 +4311,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|2
-   i64.const 0
-   set_local $0
-   loop $repeat|2
-    get_local $0
-    i64.const 50
-    i64.ge_u
-    br_if $break|2
+  i64.const 0
+  set_local $0
+  loop $repeat|2
+   get_local $0
+   i64.const 50
+   i64.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i64>#has
@@ -4419,9 +4352,7 @@
      br $repeat|2
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4435,14 +4366,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   i64.const 0
-   set_local $0
-   loop $repeat|3
-    get_local $0
-    i64.const 50
-    i64.ge_u
-    br_if $break|3
+  i64.const 0
+  set_local $0
+  loop $repeat|3
+   get_local $0
+   i64.const 50
+   i64.lt_u
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<i64>#has
@@ -4491,9 +4421,7 @@
      br $repeat|3
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4887,15 +4815,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   f32.const 50
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    f32.const 100
-    f32.lt
-    i32.eqz
-    br_if $break|1
+  f32.const 50
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   f32.const 100
+   f32.lt
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<f32>#has
@@ -4929,9 +4855,7 @@
      unreachable
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4945,15 +4869,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|2
-   f32.const 0
-   set_local $0
-   loop $repeat|2
-    get_local $0
-    f32.const 50
-    f32.lt
-    i32.eqz
-    br_if $break|2
+  f32.const 0
+  set_local $0
+  loop $repeat|2
+   get_local $0
+   f32.const 50
+   f32.lt
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<f32>#has
@@ -4988,9 +4910,7 @@
      br $repeat|2
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -5004,15 +4924,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   f32.const 0
-   set_local $0
-   loop $repeat|3
-    get_local $0
-    f32.const 50
-    f32.lt
-    i32.eqz
-    br_if $break|3
+  f32.const 0
+  set_local $0
+  loop $repeat|3
+   get_local $0
+   f32.const 50
+   f32.lt
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<f32>#has
@@ -5061,9 +4979,7 @@
      br $repeat|3
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -5457,15 +5373,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   f64.const 50
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    f64.const 100
-    f64.lt
-    i32.eqz
-    br_if $break|1
+  f64.const 50
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   f64.const 100
+   f64.lt
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<f64>#has
@@ -5499,9 +5413,7 @@
      unreachable
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -5515,15 +5427,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|2
-   f64.const 0
-   set_local $0
-   loop $repeat|2
-    get_local $0
-    f64.const 50
-    f64.lt
-    i32.eqz
-    br_if $break|2
+  f64.const 0
+  set_local $0
+  loop $repeat|2
+   get_local $0
+   f64.const 50
+   f64.lt
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<f64>#has
@@ -5558,9 +5468,7 @@
      br $repeat|2
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -5574,15 +5482,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|3
-   f64.const 0
-   set_local $0
-   loop $repeat|3
-    get_local $0
-    f64.const 50
-    f64.lt
-    i32.eqz
-    br_if $break|3
+  f64.const 0
+  set_local $0
+  loop $repeat|3
+   get_local $0
+   f64.const 50
+   f64.lt
+   if
     get_local $1
     get_local $0
     call $~lib/set/Set<f64>#has
@@ -5631,9 +5537,7 @@
      br $repeat|3
     end
     unreachable
-    unreachable
    end
-   unreachable
   end
   get_local $1
   i32.load offset=20
