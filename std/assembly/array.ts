@@ -372,25 +372,28 @@ export class Array<T> {
   }
 
   splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): Array<T> {
-    if (deleteCount < 1) return new Array<T>();
+    // if (deleteCount < 1) return new Array<T>();
     var length = this.length_;
-    if (start < 0) start = max(length + start, 0);
-    if (start >= length) return new Array<T>();
-    deleteCount = min(deleteCount, length - start);
+    var actualStart = start < 0 ? max(length + start, 0) : min(start, length);
+    deleteCount = min(deleteCount, length - actualStart);
     var buffer  = this.buffer_;
     var spliced = new Array<T>(deleteCount);
-    var source  = changetype<usize>(buffer) + HEADER_SIZE + (<usize>start << alignof<T>());
+    var source  = changetype<usize>(buffer) + HEADER_SIZE + (<usize>actualStart << alignof<T>());
     memory.copy(
       changetype<usize>(spliced.buffer_) + HEADER_SIZE,
       source,
       <usize>deleteCount << alignof<T>()
     );
-    memory.copy(
-      source,
-      changetype<usize>(buffer) + HEADER_SIZE + (<usize>(start + deleteCount) << alignof<T>()),
-      <usize>(length - deleteCount) << alignof<T>()
-    );
-    this.length_ = length - deleteCount;
+    var newLength = length - deleteCount;
+    var offset = start + deleteCount;
+    if (newLength != 0 && offset != 0) {
+      memory.copy(
+        source,
+        changetype<usize>(buffer) + HEADER_SIZE + (<usize>offset << alignof<T>()),
+        <usize>newLength << alignof<T>()
+      );
+    }
+    this.length_ = newLength;
     return spliced;
   }
 
