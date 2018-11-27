@@ -352,6 +352,10 @@ sarr = <i32[]>[1, 2, 3, 4, 5];
 assert(isArraysEqual<i32>(sarr.splice(-2), <i32[]>[4, 5]));
 assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3]));
 
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-2, 1), <i32[]>[4]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 5]));
+
 // Array#findIndex /////////////////////////////////////////////////////////////////////////////////
 
 arr[0] = 0;
