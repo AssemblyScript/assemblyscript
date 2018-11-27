@@ -4139,16 +4139,19 @@
   get_local $0
   get_local $1
   i32.store offset=4
-  get_local $3
-  get_global $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  set_local $4
-  i32.const 0
-  set_local $5
-  get_local $4
-  get_local $5
   get_local $2
-  call $~lib/internal/memory/memset
+  if
+   get_local $3
+   get_global $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   set_local $4
+   i32.const 0
+   set_local $5
+   get_local $4
+   get_local $5
+   get_local $2
+   call $~lib/internal/memory/memset
+  end
   get_local $0
  )
  (func $~lib/array/Array<String>#__unchecked_set (; 39 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -4304,7 +4307,7 @@
    if
     i32.const 0
     i32.const 976
-    i32.const 184
+    i32.const 186
     i32.const 42
     call $~lib/env/abort
     unreachable

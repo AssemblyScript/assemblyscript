@@ -47,11 +47,13 @@ export class Array<T> {
     var buffer = allocateUnsafe(byteLength);
     this.buffer_ = buffer;
     this.length_ = length;
-    memory.fill(
-      changetype<usize>(buffer) + HEADER_SIZE,
-      0,
-      <usize>byteLength
-    );
+    if (byteLength) {
+      memory.fill(
+        changetype<usize>(buffer) + HEADER_SIZE,
+        0,
+        <usize>byteLength
+      );
+    }
   }
 
   @inline
@@ -378,16 +380,15 @@ export class Array<T> {
     var buffer  = this.buffer_;
     var spliced = new Array<T>(deleteCount);
     var source  = changetype<usize>(buffer) + HEADER_SIZE + (<usize>start << alignof<T>());
-    var size    = <usize>deleteCount << alignof<T>();
     memory.copy(
       changetype<usize>(spliced.buffer_) + HEADER_SIZE,
       source,
-      size
+      <usize>deleteCount << alignof<T>()
     );
     memory.copy(
       source,
       changetype<usize>(buffer) + HEADER_SIZE + (<usize>(start + deleteCount) << alignof<T>()),
-      size
+      <usize>(length - deleteCount) << alignof<T>()
     );
     this.length_ = length - deleteCount;
     return spliced;

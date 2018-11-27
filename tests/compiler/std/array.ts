@@ -334,12 +334,15 @@ assert(arr[1] == 42);
 
 var sarr: i32[] = [1, 2, 3, 4, 5];
 assert(isArraysEqual<i32>(sarr.splice(0), <i32[]>[1, 2, 3, 4, 5]));
-// assert(sarr.length == 0);
+assert(isArraysEqual<i32>(sarr, <i32[]>[]));
 
 sarr = <i32[]>[1, 2, 3, 4, 5];
 assert(isArraysEqual<i32>(sarr.splice(2, 2), <i32[]>[3, 4]));
 assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 5]));
-// assert(sarr.length == 3);
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(0, 1), <i32[]>[1]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[2, 3, 4, 5]));
 
 // Array#findIndex /////////////////////////////////////////////////////////////////////////////////
 

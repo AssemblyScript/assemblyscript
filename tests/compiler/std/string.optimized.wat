@@ -3325,9 +3325,9 @@
   get_local $0
   i32.const 2
   i32.shl
-  tee_local $3
+  tee_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
-  set_local $2
+  set_local $3
   i32.const 8
   call $~lib/allocator/arena/__memory_allocate
   tee_local $1
@@ -3337,16 +3337,19 @@
   i32.const 0
   i32.store offset=4
   get_local $1
-  get_local $2
+  get_local $3
   i32.store
   get_local $1
   get_local $0
   i32.store offset=4
   get_local $2
-  i32.const 8
-  i32.add
-  get_local $3
-  call $~lib/internal/memory/memset
+  if
+   get_local $3
+   i32.const 8
+   i32.add
+   get_local $2
+   call $~lib/internal/memory/memset
+  end
   get_local $1
  )
  (func $~lib/internal/arraybuffer/reallocateUnsafe (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -3465,7 +3468,7 @@
    if
     i32.const 0
     i32.const 976
-    i32.const 184
+    i32.const 186
     i32.const 42
     call $~lib/env/abort
     unreachable
