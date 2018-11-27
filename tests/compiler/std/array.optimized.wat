@@ -726,9 +726,9 @@
   get_local $0
   i32.const 2
   i32.shl
-  tee_local $2
+  tee_local $3
   call $~lib/internal/arraybuffer/allocateUnsafe
-  set_local $3
+  set_local $2
   i32.const 8
   call $~lib/allocator/arena/__memory_allocate
   tee_local $1
@@ -738,20 +738,17 @@
   i32.const 0
   i32.store offset=4
   get_local $1
-  get_local $3
+  get_local $2
   i32.store
   get_local $1
   get_local $0
   i32.store offset=4
   get_local $2
-  if
-   get_local $3
-   i32.const 8
-   i32.add
-   i32.const 0
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  i32.const 8
+  i32.add
+  i32.const 0
+  get_local $3
+  call $~lib/internal/memory/memset
   get_local $1
  )
  (func $~lib/array/Array<u8>#fill (; 6 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
@@ -2344,7 +2341,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 186
+    i32.const 184
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -2381,7 +2378,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 248
+   i32.const 246
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -2679,7 +2676,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 338
+    i32.const 336
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -2731,7 +2728,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 309
+   i32.const 307
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3027,7 +3024,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 111
+    i32.const 109
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -4233,7 +4230,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 411
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4819,7 +4816,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 411
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5406,7 +5403,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 411
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5808,7 +5805,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 411
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable

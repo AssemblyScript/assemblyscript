@@ -47,13 +47,11 @@ export class Array<T> {
     var buffer = allocateUnsafe(byteLength);
     this.buffer_ = buffer;
     this.length_ = length;
-    if (byteLength) {
-      memory.fill(
-        changetype<usize>(buffer) + HEADER_SIZE,
-        0,
-        <usize>byteLength
-      );
-    }
+    memory.fill(
+      changetype<usize>(buffer) + HEADER_SIZE,
+      0,
+      <usize>byteLength
+    );
   }
 
   @inline
