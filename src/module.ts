@@ -1309,7 +1309,7 @@ export function getSetGlobalValue(expr: ExpressionRef): ExpressionRef {
   return _BinaryenSetGlobalGetValue(expr);
 }
 
-export function getGlobalGetName(expr: ExpressionRef):string | null {
+export function getGlobalGetName(expr: ExpressionRef): string | null {
   return readString(_BinaryenGetGlobalGetName(expr));
 }
 // functions
