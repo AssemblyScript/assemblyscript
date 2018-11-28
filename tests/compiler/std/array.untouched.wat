@@ -3667,22 +3667,22 @@
   end
   set_local $1
   get_local $2
+  tee_local $4
+  get_local $3
+  get_local $1
+  i32.sub
+  tee_local $5
+  get_local $4
+  get_local $5
+  i32.lt_s
+  select
+  tee_local $4
   i32.const 0
-  i32.le_s
-  if (result i32)
-   i32.const 0
-  else   
-   get_local $2
-   tee_local $4
-   get_local $3
-   get_local $1
-   i32.sub
-   tee_local $5
-   get_local $4
-   get_local $5
-   i32.lt_s
-   select
-  end
+  tee_local $5
+  get_local $4
+  get_local $5
+  i32.gt_s
+  select
   set_local $2
   get_local $0
   i32.load

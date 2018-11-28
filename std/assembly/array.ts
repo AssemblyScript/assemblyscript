@@ -371,8 +371,8 @@ export class Array<T> {
 
   splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): Array<T> {
     var length  = this.length_;
-    start       = start < 0 ? max(length + start, 0) : min(start, length);
-    deleteCount = deleteCount <= 0 ? 0 : min(deleteCount, length - start);
+    start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
+    deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
     var buffer  = this.buffer_;
     var spliced = new Array<T>(deleteCount);
     var source  = changetype<usize>(buffer) + HEADER_SIZE + (<usize>start << alignof<T>());
