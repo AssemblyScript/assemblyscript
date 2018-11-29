@@ -337,6 +337,10 @@ assert(isArraysEqual<i32>(sarr.splice(0), <i32[]>[1, 2, 3, 4, 5]));
 assert(isArraysEqual<i32>(sarr, <i32[]>[]));
 
 sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(2), <i32[]>[3, 4, 5]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
 assert(isArraysEqual<i32>(sarr.splice(2, 2), <i32[]>[3, 4]));
 assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 5]));
 
