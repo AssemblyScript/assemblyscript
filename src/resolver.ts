@@ -505,7 +505,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         break;
       }
-      case ElementKind.CLASS: { // element access on element access
+      case ElementKind.CLASS: {
         let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET);
         if (!indexedGet) {
           if (reportMode == ReportMode.REPORT) {
@@ -516,13 +516,18 @@ export class Resolver extends DiagnosticEmitter {
           }
           return null;
         }
-        let returnType = indexedGet.signature.returnType;
-        if (target = returnType.classReference) {
-          this.currentThisExpression = targetExpression;
-          this.currentElementExpression = elementAccess.elementExpression;
-          return target;
+        if (targetExpression.kind == NodeKind.ELEMENTACCESS) { // nested element access
+          let returnType = indexedGet.signature.returnType;
+          if (target = returnType.classReference) {
+            this.currentThisExpression = targetExpression;
+            this.currentElementExpression = elementAccess.elementExpression;
+            return target;
+          }
+          return null;
         }
-        break;
+        this.currentThisExpression = targetExpression;
+        this.currentElementExpression = elementAccess.elementExpression;
+        return target;
       }
     }
     if (reportMode == ReportMode.REPORT) {

@@ -112,6 +112,8 @@ declare function changetype<T>(value: any): T;
 declare function unchecked<T>(value: T): T;
 /** Emits a `call_indirect` instruction, calling the specified function in the function table by index with the specified arguments. Does result in a runtime error if the arguments do not match the called function. */
 declare function call_indirect<T>(target: Function | u32, ...args: any[]): T;
+/** Instantiates a new instance of `T` using the specified constructor arguments. */
+declare function instantiate<T>(...args: any[]): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
@@ -570,8 +572,8 @@ declare class Array<T> {
   shift(): T;
   some(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   unshift(element: T): i32;
-  slice(from: i32, to?: i32): T[];
-  splice(start: i32, deleteCount?: i32): void;
+  slice(from: i32, to?: i32): Array<T>;
+  splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): T[];
