@@ -97,7 +97,6 @@
     end
    end
   end
-  get_local $3
   get_local $1
   i32.const 614242
   i32.add
@@ -106,8 +105,12 @@
   i32.shr_s
   i32.const 1023
   i32.sub
+  get_local $3
   i32.add
   set_local $3
+  get_local $4
+  i64.const 4294967295
+  i64.and
   get_local $1
   i32.const 1048575
   i32.and
@@ -116,9 +119,6 @@
   i64.extend_u/i32
   i64.const 32
   i64.shl
-  get_local $4
-  i64.const 4294967295
-  i64.and
   i64.or
   f64.reinterpret/i64
   f64.const 1

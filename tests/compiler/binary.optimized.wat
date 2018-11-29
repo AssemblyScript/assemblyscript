@@ -188,6 +188,7 @@
    tee_local $3
    i32.shl
    set_local $1
+   get_local $4
    get_local $2
    get_local $3
    i32.sub
@@ -210,7 +211,6 @@
     i32.shr_u
    end
    tee_local $1
-   get_local $4
    i32.or
    f32.reinterpret/i32
    return

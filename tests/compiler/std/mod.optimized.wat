@@ -86,8 +86,8 @@
    get_local $7
    i64.le_u
    if
-    get_local $9
     get_local $7
+    get_local $9
     i64.eq
     br_if $folding-inner0
     get_local $0
@@ -437,6 +437,7 @@
    tee_local $5
    i32.shl
    set_local $2
+   get_local $8
    get_local $3
    get_local $5
    i32.sub
@@ -459,7 +460,6 @@
     i32.shr_u
    end
    tee_local $2
-   get_local $8
    i32.or
    f32.reinterpret/i32
    return

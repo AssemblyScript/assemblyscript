@@ -270,10 +270,11 @@
   i64.const 32
   i64.shr_u
   i32.wrap/i64
-  tee_local $11
+  tee_local $12
   i32.const 2147483647
   i32.and
-  tee_local $12
+  set_local $11
+  get_local $11
   get_local $17
   i32.wrap/i64
   tee_local $7
@@ -303,7 +304,7 @@
   get_local $8
   i32.eqz
   if
-   get_local $12
+   get_local $11
    i32.const 2146435072
    i32.gt_s
    set_local $8
@@ -311,7 +312,7 @@
   get_local $8
   i32.eqz
   if
-   get_local $12
+   get_local $11
    i32.const 2146435072
    i32.eq
    tee_local $8
@@ -333,20 +334,20 @@
   i32.const 0
   i32.lt_s
   if
-   get_local $12
+   get_local $11
    i32.const 1128267776
    i32.ge_s
    if
     i32.const 2
     set_local $16
    else    
-    get_local $12
+    get_local $11
     i32.const 1072693248
     i32.ge_s
     if
      i32.const 52
      i32.const 20
-     get_local $12
+     get_local $11
      i32.const 20
      i32.shr_s
      i32.const 1023
@@ -360,13 +361,14 @@
      i32.sub
      set_local $8
      get_local $7
-     get_local $12
+     get_local $11
      get_local $5
      select
      tee_local $10
      get_local $8
      i32.shr_s
-     tee_local $5
+     set_local $5
+     get_local $5
      get_local $8
      i32.shl
      get_local $10
@@ -385,7 +387,7 @@
   get_local $7
   i32.eqz
   if
-   get_local $12
+   get_local $11
    i32.const 2146435072
    i32.eq
    if
@@ -399,7 +401,7 @@
      i32.const 1072693248
      i32.ge_s
      if
-      get_local $11
+      get_local $12
       i32.const 0
       i32.lt_s
       if
@@ -409,7 +411,7 @@
       get_local $1
       return
      else      
-      get_local $11
+      get_local $12
       i32.const 0
       i32.ge_s
       if (result f64)
@@ -428,11 +430,11 @@
     end
     unreachable
    end
-   get_local $12
+   get_local $11
    i32.const 1072693248
    i32.eq
    if
-    get_local $11
+    get_local $12
     i32.const 0
     i32.ge_s
     if
@@ -444,7 +446,7 @@
     f64.div
     return
    end
-   get_local $11
+   get_local $12
    i32.const 1073741824
    i32.eq
    if
@@ -453,7 +455,7 @@
     f64.mul
     return
    end
-   get_local $11
+   get_local $12
    i32.const 1071644672
    i32.eq
    if
@@ -493,7 +495,7 @@
    end
    get_local $5
    if
-    get_local $11
+    get_local $12
     i32.const 0
     i32.lt_s
     if
@@ -559,11 +561,11 @@
     set_local $13
    end
   end
-  get_local $12
+  get_local $11
   i32.const 1105199104
   i32.gt_s
   if (result f64)
-   get_local $12
+   get_local $11
    i32.const 1139802112
    i32.gt_s
    if
@@ -571,7 +573,7 @@
     i32.const 1072693247
     i32.le_s
     if
-     get_local $11
+     get_local $12
      i32.const 0
      i32.lt_s
      if (result f64)
@@ -586,7 +588,7 @@
     i32.const 1072693248
     i32.ge_s
     if
-     get_local $11
+     get_local $12
      i32.const 0
      i32.gt_s
      if (result f64)
@@ -602,7 +604,7 @@
    i32.const 1072693247
    i32.lt_s
    if
-    get_local $11
+    get_local $12
     i32.const 0
     i32.lt_s
     if (result f64)
@@ -625,7 +627,7 @@
    i32.const 1072693248
    i32.gt_s
    if
-    get_local $11
+    get_local $12
     i32.const 0
     i32.gt_s
     if (result f64)
@@ -704,12 +706,12 @@
     i32.wrap/i64
     set_local $4
    end
-   get_local $7
    get_local $4
    i32.const 20
    i32.shr_s
    i32.const 1023
    i32.sub
+   get_local $7
    i32.add
    set_local $7
    get_local $4
@@ -1020,12 +1022,12 @@
     i32.const 1071644672
     i32.gt_s
     if
-     get_local $5
      i32.const 1048576
      get_local $10
      i32.const 1
      i32.add
      i32.shr_s
+     get_local $5
      i32.add
      tee_local $7
      i32.const 2147483647
@@ -1035,12 +1037,12 @@
      i32.const 1023
      i32.sub
      set_local $10
-     get_local $7
      i32.const 1048575
      get_local $10
      i32.shr_s
      i32.const -1
      i32.xor
+     get_local $7
      i32.and
      i64.extend_s/i32
      i64.const 32
@@ -2138,8 +2140,8 @@
    i32.eqz
    set_local $0
   end
-  get_local $1
   get_local $0
+  get_local $1
   i32.ne
   if
    i32.const 0

@@ -28,11 +28,11 @@
     get_local $3
     i32.ge_u
     br_if $break|0
-    get_local $2
     get_local $0
     get_local $1
     i32.add
     i32.load8_u offset=4
+    get_local $2
     i32.xor
     i32.const 16777619
     i32.mul

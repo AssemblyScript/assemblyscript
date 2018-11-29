@@ -96,22 +96,22 @@
   i32.load offset=4
   set_local $2
   get_local $1
-  get_local $0
   get_local $1
   i32.load
   i32.const 3
   i32.and
+  get_local $0
   i32.or
   i32.store
   get_local $1
   get_local $2
   i32.store offset=4
   get_local $2
-  get_local $1
   get_local $2
   i32.load
   i32.const 3
   i32.and
+  get_local $1
   i32.or
   i32.store
   get_local $0
@@ -121,8 +121,8 @@
  (func $~lib/collector/itcm/ManagedObject#makeGray (; 4 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  get_local $0
   get_global $~lib/collector/itcm/iter
+  get_local $0
   i32.eq
   if
    get_local $0
@@ -139,11 +139,11 @@
   tee_local $1
   i32.store offset=4
   get_local $1
-  get_local $2
   get_local $1
   i32.load
   i32.const 3
   i32.and
+  get_local $2
   i32.or
   i32.store
   get_global $~lib/collector/itcm/toSpace
@@ -162,6 +162,7 @@
   (local $1 i32)
   get_local $0
   if
+   get_global $~lib/collector/itcm/white
    get_local $0
    i32.const 16
    i32.sub
@@ -169,7 +170,6 @@
    i32.load
    i32.const 3
    i32.and
-   get_global $~lib/collector/itcm/white
    i32.eq
    if
     get_local $1
@@ -243,12 +243,12 @@
      get_local $0
      set_global $~lib/collector/itcm/iter
      get_local $0
+     get_global $~lib/collector/itcm/white
+     i32.eqz
      get_local $0
      i32.load
      i32.const -4
      i32.and
-     get_global $~lib/collector/itcm/white
-     i32.eqz
      i32.or
      i32.store
      i32.const 1
@@ -266,11 +266,11 @@
      get_global $std/gc-basics/obj2
      i32.const 2
      call_indirect (type $iv)
+     get_global $~lib/collector/itcm/toSpace
      get_global $~lib/collector/itcm/iter
      i32.load
      i32.const -4
      i32.and
-     get_global $~lib/collector/itcm/toSpace
      i32.eq
      if
       get_global $~lib/collector/itcm/fromSpace
@@ -325,11 +325,11 @@
   i32.const 1
   i32.store offset=8
   get_local $0
+  get_global $~lib/collector/itcm/white
   get_local $0
   i32.load
   i32.const -4
   i32.and
-  get_global $~lib/collector/itcm/white
   i32.or
   i32.store
   get_global $~lib/collector/itcm/fromSpace
@@ -422,8 +422,8 @@
   end
   get_local $1
   if
-   get_local $3
    get_local $2
+   get_local $3
    i32.eq
    set_local $1
   end
