@@ -12,7 +12,6 @@ Atomic.store<i16>(2, <i64>16);
 Atomic.store<i32>(4, <i64>32);
 Atomic.store<i64>(8, <i64>64);
 
-
 // Atomic load
 i = Atomic.load<i8>(0);
 i = Atomic.load<i16>(2);

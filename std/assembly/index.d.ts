@@ -168,6 +168,10 @@ declare namespace Atomic {
   export function xchg<T>(ptr: usize, value: T, constantOffset?: usize): T;
   /** Atomically compare exchange a value of the specified type to memory.*/
   export function cmpxchg<T>(ptr: usize, expected:T, replacement: T, constantOffset?: usize): T;
+  
+  export function wait<T>(offset: usize, expected: T, timeout: i64): i32;
+    
+  export function wake<T>(offset: usize, count: u32): u32;
 }
 
 /** Converts any other numeric value to an 8-bit signed integer. */
@@ -239,6 +243,9 @@ declare namespace i32 {
     export function store16(offset: usize, value: i32, constantOffset?: usize): void;
     /** Atomically stores a 32-bit integer to memory. */
     export function store(offset: usize, value: i32, constantOffset?: usize): void;
+    
+    export function wait(offset: usize, expected: i32, timeout: i64): i32;
+    export function wake(offset: usize, count: u32): u32;
 
     namespace rmw8_u {
       export function add(offset: usize, value: i32, constantOffset?: usize): i32
@@ -328,6 +335,9 @@ declare namespace i64 {
     export function store32(offset: usize, value: i64, constantOffset?: usize): void;
     /** Atomically stores a 64-bit integer to memory. */
     export function store(offset: usize, value: i64, constantOffset?: usize): void;
+    
+    export function wait(offset: usize, expected: i64, timeout: i64): i32;
+    export function wake(offset: usize, count: u32): u32;
 
     namespace rmw8_u {
       export function add(offset: usize, value: i64, constantOffset?: usize): i64

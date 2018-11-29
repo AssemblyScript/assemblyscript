@@ -1942,6 +1942,114 @@ export function compileCall(
         typeArguments[0].byteSize, offset, arg0, arg1, arg2, type.toNativeType()
       );
     }
+    case "Atomic.wait": { // wait<T!>(ptr: usize, expected:T, timeout: i64): i32;
+      let hasError = typeArguments == null;
+      if (operands.length != 3) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "3", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        hasError = true;
+      }
+
+      if (!typeArguments || hasError) {
+        return module.createUnreachable();
+      }
+
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg1 = compiler.compileExpression(
+        operands[1],
+        typeArguments[0],
+        typeArguments[0].is(TypeFlags.INTEGER)
+          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+          : ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg2 = compiler.compileExpression(
+        operands[2],
+        Type.i64,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+
+      let type: Type = typeArguments[0];
+      if (
+        typeArguments[0].is(TypeFlags.INTEGER) &&
+        (
+          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
+          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+        )
+      ) {
+        arg1 = compiler.convertExpression(
+          arg1,
+          compiler.currentType, typeArguments[0],
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[1]
+        );
+        arg2 = compiler.convertExpression(
+          arg2,
+          compiler.currentType, typeArguments[0],
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[2]
+        );
+      }
+
+      return module.createAtomicWait(
+        arg0, arg1, arg2, type.toNativeType()
+      );
+    }
+    case "Atomic.wake": { // wake<T!>(ptr: usize, count: u32): u32;
+      let hasError = typeArguments == null;
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        hasError = true;
+      }
+
+      if (!typeArguments || hasError) {
+        return module.createUnreachable();
+      }
+
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg1 = compiler.compileExpression(
+        operands[1],
+        Type.i32,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+
+      return module.createAtomicWake(
+        arg0, arg1
+      );
+    }
     case "sizeof": { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
       if (operands.length != 0) {
@@ -3159,11 +3267,10 @@ function deferASMCall(
     case "i64.atomic.rmw32_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u32, operands, Type.u64, reportNode);
     case "i64.atomic.rmw.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u64, operands, Type.u64, reportNode);
 
-    // TODO: wait - wake postponed to next version
-    // case "i32.atomic.wait": return deferASM("Atomic.wait", compiler, Type.u32, operands, Type.u32, reportNode);
-    // case "i64.atomic.wait": return deferASM("Atomic.wait", compiler, Type.u64, operands, Type.u64, reportNode);
-    // case "i32.atomic.wake": return deferASM("Atomic.wake", compiler, Type.u32, operands, Type.u32, reportNode);
-    // case "i64.atomic.wake": return deferASM("Atomic.wake", compiler, Type.u32, operands, Type.u32, reportNode);
+    case "i32.wait": return deferASM("Atomic.wait", compiler, Type.i32, operands, Type.u32, reportNode);
+    case "i64.wait": return deferASM("Atomic.wait", compiler, Type.i64, operands, Type.i64, reportNode);
+    case "i32.wake": return deferASM("Atomic.wake", compiler, Type.i32, operands, Type.u32, reportNode);
+    case "i64.wake": return deferASM("Atomic.wake", compiler, Type.i64, operands, Type.i64, reportNode);
   }
   return 0;
 }
