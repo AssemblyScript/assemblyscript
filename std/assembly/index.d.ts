@@ -112,6 +112,8 @@ declare function changetype<T>(value: any): T;
 declare function unchecked<T>(value: T): T;
 /** Emits a `call_indirect` instruction, calling the specified function in the function table by index with the specified arguments. Does result in a runtime error if the arguments do not match the called function. */
 declare function call_indirect<T>(target: Function | u32, ...args: any[]): T;
+/** Instantiates a new instance of `T` using the specified constructor arguments. */
+declare function instantiate<T>(...args: any[]): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
