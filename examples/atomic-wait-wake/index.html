@@ -91,16 +91,17 @@
                     case "inited":{
                         readyCount++;
                         if(readyCount === 2) {
-                            // workers[0].postMessage({ command: "wait", value: 1  });
-                            // setTimeout(() => {
-                            //     workers[1].postMessage({ command: "wake", value: 1  });
-                            // }, 1000)
-                            // setTimeout(() => {
-                            //     workers[0].postMessage({ command: "wait_js", value: 1 });
-                            // }, 2000)
-                            // setTimeout(() => {
-                            //     workers[1].postMessage({ command: "wake", value: 2 });
-                            // }, 3000)
+                            workers[0].postMessage({ command: "wait", value: 1  });
+                            setTimeout(() => {
+                                workers[1].postMessage({ command: "wake", value: 1  });
+                            }, 1000)
+
+                            setTimeout(() => {
+                                workers[0].postMessage({ command: "wait_js", value: 1 });
+                            }, 1500)
+                            setTimeout(() => {
+                                workers[1].postMessage({ command: "wake", value: 2 });
+                            }, 3000)
                             // setTimeout(() => {
                             //     workers[0].postMessage({ command: "wait_i64", value: 1 });
                             // }, 0)
@@ -109,10 +110,10 @@
                             // }, 1000)
                             setTimeout(() => {
                                 workers[0].postMessage({ command: "wait", value: 1 });
-                            }, 0)
-                            // setTimeout(() => {
-                            //     workers[1].postMessage({ command: "wake", value: 2 });
-                            // }, 1000)
+                            }, 3500)
+                            setTimeout(() => {
+                                workers[1].postMessage({ command: "wake_js", value: 2 });
+                            }, 5000)
                         }
                         break;
                     }
