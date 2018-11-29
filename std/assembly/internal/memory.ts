@@ -144,7 +144,7 @@ export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/s
 
 // this function will go away once `memory.copy` becomes an intrinsic
 export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
-  if (dest == src) return;
+  if (dest === src) return;
   if (src + n <= dest || dest + n <= src) {
     memcpy(dest, src, n);
     return;
