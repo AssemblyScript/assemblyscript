@@ -8,9 +8,9 @@ function onMessageReceived(e) {
             case "init": {
                 memory = data.memory;
                 i32 = new Int32Array(memory.buffer);
-                Atomics.store(i32, 0, 123);
-                console.log("Stored", 123);
                 setTimeout(() => {
+                    Atomics.store(i32, 0, 123);
+                    console.log("Stored", 123);
                     Atomics.wake(i32, 0, 1);
                 }, 2000);
             }

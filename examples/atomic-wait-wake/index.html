@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Shared Memory - AssemblyScript</title>
+        <title>Atomic wait wake - AssemblyScript</title>
         <link rel="icon" href="http://assemblyscript.org/favicon.ico" type="image/x-icon" />
         <meta name="viewport" content="user-scalable=0" />
         <style>
@@ -43,19 +43,24 @@
                 height: calc(100% - 80px);
                 background: #070809;
             }
+            .info {
+                padding: 2rem;
+            }
         </style>
     </head>
 
     <body>
         <h1>
-            <a href="https://github.com/WebAssembly/threads">Shared Memory</a> in
+            <a href="https://github.com/WebAssembly/threads">Atomic wait wake</a> in
             <a href="http://assemblyscript.org">AssemblyScript</a> (
             <a
                 href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/shared-memory/assembly/index.ts"
                 >source</a
             >
             )
+            <br>
         </h1>
+        <div class="info">Open console to results</div>
         <script>
             "use strict";
 
@@ -66,43 +71,54 @@
             });
             const memoryView = new DataView(memory.buffer);
             let _exports = {};
-
+            const workers = [];
             async function init() {
-                const res = await fetch("build/untouched.wasm");
+                const res = await fetch("build/optimized.wasm");
                 const buffer = await res.arrayBuffer();
-                const module1 = await WebAssembly.instantiate(buffer, {
-                    env: {
-                        memory,
-                        abort: function() {},
-                    },
-                    index: {
-                        log: console.log,
-                    },
-                });
-                const module2 = await WebAssembly.instantiate(buffer, {
-                    env: {
-                        memory,
-                        abort: function() {},
-                    },
-                    index: {
-                        log: console.log,
-                    },
-                });
-                const exp1 = module1.instance.exports;
-                const exp2 = module2.instance.exports;
-
-                _exports.exp1 = exp1;
-                _exports.exp2 = exp2;
-
-                _exports.exp1.wait();
-                // _exports.exp2.wake();
+                const wasm = await WebAssembly.compile(buffer);
+                let worker1 = new Worker("./js/worker1.js");
+                let worker2 = new Worker("./js/worker1.js");
+                worker1.onmessage = handleMessage;
+                worker2.onmessage = handleMessage;
+                workers.push(worker1)
+                workers.push(worker2);
+                worker1.postMessage({ command: "init", id:1, memory, wasm });
+                worker2.postMessage({ command: "init", id:2, memory, wasm });
             }
-
-            // init();
-            let worker1 = new Worker("./js/worker1.js");
-            let worker2 = new Worker("./js/worker2.js");
-            worker1.postMessage({ command: "init", memory });
-            worker2.postMessage({ command: "init", memory });
+            let readyCount = 0;
+            function handleMessage(event) {
+                switch(event.data.command){
+                    case "inited":{
+                        readyCount++;
+                        if(readyCount === 2) {
+                            // workers[0].postMessage({ command: "wait", value: 1  });
+                            // setTimeout(() => {
+                            //     workers[1].postMessage({ command: "wake", value: 1  });
+                            // }, 1000)
+                            // setTimeout(() => {
+                            //     workers[0].postMessage({ command: "wait_js", value: 1 });
+                            // }, 2000)
+                            // setTimeout(() => {
+                            //     workers[1].postMessage({ command: "wake", value: 2 });
+                            // }, 3000)
+                            // setTimeout(() => {
+                            //     workers[0].postMessage({ command: "wait_i64", value: 1 });
+                            // }, 0)
+                            // setTimeout(() => {
+                            //     workers[1].postMessage({ command: "wake_i64", value: 2 });
+                            // }, 1000)
+                            setTimeout(() => {
+                                workers[0].postMessage({ command: "wait", value: 1 });
+                            }, 0)
+                            // setTimeout(() => {
+                            //     workers[1].postMessage({ command: "wake", value: 2 });
+                            // }, 1000)
+                        }
+                        break;
+                    }
+                }
+            }
+            init();
         </script>
     </body>
 </html>

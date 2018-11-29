@@ -3267,10 +3267,10 @@ function deferASMCall(
     case "i64.atomic.rmw32_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u32, operands, Type.u64, reportNode);
     case "i64.atomic.rmw.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u64, operands, Type.u64, reportNode);
 
-    case "i32.atomic.wait": return deferASM("Atomic.wait", compiler, Type.u32, operands, Type.u32, reportNode);
-    case "i64.atomic.wait": return deferASM("Atomic.wait", compiler, Type.u64, operands, Type.u64, reportNode);
-    case "i32.atomic.wake": return deferASM("Atomic.wake", compiler, Type.u32, operands, Type.u32, reportNode);
-    case "i64.atomic.wake": return deferASM("Atomic.wake", compiler, Type.u32, operands, Type.u32, reportNode);
+    case "i32.wait": return deferASM("Atomic.wait", compiler, Type.i32, operands, Type.u32, reportNode);
+    case "i64.wait": return deferASM("Atomic.wait", compiler, Type.i64, operands, Type.i64, reportNode);
+    case "i32.wake": return deferASM("Atomic.wake", compiler, Type.i32, operands, Type.u32, reportNode);
+    case "i64.wake": return deferASM("Atomic.wake", compiler, Type.i64, operands, Type.i64, reportNode);
   }
   return 0;
 }
