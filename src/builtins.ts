@@ -2734,6 +2734,25 @@ export function compileCall(
       // thus must be used with care. it exists because it *might* be useful in specific scenarios.
       return module.createCallIndirect(arg0, operandExprs, typeName);
     }
+    case "instantiate": {
+      if (!(typeArguments && typeArguments.length == 1)) {
+        if (typeArguments && typeArguments.length) compiler.currentType = typeArguments[0];
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+      let classInstance = typeArguments[0].classReference;
+      if (!classInstance) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      return compiler.compileInstantiate(classInstance, operands, reportNode);
+    }
 
     // user-defined diagnostic macros
 

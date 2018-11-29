@@ -6656,9 +6656,10 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     if (!classInstance) return module.createUnreachable();
+    return this.compileInstantiate(classInstance, expression.arguments, expression);
+  }
 
-    var expr: ExpressionRef;
-
+  compileInstantiate(classInstance: Class, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
     // traverse to the top-most visible constructor
     var currentClassInstance: Class | null = classInstance;
     var constructorInstance: Function | null = null;
@@ -6668,14 +6669,21 @@ export class Compiler extends DiagnosticEmitter {
     } while (currentClassInstance = currentClassInstance.base);
 
     // if a constructor is present, call it with a zero `this`
+    var expr: ExpressionRef;
     if (constructorInstance) {
-      expr = this.compileCallDirect(constructorInstance, expression.arguments, expression,
-        options.usizeType.toNativeZero(module)
+      expr = this.compileCallDirect(constructorInstance, argumentExpressions, reportNode,
+        this.options.usizeType.toNativeZero(this.module)
       );
 
     // otherwise simply allocate a new instance and initialize its fields
     } else {
-      expr = this.makeAllocate(classInstance, expression);
+      if (argumentExpressions.length) {
+        this.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "0", argumentExpressions.length.toString(10)
+        );
+      }
+      expr = this.makeAllocate(classInstance, reportNode);
     }
 
     this.currentType = classInstance.type;

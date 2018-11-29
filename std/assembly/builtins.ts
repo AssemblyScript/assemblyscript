@@ -41,6 +41,7 @@
 @builtin export declare function assert<T>(isTrueish: T, message?: string): T;
 @builtin export declare function unchecked<T>(expr: T): T;
 @builtin export declare function call_indirect<T>(target: void, ...args: void[]): T;
+@builtin export declare function instantiate<T>(...args: void[]): T;
 
 export namespace Atomic {
   @builtin export declare function load<T>(offset: usize, constantOffset?: usize): T;
