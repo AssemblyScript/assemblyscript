@@ -4,7 +4,7 @@ import {
   Opcode
 } from "../../src/common";
 
-import {readVaruint, readUint} from "..";
+import {Buffer} from "../buffer";
 
 
 // export function parseExpr(): Instruction[] {
@@ -23,8 +23,8 @@ export class Instruction {
   constructor(public opcode: Opcode){
   }
 
-  static parse(): Instruction {
-    let byte: u8 = changetype<u8>(readUint<u8>());
+  static parse(buf: Buffer): Instruction {
+    let byte: u8 = changetype<u8>(buf.readUint<u8>());
     switch(byte){
       case Opcode.unreachable:
       case Opcode.nop:
@@ -39,7 +39,7 @@ export class Instruction {
       case Opcode.return_:
       case Opcode.call:
       case Opcode.call_indirect: {
-        return new ControlInstruction(byte);
+        return ControlInstruction.parse(byte);
       }
       case Opcode.drop:
       case Opcode.select:
