@@ -5410,11 +5410,27 @@ export class Compiler extends DiagnosticEmitter {
           (<Class>parent).type,
           "this"
         );
+        let parentBase = (<Class>parent).base;
+        if (parentBase) {
+          flow.addScopedLocalAlias(
+            getGetLocalIndex(thisArg),
+            parentBase.type,
+            "super"
+          );
+        }
       } else {
         let thisLocal = flow.addScopedLocal((<Class>parent).type, "this", false);
         body.push(
           module.createSetLocal(thisLocal.index, thisArg)
         );
+        let parentBase = (<Class>parent).base;
+        if (parentBase) {
+          flow.addScopedLocalAlias(
+            thisLocal.index,
+            parentBase.type,
+            "super"
+          );
+        }
       }
     }
     var parameterTypes = signature.parameterTypes;
