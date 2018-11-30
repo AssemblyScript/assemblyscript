@@ -4,8 +4,6 @@
  (type $F (func (result f64)))
  (type $iIi (func (param i32 i64) (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iI (func (param i32) (result i64)))
- (type $iII (func (param i32 i64) (result i64)))
  (type $v (func))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -132,17 +130,7 @@
   i64.store
   get_local $0
  )
- (func $~lib/date/Date#getTime (; 6 ;) (type $iI) (param $0 i32) (result i64)
-  get_local $0
-  i64.load
- )
- (func $~lib/date/Date#setTime (; 7 ;) (type $iII) (param $0 i32) (param $1 i64) (result i64)
-  get_local $0
-  get_local $1
-  i64.store
-  get_local $1
- )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 6 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -292,8 +280,12 @@
   get_global $std/date/creationTime
   call $~lib/date/Date#constructor
   set_global $std/date/date
-  get_global $std/date/date
-  call $~lib/date/Date#getTime
+  block $~lib/date/Date#getTime|inlined.0 (result i64)
+   get_global $std/date/date
+   set_local $5
+   get_local $5
+   i64.load
+  end
   get_global $std/date/creationTime
   i64.eq
   i32.eqz
@@ -305,14 +297,25 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/date/date
-  get_global $std/date/creationTime
-  i64.const 1
-  i64.add
-  call $~lib/date/Date#setTime
+  block $~lib/date/Date#setTime|inlined.0 (result i64)
+   get_global $std/date/date
+   set_local $5
+   get_global $std/date/creationTime
+   i64.const 1
+   i64.add
+   set_local $6
+   get_local $5
+   get_local $6
+   i64.store
+   get_local $6
+  end
   drop
-  get_global $std/date/date
-  call $~lib/date/Date#getTime
+  block $~lib/date/Date#getTime|inlined.1 (result i64)
+   get_global $std/date/date
+   set_local $5
+   get_local $5
+   i64.load
+  end
   get_global $std/date/creationTime
   i64.const 1
   i64.add
@@ -327,6 +330,6 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (type $v)
+ (func $null (; 7 ;) (type $v)
  )
 )

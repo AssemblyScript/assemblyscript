@@ -25,14 +25,16 @@ const EMPTY: usize = 1 << 0;
 const BUCKET_SIZE = sizeof<usize>();
 
 /** Computes the alignment of an entry. */
-@inline function ENTRY_ALIGN<K>(): usize {
+@inline
+function ENTRY_ALIGN<K>(): usize {
   // can align to 4 instead of 8 if 32-bit and K is <= 32-bits
   const align = (sizeof<K>() > sizeof<usize>() ? sizeof<K>() : sizeof<usize>()) - 1;
   return align;
 }
 
 /** Computes the aligned size of an entry. */
-@inline function ENTRY_SIZE<K>(): usize {
+@inline
+function ENTRY_SIZE<K>(): usize {
   const align = ENTRY_ALIGN<K>();
   const size = (offsetof<SetEntry<K>>() + align) & ~align;
   return size;
@@ -50,7 +52,10 @@ export class Set<K> {
   private entriesOffset: i32;
   private entriesCount: i32;
 
-  get size(): i32 { return this.entriesCount; }
+  @inline
+  get size(): i32 {
+    return this.entriesCount;
+  }
 
   constructor() { this.clear(); }
 
@@ -153,6 +158,7 @@ export class Set<K> {
     this.entriesOffset = this.entriesCount;
   }
 
+  @inline
   toString(): string {
     return "[object Set]";
   }

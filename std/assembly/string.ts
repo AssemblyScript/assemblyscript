@@ -71,6 +71,7 @@ export class String {
     return out;
   }
 
+  @inline
   charCodeAt(pos: i32): i32 {
     assert(this !== null);
     if (<u32>pos >= <u32>this.length) return -1; // (NaN)
@@ -100,7 +101,7 @@ export class String {
     return ((first - 0xD800) << 10) + (second - 0xDC00) + 0x10000;
   }
 
-  @operator("+")
+  @inline @operator("+")
   private static __concat(left: String, right: String): String {
     if (!changetype<usize>(left)) left = changetype<String>("null");
     return left.concat(right);
@@ -468,6 +469,7 @@ export class String {
     return result;
   }
 
+  @inline
   toString(): String {
     return this;
   }
@@ -579,14 +581,17 @@ export class String {
   }
 }
 
+@inline
 export function parseInt(str: String, radix: i32 = 0): f64 {
   return parse<f64>(str, radix);
 }
 
+@inline
 export function parseI32(str: String, radix: i32 = 0): i32 {
   return parse<i32>(str, radix);
 }
 
+@inline
 export function parseI64(str: String, radix: i32 = 0): i64 {
   return parse<i64>(str, radix);
 }

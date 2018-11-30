@@ -26,7 +26,8 @@ const EMPTY: usize = 1 << 0;
 const BUCKET_SIZE = sizeof<usize>();
 
 /** Computes the alignment of an entry. */
-@inline function ENTRY_ALIGN<K,V>(): usize {
+@inline
+function ENTRY_ALIGN<K,V>(): usize {
   // can align to 4 instead of 8 if 32-bit and K/V is <= 32-bits
   const maxkv = sizeof<K>() > sizeof<V>() ? sizeof<K>() : sizeof<V>();
   const align = (maxkv > sizeof<usize>() ? maxkv : sizeof<usize>()) - 1;
@@ -34,7 +35,8 @@ const BUCKET_SIZE = sizeof<usize>();
 }
 
 /** Computes the aligned size of an entry. */
-@inline function ENTRY_SIZE<K,V>(): usize {
+@inline
+function ENTRY_SIZE<K,V>(): usize {
   const align = ENTRY_ALIGN<K,V>();
   const size = (offsetof<MapEntry<K,V>>() + align) & ~align;
   return size;
@@ -52,7 +54,10 @@ export class Map<K,V> {
   private entriesOffset: i32;
   private entriesCount: i32;
 
-  get size(): i32 { return this.entriesCount; }
+  @inline
+  get size(): i32 {
+    return this.entriesCount;
+  }
 
   constructor() { this.clear(); }
 
@@ -165,6 +170,7 @@ export class Map<K,V> {
     this.entriesOffset = this.entriesCount;
   }
 
+  @inline
   toString(): string {
     return "[object Map]";
   }

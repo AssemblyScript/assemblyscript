@@ -3046,7 +3046,7 @@
   if
    i32.const 0
    i32.const 504
-   i32.const 110
+   i32.const 111
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3107,6 +3107,7 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   get_local $0
   set_local $1
   i32.const 168
@@ -3283,11 +3284,23 @@
    end
    unreachable
   end
-  i32.const 464
-  get_local $2
-  call $~lib/string/String.__concat
-  i32.const 592
-  call $~lib/string/String.__concat
+  block $~lib/string/String.__concat|inlined.1 (result i32)
+   i32.const 464
+   get_local $2
+   call $~lib/string/String.__concat
+   set_local $3
+   i32.const 592
+   set_local $4
+   get_local $3
+   i32.eqz
+   if
+    i32.const 488
+    set_local $3
+   end
+   get_local $3
+   get_local $4
+   call $~lib/string/String#concat
+  end
  )
  (func $start (; 35 ;) (type $v)
   get_global $HEAP_BASE

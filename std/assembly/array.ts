@@ -36,7 +36,8 @@ export class Array<T> {
   /* @internal */ buffer_: ArrayBuffer;
   /* @internal */ length_: i32;
 
-  @inline static isArray<U>(value: U): bool {
+  @inline
+  static isArray<U>(value: U): bool {
     return builtin_isArray(value) && value !== null;
   }
 
@@ -95,7 +96,7 @@ export class Array<T> {
       : <T>unreachable();
   }
 
-  @operator("{}")
+  @inline @operator("{}")
   private __unchecked_get(index: i32): T {
     return loadUnsafe<T,T>(this.buffer_, index);
   }
@@ -115,7 +116,7 @@ export class Array<T> {
     if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line
   }
 
-  @operator("{}=")
+  @inline @operator("{}=")
   private __unchecked_set(index: i32, value: T): void {
     storeUnsafe<T,T>(this.buffer_, index, value);
     if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(value)); // tslint:disable-line

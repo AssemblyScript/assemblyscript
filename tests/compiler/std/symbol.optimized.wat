@@ -2332,7 +2332,7 @@
   if
    i32.const 0
    i32.const 504
-   i32.const 110
+   i32.const 111
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2370,18 +2370,7 @@
   call $~lib/internal/string/copyUnsafe
   get_local $2
  )
- (func $~lib/string/String.__concat (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  i32.eqz
-  if
-   i32.const 488
-   set_local $0
-  end
-  get_local $0
-  get_local $1
-  call $~lib/string/String#concat
- )
- (func $~lib/symbol/symbol#toString (; 27 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/symbol#toString (; 26 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 168
@@ -2455,28 +2444,35 @@
    get_global $~lib/symbol/idToString
    i32.const 0
    i32.ne
-   tee_local $2
+   tee_local $0
    if
     get_global $~lib/symbol/idToString
-    get_local $0
+    get_local $2
     call $~lib/map/Map<usize,String>#has
-    set_local $2
+    set_local $0
    end
-   get_local $2
+   get_local $0
    if
     get_global $~lib/symbol/idToString
-    get_local $0
+    get_local $2
     call $~lib/map/Map<usize,String>#get
     set_local $1
    end
   end
   i32.const 464
   get_local $1
-  call $~lib/string/String.__concat
+  call $~lib/string/String#concat
+  tee_local $0
+  i32.eqz
+  if
+   i32.const 488
+   set_local $0
+  end
+  get_local $0
   i32.const 592
-  call $~lib/string/String.__concat
+  call $~lib/string/String#concat
  )
- (func $start (; 28 ;) (type $v)
+ (func $start (; 27 ;) (type $v)
   (local $0 i32)
   i32.const 760
   set_global $~lib/allocator/arena/startOffset
@@ -2653,7 +2649,7 @@
    unreachable
   end
  )
- (func $null (; 29 ;) (type $v)
+ (func $null (; 28 ;) (type $v)
   nop
  )
 )

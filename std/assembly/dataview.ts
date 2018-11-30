@@ -183,7 +183,8 @@ export class DataView {
   }
 }
 
-@inline function checkOffset(byteOffset: i32, n: i32, byteLength: i32): void {
+@inline
+function checkOffset(byteOffset: i32, n: i32, byteLength: i32): void {
   // n and byteLength must be known to be in bounds
   if (<u32>byteOffset > <u32>MAX_BLENGTH || byteOffset + n > byteLength) throw new Error("Offset out of bounds");
 }

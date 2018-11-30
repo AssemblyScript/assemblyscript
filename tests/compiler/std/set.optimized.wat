@@ -754,11 +754,12 @@
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
   set_local $1
-  loop $repeat|0
-   get_local $0
-   i32.const 100
-   i32.lt_s
-   if
+  block $break|0
+   loop $repeat|0
+    get_local $0
+    i32.const 100
+    i32.ge_s
+    br_if $break|0
     get_local $1
     get_local $0
     call $~lib/set/Set<i8>#has
@@ -791,7 +792,9 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -1290,11 +1293,12 @@
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
   set_local $1
-  loop $repeat|0
-   get_local $0
-   i32.const 100
-   i32.lt_u
-   if
+  block $break|0
+   loop $repeat|0
+    get_local $0
+    i32.const 100
+    i32.ge_u
+    br_if $break|0
     get_local $1
     get_local $0
     call $~lib/set/Set<u8>#has
@@ -1327,7 +1331,9 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -1914,11 +1920,12 @@
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
   set_local $1
-  loop $repeat|0
-   get_local $0
-   i32.const 100
-   i32.lt_s
-   if
+  block $break|0
+   loop $repeat|0
+    get_local $0
+    i32.const 100
+    i32.ge_s
+    br_if $break|0
     get_local $1
     get_local $0
     call $~lib/set/Set<i16>#has
@@ -1951,7 +1958,9 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -2487,11 +2496,12 @@
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
   set_local $1
-  loop $repeat|0
-   get_local $0
-   i32.const 100
-   i32.lt_u
-   if
+  block $break|0
+   loop $repeat|0
+    get_local $0
+    i32.const 100
+    i32.ge_u
+    br_if $break|0
     get_local $1
     get_local $0
     call $~lib/set/Set<u16>#has
@@ -2524,7 +2534,9 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -3079,11 +3091,12 @@
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
   set_local $1
-  loop $repeat|0
-   get_local $0
-   i32.const 100
-   i32.lt_s
-   if
+  block $break|0
+   loop $repeat|0
+    get_local $0
+    i32.const 100
+    i32.ge_s
+    br_if $break|0
     get_local $1
     get_local $0
     call $~lib/set/Set<i32>#has
@@ -3116,7 +3129,9 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -3335,11 +3350,12 @@
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
   set_local $1
-  loop $repeat|0
-   get_local $0
-   i32.const 100
-   i32.lt_u
-   if
+  block $break|0
+   loop $repeat|0
+    get_local $0
+    i32.const 100
+    i32.ge_u
+    br_if $break|0
     get_local $1
     get_local $0
     call $~lib/set/Set<i32>#has
@@ -3372,7 +3388,9 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4013,11 +4031,12 @@
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
   set_local $1
-  loop $repeat|0
-   get_local $0
-   i64.const 100
-   i64.lt_s
-   if
+  block $break|0
+   loop $repeat|0
+    get_local $0
+    i64.const 100
+    i64.ge_s
+    br_if $break|0
     get_local $1
     get_local $0
     call $~lib/set/Set<i64>#has
@@ -4050,7 +4069,9 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4269,11 +4290,12 @@
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
   set_local $1
-  loop $repeat|0
-   get_local $0
-   i64.const 100
-   i64.lt_u
-   if
+  block $break|0
+   loop $repeat|0
+    get_local $0
+    i64.const 100
+    i64.ge_u
+    br_if $break|0
     get_local $1
     get_local $0
     call $~lib/set/Set<i64>#has
@@ -4306,7 +4328,9 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -4836,11 +4860,13 @@
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
   set_local $1
-  loop $repeat|0
-   get_local $0
-   f32.const 100
-   f32.lt
-   if
+  block $break|0
+   loop $repeat|0
+    get_local $0
+    f32.const 100
+    f32.lt
+    i32.eqz
+    br_if $break|0
     get_local $1
     get_local $0
     call $~lib/set/Set<f32>#has
@@ -4873,7 +4899,9 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
   get_local $1
   i32.load offset=20
@@ -5406,11 +5434,13 @@
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
   set_local $1
-  loop $repeat|0
-   get_local $0
-   f64.const 100
-   f64.lt
-   if
+  block $break|0
+   loop $repeat|0
+    get_local $0
+    f64.const 100
+    f64.lt
+    i32.eqz
+    br_if $break|0
     get_local $1
     get_local $0
     call $~lib/set/Set<f64>#has
@@ -5443,7 +5473,9 @@
      unreachable
     end
     unreachable
+    unreachable
    end
+   unreachable
   end
   get_local $1
   i32.load offset=20

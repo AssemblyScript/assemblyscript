@@ -77,15 +77,18 @@ export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): Array
 //
 // TODO: is there a better way to model this?
 
-@inline export function loadUnsafe<T,TOut>(buffer: ArrayBuffer, index: i32): TOut {
+@inline
+export function loadUnsafe<T,TOut>(buffer: ArrayBuffer, index: i32): TOut {
   return <TOut>load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE);
 }
 
-@inline export function storeUnsafe<T,TIn>(buffer: ArrayBuffer, index: i32, value: TIn): void {
+@inline
+export function storeUnsafe<T,TIn>(buffer: ArrayBuffer, index: i32, value: TIn): void {
   store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE);
 }
 
-@inline export function loadUnsafeWithOffset<T,TOut>(
+@inline
+export function loadUnsafeWithOffset<T,TOut>(
   buffer: ArrayBuffer,
   index: i32,
   byteOffset: i32
@@ -93,7 +96,8 @@ export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): Array
   return <TOut>load<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), HEADER_SIZE);
 }
 
-@inline export function storeUnsafeWithOffset<T,TIn>(
+@inline
+export function storeUnsafeWithOffset<T,TIn>(
   buffer: ArrayBuffer,
   index: i32,
   value: TIn,
