@@ -64,18 +64,40 @@ export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): Array
   return buffer;
 }
 
-@inline export function loadUnsafe<T,V>(buffer: ArrayBuffer, index: i32): V {
-  return <V>load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE);
+// The helpers below use two different types in order to emit loads and stores that load respectively
+// store one type to/from memory while returning/taking the desired output/input type. This allows to
+// emit instructions like
+//
+// * `i32.load8` ^= `<i32>load<i8>(...)` that reads an i8 but returns an i32, or
+// * `i64.load32_s` ^= `<i64>load<i32>(...)`) that reads a 32-bit as a 64-bit integer
+//
+// without having to emit an additional instruction for conversion purposes. This is useful for
+// small integers only of course. When dealing with reference types like classes, both parameters
+// are usually the same, even though it looks ugly.
+//
+// TODO: is there a better way to model this?
+
+@inline export function loadUnsafe<T,TOut>(buffer: ArrayBuffer, index: i32): TOut {
+  return <TOut>load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE);
 }
 
-@inline export function storeUnsafe<T,V>(buffer: ArrayBuffer, index: i32, value: V): void {
+@inline export function storeUnsafe<T,TIn>(buffer: ArrayBuffer, index: i32, value: TIn): void {
   store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE);
 }
 
-@inline export function loadUnsafeWithOffset<T,V>(buffer: ArrayBuffer, index: i32, byteOffset: i32): V {
-  return <V>load<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), HEADER_SIZE);
+@inline export function loadUnsafeWithOffset<T,TOut>(
+  buffer: ArrayBuffer,
+  index: i32,
+  byteOffset: i32
+): TOut {
+  return <TOut>load<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), HEADER_SIZE);
 }
 
-@inline export function storeUnsafeWithOffset<T,V>(buffer: ArrayBuffer, index: i32, value: V, byteOffset: i32): void {
+@inline export function storeUnsafeWithOffset<T,TIn>(
+  buffer: ArrayBuffer,
+  index: i32,
+  value: TIn,
+  byteOffset: i32
+): void {
   store<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), value, HEADER_SIZE);
 }
