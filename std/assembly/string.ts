@@ -101,12 +101,13 @@ export class String {
     return ((first - 0xD800) << 10) + (second - 0xDC00) + 0x10000;
   }
 
-  @inline @operator("+")
+  @operator("+")
   private static __concat(left: String, right: String): String {
     if (!changetype<usize>(left)) left = changetype<String>("null");
     return left.concat(right);
   }
 
+  @inline
   concat(other: String): String {
     assert(this !== null);
     if (other === null) other = changetype<String>("null");

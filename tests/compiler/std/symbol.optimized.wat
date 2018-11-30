@@ -2323,51 +2323,60 @@
   i32.shl
   call $~lib/internal/memory/memmove
  )
- (func $~lib/string/String#concat (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
   i32.eqz
   if
-   i32.const 0
-   i32.const 504
-   i32.const 111
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
-  get_local $1
-  i32.eqz
-  if
    i32.const 488
-   set_local $1
+   set_local $0
   end
-  get_local $0
-  i32.load
-  tee_local $3
-  get_local $1
-  i32.load
-  tee_local $4
-  i32.add
-  tee_local $2
-  i32.eqz
-  if
-   i32.const 168
-   return
+  block $~lib/string/String#concat|inlined.0
+   get_local $0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 504
+    i32.const 112
+    i32.const 4
+    call $~lib/env/abort
+    unreachable
+   end
+   get_local $1
+   i32.eqz
+   if
+    i32.const 488
+    set_local $1
+   end
+   get_local $0
+   i32.load
+   tee_local $3
+   get_local $1
+   i32.load
+   tee_local $4
+   i32.add
+   tee_local $2
+   i32.eqz
+   if
+    i32.const 168
+    set_local $2
+    br $~lib/string/String#concat|inlined.0
+   end
+   get_local $2
+   call $~lib/internal/string/allocateUnsafe
+   tee_local $2
+   i32.const 0
+   get_local $0
+   get_local $3
+   call $~lib/internal/string/copyUnsafe
+   get_local $2
+   get_local $3
+   get_local $1
+   get_local $4
+   call $~lib/internal/string/copyUnsafe
   end
-  get_local $2
-  call $~lib/internal/string/allocateUnsafe
-  tee_local $2
-  i32.const 0
-  get_local $0
-  get_local $3
-  call $~lib/internal/string/copyUnsafe
-  get_local $2
-  get_local $3
-  get_local $1
-  get_local $4
-  call $~lib/internal/string/copyUnsafe
   get_local $2
  )
  (func $~lib/symbol/symbol#toString (; 26 ;) (type $ii) (param $0 i32) (result i32)
@@ -2444,33 +2453,26 @@
    get_global $~lib/symbol/idToString
    i32.const 0
    i32.ne
-   tee_local $0
+   tee_local $2
    if
     get_global $~lib/symbol/idToString
-    get_local $2
+    get_local $0
     call $~lib/map/Map<usize,String>#has
-    set_local $0
+    set_local $2
    end
-   get_local $0
+   get_local $2
    if
     get_global $~lib/symbol/idToString
-    get_local $2
+    get_local $0
     call $~lib/map/Map<usize,String>#get
     set_local $1
    end
   end
   i32.const 464
   get_local $1
-  call $~lib/string/String#concat
-  tee_local $0
-  i32.eqz
-  if
-   i32.const 488
-   set_local $0
-  end
-  get_local $0
+  call $~lib/string/String.__concat
   i32.const 592
-  call $~lib/string/String#concat
+  call $~lib/string/String.__concat
  )
  (func $start (; 27 ;) (type $v)
   (local $0 i32)

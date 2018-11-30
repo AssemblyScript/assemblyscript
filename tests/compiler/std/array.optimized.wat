@@ -6282,59 +6282,67 @@
   i32.shl
   call $~lib/internal/memory/memmove
  )
- (func $~lib/string/String#concat (; 106 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 106 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
   i32.eqz
   if
-   i32.const 0
-   i32.const 3976
-   i32.const 111
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
-  get_local $1
-  i32.eqz
-  if
    i32.const 4064
-   set_local $1
+   set_local $0
   end
-  get_local $0
-  i32.load
-  tee_local $3
-  get_local $1
-  i32.load
-  tee_local $4
-  i32.add
-  tee_local $2
-  i32.eqz
-  if
-   i32.const 3824
-   return
+  block $~lib/string/String#concat|inlined.0
+   get_local $0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 3976
+    i32.const 112
+    i32.const 4
+    call $~lib/env/abort
+    unreachable
+   end
+   get_local $1
+   i32.eqz
+   if
+    i32.const 4064
+    set_local $1
+   end
+   get_local $0
+   i32.load
+   tee_local $3
+   get_local $1
+   i32.load
+   tee_local $4
+   i32.add
+   tee_local $2
+   i32.eqz
+   if
+    i32.const 3824
+    set_local $2
+    br $~lib/string/String#concat|inlined.0
+   end
+   get_local $2
+   call $~lib/internal/string/allocateUnsafe
+   tee_local $2
+   i32.const 0
+   get_local $0
+   i32.const 0
+   get_local $3
+   call $~lib/internal/string/copyUnsafe
+   get_local $2
+   get_local $3
+   get_local $1
+   i32.const 0
+   get_local $4
+   call $~lib/internal/string/copyUnsafe
   end
-  get_local $2
-  call $~lib/internal/string/allocateUnsafe
-  tee_local $2
-  i32.const 0
-  get_local $0
-  i32.const 0
-  get_local $3
-  call $~lib/internal/string/copyUnsafe
-  get_local $2
-  get_local $3
-  get_local $1
-  i32.const 0
-  get_local $4
-  call $~lib/internal/string/copyUnsafe
   get_local $2
  )
  (func $std/array/createRandomString (; 107 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   i32.const 3824
   set_local $1
   block $break|0
@@ -6343,6 +6351,7 @@
     get_local $0
     i32.ge_s
     br_if $break|0
+    get_local $1
     call $~lib/math/NativeMath.random
     i32.const 2848
     i32.load
@@ -6351,16 +6360,7 @@
     f64.floor
     i32.trunc_s/f64
     call $~lib/string/String#charAt
-    set_local $3
-    get_local $1
-    i32.eqz
-    if
-     i32.const 4064
-     set_local $1
-    end
-    get_local $1
-    get_local $3
-    call $~lib/string/String#concat
+    call $~lib/string/String.__concat
     set_local $1
     get_local $2
     i32.const 1
@@ -6414,7 +6414,7 @@
   if
    i32.const 0
    i32.const 3976
-   i32.const 270
+   i32.const 271
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9626,32 +9626,18 @@
     i32.load offset=8
     tee_local $2
     if
+     get_local $1
      get_local $2
      i32.const 4136
      call $~lib/array/Array<i32>#join
-     set_local $2
-     get_local $1
-     i32.eqz
-     if
-      i32.const 4064
-      set_local $1
-     end
-     get_local $1
-     get_local $2
-     call $~lib/string/String#concat
+     call $~lib/string/String.__concat
      set_local $1
     end
     get_local $5
     if
      get_local $1
-     i32.eqz
-     if
-      i32.const 4064
-      set_local $1
-     end
-     get_local $1
      i32.const 4136
-     call $~lib/string/String#concat
+     call $~lib/string/String.__concat
      set_local $1
     end
     get_local $0
@@ -9671,19 +9657,11 @@
   i32.load offset=8
   tee_local $2
   if
+   get_local $1
    get_local $2
    i32.const 4136
    call $~lib/array/Array<i32>#join
-   set_local $0
-   get_local $1
-   i32.eqz
-   if
-    i32.const 4064
-    set_local $1
-   end
-   get_local $1
-   get_local $0
-   call $~lib/string/String#concat
+   call $~lib/string/String.__concat
    set_local $1
   end
   get_local $1
@@ -9890,32 +9868,18 @@
     i32.load offset=8
     tee_local $2
     if
+     get_local $1
      get_local $2
      i32.const 4136
      call $~lib/array/Array<u8>#join
-     set_local $2
-     get_local $1
-     i32.eqz
-     if
-      i32.const 4064
-      set_local $1
-     end
-     get_local $1
-     get_local $2
-     call $~lib/string/String#concat
+     call $~lib/string/String.__concat
      set_local $1
     end
     get_local $5
     if
      get_local $1
-     i32.eqz
-     if
-      i32.const 4064
-      set_local $1
-     end
-     get_local $1
      i32.const 4136
-     call $~lib/string/String#concat
+     call $~lib/string/String.__concat
      set_local $1
     end
     get_local $0
@@ -9935,19 +9899,11 @@
   i32.load offset=8
   tee_local $2
   if
+   get_local $1
    get_local $2
    i32.const 4136
    call $~lib/array/Array<u8>#join
-   set_local $0
-   get_local $1
-   i32.eqz
-   if
-    i32.const 4064
-    set_local $1
-   end
-   get_local $1
-   get_local $0
-   call $~lib/string/String#concat
+   call $~lib/string/String.__concat
    set_local $1
   end
   get_local $1
@@ -10011,32 +9967,18 @@
     i32.load offset=8
     tee_local $3
     if
+     get_local $2
      get_local $3
      get_local $1
      call $~lib/array/Array<u32>#join
-     set_local $3
-     get_local $2
-     i32.eqz
-     if
-      i32.const 4064
-      set_local $2
-     end
-     get_local $2
-     get_local $3
-     call $~lib/string/String#concat
+     call $~lib/string/String.__concat
      set_local $2
     end
     get_local $6
     if
      get_local $2
-     i32.eqz
-     if
-      i32.const 4064
-      set_local $2
-     end
-     get_local $2
      get_local $1
-     call $~lib/string/String#concat
+     call $~lib/string/String.__concat
      set_local $2
     end
     get_local $0
@@ -10056,19 +9998,11 @@
   i32.load offset=8
   tee_local $3
   if
+   get_local $2
    get_local $3
    get_local $1
    call $~lib/array/Array<u32>#join
-   set_local $0
-   get_local $2
-   i32.eqz
-   if
-    i32.const 4064
-    set_local $2
-   end
-   get_local $2
-   get_local $0
-   call $~lib/string/String#concat
+   call $~lib/string/String.__concat
    set_local $2
   end
   get_local $2
@@ -10132,32 +10066,18 @@
     i32.load offset=8
     tee_local $2
     if
+     get_local $1
      get_local $2
      i32.const 4136
      call $~lib/array/Array<Array<u32>>#join
-     set_local $2
-     get_local $1
-     i32.eqz
-     if
-      i32.const 4064
-      set_local $1
-     end
-     get_local $1
-     get_local $2
-     call $~lib/string/String#concat
+     call $~lib/string/String.__concat
      set_local $1
     end
     get_local $5
     if
      get_local $1
-     i32.eqz
-     if
-      i32.const 4064
-      set_local $1
-     end
-     get_local $1
      i32.const 4136
-     call $~lib/string/String#concat
+     call $~lib/string/String.__concat
      set_local $1
     end
     get_local $0
@@ -10177,19 +10097,11 @@
   i32.load offset=8
   tee_local $2
   if
+   get_local $1
    get_local $2
    i32.const 4136
    call $~lib/array/Array<Array<u32>>#join
-   set_local $0
-   get_local $1
-   i32.eqz
-   if
-    i32.const 4064
-    set_local $1
-   end
-   get_local $1
-   get_local $0
-   call $~lib/string/String#concat
+   call $~lib/string/String.__concat
    set_local $1
   end
   get_local $1

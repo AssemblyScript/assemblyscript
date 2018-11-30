@@ -540,7 +540,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 245
+   i32.const 246
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -606,7 +606,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 125
+   i32.const 126
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -689,7 +689,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 214
+   i32.const 215
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2516,7 +2516,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 361
+   i32.const 362
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2633,7 +2633,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 381
+   i32.const 382
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2750,7 +2750,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 230
+   i32.const 231
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3281,7 +3281,7 @@
             if
              i32.const 0
              i32.const 80
-             i32.const 631
+             i32.const 632
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -3349,63 +3349,71 @@
   get_local $5
   f64.mul
  )
- (func $~lib/string/String#concat (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   get_local $0
-  i32.const 0
-  i32.ne
   i32.eqz
   if
-   i32.const 0
-   i32.const 80
-   i32.const 111
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
-  get_local $1
-  i32.const 0
-  i32.eq
-  if
    i32.const 200
-   set_local $1
+   set_local $0
   end
-  get_local $0
-  i32.load
-  set_local $2
-  get_local $1
-  i32.load
-  set_local $3
-  get_local $2
-  get_local $3
-  i32.add
-  set_local $4
-  get_local $4
-  i32.const 0
-  i32.eq
-  if
-   i32.const 256
-   return
+  block $~lib/string/String#concat|inlined.0 (result i32)
+   get_local $0
+   i32.const 0
+   i32.ne
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 80
+    i32.const 112
+    i32.const 4
+    call $~lib/env/abort
+    unreachable
+   end
+   get_local $1
+   i32.const 0
+   i32.eq
+   if
+    i32.const 200
+    set_local $1
+   end
+   get_local $0
+   i32.load
+   set_local $2
+   get_local $1
+   i32.load
+   set_local $3
+   get_local $2
+   get_local $3
+   i32.add
+   set_local $4
+   get_local $4
+   i32.const 0
+   i32.eq
+   if
+    i32.const 256
+    br $~lib/string/String#concat|inlined.0
+   end
+   get_local $4
+   call $~lib/internal/string/allocateUnsafe
+   set_local $5
+   get_local $5
+   i32.const 0
+   get_local $0
+   i32.const 0
+   get_local $2
+   call $~lib/internal/string/copyUnsafe
+   get_local $5
+   get_local $2
+   get_local $1
+   i32.const 0
+   get_local $3
+   call $~lib/internal/string/copyUnsafe
+   get_local $5
   end
-  get_local $4
-  call $~lib/internal/string/allocateUnsafe
-  set_local $5
-  get_local $5
-  i32.const 0
-  get_local $0
-  i32.const 0
-  get_local $2
-  call $~lib/internal/string/copyUnsafe
-  get_local $5
-  get_local $2
-  get_local $1
-  i32.const 0
-  get_local $3
-  call $~lib/internal/string/copyUnsafe
-  get_local $5
  )
  (func $~lib/string/String.__ne (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
@@ -3684,7 +3692,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 401
+   i32.const 402
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3710,7 +3718,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 406
+   i32.const 407
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -4307,7 +4315,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 418
+   i32.const 419
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6527,7 +6535,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 270
+   i32.const 271
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7738,21 +7746,9 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/string/String.__concat|inlined.0 (result i32)
-   i32.const 280
-   set_local $2
-   i32.const 648
-   set_local $0
-   get_local $2
-   i32.eqz
-   if
-    i32.const 200
-    set_local $2
-   end
-   get_local $2
-   get_local $0
-   call $~lib/string/String#concat
-  end
+  i32.const 280
+  i32.const 648
+  call $~lib/string/String.__concat
   set_global $std/string/c
   get_global $std/string/c
   i32.const 656
@@ -8136,23 +8132,11 @@
   i32.const 65377
   call $~lib/string/String.fromCodePoint
   set_global $std/string/a
-  block $~lib/string/String.__concat|inlined.1 (result i32)
-   i32.const 55296
-   call $~lib/string/String.fromCodePoint
-   set_local $0
-   i32.const 56322
-   call $~lib/string/String.fromCodePoint
-   set_local $2
-   get_local $0
-   i32.eqz
-   if
-    i32.const 200
-    set_local $0
-   end
-   get_local $0
-   get_local $2
-   call $~lib/string/String#concat
-  end
+  i32.const 55296
+  call $~lib/string/String.fromCodePoint
+  i32.const 56322
+  call $~lib/string/String.fromCodePoint
+  call $~lib/string/String.__concat
   set_global $std/string/b
   get_global $std/string/a
   get_global $std/string/b
