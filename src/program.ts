@@ -2391,8 +2391,8 @@ export class FunctionPrototype extends Element {
   declaration: FunctionDeclaration;
   /** If an instance method, the class prototype reference. */
   classPrototype: ClassPrototype | null;
-  /** Resolved instances. */
-  instances: Map<string,Function> = new Map();
+  /** Resolved instances by class type arguments and function type arguments. */
+  instances: Map<string,Map<string,Function>> = new Map();
   /** Class type arguments, if a partially resolved method of a generic class. Not set otherwise. */
   classTypeArguments: Type[] | null = null;
   /** Operator kind, if an overload. */
