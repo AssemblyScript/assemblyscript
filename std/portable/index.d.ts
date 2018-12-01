@@ -382,6 +382,7 @@ declare class Array<T> {
 }
 
 declare class Uint8Array extends Array<u8> {}
+declare class Uint8ClampedArray extends Array<u8> {}
 declare class Uint16Array extends Array<u16> {}
 declare class Uint32Array extends Array<u32> {}
 declare class Int8Array extends Array<i8> {}

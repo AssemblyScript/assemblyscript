@@ -24,7 +24,8 @@ import {
   Property,
   DecoratorFlags,
   FieldPrototype,
-  Field
+  Field,
+  Global
 } from "./program";
 
 import {
@@ -358,6 +359,18 @@ export class Resolver extends DiagnosticEmitter {
     return null;
   }
 
+  /** Resolves a lazily compiled global, i.e. a static class field. */
+  ensureResolvedLazyGlobal(global: Global, reportMode: ReportMode = ReportMode.REPORT): bool {
+    if (global.is(CommonFlags.RESOLVED)) return true;
+    var resolveType = assert(global.declaration).type;
+    if (!resolveType) return false;
+    var resolvedType = this.resolveType(resolveType, null, reportMode);
+    if (!resolvedType) return false;
+    global.type = resolvedType;
+    global.set(CommonFlags.RESOLVED);
+    return true;
+  }
+
   /** Resolves a property access to the element it refers to. */
   resolvePropertyAccess(
     propertyAccess: PropertyAccessExpression,
@@ -374,7 +387,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Resolve variable-likes to the class type they reference first
     switch (target.kind) {
-      case ElementKind.GLOBAL:
+      case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
         let type = (<VariableLikeElement>target).type;
@@ -494,7 +507,7 @@ export class Resolver extends DiagnosticEmitter {
     var target = this.resolveExpression(targetExpression, contextualFunction, reportMode);
     if (!target) return null;
     switch (target.kind) {
-      case ElementKind.GLOBAL:
+      case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
         let type = (<VariableLikeElement>target).type;
@@ -700,9 +713,14 @@ export class Resolver extends DiagnosticEmitter {
     contextualTypeArguments: Map<string,Type> | null = null,
     reportMode: ReportMode = ReportMode.REPORT
   ): Function | null {
+    var classTypeArguments = prototype.classTypeArguments;
+    var classInstanceKey = classTypeArguments ? typesToString(classTypeArguments) : "";
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
-    var instance = prototype.instances.get(instanceKey);
-    if (instance) return instance;
+    var classInstances = prototype.instances.get(classInstanceKey);
+    if (classInstances) {
+      let instance = classInstances.get(instanceKey);
+      if (instance) return instance;
+    }
 
     var declaration = prototype.declaration;
     var isInstance = prototype.is(CommonFlags.INSTANCE);
@@ -721,7 +739,6 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // override with class type arguments if a partially resolved instance method
-    var classTypeArguments = prototype.classTypeArguments;
     if (classTypeArguments) { // set only if partially resolved
       assert(prototype.is(CommonFlags.INSTANCE));
       let classDeclaration = assert(classPrototype).declaration;
@@ -805,7 +822,7 @@ export class Resolver extends DiagnosticEmitter {
 
     var internalName = prototype.internalName;
     if (instanceKey.length) internalName += "<" + instanceKey + ">";
-    instance = new Function(
+    var instance = new Function(
       prototype,
       internalName,
       signature,
@@ -814,7 +831,8 @@ export class Resolver extends DiagnosticEmitter {
         : classPrototype,
       contextualTypeArguments
     );
-    prototype.instances.set(instanceKey, instance);
+    if (!classInstances) prototype.instances.set(classInstanceKey, classInstances = new Map());
+    classInstances.set(instanceKey, instance);
     this.program.instancesLookup.set(internalName, instance);
     return instance;
   }
@@ -843,6 +861,7 @@ export class Resolver extends DiagnosticEmitter {
     partialPrototype.flags = prototype.flags;
     partialPrototype.operatorKind = prototype.operatorKind;
     partialPrototype.classTypeArguments = typeArguments;
+    partialPrototype.instances = prototype.instances;
     return partialPrototype;
   }
 

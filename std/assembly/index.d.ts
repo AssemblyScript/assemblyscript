@@ -526,6 +526,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
 declare class Int8Array extends TypedArray<i8> {}
 /** An array of 8-bit unsigned integers. */
 declare class Uint8Array extends TypedArray<u8> {}
+/** A clamped array of 8-bit unsigned integers. */
+declare class Uint8ClampedArray extends TypedArray<u8> {}
 /** An array of twos-complement 16-bit signed integers. */
 declare class Int16Array extends TypedArray<i16> {}
 /** An array of 16-bit unsigned integers. */
