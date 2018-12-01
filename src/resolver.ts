@@ -24,7 +24,8 @@ import {
   Property,
   DecoratorFlags,
   FieldPrototype,
-  Field
+  Field,
+  Global
 } from "./program";
 
 import {
@@ -358,6 +359,18 @@ export class Resolver extends DiagnosticEmitter {
     return null;
   }
 
+  /** Resolves a lazily compiled global, i.e. a static class field. */
+  ensureResolvedLazyGlobal(global: Global, reportMode: ReportMode = ReportMode.REPORT): bool {
+    if (global.is(CommonFlags.RESOLVED)) return true;
+    var resolveType = assert(global.declaration).type;
+    if (!resolveType) return false;
+    var resolvedType = this.resolveType(resolveType, null, reportMode);
+    if (!resolvedType) return false;
+    global.type = resolvedType;
+    global.set(CommonFlags.RESOLVED);
+    return true;
+  }
+
   /** Resolves a property access to the element it refers to. */
   resolvePropertyAccess(
     propertyAccess: PropertyAccessExpression,
@@ -374,7 +387,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Resolve variable-likes to the class type they reference first
     switch (target.kind) {
-      case ElementKind.GLOBAL:
+      case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
         let type = (<VariableLikeElement>target).type;
@@ -494,7 +507,7 @@ export class Resolver extends DiagnosticEmitter {
     var target = this.resolveExpression(targetExpression, contextualFunction, reportMode);
     if (!target) return null;
     switch (target.kind) {
-      case ElementKind.GLOBAL:
+      case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
         let type = (<VariableLikeElement>target).type;

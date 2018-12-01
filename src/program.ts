@@ -16,7 +16,8 @@ import {
 
 import {
   Options,
-  Feature
+  Feature,
+  Compiler
 } from "./compiler";
 
 import {
@@ -730,19 +731,19 @@ export class Program extends DiagnosticEmitter {
   /** Sets a constant integer value. */
   setConstantInteger(globalName: string, type: Type, value: I64): void {
     assert(type.is(TypeFlags.INTEGER));
-    this.elementsLookup.set(globalName,
-      new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
-        .withConstantIntegerValue(value)
-    );
+    var global = new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
+      .withConstantIntegerValue(value);
+    global.set(CommonFlags.RESOLVED);
+    this.elementsLookup.set(globalName, global);
   }
 
   /** Sets a constant float value. */
   setConstantFloat(globalName: string, type: Type, value: f64): void {
     assert(type.is(TypeFlags.FLOAT));
-    this.elementsLookup.set(globalName,
-      new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
-        .withConstantFloatValue(value)
-    );
+    var global = new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
+      .withConstantFloatValue(value);
+    global.set(CommonFlags.RESOLVED);
+    this.elementsLookup.set(globalName, global);
   }
 
   /** Tries to locate an import by traversing exports and queued exports. */
