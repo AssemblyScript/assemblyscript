@@ -1907,7 +1907,11 @@
    end
   end
  )
+<<<<<<< HEAD
  (func $~lib/internal/string/copyUnsafe (; 13 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+=======
+ (func $~lib/internal/string/copyUnsafe (; 14 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+>>>>>>> master
   get_local $1
   i32.const 1
   i32.shl
