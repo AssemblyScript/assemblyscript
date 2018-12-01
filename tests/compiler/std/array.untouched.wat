@@ -828,7 +828,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 45
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -2876,7 +2876,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 184
+    i32.const 185
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -2939,7 +2939,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 246
+   i32.const 247
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3360,7 +3360,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 336
+    i32.const 337
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -3431,7 +3431,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 307
+   i32.const 308
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3792,7 +3792,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 109
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -4219,7 +4219,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 45
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -5550,7 +5550,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6314,7 +6314,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7100,7 +7100,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7756,7 +7756,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8129,7 +8129,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 45
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -8198,7 +8198,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 109
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -8433,7 +8433,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8595,7 +8595,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 45
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -8683,7 +8683,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 109
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -8886,7 +8886,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9374,7 +9374,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 409
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9667,7 +9667,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 45
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -9819,73 +9819,76 @@
   get_local $7
   call $~lib/internal/memory/memmove
  )
- (func $~lib/string/String.__concat (; 168 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 168 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  get_local $0
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 3976
+   i32.const 110
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $1
+  i32.const 0
+  i32.eq
+  if
+   i32.const 4064
+   set_local $1
+  end
+  get_local $0
+  i32.load
+  set_local $2
+  get_local $1
+  i32.load
+  set_local $3
+  get_local $2
+  get_local $3
+  i32.add
+  set_local $4
+  get_local $4
+  i32.const 0
+  i32.eq
+  if
+   i32.const 3824
+   return
+  end
+  get_local $4
+  call $~lib/internal/string/allocateUnsafe
+  set_local $5
+  get_local $5
+  i32.const 0
+  get_local $0
+  i32.const 0
+  get_local $2
+  call $~lib/internal/string/copyUnsafe
+  get_local $5
+  get_local $2
+  get_local $1
+  i32.const 0
+  get_local $3
+  call $~lib/internal/string/copyUnsafe
+  get_local $5
+ )
+ (func $~lib/string/String.__concat (; 169 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   i32.eqz
   if
    i32.const 4064
    set_local $0
   end
-  block $~lib/string/String#concat|inlined.0 (result i32)
-   get_local $0
-   i32.const 0
-   i32.ne
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 3976
-    i32.const 111
-    i32.const 4
-    call $~lib/env/abort
-    unreachable
-   end
-   get_local $1
-   i32.const 0
-   i32.eq
-   if
-    i32.const 4064
-    set_local $1
-   end
-   get_local $0
-   i32.load
-   set_local $2
-   get_local $1
-   i32.load
-   set_local $3
-   get_local $2
-   get_local $3
-   i32.add
-   set_local $4
-   get_local $4
-   i32.const 0
-   i32.eq
-   if
-    i32.const 3824
-    br $~lib/string/String#concat|inlined.0
-   end
-   get_local $4
-   call $~lib/internal/string/allocateUnsafe
-   set_local $5
-   get_local $5
-   i32.const 0
-   get_local $0
-   i32.const 0
-   get_local $2
-   call $~lib/internal/string/copyUnsafe
-   get_local $5
-   get_local $2
-   get_local $1
-   i32.const 0
-   get_local $3
-   call $~lib/internal/string/copyUnsafe
-   get_local $5
-  end
+  get_local $0
+  get_local $1
+  call $~lib/string/String#concat
  )
- (func $std/array/createRandomString (; 169 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomString (; 170 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -9927,7 +9930,7 @@
   end
   get_local $1
  )
- (func $~lib/array/Array<String>#__set (; 170 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<String>#__set (; 171 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -9948,7 +9951,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 109
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -9978,7 +9981,7 @@
   get_local $2
   i32.store offset=8
  )
- (func $std/array/createRandomStringArray (; 171 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/createRandomStringArray (; 172 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 0
@@ -10016,7 +10019,7 @@
   end
   get_local $1
  )
- (func $start~anonymous|55 (; 172 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start~anonymous|55 (; 173 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   call $~lib/string/String.__gt
@@ -10025,7 +10028,7 @@
   call $~lib/string/String.__lt
   i32.sub
  )
- (func $~lib/string/String#substring (; 173 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (; 174 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -10041,7 +10044,7 @@
   if
    i32.const 0
    i32.const 3976
-   i32.const 270
+   i32.const 269
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -10135,7 +10138,7 @@
   call $~lib/internal/string/copyUnsafe
   get_local $10
  )
- (func $~lib/array/Array<bool>#join (; 174 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<bool>#join (; 175 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10335,7 +10338,7 @@
   get_local $12
   return
  )
- (func $~lib/internal/number/decimalCount32 (; 175 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/decimalCount32 (; 176 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   i32.const 100000
@@ -10404,7 +10407,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/utoa32_lut (; 176 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 177 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -10557,7 +10560,7 @@
    i32.store16 offset=4
   end
  )
- (func $~lib/internal/number/itoa32 (; 177 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa32 (; 178 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -10598,12 +10601,12 @@
   end
   get_local $3
  )
- (func $~lib/internal/number/itoa<i32> (; 178 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i32> (; 179 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/internal/number/itoa32
   return
  )
- (func $~lib/internal/number/itoa_stream<i32> (; 179 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<i32> (; 180 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -10651,7 +10654,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<i32>#join (; 180 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#join (; 181 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10814,7 +10817,7 @@
   get_local $11
   return
  )
- (func $~lib/internal/number/utoa32 (; 181 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/utoa32 (; 182 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -10835,12 +10838,12 @@
   call $~lib/internal/number/utoa32_lut
   get_local $2
  )
- (func $~lib/internal/number/itoa<u32> (; 182 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u32> (; 183 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/internal/number/utoa32
   return
  )
- (func $~lib/internal/number/itoa_stream<u32> (; 183 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<u32> (; 184 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $0
   get_local $1
@@ -10868,7 +10871,7 @@
   call $~lib/internal/number/utoa32_lut
   get_local $3
  )
- (func $~lib/array/Array<u32>#join (; 184 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#join (; 185 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11031,14 +11034,14 @@
   get_local $11
   return
  )
- (func $~lib/builtins/isFinite<f64> (; 185 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 186 ;) (type $Fi) (param $0 f64) (result i32)
   get_local $0
   get_local $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $~lib/internal/number/genDigits (; 186 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/number/genDigits (; 187 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -11586,7 +11589,7 @@
   end
   get_local $15
  )
- (func $~lib/internal/number/prettify (; 187 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/prettify (; 188 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -11930,7 +11933,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/dtoa_core (; 188 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/internal/number/dtoa_core (; 189 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i64)
   (local $4 i32)
@@ -12360,7 +12363,7 @@
   get_local $2
   i32.add
  )
- (func $~lib/internal/number/dtoa (; 189 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/number/dtoa (; 190 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -12422,7 +12425,7 @@
   end
   get_local $3
  )
- (func $~lib/internal/number/dtoa_stream (; 190 ;) (type $iiFi) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
+ (func $~lib/internal/number/dtoa_stream (; 191 ;) (type $iiFi) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -12509,7 +12512,7 @@
   get_local $2
   call $~lib/internal/number/dtoa_core
  )
- (func $~lib/array/Array<f64>#join (; 191 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#join (; 192 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f64)
@@ -12672,7 +12675,7 @@
   get_local $11
   return
  )
- (func $~lib/array/Array<String>#join (; 192 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#join (; 193 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12852,7 +12855,7 @@
   get_local $9
   return
  )
- (func $std/array/Ref#constructor (; 193 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array/Ref#constructor (; 194 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   if (result i32)
@@ -12868,7 +12871,7 @@
   end
   tee_local $0
  )
- (func $~lib/array/Array<Ref>#constructor (; 194 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref>#constructor (; 195 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12879,7 +12882,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 45
+   i32.const 46
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -12927,7 +12930,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/array/Array<Ref>#__unchecked_set (; 195 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref>#__unchecked_set (; 196 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   get_local $0
   i32.load
@@ -12940,7 +12943,7 @@
   get_local $2
   i32.store offset=8
  )
- (func $~lib/array/Array<Ref>#join (; 196 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref>#join (; 197 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13103,7 +13106,7 @@
   get_local $11
   return
  )
- (func $~lib/internal/number/itoa<i8> (; 197 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i8> (; 198 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 24
   i32.shl
@@ -13112,7 +13115,7 @@
   call $~lib/internal/number/itoa32
   return
  )
- (func $~lib/internal/number/itoa_stream<i8> (; 198 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<i8> (; 199 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -13179,7 +13182,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<i8>#join (; 199 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#join (; 200 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13342,14 +13345,14 @@
   get_local $11
   return
  )
- (func $~lib/internal/number/itoa<u16> (; 200 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u16> (; 201 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 65535
   i32.and
   call $~lib/internal/number/utoa32
   return
  )
- (func $~lib/internal/number/itoa_stream<u16> (; 201 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<u16> (; 202 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -13386,7 +13389,7 @@
   call $~lib/internal/number/utoa32_lut
   get_local $3
  )
- (func $~lib/array/Array<u16>#join (; 202 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u16>#join (; 203 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13549,7 +13552,7 @@
   get_local $11
   return
  )
- (func $~lib/internal/number/decimalCount64 (; 203 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/decimalCount64 (; 204 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   get_local $0
   i64.const 1000000000000000
@@ -13618,7 +13621,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/utoa64_lut (; 204 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/internal/number/utoa64_lut (; 205 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
@@ -13756,7 +13759,7 @@
   get_local $2
   call $~lib/internal/number/utoa32_lut
  )
- (func $~lib/internal/number/utoa64 (; 205 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/utoa64 (; 206 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -13798,12 +13801,12 @@
   end
   get_local $1
  )
- (func $~lib/internal/number/itoa<u64> (; 206 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa<u64> (; 207 ;) (type $Ii) (param $0 i64) (result i32)
   get_local $0
   call $~lib/internal/number/utoa64
   return
  )
- (func $~lib/internal/number/itoa_stream<u64> (; 207 ;) (type $iiIi) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/internal/number/itoa_stream<u64> (; 208 ;) (type $iiIi) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -13849,7 +13852,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<u64>#join (; 208 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u64>#join (; 209 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i64)
@@ -14012,7 +14015,7 @@
   get_local $11
   return
  )
- (func $~lib/internal/number/itoa64 (; 209 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa64 (; 210 ;) (type $Ii) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -14076,12 +14079,12 @@
   end
   get_local $2
  )
- (func $~lib/internal/number/itoa<i64> (; 210 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/number/itoa<i64> (; 211 ;) (type $Ii) (param $0 i64) (result i32)
   get_local $0
   call $~lib/internal/number/itoa64
   return
  )
- (func $~lib/internal/number/itoa_stream<i64> (; 211 ;) (type $iiIi) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/internal/number/itoa_stream<i64> (; 212 ;) (type $iiIi) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -14149,7 +14152,7 @@
   end
   get_local $3
  )
- (func $~lib/array/Array<i64>#join (; 212 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i64>#join (; 213 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i64)
@@ -14312,7 +14315,7 @@
   get_local $11
   return
  )
- (func $~lib/array/Array<Array<i32>>#join (; 213 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#join (; 214 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14434,14 +14437,14 @@
   get_local $3
   return
  )
- (func $~lib/internal/number/itoa<u8> (; 214 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u8> (; 215 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 255
   i32.and
   call $~lib/internal/number/utoa32
   return
  )
- (func $~lib/internal/number/itoa_stream<u8> (; 215 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<u8> (; 216 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -14478,7 +14481,7 @@
   call $~lib/internal/number/utoa32_lut
   get_local $3
  )
- (func $~lib/array/Array<u8>#join (; 216 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#join (; 217 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14641,7 +14644,7 @@
   get_local $11
   return
  )
- (func $~lib/array/Array<Array<u8>>#join (; 217 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<u8>>#join (; 218 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14763,7 +14766,7 @@
   get_local $3
   return
  )
- (func $~lib/array/Array<Array<u32>>#join (; 218 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<u32>>#join (; 219 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14885,7 +14888,7 @@
   get_local $3
   return
  )
- (func $~lib/array/Array<Array<Array<u32>>>#join (; 219 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<Array<u32>>>#join (; 220 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -15007,7 +15010,7 @@
   get_local $3
   return
  )
- (func $start (; 220 ;) (type $v)
+ (func $start (; 221 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -19419,6 +19422,6 @@
    unreachable
   end
  )
- (func $null (; 221 ;) (type $v)
+ (func $null (; 222 ;) (type $v)
  )
 )

@@ -106,7 +106,6 @@ export class String {
     return left.concat(right);
   }
 
-  @inline
   concat(other: String): String {
     assert(this !== null);
     if (other === null) other = changetype<String>("null");
