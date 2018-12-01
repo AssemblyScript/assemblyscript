@@ -44,22 +44,22 @@
   i32.load offset=4
   set_local $2
   get_local $1
-  get_local $0
   get_local $1
   i32.load
   i32.const 3
   i32.and
+  get_local $0
   i32.or
   i32.store
   get_local $1
   get_local $2
   i32.store offset=4
   get_local $2
-  get_local $1
   get_local $2
   i32.load
   i32.const 3
   i32.and
+  get_local $1
   i32.or
   i32.store
   get_local $0
@@ -69,8 +69,8 @@
  (func $~lib/collector/itcm/ManagedObject#makeGray (; 3 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  get_local $0
   get_global $~lib/collector/itcm/iter
+  get_local $0
   i32.eq
   if
    get_local $0
@@ -87,11 +87,11 @@
   tee_local $1
   i32.store offset=4
   get_local $1
-  get_local $2
   get_local $1
   i32.load
   i32.const 3
   i32.and
+  get_local $2
   i32.or
   i32.store
   get_global $~lib/collector/itcm/toSpace
@@ -110,6 +110,7 @@
   (local $1 i32)
   get_local $0
   if
+   get_global $~lib/collector/itcm/white
    get_local $0
    i32.const 16
    i32.sub
@@ -117,7 +118,6 @@
    i32.load
    i32.const 3
    i32.and
-   get_global $~lib/collector/itcm/white
    i32.eq
    if
     get_local $1
@@ -142,8 +142,8 @@
    get_local $0
    i32.lt_u
    if
-    get_local $2
     get_local $1
+    get_local $2
     i32.add
     i32.load offset=8
     call $~lib/collector/itcm/__gc_mark
@@ -283,12 +283,12 @@
      get_local $0
      set_global $~lib/collector/itcm/iter
      get_local $0
+     get_global $~lib/collector/itcm/white
+     i32.eqz
      get_local $0
      i32.load
      i32.const -4
      i32.and
-     get_global $~lib/collector/itcm/white
-     i32.eqz
      i32.or
      i32.store
      i32.const 1
@@ -303,11 +303,11 @@
      get_global $std/gc-array/arr
      i32.const 3
      call_indirect (type $iv)
+     get_global $~lib/collector/itcm/toSpace
      get_global $~lib/collector/itcm/iter
      i32.load
      i32.const -4
      i32.and
-     get_global $~lib/collector/itcm/toSpace
      i32.eq
      if
       get_global $~lib/collector/itcm/fromSpace
@@ -396,11 +396,11 @@
   get_local $1
   i32.store offset=8
   get_local $2
+  get_global $~lib/collector/itcm/white
   get_local $2
   i32.load
   i32.const -4
   i32.and
-  get_global $~lib/collector/itcm/white
   i32.or
   i32.store
   get_global $~lib/collector/itcm/fromSpace
@@ -480,24 +480,24 @@
   if
    return
   end
-  get_local $0
   i32.const 0
   get_local $0
   i32.sub
   i32.const 3
   i32.and
   tee_local $2
+  get_local $0
   i32.add
   tee_local $0
   i32.const 0
   i32.store
-  get_local $0
   get_local $1
   get_local $2
   i32.sub
   i32.const -4
   i32.and
   tee_local $1
+  get_local $0
   i32.add
   i32.const 4
   i32.sub
@@ -582,12 +582,12 @@
   i32.const 0
   i32.store
   get_local $0
-  get_local $0
   i32.const 4
   i32.and
   i32.const 24
   i32.add
   tee_local $2
+  get_local $0
   i32.add
   set_local $0
   get_local $1
@@ -890,9 +890,6 @@
        i32.ge_u
        if
         get_local $0
-        get_local $5
-        i32.const 24
-        i32.shr_u
         get_local $1
         i32.const 1
         i32.add
@@ -900,14 +897,14 @@
         tee_local $3
         i32.const 8
         i32.shl
+        get_local $5
+        i32.const 24
+        i32.shr_u
         i32.or
         i32.store
         get_local $0
         i32.const 4
         i32.add
-        get_local $3
-        i32.const 24
-        i32.shr_u
         get_local $1
         i32.const 5
         i32.add
@@ -915,14 +912,14 @@
         tee_local $5
         i32.const 8
         i32.shl
+        get_local $3
+        i32.const 24
+        i32.shr_u
         i32.or
         i32.store
         get_local $0
         i32.const 8
         i32.add
-        get_local $5
-        i32.const 24
-        i32.shr_u
         get_local $1
         i32.const 9
         i32.add
@@ -930,14 +927,14 @@
         tee_local $3
         i32.const 8
         i32.shl
+        get_local $5
+        i32.const 24
+        i32.shr_u
         i32.or
         i32.store
         get_local $0
         i32.const 12
         i32.add
-        get_local $3
-        i32.const 24
-        i32.shr_u
         get_local $1
         i32.const 13
         i32.add
@@ -945,6 +942,9 @@
         tee_local $5
         i32.const 8
         i32.shl
+        get_local $3
+        i32.const 24
+        i32.shr_u
         i32.or
         i32.store
         get_local $1
@@ -999,9 +999,6 @@
       i32.ge_u
       if
        get_local $0
-       get_local $5
-       i32.const 16
-       i32.shr_u
        get_local $1
        i32.const 2
        i32.add
@@ -1009,14 +1006,14 @@
        tee_local $3
        i32.const 16
        i32.shl
+       get_local $5
+       i32.const 16
+       i32.shr_u
        i32.or
        i32.store
        get_local $0
        i32.const 4
        i32.add
-       get_local $3
-       i32.const 16
-       i32.shr_u
        get_local $1
        i32.const 6
        i32.add
@@ -1024,14 +1021,14 @@
        tee_local $5
        i32.const 16
        i32.shl
+       get_local $3
+       i32.const 16
+       i32.shr_u
        i32.or
        i32.store
        get_local $0
        i32.const 8
        i32.add
-       get_local $5
-       i32.const 16
-       i32.shr_u
        get_local $1
        i32.const 10
        i32.add
@@ -1039,14 +1036,14 @@
        tee_local $3
        i32.const 16
        i32.shl
+       get_local $5
+       i32.const 16
+       i32.shr_u
        i32.or
        i32.store
        get_local $0
        i32.const 12
        i32.add
-       get_local $3
-       i32.const 16
-       i32.shr_u
        get_local $1
        i32.const 14
        i32.add
@@ -1054,6 +1051,9 @@
        tee_local $5
        i32.const 16
        i32.shl
+       get_local $3
+       i32.const 16
+       i32.shr_u
        i32.or
        i32.store
        get_local $1
@@ -1100,9 +1100,6 @@
      i32.ge_u
      if
       get_local $0
-      get_local $5
-      i32.const 8
-      i32.shr_u
       get_local $1
       i32.const 3
       i32.add
@@ -1110,14 +1107,14 @@
       tee_local $3
       i32.const 24
       i32.shl
+      get_local $5
+      i32.const 8
+      i32.shr_u
       i32.or
       i32.store
       get_local $0
       i32.const 4
       i32.add
-      get_local $3
-      i32.const 8
-      i32.shr_u
       get_local $1
       i32.const 7
       i32.add
@@ -1125,14 +1122,14 @@
       tee_local $5
       i32.const 24
       i32.shl
+      get_local $3
+      i32.const 8
+      i32.shr_u
       i32.or
       i32.store
       get_local $0
       i32.const 8
       i32.add
-      get_local $5
-      i32.const 8
-      i32.shr_u
       get_local $1
       i32.const 11
       i32.add
@@ -1140,14 +1137,14 @@
       tee_local $3
       i32.const 24
       i32.shl
+      get_local $5
+      i32.const 8
+      i32.shr_u
       i32.or
       i32.store
       get_local $0
       i32.const 12
       i32.add
-      get_local $3
-      i32.const 8
-      i32.shr_u
       get_local $1
       i32.const 15
       i32.add
@@ -1155,6 +1152,9 @@
       tee_local $5
       i32.const 24
       i32.shl
+      get_local $3
+      i32.const 8
+      i32.shr_u
       i32.or
       i32.store
       get_local $1
@@ -1708,11 +1708,11 @@
       if
        return
       end
-      get_local $0
       get_local $2
       i32.const 1
       i32.sub
       tee_local $2
+      get_local $0
       i32.add
       get_local $1
       get_local $2
@@ -1727,11 +1727,11 @@
      i32.const 8
      i32.ge_u
      if
-      get_local $0
       get_local $2
       i32.const 8
       i32.sub
       tee_local $2
+      get_local $0
       i32.add
       get_local $1
       get_local $2
@@ -1745,11 +1745,11 @@
    loop $continue|5
     get_local $2
     if
-     get_local $0
      get_local $2
      i32.const 1
      i32.sub
      tee_local $2
+     get_local $0
      i32.add
      get_local $1
      get_local $2
@@ -1819,8 +1819,8 @@
     i32.add
     get_local $2
     call $~lib/internal/memory/memmove
-    get_local $4
     get_local $2
+    get_local $4
     i32.add
     get_local $1
     get_local $2
@@ -1854,6 +1854,8 @@
  )
  (func $~lib/collector/itcm/__gc_link (; 16 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
+  get_global $~lib/collector/itcm/white
+  i32.eqz
   get_local $0
   i32.const 16
   i32.sub
@@ -1861,18 +1863,16 @@
   i32.load
   i32.const 3
   i32.and
-  get_global $~lib/collector/itcm/white
-  i32.eqz
   i32.eq
   tee_local $0
   if
+   get_global $~lib/collector/itcm/white
    get_local $1
    i32.const 16
    i32.sub
    i32.load
    i32.const 3
    i32.and
-   get_global $~lib/collector/itcm/white
    i32.eq
    set_local $0
   end
@@ -1920,10 +1920,10 @@
    get_local $4
    i32.store offset=4
   end
-  get_local $3
   get_local $1
   i32.const 2
   i32.shl
+  get_local $3
   i32.add
   get_local $2
   i32.store offset=8
