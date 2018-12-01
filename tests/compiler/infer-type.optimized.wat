@@ -24,8 +24,7 @@
   loop $repeat|0
    get_local $0
    i32.const 10
-   i32.ge_s
-   i32.eqz
+   i32.lt_s
    if
     get_local $0
     i32.const 1

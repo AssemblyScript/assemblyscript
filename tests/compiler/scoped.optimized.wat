@@ -11,8 +11,7 @@
   loop $repeat|0
    get_local $0
    i32.const 1
-   i32.ge_s
-   i32.eqz
+   i32.lt_s
    if
     get_local $0
     i32.const 1
@@ -21,22 +20,19 @@
     br $repeat|0
    end
   end
-  block $break|1
-   i32.const 0
-   set_local $0
-   loop $repeat|1
-    get_local $0
-    i32.const 1
-    i32.ge_s
-    br_if $break|1
+  i32.const 0
+  set_local $0
+  loop $repeat|1
+   get_local $0
+   i32.const 1
+   i32.lt_s
+   if
     get_local $0
     i32.const 1
     i32.add
     set_local $0
     br $repeat|1
-    unreachable
    end
-   unreachable
   end
  )
  (func $null (; 1 ;) (type $v)
