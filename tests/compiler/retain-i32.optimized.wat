@@ -13,22 +13,19 @@
  (start $start)
  (func $start (; 1 ;) (type $v)
   (local $0 i32)
-  block $break|0
-   i32.const -128
-   set_local $0
-   loop $repeat|0
-    get_local $0
-    i32.const 255
-    i32.gt_s
-    br_if $break|0
+  i32.const -128
+  set_local $0
+  loop $repeat|0
+   get_local $0
+   i32.const 255
+   i32.le_s
+   if
     get_local $0
     i32.const 1
     i32.add
     set_local $0
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
   i32.const -1
   set_global $retain-i32/si
