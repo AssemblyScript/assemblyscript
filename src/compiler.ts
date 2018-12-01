@@ -551,13 +551,15 @@ export class Compiler extends DiagnosticEmitter {
 
       // skip prototype and export instances
       case ElementKind.FUNCTION_PROTOTYPE: {
-        for (let instance of (<FunctionPrototype>element).instances.values()) {
-          let instanceName = name;
-          if (instance.is(CommonFlags.GENERIC)) {
-            let fullName = instance.internalName;
-            instanceName += fullName.substring(fullName.lastIndexOf("<"));
+        for (let instances of (<FunctionPrototype>element).instances.values()) {
+          for (let instance of instances.values()) {
+            let instanceName = name;
+            if (instance.is(CommonFlags.GENERIC)) {
+              let fullName = instance.internalName;
+              instanceName += fullName.substring(fullName.lastIndexOf("<"));
+            }
+            this.makeModuleExport(instanceName, instance, prefix);
           }
-          this.makeModuleExport(instanceName, instance, prefix);
         }
         break;
       }
