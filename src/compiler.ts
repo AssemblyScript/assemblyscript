@@ -701,7 +701,7 @@ export class Compiler extends DiagnosticEmitter {
     var declaration = global.declaration;
     var initExpr: ExpressionRef = 0;
 
-    if (global.type == Type.void) { // type is void if not yet resolved or not annotated
+    if (!global.is(CommonFlags.RESOLVED)) {
       if (declaration) {
 
         // resolve now if annotated
@@ -716,6 +716,7 @@ export class Compiler extends DiagnosticEmitter {
             return false;
           }
           global.type = resolvedType;
+          global.set(CommonFlags.RESOLVED);
 
         // infer from initializer if not annotated
         } else if (declaration.initializer) { // infer type using void/NONE for literal inference
@@ -732,6 +733,7 @@ export class Compiler extends DiagnosticEmitter {
             return false;
           }
           global.type = this.currentType;
+          global.set(CommonFlags.RESOLVED);
 
         // must either be annotated or have an initializer
         } else {
@@ -742,7 +744,7 @@ export class Compiler extends DiagnosticEmitter {
           return false;
         }
       } else {
-        assert(false); // must have a declaration if 'void' (and thus resolved later on)
+        assert(false); // must have a declaration if resolved lazily
       }
     }
 
