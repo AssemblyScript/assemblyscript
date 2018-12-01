@@ -36,7 +36,6 @@ export class Array<T> {
   /* @internal */ buffer_: ArrayBuffer;
   /* @internal */ length_: i32;
 
-  @inline
   static isArray<U>(value: U): bool {
     return builtin_isArray(value) && value !== null;
   }

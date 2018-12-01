@@ -1,9 +1,12 @@
 (module
  (type $iiiiiiFF (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $I (func (result i64)))
  (type $F (func (result f64)))
  (type $iIi (func (param i32 i64) (result i32)))
  (type $ii (func (param i32) (result i32)))
+ (type $iI (func (param i32) (result i64)))
+ (type $iII (func (param i32 i64) (result i64)))
  (type $v (func))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -24,7 +27,11 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/date/Date.now (; 3 ;) (type $I) (result i64)
+  call $~lib/bindings/Date/now
+  i64.trunc_s/f64
+ )
+ (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -103,12 +110,12 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/date/Date#constructor (; 5 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/date/Date#constructor (; 6 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   get_local $0
   if (result i32)
@@ -130,7 +137,17 @@
   i64.store
   get_local $0
  )
- (func $start (; 6 ;) (type $v)
+ (func $~lib/date/Date#getTime (; 7 ;) (type $iI) (param $0 i32) (result i64)
+  get_local $0
+  i64.load
+ )
+ (func $~lib/date/Date#setTime (; 8 ;) (type $iII) (param $0 i32) (param $1 i64) (result i64)
+  get_local $0
+  get_local $1
+  i64.store
+  get_local $1
+ )
+ (func $start (; 9 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -261,10 +278,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/date/Date.now|inlined.0 (result i64)
-   call $~lib/bindings/Date/now
-   i64.trunc_s/f64
-  end
+  call $~lib/date/Date.now
   get_global $std/date/creationTime
   i64.gt_s
   i32.eqz
@@ -280,12 +294,8 @@
   get_global $std/date/creationTime
   call $~lib/date/Date#constructor
   set_global $std/date/date
-  block $~lib/date/Date#getTime|inlined.0 (result i64)
-   get_global $std/date/date
-   set_local $5
-   get_local $5
-   i64.load
-  end
+  get_global $std/date/date
+  call $~lib/date/Date#getTime
   get_global $std/date/creationTime
   i64.eq
   i32.eqz
@@ -297,25 +307,14 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/date/Date#setTime|inlined.0 (result i64)
-   get_global $std/date/date
-   set_local $5
-   get_global $std/date/creationTime
-   i64.const 1
-   i64.add
-   set_local $6
-   get_local $5
-   get_local $6
-   i64.store
-   get_local $6
-  end
+  get_global $std/date/date
+  get_global $std/date/creationTime
+  i64.const 1
+  i64.add
+  call $~lib/date/Date#setTime
   drop
-  block $~lib/date/Date#getTime|inlined.1 (result i64)
-   get_global $std/date/date
-   set_local $5
-   get_local $5
-   i64.load
-  end
+  get_global $std/date/date
+  call $~lib/date/Date#getTime
   get_global $std/date/creationTime
   i64.const 1
   i64.add
@@ -330,6 +329,6 @@
    unreachable
   end
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 10 ;) (type $v)
  )
 )

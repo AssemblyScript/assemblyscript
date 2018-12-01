@@ -18,7 +18,6 @@ export class Date {
     return <i64>Date_UTC(year, month, day, hour, minute, second, <f64>millisecond);
   }
 
-  @inline
   static now(): i64 {
     return <i64>Date_now();
   }
@@ -29,12 +28,10 @@ export class Date {
     this.value = value;
   }
 
-  @inline
   getTime(): i64 {
     return this.value;
   }
 
-  @inline
   setTime(value: i64): i64 {
     this.value = value;
     return value;

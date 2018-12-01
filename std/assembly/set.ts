@@ -158,7 +158,6 @@ export class Set<K> {
     this.entriesOffset = this.entriesCount;
   }
 
-  @inline
   toString(): string {
     return "[object Set]";
   }

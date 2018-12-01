@@ -170,7 +170,6 @@ export class Map<K,V> {
     this.entriesOffset = this.entriesCount;
   }
 
-  @inline
   toString(): string {
     return "[object Map]";
   }

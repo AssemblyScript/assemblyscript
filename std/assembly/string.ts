@@ -71,7 +71,6 @@ export class String {
     return out;
   }
 
-  @inline
   charCodeAt(pos: i32): i32 {
     assert(this !== null);
     if (<u32>pos >= <u32>this.length) return -1; // (NaN)
@@ -470,7 +469,6 @@ export class String {
     return result;
   }
 
-  @inline
   toString(): String {
     return this;
   }
