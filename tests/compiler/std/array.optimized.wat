@@ -6758,11 +6758,7 @@
   end
   get_local $2
  )
-<<<<<<< HEAD
  (func $~lib/internal/number/itoa_stream<i32> (; 114 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-=======
- (func $~lib/internal/number/itoa_stream<i32> (; 115 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
->>>>>>> master
   get_local $1
   i32.const 1
   i32.shl
@@ -8132,11 +8128,7 @@
   end
   get_local $1
  )
-<<<<<<< HEAD
  (func $~lib/internal/number/dtoa_stream (; 123 ;) (type $iiFi) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
-=======
- (func $~lib/internal/number/dtoa_stream (; 124 ;) (type $iiFi) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
->>>>>>> master
   get_local $1
   i32.const 1
   i32.shl
@@ -8763,11 +8755,7 @@
   end
   get_local $1
  )
-<<<<<<< HEAD
  (func $~lib/internal/number/itoa_stream<u16> (; 129 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-=======
- (func $~lib/internal/number/itoa_stream<u16> (; 130 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
->>>>>>> master
   get_local $1
   i32.const 1
   i32.shl
@@ -9589,11 +9577,7 @@
   end
   get_local $1
  )
-<<<<<<< HEAD
  (func $~lib/internal/number/itoa_stream<u8> (; 140 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-=======
- (func $~lib/internal/number/itoa_stream<u8> (; 141 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
->>>>>>> master
   get_local $1
   i32.const 1
   i32.shl
