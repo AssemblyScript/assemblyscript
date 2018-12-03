@@ -4,6 +4,7 @@
  (type $F (func (result f64)))
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
+ (type $FUNCSIG$jiiiij (func (param i32 i32 i32 i32 i64) (result i64)))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
@@ -18,7 +19,19 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/date/Date.UTC (; 3 ;) (type $FUNCSIG$jiiiij) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i64) (result i64)
+  get_local $0
+  get_local $1
+  get_local $2
+  get_local $3
+  i32.const 0
+  i32.const 0
+  get_local $4
+  f64.convert_s/i64
+  call $~lib/bindings/Date/UTC
+  i64.trunc_s/f64
+ )
+ (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -80,7 +93,7 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $start (; 4 ;) (type $v)
+ (func $start (; 5 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   i32.const 40
@@ -91,11 +104,8 @@
   i32.const 0
   i32.const 1
   i32.const 0
-  i32.const 0
-  i32.const 0
-  f64.const 0
-  call $~lib/bindings/Date/UTC
-  i64.trunc_s/f64
+  i64.const 0
+  call $~lib/date/Date.UTC
   i64.const 0
   i64.ne
   if
@@ -110,11 +120,8 @@
   i32.const 0
   i32.const 1
   i32.const 0
-  i32.const 0
-  i32.const 0
-  f64.const 0
-  call $~lib/bindings/Date/UTC
-  i64.trunc_s/f64
+  i64.const 0
+  call $~lib/date/Date.UTC
   i64.const 0
   i64.ne
   if
@@ -129,11 +136,8 @@
   i32.const 10
   i32.const 10
   i32.const 11
-  i32.const 0
-  i32.const 0
-  f64.const 1
-  call $~lib/bindings/Date/UTC
-  i64.trunc_s/f64
+  i64.const 1
+  call $~lib/date/Date.UTC
   set_global $std/date/creationTime
   get_global $std/date/creationTime
   i64.const 1541847600001
@@ -202,7 +206,7 @@
    unreachable
   end
  )
- (func $null (; 5 ;) (type $v)
+ (func $null (; 6 ;) (type $v)
   nop
  )
 )

@@ -579,17 +579,14 @@ export class String {
   }
 }
 
-@inline
 export function parseInt(str: String, radix: i32 = 0): f64 {
   return parse<f64>(str, radix);
 }
 
-@inline
 export function parseI32(str: String, radix: i32 = 0): i32 {
   return parse<i32>(str, radix);
 }
 
-@inline
 export function parseI64(str: String, radix: i32 = 0): i64 {
   return parse<i64>(str, radix);
 }

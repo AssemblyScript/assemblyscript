@@ -5,7 +5,6 @@ import {
 
 export class Date {
 
-  @inline
   static UTC(
     year: i32,
     month: i32 = 0,
