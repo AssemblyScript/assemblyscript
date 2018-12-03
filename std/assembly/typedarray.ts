@@ -11,25 +11,25 @@ export class Int8Array extends TypedArray<i8,i32> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i8, index: i32, array: Int8Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Int8Array, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Int8Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
    * of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i8, index: i32, array: Int8Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Int8Array, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Int8Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
 
@@ -42,25 +42,25 @@ export class Uint8Array extends TypedArray<u8,u32> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u8, index: i32, array: Uint8Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Uint8Array, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Uint8Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
    * of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u8, index: i32, array: Uint8Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Uint8Array, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Uint8Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
 
@@ -83,25 +83,25 @@ export class Uint8ClampedArray extends TypedArray<u8,u32> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u8, index: i32, array: Uint8ClampedArray) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Uint8ClampedArray, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Uint8ClampedArray, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
    * of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u8, index: i32, array: Uint8ClampedArray) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Uint8ClampedArray, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Uint8ClampedArray, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
 
@@ -114,24 +114,24 @@ export class Int16Array extends TypedArray<i16,i32> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i16, index: i32, array: Int16Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Int16Array, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Int16Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i16, index: i32, array: Int16Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Int16Array, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Int16Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
 
@@ -144,25 +144,25 @@ export class Uint16Array extends TypedArray<u16,u32> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u16, index: i32, array: Uint16Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Uint16Array, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Uint16Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
    * of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u16, index: i32, array: Uint16Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Uint16Array, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Uint16Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
 
@@ -175,25 +175,25 @@ export class Int32Array extends TypedArray<i32,i32> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i32, index: i32, array: Int32Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Int32Array, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Int32Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
    * of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i32, index: i32, array: Int32Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Int32Array, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Int32Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
 
@@ -206,25 +206,25 @@ export class Uint32Array extends TypedArray<u32,u32> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u32, index: i32, array: Uint32Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Uint32Array, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Uint32Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
    * of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u32, index: i32, array: Uint32Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Uint32Array, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Uint32Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
 
@@ -237,25 +237,25 @@ export class Int64Array extends TypedArray<i64,i64> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i64, index: i32, array: Int64Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Int64Array, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Int64Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
    * of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i64, index: i32, array: Int64Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Int64Array, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Int64Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
 
@@ -268,25 +268,25 @@ export class Uint64Array extends TypedArray<u64,u64> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u64, index: i32, array: Uint64Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Uint64Array, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Uint64Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
    * of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u64, index: i32, array: Uint64Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Uint64Array, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Uint64Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
 
@@ -299,25 +299,25 @@ export class Float32Array extends TypedArray<f32,f32> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: f32, index: i32, array: Float32Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Float32Array, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Float32Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
    * of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: f32, index: i32, array: Float32Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Float32Array, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Float32Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
 
@@ -330,24 +330,24 @@ export class Float64Array extends TypedArray<f64,f64> {
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: f64, index: i32, array: Float64Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Float64Array, ReturnType>(callbackfn, this, initialvalue);
+    return super.reduce_internal<Float64Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   /**
    * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
    * of the array instead of from the beginning
-   * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
+   * @param initialValue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: f64, index: i32, array: Float64Array) => ReturnType,
-    initialvalue: ReturnType,
+    initialValue: ReturnType,
     ): ReturnType {
-    return super.reduce_internal<Float64Array, ReturnType>(callbackfn, this, initialvalue, true);
+    return super.reduce_internal<Float64Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
