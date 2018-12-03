@@ -525,6 +525,11 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
     callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
     initialValue: W,
   ): W;
+  /**  The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. This method has the same algorithm as Array.prototype.reduceRight(). */
+  reduceRight<W>(
+    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
+    initialValue: W,
+  ): W;
 }
 
 /** An array of twos-complement 8-bit signed integers. */

@@ -413,3 +413,191 @@ reduceInt64ArrayTest();
 reduceUint64ArrayTest();
 reduceFloat32ArrayTest();
 reduceFloat64ArrayTest();
+
+/**
+ * ReduceRight test suite:
+ * Each function is designed to test a simple sum reduction. In each test it initialized the tested
+ * typedarray, and sets the values manually. Then it calls `TypedArray.prototype.reduceRight` with a
+ * single sum arrow function reduction. For each reduction, it verifies the `self` parameter is the
+ * instantiated array, the index is the correct index, and it increments the testIndex variable.
+ * Finally, it asserts the value is 6.
+ *
+ * TODO: When function closure support is added, remove the function comments to fully verify the
+ * tests work.
+ */
+function reduceRightInt8ArrayTest(): void {
+  var array: Int8Array = new Int8Array(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<i8>((acc: i8, val: i8, index: i32, self: Int8Array): i8 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+function reduceRightUint8ArrayTest(): void {
+  var array: Uint8Array = new Uint8Array(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<u8>((acc: u8, val: u8, index: i32, self: Uint8Array): u8 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+function reduceRightUint8ClampedArrayTest(): void {
+  var array: Uint8ClampedArray = new Uint8ClampedArray(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<u8>((acc: u8, val: u8, index: i32, self: Uint8ClampedArray): u8 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+function reduceRightInt16ArrayTest(): void {
+  var array: Int16Array = new Int16Array(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<i16>((acc: i16, val: i16, index: i32, self: Int16Array): i16 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+function reduceRightUint16ArrayTest(): void {
+  var array: Uint16Array = new Uint16Array(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<u16>((acc: u16, val: u16, index: i32, self: Uint16Array): u16 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+function reduceRightInt32ArrayTest(): void {
+  var array: Int32Array = new Int32Array(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<i32>((acc: i32, val: i32, index: i32, self: Int32Array): i32 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+function reduceRightUint32ArrayTest(): void {
+  var array: Uint32Array = new Uint32Array(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<u32>((acc: u32, val: u32, index: i32, self: Uint32Array): u32 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+function reduceRightInt64ArrayTest(): void {
+  var array: Int64Array = new Int64Array(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<i64>((acc: i64, val: i64, index: i32, self: Int64Array): i64 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+function reduceRightUint64ArrayTest(): void {
+  var array: Uint64Array = new Uint64Array(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<u64>((acc: u64, val: u64, index: i32, self: Uint64Array): u64 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+function reduceRightFloat32ArrayTest(): void {
+  var array: Float32Array = new Float32Array(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<f32>((acc: f32, val: f32, index: i32, self: Float32Array): f32 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+function reduceRightFloat64ArrayTest(): void {
+  var array: Float64Array = new Float64Array(3);
+  array[0] = 1;
+  array[1] = 2;
+  array[2] = 3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<f64>((acc: f64, val: f64, index: i32, self: Float64Array): f64 => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == 6);
+}
+
+reduceRightInt8ArrayTest();
+reduceRightUint8ArrayTest();
+reduceRightUint8ClampedArrayTest();
+reduceRightInt16ArrayTest();
+reduceRightUint16ArrayTest();
+reduceRightInt32ArrayTest();
+reduceRightUint32ArrayTest();
+reduceRightInt64ArrayTest();
+reduceRightUint64ArrayTest();
+reduceRightFloat32ArrayTest();
+reduceRightFloat64ArrayTest();
