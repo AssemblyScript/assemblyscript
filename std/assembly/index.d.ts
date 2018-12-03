@@ -520,6 +520,11 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   readonly length: i32;
   /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
   subarray(begin?: i32, end?: i32): this;
+  /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
+  reduce<W>(
+    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
+    initialValue: W,
+  ): W;
 }
 
 /** An array of twos-complement 8-bit signed integers. */
