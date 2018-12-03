@@ -285,33 +285,10 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  // Include entry files
-  for (let i = 0, k = argv.length; i < k; ++i) {
-    const filename = argv[i];
-
-    let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
-
-    // Try entryPath.ts, then entryPath/index.ts
-    let sourceText = readFile(path.join(baseDir, sourcePath) + ".ts");
-    if (sourceText === null) {
-      sourceText = readFile(path.join(baseDir, sourcePath, "index.ts"));
-      if (sourceText === null) {
-        return callback(Error("Entry file '" + sourcePath + ".ts' not found."));
-      } else {
-        sourcePath += "/index.ts";
-      }
-    } else {
-      sourcePath += ".ts";
-    }
-
-    stats.parseCount++;
-    stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
-    });
-
-    // Process backlog
+  // Parses the backlog of imported files after including entry files
+  function parseBacklog() {
+    var sourcePath, sourceText;
     while ((sourcePath = parser.nextFile()) != null) {
-      let found = false;
 
       // Load library file if explicitly requested
       if (sourcePath.startsWith(exports.libraryPrefix)) {
@@ -390,7 +367,38 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
+  // Include entry files
+  for (let i = 0, k = argv.length; i < k; ++i) {
+    const filename = argv[i];
+
+    let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
+
+    // Try entryPath.ts, then entryPath/index.ts
+    let sourceText = readFile(path.join(baseDir, sourcePath) + ".ts");
+    if (sourceText === null) {
+      sourceText = readFile(path.join(baseDir, sourcePath, "index.ts"));
+      if (sourceText === null) {
+        return callback(Error("Entry file '" + sourcePath + ".ts' not found."));
+      } else {
+        sourcePath += "/index.ts";
+      }
+    } else {
+      sourcePath += ".ts";
+    }
+
+    stats.parseCount++;
+    stats.parseTime += measure(() => {
+      parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
+    });
+    let code = parseBacklog();
+    if (code) return code;
+  }
+
   applyTransform("afterParse", parser);
+  {
+    let code = parseBacklog();
+    if (code) return code;
+  }
 
   // Finish parsing
   const program = assemblyscript.finishParsing(parser);

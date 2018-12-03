@@ -16,8 +16,7 @@ import {
 
 import {
   Options,
-  Feature,
-  Compiler
+  Feature
 } from "./compiler";
 
 import {
