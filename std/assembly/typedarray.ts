@@ -21,7 +21,8 @@ export class Int8Array extends TypedArray<i8,i32> {
   }
 
   /**
-   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
+   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
+   * of the array instead of from the beginning
    * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
@@ -51,7 +52,8 @@ export class Uint8Array extends TypedArray<u8,u32> {
   }
 
   /**
-   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
+   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
+   * of the array instead of from the beginning
    * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
@@ -91,7 +93,8 @@ export class Uint8ClampedArray extends TypedArray<u8,u32> {
   }
 
   /**
-   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
+   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
+   * of the array instead of from the beginning
    * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
@@ -151,7 +154,8 @@ export class Uint16Array extends TypedArray<u16,u32> {
   }
 
   /**
-   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
+   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
+   * of the array instead of from the beginning
    * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
@@ -181,7 +185,8 @@ export class Int32Array extends TypedArray<i32,i32> {
   }
 
   /**
-   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
+   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
+   * of the array instead of from the beginning
    * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
@@ -211,7 +216,8 @@ export class Uint32Array extends TypedArray<u32,u32> {
   }
 
   /**
-   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
+   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
+   * of the array instead of from the beginning
    * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
@@ -241,7 +247,8 @@ export class Int64Array extends TypedArray<i64,i64> {
   }
 
   /**
-   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
+   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
+   * of the array instead of from the beginning
    * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
@@ -271,7 +278,8 @@ export class Uint64Array extends TypedArray<u64,u64> {
   }
 
   /**
-   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
+   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
+   * of the array instead of from the beginning
    * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
@@ -301,7 +309,8 @@ export class Float32Array extends TypedArray<f32,f32> {
   }
 
   /**
-   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
+   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
+   * of the array instead of from the beginning
    * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(
@@ -331,7 +340,8 @@ export class Float64Array extends TypedArray<f64,f64> {
   }
 
   /**
-   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end of the array instead of from the beginning
+   * @param callbackfn {function} - a function that reduces each value to a ReturnType from the end
+   * of the array instead of from the beginning
    * @param initialvalue {ReturnType} - the initial ReturnType value to be passed to the callbackfn
    */
   reduceRight<ReturnType>(

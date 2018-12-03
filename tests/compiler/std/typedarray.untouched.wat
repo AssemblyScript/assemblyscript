@@ -18,9 +18,7 @@
  (type $iiff (func (param i32 i32 f32) (result f32)))
  (type $FFiiF (func (param f64 f64 i32 i32) (result f64)))
  (type $iiFF (func (param i32 i32 f64) (result f64)))
- (type $iiFFFFFv (func (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (import "env" "trace" (func $~lib/env/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
  (data (i32.const 8) "\11\00\00\00s\00t\00d\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 48) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
@@ -53,7 +51,6 @@
  (data (i32.const 576) " \02\00\00\03\00\00\00")
  (data (i32.const 584) "\14\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00")
  (data (i32.const 616) "H\02\00\00\05\00\00\00")
- (data (i32.const 624) "\10\00\00\00p\00a\00r\00a\00m\00s\00:\00 \00%\00d\00 \00%\00d\00 \00%\00d\00")
  (table $0 24 anyfunc)
  (elem (i32.const 0) $null $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceUint8ArrayTest~anonymous|3 $std/typedarray/reduceUint8ClampedArrayTest~anonymous|4 $std/typedarray/reduceInt16ArrayTest~anonymous|5 $std/typedarray/reduceUint16ArrayTest~anonymous|6 $std/typedarray/reduceInt32ArrayTest~anonymous|7 $std/typedarray/reduceUint32ArrayTest~anonymous|8 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceUint64ArrayTest~anonymous|10 $std/typedarray/reduceFloat32ArrayTest~anonymous|11 $std/typedarray/reduceFloat64ArrayTest~anonymous|12 $std/typedarray/reduceRightInt8ArrayTest~anonymous|13 $std/typedarray/reduceRightUint8ArrayTest~anonymous|14 $std/typedarray/reduceRightUint8ClampedArrayTest~anonymous|15 $std/typedarray/reduceRightInt16ArrayTest~anonymous|16 $std/typedarray/reduceRightUint16ArrayTest~anonymous|17 $std/typedarray/reduceRightInt32ArrayTest~anonymous|18 $std/typedarray/reduceRightUint32ArrayTest~anonymous|19 $std/typedarray/reduceRightInt64ArrayTest~anonymous|20 $std/typedarray/reduceRightUint64ArrayTest~anonymous|21 $std/typedarray/reduceRightFloat32ArrayTest~anonymous|22 $std/typedarray/reduceRightFloat64ArrayTest~anonymous|23)
  (global $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT i32 (i32.const 1))
@@ -89,11 +86,11 @@
  (global $std/typedarray/multisubarr1 (mut i32) (i32.const 0))
  (global $std/typedarray/multisubarr2 (mut i32) (i32.const 0))
  (global $std/typedarray/multisubarr3 (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 660))
+ (global $HEAP_BASE i32 (i32.const 624))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 1 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   get_local $0
@@ -105,7 +102,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -184,7 +181,7 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -213,7 +210,7 @@
   i32.store
   get_local $1
  )
- (func $~lib/internal/memory/memset (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -467,12 +464,12 @@
    end
   end
  )
- (func $~lib/memory/memory.allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8,i32>#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -537,7 +534,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8,u32>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -602,7 +599,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i16,i32>#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i16,i32>#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -667,7 +664,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<u16,u32>#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u16,u32>#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -732,7 +729,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#constructor (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -797,7 +794,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<u32,u32>#constructor (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u32,u32>#constructor (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -862,7 +859,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i64,i64>#constructor (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i64,i64>#constructor (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -927,7 +924,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<u64,u64>#constructor (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u64,u64>#constructor (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -992,7 +989,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<f32,f32>#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f32,f32>#constructor (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1057,7 +1054,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#constructor (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64,f64>#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1122,7 +1119,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $std/typedarray/testInstantiate (; 17 ;) (type $iv) (param $0 i32)
+ (func $std/typedarray/testInstantiate (; 16 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1674,7 +1671,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#__set (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#__set (; 17 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -1707,7 +1704,7 @@
   get_local $2
   i32.store offset=8
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#__get (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#__get (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $1
@@ -1741,7 +1738,7 @@
    i32.load offset=8
   end
  )
- (func $~lib/typedarray/Int32Array#subarray (; 20 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#subarray (; 19 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1840,7 +1837,7 @@
   i32.store offset=8
   get_local $4
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#__set (; 21 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $~lib/internal/typedarray/TypedArray<f64,f64>#__set (; 20 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -1873,7 +1870,7 @@
   get_local $2
   f64.store offset=8
  )
- (func $~lib/typedarray/Float64Array#subarray (; 22 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Float64Array#subarray (; 21 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1972,7 +1969,7 @@
   i32.store offset=8
   get_local $4
  )
- (func $~lib/internal/array/insertionSort<f64> (; 23 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<f64> (; 22 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 f64)
   (local $6 i32)
@@ -2084,10 +2081,10 @@
    unreachable
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 24 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 23 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/internal/array/weakHeapSort<f64> (; 25 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/weakHeapSort<f64> (; 24 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2500,7 +2497,7 @@
   get_local $12
   f64.store offset=8
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2613,7 +2610,7 @@
   get_local $0
   return
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1 (; 27 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1 (; 26 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   get_local $0
@@ -2646,7 +2643,7 @@
   i64.lt_s
   i32.sub
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -2665,7 +2662,7 @@
   get_local $1
   call $~lib/internal/typedarray/TypedArray<f64,f64>#sort
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#__get (; 29 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/internal/typedarray/TypedArray<f64,f64>#__get (; 28 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 i32)
   get_local $1
@@ -2699,7 +2696,7 @@
    f64.load offset=8
   end
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#__set (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u8,u32>#__set (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -2732,7 +2729,7 @@
   get_local $2
   i32.store8 offset=8
  )
- (func $~lib/typedarray/Uint8ClampedArray#__set (; 31 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8ClampedArray#__set (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -2754,7 +2751,7 @@
   select
   call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#__get (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8,u32>#__get (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $1
@@ -2788,7 +2785,7 @@
    i32.load8_u offset=8
   end
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#__set (; 33 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<i8,i32>#__set (; 32 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -2821,7 +2818,7 @@
   get_local $2
   i32.store8 offset=8
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#fill (; 34 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8,i32>#fill (; 33 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2913,7 +2910,7 @@
   end
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#__get (; 35 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8,i32>#__get (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $1
@@ -2947,7 +2944,7 @@
    i32.load8_s offset=8
   end
  )
- (func $~lib/array/Array<i8>#__get (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#__get (; 35 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -2969,7 +2966,7 @@
    unreachable
   end
  )
- (func $std/typedarray/isInt8ArrayEqual (; 37 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/typedarray/isInt8ArrayEqual (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.3 (result i32)
@@ -3035,7 +3032,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#fill|trampoline (; 38 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8,i32>#fill|trampoline (; 37 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -3059,7 +3056,7 @@
   get_local $3
   call $~lib/internal/typedarray/TypedArray<i8,i32>#fill
  )
- (func $~lib/typedarray/Int8Array#subarray (; 39 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int8Array#subarray (; 38 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3158,7 +3155,7 @@
   i32.store offset=8
   get_local $4
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#fill (; 40 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#fill (; 39 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -3254,7 +3251,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<i32>#__get (; 41 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 40 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -3276,7 +3273,7 @@
    unreachable
   end
  )
- (func $std/typedarray/isInt32ArrayEqual (; 42 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/typedarray/isInt32ArrayEqual (; 41 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.6 (result i32)
@@ -3334,7 +3331,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#fill|trampoline (; 43 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32,i32>#fill|trampoline (; 42 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -3358,12 +3355,12 @@
   get_local $3
   call $~lib/internal/typedarray/TypedArray<i32,i32>#fill
  )
- (func $std/typedarray/reduceInt8ArrayTest~anonymous|2 (; 44 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceInt8ArrayTest~anonymous|2 (; 43 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Int8Array#reduce<i8> (; 45 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int8Array#reduce<i8> (; 44 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3448,7 +3445,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceInt8ArrayTest (; 46 ;) (type $v)
+ (func $std/typedarray/reduceInt8ArrayTest (; 45 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -3489,12 +3486,12 @@
    unreachable
   end
  )
- (func $std/typedarray/reduceUint8ArrayTest~anonymous|3 (; 47 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceUint8ArrayTest~anonymous|3 (; 46 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Uint8Array#reduce<u8> (; 48 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#reduce<u8> (; 47 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3579,7 +3576,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceUint8ArrayTest (; 49 ;) (type $v)
+ (func $std/typedarray/reduceUint8ArrayTest (; 48 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -3618,12 +3615,12 @@
    unreachable
   end
  )
- (func $std/typedarray/reduceUint8ClampedArrayTest~anonymous|4 (; 50 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceUint8ClampedArrayTest~anonymous|4 (; 49 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Uint8ClampedArray#reduce<u8> (; 51 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint8ClampedArray#reduce<u8> (; 50 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3708,7 +3705,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceUint8ClampedArrayTest (; 52 ;) (type $v)
+ (func $std/typedarray/reduceUint8ClampedArrayTest (; 51 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -3747,7 +3744,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<i16,i32>#__set (; 53 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<i16,i32>#__set (; 52 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -3780,12 +3777,12 @@
   get_local $2
   i32.store16 offset=8
  )
- (func $std/typedarray/reduceInt16ArrayTest~anonymous|5 (; 54 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceInt16ArrayTest~anonymous|5 (; 53 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Int16Array#reduce<i16> (; 55 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int16Array#reduce<i16> (; 54 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3870,7 +3867,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceInt16ArrayTest (; 56 ;) (type $v)
+ (func $std/typedarray/reduceInt16ArrayTest (; 55 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -3911,7 +3908,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<u16,u32>#__set (; 57 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u16,u32>#__set (; 56 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -3944,12 +3941,12 @@
   get_local $2
   i32.store16 offset=8
  )
- (func $std/typedarray/reduceUint16ArrayTest~anonymous|6 (; 58 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceUint16ArrayTest~anonymous|6 (; 57 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Uint16Array#reduce<u16> (; 59 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint16Array#reduce<u16> (; 58 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4034,7 +4031,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceUint16ArrayTest (; 60 ;) (type $v)
+ (func $std/typedarray/reduceUint16ArrayTest (; 59 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -4073,12 +4070,12 @@
    unreachable
   end
  )
- (func $std/typedarray/reduceInt32ArrayTest~anonymous|7 (; 61 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceInt32ArrayTest~anonymous|7 (; 60 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Int32Array#reduce<i32> (; 62 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#reduce<i32> (; 61 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4163,7 +4160,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceInt32ArrayTest (; 63 ;) (type $v)
+ (func $std/typedarray/reduceInt32ArrayTest (; 62 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -4200,7 +4197,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<u32,u32>#__set (; 64 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u32,u32>#__set (; 63 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -4233,12 +4230,12 @@
   get_local $2
   i32.store offset=8
  )
- (func $std/typedarray/reduceUint32ArrayTest~anonymous|8 (; 65 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceUint32ArrayTest~anonymous|8 (; 64 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Uint32Array#reduce<u32> (; 66 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint32Array#reduce<u32> (; 65 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4323,7 +4320,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceUint32ArrayTest (; 67 ;) (type $v)
+ (func $std/typedarray/reduceUint32ArrayTest (; 66 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -4360,7 +4357,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<i64,i64>#__set (; 68 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/internal/typedarray/TypedArray<i64,i64>#__set (; 67 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -4393,12 +4390,12 @@
   get_local $2
   i64.store offset=8
  )
- (func $std/typedarray/reduceInt64ArrayTest~anonymous|9 (; 69 ;) (type $IIiiI) (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
+ (func $std/typedarray/reduceInt64ArrayTest~anonymous|9 (; 68 ;) (type $IIiiI) (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
   get_local $0
   get_local $1
   i64.add
  )
- (func $~lib/typedarray/Int64Array#reduce<i64> (; 70 ;) (type $iiII) (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
+ (func $~lib/typedarray/Int64Array#reduce<i64> (; 69 ;) (type $iiII) (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4483,7 +4480,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceInt64ArrayTest (; 71 ;) (type $v)
+ (func $std/typedarray/reduceInt64ArrayTest (; 70 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   i32.const 0
@@ -4520,7 +4517,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<u64,u64>#__set (; 72 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/internal/typedarray/TypedArray<u64,u64>#__set (; 71 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -4553,12 +4550,12 @@
   get_local $2
   i64.store offset=8
  )
- (func $std/typedarray/reduceUint64ArrayTest~anonymous|10 (; 73 ;) (type $IIiiI) (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
+ (func $std/typedarray/reduceUint64ArrayTest~anonymous|10 (; 72 ;) (type $IIiiI) (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
   get_local $0
   get_local $1
   i64.add
  )
- (func $~lib/typedarray/Uint64Array#reduce<u64> (; 74 ;) (type $iiII) (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
+ (func $~lib/typedarray/Uint64Array#reduce<u64> (; 73 ;) (type $iiII) (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4643,7 +4640,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceUint64ArrayTest (; 75 ;) (type $v)
+ (func $std/typedarray/reduceUint64ArrayTest (; 74 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   i32.const 0
@@ -4680,7 +4677,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<f32,f32>#__set (; 76 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $~lib/internal/typedarray/TypedArray<f32,f32>#__set (; 75 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -4713,12 +4710,12 @@
   get_local $2
   f32.store offset=8
  )
- (func $std/typedarray/reduceFloat32ArrayTest~anonymous|11 (; 77 ;) (type $ffiif) (param $0 f32) (param $1 f32) (param $2 i32) (param $3 i32) (result f32)
+ (func $std/typedarray/reduceFloat32ArrayTest~anonymous|11 (; 76 ;) (type $ffiif) (param $0 f32) (param $1 f32) (param $2 i32) (param $3 i32) (result f32)
   get_local $0
   get_local $1
   f32.add
  )
- (func $~lib/typedarray/Float32Array#reduce<f32> (; 78 ;) (type $iiff) (param $0 i32) (param $1 i32) (param $2 f32) (result f32)
+ (func $~lib/typedarray/Float32Array#reduce<f32> (; 77 ;) (type $iiff) (param $0 i32) (param $1 i32) (param $2 f32) (result f32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4803,7 +4800,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceFloat32ArrayTest (; 79 ;) (type $v)
+ (func $std/typedarray/reduceFloat32ArrayTest (; 78 ;) (type $v)
   (local $0 i32)
   (local $1 f32)
   i32.const 0
@@ -4840,12 +4837,12 @@
    unreachable
   end
  )
- (func $std/typedarray/reduceFloat64ArrayTest~anonymous|12 (; 80 ;) (type $FFiiF) (param $0 f64) (param $1 f64) (param $2 i32) (param $3 i32) (result f64)
+ (func $std/typedarray/reduceFloat64ArrayTest~anonymous|12 (; 79 ;) (type $FFiiF) (param $0 f64) (param $1 f64) (param $2 i32) (param $3 i32) (result f64)
   get_local $0
   get_local $1
   f64.add
  )
- (func $~lib/typedarray/Float64Array#reduce<f64> (; 81 ;) (type $iiFF) (param $0 i32) (param $1 i32) (param $2 f64) (result f64)
+ (func $~lib/typedarray/Float64Array#reduce<f64> (; 80 ;) (type $iiFF) (param $0 i32) (param $1 i32) (param $2 f64) (result f64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4930,7 +4927,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceFloat64ArrayTest (; 82 ;) (type $v)
+ (func $std/typedarray/reduceFloat64ArrayTest (; 81 ;) (type $v)
   (local $0 i32)
   (local $1 f64)
   i32.const 0
@@ -4967,23 +4964,12 @@
    unreachable
   end
  )
- (func $std/typedarray/reduceRightInt8ArrayTest~anonymous|13 (; 83 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  i32.const 624
-  i32.const 3
-  get_local $0
-  f64.convert_s/i32
-  get_local $1
-  f64.convert_s/i32
-  get_local $2
-  f64.convert_s/i32
-  f64.const 0
-  f64.const 0
-  call $~lib/env/trace
+ (func $std/typedarray/reduceRightInt8ArrayTest~anonymous|13 (; 82 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Int8Array#reduceRight<i8> (; 84 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int8Array#reduceRight<i8> (; 83 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5068,7 +5054,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightInt8ArrayTest (; 85 ;) (type $v)
+ (func $std/typedarray/reduceRightInt8ArrayTest (; 84 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -5103,18 +5089,18 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 441
+   i32.const 440
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/typedarray/reduceRightUint8ArrayTest~anonymous|14 (; 86 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceRightUint8ArrayTest~anonymous|14 (; 85 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Uint8Array#reduceRight<u8> (; 87 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#reduceRight<u8> (; 86 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5199,7 +5185,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightUint8ArrayTest (; 88 ;) (type $v)
+ (func $std/typedarray/reduceRightUint8ArrayTest (; 87 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -5232,18 +5218,18 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 456
+   i32.const 455
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/typedarray/reduceRightUint8ClampedArrayTest~anonymous|15 (; 89 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceRightUint8ClampedArrayTest~anonymous|15 (; 88 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Uint8ClampedArray#reduceRight<u8> (; 90 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint8ClampedArray#reduceRight<u8> (; 89 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5328,7 +5314,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightUint8ClampedArrayTest (; 91 ;) (type $v)
+ (func $std/typedarray/reduceRightUint8ClampedArrayTest (; 90 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -5361,18 +5347,18 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 471
+   i32.const 470
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/typedarray/reduceRightInt16ArrayTest~anonymous|16 (; 92 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceRightInt16ArrayTest~anonymous|16 (; 91 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Int16Array#reduceRight<i16> (; 93 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int16Array#reduceRight<i16> (; 92 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5457,7 +5443,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightInt16ArrayTest (; 94 ;) (type $v)
+ (func $std/typedarray/reduceRightInt16ArrayTest (; 93 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -5492,18 +5478,18 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 486
+   i32.const 485
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/typedarray/reduceRightUint16ArrayTest~anonymous|17 (; 95 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceRightUint16ArrayTest~anonymous|17 (; 94 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Uint16Array#reduceRight<u16> (; 96 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint16Array#reduceRight<u16> (; 95 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5588,7 +5574,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightUint16ArrayTest (; 97 ;) (type $v)
+ (func $std/typedarray/reduceRightUint16ArrayTest (; 96 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -5621,18 +5607,18 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 501
+   i32.const 500
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/typedarray/reduceRightInt32ArrayTest~anonymous|18 (; 98 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceRightInt32ArrayTest~anonymous|18 (; 97 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Int32Array#reduceRight<i32> (; 99 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#reduceRight<i32> (; 98 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5717,7 +5703,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightInt32ArrayTest (; 100 ;) (type $v)
+ (func $std/typedarray/reduceRightInt32ArrayTest (; 99 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -5748,18 +5734,18 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 516
+   i32.const 515
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/typedarray/reduceRightUint32ArrayTest~anonymous|19 (; 101 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $std/typedarray/reduceRightUint32ArrayTest~anonymous|19 (; 100 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/typedarray/Uint32Array#reduceRight<u32> (; 102 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint32Array#reduceRight<u32> (; 101 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5844,7 +5830,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightUint32ArrayTest (; 103 ;) (type $v)
+ (func $std/typedarray/reduceRightUint32ArrayTest (; 102 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -5875,18 +5861,18 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 531
+   i32.const 530
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/typedarray/reduceRightInt64ArrayTest~anonymous|20 (; 104 ;) (type $IIiiI) (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
+ (func $std/typedarray/reduceRightInt64ArrayTest~anonymous|20 (; 103 ;) (type $IIiiI) (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
   get_local $0
   get_local $1
   i64.add
  )
- (func $~lib/typedarray/Int64Array#reduceRight<i64> (; 105 ;) (type $iiII) (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
+ (func $~lib/typedarray/Int64Array#reduceRight<i64> (; 104 ;) (type $iiII) (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5971,7 +5957,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightInt64ArrayTest (; 106 ;) (type $v)
+ (func $std/typedarray/reduceRightInt64ArrayTest (; 105 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   i32.const 0
@@ -6002,18 +5988,18 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 546
+   i32.const 545
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/typedarray/reduceRightUint64ArrayTest~anonymous|21 (; 107 ;) (type $IIiiI) (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
+ (func $std/typedarray/reduceRightUint64ArrayTest~anonymous|21 (; 106 ;) (type $IIiiI) (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
   get_local $0
   get_local $1
   i64.add
  )
- (func $~lib/typedarray/Uint64Array#reduceRight<u64> (; 108 ;) (type $iiII) (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
+ (func $~lib/typedarray/Uint64Array#reduceRight<u64> (; 107 ;) (type $iiII) (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6098,7 +6084,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightUint64ArrayTest (; 109 ;) (type $v)
+ (func $std/typedarray/reduceRightUint64ArrayTest (; 108 ;) (type $v)
   (local $0 i32)
   (local $1 i64)
   i32.const 0
@@ -6129,18 +6115,18 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 561
+   i32.const 560
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/typedarray/reduceRightFloat32ArrayTest~anonymous|22 (; 110 ;) (type $ffiif) (param $0 f32) (param $1 f32) (param $2 i32) (param $3 i32) (result f32)
+ (func $std/typedarray/reduceRightFloat32ArrayTest~anonymous|22 (; 109 ;) (type $ffiif) (param $0 f32) (param $1 f32) (param $2 i32) (param $3 i32) (result f32)
   get_local $0
   get_local $1
   f32.add
  )
- (func $~lib/typedarray/Float32Array#reduceRight<f32> (; 111 ;) (type $iiff) (param $0 i32) (param $1 i32) (param $2 f32) (result f32)
+ (func $~lib/typedarray/Float32Array#reduceRight<f32> (; 110 ;) (type $iiff) (param $0 i32) (param $1 i32) (param $2 f32) (result f32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6225,7 +6211,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightFloat32ArrayTest (; 112 ;) (type $v)
+ (func $std/typedarray/reduceRightFloat32ArrayTest (; 111 ;) (type $v)
   (local $0 i32)
   (local $1 f32)
   i32.const 0
@@ -6256,18 +6242,18 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 576
+   i32.const 575
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $std/typedarray/reduceRightFloat64ArrayTest~anonymous|23 (; 113 ;) (type $FFiiF) (param $0 f64) (param $1 f64) (param $2 i32) (param $3 i32) (result f64)
+ (func $std/typedarray/reduceRightFloat64ArrayTest~anonymous|23 (; 112 ;) (type $FFiiF) (param $0 f64) (param $1 f64) (param $2 i32) (param $3 i32) (result f64)
   get_local $0
   get_local $1
   f64.add
  )
- (func $~lib/typedarray/Float64Array#reduceRight<f64> (; 114 ;) (type $iiFF) (param $0 i32) (param $1 i32) (param $2 f64) (result f64)
+ (func $~lib/typedarray/Float64Array#reduceRight<f64> (; 113 ;) (type $iiFF) (param $0 i32) (param $1 i32) (param $2 f64) (result f64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6352,7 +6338,7 @@
   end
   get_local $2
  )
- (func $std/typedarray/reduceRightFloat64ArrayTest (; 115 ;) (type $v)
+ (func $std/typedarray/reduceRightFloat64ArrayTest (; 114 ;) (type $v)
   (local $0 i32)
   (local $1 f64)
   i32.const 0
@@ -6383,13 +6369,13 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 591
+   i32.const 590
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $start (; 116 ;) (type $v)
+ (func $start (; 115 ;) (type $v)
   (local $0 i32)
   get_global $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT
   i32.const 1
@@ -7591,6 +7577,6 @@
   call $std/typedarray/reduceRightFloat32ArrayTest
   call $std/typedarray/reduceRightFloat64ArrayTest
  )
- (func $null (; 117 ;) (type $v)
+ (func $null (; 116 ;) (type $v)
  )
 )
