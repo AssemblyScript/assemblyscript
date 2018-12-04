@@ -12,14 +12,14 @@ export class Int8Array extends TypedArray<i8,i32> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i8, index: i32, array: Int8Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Int8Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i8, index: i32, array: Int8Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Int8Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
@@ -34,14 +34,14 @@ export class Uint8Array extends TypedArray<u8,u32> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u8, index: i32, array: Uint8Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Uint8Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u8, index: i32, array: Uint8Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Uint8Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
@@ -66,14 +66,14 @@ export class Uint8ClampedArray extends TypedArray<u8,u32> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u8, index: i32, array: Uint8ClampedArray) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Uint8ClampedArray, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u8, index: i32, array: Uint8ClampedArray) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Uint8ClampedArray, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
@@ -88,14 +88,14 @@ export class Int16Array extends TypedArray<i16,i32> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i16, index: i32, array: Int16Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Int16Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i16, index: i32, array: Int16Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Int16Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
@@ -110,14 +110,14 @@ export class Uint16Array extends TypedArray<u16,u32> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u16, index: i32, array: Uint16Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Uint16Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u16, index: i32, array: Uint16Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Uint16Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
@@ -136,14 +136,14 @@ export class Int32Array extends TypedArray<i32,i32> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i32, index: i32, array: Int32Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Int32Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i32, index: i32, array: Int32Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Int32Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
@@ -158,14 +158,14 @@ export class Uint32Array extends TypedArray<u32,u32> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u32, index: i32, array: Uint32Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Uint32Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u32, index: i32, array: Uint32Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Uint32Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
@@ -180,14 +180,14 @@ export class Int64Array extends TypedArray<i64,i64> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i64, index: i32, array: Int64Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Int64Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: i64, index: i32, array: Int64Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Int64Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
@@ -202,14 +202,14 @@ export class Uint64Array extends TypedArray<u64,u64> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u64, index: i32, array: Uint64Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Uint64Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: u64, index: i32, array: Uint64Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Uint64Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
@@ -224,14 +224,14 @@ export class Float32Array extends TypedArray<f32,f32> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: f32, index: i32, array: Float32Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Float32Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: f32, index: i32, array: Float32Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Float32Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
@@ -246,14 +246,14 @@ export class Float64Array extends TypedArray<f64,f64> {
   reduce<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: f64, index: i32, array: Float64Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Float64Array, ReturnType>(callbackfn, this, initialValue);
   }
 
   reduceRight<ReturnType>(
     callbackfn: (accumulator: ReturnType, value: f64, index: i32, array: Float64Array) => ReturnType,
     initialValue: ReturnType,
-    ): ReturnType {
+  ): ReturnType {
     return super.reduce_internal<Float64Array, ReturnType>(callbackfn, this, initialValue, true);
   }
 }
