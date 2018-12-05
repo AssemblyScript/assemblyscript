@@ -551,7 +551,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 37
+   i32.const 45
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -587,18 +587,16 @@
   get_local $0
   get_local $1
   i32.store offset=4
-  block $~lib/memory/memory.fill|inlined.0
-   get_local $3
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
-   set_local $4
-   i32.const 0
-   set_local $5
-   get_local $4
-   get_local $5
-   get_local $2
-   call $~lib/internal/memory/memset
-  end
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
   get_local $0
  )
  (func $~lib/array/Array<Body>#__unchecked_set (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
