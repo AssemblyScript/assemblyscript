@@ -73,17 +73,17 @@
             let _exports = {};
             const workers = [];
             async function init() {
-                const res = await fetch("build/optimized.wasm");
+                const res = await fetch("build/untouched.wasm");
                 const buffer = await res.arrayBuffer();
                 const wasm = await WebAssembly.compile(buffer);
                 let worker1 = new Worker("./js/worker1.js");
-                let worker2 = new Worker("./js/worker1.js");
+                // let worker2 = new Worker("./js/worker1.js");
                 worker1.onmessage = handleMessage;
-                worker2.onmessage = handleMessage;
+                // worker2.onmessage = handleMessage;
                 workers.push(worker1)
-                workers.push(worker2);
+                // workers.push(worker2);
                 worker1.postMessage({ command: "init", id:1, memory, wasm });
-                worker2.postMessage({ command: "init", id:2, memory, wasm });
+                // worker2.postMessage({ command: "init", id:2, memory, wasm });
             }
             let readyCount = 0;
             function handleMessage(event) {
@@ -114,6 +114,8 @@
                             setTimeout(() => {
                                 workers[1].postMessage({ command: "wake_js", value: 2 });
                             }, 5000)
+                        } else {
+                          workers[0].postMessage({command: "wget", value: 1});
                         }
                         break;
                     }
