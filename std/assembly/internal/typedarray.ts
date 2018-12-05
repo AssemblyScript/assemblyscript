@@ -126,4 +126,31 @@ export abstract class TypedArray<T,TNative> {
       return this;
     }
   }
+
+  /**
+   * TypedArray reduce implementation. This is a method that will be called from the parent,
+   * passing types down from the child class using the typed parameters TypedArrayType and
+   * ReturnType respectively. This implementation requires an initial value, and the direction.
+   * When direction is true, reduce will reduce from the right side.
+   */
+  @inline
+  protected reduce_internal<TypedArrayType, ReturnType>(
+    callbackfn: (accumulator: ReturnType, value: T, index: i32, array: TypedArrayType) => ReturnType,
+    array: TypedArrayType,
+    initialValue: ReturnType,
+    direction: bool = false,
+    ): ReturnType {
+    var index: i32 = direction ? this.length - 1 : 0;
+    var length: i32 = direction ? -1 : this.length;
+    while (index != length) {
+      initialValue = callbackfn(
+        initialValue,
+        this.__unchecked_get(index),
+        index,
+        array,
+      );
+      index = direction ? index - 1 : index + 1;
+    }
+    return initialValue;
+  }
 }
