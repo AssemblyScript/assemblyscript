@@ -633,7 +633,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $2
     call $~lib/set/Set<i8>#rehash
    end
    get_local $0
@@ -729,7 +728,7 @@
   select
   i32.ge_u
   tee_local $1
-  if
+  if (result i32)
    get_local $0
    i32.load offset=20
    get_local $0
@@ -739,9 +738,9 @@
    f64.mul
    i32.trunc_s/f64
    i32.lt_s
-   set_local $1
+  else   
+   get_local $1
   end
-  get_local $1
   if
    get_local $0
    get_local $2
@@ -1162,7 +1161,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $2
     call $~lib/set/Set<u8>#rehash
    end
    get_local $0
@@ -1256,7 +1254,7 @@
   select
   i32.ge_u
   tee_local $1
-  if
+  if (result i32)
    get_local $0
    i32.load offset=20
    get_local $0
@@ -1266,9 +1264,9 @@
    f64.mul
    i32.trunc_s/f64
    i32.lt_s
-   set_local $1
+  else   
+   get_local $1
   end
-  get_local $1
   if
    get_local $0
    get_local $2
@@ -1766,7 +1764,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $2
     call $~lib/set/Set<i16>#rehash
    end
    get_local $0
@@ -1871,7 +1868,7 @@
   select
   i32.ge_u
   tee_local $1
-  if
+  if (result i32)
    get_local $0
    i32.load offset=20
    get_local $0
@@ -1881,9 +1878,9 @@
    f64.mul
    i32.trunc_s/f64
    i32.lt_s
-   set_local $1
+  else   
+   get_local $1
   end
-  get_local $1
   if
    get_local $0
    get_local $2
@@ -2332,7 +2329,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $2
     call $~lib/set/Set<u16>#rehash
    end
    get_local $0
@@ -2435,7 +2431,7 @@
   select
   i32.ge_u
   tee_local $1
-  if
+  if (result i32)
    get_local $0
    i32.load offset=20
    get_local $0
@@ -2445,9 +2441,9 @@
    f64.mul
    i32.trunc_s/f64
    i32.lt_s
-   set_local $1
+  else   
+   get_local $1
   end
-  get_local $1
   if
    get_local $0
    get_local $2
@@ -2929,7 +2925,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $2
     call $~lib/set/Set<i32>#rehash
    end
    get_local $0
@@ -3844,7 +3839,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $2
     call $~lib/set/Set<i64>#rehash
    end
    get_local $0
@@ -4648,7 +4642,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $2
     call $~lib/set/Set<f32>#rehash
    end
    get_local $0
@@ -5206,7 +5199,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $2
     call $~lib/set/Set<f64>#rehash
    end
    get_local $0

@@ -1172,42 +1172,42 @@
   get_local $1
   i32.lt_s
   select
-  set_local $2
+  set_local $3
   i32.const 6
   get_local $1
   i32.const 6
   get_local $1
   i32.lt_s
   select
-  tee_local $1
+  tee_local $2
+  get_local $3
   get_local $2
-  get_local $1
-  get_local $2
+  get_local $3
   i32.gt_s
   select
-  set_local $3
+  set_local $1
   i32.const 12
   call $~lib/allocator/arena/__memory_allocate
-  tee_local $1
+  tee_local $2
   get_local $0
   i32.load
   i32.store
-  get_local $1
+  get_local $2
   get_local $0
   i32.load offset=4
-  get_local $2
+  get_local $3
   i32.const 3
   i32.shl
   i32.add
   i32.store offset=4
+  get_local $2
   get_local $1
   get_local $3
-  get_local $2
   i32.sub
   i32.const 3
   i32.shl
   i32.store offset=8
-  get_local $1
+  get_local $2
  )
  (func $~lib/internal/array/insertionSort<f64> (; 14 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
@@ -1808,7 +1808,6 @@
    select
   else   
    get_local $2
-   tee_local $5
    get_local $4
    get_local $2
    get_local $4
@@ -1831,7 +1830,6 @@
    select
   else   
    get_local $3
-   tee_local $5
    get_local $4
    get_local $3
    get_local $4
@@ -1893,10 +1891,10 @@
   end
   get_local $0
   i32.load offset=8
-  set_local $4
+  set_local $3
   loop $repeat|0
    get_local $2
-   get_local $4
+   get_local $3
    i32.lt_s
    if
     get_local $0
@@ -1907,18 +1905,17 @@
     get_local $2
     get_local $1
     i32.load
-    tee_local $3
+    tee_local $4
     i32.load
     i32.lt_u
     if (result i32)
      get_local $2
-     get_local $3
+     get_local $4
      i32.add
      i32.load8_s offset=8
     else     
      unreachable
     end
-    tee_local $3
     i32.const 255
     i32.and
     i32.ne
@@ -2052,7 +2049,6 @@
    select
   else   
    get_local $2
-   tee_local $5
    get_local $4
    get_local $2
    get_local $4
@@ -2075,7 +2071,6 @@
    select
   else   
    get_local $3
-   tee_local $5
    get_local $4
    get_local $3
    get_local $4
@@ -2126,10 +2121,10 @@
   i32.load offset=8
   i32.const 2
   i32.shr_u
-  set_local $4
+  set_local $3
   loop $repeat|0
    get_local $2
-   get_local $4
+   get_local $3
    i32.lt_s
    if
     get_local $0
@@ -2138,7 +2133,7 @@
     get_local $2
     get_local $1
     i32.load
-    tee_local $3
+    tee_local $4
     i32.load
     i32.const 2
     i32.shr_u
@@ -2147,13 +2142,12 @@
      get_local $2
      i32.const 2
      i32.shl
-     get_local $3
+     get_local $4
      i32.add
      i32.load offset=8
     else     
      unreachable
     end
-    tee_local $3
     i32.ne
     if
      i32.const 0
@@ -3865,39 +3859,43 @@
   get_local $0
   call $~lib/internal/typedarray/TypedArray<f64,f64>#sort
   drop
-  get_global $std/typedarray/af64
-  i32.const 0
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
-  f64.const 4
-  f64.eq
-  tee_local $0
-  if
-   get_global $std/typedarray/af64
-   i32.const 1
-   call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
-   f64.const 5
-   f64.eq
-   set_local $0
+  block (result i32)
+   block (result i32)
+    get_global $std/typedarray/af64
+    i32.const 0
+    call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
+    f64.const 4
+    f64.eq
+    tee_local $0
+    if
+     get_global $std/typedarray/af64
+     i32.const 1
+     call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
+     f64.const 5
+     f64.eq
+     set_local $0
+    end
+    get_local $0
+   end
+   if
+    get_global $std/typedarray/af64
+    i32.const 2
+    call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
+    f64.const 6
+    f64.eq
+    set_local $0
+   end
+   get_local $0
   end
-  get_local $0
-  if
-   get_global $std/typedarray/af64
-   i32.const 2
-   call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
-   f64.const 6
-   f64.eq
-   set_local $0
-  end
-  get_local $0
-  if
+  if (result i32)
    get_global $std/typedarray/af64
    i32.const 3
    call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
    f64.const 7
    f64.eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0

@@ -406,28 +406,30 @@
   tee_local $0
   i32.load offset=4
   set_local $2
-  get_local $0
-  i32.load
-  i32.const -4
-  i32.and
-  tee_local $3
-  i32.const 0
-  i32.ne
-  tee_local $1
-  if
-   get_local $2
+  block (result i32)
+   get_local $0
+   i32.load
+   i32.const -4
+   i32.and
+   tee_local $3
    i32.const 0
    i32.ne
-   set_local $1
+   tee_local $1
+   if
+    get_local $2
+    i32.const 0
+    i32.ne
+    set_local $1
+   end
+   get_local $1
   end
-  get_local $1
-  if
+  if (result i32)
    get_local $2
    get_local $3
    i32.eq
-   set_local $1
+  else   
+   get_local $1
   end
-  get_local $1
   i32.eqz
   if
    i32.const 0

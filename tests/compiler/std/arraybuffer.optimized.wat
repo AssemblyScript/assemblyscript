@@ -334,15 +334,12 @@
   (local $4 i32)
   (local $5 i32)
   loop $continue|0
+   get_local $1
+   i32.const 3
+   i32.and
    get_local $2
-   if (result i32)
-    get_local $1
-    i32.const 3
-    i32.and
-   else    
-    get_local $2
-   end
-   tee_local $3
+   get_local $2
+   select
    if
     get_local $0
     tee_local $4
@@ -434,14 +431,14 @@
     i32.add
     i32.load
     i32.store
-    get_local $0
-    i32.const 8
-    i32.add
-    set_local $0
     get_local $1
     i32.const 8
     i32.add
     set_local $1
+    get_local $0
+    i32.const 8
+    i32.add
+    set_local $0
    end
    get_local $2
    i32.const 4
@@ -451,14 +448,14 @@
     get_local $1
     i32.load
     i32.store
-    get_local $0
-    i32.const 4
-    i32.add
-    set_local $0
     get_local $1
     i32.const 4
     i32.add
     set_local $1
+    get_local $0
+    i32.const 4
+    i32.add
+    set_local $0
    end
    get_local $2
    i32.const 2
@@ -468,21 +465,19 @@
     get_local $1
     i32.load16_u
     i32.store16
-    get_local $0
-    i32.const 2
-    i32.add
-    set_local $0
     get_local $1
     i32.const 2
     i32.add
     set_local $1
+    get_local $0
+    i32.const 2
+    i32.add
+    set_local $0
    end
    get_local $2
    i32.const 1
    i32.and
    if
-    get_local $1
-    set_local $3
     get_local $0
     get_local $1
     i32.load8_u
@@ -1225,8 +1220,6 @@
   i32.const 1
   i32.and
   if
-   get_local $1
-   set_local $3
    get_local $0
    get_local $1
    i32.load8_u
@@ -1293,7 +1286,6 @@
       set_local $2
       get_local $0
       tee_local $4
-      tee_local $3
       i32.const 1
       i32.add
       set_local $0
@@ -1339,7 +1331,6 @@
     if
      get_local $0
      tee_local $4
-     tee_local $3
      i32.const 1
      i32.add
      set_local $0
@@ -1454,7 +1445,6 @@
    select
   else   
    get_local $1
-   tee_local $4
    get_local $3
    get_local $1
    get_local $3
@@ -1477,14 +1467,12 @@
    select
   else   
    get_local $2
-   tee_local $4
    get_local $3
    get_local $2
    get_local $3
    i32.lt_s
    select
   end
-  tee_local $2
   get_local $1
   i32.sub
   tee_local $4
@@ -1498,7 +1486,6 @@
   tee_local $3
   i32.const 8
   i32.add
-  tee_local $4
   get_local $0
   i32.const 8
   i32.add

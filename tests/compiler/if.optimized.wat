@@ -14,12 +14,10 @@
  (export "ifThenElseBlock" (func $if/ifThenElse))
  (export "ifAlwaysReturns" (func $if/ifAlwaysReturns))
  (func $if/ifThenElse (; 1 ;) (type $ii) (param $0 i32) (result i32)
+  i32.const 1
+  i32.const 0
   get_local $0
-  if (result i32)
-   i32.const 1
-  else   
-   i32.const 0
-  end
+  select
  )
  (func $if/ifThen (; 2 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
