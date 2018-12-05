@@ -12,6 +12,9 @@ declare module ASModule {
     constructor(i: i32);
     i: i32;
     _if(i: i32): void;
+    _else(i: i32): void;
+    _while(i: i32): void;
+    _doWhile(i: i32): void;
   }
 }
 export default ASModule;

@@ -84,4 +84,5 @@ asc.main([
     }
   });
   console.log(decompiler.finish());
+  let Mod = loader.instantiateBuffer(binary, {index:{println:console.log}});
 });
