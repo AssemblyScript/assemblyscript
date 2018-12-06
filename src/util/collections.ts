@@ -1,4 +1,4 @@
-export function uniqueArray<V>(original: Array<V> | null = null): Array<V> {
+export function makeArray<V>(original: Array<V> | null = null): Array<V> {
   if (original) {
     let cloned = new Array<V>(original.length);
     for (let i = 0, k = original.length; i < k; ++i) cloned[i] = original[i];
@@ -7,7 +7,7 @@ export function uniqueArray<V>(original: Array<V> | null = null): Array<V> {
   return new Array<V>();
 }
 
-export function uniqueSet<V>(original: Set<V> | null = null): Set<V> {
+export function makeSet<V>(original: Set<V> | null = null): Set<V> {
   if (original) {
     let cloned = new Set<V>();
     for (let v of original) cloned.add(v);
@@ -16,7 +16,7 @@ export function uniqueSet<V>(original: Set<V> | null = null): Set<V> {
   return new Set<V>();
 }
 
-export function uniqueMap<K,V>(original: Map<K,V> | null = null): Map<K,V> {
+export function makeMap<K,V>(original: Map<K,V> | null = null): Map<K,V> {
   if (original) {
     let cloned = new Map<K,V>();
     for (let [k, v] of original) cloned.set(k, v);

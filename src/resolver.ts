@@ -62,7 +62,7 @@ import {
 } from "./common";
 
 import {
-  uniqueMap
+  makeMap
 } from "./util";
 
 /** Indicates whether errors are reported or not. */
@@ -138,7 +138,7 @@ export class Resolver extends DiagnosticEmitter {
             let instance = this.resolveClassInclTypeArguments(
               <ClassPrototype>element,
               typeNode.typeArguments,
-              uniqueMap<string,Type>(contextualTypeArguments),
+              makeMap<string,Type>(contextualTypeArguments),
               node
             ); // reports
             if (!instance) return null;
@@ -451,7 +451,7 @@ export class Resolver extends DiagnosticEmitter {
         let getter = this.resolveFunction(
           assert((<Property>target).getterPrototype),
           null,
-          uniqueMap<string,Type>(),
+          makeMap<string,Type>(),
           reportMode
         );
         if (!getter) return null;
@@ -706,7 +706,7 @@ export class Resolver extends DiagnosticEmitter {
           let instance = this.resolveFunctionInclTypeArguments(
             <FunctionPrototype>target,
             (<CallExpression>expression).typeArguments,
-            uniqueMap<string,Type>(contextualFunction.flow.contextualTypeArguments),
+            makeMap<string,Type>(contextualFunction.flow.contextualTypeArguments),
             expression,
             reportMode
           );
@@ -754,7 +754,7 @@ export class Resolver extends DiagnosticEmitter {
   resolveFunction(
     prototype: FunctionPrototype,
     typeArguments: Type[] | null,
-    contextualTypeArguments: Map<string,Type> = uniqueMap<string,Type>(),
+    contextualTypeArguments: Map<string,Type> = makeMap<string,Type>(),
     reportMode: ReportMode = ReportMode.REPORT
   ): Function | null {
     var classTypeArguments = prototype.classTypeArguments; // set only if partially resolved
@@ -937,7 +937,7 @@ export class Resolver extends DiagnosticEmitter {
   resolveClass(
     prototype: ClassPrototype,
     typeArguments: Type[] | null,
-    contextualTypeArguments: Map<string,Type> = uniqueMap<string,Type>(),
+    contextualTypeArguments: Map<string,Type> = makeMap<string,Type>(),
     reportMode: ReportMode = ReportMode.REPORT
   ): Class | null {
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
@@ -1035,7 +1035,7 @@ export class Resolver extends DiagnosticEmitter {
       instance.constructorInstance = this.resolveFunction(
         constructorPartial,
         null,
-        uniqueMap<string,Type>(),
+        makeMap<string,Type>(),
         reportMode
       );
     }
@@ -1165,14 +1165,14 @@ export class Resolver extends DiagnosticEmitter {
         operatorInstance = this.resolveFunction(
           operatorPartial,
           null,
-          uniqueMap<string,Type>(),
+          makeMap<string,Type>(),
           reportMode
         );
       } else {
         operatorInstance = this.resolveFunction(
           overloadPrototype,
           null,
-          uniqueMap<string,Type>(),
+          makeMap<string,Type>(),
           reportMode
         );
       }

@@ -163,7 +163,7 @@ import {
   writeI64,
   writeF32,
   writeF64,
-  uniqueMap
+  makeMap
 } from "./util";
 
 /** Compilation target. */
@@ -966,7 +966,7 @@ export class Compiler extends DiagnosticEmitter {
     return this.compileFunctionUsingTypeArguments( // reports
       <FunctionPrototype>element,
       typeArguments,
-      uniqueMap<string,Type>(),
+      makeMap<string,Type>(),
       null,
       (<FunctionPrototype>element).declaration.name
     );
@@ -1237,7 +1237,7 @@ export class Compiler extends DiagnosticEmitter {
             this.compileClassUsingTypeArguments(
               <ClassPrototype>element,
               [],
-              uniqueMap<string,Type>()
+              makeMap<string,Type>()
             );
           }
           break;
@@ -1256,7 +1256,7 @@ export class Compiler extends DiagnosticEmitter {
             this.compileFunctionUsingTypeArguments(
               <FunctionPrototype>element,
               [],
-              uniqueMap<string,Type>(),
+              makeMap<string,Type>(),
               null,
               (<FunctionPrototype>element).declaration.name
             );
@@ -1293,7 +1293,7 @@ export class Compiler extends DiagnosticEmitter {
             this.compileClassUsingTypeArguments(
               <ClassPrototype>element,
               [],
-              uniqueMap<string,Type>()
+              makeMap<string,Type>()
             );
           }
           break;
@@ -1310,7 +1310,7 @@ export class Compiler extends DiagnosticEmitter {
             this.compileFunctionUsingTypeArguments(
               <FunctionPrototype>element,
               [],
-              uniqueMap<string,Type>(),
+              makeMap<string,Type>(),
               null,
               (<FunctionPrototype>element).declaration.name
             );
@@ -1340,7 +1340,7 @@ export class Compiler extends DiagnosticEmitter {
     this.compileClassUsingTypeArguments(
       <ClassPrototype>element,
       typeArguments,
-      uniqueMap<string,Type>(),
+      makeMap<string,Type>(),
       declaration
     );
   }
@@ -1380,7 +1380,7 @@ export class Compiler extends DiagnosticEmitter {
               this.compileFunctionUsingTypeArguments(
                 <FunctionPrototype>element,
                 [],
-                uniqueMap<string,Type>(),
+                makeMap<string,Type>(),
                 null,
                 (<FunctionPrototype>element).declaration.name
               );
@@ -1393,7 +1393,7 @@ export class Compiler extends DiagnosticEmitter {
               this.compileFunctionUsingTypeArguments(
                 getter,
                 [],
-                uniqueMap<string,Type>(),
+                makeMap<string,Type>(),
                 null,
                 getter.declaration.name
               );
@@ -1403,7 +1403,7 @@ export class Compiler extends DiagnosticEmitter {
               this.compileFunctionUsingTypeArguments(
                 setter,
                 [],
-                uniqueMap<string,Type>(),
+                makeMap<string,Type>(),
                 null,
                 setter.declaration.name
               );
@@ -1426,7 +1426,7 @@ export class Compiler extends DiagnosticEmitter {
               this.compileFunctionUsingTypeArguments(
                 <FunctionPrototype>element,
                 [],
-                uniqueMap<string,Type>(instance.contextualTypeArguments),
+                makeMap<string,Type>(instance.contextualTypeArguments),
                 null,
                 (<FunctionPrototype>element).declaration.name
               );
@@ -1443,7 +1443,7 @@ export class Compiler extends DiagnosticEmitter {
               this.compileFunctionUsingTypeArguments(
                 getter,
                 [],
-                uniqueMap<string,Type>(instance.contextualTypeArguments),
+                makeMap<string,Type>(instance.contextualTypeArguments),
                 null,
                 getter.declaration.name
               );
@@ -1453,7 +1453,7 @@ export class Compiler extends DiagnosticEmitter {
               this.compileFunctionUsingTypeArguments(
                 setter,
                 [],
-                uniqueMap<string,Type>(instance.contextualTypeArguments),
+                makeMap<string,Type>(instance.contextualTypeArguments),
                 null,
                 setter.declaration.name
               );
@@ -5031,7 +5031,7 @@ export class Compiler extends DiagnosticEmitter {
           instance = this.resolver.resolveFunctionInclTypeArguments(
             prototype,
             typeArguments,
-            uniqueMap<string,Type>(this.currentFunction.flow.contextualTypeArguments),
+            makeMap<string,Type>(this.currentFunction.flow.contextualTypeArguments),
             expression
           );
 
@@ -5105,7 +5105,7 @@ export class Compiler extends DiagnosticEmitter {
           instance = this.resolver.resolveFunction(
             prototype,
             resolvedTypeArguments,
-            uniqueMap<string,Type>(this.currentFunction.flow.contextualTypeArguments)
+            makeMap<string,Type>(this.currentFunction.flow.contextualTypeArguments)
           );
           if (!instance) return this.module.createUnreachable();
           return this.makeCallDirect(instance, argumentExprs);
@@ -5254,7 +5254,7 @@ export class Compiler extends DiagnosticEmitter {
       typeArguments = this.resolver.resolveTypeArguments(
         assert(prototype.declaration.typeParameters),
         typeArgumentNodes,
-        uniqueMap<string,Type>(this.currentFunction.flow.contextualTypeArguments),
+        makeMap<string,Type>(this.currentFunction.flow.contextualTypeArguments),
         expression
       );
     }
@@ -5945,7 +5945,7 @@ export class Compiler extends DiagnosticEmitter {
     var instance = this.compileFunctionUsingTypeArguments(
       prototype,
       [],
-      uniqueMap<string,Type>(flow.contextualTypeArguments),
+      makeMap<string,Type>(flow.contextualTypeArguments),
       flow,
       declaration
     );
@@ -6106,7 +6106,7 @@ export class Compiler extends DiagnosticEmitter {
         let instance = this.resolver.resolveFunction(
           <FunctionPrototype>target,
           null,
-          uniqueMap<string,Type>(currentFunction.flow.contextualTypeArguments)
+          makeMap<string,Type>(currentFunction.flow.contextualTypeArguments)
         );
         if (!(instance && this.compileFunction(instance))) return module.createUnreachable();
         let index = this.ensureFunctionTableEntry(instance);
@@ -6454,7 +6454,7 @@ export class Compiler extends DiagnosticEmitter {
     var arrayInstance = assert(this.resolver.resolveClass(
       arrayPrototype,
       [ elementType ],
-      uniqueMap<string,Type>()
+      makeMap<string,Type>()
     ));
     var arrayHeaderSize = (arrayInstance.currentMemoryOffset + 7) & ~7;
     if (hasGC) {
@@ -6526,7 +6526,7 @@ export class Compiler extends DiagnosticEmitter {
     var arrayInstance = assert(this.resolver.resolveClass(
       <ClassPrototype>arrayPrototype,
       [ elementType ],
-      uniqueMap<string,Type>()
+      makeMap<string,Type>()
     ));
     var arrayType = arrayInstance.type;
 
@@ -6679,13 +6679,13 @@ export class Compiler extends DiagnosticEmitter {
       classInstance = this.resolver.resolveClass(
         classPrototype,
         classReference.typeArguments,
-        uniqueMap<string,Type>(currentFunction.flow.contextualTypeArguments)
+        makeMap<string,Type>(currentFunction.flow.contextualTypeArguments)
       );
     } else {
       classInstance = this.resolver.resolveClassInclTypeArguments(
         classPrototype,
         typeArguments,
-        uniqueMap<string,Type>(currentFunction.flow.contextualTypeArguments),
+        makeMap<string,Type>(currentFunction.flow.contextualTypeArguments),
         expression
       );
     }
