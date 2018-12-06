@@ -145,23 +145,71 @@ export class NEARBindingsBuilder extends ExportsWalker {
     console.log("visitFunction: " + element.simpleName);
   }
   visitClass(element: Class): void {
-    console.log("visitClass: " + element.simpleName);
-    this.sb.push(`function __near_encode_${element.simpleName}(
-        value: ${element.simpleName}, encoder: BSONEncoder): void {\n`);
+    let className = element.simpleName;
+    let typeMapping : { [key: string] : string } = {
+      "i32" : "Integer",
+      "String" : "String",
+      "Uint8Array" : "Uint8Array",
+      "bool" : "Boolean"
+    };
+    console.log("visitClass: " + className);
+    this.sb.push(`export function __near_encode_${className}(
+        value: ${className}, encoder: BSONEncoder): void {\n`);
+    this.forEachField(element, (field) => {
+      console.log("field " + field.simpleName + " " + field.type)
+      let setterType = typeMapping[field.type.toString()];
+      this.sb.push(`if (value.${field.simpleName} != null) {
+        encoder.set${setterType}("${field.simpleName}", value.${field.simpleName});
+      } else {
+        encoder.setNull("${field.simpleName}");
+      }\n`);
+    });
+    this.sb.push("}\n\n"); // __near_encode
+
+    this.sb.push(`export class __near_BSONHandler_${className} {\n`);
+    for (let fieldType in typeMapping) {
+      let setterType = typeMapping[fieldType];
+      this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {\n`);
+      this.forEachField(element, (field) => {
+        if (field.type.toString() == fieldType) {
+            this.sb.push(`if (name == "${field.simpleName}") { this.value.${field.simpleName} = value; return; }\n`);
+        }
+      });
+      this.sb.push("}\n");
+    }
+    this.sb.push("setNull(name: string): void {\n");
+    this.forEachField(element, (field) => {
+      this.sb.push(`if (name == "${field.simpleName}") { this.value.${field.simpleName} = null; return; }\n`);
+    });
+    this.sb.push("}\n"); // setNull
+    this.sb.push("}\n\n"); // class __near_BSONHandler_
+
+    this.sb.push(`export function __near_decode_${className}(
+        buffer: Uint8Array, offset: i32): void {
+      let handler = new __near_BSONHandler_${className}();
+      let decoder = new BSONDecoder(handler);
+      decoder.deserialize(buffer, offset);
+      return handler.value;
+    }\n\n`);
+  }
+
+  private forEachField(element: Class, fn: (field: Field) => void): void {
     var members = element.members;
     if (members) {
       for (let member of members.values()) {
-        this.visitElement(member);
+        if (!(member instanceof Field)) {
+          continue;
+        }
+        fn(member);
       }
     }
-    this.sb.push("}\n");
   }
+
   visitInterface(element: Interface): void {
     throw new Error("Method not implemented.");
   }
   visitField(element: Field): void {
-    let type = "String";
-    this.sb.push(`encoder.set${type}("${element.simpleName}", value.${element.simpleName});\n`);
+    throw new Error("Shouldn't be called");
   }
   visitNamespace(element: Element): void {
     console.log("visitNamespace: " + element.simpleName);
