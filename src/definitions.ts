@@ -142,19 +142,29 @@ export class NEARBindingsBuilder extends ExportsWalker {
     throw new Error("Method not implemented.");
   }
   visitFunction(element: Function): void {
-    throw new Error("Method not implemented.");
+    console.log("visitFunction: " + element.simpleName);
   }
   visitClass(element: Class): void {
-    throw new Error("Method not implemented.");
+    console.log("visitClass: " + element.simpleName);
+    this.sb.push(`function __near_encode_${element.simpleName}(
+        value: ${element.simpleName}, encoder: BSONEncoder): void {\n`);
+    var members = element.members;
+    if (members) {
+      for (let member of members.values()) {
+        this.visitElement(member);
+      }
+    }
+    this.sb.push("}\n");
   }
   visitInterface(element: Interface): void {
     throw new Error("Method not implemented.");
   }
   visitField(element: Field): void {
-    throw new Error("Method not implemented.");
+    let type = "String";
+    this.sb.push(`encoder.set${type}("${element.simpleName}", value.${element.simpleName});\n`);
   }
   visitNamespace(element: Element): void {
-    throw new Error("Method not implemented.");
+    console.log("visitNamespace: " + element.simpleName);
   }
 
   build(): string {
