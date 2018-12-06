@@ -127,6 +127,42 @@ abstract class ExportsWalker {
   abstract visitNamespace(element: Element): void;
 }
 
+// TODO: Extract this into separate module, preferrable pluggable
+export class NEARBindingsBuilder extends ExportsWalker {
+  private sb: string[] = [];
+
+  static build(program: Program): string {
+    return new NEARBindingsBuilder(program).build();
+  }
+
+  visitGlobal(element: Global): void {
+    throw new Error("Method not implemented.");
+  }
+  visitEnum(element: Enum): void {
+    throw new Error("Method not implemented.");
+  }
+  visitFunction(element: Function): void {
+    throw new Error("Method not implemented.");
+  }
+  visitClass(element: Class): void {
+    throw new Error("Method not implemented.");
+  }
+  visitInterface(element: Interface): void {
+    throw new Error("Method not implemented.");
+  }
+  visitField(element: Field): void {
+    throw new Error("Method not implemented.");
+  }
+  visitNamespace(element: Element): void {
+    throw new Error("Method not implemented.");
+  }
+
+  build(): string {
+    this.walk();
+    return this.sb.join("");
+  }
+}
+
 /** A WebIDL definitions builder. */
 export class IDLBuilder extends ExportsWalker {
 

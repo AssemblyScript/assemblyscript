@@ -74,6 +74,10 @@
     "type": "s",
     "alias": "d"
   },
+  "nearFile": {
+    "description": "Specifies the NEAR Bindings output file (.near.ts).",
+    "type": "s"
+  },
   "sourceMap": {
     "description": [
       "Enables source map generation. Optionally takes the URL",
