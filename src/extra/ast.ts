@@ -68,6 +68,7 @@ import {
   FieldDeclaration,
   FunctionDeclaration,
   ImportDeclaration,
+  IndexDeclaration,
   InterfaceDeclaration,
   MethodDeclaration,
   NamespaceDeclaration,
@@ -293,6 +294,10 @@ export class ASTBuilder {
       }
       case NodeKind.IMPORTDECLARATION: {
         this.visitImportDeclaration(<ImportDeclaration>node);
+        break;
+      }
+      case NodeKind.INDEXDECLARATION: {
+        this.visitIndexDeclaration(<IndexDeclaration>node);
         break;
       }
       case NodeKind.INTERFACEDECLARATION: {
@@ -1179,6 +1184,14 @@ export class ASTBuilder {
       sb.push(" from ");
     }
     this.visitStringLiteralExpression(node.path);
+  }
+
+  visitIndexDeclaration(node: IndexDeclaration): void {
+    var sb = this.sb;
+    sb.push("[key: ");
+    this.visitTypeNode(node.keyType);
+    sb.push("]: ");
+    this.visitTypeNode(node.valueType);
   }
 
   visitInterfaceDeclaration(node: InterfaceDeclaration): void {

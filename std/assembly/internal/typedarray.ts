@@ -8,12 +8,12 @@ import {
 
 import {
   insertionSort,
-  weakHeapSort,
-  defaultComparator
+  weakHeapSort
 } from "./array";
 
 /** Typed array base class. Not a global object. */
 export abstract class TypedArray<T> {
+  [key: number]: T; // compatibility only
 
   readonly buffer: ArrayBuffer;
   readonly byteOffset: i32;
@@ -58,64 +58,73 @@ export abstract class TypedArray<T> {
   }
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
+}
 
-  fill(value: NATIVE<T>, start: i32 = 0, end: i32 = i32.MAX_VALUE): this /* ! */ {
-    var buffer = this.buffer;
-    var byteOffset = this.byteOffset;
-    var len = this.length;
-    start = start < 0 ? max(len + start, 0) : min(start, len);
-    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
-    if (sizeof<T>() == 1) {
-      if (start < end) {
-        memory.fill(
-          changetype<usize>(buffer) + start + byteOffset + AB_HEADER_SIZE,
-          <u8>value,
-          <usize>(end - start)
-        );
-      }
-    } else {
-      for (; start < end; ++start) {
-        STORE_OFFSET<T,NATIVE<T>>(buffer, start, value, byteOffset);
-      }
+@inline
+export function FILL<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  value: NATIVE<T>,
+  start: i32,
+  end: i32
+): TArray {
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  var len = array.length;
+  start = start < 0 ? max(len + start, 0) : min(start, len);
+  end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+  if (sizeof<T>() == 1) {
+    if (start < end) {
+      memory.fill(
+        changetype<usize>(buffer) + start + byteOffset + AB_HEADER_SIZE,
+        <u8>value,
+        <usize>(end - start)
+      );
     }
-    return this;
+  } else {
+    for (; start < end; ++start) {
+      STORE_OFFSET<T,NATIVE<T>>(buffer, start, value, byteOffset);
+    }
   }
+  return array;
+}
 
-  sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this /* ! */ {
-    var byteOffset = this.byteOffset;
-    var length = this.length;
-    if (length <= 1) return this;
-    var buffer = this.buffer;
-    if (length == 2) {
-      let a = LOAD_OFFSET<T>(buffer, 1, byteOffset);
-      let b = LOAD_OFFSET<T>(buffer, 0, byteOffset);
-      if (comparator(a, b) < 0) {
-        STORE_OFFSET<T>(buffer, 1, b, byteOffset);
-        STORE_OFFSET<T>(buffer, 0, a, byteOffset);
-      }
-      return this;
+@inline
+export function SORT<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  comparator: (a: T, b: T) => i32
+): TArray {
+  var byteOffset = array.byteOffset;
+  var length = array.length;
+  if (length <= 1) return array;
+  var buffer = array.buffer;
+  if (length == 2) {
+    let a = LOAD_OFFSET<T>(buffer, 1, byteOffset);
+    let b = LOAD_OFFSET<T>(buffer, 0, byteOffset);
+    if (comparator(a, b) < 0) {
+      STORE_OFFSET<T>(buffer, 1, b, byteOffset);
+      STORE_OFFSET<T>(buffer, 0, a, byteOffset);
     }
-
-    if (isReference<T>()) {
-      // TODO replace this to faster stable sort (TimSort) when it implemented
+    return array;
+  }
+  if (isReference<T>()) {
+    // TODO replace this to faster stable sort (TimSort) when it implemented
+    insertionSort<T>(buffer, byteOffset, length, comparator);
+    return array;
+  } else {
+    if (length < 256) {
       insertionSort<T>(buffer, byteOffset, length, comparator);
-      return this;
     } else {
-      if (length < 256) {
-        insertionSort<T>(buffer, byteOffset, length, comparator);
-      } else {
-        weakHeapSort<T>(buffer, byteOffset, length, comparator);
-      }
-      return this;
+      weakHeapSort<T>(buffer, byteOffset, length, comparator);
     }
+    return array;
   }
 }
 
 @inline
-export function SUBARRAY<TArray, T>(
+export function SUBARRAY<TArray extends TypedArray<T>, T>(
   array: TArray,
-  begin: i32 = 0,
-  end: i32 = i32.MAX_VALUE
+  begin: i32,
+  end: i32
 ): TArray {
   var length = <i32>array.length;
   if (begin < 0) begin = max(length + begin, 0);
@@ -130,7 +139,7 @@ export function SUBARRAY<TArray, T>(
 }
 
 @inline
-export function REDUCE<TArray, T, TRet>(
+export function REDUCE<TArray extends TypedArray<T>, T, TRet>(
   array: TArray,
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
@@ -140,7 +149,7 @@ export function REDUCE<TArray, T, TRet>(
   while (index != length) {
     initialValue = callbackfn(
       initialValue,
-      unchecked(array[index]), // tslint:disable-line
+      unchecked(array[index]),
       index,
       array,
     );
@@ -150,7 +159,7 @@ export function REDUCE<TArray, T, TRet>(
 }
 
 @inline
-export function REDUCE_RIGHT<TArray, T, TRet>(
+export function REDUCE_RIGHT<TArray extends TypedArray<T>, T, TRet>(
   array: TArray,
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
@@ -160,7 +169,7 @@ export function REDUCE_RIGHT<TArray, T, TRet>(
   while (index != length) {
     initialValue = callbackfn(
       initialValue,
-      unchecked(array[index]), // tslint:disable-line
+      unchecked(array[index]),
       index,
       array,
     );

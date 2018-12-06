@@ -87,6 +87,7 @@ export enum NodeKind {
   FIELDDECLARATION,
   FUNCTIONDECLARATION,
   IMPORTDECLARATION,
+  INDEXDECLARATION,
   INTERFACEDECLARATION,
   METHODDECLARATION,
   NAMESPACEDECLARATION,
@@ -873,6 +874,18 @@ export abstract class Node {
     return stmt;
   }
 
+  static createIndexDeclaration(
+    keyType: TypeNode,
+    valueType: CommonTypeNode,
+    range: Range
+  ): IndexDeclaration {
+    var elem = new IndexDeclaration();
+    elem.range = range;
+    elem.keyType = keyType; keyType.parent = elem;
+    elem.valueType = valueType; valueType.parent = elem;
+    return elem;
+  }
+
   static createMethodDeclaration(
     name: IdentifierExpression,
     typeParameters: TypeParameterNode[] | null,
@@ -1624,6 +1637,16 @@ export abstract class DeclarationStatement extends Statement {
       !this.isTopLevelExport                          // if not top-level
     );
   }
+}
+
+/** Represents an index declaration. */
+export class IndexDeclaration extends DeclarationStatement {
+  kind = NodeKind.INDEXDECLARATION;
+
+  /** Key type. */
+  keyType: TypeNode;
+  /** Value type. */
+  valueType: CommonTypeNode;
 }
 
 /** Base class of all variable-like declaration statements. */

@@ -1737,7 +1737,7 @@ export class Parser extends DiagnosticEmitter {
         }
       } else if (tn.skip(Token.SET)) {
         if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
-          flags |= CommonFlags.SET | CommonFlags.SET;
+          flags |= CommonFlags.SET;
           isSetter = true;
           setStart = tn.tokenPos;
           setEnd = tn.pos;
@@ -1779,6 +1779,66 @@ export class Parser extends DiagnosticEmitter {
       name = Node.createConstructorExpression(tn.range());
     } else {
       // TODO: handle symbols, i.e. '[' 'Symbol' '.' Identifier ']'
+      if (tn.skip(Token.OPENBRACKET)) {
+        // TODO: reject decorators and keywords
+        let indexStart = tn.tokenPos;
+        if (tn.skipIdentifier()) {
+          let id = tn.readIdentifier();
+          if (id == "key") {
+            if (tn.skip(Token.COLON)) {
+              let keyType = this.parseType(tn);
+              if (!keyType) return null;
+              if (keyType.kind != NodeKind.TYPE) {
+                this.error(
+                  DiagnosticCode.Type_expected,
+                  tn.range()
+                );
+                return null;
+              }
+              if (tn.skip(Token.CLOSEBRACKET)) {
+                if (tn.skip(Token.COLON)) {
+                  let valueType = this.parseType(tn);
+                  if (!valueType) return null;
+                  let ret = Node.createIndexDeclaration(<TypeNode>keyType, valueType, tn.range(indexStart, tn.pos));
+                  tn.skip(Token.SEMICOLON);
+                  return ret;
+                } else {
+                  this.error(
+                    DiagnosticCode._0_expected,
+                    tn.range(), ":"
+                  );
+                  return null;
+                }
+              } else {
+                this.error(
+                  DiagnosticCode._0_expected,
+                  tn.range(), "]"
+                );
+                return null;
+              }
+            } else {
+              this.error(
+                DiagnosticCode._0_expected,
+                tn.range(), ":"
+              );
+              return null;
+            }
+          } else {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), "key"
+            );
+            return null;
+          }
+        } else {
+          this.error(
+            DiagnosticCode.Identifier_expected,
+            tn.range()
+          );
+          return null;
+        }
+      }
+
       if (!tn.skipIdentifier()) {
         this.error(
           DiagnosticCode.Identifier_expected,

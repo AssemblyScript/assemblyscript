@@ -32,6 +32,7 @@ import {
 } from "./builtins";
 
 export class Array<T> {
+  [key: number]: T; // compatibility only
 
   /* @internal */ buffer_: ArrayBuffer;
   /* @internal */ length_: i32;

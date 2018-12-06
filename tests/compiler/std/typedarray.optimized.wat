@@ -55,7 +55,7 @@
  (data (i32.const 608) "\02")
  (data (i32.const 616) "H\02\00\00\05")
  (table $0 24 anyfunc)
- (elem (i32.const 0) $null $~lib/internal/typedarray/TypedArray<f64>#sort|trampoline~anonymous|1 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceFloat32ArrayTest~anonymous|11 $std/typedarray/reduceFloat64ArrayTest~anonymous|12 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceFloat32ArrayTest~anonymous|11 $std/typedarray/reduceFloat64ArrayTest~anonymous|12)
+ (elem (i32.const 0) $null $~lib/typedarray/Float64Array#sort|trampoline~anonymous|1 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceFloat32ArrayTest~anonymous|11 $std/typedarray/reduceFloat64ArrayTest~anonymous|12 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceFloat32ArrayTest~anonymous|11 $std/typedarray/reduceFloat64ArrayTest~anonymous|12)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/typedarray/arr (mut i32) (i32.const 0))
@@ -1580,7 +1580,7 @@
   get_local $7
   f64.store offset=8
  )
- (func $~lib/internal/typedarray/TypedArray<f64>#sort (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Float64Array#sort (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1589,79 +1589,77 @@
   get_local $0
   i32.load offset=4
   set_local $2
-  get_local $0
-  i32.load offset=8
-  i32.const 3
-  i32.shr_u
-  tee_local $4
-  i32.const 1
-  i32.le_s
-  if
+  block $~lib/internal/typedarray/SORT<Float64Array,f64>|inlined.0
    get_local $0
-   return
-  end
-  get_local $0
-  i32.load
-  set_local $3
-  get_local $4
-  i32.const 2
-  i32.eq
-  if
-   get_local $2
-   get_local $3
-   i32.add
-   i32.const 8
-   i32.add
-   f64.load offset=8
-   set_local $5
-   get_local $2
-   get_local $3
-   i32.add
-   f64.load offset=8
-   set_local $6
+   i32.load offset=8
+   i32.const 3
+   i32.shr_u
+   tee_local $4
+   i32.const 1
+   i32.le_s
+   br_if $~lib/internal/typedarray/SORT<Float64Array,f64>|inlined.0
+   get_local $0
+   i32.load
+   set_local $3
+   get_local $4
    i32.const 2
-   set_global $~argc
-   get_local $5
-   get_local $6
-   get_local $1
-   call_indirect (type $FFi)
-   i32.const 0
-   i32.lt_s
+   i32.eq
    if
     get_local $2
     get_local $3
     i32.add
-    tee_local $1
     i32.const 8
     i32.add
-    get_local $6
-    f64.store offset=8
-    get_local $1
+    f64.load offset=8
+    set_local $5
+    get_local $2
+    get_local $3
+    i32.add
+    f64.load offset=8
+    set_local $6
+    i32.const 2
+    set_global $~argc
     get_local $5
-    f64.store offset=8
+    get_local $6
+    get_local $1
+    call_indirect (type $FFi)
+    i32.const 0
+    i32.lt_s
+    if
+     get_local $2
+     get_local $3
+     i32.add
+     tee_local $1
+     i32.const 8
+     i32.add
+     get_local $6
+     f64.store offset=8
+     get_local $1
+     get_local $5
+     f64.store offset=8
+    end
+    br $~lib/internal/typedarray/SORT<Float64Array,f64>|inlined.0
    end
-   get_local $0
-   return
-  end
-  get_local $4
-  i32.const 256
-  i32.lt_s
-  if
-   get_local $3
-   get_local $2
    get_local $4
-   get_local $1
-   call $~lib/internal/array/insertionSort<f64>
-  else   
-   get_local $3
-   get_local $2
-   get_local $4
-   get_local $1
-   call $~lib/internal/array/weakHeapSort<f64>
+   i32.const 256
+   i32.lt_s
+   if
+    get_local $3
+    get_local $2
+    get_local $4
+    get_local $1
+    call $~lib/internal/array/insertionSort<f64>
+   else    
+    get_local $3
+    get_local $2
+    get_local $4
+    get_local $1
+    call $~lib/internal/array/weakHeapSort<f64>
+   end
   end
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<f64>#sort|trampoline~anonymous|1 (; 17 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/typedarray/Float64Array#sort|trampoline~anonymous|1 (; 17 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   get_local $0
@@ -1779,7 +1777,7 @@
   i32.add
   i32.load8_u offset=8
  )
- (func $~lib/internal/typedarray/TypedArray<i8>#fill (; 22 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/typedarray/Int8Array#fill (; 22 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1937,7 +1935,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/typedarray/TypedArray<i8>#fill|trampoline (; 25 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int8Array#fill|trampoline (; 25 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   block $2of2
    block $1of2
@@ -1960,7 +1958,7 @@
   get_local $1
   get_local $2
   get_local $3
-  call $~lib/internal/typedarray/TypedArray<i8>#fill
+  call $~lib/typedarray/Int8Array#fill
  )
  (func $~lib/typedarray/Int8Array#subarray (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2021,7 +2019,7 @@
   i32.store offset=8
   get_local $2
  )
- (func $~lib/internal/typedarray/TypedArray<i32>#fill (; 27 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#fill (; 27 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2170,7 +2168,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/typedarray/TypedArray<i32>#fill|trampoline (; 29 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#fill|trampoline (; 29 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   block $2of2
    block $1of2
@@ -2193,7 +2191,7 @@
   get_local $1
   get_local $2
   get_local $3
-  call $~lib/internal/typedarray/TypedArray<i32>#fill
+  call $~lib/typedarray/Int32Array#fill
  )
  (func $std/typedarray/reduceInt8ArrayTest~anonymous|2 (; 30 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
@@ -3863,7 +3861,7 @@
   end
   get_local $1
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<f64>#sort
+  call $~lib/typedarray/Float64Array#sort
   drop
   get_global $std/typedarray/af64
   i32.const 0
@@ -3992,7 +3990,7 @@
   i32.const 1
   i32.const 1
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i8>#fill
+  call $~lib/typedarray/Int8Array#fill
   drop
   get_global $std/typedarray/arr8
   i32.const 192
@@ -4011,7 +4009,7 @@
   get_global $std/typedarray/arr8
   i32.const 0
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i8>#fill|trampoline
+  call $~lib/typedarray/Int8Array#fill|trampoline
   drop
   get_global $std/typedarray/arr8
   i32.const 216
@@ -4029,7 +4027,7 @@
   i32.const 1
   i32.const 0
   i32.const -3
-  call $~lib/internal/typedarray/TypedArray<i8>#fill
+  call $~lib/typedarray/Int8Array#fill
   drop
   get_global $std/typedarray/arr8
   i32.const 240
@@ -4048,7 +4046,7 @@
   get_global $std/typedarray/arr8
   i32.const 2
   i32.const -2
-  call $~lib/internal/typedarray/TypedArray<i8>#fill|trampoline
+  call $~lib/typedarray/Int8Array#fill|trampoline
   drop
   get_global $std/typedarray/arr8
   i32.const 264
@@ -4066,7 +4064,7 @@
   i32.const 0
   i32.const 1
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i8>#fill
+  call $~lib/typedarray/Int8Array#fill
   drop
   get_global $std/typedarray/arr8
   i32.const 288
@@ -4089,7 +4087,7 @@
   get_global $std/typedarray/sub8
   i32.const 0
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i8>#fill|trampoline
+  call $~lib/typedarray/Int8Array#fill|trampoline
   drop
   get_global $std/typedarray/sub8
   i32.load offset=8
@@ -4178,7 +4176,7 @@
   i32.const 1
   i32.const 1
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i32>#fill
+  call $~lib/typedarray/Int32Array#fill
   drop
   get_global $std/typedarray/arr32
   i32.const 376
@@ -4197,7 +4195,7 @@
   get_global $std/typedarray/arr32
   i32.const 0
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i32>#fill|trampoline
+  call $~lib/typedarray/Int32Array#fill|trampoline
   drop
   get_global $std/typedarray/arr32
   i32.const 416
@@ -4215,7 +4213,7 @@
   i32.const 1
   i32.const 0
   i32.const -3
-  call $~lib/internal/typedarray/TypedArray<i32>#fill
+  call $~lib/typedarray/Int32Array#fill
   drop
   get_global $std/typedarray/arr32
   i32.const 456
@@ -4234,7 +4232,7 @@
   get_global $std/typedarray/arr32
   i32.const 2
   i32.const -2
-  call $~lib/internal/typedarray/TypedArray<i32>#fill|trampoline
+  call $~lib/typedarray/Int32Array#fill|trampoline
   drop
   get_global $std/typedarray/arr32
   i32.const 496
@@ -4252,7 +4250,7 @@
   i32.const 0
   i32.const 1
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i32>#fill
+  call $~lib/typedarray/Int32Array#fill
   drop
   get_global $std/typedarray/arr32
   i32.const 536
@@ -4275,7 +4273,7 @@
   get_global $std/typedarray/sub32
   i32.const 0
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i32>#fill|trampoline
+  call $~lib/typedarray/Int32Array#fill|trampoline
   drop
   get_global $std/typedarray/sub32
   i32.load offset=8

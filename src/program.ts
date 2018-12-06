@@ -965,6 +965,7 @@ export class Program extends DiagnosticEmitter {
           }
           break;
         }
+        case NodeKind.INDEXDECLARATION: break; // not supported, skipped for now
         default: {
           assert(false); // should have been reported while parsing
           return;
