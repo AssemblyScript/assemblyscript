@@ -14,9 +14,10 @@ let fs = require("fs");
 asc.main([
         "index.ts",
         "--baseDir",`${__dirname}/decompiler`,
-        "-b", "untouched.wasm",
-        "-t", "untouched.wat",
+        "-b", "build/untouched.wasm",
+        "-t", "build/untouched.wat",
         "--tsdFile", "index.d.ts",
+        // "--noTreeShaking",
         "--sourceMap",
         "--validate",
         // "--importMemory",
@@ -48,7 +49,7 @@ asc.main([
     // console.log(" - Function[" + index + "] name: " + name);
   }
 
-  let binary = fs.readFileSync(`${__dirname}/decompiler/untouched.wasm`);
+  let binary = fs.readFileSync(`${__dirname}/decompiler/build/untouched.wasm`);
   Parser.parse(binary, {
     onSection,
     // onType,
@@ -84,5 +85,12 @@ asc.main([
     }
   });
   console.log(decompiler.finish());
-  let Mod = loader.instantiateBuffer(binary, {index:{println:console.log}});
+  let Mod;
+  mod.setStart(mod.getFunction("null")); //Set start function to null function.
+  debugger;
+  Mod = loader.instantiateBuffer(mod.emitBinary(), {index:
+    {println:console.log,
+      asyncfn: (self, cb) => Mod.getFunction(cb)(self, 42)
+    }});
+  Mod.start();//Call start
 });
