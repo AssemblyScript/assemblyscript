@@ -2413,14 +2413,13 @@ export class FunctionPrototype extends Element {
     this.decoratorFlags = decoratorFlags;
   }
 
-  /** Applies class type arguments if a partially resolved instance method. */
-  applyClassTypeArguments(contextualTypeArguments: Map<string,Type> | null = null): void {
+  /** Applies class type arguments to the context of a partially resolved instance method. */
+  applyClassTypeArguments(contextualTypeArguments: Map<string,Type>): void {
     var classTypeArguments = assert(this.classTypeArguments); // set only if partial
     var classDeclaration = assert(this.classPrototype).declaration;
     var classTypeParameters = classDeclaration.typeParameters;
     var numClassTypeParameters = classTypeParameters.length;
     assert(numClassTypeParameters == classTypeArguments.length);
-    if (!contextualTypeArguments) contextualTypeArguments = new Map();
     for (let i = 0; i < numClassTypeParameters; ++i) {
       contextualTypeArguments.set(
         classTypeParameters[i].name.text,
