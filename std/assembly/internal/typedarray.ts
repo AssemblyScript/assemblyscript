@@ -12,11 +12,8 @@ import {
   defaultComparator
 } from "./array";
 
-// The internal TypedArray class uses two type parameters for the same reason as `loadUnsafe` and
-// `storeUnsafe` in 'internal/arraybuffer.ts'. See the documentation there for details.
-
 /** Typed array base class. Not a global object. */
-export abstract class TypedArray<T,TNative = T> {
+export abstract class TypedArray<T> {
 
   readonly buffer: ArrayBuffer;
   readonly byteOffset: i32;
@@ -50,19 +47,19 @@ export abstract class TypedArray<T,TNative = T> {
   }
 
   @operator("[]=")
-  protected __set(index: i32, value: TNative): void {
+  protected __set(index: i32, value: NATIVE<T>): void {
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    STORE_OFFSET<T,TNative>(this.buffer, index, value, this.byteOffset);
+    STORE_OFFSET<T,NATIVE<T>>(this.buffer, index, value, this.byteOffset);
   }
 
   @inline @operator("{}=")
-  protected __unchecked_set(index: i32, value: TNative): void {
-    STORE_OFFSET<T,TNative>(this.buffer, index, value, this.byteOffset);
+  protected __unchecked_set(index: i32, value: NATIVE<T>): void {
+    STORE_OFFSET<T,NATIVE<T>>(this.buffer, index, value, this.byteOffset);
   }
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
 
-  fill(value: TNative, start: i32 = 0, end: i32 = i32.MAX_VALUE): this /* ! */ {
+  fill(value: NATIVE<T>, start: i32 = 0, end: i32 = i32.MAX_VALUE): this /* ! */ {
     var buffer = this.buffer;
     var byteOffset = this.byteOffset;
     var len = this.length;
@@ -78,7 +75,7 @@ export abstract class TypedArray<T,TNative = T> {
       }
     } else {
       for (; start < end; ++start) {
-        STORE_OFFSET<T,TNative>(buffer, start, value, byteOffset);
+        STORE_OFFSET<T,NATIVE<T>>(buffer, start, value, byteOffset);
       }
     }
     return this;

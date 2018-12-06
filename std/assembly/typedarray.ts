@@ -5,7 +5,7 @@ import {
   REDUCE_RIGHT
 } from "./internal/typedarray";
 
-export class Int8Array extends TypedArray<i8,i32> {
+export class Int8Array extends TypedArray<i8> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int8Array {
@@ -27,7 +27,7 @@ export class Int8Array extends TypedArray<i8,i32> {
   }
 }
 
-export class Uint8Array extends TypedArray<u8,u32> {
+export class Uint8Array extends TypedArray<u8> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint8Array {
@@ -63,7 +63,7 @@ export class Uint8ClampedArray extends Uint8Array {
   }
 }
 
-export class Int16Array extends TypedArray<i16,i32> {
+export class Int16Array extends TypedArray<i16> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int16Array {
@@ -85,7 +85,7 @@ export class Int16Array extends TypedArray<i16,i32> {
   }
 }
 
-export class Uint16Array extends TypedArray<u16,u32> {
+export class Uint16Array extends TypedArray<u16> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint16Array {

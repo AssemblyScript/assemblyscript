@@ -54,7 +54,7 @@
  (data (i32.const 584) "\14\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00")
  (data (i32.const 616) "H\02\00\00\05\00\00\00")
  (table $0 24 anyfunc)
- (elem (i32.const 0) $null $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceUint8ArrayTest~anonymous|3 $std/typedarray/reduceUint8ClampedArrayTest~anonymous|4 $std/typedarray/reduceInt16ArrayTest~anonymous|5 $std/typedarray/reduceUint16ArrayTest~anonymous|6 $std/typedarray/reduceInt32ArrayTest~anonymous|7 $std/typedarray/reduceUint32ArrayTest~anonymous|8 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceUint64ArrayTest~anonymous|10 $std/typedarray/reduceFloat32ArrayTest~anonymous|11 $std/typedarray/reduceFloat64ArrayTest~anonymous|12 $std/typedarray/reduceRightInt8ArrayTest~anonymous|13 $std/typedarray/reduceRightUint8ArrayTest~anonymous|14 $std/typedarray/reduceRightUint8ClampedArrayTest~anonymous|15 $std/typedarray/reduceRightInt16ArrayTest~anonymous|16 $std/typedarray/reduceRightUint16ArrayTest~anonymous|17 $std/typedarray/reduceRightInt32ArrayTest~anonymous|18 $std/typedarray/reduceRightUint32ArrayTest~anonymous|19 $std/typedarray/reduceRightInt64ArrayTest~anonymous|20 $std/typedarray/reduceRightUint64ArrayTest~anonymous|21 $std/typedarray/reduceRightFloat32ArrayTest~anonymous|22 $std/typedarray/reduceRightFloat64ArrayTest~anonymous|23)
+ (elem (i32.const 0) $null $~lib/internal/typedarray/TypedArray<f64>#sort|trampoline~anonymous|1 $std/typedarray/reduceInt8ArrayTest~anonymous|2 $std/typedarray/reduceUint8ArrayTest~anonymous|3 $std/typedarray/reduceUint8ClampedArrayTest~anonymous|4 $std/typedarray/reduceInt16ArrayTest~anonymous|5 $std/typedarray/reduceUint16ArrayTest~anonymous|6 $std/typedarray/reduceInt32ArrayTest~anonymous|7 $std/typedarray/reduceUint32ArrayTest~anonymous|8 $std/typedarray/reduceInt64ArrayTest~anonymous|9 $std/typedarray/reduceUint64ArrayTest~anonymous|10 $std/typedarray/reduceFloat32ArrayTest~anonymous|11 $std/typedarray/reduceFloat64ArrayTest~anonymous|12 $std/typedarray/reduceRightInt8ArrayTest~anonymous|13 $std/typedarray/reduceRightUint8ArrayTest~anonymous|14 $std/typedarray/reduceRightUint8ClampedArrayTest~anonymous|15 $std/typedarray/reduceRightInt16ArrayTest~anonymous|16 $std/typedarray/reduceRightUint16ArrayTest~anonymous|17 $std/typedarray/reduceRightInt32ArrayTest~anonymous|18 $std/typedarray/reduceRightUint32ArrayTest~anonymous|19 $std/typedarray/reduceRightInt64ArrayTest~anonymous|20 $std/typedarray/reduceRightUint64ArrayTest~anonymous|21 $std/typedarray/reduceRightFloat32ArrayTest~anonymous|22 $std/typedarray/reduceRightFloat64ArrayTest~anonymous|23)
  (global $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT i32 (i32.const 1))
  (global $~lib/typedarray/Uint8Array.BYTES_PER_ELEMENT i32 (i32.const 1))
  (global $~lib/typedarray/Uint8ClampedArray.BYTES_PER_ELEMENT i32 (i32.const 1))
@@ -481,7 +481,7 @@
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -492,7 +492,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 27
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -546,7 +546,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -557,7 +557,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 27
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -611,7 +611,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i16,i32>#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i16>#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -622,7 +622,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 27
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -676,7 +676,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<u16,u32>#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u16>#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -687,7 +687,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 27
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -741,7 +741,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#constructor (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -752,7 +752,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 27
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -806,7 +806,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<u32,u32>#constructor (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u32>#constructor (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -817,7 +817,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 27
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -871,7 +871,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i64,i64>#constructor (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i64>#constructor (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -882,7 +882,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 27
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -936,7 +936,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<u64,u64>#constructor (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u64>#constructor (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -947,7 +947,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 27
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -1001,7 +1001,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<f32,f32>#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f32>#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1012,7 +1012,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 27
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -1066,7 +1066,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#constructor (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64>#constructor (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1077,7 +1077,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 27
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -1145,7 +1145,7 @@
   (local $11 i32)
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i8>#constructor
   set_local $1
   get_local $1
   i32.load offset=4
@@ -1175,7 +1175,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.0 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.0 (result i32)
    get_local $1
    i32.load offset=8
    i32.const 0
@@ -1194,7 +1194,7 @@
   end
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_local $2
   get_local $2
   i32.load offset=4
@@ -1224,7 +1224,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<u8,u32>#get:length|inlined.0 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u8>#get:length|inlined.0 (result i32)
    get_local $2
    i32.load offset=8
    i32.const 0
@@ -1243,7 +1243,7 @@
   end
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_local $3
   get_local $3
   i32.load offset=4
@@ -1273,7 +1273,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<u8,u32>#get:length|inlined.1 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u8>#get:length|inlined.1 (result i32)
    get_local $3
    i32.load offset=8
    i32.const 0
@@ -1292,7 +1292,7 @@
   end
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<i16,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i16>#constructor
   set_local $4
   get_local $4
   i32.load offset=4
@@ -1322,7 +1322,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<i16,i32>#get:length|inlined.0 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i16>#get:length|inlined.0 (result i32)
    get_local $4
    i32.load offset=8
    i32.const 1
@@ -1341,7 +1341,7 @@
   end
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<u16,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u16>#constructor
   set_local $5
   get_local $5
   i32.load offset=4
@@ -1371,7 +1371,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<u16,u32>#get:length|inlined.0 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u16>#get:length|inlined.0 (result i32)
    get_local $5
    i32.load offset=8
    i32.const 1
@@ -1390,7 +1390,7 @@
   end
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i32>#constructor
   set_local $6
   get_local $6
   i32.load offset=4
@@ -1420,7 +1420,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.0 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i32>#get:length|inlined.0 (result i32)
    get_local $6
    i32.load offset=8
    i32.const 2
@@ -1439,7 +1439,7 @@
   end
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<u32,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u32>#constructor
   set_local $7
   get_local $7
   i32.load offset=4
@@ -1469,7 +1469,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<u32,u32>#get:length|inlined.0 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u32>#get:length|inlined.0 (result i32)
    get_local $7
    i32.load offset=8
    i32.const 2
@@ -1488,7 +1488,7 @@
   end
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<i64,i64>#constructor
+  call $~lib/internal/typedarray/TypedArray<i64>#constructor
   set_local $8
   get_local $8
   i32.load offset=4
@@ -1518,7 +1518,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<i64,i64>#get:length|inlined.0 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i64>#get:length|inlined.0 (result i32)
    get_local $8
    i32.load offset=8
    i32.const 3
@@ -1537,7 +1537,7 @@
   end
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<u64,u64>#constructor
+  call $~lib/internal/typedarray/TypedArray<u64>#constructor
   set_local $9
   get_local $9
   i32.load offset=4
@@ -1567,7 +1567,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<u64,u64>#get:length|inlined.0 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u64>#get:length|inlined.0 (result i32)
    get_local $9
    i32.load offset=8
    i32.const 3
@@ -1586,7 +1586,7 @@
   end
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<f32,f32>#constructor
+  call $~lib/internal/typedarray/TypedArray<f32>#constructor
   set_local $10
   get_local $10
   i32.load offset=4
@@ -1616,7 +1616,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<f32,f32>#get:length|inlined.0 (result i32)
+  block $~lib/internal/typedarray/TypedArray<f32>#get:length|inlined.0 (result i32)
    get_local $10
    i32.load offset=8
    i32.const 2
@@ -1635,7 +1635,7 @@
   end
   i32.const 0
   get_local $0
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#constructor
+  call $~lib/internal/typedarray/TypedArray<f64>#constructor
   set_local $11
   get_local $11
   i32.load offset=4
@@ -1665,7 +1665,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<f64,f64>#get:length|inlined.0 (result i32)
+  block $~lib/internal/typedarray/TypedArray<f64>#get:length|inlined.0 (result i32)
    get_local $11
    i32.load offset=8
    i32.const 3
@@ -1683,7 +1683,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#__set (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#__set (; 18 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -1695,7 +1695,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 54
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1716,7 +1716,7 @@
   get_local $2
   i32.store offset=8
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#__get (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#__get (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $1
@@ -1728,7 +1728,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 43
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1754,7 +1754,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.2 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i32>#get:length|inlined.2 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
@@ -1849,7 +1849,7 @@
   i32.store offset=8
   get_local $4
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#__set (; 21 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $~lib/internal/typedarray/TypedArray<f64>#__set (; 21 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -1861,7 +1861,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 54
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1886,7 +1886,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  block $~lib/internal/typedarray/TypedArray<f64,f64>#get:length|inlined.1 (result i32)
+  block $~lib/internal/typedarray/TypedArray<f64>#get:length|inlined.1 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
@@ -2509,7 +2509,7 @@
   get_local $12
   f64.store offset=8
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64>#sort (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2519,7 +2519,7 @@
   get_local $0
   i32.load offset=4
   set_local $2
-  block $~lib/internal/typedarray/TypedArray<f64,f64>#get:length|inlined.3 (result i32)
+  block $~lib/internal/typedarray/TypedArray<f64>#get:length|inlined.3 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
@@ -2622,7 +2622,7 @@
   get_local $0
   return
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline~anonymous|1 (; 27 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64>#sort|trampoline~anonymous|1 (; 27 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   get_local $0
@@ -2655,7 +2655,7 @@
   i64.lt_s
   i32.sub
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64>#sort|trampoline (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -2672,9 +2672,9 @@
   end
   get_local $0
   get_local $1
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#sort
+  call $~lib/internal/typedarray/TypedArray<f64>#sort
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#__get (; 29 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/internal/typedarray/TypedArray<f64>#__get (; 29 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 i32)
   get_local $1
@@ -2686,7 +2686,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 43
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2708,7 +2708,7 @@
    f64.load offset=8
   end
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#__set (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -2720,7 +2720,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 54
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2761,9 +2761,9 @@
   get_local $4
   i32.gt_s
   select
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#__get (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $1
@@ -2775,7 +2775,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 43
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2797,7 +2797,7 @@
    i32.load8_u offset=8
   end
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#__set (; 33 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<i8>#__set (; 33 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -2809,7 +2809,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 54
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2830,7 +2830,7 @@
   get_local $2
   i32.store8 offset=8
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#fill (; 34 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8>#fill (; 34 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2842,7 +2842,7 @@
   get_local $0
   i32.load offset=4
   set_local $5
-  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.1 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.1 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 0
@@ -2922,7 +2922,7 @@
   end
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#__get (; 35 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8>#__get (; 35 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $1
@@ -2934,7 +2934,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 43
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2981,7 +2981,7 @@
  (func $std/typedarray/isInt8ArrayEqual (; 37 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.3 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.3 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 0
@@ -3000,7 +3000,7 @@
    block
     i32.const 0
     set_local $2
-    block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.4 (result i32)
+    block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.4 (result i32)
      get_local $0
      i32.load offset=8
      i32.const 0
@@ -3016,7 +3016,7 @@
     br_if $break|0
     get_local $0
     get_local $2
-    call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
+    call $~lib/internal/typedarray/TypedArray<i8>#__get
     i32.const 24
     i32.shl
     i32.const 24
@@ -3044,7 +3044,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#fill|trampoline (; 38 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8>#fill|trampoline (; 38 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -3066,13 +3066,13 @@
   get_local $1
   get_local $2
   get_local $3
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#fill
+  call $~lib/internal/typedarray/TypedArray<i8>#fill
  )
  (func $~lib/typedarray/Int8Array#subarray (; 39 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.5 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.5 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 0
@@ -3167,7 +3167,7 @@
   i32.store offset=8
   get_local $4
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#fill (; 40 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#fill (; 40 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -3179,7 +3179,7 @@
   get_local $0
   i32.load offset=4
   set_local $5
-  block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.4 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i32>#get:length|inlined.4 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
@@ -3288,7 +3288,7 @@
  (func $std/typedarray/isInt32ArrayEqual (; 42 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.6 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i32>#get:length|inlined.6 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
@@ -3307,7 +3307,7 @@
    block
     i32.const 0
     set_local $2
-    block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.7 (result i32)
+    block $~lib/internal/typedarray/TypedArray<i32>#get:length|inlined.7 (result i32)
      get_local $0
      i32.load offset=8
      i32.const 2
@@ -3323,7 +3323,7 @@
     br_if $break|0
     get_local $0
     get_local $2
-    call $~lib/internal/typedarray/TypedArray<i32,i32>#__get
+    call $~lib/internal/typedarray/TypedArray<i32>#__get
     get_local $1
     get_local $2
     call $~lib/array/Array<i32>#__get
@@ -3343,7 +3343,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#fill|trampoline (; 43 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#fill|trampoline (; 43 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -3365,14 +3365,14 @@
   get_local $1
   get_local $2
   get_local $3
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#fill
+  call $~lib/internal/typedarray/TypedArray<i32>#fill
  )
  (func $std/typedarray/reduceInt8ArrayTest~anonymous|2 (; 44 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/internal/typedarray/TypedArray<i8,i32>#__unchecked_get (; 45 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8>#__unchecked_get (; 45 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -3395,7 +3395,7 @@
   (local $4 i32)
   i32.const 0
   set_local $3
-  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.10 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.10 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 0
@@ -3415,7 +3415,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<i8,i32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<i8>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -3438,20 +3438,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i8>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_local $0
   i32.const 2
   i32.const 0
@@ -3479,7 +3479,7 @@
   get_local $1
   i32.add
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#__unchecked_get (; 49 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__unchecked_get (; 49 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -3502,7 +3502,7 @@
   (local $4 i32)
   i32.const 0
   set_local $3
-  block $~lib/internal/typedarray/TypedArray<u8,u32>#get:length|inlined.2 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u8>#get:length|inlined.2 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 0
@@ -3522,7 +3522,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<u8,u32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<u8>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -3545,20 +3545,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_local $0
   i32.const 3
   i32.const 0
@@ -3589,7 +3589,7 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_local $0
   get_local $0
   i32.const 0
@@ -3623,7 +3623,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<i16,i32>#__set (; 54 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<i16>#__set (; 54 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -3635,7 +3635,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 54
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -3661,7 +3661,7 @@
   get_local $1
   i32.add
  )
- (func $~lib/internal/typedarray/TypedArray<i16,i32>#__unchecked_get (; 56 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i16>#__unchecked_get (; 56 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -3684,7 +3684,7 @@
   (local $4 i32)
   i32.const 0
   set_local $3
-  block $~lib/internal/typedarray/TypedArray<i16,i32>#get:length|inlined.1 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i16>#get:length|inlined.1 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 1
@@ -3704,7 +3704,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<i16,i32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<i16>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -3727,20 +3727,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i16,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i16>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i16,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i16>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i16,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i16>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i16,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i16>#__set
   get_local $0
   i32.const 5
   i32.const 0
@@ -3763,7 +3763,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<u16,u32>#__set (; 59 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u16>#__set (; 59 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -3775,7 +3775,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 54
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -3801,7 +3801,7 @@
   get_local $1
   i32.add
  )
- (func $~lib/internal/typedarray/TypedArray<u16,u32>#__unchecked_get (; 61 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u16>#__unchecked_get (; 61 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -3824,7 +3824,7 @@
   (local $4 i32)
   i32.const 0
   set_local $3
-  block $~lib/internal/typedarray/TypedArray<u16,u32>#get:length|inlined.1 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u16>#get:length|inlined.1 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 1
@@ -3844,7 +3844,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<u16,u32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<u16>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -3867,20 +3867,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u16,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u16>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<u16,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u16>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<u16,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u16>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u16,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u16>#__set
   get_local $0
   i32.const 6
   i32.const 0
@@ -3906,7 +3906,7 @@
   get_local $1
   i32.add
  )
- (func $~lib/internal/typedarray/TypedArray<i32,i32>#__unchecked_get (; 65 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#__unchecked_get (; 65 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -3929,7 +3929,7 @@
   (local $4 i32)
   i32.const 0
   set_local $3
-  block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.9 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i32>#get:length|inlined.9 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
@@ -3949,7 +3949,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<i32,i32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<i32>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -3972,20 +3972,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i32>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_local $0
   i32.const 7
   i32.const 0
@@ -4004,7 +4004,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<u32,u32>#__set (; 68 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u32>#__set (; 68 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -4016,7 +4016,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 54
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4042,7 +4042,7 @@
   get_local $1
   i32.add
  )
- (func $~lib/internal/typedarray/TypedArray<u32,u32>#__unchecked_get (; 70 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u32>#__unchecked_get (; 70 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -4065,7 +4065,7 @@
   (local $4 i32)
   i32.const 0
   set_local $3
-  block $~lib/internal/typedarray/TypedArray<u32,u32>#get:length|inlined.1 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u32>#get:length|inlined.1 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
@@ -4085,7 +4085,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<u32,u32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<u32>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -4108,20 +4108,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u32,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u32>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<u32,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u32>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<u32,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u32>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u32,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u32>#__set
   get_local $0
   i32.const 8
   i32.const 0
@@ -4140,7 +4140,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<i64,i64>#__set (; 73 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/internal/typedarray/TypedArray<i64>#__set (; 73 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -4152,7 +4152,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 54
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4178,7 +4178,7 @@
   get_local $1
   i64.add
  )
- (func $~lib/internal/typedarray/TypedArray<i64,i64>#__unchecked_get (; 75 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/internal/typedarray/TypedArray<i64>#__unchecked_get (; 75 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -4201,7 +4201,7 @@
   (local $4 i32)
   i32.const 0
   set_local $3
-  block $~lib/internal/typedarray/TypedArray<i64,i64>#get:length|inlined.1 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i64>#get:length|inlined.1 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
@@ -4221,7 +4221,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<i64,i64>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<i64>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -4244,20 +4244,20 @@
   (local $1 i64)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i64,i64>#constructor
+  call $~lib/internal/typedarray/TypedArray<i64>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i64.const 1
-  call $~lib/internal/typedarray/TypedArray<i64,i64>#__set
+  call $~lib/internal/typedarray/TypedArray<i64>#__set
   get_local $0
   i32.const 1
   i64.const 2
-  call $~lib/internal/typedarray/TypedArray<i64,i64>#__set
+  call $~lib/internal/typedarray/TypedArray<i64>#__set
   get_local $0
   i32.const 2
   i64.const 3
-  call $~lib/internal/typedarray/TypedArray<i64,i64>#__set
+  call $~lib/internal/typedarray/TypedArray<i64>#__set
   get_local $0
   i32.const 9
   i64.const 0
@@ -4276,7 +4276,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<u64,u64>#__set (; 78 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/internal/typedarray/TypedArray<u64>#__set (; 78 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -4288,7 +4288,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 54
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4314,7 +4314,7 @@
   get_local $1
   i64.add
  )
- (func $~lib/internal/typedarray/TypedArray<u64,u64>#__unchecked_get (; 80 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/internal/typedarray/TypedArray<u64>#__unchecked_get (; 80 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -4337,7 +4337,7 @@
   (local $4 i32)
   i32.const 0
   set_local $3
-  block $~lib/internal/typedarray/TypedArray<u64,u64>#get:length|inlined.1 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u64>#get:length|inlined.1 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
@@ -4357,7 +4357,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<u64,u64>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<u64>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -4380,20 +4380,20 @@
   (local $1 i64)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u64,u64>#constructor
+  call $~lib/internal/typedarray/TypedArray<u64>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i64.const 1
-  call $~lib/internal/typedarray/TypedArray<u64,u64>#__set
+  call $~lib/internal/typedarray/TypedArray<u64>#__set
   get_local $0
   i32.const 1
   i64.const 2
-  call $~lib/internal/typedarray/TypedArray<u64,u64>#__set
+  call $~lib/internal/typedarray/TypedArray<u64>#__set
   get_local $0
   i32.const 2
   i64.const 3
-  call $~lib/internal/typedarray/TypedArray<u64,u64>#__set
+  call $~lib/internal/typedarray/TypedArray<u64>#__set
   get_local $0
   i32.const 10
   i64.const 0
@@ -4412,7 +4412,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<f32,f32>#__set (; 83 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $~lib/internal/typedarray/TypedArray<f32>#__set (; 83 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
   (local $3 i32)
   (local $4 i32)
   get_local $1
@@ -4424,7 +4424,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 54
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4450,7 +4450,7 @@
   get_local $1
   f32.add
  )
- (func $~lib/internal/typedarray/TypedArray<f32,f32>#__unchecked_get (; 85 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/internal/typedarray/TypedArray<f32>#__unchecked_get (; 85 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -4473,7 +4473,7 @@
   (local $4 i32)
   i32.const 0
   set_local $3
-  block $~lib/internal/typedarray/TypedArray<f32,f32>#get:length|inlined.1 (result i32)
+  block $~lib/internal/typedarray/TypedArray<f32>#get:length|inlined.1 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
@@ -4493,7 +4493,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<f32,f32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<f32>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -4516,20 +4516,20 @@
   (local $1 f32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<f32,f32>#constructor
+  call $~lib/internal/typedarray/TypedArray<f32>#constructor
   set_local $0
   get_local $0
   i32.const 0
   f32.const 1
-  call $~lib/internal/typedarray/TypedArray<f32,f32>#__set
+  call $~lib/internal/typedarray/TypedArray<f32>#__set
   get_local $0
   i32.const 1
   f32.const 2
-  call $~lib/internal/typedarray/TypedArray<f32,f32>#__set
+  call $~lib/internal/typedarray/TypedArray<f32>#__set
   get_local $0
   i32.const 2
   f32.const 3
-  call $~lib/internal/typedarray/TypedArray<f32,f32>#__set
+  call $~lib/internal/typedarray/TypedArray<f32>#__set
   get_local $0
   i32.const 11
   f32.const 0
@@ -4553,7 +4553,7 @@
   get_local $1
   f64.add
  )
- (func $~lib/internal/typedarray/TypedArray<f64,f64>#__unchecked_get (; 89 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/internal/typedarray/TypedArray<f64>#__unchecked_get (; 89 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -4576,7 +4576,7 @@
   (local $4 i32)
   i32.const 0
   set_local $3
-  block $~lib/internal/typedarray/TypedArray<f64,f64>#get:length|inlined.4 (result i32)
+  block $~lib/internal/typedarray/TypedArray<f64>#get:length|inlined.4 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
@@ -4596,7 +4596,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<f64,f64>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<f64>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -4619,20 +4619,20 @@
   (local $1 f64)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#constructor
+  call $~lib/internal/typedarray/TypedArray<f64>#constructor
   set_local $0
   get_local $0
   i32.const 0
   f64.const 1
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_local $0
   i32.const 1
   f64.const 2
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_local $0
   i32.const 2
   f64.const 3
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_local $0
   i32.const 12
   f64.const 0
@@ -4659,7 +4659,7 @@
  (func $~lib/typedarray/Int8Array#reduceRight<i8> (; 93 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.11 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.11 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 0
@@ -4683,7 +4683,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<i8,i32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<i8>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -4706,20 +4706,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i8>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_local $0
   i32.const 13
   i32.const 0
@@ -4750,7 +4750,7 @@
  (func $~lib/typedarray/Uint8Array#reduceRight<u8> (; 96 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/internal/typedarray/TypedArray<u8,u32>#get:length|inlined.3 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u8>#get:length|inlined.3 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 0
@@ -4774,7 +4774,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<u8,u32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<u8>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -4797,20 +4797,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_local $0
   i32.const 14
   i32.const 0
@@ -4841,7 +4841,7 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_local $0
   get_local $0
   i32.const 0
@@ -4883,7 +4883,7 @@
  (func $~lib/typedarray/Int16Array#reduceRight<i16> (; 101 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/internal/typedarray/TypedArray<i16,i32>#get:length|inlined.2 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i16>#get:length|inlined.2 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 1
@@ -4907,7 +4907,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<i16,i32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<i16>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -4930,20 +4930,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i16,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i16>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i16,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i16>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i16,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i16>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i16,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i16>#__set
   get_local $0
   i32.const 16
   i32.const 0
@@ -4974,7 +4974,7 @@
  (func $~lib/typedarray/Uint16Array#reduceRight<u16> (; 104 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/internal/typedarray/TypedArray<u16,u32>#get:length|inlined.2 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u16>#get:length|inlined.2 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 1
@@ -4998,7 +4998,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<u16,u32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<u16>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -5021,20 +5021,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u16,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u16>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<u16,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u16>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<u16,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u16>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u16,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u16>#__set
   get_local $0
   i32.const 17
   i32.const 0
@@ -5063,7 +5063,7 @@
  (func $~lib/typedarray/Int32Array#reduceRight<i32> (; 107 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.10 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i32>#get:length|inlined.10 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
@@ -5087,7 +5087,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<i32,i32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<i32>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -5110,20 +5110,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i32>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_local $0
   i32.const 18
   i32.const 0
@@ -5150,7 +5150,7 @@
  (func $~lib/typedarray/Uint32Array#reduceRight<u32> (; 110 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/internal/typedarray/TypedArray<u32,u32>#get:length|inlined.2 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u32>#get:length|inlined.2 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
@@ -5174,7 +5174,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<u32,u32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<u32>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -5197,20 +5197,20 @@
   (local $1 i32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u32,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u32>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<u32,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u32>#__set
   get_local $0
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<u32,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u32>#__set
   get_local $0
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u32,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u32>#__set
   get_local $0
   i32.const 19
   i32.const 0
@@ -5237,7 +5237,7 @@
  (func $~lib/typedarray/Int64Array#reduceRight<i64> (; 113 ;) (type $iiII) (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/internal/typedarray/TypedArray<i64,i64>#get:length|inlined.2 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i64>#get:length|inlined.2 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
@@ -5261,7 +5261,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<i64,i64>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<i64>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -5284,20 +5284,20 @@
   (local $1 i64)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i64,i64>#constructor
+  call $~lib/internal/typedarray/TypedArray<i64>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i64.const 1
-  call $~lib/internal/typedarray/TypedArray<i64,i64>#__set
+  call $~lib/internal/typedarray/TypedArray<i64>#__set
   get_local $0
   i32.const 1
   i64.const 2
-  call $~lib/internal/typedarray/TypedArray<i64,i64>#__set
+  call $~lib/internal/typedarray/TypedArray<i64>#__set
   get_local $0
   i32.const 2
   i64.const 3
-  call $~lib/internal/typedarray/TypedArray<i64,i64>#__set
+  call $~lib/internal/typedarray/TypedArray<i64>#__set
   get_local $0
   i32.const 20
   i64.const 0
@@ -5324,7 +5324,7 @@
  (func $~lib/typedarray/Uint64Array#reduceRight<u64> (; 116 ;) (type $iiII) (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/internal/typedarray/TypedArray<u64,u64>#get:length|inlined.2 (result i32)
+  block $~lib/internal/typedarray/TypedArray<u64>#get:length|inlined.2 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
@@ -5348,7 +5348,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<u64,u64>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<u64>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -5371,20 +5371,20 @@
   (local $1 i64)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u64,u64>#constructor
+  call $~lib/internal/typedarray/TypedArray<u64>#constructor
   set_local $0
   get_local $0
   i32.const 0
   i64.const 1
-  call $~lib/internal/typedarray/TypedArray<u64,u64>#__set
+  call $~lib/internal/typedarray/TypedArray<u64>#__set
   get_local $0
   i32.const 1
   i64.const 2
-  call $~lib/internal/typedarray/TypedArray<u64,u64>#__set
+  call $~lib/internal/typedarray/TypedArray<u64>#__set
   get_local $0
   i32.const 2
   i64.const 3
-  call $~lib/internal/typedarray/TypedArray<u64,u64>#__set
+  call $~lib/internal/typedarray/TypedArray<u64>#__set
   get_local $0
   i32.const 21
   i64.const 0
@@ -5411,7 +5411,7 @@
  (func $~lib/typedarray/Float32Array#reduceRight<f32> (; 119 ;) (type $iiff) (param $0 i32) (param $1 i32) (param $2 f32) (result f32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/internal/typedarray/TypedArray<f32,f32>#get:length|inlined.2 (result i32)
+  block $~lib/internal/typedarray/TypedArray<f32>#get:length|inlined.2 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
@@ -5435,7 +5435,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<f32,f32>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<f32>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -5458,20 +5458,20 @@
   (local $1 f32)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<f32,f32>#constructor
+  call $~lib/internal/typedarray/TypedArray<f32>#constructor
   set_local $0
   get_local $0
   i32.const 0
   f32.const 1
-  call $~lib/internal/typedarray/TypedArray<f32,f32>#__set
+  call $~lib/internal/typedarray/TypedArray<f32>#__set
   get_local $0
   i32.const 1
   f32.const 2
-  call $~lib/internal/typedarray/TypedArray<f32,f32>#__set
+  call $~lib/internal/typedarray/TypedArray<f32>#__set
   get_local $0
   i32.const 2
   f32.const 3
-  call $~lib/internal/typedarray/TypedArray<f32,f32>#__set
+  call $~lib/internal/typedarray/TypedArray<f32>#__set
   get_local $0
   i32.const 22
   f32.const 0
@@ -5498,7 +5498,7 @@
  (func $~lib/typedarray/Float64Array#reduceRight<f64> (; 122 ;) (type $iiFF) (param $0 i32) (param $1 i32) (param $2 f64) (result f64)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/internal/typedarray/TypedArray<f64,f64>#get:length|inlined.5 (result i32)
+  block $~lib/internal/typedarray/TypedArray<f64>#get:length|inlined.5 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
@@ -5522,7 +5522,7 @@
        get_local $2
        get_local $0
        get_local $3
-       call $~lib/internal/typedarray/TypedArray<f64,f64>#__unchecked_get
+       call $~lib/internal/typedarray/TypedArray<f64>#__unchecked_get
        get_local $3
        get_local $0
        get_local $1
@@ -5545,20 +5545,20 @@
   (local $1 f64)
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#constructor
+  call $~lib/internal/typedarray/TypedArray<f64>#constructor
   set_local $0
   get_local $0
   i32.const 0
   f64.const 1
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_local $0
   i32.const 1
   f64.const 2
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_local $0
   i32.const 2
   f64.const 3
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_local $0
   i32.const 23
   f64.const 0
@@ -5727,21 +5727,21 @@
   call $std/typedarray/testInstantiate
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i32>#constructor
   set_global $std/typedarray/arr
   get_global $std/typedarray/arr
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_global $std/typedarray/arr
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_global $std/typedarray/arr
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
-  block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.1 (result i32)
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
+  block $~lib/internal/typedarray/TypedArray<i32>#get:length|inlined.1 (result i32)
    get_global $std/typedarray/arr
    set_local $0
    get_local $0
@@ -5790,7 +5790,7 @@
   end
   get_global $std/typedarray/arr
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__get
+  call $~lib/internal/typedarray/TypedArray<i32>#__get
   i32.const 1
   i32.eq
   i32.eqz
@@ -5804,7 +5804,7 @@
   end
   get_global $std/typedarray/arr
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__get
+  call $~lib/internal/typedarray/TypedArray<i32>#__get
   i32.const 2
   i32.eq
   i32.eqz
@@ -5818,7 +5818,7 @@
   end
   get_global $std/typedarray/arr
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__get
+  call $~lib/internal/typedarray/TypedArray<i32>#__get
   i32.const 3
   i32.eq
   i32.eqz
@@ -5835,7 +5835,7 @@
   i32.const 2
   call $~lib/typedarray/Int32Array#subarray
   set_global $std/typedarray/arr
-  block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.3 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i32>#get:length|inlined.3 (result i32)
    get_global $std/typedarray/arr
    set_local $0
    get_local $0
@@ -5886,7 +5886,7 @@
   end
   get_global $std/typedarray/arr
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__get
+  call $~lib/internal/typedarray/TypedArray<i32>#__get
   i32.const 2
   i32.eq
   i32.eqz
@@ -5900,46 +5900,46 @@
   end
   i32.const 0
   i32.const 8
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#constructor
+  call $~lib/internal/typedarray/TypedArray<f64>#constructor
   set_global $std/typedarray/af64
   get_global $std/typedarray/af64
   i32.const 0
   f64.const 1
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_global $std/typedarray/af64
   i32.const 1
   f64.const 2
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_global $std/typedarray/af64
   i32.const 2
   f64.const 7
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_global $std/typedarray/af64
   i32.const 3
   f64.const 6
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_global $std/typedarray/af64
   i32.const 4
   f64.const 5
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_global $std/typedarray/af64
   i32.const 5
   f64.const 4
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_global $std/typedarray/af64
   i32.const 6
   f64.const 3
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_global $std/typedarray/af64
   i32.const 7
   f64.const 8
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__set
+  call $~lib/internal/typedarray/TypedArray<f64>#__set
   get_global $std/typedarray/af64
   i32.const 2
   i32.const 6
   call $~lib/typedarray/Float64Array#subarray
   set_global $std/typedarray/af64
-  block $~lib/internal/typedarray/TypedArray<f64,f64>#get:length|inlined.2 (result i32)
+  block $~lib/internal/typedarray/TypedArray<f64>#get:length|inlined.2 (result i32)
    get_global $std/typedarray/af64
    set_local $0
    get_local $0
@@ -5993,19 +5993,19 @@
    set_global $~argc
    get_global $std/typedarray/af64
    i32.const 0
-   call $~lib/internal/typedarray/TypedArray<f64,f64>#sort|trampoline
+   call $~lib/internal/typedarray/TypedArray<f64>#sort|trampoline
   end
   drop
   get_global $std/typedarray/af64
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
+  call $~lib/internal/typedarray/TypedArray<f64>#__get
   f64.const 4
   f64.eq
   tee_local $0
   if (result i32)
    get_global $std/typedarray/af64
    i32.const 1
-   call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
+   call $~lib/internal/typedarray/TypedArray<f64>#__get
    f64.const 5
    f64.eq
   else   
@@ -6015,7 +6015,7 @@
   if (result i32)
    get_global $std/typedarray/af64
    i32.const 2
-   call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
+   call $~lib/internal/typedarray/TypedArray<f64>#__get
    f64.const 6
    f64.eq
   else   
@@ -6025,7 +6025,7 @@
   if (result i32)
    get_global $std/typedarray/af64
    i32.const 3
-   call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
+   call $~lib/internal/typedarray/TypedArray<f64>#__get
    f64.const 7
    f64.eq
   else   
@@ -6042,7 +6042,7 @@
   end
   i32.const 0
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_global $std/typedarray/clampedArr
   get_global $std/typedarray/clampedArr
   i32.const 0
@@ -6058,7 +6058,7 @@
   call $~lib/typedarray/Uint8ClampedArray#__set
   get_global $std/typedarray/clampedArr
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__get
+  call $~lib/internal/typedarray/TypedArray<u8>#__get
   i32.const 255
   i32.and
   i32.const 0
@@ -6074,7 +6074,7 @@
   end
   get_global $std/typedarray/clampedArr
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__get
+  call $~lib/internal/typedarray/TypedArray<u8>#__get
   i32.const 255
   i32.and
   i32.const 2
@@ -6090,7 +6090,7 @@
   end
   get_global $std/typedarray/clampedArr
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__get
+  call $~lib/internal/typedarray/TypedArray<u8>#__get
   i32.const 255
   i32.and
   i32.const 255
@@ -6106,33 +6106,33 @@
   end
   i32.const 0
   i32.const 5
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i8>#constructor
   set_global $std/typedarray/arr8
   get_global $std/typedarray/arr8
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/arr8
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/arr8
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/arr8
   i32.const 3
   i32.const 4
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/arr8
   i32.const 4
   i32.const 5
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/arr8
   i32.const 1
   i32.const 1
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#fill
+  call $~lib/internal/typedarray/TypedArray<i8>#fill
   drop
   get_global $std/typedarray/arr8
   i32.const 192
@@ -6153,7 +6153,7 @@
    i32.const 0
    i32.const 0
    i32.const 0
-   call $~lib/internal/typedarray/TypedArray<i8,i32>#fill|trampoline
+   call $~lib/internal/typedarray/TypedArray<i8>#fill|trampoline
   end
   drop
   get_global $std/typedarray/arr8
@@ -6172,7 +6172,7 @@
   i32.const 1
   i32.const 0
   i32.const -3
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#fill
+  call $~lib/internal/typedarray/TypedArray<i8>#fill
   drop
   get_global $std/typedarray/arr8
   i32.const 240
@@ -6193,7 +6193,7 @@
    i32.const 2
    i32.const -2
    i32.const 0
-   call $~lib/internal/typedarray/TypedArray<i8,i32>#fill|trampoline
+   call $~lib/internal/typedarray/TypedArray<i8>#fill|trampoline
   end
   drop
   get_global $std/typedarray/arr8
@@ -6212,7 +6212,7 @@
   i32.const 0
   i32.const 1
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#fill
+  call $~lib/internal/typedarray/TypedArray<i8>#fill
   drop
   get_global $std/typedarray/arr8
   i32.const 288
@@ -6238,10 +6238,10 @@
    i32.const 0
    i32.const 0
    i32.const 0
-   call $~lib/internal/typedarray/TypedArray<i8,i32>#fill|trampoline
+   call $~lib/internal/typedarray/TypedArray<i8>#fill|trampoline
   end
   drop
-  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.6 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.6 (result i32)
    get_global $std/typedarray/sub8
    set_local $0
    get_local $0
@@ -6312,33 +6312,33 @@
   end
   i32.const 0
   i32.const 5
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i32>#constructor
   set_global $std/typedarray/arr32
   get_global $std/typedarray/arr32
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_global $std/typedarray/arr32
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_global $std/typedarray/arr32
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_global $std/typedarray/arr32
   i32.const 3
   i32.const 4
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_global $std/typedarray/arr32
   i32.const 4
   i32.const 5
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i32>#__set
   get_global $std/typedarray/arr32
   i32.const 1
   i32.const 1
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#fill
+  call $~lib/internal/typedarray/TypedArray<i32>#fill
   drop
   get_global $std/typedarray/arr32
   i32.const 376
@@ -6359,7 +6359,7 @@
    i32.const 0
    i32.const 0
    i32.const 0
-   call $~lib/internal/typedarray/TypedArray<i32,i32>#fill|trampoline
+   call $~lib/internal/typedarray/TypedArray<i32>#fill|trampoline
   end
   drop
   get_global $std/typedarray/arr32
@@ -6378,7 +6378,7 @@
   i32.const 1
   i32.const 0
   i32.const -3
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#fill
+  call $~lib/internal/typedarray/TypedArray<i32>#fill
   drop
   get_global $std/typedarray/arr32
   i32.const 456
@@ -6399,7 +6399,7 @@
    i32.const 2
    i32.const -2
    i32.const 0
-   call $~lib/internal/typedarray/TypedArray<i32,i32>#fill|trampoline
+   call $~lib/internal/typedarray/TypedArray<i32>#fill|trampoline
   end
   drop
   get_global $std/typedarray/arr32
@@ -6418,7 +6418,7 @@
   i32.const 0
   i32.const 1
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i32,i32>#fill
+  call $~lib/internal/typedarray/TypedArray<i32>#fill
   drop
   get_global $std/typedarray/arr32
   i32.const 536
@@ -6444,10 +6444,10 @@
    i32.const 0
    i32.const 0
    i32.const 0
-   call $~lib/internal/typedarray/TypedArray<i32,i32>#fill|trampoline
+   call $~lib/internal/typedarray/TypedArray<i32>#fill|trampoline
   end
   drop
-  block $~lib/internal/typedarray/TypedArray<i32,i32>#get:length|inlined.8 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i32>#get:length|inlined.8 (result i32)
    get_global $std/typedarray/sub32
    set_local $0
    get_local $0
@@ -6522,36 +6522,36 @@
   end
   i32.const 0
   get_global $std/typedarray/MAX_F64LENGTH
-  call $~lib/internal/typedarray/TypedArray<f64,f64>#constructor
+  call $~lib/internal/typedarray/TypedArray<f64>#constructor
   drop
   i32.const 0
   i32.const 6
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#constructor
+  call $~lib/internal/typedarray/TypedArray<i8>#constructor
   set_global $std/typedarray/multisubarr
   get_global $std/typedarray/multisubarr
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/multisubarr
   i32.const 1
   i32.const 2
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/multisubarr
   i32.const 2
   i32.const 3
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/multisubarr
   i32.const 3
   i32.const 4
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/multisubarr
   i32.const 4
   i32.const 5
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/multisubarr
   i32.const 5
   i32.const 6
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__set
+  call $~lib/internal/typedarray/TypedArray<i8>#__set
   get_global $std/typedarray/multisubarr
   i32.const 1
   i32.const 6
@@ -6559,7 +6559,7 @@
   set_global $std/typedarray/multisubarr1
   get_global $std/typedarray/multisubarr1
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
+  call $~lib/internal/typedarray/TypedArray<i8>#__get
   i32.const 24
   i32.shl
   i32.const 24
@@ -6575,7 +6575,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.7 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.7 (result i32)
    get_global $std/typedarray/multisubarr1
    set_local $0
    get_local $0
@@ -6627,7 +6627,7 @@
   set_global $std/typedarray/multisubarr2
   get_global $std/typedarray/multisubarr2
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
+  call $~lib/internal/typedarray/TypedArray<i8>#__get
   i32.const 24
   i32.shl
   i32.const 24
@@ -6643,7 +6643,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.8 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.8 (result i32)
    get_global $std/typedarray/multisubarr2
    set_local $0
    get_local $0
@@ -6695,7 +6695,7 @@
   set_global $std/typedarray/multisubarr3
   get_global $std/typedarray/multisubarr3
   i32.const 0
-  call $~lib/internal/typedarray/TypedArray<i8,i32>#__get
+  call $~lib/internal/typedarray/TypedArray<i8>#__get
   i32.const 24
   i32.shl
   i32.const 24
@@ -6711,7 +6711,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/typedarray/TypedArray<i8,i32>#get:length|inlined.9 (result i32)
+  block $~lib/internal/typedarray/TypedArray<i8>#get:length|inlined.9 (result i32)
    get_global $std/typedarray/multisubarr3
    set_local $0
    get_local $0

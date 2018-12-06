@@ -51,7 +51,8 @@ import {
 import {
   Type,
   Signature,
-  typesToString
+  typesToString,
+  TypeKind
 } from "./types";
 
 import {
@@ -154,30 +155,29 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // resolve parameters
-    {
-      let typeArgumentNodes = typeNode.typeArguments;
-      if (typeArgumentNodes) {
-        let numTypeArguments = typeArgumentNodes.length;
-        let paramTypes = new Array<Type>(numTypeArguments);
-        for (let i = 0; i < numTypeArguments; ++i) {
-          let paramType = this.resolveType( // reports
-            typeArgumentNodes[i],
-            contextualTypeArguments,
-            reportMode
-          );
-          if (!paramType) return null;
-          paramTypes[i] = paramType;
+    var typeArgumentNodes = typeNode.typeArguments;
+    var typeArguments: Type[] | null = null;
+    if (typeArgumentNodes) {
+      let numTypeArguments = typeArgumentNodes.length;
+      typeArguments = new Array<Type>(numTypeArguments);
+      for (let i = 0; i < numTypeArguments; ++i) {
+        let paramType = this.resolveType( // reports
+          typeArgumentNodes[i],
+          contextualTypeArguments,
+          reportMode
+        );
+        if (!paramType) return null;
+        typeArguments[i] = paramType;
+      }
+      if (numTypeArguments) { // can't be a placeholder if it has parameters
+        let instanceKey = typesToString(typeArguments);
+        if (instanceKey.length) {
+          localName += "<" + instanceKey + ">";
+          globalName += "<" + instanceKey + ">";
         }
-        if (numTypeArguments) { // can't be a placeholder if it has parameters
-          let instanceKey = typesToString(paramTypes);
-          if (instanceKey.length) {
-            localName += "<" + instanceKey + ">";
-            globalName += "<" + instanceKey + ">";
-          }
-        } else if (contextualTypeArguments) {
-          let placeholderType = contextualTypeArguments.get(globalName);
-          if (placeholderType) return placeholderType;
-        }
+      } else if (contextualTypeArguments) {
+        let placeholderType = contextualTypeArguments.get(globalName);
+        if (placeholderType) return placeholderType;
       }
     }
 
@@ -190,6 +190,36 @@ export class Resolver extends DiagnosticEmitter {
         (type = typesLookup.get(globalName))
       ) {
         return type;
+      }
+    }
+
+    // check built-in macro types
+    if (simpleName == "NATIVE") {
+      if (!(typeArguments && typeArguments.length == 1)) {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            typeNode.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
+          );
+        }
+        return null;
+      }
+      switch (typeArguments[0].kind) {
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.I32: return Type.i32;
+        case TypeKind.ISIZE: if (!this.program.options.isWasm64) return Type.i32;
+        case TypeKind.I64: return Type.i64;
+        case TypeKind.U8:
+        case TypeKind.U16:
+        case TypeKind.U32:
+        case TypeKind.BOOL: return Type.u32;
+        case TypeKind.USIZE: if (!this.program.options.isWasm64) return Type.u32;
+        case TypeKind.U64: return Type.u64;
+        case TypeKind.F32: return Type.f32;
+        case TypeKind.F64: return Type.f64;
+        case TypeKind.VOID: return Type.void;
+        default: assert(false);
       }
     }
 
