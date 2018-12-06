@@ -379,6 +379,11 @@ export class ASTBuilder {
       this.sb.push(" extends ");
       this.visitTypeNode(extendsType);
     }
+    var defaultType = node.defaultType;
+    if (defaultType) {
+      this.sb.push("=");
+      this.visitTypeNode(defaultType);
+    }
   }
 
   visitSignatureNode(node: SignatureNode): void {

@@ -11,7 +11,7 @@ import {
 } from "./internal/string";
 
 import {
-  storeUnsafe as storeUnsafeArray
+  STORE as storeUnsafeArray
 } from "./internal/arraybuffer";
 
 @sealed

@@ -71,21 +71,18 @@ export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): Array
 // * `i32.load8` ^= `<i32>load<i8>(...)` that reads an i8 but returns an i32, or
 // * `i64.load32_s` ^= `<i64>load<i32>(...)`) that reads a 32-bit as a 64-bit integer
 //
-// without having to emit an additional instruction for conversion purposes. This is useful for
-// small integers only of course. When dealing with reference types like classes, both parameters
-// are usually the same, even though it looks ugly.
-//
-// TODO: is there a better way to model this?
+// without having to emit an additional instruction for conversion purposes. The second parameter
+// can be omitted for references and other loads and stores that simply return the exact type.
 
-@inline export function loadUnsafe<T,TOut>(buffer: ArrayBuffer, index: i32): TOut {
+@inline export function LOAD<T,TOut = T>(buffer: ArrayBuffer, index: i32): TOut {
   return <TOut>load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE);
 }
 
-@inline export function storeUnsafe<T,TIn>(buffer: ArrayBuffer, index: i32, value: TIn): void {
+@inline export function STORE<T,TIn = T>(buffer: ArrayBuffer, index: i32, value: TIn): void {
   store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE);
 }
 
-@inline export function loadUnsafeWithOffset<T,TOut>(
+@inline export function LOAD_OFFSET<T,TOut = T>(
   buffer: ArrayBuffer,
   index: i32,
   byteOffset: i32
@@ -93,7 +90,7 @@ export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): Array
   return <TOut>load<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), HEADER_SIZE);
 }
 
-@inline export function storeUnsafeWithOffset<T,TIn>(
+@inline export function STORE_OFFSET<T,TIn = T>(
   buffer: ArrayBuffer,
   index: i32,
   value: TIn,

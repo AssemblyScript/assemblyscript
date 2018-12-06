@@ -2944,7 +2944,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.1 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.1 (result i32)
    get_local $0
    i32.load
    set_local $2
@@ -3187,7 +3187,7 @@
      get_local $11
      if
       block
-       block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.2 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.2 (result i32)
         get_local $4
         get_local $9
         i32.const 2
@@ -3439,7 +3439,7 @@
   get_local $0
   i32.load
   set_local $2
-  block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.3 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.3 (result i32)
    i32.const 0
    set_local $3
    get_local $2
@@ -3512,7 +3512,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.4 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.4 (result i32)
       get_local $1
       get_local $2
       i32.const 2
@@ -3521,7 +3521,7 @@
       i32.load offset=8
      end
      set_local $4
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.5 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.5 (result i32)
       get_local $1
       get_local $3
       i32.const 2
@@ -3611,7 +3611,7 @@
     i32.lt_s
     if
      block
-      block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.7 (result i32)
+      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.7 (result i32)
        get_local $6
        get_local $2
        i32.const 2
@@ -3861,7 +3861,7 @@
     block (result i32)
      i32.const 3
      set_global $~argc
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.9 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.9 (result i32)
       get_local $2
       get_local $3
       i32.const 2
@@ -3962,7 +3962,7 @@
     block (result i32)
      i32.const 3
      set_global $~argc
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.11 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.11 (result i32)
       get_local $2
       get_local $3
       i32.const 2
@@ -4059,7 +4059,7 @@
     block (result i32)
      i32.const 3
      set_global $~argc
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.13 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.13 (result i32)
       get_local $2
       get_local $3
       i32.const 2
@@ -4156,7 +4156,7 @@
     block
      i32.const 3
      set_global $~argc
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.14 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.14 (result i32)
       get_local $2
       get_local $3
       i32.const 2
@@ -4310,7 +4310,7 @@
      block (result f32)
       i32.const 3
       set_global $~argc
-      block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.15 (result i32)
+      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.15 (result i32)
        get_local $2
        get_local $6
        i32.const 2
@@ -4418,7 +4418,7 @@
      block (result i32)
       i32.const 3
       set_global $~argc
-      block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.16 (result i32)
+      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.16 (result i32)
        get_local $2
        get_local $6
        i32.const 2
@@ -4508,7 +4508,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.17 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.17 (result i32)
       get_local $2
       get_local $5
       i32.const 2
@@ -4623,7 +4623,7 @@
      i32.const 4
      set_global $~argc
      get_local $3
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.18 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.18 (result i32)
       get_local $4
       get_local $5
       i32.const 2
@@ -4703,7 +4703,7 @@
      i32.const 4
      set_global $~argc
      get_local $3
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.19 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.19 (result i32)
       get_local $4
       get_local $5
       i32.const 2
@@ -4792,7 +4792,7 @@
      i32.const 4
      set_global $~argc
      get_local $3
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.20 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.20 (result i32)
       get_local $4
       get_local $5
       i32.const 2
@@ -4859,7 +4859,7 @@
      i32.const 4
      set_global $~argc
      get_local $3
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.21 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.21 (result i32)
       get_local $4
       get_local $5
       i32.const 2
@@ -5027,7 +5027,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f32,f32>|inlined.0 (result f32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<f32,f32>|inlined.0 (result f32)
       get_local $0
       get_local $1
       i32.add
@@ -5049,7 +5049,7 @@
        i32.ge_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f32,f32>|inlined.1 (result f32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<f32,f32>|inlined.1 (result f32)
           get_local $0
           get_local $1
           i32.add
@@ -5205,7 +5205,7 @@
      i32.const 1
      i32.shr_s
      set_local $8
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f32,f32>|inlined.2 (result f32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<f32,f32>|inlined.2 (result f32)
       get_local $0
       get_local $1
       i32.add
@@ -5216,7 +5216,7 @@
       f32.load offset=8
      end
      set_local $9
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f32,f32>|inlined.3 (result f32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<f32,f32>|inlined.3 (result f32)
       get_local $0
       get_local $1
       i32.add
@@ -5301,7 +5301,7 @@
     i32.eqz
     br_if $break|2
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f32,f32>|inlined.4 (result f32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<f32,f32>|inlined.4 (result f32)
       i32.const 0
       set_local $8
       get_local $0
@@ -5316,7 +5316,7 @@
      set_local $10
      i32.const 0
      set_local $8
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f32,f32>|inlined.5 (result f32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<f32,f32>|inlined.5 (result f32)
       get_local $0
       get_local $1
       i32.add
@@ -5384,7 +5384,7 @@
        i32.gt_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f32,f32>|inlined.6 (result f32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<f32,f32>|inlined.6 (result f32)
           i32.const 0
           set_local $11
           get_local $0
@@ -5397,7 +5397,7 @@
           f32.load offset=8
          end
          set_local $10
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f32,f32>|inlined.7 (result f32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<f32,f32>|inlined.7 (result f32)
           get_local $0
           get_local $1
           i32.add
@@ -5490,7 +5490,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f32,f32>|inlined.8 (result f32)
+  block $~lib/internal/arraybuffer/LOAD_OFFSET<f32,f32>|inlined.8 (result f32)
    i32.const 1
    set_local $6
    get_local $0
@@ -5505,7 +5505,7 @@
   set_local $12
   i32.const 1
   set_local $6
-  block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f32,f32>|inlined.9 (result f32)
+  block $~lib/internal/arraybuffer/LOAD_OFFSET<f32,f32>|inlined.9 (result f32)
    i32.const 0
    set_local $7
    get_local $0
@@ -5572,7 +5572,7 @@
   i32.const 2
   i32.eq
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<f32,f32>|inlined.1 (result f32)
+   block $~lib/internal/arraybuffer/LOAD<f32,f32>|inlined.1 (result f32)
     i32.const 1
     set_local $4
     get_local $3
@@ -5583,7 +5583,7 @@
     f32.load offset=8
    end
    set_local $5
-   block $~lib/internal/arraybuffer/loadUnsafe<f32,f32>|inlined.2 (result f32)
+   block $~lib/internal/arraybuffer/LOAD<f32,f32>|inlined.2 (result f32)
     i32.const 0
     set_local $4
     get_local $3
@@ -5794,7 +5794,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.0 (result f64)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<f64,f64>|inlined.0 (result f64)
       get_local $0
       get_local $1
       i32.add
@@ -5816,7 +5816,7 @@
        i32.ge_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.1 (result f64)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<f64,f64>|inlined.1 (result f64)
           get_local $0
           get_local $1
           i32.add
@@ -5969,7 +5969,7 @@
      i32.const 1
      i32.shr_s
      set_local $8
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.2 (result f64)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<f64,f64>|inlined.2 (result f64)
       get_local $0
       get_local $1
       i32.add
@@ -5980,7 +5980,7 @@
       f64.load offset=8
      end
      set_local $9
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.3 (result f64)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<f64,f64>|inlined.3 (result f64)
       get_local $0
       get_local $1
       i32.add
@@ -6065,7 +6065,7 @@
     i32.eqz
     br_if $break|2
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.4 (result f64)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<f64,f64>|inlined.4 (result f64)
       i32.const 0
       set_local $8
       get_local $0
@@ -6080,7 +6080,7 @@
      set_local $10
      i32.const 0
      set_local $8
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.5 (result f64)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<f64,f64>|inlined.5 (result f64)
       get_local $0
       get_local $1
       i32.add
@@ -6148,7 +6148,7 @@
        i32.gt_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.6 (result f64)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<f64,f64>|inlined.6 (result f64)
           i32.const 0
           set_local $11
           get_local $0
@@ -6161,7 +6161,7 @@
           f64.load offset=8
          end
          set_local $10
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.7 (result f64)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<f64,f64>|inlined.7 (result f64)
           get_local $0
           get_local $1
           i32.add
@@ -6254,7 +6254,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.8 (result f64)
+  block $~lib/internal/arraybuffer/LOAD_OFFSET<f64,f64>|inlined.8 (result f64)
    i32.const 1
    set_local $6
    get_local $0
@@ -6269,7 +6269,7 @@
   set_local $12
   i32.const 1
   set_local $6
-  block $~lib/internal/arraybuffer/loadUnsafeWithOffset<f64,f64>|inlined.9 (result f64)
+  block $~lib/internal/arraybuffer/LOAD_OFFSET<f64,f64>|inlined.9 (result f64)
    i32.const 0
    set_local $7
    get_local $0
@@ -6336,7 +6336,7 @@
   i32.const 2
   i32.eq
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.0 (result f64)
+   block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.0 (result f64)
     i32.const 1
     set_local $4
     get_local $3
@@ -6347,7 +6347,7 @@
     f64.load offset=8
    end
    set_local $5
-   block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.1 (result f64)
+   block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.1 (result f64)
     i32.const 0
     set_local $4
     get_local $3
@@ -6580,7 +6580,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32,i32>|inlined.0 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<i32,i32>|inlined.0 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -6602,7 +6602,7 @@
        i32.ge_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32,i32>|inlined.1 (result i32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<i32,i32>|inlined.1 (result i32)
           get_local $0
           get_local $1
           i32.add
@@ -6755,7 +6755,7 @@
      i32.const 1
      i32.shr_s
      set_local $8
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32,i32>|inlined.2 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<i32,i32>|inlined.2 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -6766,7 +6766,7 @@
       i32.load offset=8
      end
      set_local $9
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32,i32>|inlined.3 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<i32,i32>|inlined.3 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -6851,7 +6851,7 @@
     i32.eqz
     br_if $break|2
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32,i32>|inlined.4 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<i32,i32>|inlined.4 (result i32)
       i32.const 0
       set_local $10
       get_local $0
@@ -6866,7 +6866,7 @@
      set_local $10
      i32.const 0
      set_local $9
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32,i32>|inlined.5 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<i32,i32>|inlined.5 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -6934,7 +6934,7 @@
        i32.gt_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32,i32>|inlined.6 (result i32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<i32,i32>|inlined.6 (result i32)
           i32.const 0
           set_local $7
           get_local $0
@@ -6947,7 +6947,7 @@
           i32.load offset=8
          end
          set_local $10
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32,i32>|inlined.7 (result i32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<i32,i32>|inlined.7 (result i32)
           get_local $0
           get_local $1
           i32.add
@@ -7040,7 +7040,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32,i32>|inlined.8 (result i32)
+  block $~lib/internal/arraybuffer/LOAD_OFFSET<i32,i32>|inlined.8 (result i32)
    i32.const 1
    set_local $6
    get_local $0
@@ -7055,7 +7055,7 @@
   set_local $12
   i32.const 1
   set_local $6
-  block $~lib/internal/arraybuffer/loadUnsafeWithOffset<i32,i32>|inlined.9 (result i32)
+  block $~lib/internal/arraybuffer/LOAD_OFFSET<i32,i32>|inlined.9 (result i32)
    i32.const 0
    set_local $9
    get_local $0
@@ -7122,7 +7122,7 @@
   i32.const 2
   i32.eq
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.22 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.22 (result i32)
     i32.const 1
     set_local $4
     get_local $3
@@ -7133,7 +7133,7 @@
     i32.load offset=8
    end
    set_local $4
-   block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.23 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.23 (result i32)
     i32.const 0
     set_local $5
     get_local $3
@@ -7236,7 +7236,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<u32,u32>|inlined.0 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<u32,u32>|inlined.0 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -7258,7 +7258,7 @@
        i32.ge_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<u32,u32>|inlined.1 (result i32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<u32,u32>|inlined.1 (result i32)
           get_local $0
           get_local $1
           i32.add
@@ -7411,7 +7411,7 @@
      i32.const 1
      i32.shr_s
      set_local $8
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<u32,u32>|inlined.2 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<u32,u32>|inlined.2 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -7422,7 +7422,7 @@
       i32.load offset=8
      end
      set_local $9
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<u32,u32>|inlined.3 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<u32,u32>|inlined.3 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -7507,7 +7507,7 @@
     i32.eqz
     br_if $break|2
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<u32,u32>|inlined.4 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<u32,u32>|inlined.4 (result i32)
       i32.const 0
       set_local $10
       get_local $0
@@ -7522,7 +7522,7 @@
      set_local $10
      i32.const 0
      set_local $9
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<u32,u32>|inlined.5 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<u32,u32>|inlined.5 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -7590,7 +7590,7 @@
        i32.gt_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<u32,u32>|inlined.6 (result i32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<u32,u32>|inlined.6 (result i32)
           i32.const 0
           set_local $7
           get_local $0
@@ -7603,7 +7603,7 @@
           i32.load offset=8
          end
          set_local $10
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<u32,u32>|inlined.7 (result i32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<u32,u32>|inlined.7 (result i32)
           get_local $0
           get_local $1
           i32.add
@@ -7696,7 +7696,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafeWithOffset<u32,u32>|inlined.8 (result i32)
+  block $~lib/internal/arraybuffer/LOAD_OFFSET<u32,u32>|inlined.8 (result i32)
    i32.const 1
    set_local $6
    get_local $0
@@ -7711,7 +7711,7 @@
   set_local $12
   i32.const 1
   set_local $6
-  block $~lib/internal/arraybuffer/loadUnsafeWithOffset<u32,u32>|inlined.9 (result i32)
+  block $~lib/internal/arraybuffer/LOAD_OFFSET<u32,u32>|inlined.9 (result i32)
    i32.const 0
    set_local $9
    get_local $0
@@ -7778,7 +7778,7 @@
   i32.const 2
   i32.eq
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.1 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.1 (result i32)
     i32.const 1
     set_local $4
     get_local $3
@@ -7789,7 +7789,7 @@
     i32.load offset=8
    end
    set_local $4
-   block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.2 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.2 (result i32)
     i32.const 0
     set_local $5
     get_local $3
@@ -8326,7 +8326,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<Array<i32>,Array<i32>>|inlined.0 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<Array<i32>,Array<i32>>|inlined.0 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -8348,7 +8348,7 @@
        i32.ge_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<Array<i32>,Array<i32>>|inlined.1 (result i32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<Array<i32>,Array<i32>>|inlined.1 (result i32)
           get_local $0
           get_local $1
           i32.add
@@ -8455,7 +8455,7 @@
   i32.const 2
   i32.eq
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.1 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.1 (result i32)
     i32.const 1
     set_local $4
     get_local $3
@@ -8466,7 +8466,7 @@
     i32.load offset=8
    end
    set_local $4
-   block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.2 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.2 (result i32)
     i32.const 0
     set_local $5
     get_local $3
@@ -8779,7 +8779,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<Proxy<i32>,Proxy<i32>>|inlined.0 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<Proxy<i32>,Proxy<i32>>|inlined.0 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -8801,7 +8801,7 @@
        i32.ge_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<Proxy<i32>,Proxy<i32>>|inlined.1 (result i32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<Proxy<i32>,Proxy<i32>>|inlined.1 (result i32)
           get_local $0
           get_local $1
           i32.add
@@ -8908,7 +8908,7 @@
   i32.const 2
   i32.eq
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<Proxy<i32>,Proxy<i32>>|inlined.0 (result i32)
     i32.const 1
     set_local $4
     get_local $3
@@ -8919,7 +8919,7 @@
     i32.load offset=8
    end
    set_local $4
-   block $~lib/internal/arraybuffer/loadUnsafe<Proxy<i32>,Proxy<i32>>|inlined.1 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<Proxy<i32>,Proxy<i32>>|inlined.1 (result i32)
     i32.const 0
     set_local $5
     get_local $3
@@ -9267,7 +9267,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafeWithOffset<String,String>|inlined.0 (result i32)
+     block $~lib/internal/arraybuffer/LOAD_OFFSET<String,String>|inlined.0 (result i32)
       get_local $0
       get_local $1
       i32.add
@@ -9289,7 +9289,7 @@
        i32.ge_s
        if
         block
-         block $~lib/internal/arraybuffer/loadUnsafeWithOffset<String,String>|inlined.1 (result i32)
+         block $~lib/internal/arraybuffer/LOAD_OFFSET<String,String>|inlined.1 (result i32)
           get_local $0
           get_local $1
           i32.add
@@ -9396,7 +9396,7 @@
   i32.const 2
   i32.eq
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.0 (result i32)
     i32.const 1
     set_local $4
     get_local $3
@@ -9407,7 +9407,7 @@
     i32.load offset=8
    end
    set_local $4
-   block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.1 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.1 (result i32)
     i32.const 0
     set_local $5
     get_local $3
@@ -10179,7 +10179,7 @@
   if
    i32.const 4104
    i32.const 4120
-   block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<bool,bool>|inlined.0 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -10219,7 +10219,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.1 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<bool,bool>|inlined.1 (result i32)
       get_local $5
       get_local $12
       i32.const 0
@@ -10273,7 +10273,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<bool,bool>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<bool,bool>|inlined.2 (result i32)
    get_local $5
    get_local $2
    i32.const 0
@@ -10445,7 +10445,7 @@
       i32.const 100
       i32.rem_u
       set_local $7
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.0 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.0 (result i64)
        get_local $3
        get_local $6
        i32.const 2
@@ -10454,7 +10454,7 @@
        i64.load32_u offset=8
       end
       set_local $8
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.1 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.1 (result i64)
        get_local $3
        get_local $7
        i32.const 2
@@ -10501,7 +10501,7 @@
    i32.const 2
    i32.sub
    set_local $2
-   block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.3 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.3 (result i32)
     get_local $3
     get_local $6
     i32.const 2
@@ -10526,7 +10526,7 @@
    i32.const 2
    i32.sub
    set_local $2
-   block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.4 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.4 (result i32)
     get_local $3
     get_local $1
     i32.const 2
@@ -10692,7 +10692,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.24 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.24 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -10728,7 +10728,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.25 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.25 (result i32)
       get_local $5
       get_local $11
       i32.const 2
@@ -10767,7 +10767,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<i32,i32>|inlined.26 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.26 (result i32)
    get_local $5
    get_local $2
    i32.const 2
@@ -10909,7 +10909,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.5 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.5 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -10945,7 +10945,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.6 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.6 (result i32)
       get_local $5
       get_local $11
       i32.const 2
@@ -10984,7 +10984,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.7 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.7 (result i32)
    get_local $5
    get_local $2
    i32.const 2
@@ -11347,7 +11347,7 @@
        get_local $14
        i32.add
        set_global $~lib/internal/number/_K
-       block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.2 (result i64)
+       block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.2 (result i64)
         get_local $16
         get_local $14
         i32.const 2
@@ -11497,7 +11497,7 @@
        i32.add
        set_global $~lib/internal/number/_K
        get_local $10
-       block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.3 (result i64)
+       block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.3 (result i64)
         i32.const 0
         get_local $14
         i32.sub
@@ -12098,7 +12098,7 @@
     end
     i32.load
     set_local $13
-    block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.0 (result i64)
+    block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.0 (result i64)
      get_local $12
      get_local $8
      i32.const 3
@@ -12107,7 +12107,7 @@
      i64.load offset=8
     end
     set_global $~lib/internal/number/_frc_pow
-    block $~lib/internal/arraybuffer/loadUnsafe<i16,i32>|inlined.0 (result i32)
+    block $~lib/internal/arraybuffer/LOAD<i16,i32>|inlined.0 (result i32)
      get_local $13
      get_local $8
      i32.const 1
@@ -12550,7 +12550,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.3 (result f64)
+   block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.3 (result f64)
     i32.const 0
     set_local $8
     get_local $5
@@ -12586,7 +12586,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.4 (result f64)
+     block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.4 (result f64)
       get_local $5
       get_local $11
       i32.const 3
@@ -12625,7 +12625,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<f64,f64>|inlined.5 (result f64)
+  block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.5 (result f64)
    get_local $5
    get_local $2
    i32.const 3
@@ -12714,7 +12714,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.3 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.3 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -12744,7 +12744,7 @@
     i32.eqz
     br_if $break|0
     get_local $8
-    block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.4 (result i32)
+    block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.4 (result i32)
      get_local $5
      get_local $9
      i32.const 2
@@ -12783,7 +12783,7 @@
     i32.eqz
     br_if $break|1
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.5 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.5 (result i32)
       get_local $5
       get_local $11
       i32.const 2
@@ -12831,7 +12831,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<String,String>|inlined.6 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<String,String>|inlined.6 (result i32)
    get_local $5
    get_local $2
    i32.const 2
@@ -13007,7 +13007,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<Ref,Ref>|inlined.0 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<Ref,Ref>|inlined.0 (result i32)
       get_local $5
       get_local $11
       i32.const 2
@@ -13052,7 +13052,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<Ref,Ref>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<Ref,Ref>|inlined.2 (result i32)
    get_local $5
    get_local $2
    i32.const 2
@@ -13220,7 +13220,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<i8,i8>|inlined.0 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -13256,7 +13256,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.1 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<i8,i8>|inlined.1 (result i32)
       get_local $5
       get_local $11
       i32.const 0
@@ -13295,7 +13295,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<i8,i8>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<i8,i8>|inlined.2 (result i32)
    get_local $5
    get_local $2
    i32.const 0
@@ -13427,7 +13427,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<u16,u16>|inlined.0 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -13463,7 +13463,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.1 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<u16,u16>|inlined.1 (result i32)
       get_local $5
       get_local $11
       i32.const 1
@@ -13502,7 +13502,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<u16,u16>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<u16,u16>|inlined.2 (result i32)
    get_local $5
    get_local $2
    i32.const 1
@@ -13682,7 +13682,7 @@
       i32.const 100
       i32.rem_u
       set_local $11
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.4 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.4 (result i64)
        get_local $3
        get_local $10
        i32.const 2
@@ -13691,7 +13691,7 @@
        i64.load32_u offset=8
       end
       set_local $12
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.5 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.5 (result i64)
        get_local $3
        get_local $11
        i32.const 2
@@ -13715,7 +13715,7 @@
       i64.shl
       i64.or
       i64.store offset=4
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.6 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.6 (result i64)
        get_local $3
        get_local $8
        i32.const 2
@@ -13724,7 +13724,7 @@
        i64.load32_u offset=8
       end
       set_local $12
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.7 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.7 (result i64)
        get_local $3
        get_local $9
        i32.const 2
@@ -13890,7 +13890,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.1 (result i64)
+   block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.1 (result i64)
     i32.const 0
     set_local $8
     get_local $5
@@ -13926,7 +13926,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.2 (result i64)
+     block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.2 (result i64)
       get_local $5
       get_local $11
       i32.const 3
@@ -13965,7 +13965,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.3 (result i64)
+  block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.3 (result i64)
    get_local $5
    get_local $2
    i32.const 3
@@ -14190,7 +14190,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<i64,i64>|inlined.0 (result i64)
+   block $~lib/internal/arraybuffer/LOAD<i64,i64>|inlined.0 (result i64)
     i32.const 0
     set_local $8
     get_local $5
@@ -14226,7 +14226,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<i64,i64>|inlined.1 (result i64)
+     block $~lib/internal/arraybuffer/LOAD<i64,i64>|inlined.1 (result i64)
       get_local $5
       get_local $11
       i32.const 3
@@ -14265,7 +14265,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<i64,i64>|inlined.2 (result i64)
+  block $~lib/internal/arraybuffer/LOAD<i64,i64>|inlined.2 (result i64)
    get_local $5
    get_local $2
    i32.const 3
@@ -14350,7 +14350,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.3 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.3 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -14381,7 +14381,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.4 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.4 (result i32)
       get_local $5
       get_local $8
       i32.const 2
@@ -14416,7 +14416,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<Array<i32>,Array<i32>>|inlined.5 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<Array<i32>,Array<i32>>|inlined.5 (result i32)
    get_local $5
    get_local $2
    i32.const 2
@@ -14519,7 +14519,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.1 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.1 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -14555,7 +14555,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.2 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.2 (result i32)
       get_local $5
       get_local $11
       i32.const 0
@@ -14594,7 +14594,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<u8,u8>|inlined.3 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.3 (result i32)
    get_local $5
    get_local $2
    i32.const 0
@@ -14679,7 +14679,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<Array<u8>,Array<u8>>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<Array<u8>,Array<u8>>|inlined.0 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -14710,7 +14710,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<Array<u8>,Array<u8>>|inlined.1 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<Array<u8>,Array<u8>>|inlined.1 (result i32)
       get_local $5
       get_local $8
       i32.const 2
@@ -14745,7 +14745,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<Array<u8>,Array<u8>>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<Array<u8>,Array<u8>>|inlined.2 (result i32)
    get_local $5
    get_local $2
    i32.const 2
@@ -14801,7 +14801,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<Array<u32>,Array<u32>>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<Array<u32>,Array<u32>>|inlined.0 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -14832,7 +14832,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<Array<u32>,Array<u32>>|inlined.1 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<Array<u32>,Array<u32>>|inlined.1 (result i32)
       get_local $5
       get_local $8
       i32.const 2
@@ -14867,7 +14867,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<Array<u32>,Array<u32>>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<Array<u32>,Array<u32>>|inlined.2 (result i32)
    get_local $5
    get_local $2
    i32.const 2
@@ -14923,7 +14923,7 @@
   get_local $2
   i32.eqz
   if
-   block $~lib/internal/arraybuffer/loadUnsafe<Array<Array<u32>>,Array<Array<u32>>>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<Array<Array<u32>>,Array<Array<u32>>>|inlined.0 (result i32)
     i32.const 0
     set_local $8
     get_local $5
@@ -14954,7 +14954,7 @@
     i32.eqz
     br_if $break|0
     block
-     block $~lib/internal/arraybuffer/loadUnsafe<Array<Array<u32>>,Array<Array<u32>>>|inlined.1 (result i32)
+     block $~lib/internal/arraybuffer/LOAD<Array<Array<u32>>,Array<Array<u32>>>|inlined.1 (result i32)
       get_local $5
       get_local $8
       i32.const 2
@@ -14989,7 +14989,7 @@
    end
    unreachable
   end
-  block $~lib/internal/arraybuffer/loadUnsafe<Array<Array<u32>>,Array<Array<u32>>>|inlined.2 (result i32)
+  block $~lib/internal/arraybuffer/LOAD<Array<Array<u32>>,Array<Array<u32>>>|inlined.2 (result i32)
    get_local $5
    get_local $2
    i32.const 2

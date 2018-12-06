@@ -2,8 +2,8 @@ import {
   HEADER_SIZE as AB_HEADER_SIZE,
   MAX_BLENGTH as AB_MAX_BLENGTH,
   allocateUnsafe,
-  loadUnsafeWithOffset,
-  storeUnsafeWithOffset
+  LOAD_OFFSET,
+  STORE_OFFSET
 } from "./arraybuffer";
 
 import {
@@ -16,7 +16,7 @@ import {
 // `storeUnsafe` in 'internal/arraybuffer.ts'. See the documentation there for details.
 
 /** Typed array base class. Not a global object. */
-export abstract class TypedArray<T,TNative> {
+export abstract class TypedArray<T,TNative = T> {
 
   readonly buffer: ArrayBuffer;
   readonly byteOffset: i32;
@@ -41,28 +41,28 @@ export abstract class TypedArray<T,TNative> {
   @operator("[]")
   protected __get(index: i32): T {
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    return loadUnsafeWithOffset<T,T>(this.buffer, index, this.byteOffset);
+    return LOAD_OFFSET<T>(this.buffer, index, this.byteOffset);
   }
 
   @inline @operator("{}")
   protected __unchecked_get(index: i32): T {
-    return loadUnsafeWithOffset<T,T>(this.buffer, index, this.byteOffset);
+    return LOAD_OFFSET<T>(this.buffer, index, this.byteOffset);
   }
 
   @operator("[]=")
   protected __set(index: i32, value: TNative): void {
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    storeUnsafeWithOffset<T,TNative>(this.buffer, index, value, this.byteOffset);
+    STORE_OFFSET<T,TNative>(this.buffer, index, value, this.byteOffset);
   }
 
   @inline @operator("{}=")
   protected __unchecked_set(index: i32, value: TNative): void {
-    storeUnsafeWithOffset<T,TNative>(this.buffer, index, value, this.byteOffset);
+    STORE_OFFSET<T,TNative>(this.buffer, index, value, this.byteOffset);
   }
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
 
-  fill(value: TNative, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: TNative, start: i32 = 0, end: i32 = i32.MAX_VALUE): this /* ! */ {
     var buffer = this.buffer;
     var byteOffset = this.byteOffset;
     var len = this.length;
@@ -78,37 +78,23 @@ export abstract class TypedArray<T,TNative> {
       }
     } else {
       for (; start < end; ++start) {
-        storeUnsafeWithOffset<T,TNative>(buffer, start, value, byteOffset);
+        STORE_OFFSET<T,TNative>(buffer, start, value, byteOffset);
       }
     }
     return this;
   }
 
-  @inline
-  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): TypedArray<T,TNative> {
-    var length = this.length;
-    if (begin < 0) begin = max(length + begin, 0);
-    else begin = min(begin, length);
-    if (end < 0) end = max(length + end, begin);
-    else end = max(min(end, length), begin);
-    var slice = memory.allocate(offsetof<this>());
-    store<usize>(slice, this.buffer, offsetof<this>("buffer"));
-    store<i32>(slice, this.byteOffset + (begin << alignof<T>()), offsetof<this>("byteOffset"));
-    store<i32>(slice, (end - begin) << alignof<T>(), offsetof<this>("byteLength"));
-    return changetype<this>(slice);
-  }
-
-  sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this {
+  sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this /* ! */ {
     var byteOffset = this.byteOffset;
     var length = this.length;
     if (length <= 1) return this;
     var buffer = this.buffer;
     if (length == 2) {
-      let a = loadUnsafeWithOffset<T,T>(buffer, 1, byteOffset);
-      let b = loadUnsafeWithOffset<T,T>(buffer, 0, byteOffset);
+      let a = LOAD_OFFSET<T>(buffer, 1, byteOffset);
+      let b = LOAD_OFFSET<T>(buffer, 0, byteOffset);
       if (comparator(a, b) < 0) {
-        storeUnsafeWithOffset<T,T>(buffer, 1, b, byteOffset);
-        storeUnsafeWithOffset<T,T>(buffer, 0, a, byteOffset);
+        STORE_OFFSET<T>(buffer, 1, b, byteOffset);
+        STORE_OFFSET<T>(buffer, 0, a, byteOffset);
       }
       return this;
     }
@@ -126,31 +112,62 @@ export abstract class TypedArray<T,TNative> {
       return this;
     }
   }
+}
 
-  /**
-   * TypedArray reduce implementation. This is a method that will be called from the parent,
-   * passing types down from the child class using the typed parameters TypedArrayType and
-   * ReturnType respectively. This implementation requires an initial value, and the direction.
-   * When direction is true, reduce will reduce from the right side.
-   */
-  @inline
-  protected reduce_internal<TypedArrayType, ReturnType>(
-    callbackfn: (accumulator: ReturnType, value: T, index: i32, array: TypedArrayType) => ReturnType,
-    array: TypedArrayType,
-    initialValue: ReturnType,
-    direction: bool = false,
-    ): ReturnType {
-    var index: i32 = direction ? this.length - 1 : 0;
-    var length: i32 = direction ? -1 : this.length;
-    while (index != length) {
-      initialValue = callbackfn(
-        initialValue,
-        this.__unchecked_get(index),
-        index,
-        array,
-      );
-      index = direction ? index - 1 : index + 1;
-    }
-    return initialValue;
+@inline
+export function SUBARRAY<TArray, T>(
+  array: TArray,
+  begin: i32 = 0,
+  end: i32 = i32.MAX_VALUE
+): TArray {
+  var length = array.length;
+  if (begin < 0) begin = max(length + begin, 0);
+  else begin = min(begin, length);
+  if (end < 0) end = max(length + end, begin);
+  else end = max(min(end, length), begin);
+  var slice = memory.allocate(offsetof<TArray>());
+  store<usize>(slice, array.buffer, offsetof<TArray>("buffer"));
+  store<i32>(slice, array.byteOffset + (begin << alignof<T>()), offsetof<TArray>("byteOffset"));
+  store<i32>(slice, (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
+  return changetype<TArray>(slice);
+}
+
+@inline
+export function REDUCE<TArray, T, TRet>(
+  array: TArray,
+  callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
+  initialValue: TRet
+): TRet {
+  var index: i32 = 0;
+  var length: i32 = array.length;
+  while (index != length) {
+    initialValue = callbackfn(
+      initialValue,
+      unchecked(array[index]),
+      index,
+      array,
+    );
+    ++index;
   }
+  return initialValue;
+}
+
+@inline
+export function REDUCE_RIGHT<TArray, T, TRet>(
+  array: TArray,
+  callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
+  initialValue: TRet
+): TRet {
+  var index: i32 = array.length - 1;
+  var length: i32 = -1;
+  while (index != length) {
+    initialValue = callbackfn(
+      initialValue,
+      unchecked(array[index]),
+      index,
+      array,
+    );
+    --index;
+  }
+  return initialValue;
 }

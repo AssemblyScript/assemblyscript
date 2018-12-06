@@ -4731,7 +4731,7 @@
       i32.const 100
       i32.rem_u
       set_local $7
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.0 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.0 (result i64)
        get_local $3
        get_local $6
        i32.const 2
@@ -4740,7 +4740,7 @@
        i64.load32_u offset=8
       end
       set_local $8
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.1 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.1 (result i64)
        get_local $3
        get_local $7
        i32.const 2
@@ -4787,7 +4787,7 @@
    i32.const 2
    i32.sub
    set_local $2
-   block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.0 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.0 (result i32)
     get_local $3
     get_local $6
     i32.const 2
@@ -4812,7 +4812,7 @@
    i32.const 2
    i32.sub
    set_local $2
-   block $~lib/internal/arraybuffer/loadUnsafe<u32,u32>|inlined.1 (result i32)
+   block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.1 (result i32)
     get_local $3
     get_local $1
     i32.const 2
@@ -5038,7 +5038,7 @@
       i32.const 100
       i32.rem_u
       set_local $11
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.2 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.2 (result i64)
        get_local $3
        get_local $10
        i32.const 2
@@ -5047,7 +5047,7 @@
        i64.load32_u offset=8
       end
       set_local $12
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.3 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.3 (result i64)
        get_local $3
        get_local $11
        i32.const 2
@@ -5071,7 +5071,7 @@
       i64.shl
       i64.or
       i64.store offset=4
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.4 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.4 (result i64)
        get_local $3
        get_local $8
        i32.const 2
@@ -5080,7 +5080,7 @@
        i64.load32_u offset=8
       end
       set_local $12
-      block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.5 (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.5 (result i64)
        get_local $3
        get_local $9
        i32.const 2
@@ -5539,7 +5539,7 @@
        get_local $14
        i32.add
        set_global $~lib/internal/number/_K
-       block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.6 (result i64)
+       block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.6 (result i64)
         get_local $16
         get_local $14
         i32.const 2
@@ -5689,7 +5689,7 @@
        i32.add
        set_global $~lib/internal/number/_K
        get_local $10
-       block $~lib/internal/arraybuffer/loadUnsafe<u32,u64>|inlined.7 (result i64)
+       block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.7 (result i64)
         i32.const 0
         get_local $14
         i32.sub
@@ -6290,7 +6290,7 @@
     end
     i32.load
     set_local $13
-    block $~lib/internal/arraybuffer/loadUnsafe<u64,u64>|inlined.0 (result i64)
+    block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.0 (result i64)
      get_local $12
      get_local $8
      i32.const 3
@@ -6299,7 +6299,7 @@
      i64.load offset=8
     end
     set_global $~lib/internal/number/_frc_pow
-    block $~lib/internal/arraybuffer/loadUnsafe<i16,i32>|inlined.0 (result i32)
+    block $~lib/internal/arraybuffer/LOAD<i16,i32>|inlined.0 (result i32)
      get_local $13
      get_local $8
      i32.const 1

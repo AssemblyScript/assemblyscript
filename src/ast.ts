@@ -181,12 +181,14 @@ export abstract class Node {
   static createTypeParameter(
     name: IdentifierExpression,
     extendsType: TypeNode | null,
+    defaultType: TypeNode | null,
     range: Range
   ): TypeParameterNode {
     var elem = new TypeParameterNode();
     elem.range = range;
     elem.name = name; name.parent = elem;
     elem.extendsType = extendsType; if (extendsType) extendsType.parent = elem;
+    elem.defaultType = defaultType; if (defaultType) defaultType.parent = elem;
     return elem;
   }
 
@@ -1070,6 +1072,8 @@ export class TypeParameterNode extends Node {
   name: IdentifierExpression;
   /** Extended type reference, if any. */
   extendsType: TypeNode | null; // can't be a function
+  /** Default type if omitted, if any. */
+  defaultType: TypeNode | null; // can't be a function
 }
 
 /** Represents the kind of a parameter. */

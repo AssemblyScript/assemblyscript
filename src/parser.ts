@@ -926,9 +926,19 @@ export class Parser extends DiagnosticEmitter {
     // at '<': TypeParameter (',' TypeParameter)* '>'
 
     var typeParameters = new Array<TypeParameterNode>();
+    var seenOptional = false;
     while (!tn.skip(Token.GREATERTHAN)) {
       let typeParameter = this.parseTypeParameter(tn);
       if (!typeParameter) return null;
+      if (typeParameter.defaultType !== null) {
+        seenOptional = true;
+      } else if (seenOptional) {
+        this.error(
+          DiagnosticCode.Required_type_parameters_may_not_follow_optional_type_parameters,
+          typeParameter.range
+        );
+        typeParameter.defaultType = null;
+      }
       typeParameters.push(<TypeParameterNode>typeParameter);
       if (!tn.skip(Token.COMMA)) {
         if (tn.skip(Token.GREATERTHAN)) {
@@ -955,7 +965,7 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer
   ): TypeParameterNode | null {
 
-    // before: Identifier ('extends' Type)?
+    // before: Identifier ('extends' Type)? ('=' Type)?
 
     if (tn.next() == Token.IDENTIFIER) {
       let identifier = Node.createIdentifierExpression(
@@ -975,9 +985,23 @@ export class Parser extends DiagnosticEmitter {
         }
         extendsType = <TypeNode>t;
       }
+      let defaultType: TypeNode | null = null;
+      if (tn.skip(Token.EQUALS)) {
+        let t = this.parseType(tn);
+        if (!t) return null;
+        if (t.kind != NodeKind.TYPE) {
+          this.error(
+            DiagnosticCode.Operation_not_supported,
+            t.range
+          );
+          return null;
+        }
+        defaultType = <TypeNode>t;
+      }
       return Node.createTypeParameter(
         identifier,
         extendsType,
+        defaultType,
         Range.join(identifier.range, tn.range())
       );
     } else {
@@ -1750,17 +1774,20 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    if (!isConstructor && !tn.skipIdentifier()) {
-      this.error(
-        DiagnosticCode.Identifier_expected,
-        tn.range()
-      );
-      return null;
+    var name: IdentifierExpression;
+    if (isConstructor) {
+      name = Node.createConstructorExpression(tn.range());
+    } else {
+      // TODO: handle symbols, i.e. '[' 'Symbol' '.' Identifier ']'
+      if (!tn.skipIdentifier()) {
+        this.error(
+          DiagnosticCode.Identifier_expected,
+          tn.range()
+        );
+        return null;
+      }
+      name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
-
-    var name = isConstructor
-      ? Node.createConstructorExpression(tn.range())
-      : Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     var typeParameters: TypeParameterNode[] | null = null;
     if (tn.skip(Token.LESSTHAN)) {
       let typeParametersStart = tn.tokenPos;
