@@ -120,14 +120,14 @@ export function SUBARRAY<TArray, T>(
   begin: i32 = 0,
   end: i32 = i32.MAX_VALUE
 ): TArray {
-  var length = array.length;
+  var length = <i32>array.length;
   if (begin < 0) begin = max(length + begin, 0);
   else begin = min(begin, length);
   if (end < 0) end = max(length + end, begin);
   else end = max(min(end, length), begin);
   var slice = memory.allocate(offsetof<TArray>());
   store<usize>(slice, array.buffer, offsetof<TArray>("buffer"));
-  store<i32>(slice, array.byteOffset + (begin << alignof<T>()), offsetof<TArray>("byteOffset"));
+  store<i32>(slice, <i32>array.byteOffset + (begin << alignof<T>()), offsetof<TArray>("byteOffset"));
   store<i32>(slice, (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
   return changetype<TArray>(slice);
 }
@@ -138,12 +138,12 @@ export function REDUCE<TArray, T, TRet>(
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var index: i32 = 0;
-  var length: i32 = array.length;
+  var index = 0;
+  var length = <i32>array.length;
   while (index != length) {
     initialValue = callbackfn(
       initialValue,
-      unchecked(array[index]),
+      unchecked(array[index]), // tslint:disable-line
       index,
       array,
     );
@@ -158,12 +158,12 @@ export function REDUCE_RIGHT<TArray, T, TRet>(
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var index: i32 = array.length - 1;
-  var length: i32 = -1;
+  var index = <i32>array.length - 1;
+  var length = -1;
   while (index != length) {
     initialValue = callbackfn(
       initialValue,
-      unchecked(array[index]),
+      unchecked(array[index]), // tslint:disable-line
       index,
       array,
     );
