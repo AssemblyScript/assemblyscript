@@ -136,14 +136,18 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   visitGlobal(element: Global): void {
-    throw new Error("Method not implemented.");
+    // Do nothing
   }
+
   visitEnum(element: Enum): void {
-    throw new Error("Method not implemented.");
+    // Do nothing
   }
+
   visitFunction(element: Function): void {
     console.log("visitFunction: " + element.simpleName);
+    // TODO: Generate wrapper function using BSON encoder/decoder
   }
+
   visitClass(element: Class): void {
     let className = element.simpleName;
     let typeMapping : { [key: string] : string } = {
@@ -154,43 +158,55 @@ export class NEARBindingsBuilder extends ExportsWalker {
     };
     console.log("visitClass: " + className);
     this.sb.push(`export function __near_encode_${className}(
-        value: ${className}, encoder: BSONEncoder): void {\n`);
+        value: ${className}, encoder: BSONEncoder): void {`);
     this.forEachField(element, (field) => {
-      console.log("field " + field.simpleName + " " + field.type)
       let setterType = typeMapping[field.type.toString()];
       this.sb.push(`if (value.${field.simpleName} != null) {
         encoder.set${setterType}("${field.simpleName}", value.${field.simpleName});
       } else {
         encoder.setNull("${field.simpleName}");
-      }\n`);
+      }`);
     });
-    this.sb.push("}\n\n"); // __near_encode
+    this.sb.push("}\n"); // __near_encode
 
-    this.sb.push(`export class __near_BSONHandler_${className} {\n`);
+    this.sb.push(`export class __near_BSONHandler_${className} {
+      value: ${className} = new ${className}();`);
     for (let fieldType in typeMapping) {
       let setterType = typeMapping[fieldType];
-      this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {\n`);
+      this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {`);
       this.forEachField(element, (field) => {
         if (field.type.toString() == fieldType) {
-            this.sb.push(`if (name == "${field.simpleName}") { this.value.${field.simpleName} = value; return; }\n`);
+            this.sb.push(`if (name == "${field.simpleName}") { this.value.${field.simpleName} = value; return; }`);
         }
       });
-      this.sb.push("}\n");
+      this.sb.push("}");
     }
-    this.sb.push("setNull(name: string): void {\n");
+    this.sb.push("setNull(name: string): void {");
     this.forEachField(element, (field) => {
-      this.sb.push(`if (name == "${field.simpleName}") { this.value.${field.simpleName} = null; return; }\n`);
+      this.sb.push(`if (name == "${field.simpleName}") {
+        this.value.${field.simpleName} = <${field.type.toString()}>null;
+        return;
+      }`);
     });
-    this.sb.push("}\n"); // setNull
-    this.sb.push("}\n\n"); // class __near_BSONHandler_
+    this.sb.push("}"); // setNull
+    
+    // TODO: Suport nested objects/arrays
+    this.sb.push(`
+      pushObject(name: string): bool { return false; }
+      popObject(): void {}
+      pushArray(name: string): bool { return false; }
+      popArray(): void {}
+    `);
+
+    this.sb.push("}\n"); // class __near_BSONHandler_
 
     this.sb.push(`export function __near_decode_${className}(
-        buffer: Uint8Array, offset: i32): void {
+        buffer: Uint8Array, offset: i32): ${className} {
       let handler = new __near_BSONHandler_${className}();
-      let decoder = new BSONDecoder(handler);
+      let decoder = new BSONDecoder<__near_BSONHandler_${className}>(handler);
       decoder.deserialize(buffer, offset);
       return handler.value;
-    }\n\n`);
+    }\n`);
   }
 
   private forEachField(element: Class, fn: (field: Field) => void): void {
@@ -206,18 +222,20 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   visitInterface(element: Interface): void {
-    throw new Error("Method not implemented.");
+    // Do nothing
   }
+
   visitField(element: Field): void {
     throw new Error("Shouldn't be called");
   }
+
   visitNamespace(element: Element): void {
-    console.log("visitNamespace: " + element.simpleName);
+    // Do nothing
   }
 
   build(): string {
     this.walk();
-    return this.sb.join("");
+    return this.sb.join("\n");
   }
 }
 
