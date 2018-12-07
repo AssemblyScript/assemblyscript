@@ -19,6 +19,5 @@ declare module ASModule {
     print(i: i32): void;
     callAsync(): void;
   }
-  function start(): void;
 }
 export default ASModule;

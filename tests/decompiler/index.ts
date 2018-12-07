@@ -52,21 +52,12 @@ export class Test {
 
 class Test2 extends Test{}
 
-let t:Test;// becomes statically allocated.
-
-// export start
-export function start(): void{
-  t = new Test(0);
-  let t2: Test2 = new Test2(0);
-  t._if(1);
-  t._else(3);
-  t.callAsync();
-  println(t.i);
-  t._while(1);
-  println(t.i);
-}
-
-//The compiler will use this as the entry point to the program.
-start();
-
-//Before instantiating set the start function to null.
+let t:Test;
+t = new Test(0);
+let t2: Test2 = new Test2(0);
+t._if(1);
+t._else(3);
+t.callAsync();
+println(t.i);
+t._while(1);
+println(t.i);

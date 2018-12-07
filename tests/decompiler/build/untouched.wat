@@ -16,6 +16,7 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $index/t (mut i32) (i32.const 0))
+ (global $index/t2 (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -30,7 +31,6 @@
  (export "Test#_doWhile" (func $index/Test#_doWhile))
  (export "Test#print" (func $index/Test#print))
  (export "Test#callAsync" (func $index/Test#callAsync))
- (export "start" (func $index/start))
  (start $start)
  (func $index/Test#constructor~anonymous|1 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
@@ -221,8 +221,18 @@
   i32.const 2
   call $index/asyncfn<Test>
  )
- (func $index/start (; 13 ;) (type $v)
-  (local $0 i32)
+ (func $start (; 13 ;) (type $v)
+  get_global $HEAP_BASE
+  get_global $~lib/internal/allocator/AL_MASK
+  i32.add
+  get_global $~lib/internal/allocator/AL_MASK
+  i32.const -1
+  i32.xor
+  i32.and
+  set_global $~lib/allocator/arena/startOffset
+  get_global $~lib/allocator/arena/startOffset
+  set_global $~lib/allocator/arena/offset
+  nop
   i32.const 0
   i32.const 0
   call $index/Test#constructor
@@ -230,7 +240,7 @@
   i32.const 0
   i32.const 0
   call $index/Test#constructor
-  set_local $0
+  set_global $index/t2
   get_global $index/t
   i32.const 1
   call $index/Test#_if
@@ -249,36 +259,22 @@
   i32.load offset=4
   call $index/println
  )
- (func $start (; 14 ;) (type $v)
-  get_global $HEAP_BASE
-  get_global $~lib/internal/allocator/AL_MASK
-  i32.add
-  get_global $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  set_global $~lib/allocator/arena/startOffset
-  get_global $~lib/allocator/arena/startOffset
-  set_global $~lib/allocator/arena/offset
-  nop
-  call $index/start
+ (func $null (; 14 ;) (type $v)
  )
- (func $null (; 15 ;) (type $v)
- )
- (func $Test#get:a (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $Test#get:a (; 15 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load
  )
- (func $Test#set:a (; 17 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $Test#set:a (; 16 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   i32.store
  )
- (func $Test#get:i (; 18 ;) (type $ii) (param $0 i32) (result i32)
+ (func $Test#get:i (; 17 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load offset=4
  )
- (func $Test#set:i (; 19 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $Test#set:i (; 18 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   i32.store offset=4
