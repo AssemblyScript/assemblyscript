@@ -291,7 +291,7 @@ testReduceRight<Uint64Array, u64>();
 testReduceRight<Float32Array, f32>();
 testReduceRight<Float64Array, f64>();
 
-function testArrayMap<ArrayType, T>(): void {
+function testArrayMap<ArrayType extends TypedArray<T>, T>(): void {
   var source: ArrayType = instantiate<ArrayType>(3);
   source[0] = <T>1;
   source[1] = <T>2;
