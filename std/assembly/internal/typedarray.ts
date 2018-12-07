@@ -177,3 +177,18 @@ export function REDUCE_RIGHT<TArray extends TypedArray<T>, T, TRet>(
   }
   return initialValue;
 }
+
+@inline
+export function MAP<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, self: TArray) => T,
+): TArray {
+  var length: i32 = array.length;
+  var result = instantiate<TArray>(length);
+  var i: i32 = 0;
+  while (i < length) {
+    unchecked(result[i] = callbackfn(array[i], i, <TArray>array));
+    ++i;
+  }
+  return result;
+}

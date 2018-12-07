@@ -4,7 +4,8 @@ import {
   SORT,
   SUBARRAY,
   REDUCE,
-  REDUCE_RIGHT
+  REDUCE_RIGHT,
+  MAP,
 } from "./internal/typedarray";
 
 import {
@@ -39,6 +40,10 @@ export class Int8Array extends TypedArray<i8> {
   ): T {
     return REDUCE_RIGHT<Int8Array, i8, T>(this, callbackfn, initialValue);
   }
+
+  map(callbackfn: (value: i8, index: i32, self: this) => i8): this {
+    return MAP<this, i8>(this, callbackfn);
+  }
 }
 
 export class Uint8Array extends TypedArray<u8> {
@@ -68,6 +73,10 @@ export class Uint8Array extends TypedArray<u8> {
     initialValue: T,
   ): T {
     return REDUCE_RIGHT<Uint8Array, u8, T>(this, callbackfn, initialValue);
+  }
+
+  map(callbackfn: (value: u8, index: i32, self: this) => u8): this {
+    return MAP<this, u8>(this, callbackfn);
   }
 }
 
@@ -113,6 +122,10 @@ export class Int16Array extends TypedArray<i16> {
   ): T {
     return REDUCE_RIGHT<Int16Array, i16, T>(this, callbackfn, initialValue);
   }
+
+  map(callbackfn: (value: i16, index: i32, self: this) => i16): this {
+    return MAP<this, i16>(this, callbackfn);
+  }
 }
 
 export class Uint16Array extends TypedArray<u16> {
@@ -142,6 +155,10 @@ export class Uint16Array extends TypedArray<u16> {
     initialValue: T,
   ): T {
     return REDUCE_RIGHT<Uint16Array, u16, T>(this, callbackfn, initialValue);
+  }
+
+  map(callbackfn: (value: u16, index: i32, self: this) => u16): this {
+    return MAP<this, u16>(this, callbackfn);
   }
 }
 
@@ -173,6 +190,10 @@ export class Int32Array extends TypedArray<i32> {
   ): T {
     return REDUCE_RIGHT<Int32Array, i32, T>(this, callbackfn, initialValue);
   }
+
+  map(callbackfn: (value: i32, index: i32, self: this) => i32): this {
+    return MAP<this, i32>(this, callbackfn);
+  }
 }
 
 export class Uint32Array extends TypedArray<u32> {
@@ -202,6 +223,10 @@ export class Uint32Array extends TypedArray<u32> {
     initialValue: T,
   ): T {
     return REDUCE_RIGHT<Uint32Array, u32, T>(this, callbackfn, initialValue);
+  }
+
+  map(callbackfn: (value: u32, index: i32, self: this) => u32): this {
+    return MAP<this, u32>(this, callbackfn);
   }
 }
 
@@ -233,6 +258,10 @@ export class Int64Array extends TypedArray<i64> {
   ): T {
     return REDUCE_RIGHT<Int64Array, i64, T>(this, callbackfn, initialValue);
   }
+
+  map(callbackfn: (value: i64, index: i32, self: this) => i64): this {
+    return MAP<this, i64>(this, callbackfn);
+  }
 }
 
 export class Uint64Array extends TypedArray<u64> {
@@ -262,6 +291,10 @@ export class Uint64Array extends TypedArray<u64> {
     initialValue: T,
   ): T {
     return REDUCE_RIGHT<Uint64Array, u64, T>(this, callbackfn, initialValue);
+  }
+
+  map(callbackfn: (value: u64, index: i32, self: this) => u64): this {
+    return MAP<this, u64>(this, callbackfn);
   }
 }
 
@@ -293,6 +326,10 @@ export class Float32Array extends TypedArray<f32> {
   ): T {
     return REDUCE_RIGHT<Float32Array, f32, T>(this, callbackfn, initialValue);
   }
+
+  map(callbackfn: (value: f32, index: i32, self: this) => f32): this {
+    return MAP<this, f32>(this, callbackfn);
+  }
 }
 
 export class Float64Array extends TypedArray<f64> {
@@ -322,5 +359,9 @@ export class Float64Array extends TypedArray<f64> {
     initialValue: T,
   ): T {
     return REDUCE_RIGHT<Float64Array, f64, T>(this, callbackfn, initialValue);
+  }
+
+  map(callbackfn: (value: f64, index: i32, self: this) => f64): this {
+    return MAP<this, f64>(this, callbackfn);
   }
 }
