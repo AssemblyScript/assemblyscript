@@ -84,7 +84,7 @@ import {
   mangleInternalPath,
   nodeIsCallable,
   nodeIsGenericCallable,
-  IndexDeclaration
+  IndexSignatureDeclaration
 } from "./ast";
 
 /** Parser interface. */
@@ -1647,6 +1647,8 @@ export class Parser extends DiagnosticEmitter {
     // implemented methods are virtual
     if (isInterface) flags |= CommonFlags.VIRTUAL;
 
+    var accessStart = 0;
+    var accessEnd = 0;
     if (tn.skip(Token.PUBLIC)) {
       if (isInterface) {
         this.error(
@@ -1655,6 +1657,8 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       flags |= CommonFlags.PUBLIC;
+      accessStart = tn.tokenPos;
+      accessEnd = tn.pos;
     } else if (tn.skip(Token.PRIVATE)) {
       if (isInterface) {
         this.error(
@@ -1663,6 +1667,8 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       flags |= CommonFlags.PRIVATE;
+      accessStart = tn.tokenPos;
+      accessEnd = tn.pos;
     } else if (tn.skip(Token.PROTECTED)) {
       if (isInterface) {
         this.error(
@@ -1671,12 +1677,14 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       flags |= CommonFlags.PROTECTED;
+      accessStart = tn.tokenPos;
+      accessEnd = tn.pos;
     }
 
-    var staticStart: i32 = 0;
-    var staticEnd: i32 = 0;
-    var abstractStart: i32 = 0;
-    var abstractEnd: i32 = 0;
+    var staticStart = 0;
+    var staticEnd = 0;
+    var abstractStart = 0;
+    var abstractEnd = 0;
     if (tn.skip(Token.STATIC)) {
       if (isInterface) {
         this.error(
@@ -1700,9 +1708,7 @@ export class Parser extends DiagnosticEmitter {
         abstractStart = tn.tokenPos;
         abstractEnd = tn.pos;
       }
-      if (parent.flags & CommonFlags.GENERIC) {
-        flags |= CommonFlags.GENERIC_CONTEXT;
-      }
+      if (parent.flags & CommonFlags.GENERIC) flags |= CommonFlags.GENERIC_CONTEXT;
     }
 
     var readonlyStart: i32 = 0;
@@ -1782,9 +1788,42 @@ export class Parser extends DiagnosticEmitter {
       name = Node.createConstructorExpression(tn.range());
     } else {
       if (!(isGetter || isSetter) && tn.skip(Token.OPENBRACKET)) {
-        // TODO: error on invalid flags
-        // TODO: also handle symbols
-        let retIndex = this.parseIndexDeclaration(tn, decorators);
+        // TODO: also handle symbols, which might have some of these modifiers
+        if (flags & CommonFlags.PUBLIC) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(accessStart, accessEnd), "public"
+          ); // recoverable
+        } else if (flags & CommonFlags.PROTECTED) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(accessStart, accessEnd), "protected"
+          ); // recoverable
+        } else if (flags & CommonFlags.PRIVATE) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(accessStart, accessEnd), "protected"
+          ); // recoverable
+        }
+        if (flags & CommonFlags.STATIC) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(staticStart, staticEnd), "static"
+          ); // recoverable
+        }
+        if (flags & CommonFlags.ABSTRACT) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(abstractStart, abstractEnd), "abstract"
+          ); // recoverable
+        }
+        if (flags & CommonFlags.READONLY) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(readonlyStart, readonlyEnd), "readonly"
+          ); // recoverable
+        }
+        let retIndex = this.parseIndexSignatureDeclaration(tn, decorators);
         if (!retIndex) return null;
         tn.skip(Token.SEMICOLON);
         return retIndex;
@@ -2016,7 +2055,7 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  parseIndexDeclaration(tn: Tokenizer, decorators: DecoratorNode[]): IndexDeclaration | null {
+  parseIndexSignatureDeclaration(tn: Tokenizer, decorators: DecoratorNode[]): IndexSignatureDeclaration | null {
 
     // at: '[': 'key' ':' Type ']' ':' Type
 
@@ -2045,7 +2084,7 @@ export class Parser extends DiagnosticEmitter {
             if (tn.skip(Token.COLON)) {
               let valueType = this.parseType(tn);
               if (!valueType) return null;
-              return Node.createIndexDeclaration(<TypeNode>keyType, valueType, tn.range(start, tn.pos));
+              return Node.createIndexSignatureDeclaration(<TypeNode>keyType, valueType, tn.range(start, tn.pos));
             } else {
               this.error(
                 DiagnosticCode._0_expected,

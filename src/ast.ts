@@ -87,7 +87,7 @@ export enum NodeKind {
   FIELDDECLARATION,
   FUNCTIONDECLARATION,
   IMPORTDECLARATION,
-  INDEXDECLARATION,
+  INDEXSIGNATUREDECLARATION,
   INTERFACEDECLARATION,
   METHODDECLARATION,
   NAMESPACEDECLARATION,
@@ -874,12 +874,12 @@ export abstract class Node {
     return stmt;
   }
 
-  static createIndexDeclaration(
+  static createIndexSignatureDeclaration(
     keyType: TypeNode,
     valueType: CommonTypeNode,
     range: Range
-  ): IndexDeclaration {
-    var elem = new IndexDeclaration();
+  ): IndexSignatureDeclaration {
+    var elem = new IndexSignatureDeclaration();
     elem.range = range;
     elem.keyType = keyType; keyType.parent = elem;
     elem.valueType = valueType; valueType.parent = elem;
@@ -1639,9 +1639,9 @@ export abstract class DeclarationStatement extends Statement {
   }
 }
 
-/** Represents an index declaration. */
-export class IndexDeclaration extends DeclarationStatement {
-  kind = NodeKind.INDEXDECLARATION;
+/** Represents an index signature declaration. */
+export class IndexSignatureDeclaration extends DeclarationStatement {
+  kind = NodeKind.INDEXSIGNATUREDECLARATION;
 
   /** Key type. */
   keyType: TypeNode;

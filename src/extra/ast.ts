@@ -68,7 +68,7 @@ import {
   FieldDeclaration,
   FunctionDeclaration,
   ImportDeclaration,
-  IndexDeclaration,
+  IndexSignatureDeclaration,
   InterfaceDeclaration,
   MethodDeclaration,
   NamespaceDeclaration,
@@ -296,8 +296,8 @@ export class ASTBuilder {
         this.visitImportDeclaration(<ImportDeclaration>node);
         break;
       }
-      case NodeKind.INDEXDECLARATION: {
-        this.visitIndexDeclaration(<IndexDeclaration>node);
+      case NodeKind.INDEXSIGNATUREDECLARATION: {
+        this.visitIndexSignatureDeclaration(<IndexSignatureDeclaration>node);
         break;
       }
       case NodeKind.INTERFACEDECLARATION: {
@@ -1186,7 +1186,7 @@ export class ASTBuilder {
     this.visitStringLiteralExpression(node.path);
   }
 
-  visitIndexDeclaration(node: IndexDeclaration): void {
+  visitIndexSignatureDeclaration(node: IndexSignatureDeclaration): void {
     var sb = this.sb;
     sb.push("[key: ");
     this.visitTypeNode(node.keyType);
