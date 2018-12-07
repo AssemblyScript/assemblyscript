@@ -94,11 +94,11 @@ export class Uint8ClampedArray extends Uint8Array {
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
-    return changetype<Uint8ClampedArray>(super.fill(value, start, end));
+    return changetype<Uint8ClampedArray>(super.fill(value, start, end)); // safe because '.fill' reuses 'this'
   }
 
   sort(comparator: (a: u8, b: u8) => i32 = defaultComparator<u8>()): Uint8ClampedArray {
-    return changetype<Uint8ClampedArray>(super.sort(comparator));
+    return changetype<Uint8ClampedArray>(super.sort(comparator)); // safe because '.sort' reuses 'this'
   }
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint8ClampedArray {
