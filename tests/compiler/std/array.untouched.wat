@@ -3399,7 +3399,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 337
+    i32.const 336
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -3474,7 +3474,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 308
+   i32.const 307
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3909,6 +3909,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   get_local $0
   i32.load
   set_local $2
@@ -3923,16 +3924,15 @@
    loop $repeat|0
     get_local $3
     get_local $4
-    i32.lt_s
     tee_local $5
-    if (result i32)
-     get_local $3
-     get_local $0
-     i32.load offset=4
-     i32.lt_s
-    else     
-     get_local $5
-    end
+    get_local $0
+    i32.load offset=4
+    tee_local $6
+    get_local $5
+    get_local $6
+    i32.lt_s
+    select
+    i32.lt_s
     i32.eqz
     br_if $break|0
     block (result i32)
@@ -4014,6 +4014,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   get_local $0
   i32.load
   set_local $2
@@ -4028,16 +4029,15 @@
    loop $repeat|0
     get_local $3
     get_local $4
-    i32.lt_s
     tee_local $5
-    if (result i32)
-     get_local $3
-     get_local $0
-     i32.load offset=4
-     i32.lt_s
-    else     
-     get_local $5
-    end
+    get_local $0
+    i32.load offset=4
+    tee_local $6
+    get_local $5
+    get_local $6
+    i32.lt_s
+    select
+    i32.lt_s
     i32.eqz
     br_if $break|0
     block (result i32)
@@ -4115,6 +4115,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   get_local $0
   i32.load
   set_local $2
@@ -4129,16 +4130,15 @@
    loop $repeat|0
     get_local $3
     get_local $4
-    i32.lt_s
     tee_local $5
-    if (result i32)
-     get_local $3
-     get_local $0
-     i32.load offset=4
-     i32.lt_s
-    else     
-     get_local $5
-    end
+    get_local $0
+    i32.load offset=4
+    tee_local $6
+    get_local $5
+    get_local $6
+    i32.lt_s
+    select
+    i32.lt_s
     i32.eqz
     br_if $break|0
     block (result i32)
@@ -4367,7 +4367,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 f32)
+  (local $8 i32)
+  (local $9 f32)
   get_local $0
   i32.load
   set_local $2
@@ -4387,16 +4388,15 @@
    loop $repeat|0
     get_local $6
     get_local $3
-    i32.lt_s
     tee_local $7
-    if (result i32)
-     get_local $6
-     get_local $0
-     i32.load offset=4
-     i32.lt_s
-    else     
-     get_local $7
-    end
+    get_local $0
+    i32.load offset=4
+    tee_local $8
+    get_local $7
+    get_local $8
+    i32.lt_s
+    select
+    i32.lt_s
     i32.eqz
     br_if $break|0
     block
@@ -4420,7 +4420,7 @@
       get_local $1
       call_indirect (type $iiif)
      end
-     set_local $8
+     set_local $9
      i32.const 0
      set_local $7
      get_local $5
@@ -4430,7 +4430,7 @@
      i32.add
      get_local $7
      i32.add
-     get_local $8
+     get_local $9
      f32.store offset=8
     end
     get_local $6
@@ -4509,16 +4509,15 @@
    loop $repeat|0
     get_local $6
     get_local $3
-    i32.lt_s
     tee_local $7
-    if (result i32)
-     get_local $6
-     get_local $0
-     i32.load offset=4
-     i32.lt_s
-    else     
-     get_local $7
-    end
+    get_local $0
+    i32.load offset=4
+    tee_local $8
+    get_local $7
+    get_local $8
+    i32.lt_s
+    select
+    i32.lt_s
     i32.eqz
     br_if $break|0
     block
@@ -4594,32 +4593,34 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   get_local $0
   i32.load
   set_local $2
-  get_local $0
-  i32.load offset=4
-  set_local $3
   i32.const 0
   i32.const 0
   call $~lib/array/Array<i32>#constructor
-  set_local $4
+  set_local $3
   block $break|0
-   i32.const 0
-   set_local $5
+   block
+    i32.const 0
+    set_local $4
+    get_local $0
+    i32.load offset=4
+    set_local $5
+   end
    loop $repeat|0
+    get_local $4
     get_local $5
-    get_local $3
-    i32.lt_s
     tee_local $6
-    if (result i32)
-     get_local $5
-     get_local $0
-     i32.load offset=4
-     i32.lt_s
-    else     
-     get_local $6
-    end
+    get_local $0
+    i32.load offset=4
+    tee_local $7
+    get_local $6
+    get_local $7
+    i32.lt_s
+    select
+    i32.lt_s
     i32.eqz
     br_if $break|0
     block
@@ -4627,7 +4628,7 @@
       i32.const 0
       set_local $6
       get_local $2
-      get_local $5
+      get_local $4
       i32.const 2
       i32.shl
       i32.add
@@ -4640,7 +4641,7 @@
       i32.const 3
       set_global $~argc
       get_local $6
-      get_local $5
+      get_local $4
       get_local $0
       get_local $1
       call_indirect (type $iiii)
@@ -4648,22 +4649,22 @@
      i32.const 0
      i32.ne
      if
-      get_local $4
+      get_local $3
       get_local $6
       call $~lib/array/Array<i32>#push
       drop
      end
     end
-    get_local $5
+    get_local $4
     i32.const 1
     i32.add
-    set_local $5
+    set_local $4
     br $repeat|0
     unreachable
    end
    unreachable
   end
-  get_local $4
+  get_local $3
  )
  (func $start~anonymous|26 (; 72 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
@@ -4710,6 +4711,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   get_local $2
   set_local $3
   get_local $0
@@ -4726,16 +4728,15 @@
    loop $repeat|0
     get_local $5
     get_local $6
-    i32.lt_s
     tee_local $7
-    if (result i32)
-     get_local $5
-     get_local $0
-     i32.load offset=4
-     i32.lt_s
-    else     
-     get_local $7
-    end
+    get_local $0
+    i32.load offset=4
+    tee_local $8
+    get_local $7
+    get_local $8
+    i32.lt_s
+    select
+    i32.lt_s
     i32.eqz
     br_if $break|0
     block (result i32)
@@ -4794,6 +4795,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   get_local $2
   set_local $3
   get_local $0
@@ -4810,16 +4812,15 @@
    loop $repeat|0
     get_local $5
     get_local $6
-    i32.lt_s
     tee_local $7
-    if (result i32)
-     get_local $5
-     get_local $0
-     i32.load offset=4
-     i32.lt_s
-    else     
-     get_local $7
-    end
+    get_local $0
+    i32.load offset=4
+    tee_local $8
+    get_local $7
+    get_local $8
+    i32.lt_s
+    select
+    i32.lt_s
     i32.eqz
     br_if $break|0
     block (result i32)
@@ -5688,7 +5689,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 409
+   i32.const 408
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6469,7 +6470,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 409
+   i32.const 408
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7277,7 +7278,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 409
+   i32.const 408
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7950,7 +7951,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 409
+   i32.const 408
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8654,7 +8655,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 409
+   i32.const 408
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9129,7 +9130,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 409
+   i32.const 408
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9639,7 +9640,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 409
+   i32.const 408
    i32.const 4
    call $~lib/env/abort
    unreachable
