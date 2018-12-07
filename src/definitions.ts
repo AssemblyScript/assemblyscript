@@ -131,6 +131,13 @@ abstract class ExportsWalker {
 export class NEARBindingsBuilder extends ExportsWalker {
   private sb: string[] = [];
 
+  private typeMapping: { [key: string]: string } = {
+    "i32": "Integer",
+    "String": "String",
+    "Uint8Array": "Uint8Array",
+    "bool": "Boolean"
+  };
+
   static build(program: Program): string {
     return new NEARBindingsBuilder(program).build();
   }
@@ -145,51 +152,83 @@ export class NEARBindingsBuilder extends ExportsWalker {
 
   visitFunction(element: Function): void {
     console.log("visitFunction: " + element.simpleName);
-    // TODO: Generate wrapper function using BSON encoder/decoder
+    let signature = element.signature;
+
+    // TODO: Generate ArgsParser BSON handler
+    this.sb.push(`export class __near_ArgsParser_${element.simpleName} {
+      `);
+    let fields = [];
+    if (signature.parameterNames) {
+      for (let i = 0; i < signature.parameterNames.length; i++) {
+        let paramName = signature.parameterNames[i];
+        let paramType = signature.parameterTypes[i];
+        fields.push({
+          simpleName: paramName,
+          type: paramType
+        });
+      }
+    }
+    fields.forEach((field) => {
+        this.sb.push(`__near_param_${field.simpleName}: ${field.type};`);
+    });
+    this.generateBSONHandlerMethods("this.__near_param_", fields);
+    this.sb.push(`}`); // __near_ArgsParser
+
+    this.sb.push(`function __near_func_${element.simpleName}(bson: Uint8Array): Uint8Array {
+      let handler = new __near_ArgsParser_${element.simpleName}();
+      let decoder = new BSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
+      decoder.deserialize(bson);
+      let result = ${element.simpleName}(`);
+    if (signature.parameterNames) {
+      let i = 0;
+      for (let paramName of signature.parameterNames) {
+        this.sb.push(`handler.__near_param_${paramName}`);
+        if (i < signature.parameterNames.length) {
+          this.sb.push(",")
+        }
+        i++;
+      }
+    }
+    this.sb.push(");");
+    
+    this.sb.push(`
+      let encoder = new BSONEncoder();`);
+
+    let returnType = signature.returnType.toString();
+    let setterType = this.typeMapping[returnType];
+    this.sb.push(`if (result != null) {
+        encoder.set${setterType}("result", result);
+      } else {
+        encoder.setNull("result");
+      }`);
+
+    this.sb.push(`
+      return encoder.serialize();
+    `);
+  
+    this.sb.push(`}`);
   }
 
-  visitClass(element: Class): void {
-    let className = element.simpleName;
-    let typeMapping : { [key: string] : string } = {
-      "i32" : "Integer",
-      "String" : "String",
-      "Uint8Array" : "Uint8Array",
-      "bool" : "Boolean"
-    };
-    console.log("visitClass: " + className);
-    this.sb.push(`export function __near_encode_${className}(
-        value: ${className}, encoder: BSONEncoder): void {`);
-    this.forEachField(element, (field) => {
-      let setterType = typeMapping[field.type.toString()];
-      this.sb.push(`if (value.${field.simpleName} != null) {
-        encoder.set${setterType}("${field.simpleName}", value.${field.simpleName});
-      } else {
-        encoder.setNull("${field.simpleName}");
-      }`);
-    });
-    this.sb.push("}\n"); // __near_encode
-
-    this.sb.push(`export class __near_BSONHandler_${className} {
-      value: ${className} = new ${className}();`);
-    for (let fieldType in typeMapping) {
-      let setterType = typeMapping[fieldType];
+  private generateBSONHandlerMethods(valuePrefix: string, fields: any[]) : void {
+    for (let fieldType in this.typeMapping) {
+      let setterType = this.typeMapping[fieldType];
       this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {`);
-      this.forEachField(element, (field) => {
+      fields.forEach((field) => {
         if (field.type.toString() == fieldType) {
-            this.sb.push(`if (name == "${field.simpleName}") { this.value.${field.simpleName} = value; return; }`);
+            this.sb.push(`if (name == "${field.simpleName}") { ${valuePrefix}${field.simpleName} = value; return; }`);
         }
       });
       this.sb.push("}");
     }
     this.sb.push("setNull(name: string): void {");
-    this.forEachField(element, (field) => {
+    fields.forEach((field) => {
       this.sb.push(`if (name == "${field.simpleName}") {
-        this.value.${field.simpleName} = <${field.type.toString()}>null;
+        ${valuePrefix}${field.simpleName} = <${field.type.toString()}>null;
         return;
       }`);
     });
-    this.sb.push("}"); // setNull
-    
+    this.sb.push("}\n"); // setNull
+
     // TODO: Suport nested objects/arrays
     this.sb.push(`
       pushObject(name: string): bool { return false; }
@@ -197,7 +236,29 @@ export class NEARBindingsBuilder extends ExportsWalker {
       pushArray(name: string): bool { return false; }
       popArray(): void {}
     `);
+  }
 
+  visitClass(element: Class): void {
+    let className = element.simpleName;
+    console.log("visitClass: " + className);
+    this.sb.push(`export function __near_encode_${className}(
+        value: ${className}): Uint8Array {
+      let encoder: BSONEncoder = new BSONEncoder();`);
+    this.getFields(element).forEach((field) => {
+      let setterType = this.typeMapping[field.type.toString()];
+      this.sb.push(`if (value.${field.simpleName} != null) {
+        encoder.set${setterType}("${field.simpleName}", value.${field.simpleName});
+      } else {
+        encoder.setNull("${field.simpleName}");
+      }`);
+    });
+    this.sb.push(`
+      return encoder.serialize();
+    }`); // __near_encode
+
+    this.sb.push(`export class __near_BSONHandler_${className} {
+      value: ${className} = new ${className}();`);
+    this.generateBSONHandlerMethods("this.value.", this.getFields(element));
     this.sb.push("}\n"); // class __near_BSONHandler_
 
     this.sb.push(`export function __near_decode_${className}(
@@ -209,16 +270,18 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }\n`);
   }
 
-  private forEachField(element: Class, fn: (field: Field) => void): void {
+  private getFields(element: Class): any[] {
     var members = element.members;
+    var results = [];
     if (members) {
       for (let member of members.values()) {
         if (!(member instanceof Field)) {
           continue;
         }
-        fn(member);
+        results.push(member);
       }
     }
+    return results;
   }
 
   visitInterface(element: Interface): void {
