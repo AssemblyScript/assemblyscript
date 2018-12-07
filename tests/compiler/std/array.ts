@@ -28,6 +28,17 @@ function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
 
 var arr = new Array<i32>();
 
+// Array.isArray ///////////////////////////////////////////////////////////////////////////////////
+
+class P {}
+var num = 1;
+var Null: i32[] | null = null;
+assert(Array.isArray(Null) == false);
+assert(Array.isArray(arr) == true);
+assert(Array.isArray(new P()) == false);
+// assert(Array.isArray(new Uint8Array(1)) == false); fail
+assert(Array.isArray(num) == false);
+
 // Array#fill //////////////////////////////////////////////////////////////////////////////////////
 
 var arr8: u8[] = [1, 2, 3, 4, 5];
@@ -44,6 +55,9 @@ assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 0, 0]));
 arr8.fill(2, -2);
 assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 2, 2]));
 
+arr8.fill(0, 1, 0);
+assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 2, 2]));
+
 var arr32: u32[] = [1, 2, 3, 4, 5];
 
 arr32.fill(1, 1, 3);
@@ -56,6 +70,9 @@ arr32.fill(1, 0, -3);
 assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 0, 0]));
 
 arr32.fill(2, -2);
+assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 2, 2]));
+
+arr32.fill(0, 1, 0);
 assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 2, 2]));
 
 // Array#push/pop //////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +112,77 @@ assert(internalCapacity<i32>(arr) == 3);
 assert(arr[0] == 43);
 assert(arr[1] == 44);
 assert(arr[2] == 45);
+
+// Array#concat ///////////////////////////////////////////////////////////////////////////////////
+
+var other = new Array<i32>();
+
+var out = arr.concat(other);
+assert(internalCapacity<i32>(arr) == 3);
+assert(arr.length == 3);
+assert(out.length == 3);
+
+out.concat([]);
+assert(internalCapacity<i32>(arr) == 3);
+
+assert(out[0] == 43);
+assert(out[1] == 44);
+assert(out[2] == 45);
+
+other.push(46);
+other.push(47);
+
+out = arr.concat(other);
+
+assert(internalCapacity<i32>(arr) == 3);
+assert(other.length == 2);
+assert(out.length == 5);
+assert(out[0] == 43);
+assert(out[1] == 44);
+assert(out[2] == 45);
+assert(out[3] == 46);
+assert(out[4] == 47);
+
+out.pop();
+assert(out.length == 4);
+
+out = arr.concat(null);
+assert(out.length == 3);
+assert(out[2] == 45);
+
+var source: i32[] = [];
+assert(source.length == 0);
+out = source.concat(arr);
+assert(out.length == 3);
+assert(source.length == 0);
+
+// Array#copyWithin ////////////////////////////////////////////////////////////////////////////////
+
+var cwArr: i32[];
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, 3), <i32[]>[4, 5, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 3), <i32[]>[1, 4, 5, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 2), <i32[]>[1, 3, 4, 5, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(2, 2), <i32[]>[1, 2, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, 3, 4), <i32[]>[4, 2, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 3, 4), <i32[]>[1, 4, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(1, 2, 4), <i32[]>[1, 3, 4, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, -2), <i32[]>[4, 5, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(0, -2, -1), <i32[]>[4, 2, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3, -2), <i32[]>[1, 3, 3, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3, -1), <i32[]>[1, 3, 4, 4, 5]));
+cwArr = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3), <i32[]>[1, 3, 4, 5, 5]));
 
 // Array#unshift ///////////////////////////////////////////////////////////////////////////////////
 
@@ -241,6 +329,60 @@ assert(arr.length == 4);
 assert(internalCapacity<i32>(arr) == 5);
 assert(arr[0] == 44);
 assert(arr[1] == 42);
+
+// Array#splice ////////////////////////////////////////////////////////////////////////////////////
+
+var sarr: i32[] = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(0), <i32[]>[1, 2, 3, 4, 5]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(2), <i32[]>[3, 4, 5]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(2, 2), <i32[]>[3, 4]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(0, 1), <i32[]>[1]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-1), <i32[]>[5]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-2), <i32[]>[4, 5]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-2, 1), <i32[]>[4]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-7, 1), <i32[]>[1]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-2, -1), <i32[]>[]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(1, -2), <i32[]>[]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(4, 0), <i32[]>[]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(7, 0), <i32[]>[]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(7, 5), <i32[]>[]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
 
 // Array#findIndex /////////////////////////////////////////////////////////////////////////////////
 

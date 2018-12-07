@@ -12,8 +12,11 @@ import {
   defaultComparator
 } from "./array";
 
+// The internal TypedArray class uses two type parameters for the same reason as `loadUnsafe` and
+// `storeUnsafe` in 'internal/arraybuffer.ts'. See the documentation there for details.
+
 /** Typed array base class. Not a global object. */
-export abstract class TypedArray<T,V> {
+export abstract class TypedArray<T,TNative> {
 
   readonly buffer: ArrayBuffer;
   readonly byteOffset: i32;
@@ -32,15 +35,13 @@ export abstract class TypedArray<T,V> {
 
   @inline
   get length(): i32 {
-    return (this.byteLength - this.byteOffset) >> alignof<T>();
+    return this.byteLength >>> alignof<T>();
   }
 
   @operator("[]")
   protected __get(index: i32): T {
-    var byteOffset = this.byteOffset;
-    var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();
-    if (<u32>index >= <u32>elementLength) throw new Error("Index out of bounds");
-    return loadUnsafeWithOffset<T,T>(this.buffer, index, byteOffset);
+    if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
+    return loadUnsafeWithOffset<T,T>(this.buffer, index, this.byteOffset);
   }
 
   @inline @operator("{}")
@@ -49,22 +50,42 @@ export abstract class TypedArray<T,V> {
   }
 
   @operator("[]=")
-  protected __set(index: i32, value: V): void {
-    var byteOffset = this.byteOffset;
-    var elementLength = (this.byteLength - byteOffset) >>> alignof<T>();
-    if (<u32>index >= <u32>elementLength) throw new Error("Index out of bounds");
-    storeUnsafeWithOffset<T,V>(this.buffer, index, value, byteOffset);
+  protected __set(index: i32, value: TNative): void {
+    if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
+    storeUnsafeWithOffset<T,TNative>(this.buffer, index, value, this.byteOffset);
   }
 
   @inline @operator("{}=")
-  protected __unchecked_set(index: i32, value: V): void {
-    storeUnsafeWithOffset<T,V>(this.buffer, index, value, this.byteOffset);
+  protected __unchecked_set(index: i32, value: TNative): void {
+    storeUnsafeWithOffset<T,TNative>(this.buffer, index, value, this.byteOffset);
   }
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
 
+  fill(value: TNative, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    var buffer = this.buffer;
+    var byteOffset = this.byteOffset;
+    var len = this.length;
+    start = start < 0 ? max(len + start, 0) : min(start, len);
+    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+    if (sizeof<T>() == 1) {
+      if (start < end) {
+        memory.fill(
+          changetype<usize>(buffer) + start + byteOffset + AB_HEADER_SIZE,
+          <u8>value,
+          <usize>(end - start)
+        );
+      }
+    } else {
+      for (; start < end; ++start) {
+        storeUnsafeWithOffset<T,TNative>(buffer, start, value, byteOffset);
+      }
+    }
+    return this;
+  }
+
   @inline
-  subarray(begin: i32 = 0, end: i32 = 0x7fffffff): TypedArray<T,V> {
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): TypedArray<T,TNative> {
     var length = this.length;
     if (begin < 0) begin = max(length + begin, 0);
     else begin = min(begin, length);
@@ -72,8 +93,8 @@ export abstract class TypedArray<T,V> {
     else end = max(min(end, length), begin);
     var slice = memory.allocate(offsetof<this>());
     store<usize>(slice, this.buffer, offsetof<this>("buffer"));
-    store<i32>(slice, begin << alignof<T>(), offsetof<this>("byteOffset"));
-    store<i32>(slice, end << alignof<T>(), offsetof<this>("byteLength"));
+    store<i32>(slice, this.byteOffset + (begin << alignof<T>()), offsetof<this>("byteOffset"));
+    store<i32>(slice, (end - begin) << alignof<T>(), offsetof<this>("byteLength"));
     return changetype<this>(slice);
   }
 
@@ -104,5 +125,32 @@ export abstract class TypedArray<T,V> {
       }
       return this;
     }
+  }
+
+  /**
+   * TypedArray reduce implementation. This is a method that will be called from the parent,
+   * passing types down from the child class using the typed parameters TypedArrayType and
+   * ReturnType respectively. This implementation requires an initial value, and the direction.
+   * When direction is true, reduce will reduce from the right side.
+   */
+  @inline
+  protected reduce_internal<TypedArrayType, ReturnType>(
+    callbackfn: (accumulator: ReturnType, value: T, index: i32, array: TypedArrayType) => ReturnType,
+    array: TypedArrayType,
+    initialValue: ReturnType,
+    direction: bool = false,
+    ): ReturnType {
+    var index: i32 = direction ? this.length - 1 : 0;
+    var length: i32 = direction ? -1 : this.length;
+    while (index != length) {
+      initialValue = callbackfn(
+        initialValue,
+        this.__unchecked_get(index),
+        index,
+        array,
+      );
+      index = direction ? index - 1 : index + 1;
+    }
+    return initialValue;
   }
 }

@@ -47,16 +47,16 @@ asc.main([
 ], {
   stdout: stdout,
   stderr: stderr,
-  readFile: (name) => {
-    console.log("readFile: " + name);
+  readFile: (name, baseDir) => {
+    console.log("readFile: " + name + ", baseDir=" + baseDir);
     if (files.hasOwnProperty(name)) return files[name];
     return null;
   },
-  writeFile: (name, data) => {
-    console.log("writeFile: " + name);
+  writeFile: (name, data, baseDir) => {
+    console.log("writeFile: " + name + ", baseDir=" + baseDir);
   },
-  listFiles: (dirname) => {
-    console.log("listFiles: " + dirname);
+  listFiles: (dirname, baseDir) => {
+    console.log("listFiles: " + dirname + ", baseDir=" + baseDir);
     return [];
   }
 }, err => {

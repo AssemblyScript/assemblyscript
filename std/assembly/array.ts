@@ -27,10 +27,18 @@ import {
   MAX_DOUBLE_LENGTH
 } from "./internal/number";
 
+import {
+  isArray as builtin_isArray
+} from "./builtins";
+
 export class Array<T> {
 
   /* @internal */ buffer_: ArrayBuffer;
   /* @internal */ length_: i32;
+
+  @inline static isArray<U>(value: U): bool {
+    return builtin_isArray(value) && value !== null;
+  }
 
   constructor(length: i32 = 0) {
     const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
@@ -116,14 +124,18 @@ export class Array<T> {
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
     var buffer = this.buffer_;
     var len    = this.length_;
+
     start = start < 0 ? max(len + start, 0) : min(start, len);
     end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+
     if (sizeof<T>() == 1) {
-      memory.fill(
-        changetype<usize>(buffer) + start + HEADER_SIZE,
-        <u8>value,
-        <usize>(end - start)
-      );
+      if (start < end) {
+        memory.fill(
+          changetype<usize>(buffer) + start + HEADER_SIZE,
+          <u8>value,
+          <usize>(end - start)
+        );
+      }
     } else {
       for (; start < end; ++start) {
         storeUnsafe<T,T>(buffer, start, value);
@@ -177,6 +189,56 @@ export class Array<T> {
     storeUnsafe<T,T>(buffer, length, element);
     if (isManaged<T>()) __gc_link(changetype<usize>(this), changetype<usize>(element)); // tslint:disable-line
     return newLength;
+  }
+
+  concat(items: Array<T>): Array<T> {
+    var thisLen = this.length_;
+    var otherLen = items === null ? 0 : items.length_;
+    var outLen = thisLen + otherLen;
+    var out = new Array<T>(outLen);
+
+    if (thisLen) {
+      memory.copy(
+        changetype<usize>(out.buffer_)  + HEADER_SIZE,
+        changetype<usize>(this.buffer_) + HEADER_SIZE,
+        <usize>thisLen << alignof<T>()
+      );
+    }
+    if (otherLen) {
+      memory.copy(
+        changetype<usize>(out.buffer_)   + HEADER_SIZE + (<usize>thisLen << alignof<T>()),
+        changetype<usize>(items.buffer_) + HEADER_SIZE,
+        <usize>otherLen << alignof<T>()
+      );
+    }
+    return out;
+  }
+
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
+    var buffer = this.buffer_;
+    var len = this.length_;
+
+        end   = min<i32>(end, len);
+    var to    = target < 0 ? max(len + target, 0) : min(target, len);
+    var from  = start < 0 ? max(len + start, 0) : min(start, len);
+    var last  = end < 0 ? max(len + end, 0) : min(end, len);
+    var count = min(last - from, len - to);
+
+    if (from < to && to < (from + count)) {
+      from += count - 1;
+      to   += count - 1;
+      while (count) {
+        storeUnsafe<T,T>(buffer, to, loadUnsafe<T,T>(buffer, from));
+        --from, --to, --count;
+      }
+    } else {
+      memory.copy(
+        changetype<usize>(buffer) + HEADER_SIZE + (<usize>to << alignof<T>()),
+        changetype<usize>(buffer) + HEADER_SIZE + (<usize>from << alignof<T>()),
+        <usize>count << alignof<T>()
+      );
+    }
+    return this;
   }
 
   pop(): T {
@@ -307,19 +369,28 @@ export class Array<T> {
     return sliced;
   }
 
-  splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): void {
-    if (deleteCount < 1) return;
-    var length = this.length_;
-    if (start < 0) start = max(length + start, 0);
-    if (start >= length) return;
-    deleteCount = min(deleteCount, length - start);
-    var buffer = this.buffer_;
+  splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): Array<T> {
+    var length  = this.length_;
+    start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
+    deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
+    var buffer  = this.buffer_;
+    var spliced = new Array<T>(deleteCount);
+    var source  = changetype<usize>(buffer) + HEADER_SIZE + (<usize>start << alignof<T>());
     memory.copy(
-      changetype<usize>(buffer) + HEADER_SIZE + (<usize>start << alignof<T>()),
-      changetype<usize>(buffer) + HEADER_SIZE + (<usize>(start + deleteCount) << alignof<T>()),
+      changetype<usize>(spliced.buffer_) + HEADER_SIZE,
+      source,
       <usize>deleteCount << alignof<T>()
     );
+    var offset = start + deleteCount;
+    if (length != offset) {
+      memory.copy(
+        source,
+        changetype<usize>(buffer) + HEADER_SIZE + (<usize>offset << alignof<T>()),
+        <usize>(length - offset) << alignof<T>()
+      );
+    }
     this.length_ = length - deleteCount;
+    return spliced;
   }
 
   reverse(): Array<T> {

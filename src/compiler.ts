@@ -397,9 +397,7 @@ export class Compiler extends DiagnosticEmitter {
       : 0;
     module.setMemory(
       numPages,
-      this.options.isWasm64
-        ? Module.MAX_MEMORY_WASM64
-        : Module.MAX_MEMORY_WASM32,
+      Module.UNLIMITED_MEMORY,
       this.memorySegments,
       options.target,
       "memory"
@@ -553,13 +551,15 @@ export class Compiler extends DiagnosticEmitter {
 
       // skip prototype and export instances
       case ElementKind.FUNCTION_PROTOTYPE: {
-        for (let instance of (<FunctionPrototype>element).instances.values()) {
-          let instanceName = name;
-          if (instance.is(CommonFlags.GENERIC)) {
-            let fullName = instance.internalName;
-            instanceName += fullName.substring(fullName.lastIndexOf("<"));
+        for (let instances of (<FunctionPrototype>element).instances.values()) {
+          for (let instance of instances.values()) {
+            let instanceName = name;
+            if (instance.is(CommonFlags.GENERIC)) {
+              let fullName = instance.internalName;
+              instanceName += fullName.substring(fullName.lastIndexOf("<"));
+            }
+            this.makeModuleExport(instanceName, instance, prefix);
           }
-          this.makeModuleExport(instanceName, instance, prefix);
         }
         break;
       }
@@ -698,7 +698,7 @@ export class Compiler extends DiagnosticEmitter {
     var declaration = global.declaration;
     var initExpr: ExpressionRef = 0;
 
-    if (global.type == Type.void) { // type is void if not yet resolved or not annotated
+    if (!global.is(CommonFlags.RESOLVED)) {
       if (declaration) {
 
         // resolve now if annotated
@@ -713,6 +713,7 @@ export class Compiler extends DiagnosticEmitter {
             return false;
           }
           global.type = resolvedType;
+          global.set(CommonFlags.RESOLVED);
 
         // infer from initializer if not annotated
         } else if (declaration.initializer) { // infer type using void/NONE for literal inference
@@ -729,6 +730,7 @@ export class Compiler extends DiagnosticEmitter {
             return false;
           }
           global.type = this.currentType;
+          global.set(CommonFlags.RESOLVED);
 
         // must either be annotated or have an initializer
         } else {
@@ -739,7 +741,7 @@ export class Compiler extends DiagnosticEmitter {
           return false;
         }
       } else {
-        assert(false); // must have a declaration if 'void' (and thus resolved later on)
+        assert(false); // must have a declaration if resolved lazily
       }
     }
 
@@ -2562,7 +2564,10 @@ export class Compiler extends DiagnosticEmitter {
 
         // f32 to int
         if (fromType.kind == TypeKind.F32) {
-          if (toType.is(TypeFlags.SIGNED)) {
+          if (toType == Type.bool) {
+            expr = module.createBinary(BinaryOp.NeF32, expr, module.createF32(0));
+            wrapMode = WrapMode.NONE;
+          } else if (toType.is(TypeFlags.SIGNED)) {
             if (toType.is(TypeFlags.LONG)) {
               expr = module.createUnary(UnaryOp.TruncF32ToI64, expr);
             } else {
@@ -2578,7 +2583,10 @@ export class Compiler extends DiagnosticEmitter {
 
         // f64 to int
         } else {
-          if (toType.is(TypeFlags.SIGNED)) {
+          if (toType == Type.bool) {
+            expr = module.createBinary(BinaryOp.NeF64, expr, module.createF64(0));
+            wrapMode = WrapMode.NONE;
+          } else if (toType.is(TypeFlags.SIGNED)) {
             if (toType.is(TypeFlags.LONG)) {
               expr = module.createUnary(UnaryOp.TruncF64ToI64, expr);
             } else {
@@ -2645,7 +2653,10 @@ export class Compiler extends DiagnosticEmitter {
       if (fromType.is(TypeFlags.LONG)) {
 
         // i64 to i32 or smaller
-        if (!toType.is(TypeFlags.LONG)) {
+        if (toType == Type.bool) {
+          expr = module.createBinary(BinaryOp.NeI64, expr, module.createI64(0));
+          wrapMode = WrapMode.NONE;
+        } else if (!toType.is(TypeFlags.LONG)) {
           expr = module.createUnary(UnaryOp.WrapI64, expr); // discards upper bits
         }
 
@@ -5403,11 +5414,27 @@ export class Compiler extends DiagnosticEmitter {
           (<Class>parent).type,
           "this"
         );
+        let parentBase = (<Class>parent).base;
+        if (parentBase) {
+          flow.addScopedLocalAlias(
+            getGetLocalIndex(thisArg),
+            parentBase.type,
+            "super"
+          );
+        }
       } else {
         let thisLocal = flow.addScopedLocal((<Class>parent).type, "this", false);
         body.push(
           module.createSetLocal(thisLocal.index, thisArg)
         );
+        let parentBase = (<Class>parent).base;
+        if (parentBase) {
+          flow.addScopedLocalAlias(
+            thisLocal.index,
+            parentBase.type,
+            "super"
+          );
+        }
       }
     }
     var parameterTypes = signature.parameterTypes;
@@ -5494,7 +5521,13 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.createUnreachable();
     }
-    return module.createBlock(returnLabel, body, returnType.toNativeType());
+    return flow.is(FlowFlags.RETURNS)
+      ? module.createBlock(returnLabel, body, returnType.toNativeType())
+      : body.length > 1
+        ? module.createBlock(null, body, returnType.toNativeType())
+        : body.length
+          ? body[0]
+          : module.createNop();
   }
 
   /** Gets the trampoline for the specified function. */
@@ -6638,9 +6671,10 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     if (!classInstance) return module.createUnreachable();
+    return this.compileInstantiate(classInstance, expression.arguments, expression);
+  }
 
-    var expr: ExpressionRef;
-
+  compileInstantiate(classInstance: Class, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
     // traverse to the top-most visible constructor
     var currentClassInstance: Class | null = classInstance;
     var constructorInstance: Function | null = null;
@@ -6650,14 +6684,21 @@ export class Compiler extends DiagnosticEmitter {
     } while (currentClassInstance = currentClassInstance.base);
 
     // if a constructor is present, call it with a zero `this`
+    var expr: ExpressionRef;
     if (constructorInstance) {
-      expr = this.compileCallDirect(constructorInstance, expression.arguments, expression,
-        options.usizeType.toNativeZero(module)
+      expr = this.compileCallDirect(constructorInstance, argumentExpressions, reportNode,
+        this.options.usizeType.toNativeZero(this.module)
       );
 
     // otherwise simply allocate a new instance and initialize its fields
     } else {
-      expr = this.makeAllocate(classInstance, expression);
+      if (argumentExpressions.length) {
+        this.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "0", argumentExpressions.length.toString(10)
+        );
+      }
+      expr = this.makeAllocate(classInstance, reportNode);
     }
 
     this.currentType = classInstance.type;
@@ -6882,26 +6923,26 @@ export class Compiler extends DiagnosticEmitter {
       ConversionKind.NONE,
       WrapMode.NONE
     );
+
     // shortcut if compiling the getter already failed
     if (getExpressionId(getValue) == ExpressionId.Unreachable) return getValue;
+
     var currentType = this.currentType;
 
-    var op: BinaryOp;
-    var nativeType: NativeType;
-    var nativeOne: ExpressionRef;
+    // if the value isn't dropped, a temp. local is required to remember the original value
+    var tempLocal: Local | null = null;
+    if (contextualType != Type.void) {
+      tempLocal = currentFunction.getTempLocal(currentType, false);
+      getValue = module.createTeeLocal(
+        tempLocal.index,
+        getValue
+      );
+    }
+
+    var calcValue: ExpressionRef;
 
     switch (expression.operator) {
       case Token.PLUS_PLUS: {
-
-        // TODO: check operator overload
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return this.module.createUnreachable();
-        }
-
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -6910,38 +6951,65 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.U32:
           case TypeKind.BOOL: {
-            op = BinaryOp.AddI32;
-            nativeType = NativeType.I32;
-            nativeOne = module.createI32(1);
+            calcValue = module.createBinary(
+              BinaryOp.AddI32,
+              getValue,
+              module.createI32(1)
+            );
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: {
+            // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.POSTFIX_INC);
+                if (overload) {
+                  calcValue = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
+                  break;
+                }
+              }
+              this.error(
+                DiagnosticCode.Operation_not_supported,
+                expression.range
+              );
+              return module.createUnreachable();
+            }
+          }
           case TypeKind.ISIZE: {
             let options = this.options;
-            op = options.isWasm64
-              ? BinaryOp.AddI64
-              : BinaryOp.AddI32;
-            nativeType = options.nativeSizeType;
-            nativeOne = currentType.toNativeOne(module);
+            calcValue = module.createBinary(
+              options.isWasm64
+                ? BinaryOp.AddI64
+                : BinaryOp.AddI32,
+              getValue,
+              currentType.toNativeOne(module)
+            );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            op = BinaryOp.AddI64;
-            nativeType = NativeType.I64;
-            nativeOne = module.createI64(1);
+            calcValue = module.createBinary(
+              BinaryOp.AddI64,
+              getValue,
+              module.createI64(1)
+            );
             break;
           }
           case TypeKind.F32: {
-            op = BinaryOp.AddF32;
-            nativeType = NativeType.F32;
-            nativeOne = module.createF32(1);
+            calcValue = module.createBinary(
+              BinaryOp.AddF32,
+              getValue,
+              module.createF32(1)
+            );
             break;
           }
           case TypeKind.F64: {
-            op = BinaryOp.AddF64;
-            nativeType = NativeType.F64;
-            nativeOne = module.createF64(1);
+            calcValue = module.createBinary(
+              BinaryOp.AddF64,
+              getValue,
+              module.createF64(1)
+            );
             break;
           }
           default: {
@@ -6952,16 +7020,6 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.MINUS_MINUS: {
-
-        // TODO: check operator overload
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
-          );
-          return this.module.createUnreachable();
-        }
-
         switch (currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -6970,38 +7028,65 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.U32:
           case TypeKind.BOOL: {
-            op = BinaryOp.SubI32;
-            nativeType = NativeType.I32;
-            nativeOne = module.createI32(1);
+            calcValue = module.createBinary(
+              BinaryOp.SubI32,
+              getValue,
+              module.createI32(1)
+            );
             break;
           }
-          case TypeKind.USIZE: // TODO: check operator overload
+          case TypeKind.USIZE: {
+            // check operator overload
+            if (this.currentType.is(TypeFlags.REFERENCE)) {
+              let classReference = this.currentType.classReference;
+              if (classReference) {
+                let overload = classReference.lookupOverload(OperatorKind.POSTFIX_DEC);
+                if (overload) {
+                  calcValue = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
+                  break;
+                }
+              }
+              this.error(
+                DiagnosticCode.Operation_not_supported,
+                expression.range
+              );
+              return module.createUnreachable();
+            }
+          }
           case TypeKind.ISIZE: {
             let options = this.options;
-            op = options.isWasm64
-              ? BinaryOp.SubI64
-              : BinaryOp.SubI32;
-            nativeType = options.nativeSizeType;
-            nativeOne = currentType.toNativeOne(module);
+            calcValue = module.createBinary(
+              options.isWasm64
+                ? BinaryOp.SubI64
+                : BinaryOp.SubI32,
+              getValue,
+              currentType.toNativeOne(module)
+            );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            op = BinaryOp.SubI64;
-            nativeType = NativeType.I64;
-            nativeOne = module.createI64(1);
+            calcValue = module.createBinary(
+              BinaryOp.SubI64,
+              getValue,
+              module.createI64(1)
+            );
             break;
           }
           case TypeKind.F32: {
-            op = BinaryOp.SubF32;
-            nativeType = NativeType.F32;
-            nativeOne = module.createF32(1);
+            calcValue = module.createBinary(
+              BinaryOp.SubF32,
+              getValue,
+              module.createF32(1)
+            );
             break;
           }
           case TypeKind.F64: {
-            op = BinaryOp.SubF64;
-            nativeType = NativeType.F64;
-            nativeOne = module.createF64(1);
+            calcValue = module.createBinary(
+              BinaryOp.SubF64,
+              getValue,
+              module.createF64(1)
+            );
             break;
           }
           default: {
@@ -7018,33 +7103,27 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // simplify if dropped anyway
-    if (contextualType == Type.void) {
+    if (!tempLocal) {
+      this.currentType = Type.void;
       return this.compileAssignmentWithValue(expression.operand,
-        module.createBinary(op,
-          getValue,
-          nativeOne
-        ),
+        calcValue,
         false
       );
     }
 
-    // otherwise use a temp local for the intermediate value (always possibly overflows)
-    var tempLocal = currentFunction.getTempLocal(currentType, false);
+    // otherwise use the temp. local for the intermediate value (always possibly overflows)
     var setValue = this.compileAssignmentWithValue(expression.operand,
-      module.createBinary(op,
-        this.module.createGetLocal(tempLocal.index, nativeType),
-        nativeOne
-      ),
+      calcValue, // also tees getValue to tempLocal
       false
     );
-    this.currentType = assert(tempLocal).type;
-    currentFunction.freeTempLocal(<Local>tempLocal);
 
-    var localIndex = (<Local>tempLocal).index;
+    this.currentType = tempLocal.type;
+    currentFunction.freeTempLocal(tempLocal);
+    var nativeType = tempLocal.type.toNativeType();
+
     return module.createBlock(null, [
-      module.createSetLocal(localIndex, getValue),
       setValue,
-      module.createGetLocal(localIndex, nativeType)
+      module.createGetLocal(tempLocal.index, nativeType)
     ], nativeType); // result of 'x++' / 'x--' might overflow
   }
 
@@ -7474,9 +7553,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.BOOL: {
         if (flow.canOverflow(expr, type)) {
-          expr = module.createBinary(BinaryOp.AndI32,
+          // bool is special in that it compares to 0 instead of masking with 0x1
+          expr = module.createBinary(BinaryOp.NeI32,
             expr,
-            module.createI32(0x1)
+            module.createI32(0)
           );
         }
         break;

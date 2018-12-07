@@ -60,3 +60,7 @@ export const varadd_ptr = varadd;
 export function calladd(fn: (a: i32, b: i32) => i32, a: i32, b: i32): i32 {
   return fn(a, b);
 }
+
+export function dotrace(num: f64): void {
+  trace("The answer is", 1, num);
+}

@@ -105,8 +105,10 @@ abstract class ExportsWalker {
   }
 
   private visitFunctionInstances(element: FunctionPrototype): void {
-    for (let instance of element.instances.values()) {
-      if (instance.is(CommonFlags.COMPILED)) this.visitFunction(<Function>instance);
+    for (let instances of element.instances.values()) {
+      for (let instance of instances.values()) {
+        if (instance.is(CommonFlags.COMPILED)) this.visitFunction(<Function>instance);
+      }
     }
   }
 
@@ -516,8 +518,10 @@ function hasCompiledMember(element: Element): bool {
     for (let member of members.values()) {
       switch (member.kind) {
         case ElementKind.FUNCTION_PROTOTYPE: {
-          for (let instance of (<FunctionPrototype>member).instances.values()) {
-            if (instance.is(CommonFlags.COMPILED)) return true;
+          for (let instances of (<FunctionPrototype>member).instances.values()) {
+            for (let instance of instances.values()) {
+              if (instance.is(CommonFlags.COMPILED)) return true;
+            }
           }
           break;
         }

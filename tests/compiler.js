@@ -15,6 +15,12 @@ const config = {
     ],
     "type": "b"
   },
+  "createBinary": {
+    "description": [
+      "Also creates the respective .wasm binaries."
+    ],
+    "type": "b"
+  },
   "help": {
     "description": "Prints this message and exits.",
     "type": "b",
@@ -81,13 +87,17 @@ tests.forEach(filename => {
   // TODO: also save stdout/stderr and diff it (-> expected failures)
 
   // Build unoptimized
-  asc.main([
+  var cmd = [
     filename,
     "--baseDir", basedir,
     "--validate",
     "--measure",
+    "--debug",
     "--textFile" // -> stdout
-  ], {
+  ];
+  if (args.createBinary)
+    cmd.push("--binaryFile", basename + ".untouched.wasm");
+  asc.main(cmd, {
     stdout: stdout,
     stderr: stderr
   }, err => {
@@ -136,13 +146,12 @@ tests.forEach(filename => {
       filename,
       "--baseDir", basedir,
       "--validate",
-      "-O3",
       "--measure",
-      "--binaryFile" // -> stdout
+      "--binaryFile", // -> stdout
+      "-O3"
     ];
-    if (args.create) cmd.push(
-      "--textFile", basename + ".optimized.wat"
-    );
+    if (args.create)
+      cmd.push("--textFile", basename + ".optimized.wat");
     asc.main(cmd, {
       stdout: stdout,
       stderr: stderr
@@ -175,15 +184,18 @@ tests.forEach(filename => {
           return parts.join("") + String.fromCharCode.apply(String, U16.subarray(dataOffset, dataOffset + dataRemain));
         }
 
+        var binaryBuffer = stdout.toBuffer();
+        if (args.createBinary)
+          fs.writeFileSync(path.join(basedir, basename + ".optimized.wasm"), binaryBuffer);
         let runTime = asc.measure(() => {
-          exports = new WebAssembly.Instance(new WebAssembly.Module(stdout.toBuffer()), {
+          exports = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), {
             env: {
               memory,
               abort: function(msg, file, line, column) {
                 console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
               },
               trace: function(msg, n) {
-                console.log("  " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
+                console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
               },
               externalFunction: function() { },
               externalConstant: 1
@@ -191,7 +203,8 @@ tests.forEach(filename => {
             math: {
               mod: function(a, b) { return a % b; }
             },
-            Math: Math,
+            Math,
+            Date,
 
             // tests/declare
             declare: {

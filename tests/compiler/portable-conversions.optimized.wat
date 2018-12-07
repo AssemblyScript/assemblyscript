@@ -1,126 +1,620 @@
 (module
+ (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $v (func))
- (memory $0 0)
- (table 1 anyfunc)
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 8) "\17\00\00\00p\00o\00r\00t\00a\00b\00l\00e\00-\00c\00o\00n\00v\00e\00r\00s\00i\00o\00n\00s\00.\00t\00s")
+ (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
- (global $portable-conversions/f (mut f32) (f32.const 0))
- (global $portable-conversions/F (mut f64) (f64.const 0))
+ (global $portable-conversions/i (mut i32) (i32.const 1))
+ (global $portable-conversions/I (mut i64) (i64.const 1))
+ (global $portable-conversions/f (mut f32) (f32.const 1))
+ (global $portable-conversions/F (mut f64) (f64.const 1))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 0 ;) (; has Stack IR ;) (type $v)
-  (drop
-   (i32.trunc_s/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i32.trunc_s/f64
-    (get_global $portable-conversions/F)
-   )
-  )
-  (drop
-   (i32.trunc_s/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i32.trunc_s/f64
-    (get_global $portable-conversions/F)
-   )
-  )
-  (drop
-   (i32.trunc_s/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i32.trunc_s/f64
-    (get_global $portable-conversions/F)
-   )
-  )
-  (drop
-   (i64.trunc_s/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i64.trunc_s/f64
-    (get_global $portable-conversions/F)
-   )
-  )
-  (drop
-   (i32.trunc_s/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i32.trunc_s/f64
-    (get_global $portable-conversions/F)
-   )
-  )
-  (drop
-   (i32.trunc_u/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i32.trunc_u/f64
-    (get_global $portable-conversions/F)
-   )
-  )
-  (drop
-   (i32.trunc_u/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i32.trunc_u/f64
-    (get_global $portable-conversions/F)
-   )
-  )
-  (drop
-   (i32.trunc_u/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i32.trunc_u/f64
-    (get_global $portable-conversions/F)
-   )
-  )
-  (drop
-   (i64.trunc_u/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i64.trunc_u/f64
-    (get_global $portable-conversions/F)
-   )
-  )
-  (drop
-   (i32.trunc_u/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i32.trunc_u/f64
-    (get_global $portable-conversions/F)
-   )
-  )
-  (drop
-   (i32.trunc_u/f32
-    (get_global $portable-conversions/f)
-   )
-  )
-  (drop
-   (i32.trunc_u/f64
-    (get_global $portable-conversions/F)
-   )
-  )
+ (func $start (; 1 ;) (type $v)
+  get_global $portable-conversions/i
+  i32.const 255
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 6
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i32.wrap/i64
+  i32.const 255
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 7
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  i32.trunc_s/f32
+  i32.const 255
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 8
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  i32.trunc_s/f64
+  i32.const 255
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 9
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  i32.const 65535
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 11
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i32.wrap/i64
+  i32.const 65535
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 12
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  i32.trunc_s/f32
+  i32.const 65535
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 13
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  i32.trunc_s/f64
+  i32.const 65535
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 14
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 16
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i32.wrap/i64
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 17
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  i32.trunc_s/f32
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 18
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  i32.trunc_s/f64
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 19
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  i64.extend_s/i32
+  i64.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 21
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i64.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 22
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  i64.trunc_s/f32
+  i64.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 23
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  i64.trunc_s/f64
+  i64.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 24
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 26
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i32.wrap/i64
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 27
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  i32.trunc_s/f32
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 28
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  i32.trunc_s/f64
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 29
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  i32.const 255
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 31
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i32.wrap/i64
+  i32.const 255
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 32
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  i32.trunc_u/f32
+  i32.const 255
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 33
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  i32.trunc_u/f64
+  i32.const 255
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 34
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  i32.const 65535
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 36
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i32.wrap/i64
+  i32.const 65535
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 37
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  i32.trunc_u/f32
+  i32.const 65535
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 38
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  i32.trunc_u/f64
+  i32.const 65535
+  i32.and
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 39
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 41
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i32.wrap/i64
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 42
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  i32.trunc_u/f32
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 43
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  i32.trunc_u/f64
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 44
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  i64.extend_s/i32
+  i64.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 46
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i64.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 47
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  i64.trunc_u/f32
+  i64.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 48
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  i64.trunc_u/f64
+  i64.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 49
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 51
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i32.wrap/i64
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 52
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  i32.trunc_u/f32
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 53
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  i32.trunc_u/f64
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 54
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 56
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  i64.const 0
+  i64.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 57
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  f32.const 0
+  f32.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 58
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  f64.const 0
+  f64.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 59
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  f32.convert_s/i32
+  f32.const 0
+  f32.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 61
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  f32.convert_s/i64
+  f32.const 0
+  f32.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 62
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  f32.const 0
+  f32.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 63
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  f32.demote/f64
+  f32.const 0
+  f32.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 64
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/i
+  f64.convert_s/i32
+  f64.const 0
+  f64.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 66
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/I
+  f64.convert_s/i64
+  f64.const 0
+  f64.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 67
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/f
+  f64.promote/f32
+  f64.const 0
+  f64.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 68
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $portable-conversions/F
+  f64.const 0
+  f64.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 69
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $null (; 1 ;) (; has Stack IR ;) (type $v)
-  (nop)
+ (func $null (; 2 ;) (type $v)
+  nop
  )
 )

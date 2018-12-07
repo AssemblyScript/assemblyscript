@@ -55,11 +55,11 @@ interface CompilerOptions {
   /** Standard error stream to use. */
   stderr?: OutputStream;
   /** Reads a file from disk (or memory). */
-  readFile?: (name: string) => string | null;
+  readFile?: (filename: string, baseDir: string) => string | null;
   /** Writes a file to disk (or memory). */
-  writeFile?: (name: string, contents: Uint8Array) => void;
+  writeFile?: (filename: string, contents: Uint8Array, baseDir: string) => void;
   /** Lists all files within a directory. */
-  listFiles?: (dir: string) => string[] | null;
+  listFiles?: (dirname: string, baseDir: string) => string[] | null;
 }
 
 /** Convenience function that parses and compiles source strings directly. */

@@ -4,8 +4,9 @@
 
 declare namespace binaryen {
   class Module {
-    constructor(ref: number);
-    emitText(): string;
+    constructor();
+    emitStackIR(optimize?: boolean): string;
     emitAsmjs(): string;
   }
+  function wrapModule(ptr: number): Module;
 }

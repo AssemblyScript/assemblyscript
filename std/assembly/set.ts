@@ -153,6 +153,10 @@ export class Set<K> {
     this.entriesOffset = this.entriesCount;
   }
 
+  toString(): string {
+    return "[object Set]";
+  }
+
   private __gc(): void {
     __gc_mark(changetype<usize>(this.buckets)); // tslint:disable-line
     var entries = this.entries;

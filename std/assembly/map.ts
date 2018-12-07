@@ -165,6 +165,10 @@ export class Map<K,V> {
     this.entriesOffset = this.entriesCount;
   }
 
+  toString(): string {
+    return "[object Map]";
+  }
+
   private __gc(): void {
     __gc_mark(changetype<usize>(this.buckets)); // tslint:disable-line
     var entries = this.entries;
