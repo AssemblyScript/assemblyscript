@@ -43,6 +43,7 @@
  (start $start)
  (func $~lib/array/Array<i32>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   get_local $0
   i32.load
   set_local $2
@@ -53,10 +54,14 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
+   i32.const 0
+   set_local $3
    get_local $2
    get_local $1
    i32.const 2
    i32.shl
+   i32.add
+   get_local $3
    i32.add
    i32.load offset=8
   else   
@@ -1978,6 +1983,7 @@
  (func $~lib/array/Array<i32>#__set (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   get_local $0
   i32.load
   set_local $3
@@ -1996,7 +2002,7 @@
    if
     i32.const 0
     i32.const 184
-    i32.const 109
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -2018,16 +2024,21 @@
    i32.add
    i32.store offset=4
   end
+  i32.const 0
+  set_local $5
   get_local $3
   get_local $1
   i32.const 2
   i32.shl
+  i32.add
+  get_local $5
   i32.add
   get_local $2
   i32.store offset=8
  )
  (func $~lib/array/Array<i64>#__get (; 10 ;) (type $iiI) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
+  (local $3 i32)
   get_local $0
   i32.load
   set_local $2
@@ -2038,10 +2049,14 @@
   i32.shr_u
   i32.lt_u
   if (result i64)
+   i32.const 0
+   set_local $3
    get_local $2
    get_local $1
    i32.const 3
    i32.shl
+   i32.add
+   get_local $3
    i32.add
    i64.load offset=8
   else   
@@ -2051,6 +2066,7 @@
  (func $~lib/array/Array<i64>#__set (; 11 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   get_local $0
   i32.load
   set_local $3
@@ -2069,7 +2085,7 @@
    if
     i32.const 0
     i32.const 184
-    i32.const 109
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -2091,16 +2107,21 @@
    i32.add
    i32.store offset=4
   end
+  i32.const 0
+  set_local $5
   get_local $3
   get_local $1
   i32.const 3
   i32.shl
+  i32.add
+  get_local $5
   i32.add
   get_local $2
   i64.store offset=8
  )
  (func $~lib/array/Array<f32>#__get (; 12 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (local $2 i32)
+  (local $3 i32)
   get_local $0
   i32.load
   set_local $2
@@ -2111,10 +2132,14 @@
   i32.shr_u
   i32.lt_u
   if (result f32)
+   i32.const 0
+   set_local $3
    get_local $2
    get_local $1
    i32.const 2
    i32.shl
+   i32.add
+   get_local $3
    i32.add
    f32.load offset=8
   else   
@@ -2124,6 +2149,7 @@
  (func $~lib/array/Array<f32>#__set (; 13 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   get_local $0
   i32.load
   set_local $3
@@ -2142,7 +2168,7 @@
    if
     i32.const 0
     i32.const 184
-    i32.const 109
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -2164,16 +2190,21 @@
    i32.add
    i32.store offset=4
   end
+  i32.const 0
+  set_local $5
   get_local $3
   get_local $1
   i32.const 2
   i32.shl
+  i32.add
+  get_local $5
   i32.add
   get_local $2
   f32.store offset=8
  )
  (func $~lib/array/Array<f64>#__get (; 14 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
+  (local $3 i32)
   get_local $0
   i32.load
   set_local $2
@@ -2184,10 +2215,14 @@
   i32.shr_u
   i32.lt_u
   if (result f64)
+   i32.const 0
+   set_local $3
    get_local $2
    get_local $1
    i32.const 3
    i32.shl
+   i32.add
+   get_local $3
    i32.add
    f64.load offset=8
   else   
@@ -2197,6 +2232,7 @@
  (func $~lib/array/Array<f64>#__set (; 15 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   get_local $0
   i32.load
   set_local $3
@@ -2215,7 +2251,7 @@
    if
     i32.const 0
     i32.const 184
-    i32.const 109
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -2237,10 +2273,14 @@
    i32.add
    i32.store offset=4
   end
+  i32.const 0
+  set_local $5
   get_local $3
   get_local $1
   i32.const 3
   i32.shl
+  i32.add
+  get_local $5
   i32.add
   get_local $2
   f64.store offset=8

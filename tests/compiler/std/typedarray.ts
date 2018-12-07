@@ -10,7 +10,6 @@ assert(Uint64Array.BYTES_PER_ELEMENT == 8);
 assert(Float32Array.BYTES_PER_ELEMENT == 4);
 assert(Float64Array.BYTES_PER_ELEMENT == 8);
 
-
 function isInt8ArrayEqual(a: Int8Array, b: Array<i8>): bool {
   if (a.length != b.length) return false;
   for (let i = 0, len = a.length; i < len; i++) {

@@ -121,6 +121,7 @@ export enum DiagnosticCode {
   Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration = 2673,
   Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration = 2674,
   Namespace_0_has_no_exported_member_1 = 2694,
+  Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
   File_0_not_found = 6054,
   Numeric_separators_are_not_allowed_here = 6188,
   Multiple_consecutive_numeric_separators_are_not_permitted = 6189
@@ -243,6 +244,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2673: return "Constructor of class '{0}' is private and only accessible within the class declaration.";
     case 2674: return "Constructor of class '{0}' is protected and only accessible within the class declaration.";
     case 2694: return "Namespace '{0}' has no exported member '{1}'.";
+    case 2706: return "Required type parameters may not follow optional type parameters.";
     case 6054: return "File '{0}' not found.";
     case 6188: return "Numeric separators are not allowed here.";
     case 6189: return "Multiple consecutive numeric separators are not permitted.";

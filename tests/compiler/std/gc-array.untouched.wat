@@ -2412,6 +2412,7 @@
  (func $~lib/array/Array<Foo>#__set (; 28 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   get_local $0
   i32.load
   set_local $3
@@ -2430,7 +2431,7 @@
    if
     i32.const 0
     i32.const 72
-    i32.const 109
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -2452,10 +2453,14 @@
    i32.add
    i32.store offset=4
   end
+  i32.const 0
+  set_local $5
   get_local $3
   get_local $1
   i32.const 2
   i32.shl
+  i32.add
+  get_local $5
   i32.add
   get_local $2
   i32.store offset=8
