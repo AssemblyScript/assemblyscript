@@ -1900,7 +1900,7 @@
    if
     i32.const 0
     i32.const 72
-    i32.const 109
+    i32.const 110
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -1920,10 +1920,10 @@
    get_local $4
    i32.store offset=4
   end
+  get_local $3
   get_local $1
   i32.const 2
   i32.shl
-  get_local $3
   i32.add
   get_local $2
   i32.store offset=8
