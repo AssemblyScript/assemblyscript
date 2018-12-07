@@ -83,7 +83,8 @@ import {
 
   mangleInternalPath,
   nodeIsCallable,
-  nodeIsGenericCallable
+  nodeIsGenericCallable,
+  IndexDeclaration
 } from "./ast";
 
 /** Parser interface. */
@@ -1626,16 +1627,18 @@ export class Parser extends DiagnosticEmitter {
     var isInterface = parent.kind == NodeKind.INTERFACEDECLARATION;
 
     var decorators = new Array<DecoratorNode>();
-    while (tn.skip(Token.AT)) {
-      let decorator = this.parseDecorator(tn);
-      if (!decorator) break;
+    if (tn.skip(Token.AT)) {
+      do {
+        let decorator = this.parseDecorator(tn);
+        if (!decorator) break;
+        decorators.push(<DecoratorNode>decorator);
+      } while (tn.skip(Token.AT));
       if (isInterface) {
         this.error(
           DiagnosticCode.Decorators_are_not_valid_here,
-          decorator.range
+          Range.join(decorators[0].range, decorators[decorators.length - 1].range)
         );
       }
-      decorators.push(<DecoratorNode>decorator);
     }
 
     // inherit ambient status
@@ -1778,67 +1781,14 @@ export class Parser extends DiagnosticEmitter {
     if (isConstructor) {
       name = Node.createConstructorExpression(tn.range());
     } else {
-      // TODO: handle symbols, i.e. '[' 'Symbol' '.' Identifier ']'
-      if (tn.skip(Token.OPENBRACKET)) {
-        // TODO: reject decorators and keywords
-        let indexStart = tn.tokenPos;
-        if (tn.skipIdentifier()) {
-          let id = tn.readIdentifier();
-          if (id == "key") {
-            if (tn.skip(Token.COLON)) {
-              let keyType = this.parseType(tn);
-              if (!keyType) return null;
-              if (keyType.kind != NodeKind.TYPE) {
-                this.error(
-                  DiagnosticCode.Type_expected,
-                  tn.range()
-                );
-                return null;
-              }
-              if (tn.skip(Token.CLOSEBRACKET)) {
-                if (tn.skip(Token.COLON)) {
-                  let valueType = this.parseType(tn);
-                  if (!valueType) return null;
-                  let ret = Node.createIndexDeclaration(<TypeNode>keyType, valueType, tn.range(indexStart, tn.pos));
-                  tn.skip(Token.SEMICOLON);
-                  return ret;
-                } else {
-                  this.error(
-                    DiagnosticCode._0_expected,
-                    tn.range(), ":"
-                  );
-                  return null;
-                }
-              } else {
-                this.error(
-                  DiagnosticCode._0_expected,
-                  tn.range(), "]"
-                );
-                return null;
-              }
-            } else {
-              this.error(
-                DiagnosticCode._0_expected,
-                tn.range(), ":"
-              );
-              return null;
-            }
-          } else {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), "key"
-            );
-            return null;
-          }
-        } else {
-          this.error(
-            DiagnosticCode.Identifier_expected,
-            tn.range()
-          );
-          return null;
-        }
+      if (!(isGetter || isSetter) && tn.skip(Token.OPENBRACKET)) {
+        // TODO: error on invalid flags
+        // TODO: also handle symbols
+        let retIndex = this.parseIndexDeclaration(tn, decorators);
+        if (!retIndex) return null;
+        tn.skip(Token.SEMICOLON);
+        return retIndex;
       }
-
       if (!tn.skipIdentifier()) {
         this.error(
           DiagnosticCode.Identifier_expected,
@@ -2062,6 +2012,69 @@ export class Parser extends DiagnosticEmitter {
       );
       tn.skip(Token.SEMICOLON);
       return retField;
+    }
+    return null;
+  }
+
+  parseIndexDeclaration(tn: Tokenizer, decorators: DecoratorNode[]): IndexDeclaration | null {
+
+    // at: '[': 'key' ':' Type ']' ':' Type
+
+    if (decorators.length) {
+      this.error(
+        DiagnosticCode.Decorators_are_not_valid_here,
+        Range.join(decorators[0].range, decorators[decorators.length - 1].range)
+      ); // recoverable
+    }
+
+    var start = tn.tokenPos;
+    if (tn.skipIdentifier()) {
+      let id = tn.readIdentifier();
+      if (id == "key") {
+        if (tn.skip(Token.COLON)) {
+          let keyType = this.parseType(tn);
+          if (!keyType) return null;
+          if (keyType.kind != NodeKind.TYPE) {
+            this.error(
+              DiagnosticCode.Type_expected,
+              tn.range()
+            );
+            return null;
+          }
+          if (tn.skip(Token.CLOSEBRACKET)) {
+            if (tn.skip(Token.COLON)) {
+              let valueType = this.parseType(tn);
+              if (!valueType) return null;
+              return Node.createIndexDeclaration(<TypeNode>keyType, valueType, tn.range(start, tn.pos));
+            } else {
+              this.error(
+                DiagnosticCode._0_expected,
+                tn.range(), ":"
+              );
+            }
+          } else {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), "]"
+            );
+          }
+        } else {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), ":"
+          );
+        }
+      } else {
+        this.error(
+          DiagnosticCode._0_expected,
+          tn.range(), "key"
+        );
+      }
+    } else {
+      this.error(
+        DiagnosticCode.Identifier_expected,
+        tn.range()
+      );
     }
     return null;
   }
