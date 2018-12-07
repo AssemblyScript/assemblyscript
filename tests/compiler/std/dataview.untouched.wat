@@ -504,11 +504,11 @@
   i32.load offset=4
   set_local $4
   get_local $3
-  get_local $4
-  i32.add
   get_local $1
   i32.const 0
   i32.shl
+  i32.add
+  get_local $4
   i32.add
   get_local $2
   i32.store8 offset=8

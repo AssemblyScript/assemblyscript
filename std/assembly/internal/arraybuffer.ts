@@ -74,27 +74,10 @@ export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): Array
 // without having to emit an additional instruction for conversion purposes. The second parameter
 // can be omitted for references and other loads and stores that simply return the exact type.
 
-@inline export function LOAD<T,TOut = T>(buffer: ArrayBuffer, index: i32): TOut {
-  return <TOut>load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), HEADER_SIZE);
+@inline export function LOAD<T,TOut = T>(buffer: ArrayBuffer, index: i32, byteOffset: i32 = 0): TOut {
+  return <TOut>load<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()) + <usize>byteOffset, HEADER_SIZE);
 }
 
-@inline export function STORE<T,TIn = T>(buffer: ArrayBuffer, index: i32, value: TIn): void {
-  store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()), value, HEADER_SIZE);
-}
-
-@inline export function LOAD_OFFSET<T,TOut = T>(
-  buffer: ArrayBuffer,
-  index: i32,
-  byteOffset: i32
-): TOut {
-  return <TOut>load<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), HEADER_SIZE);
-}
-
-@inline export function STORE_OFFSET<T,TIn = T>(
-  buffer: ArrayBuffer,
-  index: i32,
-  value: TIn,
-  byteOffset: i32
-): void {
-  store<T>(changetype<usize>(buffer) + <usize>byteOffset + (<usize>index << alignof<T>()), value, HEADER_SIZE);
+@inline export function STORE<T,TIn = T>(buffer: ArrayBuffer, index: i32, value: TIn, byteOffset: i32 = 0): void {
+  store<T>(changetype<usize>(buffer) + (<usize>index << alignof<T>()) + <usize>byteOffset, value, HEADER_SIZE);
 }

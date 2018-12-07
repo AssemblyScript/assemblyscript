@@ -1920,10 +1920,10 @@
    get_local $4
    i32.store offset=4
   end
+  get_local $3
   get_local $1
   i32.const 2
   i32.shl
-  get_local $3
   i32.add
   get_local $2
   i32.store offset=8

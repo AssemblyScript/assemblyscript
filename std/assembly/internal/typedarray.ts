@@ -2,8 +2,8 @@ import {
   HEADER_SIZE as AB_HEADER_SIZE,
   MAX_BLENGTH as AB_MAX_BLENGTH,
   allocateUnsafe,
-  LOAD_OFFSET,
-  STORE_OFFSET
+  LOAD,
+  STORE
 } from "./arraybuffer";
 
 import {
@@ -38,23 +38,23 @@ export abstract class TypedArray<T> {
   @operator("[]")
   protected __get(index: i32): T {
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    return LOAD_OFFSET<T>(this.buffer, index, this.byteOffset);
+    return LOAD<T>(this.buffer, index, this.byteOffset);
   }
 
   @inline @operator("{}")
   protected __unchecked_get(index: i32): T {
-    return LOAD_OFFSET<T>(this.buffer, index, this.byteOffset);
+    return LOAD<T>(this.buffer, index, this.byteOffset);
   }
 
   @operator("[]=")
   protected __set(index: i32, value: NATIVE<T>): void {
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    STORE_OFFSET<T,NATIVE<T>>(this.buffer, index, value, this.byteOffset);
+    STORE<T,NATIVE<T>>(this.buffer, index, value, this.byteOffset);
   }
 
   @inline @operator("{}=")
   protected __unchecked_set(index: i32, value: NATIVE<T>): void {
-    STORE_OFFSET<T,NATIVE<T>>(this.buffer, index, value, this.byteOffset);
+    STORE<T,NATIVE<T>>(this.buffer, index, value, this.byteOffset);
   }
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
@@ -82,7 +82,7 @@ export function FILL<TArray extends TypedArray<T>, T>(
     }
   } else {
     for (; start < end; ++start) {
-      STORE_OFFSET<T,NATIVE<T>>(buffer, start, value, byteOffset);
+      STORE<T,NATIVE<T>>(buffer, start, value, byteOffset);
     }
   }
   return array;
@@ -98,11 +98,11 @@ export function SORT<TArray extends TypedArray<T>, T>(
   if (length <= 1) return array;
   var buffer = array.buffer;
   if (length == 2) {
-    let a = LOAD_OFFSET<T>(buffer, 1, byteOffset);
-    let b = LOAD_OFFSET<T>(buffer, 0, byteOffset);
+    let a = LOAD<T>(buffer, 1, byteOffset);
+    let b = LOAD<T>(buffer, 0, byteOffset);
     if (comparator(a, b) < 0) {
-      STORE_OFFSET<T>(buffer, 1, b, byteOffset);
-      STORE_OFFSET<T>(buffer, 0, a, byteOffset);
+      STORE<T>(buffer, 1, b, byteOffset);
+      STORE<T>(buffer, 0, a, byteOffset);
     }
     return array;
   }
