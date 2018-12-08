@@ -174,7 +174,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.generateBSONHandlerMethods("this.__near_param_", fields);
     this.sb.push(`}`); // __near_ArgsParser
 
-    this.sb.push(`function __near_func_${element.simpleName}(bson: Uint8Array): Uint8Array {
+    this.sb.push(`export function __near_func_${element.simpleName}(bson: Uint8Array): Uint8Array {
       let handler = new __near_ArgsParser_${element.simpleName}();
       let decoder = new BSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
       decoder.deserialize(bson);
