@@ -40,11 +40,6 @@ export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): Array
     assert(newByteLength <= MAX_BLENGTH);
     if (newByteLength <= <i32>(computeSize(oldByteLength) - HEADER_SIZE)) { // fast path: zero out additional space
       store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
-      memory.fill(
-        changetype<usize>(buffer) + HEADER_SIZE + <usize>oldByteLength,
-        0,
-        <usize>(newByteLength - oldByteLength)
-      );
     } else { // slow path: copy to new buffer
       let newBuffer = allocateUnsafe(newByteLength);
       memory.copy(
@@ -52,13 +47,16 @@ export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): Array
         changetype<usize>(buffer) + HEADER_SIZE,
         <usize>oldByteLength
       );
-      memory.fill(
-        changetype<usize>(newBuffer) + HEADER_SIZE + <usize>oldByteLength,
-        0,
-        <usize>(newByteLength - oldByteLength)
-      );
-      return newBuffer;
+      if (!isManaged<ArrayBuffer>()) {
+        memory.free(changetype<usize>(buffer));
+      }
+      buffer = newBuffer;
     }
+    memory.fill(
+      changetype<usize>(buffer) + HEADER_SIZE + <usize>oldByteLength,
+      0,
+      <usize>(newByteLength - oldByteLength)
+    );
   } else if (newByteLength < oldByteLength) { // fast path: override size
     // TBD: worth to copy and release if size is significantly less than before?
     assert(newByteLength >= 0);

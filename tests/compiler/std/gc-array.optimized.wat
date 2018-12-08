@@ -410,226 +410,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/internal/memory/memset (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  get_local $1
-  i32.eqz
-  if
-   return
-  end
-  get_local $0
-  i32.const 0
-  i32.store8
-  get_local $0
-  get_local $1
-  i32.add
-  i32.const 1
-  i32.sub
-  i32.const 0
-  i32.store8
-  get_local $1
-  i32.const 2
-  i32.le_u
-  if
-   return
-  end
-  get_local $0
-  i32.const 1
-  i32.add
-  i32.const 0
-  i32.store8
-  get_local $0
-  i32.const 2
-  i32.add
-  i32.const 0
-  i32.store8
-  get_local $0
-  get_local $1
-  i32.add
-  tee_local $2
-  i32.const 2
-  i32.sub
-  i32.const 0
-  i32.store8
-  get_local $2
-  i32.const 3
-  i32.sub
-  i32.const 0
-  i32.store8
-  get_local $1
-  i32.const 6
-  i32.le_u
-  if
-   return
-  end
-  get_local $0
-  i32.const 3
-  i32.add
-  i32.const 0
-  i32.store8
-  get_local $0
-  get_local $1
-  i32.add
-  i32.const 4
-  i32.sub
-  i32.const 0
-  i32.store8
-  get_local $1
-  i32.const 8
-  i32.le_u
-  if
-   return
-  end
-  i32.const 0
-  get_local $0
-  i32.sub
-  i32.const 3
-  i32.and
-  tee_local $2
-  get_local $0
-  i32.add
-  tee_local $0
-  i32.const 0
-  i32.store
-  get_local $1
-  get_local $2
-  i32.sub
-  i32.const -4
-  i32.and
-  tee_local $1
-  get_local $0
-  i32.add
-  i32.const 4
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $1
-  i32.const 8
-  i32.le_u
-  if
-   return
-  end
-  get_local $0
-  i32.const 4
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 8
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  get_local $1
-  i32.add
-  tee_local $2
-  i32.const 12
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $2
-  i32.const 8
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $1
-  i32.const 24
-  i32.le_u
-  if
-   return
-  end
-  get_local $0
-  i32.const 12
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 16
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 20
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 24
-  i32.add
-  i32.const 0
-  i32.store
-  get_local $0
-  get_local $1
-  i32.add
-  tee_local $2
-  i32.const 28
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $2
-  i32.const 24
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $2
-  i32.const 20
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $2
-  i32.const 16
-  i32.sub
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 4
-  i32.and
-  i32.const 24
-  i32.add
-  tee_local $2
-  get_local $0
-  i32.add
-  set_local $0
-  get_local $1
-  get_local $2
-  i32.sub
-  set_local $1
-  loop $continue|0
-   get_local $1
-   i32.const 32
-   i32.ge_u
-   if
-    get_local $0
-    i64.const 0
-    i64.store
-    get_local $0
-    i32.const 8
-    i32.add
-    i64.const 0
-    i64.store
-    get_local $0
-    i32.const 16
-    i32.add
-    i64.const 0
-    i64.store
-    get_local $0
-    i32.const 24
-    i32.add
-    i64.const 0
-    i64.store
-    get_local $1
-    i32.const 32
-    i32.sub
-    set_local $1
-    get_local $0
-    i32.const 32
-    i32.add
-    set_local $0
-    br $continue|0
-   end
-  end
- )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 11 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   i32.const 1073741816
@@ -657,7 +438,7 @@
   i32.store
   get_local $1
  )
- (func $~lib/internal/memory/memcpy (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1561,7 +1342,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -1761,10 +1542,228 @@
    end
   end
  )
+ (func $~lib/internal/memory/memset (; 14 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  get_local $1
+  i32.eqz
+  if
+   return
+  end
+  get_local $0
+  i32.const 0
+  i32.store8
+  get_local $0
+  get_local $1
+  i32.add
+  i32.const 1
+  i32.sub
+  i32.const 0
+  i32.store8
+  get_local $1
+  i32.const 2
+  i32.le_u
+  if
+   return
+  end
+  get_local $0
+  i32.const 1
+  i32.add
+  i32.const 0
+  i32.store8
+  get_local $0
+  i32.const 2
+  i32.add
+  i32.const 0
+  i32.store8
+  get_local $0
+  get_local $1
+  i32.add
+  tee_local $2
+  i32.const 2
+  i32.sub
+  i32.const 0
+  i32.store8
+  get_local $2
+  i32.const 3
+  i32.sub
+  i32.const 0
+  i32.store8
+  get_local $1
+  i32.const 6
+  i32.le_u
+  if
+   return
+  end
+  get_local $0
+  i32.const 3
+  i32.add
+  i32.const 0
+  i32.store8
+  get_local $0
+  get_local $1
+  i32.add
+  i32.const 4
+  i32.sub
+  i32.const 0
+  i32.store8
+  get_local $1
+  i32.const 8
+  i32.le_u
+  if
+   return
+  end
+  i32.const 0
+  get_local $0
+  i32.sub
+  i32.const 3
+  i32.and
+  tee_local $2
+  get_local $0
+  i32.add
+  tee_local $0
+  i32.const 0
+  i32.store
+  get_local $1
+  get_local $2
+  i32.sub
+  i32.const -4
+  i32.and
+  tee_local $1
+  get_local $0
+  i32.add
+  i32.const 4
+  i32.sub
+  i32.const 0
+  i32.store
+  get_local $1
+  i32.const 8
+  i32.le_u
+  if
+   return
+  end
+  get_local $0
+  i32.const 4
+  i32.add
+  i32.const 0
+  i32.store
+  get_local $0
+  i32.const 8
+  i32.add
+  i32.const 0
+  i32.store
+  get_local $0
+  get_local $1
+  i32.add
+  tee_local $2
+  i32.const 12
+  i32.sub
+  i32.const 0
+  i32.store
+  get_local $2
+  i32.const 8
+  i32.sub
+  i32.const 0
+  i32.store
+  get_local $1
+  i32.const 24
+  i32.le_u
+  if
+   return
+  end
+  get_local $0
+  i32.const 12
+  i32.add
+  i32.const 0
+  i32.store
+  get_local $0
+  i32.const 16
+  i32.add
+  i32.const 0
+  i32.store
+  get_local $0
+  i32.const 20
+  i32.add
+  i32.const 0
+  i32.store
+  get_local $0
+  i32.const 24
+  i32.add
+  i32.const 0
+  i32.store
+  get_local $0
+  get_local $1
+  i32.add
+  tee_local $2
+  i32.const 28
+  i32.sub
+  i32.const 0
+  i32.store
+  get_local $2
+  i32.const 24
+  i32.sub
+  i32.const 0
+  i32.store
+  get_local $2
+  i32.const 20
+  i32.sub
+  i32.const 0
+  i32.store
+  get_local $2
+  i32.const 16
+  i32.sub
+  i32.const 0
+  i32.store
+  get_local $0
+  i32.const 4
+  i32.and
+  i32.const 24
+  i32.add
+  tee_local $2
+  get_local $0
+  i32.add
+  set_local $0
+  get_local $1
+  get_local $2
+  i32.sub
+  set_local $1
+  loop $continue|0
+   get_local $1
+   i32.const 32
+   i32.ge_u
+   if
+    get_local $0
+    i64.const 0
+    i64.store
+    get_local $0
+    i32.const 8
+    i32.add
+    i64.const 0
+    i64.store
+    get_local $0
+    i32.const 16
+    i32.add
+    i64.const 0
+    i64.store
+    get_local $0
+    i32.const 24
+    i32.add
+    i64.const 0
+    i64.store
+    get_local $1
+    i32.const 32
+    i32.sub
+    set_local $1
+    get_local $0
+    i32.const 32
+    i32.add
+    set_local $0
+    br $continue|0
+   end
+  end
+ )
  (func $~lib/internal/arraybuffer/reallocateUnsafe (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   get_local $1
   get_local $0
   i32.load
@@ -1798,37 +1797,29 @@
     get_local $0
     get_local $1
     i32.store
-    get_local $0
-    i32.const 8
-    i32.add
-    get_local $2
-    i32.add
-    get_local $1
-    get_local $2
-    i32.sub
-    call $~lib/internal/memory/memset
    else    
     get_local $1
     call $~lib/internal/arraybuffer/allocateUnsafe
     tee_local $3
     i32.const 8
     i32.add
-    tee_local $4
     get_local $0
     i32.const 8
     i32.add
     get_local $2
     call $~lib/internal/memory/memmove
-    get_local $2
-    get_local $4
-    i32.add
-    get_local $1
-    get_local $2
-    i32.sub
-    call $~lib/internal/memory/memset
     get_local $3
-    return
+    set_local $0
    end
+   get_local $0
+   i32.const 8
+   i32.add
+   get_local $2
+   i32.add
+   get_local $1
+   get_local $2
+   i32.sub
+   call $~lib/internal/memory/memset
   else   
    get_local $1
    get_local $2
@@ -1840,7 +1831,7 @@
     if
      i32.const 0
      i32.const 120
-     i32.const 64
+     i32.const 62
      i32.const 4
      call $~lib/env/abort
      unreachable
