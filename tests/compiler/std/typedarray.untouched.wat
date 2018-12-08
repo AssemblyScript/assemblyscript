@@ -196,7 +196,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 23
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -485,7 +485,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -550,7 +550,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -615,7 +615,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -680,7 +680,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -745,7 +745,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -810,7 +810,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -875,7 +875,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -940,7 +940,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -1005,7 +1005,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -1070,7 +1070,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -1688,7 +1688,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1721,7 +1721,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1854,7 +1854,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1974,7 +1974,7 @@
   i32.store offset=8
   get_local $4
  )
- (func $~lib/internal/array/insertionSort<f64> (; 22 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<f64> (; 22 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 f64)
   (local $6 i32)
@@ -2089,7 +2089,7 @@
  (func $~lib/allocator/arena/__memory_free (; 23 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/internal/array/weakHeapSort<f64> (; 24 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/weakHeapSort<f64> (; 24 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2597,28 +2597,23 @@
     get_local $0
     br $~lib/internal/typedarray/SORT<Float64Array,f64>|inlined.0
    end
-   block
+   get_local $3
+   i32.const 256
+   i32.lt_s
+   if
+    get_local $4
+    get_local $2
     get_local $3
-    i32.const 256
-    i32.lt_s
-    if
-     get_local $4
-     get_local $2
-     get_local $3
-     get_local $1
-     call $~lib/internal/array/insertionSort<f64>
-    else     
-     get_local $4
-     get_local $2
-     get_local $3
-     get_local $1
-     call $~lib/internal/array/weakHeapSort<f64>
-    end
-    get_local $0
-    br $~lib/internal/typedarray/SORT<Float64Array,f64>|inlined.0
-    unreachable
+    get_local $1
+    call $~lib/internal/sort/insertionSort<f64>
+   else    
+    get_local $4
+    get_local $2
+    get_local $3
+    get_local $1
+    call $~lib/internal/sort/weakHeapSort<f64>
    end
-   unreachable
+   get_local $0
   end
  )
  (func $~lib/typedarray/Float64Array#sort|trampoline~anonymous|1 (; 26 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
@@ -2663,9 +2658,9 @@
     end
     unreachable
    end
-   block $~lib/internal/array/defaultComparator<f64>|inlined.0 (result i32)
+   block $~lib/internal/sort/COMPARATOR<f64>|inlined.0 (result i32)
     i32.const 1
-    br $~lib/internal/array/defaultComparator<f64>|inlined.0
+    br $~lib/internal/sort/COMPARATOR<f64>|inlined.0
    end
    set_local $1
   end
@@ -2685,7 +2680,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2719,7 +2714,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2774,7 +2769,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2808,7 +2803,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2933,7 +2928,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -3644,7 +3639,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -3784,7 +3779,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4025,7 +4020,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4161,7 +4156,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4297,7 +4292,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4433,7 +4428,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -6183,7 +6178,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -6380,7 +6375,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -6718,7 +6713,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -6901,7 +6896,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -7084,7 +7079,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -7267,7 +7262,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable

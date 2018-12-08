@@ -149,7 +149,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 23
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -412,7 +412,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -456,7 +456,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -503,7 +503,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -550,7 +550,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 24
+   i32.const 23
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -1029,7 +1029,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1056,7 +1056,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1147,7 +1147,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1215,7 +1215,7 @@
   i32.store offset=8
   get_local $1
  )
- (func $~lib/internal/array/insertionSort<f64> (; 14 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<f64> (; 14 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 f64)
@@ -1305,7 +1305,7 @@
    unreachable
   end
  )
- (func $~lib/internal/array/weakHeapSort<f64> (; 15 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/weakHeapSort<f64> (; 15 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1659,13 +1659,13 @@
     get_local $2
     get_local $4
     get_local $1
-    call $~lib/internal/array/insertionSort<f64>
+    call $~lib/internal/sort/insertionSort<f64>
    else    
     get_local $3
     get_local $2
     get_local $4
     get_local $1
-    call $~lib/internal/array/weakHeapSort<f64>
+    call $~lib/internal/sort/weakHeapSort<f64>
    end
   end
   get_local $0
@@ -1709,7 +1709,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1733,7 +1733,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1774,7 +1774,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1873,7 +1873,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2388,7 +2388,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2660,7 +2660,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2793,7 +2793,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 51
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4089,7 +4089,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4246,7 +4246,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4589,7 +4589,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4803,7 +4803,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 40
+   i32.const 39
    i32.const 63
    call $~lib/env/abort
    unreachable

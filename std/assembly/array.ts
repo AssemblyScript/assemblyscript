@@ -14,10 +14,9 @@ import {
 } from "./internal/string";
 
 import {
-  defaultComparator,
-  insertionSort,
-  weakHeapSort
-} from "./internal/array";
+  COMPARATOR,
+  SORT
+} from "./internal/sort";
 
 import {
   itoa,
@@ -403,7 +402,7 @@ export class Array<T> {
     return this;
   }
 
-  sort(comparator: (a: T, b: T) => i32 = defaultComparator<T>()): this {
+  sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): this {
     // TODO remove this when flow will allow trackcing null
     assert(comparator); // The comparison function must be a function
 
@@ -419,19 +418,8 @@ export class Array<T> {
       }
       return this;
     }
-
-    if (isReference<T>()) {
-      // TODO replace this to faster stable sort (TimSort) when it implemented
-      insertionSort<T>(buffer, 0, length, comparator);
-      return this;
-    } else {
-      if (length < 256) {
-        insertionSort<T>(buffer, 0, length, comparator);
-      } else {
-        weakHeapSort<T>(buffer, 0, length, comparator);
-      }
-      return this;
-    }
+    SORT<T>(buffer, 0, length, comparator);
+    return this;
   }
 
   join(separator: string = ","): string {

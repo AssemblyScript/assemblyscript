@@ -9,8 +9,8 @@ import {
 } from "./internal/typedarray";
 
 import {
-  defaultComparator
-} from "./internal/array";
+  COMPARATOR
+} from "./internal/sort";
 
 export class Int8Array extends TypedArray<i8> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
@@ -19,7 +19,7 @@ export class Int8Array extends TypedArray<i8> {
     return FILL<Int8Array, i8>(this, value, start, end);
   }
 
-  sort(comparator: (a: i8, b: i8) => i32 = defaultComparator<i8>()): Int8Array {
+  sort(comparator: (a: i8, b: i8) => i32 = COMPARATOR<i8>()): Int8Array {
     return SORT<Int8Array, i8>(this, comparator);
   }
 
@@ -53,7 +53,7 @@ export class Uint8Array extends TypedArray<u8> {
     return FILL<Uint8Array, u8>(this, value, start, end);
   }
 
-  sort(comparator: (a: u8, b: u8) => i32 = defaultComparator<u8>()): Uint8Array {
+  sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8Array {
     return SORT<Uint8Array, u8>(this, comparator);
   }
 
@@ -97,7 +97,7 @@ export class Uint8ClampedArray extends Uint8Array {
     return changetype<Uint8ClampedArray>(super.fill(value, start, end)); // safe because '.fill' reuses 'this'
   }
 
-  sort(comparator: (a: u8, b: u8) => i32 = defaultComparator<u8>()): Uint8ClampedArray {
+  sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8ClampedArray {
     return changetype<Uint8ClampedArray>(super.sort(comparator)); // safe because '.sort' reuses 'this'
   }
 
@@ -117,7 +117,7 @@ export class Int16Array extends TypedArray<i16> {
     return FILL<Int16Array, i16>(this, value, start, end);
   }
 
-  sort(comparator: (a: i16, b: i16) => i32 = defaultComparator<i16>()): Int16Array {
+  sort(comparator: (a: i16, b: i16) => i32 = COMPARATOR<i16>()): Int16Array {
     return SORT<Int16Array, i16>(this, comparator);
   }
 
@@ -151,7 +151,7 @@ export class Uint16Array extends TypedArray<u16> {
     return FILL<Uint16Array, u16>(this, value, start, end);
   }
 
-  sort(comparator: (a: u16, b: u16) => i32 = defaultComparator<u16>()): Uint16Array {
+  sort(comparator: (a: u16, b: u16) => i32 = COMPARATOR<u16>()): Uint16Array {
     return SORT<Uint16Array, u16>(this, comparator);
   }
 
@@ -185,7 +185,7 @@ export class Int32Array extends TypedArray<i32> {
     return FILL<Int32Array, i32>(this, value, start, end);
   }
 
-  sort(comparator: (a: i32, b: i32) => i32 = defaultComparator<i32>()): Int32Array {
+  sort(comparator: (a: i32, b: i32) => i32 = COMPARATOR<i32>()): Int32Array {
     return SORT<Int32Array, i32>(this, comparator);
   }
 
@@ -219,7 +219,7 @@ export class Uint32Array extends TypedArray<u32> {
     return FILL<Uint32Array, u32>(this, value, start, end);
   }
 
-  sort(comparator: (a: u32, b: u32) => i32 = defaultComparator<u32>()): Uint32Array {
+  sort(comparator: (a: u32, b: u32) => i32 = COMPARATOR<u32>()): Uint32Array {
     return SORT<Uint32Array, u32>(this, comparator);
   }
 
@@ -253,7 +253,7 @@ export class Int64Array extends TypedArray<i64> {
     return FILL<Int64Array, i64>(this, value, start, end);
   }
 
-  sort(comparator: (a: i64, b: i64) => i32 = defaultComparator<i64>()): Int64Array {
+  sort(comparator: (a: i64, b: i64) => i32 = COMPARATOR<i64>()): Int64Array {
     return SORT<Int64Array, i64>(this, comparator);
   }
 
@@ -287,7 +287,7 @@ export class Uint64Array extends TypedArray<u64> {
     return FILL<Uint64Array, u64>(this, value, start, end);
   }
 
-  sort(comparator: (a: u64, b: u64) => i32 = defaultComparator<u64>()): Uint64Array {
+  sort(comparator: (a: u64, b: u64) => i32 = COMPARATOR<u64>()): Uint64Array {
     return SORT<Uint64Array, u64>(this, comparator);
   }
 
@@ -321,7 +321,7 @@ export class Float32Array extends TypedArray<f32> {
     return FILL<Float32Array, f32>(this, value, start, end);
   }
 
-  sort(comparator: (a: f32, b: f32) => i32 = defaultComparator<f32>()): Float32Array {
+  sort(comparator: (a: f32, b: f32) => i32 = COMPARATOR<f32>()): Float32Array {
     return SORT<Float32Array, f32>(this, comparator);
   }
 
@@ -355,7 +355,7 @@ export class Float64Array extends TypedArray<f64> {
     return FILL<Float64Array, f64>(this, value, start, end);
   }
 
-  sort(comparator: (a: f64, b: f64) => i32 = defaultComparator<f64>()): Float64Array {
+  sort(comparator: (a: f64, b: f64) => i32 = COMPARATOR<f64>()): Float64Array {
     return SORT<Float64Array, f64>(this, comparator);
   }
 

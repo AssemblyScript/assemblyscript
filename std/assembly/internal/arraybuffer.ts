@@ -1,4 +1,7 @@
-import { AL_MASK, MAX_SIZE_32 } from "./allocator";
+import {
+  AL_MASK,
+  MAX_SIZE_32
+ } from "./allocator";
 
 /** Size of an ArrayBuffer header. */
 export const HEADER_SIZE: usize = (offsetof<ArrayBuffer>() + AL_MASK) & ~AL_MASK;

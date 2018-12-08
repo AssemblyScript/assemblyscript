@@ -4,12 +4,12 @@ import {
 } from "./arraybuffer";
 
 import {
-  compareUnsafe,
+  compareUnsafe
 } from "./string";
 
-/** Obtains the default comparator for the specified type. */
+/** Obtains the default comparator for the specified value type. */
 @inline
-export function defaultComparator<T>(): (a: T, b: T) => i32 {
+export function COMPARATOR<T>(): (a: T, b: T) => i32 {
   if (isInteger<T>()) {
     if (isSigned<T>() && sizeof<T>() <= 4) {
       return (a: T, b: T): i32 => (<i32>(a - b));
@@ -44,8 +44,27 @@ export function defaultComparator<T>(): (a: T, b: T) => i32 {
   }
 }
 
+@inline
+export function SORT<T>(
+  buffer: ArrayBuffer,
+  byteOffset: i32,
+  length: i32,
+  comparator: (a: T, b: T) => i32
+): void {
+  if (isReference<T>()) {
+    // TODO replace this to faster stable sort (TimSort) when it implemented
+    insertionSort<T>(buffer, byteOffset, length, comparator);
+  } else {
+    if (length < 256) {
+      insertionSort<T>(buffer, byteOffset, length, comparator);
+    } else {
+      weakHeapSort<T>(buffer, byteOffset, length, comparator);
+    }
+  }
+}
+
 /** Sorts an Array with the 'Insertion Sort' algorithm. */
-export function insertionSort<T>(
+function insertionSort<T>(
   buffer: ArrayBuffer,
   byteOffset: i32,
   length: i32,
@@ -65,7 +84,7 @@ export function insertionSort<T>(
 }
 
 /** Sorts an Array with the 'Weak Heap Sort' algorithm. */
-export function weakHeapSort<T>(
+function weakHeapSort<T>(
   buffer: ArrayBuffer,
   byteOffset: i32,
   length: i32,
