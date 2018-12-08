@@ -539,7 +539,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 23
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -828,7 +828,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 46
+   i32.const 45
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -2774,7 +2774,7 @@
    if
     i32.const 0
     i32.const 40
-    i32.const 37
+    i32.const 40
     i32.const 4
     call $~lib/env/abort
     unreachable
@@ -2845,7 +2845,7 @@
     if
      i32.const 0
      i32.const 40
-     i32.const 59
+     i32.const 62
      i32.const 4
      call $~lib/env/abort
      unreachable
@@ -2888,7 +2888,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 185
+    i32.const 184
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -2961,7 +2961,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 247
+   i32.const 246
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3394,7 +3394,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 336
+    i32.const 335
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -3469,7 +3469,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 307
+   i32.const 306
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3860,7 +3860,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 110
+    i32.const 109
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -4307,7 +4307,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 46
+   i32.const 45
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -5144,7 +5144,7 @@
   call $~lib/math/splitMix32
   set_global $~lib/math/random_state1_32
  )
- (func $~lib/internal/array/insertionSort<f32> (; 97 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<f32> (; 97 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 f32)
   (local $6 i32)
@@ -5256,7 +5256,7 @@
    unreachable
   end
  )
- (func $~lib/internal/array/weakHeapSort<f32> (; 98 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/weakHeapSort<f32> (; 98 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -5681,7 +5681,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5774,24 +5774,25 @@
    get_local $0
    return
   end
+  i32.const 0
+  set_local $4
   get_local $2
   i32.const 256
   i32.lt_s
   if
    get_local $3
-   i32.const 0
+   get_local $4
    get_local $2
    get_local $1
-   call $~lib/internal/array/insertionSort<f32>
+   call $~lib/internal/sort/insertionSort<f32>
   else   
    get_local $3
-   i32.const 0
+   get_local $4
    get_local $2
    get_local $1
-   call $~lib/internal/array/weakHeapSort<f32>
+   call $~lib/internal/sort/weakHeapSort<f32>
   end
   get_local $0
-  return
  )
  (func $~lib/array/Array<f32>#sort|trampoline~anonymous|43 (; 100 ;) (type $ffi) (param $0 f32) (param $1 f32) (result i32)
   (local $2 i32)
@@ -5835,9 +5836,9 @@
     end
     unreachable
    end
-   block $~lib/internal/array/defaultComparator<f32>|inlined.0 (result i32)
+   block $~lib/internal/sort/COMPARATOR<f32>|inlined.0 (result i32)
     i32.const 43
-    br $~lib/internal/array/defaultComparator<f32>|inlined.0
+    br $~lib/internal/sort/COMPARATOR<f32>|inlined.0
    end
    set_local $1
   end
@@ -5925,7 +5926,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/array/insertionSort<f64> (; 104 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<f64> (; 104 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 f64)
   (local $6 i32)
@@ -6037,7 +6038,7 @@
    unreachable
   end
  )
- (func $~lib/internal/array/weakHeapSort<f64> (; 105 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/weakHeapSort<f64> (; 105 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -6462,7 +6463,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -6555,24 +6556,25 @@
    get_local $0
    return
   end
+  i32.const 0
+  set_local $4
   get_local $2
   i32.const 256
   i32.lt_s
   if
    get_local $3
-   i32.const 0
+   get_local $4
    get_local $2
    get_local $1
-   call $~lib/internal/array/insertionSort<f64>
+   call $~lib/internal/sort/insertionSort<f64>
   else   
    get_local $3
-   i32.const 0
+   get_local $4
    get_local $2
    get_local $1
-   call $~lib/internal/array/weakHeapSort<f64>
+   call $~lib/internal/sort/weakHeapSort<f64>
   end
   get_local $0
-  return
  )
  (func $~lib/array/Array<f64>#sort|trampoline~anonymous|44 (; 107 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
@@ -6616,9 +6618,9 @@
     end
     unreachable
    end
-   block $~lib/internal/array/defaultComparator<f64>|inlined.0 (result i32)
+   block $~lib/internal/sort/COMPARATOR<f64>|inlined.0 (result i32)
     i32.const 44
-    br $~lib/internal/array/defaultComparator<f64>|inlined.0
+    br $~lib/internal/sort/COMPARATOR<f64>|inlined.0
    end
    set_local $1
   end
@@ -6733,7 +6735,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/array/insertionSort<i32> (; 112 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<i32> (; 112 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -6845,7 +6847,7 @@
    unreachable
   end
  )
- (func $~lib/internal/array/weakHeapSort<i32> (; 113 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/weakHeapSort<i32> (; 113 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -7270,7 +7272,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7363,24 +7365,25 @@
    get_local $0
    return
   end
+  i32.const 0
+  set_local $6
   get_local $2
   i32.const 256
   i32.lt_s
   if
    get_local $3
-   i32.const 0
+   get_local $6
    get_local $2
    get_local $1
-   call $~lib/internal/array/insertionSort<i32>
+   call $~lib/internal/sort/insertionSort<i32>
   else   
    get_local $3
-   i32.const 0
+   get_local $6
    get_local $2
    get_local $1
-   call $~lib/internal/array/weakHeapSort<i32>
+   call $~lib/internal/sort/weakHeapSort<i32>
   end
   get_local $0
-  return
  )
  (func $~lib/array/Array<i32>#sort|trampoline~anonymous|45 (; 115 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
@@ -7396,9 +7399,9 @@
     end
     unreachable
    end
-   block $~lib/internal/array/defaultComparator<i32>|inlined.0 (result i32)
+   block $~lib/internal/sort/COMPARATOR<i32>|inlined.0 (result i32)
     i32.const 45
-    br $~lib/internal/array/defaultComparator<i32>|inlined.0
+    br $~lib/internal/sort/COMPARATOR<i32>|inlined.0
    end
    set_local $1
   end
@@ -7406,7 +7409,7 @@
   get_local $1
   call $~lib/array/Array<i32>#sort
  )
- (func $~lib/internal/array/insertionSort<u32> (; 117 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<u32> (; 117 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -7518,7 +7521,7 @@
    unreachable
   end
  )
- (func $~lib/internal/array/weakHeapSort<u32> (; 118 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/weakHeapSort<u32> (; 118 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -7943,7 +7946,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8036,24 +8039,25 @@
    get_local $0
    return
   end
+  i32.const 0
+  set_local $6
   get_local $2
   i32.const 256
   i32.lt_s
   if
    get_local $3
-   i32.const 0
+   get_local $6
    get_local $2
    get_local $1
-   call $~lib/internal/array/insertionSort<u32>
+   call $~lib/internal/sort/insertionSort<u32>
   else   
    get_local $3
-   i32.const 0
+   get_local $6
    get_local $2
    get_local $1
-   call $~lib/internal/array/weakHeapSort<u32>
+   call $~lib/internal/sort/weakHeapSort<u32>
   end
   get_local $0
-  return
  )
  (func $~lib/array/Array<u32>#sort|trampoline~anonymous|46 (; 120 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
@@ -8073,9 +8077,9 @@
     end
     unreachable
    end
-   block $~lib/internal/array/defaultComparator<u32>|inlined.0 (result i32)
+   block $~lib/internal/sort/COMPARATOR<u32>|inlined.0 (result i32)
     i32.const 46
-    br $~lib/internal/array/defaultComparator<u32>|inlined.0
+    br $~lib/internal/sort/COMPARATOR<u32>|inlined.0
    end
    set_local $1
   end
@@ -8295,9 +8299,9 @@
  )
  (func $std/array/assertSortedDefault<i32> (; 128 ;) (type $iv) (param $0 i32)
   get_local $0
-  block $~lib/internal/array/defaultComparator<i32>|inlined.1 (result i32)
+  block $~lib/internal/sort/COMPARATOR<i32>|inlined.1 (result i32)
    i32.const 47
-   br $~lib/internal/array/defaultComparator<i32>|inlined.1
+   br $~lib/internal/sort/COMPARATOR<i32>|inlined.1
   end
   call $std/array/assertSorted<i32>
  )
@@ -8332,7 +8336,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 46
+   i32.const 45
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -8402,7 +8406,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 110
+    i32.const 109
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -8523,7 +8527,7 @@
   call $~lib/array/Array<i32>#__get
   i32.sub
  )
- (func $~lib/internal/array/insertionSort<Array<i32>> (; 138 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<Array<i32>> (; 138 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -8647,7 +8651,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8740,13 +8744,14 @@
    get_local $0
    return
   end
-  get_local $3
   i32.const 0
+  set_local $6
+  get_local $3
+  get_local $6
   get_local $2
   get_local $1
-  call $~lib/internal/array/insertionSort<Array<i32>>
+  call $~lib/internal/sort/insertionSort<Array<i32>>
   get_local $0
-  return
  )
  (func $std/array/isSorted<Array<i32>> (; 140 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -8825,7 +8830,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 46
+   i32.const 45
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -8914,7 +8919,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 110
+    i32.const 109
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -8998,7 +9003,7 @@
   i32.load
   i32.sub
  )
- (func $~lib/internal/array/insertionSort<Proxy<i32>> (; 147 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<Proxy<i32>> (; 147 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -9122,7 +9127,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9215,13 +9220,14 @@
    get_local $0
    return
   end
-  get_local $3
   i32.const 0
+  set_local $6
+  get_local $3
+  get_local $6
   get_local $2
   get_local $1
-  call $~lib/internal/array/insertionSort<Proxy<i32>>
+  call $~lib/internal/sort/insertionSort<Proxy<i32>>
   get_local $0
-  return
  )
  (func $~lib/array/Array<Proxy<i32>>#__get (; 149 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9508,7 +9514,7 @@
   call $~lib/string/String.__lt
   i32.sub
  )
- (func $~lib/internal/array/insertionSort<String> (; 156 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<String> (; 156 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -9632,7 +9638,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9725,13 +9731,14 @@
    get_local $0
    return
   end
-  get_local $3
   i32.const 0
+  set_local $6
+  get_local $3
+  get_local $6
   get_local $2
   get_local $1
-  call $~lib/internal/array/insertionSort<String>
+  call $~lib/internal/sort/insertionSort<String>
   get_local $0
-  return
  )
  (func $~lib/array/Array<String>#__get (; 158 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9946,7 +9953,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 46
+   i32.const 45
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -10231,7 +10238,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 110
+    i32.const 109
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -13268,7 +13275,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 46
+   i32.const 45
    i32.const 39
    call $~lib/env/abort
    unreachable

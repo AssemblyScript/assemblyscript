@@ -204,168 +204,168 @@
   (local $0 i32)
   (local $1 f32)
   (local $2 f64)
-  block $~lib/internal/hash/hash<String>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<String>|inlined.0 (result i32)
    i32.const 0
    set_local $0
    get_local $0
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/hash<String>|inlined.0
+   br $~lib/internal/hash/HASH<String>|inlined.0
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<String>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<String>|inlined.1 (result i32)
    i32.const 8
    set_local $0
    get_local $0
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/hash<String>|inlined.1
+   br $~lib/internal/hash/HASH<String>|inlined.1
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<String>|inlined.2 (result i32)
+  block $~lib/internal/hash/HASH<String>|inlined.2 (result i32)
    i32.const 16
    set_local $0
    get_local $0
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/hash<String>|inlined.2
+   br $~lib/internal/hash/HASH<String>|inlined.2
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<String>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<String>|inlined.3 (result i32)
    i32.const 24
    set_local $0
    get_local $0
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/hash<String>|inlined.3
+   br $~lib/internal/hash/HASH<String>|inlined.3
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<String>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<String>|inlined.4 (result i32)
    i32.const 32
    set_local $0
    get_local $0
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/hash<String>|inlined.4
+   br $~lib/internal/hash/HASH<String>|inlined.4
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f32>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<f32>|inlined.0 (result i32)
    f32.const 0
    set_local $1
    get_local $1
    i32.reinterpret/f32
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<f32>|inlined.0
+   br $~lib/internal/hash/HASH<f32>|inlined.0
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f32>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<f32>|inlined.1 (result i32)
    f32.const 1
    set_local $1
    get_local $1
    i32.reinterpret/f32
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<f32>|inlined.1
+   br $~lib/internal/hash/HASH<f32>|inlined.1
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f32>|inlined.2 (result i32)
+  block $~lib/internal/hash/HASH<f32>|inlined.2 (result i32)
    f32.const 1.100000023841858
    set_local $1
    get_local $1
    i32.reinterpret/f32
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<f32>|inlined.2
+   br $~lib/internal/hash/HASH<f32>|inlined.2
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f32>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<f32>|inlined.3 (result i32)
    f32.const 0
    set_local $1
    get_local $1
    i32.reinterpret/f32
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<f32>|inlined.3
+   br $~lib/internal/hash/HASH<f32>|inlined.3
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f32>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<f32>|inlined.4 (result i32)
    f32.const inf
    set_local $1
    get_local $1
    i32.reinterpret/f32
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<f32>|inlined.4
+   br $~lib/internal/hash/HASH<f32>|inlined.4
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f32>|inlined.5 (result i32)
+  block $~lib/internal/hash/HASH<f32>|inlined.5 (result i32)
    f32.const nan:0x400000
    set_local $1
    get_local $1
    i32.reinterpret/f32
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<f32>|inlined.5
+   br $~lib/internal/hash/HASH<f32>|inlined.5
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f64>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<f64>|inlined.0 (result i32)
    f64.const 0
    set_local $2
    get_local $2
    i64.reinterpret/f64
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<f64>|inlined.0
+   br $~lib/internal/hash/HASH<f64>|inlined.0
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f64>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<f64>|inlined.1 (result i32)
    f64.const 1
    set_local $2
    get_local $2
    i64.reinterpret/f64
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<f64>|inlined.1
+   br $~lib/internal/hash/HASH<f64>|inlined.1
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f64>|inlined.2 (result i32)
+  block $~lib/internal/hash/HASH<f64>|inlined.2 (result i32)
    f64.const 1.1
    set_local $2
    get_local $2
    i64.reinterpret/f64
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<f64>|inlined.2
+   br $~lib/internal/hash/HASH<f64>|inlined.2
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f64>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<f64>|inlined.3 (result i32)
    f64.const 0
    set_local $2
    get_local $2
    i64.reinterpret/f64
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<f64>|inlined.3
+   br $~lib/internal/hash/HASH<f64>|inlined.3
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f64>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<f64>|inlined.4 (result i32)
    f64.const inf
    set_local $2
    get_local $2
    i64.reinterpret/f64
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<f64>|inlined.4
+   br $~lib/internal/hash/HASH<f64>|inlined.4
   end
   call $std/hash/check
   drop
-  block $~lib/internal/hash/hash<f64>|inlined.5 (result i32)
+  block $~lib/internal/hash/HASH<f64>|inlined.5 (result i32)
    f64.const nan:0x8000000000000
    set_local $2
    get_local $2
    i64.reinterpret/f64
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<f64>|inlined.5
+   br $~lib/internal/hash/HASH<f64>|inlined.5
   end
   call $std/hash/check
   drop

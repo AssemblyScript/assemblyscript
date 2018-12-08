@@ -465,7 +465,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 23
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -729,7 +729,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 46
+   i32.const 45
    i32.const 39
    call $~lib/env/abort
    unreachable
@@ -2241,7 +2241,7 @@
    if
     i32.const 0
     i32.const 40
-    i32.const 37
+    i32.const 40
     i32.const 4
     call $~lib/env/abort
     unreachable
@@ -2297,7 +2297,7 @@
     if
      i32.const 0
      i32.const 40
-     i32.const 59
+     i32.const 62
      i32.const 4
      call $~lib/env/abort
      unreachable
@@ -2334,7 +2334,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 185
+    i32.const 184
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -2371,7 +2371,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 247
+   i32.const 246
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -2669,7 +2669,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 336
+    i32.const 335
     i32.const 42
     call $~lib/env/abort
     unreachable
@@ -2721,7 +2721,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 307
+   i32.const 306
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -3009,7 +3009,7 @@
    if
     i32.const 0
     i32.const 8
-    i32.const 110
+    i32.const 109
     i32.const 41
     call $~lib/env/abort
     unreachable
@@ -3823,7 +3823,7 @@
   call $~lib/math/splitMix32
   set_global $~lib/math/random_state1_32
  )
- (func $~lib/internal/array/insertionSort<f32> (; 69 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/sort/insertionSort<f32> (; 69 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 f32)
@@ -3903,7 +3903,7 @@
    end
   end
  )
- (func $~lib/internal/array/weakHeapSort<f32> (; 70 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/sort/weakHeapSort<f32> (; 70 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4172,7 +4172,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4229,12 +4229,12 @@
    get_local $2
    get_local $3
    get_local $1
-   call $~lib/internal/array/insertionSort<f32>
+   call $~lib/internal/sort/insertionSort<f32>
   else   
    get_local $2
    get_local $3
    get_local $1
-   call $~lib/internal/array/weakHeapSort<f32>
+   call $~lib/internal/sort/weakHeapSort<f32>
   end
   get_local $0
  )
@@ -4394,7 +4394,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/array/insertionSort<f64> (; 74 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/sort/insertionSort<f64> (; 74 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 f64)
@@ -4474,7 +4474,7 @@
    end
   end
  )
- (func $~lib/internal/array/weakHeapSort<f64> (; 75 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/sort/weakHeapSort<f64> (; 75 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4743,7 +4743,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4800,12 +4800,12 @@
    get_local $2
    get_local $3
    get_local $1
-   call $~lib/internal/array/insertionSort<f64>
+   call $~lib/internal/sort/insertionSort<f64>
   else   
    get_local $2
    get_local $3
    get_local $1
-   call $~lib/internal/array/weakHeapSort<f64>
+   call $~lib/internal/sort/weakHeapSort<f64>
   end
   get_local $0
  )
@@ -4965,7 +4965,7 @@
   end
   i32.const 1
  )
- (func $~lib/internal/array/insertionSort<i32> (; 79 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/sort/insertionSort<i32> (; 79 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5047,7 +5047,7 @@
    end
   end
  )
- (func $~lib/internal/array/weakHeapSort<i32> (; 80 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/sort/weakHeapSort<i32> (; 80 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5315,7 +5315,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5372,12 +5372,12 @@
    get_local $3
    get_local $2
    get_local $1
-   call $~lib/internal/array/insertionSort<i32>
+   call $~lib/internal/sort/insertionSort<i32>
   else   
    get_local $3
    get_local $2
    get_local $1
-   call $~lib/internal/array/weakHeapSort<i32>
+   call $~lib/internal/sort/weakHeapSort<i32>
   end
   get_local $0
  )
@@ -5704,7 +5704,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 408
+   i32.const 407
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5757,7 +5757,7 @@
   get_local $3
   get_local $2
   get_local $1
-  call $~lib/internal/array/insertionSort<i32>
+  call $~lib/internal/sort/insertionSort<i32>
   get_local $0
  )
  (func $std/array/assertSorted<Array<i32>> (; 94 ;) (type $iiv) (param $0 i32) (param $1 i32)

@@ -7,9 +7,8 @@ import {
 } from "./arraybuffer";
 
 import {
-  insertionSort,
-  weakHeapSort
-} from "./array";
+  SORT as SORT_IMPL
+} from "./sort";
 
 /** Typed array base class. Not a global object. */
 export abstract class TypedArray<T> {
@@ -106,18 +105,8 @@ export function SORT<TArray extends TypedArray<T>, T>(
     }
     return array;
   }
-  if (isReference<T>()) {
-    // TODO replace this to faster stable sort (TimSort) when it implemented
-    insertionSort<T>(buffer, byteOffset, length, comparator);
-    return array;
-  } else {
-    if (length < 256) {
-      insertionSort<T>(buffer, byteOffset, length, comparator);
-    } else {
-      weakHeapSort<T>(buffer, byteOffset, length, comparator);
-    }
-    return array;
-  }
+  SORT_IMPL<T>(buffer, byteOffset, length, comparator);
+  return array;
 }
 
 @inline

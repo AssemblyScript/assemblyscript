@@ -3,7 +3,7 @@ import {
 } from "./internal/arraybuffer";
 
 import {
-  hash
+  HASH
 } from "./internal/hash";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
@@ -78,11 +78,11 @@ export class Set<K> {
   }
 
   has(key: K): bool {
-    return this.find(key, hash(key)) !== null;
+    return this.find(key, HASH(key)) !== null;
   }
 
   add(key: K): void {
-    var hashCode = hash(key);
+    var hashCode = HASH(key);
     var entry = this.find(key, hashCode);
     if (!entry) {
       // check if rehashing is necessary
@@ -109,7 +109,7 @@ export class Set<K> {
   }
 
   delete(key: K): bool {
-    var entry = this.find(key, hash<K>(key));
+    var entry = this.find(key, HASH<K>(key));
     if (!entry) return false;
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
@@ -137,7 +137,7 @@ export class Set<K> {
       if (!(oldEntry.taggedNext & EMPTY)) {
         let newEntry = changetype<SetEntry<K>>(newPtr);
         newEntry.key = oldEntry.key;
-        let newBucketIndex = hash<K>(oldEntry.key) & newBucketsMask;
+        let newBucketIndex = HASH<K>(oldEntry.key) & newBucketsMask;
         let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
         newEntry.taggedNext = load<usize>(newBucketPtrBase, HEADER_SIZE_AB);
         store<usize>(newBucketPtrBase, newPtr, HEADER_SIZE_AB);
