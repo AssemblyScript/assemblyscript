@@ -57,10 +57,10 @@ $> npm link
 Examples
 --------
 
-* **[Conway's Game of Life](./examples/game-of-life)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/game-of-life/index.html) | [fiddle](https://webassembly.studio/?f=gvuw4enb3qk) ]<br />
+* **[Conway's Game of Life](./examples/game-of-life)** [ [demo](https://assemblyscript.github.io/assemblyscript/examples/game-of-life) | [fiddle](https://webassembly.studio/?f=gvuw4enb3qk) ]<br />
   Continuously updates the cellular automaton and visualizes its state on a canvas.
 
-* **[Mandelbrot Set](./examples/mandelbrot)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/mandelbrot/index.html) | [fiddle](https://webassembly.studio/?f=m6hbiw9wyq) ]<br />
+* **[Mandelbrot Set](./examples/mandelbrot)** [ [demo](https://assemblyscript.github.io/assemblyscript/examples/mandelbrot) | [fiddle](https://webassembly.studio/?f=m6hbiw9wyq) ]<br />
   Renders the Mandelbrot set to a canvas.
 
 * **[i64 polyfill](./examples/i64-polyfill)**<br />
@@ -72,7 +72,7 @@ Examples
 * **[WASM parser](./lib/parse)**<br />
   A WebAssembly binary parser in WebAssembly.
 
-* **[N-body system](./examples/n-body)** [ [demo](https://rawgit.com/AssemblyScript/assemblyscript/master/examples/n-body/index.html) ]<br />
+* **[N-body system](./examples/n-body)** [ [demo](https://assemblyscript.github.io/assemblyscript/examples/n-body) ]<br />
   An implementation of the N-body system from the [Computer Language Benchmarks Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/).
 
 Building
