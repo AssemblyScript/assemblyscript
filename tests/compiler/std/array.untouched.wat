@@ -5,6 +5,7 @@
  (type $iiiv (func (param i32 i32 i32)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $iv (func (param i32)))
  (type $iiv (func (param i32 i32)))
  (type $iiif (func (param i32 i32 i32) (result f32)))
  (type $iif (func (param i32 i32) (result f32)))
@@ -12,7 +13,6 @@
  (type $Iv (func (param i64)))
  (type $II (func (param i64) (result i64)))
  (type $ffi (func (param f32 f32) (result i32)))
- (type $iv (func (param i32)))
  (type $fi (func (param f32) (result i32)))
  (type $FFi (func (param f64 f64) (result i32)))
  (type $iiF (func (param i32 i32) (result f64)))
@@ -2752,12 +2752,14 @@
    end
   end
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_free (; 23 ;) (type $iv) (param $0 i32)
+  nop
+ )
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   get_local $0
   i32.load
   set_local $2
@@ -2787,57 +2789,50 @@
     get_local $0
     get_local $1
     i32.store
-    get_local $0
-    get_global $~lib/internal/arraybuffer/HEADER_SIZE
-    i32.add
-    get_local $2
-    i32.add
-    set_local $3
-    i32.const 0
-    set_local $4
-    get_local $1
-    get_local $2
-    i32.sub
-    set_local $5
-    get_local $3
-    get_local $4
-    get_local $5
-    call $~lib/internal/memory/memset
    else    
     get_local $1
     call $~lib/internal/arraybuffer/allocateUnsafe
-    set_local $5
-    get_local $5
+    set_local $3
+    get_local $3
     get_global $~lib/internal/arraybuffer/HEADER_SIZE
     i32.add
     set_local $4
     get_local $0
     get_global $~lib/internal/arraybuffer/HEADER_SIZE
     i32.add
-    set_local $3
+    set_local $5
     get_local $4
-    get_local $3
+    get_local $5
     get_local $2
     call $~lib/internal/memory/memmove
-    get_local $5
-    get_global $~lib/internal/arraybuffer/HEADER_SIZE
-    i32.add
-    get_local $2
-    i32.add
-    set_local $3
-    i32.const 0
-    set_local $4
-    get_local $1
-    get_local $2
-    i32.sub
-    set_local $6
+    block $~lib/memory/memory.free|inlined.0
+     block
+      get_local $0
+      call $~lib/allocator/arena/__memory_free
+      br $~lib/memory/memory.free|inlined.0
+      unreachable
+     end
+     unreachable
+    end
     get_local $3
-    get_local $4
-    get_local $6
-    call $~lib/internal/memory/memset
-    get_local $5
-    return
+    set_local $0
    end
+   get_local $0
+   get_global $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   get_local $2
+   i32.add
+   set_local $3
+   i32.const 0
+   set_local $5
+   get_local $1
+   get_local $2
+   i32.sub
+   set_local $4
+   get_local $3
+   get_local $5
+   get_local $4
+   call $~lib/internal/memory/memset
   else   
    get_local $1
    get_local $2
@@ -2850,7 +2845,7 @@
     if
      i32.const 0
      i32.const 40
-     i32.const 61
+     i32.const 59
      i32.const 4
      call $~lib/env/abort
      unreachable
@@ -2862,7 +2857,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<i32>#push (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#push (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2924,7 +2919,7 @@
   i32.store offset=8
   get_local $5
  )
- (func $~lib/array/Array<i32>#__get (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -2951,7 +2946,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<i32>#pop (; 26 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#pop (; 27 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2997,7 +2992,7 @@
   i32.store offset=4
   get_local $5
  )
- (func $~lib/array/Array<i32>#concat (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#concat (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3074,7 +3069,7 @@
   end
   get_local $5
  )
- (func $~lib/array/Array<i32>#copyWithin (; 28 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/array/Array<i32>#copyWithin (; 29 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -3287,7 +3282,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<i32>#copyWithin|trampoline (; 29 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/array/Array<i32>#copyWithin|trampoline (; 30 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -3307,7 +3302,7 @@
   get_local $3
   call $~lib/array/Array<i32>#copyWithin
  )
- (func $std/array/isArraysEqual<i32> (; 30 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<i32> (; 31 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $2
   i32.eqz
@@ -3366,7 +3361,7 @@
   end
   i32.const 1
  )
- (func $~lib/array/Array<i32>#unshift (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#unshift (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3457,7 +3452,7 @@
   i32.store offset=4
   get_local $5
  )
- (func $~lib/array/Array<i32>#shift (; 32 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#shift (; 33 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3537,7 +3532,7 @@
   i32.store offset=4
   get_local $5
  )
- (func $~lib/array/Array<i32>#reverse (; 33 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#reverse (; 34 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3630,7 +3625,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<i32>#indexOf (; 34 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#indexOf (; 35 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3708,7 +3703,7 @@
   end
   i32.const -1
  )
- (func $~lib/array/Array<i32>#splice (; 35 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#splice (; 36 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3824,7 +3819,7 @@
   i32.store offset=4
   get_local $7
  )
- (func $~lib/array/Array<i32>#splice|trampoline (; 36 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#splice|trampoline (; 37 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -3843,7 +3838,7 @@
   get_local $2
   call $~lib/array/Array<i32>#splice
  )
- (func $~lib/array/Array<i32>#__set (; 37 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 38 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3899,12 +3894,12 @@
   get_local $2
   i32.store offset=8
  )
- (func $start~anonymous|1 (; 38 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|1 (; 39 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 0
   i32.eq
  )
- (func $~lib/array/Array<i32>#findIndex (; 39 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#findIndex (; 40 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3972,17 +3967,17 @@
   end
   i32.const -1
  )
- (func $start~anonymous|2 (; 40 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|2 (; 41 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 1
   i32.eq
  )
- (func $start~anonymous|3 (; 41 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|3 (; 42 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 100
   i32.eq
  )
- (func $start~anonymous|4 (; 42 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|4 (; 43 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -3991,12 +3986,12 @@
   i32.const 100
   i32.eq
  )
- (func $start~anonymous|5 (; 43 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|5 (; 44 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 100
   i32.eq
  )
- (func $start~anonymous|6 (; 44 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|6 (; 45 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4004,12 +3999,12 @@
   i32.const 100
   i32.eq
  )
- (func $start~anonymous|7 (; 45 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|7 (; 46 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 0
   i32.ge_s
  )
- (func $~lib/array/Array<i32>#every (; 46 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#every (; 47 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4078,12 +4073,12 @@
   end
   i32.const 1
  )
- (func $start~anonymous|8 (; 47 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|8 (; 48 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 0
   i32.le_s
  )
- (func $start~anonymous|9 (; 48 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|9 (; 49 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -4092,12 +4087,12 @@
   i32.const 10
   i32.lt_s
  )
- (func $start~anonymous|10 (; 49 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|10 (; 50 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 10
   i32.lt_s
  )
- (func $start~anonymous|11 (; 50 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|11 (; 51 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4105,12 +4100,12 @@
   i32.const 3
   i32.lt_s
  )
- (func $start~anonymous|12 (; 51 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|12 (; 52 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 3
   i32.ge_s
  )
- (func $~lib/array/Array<i32>#some (; 52 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#some (; 53 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4178,12 +4173,12 @@
   end
   i32.const 0
  )
- (func $start~anonymous|13 (; 53 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|13 (; 54 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const -1
   i32.le_s
  )
- (func $start~anonymous|14 (; 54 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|14 (; 55 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -4192,12 +4187,12 @@
   i32.const 10
   i32.gt_s
  )
- (func $start~anonymous|15 (; 55 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|15 (; 56 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 10
   i32.gt_s
  )
- (func $start~anonymous|16 (; 56 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|16 (; 57 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4205,13 +4200,13 @@
   i32.const 3
   i32.gt_s
  )
- (func $start~anonymous|17 (; 57 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|17 (; 58 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_global $std/array/i
   get_local $0
   i32.add
   set_global $std/array/i
  )
- (func $~lib/array/Array<i32>#forEach (; 58 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#forEach (; 59 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4272,7 +4267,7 @@
    unreachable
   end
  )
- (func $start~anonymous|18 (; 59 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|18 (; 60 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -4282,13 +4277,13 @@
   i32.add
   set_global $std/array/i
  )
- (func $start~anonymous|19 (; 60 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|19 (; 61 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_global $std/array/i
   get_local $0
   i32.add
   set_global $std/array/i
  )
- (func $start~anonymous|20 (; 61 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $start~anonymous|20 (; 62 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4297,11 +4292,11 @@
   i32.add
   set_global $std/array/i
  )
- (func $start~anonymous|21 (; 62 ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $start~anonymous|21 (; 63 ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   get_local $0
   f32.convert_s/i32
  )
- (func $~lib/array/Array<f32>#constructor (; 63 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#constructor (; 64 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4360,7 +4355,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/array/Array<i32>#map<f32> (; 64 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#map<f32> (; 65 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4444,7 +4439,7 @@
   end
   get_local $4
  )
- (func $~lib/array/Array<f32>#__get (; 65 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (; 66 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -4471,7 +4466,7 @@
    unreachable
   end
  )
- (func $start~anonymous|22 (; 66 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|22 (; 67 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -4482,7 +4477,7 @@
   set_global $std/array/i
   get_local $0
  )
- (func $~lib/array/Array<i32>#map<i32> (; 67 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#map<i32> (; 68 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4565,14 +4560,14 @@
   end
   get_local $4
  )
- (func $start~anonymous|23 (; 68 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|23 (; 69 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_global $std/array/i
   get_local $0
   i32.add
   set_global $std/array/i
   get_local $0
  )
- (func $start~anonymous|24 (; 69 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|24 (; 70 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4582,12 +4577,12 @@
   set_global $std/array/i
   get_local $0
  )
- (func $start~anonymous|25 (; 70 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|25 (; 71 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 2
   i32.ge_s
  )
- (func $~lib/array/Array<i32>#filter (; 71 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#filter (; 72 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4666,7 +4661,7 @@
   end
   get_local $3
  )
- (func $start~anonymous|26 (; 72 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|26 (; 73 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -4679,7 +4674,7 @@
   i32.const 2
   i32.ge_s
  )
- (func $start~anonymous|27 (; 73 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|27 (; 74 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_global $std/array/i
   get_local $0
   i32.add
@@ -4688,7 +4683,7 @@
   i32.const 2
   i32.ge_s
  )
- (func $start~anonymous|28 (; 74 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start~anonymous|28 (; 75 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -4700,12 +4695,12 @@
   i32.const 2
   i32.ge_s
  )
- (func $start~anonymous|29 (; 75 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|29 (; 76 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/array/Array<i32>#reduce<i32> (; 76 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduce<i32> (; 77 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4772,12 +4767,12 @@
   end
   get_local $3
  )
- (func $start~anonymous|30 (; 77 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|30 (; 78 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $start~anonymous|31 (; 78 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|31 (; 79 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   i32.const 0
   i32.ne
@@ -4789,7 +4784,7 @@
    i32.gt_s
   end
  )
- (func $~lib/array/Array<i32>#reduce<bool> (; 79 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduce<bool> (; 80 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4856,7 +4851,7 @@
   end
   get_local $3
  )
- (func $start~anonymous|32 (; 80 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|32 (; 81 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   i32.const 0
   i32.ne
@@ -4868,7 +4863,7 @@
    i32.gt_s
   end
  )
- (func $start~anonymous|33 (; 81 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|33 (; 82 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $3
   i32.const 1
   call $~lib/array/Array<i32>#push
@@ -4877,12 +4872,12 @@
   get_local $1
   i32.add
  )
- (func $start~anonymous|34 (; 82 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|34 (; 83 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $start~anonymous|35 (; 83 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|35 (; 84 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $3
   call $~lib/array/Array<i32>#pop
   drop
@@ -4890,12 +4885,12 @@
   get_local $1
   i32.add
  )
- (func $start~anonymous|36 (; 84 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|36 (; 85 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $~lib/array/Array<i32>#reduceRight<i32> (; 85 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduceRight<i32> (; 86 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4950,12 +4945,12 @@
   end
   get_local $3
  )
- (func $start~anonymous|37 (; 86 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|37 (; 87 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $start~anonymous|38 (; 87 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|38 (; 88 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   i32.const 0
   i32.ne
@@ -4967,7 +4962,7 @@
    i32.gt_s
   end
  )
- (func $~lib/array/Array<i32>#reduceRight<bool> (; 88 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#reduceRight<bool> (; 89 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5022,7 +5017,7 @@
   end
   get_local $3
  )
- (func $start~anonymous|39 (; 89 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|39 (; 90 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   i32.const 0
   i32.ne
@@ -5034,7 +5029,7 @@
    i32.gt_s
   end
  )
- (func $start~anonymous|40 (; 90 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|40 (; 91 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $3
   i32.const 1
   call $~lib/array/Array<i32>#push
@@ -5043,12 +5038,12 @@
   get_local $1
   i32.add
  )
- (func $start~anonymous|41 (; 91 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|41 (; 92 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $0
   get_local $1
   i32.add
  )
- (func $start~anonymous|42 (; 92 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start~anonymous|42 (; 93 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $3
   call $~lib/array/Array<i32>#pop
   drop
@@ -5056,7 +5051,7 @@
   get_local $1
   i32.add
  )
- (func $~lib/math/murmurHash3 (; 93 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (; 94 ;) (type $II) (param $0 i64) (result i64)
   get_local $0
   get_local $0
   i64.const 33
@@ -5085,7 +5080,7 @@
   set_local $0
   get_local $0
  )
- (func $~lib/math/splitMix32 (; 94 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/math/splitMix32 (; 95 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 1831565813
   i32.add
@@ -5120,7 +5115,7 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/math/NativeMath.seedRandom (; 95 ;) (type $Iv) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 96 ;) (type $Iv) (param $0 i64)
   get_local $0
   i64.eqz
   if
@@ -5149,7 +5144,7 @@
   call $~lib/math/splitMix32
   set_global $~lib/math/random_state1_32
  )
- (func $~lib/internal/array/insertionSort<f32> (; 96 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/array/insertionSort<f32> (; 97 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 f32)
   (local $6 i32)
@@ -5260,9 +5255,6 @@
    end
    unreachable
   end
- )
- (func $~lib/allocator/arena/__memory_free (; 97 ;) (type $iv) (param $0 i32)
-  nop
  )
  (func $~lib/internal/array/weakHeapSort<f32> (; 98 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
@@ -5619,11 +5611,11 @@
    end
    unreachable
   end
-  block $~lib/memory/memory.free|inlined.0
+  block $~lib/memory/memory.free|inlined.1
    block
     get_local $5
     call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.0
+    br $~lib/memory/memory.free|inlined.1
     unreachable
    end
    unreachable
@@ -6400,11 +6392,11 @@
    end
    unreachable
   end
-  block $~lib/memory/memory.free|inlined.1
+  block $~lib/memory/memory.free|inlined.2
    block
     get_local $5
     call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.1
+    br $~lib/memory/memory.free|inlined.2
     unreachable
    end
    unreachable
@@ -7208,11 +7200,11 @@
    end
    unreachable
   end
-  block $~lib/memory/memory.free|inlined.2
+  block $~lib/memory/memory.free|inlined.3
    block
     get_local $5
     call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.2
+    br $~lib/memory/memory.free|inlined.3
     unreachable
    end
    unreachable
@@ -7881,11 +7873,11 @@
    end
    unreachable
   end
-  block $~lib/memory/memory.free|inlined.3
+  block $~lib/memory/memory.free|inlined.4
    block
     get_local $5
     call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.3
+    br $~lib/memory/memory.free|inlined.4
     unreachable
    end
    unreachable
@@ -10630,11 +10622,11 @@
     call $~lib/env/abort
     unreachable
    end
-   block $~lib/memory/memory.free|inlined.4
+   block $~lib/memory/memory.free|inlined.5
     block
      get_local $10
      call $~lib/allocator/arena/__memory_free
-     br $~lib/memory/memory.free|inlined.4
+     br $~lib/memory/memory.free|inlined.5
      unreachable
     end
     unreachable
@@ -11139,11 +11131,11 @@
     call $~lib/env/abort
     unreachable
    end
-   block $~lib/memory/memory.free|inlined.5
+   block $~lib/memory/memory.free|inlined.6
     block
      get_local $8
      call $~lib/allocator/arena/__memory_free
-     br $~lib/memory/memory.free|inlined.5
+     br $~lib/memory/memory.free|inlined.6
      unreachable
     end
     unreachable
@@ -11369,11 +11361,11 @@
     call $~lib/env/abort
     unreachable
    end
-   block $~lib/memory/memory.free|inlined.6
+   block $~lib/memory/memory.free|inlined.7
     block
      get_local $8
      call $~lib/allocator/arena/__memory_free
-     br $~lib/memory/memory.free|inlined.6
+     br $~lib/memory/memory.free|inlined.7
      unreachable
     end
     unreachable
@@ -12779,11 +12771,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/memory/memory.free|inlined.7
+  block $~lib/memory/memory.free|inlined.8
    block
     get_local $1
     call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.7
+    br $~lib/memory/memory.free|inlined.8
     unreachable
    end
    unreachable
@@ -13040,11 +13032,11 @@
     call $~lib/env/abort
     unreachable
    end
-   block $~lib/memory/memory.free|inlined.8
+   block $~lib/memory/memory.free|inlined.9
     block
      get_local $8
      call $~lib/allocator/arena/__memory_free
-     br $~lib/memory/memory.free|inlined.8
+     br $~lib/memory/memory.free|inlined.9
      unreachable
     end
     unreachable
@@ -13501,11 +13493,11 @@
     call $~lib/env/abort
     unreachable
    end
-   block $~lib/memory/memory.free|inlined.9
+   block $~lib/memory/memory.free|inlined.10
     block
      get_local $9
      call $~lib/allocator/arena/__memory_free
-     br $~lib/memory/memory.free|inlined.9
+     br $~lib/memory/memory.free|inlined.10
      unreachable
     end
     unreachable
@@ -13753,11 +13745,11 @@
     call $~lib/env/abort
     unreachable
    end
-   block $~lib/memory/memory.free|inlined.10
+   block $~lib/memory/memory.free|inlined.11
     block
      get_local $8
      call $~lib/allocator/arena/__memory_free
-     br $~lib/memory/memory.free|inlined.10
+     br $~lib/memory/memory.free|inlined.11
      unreachable
     end
     unreachable
@@ -13973,11 +13965,11 @@
     call $~lib/env/abort
     unreachable
    end
-   block $~lib/memory/memory.free|inlined.11
+   block $~lib/memory/memory.free|inlined.12
     block
      get_local $8
      call $~lib/allocator/arena/__memory_free
-     br $~lib/memory/memory.free|inlined.11
+     br $~lib/memory/memory.free|inlined.12
      unreachable
     end
     unreachable
@@ -14466,11 +14458,11 @@
     call $~lib/env/abort
     unreachable
    end
-   block $~lib/memory/memory.free|inlined.12
+   block $~lib/memory/memory.free|inlined.13
     block
      get_local $8
      call $~lib/allocator/arena/__memory_free
-     br $~lib/memory/memory.free|inlined.12
+     br $~lib/memory/memory.free|inlined.13
      unreachable
     end
     unreachable
@@ -14779,11 +14771,11 @@
     call $~lib/env/abort
     unreachable
    end
-   block $~lib/memory/memory.free|inlined.13
+   block $~lib/memory/memory.free|inlined.14
     block
      get_local $8
      call $~lib/allocator/arena/__memory_free
-     br $~lib/memory/memory.free|inlined.13
+     br $~lib/memory/memory.free|inlined.14
      unreachable
     end
     unreachable
@@ -15134,11 +15126,11 @@
     call $~lib/env/abort
     unreachable
    end
-   block $~lib/memory/memory.free|inlined.14
+   block $~lib/memory/memory.free|inlined.15
     block
      get_local $8
      call $~lib/allocator/arena/__memory_free
-     br $~lib/memory/memory.free|inlined.14
+     br $~lib/memory/memory.free|inlined.15
      unreachable
     end
     unreachable
