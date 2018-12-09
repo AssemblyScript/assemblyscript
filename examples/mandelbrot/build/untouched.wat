@@ -4,8 +4,8 @@
  (type $FFFF (func (param f64 f64 f64) (result f64)))
  (type $v (func))
  (import "env" "memory" (memory $0 0))
- (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
  (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
+ (import "Math" "log2" (func $~lib/bindings/Math/log2 (param f64) (result f64)))
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $assembly/index/NUM_COLORS i32 (i32.const 2048))
@@ -13,14 +13,14 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "computeLine" (func $assembly/index/computeLine))
- (func $assembly/index/clamp<f64> (; 1 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
+ (func $assembly/index/clamp<f64> (; 2 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
   get_local $0
   get_local $1
   f64.max
   get_local $2
   f64.min
  )
- (func $assembly/index/computeLine (; 2 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $assembly/index/computeLine (; 3 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
@@ -216,11 +216,7 @@
       get_local $19
       call $~lib/bindings/Math/log
       f64.mul
-      call $~lib/bindings/Math/log
-      f64.const 1
-      get_global $~lib/bindings/Math/LN2
-      f64.div
-      f64.mul
+      call $~lib/bindings/Math/log2
       set_local $21
       get_global $assembly/index/NUM_COLORS
       i32.const 1
@@ -259,6 +255,6 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $v)
+ (func $null (; 4 ;) (type $v)
  )
 )
