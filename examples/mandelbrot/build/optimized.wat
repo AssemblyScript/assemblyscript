@@ -197,10 +197,10 @@
      i32.trunc_u/f64
      set_local $2
     end
-    get_local $0
     get_local $8
     i32.const 1
     i32.shl
+    get_local $0
     i32.add
     get_local $2
     i32.store16

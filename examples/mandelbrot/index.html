@@ -30,13 +30,18 @@ var ctx = cnv.getContext("2d");
 var bcr = cnv.getBoundingClientRect();
 
 // Compute the size of the viewport
-var width = bcr.width | 0;
+var width  = bcr.width  | 0;
 var height = bcr.height | 0;
+var ratio  = window.devicePixelRatio || 1;
+width  *= ratio;
+height *= ratio;
 var size = width * height;
 var byteSize = size << 1; // discrete color indices in range [0, 2047] (here: 2b per pixel)
 
-cnv.width = width;
+cnv.width  = width;
 cnv.height = height;
+
+ctx.scale(ratio, ratio);
 
 // Compute the size of and instantiate the module's memory
 var memory = new WebAssembly.Memory({ initial: ((byteSize + 0xffff) & ~0xffff) >>> 16 });
