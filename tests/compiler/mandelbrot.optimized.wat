@@ -97,7 +97,6 @@
     end
    end
   end
-  get_local $3
   get_local $1
   i32.const 614242
   i32.add
@@ -106,8 +105,12 @@
   i32.shr_s
   i32.const 1023
   i32.sub
+  get_local $3
   i32.add
   set_local $3
+  get_local $4
+  i64.const 4294967295
+  i64.and
   get_local $1
   i32.const 1048575
   i32.and
@@ -116,9 +119,6 @@
   i64.extend_u/i32
   i64.const 32
   i64.shl
-  get_local $4
-  i64.const 4294967295
-  i64.and
   i64.or
   f64.reinterpret/i64
   f64.const 1
@@ -302,10 +302,22 @@
       end
      end
     end
+<<<<<<< HEAD
     loop $continue|2
      get_local $7
      f64.convert_u/i32
      get_local $9
+=======
+    f64.const 8
+    get_local $3
+    f64.convert_u/i32
+    f64.min
+    set_local $6
+    loop $repeat|2
+     get_local $2
+     f64.convert_u/i32
+     get_local $6
+>>>>>>> master
      f64.lt
      if
       get_local $4
@@ -331,8 +343,13 @@
       get_local $7
       i32.const 1
       i32.add
+<<<<<<< HEAD
       set_local $7
       br $continue|2
+=======
+      set_local $2
+      br $repeat|2
+>>>>>>> master
      end
     end
     i32.const 2047

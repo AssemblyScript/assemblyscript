@@ -39,6 +39,7 @@
  (start $start)
  (func $~lib/array/Array<i8>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   get_local $0
   i32.load
   set_local $2
@@ -49,10 +50,14 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
+   i32.const 0
+   set_local $3
    get_local $2
    get_local $1
    i32.const 0
    i32.shl
+   i32.add
+   get_local $3
    i32.add
    i32.load8_s offset=8
   else   
@@ -61,6 +66,7 @@
  )
  (func $~lib/array/Array<i32>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   get_local $0
   i32.load
   set_local $2
@@ -71,10 +77,14 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
+   i32.const 0
+   set_local $3
    get_local $2
    get_local $1
    i32.const 2
    i32.shl
+   i32.add
+   get_local $3
    i32.add
    i32.load offset=8
   else   
@@ -182,7 +192,7 @@
   if
    i32.const 0
    i32.const 168
-   i32.const 23
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -521,13 +531,18 @@
  )
  (func $~lib/array/Array<i8>#__unchecked_set (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
   get_local $0
   i32.load
   set_local $3
+  i32.const 0
+  set_local $4
   get_local $3
   get_local $1
   i32.const 0
   i32.shl
+  i32.add
+  get_local $4
   i32.add
   get_local $2
   i32.store8 offset=8
@@ -593,13 +608,18 @@
  )
  (func $~lib/array/Array<i32>#__unchecked_set (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
   get_local $0
   i32.load
   set_local $3
+  i32.const 0
+  set_local $4
   get_local $3
   get_local $1
   i32.const 2
   i32.shl
+  i32.add
+  get_local $4
   i32.add
   get_local $2
   i32.store offset=8
@@ -665,13 +685,18 @@
  )
  (func $~lib/array/Array<Ref>#__unchecked_set (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
   get_local $0
   i32.load
   set_local $3
+  i32.const 0
+  set_local $4
   get_local $3
   get_local $1
   i32.const 2
   i32.shl
+  i32.add
+  get_local $4
   i32.add
   get_local $2
   i32.store offset=8
@@ -753,13 +778,18 @@
  )
  (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 16 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
   get_local $0
   i32.load
   set_local $3
+  i32.const 0
+  set_local $4
   get_local $3
   get_local $1
   i32.const 2
   i32.shl
+  i32.add
+  get_local $4
   i32.add
   get_local $2
   i32.store offset=8

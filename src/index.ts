@@ -169,3 +169,20 @@ export function buildTSD(program: Program): string {
 
 /** Prefix indicating a library file. */
 export { LIBRARY_PREFIX } from "./common";
+
+// Full API
+export * from "./ast";
+// export * from "./binary";
+export * from "./common";
+export * from "./compiler";
+export * from "./decompiler";
+export * from "./definitions";
+export * from "./diagnosticMessages.generated";
+export * from "./diagnostics";
+export * from "./module";
+export * from "./parser";
+export * from "./program";
+export * from "./resolver";
+export * from "./tokenizer";
+export * from "./types";
+export * from "./util";

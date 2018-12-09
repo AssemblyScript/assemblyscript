@@ -112,6 +112,8 @@ declare function changetype<T>(value: any): T;
 declare function unchecked<T>(value: T): T;
 /** Emits a `call_indirect` instruction, calling the specified function in the function table by index with the specified arguments. Does result in a runtime error if the arguments do not match the called function. */
 declare function call_indirect<T>(target: Function | u32, ...args: any[]): T;
+/** Instantiates a new instance of `T` using the specified constructor arguments. */
+declare function instantiate<T>(...args: any[]): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
@@ -363,6 +365,8 @@ declare namespace f64 {
   /** Converts A string to an integer. */
   export function parseInt(string: string, radix?: i32): f64;
 }
+/** Macro type evaluating to the underlying native WebAssembly type. */
+declare type NATIVE<T> = T;
 
 // User-defined diagnostic macros
 
@@ -518,12 +522,24 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   readonly length: i32;
   /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
   subarray(begin?: i32, end?: i32): this;
+  /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
+  reduce<W>(
+    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
+    initialValue: W,
+  ): W;
+  /**  The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. This method has the same algorithm as Array.prototype.reduceRight(). */
+  reduceRight<W>(
+    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
+    initialValue: W,
+  ): W;
 }
 
 /** An array of twos-complement 8-bit signed integers. */
 declare class Int8Array extends TypedArray<i8> {}
 /** An array of 8-bit unsigned integers. */
 declare class Uint8Array extends TypedArray<u8> {}
+/** A clamped array of 8-bit unsigned integers. */
+declare class Uint8ClampedArray extends TypedArray<u8> {}
 /** An array of twos-complement 16-bit signed integers. */
 declare class Int16Array extends TypedArray<i16> {}
 /** An array of 16-bit unsigned integers. */
@@ -570,8 +586,8 @@ declare class Array<T> {
   shift(): T;
   some(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   unshift(element: T): i32;
-  slice(from: i32, to?: i32): T[];
-  splice(start: i32, deleteCount?: i32): void;
+  slice(from: i32, to?: i32): Array<T>;
+  splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): T[];

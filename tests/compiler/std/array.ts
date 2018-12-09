@@ -1,6 +1,6 @@
 import "allocator/arena";
 import { Array } from "array";
-import { defaultComparator } from "internal/array";
+import { COMPARATOR } from "internal/sort";
 
 // Obtains the internal capacity of an array from its backing buffer.
 function internalCapacity<T>(array: Array<T>): i32 {
@@ -330,6 +330,60 @@ assert(internalCapacity<i32>(arr) == 5);
 assert(arr[0] == 44);
 assert(arr[1] == 42);
 
+// Array#splice ////////////////////////////////////////////////////////////////////////////////////
+
+var sarr: i32[] = [1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(0), <i32[]>[1, 2, 3, 4, 5]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(2), <i32[]>[3, 4, 5]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(2, 2), <i32[]>[3, 4]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(0, 1), <i32[]>[1]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-1), <i32[]>[5]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-2), <i32[]>[4, 5]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-2, 1), <i32[]>[4]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-7, 1), <i32[]>[1]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(-2, -1), <i32[]>[]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(1, -2), <i32[]>[]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(4, 0), <i32[]>[]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(7, 0), <i32[]>[]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+
+sarr = <i32[]>[1, 2, 3, 4, 5];
+assert(isArraysEqual<i32>(sarr.splice(7, 5), <i32[]>[]));
+assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+
 // Array#findIndex /////////////////////////////////////////////////////////////////////////////////
 
 arr[0] = 0;
@@ -658,7 +712,7 @@ arr.push(3);
 // Array#sort //////////////////////////////////////////////////////////////////////////////////////
 
 // Checks if an array is properly sorted
-function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = defaultComparator<T>()): bool {
+function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): bool {
   for (let i: i32 = 1, len: i32 = data.length; i < len; i++) {
     if (comparator(data[i - 1], data[i]) > 0) return false;
   }
@@ -728,7 +782,7 @@ function assertSorted<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): void {
 }
 
 function assertSortedDefault<T>(arr: Array<T>): void {
-  assertSorted<T>(arr, defaultComparator<T>());
+  assertSorted<T>(arr, COMPARATOR<T>());
 }
 
 // Tests for default comparator

@@ -17,22 +17,22 @@
   (local $3 i32)
   i32.const -2128831035
   set_local $2
-  block $break|0
-   get_local $0
-   i32.load
-   i32.const 1
-   i32.shl
-   set_local $3
-   loop $repeat|0
+  get_local $0
+  i32.load
+  i32.const 1
+  i32.shl
+  set_local $3
+  loop $repeat|0
+   block $break|0
     get_local $1
     get_local $3
     i32.ge_u
     br_if $break|0
-    get_local $2
     get_local $0
     get_local $1
     i32.add
     i32.load8_u offset=4
+    get_local $2
     i32.xor
     i32.const 16777619
     i32.mul
@@ -42,9 +42,7 @@
     i32.add
     set_local $1
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
   get_local $2
  )

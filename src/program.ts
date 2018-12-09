@@ -730,19 +730,19 @@ export class Program extends DiagnosticEmitter {
   /** Sets a constant integer value. */
   setConstantInteger(globalName: string, type: Type, value: I64): void {
     assert(type.is(TypeFlags.INTEGER));
-    this.elementsLookup.set(globalName,
-      new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
-        .withConstantIntegerValue(value)
-    );
+    var global = new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
+      .withConstantIntegerValue(value);
+    global.set(CommonFlags.RESOLVED);
+    this.elementsLookup.set(globalName, global);
   }
 
   /** Sets a constant float value. */
   setConstantFloat(globalName: string, type: Type, value: f64): void {
     assert(type.is(TypeFlags.FLOAT));
-    this.elementsLookup.set(globalName,
-      new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
-        .withConstantFloatValue(value)
-    );
+    var global = new Global(this, globalName, globalName, type, null, DecoratorFlags.NONE)
+      .withConstantFloatValue(value);
+    global.set(CommonFlags.RESOLVED);
+    this.elementsLookup.set(globalName, global);
   }
 
   /** Tries to locate an import by traversing exports and queued exports. */
@@ -965,6 +965,7 @@ export class Program extends DiagnosticEmitter {
           }
           break;
         }
+        case NodeKind.INDEXSIGNATUREDECLARATION: break; // ignored for now
         default: {
           assert(false); // should have been reported while parsing
           return;
@@ -2390,8 +2391,8 @@ export class FunctionPrototype extends Element {
   declaration: FunctionDeclaration;
   /** If an instance method, the class prototype reference. */
   classPrototype: ClassPrototype | null;
-  /** Resolved instances. */
-  instances: Map<string,Function> = new Map();
+  /** Resolved instances by class type arguments and function type arguments. */
+  instances: Map<string,Map<string,Function>> = new Map();
   /** Class type arguments, if a partially resolved method of a generic class. Not set otherwise. */
   classTypeArguments: Type[] | null = null;
   /** Operator kind, if an overload. */
@@ -2411,6 +2412,21 @@ export class FunctionPrototype extends Element {
     this.flags = declaration.flags;
     this.classPrototype = classPrototype;
     this.decoratorFlags = decoratorFlags;
+  }
+
+  /** Applies class type arguments to the context of a partially resolved instance method. */
+  applyClassTypeArguments(contextualTypeArguments: Map<string,Type>): void {
+    var classTypeArguments = assert(this.classTypeArguments); // set only if partial
+    var classDeclaration = assert(this.classPrototype).declaration;
+    var classTypeParameters = classDeclaration.typeParameters;
+    var numClassTypeParameters = classTypeParameters.length;
+    assert(numClassTypeParameters == classTypeArguments.length);
+    for (let i = 0; i < numClassTypeParameters; ++i) {
+      contextualTypeArguments.set(
+        classTypeParameters[i].name.text,
+        classTypeArguments[i]
+      );
+    }
   }
 
   toString(): string { return this.simpleName; }

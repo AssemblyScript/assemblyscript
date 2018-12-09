@@ -373,8 +373,8 @@ declare class Array<T> {
   shift(): T;
   some(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   unshift(element: T): i32;
-  slice(from?: i32, to?: i32): T[];
-  splice(start: i32, deleteCount?: i32): void;
+  slice(from?: i32, to?: i32): Array<T>;
+  splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): T[];
@@ -382,6 +382,7 @@ declare class Array<T> {
 }
 
 declare class Uint8Array extends Array<u8> {}
+declare class Uint8ClampedArray extends Array<u8> {}
 declare class Uint16Array extends Array<u16> {}
 declare class Uint32Array extends Array<u32> {}
 declare class Int8Array extends Array<i8> {}

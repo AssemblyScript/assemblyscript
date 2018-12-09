@@ -74,35 +74,35 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $folding-inner0
+  get_local $0
+  i32.reinterpret/f32
+  tee_local $1
+  i32.const 23
+  i32.shr_u
+  i32.const 255
+  i32.and
+  set_local $2
+  get_local $1
+  i32.const -2147483648
+  i32.and
+  set_local $4
+  get_local $2
+  i32.const 255
+  i32.eq
+  tee_local $3
+  i32.eqz
+  if
+   i32.const 0
+   set_local $3
+  end
+  get_local $3
+  if
    get_local $0
-   i32.reinterpret/f32
-   tee_local $1
-   i32.const 23
-   i32.shr_u
-   i32.const 255
-   i32.and
-   set_local $2
-   get_local $1
-   i32.const -2147483648
-   i32.and
-   set_local $4
-   get_local $2
-   i32.const 255
-   i32.eq
-   tee_local $3
-   i32.eqz
-   if
-    i32.const 0
-    set_local $3
-   end
-   get_local $3
-   if
-    get_local $0
-    get_local $0
-    f32.div
-    return
-   end
+   get_local $0
+   f32.div
+   return
+  end
+  block $folding-inner0
    get_local $1
    i32.const 1
    i32.shl
@@ -188,6 +188,7 @@
    tee_local $3
    i32.shl
    set_local $1
+   get_local $4
    get_local $2
    get_local $3
    i32.sub
@@ -210,7 +211,6 @@
     i32.shr_u
    end
    tee_local $1
-   get_local $4
    i32.or
    f32.reinterpret/i32
    return
@@ -225,35 +225,35 @@
   (local $3 i64)
   (local $4 i32)
   (local $5 i64)
-  block $folding-inner0
+  get_local $0
+  i64.reinterpret/f64
+  tee_local $1
+  i64.const 52
+  i64.shr_u
+  i64.const 2047
+  i64.and
+  set_local $2
+  get_local $1
+  i64.const 63
+  i64.shr_u
+  set_local $5
+  get_local $2
+  i64.const 2047
+  i64.eq
+  tee_local $4
+  i32.eqz
+  if
+   i32.const 0
+   set_local $4
+  end
+  get_local $4
+  if
    get_local $0
-   i64.reinterpret/f64
-   tee_local $1
-   i64.const 52
-   i64.shr_u
-   i64.const 2047
-   i64.and
-   set_local $2
-   get_local $1
-   i64.const 63
-   i64.shr_u
-   set_local $5
-   get_local $2
-   i64.const 2047
-   i64.eq
-   tee_local $4
-   i32.eqz
-   if
-    i32.const 0
-    set_local $4
-   end
-   get_local $4
-   if
-    get_local $0
-    get_local $0
-    f64.div
-    return
-   end
+   get_local $0
+   f64.div
+   return
+  end
+  block $folding-inner0
    get_local $1
    i64.const 1
    i64.shl
@@ -601,20 +601,20 @@
   get_global $binary/f
   call $~lib/math/NativeMathf.mod
   drop
+  get_global $binary/f
+  tee_local $0
+  i32.reinterpret/f32
+  i32.const 2147483647
+  i32.and
+  i32.const 2139095040
+  i32.gt_s
+  tee_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
   block $__inlined_func$~lib/math/NativeMathf.pow
-   get_global $binary/f
-   tee_local $0
-   i32.reinterpret/f32
-   i32.const 2147483647
-   i32.and
-   i32.const 2139095040
-   i32.gt_s
-   tee_local $1
-   i32.eqz
-   if
-    i32.const 0
-    set_local $1
-   end
    get_local $1
    br_if $__inlined_func$~lib/math/NativeMathf.pow
   end

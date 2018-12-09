@@ -10,7 +10,6 @@ assert(Uint64Array.BYTES_PER_ELEMENT == 8);
 assert(Float32Array.BYTES_PER_ELEMENT == 4);
 assert(Float64Array.BYTES_PER_ELEMENT == 8);
 
-
 function isInt8ArrayEqual(a: Int8Array, b: Array<i8>): bool {
   if (a.length != b.length) return false;
   for (let i = 0, len = a.length; i < len; i++) {
@@ -225,3 +224,98 @@ assert(multisubarr3[0] === 4);
 assert(multisubarr3.length === 3);
 assert(multisubarr3.byteOffset === 3);
 assert(multisubarr3.byteLength === 3);
+
+/**
+ * Reduce test suite:
+ * The reduce test is designed to test a simple sum reduction. In each test it instantiates the
+ * tested typedarray, and sets the values manually. Then it calls `TypedArray.prototype.reduce` with a
+ * single sum arrow function reduction. For each reduction, it verifies the `self` parameter is the
+ * instantiated array, the index is the correct index, and it increments the testIndex variable.
+ * Finally, it asserts the value is 6.
+ *
+ * TODO: When function closure support is added, remove the function comments to fully verify the
+ * tests work.
+ */
+
+function testReduce<ArrayType, T>(): void {
+  var array: ArrayType = instantiate<ArrayType>(3);
+  array[0] = <T>1;
+  array[1] = <T>2;
+  array[2] = <T>3;
+  // var testindex: i32 = 2;
+  var result = array.reduce<T>((acc: T, val: T, index: i32, self: ArrayType): T => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == <T>6);
+}
+
+testReduce<Int8Array, i8>();
+testReduce<Uint8Array, u8>();
+testReduce<Uint8ClampedArray, u8>();
+testReduce<Int16Array, i16>();
+testReduce<Uint16Array, u16>();
+testReduce<Int32Array, i32>();
+testReduce<Uint32Array, u32>();
+testReduce<Int64Array, i64>();
+testReduce<Uint64Array, u64>();
+testReduce<Float32Array, f32>();
+testReduce<Float64Array, f64>();
+
+function testReduceRight<ArrayType, T>(): void {
+  var array: ArrayType = instantiate<ArrayType>(3);
+  array[0] = <T>1;
+  array[1] = <T>2;
+  array[2] = <T>3;
+  // var testindex: i32 = 2;
+  var result = array.reduceRight<T>((acc: T, val: T, index: i32, self: ArrayType): T => {
+    // assert(testindex == index);
+    // assert(array == self);
+    // --testindex;
+    return acc + val;
+  }, 0);
+  assert(result == <T>6);
+}
+
+testReduceRight<Int8Array, i8>();
+testReduceRight<Uint8Array, u8>();
+testReduceRight<Uint8ClampedArray, u8>();
+testReduceRight<Int16Array, i16>();
+testReduceRight<Uint16Array, u16>();
+testReduceRight<Int32Array, i32>();
+testReduceRight<Uint32Array, u32>();
+testReduceRight<Int64Array, i64>();
+testReduceRight<Uint64Array, u64>();
+testReduceRight<Float32Array, f32>();
+testReduceRight<Float64Array, f64>();
+
+function testArrayMap<ArrayType extends TypedArray<T>, T>(): void {
+  var source: ArrayType = instantiate<ArrayType>(3);
+  source[0] = <T>1;
+  source[1] = <T>2;
+  source[2] = <T>3;
+  // var testIndex: i32 = 0;
+  var result = source.map((value: T, index: i32, self: ArrayType): T => {
+    // assert(self == source);
+    // assert(testIndex == testIndex);
+    // testIndex++;
+    return value * value;
+  });
+  assert(result[0] == <T>1);
+  assert(result[1] == <T>4);
+  assert(result[2] == <T>9);
+}
+
+testArrayMap<Int8Array, i8>();
+testArrayMap<Uint8Array, u8>();
+testArrayMap<Uint8ClampedArray, u8>();
+testArrayMap<Int16Array, i16>();
+testArrayMap<Uint16Array, u16>();
+testArrayMap<Int32Array, i32>();
+testArrayMap<Uint32Array, u32>();
+testArrayMap<Int64Array, i64>();
+testArrayMap<Uint64Array, u64>();
+testArrayMap<Float32Array, f32>();
+testArrayMap<Float64Array, f64>();

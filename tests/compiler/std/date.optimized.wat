@@ -170,9 +170,9 @@
   i64.store
   get_local $0
   set_global $std/date/date
+  get_global $std/date/creationTime
   get_global $std/date/date
   i64.load
-  get_global $std/date/creationTime
   i64.ne
   if
    i32.const 0
