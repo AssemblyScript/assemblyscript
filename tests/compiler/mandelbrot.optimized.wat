@@ -302,22 +302,10 @@
       end
      end
     end
-<<<<<<< HEAD
     loop $continue|2
      get_local $7
      f64.convert_u/i32
      get_local $9
-=======
-    f64.const 8
-    get_local $3
-    f64.convert_u/i32
-    f64.min
-    set_local $6
-    loop $repeat|2
-     get_local $2
-     f64.convert_u/i32
-     get_local $6
->>>>>>> master
      f64.lt
      if
       get_local $4
@@ -343,13 +331,8 @@
       get_local $7
       i32.const 1
       i32.add
-<<<<<<< HEAD
       set_local $7
       br $continue|2
-=======
-      set_local $2
-      br $repeat|2
->>>>>>> master
      end
     end
     i32.const 2047
@@ -388,10 +371,10 @@
      i32.trunc_u/f64
      set_local $2
     end
-    get_local $0
     get_local $8
     i32.const 1
     i32.shl
+    get_local $0
     i32.add
     get_local $2
     i32.store16
