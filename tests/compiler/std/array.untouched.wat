@@ -331,6 +331,14 @@
  (data (i32.const 8320) "p \00\00\01\00\00\00")
  (data (i32.const 8328) "\04\00\00\00\00\00\00\00\80 \00\00\00\00\00\00")
  (data (i32.const 8344) "\88 \00\00\01\00\00\00")
+ (data (i32.const 8352) "\03\00\00\00\00\00\00\00\01\02\03\00\00\00\00\00")
+ (data (i32.const 8368) "\a0 \00\00\03\00\00\00")
+ (data (i32.const 8376) "\02\00\00\00\00\00\00\00\04\05\00\00\00\00\00\00")
+ (data (i32.const 8392) "\b8 \00\00\02\00\00\00")
+ (data (i32.const 8400) "\04\00\00\00\00\00\00\00\06\07\08\t\00\00\00\00")
+ (data (i32.const 8416) "\d0 \00\00\04\00\00\00")
+ (data (i32.const 8424) "\0c\00\00\00\00\00\00\00\b0 \00\00\c8 \00\00\e0 \00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 8456) "\e8 \00\00\03\00\00\00")
  (table $0 56 anyfunc)
  (elem (i32.const 0) $null $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|5 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|19 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $start~anonymous|23 $start~anonymous|24 $start~anonymous|25 $start~anonymous|26 $start~anonymous|27 $start~anonymous|28 $start~anonymous|29 $start~anonymous|30 $start~anonymous|31 $start~anonymous|32 $start~anonymous|33 $start~anonymous|34 $start~anonymous|35 $start~anonymous|36 $start~anonymous|37 $start~anonymous|38 $start~anonymous|39 $start~anonymous|40 $start~anonymous|41 $start~anonymous|42 $~lib/array/Array<f32>#sort|trampoline~anonymous|43 $~lib/array/Array<f64>#sort|trampoline~anonymous|44 $~lib/array/Array<i32>#sort|trampoline~anonymous|45 $~lib/array/Array<u32>#sort|trampoline~anonymous|46 $std/array/assertSortedDefault<i32>~anonymous|47 $start~anonymous|48 $start~anonymous|49 $start~anonymous|50 $start~anonymous|51 $start~anonymous|52 $start~anonymous|53 $start~anonymous|54 $start~anonymous|55)
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
@@ -434,7 +442,9 @@
  (global $std/array/subarr32 (mut i32) (i32.const 8176))
  (global $std/array/subarr8 (mut i32) (i32.const 8272))
  (global $std/array/subarrU32 (mut i32) (i32.const 8344))
- (global $HEAP_BASE i32 (i32.const 8352))
+ (global $std/array/flattest (mut i32) (i32.const 8456))
+ (global $std/array/flattestresult (mut i32) (i32.const 0))
+ (global $HEAP_BASE i32 (i32.const 8464))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -15551,7 +15561,231 @@
   get_local $3
   return
  )
- (func $start (; 221 ;) (type $v)
+ (func $~lib/array/Array<Array<u8>>#__unchecked_get (; 221 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  get_local $0
+  i32.load
+  set_local $2
+  i32.const 0
+  set_local $3
+  get_local $2
+  get_local $1
+  i32.const 2
+  i32.shl
+  i32.add
+  get_local $3
+  i32.add
+  i32.load offset=8
+ )
+ (func $~lib/array/Array<u8>#constructor (; 222 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  get_local $1
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 45
+   i32.const 39
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $1
+  i32.const 0
+  i32.shl
+  set_local $2
+  get_local $2
+  call $~lib/internal/arraybuffer/allocateUnsafe
+  set_local $3
+  get_local $0
+  if (result i32)
+   get_local $0
+  else   
+   block (result i32)
+    i32.const 8
+    call $~lib/memory/memory.allocate
+    set_local $4
+    get_local $4
+    i32.const 0
+    i32.store
+    get_local $4
+    i32.const 0
+    i32.store offset=4
+    get_local $4
+   end
+   tee_local $0
+  end
+  tee_local $0
+  get_local $3
+  i32.store
+  get_local $0
+  get_local $1
+  i32.store offset=4
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
+  get_local $0
+ )
+ (func $~lib/array/Array<u8>#__unchecked_get (; 223 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  get_local $0
+  i32.load
+  set_local $2
+  i32.const 0
+  set_local $3
+  get_local $2
+  get_local $1
+  i32.const 0
+  i32.shl
+  i32.add
+  get_local $3
+  i32.add
+  i32.load8_u offset=8
+ )
+ (func $~lib/array/Array<u8>#__unchecked_set (; 224 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  get_local $0
+  i32.load
+  set_local $3
+  i32.const 0
+  set_local $4
+  get_local $3
+  get_local $1
+  i32.const 0
+  i32.shl
+  i32.add
+  get_local $4
+  i32.add
+  get_local $2
+  i32.store8 offset=8
+ )
+ (func $~lib/array/Array<Array<u8>>#flat<u8> (; 225 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 0
+  set_local $1
+  i32.const 0
+  set_local $2
+  get_local $0
+  i32.load offset=4
+  set_local $4
+  block $break|0
+   loop $continue|0
+    get_local $2
+    get_local $4
+    i32.lt_s
+    if
+     block
+      get_local $0
+      get_local $2
+      call $~lib/array/Array<Array<u8>>#__unchecked_get
+      tee_local $6
+      drop
+      get_local $1
+      get_local $6
+      i32.load offset=4
+      i32.add
+      set_local $1
+      get_local $2
+      i32.const 1
+      i32.add
+      set_local $2
+     end
+     br $continue|0
+    end
+   end
+  end
+  i32.const 0
+  get_local $1
+  call $~lib/array/Array<u8>#constructor
+  set_local $7
+  i32.const 0
+  set_local $2
+  i32.const 0
+  set_local $1
+  block $break|1
+   loop $continue|1
+    get_local $2
+    get_local $4
+    i32.lt_s
+    if
+     block
+      i32.const 0
+      set_local $3
+      get_local $0
+      get_local $2
+      call $~lib/array/Array<Array<u8>>#__unchecked_get
+      tee_local $6
+      drop
+      get_local $6
+      i32.load offset=4
+      set_local $5
+      block $break|2
+       loop $continue|2
+        get_local $3
+        get_local $5
+        i32.lt_s
+        if
+         block
+          block (result i32)
+           get_local $7
+           tee_local $8
+           get_local $1
+           tee_local $9
+           get_local $6
+           get_local $3
+           call $~lib/array/Array<u8>#__unchecked_get
+           call $~lib/array/Array<u8>#__unchecked_set
+           get_local $8
+           get_local $9
+           call $~lib/array/Array<u8>#__unchecked_get
+          end
+          drop
+          get_local $1
+          i32.const 1
+          i32.add
+          set_local $1
+          get_local $3
+          i32.const 1
+          i32.add
+          set_local $3
+         end
+         br $continue|2
+        end
+       end
+      end
+      get_local $2
+      i32.const 1
+      i32.add
+      set_local $2
+     end
+     br $continue|1
+    end
+   end
+  end
+  get_local $7
+ )
+ (func $start (; 226 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -19962,7 +20196,171 @@
    call $~lib/env/abort
    unreachable
   end
+  get_global $std/array/flattest
+  call $~lib/array/Array<Array<u8>>#flat<u8>
+  set_global $std/array/flattestresult
+  block $~lib/array/Array<u8>#get:length|inlined.3 (result i32)
+   get_global $std/array/flattestresult
+   set_local $3
+   get_local $3
+   i32.load offset=4
+  end
+  i32.const 9
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 921
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/flattestresult
+  i32.const 0
+  call $~lib/array/Array<u8>#__get
+  i32.const 255
+  i32.and
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 922
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/flattestresult
+  i32.const 1
+  call $~lib/array/Array<u8>#__get
+  i32.const 255
+  i32.and
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 923
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/flattestresult
+  i32.const 2
+  call $~lib/array/Array<u8>#__get
+  i32.const 255
+  i32.and
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 924
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/flattestresult
+  i32.const 3
+  call $~lib/array/Array<u8>#__get
+  i32.const 255
+  i32.and
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 925
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/flattestresult
+  i32.const 4
+  call $~lib/array/Array<u8>#__get
+  i32.const 255
+  i32.and
+  i32.const 5
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 926
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/flattestresult
+  i32.const 5
+  call $~lib/array/Array<u8>#__get
+  i32.const 255
+  i32.and
+  i32.const 6
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 927
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/flattestresult
+  i32.const 6
+  call $~lib/array/Array<u8>#__get
+  i32.const 255
+  i32.and
+  i32.const 7
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 928
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/flattestresult
+  i32.const 7
+  call $~lib/array/Array<u8>#__get
+  i32.const 255
+  i32.and
+  i32.const 8
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 929
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $std/array/flattestresult
+  i32.const 8
+  call $~lib/array/Array<u8>#__get
+  i32.const 255
+  i32.and
+  i32.const 9
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 104
+   i32.const 930
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $null (; 222 ;) (type $v)
+ (func $null (; 227 ;) (type $v)
  )
 )
