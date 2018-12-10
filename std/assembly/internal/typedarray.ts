@@ -181,3 +181,75 @@ export function MAP<TArray extends TypedArray<T>, T>(
   }
   return result;
 }
+
+@inline
+export function FIND<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): T | null {
+  var i: i32 = 0;
+  var length: i32 = array.length;
+  var val: T;
+  while (i < length) {
+    val = unchecked(array[i]);
+    if (callbackfn(val, i, array)) {
+      return val;
+    }
+    ++i;
+  }
+  return null;
+}
+
+@inline
+export function FINDINDEX<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): i32 {
+  var i: i32 = 0;
+  var length: i32 = array.length;
+  var val: T;
+  while (i < length) {
+    val = unchecked(array[i]);
+    if (callbackfn(val, i, array)) {
+      return i;
+    }
+    ++i;
+  }
+  return -1;
+}
+
+@inline
+export function SOME<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): bool {
+  var i: i32 = 0;
+  var length: i32 = array.length;
+  var val: T;
+  while (i < length) {
+    val = unchecked(array[i]);
+    if (callbackfn(val, i, array)) {
+      return true;
+    }
+    ++i;
+  }
+  return false;
+}
+
+@inline
+export function EVERY<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): bool {
+  var i: i32 = 0;
+  var length: i32 = array.length;
+  var val: T;
+  while (i < length) {
+    val = unchecked(array[i]);
+    if (!callbackfn(val, i, array)) {
+      return false;
+    }
+    ++i;
+  }
+  return true;
+}

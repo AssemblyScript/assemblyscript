@@ -15561,24 +15561,7 @@
   get_local $3
   return
  )
- (func $~lib/array/Array<Array<u8>>#__unchecked_get (; 221 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  get_local $0
-  i32.load
-  set_local $2
-  i32.const 0
-  set_local $3
-  get_local $2
-  get_local $1
-  i32.const 2
-  i32.shl
-  i32.add
-  get_local $3
-  i32.add
-  i32.load offset=8
- )
- (func $~lib/array/Array<u8>#constructor (; 222 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#constructor (; 221 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -15637,42 +15620,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/array/Array<u8>#__unchecked_get (; 223 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  get_local $0
-  i32.load
-  set_local $2
-  i32.const 0
-  set_local $3
-  get_local $2
-  get_local $1
-  i32.const 0
-  i32.shl
-  i32.add
-  get_local $3
-  i32.add
-  i32.load8_u offset=8
- )
- (func $~lib/array/Array<u8>#__unchecked_set (; 224 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  get_local $0
-  i32.load
-  set_local $3
-  i32.const 0
-  set_local $4
-  get_local $3
-  get_local $1
-  i32.const 0
-  i32.shl
-  i32.add
-  get_local $4
-  i32.add
-  get_local $2
-  i32.store8 offset=8
- )
- (func $~lib/array/Array<Array<u8>>#flat<u8> (; 225 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<Array<u8>>#flat<u8> (; 222 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -15682,6 +15630,9 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   i32.const 0
   set_local $1
   i32.const 0
@@ -15689,6 +15640,9 @@
   get_local $0
   i32.load offset=4
   set_local $4
+  get_local $0
+  i32.load
+  set_local $5
   block $break|0
    loop $continue|0
     get_local $2
@@ -15696,11 +15650,19 @@
     i32.lt_s
     if
      block
-      get_local $0
-      get_local $2
-      call $~lib/array/Array<Array<u8>>#__unchecked_get
-      tee_local $6
-      drop
+      block $~lib/internal/arraybuffer/LOAD<Array<u8>,Array<u8>>|inlined.3 (result i32)
+       i32.const 0
+       set_local $9
+       get_local $5
+       get_local $2
+       i32.const 2
+       i32.shl
+       i32.add
+       get_local $9
+       i32.add
+       i32.load offset=8
+      end
+      set_local $6
       get_local $1
       get_local $6
       i32.load offset=4
@@ -15718,7 +15680,10 @@
   i32.const 0
   get_local $1
   call $~lib/array/Array<u8>#constructor
-  set_local $7
+  set_local $10
+  get_local $10
+  i32.load
+  set_local $11
   i32.const 0
   set_local $2
   i32.const 0
@@ -15732,35 +15697,56 @@
      block
       i32.const 0
       set_local $3
-      get_local $0
-      get_local $2
-      call $~lib/array/Array<Array<u8>>#__unchecked_get
-      tee_local $6
-      drop
+      block $~lib/internal/arraybuffer/LOAD<Array<u8>,Array<u8>>|inlined.4 (result i32)
+       i32.const 0
+       set_local $9
+       get_local $5
+       get_local $2
+       i32.const 2
+       i32.shl
+       i32.add
+       get_local $9
+       i32.add
+       i32.load offset=8
+      end
+      set_local $6
       get_local $6
       i32.load offset=4
-      set_local $5
+      set_local $7
+      get_local $6
+      i32.load
+      set_local $8
       block $break|2
        loop $continue|2
         get_local $3
-        get_local $5
+        get_local $7
         i32.lt_s
         if
          block
-          block (result i32)
-           get_local $7
-           tee_local $8
-           get_local $1
-           tee_local $9
-           get_local $6
-           get_local $3
-           call $~lib/array/Array<u8>#__unchecked_get
-           call $~lib/array/Array<u8>#__unchecked_set
+          block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.4 (result i32)
+           i32.const 0
+           set_local $9
            get_local $8
+           get_local $3
+           i32.const 0
+           i32.shl
+           i32.add
            get_local $9
-           call $~lib/array/Array<u8>#__unchecked_get
+           i32.add
+           i32.load8_u offset=8
           end
-          drop
+          set_local $9
+          i32.const 0
+          set_local $12
+          get_local $11
+          get_local $1
+          i32.const 0
+          i32.shl
+          i32.add
+          get_local $12
+          i32.add
+          get_local $9
+          i32.store8 offset=8
           get_local $1
           i32.const 1
           i32.add
@@ -15783,9 +15769,9 @@
     end
    end
   end
-  get_local $7
+  get_local $10
  )
- (func $start (; 226 ;) (type $v)
+ (func $start (; 223 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -20361,6 +20347,6 @@
    unreachable
   end
  )
- (func $null (; 227 ;) (type $v)
+ (func $null (; 224 ;) (type $v)
  )
 )

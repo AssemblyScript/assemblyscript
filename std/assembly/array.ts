@@ -593,26 +593,30 @@ export class Array<T> {
     var i: i32 = 0;
     var j: i32;
     var length: i32 = this.length_;
-    var sublength: i32;
+    var buffer: ArrayBuffer = this.buffer_;
     var child: Array<U>;
+    var childLength: i32;
+    var childBuffer: ArrayBuffer;
 
     // reduce length to a single sum
     while (i < length) {
-      unchecked(child = <Array<U>>this[i]); // safe because we know the length
+      child = LOAD<Array<U>>(buffer, i);
       count += child.length_;
       ++i;
     }
     var result: Array<U> = new Array<U>(count);
+    var resultBuffer: ArrayBuffer = result.buffer_;
 
-    // use count as target result index
     i = 0;
+    // use count as target result index
     count = 0;
     while (i < length) {
       j = 0;
-      unchecked(child = <Array<U>>this[i]); // safe because we know the length
-      sublength = child.length_;
-      while (j < sublength) {
-        unchecked(result[count] = child[j]); // safe because we know the length
+      child = LOAD<Array<U>>(buffer, i);
+      childLength = child.length_;
+      childBuffer = child.buffer_;
+      while (j < childLength) {
+        STORE<U>(resultBuffer, count, LOAD<U>(childBuffer, j));
         ++count;
         ++j;
       }

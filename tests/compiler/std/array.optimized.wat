@@ -10031,16 +10031,19 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   get_local $0
   i32.load offset=4
+  set_local $4
+  get_local $0
+  i32.load
   set_local $5
   loop $continue|0
    get_local $1
-   get_local $5
+   get_local $4
    i32.lt_s
    if
-    get_local $0
-    i32.load
+    get_local $5
     get_local $1
     i32.const 2
     i32.shl
@@ -10059,57 +10062,53 @@
   end
   get_local $2
   call $~lib/array/Array<u8>#constructor
-  set_local $4
+  tee_local $6
+  i32.load
+  set_local $7
   i32.const 0
   set_local $1
   i32.const 0
   set_local $2
   loop $continue|1
    get_local $1
-   get_local $5
+   get_local $4
    i32.lt_s
    if
     i32.const 0
-    set_local $3
-    get_local $0
-    i32.load
+    set_local $0
+    get_local $5
     get_local $1
     i32.const 2
     i32.shl
     i32.add
     i32.load offset=8
-    tee_local $6
+    tee_local $3
     i32.load offset=4
-    set_local $7
+    set_local $8
+    get_local $3
+    i32.load
+    set_local $3
     loop $continue|2
-     get_local $3
-     get_local $7
+     get_local $0
+     get_local $8
      i32.lt_s
      if
-      get_local $4
-      i32.load
       get_local $2
+      get_local $7
       i32.add
-      get_local $6
-      i32.load
+      get_local $0
       get_local $3
       i32.add
       i32.load8_u offset=8
       i32.store8 offset=8
-      get_local $4
-      i32.load
-      get_local $2
-      i32.add
-      i32.load8_u offset=8
-      drop
       get_local $2
       i32.const 1
       i32.add
       set_local $2
-      get_local $3
+      get_local $0
       i32.const 1
       i32.add
-      set_local $3
+      set_local $0
       br $continue|2
      end
     end
@@ -10120,7 +10119,7 @@
     br $continue|1
    end
   end
-  get_local $4
+  get_local $6
  )
  (func $start (; 148 ;) (type $v)
   (local $0 i32)
