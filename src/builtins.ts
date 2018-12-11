@@ -2012,7 +2012,7 @@ export function compileCall(
         arg0, arg1, arg2, type.toNativeType()
       );
     }
-    case "Atomic.wake": { // wake<T!>(ptr: usize, count: u32): u32;
+    case "Atomic.notify": { // notify<T!>(ptr: usize, count: u32): u32;
       let hasError = typeArguments == null;
       if (operands.length != 2) {
         compiler.error(
@@ -3269,8 +3269,8 @@ function deferASMCall(
 
     case "i32.wait": return deferASM("Atomic.wait", compiler, Type.i32, operands, Type.u32, reportNode);
     case "i64.wait": return deferASM("Atomic.wait", compiler, Type.i64, operands, Type.i64, reportNode);
-    case "i32.wake": return deferASM("Atomic.wake", compiler, Type.i32, operands, Type.u32, reportNode);
-    case "i64.wake": return deferASM("Atomic.wake", compiler, Type.i64, operands, Type.i64, reportNode);
+    case "i32.notify": return deferASM("Atomic.notify", compiler, Type.i32, operands, Type.u32, reportNode);
+    case "i64.notify": return deferASM("Atomic.notify", compiler, Type.i64, operands, Type.i64, reportNode);
   }
   return 0;
 }

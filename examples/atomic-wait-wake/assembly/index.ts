@@ -21,6 +21,6 @@ export function wait(mutexAddr: i32 = 0, value: int = 1): void {
 export function wake(mutexAddr: i32 = 0, value: int = 0, numAgents: i32 = 1): void {
   log_str('[WASM][' + itoa<i32>(id) + '] waking '+ itoa<i32>(numAgents) + ' agent(s)...');
   Atomic.store<int>(mutexAddr, value);
-  var count = Atomic.wake<int>(mutexAddr, numAgents);
+  var count = Atomic.notify<int>(mutexAddr, numAgents);
   log_str('[WASM][' + itoa<i32>(id) + '] waken ' + itoa<i32>(count) + ' agent(s)');
 }

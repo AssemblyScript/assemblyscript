@@ -171,7 +171,7 @@ declare namespace Atomic {
   
   export function wait<T>(offset: usize, expected: T, timeout: i64): i32;
     
-  export function wake<T>(offset: usize, count: u32): u32;
+  export function notify<T>(offset: usize, count: u32): u32;
 }
 
 /** Converts any other numeric value to an 8-bit signed integer. */
@@ -245,7 +245,7 @@ declare namespace i32 {
     export function store(offset: usize, value: i32, constantOffset?: usize): void;
     
     export function wait(offset: usize, expected: i32, timeout: i64): i32;
-    export function wake(offset: usize, count: u32): u32;
+    export function notify(offset: usize, count: u32): u32;
 
     namespace rmw8_u {
       export function add(offset: usize, value: i32, constantOffset?: usize): i32
@@ -337,7 +337,7 @@ declare namespace i64 {
     export function store(offset: usize, value: i64, constantOffset?: usize): void;
     
     export function wait(offset: usize, expected: i64, timeout: i64): i32;
-    export function wake(offset: usize, count: u32): u32;
+    export function notify(offset: usize, count: u32): u32;
 
     namespace rmw8_u {
       export function add(offset: usize, value: i64, constantOffset?: usize): i64

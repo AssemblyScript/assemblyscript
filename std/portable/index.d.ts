@@ -581,7 +581,6 @@ declare namespace Atomic {
   export function cmpxchg<T>(ptr: usize, expected:T, replacement: T): T;
   export function compareExchange<T>(ptr: usize, expected:T, replacement: T): T;
 
-  // TODO: wait - wake postponed to next version
-  // export function wait()
-  // export function wake()
+  export function wait(offset: usize, expected: i32, timeout: i32): i32;
+  export function notify(offset: usize, count: u32): u32;
 }
