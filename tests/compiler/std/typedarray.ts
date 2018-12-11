@@ -319,3 +319,33 @@ testArrayMap<Int64Array, i64>();
 testArrayMap<Uint64Array, u64>();
 testArrayMap<Float32Array, f32>();
 testArrayMap<Float64Array, f64>();
+
+function testArrayFindIndex<ArrayType extends TypedArray<T>, T>(): void {
+  var source: ArrayType = instantiate<ArrayType>(3);
+  source[0] = <T>1;
+  source[1] = <T>2;
+  source[2] = <T>3;
+  // var testIndex: i32 = 0;
+  var result = source.findIndex((value: T, index: i32, self: ArrayType): bool => {
+    // assert(self == source);
+    // assert(testIndex == testIndex);
+    // testIndex++;
+    return value == <T>2;
+  });
+  assert(result == 1);
+  var failResult = source.findIndex((value: T, index: i32, self: ArrayType): bool => value == <T>4);
+
+  assert(failResult == -1);
+}
+
+testArrayFindIndex<Int8Array, i8>();
+testArrayFindIndex<Uint8Array, u8>();
+testArrayFindIndex<Uint8ClampedArray, u8>();
+testArrayFindIndex<Int16Array, i16>();
+testArrayFindIndex<Uint16Array, u16>();
+testArrayFindIndex<Int32Array, i32>();
+testArrayFindIndex<Uint32Array, u32>();
+testArrayFindIndex<Int64Array, i64>();
+testArrayFindIndex<Uint64Array, u64>();
+testArrayFindIndex<Float32Array, f32>();
+testArrayFindIndex<Float64Array, f64>();

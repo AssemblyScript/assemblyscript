@@ -585,46 +585,6 @@ export class Array<T> {
     return this.join();
   }
 
-  flat<U>(): Array<U> {
-    if (!isArray<T>()) {
-      throw new Error("Cannot call flat on array whose children are not an array type.");
-    }
-    var count: i32 = 0;
-    var i: i32 = 0;
-    var j: i32;
-    var length: i32 = this.length_;
-    var buffer: ArrayBuffer = this.buffer_;
-    var child: Array<U>;
-    var childLength: i32;
-    var childBuffer: ArrayBuffer;
-
-    // reduce length to a single sum
-    while (i < length) {
-      child = LOAD<Array<U>>(buffer, i);
-      count += child.length_;
-      ++i;
-    }
-    var result: Array<U> = new Array<U>(count);
-    var resultBuffer: ArrayBuffer = result.buffer_;
-
-    i = 0;
-    // use count as target result index
-    count = 0;
-    while (i < length) {
-      j = 0;
-      child = LOAD<Array<U>>(buffer, i);
-      childLength = child.length_;
-      childBuffer = child.buffer_;
-      while (j < childLength) {
-        STORE<U>(resultBuffer, count, LOAD<U>(childBuffer, j));
-        ++count;
-        ++j;
-      }
-      ++i;
-    }
-    return result;
-  }
-
   private __gc(): void {
     var buffer = this.buffer_;
     __gc_mark(changetype<usize>(buffer)); // tslint:disable-line

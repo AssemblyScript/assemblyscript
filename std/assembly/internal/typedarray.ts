@@ -183,24 +183,6 @@ export function MAP<TArray extends TypedArray<T>, T>(
 }
 
 @inline
-export function FIND<TArray extends TypedArray<T>, T>(
-  array: TArray,
-  callbackfn: (value: T, index: i32, array: TArray) => bool,
-): T | null {
-  var i: i32 = 0;
-  var length: i32 = array.length;
-  var val: T;
-  while (i < length) {
-    val = unchecked(array[i]);
-    if (callbackfn(val, i, array)) {
-      return val;
-    }
-    ++i;
-  }
-  return null;
-}
-
-@inline
 export function FINDINDEX<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
