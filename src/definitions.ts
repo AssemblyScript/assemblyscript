@@ -138,6 +138,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
     "bool": "Boolean"
   };
 
+  private nonNullableTypes = ["i32", "bool"];
+
   static build(program: Program): string {
     return new NEARBindingsBuilder(program).build();
   }
@@ -154,7 +156,6 @@ export class NEARBindingsBuilder extends ExportsWalker {
     console.log("visitFunction: " + element.simpleName);
     let signature = element.signature;
 
-    // TODO: Generate ArgsParser BSON handler
     this.sb.push(`export class __near_ArgsParser_${element.simpleName} {
       `);
     let fields = [];
@@ -196,11 +197,16 @@ export class NEARBindingsBuilder extends ExportsWalker {
 
     let returnType = signature.returnType.toString();
     let setterType = this.typeMapping[returnType];
-    this.sb.push(`if (result != null) {
-        encoder.set${setterType}("result", result);
-      } else {
-        encoder.setNull("result");
-      }`);
+    if (this.nonNullableTypes.indexOf(returnType) != -1) {
+      this.sb.push(`encoder.set${setterType}("result", result);`);
+    } else {
+      // TODO: Check integer and boolean results
+      this.sb.push(`if (result != null) {
+          encoder.set${setterType}("result", result);
+        } else {
+          encoder.setNull("result");
+        }`);
+    }
 
     this.sb.push(`
       return encoder.serialize();
