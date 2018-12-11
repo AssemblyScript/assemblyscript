@@ -5421,33 +5421,22 @@ export class Compiler extends DiagnosticEmitter {
     if (thisArg) {
       let parent = assert(instance.parent);
       assert(parent.kind == ElementKind.CLASS);
-      if (getExpressionId(thisArg) == ExpressionId.GetLocal) {
-        flow.addScopedLocalAlias(
-          getGetLocalIndex(thisArg),
-          (<Class>parent).type,
-          "this"
-        );
-        let parentBase = (<Class>parent).base;
-        if (parentBase) {
-          flow.addScopedLocalAlias(
-            getGetLocalIndex(thisArg),
-            parentBase.type,
-            "super"
-          );
-        }
-      } else {
-        let thisLocal = flow.addScopedLocal((<Class>parent).type, "this", false);
+      let thisType = assert(instance.signature.thisType);
+      let classType = thisType.classReference;
+      let superType = classType
+        ? classType.base
+          ? classType.base.type
+          : null
+        : null;
+      if (getExpressionId(thisArg) == ExpressionId.GetLocal) { // reuse this var
+        flow.addScopedLocalAlias(getGetLocalIndex(thisArg), thisType, "this");
+        if (superType) flow.addScopedLocalAlias(getGetLocalIndex(thisArg), superType, "super");
+      } else { // use a temp var
+        let thisLocal = flow.addScopedLocal(thisType, "this", false);
         body.push(
           module.createSetLocal(thisLocal.index, thisArg)
         );
-        let parentBase = (<Class>parent).base;
-        if (parentBase) {
-          flow.addScopedLocalAlias(
-            thisLocal.index,
-            parentBase.type,
-            "super"
-          );
-        }
+        if (superType) flow.addScopedLocalAlias(thisLocal.index, superType, "super");
       }
     }
     var parameterTypes = signature.parameterTypes;
@@ -6003,7 +5992,7 @@ export class Compiler extends DiagnosticEmitter {
         if (currentFunction.is(CommonFlags.INSTANCE)) {
           let parent = assert(currentFunction.parent);
           assert(parent.kind == ElementKind.CLASS);
-          let thisType = (<Class>parent).type;
+          let thisType = assert(currentFunction.signature.thisType);
           if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
             if (!flow.is(FlowFlags.ALLOCATES)) {
               flow.set(FlowFlags.ALLOCATES);

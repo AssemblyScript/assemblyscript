@@ -800,7 +800,13 @@ export class Resolver extends DiagnosticEmitter {
         reportMode
       );
       if (!classInstance) return null;
-      thisType = classInstance.type;
+      let explicitThisType = signatureNode.explicitThisType;
+      if (explicitThisType) {
+        thisType = this.resolveType(explicitThisType, contextualTypeArguments, reportMode);
+        if (!thisType) return null;
+      } else {
+        thisType = classInstance.type;
+      }
       contextualTypeArguments.set("this", thisType);
     }
 
