@@ -536,6 +536,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   findIndex(predicate: (element: T, index: i32, array?: this) => bool): i32;
   /** The every() method tests whether all elements in the typed array pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.every(). */
   every(predicate: (element: T, index: i32, array?: this) => bool): bool;
+  /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some(). */
+  some(predicate: (element: T, index: i32, array?: this) => bool): bool;
 }
 
 /** An array of twos-complement 8-bit signed integers. */

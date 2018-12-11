@@ -349,3 +349,64 @@ testArrayFindIndex<Int64Array, i64>();
 testArrayFindIndex<Uint64Array, u64>();
 testArrayFindIndex<Float32Array, f32>();
 testArrayFindIndex<Float64Array, f64>();
+
+function testArrayEvery<ArrayType extends TypedArray<T>, T>(): void {
+  var source: ArrayType = instantiate<ArrayType>(3);
+  source[0] = <T>2;
+  source[1] = <T>4;
+  source[2] = <T>6;
+  // var testIndex: i32 = 0;
+  var result: bool = source.every((value: T, index: i32, self: ArrayType): bool => {
+    // assert(self == source);
+    // assert(testIndex == testIndex);
+    // testIndex++;
+    return mod(value, <T>2) == <T>0;
+  });
+  assert(result);
+  var failResult = source.every((value: T, index: i32, self: ArrayType): bool => value == <T>2);
+
+  assert(!failResult);
+}
+
+testArrayEvery<Int8Array, i8>();
+testArrayEvery<Uint8Array, u8>();
+testArrayEvery<Uint8ClampedArray, u8>();
+testArrayEvery<Int16Array, i16>();
+testArrayEvery<Uint16Array, u16>();
+testArrayEvery<Int32Array, i32>();
+testArrayEvery<Uint32Array, u32>();
+testArrayEvery<Int64Array, i64>();
+testArrayEvery<Uint64Array, u64>();
+testArrayEvery<Float32Array, f32>();
+testArrayEvery<Float64Array, f64>();
+
+
+function testArraySome<ArrayType extends TypedArray<T>, T>(): void {
+  var source: ArrayType = instantiate<ArrayType>(3);
+  source[0] = <T>2;
+  source[1] = <T>4;
+  source[2] = <T>6;
+  // var testIndex: i32 = 0;
+  var result: bool = source.some((value: T, index: i32, self: ArrayType): bool => {
+    // assert(self == source);
+    // assert(testIndex == testIndex);
+    // testIndex++;
+    return value == <T>2;
+  });
+  assert(result);
+  var failResult = source.some((value: T, index: i32, self: ArrayType): bool => value == <T>0);
+
+  assert(!failResult);
+}
+
+testArraySome<Int8Array, i8>();
+testArraySome<Uint8Array, u8>();
+testArraySome<Uint8ClampedArray, u8>();
+testArraySome<Int16Array, i16>();
+testArraySome<Uint16Array, u16>();
+testArraySome<Int32Array, i32>();
+testArraySome<Uint32Array, u32>();
+testArraySome<Int64Array, i64>();
+testArraySome<Uint64Array, u64>();
+testArraySome<Float32Array, f32>();
+testArraySome<Float64Array, f64>();
