@@ -52,7 +52,8 @@ import {
   Type,
   Signature,
   typesToString,
-  TypeKind
+  TypeKind,
+  TypeFlags
 } from "./types";
 
 import {
@@ -438,11 +439,16 @@ export class Resolver extends DiagnosticEmitter {
         assert(type != Type.void);
         let classReference = type.classReference;
         if (!classReference) {
-          this.error(
-            DiagnosticCode.Property_0_does_not_exist_on_type_1,
-            propertyAccess.property.range, propertyName, (<VariableLikeElement>target).type.toString()
-          );
-          return null;
+          let basicClasses = this.program.basicClasses;
+          if (!type.is(TypeFlags.REFERENCE) && basicClasses.has(type.kind)) {
+            classReference = assert(basicClasses.get(type.kind));
+          } else {
+            this.error(
+              DiagnosticCode.Property_0_does_not_exist_on_type_1,
+              propertyAccess.property.range, propertyName, (<VariableLikeElement>target).type.toString()
+            );
+            return null;
+          }
         }
         target = classReference;
         break;
