@@ -596,7 +596,6 @@ declare class Array<T> {
   splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
-  flat<U>(): Array<U>;
   reverse(): T[];
   toString(): string;
 }
