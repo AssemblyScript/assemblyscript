@@ -6,7 +6,6 @@ import {
   REDUCE,
   REDUCE_RIGHT,
   MAP,
-  FIND,
   FINDINDEX,
   EVERY,
   SOME,

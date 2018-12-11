@@ -360,7 +360,7 @@ function testArrayEvery<ArrayType extends TypedArray<T>, T>(): void {
     // assert(self == source);
     // assert(testIndex == testIndex);
     // testIndex++;
-    return mod(value, <T>2) == <T>0;
+    return (value % <T>2) == <T>0;
   });
   assert(result);
   var failResult = source.every((value: T, index: i32, self: ArrayType): bool => value == <T>2);

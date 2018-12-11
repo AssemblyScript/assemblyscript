@@ -909,22 +909,3 @@ assert(subarr8.toString() == "1,2,3,4");
 var subarrU32: u32[][][] = [[[1]]];
 assert(subarrU32.toString() == "1");
 
-// Array#flat //////////////////////////////////////////////////////////////////////////////////////
-
-var flattest: u8[][] = [
-  [<u8>1, <u8>2, <u8>3],
-  [<u8>4, <u8>5],
-  [<u8>6, <u8>7, <u8>8, <u8>9],
-];
-
-var flattestresult: u8[] = flattest.flat<u8>();
-assert(flattestresult.length == 9);
-assert(flattestresult[0] == <u8>1);
-assert(flattestresult[1] == <u8>2);
-assert(flattestresult[2] == <u8>3);
-assert(flattestresult[3] == <u8>4);
-assert(flattestresult[4] == <u8>5);
-assert(flattestresult[5] == <u8>6);
-assert(flattestresult[6] == <u8>7);
-assert(flattestresult[7] == <u8>8);
-assert(flattestresult[8] == <u8>9);
