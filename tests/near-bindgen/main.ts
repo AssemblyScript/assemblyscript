@@ -1,8 +1,8 @@
 import "allocator/arena";
 // TODO: Why cannot import from index?
-// import { BSONEncoder, BSONDecoder } from "../../../assemblyscript-bson/assembly";
-import { BSONEncoder } from "../../../assemblyscript-bson/assembly/encoder";
-import { BSONDecoder } from "../../../assemblyscript-bson/assembly/decoder";
+// import { BSONEncoder, BSONDecoder } from "./bson";
+import { BSONEncoder } from "./bson/encoder";
+import { BSONDecoder } from "./bson/decoder";
 
 export class FooBar {
     foo: i32 = 0;
