@@ -196,17 +196,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       let encoder = new BSONEncoder();`);
 
     let returnType = signature.returnType.toString();
-    let setterType = this.typeMapping[returnType];
-    if (this.nonNullableTypes.indexOf(returnType) != -1) {
-      this.sb.push(`encoder.set${setterType}("result", result);`);
-    } else {
-      // TODO: Check integer and boolean results
-      this.sb.push(`if (result != null) {
-          encoder.set${setterType}("result", result);
-        } else {
-          encoder.setNull("result");
-        }`);
-    }
+    this.generateFieldEncoder(returnType, "result", "result");
 
     this.sb.push(`
       return encoder.serialize();
@@ -230,12 +220,14 @@ export class NEARBindingsBuilder extends ExportsWalker {
     fields.forEach((field) => {
       this.sb.push(`if (name == "${field.simpleName}") {
         ${valuePrefix}${field.simpleName} = <${field.type.toString()}>null;
-        return;
       }`);
     });
     this.sb.push("}\n"); // setNull
 
     // TODO: Suport nested objects/arrays
+    // TODO: This needs some way to get current index in buffer (extract parser state into separte class?),
+    // TODO: so that we can call method to parse object recursively
+    // TODO: popObject() should also return false to exit nested parser?
     this.sb.push(`
       pushObject(name: string): bool { return false; }
       popObject(): void {}
@@ -248,19 +240,15 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let className = element.simpleName;
     console.log("visitClass: " + className);
     this.sb.push(`export function __near_encode_${className}(
-        value: ${className}): Uint8Array {
-      let encoder: BSONEncoder = new BSONEncoder();`);
+        value: ${className},
+        encoder: BSONEncoder): void {`);
     this.getFields(element).forEach((field) => {
-      let setterType = this.typeMapping[field.type.toString()];
-      this.sb.push(`if (value.${field.simpleName} != null) {
-        encoder.set${setterType}("${field.simpleName}", value.${field.simpleName});
-      } else {
-        encoder.setNull("${field.simpleName}");
-      }`);
+      let fieldType = field.type.toString();
+      let fieldName = field.simpleName;
+      let sourceExpr = `value.${fieldName}`;
+      this.generateFieldEncoder(fieldType, fieldName, sourceExpr);
     });
-    this.sb.push(`
-      return encoder.serialize();
-    }`); // __near_encode
+    this.sb.push("}"); // __near_encode
 
     this.sb.push(`export class __near_BSONHandler_${className} {
       value: ${className} = new ${className}();`);
@@ -274,6 +262,31 @@ export class NEARBindingsBuilder extends ExportsWalker {
       decoder.deserialize(buffer, offset);
       return handler.value;
     }\n`);
+  }
+
+  private generateFieldEncoder(fieldType: any, fieldName: any, sourceExpr: string) {
+    let setterType = this.typeMapping[fieldType];
+    if (!setterType) {
+      // Object
+      this.sb.push(`if (${sourceExpr} != null) {
+          __near_encode_${fieldType}(${sourceExpr}, encoder);
+        } else {
+          encoder.setNull("${fieldName}");
+        }`);
+    }
+    else {
+      // Basic types
+      if (this.nonNullableTypes.indexOf(fieldType) != -1) {
+        this.sb.push(`encoder.set${setterType}("${fieldName}", ${sourceExpr});`);
+      }
+      else {
+        this.sb.push(`if (${sourceExpr} != null) {
+            encoder.set${setterType}("${fieldName}", ${sourceExpr});
+          } else {
+            encoder.setNull("${fieldName}");
+          }`);
+      }
+    }
   }
 
   private getFields(element: Class): any[] {

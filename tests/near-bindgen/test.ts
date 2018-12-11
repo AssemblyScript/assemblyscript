@@ -11,17 +11,19 @@ export function runTest(): void {
   original.bar = 123;
   original.flag = true;
   original.baz = "foo";
-  let encoded = main.__near_encode_FooBar(original);
+  let encoder: BSONEncoder = new BSONEncoder();
+  main.__near_encode_FooBar(original, encoder);
+  let encoded = encoder.serialize();
   let decoded = main.__near_decode_FooBar(encoded, 0);
 
   assert(original.foo == decoded.foo);
   assert(original.bar == decoded.bar);
 
-  let encoder: BSONEncoder = new BSONEncoder();
-  encoder.setInteger("x", 1);
-  encoder.setInteger("y", 2);
+  let argsEncoder: BSONEncoder = new BSONEncoder();
+  argsEncoder.setInteger("x", 1);
+  argsEncoder.setInteger("y", 2);
 
-  let addBsonStr = bin2hex(encoder.serialize());
+  let addBsonStr = bin2hex(argsEncoder.serialize());
   let expectedResultEncoder: BSONEncoder = new BSONEncoder();
   expectedResultEncoder.setInteger("result", 3);
 
