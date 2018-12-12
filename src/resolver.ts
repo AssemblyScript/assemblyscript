@@ -814,6 +814,13 @@ export class Resolver extends DiagnosticEmitter {
         thisType = classInstance.type;
       }
       contextualTypeArguments.set("this", thisType);
+    } else {
+      if (signatureNode.explicitThisType) {
+        this.error(
+          DiagnosticCode._this_cannot_be_referenced_in_current_location,
+          signatureNode.explicitThisType.range
+        ); // recoverable
+      }
     }
 
     // resolve signature node
