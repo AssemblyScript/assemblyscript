@@ -175,11 +175,16 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.generateBSONHandlerMethods("this.__near_param_", fields);
     this.sb.push(`}`); // __near_ArgsParser
 
-    this.sb.push(`export function __near_func_${element.simpleName}(bson: Uint8Array): Uint8Array {
+    let returnType = signature.returnType.toString();
+    this.sb.push(`export function __near_func_${element.simpleName}(bson: Uint8Array): void {
       let handler = new __near_ArgsParser_${element.simpleName}();
       let decoder = new BSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
-      decoder.deserialize(bson);
-      let result = ${element.simpleName}(`);
+      decoder.deserialize(bson);`);
+    if (returnType != "void") {
+      this.sb.push(`let result = ${element.simpleName}(`);
+    } else {
+      this.sb.push(`${element.simpleName}(`)
+    }
     if (signature.parameterNames) {
       let i = 0;
       for (let paramName of signature.parameterNames) {
@@ -192,15 +197,14 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
     this.sb.push(");");
     
-    this.sb.push(`
-      let encoder = new BSONEncoder();`);
-
-    let returnType = signature.returnType.toString();
-    this.generateFieldEncoder(returnType, "result", "result");
-
-    this.sb.push(`
-      return encoder.serialize();
-    `);
+    if (returnType != "void") {
+      this.sb.push(`
+        let encoder = new BSONEncoder();`);
+      this.generateFieldEncoder(returnType, "result", "result");
+      this.sb.push(`
+        return_value(<u32>encoder.serialize());
+      `);
+    }
   
     this.sb.push(`}`);
   }

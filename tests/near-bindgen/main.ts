@@ -7,6 +7,13 @@ import { BSONDecoder } from "./bson/decoder";
 @external("env", "log")
 declare function log(str: string): void;
 
+declare function return_value(value_ptr: u32): void;
+
+type Address = u64;
+
+export function _init(initialOwner: Address): void {
+}
+
 export class FooBar {
     foo: i32 = 0;
     bar: i32 = 1;
