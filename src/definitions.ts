@@ -316,6 +316,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   build(): string {
+    let mainSource = this.program.sources
+      .filter(s => s.normalizedPath.indexOf("~lib") != 0)[0];
+    this.sb.push(mainSource.text);
     this.walk();
     return this.sb.join("\n");
   }
