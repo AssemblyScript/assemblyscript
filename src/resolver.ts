@@ -45,7 +45,8 @@ import {
   LiteralKind,
   ParenthesizedExpression,
   AssertionExpression,
-  Expression
+  Expression,
+  IntegerLiteralExpression
 } from "./ast";
 
 import {
@@ -84,8 +85,6 @@ export class Resolver extends DiagnosticEmitter {
   currentThisExpression: Expression | null = null;
   /** Element expression of the previously resolved element access. */
   currentElementExpression : Expression | null = null;
-  /** Whether the last resolved type has been resolved from a placeholder, i.e. `T`. */
-  currentTypeIsPlaceholder: bool = false;
 
   /** Constructs the resolver for the specified program. */
   constructor(program: Program) {
@@ -420,11 +419,12 @@ export class Resolver extends DiagnosticEmitter {
   resolvePropertyAccess(
     propertyAccess: PropertyAccessExpression,
     contextualFunction: Function,
+    contextualType: Type,
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
     // start by resolving the lhs target (expression before the last dot)
     var targetExpression = propertyAccess.expression;
-    var target = this.resolveExpression(targetExpression, contextualFunction, reportMode); // reports
+    var target = this.resolveExpression(targetExpression, contextualFunction, contextualType, reportMode); // reports
     if (!target) return null;
 
     // at this point we know exactly what the target is, so look up the element within
@@ -551,10 +551,11 @@ export class Resolver extends DiagnosticEmitter {
   resolveElementAccess(
     elementAccess: ElementAccessExpression,
     contextualFunction: Function,
+    contextualType: Type,
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
     var targetExpression = elementAccess.expression;
-    var target = this.resolveExpression(targetExpression, contextualFunction, reportMode);
+    var target = this.resolveExpression(targetExpression, contextualFunction, contextualType, reportMode);
     if (!target) return null;
     switch (target.kind) {
       case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
@@ -602,9 +603,73 @@ export class Resolver extends DiagnosticEmitter {
     return null;
   }
 
+  determineIntegerLiteralType(
+    intValue: I64,
+    contextualType: Type
+  ): Type {
+
+    // compile to contextualType if matching
+    switch (contextualType.kind) {
+      case TypeKind.I8: {
+        if (i64_is_i8(intValue)) return Type.i8;
+        break;
+      }
+      case TypeKind.U8: {
+        if (i64_is_u8(intValue)) return Type.u8;
+        break;
+      }
+      case TypeKind.I16: {
+        if (i64_is_i16(intValue)) return Type.i16;
+        break;
+      }
+      case TypeKind.U16: {
+        if (i64_is_u16(intValue)) return Type.u16;
+        break;
+      }
+      case TypeKind.I32: {
+        if (i64_is_i32(intValue)) return Type.i32;
+        break;
+      }
+      case TypeKind.U32: {
+        if (i64_is_u32(intValue)) return Type.u32;
+        break;
+      }
+      case TypeKind.BOOL: {
+        if (i64_is_bool(intValue)) return Type.bool;
+        break;
+      }
+      case TypeKind.ISIZE: {
+        if (!this.program.options.isWasm64) {
+          if (i64_is_i32(intValue)) return Type.isize32;
+          break;
+        }
+        return Type.isize64;
+      }
+      case TypeKind.USIZE: {
+        if (!this.program.options.isWasm64) {
+          if (i64_is_u32(intValue)) return Type.usize32;
+          break;
+        }
+        return Type.usize64;
+      }
+      case TypeKind.I64: return Type.i64;
+      case TypeKind.U64: return Type.u64;
+      case TypeKind.F32: return Type.f32;
+      case TypeKind.F64: return Type.f64;
+      case TypeKind.VOID: break; // best fitting below
+      default: assert(false);
+    }
+
+    // otherwise compile to best fitting native type
+    if (i64_is_i32(intValue)) return Type.i32;
+    if (i64_is_u32(intValue)) return Type.u32;
+    return Type.i64;
+  }
+
   resolveExpression(
     expression: Expression,
     contextualFunction: Function,
+    contextualType: Type = Type.void,
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
     while (expression.kind == NodeKind.PARENTHESIZED) {
@@ -681,6 +746,21 @@ export class Resolver extends DiagnosticEmitter {
       }
       case NodeKind.LITERAL: {
         switch ((<LiteralExpression>expression).literalKind) {
+          case LiteralKind.INTEGER: {
+            let type = this.determineIntegerLiteralType((<IntegerLiteralExpression>expression).value, contextualType);
+            return assert(this.program.basicClasses.get(type.kind));
+          }
+          case LiteralKind.FLOAT: {
+            this.currentThisExpression = expression;
+            this.currentElementExpression = null;
+            return assert(
+              this.program.basicClasses.get(
+                contextualType == Type.f32
+                  ? TypeKind.F32
+                  : TypeKind.F64
+              )
+            );
+          }
           case LiteralKind.STRING: {
             this.currentThisExpression = expression;
             this.currentElementExpression = null;
@@ -694,6 +774,7 @@ export class Resolver extends DiagnosticEmitter {
         return this.resolvePropertyAccess(
           <PropertyAccessExpression>expression,
           contextualFunction,
+          contextualType,
           reportMode
         );
       }
@@ -701,12 +782,13 @@ export class Resolver extends DiagnosticEmitter {
         return this.resolveElementAccess(
           <ElementAccessExpression>expression,
           contextualFunction,
+          contextualType,
           reportMode
         );
       }
       case NodeKind.CALL: {
         let targetExpression = (<CallExpression>expression).expression;
-        let target = this.resolveExpression(targetExpression, contextualFunction, reportMode);
+        let target = this.resolveExpression(targetExpression, contextualFunction, contextualType, reportMode);
         if (!target) return null;
         if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
           let instance = this.resolveFunctionInclTypeArguments(
