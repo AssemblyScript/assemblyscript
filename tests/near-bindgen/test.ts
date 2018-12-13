@@ -3,7 +3,8 @@ import * as main from "./combined";
 
 import { BSONEncoder } from "./bson/encoder";
 
-declare function logStr(str: string): void;
+@external("env", "log")
+declare function log(str: string): void;
 
 export function runTest(): void {
   let original = new main.FooBar();

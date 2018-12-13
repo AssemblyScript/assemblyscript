@@ -4,6 +4,9 @@ import "allocator/arena";
 import { BSONEncoder } from "./bson/encoder";
 import { BSONDecoder } from "./bson/decoder";
 
+@external("env", "log")
+declare function log(str: string): void;
+
 export class FooBar {
     foo: i32 = 0;
     bar: i32 = 1;
