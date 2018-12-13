@@ -31,6 +31,8 @@
  (data (i32.const 2072) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
  (data (i32.const 2112) "\03\00\00\002\00.\000")
  (data (i32.const 2128) "\01\00\00\003")
+ (data (i32.const 2136) "\01\00\00\004")
+ (data (i32.const 2144) "\02\00\00\00-\005")
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -2663,7 +2665,7 @@
   get_local $1
  )
  (func $start (; 15 ;) (type $v)
-  i32.const 2136
+  i32.const 2152
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
@@ -2702,6 +2704,32 @@
    i32.const 0
    i32.const 600
    i32.const 6
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 4
+  call $~lib/internal/number/itoa32
+  i32.const 2136
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 7
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const -5
+  call $~lib/internal/number/itoa32
+  i32.const 2144
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 8
    i32.const 0
    call $~lib/env/abort
    unreachable

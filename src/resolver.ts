@@ -46,7 +46,8 @@ import {
   ParenthesizedExpression,
   AssertionExpression,
   Expression,
-  IntegerLiteralExpression
+  IntegerLiteralExpression,
+  UnaryPrefixExpression
 } from "./ast";
 
 import {
@@ -66,6 +67,7 @@ import {
 import {
   makeMap
 } from "./util";
+import { Token } from "./tokenizer";
 
 /** Indicates whether errors are reported or not. */
 export enum ReportMode {
@@ -608,56 +610,58 @@ export class Resolver extends DiagnosticEmitter {
     contextualType: Type
   ): Type {
 
-    // compile to contextualType if matching
-    switch (contextualType.kind) {
-      case TypeKind.I8: {
-        if (i64_is_i8(intValue)) return Type.i8;
-        break;
-      }
-      case TypeKind.U8: {
-        if (i64_is_u8(intValue)) return Type.u8;
-        break;
-      }
-      case TypeKind.I16: {
-        if (i64_is_i16(intValue)) return Type.i16;
-        break;
-      }
-      case TypeKind.U16: {
-        if (i64_is_u16(intValue)) return Type.u16;
-        break;
-      }
-      case TypeKind.I32: {
-        if (i64_is_i32(intValue)) return Type.i32;
-        break;
-      }
-      case TypeKind.U32: {
-        if (i64_is_u32(intValue)) return Type.u32;
-        break;
-      }
-      case TypeKind.BOOL: {
-        if (i64_is_bool(intValue)) return Type.bool;
-        break;
-      }
-      case TypeKind.ISIZE: {
-        if (!this.program.options.isWasm64) {
-          if (i64_is_i32(intValue)) return Type.isize32;
+    if (!contextualType.is(TypeFlags.REFERENCE)) {
+      // compile to contextualType if matching
+      switch (contextualType.kind) {
+        case TypeKind.I8: {
+          if (i64_is_i8(intValue)) return Type.i8;
           break;
         }
-        return Type.isize64;
-      }
-      case TypeKind.USIZE: {
-        if (!this.program.options.isWasm64) {
-          if (i64_is_u32(intValue)) return Type.usize32;
+        case TypeKind.U8: {
+          if (i64_is_u8(intValue)) return Type.u8;
           break;
         }
-        return Type.usize64;
+        case TypeKind.I16: {
+          if (i64_is_i16(intValue)) return Type.i16;
+          break;
+        }
+        case TypeKind.U16: {
+          if (i64_is_u16(intValue)) return Type.u16;
+          break;
+        }
+        case TypeKind.I32: {
+          if (i64_is_i32(intValue)) return Type.i32;
+          break;
+        }
+        case TypeKind.U32: {
+          if (i64_is_u32(intValue)) return Type.u32;
+          break;
+        }
+        case TypeKind.BOOL: {
+          if (i64_is_bool(intValue)) return Type.bool;
+          break;
+        }
+        case TypeKind.ISIZE: {
+          if (!this.program.options.isWasm64) {
+            if (i64_is_i32(intValue)) return Type.isize32;
+            break;
+          }
+          return Type.isize64;
+        }
+        case TypeKind.USIZE: {
+          if (!this.program.options.isWasm64) {
+            if (i64_is_u32(intValue)) return Type.usize32;
+            break;
+          }
+          return Type.usize64;
+        }
+        case TypeKind.I64: return Type.i64;
+        case TypeKind.U64: return Type.u64;
+        case TypeKind.F32: return Type.f32;
+        case TypeKind.F64: return Type.f64;
+        case TypeKind.VOID: break; // best fitting below
+        default: assert(false);
       }
-      case TypeKind.I64: return Type.i64;
-      case TypeKind.U64: return Type.u64;
-      case TypeKind.F32: return Type.f32;
-      case TypeKind.F64: return Type.f64;
-      case TypeKind.VOID: break; // best fitting below
-      default: assert(false);
     }
 
     // otherwise compile to best fitting native type
@@ -692,7 +696,42 @@ export class Resolver extends DiagnosticEmitter {
         }
         return null;
       }
-      case NodeKind.BINARY: { // TODO: string concatenation, mostly
+      case NodeKind.UNARYPREFIX: {
+        switch ((<UnaryPrefixExpression>expression).operator) {
+          case Token.MINUS: {
+            let operand = (<UnaryPrefixExpression>expression).operand;
+            // implicitly negate if an integer literal to distinguish between i32/u32/i64
+            if (operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.INTEGER) {
+              let type = this.determineIntegerLiteralType(
+                i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value),
+                contextualType
+              );
+              return assert(this.program.basicClasses.get(type.kind));
+            }
+            return this.resolveExpression(
+              operand,
+              contextualFunction,
+              contextualType,
+              reportMode
+            );
+          }
+          case Token.PLUS: { // nop
+            return this.resolveExpression(
+              (<UnaryPrefixExpression>expression).operand,
+              contextualFunction,
+              contextualType,
+              reportMode
+            );
+          }
+          // TODO
+        }
+        // fallthrough for now
+      }
+      case NodeKind.UNARYPOSTFIX:
+      case NodeKind.BINARY: {
+        // TODO: all sorts of unary and binary expressions, which means looking up overloads and
+        // evaluating their return types, knowing the semantics of different operators etc.
+        // should probably share that code with the compiler somehow, as it also does exactly this.
         throw new Error("not implemented");
       }
       case NodeKind.THIS: { // -> Class / ClassPrototype
@@ -747,8 +786,14 @@ export class Resolver extends DiagnosticEmitter {
       case NodeKind.LITERAL: {
         switch ((<LiteralExpression>expression).literalKind) {
           case LiteralKind.INTEGER: {
-            let type = this.determineIntegerLiteralType((<IntegerLiteralExpression>expression).value, contextualType);
-            return assert(this.program.basicClasses.get(type.kind));
+            return assert(
+              this.program.basicClasses.get(
+                this.determineIntegerLiteralType(
+                  (<IntegerLiteralExpression>expression).value,
+                  contextualType
+                ).kind
+              )
+            );
           }
           case LiteralKind.FLOAT: {
             this.currentThisExpression = expression;

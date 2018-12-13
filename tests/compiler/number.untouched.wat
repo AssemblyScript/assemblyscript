@@ -33,6 +33,8 @@
  (data (i32.const 2104) "\00\00\00\00")
  (data (i32.const 2112) "\03\00\00\002\00.\000\00")
  (data (i32.const 2128) "\01\00\00\003\00")
+ (data (i32.const 2136) "\01\00\00\004\00")
+ (data (i32.const 2144) "\02\00\00\00-\005\00")
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
@@ -80,7 +82,7 @@
  (global $~lib/internal/number/_K (mut i32) (i32.const 0))
  (global $~lib/internal/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 2136))
+ (global $HEAP_BASE i32 (i32.const 2152))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -3624,6 +3626,32 @@
    i32.const 0
    i32.const 600
    i32.const 6
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 4
+  call $~lib/number/Number<i32>#toString
+  i32.const 2136
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 7
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const -5
+  call $~lib/number/Number<i32>#toString
+  i32.const 2144
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 8
    i32.const 0
    call $~lib/env/abort
    unreachable
