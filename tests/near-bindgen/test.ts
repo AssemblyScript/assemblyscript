@@ -29,7 +29,7 @@ export function runTest(): void {
   expectedResultEncoder.setInteger("result", 3);
 
   /*
-  let bsonResult = main.__near_func_add(hex2bin(addBsonStr));
+  let bsonResult = main.near_func_add(hex2bin(addBsonStr));
 
   let bsonResultStr = bin2hex(bsonResult);
   let expectedBsonResultStr = bin2hex(expectedResultEncoder.serialize())

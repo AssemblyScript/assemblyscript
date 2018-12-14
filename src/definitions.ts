@@ -176,7 +176,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.sb.push(`}`); // __near_ArgsParser
 
     let returnType = signature.returnType.toString();
-    this.sb.push(`export function __near_func_${element.simpleName}(): void {
+    this.sb.push(`export function near_func_${element.simpleName}(): void {
       let bson = new Uint8Array(input_read_len());
       input_read_into(bson.buffer.data);
       let handler = new __near_ArgsParser_${element.simpleName}();
