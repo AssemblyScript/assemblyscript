@@ -33,8 +33,11 @@
  (data (i32.const 2104) "\00\00\00\00")
  (data (i32.const 2112) "\03\00\00\002\00.\000\00")
  (data (i32.const 2128) "\01\00\00\003\00")
- (data (i32.const 2136) "\01\00\00\004\00")
- (data (i32.const 2144) "\02\00\00\00-\005\00")
+ (data (i32.const 2136) "\02\00\00\00-\005\00")
+ (data (i32.const 2144) "\01\00\00\004\00")
+ (data (i32.const 2152) "\01\00\00\002\00")
+ (data (i32.const 2160) "\04\00\00\00t\00r\00u\00e\00")
+ (data (i32.const 2176) "\05\00\00\00f\00a\00l\00s\00e\00")
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
@@ -82,7 +85,7 @@
  (global $~lib/internal/number/_K (mut i32) (i32.const 0))
  (global $~lib/internal/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 2152))
+ (global $HEAP_BASE i32 (i32.const 2192))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -490,10 +493,9 @@
   call $~lib/internal/number/itoa32
   return
  )
- (func $~lib/number/Number<i32>#toString (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (; 7 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/internal/number/itoa<i32>
-  return
  )
  (func $~lib/internal/string/compareUnsafe (; 8 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
@@ -3575,12 +3577,22 @@
   end
   get_local $3
  )
- (func $~lib/number/Number<f64>#toString (; 21 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/number/F64#toString (; 21 ;) (type $Fi) (param $0 f64) (result i32)
   get_local $0
   call $~lib/internal/number/dtoa
-  return
  )
- (func $start (; 22 ;) (type $v)
+ (func $~lib/number/Bool#toString (; 22 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.const 0
+  i32.ne
+  if (result i32)
+   i32.const 2160
+  else   
+   i32.const 2176
+  end
+ )
+ (func $start (; 23 ;) (type $v)
+  (local $0 i32)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
   i32.add
@@ -3592,21 +3604,8 @@
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
   get_global $number/a
-  call $~lib/number/Number<i32>#toString
+  call $~lib/number/I32#toString
   i32.const 592
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 600
-   i32.const 4
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  f64.const 2
-  call $~lib/number/Number<f64>#toString
-  i32.const 2112
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3617,35 +3616,9 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 3
-  call $~lib/number/Number<i32>#toString
-  i32.const 2128
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 600
-   i32.const 6
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 4
-  call $~lib/number/Number<i32>#toString
-  i32.const 2136
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 600
-   i32.const 7
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const -5
-  call $~lib/number/Number<i32>#toString
-  i32.const 2144
+  f64.const 2
+  call $~lib/number/F64#toString
+  i32.const 2112
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3656,7 +3629,152 @@
    call $~lib/env/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/number/I32#toString
+  i32.const 2128
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 9
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const -5
+  call $~lib/number/I32#toString
+  i32.const 2136
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 12
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 4
+  call $~lib/number/I32#toString
+  i32.const 2144
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 13
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block (result i32)
+   get_global $number/a
+   i32.const 1
+   i32.add
+   set_global $number/a
+   get_global $number/a
+  end
+  call $~lib/number/I32#toString
+  i32.const 2152
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 14
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block (result i32)
+   get_global $number/a
+   i32.const 1
+   i32.sub
+   set_global $number/a
+   get_global $number/a
+  end
+  call $~lib/number/I32#toString
+  i32.const 592
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 15
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 0
+  i32.eqz
+  call $~lib/number/Bool#toString
+  i32.const 2160
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 16
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  i32.eqz
+  call $~lib/number/Bool#toString
+  i32.const 2176
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 17
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block (result i32)
+   get_global $number/a
+   tee_local $0
+   i32.const 1
+   i32.add
+   set_global $number/a
+   get_local $0
+  end
+  call $~lib/number/I32#toString
+  i32.const 592
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 21
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block (result i32)
+   get_global $number/a
+   tee_local $0
+   i32.const 1
+   i32.sub
+   set_global $number/a
+   get_local $0
+  end
+  call $~lib/number/I32#toString
+  i32.const 2152
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 22
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $null (; 23 ;) (type $v)
+ (func $null (; 24 ;) (type $v)
  )
 )

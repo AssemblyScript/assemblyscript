@@ -47,7 +47,8 @@ import {
   AssertionExpression,
   Expression,
   IntegerLiteralExpression,
-  UnaryPrefixExpression
+  UnaryPrefixExpression,
+  UnaryPostfixExpression
 } from "./ast";
 
 import {
@@ -686,17 +687,15 @@ export class Resolver extends DiagnosticEmitter {
           contextualFunction.flow.contextualTypeArguments,
           reportMode
         );
-        if (type) {
-          let classType = type.classReference;
-          if (classType) {
-            this.currentThisExpression = null;
-            this.currentElementExpression = null;
-            return classType;
-          }
-        }
-        return null;
+        if (!type) return null;
+        let classType = type.classReference;
+        if (!classType) return null;
+        this.currentThisExpression = null;
+        this.currentElementExpression = null;
+        return classType;
       }
       case NodeKind.UNARYPREFIX: {
+        // TODO: overloads
         switch ((<UnaryPrefixExpression>expression).operator) {
           case Token.MINUS: {
             let operand = (<UnaryPrefixExpression>expression).operand;
@@ -715,7 +714,9 @@ export class Resolver extends DiagnosticEmitter {
               reportMode
             );
           }
-          case Token.PLUS: { // nop
+          case Token.PLUS:
+          case Token.PLUS_PLUS:
+          case Token.MINUS_MINUS: {
             return this.resolveExpression(
               (<UnaryPrefixExpression>expression).operand,
               contextualFunction,
@@ -723,11 +724,39 @@ export class Resolver extends DiagnosticEmitter {
               reportMode
             );
           }
-          // TODO
+          case Token.EXCLAMATION: {
+            return assert(this.program.basicClasses.get(TypeKind.BOOL));
+          }
+          case Token.TILDE: {
+            let resolvedOperand = this.resolveExpression(
+              (<UnaryPrefixExpression>expression).operand,
+              contextualFunction,
+              contextualType,
+              reportMode
+            );
+            if (!resolvedOperand) return null;
+            throw new Error("not implemented"); // TODO: should all elements have a corresponding type right away?
+          }
+          default: assert(false);
         }
-        // fallthrough for now
+        return null;
       }
-      case NodeKind.UNARYPOSTFIX:
+      case NodeKind.UNARYPOSTFIX: {
+        // TODO: overloads
+        switch ((<UnaryPostfixExpression>expression).operator) {
+          case Token.PLUS_PLUS:
+          case Token.MINUS_MINUS: {
+            return this.resolveExpression(
+              (<UnaryPostfixExpression>expression).operand,
+              contextualFunction,
+              contextualType,
+              reportMode
+            );
+          }
+          default: assert(false);
+        }
+        return null;
+      }
       case NodeKind.BINARY: {
         // TODO: all sorts of unary and binary expressions, which means looking up overloads and
         // evaluating their return types, knowing the semantics of different operators etc.

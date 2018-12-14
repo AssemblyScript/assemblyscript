@@ -31,8 +31,11 @@
  (data (i32.const 2072) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
  (data (i32.const 2112) "\03\00\00\002\00.\000")
  (data (i32.const 2128) "\01\00\00\003")
- (data (i32.const 2136) "\01\00\00\004")
- (data (i32.const 2144) "\02\00\00\00-\005")
+ (data (i32.const 2136) "\02\00\00\00-\005")
+ (data (i32.const 2144) "\01\00\00\004")
+ (data (i32.const 2152) "\01\00\00\002")
+ (data (i32.const 2160) "\04\00\00\00t\00r\00u\00e")
+ (data (i32.const 2176) "\05\00\00\00f\00a\00l\00s\00e")
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -2665,7 +2668,8 @@
   get_local $1
  )
  (func $start (; 15 ;) (type $v)
-  i32.const 2152
+  (local $0 i32)
+  i32.const 2192
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
@@ -2677,7 +2681,7 @@
   if
    i32.const 0
    i32.const 600
-   i32.const 4
+   i32.const 5
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2690,7 +2694,7 @@
   if
    i32.const 0
    i32.const 600
-   i32.const 5
+   i32.const 8
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -2703,12 +2707,12 @@
   if
    i32.const 0
    i32.const 600
-   i32.const 6
+   i32.const 9
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
-  i32.const 4
+  i32.const -5
   call $~lib/internal/number/itoa32
   i32.const 2136
   call $~lib/string/String.__eq
@@ -2716,12 +2720,12 @@
   if
    i32.const 0
    i32.const 600
-   i32.const 7
+   i32.const 12
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
-  i32.const -5
+  i32.const 4
   call $~lib/internal/number/itoa32
   i32.const 2144
   call $~lib/string/String.__eq
@@ -2729,7 +2733,101 @@
   if
    i32.const 0
    i32.const 600
-   i32.const 8
+   i32.const 13
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $number/a
+  i32.const 1
+  i32.add
+  set_global $number/a
+  get_global $number/a
+  call $~lib/internal/number/itoa32
+  i32.const 2152
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 14
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $number/a
+  i32.const 1
+  i32.sub
+  set_global $number/a
+  get_global $number/a
+  call $~lib/internal/number/itoa32
+  i32.const 592
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 15
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 2160
+  i32.const 2160
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 16
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 2176
+  i32.const 2176
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 17
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $number/a
+  tee_local $0
+  i32.const 1
+  i32.add
+  set_global $number/a
+  get_local $0
+  call $~lib/internal/number/itoa32
+  i32.const 592
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 21
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $number/a
+  tee_local $0
+  i32.const 1
+  i32.sub
+  set_global $number/a
+  get_local $0
+  call $~lib/internal/number/itoa32
+  i32.const 2152
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 22
    i32.const 0
    call $~lib/env/abort
    unreachable
