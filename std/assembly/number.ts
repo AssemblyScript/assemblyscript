@@ -9,6 +9,7 @@ abstract class Number<T> {
   }
 
   toString(this: T): String {
+    // TODO: radix other than 10
     if (isInteger<T>()) return itoa<T>(this);
     if (isFloat<T>()) return dtoa(this);
     assert(false);
