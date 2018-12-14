@@ -204,7 +204,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
         let encoder = new BSONEncoder();`);
       this.generateFieldEncoder(returnType, "result", "result");
       this.sb.push(`
-        return_value(<u32>encoder.serialize());
+        return_value(encoder.serialize().buffer.data);
       `);
     }
   
