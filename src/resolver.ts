@@ -68,7 +68,10 @@ import {
 import {
   makeMap
 } from "./util";
-import { Token } from "./tokenizer";
+
+import {
+  Token
+} from "./tokenizer";
 
 /** Indicates whether errors are reported or not. */
 export enum ReportMode {

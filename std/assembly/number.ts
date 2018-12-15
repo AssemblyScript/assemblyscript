@@ -8,15 +8,232 @@ import {
   isFinite as builtin_isFinite
 } from "./builtins";
 
-export abstract class Number {
+@sealed
+export abstract class I8 {
 
-  static readonly EPSILON: f64 = reinterpret<f64>(0x3CB0000000000000); // 0x1p-52
-  static readonly MIN_VALUE: f64 = reinterpret<f64>(0x0000000000000001); // 0x0.0000000000001p+0
-  static readonly MAX_VALUE: f64 = reinterpret<f64>(0x7FEFFFFFFFFFFFFF); // 0x1.fffffffffffffp+1023
-  static readonly MIN_NORMAL_VALUE: f64 = reinterpret<f64>(0x0010000000000000); // 0x1p-1022
-  static readonly MIN_SAFE_INTEGER: f64 = -9007199254740991;
-  static readonly MAX_SAFE_INTEGER: f64 =  9007199254740991;
-  static readonly POSITIVE_INFINITY: f64 =  Infinity;
+  static readonly MIN_VALUE: i8 = i8.MIN_VALUE;
+  static readonly MAX_VALUE: i8 = i8.MAX_VALUE;
+
+  static parseInt(value: string, radix: i32 = 0): i8 {
+    return <i8>parseI32(value, radix);
+  }
+
+  toString(this: i8): String {
+    // TODO: radix
+    return itoa(this);
+  }
+}
+
+@sealed
+export abstract class I16 {
+
+  static readonly MIN_VALUE: i16 = i16.MIN_VALUE;
+  static readonly MAX_VALUE: i16 = i16.MAX_VALUE;
+
+  static parseInt(value: string, radix: i32 = 0): i16 {
+    return <i16>parseI32(value, radix);
+  }
+
+  toString(this: i16): String {
+    // TODO: radix
+    return itoa(this);
+  }
+}
+
+@sealed
+export abstract class I32 {
+
+  static readonly MIN_VALUE: i32 = i32.MIN_VALUE;
+  static readonly MAX_VALUE: i32 = i32.MAX_VALUE;
+
+  static parseInt(value: string, radix: i32 = 0): i32 {
+    return <i32>parseI32(value, radix);
+  }
+
+  toString(this: i32): String {
+    // TODO: radix
+    return itoa(this);
+  }
+}
+
+@sealed
+export abstract class I64 {
+
+  static readonly MIN_VALUE: i64 = i64.MIN_VALUE;
+  static readonly MAX_VALUE: i64 = i64.MAX_VALUE;
+
+  static parseInt(value: string, radix: i32 = 0): i64 {
+    return <i64>parseI64(value, radix);
+  }
+
+  toString(this: i64): String {
+    // TODO: radix
+    return itoa(this);
+  }
+}
+
+@sealed
+export abstract class Isize {
+
+  static readonly MIN_VALUE: isize = isize.MIN_VALUE;
+  static readonly MAX_VALUE: isize = isize.MAX_VALUE;
+
+  static parseInt(value: string, radix: i32 = 0): isize {
+    return <isize>parseI64(value, radix);
+  }
+
+  toString(this: isize): String {
+    // TODO: radix
+    return itoa(this);
+  }
+}
+
+@sealed
+export abstract class U8 {
+
+  static readonly MIN_VALUE: u8 = u8.MIN_VALUE;
+  static readonly MAX_VALUE: u8 = u8.MAX_VALUE;
+
+  static parseInt(value: string, radix: i32 = 0): u8 {
+    return <u8>parseI32(value, radix);
+  }
+
+  toString(this: u8): String {
+    // TODO: radix
+    return itoa(this);
+  }
+}
+
+@sealed
+export abstract class U16 {
+
+  static readonly MIN_VALUE: u16 = u16.MIN_VALUE;
+  static readonly MAX_VALUE: u16 = u16.MAX_VALUE;
+
+  static parseInt(value: string, radix: i32 = 0): u16 {
+    return <u16>parseI32(value, radix);
+  }
+
+  toString(this: u16): String {
+    // TODO: radix
+    return itoa(this);
+  }
+}
+
+@sealed
+export abstract class U32 {
+
+  static readonly MIN_VALUE: u32 = u32.MIN_VALUE;
+  static readonly MAX_VALUE: u32 = u32.MAX_VALUE;
+
+  static parseInt(value: string, radix: i32 = 0): u32 {
+    return <u32>parseI32(value, radix);
+  }
+
+  toString(this: u32): String {
+    // TODO: radix
+    return itoa(this);
+  }
+}
+
+@sealed
+export abstract class U64 {
+
+  static readonly MIN_VALUE: u64 = u64.MIN_VALUE;
+  static readonly MAX_VALUE: u64 = u64.MAX_VALUE;
+
+  static parseInt(value: string, radix: i32 = 0): u64 {
+    return <u64>parseI64(value, radix);
+  }
+
+  toString(this: u64): String {
+    // TODO: radix
+    return itoa(this);
+  }
+}
+
+@sealed
+export abstract class Usize {
+
+  static readonly MIN_VALUE: usize = usize.MIN_VALUE;
+  static readonly MAX_VALUE: usize = usize.MAX_VALUE;
+
+  static parseInt(value: string, radix: i32 = 0): usize {
+    return <usize>parseI64(value, radix);
+  }
+
+  toString(this: usize): String {
+    // TODO: radix
+    return itoa(this);
+  }
+}
+
+@sealed
+export abstract class Bool {
+
+  static readonly MIN_VALUE: bool = bool.MIN_VALUE;
+  static readonly MAX_VALUE: bool = bool.MAX_VALUE;
+
+  toString(this: bool): String {
+    // TODO: radix?
+    return this ? "true" : "false";
+  }
+}
+
+@sealed
+export abstract class Boolean extends Bool {}
+
+@sealed
+export abstract class F32 {
+
+  static readonly EPSILON: f32 = f32.EPSILON;
+  static readonly MIN_VALUE: f32 = f32.MIN_VALUE;
+  static readonly MAX_VALUE: f32 = f32.MAX_VALUE;
+  static readonly MIN_SAFE_INTEGER: f32 = f32.MIN_SAFE_INTEGER;
+  static readonly MAX_SAFE_INTEGER: f32 = f32.MAX_SAFE_INTEGER;
+  static readonly POSITIVE_INFINITY: f32 = Infinity;
+  static readonly NEGATIVE_INFINITY: f32 = -Infinity;
+  static readonly NaN: f32 = NaN;
+
+  static isNaN(value: f32): bool {
+    return isNaN<f32>(value);
+  }
+
+  static isFinite(value: f32): bool {
+    return isFinite<f32>(value);
+  }
+
+  static isSafeInteger(value: f32): bool {
+    return abs<f32>(value) <= f32.MAX_SAFE_INTEGER && trunc<f32>(value) == value;
+  }
+
+  static isInteger(value: f32): bool {
+    return isFinite<f32>(value) && trunc<f32>(value) == value;
+  }
+
+  static parseInt(value: string, radix: i32 = 0): f32 {
+    return <f32>parseI64(value, radix);
+  }
+
+  static parseFloat(value: string): f32 {
+    return <f32>parseFloat(value);
+  }
+
+  toString(this: f32): String {
+    // TODO: radix
+    return dtoa(this);
+  }
+}
+
+@sealed
+export abstract class F64 {
+
+  static readonly EPSILON: f64 = f64.EPSILON;
+  static readonly MIN_VALUE: f64 = f64.MIN_VALUE;
+  static readonly MAX_VALUE: f64 = f64.MAX_VALUE;
+  static readonly MIN_SAFE_INTEGER: f64 = f64.MIN_SAFE_INTEGER;
+  static readonly MAX_SAFE_INTEGER: f64 = f64.MAX_SAFE_INTEGER;
+  static readonly POSITIVE_INFINITY: f64 = Infinity;
   static readonly NEGATIVE_INFINITY: f64 = -Infinity;
   static readonly NaN: f64 = NaN;
 
@@ -43,104 +260,12 @@ export abstract class Number {
   static parseFloat(value: string): f64 {
     return parseFloat(value);
   }
-}
 
-@sealed
-export abstract class I8 extends Number {
-  toString(this: i8): String {
-    return itoa(this);
-  }
-}
-
-@sealed
-export abstract class I16 extends Number {
-  toString(this: i16): String {
-    return itoa(this);
-  }
-
-}
-
-@sealed
-export abstract class I32 extends Number {
-  toString(this: i32): String {
-    return itoa(this);
-  }
-
-}
-
-@sealed
-export abstract class I64 extends Number {
-  toString(this: i64): String {
-    return itoa(this);
-  }
-
-}
-
-@sealed
-export abstract class Isize extends Number {
-  toString(this: isize): String {
-    return itoa(this);
-  }
-
-}
-
-@sealed
-export abstract class U8 extends Number {
-  toString(this: u8): String {
-    return itoa(this);
-  }
-
-}
-
-@sealed
-export abstract class U16 extends Number {
-  toString(this: u16): String {
-    return itoa(this);
-  }
-
-}
-
-@sealed
-export abstract class U32 extends Number {
-  toString(this: u32): String {
-    return itoa(this);
-  }
-
-}
-
-@sealed
-export abstract class U64 extends Number {
-  toString(this: u64): String {
-    return itoa(this);
-  }
-
-}
-
-@sealed
-export abstract class Usize extends Number {
-  toString(this: usize): String {
-    return itoa(this);
-  }
-}
-
-@sealed
-export abstract class Bool extends Number {
-  toString(this: bool): String {
-    return this ? "true" : "false";
-  }
-}
-
-@sealed
-export abstract class F32 extends Number {
-  toString(this: f32): String {
-    return dtoa(this);
-  }
-
-}
-
-@sealed
-export abstract class F64 extends Number {
   toString(this: f64): String {
+    // TODO: radix
     return dtoa(this);
   }
 }
+
+@sealed
+export abstract class Number extends F64 {}

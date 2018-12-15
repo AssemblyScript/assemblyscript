@@ -10,6 +10,7 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
  (type $iv (func (param i32)))
+ (type $fi (func (param f32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -85,6 +86,16 @@
  (global $~lib/internal/number/_K (mut i32) (i32.const 0))
  (global $~lib/internal/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
+ (global $NaN f64 (f64.const nan:0x8000000000000))
+ (global $~lib/number/F32.NaN f32 (f32.const nan:0x400000))
+ (global $~lib/builtins/f32.MIN_SAFE_INTEGER f32 (f32.const -16777215))
+ (global $~lib/builtins/f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
+ (global $Infinity f64 (f64.const inf))
+ (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
+ (global $~lib/number/F64.NaN f64 (f64.const nan:0x8000000000000))
+ (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
+ (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
+ (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $HEAP_BASE i32 (i32.const 2192))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -3591,8 +3602,84 @@
    i32.const 2176
   end
  )
- (func $start (; 23 ;) (type $v)
+ (func $~lib/number/F32.isSafeInteger (; 23 ;) (type $fi) (param $0 f32) (result i32)
+  (local $1 i32)
+  get_local $0
+  f32.abs
+  get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
+  f32.le
+  tee_local $1
+  if (result i32)
+   get_local $0
+   f32.trunc
+   get_local $0
+   f32.eq
+  else   
+   get_local $1
+  end
+ )
+ (func $~lib/number/F32.isInteger (; 24 ;) (type $fi) (param $0 f32) (result i32)
+  (local $1 i32)
+  block $~lib/builtins/isFinite<f32>|inlined.0 (result i32)
+   get_local $0
+   get_local $0
+   f32.sub
+   f32.const 0
+   f32.eq
+  end
+  tee_local $1
+  i32.const 0
+  i32.ne
+  if (result i32)
+   get_local $0
+   f32.trunc
+   get_local $0
+   f32.eq
+  else   
+   get_local $1
+  end
+ )
+ (func $~lib/number/F64.isSafeInteger (; 25 ;) (type $Fi) (param $0 f64) (result i32)
+  (local $1 i32)
+  get_local $0
+  f64.abs
+  get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+  f64.le
+  tee_local $1
+  if (result i32)
+   get_local $0
+   f64.trunc
+   get_local $0
+   f64.eq
+  else   
+   get_local $1
+  end
+ )
+ (func $~lib/number/F64.isInteger (; 26 ;) (type $Fi) (param $0 f64) (result i32)
+  (local $1 i32)
+  block $~lib/builtins/isFinite<f64>|inlined.0 (result i32)
+   get_local $0
+   get_local $0
+   f64.sub
+   f64.const 0
+   f64.eq
+  end
+  tee_local $1
+  i32.const 0
+  i32.ne
+  if (result i32)
+   get_local $0
+   f64.trunc
+   get_local $0
+   f64.eq
+  else   
+   get_local $1
+  end
+ )
+ (func $start (; 27 ;) (type $v)
   (local $0 i32)
+  (local $1 f32)
+  (local $2 f64)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
   i32.add
@@ -3611,7 +3698,7 @@
   if
    i32.const 0
    i32.const 600
-   i32.const 5
+   i32.const 7
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3624,7 +3711,7 @@
   if
    i32.const 0
    i32.const 600
-   i32.const 8
+   i32.const 9
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3637,7 +3724,7 @@
   if
    i32.const 0
    i32.const 600
-   i32.const 9
+   i32.const 10
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3749,7 +3836,7 @@
   if
    i32.const 0
    i32.const 600
-   i32.const 21
+   i32.const 20
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -3769,12 +3856,620 @@
   if
    i32.const 0
    i32.const 600
-   i32.const 22
+   i32.const 21
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/isNaN<f32>|inlined.0 (result i32)
+   get_global $~lib/number/F32.NaN
+   set_local $1
+   get_local $1
+   get_local $1
+   f32.ne
+  end
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 25
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f32.MIN_SAFE_INTEGER
+  f32.const 1
+  f32.sub
+  call $~lib/number/F32.isSafeInteger
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 27
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f32.MIN_SAFE_INTEGER
+  call $~lib/number/F32.isSafeInteger
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 28
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 0
+  call $~lib/number/F32.isSafeInteger
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 29
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const -0
+  call $~lib/number/F32.isSafeInteger
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 30
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  call $~lib/number/F32.isSafeInteger
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 31
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const inf
+  call $~lib/number/F32.isSafeInteger
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 32
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
+  call $~lib/number/F32.isSafeInteger
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 33
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
+  f32.const 1
+  f32.add
+  call $~lib/number/F32.isSafeInteger
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 34
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 0.5
+  call $~lib/number/F32.isSafeInteger
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 35
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 0
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 36
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const -0
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 37
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 38
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const inf
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 39
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f32.EPSILON
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 40
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 1
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 41
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const -1
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 42
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f32.MIN_SAFE_INTEGER
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 43
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 44
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 0.5
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 45
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const -1.5
+  call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 46
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/isNaN<f64>|inlined.0 (result i32)
+   get_global $~lib/number/F64.NaN
+   set_local $2
+   get_local $2
+   get_local $2
+   f64.ne
+  end
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 48
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f64.MIN_SAFE_INTEGER
+  f64.const 1
+  f64.sub
+  call $~lib/number/F64.isSafeInteger
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 50
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f64.MIN_SAFE_INTEGER
+  call $~lib/number/F64.isSafeInteger
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 51
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 0
+  call $~lib/number/F64.isSafeInteger
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 52
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const -0
+  call $~lib/number/F64.isSafeInteger
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 53
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  call $~lib/number/F64.isSafeInteger
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 54
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const inf
+  call $~lib/number/F64.isSafeInteger
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 55
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+  call $~lib/number/F64.isSafeInteger
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 56
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+  f64.const 1
+  f64.add
+  call $~lib/number/F64.isSafeInteger
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 57
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 0.5
+  call $~lib/number/F64.isSafeInteger
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 58
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 0
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 59
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const -0
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 60
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 61
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const inf
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 62
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f64.EPSILON
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 63
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 1
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 64
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const -1
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 65
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f64.MIN_SAFE_INTEGER
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 66
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 67
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 0.5
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 68
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const -1.5
+  call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 600
+   i32.const 69
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
  )
- (func $null (; 24 ;) (type $v)
+ (func $null (; 28 ;) (type $v)
  )
 )
