@@ -5250,19 +5250,18 @@
   get_local $0
   call $~lib/typedarray/Float64Array#sort
   drop
-<<<<<<< HEAD
   block (result i32)
    block (result i32)
     get_global $std/typedarray/af64
     i32.const 0
-    call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
+    call $~lib/internal/typedarray/TypedArray<f64>#__get
     f64.const 4
     f64.eq
     tee_local $0
     if
      get_global $std/typedarray/af64
      i32.const 1
-     call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
+     call $~lib/internal/typedarray/TypedArray<f64>#__get
      f64.const 5
      f64.eq
      set_local $0
@@ -5272,36 +5271,12 @@
    if
     get_global $std/typedarray/af64
     i32.const 2
-    call $~lib/internal/typedarray/TypedArray<f64,f64>#__get
+    call $~lib/internal/typedarray/TypedArray<f64>#__get
     f64.const 6
     f64.eq
     set_local $0
    end
    get_local $0
-=======
-  get_global $std/typedarray/af64
-  i32.const 0
-  call $~lib/internal/typedarray/TypedArray<f64>#__get
-  f64.const 4
-  f64.eq
-  tee_local $0
-  if
-   get_global $std/typedarray/af64
-   i32.const 1
-   call $~lib/internal/typedarray/TypedArray<f64>#__get
-   f64.const 5
-   f64.eq
-   set_local $0
-  end
-  get_local $0
-  if
-   get_global $std/typedarray/af64
-   i32.const 2
-   call $~lib/internal/typedarray/TypedArray<f64>#__get
-   f64.const 6
-   f64.eq
-   set_local $0
->>>>>>> master
   end
   if (result i32)
    get_global $std/typedarray/af64

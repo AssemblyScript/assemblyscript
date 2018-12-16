@@ -3360,22 +3360,11 @@
    get_local $0
    i32.load offset=4
    tee_local $2
-<<<<<<< HEAD
-   if (result i32)
-    get_local $1
-    get_local $0
-    i32.load offset=4
-    i32.lt_s
-   else    
-    get_local $2
-   end
-=======
    get_local $3
    get_local $2
    i32.lt_s
    select
    i32.lt_s
->>>>>>> master
    if
     i32.const 3
     set_global $~argc
@@ -7330,19 +7319,18 @@
    i64.and
    tee_local $1
    get_local $5
-<<<<<<< HEAD
    i64.ge_u
    br_if $continue|3
    get_global $~lib/internal/number/_K
    get_local $9
    i32.add
    set_global $~lib/internal/number/_K
+   get_local $12
    i32.const 0
    get_local $9
    i32.sub
    i32.const 2
    i32.shl
-   get_local $12
    i32.add
    i64.load32_u offset=8
    get_local $8
@@ -7355,9 +7343,9 @@
    i32.shl
    get_local $0
    i32.add
-   tee_local $4
+   tee_local $7
    i32.load16_u offset=4
-   set_local $7
+   set_local $4
    loop $continue|4
     get_local $1
     get_local $8
@@ -7365,36 +7353,6 @@
     tee_local $2
     if
      get_local $5
-=======
-   i64.lt_u
-   if (result i32)
-    get_global $~lib/internal/number/_K
-    get_local $9
-    i32.add
-    set_global $~lib/internal/number/_K
-    get_local $12
-    i32.const 0
-    get_local $9
-    i32.sub
-    i32.const 2
-    i32.shl
-    i32.add
-    i64.load32_u offset=8
-    get_local $8
-    i64.mul
-    set_local $8
-    get_local $6
-    i32.const 1
-    i32.sub
-    i32.const 1
-    i32.shl
-    get_local $0
-    i32.add
-    tee_local $7
-    i32.load16_u offset=4
-    set_local $4
-    loop $continue|4
->>>>>>> master
      get_local $1
      i64.sub
      get_local $10
@@ -7418,7 +7376,6 @@
       get_local $10
       i64.add
       get_local $8
-<<<<<<< HEAD
       i64.sub
       i64.gt_u
       set_local $2
@@ -7426,56 +7383,19 @@
     end
     get_local $2
     if
-     get_local $7
+     get_local $4
      i32.const 1
      i32.sub
-     set_local $7
+     set_local $4
      get_local $1
      get_local $10
      i64.add
      set_local $1
      br $continue|4
     end
-=======
-      i64.lt_u
-      tee_local $2
-      i32.eqz
-      if
-       get_local $8
-       get_local $1
-       i64.sub
-       get_local $1
-       get_local $10
-       i64.add
-       get_local $8
-       i64.sub
-       i64.gt_u
-       set_local $2
-      end
-     end
-     get_local $2
-     if
-      get_local $4
-      i32.const 1
-      i32.sub
-      set_local $4
-      get_local $1
-      get_local $10
-      i64.add
-      set_local $1
-      br $continue|4
-     end
-    end
-    get_local $7
-    get_local $4
-    i32.store16 offset=4
-    get_local $6
-   else    
-    br $continue|3
->>>>>>> master
    end
-   get_local $4
    get_local $7
+   get_local $4
    i32.store16 offset=4
    get_local $6
   end
@@ -7880,12 +7800,8 @@
   i32.add
   i64.load offset=8
   set_global $~lib/internal/number/_frc_pow
-<<<<<<< HEAD
-  get_local $6
-=======
   get_local $4
-  get_local $5
->>>>>>> master
+  get_local $6
   i32.const 1
   i32.shl
   i32.add
@@ -8542,9 +8458,8 @@
     br $repeat|0
    end
   end
-<<<<<<< HEAD
-  get_local $0
-  set_local $2
+  get_local $2
+  set_local $0
   block (result i32)
    get_local $3
    i32.const 2
@@ -8553,7 +8468,7 @@
    i32.add
    i32.load offset=8
    if
-    get_local $0
+    get_local $2
     get_local $1
     i32.const 6792
     i32.const 0
@@ -8568,31 +8483,6 @@
    get_local $1
    i32.gt_s
   end
-=======
-  get_local $3
-  i32.const 2
-  i32.shl
-  get_local $5
-  i32.add
-  i32.load offset=8
-  if
-   get_local $2
-   get_local $1
-   i32.const 6792
-   i32.const 0
-   i32.const 15
-   call $~lib/internal/string/copyUnsafe
-   get_local $1
-   i32.const 15
-   i32.add
-   set_local $1
-  end
-  get_local $2
-  set_local $0
-  get_local $7
-  get_local $1
-  i32.gt_s
->>>>>>> master
   if
    get_local $2
    get_local $1
