@@ -1,15 +1,15 @@
 import {
-  loadUnsafeWithOffset,
-  storeUnsafeWithOffset
+  LOAD,
+  STORE
 } from "./arraybuffer";
 
 import {
-  compareUnsafe,
+  compareUnsafe
 } from "./string";
 
-/** Obtains the default comparator for the specified type. */
+/** Obtains the default comparator for the specified value type. */
 @inline
-export function defaultComparator<T>(): (a: T, b: T) => i32 {
+export function COMPARATOR<T>(): (a: T, b: T) => i32 {
   if (isInteger<T>()) {
     if (isSigned<T>() && sizeof<T>() <= 4) {
       return (a: T, b: T): i32 => (<i32>(a - b));
@@ -44,28 +44,47 @@ export function defaultComparator<T>(): (a: T, b: T) => i32 {
   }
 }
 
+@inline
+export function SORT<T>(
+  buffer: ArrayBuffer,
+  byteOffset: i32,
+  length: i32,
+  comparator: (a: T, b: T) => i32
+): void {
+  if (isReference<T>()) {
+    // TODO replace this to faster stable sort (TimSort) when it implemented
+    insertionSort<T>(buffer, byteOffset, length, comparator);
+  } else {
+    if (length < 256) {
+      insertionSort<T>(buffer, byteOffset, length, comparator);
+    } else {
+      weakHeapSort<T>(buffer, byteOffset, length, comparator);
+    }
+  }
+}
+
 /** Sorts an Array with the 'Insertion Sort' algorithm. */
-export function insertionSort<T>(
+function insertionSort<T>(
   buffer: ArrayBuffer,
   byteOffset: i32,
   length: i32,
   comparator: (a: T, b: T) => i32
 ): void {
   for (let i = 0; i < length; i++) {
-    let a = loadUnsafeWithOffset<T,T>(buffer, i, byteOffset);       // a = arr[i]
+    let a = LOAD<T>(buffer, i, byteOffset);       // a = arr[i]
     let j = i - 1;
     while (j >= 0) {
-      let b = loadUnsafeWithOffset<T,T>(buffer, j, byteOffset);     // b = arr[j]
+      let b = LOAD<T>(buffer, j, byteOffset);     // b = arr[j]
       if (comparator(a, b) < 0) {
-        storeUnsafeWithOffset<T,T>(buffer, j-- + 1, b, byteOffset); // arr[j + 1] = b
+        STORE<T>(buffer, j-- + 1, b, byteOffset); // arr[j + 1] = b
       } else break;
     }
-    storeUnsafeWithOffset<T,T>(buffer, j + 1, a, byteOffset);       // arr[j + 1] = a
+    STORE<T>(buffer, j + 1, a, byteOffset);       // arr[j + 1] = a
   }
 }
 
 /** Sorts an Array with the 'Weak Heap Sort' algorithm. */
-export function weakHeapSort<T>(
+function weakHeapSort<T>(
   buffer: ArrayBuffer,
   byteOffset: i32,
   length: i32,
@@ -84,37 +103,37 @@ export function weakHeapSort<T>(
     while ((j & 1) == (load<u32>(bitset + (j >> 6 << shift32)) >> (j >> 1 & 31) & 1)) j >>= 1;
 
     let p = j >> 1;
-    let a = loadUnsafeWithOffset<T,T>(buffer, p, byteOffset);  // a = arr[p]
-    let b = loadUnsafeWithOffset<T,T>(buffer, i, byteOffset);  // b = arr[i]
+    let a = LOAD<T>(buffer, p, byteOffset);  // a = arr[p]
+    let b = LOAD<T>(buffer, i, byteOffset);  // b = arr[i]
     if (comparator(a, b) < 0) {
       store<u32>(
         bitset + (i >> 5 << shift32),
         load<u32>(bitset + (i >> 5 << shift32)) ^ (1 << (i & 31))
       );
-      storeUnsafeWithOffset<T,T>(buffer, i, a, byteOffset);    // arr[i] = a
-      storeUnsafeWithOffset<T,T>(buffer, p, b, byteOffset);    // arr[p] = b
+      STORE<T>(buffer, i, a, byteOffset);    // arr[i] = a
+      STORE<T>(buffer, p, b, byteOffset);    // arr[p] = b
     }
   }
 
   for (let i = length - 1; i >= 2; i--) {
-    let a = loadUnsafeWithOffset<T,T>(buffer, 0, byteOffset);
-    storeUnsafeWithOffset<T,T>(buffer, 0, loadUnsafeWithOffset<T,T>(buffer, i, byteOffset), byteOffset);
-    storeUnsafeWithOffset<T,T>(buffer, i, a, byteOffset);
+    let a = LOAD<T>(buffer, 0, byteOffset);
+    STORE<T>(buffer, 0, LOAD<T>(buffer, i, byteOffset), byteOffset);
+    STORE<T>(buffer, i, a, byteOffset);
 
     let x = 1, y: i32;
     while ((y = (x << 1) + ((load<u32>(bitset + (x >> 5 << shift32)) >> (x & 31)) & 1)) < i) x = y;
 
     while (x > 0) {
-      a = loadUnsafeWithOffset<T,T>(buffer, 0, byteOffset);     // a = arr[0]
-      let b = loadUnsafeWithOffset<T,T>(buffer, x, byteOffset); // b = arr[x]
+      a = LOAD<T>(buffer, 0, byteOffset);     // a = arr[0]
+      let b = LOAD<T>(buffer, x, byteOffset); // b = arr[x]
 
       if (comparator(a, b) < 0) {
         store<u32>(
           bitset + (x >> 5 << shift32),
           load<u32>(bitset + (x >> 5 << shift32)) ^ (1 << (x & 31))
         );
-        storeUnsafeWithOffset<T,T>(buffer, x, a, byteOffset);    // arr[x] = a
-        storeUnsafeWithOffset<T,T>(buffer, 0, b, byteOffset);    // arr[0] = b
+        STORE<T>(buffer, x, a, byteOffset);    // arr[x] = a
+        STORE<T>(buffer, 0, b, byteOffset);    // arr[0] = b
       }
       x >>= 1;
     }
@@ -122,7 +141,7 @@ export function weakHeapSort<T>(
 
   memory.free(bitset);
 
-  var t = loadUnsafeWithOffset<T,T>(buffer, 1, byteOffset); // t = arr[1]
-  storeUnsafeWithOffset<T,T>(buffer, 1, loadUnsafeWithOffset<T,T>(buffer, 0, byteOffset), byteOffset);
-  storeUnsafeWithOffset<T,T>(buffer, 0, t, byteOffset); // arr[0] = t
+  var t = LOAD<T>(buffer, 1, byteOffset); // t = arr[1]
+  STORE<T>(buffer, 1, LOAD<T>(buffer, 0, byteOffset), byteOffset);
+  STORE<T>(buffer, 0, t, byteOffset); // arr[0] = t
 }

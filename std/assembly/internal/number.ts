@@ -7,7 +7,7 @@ import {
 } from "./string";
 
 import {
-  loadUnsafe
+  LOAD
 } from "./arraybuffer";
 
 export const MAX_DOUBLE_LENGTH = 28;
@@ -124,7 +124,7 @@ export function decimalCount32(value: u32): u32 {
     let t = l * 1233 >>> 12; // log10
 
     let lutbuf = <ArrayBuffer>POWERS10().buffer_;
-    let power  = loadUnsafe<u32,u32>(lutbuf, t);
+    let power  = LOAD<u32>(lutbuf, t);
     t -= <u32>(value < power);
     return t + 1;
   } else {
@@ -154,7 +154,7 @@ export function decimalCount64(value: u64): u32 {
     let t = l * 1233 >>> 12; // log10
 
     let lutbuf = <ArrayBuffer>POWERS10().buffer_;
-    let power  = loadUnsafe<u32,u64>(lutbuf, t - 10);
+    let power  = LOAD<u32,u64>(lutbuf, t - 10);
     t -= <u32>(value < 10000000000 * power);
     return t + 1;
   } else {
@@ -188,8 +188,8 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
     let d1 = r / 100;
     let d2 = r % 100;
 
-    let digits1 = loadUnsafe<u32,u64>(lutbuf, d1);
-    let digits2 = loadUnsafe<u32,u64>(lutbuf, d2);
+    let digits1 = LOAD<u32,u64>(lutbuf, d1);
+    let digits2 = LOAD<u32,u64>(lutbuf, d2);
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
@@ -200,13 +200,13 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
     let d1 = num % 100;
     num = t;
     offset -= 2;
-    let digits = loadUnsafe<u32,u32>(lutbuf, d1);
+    let digits = LOAD<u32>(lutbuf, d1);
     store<u32>(buffer + (offset << 1), digits, STRING_HEADER_SIZE);
   }
 
   if (num >= 10) {
     offset -= 2;
-    let digits = loadUnsafe<u32,u32>(lutbuf, num);
+    let digits = LOAD<u32>(lutbuf, num);
     store<u32>(buffer + (offset << 1), digits, STRING_HEADER_SIZE);
   } else {
     offset -= 1;
@@ -231,14 +231,14 @@ function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
     let c1 = c / 100;
     let c2 = c % 100;
 
-    let digits1 = loadUnsafe<u32,u64>(lutbuf, c1);
-    let digits2 = loadUnsafe<u32,u64>(lutbuf, c2);
+    let digits1 = LOAD<u32,u64>(lutbuf, c1);
+    let digits2 = LOAD<u32,u64>(lutbuf, c2);
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
 
-    digits1 = loadUnsafe<u32,u64>(lutbuf, b1);
-    digits2 = loadUnsafe<u32,u64>(lutbuf, b2);
+    digits1 = LOAD<u32,u64>(lutbuf, b1);
+    digits2 = LOAD<u32,u64>(lutbuf, b2);
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32), STRING_HEADER_SIZE);
@@ -438,8 +438,8 @@ function getCachedPower(minExp: i32): void {
   _K = 348 - (index << 3);	// decimal exponent no need lookup table
   var frcPowers = <ArrayBuffer>FRC_POWERS().buffer_;
   var expPowers = <ArrayBuffer>EXP_POWERS().buffer_;
-  _frc_pow = loadUnsafe<u64,u64>(frcPowers, index);
-  _exp_pow = loadUnsafe<i16,i32>(expPowers, index);
+  _frc_pow = LOAD<u64>(frcPowers, index);
+  _exp_pow = LOAD<i16,i32>(expPowers, index);
 }
 
 @inline
@@ -513,7 +513,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     let tmp = ((<u64>p1) << one_exp) + p2;
     if (tmp <= delta) {
       _K += kappa;
-      grisuRound(buffer, len, delta, tmp, loadUnsafe<u32,u64>(powers10, kappa) << one_exp, wp_w_frc);
+      grisuRound(buffer, len, delta, tmp, LOAD<u32,u64>(powers10, kappa) << one_exp, wp_w_frc);
       return len;
     }
   }
@@ -529,7 +529,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     --kappa;
     if (p2 < delta) {
       _K += kappa;
-      wp_w_frc *= loadUnsafe<u32,u64>(powers10, -kappa);
+      wp_w_frc *= LOAD<u32,u64>(powers10, -kappa);
       grisuRound(buffer, len, delta, p2, one_frc, wp_w_frc);
       return len;
     }

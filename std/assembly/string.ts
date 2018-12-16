@@ -11,7 +11,7 @@ import {
 } from "./internal/string";
 
 import {
-  storeUnsafe as storeUnsafeArray
+  STORE
 } from "./internal/arraybuffer";
 
 @sealed
@@ -436,7 +436,7 @@ export class String {
           ),
           HEADER_SIZE
         );
-        storeUnsafeArray<String,String>(buffer, i, char);
+        STORE<String>(buffer, i, char);
       }
       return result;
     } else if (!length) {

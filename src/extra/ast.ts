@@ -68,6 +68,7 @@ import {
   FieldDeclaration,
   FunctionDeclaration,
   ImportDeclaration,
+  IndexSignatureDeclaration,
   InterfaceDeclaration,
   MethodDeclaration,
   NamespaceDeclaration,
@@ -295,6 +296,10 @@ export class ASTBuilder {
         this.visitImportDeclaration(<ImportDeclaration>node);
         break;
       }
+      case NodeKind.INDEXSIGNATUREDECLARATION: {
+        this.visitIndexSignatureDeclaration(<IndexSignatureDeclaration>node);
+        break;
+      }
       case NodeKind.INTERFACEDECLARATION: {
         this.visitInterfaceDeclaration(<InterfaceDeclaration>node);
         break;
@@ -378,6 +383,11 @@ export class ASTBuilder {
     if (extendsType) {
       this.sb.push(" extends ");
       this.visitTypeNode(extendsType);
+    }
+    var defaultType = node.defaultType;
+    if (defaultType) {
+      this.sb.push("=");
+      this.visitTypeNode(defaultType);
     }
   }
 
@@ -1174,6 +1184,14 @@ export class ASTBuilder {
       sb.push(" from ");
     }
     this.visitStringLiteralExpression(node.path);
+  }
+
+  visitIndexSignatureDeclaration(node: IndexSignatureDeclaration): void {
+    var sb = this.sb;
+    sb.push("[key: ");
+    this.visitTypeNode(node.keyType);
+    sb.push("]: ");
+    this.visitTypeNode(node.valueType);
   }
 
   visitInterfaceDeclaration(node: InterfaceDeclaration): void {

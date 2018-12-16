@@ -365,6 +365,8 @@ declare namespace f64 {
   /** Converts A string to an integer. */
   export function parseInt(string: string, radix?: i32): f64;
 }
+/** Macro type evaluating to the underlying native WebAssembly type. */
+declare type NATIVE<T> = T;
 
 // User-defined diagnostic macros
 

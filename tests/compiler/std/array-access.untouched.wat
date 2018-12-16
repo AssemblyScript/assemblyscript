@@ -27,6 +27,7 @@
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
  (func $~lib/array/Array<Array<i32>>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   get_local $0
   i32.load
   set_local $2
@@ -37,10 +38,14 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
+   i32.const 0
+   set_local $3
    get_local $2
    get_local $1
    i32.const 2
    i32.shl
+   i32.add
+   get_local $3
    i32.add
    i32.load offset=8
   else   
@@ -49,6 +54,7 @@
  )
  (func $~lib/array/Array<i32>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   get_local $0
   i32.load
   set_local $2
@@ -59,10 +65,14 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
+   i32.const 0
+   set_local $3
    get_local $2
    get_local $1
    i32.const 2
    i32.shl
+   i32.add
+   get_local $3
    i32.add
    i32.load offset=8
   else   
@@ -78,6 +88,7 @@
  )
  (func $~lib/array/Array<String>#__get (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   get_local $0
   i32.load
   set_local $2
@@ -88,10 +99,14 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
+   i32.const 0
+   set_local $3
    get_local $2
    get_local $1
    i32.const 2
    i32.shl
+   i32.add
+   get_local $3
    i32.add
    i32.load offset=8
   else   
@@ -234,6 +249,7 @@
  )
  (func $~lib/array/Array<Array<String>>#__get (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   get_local $0
   i32.load
   set_local $2
@@ -244,10 +260,14 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
+   i32.const 0
+   set_local $3
    get_local $2
    get_local $1
    i32.const 2
    i32.shl
+   i32.add
+   get_local $3
    i32.add
    i32.load offset=8
   else   

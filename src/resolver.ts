@@ -51,7 +51,8 @@ import {
 import {
   Type,
   Signature,
-  typesToString
+  typesToString,
+  TypeKind
 } from "./types";
 
 import {
@@ -59,6 +60,10 @@ import {
   INSTANCE_DELIMITER,
   CommonFlags
 } from "./common";
+
+import {
+  makeMap
+} from "./util";
 
 /** Indicates whether errors are reported or not. */
 export enum ReportMode {
@@ -78,6 +83,8 @@ export class Resolver extends DiagnosticEmitter {
   currentThisExpression: Expression | null = null;
   /** Element expression of the previously resolved element access. */
   currentElementExpression : Expression | null = null;
+  /** Whether the last resolved type has been resolved from a placeholder, i.e. `T`. */
+  currentTypeIsPlaceholder: bool = false;
 
   /** Constructs the resolver for the specified program. */
   constructor(program: Program) {
@@ -131,7 +138,7 @@ export class Resolver extends DiagnosticEmitter {
             let instance = this.resolveClassInclTypeArguments(
               <ClassPrototype>element,
               typeNode.typeArguments,
-              contextualTypeArguments,
+              makeMap<string,Type>(contextualTypeArguments),
               node
             ); // reports
             if (!instance) return null;
@@ -148,30 +155,29 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // resolve parameters
-    {
-      let typeArgumentNodes = typeNode.typeArguments;
-      if (typeArgumentNodes) {
-        let numTypeArguments = typeArgumentNodes.length;
-        let paramTypes = new Array<Type>(numTypeArguments);
-        for (let i = 0; i < numTypeArguments; ++i) {
-          let paramType = this.resolveType( // reports
-            typeArgumentNodes[i],
-            contextualTypeArguments,
-            reportMode
-          );
-          if (!paramType) return null;
-          paramTypes[i] = paramType;
+    var typeArgumentNodes = typeNode.typeArguments;
+    var typeArguments: Type[] | null = null;
+    if (typeArgumentNodes) {
+      let numTypeArguments = typeArgumentNodes.length;
+      typeArguments = new Array<Type>(numTypeArguments);
+      for (let i = 0; i < numTypeArguments; ++i) {
+        let paramType = this.resolveType( // reports
+          typeArgumentNodes[i],
+          contextualTypeArguments,
+          reportMode
+        );
+        if (!paramType) return null;
+        typeArguments[i] = paramType;
+      }
+      if (numTypeArguments) { // can't be a placeholder if it has parameters
+        let instanceKey = typesToString(typeArguments);
+        if (instanceKey.length) {
+          localName += "<" + instanceKey + ">";
+          globalName += "<" + instanceKey + ">";
         }
-        if (numTypeArguments) { // can't be a placeholder if it has parameters
-          let instanceKey = typesToString(paramTypes);
-          if (instanceKey.length) {
-            localName += "<" + instanceKey + ">";
-            globalName += "<" + instanceKey + ">";
-          }
-        } else if (contextualTypeArguments) {
-          let placeholderType = contextualTypeArguments.get(globalName);
-          if (placeholderType) return placeholderType;
-        }
+      } else if (contextualTypeArguments) {
+        let placeholderType = contextualTypeArguments.get(globalName);
+        if (placeholderType) return placeholderType;
       }
     }
 
@@ -184,6 +190,36 @@ export class Resolver extends DiagnosticEmitter {
         (type = typesLookup.get(globalName))
       ) {
         return type;
+      }
+    }
+
+    // check built-in macro types
+    if (simpleName == "NATIVE") {
+      if (!(typeArguments && typeArguments.length == 1)) {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            typeNode.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
+          );
+        }
+        return null;
+      }
+      switch (typeArguments[0].kind) {
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.I32: return Type.i32;
+        case TypeKind.ISIZE: if (!this.program.options.isWasm64) return Type.i32;
+        case TypeKind.I64: return Type.i64;
+        case TypeKind.U8:
+        case TypeKind.U16:
+        case TypeKind.U32:
+        case TypeKind.BOOL: return Type.u32;
+        case TypeKind.USIZE: if (!this.program.options.isWasm64) return Type.u32;
+        case TypeKind.U64: return Type.u64;
+        case TypeKind.F32: return Type.f32;
+        case TypeKind.F64: return Type.f64;
+        case TypeKind.VOID: return Type.void;
+        default: assert(false);
       }
     }
 
@@ -255,39 +291,47 @@ export class Resolver extends DiagnosticEmitter {
   resolveTypeArguments(
     typeParameters: TypeParameterNode[],
     typeArgumentNodes: CommonTypeNode[] | null,
-    contextualTypeArguments: Map<string,Type> | null = null,
+    contextualTypeArguments: Map<string,Type>,
     alternativeReportNode: Node | null = null,
     reportMode: ReportMode = ReportMode.REPORT
   ): Type[] | null {
-    var parameterCount = typeParameters.length;
+    var minParameterCount = 0;
+    var maxParameterCount = 0;
+    for (let i = 0; i < typeParameters.length; ++i) {
+      if (!typeParameters[i].defaultType) ++minParameterCount;
+      ++maxParameterCount;
+    }
     var argumentCount = typeArgumentNodes ? typeArgumentNodes.length : 0;
-    if (parameterCount != argumentCount) {
-      if (argumentCount) {
-        this.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          Range.join(
-            (<TypeNode[]>typeArgumentNodes)[0].range,
-            (<TypeNode[]>typeArgumentNodes)[argumentCount - 1].range
-          ),
-          parameterCount.toString(10), argumentCount.toString(10)
-        );
-      } else if (alternativeReportNode) {
-        this.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          alternativeReportNode.range.atEnd, parameterCount.toString(10), "0"
-        );
-      }
+    if (argumentCount < minParameterCount || argumentCount > maxParameterCount) {
+      this.error(
+        DiagnosticCode.Expected_0_type_arguments_but_got_1,
+        argumentCount
+          ? Range.join(
+              (<TypeNode[]>typeArgumentNodes)[0].range,
+              (<TypeNode[]>typeArgumentNodes)[argumentCount - 1].range
+            )
+          : assert(alternativeReportNode).range.atEnd,
+        (argumentCount < minParameterCount ? minParameterCount : maxParameterCount).toString(10),
+        argumentCount.toString(10)
+      );
       return null;
     }
-    var typeArguments = new Array<Type>(parameterCount);
-    for (let i = 0; i < parameterCount; ++i) {
-      let type = this.resolveType( // reports
-        (<TypeNode[]>typeArgumentNodes)[i],
-        contextualTypeArguments,
-        reportMode
-      );
+    var typeArguments = new Array<Type>(maxParameterCount);
+    for (let i = 0; i < maxParameterCount; ++i) {
+      let type = i < argumentCount
+        ? this.resolveType( // reports
+            (<TypeNode[]>typeArgumentNodes)[i],
+            contextualTypeArguments,
+            reportMode
+          )
+        : this.resolveType( // reports
+            assert(typeParameters[i].defaultType),
+            contextualTypeArguments,
+            reportMode
+          );
       if (!type) return null;
       // TODO: check extendsType
+      contextualTypeArguments.set(typeParameters[i].name.text, type);
       typeArguments[i] = type;
     }
     return typeArguments;
@@ -407,7 +451,7 @@ export class Resolver extends DiagnosticEmitter {
         let getter = this.resolveFunction(
           assert((<Property>target).getterPrototype),
           null,
-          null,
+          makeMap<string,Type>(),
           reportMode
         );
         if (!getter) return null;
@@ -662,7 +706,7 @@ export class Resolver extends DiagnosticEmitter {
           let instance = this.resolveFunctionInclTypeArguments(
             <FunctionPrototype>target,
             (<CallExpression>expression).typeArguments,
-            contextualFunction.flow.contextualTypeArguments,
+            makeMap<string,Type>(contextualFunction.flow.contextualTypeArguments),
             expression,
             reportMode
           );
@@ -710,10 +754,10 @@ export class Resolver extends DiagnosticEmitter {
   resolveFunction(
     prototype: FunctionPrototype,
     typeArguments: Type[] | null,
-    contextualTypeArguments: Map<string,Type> | null = null,
+    contextualTypeArguments: Map<string,Type> = makeMap<string,Type>(),
     reportMode: ReportMode = ReportMode.REPORT
   ): Function | null {
-    var classTypeArguments = prototype.classTypeArguments;
+    var classTypeArguments = prototype.classTypeArguments; // set only if partially resolved
     var classInstanceKey = classTypeArguments ? typesToString(classTypeArguments) : "";
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
     var classInstances = prototype.instances.get(classInstanceKey);
@@ -726,34 +770,8 @@ export class Resolver extends DiagnosticEmitter {
     var isInstance = prototype.is(CommonFlags.INSTANCE);
     var classPrototype = prototype.classPrototype;
 
-    // inherit contextual type arguments as provided. might be overridden.
-    var inheritedTypeArguments = contextualTypeArguments;
-    contextualTypeArguments = new Map();
-    if (inheritedTypeArguments) {
-      for (let [inheritedName, inheritedType] of inheritedTypeArguments) {
-        contextualTypeArguments.set(
-          inheritedName,
-          inheritedType
-        );
-      }
-    }
-
-    // override with class type arguments if a partially resolved instance method
-    if (classTypeArguments) { // set only if partially resolved
-      assert(prototype.is(CommonFlags.INSTANCE));
-      let classDeclaration = assert(classPrototype).declaration;
-      let classTypeParameters = classDeclaration.typeParameters;
-      let numClassTypeParameters = classTypeParameters.length;
-      assert(numClassTypeParameters == classTypeArguments.length);
-      for (let i = 0; i < numClassTypeParameters; ++i) {
-        contextualTypeArguments.set(
-          classTypeParameters[i].name.text,
-          classTypeArguments[i]
-        );
-      }
-    } else {
-      assert(!classTypeArguments);
-    }
+    // apply class type arguments if a partially resolved instance method
+    if (classTypeArguments) prototype.applyClassTypeArguments(contextualTypeArguments);
 
     // override with function specific type arguments
     var signatureNode = declaration.signature;
@@ -869,13 +887,21 @@ export class Resolver extends DiagnosticEmitter {
   resolveFunctionInclTypeArguments(
     prototype: FunctionPrototype,
     typeArgumentNodes: CommonTypeNode[] | null,
-    contextualTypeArguments: Map<string,Type> | null,
+    contextualTypeArguments: Map<string,Type>,
     reportNode: Node,
     reportMode: ReportMode = ReportMode.REPORT
   ): Function | null {
     var resolvedTypeArguments: Type[] | null = null;
+
+    // Resolve type arguments if generic
     if (prototype.is(CommonFlags.GENERIC)) {
-      assert(typeArgumentNodes != null && typeArgumentNodes.length != 0);
+
+      // apply class type arguments if a partially resolved instance method
+      // FIXME: this is done once more in resolveFunction. required here for resolveTypeArguments,
+      // required there for just resolving a function no matter if a partial or not.
+      let classTypeArguments = prototype.classTypeArguments;
+      if (classTypeArguments) prototype.applyClassTypeArguments(contextualTypeArguments);
+
       resolvedTypeArguments = this.resolveTypeArguments( // reports
         assert(prototype.declaration.typeParameters),
         typeArgumentNodes,
@@ -884,7 +910,21 @@ export class Resolver extends DiagnosticEmitter {
         reportMode
       );
       if (!resolvedTypeArguments) return null;
+
+    // Otherwise make sure that no type arguments have been specified
+    } else {
+      if (typeArgumentNodes !== null && typeArgumentNodes.length) {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_generic,
+            reportNode.range, prototype.internalName
+          );
+        }
+        return null;
+      }
     }
+
+    // Continue with concrete types
     return this.resolveFunction(
       prototype,
       resolvedTypeArguments,
@@ -897,7 +937,7 @@ export class Resolver extends DiagnosticEmitter {
   resolveClass(
     prototype: ClassPrototype,
     typeArguments: Type[] | null,
-    contextualTypeArguments: Map<string,Type> | null = null,
+    contextualTypeArguments: Map<string,Type> = makeMap<string,Type>(),
     reportMode: ReportMode = ReportMode.REPORT
   ): Class | null {
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
@@ -905,15 +945,6 @@ export class Resolver extends DiagnosticEmitter {
     // Check if this exact instance has already been resolved
     var instance = prototype.instances.get(instanceKey);
     if (instance) return instance;
-
-    // Copy contextual type arguments so we don't pollute the original map
-    var inheritedTypeArguments = contextualTypeArguments;
-    contextualTypeArguments = new Map();
-    if (inheritedTypeArguments) {
-      for (let [inheritedName, inheritedType] of inheritedTypeArguments) {
-        contextualTypeArguments.set(inheritedName, inheritedType);
-      }
-    }
 
     // Insert contextual type arguments for this operation. Internally, this method is always
     // called with matching type parameter / argument counts.
@@ -993,14 +1024,20 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Resolve constructor by first applying the class type arguments
-    if (prototype.constructorPrototype) {
+    var constructorPrototype = prototype.constructorPrototype;
+    if (constructorPrototype) {
       let constructorPartial = this.resolveFunctionPartially(
-        prototype.constructorPrototype,
+        constructorPrototype,
         typeArguments,
         reportMode
       );
       if (!constructorPartial) return null;
-      instance.constructorInstance = this.resolveFunction(constructorPartial, null, null, reportMode);
+      instance.constructorInstance = this.resolveFunction(
+        constructorPartial,
+        null,
+        makeMap<string,Type>(),
+        reportMode
+      );
     }
 
     // Resolve instance members
@@ -1125,9 +1162,19 @@ export class Resolver extends DiagnosticEmitter {
           reportMode
         );
         if (!operatorPartial) continue;
-        operatorInstance = this.resolveFunction(operatorPartial, null, null, reportMode);
+        operatorInstance = this.resolveFunction(
+          operatorPartial,
+          null,
+          makeMap<string,Type>(),
+          reportMode
+        );
       } else {
-        operatorInstance = this.resolveFunction(overloadPrototype, null, null, reportMode);
+        operatorInstance = this.resolveFunction(
+          overloadPrototype,
+          null,
+          makeMap<string,Type>(),
+          reportMode
+        );
       }
       if (!operatorInstance) continue;
       let overloads = instance.overloads;
@@ -1141,7 +1188,7 @@ export class Resolver extends DiagnosticEmitter {
   resolveClassInclTypeArguments(
     prototype: ClassPrototype,
     typeArgumentNodes: CommonTypeNode[] | null,
-    contextualTypeArguments: Map<string,Type> | null,
+    contextualTypeArguments: Map<string,Type>,
     reportNode: Node,
     reportMode: ReportMode = ReportMode.REPORT
   ): Class | null {
@@ -1149,21 +1196,8 @@ export class Resolver extends DiagnosticEmitter {
 
     // Resolve type arguments if generic
     if (prototype.is(CommonFlags.GENERIC)) {
-      let typeParameterNodes = prototype.declaration.typeParameters;
-      let expectedTypeArguments = typeParameterNodes.length;
-      assert(expectedTypeArguments > 0);
-      let actualTypeArguments = typeArgumentNodes !== null ? typeArgumentNodes.length : 0;
-      if (expectedTypeArguments != actualTypeArguments) {
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, expectedTypeArguments.toString(10), actualTypeArguments.toString(10)
-          );
-        }
-        return null;
-      }
       resolvedTypeArguments = this.resolveTypeArguments(
-        typeParameterNodes,
+        assert(prototype.declaration.typeParameters),
         typeArgumentNodes,
         contextualTypeArguments,
         reportNode,
