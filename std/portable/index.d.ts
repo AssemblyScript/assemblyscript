@@ -368,6 +368,7 @@ declare class Array<T> {
   forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void;
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U>;
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T>;
+  find(callbackfn: (value: T, index: i32, array: Array<T>) => bool): T | null;
   reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U, initialValue: U): U;
   reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U, initialValue: U): U;
   shift(): T;

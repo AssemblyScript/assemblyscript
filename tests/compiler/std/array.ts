@@ -585,6 +585,12 @@ arr.push(3);
 var filteredArr: i32[] = arr.filter((value: i32, index: i32, array: Array<i32>): bool => value >= 2);
 assert(filteredArr.length == 2);
 
+// Array#find ////////////////////////////////////////////////////////////////////////////////////
+var found: i32 | null = arr.find((value: i32, index: i32, array: Array<i32>): bool => value >= 2);
+assert(found == 2);
+found = arr.find((value: i32, index: i32, array: Array<i32>): bool => value >= 4);
+assert(found == null);
+
 // Test side effect push
 i = 0;
 arr.filter((value: i32, index: i32, array: Array<i32>): bool => {

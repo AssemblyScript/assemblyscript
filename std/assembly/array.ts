@@ -277,6 +277,17 @@ export class Array<T> {
     return result;
   }
 
+  find(callbackfn: (value: T, index: i32, array: Array<T>) => bool): T | null {
+    var buffer = this.buffer_;
+    for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
+      let value = LOAD<T>(buffer, index);
+      if (callbackfn(value, index, this)) {
+        return value;
+      }
+    }
+    return null;
+  }
+
   reduce<U>(
     callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U,
     initialValue: U
