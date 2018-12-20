@@ -127,6 +127,209 @@ abstract class ExportsWalker {
   abstract visitNamespace(element: Element): void;
 }
 
+// TODO: Extract this into separate module, preferrable pluggable
+export class NEARBindingsBuilder extends ExportsWalker {
+  private sb: string[] = [];
+
+  private typeMapping: { [key: string]: string } = {
+    "i32": "Integer",
+    "String": "String",
+    "Uint8Array": "Uint8Array",
+    "bool": "Boolean"
+  };
+
+  private nonNullableTypes = ["i32", "bool"];
+
+  static build(program: Program): string {
+    return new NEARBindingsBuilder(program).build();
+  }
+
+  visitGlobal(element: Global): void {
+    // Do nothing
+  }
+
+  visitEnum(element: Enum): void {
+    // Do nothing
+  }
+
+  visitFunction(element: Function): void {
+    console.log("visitFunction: " + element.simpleName);
+    let signature = element.signature;
+
+    this.sb.push(`export class __near_ArgsParser_${element.simpleName} {
+      `);
+    let fields = [];
+    if (signature.parameterNames) {
+      for (let i = 0; i < signature.parameterNames.length; i++) {
+        let paramName = signature.parameterNames[i];
+        let paramType = signature.parameterTypes[i];
+        fields.push({
+          simpleName: paramName,
+          type: paramType
+        });
+      }
+    }
+    fields.forEach((field) => {
+        this.sb.push(`__near_param_${field.simpleName}: ${field.type};`);
+    });
+    this.generateBSONHandlerMethods("this.__near_param_", fields);
+    this.sb.push(`}`); // __near_ArgsParser
+
+    let returnType = signature.returnType.toString();
+    this.sb.push(`export function near_func_${element.simpleName}(): void {
+      let bson = new Uint8Array(input_read_len());
+      input_read_into(bson.buffer.data);
+      let handler = new __near_ArgsParser_${element.simpleName}();
+      let decoder = new BSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
+      decoder.deserialize(bson);`);
+    if (returnType != "void") {
+      this.sb.push(`let result = ${element.simpleName}(`);
+    } else {
+      this.sb.push(`${element.simpleName}(`)
+    }
+    if (signature.parameterNames) {
+      let i = 0;
+      for (let paramName of signature.parameterNames) {
+        this.sb.push(`handler.__near_param_${paramName}`);
+        if (i < signature.parameterNames.length) {
+          this.sb.push(",")
+        }
+        i++;
+      }
+    }
+    this.sb.push(");");
+    
+    if (returnType != "void") {
+      this.sb.push(`
+        let encoder = new BSONEncoder();`);
+      this.generateFieldEncoder(returnType, "result", "result");
+      this.sb.push(`
+        return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
+      `);
+    }
+  
+    this.sb.push(`}`);
+  }
+
+  private generateBSONHandlerMethods(valuePrefix: string, fields: any[]) : void {
+    for (let fieldType in this.typeMapping) {
+      let setterType = this.typeMapping[fieldType];
+      this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {`);
+      fields.forEach((field) => {
+        if (field.type.toString() == fieldType) {
+            this.sb.push(`if (name == "${field.simpleName}") { ${valuePrefix}${field.simpleName} = value; return; }`);
+        }
+      });
+      this.sb.push("}");
+    }
+    this.sb.push("setNull(name: string): void {");
+    fields.forEach((field) => {
+      this.sb.push(`if (name == "${field.simpleName}") {
+        ${valuePrefix}${field.simpleName} = <${field.type.toString()}>null;
+      }`);
+    });
+    this.sb.push("}\n"); // setNull
+
+    // TODO: Suport nested objects/arrays
+    // TODO: This needs some way to get current index in buffer (extract parser state into separte class?),
+    // TODO: so that we can call method to parse object recursively
+    // TODO: popObject() should also return false to exit nested parser?
+    this.sb.push(`
+      pushObject(name: string): bool { return false; }
+      popObject(): void {}
+      pushArray(name: string): bool { return false; }
+      popArray(): void {}
+    `);
+  }
+
+  visitClass(element: Class): void {
+    let className = element.simpleName;
+    console.log("visitClass: " + className);
+    this.sb.push(`export function __near_encode_${className}(
+        value: ${className},
+        encoder: BSONEncoder): void {`);
+    this.getFields(element).forEach((field) => {
+      let fieldType = field.type.toString();
+      let fieldName = field.simpleName;
+      let sourceExpr = `value.${fieldName}`;
+      this.generateFieldEncoder(fieldType, fieldName, sourceExpr);
+    });
+    this.sb.push("}"); // __near_encode
+
+    this.sb.push(`export class __near_BSONHandler_${className} {
+      value: ${className} = new ${className}();`);
+    this.generateBSONHandlerMethods("this.value.", this.getFields(element));
+    this.sb.push("}\n"); // class __near_BSONHandler_
+
+    this.sb.push(`export function __near_decode_${className}(
+        buffer: Uint8Array, offset: i32): ${className} {
+      let handler = new __near_BSONHandler_${className}();
+      let decoder = new BSONDecoder<__near_BSONHandler_${className}>(handler);
+      decoder.deserialize(buffer, offset);
+      return handler.value;
+    }\n`);
+  }
+
+  private generateFieldEncoder(fieldType: any, fieldName: any, sourceExpr: string) {
+    let setterType = this.typeMapping[fieldType];
+    if (!setterType) {
+      // Object
+      this.sb.push(`if (${sourceExpr} != null) {
+          __near_encode_${fieldType}(${sourceExpr}, encoder);
+        } else {
+          encoder.setNull("${fieldName}");
+        }`);
+    }
+    else {
+      // Basic types
+      if (this.nonNullableTypes.indexOf(fieldType) != -1) {
+        this.sb.push(`encoder.set${setterType}("${fieldName}", ${sourceExpr});`);
+      }
+      else {
+        this.sb.push(`if (${sourceExpr} != null) {
+            encoder.set${setterType}("${fieldName}", ${sourceExpr});
+          } else {
+            encoder.setNull("${fieldName}");
+          }`);
+      }
+    }
+  }
+
+  private getFields(element: Class): any[] {
+    var members = element.members;
+    var results = [];
+    if (members) {
+      for (let member of members.values()) {
+        if (!(member instanceof Field)) {
+          continue;
+        }
+        results.push(member);
+      }
+    }
+    return results;
+  }
+
+  visitInterface(element: Interface): void {
+    // Do nothing
+  }
+
+  visitField(element: Field): void {
+    throw new Error("Shouldn't be called");
+  }
+
+  visitNamespace(element: Element): void {
+    // Do nothing
+  }
+
+  build(): string {
+    let mainSource = this.program.sources
+      .filter(s => s.normalizedPath.indexOf("~lib") != 0)[0];
+    this.sb.push(mainSource.text);
+    this.walk();
+    return this.sb.join("\n");
+  }
+}
+
 /** A WebIDL definitions builder. */
 export class IDLBuilder extends ExportsWalker {
 
