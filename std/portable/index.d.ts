@@ -94,6 +94,12 @@ declare function isReference(value: any): value is object | string;
 declare function isString(value: any): value is string | String;
 /** Tests if the specified value can be used as an array. */
 declare function isArray(value: any): value is Array<any>;
+/** Tests if the specified expression resolves to a defined element. */
+declare function isDefined(expr: any): bool;
+/** Tests if the specified expression evaluates to a constant value. */
+declare function isConstant(expr: any): bool;
+
+declare function is(value: any): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the value. */
 declare function assert<T>(isTrueish: T | null, message?: string): T;
 /** Parses an integer string to a 64-bit float. */
@@ -285,6 +291,8 @@ declare namespace memory {
   function free(ptr: usize): void;
   /** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
   function copy(dst: usize, src: usize, n: usize): void;
+  /** Fills size bytes from from the specified destination by same value in memory. */
+  function fill(dst: usize, value: u8, size: usize): void;
   /** Resets the allocator to its initial state, if supported. */
   function reset(): void;
 }
