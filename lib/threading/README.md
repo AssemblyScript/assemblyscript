@@ -34,3 +34,15 @@ This matches the WC3's WebWorker API.
 `postMessage(item: T)` - pushes an item onto the workers stack.
 
 `onmessage(item: T)` - which which is called when an item is popped from the array.
+
+
+## Testing it out
+First build the test binary.
+
+`npm run asbuild:test`
+
+Then start the server.
+
+`npm run server`
+
+In the console you should see that the message 424242 was received by the forked Web Worker.
