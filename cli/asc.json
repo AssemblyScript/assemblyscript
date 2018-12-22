@@ -111,6 +111,11 @@
     "type": "i",
     "default": 0
   },
+  "ignoreDataSegments": {
+    "description": "Ingore data segments to binary. Default false.",
+    "type": "b",
+    "default": false
+  },
   "memoryBase": {
     "description": "Sets the start offset of compiler-generated static memory.",
     "type": "i",

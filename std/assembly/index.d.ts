@@ -168,9 +168,10 @@ declare namespace Atomic {
   export function xor<T>(ptr: usize, value: T, constantOffset?: usize): T;
   /** Atomically exchange a value of the specified type to memory.*/
   export function xchg<T>(ptr: usize, value: T, constantOffset?: usize): T;
-  /** Atomically compare exchange a value of the specified type to memory.*/
+  /** Atomically compare exchange a value of the specified type to memory. If the loaded value is equal to the expected value, the replacement value is stored to the same memory address. If the values are not equal, no value is stored. In either case, the loaded value is returned.
+  */
   export function cmpxchg<T>(ptr: usize, expected:T, replacement: T, constantOffset?: usize): T;
-  
+
   export function wait<T>(offset: usize, expected: T, timeout: i64): i32;
     
   export function notify<T>(offset: usize, count: u32): u32;

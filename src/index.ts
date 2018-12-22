@@ -107,6 +107,11 @@ export function setSharedMemory(options: Options, sharedMemory: i32): void {
   options.sharedMemory = sharedMemory;
 }
 
+/** Sets the `ignoreDataSegments` option. */
+export function ignoreDataSegments(options: Options, ignoreDataSegments: bool): void {
+  options.ignoreDataSegments = ignoreDataSegments;
+}
+
 /** Sets the `importTable` option. */
 export function setImportTable(options: Options, importTable: bool): void {
   options.importTable = importTable;

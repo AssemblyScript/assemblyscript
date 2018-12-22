@@ -429,6 +429,7 @@ exports.main = async function main(argv, options, callback) {
   assemblyscript.setImportMemory(compilerOptions, args.importMemory);
   assemblyscript.setSharedMemory(compilerOptions, args.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, args.importTable);
+  assemblyscript.ignoreDataSegments(compilerOptions, args.ignoreDataSegments);
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);

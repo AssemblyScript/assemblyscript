@@ -186,6 +186,8 @@ export class Options {
   importMemory: bool = false;
   /** If greater than zero, declare memory as shared by setting max memory to sharedMemory. */
   sharedMemory: i32 = 0;
+  /** Don't include datasegments in compiled module.  Use with sharedMemory to ensure module intialized only once.*/
+  ignoreDataSegments: bool = false;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, generates information necessary for source maps. */
@@ -399,10 +401,12 @@ export class Compiler extends DiagnosticEmitter {
     ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
     : 0;
     var isSharedMemory = options.sharedMemory > 0;
+    var addSegments = !options.ignoreDataSegments;
+
     module.setMemory(
       numPages,
       isSharedMemory ? options.sharedMemory : Module.UNLIMITED_MEMORY,
-      this.memorySegments,
+      addSegments? this.memorySegments: [],
       options.target,
       "memory",
       isSharedMemory
