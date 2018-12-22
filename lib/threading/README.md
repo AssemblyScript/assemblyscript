@@ -17,7 +17,7 @@ This is the base class which wraps around a pointer used by `wait` and `notify`.
 
 `release(numAgents: i32 = -1)` - Will atomically store 1 and will notify `numAgents` threads waiting on the lock.  `-1` is all waiters.
 
-##Mailbox<T>
+## Mailbox<T>
 An array can act as a mailbox for a thread.  Both pushes and pops to the array are guarded by locks.
 
 `new Mailbox()`
@@ -26,7 +26,7 @@ An array can act as a mailbox for a thread.  Both pushes and pops to the array a
 
 `pop(): T` - Attempts to pop an item from the array, however, the thread will wait until there are items in the array.
 
-##WebWorker<T>
+## WebWorker<T>
 This matches the WC3's WebWorker API.
 
 `new WebWorker()`
