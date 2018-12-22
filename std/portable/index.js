@@ -260,7 +260,10 @@ globalScope["memory"] = (() => {
     copy: globalScope["__memory_copy"] || function copy(dest, src, size) {
       HEAP.copyWithin(dest, src, src + size);
     },
-    reset: globalScope["__memory_reset"] || function reset() { }
+    reset: globalScope["__memory_reset"] || function reset() {
+      HEAP = new Uint8Array(0);
+      HEAP_OFFSET = 0;
+    }
   };
 })();
 
