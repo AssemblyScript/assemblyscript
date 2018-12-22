@@ -1,6 +1,6 @@
 # ![AS](https://avatars1.githubusercontent.com/u/28916798?s=48) threading
 
-WebAssembly now has atomic instructions which allow for WebAssembly instances to atomically access a shared memory.  There are also two need instructions `wait` and `notify`, which allow threads to wait on a memory address and notify threads that are waiting (which currently aren't implemented by can be handled by the host for now).
+WebAssembly now has atomic instructions which allow for WebAssembly instances to atomically access a shared memory.  There are also two new instructions `wait` and `notify`, which allow threads to wait on a memory address and notify threads that are waiting (which currently aren't implemented by can be handled by the host for now).
 
 While these instructions are a big step forward for multithreaded WebAssembly applications the loader must still create WebWorkers and pass the required information such as the shared memory.  Furthermore, these instructions are still very low level and can be tricky to implement correctly.  Thus this module aims to provide a collection of useful classes to aid to fill this gap including a special loader to handle the creation of threads.
 
