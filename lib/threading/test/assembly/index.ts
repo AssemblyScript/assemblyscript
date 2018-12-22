@@ -5,7 +5,7 @@ declare function log_str(v: string): void;
 declare function log<T>(t:T):void;
 // declare function fetch(v: string, cb: int): void;
 
-import {Worker, startWorker, Lock, Mailbox, cloneWorker } from "../../assembly";
+import {Worker, startWorker, Lock, Mailbox } from "../../assembly";
 
 
 export function myStart(): void{
@@ -15,7 +15,6 @@ export function myStart(): void{
 }
 
 export function startChild(worker: Worker): void{
-  // let child = worker.clone();
   worker.start();
 }
 

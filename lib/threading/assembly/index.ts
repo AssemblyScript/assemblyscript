@@ -37,13 +37,14 @@ export class Lock {
     return Atomic.load<i32>(ptr);
   }
   acquire(): void {
-    print(100000001);
-
+    log_str("aquiring Lock");
     Lock.acquire(changetype<usize>(this));
+    log_str("lock is acquired");
   }
   release(): void {
-    print(111111111);
+    log_str("Releasing Lock");
     Lock.release(changetype<usize>(this));
+    log_str("Lock is Released");
   }
   /** Wait until lock is acquired, e.i. the ptr is set to 0.  */
   static acquire(ptr: usize): void {
@@ -137,13 +138,8 @@ export class Worker {
   id: i32;
 
   constructor() {
-     // this.mailbox = mailbox;
-     // this.id = changetype<i32>(this);
      this.array = [];
-     log<Array<i32>>(this.array);
      this.lock = new Lock();
-     // log<i32>(this.id);
-     // log<i32>(this.id + changetype<i32>(this.array));
      this.init();
   }
 
@@ -152,27 +148,18 @@ export class Worker {
     let array = this.array;
     let count = 0;
     while(this.alive) {
-      // log_str("start of loop. array has length: " + itoa<i32>(a.length));
       this.lock.acquire();
       while (this.array.length == 0) {
         count++;
         if (count > 100){
-          print(1010101010);
           break;
         }
         this.lock.release();
-        log<i32>(Atomic.load<i32>(ptr));
         wait(ptr, 1 ,-1);
         Lock.acquire(ptr);
       }
-      // lock.acquire(ptr);
-      debug();
       let x = this.array[0];
       let i: i32 = array.pop();
-      debug();
-      log<i32>(i);
-      log<i32>(x);
-      log<i32>(array.length);
       this.lock.release();
       this.onmessage(i);
       if (count>100){
@@ -183,7 +170,7 @@ export class Worker {
 
   init(): void {
     this.id = changetype<i32>(this);
-    fork(this.clone());
+    fork(this);
   }
 
   onmessage(message: i32): void {
@@ -194,56 +181,11 @@ export class Worker {
   postMessage(message: i32): void {
     this.lock.acquire();
     this.array.push(message);
-    log_str("putting message in array");
-    log<Array<i32>>(this.array);
-    log<i32>(this.array.length);
-    log<i32>(this.array[0]);
-    // log<i32>(this.array[1]);
-    log<Worker>(this);
     this.lock.release();
   }
 
-  clone(): Worker {
-    // let worker = changetype<Worker>(__memory_allocate(sizeof<Worker>()));
-    // log_str("creating worker from: ");
-    // print(changetype<i32>(this));
-    // log_str("now");
-    // print(changetype<i32>(worker));
-
-    // worker.mailbox = this.mailbox;
-    // // worker.mailbox.lock = this.mailbox.lock;
-    // print(worker.mailbox.array.length)
-    // print(changetype<Array<i32>>(this.mailbox)[0])
-    //
-    // print(changetype<i32>(this.mailbox));
-    // print(changetype<i32>(worker.mailbox));
-    // print(changetype<i32>(this.mailbox.lock));
-    // print(changetype<i32>(worker.mailbox.lock));
-    // let x = this.mailbox.lock.ptr;
-    // print(this.mailbox.lock.ptr);
-    // print(x);
-    // worker.mailbox.lock.ptr = x;
-    // print(worker.mailbox.lock.ptr);
-    // log_str("copying " + itoa<i32>(this.mailbox.lock.ptr));
-    // log_str("now " + itoa<i32>(worker.mailbox.lock.ptr));
-
-    // worker.alive = this.alive;
-    // worker.array = this.array;
-    // log<Array<i32>>(worker.array);
-    // worker.lock = this.lock;
-    // worker.lock.ptr = this.lock.ptr;
-    // print(worker.lock.ptr);
-    // print(this.lock.ptr);
-    // print(Lock.load(this.lock.ptr));
-    // worker.id = changetype<i32>(worker);
-    return this;
-  }
 }
 
-export function cloneWorker(worker: Worker): Worker{
-  return worker.clone();
-
-}
 
 export function startWorker(worker: Worker): void{
   worker.start();
