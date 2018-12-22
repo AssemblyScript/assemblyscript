@@ -19,10 +19,6 @@ export function startChild(worker: Worker): void{
 }
 
 export {Worker, Mailbox, Lock}
-export function  mailboxLock(m: Mailbox<i32>): Lock {
-  return m.write;
-}
-
 
 
 export function postMessage(worker: Worker, x: i32): void {

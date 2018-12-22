@@ -48,28 +48,18 @@ export class Lock {
   }
   /** Wait until lock is acquired, e.i. the ptr is set to 0.  */
   static acquire(ptr: usize): void {
-    // log_str("about to wait... -------- " + itoa<i32>(ptr));
-    // print(Atomic.load<i32>(ptr));
-    // print(Atomic.load<i32>(this.ptr));
-    // print(Lock.load(ptr));
-    // return
     let count = 0;
     while (!Atomic.cmpxchg<i32>(ptr, 1, 0)){
-      // log_str("waiting for lock");
-      // print(lock);
       wait(ptr, 0, -1);
       if (count++ > 5){
         break;
       }
     }
-    // log_str("aquired Lock");
   }
 
   static release(ptr: i32): void {
-    // log_str("releasing Lock")
     Lock.store(ptr, 1);
     notify(ptr, 1);
-    // log_str("released Lock - " + itoa<i32>(ptr));
   }
 
 
@@ -78,44 +68,37 @@ export class Lock {
 export class Mailbox<T> {
   array: Array<T> = [];
   lock: Lock;
-  write: Lock;
 
   constructor(){
-    log_str("creating Mailbox");
-    this.lock = 1
-    this.write = 0; //Initially locked.
-    log_str("Creating locks. Read: " + itoa<i32>(this.lock)+" "+
-             "\nWrite: "+ itoa<i32>(this.write));
+    this.lock = new Lock();
   }
 
   push(item: T): void {
     log_str("Pushing----");
-    log_str("Read lock as Writer"+ this.lock);
-
-    // this.lock.acquire(this.lock);
+    this.lock.acquire();
     log_str("Read lock acquired for writer");
-
     this.array.push(item);
     log_str("Pushed item");
-
-    // this.lock.release(this.lock.ptr);
-    // this.write.release(this.write.ptr);
-    log_str("both writing locks released.");
-    print(changetype<i32>(item));
-
-    print(changetype<Array<i32>>(this.array)[0]);
+    this.lock.release();
   }
 
   pop(): T {
     log_str("Popping----");
+    let ptr = changetype<i32>(this.lock);
+    let count = 0;
     while (this.array.length == 0) {
-      // log_str("write lock "+ this.write.toString());
-      // this.write.acquire(this.write.ptr);
+      this.lock.acquire();
+      count++;
+      if (count > 100){
+        break;
+      }
+      this.lock.release();
+      wait(ptr, 1 , -1);
+      Lock.acquire(ptr);
     }
     // this.lock.acquire(this.lock.ptr);
-    log_str("aquired read lock as reader");
     let i: T = this.array.pop();
-    // this.lock.release(this.lock.ptr);
+    this.lock.release();
     return i;
   }
 
@@ -131,36 +114,21 @@ export class Mailbox<T> {
 
 
 export class Worker {
-  lock: Lock;
-  array: Array<i32>;
+  array: Mailbox<i32>;
   // mailbox: Mailbox<i32>;
   alive: boolean = true;
   id: i32;
 
   constructor() {
-     this.array = [];
-     this.lock = new Lock();
+     this.array = new Mailbox<i32>();
      this.init();
   }
 
   start(): void {
-    let ptr = changetype<i32>(this.lock);
     let array = this.array;
     let count = 0;
     while(this.alive) {
-      this.lock.acquire();
-      while (this.array.length == 0) {
-        count++;
-        if (count > 100){
-          break;
-        }
-        this.lock.release();
-        wait(ptr, 1 ,-1);
-        Lock.acquire(ptr);
-      }
-      let x = this.array[0];
       let i: i32 = array.pop();
-      this.lock.release();
       this.onmessage(i);
       if (count>100){
         break;
@@ -179,9 +147,9 @@ export class Worker {
   }
 
   postMessage(message: i32): void {
-    this.lock.acquire();
+    // this.lock.acquire();
     this.array.push(message);
-    this.lock.release();
+    // this.lock.release();
   }
 
 }
