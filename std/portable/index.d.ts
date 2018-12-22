@@ -95,11 +95,9 @@ declare function isString(value: any): value is string | String;
 /** Tests if the specified value can be used as an array. */
 declare function isArray(value: any): value is Array<any>;
 /** Tests if the specified expression resolves to a defined element. */
-declare function isDefined(expr: any): bool;
+declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. */
-declare function isConstant(expr: any): bool;
-
-declare function is(value: any): bool;
+declare function isConstant(expression: any): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the value. */
 declare function assert<T>(isTrueish: T | null, message?: string): T;
 /** Parses an integer string to a 64-bit float. */
