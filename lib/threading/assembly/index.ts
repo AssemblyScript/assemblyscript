@@ -11,7 +11,8 @@ declare function fork(worker: Worker): void
 declare function log_str(s: string): void
 declare function log<T>(i:T): void
 declare function loc(i:Lock):i32;
-declare function debug():void;
+declare function debug(): void;
+declare function printMemory(): void;
 
 
 // function loc (x: Lock):i32 {
@@ -42,13 +43,19 @@ export class Lock {
     log_str("lock is acquired");
   }
   release(): void {
-    log_str("Releasing Lock");
+    // log_str("Releasing Lock at "+ itoa<Lock>(this));
     Lock.release(changetype<usize>(this));
     log_str("Lock is Released");
   }
   /** Wait until lock is acquired, e.i. the ptr is set to 0.  */
   static acquire(ptr: usize): void {
     let count = 0;
+    printMemory();
+    print(Atomic.load<i32>(ptr));
+    // log_str("aquiring Lock ---" + itoa<i32>(ptr) + " has VALUE "+ itoa<i32>(Atomic.load<i32>(ptr)));
+    print(Atomic.load<i32>(ptr));
+
+    printMemory();
     while (!Atomic.cmpxchg<i32>(ptr, 1, 0)){
       wait(ptr, 0, -1);
       if (count++ > 5){
@@ -93,8 +100,9 @@ export class Mailbox<T> {
         break;
       }
       this.lock.release();
+      log_str("going to sleep");
       wait(ptr, 1 , -1);
-      Lock.acquire(ptr);
+      this.lock.acquire();
     }
     // this.lock.acquire(this.lock.ptr);
     let i: T = this.array.pop();
@@ -115,7 +123,6 @@ export class Mailbox<T> {
 
 export class Worker {
   array: Mailbox<i32>;
-  // mailbox: Mailbox<i32>;
   alive: boolean = true;
   id: i32;
 
