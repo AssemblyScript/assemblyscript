@@ -1,6 +1,10 @@
 {
+  /* "extends": "../../../tsconfig-base.json", */
   "compilerOptions": {
-    "module": "commonjs"
+    "outDir": "../out",
+    "module": "commonjs",
+    "lib":["es2015", "es2016", "es2017","es2017.sharedmemory", "webworker"],
+    "target":"es2017"
   },
   "include": [
     "./**/*.ts"

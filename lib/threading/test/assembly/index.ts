@@ -15,7 +15,7 @@ export function myStart(): void{
 }
 
 export function startChild(worker: Worker): void{
-  worker.start();
+  worker.run();
 }
 
 export {Worker, Mailbox, Lock}

@@ -6,11 +6,11 @@
   "types": "index.d.ts",
   "scripts": {
     "asbuild": "asc assembly/index.ts -O3 -b build/index.wasm -t build/index.wat --importMemory --sourceMap --importMemory --sharedMemory=256 --validate",
-    "asbuild:memory": "../../bin/asc test/assembly/index.ts -b test/build/memory.wasm -t test/build/memory.wat --sourceMap --sharedMemory=256 --validate",
+    "asbuild:memory": "../../bin/asc test/assembly/index.ts -b test/build/index.memory -t test/build/memory.wat --sourceMap --sharedMemory=256 --validate",
     "asbuild:test": "npm run asbuild:memory && ../../bin/asc test/assembly/index.ts --ignoreDataSegments -b test/build/index.wasm -t test/build/index.wat --importMemory --sourceMap --debug --sharedMemory=256 --validate",
     "build": "npm run asbuild && webpack --mode production --display-modules",
     "server": "http-server ./test -o -c-1",
-    "test": "asbuild:test && ts-node tests/"
+    "test": "webpack --mode development --display-modules && npm run asbuild:test"
   },
   "files": [
     "package.json",
@@ -21,6 +21,7 @@
     "README.md"
   ],
   "dependencies": {
+    "@types/node": "^10.12.18",
     "http-server": "^0.11.1",
     "tsc": "^1.20150623.0",
     "webworker-threads": "^0.7.17"

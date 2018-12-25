@@ -12,7 +12,7 @@ declare function log_str(s: string): void
 declare function log<T>(i:T): void
 declare function loc(i:Lock):i32;
 declare function debug(): void;
-declare function printMemory(): void;
+declare function printMemory<T>(t: T): void;
 
 
 // function loc (x: Lock):i32 {
@@ -43,19 +43,17 @@ export class Lock {
     log_str("lock is acquired");
   }
   release(): void {
-    // log_str("Releasing Lock at "+ itoa<Lock>(this));
     Lock.release(changetype<usize>(this));
     log_str("Lock is Released");
   }
   /** Wait until lock is acquired, e.i. the ptr is set to 0.  */
   static acquire(ptr: usize): void {
     let count = 0;
-    printMemory();
-    print(Atomic.load<i32>(ptr));
+    printMemory<usize>(ptr);
+    // log_str(itoa<i32>(Atomic.load<i32>(ptr))+ " oo "+ itoa<i32>(Atomic.load<i32>(ptr)));
     // log_str("aquiring Lock ---" + itoa<i32>(ptr) + " has VALUE "+ itoa<i32>(Atomic.load<i32>(ptr)));
     print(Atomic.load<i32>(ptr));
-
-    printMemory();
+    printMemory<usize>(ptr);
     while (!Atomic.cmpxchg<i32>(ptr, 1, 0)){
       wait(ptr, 0, -1);
       if (count++ > 5){
@@ -131,10 +129,16 @@ export class Worker {
      this.init();
   }
 
-  start(): void {
+  static start(worker: Worker): void{
+    worker.run();
+  }
+
+  run(): void {
+    log_str("starting Worker");
     let array = this.array;
     let count = 0;
     while(this.alive) {
+      log_str("about to call pop");
       let i: i32 = array.pop();
       this.onmessage(i);
       if (count>100){
@@ -163,5 +167,5 @@ export class Worker {
 
 
 export function startWorker(worker: Worker): void{
-  worker.start();
+  worker.run();
 }
