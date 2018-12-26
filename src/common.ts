@@ -60,22 +60,24 @@ export enum CommonFlags {
 
   // Compilation states
 
+  /** Is resolved. */
+  RESOLVED = 1 << 22,
   /** Is compiled. */
-  COMPILED = 1 << 22,
+  COMPILED = 1 << 23,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 23,
+  INLINED = 1 << 24,
   /** Is scoped. */
-  SCOPED = 1 << 24,
+  SCOPED = 1 << 25,
   /** Is a trampoline. */
-  TRAMPOLINE = 1 << 25,
+  TRAMPOLINE = 1 << 26,
   /** Is a virtual method. */
-  VIRTUAL = 1 << 26,
+  VIRTUAL = 1 << 27,
   /** Is the main function. */
-  MAIN = 1 << 27,
+  MAIN = 1 << 28,
 
   // Other
 
-  QUOTED = 1 << 28
+  QUOTED = 1 << 29
 }
 
 /** Path delimiter inserted between file system levels. */

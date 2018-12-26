@@ -14,9 +14,10 @@ let fs = require("fs");
 asc.main([
         "index.ts",
         "--baseDir",`${__dirname}/decompiler`,
-        "-b", "untouched.wasm",
-        "-t", "untouched.wat",
+        "-b", "build/untouched.wasm",
+        "-t", "build/untouched.wat",
         "--tsdFile", "index.d.ts",
+        // "--noTreeShaking",
         "--sourceMap",
         "--validate",
         // "--importMemory",
@@ -35,9 +36,13 @@ asc.main([
     // console.log("- Function[" + funIndex + "] -> FunctionType[" + typeIndex + "]");
   }
   //Need to include onSection because otherwise nothing else gets parsed.
+  var startFuncIndex = 0;
   function onSection(id, offset, length, nameOffset, nameLength) {
     var name = id == 0 ? "'" + Parser.parse.readString(nameOffset, nameLength) + "'" : Parser.SectionId[id];
-    // console.log(name + " section at " + offset + ".." + (offset + length));
+    console.log(name + " section at " + offset + ".." + (offset + length));
+    if (name.toLowerCase() === "start"){
+      startFuncIndex =  Parser.parse.readUint32(offset);
+    }
     return true;
   }
 
@@ -48,7 +53,7 @@ asc.main([
     // console.log(" - Function[" + index + "] name: " + name);
   }
 
-  let binary = fs.readFileSync(`${__dirname}/decompiler/untouched.wasm`);
+  let binary = fs.readFileSync(`${__dirname}/decompiler/build/untouched.wasm`);
   Parser.parse(binary, {
     onSection,
     // onType,
@@ -84,4 +89,17 @@ asc.main([
     }
   });
   console.log(decompiler.finish());
+  let Mod;
+  mod.setStart(mod.getFunction("null")); //Set start function to null function.
+  mod.addFunctionExport("start", "start");
+  debugger;
+  Mod = loader.instantiateBuffer(mod.emitBinary(), {index:
+    {println:console.log,
+      asyncfn: (self, cb) => {
+        Mod.getFunction(cb)(self, 42)
+      }
+      //self is an object & cb is an anonymous function in the module's table.
+    }});
+
+  Mod.start();
 });

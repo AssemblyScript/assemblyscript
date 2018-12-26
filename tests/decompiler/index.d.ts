@@ -10,8 +10,14 @@ declare module ASModule {
   type bool = any;
   class Test {
     constructor(i: i32);
+    a: u32;
     i: i32;
     _if(i: i32): void;
+    _else(i: i32): void;
+    _while(i: i32): void;
+    _doWhile(i: i32): void;
+    print(i: i32): void;
+    callAsync(): void;
   }
 }
 export default ASModule;

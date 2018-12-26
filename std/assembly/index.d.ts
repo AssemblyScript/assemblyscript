@@ -112,6 +112,8 @@ declare function changetype<T>(value: any): T;
 declare function unchecked<T>(value: T): T;
 /** Emits a `call_indirect` instruction, calling the specified function in the function table by index with the specified arguments. Does result in a runtime error if the arguments do not match the called function. */
 declare function call_indirect<T>(target: Function | u32, ...args: any[]): T;
+/** Instantiates a new instance of `T` using the specified constructor arguments. */
+declare function instantiate<T>(...args: any[]): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
 declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
@@ -148,6 +150,32 @@ declare function parseFloat(str: string): f64;
 declare function fmod(x: f64, y: f64): f64;
 /** Returns the 32-bit floating-point remainder of `x/y`. */
 declare function fmodf(x: f32, y: f32): f32;
+
+declare namespace Atomic { 
+  /** Atomically loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
+  export function load<T>(ptr: usize, constantOffset?: usize): T;
+  /** Atomically stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
+  export function store<T>(ptr: usize, value: any, constantOffset?: usize): void;
+  /** Atomically add a value of the specified type to memory.*/
+  export function add<T>(ptr: usize, value: T, constantOffset?: usize): T;
+  /** Atomically subtract a value of the specified type from memory.*/
+  export function sub<T>(ptr: usize, value: T, constantOffset?: usize): T;
+  /** Atomically and a value of the specified type to memory.*/
+  export function and<T>(ptr: usize, value: T, constantOffset?: usize): T;
+  /** Atomically or a value of the specified type to memory.*/
+  export function or<T>(ptr: usize, value: T, constantOffset?: usize): T;
+  /** Atomically xor a value of the specified type to memory.*/
+  export function xor<T>(ptr: usize, value: T, constantOffset?: usize): T;
+  /** Atomically exchange a value of the specified type to memory.*/
+  export function xchg<T>(ptr: usize, value: T, constantOffset?: usize): T;
+  /** Atomically compare exchange a value of the specified type to memory. If the loaded value is equal to the expected value, the replacement value is stored to the same memory address. If the values are not equal, no value is stored. In either case, the loaded value is returned.
+  */
+  export function cmpxchg<T>(ptr: usize, expected:T, replacement: T, constantOffset?: usize): T;
+
+  export function wait<T>(offset: usize, expected: T, timeout: i64): i32;
+    
+  export function notify<T>(offset: usize, count: u32): u32;
+}
 
 /** Converts any other numeric value to an 8-bit signed integer. */
 declare function i8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
@@ -200,6 +228,58 @@ declare namespace i32 {
   export function parseFloat(string: string): i32;
   /** Converts A string to an integer. */
   export function parseInt(string: string, radix?: i32): i32;
+
+  namespace atomic {
+    /** Atomically loads an 8-bit signed integer from memory and returns it as a 32-bit integer. */
+    export function load8_s(offset: usize, constantOffset?: usize): i32;
+    /** Atomically loads an 8-bit unsigned integer from memory and returns it as a 32-bit integer. */
+    export function load8_u(offset: usize, constantOffset?: usize): i32;
+    /** Atomically loads a 16-bit signed integer from memory and returns it as a 32-bit integer. */
+    export function load16_s(offset: usize, constantOffset?: usize): i32;
+    /** Atomically loads a 16-bit unsigned integer from memory and returns it as a 32-bit integer. */
+    export function load16_u(offset: usize, constantOffset?: usize): i32;
+    /** Atomically loads a 32-bit integer from memory. */
+    export function load(offset: usize, constantOffset?: usize): i32;
+    /** Atomically stores a 32-bit integer to memory as an 8-bit integer. */
+    export function store8(offset: usize, value: i32, constantOffset?: usize): void;
+    /** Atomically stores a 32-bit integer to memory as a 16-bit integer. */
+    export function store16(offset: usize, value: i32, constantOffset?: usize): void;
+    /** Atomically stores a 32-bit integer to memory. */
+    export function store(offset: usize, value: i32, constantOffset?: usize): void;
+    
+    export function wait(offset: usize, expected: i32, timeout: i64): i32;
+    export function notify(offset: usize, count: u32): u32;
+
+    namespace rmw8_u {
+      export function add(offset: usize, value: i32, constantOffset?: usize): i32
+      export function sub(offset: usize, value: i32, constantOffset?: usize): i32
+      export function and(offset: usize, value: i32, constantOffset?: usize): i32
+      export function or(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xor(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xchg(offset: usize, value: i32, constantOffset?: usize): i32
+      export function cmpxchg(offset: usize, expected:i32, replacement: i32, constantOffset?: usize): i32;
+    }
+
+    namespace rmw16_u {
+      export function add(offset: usize, value: i32, constantOffset?: usize): i32
+      export function sub(offset: usize, value: i32, constantOffset?: usize): i32
+      export function and(offset: usize, value: i32, constantOffset?: usize): i32
+      export function or(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xor(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xchg(offset: usize, value: i32, constantOffset?: usize): i32
+      export function cmpxchg(offset: usize, expected:i32, replacement: i32, constantOffset?: usize): i32;
+    }
+
+    namespace rmw {
+      export function add(offset: usize, value: i32, constantOffset?: usize): i32
+      export function sub(offset: usize, value: i32, constantOffset?: usize): i32
+      export function and(offset: usize, value: i32, constantOffset?: usize): i32
+      export function or(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xor(offset: usize, value: i32, constantOffset?: usize): i32
+      export function xchg(offset: usize, value: i32, constantOffset?: usize): i32
+      export function cmpxchg(offset: usize, expected:i32, replacement: i32, constantOffset?: usize): i32;
+    }
+  }
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
 declare function i64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -234,6 +314,74 @@ declare namespace i64 {
   export function parseFloat(string: string): i64;
   /** Converts A string to an integer. */
   export function parseInt(string: string, radix?: i32): i64;
+
+  namespace atomic {
+    /** Atomically loads an 8-bit signed integer from memory and returns it as a 64-bit signed integer. */
+    export function load8_s(offset: usize, constantOffset?: usize): i64;
+    /** Atomically loads an 8-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
+    export function load8_u(offset: usize, constantOffset?: usize): u64;
+    /** Atomically loads a 16-bit signed integer from memory and returns it as a 64-bit signed integer. */
+    export function load16_s(offset: usize, constantOffset?: usize): i64;
+    /** Atomically loads a 16-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
+    export function load16_u(offset: usize, constantOffset?: usize): u64;
+    /** Atomically loads a 32-bit signed integer from memory and returns it as a 64-bit signed integer. */
+    export function load32_s(offset: usize, constantOffset?: usize): i64;
+    /** Atomically loads a 32-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
+    export function load32_u(offset: usize, constantOffset?: usize): u64;
+    /** Atomically loads a 64-bit unsigned integer from memory. */
+    export function load(offset: usize, constantOffset?: usize): i64;
+    /** Atomically stores a 64-bit integer to memory as an 8-bit integer. */
+    export function store8(offset: usize, value: i64, constantOffset?: usize): void;
+    /** Atomically stores a 64-bit integer to memory as a 16-bit integer. */
+    export function store16(offset: usize, value: i64, constantOffset?: usize): void;
+    /** Atomically stores a 64-bit integer to memory as a 32-bit integer. */
+    export function store32(offset: usize, value: i64, constantOffset?: usize): void;
+    /** Atomically stores a 64-bit integer to memory. */
+    export function store(offset: usize, value: i64, constantOffset?: usize): void;
+    
+    export function wait(offset: usize, expected: i64, timeout: i64): i32;
+    export function notify(offset: usize, count: u32): u32;
+
+    namespace rmw8_u {
+      export function add(offset: usize, value: i64, constantOffset?: usize): i64
+      export function sub(offset: usize, value: i64, constantOffset?: usize): i64
+      export function and(offset: usize, value: i64, constantOffset?: usize): i64
+      export function or(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xor(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xchg(offset: usize, value: i64, constantOffset?: usize): i64
+      export function cmpxchg(offset: usize, expected:i64, replacement: i64, constantOffset?: usize): i64;
+    }
+
+    namespace rmw16_u {
+      export function add(offset: usize, value: i64, constantOffset?: usize): i64
+      export function sub(offset: usize, value: i64, constantOffset?: usize): i64
+      export function and(offset: usize, value: i64, constantOffset?: usize): i64
+      export function or(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xor(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xchg(offset: usize, value: i64, constantOffset?: usize): i64
+      export function cmpxchg(offset: usize, expected:i64, replacement: i64, constantOffset?: usize): i64;
+    }
+
+    namespace rmw32_u {
+      export function add(offset: usize, value: i64, constantOffset?: usize): i64
+      export function sub(offset: usize, value: i64, constantOffset?: usize): i64
+      export function and(offset: usize, value: i64, constantOffset?: usize): i64
+      export function or(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xor(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xchg(offset: usize, value: i64, constantOffset?: usize): i64
+      export function cmpxchg(offset: usize, expected:i64, replacement: i64, constantOffset?: usize): i64;
+    }
+
+    namespace rmw {
+      export function add(offset: usize, value: i64, constantOffset?: usize): i64
+      export function sub(offset: usize, value: i64, constantOffset?: usize): i64
+      export function and(offset: usize, value: i64, constantOffset?: usize): i64
+      export function or(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xor(offset: usize, value: i64, constantOffset?: usize): i64
+      export function xchg(offset: usize, value: i64, constantOffset?: usize): i64
+      export function cmpxchg(offset: usize, expected:i64, replacement: i64, constantOffset?: usize): i64;
+    }
+  }
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
 declare var isize: i32 | i64;
@@ -524,6 +672,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
 declare class Int8Array extends TypedArray<i8> {}
 /** An array of 8-bit unsigned integers. */
 declare class Uint8Array extends TypedArray<u8> {}
+/** A clamped array of 8-bit unsigned integers. */
+declare class Uint8ClampedArray extends TypedArray<u8> {}
 /** An array of twos-complement 16-bit signed integers. */
 declare class Int16Array extends TypedArray<i16> {}
 /** An array of 16-bit unsigned integers. */
@@ -570,8 +720,8 @@ declare class Array<T> {
   shift(): T;
   some(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   unshift(element: T): i32;
-  slice(from: i32, to?: i32): T[];
-  splice(start: i32, deleteCount?: i32): void;
+  slice(from: i32, to?: i32): Array<T>;
+  splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): T[];
@@ -611,6 +761,7 @@ declare class String {
   toString(): string;
   static fromUTF8(ptr: usize, len: usize): string;
   toUTF8(): usize;
+  // split(separator?: string, limit?:i32): string[];
 }
 
 /** Class for representing a runtime error. Base class of all errors. */
@@ -849,3 +1000,4 @@ declare function inline(target: any, propertyKey: any, descriptor: any): any;
 
 /** Annotates an explicit external name of a function or global. */
 declare function external(target: any, propertyKey: any, descriptor: any): any;
+

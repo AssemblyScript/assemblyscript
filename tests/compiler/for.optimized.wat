@@ -13,10 +13,10 @@
  (func $start (; 1 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
-  block $break|0
-   i32.const 0
-   set_global $for/i
-   loop $repeat|0
+  i32.const 0
+  set_global $for/i
+  loop $repeat|0
+   block $break|0
     get_global $for/i
     i32.const 10
     i32.ge_s
@@ -26,9 +26,7 @@
     i32.add
     set_global $for/i
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
   get_global $for/i
   i32.const 10
@@ -41,8 +39,8 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|1
-   loop $repeat|1
+  loop $repeat|1
+   block $break|1
     get_local $0
     i32.const 10
     i32.ge_s
@@ -52,9 +50,7 @@
     i32.add
     set_local $0
     br $repeat|1
-    unreachable
    end
-   unreachable
   end
   loop $repeat|2
    get_global $for/i
@@ -99,10 +95,10 @@
    get_global $for/i
    br_if $repeat|4
   end
-  block $break|5
-   i32.const 0
-   set_local $0
-   loop $repeat|5
+  i32.const 0
+  set_local $0
+  loop $repeat|5
+   block $break|5
     get_local $0
     i32.const 10
     i32.ge_s
@@ -112,9 +108,7 @@
     i32.add
     set_local $0
     br $repeat|5
-    unreachable
    end
-   unreachable
   end
   get_local $0
   i32.const 10
@@ -127,23 +121,23 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|6
-   i32.const 0
-   set_local $0
-   loop $repeat|6
+  i32.const 0
+  set_local $0
+  loop $repeat|6
+   block $break|6
     get_local $0
     i32.const 10
     i32.ge_s
     br_if $break|6
-    block $break|7
-     i32.const 0
-     set_local $1
-     loop $repeat|7
+    i32.const 0
+    set_local $1
+    loop $repeat|7
+     block $break|7
+      get_local $1
+      i32.const 10
+      i32.ge_s
+      br_if $break|7
       block $continue|7
-       get_local $1
-       i32.const 10
-       i32.ge_s
-       br_if $break|7
        get_local $0
        get_local $1
        i32.eq
@@ -154,18 +148,14 @@
       i32.add
       set_local $1
       br $repeat|7
-      unreachable
      end
-     unreachable
     end
     get_local $0
     i32.const 1
     i32.add
     set_local $0
     br $repeat|6
-    unreachable
    end
-   unreachable
   end
  )
  (func $null (; 2 ;) (type $v)

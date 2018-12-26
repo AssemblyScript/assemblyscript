@@ -26,59 +26,59 @@
   (local $7 i64)
   (local $8 i64)
   (local $9 i64)
-  block $folding-inner0
-   get_local $0
-   i64.reinterpret/f64
-   tee_local $2
-   i64.const 52
-   i64.shr_u
+  get_local $0
+  i64.reinterpret/f64
+  tee_local $2
+  i64.const 52
+  i64.shr_u
+  i64.const 2047
+  i64.and
+  set_local $4
+  get_local $1
+  i64.reinterpret/f64
+  tee_local $3
+  i64.const 52
+  i64.shr_u
+  i64.const 2047
+  i64.and
+  set_local $5
+  get_local $2
+  i64.const 63
+  i64.shr_u
+  set_local $8
+  get_local $3
+  i64.const 1
+  i64.shl
+  tee_local $7
+  i64.const 0
+  i64.eq
+  tee_local $6
+  i32.eqz
+  if
+   get_local $4
    i64.const 2047
-   i64.and
-   set_local $4
-   get_local $1
-   i64.reinterpret/f64
-   tee_local $3
-   i64.const 52
-   i64.shr_u
-   i64.const 2047
-   i64.and
-   set_local $5
-   get_local $2
-   i64.const 63
-   i64.shr_u
-   set_local $8
-   get_local $3
-   i64.const 1
-   i64.shl
-   tee_local $7
-   i64.const 0
    i64.eq
-   tee_local $6
-   i32.eqz
-   if
-    get_local $4
-    i64.const 2047
-    i64.eq
-    set_local $6
-   end
-   get_local $6
-   i32.eqz
-   if
-    get_local $1
-    get_local $1
-    f64.ne
-    set_local $6
-   end
-   get_local $6
-   if
-    get_local $0
-    get_local $1
-    f64.mul
-    tee_local $0
-    get_local $0
-    f64.div
-    return
-   end
+   set_local $6
+  end
+  get_local $6
+  i32.eqz
+  if
+   get_local $1
+   get_local $1
+   f64.ne
+   set_local $6
+  end
+  get_local $6
+  if
+   get_local $0
+   get_local $1
+   f64.mul
+   tee_local $0
+   get_local $0
+   f64.div
+   return
+  end
+  block $folding-inner0
    get_local $2
    i64.const 1
    i64.shl
@@ -86,8 +86,8 @@
    get_local $7
    i64.le_u
    if
-    get_local $9
     get_local $7
+    get_local $9
     i64.eq
     br_if $folding-inner0
     get_local $0
@@ -279,16 +279,44 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  block $folding-inner0
-   get_local $0
-   i32.reinterpret/f32
-   tee_local $2
-   i32.const 23
-   i32.shr_u
+  get_local $0
+  i32.reinterpret/f32
+  tee_local $2
+  i32.const 23
+  i32.shr_u
+  i32.const 255
+  i32.and
+  set_local $3
+  get_local $1
+  i32.reinterpret/f32
+  tee_local $4
+  i32.const 23
+  i32.shr_u
+  i32.const 255
+  i32.and
+  set_local $6
+  get_local $2
+  i32.const -2147483648
+  i32.and
+  set_local $8
+  get_local $4
+  i32.const 1
+  i32.shl
+  tee_local $7
+  i32.eqz
+  tee_local $5
+  i32.eqz
+  if
+   get_local $3
    i32.const 255
-   i32.and
-   set_local $3
+   i32.eq
+   set_local $5
+  end
+  get_local $5
+  i32.eqz
+  if
    get_local $1
+<<<<<<< HEAD
    i32.reinterpret/f32
    tee_local $4
    i32.const 23
@@ -331,6 +359,23 @@
     f32.div
     return
    end
+=======
+   get_local $1
+   f32.ne
+   set_local $5
+  end
+  get_local $5
+  if
+   get_local $0
+   get_local $1
+   f32.mul
+   tee_local $0
+   get_local $0
+   f32.div
+   return
+  end
+  block $folding-inner0
+>>>>>>> threading
    get_local $2
    i32.const 1
    i32.shl
@@ -437,6 +482,7 @@
    tee_local $5
    i32.shl
    set_local $2
+   get_local $8
    get_local $3
    get_local $5
    i32.sub
@@ -459,7 +505,6 @@
     i32.shr_u
    end
    tee_local $2
-   get_local $8
    i32.or
    f32.reinterpret/i32
    return

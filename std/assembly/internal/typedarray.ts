@@ -12,8 +12,11 @@ import {
   defaultComparator
 } from "./array";
 
+// The internal TypedArray class uses two type parameters for the same reason as `loadUnsafe` and
+// `storeUnsafe` in 'internal/arraybuffer.ts'. See the documentation there for details.
+
 /** Typed array base class. Not a global object. */
-export abstract class TypedArray<T,V> {
+export abstract class TypedArray<T,TNative> {
 
   readonly buffer: ArrayBuffer;
   readonly byteOffset: i32;
@@ -47,19 +50,19 @@ export abstract class TypedArray<T,V> {
   }
 
   @operator("[]=")
-  protected __set(index: i32, value: V): void {
+  protected __set(index: i32, value: TNative): void {
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    storeUnsafeWithOffset<T,V>(this.buffer, index, value, this.byteOffset);
+    storeUnsafeWithOffset<T,TNative>(this.buffer, index, value, this.byteOffset);
   }
 
   @inline @operator("{}=")
-  protected __unchecked_set(index: i32, value: V): void {
-    storeUnsafeWithOffset<T,V>(this.buffer, index, value, this.byteOffset);
+  protected __unchecked_set(index: i32, value: TNative): void {
+    storeUnsafeWithOffset<T,TNative>(this.buffer, index, value, this.byteOffset);
   }
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
 
-  fill(value: V, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: TNative, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
     var buffer = this.buffer;
     var byteOffset = this.byteOffset;
     var len = this.length;
@@ -75,14 +78,14 @@ export abstract class TypedArray<T,V> {
       }
     } else {
       for (; start < end; ++start) {
-        storeUnsafeWithOffset<T,V>(buffer, start, value, byteOffset);
+        storeUnsafeWithOffset<T,TNative>(buffer, start, value, byteOffset);
       }
     }
     return this;
   }
 
   @inline
-  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): TypedArray<T,V> {
+  subarray(begin: i32 = 0, end: i32 = i32.MAX_VALUE): TypedArray<T,TNative> {
     var length = this.length;
     if (begin < 0) begin = max(length + begin, 0);
     else begin = min(begin, length);

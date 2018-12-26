@@ -66,6 +66,10 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   // provide a way to read strings from memory
   parse.readString = (offset: number, length: number): string => utf8_read(buffer, offset, offset + length);
 
+  parse.readUint32 = (index: number): number => {
+    return buffer[index];
+  }
+
   // instantiate the parser and return its exports
   var imports = {
     env: {
@@ -100,6 +104,7 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
 export declare namespace parse {
   /** Utility function for reading an UTF8 encoded string from memory while parsing. */
   function readString(offset: number, length: number): string;
+  function readUint32(index: number): number;
 }
 
 // see: https://github.com/dcodeIO/protobuf.js/tree/master/lib/utf8

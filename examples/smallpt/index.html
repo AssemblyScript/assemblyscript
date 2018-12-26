@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Path Tracing 3D Rendering - AssemblyScript</title>
+  <link rel="icon" href="http://assemblyscript.org/favicon.ico" type="image/x-icon" />
+  <meta name="viewport" content="user-scalable=0" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: #111;
+      background: #fff;
+      font-family: sans-serif;
+    }
+
+    body {
+      border-top: 2px solid #070809;
+    }
+
+    h1 {
+      padding: 18px 20px 20px;
+      font-size: 12pt;
+      margin: 0;
+    }
+
+    a {
+      color: #111;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #efbd03;
+      text-decoration: underline;
+    }
+
+    canvas {
+      transform: rotate(180deg);
+      background: #070809;
+    }
+
+    #startStopBtn {
+      display: inline-block;
+      padding: 10px;
+      background: #008dff;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    #stage {
+      position: relative;
+      text-align: center;
+    }
+
+    #profiler {
+      font-family: 'Courier New', Courier, monospace;
+      position: absolute;
+      padding: 10px;
+    }
+
+    .cpu-time {
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>
+    <a href="https://en.wikipedia.org/wiki/Path_tracing">Path Tracing 3D Rendering</a> in
+    <a href="http://assemblyscript.org">AssemblyScript</a>
+    (
+    <a href="https://github.com/AssemblyScript/assemblyscript/blob/master/examples/path-tracer/assembly/index.ts">source</a>
+    )
+    <div style="font-size: 0.8rem">
+      <a href="https://dump.01alchemist.com" target="_blank">By 01 Alchemist</a>
+    </div>
+  </h1>
+  <div id="profiler">
+    <h4>CPU Profile</h4>
+  </div>
+  <div id="stage">
+    <canvas id="viewport"></canvas>
+    <div id="startStopBtn">START</div>
+  </div>
+  <script type="application/javascript" src="js/index.js"></script>
+</body>
+
+</html>
