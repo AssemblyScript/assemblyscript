@@ -130,10 +130,10 @@
    call $~lib/env/abort
    unreachable
   end
-  block $break|0
-   i32.const 0
-   set_local $0
-   loop $repeat|0
+  i32.const 0
+  set_local $0
+  loop $repeat|0
+   block $break|0
     get_local $0
     get_global $comma/a
     i32.ge_s
@@ -147,9 +147,7 @@
     i32.add
     set_local $0
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
   get_local $0
   i32.const 1

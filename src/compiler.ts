@@ -184,6 +184,10 @@ export class Options {
   noAssert: bool = false;
   /** If true, imports the memory provided by the embedder. */
   importMemory: bool = false;
+  /** If greater than zero, declare memory as shared by setting max memory to sharedMemory. */
+  sharedMemory: i32 = 0;
+  /** Don't include datasegments in compiled module.  Use with sharedMemory to ensure module intialized only once.*/
+  ignoreDataSegments: bool = false;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, generates information necessary for source maps. */
@@ -233,7 +237,8 @@ export const enum Feature {
   /** Sign extension operations. */
   SIGN_EXTENSION = 1 << 0, // see: https://github.com/WebAssembly/sign-extension-ops
   /** Mutable global imports and exports. */
-  MUTABLE_GLOBAL = 1 << 1  // see: https://github.com/WebAssembly/mutable-global
+  MUTABLE_GLOBAL = 1 << 1,  // see: https://github.com/WebAssembly/mutable-global
+  ATOMIC = 1 << 2
 }
 
 /** Indicates the desired kind of a conversion. */
@@ -393,18 +398,22 @@ export class Compiler extends DiagnosticEmitter {
 
     // determine initial page size
     var numPages = this.memorySegments.length
-      ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
-      : 0;
+    ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
+    : 0;
+    var isSharedMemory = options.sharedMemory > 0;
+    var addSegments = !options.ignoreDataSegments;
+
     module.setMemory(
       numPages,
-      Module.UNLIMITED_MEMORY,
-      this.memorySegments,
+      isSharedMemory ? options.sharedMemory : Module.UNLIMITED_MEMORY,
+      addSegments? this.memorySegments: [],
       options.target,
-      "memory"
+      "memory",
+      isSharedMemory
     );
 
     // import memory if requested (default memory is named '0' by Binaryen)
-    if (options.importMemory) module.addMemoryImport("0", "env", "memory");
+    if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
 
     // set up function table
     var functionTable = this.functionTable;
@@ -551,13 +560,15 @@ export class Compiler extends DiagnosticEmitter {
 
       // skip prototype and export instances
       case ElementKind.FUNCTION_PROTOTYPE: {
-        for (let instance of (<FunctionPrototype>element).instances.values()) {
-          let instanceName = name;
-          if (instance.is(CommonFlags.GENERIC)) {
-            let fullName = instance.internalName;
-            instanceName += fullName.substring(fullName.lastIndexOf("<"));
+        for (let instances of (<FunctionPrototype>element).instances.values()) {
+          for (let instance of instances.values()) {
+            let instanceName = name;
+            if (instance.is(CommonFlags.GENERIC)) {
+              let fullName = instance.internalName;
+              instanceName += fullName.substring(fullName.lastIndexOf("<"));
+            }
+            this.makeModuleExport(instanceName, instance, prefix);
           }
-          this.makeModuleExport(instanceName, instance, prefix);
         }
         break;
       }
@@ -696,7 +707,7 @@ export class Compiler extends DiagnosticEmitter {
     var declaration = global.declaration;
     var initExpr: ExpressionRef = 0;
 
-    if (global.type == Type.void) { // type is void if not yet resolved or not annotated
+    if (!global.is(CommonFlags.RESOLVED)) {
       if (declaration) {
 
         // resolve now if annotated
@@ -711,6 +722,7 @@ export class Compiler extends DiagnosticEmitter {
             return false;
           }
           global.type = resolvedType;
+          global.set(CommonFlags.RESOLVED);
 
         // infer from initializer if not annotated
         } else if (declaration.initializer) { // infer type using void/NONE for literal inference
@@ -727,6 +739,7 @@ export class Compiler extends DiagnosticEmitter {
             return false;
           }
           global.type = this.currentType;
+          global.set(CommonFlags.RESOLVED);
 
         // must either be annotated or have an initializer
         } else {
@@ -737,7 +750,7 @@ export class Compiler extends DiagnosticEmitter {
           return false;
         }
       } else {
-        assert(false); // must have a declaration if 'void' (and thus resolved later on)
+        assert(false); // must have a declaration if resolved lazily
       }
     }
 
@@ -5410,11 +5423,27 @@ export class Compiler extends DiagnosticEmitter {
           (<Class>parent).type,
           "this"
         );
+        let parentBase = (<Class>parent).base;
+        if (parentBase) {
+          flow.addScopedLocalAlias(
+            getGetLocalIndex(thisArg),
+            parentBase.type,
+            "super"
+          );
+        }
       } else {
         let thisLocal = flow.addScopedLocal((<Class>parent).type, "this", false);
         body.push(
           module.createSetLocal(thisLocal.index, thisArg)
         );
+        let parentBase = (<Class>parent).base;
+        if (parentBase) {
+          flow.addScopedLocalAlias(
+            thisLocal.index,
+            parentBase.type,
+            "super"
+          );
+        }
       }
     }
     var parameterTypes = signature.parameterTypes;
@@ -6651,9 +6680,10 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     if (!classInstance) return module.createUnreachable();
+    return this.compileInstantiate(classInstance, expression.arguments, expression);
+  }
 
-    var expr: ExpressionRef;
-
+  compileInstantiate(classInstance: Class, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
     // traverse to the top-most visible constructor
     var currentClassInstance: Class | null = classInstance;
     var constructorInstance: Function | null = null;
@@ -6663,14 +6693,21 @@ export class Compiler extends DiagnosticEmitter {
     } while (currentClassInstance = currentClassInstance.base);
 
     // if a constructor is present, call it with a zero `this`
+    var expr: ExpressionRef;
     if (constructorInstance) {
-      expr = this.compileCallDirect(constructorInstance, expression.arguments, expression,
-        options.usizeType.toNativeZero(module)
+      expr = this.compileCallDirect(constructorInstance, argumentExpressions, reportNode,
+        this.options.usizeType.toNativeZero(this.module)
       );
 
     // otherwise simply allocate a new instance and initialize its fields
     } else {
-      expr = this.makeAllocate(classInstance, expression);
+      if (argumentExpressions.length) {
+        this.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "0", argumentExpressions.length.toString(10)
+        );
+      }
+      expr = this.makeAllocate(classInstance, reportNode);
     }
 
     this.currentType = classInstance.type;

@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@protobufjs/utf8": "^1.1.0",
-    "binaryen": "55.0.0-nightly.20181122",
+    "binaryen": "55.0.0-nightly.20181130",
     "glob": "^7.1.3",
     "long": "^4.0.0"
   },
@@ -45,9 +45,10 @@
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
     "check:compiler": "tslint -c tslint.json --project src --formatters-dir lib/lint/formatters --format as",
     "check:library": "tslint -c tslint.json --project std/assembly --formatters-dir lib/lint/formatters --format as",
-    "test": "npm run test:parser && npm run test:compiler",
+    "test": "npm run test:parser && npm run test:compiler && npm run test:compiler.shared-memory",
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
+    "test:compiler.shared-memory": "node --experimental-wasm-threads tests/compiler.shared-memory",
     "make": "npm run clean && npm test && npm run build && npm test",
     "all": "npm run check && npm run make",
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md"

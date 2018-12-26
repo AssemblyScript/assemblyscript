@@ -788,13 +788,14 @@ export class Module {
   addMemoryImport(
     internalName: string,
     externalModuleName: string,
-    externalBaseName: string
+    externalBaseName: string,
+    shared: bool = false,
   ): ImportRef {
     var cStr1 = allocString(internalName);
     var cStr2 = allocString(externalModuleName);
     var cStr3 = allocString(externalBaseName);
     try {
-      return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3);
+      return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3, shared);
     } finally {
       memory.free(cStr3);
       memory.free(cStr2);
@@ -828,7 +829,8 @@ export class Module {
     maximum: Index,
     segments: MemorySegment[],
     target: Target,
-    exportName: string | null = null
+    exportName: string | null = null,
+    shared: bool = false
   ): void {
     var cStr = allocString(exportName);
     var k = segments.length;
@@ -848,7 +850,7 @@ export class Module {
     var cArr2 = allocI32Array(offs);
     var cArr3 = allocI32Array(sizs);
     try {
-      _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, k);
+      _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, k, shared);
     } finally {
       memory.free(cArr3);
       memory.free(cArr2);

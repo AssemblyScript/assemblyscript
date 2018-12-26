@@ -3,3 +3,6 @@ docs/
 node_modules/
 out/
 raw/
+.history
+.vscode
+.idea

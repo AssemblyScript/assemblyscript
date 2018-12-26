@@ -1,0 +1,38 @@
+{
+  "name": "@assemblyscript/threading",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "asbuild": "asc assembly/index.ts -O3 -b build/index.wasm -t build/index.wat --importMemory --sourceMap --importMemory --sharedMemory=256 --validate",
+    "asbuild:memory": "../../bin/asc test/assembly/index.ts -b test/build/index.memory -t test/build/memory.wat --sourceMap --sharedMemory=256 --validate",
+    "asbuild:test": "npm run asbuild:memory && ../../bin/asc test/assembly/index.ts --ignoreDataSegments -b test/build/index.wasm -t test/build/index.wat --importMemory --sourceMap --debug --sharedMemory=256 --validate",
+    "build": "npm run asbuild && webpack --mode production --display-modules",
+    "server": "http-server ./test -o -c-1",
+    "test": "webpack --mode development --display-modules && npm run asbuild:test"
+  },
+  "files": [
+    "package.json",
+    "index.d.ts",
+    "index.js",
+    "index.js.map",
+    "src/",
+    "README.md"
+  ],
+  "dependencies": {
+    "@types/node": "^10.12.18",
+    "http-server": "^0.11.1",
+    "tsc": "^1.20150623.0",
+    "webworker-threads": "^0.7.17"
+  },
+  "devDependencies": {
+    "@types/webassembly-js-api": "0.0.1",
+    "assemblyscript": "AssemblyScript/assemblyscript",
+    "ts-loader": "^5.2.1",
+    "ts-node": "^6.2.0",
+    "typescript": "^3.2.2",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
+  }
+}

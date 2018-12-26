@@ -373,8 +373,8 @@ declare class Array<T> {
   shift(): T;
   some(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   unshift(element: T): i32;
-  slice(from?: i32, to?: i32): T[];
-  splice(start: i32, deleteCount?: i32): void;
+  slice(from?: i32, to?: i32): Array<T>;
+  splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): T[];
@@ -382,6 +382,7 @@ declare class Array<T> {
 }
 
 declare class Uint8Array extends Array<u8> {}
+declare class Uint8ClampedArray extends Array<u8> {}
 declare class Uint16Array extends Array<u16> {}
 declare class Uint32Array extends Array<u32> {}
 declare class Int8Array extends Array<i8> {}
@@ -422,6 +423,7 @@ declare class String {
   repeat(count?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
+  split(separator?: string, limit?:i32): string[];
 }
 
 interface Boolean {}
@@ -593,4 +595,33 @@ declare class Date {
 declare namespace console {
   /** @deprecated */
   function log(message: string): void;
+  function info(...any:any[]): void;
+}
+
+declare class Object {
+  static keys(obj:any):string[];
+}
+
+declare namespace Atomic { 
+  /** Atomically loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
+  export function load<T>(ptr: usize, constantOffset?: usize): T;
+  /** Atomically stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
+  export function store<T>(ptr: usize, value: any, constantOffset?: usize): void;
+  /** Atomically add a value of the specified type to memory.*/
+  export function add<T>(ptr: usize, value: T): void;
+  /** Atomically and a value of the specified type to memory.*/
+  export function and<T>(ptr: usize, value: T): void;
+  /** Atomically or a value of the specified type to memory.*/
+  export function or<T>(ptr: usize, value: T): void;
+  /** Atomically xor a value of the specified type to memory.*/
+  export function xor<T>(ptr: usize, value: T): void;
+  /** Atomically exchange a value of the specified type to memory.*/
+  export function xchg<T>(ptr: usize, value: T): void;
+  export function exchange<T>(ptr: usize, value: T): void;
+  /** Atomically compare exchange a value of the specified type to memory.*/
+  export function cmpxchg<T>(ptr: usize, expected:T, replacement: T): T;
+  export function compareExchange<T>(ptr: usize, expected:T, replacement: T): T;
+
+  export function wait(offset: usize, expected: i32, timeout: i32): i32;
+  export function notify(offset: usize, count: u32): u32;
 }
