@@ -1,6 +1,6 @@
 import "allocator/arena";
 import { Array } from "array";
-import { defaultComparator } from "internal/array";
+import { COMPARATOR } from "internal/sort";
 
 // Obtains the internal capacity of an array from its backing buffer.
 function internalCapacity<T>(array: Array<T>): i32 {
@@ -712,7 +712,7 @@ arr.push(3);
 // Array#sort //////////////////////////////////////////////////////////////////////////////////////
 
 // Checks if an array is properly sorted
-function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = defaultComparator<T>()): bool {
+function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): bool {
   for (let i: i32 = 1, len: i32 = data.length; i < len; i++) {
     if (comparator(data[i - 1], data[i]) > 0) return false;
   }
@@ -782,7 +782,7 @@ function assertSorted<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): void {
 }
 
 function assertSortedDefault<T>(arr: Array<T>): void {
-  assertSorted<T>(arr, defaultComparator<T>());
+  assertSorted<T>(arr, COMPARATOR<T>());
 }
 
 // Tests for default comparator
