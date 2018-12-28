@@ -3,6 +3,7 @@ import "allocator/arena";
 // import { BSONEncoder, BSONDecoder } from "./bson";
 import { BSONEncoder } from "./bson/encoder";
 import { BSONDecoder } from "./bson/decoder";
+import { near } from "./near"
 
 @external("env", "log")
 declare function log(str: string): void;
