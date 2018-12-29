@@ -16,11 +16,6 @@ declare function input_read_len(): u32;
 @external("env", "input_read_into")
 declare function input_read_into(ptr: usize): void;
 
-type Address = u64;
-
-export function _init(initialOwner: Address): void {
-}
-
 export class FooBar {
     foo: i32 = 0;
     bar: i32 = 1;
@@ -33,10 +28,20 @@ export class ContainerClass {
     foobar: FooBar
 }
 
+export class AnotherContainerClass {
+    foobar: FooBar
+}
+
+export function doNothing(): void {
+
+}
+
 export function add(x: i32, y: i32): i32 {
     return x + y;
 }
 
-export function getFoobar(container: ContainerClass): FooBar {
-    return container.foobar;
+export function getFoobar(container: ContainerClass): AnotherContainerClass {
+    let result = new AnotherContainerClass();
+    result.foobar = container.foobar;
+    return result;
 }
