@@ -11,23 +11,110 @@ import {
   Opcode
 } from "../src/common";
 
+export {memory}
 import {Buffer} from "./buffer";
 import * as opt from "./options";
 
-class Section {
-  public (ref: usize, id: SectionId, payload_len: usize){}
+declare function log<T>(t: T):void;
+
+declare function debug():void;
+
+function sectionName(s: SectionId): string {
+  switch (s){
+    case 0:
+      return "Custom"
+    case 1:
+      return "Type"
+     case 2:
+			return "Import"
+     case 3:
+			return "Function"
+     case 4:
+			return "Table"
+     case 5:
+			return "Memory"
+     case 6:
+			return "Global"
+     case 7:
+			return "Export"
+     case 8:
+			return "Start"
+     case 9:
+			return "Element"
+     case 10:
+			return "Code"
+     case 11:
+			return "Data"
+     default:
+      unreachable();
+  }
+
+  return "";
+}
+
+export class Section {
+  ref: u32;
+  id: u32;
+  payload_len: u32;
+  payload_off: u32;
+  name: string = "";
+
+  constructor (buf: Buffer){
+    this.parse(buf);
+  }
+
+  parse(buf:Buffer): Section {
+    this.ref = buf.off;
+    this.id = buf.readVaruint(7);
+    this.payload_len = buf.readVaruint(32);
+    if (this.id == 0){
+      let before = buf.off;
+      let name_len = buf.readVaruint(32);
+      let name_off = buf.off;
+      this.name = "'" + String.fromUTF8(name_off, name_len) + "''";
+      buf.off += name_len;
+      this.payload_len -= buf.off - before;
+    } else if (this.id <= <u32> SectionId.Data){
+      this.name = sectionName(this.id);
+    } else {
+      unreachable();
+    }
+    this.payload_off = buf.off;
+    return this;
+  }
 
 }
 
 class Module {
   sections: Section[];
+
+  push(s :Section): void {
+    this.sections.push(s);
+  }
 }
 
 class Parser {
- constructor(public buf: Buffer){}
+  buf: Buffer;
+  module: Module;
+ constructor(buf: Buffer){
+   this.buf = buf;
+   this.module = new Module();
+ }
 
  parseString(): String {
    return String.fromUTF8(this.buf.off,this.buf.readVaruint(32));
+ }
+
+ readVaruint(len: usize): u32 {
+   return this.buf.readVaruint(len);
+ }
+
+ get off(): usize {
+   return this.buf.off;
+ }
+
+ set off(u: usize) {
+   this.buf.off = u;
  }
 
 /** Starts parsing the module that has been placed in memory. */
@@ -40,21 +127,11 @@ class Parser {
     var glo_space_index: u32 = 0;
     var mem_space_index: u32 = 0;
     var tbl_space_index: u32 = 0;
-    while (this.buf.off < this.buf.size) {
-      let section_off = off;
-      let id = readVaruint(7);
-      let payload_len = readVaruint(32);
-      let name_off = 0;
-      let name_len = 0;
-      let section = pa
-      if (!id) {
-        let before = off;
-        name_len = readVaruint(32);
-        name_off = off;
-        off += name_len;
-        payload_len -= off - before;
-      } else if (id > <u32>SectionId.Data) unreachable();
-      let payload_off = off;
+    while (this.buf.off < this.buf.length) {
+      let section = new Section(this.buf);
+      this.module.push(section)
+      this.off += section.payload_len;
+      continue;
       if (opt.onSection(
         id,
         payload_off,
@@ -324,12 +401,20 @@ class Parser {
           default: unreachable();
         }
       } else { // skip
-        off += payload_len;
+        this.off += payload_len;
       }
     }
-    if (off != end) unreachable();
+    // if (this.off != this.buf.length) unreachable();
   }
 
+}
 
+export function newParser(buf: Uint8Array): Parser {
+  let buffer = new Buffer(buf);
+  return new Parser(buffer);
+}
 
+export function parse(p: Parser): Section[] {
+  p.parse();
+  return p.module.sections;
 }

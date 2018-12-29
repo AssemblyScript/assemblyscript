@@ -4,7 +4,7 @@ import {
   SectionId,
   ExternalKind,
   parse
-} from "..";
+} from "../src";
 
 function onSection(id: SectionId, offset: number, length: number, nameOffset: number, nameLength: number): boolean {
   var name = id == 0 ? "'" + parse.readString(nameOffset, nameLength) + "'" : SectionId[id];

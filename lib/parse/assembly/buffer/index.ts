@@ -1,15 +1,19 @@
 
-
+import "allocator/arena";
+// import {Uint8Array} from "typedarray";
 
 export class Buffer {
+  buffer: Uint8Array;
+  length: usize;
   off: usize;
-  data: usize;
 
   /** Current offset in memory. */
-  constructor(public size: usize){
-    this.data = allocate(size);
-    this.off = this.data;
+  constructor(array: Uint8Array){
+    this.buffer = array
+    this.off = array.buffer.data;
+    this.length = array.byteLength;
   }
+
 
   /** Reads an unsigned integer from memory. */
    readUint<T>(): u32 {
@@ -19,7 +23,9 @@ export class Buffer {
     return val;
   }
 
-  peakUint<T>(): u32
+  peakUint<T>(): u32 {
+    return <u32>(<unknown>load<T>(this.off));
+  }
 
   /** Reads an unsigned 64-bit integer from memory. */
   readUint64(): u64 {

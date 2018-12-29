@@ -223,3 +223,6 @@ export enum Opcode { // just a few of these are actually used
   f32_reinterpret_i32 = 0xbe,
   f64_reinterpret_i64 = 0xbf
 }
+
+export declare function parse(p: any): number;
+export declare function newParser(p: any):number[];

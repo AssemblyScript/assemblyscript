@@ -1,10 +1,16 @@
-import { Type, SectionId, ExternalKind } from "./common";
+import { Type, SectionId, ExternalKind, newParser } from "./common";
+import assert = require("assert");
 export { Type, SectionId, ExternalKind };
+import  * as loader from "../../loader";
 
+
+type Instance<T> = loader.ASUtil & T;
+
+type Parser = {parse: (any)=> any, newParser: (any)=>any};
 /** Cached compiled parser. */
 var compiled: WebAssembly.Module | null = null;
 
-declare var WASM_DATA: string; // injected by webpack
+var WASM_DATA: string; // injected by webpack
 if (typeof WASM_DATA !== "string") WASM_DATA = require("fs").readFileSync(__dirname + "/../build/index.wasm", "base64");
 
 /** Options specified to the parser. The `onSection` callback determines the sections being evaluated in detail. */
@@ -48,6 +54,7 @@ export interface ParseOptions {
   /** Called with each local name if present and the 'name' section is evaluated. */
   onLocalName?(funcIndex: number, index: number, offset: number, length: number): void;
 }
+let memory: WebAssembly.Memory;
 
 /** Parses the contents of a WebAssembly binary according to the specified options. */
 export function parse(binary: Uint8Array, options?: ParseOptions): void {
@@ -59,9 +66,9 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   // use the binary as the parser's memory
   var nBytes = binary.length;
   var nPages = ((nBytes + 0xffff) & ~0xffff) >> 16;
-  var memory = new WebAssembly.Memory({ initial: nPages });
-  var buffer = new Uint8Array(memory.buffer);
-  buffer.set(binary);
+  memory = new WebAssembly.Memory({ initial: nPages });
+  var buffer = new Uint32Array(memory.buffer);
+  // buffer.set(binary);
 
   // provide a way to read strings from memory
   parse.readString = (offset: number, length: number): string => utf8_read(buffer, offset, offset + length);
@@ -73,9 +80,15 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   // instantiate the parser and return its exports
   var imports = {
     env: {
+      abort: console.error,
       memory
     },
-    options: {}
+    index: {
+      debug: () => {debugger; },
+      log: (x) => console.log(x)
+    },
+    options: {},
+
   };
   [ "onSection",
     "onType",
@@ -97,8 +110,21 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
     "onFunctionName",
     "onLocalName"
   ].forEach((name: string): void => imports.options[name] = options[name] || function() {});
-  var instance = new WebAssembly.Instance(compiled, imports);
-  instance.exports.parse(0, nBytes);
+  var instance: Instance<Parser>  = loader.instantiate(compiled, imports);
+  let array = instance.newArray(new Uint8Array(binary))
+  let parserPtr = instance.newParser(array)
+  let Mod = instance.parse(parserPtr)>>2;
+  let sections = buffer.slice(Mod, 2);
+  let arrayBuf = sections[0]>>2;
+  for (let i =0; i<sections[1]; i++){
+    let section = instance.I32[arrayBuf+2 + i]>>2;
+    console.log(instance.getString(instance.I32[section + 4]));
+  }
+  // debugger;
+  // for (let i in Mod) {
+  //   console.log(Mod[i]);
+  // }
+  // debugger;
 }
 
 export declare namespace parse {
