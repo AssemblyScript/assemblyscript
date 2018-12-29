@@ -51,6 +51,13 @@ export class Buffer {
     return val;
   }
 
+  peekVaruint(size: u32): u32 {
+    let before = this.off;
+    let res = this.readVaruint(size);
+    this .off = before;
+    return res;
+  }
+
   /** Reads a LEB128-encoded signed integer from memory. */
    readVarint(size: u32): i32 {
     var val: u32 = 0;
