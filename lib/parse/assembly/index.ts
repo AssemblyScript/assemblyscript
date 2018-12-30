@@ -12,11 +12,11 @@ import {
 } from "../src/common";
 
 export {memory}
-import {Buffer} from "./buffer";
-
-import {Section} from './module';
-
-declare function log<T>(t: T):void;
+import {Buffer} from './buffer';
+import {SectionHeader,
+        TypeSection,
+        Module} from './module';
+import {log} from './host';
 
 declare function debug():void;
 
@@ -54,21 +54,19 @@ declare function debug():void;
 //
 //   }
 
+let type: TypeSection;
 
-class Module {
-  sections: Section[];
-
-  push(s :Section): void {
-    this.sections.push(s);
-  }
+export function getType(): TypeSection {
+  return type;
 }
+
 
 export class Parser {
   buf: Buffer;
   module: Module;
  constructor(buf: Buffer){
    this.buf = buf;
-   this.module = new Module();
+   this.module = new Module(buf);
  }
 
  parseString(): String {
@@ -98,13 +96,13 @@ export class Parser {
     var mem_space_index: u32 = 0;
     var tbl_space_index: u32 = 0;
     while (this.buf.off < this.buf.length) {
-      log<i32>(this.off);
-      let section = Section.create(this.buf);
-      this.module.push(section);
-      this.off = section.payload_off + section.payload_len;
-      log<i32>(this.off);
+      // log<string>("parsing next section", true);
+      let header: SectionHeader = new SectionHeader(this.buf);
+      this.module.parseSection(header);
+      this.off = header.end;
+      // log<i32>(this.off);
     }
-    log<i32>(this.buf.length);
+    // log<i32>(this.buf.length);
     // if (this.off != this.buf.length) unreachable();
   }
 
@@ -114,8 +112,12 @@ export function newParser(buf: Uint8Array): Parser {
   let buffer = new Buffer(buf);
   return new Parser(buffer);
 }
-
-export function parse(p: Parser): Section[] {
+export function parse(p: Parser): Module {
   p.parse();
-  return p.module.sections;
+  log<i32>(p.module.Headers.length);
+  let headers:SectionHeader[] = p.module.getID(SectionId.Type);
+  let section = new TypeSection(headers[0]);
+  type = (section).parse(p.module.buf);
+
+  return p.module;
 }

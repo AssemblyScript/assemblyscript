@@ -4,40 +4,50 @@
  (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
  (type $v (func))
+ (type $i (func (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiv (func (param i32 i32)))
- (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
+ (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "memory" (memory $0 1))
  (data (i32.const 8) "\00\00\00\00")
  (data (i32.const 16) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
  (data (i32.const 48) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 104) "\18\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00m\00o\00d\00u\00l\00e\00/\00i\00n\00d\00e\00x\00.\00t\00s\00")
- (data (i32.const 160) "\00\00\00\00\00\00\00\00")
- (data (i32.const 168) "\a0\00\00\00\00\00\00\00")
- (data (i32.const 176) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 208) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 272) "\00\00\00\00\00\00\00\00")
- (data (i32.const 280) "\10\01\00\00\00\00\00\00")
- (data (i32.const 288) "\01\00\00\00\'\00")
- (data (i32.const 296) "\04\00\00\00n\00u\00l\00l\00")
- (data (i32.const 312) "\06\00\00\00C\00u\00s\00t\00o\00m\00")
- (data (i32.const 328) "\04\00\00\00T\00y\00p\00e\00")
- (data (i32.const 344) "\06\00\00\00I\00m\00p\00o\00r\00t\00")
- (data (i32.const 360) "\08\00\00\00F\00u\00n\00c\00t\00i\00o\00n\00")
- (data (i32.const 384) "\05\00\00\00T\00a\00b\00l\00e\00")
- (data (i32.const 400) "\06\00\00\00M\00e\00m\00o\00r\00y\00")
- (data (i32.const 416) "\06\00\00\00G\00l\00o\00b\00a\00l\00")
- (data (i32.const 432) "\06\00\00\00E\00x\00p\00o\00r\00t\00")
- (data (i32.const 448) "\05\00\00\00S\00t\00a\00r\00t\00")
- (data (i32.const 464) "\07\00\00\00E\00l\00e\00m\00e\00n\00t\00")
- (data (i32.const 488) "\04\00\00\00C\00o\00d\00e\00")
- (data (i32.const 504) "\04\00\00\00D\00a\00t\00a\00")
+ (data (i32.const 104) "\01\00\00\00\'\00")
+ (data (i32.const 112) "\04\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 128) "\06\00\00\00C\00u\00s\00t\00o\00m\00")
+ (data (i32.const 144) "\04\00\00\00T\00y\00p\00e\00")
+ (data (i32.const 160) "\06\00\00\00I\00m\00p\00o\00r\00t\00")
+ (data (i32.const 176) "\08\00\00\00F\00u\00n\00c\00t\00i\00o\00n\00")
+ (data (i32.const 200) "\05\00\00\00T\00a\00b\00l\00e\00")
+ (data (i32.const 216) "\06\00\00\00M\00e\00m\00o\00r\00y\00")
+ (data (i32.const 232) "\06\00\00\00G\00l\00o\00b\00a\00l\00")
+ (data (i32.const 248) "\06\00\00\00E\00x\00p\00o\00r\00t\00")
+ (data (i32.const 264) "\05\00\00\00S\00t\00a\00r\00t\00")
+ (data (i32.const 280) "\07\00\00\00E\00l\00e\00m\00e\00n\00t\00")
+ (data (i32.const 304) "\04\00\00\00C\00o\00d\00e\00")
+ (data (i32.const 320) "\04\00\00\00D\00a\00t\00a\00")
+ (data (i32.const 336) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 368) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 432) "\00\00\00\00\00\00\00\00")
+ (data (i32.const 440) "\b0\01\00\00\00\00\00\00")
+ (data (i32.const 448) "\00\00\00\00\00\00\00\00")
+ (data (i32.const 456) "\c0\01\00\00\00\00\00\00")
+ (data (i32.const 464) "\13\00\00\00p\00a\00r\00s\00i\00n\00g\00 \00T\00y\00p\00e\00S\00e\00c\00t\00i\00o\00n\00")
+ (data (i32.const 512) "\00\00\00\00\00\00\00\00")
+ (data (i32.const 520) "\00\02\00\00\00\00\00\00")
+ (data (i32.const 528) "\00\00\00\00\00\00\00\00")
+ (data (i32.const 536) "\10\02\00\00\00\00\00\00")
+ (data (i32.const 544) "\15\00\00\00F\00i\00n\00i\00s\00h\00e\00d\00 \00t\00y\00p\00e\00 \00s\00e\00c\00t\00i\00o\00n\00")
  (table 1 anyfunc)
  (elem (i32.const 0) $null)
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (import "index" "log" (func $assembly/index/log<i32> (param i32)))
+ (import "index" "_log_str" (func $assembly/host/index/_log_str (param i32)))
+ (import "index" "_log" (func $assembly/host/index/_log<i32> (param i32 i32)))
+ (import "index" "_log" (func $assembly/host/index/_log<String> (param i32 i32)))
+ (import "index" "_log" (func $assembly/host/index/_log<usize> (param i32 i32)))
+ (import "index" "_log" (func $assembly/host/index/_log<u32> (param i32 i32)))
  (global $src/common/MAX_PAGES i32 (i32.const 65535))
  (global $src/common/MAX_ELEMS i32 (i32.const -1))
  (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
@@ -46,6 +56,7 @@
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
+ (global $assembly/index/type (mut i32) (i32.const 0))
  (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
  (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
  (global $src/common/SectionId.Custom (mut i32) (i32.const 0))
@@ -62,9 +73,10 @@
  (global $src/common/SectionId.Data (mut i32) (i32.const 11))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
- (global $HEAP_BASE i32 (i32.const 516))
+ (global $HEAP_BASE i32 (i32.const 592))
  (export "memory" (memory $0))
  (export "table" (table $0))
+ (export "getType" (func $assembly/index/getType))
  (export "Parser#constructor" (func $assembly/index/Parser#constructor))
  (export "Parser#get:buf" (func $Parser#get:buf))
  (export "Parser#set:buf" (func $Parser#set:buf))
@@ -84,7 +96,7 @@
  (export "memory.free" (func $~lib/memory/memory.free))
  (export "memory.reset" (func $~lib/memory/memory.reset))
  (start $start)
- (func $~lib/internal/memory/memset (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -608,7 +620,7 @@
    )
   )
  )
- (func $~lib/memory/memory.fill (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   ;;@ ~lib/memory.ts:15:4
   (call $~lib/internal/memory/memset
    ;;@ ~lib/memory.ts:15:11
@@ -619,7 +631,7 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/memory/memcpy (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2876,7 +2888,7 @@
    )
   )
  )
- (func $~lib/internal/memory/memmove (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   ;;@ ~lib/internal/memory.ts:147:2
   (if
@@ -3307,7 +3319,7 @@
    )
   )
  )
- (func $~lib/memory/memory.copy (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   ;;@ ~lib/memory.ts:20:4
   (call $~lib/internal/memory/memmove
    ;;@ ~lib/memory.ts:20:12
@@ -3318,7 +3330,7 @@
    (get_local $2)
   )
  )
- (func $~lib/internal/memory/memcmp (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/memory/memcmp (; 11 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   ;;@ ~lib/internal/memory.ts:249:2
   (if
@@ -3410,7 +3422,7 @@
    (i32.const 0)
   )
  )
- (func $~lib/memory/memory.compare (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.compare (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   ;;@ ~lib/memory.ts:25:27
   (call $~lib/internal/memory/memcmp
    ;;@ ~lib/memory.ts:25:18
@@ -3421,7 +3433,7 @@
    (get_local $2)
   )
  )
- (func $~lib/allocator/arena/__memory_allocate (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 13 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3581,7 +3593,7 @@
   ;;@ ~lib/allocator/arena.ts:32:9
   (get_local $1)
  )
- (func $~lib/memory/memory.allocate (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 14 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ ~lib/memory.ts:41:4
   (return
    ;;@ ~lib/memory.ts:41:45
@@ -3591,10 +3603,10 @@
    )
   )
  )
- (func $~lib/allocator/arena/__memory_free (; 11 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 15 ;) (type $iv) (param $0 i32)
   (nop)
  )
- (func $~lib/memory/memory.free (; 12 ;) (type $iv) (param $0 i32)
+ (func $~lib/memory/memory.free (; 16 ;) (type $iv) (param $0 i32)
   ;;@ ~lib/memory.ts:47:36
   (call $~lib/allocator/arena/__memory_free
    ;;@ ~lib/memory.ts:47:50
@@ -3603,22 +3615,59 @@
   ;;@ ~lib/memory.ts:47:56
   (return)
  )
- (func $~lib/allocator/arena/__memory_reset (; 13 ;) (type $v)
+ (func $~lib/allocator/arena/__memory_reset (; 17 ;) (type $v)
   ;;@ ~lib/allocator/arena.ts:38:2
   (set_global $~lib/allocator/arena/offset
    ;;@ ~lib/allocator/arena.ts:38:11
    (get_global $~lib/allocator/arena/startOffset)
   )
  )
- (func $~lib/memory/memory.reset (; 14 ;) (type $v)
+ (func $~lib/memory/memory.reset (; 18 ;) (type $v)
   ;;@ ~lib/memory.ts:53:37
   (call $~lib/allocator/arena/__memory_reset)
   ;;@ ~lib/memory.ts:53:55
   (return)
  )
- (func $assembly/index/Parser#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/index/getType (; 19 ;) (type $i) (result i32)
+  ;;@ assembly/index.ts:60:9
+  (get_global $assembly/index/type)
+ )
+ (func $assembly/module/index/Module#constructor (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  ;;@ assembly/index.ts:37:3
+  ;;@ assembly/module/index.ts:24:4
+  (i32.store offset=4
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $2
+        (call $~lib/memory/memory.allocate
+         (i32.const 8)
+        )
+       )
+       (i32.store
+        (get_local $2)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $2)
+        (i32.const 0)
+       )
+       (get_local $2)
+      )
+     )
+    )
+   )
+   ;;@ assembly/module/index.ts:24:15
+   (get_local $1)
+  )
+  (get_local $0)
+ )
+ (func $assembly/index/Parser#constructor (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  ;;@ assembly/index.ts:68:3
   (i32.store
    (tee_local $0
     (if (result i32)
@@ -3644,61 +3693,54 @@
      )
     )
    )
-   ;;@ assembly/index.ts:37:14
+   ;;@ assembly/index.ts:68:14
    (get_local $1)
   )
-  ;;@ assembly/index.ts:38:3
+  ;;@ assembly/index.ts:69:3
   (i32.store offset=4
    (get_local $0)
-   ;;@ assembly/index.ts:38:17
-   (block (result i32)
-    (set_local $2
-     (call $~lib/memory/memory.allocate
-      (i32.const 4)
-     )
-    )
-    (i32.store
-     (get_local $2)
-     (i32.const 0)
-    )
-    (get_local $2)
+   ;;@ assembly/index.ts:69:17
+   (call $assembly/module/index/Module#constructor
+    (i32.const 0)
+    ;;@ assembly/index.ts:69:28
+    (get_local $1)
    )
   )
   (get_local $0)
  )
- (func $assembly/buffer/index/Buffer#readVaruint (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/buffer/index/Buffer#readVaruint (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  ;;@ assembly/buffer/index.ts:40:4
+  ;;@ assembly/buffer/index.ts:38:4
   (set_local $2
-   ;;@ assembly/buffer/index.ts:40:19
+   ;;@ assembly/buffer/index.ts:38:19
+   (i32.const 0)
+  )
+  ;;@ assembly/buffer/index.ts:39:4
+  (set_local $3
+   ;;@ assembly/buffer/index.ts:39:19
    (i32.const 0)
   )
   ;;@ assembly/buffer/index.ts:41:4
-  (set_local $3
-   ;;@ assembly/buffer/index.ts:41:19
-   (i32.const 0)
-  )
-  ;;@ assembly/buffer/index.ts:43:4
   (set_local $5
-   ;;@ assembly/buffer/index.ts:43:15
+   ;;@ assembly/buffer/index.ts:41:15
    (i32.load offset=8
     (get_local $0)
    )
   )
-  ;;@ assembly/buffer/index.ts:44:4
+  ;;@ assembly/buffer/index.ts:42:4
   (block $break|0
    (loop $continue|0
-    ;;@ assembly/buffer/index.ts:44:7
+    ;;@ assembly/buffer/index.ts:42:7
     (block
-     ;;@ assembly/buffer/index.ts:45:6
+     ;;@ assembly/buffer/index.ts:43:6
      (set_local $4
-      ;;@ assembly/buffer/index.ts:45:12
+      ;;@ assembly/buffer/index.ts:43:12
       (i32.load8_u
-       ;;@ assembly/buffer/index.ts:45:21
+       ;;@ assembly/buffer/index.ts:43:21
        (block (result i32)
         (set_local $6
          (get_local $5)
@@ -3713,63 +3755,63 @@
        )
       )
      )
-     ;;@ assembly/buffer/index.ts:46:6
+     ;;@ assembly/buffer/index.ts:44:6
      (set_local $2
       (i32.or
        (get_local $2)
-       ;;@ assembly/buffer/index.ts:46:13
+       ;;@ assembly/buffer/index.ts:44:13
        (i32.shl
         (i32.and
-         ;;@ assembly/buffer/index.ts:46:14
+         ;;@ assembly/buffer/index.ts:44:14
          (get_local $4)
-         ;;@ assembly/buffer/index.ts:46:20
+         ;;@ assembly/buffer/index.ts:44:20
          (i32.const 127)
         )
-        ;;@ assembly/buffer/index.ts:46:29
+        ;;@ assembly/buffer/index.ts:44:29
         (get_local $3)
        )
       )
      )
-     ;;@ assembly/buffer/index.ts:47:6
+     ;;@ assembly/buffer/index.ts:45:6
      (if
-      ;;@ assembly/buffer/index.ts:47:10
+      ;;@ assembly/buffer/index.ts:45:10
       (i32.eqz
-       ;;@ assembly/buffer/index.ts:47:11
+       ;;@ assembly/buffer/index.ts:45:11
        (i32.and
-        ;;@ assembly/buffer/index.ts:47:12
+        ;;@ assembly/buffer/index.ts:45:12
         (get_local $4)
-        ;;@ assembly/buffer/index.ts:47:18
+        ;;@ assembly/buffer/index.ts:45:18
         (i32.const 128)
        )
       )
-      ;;@ assembly/buffer/index.ts:47:25
+      ;;@ assembly/buffer/index.ts:45:25
       (br $break|0)
      )
-     ;;@ assembly/buffer/index.ts:48:6
+     ;;@ assembly/buffer/index.ts:46:6
      (set_local $3
       (i32.add
        (get_local $3)
-       ;;@ assembly/buffer/index.ts:48:13
+       ;;@ assembly/buffer/index.ts:46:13
        (i32.const 7)
       )
      )
     )
     (br_if $continue|0
-     ;;@ assembly/buffer/index.ts:49:13
+     ;;@ assembly/buffer/index.ts:47:13
      (i32.const 1)
     )
    )
   )
-  ;;@ assembly/buffer/index.ts:50:5
+  ;;@ assembly/buffer/index.ts:48:5
   (i32.store offset=8
    (get_local $0)
-   ;;@ assembly/buffer/index.ts:50:16
+   ;;@ assembly/buffer/index.ts:48:16
    (get_local $5)
   )
-  ;;@ assembly/buffer/index.ts:51:11
+  ;;@ assembly/buffer/index.ts:49:11
   (get_local $2)
  )
- (func $~lib/internal/string/allocateUnsafe (; 17 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 23 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   ;;@ ~lib/internal/string.ts:14:2
@@ -3840,7 +3882,7 @@
   ;;@ ~lib/internal/string.ts:22:34
   (get_local $2)
  )
- (func $~lib/string/String.fromUTF8 (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.fromUTF8 (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4455,249 +4497,645 @@
   ;;@ ~lib/string.ts:539:11
   (get_local $7)
  )
- (func $assembly/index/Parser#parseString (; 19 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ assembly/index.ts:42:63
+ (func $assembly/index/Parser#parseString (; 25 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ assembly/index.ts:73:63
   (call $~lib/string/String.fromUTF8
-   ;;@ assembly/index.ts:42:26
+   ;;@ assembly/index.ts:73:26
    (i32.load offset=8
     (i32.load
      (get_local $0)
     )
    )
-   ;;@ assembly/index.ts:42:48
+   ;;@ assembly/index.ts:73:48
    (call $assembly/buffer/index/Buffer#readVaruint
-    ;;@ assembly/index.ts:42:39
+    ;;@ assembly/index.ts:73:39
     (i32.load
      (get_local $0)
     )
-    ;;@ assembly/index.ts:42:60
+    ;;@ assembly/index.ts:73:60
     (i32.const 32)
    )
   )
  )
- (func $assembly/index/Parser#readVaruint (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  ;;@ assembly/index.ts:46:34
+ (func $assembly/index/Parser#readVaruint (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  ;;@ assembly/index.ts:77:34
   (call $assembly/buffer/index/Buffer#readVaruint
-   ;;@ assembly/index.ts:46:10
+   ;;@ assembly/index.ts:77:10
    (i32.load
     (get_local $0)
    )
-   ;;@ assembly/index.ts:46:31
+   ;;@ assembly/index.ts:77:31
    (get_local $1)
   )
  )
- (func $assembly/index/Parser#get:off (; 21 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ assembly/index.ts:50:19
+ (func $assembly/index/Parser#get:off (; 27 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ assembly/index.ts:81:19
   (i32.load offset=8
-   ;;@ assembly/index.ts:50:10
+   ;;@ assembly/index.ts:81:10
    (i32.load
     (get_local $0)
    )
   )
  )
- (func $assembly/index/Parser#set:off (; 22 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  ;;@ assembly/index.ts:54:3
+ (func $assembly/index/Parser#set:off (; 28 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  ;;@ assembly/index.ts:85:3
   (i32.store offset=8
    (i32.load
     (get_local $0)
    )
-   ;;@ assembly/index.ts:54:18
+   ;;@ assembly/index.ts:85:18
    (get_local $1)
   )
  )
- (func $assembly/buffer/index/Buffer#readUint<u32> (; 23 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/buffer/index/Buffer#readUint<u32> (; 29 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  ;;@ assembly/buffer/index.ts:20:4
+  ;;@ assembly/buffer/index.ts:18:4
   (set_local $1
-   ;;@ assembly/buffer/index.ts:20:14
+   ;;@ assembly/buffer/index.ts:18:14
    (i32.load offset=8
     (get_local $0)
    )
   )
-  ;;@ assembly/buffer/index.ts:21:4
+  ;;@ assembly/buffer/index.ts:19:4
   (set_local $2
-   ;;@ assembly/buffer/index.ts:21:14
+   ;;@ assembly/buffer/index.ts:19:14
    (i32.load
-    ;;@ assembly/buffer/index.ts:21:27
+    ;;@ assembly/buffer/index.ts:19:27
     (get_local $1)
    )
   )
-  ;;@ assembly/buffer/index.ts:22:4
+  ;;@ assembly/buffer/index.ts:20:4
   (i32.store offset=8
    (get_local $0)
-   ;;@ assembly/buffer/index.ts:22:15
+   ;;@ assembly/buffer/index.ts:20:15
    (i32.add
     (get_local $1)
-    ;;@ assembly/buffer/index.ts:22:21
+    ;;@ assembly/buffer/index.ts:20:21
     (i32.const 4)
    )
   )
-  ;;@ assembly/buffer/index.ts:23:11
+  ;;@ assembly/buffer/index.ts:21:11
   (get_local $2)
  )
- (func $assembly/buffer/index/Buffer#peekVaruint (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  ;;@ assembly/buffer/index.ts:55:4
-  (set_local $2
-   ;;@ assembly/buffer/index.ts:55:17
-   (i32.load offset=8
-    (get_local $0)
+ (func $~lib/internal/string/copyUnsafe (; 30 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  ;;@ ~lib/internal/string.ts:34:9
+  (block $~lib/memory/memory.copy|inlined.1
+   (set_local $5
+    ;;@ ~lib/internal/string.ts:35:4
+    (i32.add
+     (i32.add
+      (get_local $0)
+      ;;@ ~lib/internal/string.ts:35:30
+      (i32.shl
+       ;;@ ~lib/internal/string.ts:35:31
+       (get_local $1)
+       ;;@ ~lib/internal/string.ts:35:45
+       (i32.const 1)
+      )
+     )
+     ;;@ ~lib/internal/string.ts:35:50
+     (get_global $~lib/internal/string/HEADER_SIZE)
+    )
+   )
+   (set_local $6
+    ;;@ ~lib/internal/string.ts:36:4
+    (i32.add
+     (i32.add
+      (get_local $2)
+      ;;@ ~lib/internal/string.ts:36:30
+      (i32.shl
+       ;;@ ~lib/internal/string.ts:36:31
+       (get_local $3)
+       ;;@ ~lib/internal/string.ts:36:45
+       (i32.const 1)
+      )
+     )
+     ;;@ ~lib/internal/string.ts:36:50
+     (get_global $~lib/internal/string/HEADER_SIZE)
+    )
+   )
+   (set_local $7
+    ;;@ ~lib/internal/string.ts:37:4
+    (i32.shl
+     (get_local $4)
+     ;;@ ~lib/internal/string.ts:37:11
+     (i32.const 1)
+    )
+   )
+   ;;@ ~lib/memory.ts:20:4
+   (call $~lib/internal/memory/memmove
+    ;;@ ~lib/memory.ts:20:12
+    (get_local $5)
+    ;;@ ~lib/memory.ts:20:18
+    (get_local $6)
+    ;;@ ~lib/memory.ts:20:23
+    (get_local $7)
    )
   )
-  ;;@ assembly/buffer/index.ts:56:4
-  (set_local $3
-   ;;@ assembly/buffer/index.ts:56:19
-   (call $assembly/buffer/index/Buffer#readVaruint
-    ;;@ assembly/buffer/index.ts:56:14
-    (get_local $0)
-    ;;@ assembly/buffer/index.ts:56:31
-    (get_local $1)
-   )
-  )
-  ;;@ assembly/buffer/index.ts:57:4
-  (i32.store offset=8
-   (get_local $0)
-   ;;@ assembly/buffer/index.ts:57:16
-   (get_local $2)
-  )
-  ;;@ assembly/buffer/index.ts:58:11
-  (get_local $3)
  )
- (func $assembly/buffer/index/Buffer#readVarint (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  ;;@ assembly/buffer/index.ts:63:4
+  ;;@ ~lib/string.ts:110:4
+  (if
+   (i32.eqz
+    ;;@ ~lib/string.ts:110:11
+    (i32.ne
+     (get_local $0)
+     ;;@ ~lib/string.ts:110:20
+     (i32.const 0)
+    )
+   )
+   (block
+    (call $~lib/env/abort
+     (i32.const 0)
+     (i32.const 16)
+     (i32.const 110)
+     (i32.const 4)
+    )
+    (unreachable)
+   )
+  )
+  ;;@ ~lib/string.ts:111:4
+  (if
+   ;;@ ~lib/string.ts:111:8
+   (i32.eq
+    (get_local $1)
+    ;;@ ~lib/string.ts:111:18
+    (i32.const 0)
+   )
+   ;;@ ~lib/string.ts:111:24
+   (set_local $1
+    ;;@ ~lib/string.ts:111:32
+    (i32.const 112)
+   )
+  )
+  ;;@ ~lib/string.ts:113:4
   (set_local $2
-   ;;@ assembly/buffer/index.ts:63:19
-   (i32.const 0)
-  )
-  ;;@ assembly/buffer/index.ts:64:4
-  (set_local $3
-   ;;@ assembly/buffer/index.ts:64:19
-   (i32.const 0)
-  )
-  ;;@ assembly/buffer/index.ts:66:4
-  (set_local $5
-   ;;@ assembly/buffer/index.ts:66:15
-   (i32.load offset=8
+   ;;@ ~lib/string.ts:113:25
+   (i32.load
     (get_local $0)
    )
   )
-  ;;@ assembly/buffer/index.ts:67:4
+  ;;@ ~lib/string.ts:114:4
+  (set_local $3
+   ;;@ ~lib/string.ts:114:26
+   (i32.load
+    (get_local $1)
+   )
+  )
+  ;;@ ~lib/string.ts:115:4
+  (set_local $4
+   ;;@ ~lib/string.ts:115:24
+   (i32.add
+    (get_local $2)
+    ;;@ ~lib/string.ts:115:34
+    (get_local $3)
+   )
+  )
+  ;;@ ~lib/string.ts:116:4
+  (if
+   ;;@ ~lib/string.ts:116:8
+   (i32.eq
+    (get_local $4)
+    ;;@ ~lib/string.ts:116:18
+    (i32.const 0)
+   )
+   ;;@ ~lib/string.ts:116:49
+   (return
+    ;;@ ~lib/string.ts:116:28
+    (i32.const 8)
+   )
+  )
+  ;;@ ~lib/string.ts:117:4
+  (set_local $5
+   ;;@ ~lib/string.ts:117:14
+   (call $~lib/internal/string/allocateUnsafe
+    ;;@ ~lib/string.ts:117:29
+    (get_local $4)
+   )
+  )
+  ;;@ ~lib/string.ts:118:4
+  (call $~lib/internal/string/copyUnsafe
+   ;;@ ~lib/string.ts:118:15
+   (get_local $5)
+   ;;@ ~lib/string.ts:118:20
+   (i32.const 0)
+   ;;@ ~lib/string.ts:118:23
+   (get_local $0)
+   ;;@ ~lib/string.ts:118:29
+   (i32.const 0)
+   ;;@ ~lib/string.ts:118:32
+   (get_local $2)
+  )
+  ;;@ ~lib/string.ts:119:4
+  (call $~lib/internal/string/copyUnsafe
+   ;;@ ~lib/string.ts:119:15
+   (get_local $5)
+   ;;@ ~lib/string.ts:119:20
+   (get_local $2)
+   ;;@ ~lib/string.ts:119:29
+   (get_local $1)
+   ;;@ ~lib/string.ts:119:36
+   (i32.const 0)
+   ;;@ ~lib/string.ts:119:39
+   (get_local $3)
+  )
+  ;;@ ~lib/string.ts:120:11
+  (get_local $5)
+ )
+ (func $~lib/string/String.__concat (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  ;;@ ~lib/string.ts:105:4
+  (if
+   ;;@ ~lib/string.ts:105:8
+   (i32.eqz
+    ;;@ ~lib/string.ts:105:9
+    (get_local $0)
+   )
+   ;;@ ~lib/string.ts:105:34
+   (set_local $0
+    ;;@ ~lib/string.ts:105:41
+    (i32.const 112)
+   )
+  )
+  ;;@ ~lib/string.ts:106:28
+  (call $~lib/string/String#concat
+   ;;@ ~lib/string.ts:106:11
+   (get_local $0)
+   ;;@ ~lib/string.ts:106:23
+   (get_local $1)
+  )
+ )
+ (func $assembly/module/index/sectionName (; 33 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  ;;@ assembly/module/index.ts:76:2
   (block $break|0
-   (loop $continue|0
-    ;;@ assembly/buffer/index.ts:67:7
-    (block
-     ;;@ assembly/buffer/index.ts:68:6
-     (set_local $4
-      ;;@ assembly/buffer/index.ts:68:12
-      (i32.load8_u
-       ;;@ assembly/buffer/index.ts:68:21
-       (block (result i32)
-        (set_local $6
-         (get_local $5)
-        )
-        (set_local $5
-         (i32.add
-          (get_local $6)
-          (i32.const 1)
+   (block $case12|0
+    (block $case11|0
+     (block $case10|0
+      (block $case9|0
+       (block $case8|0
+        (block $case7|0
+         (block $case6|0
+          (block $case5|0
+           (block $case4|0
+            (block $case3|0
+             (block $case2|0
+              (block $case1|0
+               (block $case0|0
+                (set_local $1
+                 ;;@ assembly/module/index.ts:76:10
+                 (get_local $0)
+                )
+                (br_if $case0|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:77:9
+                  (i32.const 0)
+                 )
+                )
+                (br_if $case1|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:79:9
+                  (i32.const 1)
+                 )
+                )
+                (br_if $case2|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:81:10
+                  (i32.const 2)
+                 )
+                )
+                (br_if $case3|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:83:10
+                  (i32.const 3)
+                 )
+                )
+                (br_if $case4|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:85:10
+                  (i32.const 4)
+                 )
+                )
+                (br_if $case5|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:87:10
+                  (i32.const 5)
+                 )
+                )
+                (br_if $case6|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:89:10
+                  (i32.const 6)
+                 )
+                )
+                (br_if $case7|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:91:10
+                  (i32.const 7)
+                 )
+                )
+                (br_if $case8|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:93:10
+                  (i32.const 8)
+                 )
+                )
+                (br_if $case9|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:95:10
+                  (i32.const 9)
+                 )
+                )
+                (br_if $case10|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:97:10
+                  (i32.const 10)
+                 )
+                )
+                (br_if $case11|0
+                 (i32.eq
+                  (get_local $1)
+                  ;;@ assembly/module/index.ts:99:10
+                  (i32.const 11)
+                 )
+                )
+                (br $case12|0)
+               )
+               ;;@ assembly/module/index.ts:78:13
+               (return
+                (i32.const 128)
+               )
+              )
+              ;;@ assembly/module/index.ts:80:13
+              (return
+               (i32.const 144)
+              )
+             )
+             ;;@ assembly/module/index.ts:82:10
+             (return
+              (i32.const 160)
+             )
+            )
+            ;;@ assembly/module/index.ts:84:10
+            (return
+             (i32.const 176)
+            )
+           )
+           ;;@ assembly/module/index.ts:86:10
+           (return
+            (i32.const 200)
+           )
+          )
+          ;;@ assembly/module/index.ts:88:10
+          (return
+           (i32.const 216)
+          )
+         )
+         ;;@ assembly/module/index.ts:90:10
+         (return
+          (i32.const 232)
          )
         )
-        (get_local $6)
-       )
-      )
-     )
-     ;;@ assembly/buffer/index.ts:69:6
-     (set_local $2
-      (i32.or
-       (get_local $2)
-       ;;@ assembly/buffer/index.ts:69:13
-       (i32.shl
-        (i32.and
-         ;;@ assembly/buffer/index.ts:69:14
-         (get_local $4)
-         ;;@ assembly/buffer/index.ts:69:20
-         (i32.const 127)
+        ;;@ assembly/module/index.ts:92:10
+        (return
+         (i32.const 248)
         )
-        ;;@ assembly/buffer/index.ts:69:29
-        (get_local $3)
+       )
+       ;;@ assembly/module/index.ts:94:10
+       (return
+        (i32.const 264)
        )
       )
-     )
-     ;;@ assembly/buffer/index.ts:70:6
-     (set_local $3
-      (i32.add
-       (get_local $3)
-       ;;@ assembly/buffer/index.ts:70:13
-       (i32.const 7)
+      ;;@ assembly/module/index.ts:96:10
+      (return
+       (i32.const 280)
       )
+     )
+     ;;@ assembly/module/index.ts:98:10
+     (return
+      (i32.const 304)
      )
     )
-    (br_if $continue|0
-     ;;@ assembly/buffer/index.ts:71:13
-     (i32.and
-      (get_local $4)
-      ;;@ assembly/buffer/index.ts:71:19
-      (i32.const 128)
+    ;;@ assembly/module/index.ts:100:10
+    (return
+     (i32.const 320)
+    )
+   )
+   ;;@ assembly/module/index.ts:102:6
+   (unreachable)
+  )
+  ;;@ assembly/module/index.ts:105:9
+  (i32.const 8)
+ )
+ (func $assembly/module/index/SectionHeader#constructor (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  ;;@ assembly/module/index.ts:116:4
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $2
+        (call $~lib/memory/memory.allocate
+         (i32.const 20)
+        )
+       )
+       (i32.store
+        (get_local $2)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $2)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $2)
+        (i32.const 0)
+       )
+       (i32.store offset=12
+        (get_local $2)
+        (i32.const 0)
+       )
+       (i32.store offset=16
+        (get_local $2)
+        ;;@ assembly/module/index.ts:113:24
+        (i32.const 8)
+       )
+       (get_local $2)
+      )
      )
     )
    )
+   ;;@ assembly/module/index.ts:116:15
+   (i32.load offset=8
+    (get_local $1)
+   )
   )
-  ;;@ assembly/buffer/index.ts:72:5
+  ;;@ assembly/module/index.ts:117:4
+  (i32.store offset=4
+   (get_local $0)
+   ;;@ assembly/module/index.ts:117:18
+   (call $assembly/buffer/index/Buffer#readVaruint
+    ;;@ assembly/module/index.ts:117:14
+    (get_local $1)
+    ;;@ assembly/module/index.ts:117:30
+    (i32.const 7)
+   )
+  )
+  ;;@ assembly/module/index.ts:118:4
   (i32.store offset=8
    (get_local $0)
-   ;;@ assembly/buffer/index.ts:72:16
-   (get_local $5)
-  )
-  ;;@ assembly/buffer/index.ts:73:78
-  (select
-   ;;@ assembly/buffer/index.ts:73:23
-   (i32.or
-    (get_local $2)
-    ;;@ assembly/buffer/index.ts:73:29
-    (i32.shl
-     ;;@ assembly/buffer/index.ts:73:30
-     (i32.xor
-      ;;@ assembly/buffer/index.ts:73:31
-      (i32.const 0)
-      (i32.const -1)
-     )
-     ;;@ assembly/buffer/index.ts:73:36
-     (get_local $3)
-    )
+   ;;@ assembly/module/index.ts:118:27
+   (call $assembly/buffer/index/Buffer#readVaruint
+    ;;@ assembly/module/index.ts:118:23
+    (get_local $1)
+    ;;@ assembly/module/index.ts:118:39
+    (i32.const 32)
    )
-   ;;@ assembly/buffer/index.ts:73:42
-   (get_local $2)
-   ;;@ assembly/buffer/index.ts:73:47
-   (if (result i32)
-    (tee_local $6
-     (i32.lt_u
-      (get_local $3)
-      ;;@ assembly/buffer/index.ts:73:53
+  )
+  ;;@ assembly/module/index.ts:119:4
+  (if
+   ;;@ assembly/module/index.ts:119:8
+   (i32.eq
+    (i32.load offset=4
+     (get_local $0)
+    )
+    ;;@ assembly/module/index.ts:119:19
+    (i32.const 0)
+   )
+   ;;@ assembly/module/index.ts:119:21
+   (block
+    ;;@ assembly/module/index.ts:120:6
+    (set_local $2
+     ;;@ assembly/module/index.ts:120:19
+     (i32.load offset=8
       (get_local $1)
      )
     )
-    ;;@ assembly/buffer/index.ts:73:61
-    (i32.ne
-     (i32.and
-      ;;@ assembly/buffer/index.ts:73:62
-      (get_local $4)
-      ;;@ assembly/buffer/index.ts:73:68
-      (i32.const 64)
+    ;;@ assembly/module/index.ts:121:6
+    (set_local $3
+     ;;@ assembly/module/index.ts:121:25
+     (call $assembly/buffer/index/Buffer#readVaruint
+      ;;@ assembly/module/index.ts:121:21
+      (get_local $1)
+      ;;@ assembly/module/index.ts:121:37
+      (i32.const 32)
      )
-     ;;@ assembly/buffer/index.ts:73:77
-     (i32.const 0)
     )
-    (get_local $6)
+    ;;@ assembly/module/index.ts:122:6
+    (set_local $4
+     ;;@ assembly/module/index.ts:122:21
+     (i32.load offset=8
+      (get_local $1)
+     )
+    )
+    ;;@ assembly/module/index.ts:123:6
+    (i32.store offset=16
+     (get_local $0)
+     ;;@ assembly/module/index.ts:123:18
+     (call $~lib/string/String.__concat
+      (call $~lib/string/String.__concat
+       (i32.const 104)
+       ;;@ assembly/module/index.ts:123:31
+       (call $~lib/string/String.fromUTF8
+        ;;@ assembly/module/index.ts:123:40
+        (get_local $4)
+        ;;@ assembly/module/index.ts:123:50
+        (get_local $3)
+       )
+      )
+      ;;@ assembly/module/index.ts:123:62
+      (i32.const 104)
+     )
+    )
+    ;;@ assembly/module/index.ts:124:6
+    (i32.store offset=8
+     (get_local $1)
+     (i32.add
+      (i32.load offset=8
+       (get_local $1)
+      )
+      ;;@ assembly/module/index.ts:124:17
+      (get_local $3)
+     )
+    )
+    ;;@ assembly/module/index.ts:125:6
+    (i32.store offset=8
+     (get_local $0)
+     (i32.sub
+      (i32.load offset=8
+       (get_local $0)
+      )
+      ;;@ assembly/module/index.ts:125:26
+      (i32.sub
+       (i32.load offset=8
+        (get_local $1)
+       )
+       ;;@ assembly/module/index.ts:125:36
+       (get_local $2)
+      )
+     )
+    )
+   )
+   ;;@ assembly/module/index.ts:126:11
+   (if
+    ;;@ assembly/module/index.ts:126:15
+    (i32.le_u
+     (i32.load offset=4
+      (get_local $0)
+     )
+     ;;@ assembly/module/index.ts:126:26
+     (get_global $src/common/SectionId.Data)
+    )
+    ;;@ assembly/module/index.ts:126:47
+    (i32.store offset=16
+     ;;@ assembly/module/index.ts:127:6
+     (get_local $0)
+     ;;@ assembly/module/index.ts:127:18
+     (call $assembly/module/index/sectionName
+      ;;@ assembly/module/index.ts:127:30
+      (i32.load offset=4
+       (get_local $0)
+      )
+     )
+    )
+    ;;@ assembly/module/index.ts:128:11
+    (unreachable)
    )
   )
+  ;;@ assembly/module/index.ts:131:4
+  (i32.store offset=12
+   (get_local $0)
+   ;;@ assembly/module/index.ts:131:23
+   (i32.load offset=8
+    (get_local $1)
+   )
+  )
+  (get_local $0)
  )
- (func $~lib/internal/arraybuffer/computeSize (; 26 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 35 ;) (type $ii) (param $0 i32) (result i32)
   ;;@ ~lib/internal/arraybuffer.ts:15:77
   (i32.shl
    ;;@ ~lib/internal/arraybuffer.ts:15:9
@@ -4722,7 +5160,7 @@
    )
   )
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 27 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 36 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   ;;@ ~lib/internal/arraybuffer.ts:23:2
@@ -4738,7 +5176,7 @@
    (block
     (call $~lib/env/abort
      (i32.const 0)
-     (i32.const 208)
+     (i32.const 368)
      (i32.const 23)
      (i32.const 2)
     )
@@ -4776,7 +5214,7 @@
   ;;@ ~lib/internal/arraybuffer.ts:31:39
   (get_local $1)
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 37 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4812,7 +5250,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 208)
+       (i32.const 368)
        (i32.const 37)
        (i32.const 4)
       )
@@ -4889,7 +5327,7 @@
        )
       )
       ;;@ ~lib/internal/arraybuffer.ts:47:13
-      (block $~lib/memory/memory.copy|inlined.1
+      (block $~lib/memory/memory.copy|inlined.2
        (set_local $4
         ;;@ ~lib/internal/arraybuffer.ts:48:8
         (i32.add
@@ -4983,7 +5421,7 @@
       (block
        (call $~lib/env/abort
         (i32.const 0)
-        (i32.const 208)
+        (i32.const 368)
         (i32.const 61)
         (i32.const 4)
        )
@@ -5003,7 +5441,7 @@
   ;;@ ~lib/internal/arraybuffer.ts:64:9
   (get_local $0)
  )
- (func $~lib/array/Array<i32>#push (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<SectionHeader>#push (; 38 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5064,7 +5502,782 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 176)
+       (i32.const 336)
+       (i32.const 172)
+       (i32.const 42)
+      )
+      (unreachable)
+     )
+    )
+    ;;@ ~lib/array.ts:173:6
+    (set_local $3
+     ;;@ ~lib/array.ts:173:15
+     (call $~lib/internal/arraybuffer/reallocateUnsafe
+      ;;@ ~lib/array.ts:173:32
+      (get_local $3)
+      ;;@ ~lib/array.ts:173:40
+      (i32.shl
+       (get_local $5)
+       ;;@ ~lib/array.ts:173:53
+       (i32.const 2)
+      )
+     )
+    )
+    ;;@ ~lib/array.ts:174:6
+    (i32.store
+     (get_local $0)
+     ;;@ ~lib/array.ts:174:21
+     (get_local $3)
+    )
+   )
+  )
+  ;;@ ~lib/array.ts:176:4
+  (i32.store offset=4
+   (get_local $0)
+   ;;@ ~lib/array.ts:176:19
+   (get_local $5)
+  )
+  ;;@ ~lib/array.ts:177:4
+  (block $~lib/internal/arraybuffer/storeUnsafe<SectionHeader,SectionHeader>|inlined.0
+   ;;@ ~lib/internal/arraybuffer.ts:72:2
+   (i32.store offset=8
+    ;;@ ~lib/internal/arraybuffer.ts:72:11
+    (i32.add
+     (get_local $3)
+     ;;@ ~lib/internal/arraybuffer.ts:72:39
+     (i32.shl
+      ;;@ ~lib/internal/arraybuffer.ts:72:40
+      (get_local $2)
+      ;;@ ~lib/internal/arraybuffer.ts:72:56
+      (i32.const 2)
+     )
+    )
+    ;;@ ~lib/internal/arraybuffer.ts:72:71
+    (get_local $1)
+   )
+  )
+  ;;@ ~lib/array.ts:179:11
+  (get_local $5)
+ )
+ (func $assembly/module/index/Module#parseSection (; 39 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  ;;@ assembly/module/index.ts:44:17
+  (drop
+   (call $~lib/array/Array<SectionHeader>#push
+    ;;@ assembly/module/index.ts:44:4
+    (i32.load
+     (get_local $0)
+    )
+    ;;@ assembly/module/index.ts:44:22
+    (get_local $1)
+   )
+  )
+  ;;@ assembly/module/index.ts:45:4
+  (block $break|0
+   (block $case1|0
+    (block $case0|0
+     (set_local $2
+      ;;@ assembly/module/index.ts:45:12
+      (i32.load offset=4
+       (get_local $1)
+      )
+     )
+     (br_if $case0|0
+      (i32.eq
+       (get_local $2)
+       ;;@ assembly/module/index.ts:46:11
+       (get_global $src/common/SectionId.Type)
+      )
+     )
+     (br $case1|0)
+    )
+    ;;@ assembly/module/index.ts:48:8
+    (br $break|0)
+   )
+  )
+ )
+ (func $assembly/module/index/SectionHeader#get:end (; 40 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ assembly/module/index.ts:135:35
+  (i32.add
+   ;;@ assembly/module/index.ts:135:11
+   (i32.load offset=12
+    (get_local $0)
+   )
+   ;;@ assembly/module/index.ts:135:30
+   (i32.load offset=8
+    (get_local $0)
+   )
+  )
+ )
+ (func $assembly/index/Parser#parse (; 41 ;) (type $iv) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  ;;@ assembly/index.ts:90:4
+  (set_local $1
+   ;;@ assembly/index.ts:90:25
+   (call $assembly/buffer/index/Buffer#readUint<u32>
+    ;;@ assembly/index.ts:90:16
+    (i32.load
+     (get_local $0)
+    )
+   )
+  )
+  ;;@ assembly/index.ts:91:4
+  (if
+   ;;@ assembly/index.ts:91:8
+   (i32.ne
+    (get_local $1)
+    ;;@ assembly/index.ts:91:17
+    (i32.const 1836278016)
+   )
+   ;;@ assembly/index.ts:91:29
+   (unreachable)
+  )
+  ;;@ assembly/index.ts:92:4
+  (set_local $2
+   ;;@ assembly/index.ts:92:27
+   (call $assembly/buffer/index/Buffer#readUint<u32>
+    ;;@ assembly/index.ts:92:18
+    (i32.load
+     (get_local $0)
+    )
+   )
+  )
+  ;;@ assembly/index.ts:93:4
+  (if
+   ;;@ assembly/index.ts:93:8
+   (i32.ne
+    (get_local $2)
+    ;;@ assembly/index.ts:93:19
+    (i32.const 1)
+   )
+   ;;@ assembly/index.ts:93:22
+   (unreachable)
+  )
+  ;;@ assembly/index.ts:94:4
+  (set_local $3
+   ;;@ assembly/index.ts:94:31
+   (i32.const 0)
+  )
+  ;;@ assembly/index.ts:95:4
+  (set_local $4
+   ;;@ assembly/index.ts:95:31
+   (i32.const 0)
+  )
+  ;;@ assembly/index.ts:96:4
+  (set_local $5
+   ;;@ assembly/index.ts:96:31
+   (i32.const 0)
+  )
+  ;;@ assembly/index.ts:97:4
+  (set_local $6
+   ;;@ assembly/index.ts:97:31
+   (i32.const 0)
+  )
+  ;;@ assembly/index.ts:98:4
+  (block $break|0
+   (loop $continue|0
+    (if
+     ;;@ assembly/index.ts:98:11
+     (i32.lt_u
+      (i32.load offset=8
+       (i32.load
+        (get_local $0)
+       )
+      )
+      ;;@ assembly/index.ts:98:26
+      (i32.load offset=4
+       (i32.load
+        (get_local $0)
+       )
+      )
+     )
+     (block
+      ;;@ assembly/index.ts:98:43
+      (block
+       ;;@ assembly/index.ts:100:6
+       (set_local $7
+        ;;@ assembly/index.ts:100:34
+        (call $assembly/module/index/SectionHeader#constructor
+         (i32.const 0)
+         ;;@ assembly/index.ts:100:52
+         (i32.load
+          (get_local $0)
+         )
+        )
+       )
+       ;;@ assembly/index.ts:101:18
+       (call $assembly/module/index/Module#parseSection
+        ;;@ assembly/index.ts:101:6
+        (i32.load offset=4
+         (get_local $0)
+        )
+        ;;@ assembly/index.ts:101:31
+        (get_local $7)
+       )
+       ;;@ assembly/index.ts:102:6
+       (call $assembly/index/Parser#set:off
+        (get_local $0)
+        ;;@ assembly/index.ts:102:17
+        (call $assembly/module/index/SectionHeader#get:end
+         (get_local $7)
+        )
+       )
+      )
+      (br $continue|0)
+     )
+    )
+   )
+  )
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#get:data (; 42 ;) (type $ii) (param $0 i32) (result i32)
+  ;;@ ~lib/arraybuffer.ts:13:55
+  (i32.add
+   ;;@ ~lib/arraybuffer.ts:13:29
+   (get_local $0)
+   ;;@ ~lib/arraybuffer.ts:13:55
+   (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
+  )
+ )
+ (func $assembly/buffer/index/Buffer#constructor (; 43 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  ;;@ assembly/buffer/index.ts:10:4
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $2
+        (call $~lib/memory/memory.allocate
+         (i32.const 12)
+        )
+       )
+       (i32.store
+        (get_local $2)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $2)
+        (i32.const 0)
+       )
+       (i32.store offset=8
+        (get_local $2)
+        (i32.const 0)
+       )
+       (get_local $2)
+      )
+     )
+    )
+   )
+   ;;@ assembly/buffer/index.ts:10:18
+   (get_local $1)
+  )
+  ;;@ assembly/buffer/index.ts:11:4
+  (i32.store offset=8
+   (get_local $0)
+   ;;@ assembly/buffer/index.ts:11:15
+   (call $~lib/arraybuffer/ArrayBuffer#get:data
+    (i32.load
+     (get_local $1)
+    )
+   )
+  )
+  ;;@ assembly/buffer/index.ts:12:4
+  (i32.store offset=4
+   (get_local $0)
+   ;;@ assembly/buffer/index.ts:12:18
+   (i32.load offset=8
+    (get_local $1)
+   )
+  )
+  (get_local $0)
+ )
+ (func $assembly/index/newParser (; 44 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  ;;@ assembly/index.ts:112:2
+  (set_local $1
+   ;;@ assembly/index.ts:112:15
+   (call $assembly/buffer/index/Buffer#constructor
+    (i32.const 0)
+    ;;@ assembly/index.ts:112:26
+    (get_local $0)
+   )
+  )
+  ;;@ assembly/index.ts:113:26
+  (call $assembly/index/Parser#constructor
+   (i32.const 0)
+   ;;@ assembly/index.ts:113:20
+   (get_local $1)
+  )
+ )
+ (func $assembly/host/index/log<i32> (; 45 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  ;;@ assembly/host/index.ts:7:2
+  (if
+   (i32.and
+    ;;@ assembly/host/index.ts:7:6
+    (get_local $1)
+    (i32.const 1)
+   )
+   ;;@ assembly/host/index.ts:7:12
+   (call $assembly/host/index/_log_str
+    ;;@ assembly/host/index.ts:8:13
+    (get_local $0)
+   )
+   ;;@ assembly/host/index.ts:9:7
+   (call $assembly/host/index/_log<i32>
+    ;;@ assembly/host/index.ts:10:9
+    (get_local $0)
+    ;;@ assembly/host/index.ts:10:15
+    (i32.const 4)
+   )
+  )
+ )
+ (func $~lib/array/Array<SectionHeader>#__get (; 46 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  ;;@ ~lib/array.ts:84:4
+  (set_local $2
+   ;;@ ~lib/array.ts:84:17
+   (i32.load
+    (get_local $0)
+   )
+  )
+  ;;@ ~lib/array.ts:87:23
+  (if (result i32)
+   ;;@ ~lib/array.ts:85:11
+   (i32.lt_u
+    (get_local $1)
+    ;;@ ~lib/array.ts:85:24
+    (i32.shr_u
+     ;;@ ~lib/array.ts:85:30
+     (i32.load
+      (get_local $2)
+     )
+     ;;@ ~lib/array.ts:85:52
+     (i32.const 2)
+    )
+   )
+   ;;@ ~lib/array.ts:86:8
+   (block $~lib/internal/arraybuffer/loadUnsafe<SectionHeader,SectionHeader>|inlined.0 (result i32)
+    ;;@ ~lib/internal/arraybuffer.ts:68:91
+    (i32.load offset=8
+     ;;@ ~lib/internal/arraybuffer.ts:68:20
+     (i32.add
+      (get_local $2)
+      ;;@ ~lib/internal/arraybuffer.ts:68:48
+      (i32.shl
+       ;;@ ~lib/internal/arraybuffer.ts:68:49
+       (get_local $1)
+       ;;@ ~lib/internal/arraybuffer.ts:68:65
+       (i32.const 2)
+      )
+     )
+    )
+   )
+   ;;@ ~lib/array.ts:87:8
+   (unreachable)
+  )
+ )
+ (func $assembly/module/index/Module#getID (; 47 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  ;;@ assembly/module/index.ts:55:4
+  (set_local $2
+   ;;@ assembly/module/index.ts:55:31
+   (i32.const 440)
+  )
+  ;;@ assembly/module/index.ts:56:4
+  (call $assembly/host/index/log<i32>
+   ;;@ assembly/module/index.ts:56:13
+   (i32.const 42)
+   ;;@ assembly/host/index.ts:6:49
+   (i32.const 0)
+  )
+  ;;@ assembly/module/index.ts:57:4
+  (set_local $3
+   ;;@ assembly/module/index.ts:57:17
+   (block $~lib/array/Array<SectionHeader>#get:length|inlined.1 (result i32)
+    (set_local $3
+     (i32.load
+      (get_local $0)
+     )
+    )
+    ;;@ ~lib/array.ts:51:16
+    (i32.load offset=4
+     ;;@ ~lib/array.ts:51:11
+     (get_local $3)
+    )
+   )
+  )
+  ;;@ assembly/module/index.ts:58:4
+  (block $break|0
+   ;;@ assembly/module/index.ts:58:9
+   (set_local $4
+    ;;@ assembly/module/index.ts:58:15
+    (i32.const 0)
+   )
+   (loop $repeat|0
+    (br_if $break|0
+     (i32.eqz
+      ;;@ assembly/module/index.ts:58:18
+      (i32.lt_s
+       (get_local $4)
+       ;;@ assembly/module/index.ts:58:22
+       (get_local $3)
+      )
+     )
+    )
+    ;;@ assembly/module/index.ts:60:6
+    (if
+     ;;@ assembly/module/index.ts:60:10
+     (i32.eq
+      (i32.load offset=4
+       (call $~lib/array/Array<SectionHeader>#__get
+        (i32.load
+         (get_local $0)
+        )
+        ;;@ assembly/module/index.ts:60:23
+        (get_local $4)
+       )
+      )
+      ;;@ assembly/module/index.ts:60:32
+      (get_local $1)
+     )
+     ;;@ assembly/module/index.ts:60:35
+     (drop
+      (call $~lib/array/Array<SectionHeader>#push
+       ;;@ assembly/module/index.ts:61:8
+       (get_local $2)
+       ;;@ assembly/module/index.ts:61:17
+       (call $~lib/array/Array<SectionHeader>#__get
+        (i32.load
+         (get_local $0)
+        )
+        ;;@ assembly/module/index.ts:61:30
+        (get_local $4)
+       )
+      )
+     )
+    )
+    ;;@ assembly/module/index.ts:58:25
+    (set_local $4
+     (i32.add
+      (get_local $4)
+      (i32.const 1)
+     )
+    )
+    (br $repeat|0)
+   )
+  )
+  ;;@ assembly/module/index.ts:64:11
+  (get_local $2)
+ )
+ (func $assembly/module/index/TypeSection#constructor (; 48 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  ;;@ assembly/module/index.ts:180:4
+  (i32.store
+   (tee_local $0
+    (if (result i32)
+     (get_local $0)
+     (get_local $0)
+     (tee_local $0
+      (block (result i32)
+       (set_local $2
+        (call $~lib/memory/memory.allocate
+         (i32.const 8)
+        )
+       )
+       (i32.store
+        (get_local $2)
+        (i32.const 0)
+       )
+       (i32.store offset=4
+        (get_local $2)
+        (i32.const 0)
+       )
+       (get_local $2)
+      )
+     )
+    )
+   )
+   ;;@ assembly/module/index.ts:180:18
+   (get_local $1)
+  )
+  ;;@ assembly/module/index.ts:181:4
+  (i32.store offset=4
+   (get_local $0)
+   ;;@ assembly/module/index.ts:181:17
+   (i32.const 456)
+  )
+  (get_local $0)
+ )
+ (func $assembly/host/index/log<String> (; 49 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  ;;@ assembly/host/index.ts:7:2
+  (if
+   (i32.and
+    ;;@ assembly/host/index.ts:7:6
+    (get_local $1)
+    (i32.const 1)
+   )
+   ;;@ assembly/host/index.ts:7:12
+   (call $assembly/host/index/_log_str
+    ;;@ assembly/host/index.ts:8:13
+    (get_local $0)
+   )
+   ;;@ assembly/host/index.ts:9:7
+   (call $assembly/host/index/_log<String>
+    ;;@ assembly/host/index.ts:10:9
+    (get_local $0)
+    ;;@ assembly/host/index.ts:10:15
+    (i32.const 4)
+   )
+  )
+ )
+ (func $assembly/host/index/log<usize> (; 50 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  ;;@ assembly/host/index.ts:7:2
+  (if
+   (i32.and
+    ;;@ assembly/host/index.ts:7:6
+    (get_local $1)
+    (i32.const 1)
+   )
+   ;;@ assembly/host/index.ts:7:12
+   (call $assembly/host/index/_log_str
+    ;;@ assembly/host/index.ts:8:13
+    (get_local $0)
+   )
+   ;;@ assembly/host/index.ts:9:7
+   (call $assembly/host/index/_log<usize>
+    ;;@ assembly/host/index.ts:10:9
+    (get_local $0)
+    ;;@ assembly/host/index.ts:10:15
+    (i32.const 4)
+   )
+  )
+ )
+ (func $assembly/host/index/log<u32> (; 51 ;) (type $iiv) (param $0 i32) (param $1 i32)
+  ;;@ assembly/host/index.ts:7:2
+  (if
+   (i32.and
+    ;;@ assembly/host/index.ts:7:6
+    (get_local $1)
+    (i32.const 1)
+   )
+   ;;@ assembly/host/index.ts:7:12
+   (call $assembly/host/index/_log_str
+    ;;@ assembly/host/index.ts:8:13
+    (get_local $0)
+   )
+   ;;@ assembly/host/index.ts:9:7
+   (call $assembly/host/index/_log<u32>
+    ;;@ assembly/host/index.ts:10:9
+    (get_local $0)
+    ;;@ assembly/host/index.ts:10:15
+    (i32.const 4)
+   )
+  )
+ )
+ (func $assembly/buffer/index/Buffer#readVarint (; 52 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  ;;@ assembly/buffer/index.ts:61:4
+  (set_local $2
+   ;;@ assembly/buffer/index.ts:61:19
+   (i32.const 0)
+  )
+  ;;@ assembly/buffer/index.ts:62:4
+  (set_local $3
+   ;;@ assembly/buffer/index.ts:62:19
+   (i32.const 0)
+  )
+  ;;@ assembly/buffer/index.ts:64:4
+  (set_local $5
+   ;;@ assembly/buffer/index.ts:64:15
+   (i32.load offset=8
+    (get_local $0)
+   )
+  )
+  ;;@ assembly/buffer/index.ts:65:4
+  (block $break|0
+   (loop $continue|0
+    ;;@ assembly/buffer/index.ts:65:7
+    (block
+     ;;@ assembly/buffer/index.ts:66:6
+     (set_local $4
+      ;;@ assembly/buffer/index.ts:66:12
+      (i32.load8_u
+       ;;@ assembly/buffer/index.ts:66:21
+       (block (result i32)
+        (set_local $6
+         (get_local $5)
+        )
+        (set_local $5
+         (i32.add
+          (get_local $6)
+          (i32.const 1)
+         )
+        )
+        (get_local $6)
+       )
+      )
+     )
+     ;;@ assembly/buffer/index.ts:67:6
+     (set_local $2
+      (i32.or
+       (get_local $2)
+       ;;@ assembly/buffer/index.ts:67:13
+       (i32.shl
+        (i32.and
+         ;;@ assembly/buffer/index.ts:67:14
+         (get_local $4)
+         ;;@ assembly/buffer/index.ts:67:20
+         (i32.const 127)
+        )
+        ;;@ assembly/buffer/index.ts:67:29
+        (get_local $3)
+       )
+      )
+     )
+     ;;@ assembly/buffer/index.ts:68:6
+     (set_local $3
+      (i32.add
+       (get_local $3)
+       ;;@ assembly/buffer/index.ts:68:13
+       (i32.const 7)
+      )
+     )
+    )
+    (br_if $continue|0
+     ;;@ assembly/buffer/index.ts:69:13
+     (i32.and
+      (get_local $4)
+      ;;@ assembly/buffer/index.ts:69:19
+      (i32.const 128)
+     )
+    )
+   )
+  )
+  ;;@ assembly/buffer/index.ts:70:5
+  (i32.store offset=8
+   (get_local $0)
+   ;;@ assembly/buffer/index.ts:70:16
+   (get_local $5)
+  )
+  ;;@ assembly/buffer/index.ts:71:78
+  (select
+   ;;@ assembly/buffer/index.ts:71:23
+   (i32.or
+    (get_local $2)
+    ;;@ assembly/buffer/index.ts:71:29
+    (i32.shl
+     ;;@ assembly/buffer/index.ts:71:30
+     (i32.xor
+      ;;@ assembly/buffer/index.ts:71:31
+      (i32.const 0)
+      (i32.const -1)
+     )
+     ;;@ assembly/buffer/index.ts:71:36
+     (get_local $3)
+    )
+   )
+   ;;@ assembly/buffer/index.ts:71:42
+   (get_local $2)
+   ;;@ assembly/buffer/index.ts:71:47
+   (if (result i32)
+    (tee_local $6
+     (i32.lt_u
+      (get_local $3)
+      ;;@ assembly/buffer/index.ts:71:53
+      (get_local $1)
+     )
+    )
+    ;;@ assembly/buffer/index.ts:71:61
+    (i32.ne
+     (i32.and
+      ;;@ assembly/buffer/index.ts:71:62
+      (get_local $4)
+      ;;@ assembly/buffer/index.ts:71:68
+      (i32.const 64)
+     )
+     ;;@ assembly/buffer/index.ts:71:77
+     (i32.const 0)
+    )
+    (get_local $6)
+   )
+  )
+ )
+ (func $~lib/array/Array<i32>#push (; 53 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  ;;@ ~lib/array.ts:166:4
+  (set_local $2
+   ;;@ ~lib/array.ts:166:17
+   (i32.load offset=4
+    (get_local $0)
+   )
+  )
+  ;;@ ~lib/array.ts:167:4
+  (set_local $3
+   ;;@ ~lib/array.ts:167:17
+   (i32.load
+    (get_local $0)
+   )
+  )
+  ;;@ ~lib/array.ts:168:4
+  (set_local $4
+   ;;@ ~lib/array.ts:168:19
+   (i32.shr_u
+    (i32.load
+     (get_local $3)
+    )
+    ;;@ ~lib/array.ts:168:41
+    (i32.const 2)
+   )
+  )
+  ;;@ ~lib/array.ts:169:4
+  (set_local $5
+   ;;@ ~lib/array.ts:169:20
+   (i32.add
+    (get_local $2)
+    ;;@ ~lib/array.ts:169:29
+    (i32.const 1)
+   )
+  )
+  ;;@ ~lib/array.ts:170:4
+  (if
+   ;;@ ~lib/array.ts:170:8
+   (i32.ge_u
+    (get_local $2)
+    ;;@ ~lib/array.ts:170:23
+    (get_local $4)
+   )
+   ;;@ ~lib/array.ts:170:38
+   (block
+    ;;@ ~lib/array.ts:172:6
+    (if
+     ;;@ ~lib/array.ts:172:10
+     (i32.ge_u
+      (get_local $2)
+      ;;@ ~lib/array.ts:172:25
+      (i32.const 268435454)
+     )
+     ;;@ ~lib/array.ts:172:42
+     (block
+      (call $~lib/env/abort
+       (i32.const 0)
+       (i32.const 336)
        (i32.const 172)
        (i32.const 42)
       )
@@ -5121,7 +6334,7 @@
   ;;@ ~lib/array.ts:179:11
   (get_local $5)
  )
- (func $assembly/module/index/FuncType#constructor (; 30 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $assembly/module/index/FuncType#constructor (; 54 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (tee_local $0
    (if (result i32)
@@ -5156,7 +6369,7 @@
    )
   )
  )
- (func $~lib/array/Array<FuncType>#push (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<FuncType>#push (; 55 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5217,7 +6430,7 @@
      (block
       (call $~lib/env/abort
        (i32.const 0)
-       (i32.const 176)
+       (i32.const 336)
        (i32.const 172)
        (i32.const 42)
       )
@@ -5274,20 +6487,7 @@
   ;;@ ~lib/array.ts:179:11
   (get_local $5)
  )
- (func $assembly/module/index/TypeSection#get:end (; 32 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ assembly/module/index.ts:100:35
-  (i32.add
-   ;;@ assembly/module/index.ts:100:11
-   (i32.load offset=12
-    (get_local $0)
-   )
-   ;;@ assembly/module/index.ts:100:30
-   (i32.load offset=8
-    (get_local $0)
-   )
-  )
- )
- (func $assembly/module/index/TypeSection#parse (; 33 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/module/index/TypeSection#parse (; 56 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5297,123 +6497,172 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  ;;@ assembly/module/index.ts:104:4
+  ;;@ assembly/module/index.ts:186:4
+  (call $assembly/host/index/log<String>
+   ;;@ assembly/module/index.ts:186:16
+   (i32.const 464)
+   ;;@ assembly/module/index.ts:186:39
+   (i32.const 1)
+  )
+  ;;@ assembly/module/index.ts:187:4
+  (call $assembly/host/index/log<usize>
+   ;;@ assembly/module/index.ts:187:15
+   (i32.load offset=8
+    (get_local $1)
+   )
+   (i32.const 0)
+  )
+  ;;@ assembly/module/index.ts:188:4
+  (call $assembly/host/index/log<String>
+   ;;@ assembly/module/index.ts:188:16
+   (i32.load offset=16
+    (i32.load
+     (get_local $0)
+    )
+   )
+   ;;@ assembly/module/index.ts:188:34
+   (i32.const 1)
+  )
+  ;;@ assembly/module/index.ts:189:4
   (i32.store offset=8
    (get_local $1)
-   ;;@ assembly/module/index.ts:104:14
+   ;;@ assembly/module/index.ts:189:14
    (i32.load offset=12
-    (get_local $0)
+    (i32.load
+     (get_local $0)
+    )
    )
   )
-  ;;@ assembly/module/index.ts:105:4
-  (set_local $2
-   ;;@ assembly/module/index.ts:105:20
-   (call $assembly/buffer/index/Buffer#readVaruint
-    ;;@ assembly/module/index.ts:105:16
+  ;;@ assembly/module/index.ts:190:4
+  (call $assembly/host/index/log<usize>
+   ;;@ assembly/module/index.ts:190:15
+   (i32.load offset=8
     (get_local $1)
-    ;;@ assembly/module/index.ts:105:32
+   )
+   (i32.const 0)
+  )
+  ;;@ assembly/module/index.ts:191:4
+  (set_local $2
+   ;;@ assembly/module/index.ts:191:20
+   (call $assembly/buffer/index/Buffer#readVaruint
+    ;;@ assembly/module/index.ts:191:16
+    (get_local $1)
+    ;;@ assembly/module/index.ts:191:32
     (i32.const 32)
    )
   )
-  ;;@ assembly/module/index.ts:106:4
+  ;;@ assembly/module/index.ts:192:4
+  (call $assembly/host/index/log<usize>
+   ;;@ assembly/module/index.ts:192:15
+   (get_local $2)
+   (i32.const 0)
+  )
+  ;;@ assembly/module/index.ts:193:4
   (block $break|0
-   ;;@ assembly/module/index.ts:106:9
+   ;;@ assembly/module/index.ts:193:9
    (set_local $3
-    ;;@ assembly/module/index.ts:106:26
+    ;;@ assembly/module/index.ts:193:26
     (i32.const 0)
    )
    (loop $repeat|0
     (br_if $break|0
      (i32.eqz
-      ;;@ assembly/module/index.ts:106:29
+      ;;@ assembly/module/index.ts:193:29
       (i32.lt_u
        (get_local $3)
-       ;;@ assembly/module/index.ts:106:37
+       ;;@ assembly/module/index.ts:193:37
        (get_local $2)
       )
      )
     )
-    ;;@ assembly/module/index.ts:106:53
+    ;;@ assembly/module/index.ts:193:53
     (block
-     ;;@ assembly/module/index.ts:107:6
+     ;;@ assembly/module/index.ts:194:6
+     (call $assembly/host/index/log<u32>
+      ;;@ assembly/module/index.ts:194:15
+      (get_local $3)
+      ;;@ assembly/host/index.ts:6:49
+      (i32.const 0)
+     )
+     ;;@ assembly/module/index.ts:195:6
      (set_local $4
-      ;;@ assembly/module/index.ts:107:17
+      ;;@ assembly/module/index.ts:195:17
       (i32.and
-       ;;@ assembly/module/index.ts:107:21
+       ;;@ assembly/module/index.ts:195:21
        (call $assembly/buffer/index/Buffer#readVarint
-        ;;@ assembly/module/index.ts:107:17
+        ;;@ assembly/module/index.ts:195:17
         (get_local $1)
-        ;;@ assembly/module/index.ts:107:32
+        ;;@ assembly/module/index.ts:195:32
         (i32.const 7)
        )
-       ;;@ assembly/module/index.ts:107:37
+       ;;@ assembly/module/index.ts:195:37
        (i32.const 127)
       )
      )
-     ;;@ assembly/module/index.ts:112:6
+     ;;@ assembly/module/index.ts:200:6
      (set_local $5
-      ;;@ assembly/module/index.ts:112:27
+      ;;@ assembly/module/index.ts:200:27
       (call $assembly/buffer/index/Buffer#readVaruint
-       ;;@ assembly/module/index.ts:112:23
+       ;;@ assembly/module/index.ts:200:23
        (get_local $1)
-       ;;@ assembly/module/index.ts:112:39
+       ;;@ assembly/module/index.ts:200:39
        (i32.const 32)
       )
      )
-     ;;@ assembly/module/index.ts:113:6
+     ;;@ assembly/module/index.ts:201:6
      (set_local $6
-      ;;@ assembly/module/index.ts:113:30
-      (i32.const 168)
+      ;;@ assembly/module/index.ts:201:30
+      (i32.const 520)
      )
-     ;;@ assembly/module/index.ts:114:6
+     ;;@ assembly/module/index.ts:202:6
      (block $break|1
-      ;;@ assembly/module/index.ts:114:11
+      ;;@ assembly/module/index.ts:202:11
       (set_local $7
-       ;;@ assembly/module/index.ts:114:33
+       ;;@ assembly/module/index.ts:202:33
        (i32.const 0)
       )
       (loop $repeat|1
        (br_if $break|1
         (i32.eqz
-         ;;@ assembly/module/index.ts:114:36
+         ;;@ assembly/module/index.ts:202:36
          (i32.lt_u
           (get_local $7)
-          ;;@ assembly/module/index.ts:114:49
+          ;;@ assembly/module/index.ts:202:49
           (get_local $5)
          )
         )
        )
-       ;;@ assembly/module/index.ts:114:75
+       ;;@ assembly/module/index.ts:202:75
        (block
-        ;;@ assembly/module/index.ts:115:8
+        ;;@ assembly/module/index.ts:203:8
         (set_local $8
-         ;;@ assembly/module/index.ts:115:24
+         ;;@ assembly/module/index.ts:203:24
          (i32.and
-          ;;@ assembly/module/index.ts:115:28
+          ;;@ assembly/module/index.ts:203:28
           (call $assembly/buffer/index/Buffer#readVarint
-           ;;@ assembly/module/index.ts:115:24
+           ;;@ assembly/module/index.ts:203:24
            (get_local $1)
-           ;;@ assembly/module/index.ts:115:39
+           ;;@ assembly/module/index.ts:203:39
            (i32.const 7)
           )
-          ;;@ assembly/module/index.ts:115:44
+          ;;@ assembly/module/index.ts:203:44
           (i32.const 127)
          )
         )
-        ;;@ assembly/module/index.ts:121:19
+        ;;@ assembly/module/index.ts:209:19
         (drop
          (call $~lib/array/Array<i32>#push
-          ;;@ assembly/module/index.ts:121:8
+          ;;@ assembly/module/index.ts:209:8
           (get_local $6)
-          ;;@ assembly/module/index.ts:121:24
+          ;;@ assembly/module/index.ts:209:24
           (get_local $8)
          )
         )
        )
-       ;;@ assembly/module/index.ts:114:61
+       ;;@ assembly/module/index.ts:202:61
        (set_local $7
         (i32.add
-         ;;@ assembly/module/index.ts:114:63
+         ;;@ assembly/module/index.ts:202:63
          (get_local $7)
          (i32.const 1)
         )
@@ -5421,70 +6670,70 @@
        (br $repeat|1)
       )
      )
-     ;;@ assembly/module/index.ts:123:6
+     ;;@ assembly/module/index.ts:211:6
      (set_local $7
-      ;;@ assembly/module/index.ts:123:28
+      ;;@ assembly/module/index.ts:211:28
       (call $assembly/buffer/index/Buffer#readVaruint
-       ;;@ assembly/module/index.ts:123:24
+       ;;@ assembly/module/index.ts:211:24
        (get_local $1)
-       ;;@ assembly/module/index.ts:123:40
+       ;;@ assembly/module/index.ts:211:40
        (i32.const 1)
       )
      )
-     ;;@ assembly/module/index.ts:124:6
+     ;;@ assembly/module/index.ts:212:6
      (set_local $8
-      ;;@ assembly/module/index.ts:124:30
-      (i32.const 280)
+      ;;@ assembly/module/index.ts:212:30
+      (i32.const 536)
      )
-     ;;@ assembly/module/index.ts:125:6
+     ;;@ assembly/module/index.ts:213:6
      (block $break|2
-      ;;@ assembly/module/index.ts:125:11
+      ;;@ assembly/module/index.ts:213:11
       (set_local $9
-       ;;@ assembly/module/index.ts:125:34
+       ;;@ assembly/module/index.ts:213:34
        (i32.const 0)
       )
       (loop $repeat|2
        (br_if $break|2
         (i32.eqz
-         ;;@ assembly/module/index.ts:125:37
+         ;;@ assembly/module/index.ts:213:37
          (i32.lt_u
           (get_local $9)
-          ;;@ assembly/module/index.ts:125:51
+          ;;@ assembly/module/index.ts:213:51
           (get_local $7)
          )
         )
        )
-       ;;@ assembly/module/index.ts:125:79
+       ;;@ assembly/module/index.ts:213:79
        (block
-        ;;@ assembly/module/index.ts:126:8
+        ;;@ assembly/module/index.ts:214:8
         (set_local $10
-         ;;@ assembly/module/index.ts:126:25
+         ;;@ assembly/module/index.ts:214:25
          (i32.and
-          ;;@ assembly/module/index.ts:126:29
+          ;;@ assembly/module/index.ts:214:29
           (call $assembly/buffer/index/Buffer#readVarint
-           ;;@ assembly/module/index.ts:126:25
+           ;;@ assembly/module/index.ts:214:25
            (get_local $1)
-           ;;@ assembly/module/index.ts:126:40
+           ;;@ assembly/module/index.ts:214:40
            (i32.const 7)
           )
-          ;;@ assembly/module/index.ts:126:45
+          ;;@ assembly/module/index.ts:214:45
           (i32.const 127)
          )
         )
-        ;;@ assembly/module/index.ts:132:19
+        ;;@ assembly/module/index.ts:220:19
         (drop
          (call $~lib/array/Array<i32>#push
-          ;;@ assembly/module/index.ts:132:8
+          ;;@ assembly/module/index.ts:220:8
           (get_local $8)
-          ;;@ assembly/module/index.ts:132:24
+          ;;@ assembly/module/index.ts:220:24
           (get_local $10)
          )
         )
        )
-       ;;@ assembly/module/index.ts:125:64
+       ;;@ assembly/module/index.ts:213:64
        (set_local $9
         (i32.add
-         ;;@ assembly/module/index.ts:125:66
+         ;;@ assembly/module/index.ts:213:66
          (get_local $9)
          (i32.const 1)
         )
@@ -5492,32 +6741,32 @@
        (br $repeat|2)
       )
      )
-     ;;@ assembly/module/index.ts:134:17
+     ;;@ assembly/module/index.ts:222:17
      (drop
       (call $~lib/array/Array<FuncType>#push
-       ;;@ assembly/module/index.ts:134:6
-       (i32.load offset=20
+       ;;@ assembly/module/index.ts:222:6
+       (i32.load offset=4
         (get_local $0)
        )
-       ;;@ assembly/module/index.ts:134:22
+       ;;@ assembly/module/index.ts:222:22
        (call $assembly/module/index/FuncType#constructor
         (i32.const 0)
-        ;;@ assembly/module/index.ts:134:35
+        ;;@ assembly/module/index.ts:222:35
         (get_local $3)
-        ;;@ assembly/module/index.ts:134:42
+        ;;@ assembly/module/index.ts:222:42
         (get_local $4)
-        ;;@ assembly/module/index.ts:134:48
+        ;;@ assembly/module/index.ts:222:48
         (get_local $6)
-        ;;@ assembly/module/index.ts:134:60
+        ;;@ assembly/module/index.ts:222:60
         (get_local $8)
        )
       )
      )
     )
-    ;;@ assembly/module/index.ts:106:44
+    ;;@ assembly/module/index.ts:193:44
     (set_local $3
      (i32.add
-      ;;@ assembly/module/index.ts:106:46
+      ;;@ assembly/module/index.ts:193:46
       (get_local $3)
       (i32.const 1)
      )
@@ -5525,1096 +6774,87 @@
     (br $repeat|0)
    )
   )
-  ;;@ assembly/module/index.ts:136:4
-  (i32.store offset=8
-   (get_local $1)
-   ;;@ assembly/module/index.ts:136:14
-   (call $assembly/module/index/TypeSection#get:end
-    (get_local $0)
-   )
+  ;;@ assembly/module/index.ts:225:4
+  (call $assembly/host/index/log<String>
+   ;;@ assembly/module/index.ts:225:16
+   (i32.const 544)
+   ;;@ assembly/module/index.ts:225:40
+   (i32.const 1)
   )
-  ;;@ assembly/module/index.ts:137:11
+  ;;@ assembly/module/index.ts:226:11
   (get_local $0)
  )
- (func $assembly/module/index/TypeSection#constructor (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  ;;@ assembly/module/index.ts:95:4
-  (drop
-   (get_local $0)
-  )
-  ;;@ assembly/module/index.ts:95:9
-  (drop
-   ;;@ assembly/module/index.ts:95:10
-   (get_local $1)
-  )
-  ;;@ assembly/module/index.ts:96:9
-  (drop
-   (call $assembly/module/index/TypeSection#parse
-    ;;@ assembly/module/index.ts:96:4
-    (tee_local $0
-     (if (result i32)
-      (get_local $0)
-      (get_local $0)
-      (tee_local $0
-       (block (result i32)
-        (set_local $2
-         (call $~lib/memory/memory.allocate
-          (i32.const 24)
-         )
-        )
-        (i32.store
-         (get_local $2)
-         (i32.const 0)
-        )
-        (i32.store offset=4
-         (get_local $2)
-         (i32.const 0)
-        )
-        (i32.store offset=8
-         (get_local $2)
-         (i32.const 0)
-        )
-        (i32.store offset=12
-         (get_local $2)
-         (i32.const 0)
-        )
-        (i32.store offset=16
-         (get_local $2)
-         ;;@ assembly/module/index.ts:51:17
-         (i32.const 8)
-        )
-        (i32.store offset=20
-         (get_local $2)
-         (i32.const 0)
-        )
-        (get_local $2)
-       )
-      )
-     )
-    )
-    ;;@ assembly/module/index.ts:96:15
-    (get_local $1)
-   )
-  )
-  (get_local $0)
- )
- (func $~lib/internal/string/copyUnsafe (; 35 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  ;;@ ~lib/internal/string.ts:34:9
-  (block $~lib/memory/memory.copy|inlined.2
-   (set_local $5
-    ;;@ ~lib/internal/string.ts:35:4
-    (i32.add
-     (i32.add
-      (get_local $0)
-      ;;@ ~lib/internal/string.ts:35:30
-      (i32.shl
-       ;;@ ~lib/internal/string.ts:35:31
-       (get_local $1)
-       ;;@ ~lib/internal/string.ts:35:45
-       (i32.const 1)
-      )
-     )
-     ;;@ ~lib/internal/string.ts:35:50
-     (get_global $~lib/internal/string/HEADER_SIZE)
-    )
-   )
-   (set_local $6
-    ;;@ ~lib/internal/string.ts:36:4
-    (i32.add
-     (i32.add
-      (get_local $2)
-      ;;@ ~lib/internal/string.ts:36:30
-      (i32.shl
-       ;;@ ~lib/internal/string.ts:36:31
-       (get_local $3)
-       ;;@ ~lib/internal/string.ts:36:45
-       (i32.const 1)
-      )
-     )
-     ;;@ ~lib/internal/string.ts:36:50
-     (get_global $~lib/internal/string/HEADER_SIZE)
-    )
-   )
-   (set_local $7
-    ;;@ ~lib/internal/string.ts:37:4
-    (i32.shl
-     (get_local $4)
-     ;;@ ~lib/internal/string.ts:37:11
-     (i32.const 1)
-    )
-   )
-   ;;@ ~lib/memory.ts:20:4
-   (call $~lib/internal/memory/memmove
-    ;;@ ~lib/memory.ts:20:12
-    (get_local $5)
-    ;;@ ~lib/memory.ts:20:18
-    (get_local $6)
-    ;;@ ~lib/memory.ts:20:23
-    (get_local $7)
-   )
-  )
- )
- (func $~lib/string/String#concat (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  ;;@ ~lib/string.ts:110:4
-  (if
-   (i32.eqz
-    ;;@ ~lib/string.ts:110:11
-    (i32.ne
-     (get_local $0)
-     ;;@ ~lib/string.ts:110:20
-     (i32.const 0)
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 16)
-     (i32.const 110)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
-  ;;@ ~lib/string.ts:111:4
-  (if
-   ;;@ ~lib/string.ts:111:8
-   (i32.eq
-    (get_local $1)
-    ;;@ ~lib/string.ts:111:18
-    (i32.const 0)
-   )
-   ;;@ ~lib/string.ts:111:24
-   (set_local $1
-    ;;@ ~lib/string.ts:111:32
-    (i32.const 296)
-   )
-  )
-  ;;@ ~lib/string.ts:113:4
-  (set_local $2
-   ;;@ ~lib/string.ts:113:25
-   (i32.load
-    (get_local $0)
-   )
-  )
-  ;;@ ~lib/string.ts:114:4
-  (set_local $3
-   ;;@ ~lib/string.ts:114:26
-   (i32.load
-    (get_local $1)
-   )
-  )
-  ;;@ ~lib/string.ts:115:4
-  (set_local $4
-   ;;@ ~lib/string.ts:115:24
-   (i32.add
-    (get_local $2)
-    ;;@ ~lib/string.ts:115:34
-    (get_local $3)
-   )
-  )
-  ;;@ ~lib/string.ts:116:4
-  (if
-   ;;@ ~lib/string.ts:116:8
-   (i32.eq
-    (get_local $4)
-    ;;@ ~lib/string.ts:116:18
-    (i32.const 0)
-   )
-   ;;@ ~lib/string.ts:116:49
-   (return
-    ;;@ ~lib/string.ts:116:28
-    (i32.const 8)
-   )
-  )
-  ;;@ ~lib/string.ts:117:4
-  (set_local $5
-   ;;@ ~lib/string.ts:117:14
-   (call $~lib/internal/string/allocateUnsafe
-    ;;@ ~lib/string.ts:117:29
-    (get_local $4)
-   )
-  )
-  ;;@ ~lib/string.ts:118:4
-  (call $~lib/internal/string/copyUnsafe
-   ;;@ ~lib/string.ts:118:15
-   (get_local $5)
-   ;;@ ~lib/string.ts:118:20
-   (i32.const 0)
-   ;;@ ~lib/string.ts:118:23
-   (get_local $0)
-   ;;@ ~lib/string.ts:118:29
-   (i32.const 0)
-   ;;@ ~lib/string.ts:118:32
-   (get_local $2)
-  )
-  ;;@ ~lib/string.ts:119:4
-  (call $~lib/internal/string/copyUnsafe
-   ;;@ ~lib/string.ts:119:15
-   (get_local $5)
-   ;;@ ~lib/string.ts:119:20
-   (get_local $2)
-   ;;@ ~lib/string.ts:119:29
-   (get_local $1)
-   ;;@ ~lib/string.ts:119:36
-   (i32.const 0)
-   ;;@ ~lib/string.ts:119:39
-   (get_local $3)
-  )
-  ;;@ ~lib/string.ts:120:11
-  (get_local $5)
- )
- (func $~lib/string/String.__concat (; 37 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  ;;@ ~lib/string.ts:105:4
-  (if
-   ;;@ ~lib/string.ts:105:8
-   (i32.eqz
-    ;;@ ~lib/string.ts:105:9
-    (get_local $0)
-   )
-   ;;@ ~lib/string.ts:105:34
-   (set_local $0
-    ;;@ ~lib/string.ts:105:41
-    (i32.const 296)
-   )
-  )
-  ;;@ ~lib/string.ts:106:28
-  (call $~lib/string/String#concat
-   ;;@ ~lib/string.ts:106:11
-   (get_local $0)
-   ;;@ ~lib/string.ts:106:23
-   (get_local $1)
-  )
- )
- (func $assembly/module/index/sectionName (; 38 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/parse (; 57 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  ;;@ assembly/module/index.ts:14:2
-  (block $break|0
-   (block $case12|0
-    (block $case11|0
-     (block $case10|0
-      (block $case9|0
-       (block $case8|0
-        (block $case7|0
-         (block $case6|0
-          (block $case5|0
-           (block $case4|0
-            (block $case3|0
-             (block $case2|0
-              (block $case1|0
-               (block $case0|0
-                (set_local $1
-                 ;;@ assembly/module/index.ts:14:10
-                 (get_local $0)
-                )
-                (br_if $case0|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:15:9
-                  (i32.const 0)
-                 )
-                )
-                (br_if $case1|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:17:9
-                  (i32.const 1)
-                 )
-                )
-                (br_if $case2|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:19:10
-                  (i32.const 2)
-                 )
-                )
-                (br_if $case3|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:21:10
-                  (i32.const 3)
-                 )
-                )
-                (br_if $case4|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:23:10
-                  (i32.const 4)
-                 )
-                )
-                (br_if $case5|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:25:10
-                  (i32.const 5)
-                 )
-                )
-                (br_if $case6|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:27:10
-                  (i32.const 6)
-                 )
-                )
-                (br_if $case7|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:29:10
-                  (i32.const 7)
-                 )
-                )
-                (br_if $case8|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:31:10
-                  (i32.const 8)
-                 )
-                )
-                (br_if $case9|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:33:10
-                  (i32.const 9)
-                 )
-                )
-                (br_if $case10|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:35:10
-                  (i32.const 10)
-                 )
-                )
-                (br_if $case11|0
-                 (i32.eq
-                  (get_local $1)
-                  ;;@ assembly/module/index.ts:37:10
-                  (i32.const 11)
-                 )
-                )
-                (br $case12|0)
-               )
-               ;;@ assembly/module/index.ts:16:13
-               (return
-                (i32.const 312)
-               )
-              )
-              ;;@ assembly/module/index.ts:18:13
-              (return
-               (i32.const 328)
-              )
-             )
-             ;;@ assembly/module/index.ts:20:10
-             (return
-              (i32.const 344)
-             )
-            )
-            ;;@ assembly/module/index.ts:22:10
-            (return
-             (i32.const 360)
-            )
-           )
-           ;;@ assembly/module/index.ts:24:10
-           (return
-            (i32.const 384)
-           )
-          )
-          ;;@ assembly/module/index.ts:26:10
-          (return
-           (i32.const 400)
-          )
-         )
-         ;;@ assembly/module/index.ts:28:10
-         (return
-          (i32.const 416)
-         )
-        )
-        ;;@ assembly/module/index.ts:30:10
-        (return
-         (i32.const 432)
-        )
-       )
-       ;;@ assembly/module/index.ts:32:10
-       (return
-        (i32.const 448)
-       )
-      )
-      ;;@ assembly/module/index.ts:34:10
-      (return
-       (i32.const 464)
-      )
-     )
-     ;;@ assembly/module/index.ts:36:10
-     (return
-      (i32.const 488)
-     )
-    )
-    ;;@ assembly/module/index.ts:38:10
-    (return
-     (i32.const 504)
-    )
-   )
-   ;;@ assembly/module/index.ts:40:6
-   (unreachable)
-  )
-  ;;@ assembly/module/index.ts:43:9
-  (i32.const 8)
- )
- (func $assembly/module/index/Section#constructor (; 39 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  ;;@ assembly/module/index.ts:54:4
-  (i32.store
-   (tee_local $0
-    (if (result i32)
-     (get_local $0)
-     (get_local $0)
-     (tee_local $0
-      (block (result i32)
-       (set_local $2
-        (call $~lib/memory/memory.allocate
-         (i32.const 20)
-        )
-       )
-       (i32.store
-        (get_local $2)
-        (i32.const 0)
-       )
-       (i32.store offset=4
-        (get_local $2)
-        (i32.const 0)
-       )
-       (i32.store offset=8
-        (get_local $2)
-        (i32.const 0)
-       )
-       (i32.store offset=12
-        (get_local $2)
-        (i32.const 0)
-       )
-       (i32.store offset=16
-        (get_local $2)
-        ;;@ assembly/module/index.ts:51:17
-        (i32.const 8)
-       )
-       (get_local $2)
+  ;;@ assembly/index.ts:116:4
+  (call $assembly/index/Parser#parse
+   ;;@ assembly/index.ts:116:2
+   (get_local $0)
+  )
+  ;;@ assembly/index.ts:117:2
+  (call $assembly/host/index/log<i32>
+   ;;@ assembly/index.ts:117:11
+   (block $~lib/array/Array<SectionHeader>#get:length|inlined.0 (result i32)
+    (set_local $1
+     (i32.load
+      (i32.load offset=4
+       (get_local $0)
       )
      )
     )
+    (i32.load offset=4
+     (get_local $1)
+    )
    )
-   ;;@ assembly/module/index.ts:54:15
-   (i32.load offset=8
-    (get_local $1)
-   )
+   (i32.const 0)
   )
-  ;;@ assembly/module/index.ts:55:4
-  (i32.store offset=4
-   (get_local $0)
-   ;;@ assembly/module/index.ts:55:18
-   (call $assembly/buffer/index/Buffer#readVaruint
-    ;;@ assembly/module/index.ts:55:14
-    (get_local $1)
-    ;;@ assembly/module/index.ts:55:30
-    (i32.const 7)
-   )
-  )
-  ;;@ assembly/module/index.ts:56:4
-  (i32.store offset=8
-   (get_local $0)
-   ;;@ assembly/module/index.ts:56:27
-   (call $assembly/buffer/index/Buffer#readVaruint
-    ;;@ assembly/module/index.ts:56:23
-    (get_local $1)
-    ;;@ assembly/module/index.ts:56:39
-    (i32.const 32)
-   )
-  )
-  ;;@ assembly/module/index.ts:57:4
-  (if
-   ;;@ assembly/module/index.ts:57:8
-   (i32.eq
+  ;;@ assembly/index.ts:118:2
+  (set_local $1
+   ;;@ assembly/index.ts:118:41
+   (call $assembly/module/index/Module#getID
+    ;;@ assembly/index.ts:118:32
     (i32.load offset=4
      (get_local $0)
     )
-    ;;@ assembly/module/index.ts:57:19
+    ;;@ assembly/index.ts:118:47
+    (get_global $src/common/SectionId.Type)
+   )
+  )
+  ;;@ assembly/index.ts:119:2
+  (set_local $2
+   ;;@ assembly/index.ts:119:16
+   (call $assembly/module/index/TypeSection#constructor
     (i32.const 0)
-   )
-   ;;@ assembly/module/index.ts:57:21
-   (block
-    ;;@ assembly/module/index.ts:58:6
-    (set_local $2
-     ;;@ assembly/module/index.ts:58:19
-     (i32.load offset=8
-      (get_local $1)
-     )
-    )
-    ;;@ assembly/module/index.ts:59:6
-    (set_local $3
-     ;;@ assembly/module/index.ts:59:25
-     (call $assembly/buffer/index/Buffer#readVaruint
-      ;;@ assembly/module/index.ts:59:21
-      (get_local $1)
-      ;;@ assembly/module/index.ts:59:37
-      (i32.const 32)
-     )
-    )
-    ;;@ assembly/module/index.ts:60:6
-    (set_local $4
-     ;;@ assembly/module/index.ts:60:21
-     (i32.load offset=8
-      (get_local $1)
-     )
-    )
-    ;;@ assembly/module/index.ts:62:6
-    (i32.store offset=16
-     (get_local $0)
-     ;;@ assembly/module/index.ts:62:18
-     (call $~lib/string/String.__concat
-      (call $~lib/string/String.__concat
-       (i32.const 288)
-       ;;@ assembly/module/index.ts:62:31
-       (call $~lib/string/String.fromUTF8
-        ;;@ assembly/module/index.ts:62:40
-        (get_local $4)
-        ;;@ assembly/module/index.ts:62:50
-        (get_local $3)
-       )
-      )
-      ;;@ assembly/module/index.ts:62:62
-      (i32.const 288)
-     )
-    )
-    ;;@ assembly/module/index.ts:63:6
-    (i32.store offset=8
+    ;;@ assembly/index.ts:119:32
+    (call $~lib/array/Array<SectionHeader>#__get
      (get_local $1)
-     (i32.add
-      (i32.load offset=8
-       (get_local $1)
-      )
-      ;;@ assembly/module/index.ts:63:17
-      (get_local $3)
-     )
-    )
-    ;;@ assembly/module/index.ts:64:6
-    (i32.store offset=8
-     (get_local $0)
-     (i32.sub
-      (i32.load offset=8
-       (get_local $0)
-      )
-      ;;@ assembly/module/index.ts:64:26
-      (i32.sub
-       (i32.load offset=8
-        (get_local $1)
-       )
-       ;;@ assembly/module/index.ts:64:36
-       (get_local $2)
-      )
-     )
+     ;;@ assembly/index.ts:119:40
+     (i32.const 0)
     )
    )
-   ;;@ assembly/module/index.ts:65:11
-   (if
-    ;;@ assembly/module/index.ts:65:15
-    (i32.le_u
+  )
+  ;;@ assembly/index.ts:120:2
+  (set_global $assembly/index/type
+   ;;@ assembly/index.ts:120:19
+   (call $assembly/module/index/TypeSection#parse
+    ;;@ assembly/index.ts:120:9
+    (get_local $2)
+    ;;@ assembly/index.ts:120:25
+    (i32.load offset=4
      (i32.load offset=4
       (get_local $0)
      )
-     ;;@ assembly/module/index.ts:65:26
-     (get_global $src/common/SectionId.Data)
-    )
-    ;;@ assembly/module/index.ts:65:47
-    (i32.store offset=16
-     ;;@ assembly/module/index.ts:66:6
-     (get_local $0)
-     ;;@ assembly/module/index.ts:66:18
-     (call $assembly/module/index/sectionName
-      ;;@ assembly/module/index.ts:66:30
-      (i32.load offset=4
-       (get_local $0)
-      )
-     )
-    )
-    ;;@ assembly/module/index.ts:67:11
-    (unreachable)
-   )
-  )
-  ;;@ assembly/module/index.ts:70:4
-  (i32.store offset=12
-   (get_local $0)
-   ;;@ assembly/module/index.ts:70:23
-   (i32.load offset=8
-    (get_local $1)
-   )
-  )
-  (get_local $0)
- )
- (func $assembly/module/index/Section.create (; 40 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  ;;@ assembly/module/index.ts:74:4
-  (set_local $1
-   ;;@ assembly/module/index.ts:74:14
-   (i32.load offset=8
-    (get_local $0)
-   )
-  )
-  ;;@ assembly/module/index.ts:75:4
-  (set_local $2
-   ;;@ assembly/module/index.ts:75:17
-   (call $assembly/buffer/index/Buffer#peekVaruint
-    ;;@ assembly/module/index.ts:75:13
-    (get_local $0)
-    ;;@ assembly/module/index.ts:75:29
-    (i32.const 7)
-   )
-  )
-  ;;@ assembly/module/index.ts:76:4
-  (if
-   (i32.eqz
-    ;;@ assembly/module/index.ts:76:12
-    (i32.eq
-     (get_local $1)
-     ;;@ assembly/module/index.ts:76:19
-     (i32.load offset=8
-      (get_local $0)
-     )
-    )
-   )
-   (block
-    (call $~lib/env/abort
-     (i32.const 0)
-     (i32.const 104)
-     (i32.const 76)
-     (i32.const 4)
-    )
-    (unreachable)
-   )
-  )
-  ;;@ assembly/module/index.ts:77:4
-  (block $break|0
-   (block $case1|0
-    (block $case0|0
-     (set_local $3
-      ;;@ assembly/module/index.ts:77:12
-      (get_local $2)
-     )
-     (br_if $case0|0
-      (i32.eq
-       (get_local $3)
-       ;;@ assembly/module/index.ts:78:11
-       (get_global $src/common/SectionId.Type)
-      )
-     )
-     (br $case1|0)
-    )
-    ;;@ assembly/module/index.ts:79:34
-    (return
-     ;;@ assembly/module/index.ts:79:15
-     (call $assembly/module/index/TypeSection#constructor
-      (i32.const 0)
-      ;;@ assembly/module/index.ts:79:31
-      (get_local $0)
-     )
     )
    )
   )
-  ;;@ assembly/module/index.ts:82:26
-  (call $assembly/module/index/Section#constructor
-   (i32.const 0)
-   ;;@ assembly/module/index.ts:82:23
+  ;;@ assembly/index.ts:122:11
+  (i32.load offset=4
+   ;;@ assembly/index.ts:122:9
    (get_local $0)
   )
  )
- (func $~lib/array/Array<Section>#push (; 41 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  ;;@ ~lib/array.ts:166:4
-  (set_local $2
-   ;;@ ~lib/array.ts:166:17
-   (i32.load offset=4
-    (get_local $0)
-   )
-  )
-  ;;@ ~lib/array.ts:167:4
-  (set_local $3
-   ;;@ ~lib/array.ts:167:17
-   (i32.load
-    (get_local $0)
-   )
-  )
-  ;;@ ~lib/array.ts:168:4
-  (set_local $4
-   ;;@ ~lib/array.ts:168:19
-   (i32.shr_u
-    (i32.load
-     (get_local $3)
-    )
-    ;;@ ~lib/array.ts:168:41
-    (i32.const 2)
-   )
-  )
-  ;;@ ~lib/array.ts:169:4
-  (set_local $5
-   ;;@ ~lib/array.ts:169:20
-   (i32.add
-    (get_local $2)
-    ;;@ ~lib/array.ts:169:29
-    (i32.const 1)
-   )
-  )
-  ;;@ ~lib/array.ts:170:4
-  (if
-   ;;@ ~lib/array.ts:170:8
-   (i32.ge_u
-    (get_local $2)
-    ;;@ ~lib/array.ts:170:23
-    (get_local $4)
-   )
-   ;;@ ~lib/array.ts:170:38
-   (block
-    ;;@ ~lib/array.ts:172:6
-    (if
-     ;;@ ~lib/array.ts:172:10
-     (i32.ge_u
-      (get_local $2)
-      ;;@ ~lib/array.ts:172:25
-      (i32.const 268435454)
-     )
-     ;;@ ~lib/array.ts:172:42
-     (block
-      (call $~lib/env/abort
-       (i32.const 0)
-       (i32.const 176)
-       (i32.const 172)
-       (i32.const 42)
-      )
-      (unreachable)
-     )
-    )
-    ;;@ ~lib/array.ts:173:6
-    (set_local $3
-     ;;@ ~lib/array.ts:173:15
-     (call $~lib/internal/arraybuffer/reallocateUnsafe
-      ;;@ ~lib/array.ts:173:32
-      (get_local $3)
-      ;;@ ~lib/array.ts:173:40
-      (i32.shl
-       (get_local $5)
-       ;;@ ~lib/array.ts:173:53
-       (i32.const 2)
-      )
-     )
-    )
-    ;;@ ~lib/array.ts:174:6
-    (i32.store
-     (get_local $0)
-     ;;@ ~lib/array.ts:174:21
-     (get_local $3)
-    )
-   )
-  )
-  ;;@ ~lib/array.ts:176:4
-  (i32.store offset=4
-   (get_local $0)
-   ;;@ ~lib/array.ts:176:19
-   (get_local $5)
-  )
-  ;;@ ~lib/array.ts:177:4
-  (block $~lib/internal/arraybuffer/storeUnsafe<Section,Section>|inlined.0
-   ;;@ ~lib/internal/arraybuffer.ts:72:2
-   (i32.store offset=8
-    ;;@ ~lib/internal/arraybuffer.ts:72:11
-    (i32.add
-     (get_local $3)
-     ;;@ ~lib/internal/arraybuffer.ts:72:39
-     (i32.shl
-      ;;@ ~lib/internal/arraybuffer.ts:72:40
-      (get_local $2)
-      ;;@ ~lib/internal/arraybuffer.ts:72:56
-      (i32.const 2)
-     )
-    )
-    ;;@ ~lib/internal/arraybuffer.ts:72:71
-    (get_local $1)
-   )
-  )
-  ;;@ ~lib/array.ts:179:11
-  (get_local $5)
- )
- (func $assembly/index/Module#push (; 42 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  ;;@ assembly/index.ts:29:18
-  (drop
-   (call $~lib/array/Array<Section>#push
-    ;;@ assembly/index.ts:29:4
-    (i32.load
-     (get_local $0)
-    )
-    ;;@ assembly/index.ts:29:23
-    (get_local $1)
-   )
-  )
- )
- (func $assembly/index/Parser#parse (; 43 ;) (type $iv) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  ;;@ assembly/index.ts:59:4
-  (set_local $1
-   ;;@ assembly/index.ts:59:25
-   (call $assembly/buffer/index/Buffer#readUint<u32>
-    ;;@ assembly/index.ts:59:16
-    (i32.load
-     (get_local $0)
-    )
-   )
-  )
-  ;;@ assembly/index.ts:60:4
-  (if
-   ;;@ assembly/index.ts:60:8
-   (i32.ne
-    (get_local $1)
-    ;;@ assembly/index.ts:60:17
-    (i32.const 1836278016)
-   )
-   ;;@ assembly/index.ts:60:29
-   (unreachable)
-  )
-  ;;@ assembly/index.ts:61:4
-  (set_local $2
-   ;;@ assembly/index.ts:61:27
-   (call $assembly/buffer/index/Buffer#readUint<u32>
-    ;;@ assembly/index.ts:61:18
-    (i32.load
-     (get_local $0)
-    )
-   )
-  )
-  ;;@ assembly/index.ts:62:4
-  (if
-   ;;@ assembly/index.ts:62:8
-   (i32.ne
-    (get_local $2)
-    ;;@ assembly/index.ts:62:19
-    (i32.const 1)
-   )
-   ;;@ assembly/index.ts:62:22
-   (unreachable)
-  )
-  ;;@ assembly/index.ts:63:4
-  (set_local $3
-   ;;@ assembly/index.ts:63:31
-   (i32.const 0)
-  )
-  ;;@ assembly/index.ts:64:4
-  (set_local $4
-   ;;@ assembly/index.ts:64:31
-   (i32.const 0)
-  )
-  ;;@ assembly/index.ts:65:4
-  (set_local $5
-   ;;@ assembly/index.ts:65:31
-   (i32.const 0)
-  )
-  ;;@ assembly/index.ts:66:4
-  (set_local $6
-   ;;@ assembly/index.ts:66:31
-   (i32.const 0)
-  )
-  ;;@ assembly/index.ts:67:4
-  (block $break|0
-   (loop $continue|0
-    (if
-     ;;@ assembly/index.ts:67:11
-     (i32.lt_u
-      (i32.load offset=8
-       (i32.load
-        (get_local $0)
-       )
-      )
-      ;;@ assembly/index.ts:67:26
-      (i32.load offset=4
-       (i32.load
-        (get_local $0)
-       )
-      )
-     )
-     (block
-      ;;@ assembly/index.ts:67:43
-      (block
-       ;;@ assembly/index.ts:68:6
-       (call $assembly/index/log<i32>
-        ;;@ assembly/index.ts:68:15
-        (call $assembly/index/Parser#get:off
-         (get_local $0)
-        )
-       )
-       ;;@ assembly/index.ts:69:6
-       (set_local $7
-        ;;@ assembly/index.ts:69:28
-        (call $assembly/module/index/Section.create
-         ;;@ assembly/index.ts:69:35
-         (i32.load
-          (get_local $0)
-         )
-        )
-       )
-       ;;@ assembly/index.ts:70:18
-       (call $assembly/index/Module#push
-        ;;@ assembly/index.ts:70:6
-        (i32.load offset=4
-         (get_local $0)
-        )
-        ;;@ assembly/index.ts:70:23
-        (get_local $7)
-       )
-       ;;@ assembly/index.ts:71:6
-       (call $assembly/index/Parser#set:off
-        (get_local $0)
-        ;;@ assembly/index.ts:71:17
-        (i32.add
-         (i32.load offset=12
-          (get_local $7)
-         )
-         ;;@ assembly/index.ts:71:39
-         (i32.load offset=8
-          (get_local $7)
-         )
-        )
-       )
-       ;;@ assembly/index.ts:72:6
-       (call $assembly/index/log<i32>
-        ;;@ assembly/index.ts:72:15
-        (call $assembly/index/Parser#get:off
-         (get_local $0)
-        )
-       )
-      )
-      (br $continue|0)
-     )
-    )
-   )
-  )
-  ;;@ assembly/index.ts:74:4
-  (call $assembly/index/log<i32>
-   ;;@ assembly/index.ts:74:13
-   (i32.load offset=4
-    (i32.load
-     (get_local $0)
-    )
-   )
-  )
- )
- (func $~lib/arraybuffer/ArrayBuffer#get:data (; 44 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ ~lib/arraybuffer.ts:13:55
-  (i32.add
-   ;;@ ~lib/arraybuffer.ts:13:29
-   (get_local $0)
-   ;;@ ~lib/arraybuffer.ts:13:55
-   (get_global $~lib/internal/arraybuffer/HEADER_SIZE)
-  )
- )
- (func $assembly/buffer/index/Buffer#constructor (; 45 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  ;;@ assembly/buffer/index.ts:12:4
-  (i32.store
-   (tee_local $0
-    (if (result i32)
-     (get_local $0)
-     (get_local $0)
-     (tee_local $0
-      (block (result i32)
-       (set_local $2
-        (call $~lib/memory/memory.allocate
-         (i32.const 12)
-        )
-       )
-       (i32.store
-        (get_local $2)
-        (i32.const 0)
-       )
-       (i32.store offset=4
-        (get_local $2)
-        (i32.const 0)
-       )
-       (i32.store offset=8
-        (get_local $2)
-        (i32.const 0)
-       )
-       (get_local $2)
-      )
-     )
-    )
-   )
-   ;;@ assembly/buffer/index.ts:12:18
-   (get_local $1)
-  )
-  ;;@ assembly/buffer/index.ts:13:4
-  (i32.store offset=8
-   (get_local $0)
-   ;;@ assembly/buffer/index.ts:13:15
-   (call $~lib/arraybuffer/ArrayBuffer#get:data
-    (i32.load
-     (get_local $1)
-    )
-   )
-  )
-  ;;@ assembly/buffer/index.ts:14:4
-  (i32.store offset=4
-   (get_local $0)
-   ;;@ assembly/buffer/index.ts:14:18
-   (i32.load offset=8
-    (get_local $1)
-   )
-  )
-  (get_local $0)
- )
- (func $assembly/index/newParser (; 46 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  ;;@ assembly/index.ts:81:2
-  (set_local $1
-   ;;@ assembly/index.ts:81:15
-   (call $assembly/buffer/index/Buffer#constructor
-    (i32.const 0)
-    ;;@ assembly/index.ts:81:26
-    (get_local $0)
-   )
-  )
-  ;;@ assembly/index.ts:82:26
-  (call $assembly/index/Parser#constructor
-   (i32.const 0)
-   ;;@ assembly/index.ts:82:20
-   (get_local $1)
-  )
- )
- (func $assembly/index/parse (; 47 ;) (type $ii) (param $0 i32) (result i32)
-  ;;@ assembly/index.ts:86:4
-  (call $assembly/index/Parser#parse
-   ;;@ assembly/index.ts:86:2
-   (get_local $0)
-  )
-  ;;@ assembly/index.ts:87:18
-  (i32.load
-   ;;@ assembly/index.ts:87:9
-   (i32.load offset=4
-    (get_local $0)
-   )
-  )
- )
- (func $start (; 48 ;) (type $v)
+ (func $start (; 58 ;) (type $v)
   (set_global $~lib/allocator/arena/startOffset
    (i32.and
     (i32.add
@@ -6630,26 +6870,27 @@
   (set_global $~lib/allocator/arena/offset
    (get_global $~lib/allocator/arena/startOffset)
   )
+  (nop)
  )
- (func $null (; 49 ;) (type $v)
+ (func $null (; 59 ;) (type $v)
  )
- (func $Parser#get:buf (; 50 ;) (type $ii) (param $0 i32) (result i32)
+ (func $Parser#get:buf (; 60 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load
    (get_local $0)
   )
  )
- (func $Parser#set:buf (; 51 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $Parser#set:buf (; 61 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store
    (get_local $0)
    (get_local $1)
   )
  )
- (func $Parser#get:module (; 52 ;) (type $ii) (param $0 i32) (result i32)
+ (func $Parser#get:module (; 62 ;) (type $ii) (param $0 i32) (result i32)
   (i32.load offset=4
    (get_local $0)
   )
  )
- (func $Parser#set:module (; 53 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $Parser#set:module (; 63 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (i32.store offset=4
    (get_local $0)
    (get_local $1)

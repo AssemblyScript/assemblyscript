@@ -1,6 +1,4 @@
-
 import "allocator/arena";
-// import {Uint8Array} from "typedarray";
 
 export class Buffer {
   buffer: Uint8Array;

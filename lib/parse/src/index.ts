@@ -76,6 +76,7 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   parse.readUint32 = (index: number): number => {
     return buffer[index];
   }
+  var instance: Instance<Parser>;
 
   // instantiate the parser and return its exports
   var imports = {
@@ -85,7 +86,9 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
     },
     index: {
       debug: () => {debugger; },
-      log: (x) => console.log(x)
+      _log: (start, sizeof) => {debugger;
+        console.log(start, sizeof); console.log(instance.I32.slice(start>>2, sizeof>>2))},
+      _log_str:(x) => console.log(instance.getString(x))
     },
     options: {},
 
@@ -110,16 +113,21 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
     "onFunctionName",
     "onLocalName"
   ].forEach((name: string): void => imports.options[name] = options[name] || function() {});
-  var instance: Instance<Parser>  = loader.instantiate(compiled, imports);
+  instance  = loader.instantiate(compiled, imports);
   let array = instance.newArray(new Uint8Array(binary))
-  let parserPtr = instance.newParser(array)
+  let parserPtr = instance.newParser(array);
+  debugger;
   let Mod = instance.parse(parserPtr)>>2;
-  let sections = buffer.slice(Mod, 2);
+  let sections = buffer.slice(instance.I32[Mod], 2);
+  console.log(sections[1])
   let arrayBuf = sections[0]>>2;
   for (let i =0; i<sections[1]; i++){
-    let section = instance.I32[arrayBuf+2 + i]>>2;
-    console.log(instance.getString(instance.I32[section + 4]));
+    let section = instance.I32[arrayBuf + 2 + i] >> 2;
+    console.log("id: " + instance.I32[section + 1]);
+    // console.log(instance.getString(instance.I32[section + 4]));
   }
+  // let typeSection = (instance as any).getType()
+  // console.log(typeSection >> 2);
   // debugger;
   // for (let i in Mod) {
   //   console.log(Mod[i]);

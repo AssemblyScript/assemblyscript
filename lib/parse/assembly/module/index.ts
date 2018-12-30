@@ -10,6 +10,68 @@ import {
 
 import {Buffer} from '../buffer';
 
+import {log, log_str} from "../host";
+
+type byte = u8;
+
+
+export class Module {
+  Headers: SectionHeader[];
+  buf: Buffer;
+  // Custom: TypeSection[];
+
+  constructor(buf: Buffer){
+    this.buf = buf;
+  }
+
+
+  get Type(): SectionHeader[]{
+    return this.getID(SectionId.Type);
+  }
+  // Import: TypeSection[];
+  // Function: TypeSection[];
+  // Table: TypeSection[];
+  // Memory: TypeSection[];
+  // Global: TypeSection[];
+  // Export: TypeSection[];
+  // Start: TypeSection[];
+  // Element: TypeSection[];
+  // Code: TypeSection[];
+  // Data: TypeSection[];
+
+
+  parseSection(header: SectionHeader): void {
+    this.Headers.push(header);
+    switch (header.id){
+      case SectionId.Type:
+        // this._Type.push(header);
+        break;
+      default:
+    }
+    // log_str(header.name);
+  }
+
+  public getID(id: SectionId): SectionHeader[] {
+    let res: SectionHeader[] = [];
+    log<i32>(42);
+    let x: i32 = this.Headers.length;
+    for (let i=0; i < x; i++){
+      // log<u32>(i);
+      if (this.Headers[i].id == id){
+        res.push(this.Headers[i]);
+      }
+    }
+    return res;
+  }
+
+  getType(): TypeSection {
+    let Types = this.Type;
+    let section = new TypeSection(Types[0]);
+    return section.parse(this.buf);
+  }
+
+}
+
 function sectionName(s: SectionId): string {
   switch (s){
     case 0:
@@ -43,12 +105,12 @@ function sectionName(s: SectionId): string {
   return "";
 }
 
-export class Section {
-  ref: u32;
-  id: u32;
-  payload_len: u32;
-  payload_off: u32;
-  name: string = "";
+export class SectionHeader {
+  public ref: u32;
+  public id: u32;
+  public payload_len: u32;
+  public payload_off: u32;
+  public name: string = "";
 
   constructor (buf: Buffer){
     this.ref = buf.off;
@@ -58,7 +120,6 @@ export class Section {
       let before = buf.off;
       let name_len = buf.readVaruint(32);
       let name_off = buf.off;
-
       this.name = "'" + String.fromUTF8(name_off, name_len) + "'";
       buf.off += name_len;
       this.payload_len -= buf.off - before;
@@ -70,40 +131,67 @@ export class Section {
     this.payload_off = buf.off;
   }
 
-  static create(buf: Buffer): Section {
-    let off = buf.off;
-    let id = buf.peekVaruint(7);
-    assert (off == buf.off);
-    switch (id){
-      case SectionId.Type:
-        return new TypeSection(buf);
-      default:
-    }
-    return new Section(buf);
+  get end(): u32{
+    return this.payload_off + this.payload_len;
   }
 
 }
+
+class Section {
+  constructor(public header: SectionHeader){}
+}
+//     static create(buf: Buffer): Section {
+//       // log<string>("Creating Section", true);
+//       let header = new SectionHeader(buf);
+//       let off = buf.off;
+//       let id = buf.peekVaruint(7);
+//       assert (off == buf.off);
+//       switch (id){
+//         case SectionId.Type:
+//           let s = new TypeSection(header);
+//           return (s.parse(buf));
+//         default:
+//       }
+//       let s = (new BaseSection(header))
+//       return s.parse(buf);
+//     }
+// }
+//
+//
+// export class BaseSection extends Section {
+//
+//   // constructor(public header: SectionHeader){}
+//
+//   parse(buf: Buffer): BaseSection {
+//     log<string>("SubClass", true);
+//     return this;
+//   }
+// }
+
 
 class FuncType {
   constructor(public index: u32, public form: i32,  public parameters: i32[],  public returnVals: i32[]){}
 }
 
-class TypeSection extends Section {
+export class TypeSection {
+  header: SectionHeader
   funcs: FuncType[];
-
-  constructor(buf: Buffer){
-    super(buf);
-    this.parse(buf);
+  constructor(header: SectionHeader){
+    this.header = header;
+    this.funcs = [];
   }
 
-  get end(): u32{
-    return this.payload_off + this.payload_len;
-  }
-
-  parse(buf:Buffer): Section {
-    buf.off = this.payload_off;
+  // constructor(public header: SectionHeader){}
+  parse(buf: Buffer): TypeSection {
+    log<string>("parsing TypeSection", true);
+    log<usize>(buf.off);
+    log<string>(this.header.name, true);
+    buf.off = this.header.payload_off;
+    log<usize>(buf.off);
     let count = buf.readVaruint(32);
+    log<usize>(count);
     for (let index: u32 = 0; index < count; ++index) {
+      log<u32>(index);
       let form = buf.readVarint(7) & 0x7f;
       // opt.onType(
       //   index,
@@ -133,7 +221,8 @@ class TypeSection extends Section {
       }
       this.funcs.push(new FuncType(index, form, parameters, returnVals));
     }
-    buf.off = this.end;
+    // buf.off = this.end;
+    log<string>("Finished type section",true)
     return this;
   }
 
