@@ -86,8 +86,25 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
     },
     index: {
       debug: () => {debugger; },
-      _log: (start, sizeof) => {debugger;
-        console.log(start, sizeof); console.log(instance.I32.slice(start>>2, sizeof>>2))},
+      _log: (start, sizeof) => {
+        let begin = start >> 2;
+        let size = sizeof >> 2;
+        if (size == 1 ){
+          console.log(start);
+        } else {
+          let str = []
+          let len = 0;
+          for (let i = begin; i < begin+size; i++){
+            let line = `| ${i} | ${instance.I32[i]>>2}`;
+            len = Math.max(len, line.length);
+            str.push(line);
+          }
+          let output = str.map((v,i,a)=> v + " ".repeat(len - v.length + 1) + "|");
+          let dash = "-";
+          let line = (dash as any).repeat(len+2);
+          console.log([line,output.join('\n'+line+'\n'),line].join("\n"));
+        }
+      },
       _log_str:(x) => console.log(instance.getString(x))
     },
     options: {},
@@ -117,7 +134,7 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   let array = instance.newArray(new Uint8Array(binary))
   let parserPtr = instance.newParser(array);
   debugger;
-  let Mod = instance.parse(parserPtr)>>2;
+  let Mod = instance.parse(parserPtr) >> 2;
   let sections = buffer.slice(instance.I32[Mod], 2);
   console.log(sections[1])
   let arrayBuf = sections[0]>>2;
@@ -126,8 +143,8 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
     console.log("id: " + instance.I32[section + 1]);
     // console.log(instance.getString(instance.I32[section + 4]));
   }
-  // let typeSection = (instance as any).getType()
-  // console.log(typeSection >> 2);
+  // let typeSection = (instance as any).getType() >> 2;
+  // console.log(instance.getString(typeSection));
   // debugger;
   // for (let i in Mod) {
   //   console.log(Mod[i]);

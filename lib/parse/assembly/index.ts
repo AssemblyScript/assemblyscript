@@ -56,10 +56,13 @@ declare function debug():void;
 
 let type: TypeSection;
 
-export function getType(): TypeSection {
-  return type;
+export function getType(): string {
+  return type.toString();
 }
 
+export function toString(t:TypeSection): string {
+  return t.toString();
+}
 
 export class Parser {
   buf: Buffer;
@@ -118,6 +121,7 @@ export function parse(p: Parser): Module {
   let headers:SectionHeader[] = p.module.getID(SectionId.Type);
   let section = new TypeSection(headers[0]);
   type = (section).parse(p.module.buf);
-
+  log<i32>(offsetof<TypeSection>());
+  log<TypeSection>(type, offsetof<TypeSection>());
   return p.module;
 }
