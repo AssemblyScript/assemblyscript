@@ -1,10 +1,16 @@
-import { Type, SectionId, ExternalKind } from "./common";
+import { Type, SectionId, ExternalKind, newParser } from "./common";
+import assert = require("assert");
 export { Type, SectionId, ExternalKind };
+import  * as loader from "../../loader";
 
+
+type Instance<T> = loader.ASUtil & T;
+
+type Parser = {parse: (any)=> any, newParser: (any)=>any};
 /** Cached compiled parser. */
 var compiled: WebAssembly.Module | null = null;
 
-declare var WASM_DATA: string; // injected by webpack
+var WASM_DATA: string; // injected by webpack
 if (typeof WASM_DATA !== "string") WASM_DATA = require("fs").readFileSync(__dirname + "/../build/index.wasm", "base64");
 
 /** Options specified to the parser. The `onSection` callback determines the sections being evaluated in detail. */
@@ -48,6 +54,7 @@ export interface ParseOptions {
   /** Called with each local name if present and the 'name' section is evaluated. */
   onLocalName?(funcIndex: number, index: number, offset: number, length: number): void;
 }
+let memory: WebAssembly.Memory;
 
 /** Parses the contents of a WebAssembly binary according to the specified options. */
 export function parse(binary: Uint8Array, options?: ParseOptions): void {
@@ -59,19 +66,51 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   // use the binary as the parser's memory
   var nBytes = binary.length;
   var nPages = ((nBytes + 0xffff) & ~0xffff) >> 16;
-  var memory = new WebAssembly.Memory({ initial: nPages });
-  var buffer = new Uint8Array(memory.buffer);
-  buffer.set(binary);
+  memory = new WebAssembly.Memory({ initial: nPages });
+  var buffer = new Uint32Array(memory.buffer);
+  // buffer.set(binary);
 
   // provide a way to read strings from memory
   parse.readString = (offset: number, length: number): string => utf8_read(buffer, offset, offset + length);
 
+  parse.readUint32 = (index: number): number => {
+    return buffer[index];
+  }
+  var instance: Instance<Parser>;
+
   // instantiate the parser and return its exports
   var imports = {
     env: {
+      abort: console.error,
       memory
     },
-    options: {}
+    index: {
+      debug: () => {debugger; },
+      _log: (start, sizeof) => {
+        let begin = start >> 2;
+        let size = sizeof >> 2;
+        if (size == 1 ){
+          console.log(start);
+        } else {
+          let str = []
+          let len = 0;
+          for (let i = begin; i < begin+size; i++){
+            let line = `| ${i} | ${instance.I32[i]>>2}`;
+            len = Math.max(len, line.length);
+            str.push(line);
+          }
+          let output = str.map((v,i,a)=> v + " ".repeat(len - v.length + 1) + "|");
+          let dash = "-";
+          let line = (dash as any).repeat(len+2);
+          console.log([line,output.join('\n'+line+'\n'),line].join("\n"));
+        }
+      },
+      _log_str:(x) => console.log(instance.getString(x)),
+      _logi: console.log,
+      _logf: console.log
+    },
+    options: {},
+
   };
   [ "onSection",
     "onType",
@@ -93,13 +132,33 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
     "onFunctionName",
     "onLocalName"
   ].forEach((name: string): void => imports.options[name] = options[name] || function() {});
-  var instance = new WebAssembly.Instance(compiled, imports);
-  instance.exports.parse(0, nBytes);
+  instance  = loader.instantiate(compiled, imports);
+  let array = instance.newArray(new Uint8Array(binary))
+  let parserPtr = instance.newParser(array);
+  debugger;
+  let Mod = instance.parse(parserPtr);
+  console.log(instance.getString((instance as any).getType(Mod)));
+  // let sections = buffer.slice(instance.I32[Mod], 2);
+  // console.log(sections[1])
+  // let arrayBuf = sections[0]>>2;
+  // for (let i =0; i<sections[1]; i++){
+  //   let section = instance.I32[arrayBuf + 2 + i] >> 2;
+  //   console.log("id: " + instance.I32[section + 1]);
+  //   // console.log(instance.getString(instance.I32[section + 4]));
+  // }
+  // let typeSection = (instance as any).getType() >> 2;
+  // console.log(instance.getString(typeSection));
+  // debugger;
+  // for (let i in Mod) {
+  //   console.log(Mod[i]);
+  // }
+  // debugger;
 }
 
 export declare namespace parse {
   /** Utility function for reading an UTF8 encoded string from memory while parsing. */
   function readString(offset: number, length: number): string;
+  function readUint32(index: number): number;
 }
 
 // see: https://github.com/dcodeIO/protobuf.js/tree/master/lib/utf8
