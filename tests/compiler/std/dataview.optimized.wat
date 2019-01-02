@@ -101,7 +101,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 23
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -339,7 +339,7 @@
    end
   end
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 8
@@ -371,7 +371,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8,u32>#__set (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $1
   get_local $0
   i32.load offset=8
@@ -379,16 +379,17 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 54
+   i32.const 50
    i32.const 63
    call $~lib/env/abort
    unreachable
   end
   get_local $1
   get_local $0
-  i32.load
-  get_local $0
   i32.load offset=4
+  get_local $1
+  get_local $0
+  i32.load
   i32.add
   i32.add
   get_local $2
@@ -1092,40 +1093,40 @@
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#constructor
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_global $std/dataview/array
   get_global $std/dataview/array
   i32.const 0
   i32.const 246
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_global $std/dataview/array
   i32.const 1
   i32.const 224
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_global $std/dataview/array
   i32.const 2
   i32.const 88
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_global $std/dataview/array
   i32.const 3
   i32.const 159
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_global $std/dataview/array
   i32.const 4
   i32.const 130
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_global $std/dataview/array
   i32.const 5
   i32.const 101
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_global $std/dataview/array
   i32.const 6
   i32.const 67
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_global $std/dataview/array
   i32.const 7
   i32.const 95
-  call $~lib/internal/typedarray/TypedArray<u8,u32>#__set
+  call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_global $std/dataview/array
   i32.load
   get_global $std/dataview/array

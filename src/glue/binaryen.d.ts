@@ -50,8 +50,14 @@ declare function _BinaryenAtomicCmpxchgId(): BinaryenExpressionId;
 declare function _BinaryenAtomicRMWId(): BinaryenExpressionId;
 declare function _BinaryenAtomicWaitId(): BinaryenExpressionId;
 declare function _BinaryenAtomicWakeId(): BinaryenExpressionId;
+declare function _BinaryenSIMDExtractId(): BinaryenExpressionId;
+declare function _BinaryenSIMDReplaceId(): BinaryenExpressionId;
+declare function _BinaryenSIMDShuffleId(): BinaryenExpressionId;
+declare function _BinaryenSIMDBitselectId(): BinaryenExpressionId;
+declare function _BinaryenSIMDShiftId(): BinaryenExpressionId;
 
 declare type BinaryenModuleRef = usize;
+declare type v128ptr = usize; // TODO: LLVM C-abi for const uint8_t[16]?
 
 declare function _BinaryenModuleCreate(): BinaryenModuleRef;
 declare function _BinaryenModuleDispose(module: BinaryenModuleRef): void;
@@ -62,6 +68,7 @@ declare function _BinaryenLiteralInt32(out: usize, x: i32): void;
 declare function _BinaryenLiteralInt64(out: usize, x: i32, y: i32): void;
 declare function _BinaryenLiteralFloat32(out: usize, x: f32): void;
 declare function _BinaryenLiteralFloat64(out: usize, x: f64): void;
+declare function _BinaryenLiteralVec128(out: usize, x: v128ptr): void;
 declare function _BinaryenLiteralFloat32Bits(out: usize, x: i32): void;
 declare function _BinaryenLiteralFloat64Bits(out: usize, x: i32, y: i32): void;
 
@@ -210,6 +217,144 @@ declare function _BinaryenAtomicRMWOr(): BinaryenAtomicRMWOp;
 declare function _BinaryenAtomicRMWXor(): BinaryenAtomicRMWOp;
 declare function _BinaryenAtomicRMWXchg(): BinaryenAtomicRMWOp;
 
+declare type BinaryenSIMDOp = BinaryenOp;
+
+declare function _BinaryenSplatVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenExtractLaneSVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenExtractLaneUVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenReplaceLaneVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenSplatVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenExtractLaneSVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenExtractLaneUVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenReplaceLaneVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenSplatVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenExtractLaneVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenReplaceLaneVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenSplatVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenExtractLaneVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenReplaceLaneVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenSplatVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenExtractLaneVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenReplaceLaneVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenSplatVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenExtractLaneVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenReplaceLaneVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenEqVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenNeVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenLtSVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenLtUVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenGtSVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenGtUVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenLeSVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenLeUVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenGeSVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenGeUVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenEqVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenNeVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenLtSVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenLtUVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenGtSVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenGtUVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenLeSVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenLeUVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenGeSVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenGeUVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenEqVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenNeVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenLtSVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenLtUVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenGtSVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenGtUVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenLeSVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenLeUVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenGeSVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenGeUVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenEqVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenNeVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenLtVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenGtVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenLeVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenGeVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenEqVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenNeVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenLtVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenGtVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenLeVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenGeVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenNotVec128(): BinaryenSIMDOp;
+declare function _BinaryenAndVec128(): BinaryenSIMDOp;
+declare function _BinaryenOrVec128(): BinaryenSIMDOp;
+declare function _BinaryenXorVec128(): BinaryenSIMDOp;
+declare function _BinaryenNegVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenAnyTrueVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenAllTrueVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenShlVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenShrSVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenShrUVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenAddVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenAddSatSVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenAddSatUVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenSubVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenSubSatSVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenSubSatUVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenMulVecI8x16(): BinaryenSIMDOp;
+declare function _BinaryenNegVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenAnyTrueVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenAllTrueVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenShlVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenShrSVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenShrUVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenAddVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenAddSatSVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenAddSatUVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenSubVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenSubSatSVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenSubSatUVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenMulVecI16x8(): BinaryenSIMDOp;
+declare function _BinaryenNegVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenAnyTrueVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenAllTrueVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenShlVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenShrSVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenShrUVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenAddVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenSubVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenMulVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenNegVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenAnyTrueVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenAllTrueVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenShlVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenShrSVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenShrUVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenAddVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenSubVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenAbsVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenNegVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenSqrtVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenAddVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenSubVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenMulVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenDivVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenMinVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenMaxVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenAbsVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenNegVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenSqrtVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenAddVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenSubVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenMulVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenDivVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenMinVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenMaxVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenTruncSatSVecF32x4ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenTruncSatUVecF32x4ToVecI32x4(): BinaryenSIMDOp;
+declare function _BinaryenTruncSatSVecF64x2ToVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenTruncSatUVecF64x2ToVecI64x2(): BinaryenSIMDOp;
+declare function _BinaryenConvertSVecI32x4ToVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenConvertUVecI32x4ToVecF32x4(): BinaryenSIMDOp;
+declare function _BinaryenConvertSVecI64x2ToVecF64x2(): BinaryenSIMDOp;
+declare function _BinaryenConvertUVecI64x2ToVecF64x2(): BinaryenSIMDOp;
+
 declare type BinaryenExpressionRef = usize;
 
 declare function _BinaryenBlock(module: BinaryenModuleRef, name: usize, children: usize, numChildren: BinaryenIndex, type: BinaryenType): BinaryenExpressionRef;
@@ -235,12 +380,19 @@ declare function _BinaryenReturn(module: BinaryenModuleRef, value: BinaryenExpre
 declare function _BinaryenHost(module: BinaryenModuleRef, op: BinaryenOp, name: usize | 0, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
 declare function _BinaryenNop(module: BinaryenModuleRef): BinaryenExpressionRef;
 declare function _BinaryenUnreachable(module: BinaryenModuleRef): BinaryenExpressionRef;
+
 declare function _BinaryenAtomicLoad(module: BinaryenModuleRef, bytes: BinaryenIndex, offset: BinaryenIndex, type: BinaryenType, ptr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenAtomicStore(module: BinaryenModuleRef, bytes: BinaryenIndex, offset: BinaryenIndex, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicRMW(module: BinaryenModuleRef, op: BinaryenAtomicRMWOp, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, value: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicCmpxchg(module: BinaryenModuleRef, bytes: i32, offset: i32, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, replacement: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicWait(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, expected: BinaryenExpressionRef, timeout: BinaryenExpressionRef, expectedType: BinaryenType): BinaryenExpressionRef;
 declare function _BinaryenAtomicWake(module: BinaryenModuleRef, ptr: BinaryenExpressionRef, wakeCount: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenSIMDExtract(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, idx: u8): BinaryenExpressionRef;
+declare function _BinaryenSIMDReplace(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, idx: u8, value: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDShuffle(module: BinaryenModuleRef, left: BinaryenExpressionRef, right: BinaryenExpressionRef, mask: v128ptr): BinaryenExpressionRef;
+declare function _BinaryenSIMDBitselect(module: BinaryenModuleRef, left: BinaryenExpressionRef, right: BinaryenExpressionRef, cond: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDShift(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, shift: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): BinaryenExpressionId;
 declare function _BinaryenExpressionGetType(expr: BinaryenExpressionRef): BinaryenType;
@@ -345,6 +497,27 @@ declare function _BinaryenAtomicWaitGetExpectedType(expr: BinaryenExpressionRef)
 
 declare function _BinaryenAtomicWakeGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenAtomicWakeGetWakeCount(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenSIMDExtractGetOp(expr: BinaryenExpressionRef): BinaryenSIMDOp;
+declare function _BinaryenSIMDExtractGetVec(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDExtractGetIdx(expr: BinaryenExpressionRef): u8;
+
+declare function _BinaryenSIMDReplaceGetOp(expr: BinaryenExpressionRef): BinaryenSIMDOp;
+declare function _BinaryenSIMDReplaceGetVec(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDReplaceGetIdx(expr: BinaryenExpressionRef): u8;
+declare function _BinaryenSIMDReplaceGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenSIMDShuffleGetLeft(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDShuffleGetRight(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDShuffleGetMask(expr: BinaryenExpressionRef, out: v128ptr): void;
+
+declare function _BinaryenSIMDBitselectGetLeft(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDBitselectGetRight(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDBitselectGetCond(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenSIMDShiftGetOp(expr: BinaryenExpressionRef): BinaryenSIMDOp;
+declare function _BinaryenSIMDShiftGetVec(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenSIMDShiftGetShift(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare type BinaryenFunctionTypeRef = usize;
 

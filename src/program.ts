@@ -966,6 +966,7 @@ export class Program extends DiagnosticEmitter {
           }
           break;
         }
+        case NodeKind.INDEXSIGNATUREDECLARATION: break; // ignored for now
         default: {
           assert(false); // should have been reported while parsing
           return;
@@ -2412,6 +2413,21 @@ export class FunctionPrototype extends Element {
     this.flags = declaration.flags;
     this.classPrototype = classPrototype;
     this.decoratorFlags = decoratorFlags;
+  }
+
+  /** Applies class type arguments to the context of a partially resolved instance method. */
+  applyClassTypeArguments(contextualTypeArguments: Map<string,Type>): void {
+    var classTypeArguments = assert(this.classTypeArguments); // set only if partial
+    var classDeclaration = assert(this.classPrototype).declaration;
+    var classTypeParameters = classDeclaration.typeParameters;
+    var numClassTypeParameters = classTypeParameters.length;
+    assert(numClassTypeParameters == classTypeArguments.length);
+    for (let i = 0; i < numClassTypeParameters; ++i) {
+      contextualTypeArguments.set(
+        classTypeParameters[i].name.text,
+        classTypeArguments[i]
+      );
+    }
   }
 
   toString(): string { return this.simpleName; }

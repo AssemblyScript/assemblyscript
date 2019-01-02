@@ -98,41 +98,11 @@
   get_local $3
   if
    get_local $0
-<<<<<<< HEAD
-   i32.reinterpret/f32
-   tee_local $1
-   i32.const 23
-   i32.shr_u
-   i32.const 255
-   i32.and
-   set_local $2
-   get_local $1
-   i32.const -2147483648
-   i32.and
-   set_local $4
-   get_local $2
-   i32.const 255
-   i32.eq
-   tee_local $3
-   i32.eqz
-   if
-    i32.const 0
-    set_local $3
-   end
-   get_local $3
-   if
-    get_local $0
-    get_local $0
-    f32.div
-    return
-   end
-=======
    get_local $0
    f32.div
    return
   end
   block $folding-inner0
->>>>>>> threading
    get_local $1
    i32.const 1
    i32.shl

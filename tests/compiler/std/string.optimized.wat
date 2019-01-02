@@ -1743,27 +1743,10 @@
      block $case3|0
       block $case2|0
        block $case1|0
-<<<<<<< HEAD
-        get_local $2
-        i32.load
-        tee_local $6
-        set_local $5
-        get_local $6
-        i32.eqz
-        br_if $break|0
-        block $tablify|0
-         get_local $5
-         i32.const 1
-         i32.sub
-         br_table $case1|0 $case2|0 $case3|0 $case4|0 $tablify|0
-        end
-        br $case5|0
-=======
         get_local $5
         i32.const 1
         i32.sub
         br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0
->>>>>>> threading
        end
        get_local $2
        i32.load16_u offset=4
@@ -3073,7 +3056,7 @@
   if
    i32.const 0
    i32.const 1008
-   i32.const 23
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -3356,7 +3339,6 @@
  (func $~lib/internal/arraybuffer/reallocateUnsafe (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   get_local $1
   get_local $0
   i32.load
@@ -3369,7 +3351,7 @@
    if
     i32.const 0
     i32.const 1008
-    i32.const 37
+    i32.const 40
     i32.const 4
     call $~lib/env/abort
     unreachable
@@ -3390,37 +3372,29 @@
     get_local $0
     get_local $1
     i32.store
-    get_local $0
-    i32.const 8
-    i32.add
-    get_local $2
-    i32.add
-    get_local $1
-    get_local $2
-    i32.sub
-    call $~lib/internal/memory/memset
    else    
     get_local $1
     call $~lib/internal/arraybuffer/allocateUnsafe
     tee_local $3
     i32.const 8
     i32.add
-    tee_local $4
     get_local $0
     i32.const 8
     i32.add
     get_local $2
     call $~lib/internal/memory/memmove
-    get_local $2
-    get_local $4
-    i32.add
-    get_local $1
-    get_local $2
-    i32.sub
-    call $~lib/internal/memory/memset
     get_local $3
-    return
+    set_local $0
    end
+   get_local $0
+   i32.const 8
+   i32.add
+   get_local $2
+   i32.add
+   get_local $1
+   get_local $2
+   i32.sub
+   call $~lib/internal/memory/memset
   else   
    get_local $1
    get_local $2
@@ -3432,7 +3406,7 @@
     if
      i32.const 0
      i32.const 1008
-     i32.const 61
+     i32.const 62
      i32.const 4
      call $~lib/env/abort
      unreachable
@@ -4520,6 +4494,7 @@
     get_local $9
     i32.add
     set_global $~lib/internal/number/_K
+    get_local $12
     i32.const 0
     get_local $9
     i32.sub
@@ -4538,9 +4513,9 @@
     i32.shl
     get_local $0
     i32.add
-    tee_local $4
+    tee_local $7
     i32.load16_u offset=4
-    set_local $7
+    set_local $4
     loop $continue|4
      get_local $1
      get_local $8
@@ -4578,10 +4553,10 @@
      end
      get_local $2
      if
-      get_local $7
+      get_local $4
       i32.const 1
       i32.sub
-      set_local $7
+      set_local $4
       get_local $1
       get_local $10
       i64.add
@@ -4589,8 +4564,8 @@
       br $continue|4
      end
     end
-    get_local $4
     get_local $7
+    get_local $4
     i32.store16 offset=4
     get_local $6
    else    

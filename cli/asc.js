@@ -96,9 +96,7 @@ exports.compileString = async (sources, options) => {
   if (typeof sources === "string") sources = { "input.ts": sources };
   const output = Object.create({
     stdout: createMemoryStream(),
-    stderr: createMemoryStream(),
-    binary: null,
-    text: null
+    stderr: createMemoryStream()
   });
   debugger;
   var argv = [];
@@ -278,7 +276,7 @@ exports.main = async function main(argv, options, callback) {
       }
       for (let j = 0, l = libFiles.length; j < l; ++j) {
         let libPath = libFiles[j];
-        let libText = await readFile(path.join(libDir, libPath));
+        let libText = readFile(libPath, libDir);
         if (libText === null) return callback(Error("Library file '" + libPath + "' not found."));
         stats.parseCount++;
         stats.parseTime += measure(() => {
@@ -293,35 +291,10 @@ exports.main = async function main(argv, options, callback) {
     }
   }
 
-  // Include entry files
-  for (let i = 0, k = argv.length; i < k; ++i) {
-    const filename = argv[i];
-    if (filename == "undefined") continue;
-
-    let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
-
-    // Try entryPath.ts, then entryPath/index.ts
-    let sourceText = await readFile(path.join(baseDir, sourcePath) + ".ts");
-    if (sourceText === null) {
-      sourceText = await readFile(path.join(baseDir, sourcePath, "index.ts"));
-      if (sourceText === null) {
-        return callback(Error("Entry file '" + sourcePath + ".ts' not found."));
-      } else {
-        sourcePath += "/index.ts";
-      }
-    } else {
-      sourcePath += ".ts";
-    }
-    debugger;
-
-    stats.parseCount++;
-    stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
-    });
-
-    // Process backlog
+  // Parses the backlog of imported files after including entry files
+  function parseBacklog() {
+    var sourcePath, sourceText;
     while ((sourcePath = parser.nextFile()) != null) {
-      let found = false;
 
       // Load library file if explicitly requested
       if (sourcePath.startsWith(exports.libraryPrefix)) {
@@ -335,13 +308,12 @@ exports.main = async function main(argv, options, callback) {
           sourcePath = exports.libraryPrefix + indexName + ".ts";
         } else {
           for (let i = 0, k = customLibDirs.length; i < k; ++i) {
-            const dir = customLibDirs[i];
-            sourceText = await readFile(path.join(dir, plainName + ".ts"));
+            sourceText = readFile(plainName + ".ts", customLibDirs[i]);
             if (sourceText !== null) {
               sourcePath = exports.libraryPrefix + plainName + ".ts";
               break;
             } else {
-              sourceText = await readFile(path.join(dir, indexName + ".ts"));
+              sourceText = readFile(indexName + ".ts", customLibDirs[i]);
               if (sourceText !== null) {
                 sourcePath = exports.libraryPrefix + indexName + ".ts";
                 break;
@@ -354,11 +326,11 @@ exports.main = async function main(argv, options, callback) {
       } else {
         const plainName = sourcePath;
         const indexName = sourcePath + "/index";
-        sourceText = await readFile(path.join(baseDir, plainName + ".ts"));
+        sourceText = readFile(plainName + ".ts", baseDir);
         if (sourceText !== null) {
           sourcePath = plainName + ".ts";
         } else {
-          sourceText = await readFile(path.join(baseDir, indexName + ".ts"));
+          sourceText = readFile(indexName + ".ts", baseDir);
           if (sourceText !== null) {
             sourcePath = indexName + ".ts";
           } else if (!plainName.startsWith(".")) {
@@ -371,12 +343,12 @@ exports.main = async function main(argv, options, callback) {
             } else {
               for (let i = 0, k = customLibDirs.length; i < k; ++i) {
                 const dir = customLibDirs[i];
-                sourceText = await readFile(path.join(dir, plainName + ".ts"));
+                sourceText = readFile(plainName + ".ts", customLibDirs[i]);
                 if (sourceText !== null) {
                   sourcePath = exports.libraryPrefix + plainName + ".ts";
                   break;
                 } else {
-                  sourceText = await readFile(path.join(dir, indexName + ".ts"));
+                  sourceText = readFile(indexName + ".ts", customLibDirs[i]);
                   if (sourceText !== null) {
                     sourcePath = exports.libraryPrefix + indexName + ".ts";
                     break;
@@ -400,7 +372,38 @@ exports.main = async function main(argv, options, callback) {
     }
   }
 
+  // Include entry files
+  for (let i = 0, k = argv.length; i < k; ++i) {
+    const filename = argv[i];
+
+    let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
+
+    // Try entryPath.ts, then entryPath/index.ts
+    let sourceText = readFile(sourcePath + ".ts", baseDir);
+    if (sourceText === null) {
+      sourceText = readFile(sourcePath + "/index.ts", baseDir);
+      if (sourceText === null) {
+        return callback(Error("Entry file '" + sourcePath + ".ts' not found."));
+      } else {
+        sourcePath += "/index.ts";
+      }
+    } else {
+      sourcePath += ".ts";
+    }
+
+    stats.parseCount++;
+    stats.parseTime += measure(() => {
+      parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
+    });
+    let code = parseBacklog();
+    if (code) return code;
+  }
+
   applyTransform("afterParse", parser);
+  {
+    let code = parseBacklog();
+    if (code) return code;
+  }
 
   // Finish parsing
   const program = assemblyscript.finishParsing(parser);
@@ -578,7 +581,7 @@ exports.main = async function main(argv, options, callback) {
       });
 
       if (args.binaryFile.length) {
-        await writeFile(path.join(baseDir, args.binaryFile), wasm.output);
+        writeFile(args.binaryFile, wasm.output, baseDir);
       } else {
         writeStdout(wasm.output);
         hasStdout = true;
@@ -598,15 +601,12 @@ exports.main = async function main(argv, options, callback) {
                 text = exports.libraryFiles[stdName];
               } else {
                 for (let i = 0, k = customLibDirs.length; i < k; ++i) {
-                  text = await readFile(path.join(
-                    customLibDirs[i],
-                    name.substring(exports.libraryPrefix.length))
-                  );
+                  text = readFile(name.substring(exports.libraryPrefix.length), customLibDirs[i]);
                   if (text !== null) break;
                 }
               }
             } else {
-              text = await readFile(path.join(baseDir, name));
+              text = readFile(name, baseDir);
             }
             if (text === null) {
               return callback(Error("Source file '" + name + "' not found."));
@@ -614,11 +614,10 @@ exports.main = async function main(argv, options, callback) {
             if (!sourceMap.sourceContents) sourceMap.sourceContents = [];
             sourceMap.sourceContents[index] = text;
           });
-          await writeFile(path.join(
-            baseDir,
+          writeFile(path.join(
             path.dirname(args.binaryFile),
             path.basename(sourceMapURL)
-          ), JSON.stringify(sourceMap));
+          ).replace(/^\.\//, ""), JSON.stringify(sourceMap), baseDir);
         } else {
           stderr.write("Skipped source map (stdout already occupied)" + EOL);
         }
@@ -633,7 +632,7 @@ exports.main = async function main(argv, options, callback) {
         stats.emitTime += measure(() => {
           asm = module.toAsmjs();
         });
-        await writeFile(path.join(baseDir, args.asmjsFile), asm);
+        writeFile(args.asmjsFile, asm, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -653,7 +652,7 @@ exports.main = async function main(argv, options, callback) {
         stats.emitTime += measure(() => {
           idl = assemblyscript.buildIDL(program);
         });
-        await writeFile(path.join(baseDir, args.idlFile), idl);
+        writeFile(args.idlFile, idl, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -673,7 +672,7 @@ exports.main = async function main(argv, options, callback) {
         stats.emitTime += measure(() => {
           tsd = assemblyscript.buildTSD(program);
         });
-        await writeFile(path.join(baseDir, args.tsdFile), tsd);
+        writeFile(args.tsdFile, tsd, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -693,7 +692,7 @@ exports.main = async function main(argv, options, callback) {
         stats.emitTime += measure(() => {
           wat = module.toText();
         });
-        await writeFile(path.join(baseDir, args.textFile), wat);
+        writeFile(args.textFile, wat, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -710,12 +709,12 @@ exports.main = async function main(argv, options, callback) {
   }
   return callback(null);
 
-  function readFileNode(filename) {
+  function readFileNode(filename, baseDir) {
     try {
       let text;
       stats.readCount++;
       stats.readTime += measure(() => {
-        text = fs.readFileSync(filename, { encoding: "utf8" });
+        text = fs.readFileSync(path.join(baseDir, filename), { encoding: "utf8" });
       });
       return text;
     } catch (e) {
@@ -723,15 +722,15 @@ exports.main = async function main(argv, options, callback) {
     }
   }
 
-  function writeFileNode(filename, contents) {
+  function writeFileNode(filename, contents, baseDir) {
     try {
       stats.writeCount++;
       stats.writeTime += measure(() => {
-        mkdirp(path.dirname(filename));
+        mkdirp(path.join(baseDir, path.dirname(filename)));
         if (typeof contents === "string") {
-          fs.writeFileSync(filename, contents, { encoding: "utf8" } );
+          fs.writeFileSync(path.join(baseDir, filename), contents, { encoding: "utf8" } );
         } else {
-          fs.writeFileSync(filename, contents);
+          fs.writeFileSync(path.join(baseDir, filename), contents);
         }
       });
       return true;
@@ -740,11 +739,11 @@ exports.main = async function main(argv, options, callback) {
     }
   }
 
-  function listFilesNode(dirname) {
+  function listFilesNode(dirname, baseDir) {
     var files;
     try {
       stats.readTime += measure(() => {
-        files = fs.readdirSync(dirname).filter(file => /^(?!.*\.d\.ts$).*\.ts$/.test(file));
+        files = fs.readdirSync(path.join(baseDir, dirname)).filter(file => /^(?!.*\.d\.ts$).*\.ts$/.test(file));
       });
       return files;
     } catch (e) {

@@ -511,6 +511,8 @@ declare namespace f64 {
   /** Converts A string to an integer. */
   export function parseInt(string: string, radix?: i32): f64;
 }
+/** Macro type evaluating to the underlying native WebAssembly type. */
+declare type NATIVE<T> = T;
 
 // User-defined diagnostic macros
 
@@ -666,6 +668,16 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   readonly length: i32;
   /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
   subarray(begin?: i32, end?: i32): this;
+  /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
+  reduce<W>(
+    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
+    initialValue: W,
+  ): W;
+  /**  The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. This method has the same algorithm as Array.prototype.reduceRight(). */
+  reduceRight<W>(
+    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
+    initialValue: W,
+  ): W;
 }
 
 /** An array of twos-complement 8-bit signed integers. */

@@ -149,7 +149,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 23
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -587,14 +587,14 @@
  (func $~lib/map/Map<i8,i32>#has (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i8>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<i8>|inlined.0 (result i32)
    get_local $1
    i32.const 24
    i32.shl
    i32.const 24
    i32.shr_s
    call $~lib/internal/hash/hash8
-   br $~lib/internal/hash/hash<i8>|inlined.0
+   br $~lib/internal/hash/HASH<i8>|inlined.0
   end
   call $~lib/map/Map<i8,i32>#find
   i32.const 0
@@ -681,13 +681,13 @@
        get_local $9
        i32.load offset=4
        i32.store offset=4
-       block $~lib/internal/hash/hash<i8>|inlined.2 (result i32)
+       block $~lib/internal/hash/HASH<i8>|inlined.2 (result i32)
         get_local $9
         i32.load8_s
         set_local $11
         get_local $11
         call $~lib/internal/hash/hash8
-        br $~lib/internal/hash/hash<i8>|inlined.2
+        br $~lib/internal/hash/HASH<i8>|inlined.2
        end
        get_local $1
        i32.and
@@ -745,14 +745,14 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/hash<i8>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<i8>|inlined.1 (result i32)
    get_local $1
    i32.const 24
    i32.shl
    i32.const 24
    i32.shr_s
    call $~lib/internal/hash/hash8
-   br $~lib/internal/hash/hash<i8>|inlined.1
+   br $~lib/internal/hash/HASH<i8>|inlined.1
   end
   set_local $3
   get_local $0
@@ -852,14 +852,14 @@
   (local $2 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i8>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<i8>|inlined.3 (result i32)
    get_local $1
    i32.const 24
    i32.shl
    i32.const 24
    i32.shr_s
    call $~lib/internal/hash/hash8
-   br $~lib/internal/hash/hash<i8>|inlined.3
+   br $~lib/internal/hash/HASH<i8>|inlined.3
   end
   call $~lib/map/Map<i8,i32>#find
   set_local $2
@@ -882,14 +882,14 @@
   (local $5 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i8>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<i8>|inlined.4 (result i32)
    get_local $1
    i32.const 24
    i32.shl
    i32.const 24
    i32.shr_s
    call $~lib/internal/hash/hash8
-   br $~lib/internal/hash/hash<i8>|inlined.4
+   br $~lib/internal/hash/HASH<i8>|inlined.4
   end
   call $~lib/map/Map<i8,i32>#find
   set_local $2
@@ -1454,12 +1454,12 @@
  (func $~lib/map/Map<u8,i32>#has (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u8>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<u8>|inlined.0 (result i32)
    get_local $1
    i32.const 255
    i32.and
    call $~lib/internal/hash/hash8
-   br $~lib/internal/hash/hash<u8>|inlined.0
+   br $~lib/internal/hash/HASH<u8>|inlined.0
   end
   call $~lib/map/Map<u8,i32>#find
   i32.const 0
@@ -1546,13 +1546,13 @@
        get_local $9
        i32.load offset=4
        i32.store offset=4
-       block $~lib/internal/hash/hash<u8>|inlined.2 (result i32)
+       block $~lib/internal/hash/HASH<u8>|inlined.2 (result i32)
         get_local $9
         i32.load8_u
         set_local $11
         get_local $11
         call $~lib/internal/hash/hash8
-        br $~lib/internal/hash/hash<u8>|inlined.2
+        br $~lib/internal/hash/HASH<u8>|inlined.2
        end
        get_local $1
        i32.and
@@ -1610,12 +1610,12 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/hash<u8>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<u8>|inlined.1 (result i32)
    get_local $1
    i32.const 255
    i32.and
    call $~lib/internal/hash/hash8
-   br $~lib/internal/hash/hash<u8>|inlined.1
+   br $~lib/internal/hash/HASH<u8>|inlined.1
   end
   set_local $3
   get_local $0
@@ -1715,12 +1715,12 @@
   (local $2 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u8>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<u8>|inlined.3 (result i32)
    get_local $1
    i32.const 255
    i32.and
    call $~lib/internal/hash/hash8
-   br $~lib/internal/hash/hash<u8>|inlined.3
+   br $~lib/internal/hash/HASH<u8>|inlined.3
   end
   call $~lib/map/Map<u8,i32>#find
   set_local $2
@@ -1743,12 +1743,12 @@
   (local $5 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u8>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<u8>|inlined.4 (result i32)
    get_local $1
    i32.const 255
    i32.and
    call $~lib/internal/hash/hash8
-   br $~lib/internal/hash/hash<u8>|inlined.4
+   br $~lib/internal/hash/HASH<u8>|inlined.4
   end
   call $~lib/map/Map<u8,i32>#find
   set_local $2
@@ -2323,14 +2323,14 @@
  (func $~lib/map/Map<i16,i32>#has (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i16>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<i16>|inlined.0 (result i32)
    get_local $1
    i32.const 16
    i32.shl
    i32.const 16
    i32.shr_s
    call $~lib/internal/hash/hash16
-   br $~lib/internal/hash/hash<i16>|inlined.0
+   br $~lib/internal/hash/HASH<i16>|inlined.0
   end
   call $~lib/map/Map<i16,i32>#find
   i32.const 0
@@ -2417,13 +2417,13 @@
        get_local $9
        i32.load offset=4
        i32.store offset=4
-       block $~lib/internal/hash/hash<i16>|inlined.2 (result i32)
+       block $~lib/internal/hash/HASH<i16>|inlined.2 (result i32)
         get_local $9
         i32.load16_s
         set_local $11
         get_local $11
         call $~lib/internal/hash/hash16
-        br $~lib/internal/hash/hash<i16>|inlined.2
+        br $~lib/internal/hash/HASH<i16>|inlined.2
        end
        get_local $1
        i32.and
@@ -2481,14 +2481,14 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/hash<i16>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<i16>|inlined.1 (result i32)
    get_local $1
    i32.const 16
    i32.shl
    i32.const 16
    i32.shr_s
    call $~lib/internal/hash/hash16
-   br $~lib/internal/hash/hash<i16>|inlined.1
+   br $~lib/internal/hash/HASH<i16>|inlined.1
   end
   set_local $3
   get_local $0
@@ -2588,14 +2588,14 @@
   (local $2 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i16>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<i16>|inlined.3 (result i32)
    get_local $1
    i32.const 16
    i32.shl
    i32.const 16
    i32.shr_s
    call $~lib/internal/hash/hash16
-   br $~lib/internal/hash/hash<i16>|inlined.3
+   br $~lib/internal/hash/HASH<i16>|inlined.3
   end
   call $~lib/map/Map<i16,i32>#find
   set_local $2
@@ -2618,14 +2618,14 @@
   (local $5 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i16>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<i16>|inlined.4 (result i32)
    get_local $1
    i32.const 16
    i32.shl
    i32.const 16
    i32.shr_s
    call $~lib/internal/hash/hash16
-   br $~lib/internal/hash/hash<i16>|inlined.4
+   br $~lib/internal/hash/HASH<i16>|inlined.4
   end
   call $~lib/map/Map<i16,i32>#find
   set_local $2
@@ -3190,12 +3190,12 @@
  (func $~lib/map/Map<u16,i32>#has (; 42 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u16>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<u16>|inlined.0 (result i32)
    get_local $1
    i32.const 65535
    i32.and
    call $~lib/internal/hash/hash16
-   br $~lib/internal/hash/hash<u16>|inlined.0
+   br $~lib/internal/hash/HASH<u16>|inlined.0
   end
   call $~lib/map/Map<u16,i32>#find
   i32.const 0
@@ -3282,13 +3282,13 @@
        get_local $9
        i32.load offset=4
        i32.store offset=4
-       block $~lib/internal/hash/hash<u16>|inlined.2 (result i32)
+       block $~lib/internal/hash/HASH<u16>|inlined.2 (result i32)
         get_local $9
         i32.load16_u
         set_local $11
         get_local $11
         call $~lib/internal/hash/hash16
-        br $~lib/internal/hash/hash<u16>|inlined.2
+        br $~lib/internal/hash/HASH<u16>|inlined.2
        end
        get_local $1
        i32.and
@@ -3346,12 +3346,12 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/hash<u16>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<u16>|inlined.1 (result i32)
    get_local $1
    i32.const 65535
    i32.and
    call $~lib/internal/hash/hash16
-   br $~lib/internal/hash/hash<u16>|inlined.1
+   br $~lib/internal/hash/HASH<u16>|inlined.1
   end
   set_local $3
   get_local $0
@@ -3451,12 +3451,12 @@
   (local $2 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u16>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<u16>|inlined.3 (result i32)
    get_local $1
    i32.const 65535
    i32.and
    call $~lib/internal/hash/hash16
-   br $~lib/internal/hash/hash<u16>|inlined.3
+   br $~lib/internal/hash/HASH<u16>|inlined.3
   end
   call $~lib/map/Map<u16,i32>#find
   set_local $2
@@ -3479,12 +3479,12 @@
   (local $5 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u16>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<u16>|inlined.4 (result i32)
    get_local $1
    i32.const 65535
    i32.and
    call $~lib/internal/hash/hash16
-   br $~lib/internal/hash/hash<u16>|inlined.4
+   br $~lib/internal/hash/HASH<u16>|inlined.4
   end
   call $~lib/map/Map<u16,i32>#find
   set_local $2
@@ -4075,10 +4075,10 @@
  (func $~lib/map/Map<i32,i32>#has (; 53 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i32>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<i32>|inlined.0 (result i32)
    get_local $1
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<i32>|inlined.0
+   br $~lib/internal/hash/HASH<i32>|inlined.0
   end
   call $~lib/map/Map<i32,i32>#find
   i32.const 0
@@ -4165,13 +4165,13 @@
        get_local $9
        i32.load offset=4
        i32.store offset=4
-       block $~lib/internal/hash/hash<i32>|inlined.2 (result i32)
+       block $~lib/internal/hash/HASH<i32>|inlined.2 (result i32)
         get_local $9
         i32.load
         set_local $11
         get_local $11
         call $~lib/internal/hash/hash32
-        br $~lib/internal/hash/hash<i32>|inlined.2
+        br $~lib/internal/hash/HASH<i32>|inlined.2
        end
        get_local $1
        i32.and
@@ -4229,10 +4229,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/hash<i32>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<i32>|inlined.1 (result i32)
    get_local $1
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<i32>|inlined.1
+   br $~lib/internal/hash/HASH<i32>|inlined.1
   end
   set_local $3
   get_local $0
@@ -4332,10 +4332,10 @@
   (local $2 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i32>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<i32>|inlined.3 (result i32)
    get_local $1
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<i32>|inlined.3
+   br $~lib/internal/hash/HASH<i32>|inlined.3
   end
   call $~lib/map/Map<i32,i32>#find
   set_local $2
@@ -4358,10 +4358,10 @@
   (local $5 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i32>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<i32>|inlined.4 (result i32)
    get_local $1
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<i32>|inlined.4
+   br $~lib/internal/hash/HASH<i32>|inlined.4
   end
   call $~lib/map/Map<i32,i32>#find
   set_local $2
@@ -4896,10 +4896,10 @@
  (func $~lib/map/Map<u32,i32>#has (; 63 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u32>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<u32>|inlined.0 (result i32)
    get_local $1
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<u32>|inlined.0
+   br $~lib/internal/hash/HASH<u32>|inlined.0
   end
   call $~lib/map/Map<u32,i32>#find
   i32.const 0
@@ -4986,13 +4986,13 @@
        get_local $9
        i32.load offset=4
        i32.store offset=4
-       block $~lib/internal/hash/hash<u32>|inlined.2 (result i32)
+       block $~lib/internal/hash/HASH<u32>|inlined.2 (result i32)
         get_local $9
         i32.load
         set_local $11
         get_local $11
         call $~lib/internal/hash/hash32
-        br $~lib/internal/hash/hash<u32>|inlined.2
+        br $~lib/internal/hash/HASH<u32>|inlined.2
        end
        get_local $1
        i32.and
@@ -5050,10 +5050,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/hash<u32>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<u32>|inlined.1 (result i32)
    get_local $1
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<u32>|inlined.1
+   br $~lib/internal/hash/HASH<u32>|inlined.1
   end
   set_local $3
   get_local $0
@@ -5153,10 +5153,10 @@
   (local $2 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u32>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<u32>|inlined.3 (result i32)
    get_local $1
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<u32>|inlined.3
+   br $~lib/internal/hash/HASH<u32>|inlined.3
   end
   call $~lib/map/Map<u32,i32>#find
   set_local $2
@@ -5179,10 +5179,10 @@
   (local $5 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u32>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<u32>|inlined.4 (result i32)
    get_local $1
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<u32>|inlined.4
+   br $~lib/internal/hash/HASH<u32>|inlined.4
   end
   call $~lib/map/Map<u32,i32>#find
   set_local $2
@@ -5805,10 +5805,10 @@
  (func $~lib/map/Map<i64,i32>#has (; 74 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i64>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<i64>|inlined.0 (result i32)
    get_local $1
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<i64>|inlined.0
+   br $~lib/internal/hash/HASH<i64>|inlined.0
   end
   call $~lib/map/Map<i64,i32>#find
   i32.const 0
@@ -5896,13 +5896,13 @@
        get_local $9
        i32.load offset=8
        i32.store offset=8
-       block $~lib/internal/hash/hash<i64>|inlined.2 (result i32)
+       block $~lib/internal/hash/HASH<i64>|inlined.2 (result i32)
         get_local $9
         i64.load
         set_local $11
         get_local $11
         call $~lib/internal/hash/hash64
-        br $~lib/internal/hash/hash<i64>|inlined.2
+        br $~lib/internal/hash/HASH<i64>|inlined.2
        end
        get_local $1
        i32.and
@@ -5960,10 +5960,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/hash<i64>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<i64>|inlined.1 (result i32)
    get_local $1
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<i64>|inlined.1
+   br $~lib/internal/hash/HASH<i64>|inlined.1
   end
   set_local $3
   get_local $0
@@ -6063,10 +6063,10 @@
   (local $2 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i64>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<i64>|inlined.3 (result i32)
    get_local $1
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<i64>|inlined.3
+   br $~lib/internal/hash/HASH<i64>|inlined.3
   end
   call $~lib/map/Map<i64,i32>#find
   set_local $2
@@ -6089,10 +6089,10 @@
   (local $5 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<i64>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<i64>|inlined.4 (result i32)
    get_local $1
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<i64>|inlined.4
+   br $~lib/internal/hash/HASH<i64>|inlined.4
   end
   call $~lib/map/Map<i64,i32>#find
   set_local $2
@@ -6634,10 +6634,10 @@
  (func $~lib/map/Map<u64,i32>#has (; 84 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u64>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<u64>|inlined.0 (result i32)
    get_local $1
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<u64>|inlined.0
+   br $~lib/internal/hash/HASH<u64>|inlined.0
   end
   call $~lib/map/Map<u64,i32>#find
   i32.const 0
@@ -6725,13 +6725,13 @@
        get_local $9
        i32.load offset=8
        i32.store offset=8
-       block $~lib/internal/hash/hash<u64>|inlined.2 (result i32)
+       block $~lib/internal/hash/HASH<u64>|inlined.2 (result i32)
         get_local $9
         i64.load
         set_local $11
         get_local $11
         call $~lib/internal/hash/hash64
-        br $~lib/internal/hash/hash<u64>|inlined.2
+        br $~lib/internal/hash/HASH<u64>|inlined.2
        end
        get_local $1
        i32.and
@@ -6789,10 +6789,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/hash<u64>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<u64>|inlined.1 (result i32)
    get_local $1
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<u64>|inlined.1
+   br $~lib/internal/hash/HASH<u64>|inlined.1
   end
   set_local $3
   get_local $0
@@ -6892,10 +6892,10 @@
   (local $2 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u64>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<u64>|inlined.3 (result i32)
    get_local $1
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<u64>|inlined.3
+   br $~lib/internal/hash/HASH<u64>|inlined.3
   end
   call $~lib/map/Map<u64,i32>#find
   set_local $2
@@ -6918,10 +6918,10 @@
   (local $5 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<u64>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<u64>|inlined.4 (result i32)
    get_local $1
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<u64>|inlined.4
+   br $~lib/internal/hash/HASH<u64>|inlined.4
   end
   call $~lib/map/Map<u64,i32>#find
   set_local $2
@@ -7463,11 +7463,11 @@
  (func $~lib/map/Map<f32,i32>#has (; 94 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<f32>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<f32>|inlined.0 (result i32)
    get_local $1
    i32.reinterpret/f32
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<f32>|inlined.0
+   br $~lib/internal/hash/HASH<f32>|inlined.0
   end
   call $~lib/map/Map<f32,i32>#find
   i32.const 0
@@ -7555,14 +7555,14 @@
        get_local $9
        i32.load offset=4
        i32.store offset=4
-       block $~lib/internal/hash/hash<f32>|inlined.2 (result i32)
+       block $~lib/internal/hash/HASH<f32>|inlined.2 (result i32)
         get_local $9
         f32.load
         set_local $11
         get_local $11
         i32.reinterpret/f32
         call $~lib/internal/hash/hash32
-        br $~lib/internal/hash/hash<f32>|inlined.2
+        br $~lib/internal/hash/HASH<f32>|inlined.2
        end
        get_local $1
        i32.and
@@ -7620,11 +7620,11 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/hash<f32>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<f32>|inlined.1 (result i32)
    get_local $1
    i32.reinterpret/f32
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<f32>|inlined.1
+   br $~lib/internal/hash/HASH<f32>|inlined.1
   end
   set_local $3
   get_local $0
@@ -7724,11 +7724,11 @@
   (local $2 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<f32>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<f32>|inlined.3 (result i32)
    get_local $1
    i32.reinterpret/f32
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<f32>|inlined.3
+   br $~lib/internal/hash/HASH<f32>|inlined.3
   end
   call $~lib/map/Map<f32,i32>#find
   set_local $2
@@ -7751,11 +7751,11 @@
   (local $5 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<f32>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<f32>|inlined.4 (result i32)
    get_local $1
    i32.reinterpret/f32
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/hash<f32>|inlined.4
+   br $~lib/internal/hash/HASH<f32>|inlined.4
   end
   call $~lib/map/Map<f32,i32>#find
   set_local $2
@@ -8297,11 +8297,11 @@
  (func $~lib/map/Map<f64,i32>#has (; 104 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<f64>|inlined.0 (result i32)
+  block $~lib/internal/hash/HASH<f64>|inlined.0 (result i32)
    get_local $1
    i64.reinterpret/f64
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<f64>|inlined.0
+   br $~lib/internal/hash/HASH<f64>|inlined.0
   end
   call $~lib/map/Map<f64,i32>#find
   i32.const 0
@@ -8389,14 +8389,14 @@
        get_local $9
        i32.load offset=8
        i32.store offset=8
-       block $~lib/internal/hash/hash<f64>|inlined.2 (result i32)
+       block $~lib/internal/hash/HASH<f64>|inlined.2 (result i32)
         get_local $9
         f64.load
         set_local $11
         get_local $11
         i64.reinterpret/f64
         call $~lib/internal/hash/hash64
-        br $~lib/internal/hash/hash<f64>|inlined.2
+        br $~lib/internal/hash/HASH<f64>|inlined.2
        end
        get_local $1
        i32.and
@@ -8454,11 +8454,11 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/hash<f64>|inlined.1 (result i32)
+  block $~lib/internal/hash/HASH<f64>|inlined.1 (result i32)
    get_local $1
    i64.reinterpret/f64
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<f64>|inlined.1
+   br $~lib/internal/hash/HASH<f64>|inlined.1
   end
   set_local $3
   get_local $0
@@ -8558,11 +8558,11 @@
   (local $2 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<f64>|inlined.3 (result i32)
+  block $~lib/internal/hash/HASH<f64>|inlined.3 (result i32)
    get_local $1
    i64.reinterpret/f64
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<f64>|inlined.3
+   br $~lib/internal/hash/HASH<f64>|inlined.3
   end
   call $~lib/map/Map<f64,i32>#find
   set_local $2
@@ -8585,11 +8585,11 @@
   (local $5 i32)
   get_local $0
   get_local $1
-  block $~lib/internal/hash/hash<f64>|inlined.4 (result i32)
+  block $~lib/internal/hash/HASH<f64>|inlined.4 (result i32)
    get_local $1
    i64.reinterpret/f64
    call $~lib/internal/hash/hash64
-   br $~lib/internal/hash/hash<f64>|inlined.4
+   br $~lib/internal/hash/HASH<f64>|inlined.4
   end
   call $~lib/map/Map<f64,i32>#find
   set_local $2

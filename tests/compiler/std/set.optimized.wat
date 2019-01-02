@@ -103,7 +103,7 @@
   if
    i32.const 0
    i32.const 56
-   i32.const 23
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -4448,7 +4448,7 @@
    unreachable
   end
  )
- (func $~lib/internal/hash/hash<f32> (; 47 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/internal/hash/HASH<f32> (; 47 ;) (type $fi) (param $0 f32) (result i32)
   get_local $0
   i32.reinterpret/f32
   call $~lib/internal/hash/hash32
@@ -4500,7 +4500,7 @@
   get_local $0
   get_local $1
   get_local $1
-  call $~lib/internal/hash/hash<f32>
+  call $~lib/internal/hash/HASH<f32>
   call $~lib/set/Set<f32>#find
   i32.const 0
   i32.ne
@@ -4616,7 +4616,7 @@
   get_local $0
   get_local $1
   get_local $1
-  call $~lib/internal/hash/hash<f32>
+  call $~lib/internal/hash/HASH<f32>
   tee_local $4
   call $~lib/set/Set<f32>#find
   i32.eqz
@@ -5006,7 +5006,7 @@
    unreachable
   end
  )
- (func $~lib/internal/hash/hash<f64> (; 54 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/hash/HASH<f64> (; 54 ;) (type $Fi) (param $0 f64) (result i32)
   get_local $0
   i64.reinterpret/f64
   call $~lib/internal/hash/hash64
@@ -5058,7 +5058,7 @@
   get_local $0
   get_local $1
   get_local $1
-  call $~lib/internal/hash/hash<f64>
+  call $~lib/internal/hash/HASH<f64>
   call $~lib/set/Set<f64>#find
   i32.const 0
   i32.ne
@@ -5174,7 +5174,7 @@
   get_local $0
   get_local $1
   get_local $1
-  call $~lib/internal/hash/hash<f64>
+  call $~lib/internal/hash/HASH<f64>
   tee_local $4
   call $~lib/set/Set<f64>#find
   i32.eqz
