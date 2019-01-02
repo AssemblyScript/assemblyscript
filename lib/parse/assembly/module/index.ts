@@ -56,10 +56,8 @@ export class Module {
 
   public getID(id: SectionId): SectionHeader[] {
     let res: SectionHeader[] = [];
-    log<i32>(42);
     let x: i32 = this.Headers.length;
     for (let i=0; i < x; i++){
-      // log<u32>(i);
       if (this.Headers[i].id == id){
         res.push(this.Headers[i]);
       }
@@ -197,9 +195,7 @@ class Section {
 class FuncType {
   public parameters: i32[];
   public returnVals: i32[];
-  constructor(public index: u32, public form: i32){
-    this.parameters = [];
-    this.returnVals = [];
+  constructor(public index: u32, public form: i8){
   }
 
 
@@ -207,12 +203,13 @@ class FuncType {
   toString(): string {
     let index = itoa<u32>(this.index);
     let form = typeName(this.form);
-    let parameters:string[] = [];
+    let parameters:string = "";
     for (let i = 0; i< this.parameters.length; i++){
-      parameters.push(typeName(this.parameters[i]));
+      parameters += typeName(this.parameters[i]);
+      parameters = i < this.parameters.length -1 ? parameters += ", ": parameters;
     }
-    let returnVal = this.returnVals.length == 1 ? typeName(this.returnVals[0]) : "";
-    return "index: " + index + ", " + "form: " + form + ", parameters: " + parameters.join(", ") + " returnVal: " + returnVal;
+    let returnVal = this.returnVals.length == 1 ? typeName(this.returnVals[0]) : "void";
+    return "index: " + index + ", " + "form: " + form + ", (" + parameters + ") => " + returnVal;
   }
 }
 
@@ -226,53 +223,28 @@ export class TypeSection {
 
   // constructor(public header: SectionHeader){}
   parse(buf: Buffer): TypeSection {
-    log_str("parsing TypeSection");
-    log<usize>(buf.off);
-    log_str(this.header.name);
     buf.off = this.header.payload_off;
-    log<usize>(buf.off);
     let count = buf.readVaruint(32);
-    log<usize>(count);
-    // let func: FuncType;
-    let parameters: i32[];
+    let func: FuncType[] = new Array<FuncType>(count);
     for (let index: u32 = 0; index < count; ++index) {
-      log<u32>(index);
-      let form = buf.readVarint(7) & 0x7f;
-      // func = new FuncType(index, form);
-      // opt.onType(
-      //   index,
-      //   form
-      // );
+      let form = buf.readVarint8(7) & 0x7f;
+      let fun = new FuncType(index, form);
+      func[index] = fun;
       let paramCount = buf.readVaruint(32);
-      log_str("param count.");
-      log<u32>(paramCount);
-      parameters = [];
-      log<u32>(parameters.length);
+      fun.parameters = new Array<i32>(paramCount);
       for (let paramIndex: u32 = 0; paramIndex < paramCount; ++paramIndex) {
-        let paramType = buf.readVarint(7) & 0x7f;
-        // opt.onTypeParam(
-        //   index,
-        //   paramIndex,
-        //   paramType
-        // );
-        parameters.push(paramType)
+        let paramType = buf.readVarint8(7) & 0x7f;
+        func[index].parameters[paramIndex]=paramType;
       }
-      log<i32>(parameters.length);
+
       let returnCount = buf.readVaruint(1); // MVP
+      func[index].returnVals = new Array<i32>(returnCount);
       for (let returnIndex: u32 = 0; returnIndex < returnCount; ++returnIndex) {
-        let returnType = buf.readVarint(7) & 0x7f;
-        // opt.onTypeReturn(
-        //   index,
-        //   returnIndex,
-        //   returnType
-        // );
-        // func.returnVals.push(returnType);
+        let returnType = buf.readVarint8(7) & 0x7f;
+        func[index].returnVals[returnIndex] = returnType;
       }
-      // log_str(func.toString());
-      // this.funcs.push(func);
+      log(func[index].toString());
     }
-    // buf.off = this.end;
-    log_str("Finished type section");
     return this;
   }
 

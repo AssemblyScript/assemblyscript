@@ -71,6 +71,10 @@ export class Buffer {
     return select<u32>(val | (~0 << shl), val, shl < size && (byt & 0x40) != 0);
   }
 
+  readVarint8(size: u32): i8 {
+    return changetype<i8>(this.readVarint(size));
+  }
+
   /** Reads a LEB128-encoded signed 64-bit integer from memory. */
   readVarint64(): i64 {
     var val: u64 = 0;

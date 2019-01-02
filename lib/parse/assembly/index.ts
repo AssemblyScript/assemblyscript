@@ -56,7 +56,10 @@ declare function debug():void;
 
 let type: TypeSection;
 
-export function getType(): string {
+export function getType(m: Module): string {
+  let headers:SectionHeader[] = m.getID(SectionId.Type);
+  let section = new TypeSection(headers[0]);
+  type = section.parse(m.buf);
   return type.toString();
 }
 
@@ -117,11 +120,5 @@ export function newParser(buf: Uint8Array): Parser {
 }
 export function parse(p: Parser): Module {
   p.parse();
-  log<i32>(p.module.Headers.length);
-  let headers:SectionHeader[] = p.module.getID(SectionId.Type);
-  let section = new TypeSection(headers[0]);
-  type = (section).parse(p.module.buf);
-  log<i32>(offsetof<TypeSection>());
-  log<TypeSection>(type, offsetof<TypeSection>());
   return p.module;
 }
