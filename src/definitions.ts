@@ -129,8 +129,6 @@ abstract class ExportsWalker {
 
 // TODO: Extract this into separate module, preferrable pluggable
 export class NEARBindingsBuilder extends ExportsWalker {
-  private sb: string[] = [];
-
   private typeMapping: { [key: string]: string } = {
     "i32": "Integer",
     "String": "String",
@@ -139,6 +137,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
   };
 
   private nonNullableTypes = ["i32", "bool"];
+
+  private sb: string[] = [];
+  private generatedEncodeFunctions = new Set<string>();
 
   static build(program: Program): string {
     return new NEARBindingsBuilder(program).build();
@@ -180,6 +181,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private generateWrapperFunction(element: Function) {
     let signature = element.signature;
     let returnType = signature.returnType.toString();
+    this.generateEncodeFunction(signature.returnType);
     this.sb.push(`export function near_func_${element.simpleName}(): void {
       let bson = new Uint8Array(input_read_len());
       input_read_into(bson.buffer.data);
@@ -199,7 +201,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     if (returnType != "void") {
       this.sb.push(`
         let encoder = new BSONEncoder();`);
-      this.generateFieldEncoder(returnType, "result", "result");
+      this.generateFieldEncoder(returnType, '"result"', "result");
       this.sb.push(`
         return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
       `);
@@ -249,22 +251,49 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   visitClass(element: Class): void {
-    this.generateEncodeFunction(element);
     this.generateHandler(element);
     this.generateDecodeFunction(element);
   }
 
-  private generateEncodeFunction(element: Class) {
-    let className = element.simpleName;
-    this.sb.push(`export function __near_encode_${className}(
-        value: ${className},
-        encoder: BSONEncoder): void {`);
-    this.getFields(element).forEach((field) => {
-      let fieldType = field.type.toString();
-      let fieldName = field.simpleName;
-      let sourceExpr = `value.${fieldName}`;
-      this.generateFieldEncoder(fieldType, fieldName, sourceExpr);
-    });
+  private generateEncodeFunction(type: Type) {
+    if (!type.classReference) {
+      return;
+    }
+
+    let typeName = this.encodeType(type);
+    if (this.generatedEncodeFunctions.has(typeName) || typeName in this.typeMapping) {
+      return;
+    }
+    this.generatedEncodeFunctions.add(typeName);
+
+    if (type.classReference.prototype.simpleName == "Array" && type.classReference.typeArguments) {
+      // Array
+      this.generateEncodeFunction(type.classReference.typeArguments[0]);
+
+      this.sb.push(`export function __near_encode_${typeName}(
+          value: ${type.toString()},
+          encoder: BSONEncoder): void {`);
+      this.sb.push(`for (let i = 0; i < value.length; i++) {`);
+      this.generateFieldEncoder(type.classReference.typeArguments[0], "near.str(i)", "value[i]");
+      this.sb.push("}");
+
+    } else {
+      // Object
+      this.getFields(type.classReference).forEach(field => {
+        this.generateEncodeFunction(field.type);
+      });
+
+      this.sb.push(`export function __near_encode_${typeName}(
+          value: ${type.toString()},
+          encoder: BSONEncoder): void {`);
+      this.getFields(type.classReference).forEach((field) => {
+        let fieldType = field.type;
+        let fieldName = field.simpleName;
+        let sourceExpr = `value.${fieldName}`;
+        this.generateFieldEncoder(fieldType, `"${fieldName}"`, sourceExpr);
+      });
+    }
+
     this.sb.push("}");
   }
 
@@ -290,37 +319,43 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }\n`);
   }
 
-  private generateFieldEncoder(fieldType: any, fieldName: any, sourceExpr: string) {
+  private generateFieldEncoder(fieldType: any, fieldExpr: string, sourceExpr: string) {
     let setterType = this.typeMapping[fieldType];
     if (!setterType) {
-      // Object
+      // Object / array
       this.sb.push(`if (${sourceExpr} != null) {
-          __near_encode_${fieldType}(${sourceExpr}, encoder);
+          __near_encode_${this.encodeType(fieldType)}(${sourceExpr}, encoder);
         } else {
-          encoder.setNull("${fieldName}");
+          encoder.setNull(${fieldExpr});
         }`);
-    }
-    else {
+    } else {
       // Basic types
       if (this.nonNullableTypes.indexOf(fieldType) != -1) {
-        this.sb.push(`encoder.set${setterType}("${fieldName}", ${sourceExpr});`);
-      }
-      else {
+        this.sb.push(`encoder.set${setterType}(${fieldExpr}, ${sourceExpr});`);
+      } else {
         this.sb.push(`if (${sourceExpr} != null) {
-            encoder.set${setterType}("${fieldName}", ${sourceExpr});
+            encoder.set${setterType}(${fieldExpr}, ${sourceExpr});
           } else {
-            encoder.setNull("${fieldName}");
+            encoder.setNull(${fieldExpr});
           }`);
       }
     }
   }
 
-  private getFields(element: Class): any[] {
+  private encodeType(type: Type) : string {
+    return (<any>type.toString())
+      .replace(/_/g, '__')
+      .replace(/>/g, '')
+      .replace(/</g, '_');
+  }
+
+  private getFields(element: Class): Field[] {
     if (!element.members) {
       return [];
     }
 
-    return [...element.members.values()].filter(member => member instanceof Field);
+    return <Field[]>[...element.members.values()].filter(member => member instanceof Field);
+
   }
 
   visitInterface(element: Interface): void {
