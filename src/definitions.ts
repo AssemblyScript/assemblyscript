@@ -153,52 +153,49 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   visitFunction(element: Function): void {
-    console.log("visitFunction: " + element.simpleName);
+    this.generateArgsParser(element);
+    this.generateWrapperFunction(element);
+  }
+
+  private generateArgsParser(element: Function) {
     let signature = element.signature;
-
     this.sb.push(`export class __near_ArgsParser_${element.simpleName} {
+        buffer: Uint8Array;
+        decoder: BSONDecoder<__near_ArgsParser_${element.simpleName}>;
       `);
-    let fields = [];
     if (signature.parameterNames) {
-      for (let i = 0; i < signature.parameterNames.length; i++) {
-        let paramName = signature.parameterNames[i];
-        let paramType = signature.parameterTypes[i];
-        fields.push({
-          simpleName: paramName,
-          type: paramType
-        });
-      }
-    }
-    fields.forEach((field) => {
+      let fields = signature.parameterNames.map((paramName, i) => {
+        return { simpleName: paramName, type: signature.parameterTypes[i] };
+      });
+      fields.forEach((field) => {
         this.sb.push(`__near_param_${field.simpleName}: ${field.type};`);
-    });
-    this.generateBSONHandlerMethods("this.__near_param_", fields);
-    this.sb.push(`}`); // __near_ArgsParser
+      });
+      this.generateBSONHandlerMethods("this.__near_param_", fields);
+    } else {
+      this.generateBSONHandlerMethods("this.__near_param_", []);
+    }
+    this.sb.push(`}`);
+  }
 
+  private generateWrapperFunction(element: Function) {
+    let signature = element.signature;
     let returnType = signature.returnType.toString();
     this.sb.push(`export function near_func_${element.simpleName}(): void {
       let bson = new Uint8Array(input_read_len());
       input_read_into(bson.buffer.data);
       let handler = new __near_ArgsParser_${element.simpleName}();
-      let decoder = new BSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
-      decoder.deserialize(bson);`);
+      handler.buffer = bson;
+      handler.decoder = new BSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
+      handler.decoder.deserialize(bson);`);
     if (returnType != "void") {
       this.sb.push(`let result = ${element.simpleName}(`);
     } else {
-      this.sb.push(`${element.simpleName}(`)
+      this.sb.push(`${element.simpleName}(`);
     }
     if (signature.parameterNames) {
-      let i = 0;
-      for (let paramName of signature.parameterNames) {
-        this.sb.push(`handler.__near_param_${paramName}`);
-        if (i < signature.parameterNames.length) {
-          this.sb.push(",")
-        }
-        i++;
-      }
+      this.sb.push(signature.parameterNames.map(paramName => `handler.__near_param_${paramName}`).join(","));
     }
     this.sb.push(");");
-    
     if (returnType != "void") {
       this.sb.push(`
         let encoder = new BSONEncoder();`);
@@ -207,7 +204,6 @@ export class NEARBindingsBuilder extends ExportsWalker {
         return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
       `);
     }
-  
     this.sb.push(`}`);
   }
 
@@ -217,7 +213,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {`);
       fields.forEach((field) => {
         if (field.type.toString() == fieldType) {
-            this.sb.push(`if (name == "${field.simpleName}") { ${valuePrefix}${field.simpleName} = value; return; }`);
+            this.sb.push(`if (name == "${field.simpleName}") {
+              ${valuePrefix}${field.simpleName} = value; return;
+            }`);
         }
       });
       this.sb.push("}");
@@ -230,12 +228,20 @@ export class NEARBindingsBuilder extends ExportsWalker {
     });
     this.sb.push("}\n"); // setNull
 
-    // TODO: Suport nested objects/arrays
-    // TODO: This needs some way to get current index in buffer (extract parser state into separte class?),
-    // TODO: so that we can call method to parse object recursively
-    // TODO: popObject() should also return false to exit nested parser?
     this.sb.push(`
-      pushObject(name: string): bool { return false; }
+      pushObject(name: string): bool {`);
+    fields.forEach((field) => {
+      if (!(field.type.toString() in this.typeMapping)) {
+        this.sb.push(`if (name == "${field.simpleName}") {
+          ${valuePrefix}${field.simpleName} = __near_decode_${field.type}(this.buffer, this.decoder.readIndex);
+          return false;
+        }`);
+      }
+    });
+    // TODO: Support arrays
+    this.sb.push(`
+        return false;
+      }
       popObject(): void {}
       pushArray(name: string): bool { return false; }
       popArray(): void {}
@@ -243,8 +249,13 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   visitClass(element: Class): void {
+    this.generateEncodeFunction(element);
+    this.generateHandler(element);
+    this.generateDecodeFunction(element);
+  }
+
+  private generateEncodeFunction(element: Class) {
     let className = element.simpleName;
-    console.log("visitClass: " + className);
     this.sb.push(`export function __near_encode_${className}(
         value: ${className},
         encoder: BSONEncoder): void {`);
@@ -254,18 +265,27 @@ export class NEARBindingsBuilder extends ExportsWalker {
       let sourceExpr = `value.${fieldName}`;
       this.generateFieldEncoder(fieldType, fieldName, sourceExpr);
     });
-    this.sb.push("}"); // __near_encode
+    this.sb.push("}");
+  }
 
+  private generateHandler(element: Class) {
+    let className = element.simpleName;
     this.sb.push(`export class __near_BSONHandler_${className} {
+      buffer: Uint8Array;
+      decoder: BSONDecoder<__near_BSONHandler_${className}>;
       value: ${className} = new ${className}();`);
     this.generateBSONHandlerMethods("this.value.", this.getFields(element));
-    this.sb.push("}\n"); // class __near_BSONHandler_
+    this.sb.push("}\n");
+  }
 
+  private generateDecodeFunction(element: Class) {
+    let className = element.simpleName;
     this.sb.push(`export function __near_decode_${className}(
         buffer: Uint8Array, offset: i32): ${className} {
       let handler = new __near_BSONHandler_${className}();
-      let decoder = new BSONDecoder<__near_BSONHandler_${className}>(handler);
-      decoder.deserialize(buffer, offset);
+      handler.buffer = buffer;
+      handler.decoder = new BSONDecoder<__near_BSONHandler_${className}>(handler);
+      handler.decoder.deserialize(buffer, offset);
       return handler.value;
     }\n`);
   }
@@ -296,17 +316,11 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private getFields(element: Class): any[] {
-    var members = element.members;
-    var results = [];
-    if (members) {
-      for (let member of members.values()) {
-        if (!(member instanceof Field)) {
-          continue;
-        }
-        results.push(member);
-      }
+    if (!element.members) {
+      return [];
     }
-    return results;
+
+    return [...element.members.values()].filter(member => member instanceof Field);
   }
 
   visitInterface(element: Interface): void {
