@@ -13,6 +13,7 @@ import {Buffer} from '../buffer';
 import {log, log_str} from "../host";
 
 import {itoa} from 'internal/number';
+import { Imports } from "./imports";
 
 type byte = u8;
 
@@ -56,6 +57,9 @@ export class Module {
 
   public getID(id: SectionId): SectionHeader[] {
     let res: SectionHeader[] = [];
+    while(res.length > 0){
+      res.pop();
+    }
     let x: i32 = this.Headers.length;
     for (let i=0; i < x; i++){
       if (this.Headers[i].id == id){
@@ -69,6 +73,19 @@ export class Module {
     let Types = this.Type;
     let section = new TypeSection(Types[0]);
     return section.parse(this.buf);
+  }
+
+  getImports(): Imports[] {
+    let ImportHeaders = this.getID(SectionId.Import);
+    let imports: Imports[] = [];
+    log(imports.length);
+    for (let i = 0; i < ImportHeaders.length; i++){
+      log(ImportHeaders[i].name)
+      let _import = new Imports(ImportHeaders[i]);
+      imports.push(_import.parse(this.buf));
+      log(_import.imports.length);
+    }
+    return imports;
   }
 
 }
@@ -160,7 +177,7 @@ export class SectionHeader {
 
 }
 
-class Section {
+export class Section {
   constructor(public header: SectionHeader){}
 }
 //     static create(buf: Buffer): Section {
@@ -213,13 +230,11 @@ class FuncType {
   }
 }
 
-export class TypeSection {
-  header: SectionHeader
+
+
+export class TypeSection extends Section {
+  // header: SectionHeader
   funcs: FuncType[];
-  constructor(header: SectionHeader){
-    this.header = header;
-    this.funcs = [];
-  }
 
   // constructor(public header: SectionHeader){}
   parse(buf: Buffer): TypeSection {
@@ -258,118 +273,71 @@ export class TypeSection {
 
 }
 
-/*
-case SectionId.Import: {
-  let count = buf.readVaruint(32);
-  for (let index: u32 = 0; index < count; ++index) {
-    let module_len = buf.readVaruint(32);
-    let module_off = off;
-    off += module_len;
-    let field_len = buf.readVaruint(32);
-    let field_off = off;
-    off += field_len;
-    let kind = readUint<u8>();
-    opt.onImport(
-      index,
-      kind,
-      module_off,
-      module_len,
-      field_off,
-      field_len
-    );
-    switch (kind) {
-      case ExternalKind.Function: {
-        let type = buf.readVaruint(32);
-        opt.onFunctionImport(
-          fun_space_index++,
-          type
-        );
-        break;
-      }
-      case ExternalKind.Table: {
-        let type = buf.readVarint(7) & 0x7f;
-        let flags = buf.readVaruint(1);
-        let initial = buf.readVaruint(32);
-        let maximum = flags & 1 ? buf.readVaruint(32) : <u32>MAX_ELEMS;
-        opt.onTableImport(
-          tbl_space_index++,
-          type,
-          initial,
-          maximum,
-          flags
-        );
-        break;
-      }
-      case ExternalKind.Memory: {
-        let flags = buf.readVaruint(1);
-        let initial = buf.readVaruint(32);
-        let maximum = flags & 1 ? buf.readVaruint(32) : <u32>MAX_PAGES;
-        opt.onMemoryImport(
-          mem_space_index++,
-          initial,
-          maximum,
-          flags
-        );
-        break;
-      }
-      case ExternalKind.Global: {
-        let type = buf.readVarint(7) & 0x7f;
-        let mutability = buf.readVaruint(1);
-        opt.onGlobalImport(
-          glo_space_index++,
-          type,
-          mutability
-        );
-        break;
-      }
-      default: unreachable();
+class FunctionSection extends Section {
+  typeIndexes: u32[];
+
+  parse(buf: Buffer): FunctionSection {
+    buf.off = this.header.payload_off;
+    let count = buf.readVaruint(32);
+    this.typeIndexes = new Array<u32>(count);
+    for (let i: u32 = 0; i < count; ++i) {
+      let typeIndex = buf.readVaruint(32);
+      this.typeIndexes[i] = typeIndex;
     }
+    return this;
   }
-  break;
 }
-case SectionId.Function: {
-  let count = buf.readVaruint(32);
-  for (let i: u32 = 0; i < count; ++i) {
-    let typeIndex = buf.readVaruint(32);
-    opt.onFunction(
-      fun_space_index++,
-      typeIndex
-    );
+
+class Table {
+  constructor(public type: u32, public flags: u8, public initial: u32, public maximum: u32){}
+}
+
+
+class TableSection extends Section {
+  tables: Table[];
+  parse(buf: Buffer): TableSection {
+    let count = buf.readVaruint(32);
+    this.tables = new Array<Table>(count);
+    for (let index: u32 = 0; index < count; ++index) {
+      let type = buf.readVaruint(7) & 0x7f;
+      let flags = buf.readVaruint(1);
+      let initial = buf.readVaruint(32);
+      let maximum = flags & 1 ? buf.readVaruint(32) : <u32>MAX_ELEMS;
+      this.tables[index] = new Table(type, flags, initial, maximum);
+    }
+    return this;
   }
-  break;
 }
-case SectionId.Table: {
-  let count = buf.readVaruint(32);
-  for (let index: u32 = 0; index < count; ++index) {
-    let type = buf.readVaruint(7) & 0x7f;
-    let flags = buf.readVaruint(1);
-    let initial = buf.readVaruint(32);
-    let maximum = flags & 1 ? buf.readVaruint(32) : <u32>MAX_ELEMS;
-    opt.onTable(
-      tbl_space_index++,
-      type,
-      initial,
-      maximum,
-      flags
-    );
+
+
+
+class Memory{
+  constructor(public flags: u8, public initial: u32, public maximum: u32){}
+
+  get shared(): boolean {
+    return this.flags > 1;
   }
-  break;
 }
-case SectionId.Memory: {
-  let count = buf.readVaruint(32);
-  for (let index: u32 = 0; index < count; ++index) {
-    let flags = buf.readVaruint(1);
-    let initial = buf.readVaruint(32);
-    let maximum = flags & 1 ? buf.readVaruint(32) : <u32>MAX_PAGES;
-    opt.onMemory(
-      mem_space_index++,
-      initial,
-      maximum,
-      flags
-    );
+
+class MemorySection {
+  memory: Memory[];
+  
+  parse(buf: Buffer): MemorySection {
+    let count = buf.readVaruint(32);
+    this.memory = new Array<Memory>(count);
+    for (let index: u32 = 0; index < count; ++index) {
+      let flags = buf.readVaruint(1);
+      if (flags > 3) {
+        unreachable();
+      }
+      let initial = buf.readVaruint(32);
+      let maximum = flags & 1 ? buf.readVaruint(32) : <u32>MAX_PAGES;
+      this.memory[index] = new Memory(flags, initial, maximum);
+    }
+    return this
   }
-  break;
 }
+/*
 case SectionId.Global: {
   let count = buf.readVaruint(32);
   for (let i: u32 = 0; i < count; ++i) {

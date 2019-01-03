@@ -63,6 +63,21 @@ export function getType(m: Module): string {
   return type.toString();
 }
 
+export function getImports(m: Module): void {
+  let imports = m.getImports();
+  // log(imports.length);
+  if (imports.length>0)
+  for (let i = 0; i< imports.length; i++){
+    log(imports.length);
+
+    // for (let j = 0; i< imports[i].imports.length; j++){
+    //   let _import = imports[i].imports[j];
+    //   log(_import.toString())
+    // }
+  }
+  // return
+}
+
 export function toString(t:TypeSection): string {
   return t.toString();
 }
@@ -70,7 +85,7 @@ export function toString(t:TypeSection): string {
 export class Parser {
   buf: Buffer;
   module: Module;
- constructor(buf: Buffer){
+  constructor(buf: Buffer){
    this.buf = buf;
    this.module = new Module(buf);
  }

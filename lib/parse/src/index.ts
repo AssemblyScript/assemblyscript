@@ -138,6 +138,7 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   debugger;
   let Mod = instance.parse(parserPtr);
   console.log(instance.getString((instance as any).getType(Mod)));
+  (instance as any).getImports(Mod);
   // let sections = buffer.slice(instance.I32[Mod], 2);
   // console.log(sections[1])
   // let arrayBuf = sections[0]>>2;
