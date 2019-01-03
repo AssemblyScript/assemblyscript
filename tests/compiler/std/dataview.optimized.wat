@@ -1077,6 +1077,7 @@
   i32.store16 offset=8
  )
  (func $start (; 23 ;) (type $v)
+  (local $0 i32)
   i32.const 216
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
@@ -1116,10 +1117,11 @@
   i32.const 95
   call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_global $std/dataview/array
+  tee_local $0
   i32.load
-  get_global $std/dataview/array
+  get_local $0
   i32.load offset=4
-  get_global $std/dataview/array
+  get_local $0
   i32.load offset=8
   call $~lib/dataview/DataView#constructor
   set_global $std/dataview/view

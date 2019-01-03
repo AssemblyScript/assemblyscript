@@ -4552,6 +4552,7 @@
  (func $~lib/internal/number/prettify (; 49 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   get_local $2
   i32.eqz
   if
@@ -4571,11 +4572,11 @@
   get_local $1
   get_local $2
   i32.add
-  tee_local $4
+  tee_local $5
   i32.le_s
   tee_local $3
   if
-   get_local $4
+   get_local $5
    i32.const 21
    i32.le_s
    set_local $3
@@ -4587,7 +4588,7 @@
    loop $repeat|0
     block $break|0
      get_local $3
-     get_local $4
+     get_local $5
      i32.ge_s
      br_if $break|0
      get_local $3
@@ -4604,40 +4605,41 @@
      br $repeat|0
     end
    end
-   get_local $4
+   get_local $5
    i32.const 1
    i32.shl
    get_local $0
    i32.add
    i32.const 3145774
    i32.store offset=4
-   get_local $4
+   get_local $5
    i32.const 2
    i32.add
   else   
-   get_local $4
+   get_local $5
    i32.const 0
    i32.gt_s
    tee_local $3
    if
-    get_local $4
+    get_local $5
     i32.const 21
     i32.le_s
     set_local $3
    end
    get_local $3
    if (result i32)
-    get_local $4
+    get_local $5
     i32.const 1
     i32.shl
     get_local $0
     i32.add
     tee_local $3
-    i32.const 6
-    i32.add
-    get_local $3
     i32.const 4
     i32.add
+    tee_local $0
+    i32.const 2
+    i32.add
+    get_local $0
     i32.const 0
     get_local $2
     i32.sub
@@ -4652,11 +4654,11 @@
     i32.add
    else    
     i32.const -6
-    get_local $4
+    get_local $5
     i32.lt_s
     tee_local $3
     if
-     get_local $4
+     get_local $5
      i32.const 0
      i32.le_s
      set_local $3
@@ -4666,16 +4668,15 @@
      get_local $0
      i32.const 4
      i32.add
+     tee_local $2
      i32.const 2
-     get_local $4
+     get_local $5
      i32.sub
      tee_local $3
      i32.const 1
      i32.shl
      i32.add
-     get_local $0
-     i32.const 4
-     i32.add
+     get_local $2
      get_local $1
      i32.const 1
      i32.shl
@@ -4684,24 +4685,24 @@
      i32.const 3014704
      i32.store offset=4
      i32.const 2
-     set_local $2
+     set_local $4
      loop $repeat|1
       block $break|1
-       get_local $2
+       get_local $4
        get_local $3
        i32.ge_s
        br_if $break|1
-       get_local $2
+       get_local $4
        i32.const 1
        i32.shl
        get_local $0
        i32.add
        i32.const 48
        i32.store16 offset=4
-       get_local $2
+       get_local $4
        i32.const 1
        i32.add
-       set_local $2
+       set_local $4
        br $repeat|1
       end
      end
@@ -4721,47 +4722,50 @@
       i32.add
       tee_local $3
       block (result i32)
-       get_local $4
+       get_local $5
        i32.const 1
        i32.sub
-       tee_local $2
+       tee_local $4
        i32.const 0
        i32.lt_s
-       tee_local $0
+       tee_local $2
        if
         i32.const 0
-        get_local $2
+        get_local $4
         i32.sub
-        set_local $2
+        set_local $4
        end
-       get_local $2
+       get_local $4
       end
-      get_local $2
+      get_local $4
       call $~lib/internal/number/decimalCount32
       i32.const 1
       i32.add
-      tee_local $2
+      tee_local $4
       call $~lib/internal/number/utoa32_lut
       get_local $3
       i32.const 45
       i32.const 43
-      get_local $0
+      get_local $2
       select
       i32.store16 offset=4
-      get_local $2
+      get_local $4
       i32.const 2
       i32.add
      else      
       get_local $0
-      i32.const 8
+      i32.const 4
       i32.add
-      get_local $0
-      i32.const 6
+      tee_local $3
+      i32.const 4
+      i32.add
+      get_local $3
+      i32.const 2
       i32.add
       get_local $1
       i32.const 1
       i32.shl
-      tee_local $2
+      tee_local $4
       i32.const 2
       i32.sub
       call $~lib/internal/memory/memmove
@@ -4769,7 +4773,7 @@
       i32.const 46
       i32.store16 offset=6
       get_local $0
-      get_local $2
+      get_local $4
       i32.add
       tee_local $0
       i32.const 101
@@ -4779,35 +4783,35 @@
       i32.add
       tee_local $3
       block (result i32)
-       get_local $4
+       get_local $5
        i32.const 1
        i32.sub
-       tee_local $2
+       tee_local $4
        i32.const 0
        i32.lt_s
-       tee_local $0
+       tee_local $2
        if
         i32.const 0
-        get_local $2
+        get_local $4
         i32.sub
-        set_local $2
+        set_local $4
        end
-       get_local $2
+       get_local $4
       end
-      get_local $2
+      get_local $4
       call $~lib/internal/number/decimalCount32
       i32.const 1
       i32.add
-      tee_local $2
+      tee_local $0
       call $~lib/internal/number/utoa32_lut
       get_local $3
       i32.const 45
       i32.const 43
-      get_local $0
+      get_local $2
       select
       i32.store16 offset=4
+      get_local $0
       get_local $1
-      get_local $2
       i32.add
       i32.const 2
       i32.add
@@ -5730,7 +5734,8 @@
    unreachable
   end
   get_global $std/string/str
-  get_global $std/string/str
+  tee_local $0
+  get_local $0
   i32.const 0
   call $~lib/string/String#indexOf
   if

@@ -407,39 +407,45 @@
   f64.mul
  )
  (func $start (; 4 ;) (type $v)
+  (local $0 i32)
+  (local $1 i64)
+  (local $2 f32)
+  (local $3 f64)
+  (local $4 i32)
   get_global $binary/i
+  tee_local $0
   i32.const 1
   i32.rem_s
   drop
-  get_global $binary/i
+  get_local $0
   f64.convert_s/i32
   call $~lib/math/NativeMath.pow
   drop
   get_global $binary/i
+  tee_local $0
   i32.const 1
   i32.lt_s
   set_global $binary/b
-  get_global $binary/i
+  get_local $0
   i32.const 1
   i32.gt_s
   set_global $binary/b
-  get_global $binary/i
+  get_local $0
   i32.const 1
   i32.le_s
   set_global $binary/b
-  get_global $binary/i
+  get_local $0
   i32.const 1
   i32.ge_s
   set_global $binary/b
-  get_global $binary/i
+  get_local $0
   i32.const 1
   i32.eq
+  tee_local $4
   set_global $binary/b
-  get_global $binary/i
-  i32.const 1
-  i32.eq
+  get_local $4
   set_global $binary/b
-  get_global $binary/i
+  get_local $0
   i32.const 1
   i32.add
   set_global $binary/i
@@ -517,38 +523,39 @@
   i32.xor
   set_global $binary/i
   get_global $binary/I
+  tee_local $1
   i64.const 1
   i64.rem_s
   drop
-  get_global $binary/I
+  get_local $1
   f64.convert_s/i64
   call $~lib/math/NativeMath.pow
   drop
   get_global $binary/I
+  tee_local $1
   i64.const 1
   i64.lt_s
   set_global $binary/b
-  get_global $binary/I
+  get_local $1
   i64.const 1
   i64.gt_s
   set_global $binary/b
-  get_global $binary/I
+  get_local $1
   i64.const 1
   i64.le_s
   set_global $binary/b
-  get_global $binary/I
+  get_local $1
   i64.const 1
   i64.ge_s
   set_global $binary/b
-  get_global $binary/I
+  get_local $1
   i64.const 1
   i64.eq
+  tee_local $0
   set_global $binary/b
-  get_global $binary/I
-  i64.const 1
-  i64.eq
+  get_local $0
   set_global $binary/b
-  get_global $binary/I
+  get_local $1
   i64.const 1
   i64.add
   set_global $binary/I
@@ -632,30 +639,30 @@
   call $~lib/math/NativeMathf.pow
   drop
   get_global $binary/f
+  tee_local $2
   f32.const 1
   f32.lt
   set_global $binary/b
-  get_global $binary/f
+  get_local $2
   f32.const 1
   f32.gt
   set_global $binary/b
-  get_global $binary/f
+  get_local $2
   f32.const 1
   f32.le
   set_global $binary/b
-  get_global $binary/f
+  get_local $2
   f32.const 1
   f32.ge
   set_global $binary/b
-  get_global $binary/f
+  get_local $2
   f32.const 1
   f32.eq
+  tee_local $0
   set_global $binary/b
-  get_global $binary/f
-  f32.const 1
-  f32.eq
+  get_local $0
   set_global $binary/b
-  get_global $binary/f
+  get_local $2
   f32.const 1
   f32.add
   set_global $binary/f
@@ -690,30 +697,30 @@
   call $~lib/math/NativeMath.pow
   drop
   get_global $binary/F
+  tee_local $3
   f64.const 1
   f64.lt
   set_global $binary/b
-  get_global $binary/F
+  get_local $3
   f64.const 1
   f64.gt
   set_global $binary/b
-  get_global $binary/F
+  get_local $3
   f64.const 1
   f64.le
   set_global $binary/b
-  get_global $binary/F
+  get_local $3
   f64.const 1
   f64.ge
   set_global $binary/b
-  get_global $binary/F
+  get_local $3
   f64.const 1
   f64.eq
+  tee_local $0
   set_global $binary/b
-  get_global $binary/F
-  f64.const 1
-  f64.eq
+  get_local $0
   set_global $binary/b
-  get_global $binary/F
+  get_local $3
   f64.const 1
   f64.add
   set_global $binary/F
