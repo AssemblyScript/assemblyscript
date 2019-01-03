@@ -53,6 +53,7 @@ export class Module {
   }
 
   public getID(id: SectionId): SectionHeader[] {
+<<<<<<< loader-memory-accessors
     let res: SectionHeader[] = new Array<SectionHeader>();
     while(res.length > 0){
       res.pop();
@@ -60,6 +61,13 @@ export class Module {
     let x: i32 = this.headers.length;
     // log("length of array should be zero");
     // log(res.length)
+=======
+    let res: SectionHeader[] = [];
+    while(res.length > 0){
+      res.pop();
+    }
+    let x: i32 = this.Headers.length;
+>>>>>>> Working on sections.
     for (let i=0; i < x; i++){
       if (this.headers[i].id == id){
         res.push(this.headers[i]);
@@ -77,11 +85,20 @@ export class Module {
   getImports(): Imports[] {
     let ImportHeaders = this.getID(SectionId.Import);
     let imports: Imports[] = [];
+<<<<<<< loader-memory-accessors
     for (let i = 0; i < ImportHeaders.length; i++){
       // log(ImportHeaders[i].name)
       let _import = new Imports(ImportHeaders[i]);
       imports.push(_import.parse(this.buf));
       // log(_import.imports.length);
+=======
+    log(imports.length);
+    for (let i = 0; i < ImportHeaders.length; i++){
+      log(ImportHeaders[i].name)
+      let _import = new Imports(ImportHeaders[i]);
+      imports.push(_import.parse(this.buf));
+      log(_import.imports.length);
+>>>>>>> Working on sections.
     }
     return imports;
   }
@@ -337,9 +354,15 @@ class Memory{
   }
 }
 
+<<<<<<< loader-memory-accessors
 class MemorySection extends Section {
   memory: Memory[];
 
+=======
+class MemorySection {
+  memory: Memory[];
+  
+>>>>>>> Working on sections.
   parse(buf: Buffer): MemorySection {
     let count = buf.readVaruint(32);
     this.memory = new Array<Memory>(count);
@@ -355,10 +378,13 @@ class MemorySection extends Section {
     return this
   }
 }
+<<<<<<< loader-memory-accessors
 
 class Data extends Section {
 
 }
+=======
+>>>>>>> Working on sections.
 /*
 case SectionId.Global: {
   let count = buf.readVaruint(32);
