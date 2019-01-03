@@ -1,5 +1,5 @@
 
-import * as main from "./combined";
+import * as main from "./main_near";
 
 import { BSONEncoder } from "./bson/encoder";
 
