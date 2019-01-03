@@ -140,6 +140,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
 
   private sb: string[] = [];
   private generatedEncodeFunctions = new Set<string>();
+  private generatedDecodeFunctions = new Set<string>();
 
   static build(program: Program): string {
     return new NEARBindingsBuilder(program).build();
@@ -153,6 +154,10 @@ export class NEARBindingsBuilder extends ExportsWalker {
     // Do nothing
   }
 
+  visitClass(element: Class): void {
+    // Do nothing
+  }
+
   visitFunction(element: Function): void {
     this.generateArgsParser(element);
     this.generateWrapperFunction(element);
@@ -160,20 +165,21 @@ export class NEARBindingsBuilder extends ExportsWalker {
 
   private generateArgsParser(element: Function) {
     let signature = element.signature;
-    this.sb.push(`export class __near_ArgsParser_${element.simpleName} {
+    let fields = signature.parameterNames ? signature.parameterNames.map((paramName, i) => {
+      return { simpleName: paramName, type: signature.parameterTypes[i] };
+    }) : [];
+    fields.forEach(field => this.generateDecodeFunction(field.type));
+    this.sb.push(`export class __near_ArgsParser_${element.simpleName} extends BSONHandler {
         buffer: Uint8Array;
         decoder: BSONDecoder<__near_ArgsParser_${element.simpleName}>;
       `);
     if (signature.parameterNames) {
-      let fields = signature.parameterNames.map((paramName, i) => {
-        return { simpleName: paramName, type: signature.parameterTypes[i] };
-      });
       fields.forEach((field) => {
         this.sb.push(`__near_param_${field.simpleName}: ${field.type};`);
       });
-      this.generateBSONHandlerMethods("this.__near_param_", fields);
+      this.generateHandlerMethods("this.__near_param_", fields);
     } else {
-      this.generateBSONHandlerMethods("this.__near_param_", []);
+      this.generateHandlerMethods("this.__near_param_", []);
     }
     this.sb.push(`}`);
   }
@@ -209,7 +215,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.sb.push(`}`);
   }
 
-  private generateBSONHandlerMethods(valuePrefix: string, fields: any[]) : void {
+  private generateHandlerMethods(valuePrefix: string, fields: any[]) : void {
     for (let fieldType in this.typeMapping) {
       let setterType = this.typeMapping[fieldType];
       this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {`);
@@ -232,27 +238,48 @@ export class NEARBindingsBuilder extends ExportsWalker {
 
     this.sb.push(`
       pushObject(name: string): bool {`);
+    this.generatePushHandler(valuePrefix, fields);
+    this.sb.push(`
+        return false;
+      }`);
+    this.sb.push(`
+      pushArray(name: string): bool {`);
+    this.generatePushHandler(valuePrefix, fields);
+    this.sb.push(`
+        return false;
+      }`);
+  }
+
+  private generatePushHandler(valuePrefix: string, fields: any[]) {
     fields.forEach((field) => {
       if (!(field.type.toString() in this.typeMapping)) {
         this.sb.push(`if (name == "${field.simpleName}") {
-          ${valuePrefix}${field.simpleName} = __near_decode_${field.type}(this.buffer, this.decoder.readIndex);
+          ${valuePrefix}${field.simpleName} = __near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.readIndex);
           return false;
         }`);
       }
     });
-    // TODO: Support arrays
-    this.sb.push(`
-        return false;
-      }
-      popObject(): void {}
-      pushArray(name: string): bool { return false; }
-      popArray(): void {}
-    `);
   }
 
-  visitClass(element: Class): void {
-    this.generateHandler(element);
-    this.generateDecodeFunction(element);
+  private generateArrayHandlerMethods(valuePrefix: string, fieldType: Type) : void {
+    let setterType = this.typeMapping[fieldType.toString()];
+    if (setterType) {
+      this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {
+        ${valuePrefix}[i32(parseInt(name))] = value;
+      }
+      setNull(name: string): void {
+        ${valuePrefix}[i32(parseInt(name))] = <${fieldType}>null;
+      }`);
+    } else {
+      this.sb.push(`pushObject(name: string): bool {
+        ${valuePrefix}[i32(parseInt(name))] = __near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.readIndex);
+        return false;
+      }
+      pushArray(name: string): bool {
+        ${valuePrefix}[i32(parseInt(name))] = __near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.readIndex);
+        return false;
+      }`);
+    }
   }
 
   private generateEncodeFunction(type: Type) {
@@ -297,23 +324,47 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.sb.push("}");
   }
 
-  private generateHandler(element: Class) {
-    let className = element.simpleName;
-    this.sb.push(`export class __near_BSONHandler_${className} {
+  private generateHandler(type: Type) {
+    let typeName = this.encodeType(type);
+    this.sb.push(`export class __near_BSONHandler_${typeName} extends BSONHandler {
       buffer: Uint8Array;
-      decoder: BSONDecoder<__near_BSONHandler_${className}>;
-      value: ${className} = new ${className}();`);
-    this.generateBSONHandlerMethods("this.value.", this.getFields(element));
+      decoder: BSONDecoder<__near_BSONHandler_${typeName}>;
+      value: ${type} = new ${type}();`);
+    if (type.classReference!.simpleName.startsWith("Array")) {
+      this.generateArrayHandlerMethods("this.value", type.classReference!.typeArguments![0]);
+    } else {
+      this.generateHandlerMethods("this.value.", this.getFields(type.classReference!));
+    }
     this.sb.push("}\n");
   }
 
-  private generateDecodeFunction(element: Class) {
-    let className = element.simpleName;
-    this.sb.push(`export function __near_decode_${className}(
-        buffer: Uint8Array, offset: i32): ${className} {
-      let handler = new __near_BSONHandler_${className}();
+  private generateDecodeFunction(type: Type) {
+    if (!type.classReference) {
+      return;
+    }
+
+    let typeName = this.encodeType(type);
+    if (this.generatedDecodeFunctions.has(typeName) || typeName in this.typeMapping) {
+      return;
+    }
+    this.generatedDecodeFunctions.add(typeName);
+
+    this.generateHandler(type);
+    if (type.classReference.prototype.simpleName == "Array" && type.classReference.typeArguments) {
+      // Array
+      this.generateDecodeFunction(type.classReference.typeArguments[0]);
+    } else {
+      // Object
+      this.getFields(type.classReference).forEach(field => {
+        this.generateDecodeFunction(field.type);
+      });
+    }
+
+    this.sb.push(`export function __near_decode_${typeName}(
+        buffer: Uint8Array, offset: i32): ${type} {
+      let handler = new __near_BSONHandler_${typeName}();
       handler.buffer = buffer;
-      handler.decoder = new BSONDecoder<__near_BSONHandler_${className}>(handler);
+      handler.decoder = new BSONDecoder<__near_BSONHandler_${typeName}>(handler);
       handler.decoder.deserialize(buffer, offset);
       return handler.value;
     }\n`);
@@ -355,7 +406,6 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
 
     return <Field[]>[...element.members.values()].filter(member => member instanceof Field);
-
   }
 
   visitInterface(element: Interface): void {
