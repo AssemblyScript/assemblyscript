@@ -218,16 +218,19 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private generateHandlerMethods(valuePrefix: string, fields: any[]) : void {
     for (let fieldType in this.typeMapping) {
       let setterType = this.typeMapping[fieldType];
-      this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {`);
-      fields.forEach((field) => {
-        if (field.type.toString() == fieldType) {
-            this.sb.push(`if (name == "${field.simpleName}") {
-              ${valuePrefix}${field.simpleName} = value;
-              return;
-            }`);
-        }
-      });
-      this.sb.push("}");
+      let matchingFields = fields.filter(field => field.type.toString() == fieldType);
+      if (matchingFields.length > 0) {
+        this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {`);
+        matchingFields.forEach(field => {
+          this.sb.push(`if (name == "${field.simpleName}") {
+            ${valuePrefix}${field.simpleName} = value;
+            return;
+          }`);
+        });
+        this.sb.push(`
+          super.set${setterType}(name, value);
+        }`);
+      }
     }
     this.sb.push("setNull(name: string): void {");
     fields.forEach((field) => {
