@@ -2,7 +2,7 @@ import "allocator/arena";
 // TODO: Why cannot import from index?
 // import { BSONEncoder, BSONDecoder } from "./bson";
 import { BSONEncoder } from "./bson/encoder";
-import { BSONDecoder } from "./bson/decoder";
+import { BSONDecoder, BSONHandler } from "./bson/decoder";
 import { near } from "./near"
 
 @external("env", "log")
@@ -22,6 +22,7 @@ export class FooBar {
     flag: bool;
     baz: string = "123";
     foobar: Uint8Array;
+    arr: Array<Array<string>>;
 }
 
 export class ContainerClass {
@@ -44,4 +45,8 @@ export function getFoobar(container: ContainerClass): AnotherContainerClass {
     let result = new AnotherContainerClass();
     result.foobar = container.foobar;
     return result;
+}
+
+export function convertFoobars(foobars: Array<FooBar>): Array<ContainerClass> {
+        return foobars.map<ContainerClass>((it: FooBar, i: i32, arr: Array<FooBar>): ContainerClass => { let container = new ContainerClass(); container.foobar = it; return container; });
 }

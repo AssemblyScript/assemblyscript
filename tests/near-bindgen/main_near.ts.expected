@@ -2,7 +2,7 @@ import "allocator/arena";
 // TODO: Why cannot import from index?
 // import { BSONEncoder, BSONDecoder } from "./bson";
 import { BSONEncoder } from "./bson/encoder";
-import { BSONDecoder } from "./bson/decoder";
+import { BSONDecoder, BSONHandler } from "./bson/decoder";
 import { near } from "./near";
 
 declare function log(str: string): void;
@@ -18,6 +18,7 @@ export class FooBar {
   flag: bool;
   baz: string = "123";
   foobar: Uint8Array;
+  arr: Array<Array<string>>;
 }
 
 export class ContainerClass {
@@ -40,25 +41,133 @@ export function getFoobar(container: ContainerClass): AnotherContainerClass {
   return result;
 }
 
-export function __near_encode_FooBar(
-  value: FooBar,
-  encoder: BSONEncoder
-): void {
-  encoder.setInteger("foo", value.foo);
-  encoder.setInteger("bar", value.bar);
-  encoder.setBoolean("flag", value.flag);
-  if (value.baz != null) {
-    encoder.setString("baz", value.baz);
-  } else {
-    encoder.setNull("baz");
+export function convertFoobars(foobars: Array<FooBar>): Array<ContainerClass> {
+  return foobars.map<ContainerClass>(
+    (it: FooBar, i: i32, arr: Array<FooBar>): ContainerClass => {
+      let container = new ContainerClass();
+      container.foobar = it;
+      return container;
+    }
+  );
+}
+
+export class __near_ArgsParser_doNothing extends BSONHandler {
+  buffer: Uint8Array;
+  decoder: BSONDecoder<__near_ArgsParser_doNothing>;
+
+  setInteger(name: string, value: i32): void {}
+  setString(name: string, value: String): void {}
+  setUint8Array(name: string, value: Uint8Array): void {}
+  setBoolean(name: string, value: bool): void {}
+  setNull(name: string): void {}
+
+  pushObject(name: string): bool {
+    return false;
   }
-  if (value.foobar != null) {
-    encoder.setUint8Array("foobar", value.foobar);
-  } else {
-    encoder.setNull("foobar");
+
+  pushArray(name: string): bool {
+    return false;
   }
 }
-export class __near_BSONHandler_FooBar {
+export function near_func_doNothing(): void {
+  let bson = new Uint8Array(input_read_len());
+  input_read_into(bson.buffer.data);
+  let handler = new __near_ArgsParser_doNothing();
+  handler.buffer = bson;
+  handler.decoder = new BSONDecoder<__near_ArgsParser_doNothing>(handler);
+  handler.decoder.deserialize(bson);
+  doNothing();
+}
+export class __near_ArgsParser_add extends BSONHandler {
+  buffer: Uint8Array;
+  decoder: BSONDecoder<__near_ArgsParser_add>;
+
+  __near_param_x: i32;
+  __near_param_y: i32;
+  setInteger(name: string, value: i32): void {
+    if (name == "x") {
+      this.__near_param_x = value;
+      return;
+    }
+    if (name == "y") {
+      this.__near_param_y = value;
+      return;
+    }
+  }
+  setString(name: string, value: String): void {}
+  setUint8Array(name: string, value: Uint8Array): void {}
+  setBoolean(name: string, value: bool): void {}
+  setNull(name: string): void {
+    if (name == "x") {
+      this.__near_param_x = <i32>null;
+    }
+    if (name == "y") {
+      this.__near_param_y = <i32>null;
+    }
+  }
+
+  pushObject(name: string): bool {
+    return false;
+  }
+
+  pushArray(name: string): bool {
+    return false;
+  }
+}
+export function near_func_add(): void {
+  let bson = new Uint8Array(input_read_len());
+  input_read_into(bson.buffer.data);
+  let handler = new __near_ArgsParser_add();
+  handler.buffer = bson;
+  handler.decoder = new BSONDecoder<__near_ArgsParser_add>(handler);
+  handler.decoder.deserialize(bson);
+  let result = add(handler.__near_param_x, handler.__near_param_y);
+
+  let encoder = new BSONEncoder();
+  encoder.setInteger("result", result);
+
+  return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
+}
+export class __near_BSONHandler_ContainerClass extends BSONHandler {
+  buffer: Uint8Array;
+  decoder: BSONDecoder<__near_BSONHandler_ContainerClass>;
+  value: ContainerClass = new ContainerClass();
+  setInteger(name: string, value: i32): void {}
+  setString(name: string, value: String): void {}
+  setUint8Array(name: string, value: Uint8Array): void {}
+  setBoolean(name: string, value: bool): void {}
+  setNull(name: string): void {
+    if (name == "foobar") {
+      this.value.foobar = <FooBar>null;
+    }
+  }
+
+  pushObject(name: string): bool {
+    if (name == "foobar") {
+      this.value.foobar = __near_decode_FooBar(
+        this.buffer,
+        this.decoder.readIndex
+      );
+      return false;
+    }
+
+    return false;
+  }
+
+  pushArray(name: string): bool {
+    if (name == "foobar") {
+      this.value.foobar = __near_decode_FooBar(
+        this.buffer,
+        this.decoder.readIndex
+      );
+      return false;
+    }
+
+    return false;
+  }
+}
+
+export class __near_BSONHandler_FooBar extends BSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_BSONHandler_FooBar>;
   value: FooBar = new FooBar();
@@ -106,53 +215,14 @@ export class __near_BSONHandler_FooBar {
     if (name == "foobar") {
       this.value.foobar = <Uint8Array>null;
     }
-  }
-
-  pushObject(name: string): bool {
-    return false;
-  }
-  popObject(): void {}
-  pushArray(name: string): bool {
-    return false;
-  }
-  popArray(): void {}
-}
-
-export function __near_decode_FooBar(buffer: Uint8Array, offset: i32): FooBar {
-  let handler = new __near_BSONHandler_FooBar();
-  handler.buffer = buffer;
-  handler.decoder = new BSONDecoder<__near_BSONHandler_FooBar>(handler);
-  handler.decoder.deserialize(buffer, offset);
-  return handler.value;
-}
-
-export function __near_encode_ContainerClass(
-  value: ContainerClass,
-  encoder: BSONEncoder
-): void {
-  if (value.foobar != null) {
-    __near_encode_FooBar(value.foobar, encoder);
-  } else {
-    encoder.setNull("foobar");
-  }
-}
-export class __near_BSONHandler_ContainerClass {
-  buffer: Uint8Array;
-  decoder: BSONDecoder<__near_BSONHandler_ContainerClass>;
-  value: ContainerClass = new ContainerClass();
-  setInteger(name: string, value: i32): void {}
-  setString(name: string, value: String): void {}
-  setUint8Array(name: string, value: Uint8Array): void {}
-  setBoolean(name: string, value: bool): void {}
-  setNull(name: string): void {
-    if (name == "foobar") {
-      this.value.foobar = <FooBar>null;
+    if (name == "arr") {
+      this.value.arr = <Array<Array<String>>>null;
     }
   }
 
   pushObject(name: string): bool {
-    if (name == "foobar") {
-      this.value.foobar = __near_decode_FooBar(
+    if (name == "arr") {
+      this.value.arr = __near_decode_Array_Array_String(
         this.buffer,
         this.decoder.readIndex
       );
@@ -161,11 +231,82 @@ export class __near_BSONHandler_ContainerClass {
 
     return false;
   }
-  popObject(): void {}
+
   pushArray(name: string): bool {
+    if (name == "arr") {
+      this.value.arr = __near_decode_Array_Array_String(
+        this.buffer,
+        this.decoder.readIndex
+      );
+      return false;
+    }
+
     return false;
   }
-  popArray(): void {}
+}
+
+export class __near_BSONHandler_Array_Array_String extends BSONHandler {
+  buffer: Uint8Array;
+  decoder: BSONDecoder<__near_BSONHandler_Array_Array_String>;
+  value: Array<Array<String>> = new Array<Array<String>>();
+  pushObject(name: string): bool {
+    this.value[i32(parseInt(name))] = __near_decode_Array_String(
+      this.buffer,
+      this.decoder.readIndex
+    );
+    return false;
+  }
+  pushArray(name: string): bool {
+    this.value[i32(parseInt(name))] = __near_decode_Array_String(
+      this.buffer,
+      this.decoder.readIndex
+    );
+    return false;
+  }
+}
+
+export class __near_BSONHandler_Array_String extends BSONHandler {
+  buffer: Uint8Array;
+  decoder: BSONDecoder<__near_BSONHandler_Array_String>;
+  value: Array<String> = new Array<String>();
+  setString(name: string, value: String): void {
+    this.value[i32(parseInt(name))] = value;
+  }
+  setNull(name: string): void {
+    this.value[i32(parseInt(name))] = <String>null;
+  }
+}
+
+export function __near_decode_Array_String(
+  buffer: Uint8Array,
+  offset: i32
+): Array<String> {
+  let handler = new __near_BSONHandler_Array_String();
+  handler.buffer = buffer;
+  handler.decoder = new BSONDecoder<__near_BSONHandler_Array_String>(handler);
+  handler.decoder.deserialize(buffer, offset);
+  return handler.value;
+}
+
+export function __near_decode_Array_Array_String(
+  buffer: Uint8Array,
+  offset: i32
+): Array<Array<String>> {
+  let handler = new __near_BSONHandler_Array_Array_String();
+  handler.buffer = buffer;
+  handler.decoder = new BSONDecoder<__near_BSONHandler_Array_Array_String>(
+    handler
+  );
+  handler.decoder.deserialize(buffer, offset);
+  return handler.value;
+}
+
+export function __near_decode_FooBar(buffer: Uint8Array, offset: i32): FooBar {
+  let handler = new __near_BSONHandler_FooBar();
+  handler.buffer = buffer;
+  handler.decoder = new BSONDecoder<__near_BSONHandler_FooBar>(handler);
+  handler.decoder.deserialize(buffer, offset);
+  return handler.value;
 }
 
 export function __near_decode_ContainerClass(
@@ -179,141 +320,7 @@ export function __near_decode_ContainerClass(
   return handler.value;
 }
 
-export function __near_encode_AnotherContainerClass(
-  value: AnotherContainerClass,
-  encoder: BSONEncoder
-): void {
-  if (value.foobar != null) {
-    __near_encode_FooBar(value.foobar, encoder);
-  } else {
-    encoder.setNull("foobar");
-  }
-}
-export class __near_BSONHandler_AnotherContainerClass {
-  buffer: Uint8Array;
-  decoder: BSONDecoder<__near_BSONHandler_AnotherContainerClass>;
-  value: AnotherContainerClass = new AnotherContainerClass();
-  setInteger(name: string, value: i32): void {}
-  setString(name: string, value: String): void {}
-  setUint8Array(name: string, value: Uint8Array): void {}
-  setBoolean(name: string, value: bool): void {}
-  setNull(name: string): void {
-    if (name == "foobar") {
-      this.value.foobar = <FooBar>null;
-    }
-  }
-
-  pushObject(name: string): bool {
-    if (name == "foobar") {
-      this.value.foobar = __near_decode_FooBar(
-        this.buffer,
-        this.decoder.readIndex
-      );
-      return false;
-    }
-
-    return false;
-  }
-  popObject(): void {}
-  pushArray(name: string): bool {
-    return false;
-  }
-  popArray(): void {}
-}
-
-export function __near_decode_AnotherContainerClass(
-  buffer: Uint8Array,
-  offset: i32
-): AnotherContainerClass {
-  let handler = new __near_BSONHandler_AnotherContainerClass();
-  handler.buffer = buffer;
-  handler.decoder = new BSONDecoder<__near_BSONHandler_AnotherContainerClass>(
-    handler
-  );
-  handler.decoder.deserialize(buffer, offset);
-  return handler.value;
-}
-
-export class __near_ArgsParser_doNothing {
-  buffer: Uint8Array;
-  decoder: BSONDecoder<__near_ArgsParser_doNothing>;
-
-  setInteger(name: string, value: i32): void {}
-  setString(name: string, value: String): void {}
-  setUint8Array(name: string, value: Uint8Array): void {}
-  setBoolean(name: string, value: bool): void {}
-  setNull(name: string): void {}
-
-  pushObject(name: string): bool {
-    return false;
-  }
-  popObject(): void {}
-  pushArray(name: string): bool {
-    return false;
-  }
-  popArray(): void {}
-}
-export function near_func_doNothing(): void {
-  let bson = new Uint8Array(input_read_len());
-  input_read_into(bson.buffer.data);
-  let handler = new __near_ArgsParser_doNothing();
-  handler.buffer = bson;
-  handler.decoder = new BSONDecoder<__near_ArgsParser_doNothing>(handler);
-  handler.decoder.deserialize(bson);
-  doNothing();
-}
-export class __near_ArgsParser_add {
-  buffer: Uint8Array;
-  decoder: BSONDecoder<__near_ArgsParser_add>;
-
-  __near_param_x: i32;
-  __near_param_y: i32;
-  setInteger(name: string, value: i32): void {
-    if (name == "x") {
-      this.__near_param_x = value;
-      return;
-    }
-    if (name == "y") {
-      this.__near_param_y = value;
-      return;
-    }
-  }
-  setString(name: string, value: String): void {}
-  setUint8Array(name: string, value: Uint8Array): void {}
-  setBoolean(name: string, value: bool): void {}
-  setNull(name: string): void {
-    if (name == "x") {
-      this.__near_param_x = <i32>null;
-    }
-    if (name == "y") {
-      this.__near_param_y = <i32>null;
-    }
-  }
-
-  pushObject(name: string): bool {
-    return false;
-  }
-  popObject(): void {}
-  pushArray(name: string): bool {
-    return false;
-  }
-  popArray(): void {}
-}
-export function near_func_add(): void {
-  let bson = new Uint8Array(input_read_len());
-  input_read_into(bson.buffer.data);
-  let handler = new __near_ArgsParser_add();
-  handler.buffer = bson;
-  handler.decoder = new BSONDecoder<__near_ArgsParser_add>(handler);
-  handler.decoder.deserialize(bson);
-  let result = add(handler.__near_param_x, handler.__near_param_y);
-
-  let encoder = new BSONEncoder();
-  encoder.setInteger("result", result);
-
-  return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
-}
-export class __near_ArgsParser_getFoobar {
+export class __near_ArgsParser_getFoobar extends BSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_ArgsParser_getFoobar>;
 
@@ -339,11 +346,87 @@ export class __near_ArgsParser_getFoobar {
 
     return false;
   }
-  popObject(): void {}
+
   pushArray(name: string): bool {
+    if (name == "container") {
+      this.__near_param_container = __near_decode_ContainerClass(
+        this.buffer,
+        this.decoder.readIndex
+      );
+      return false;
+    }
+
     return false;
   }
-  popArray(): void {}
+}
+export function __near_encode_Array_String(
+  value: Array<String>,
+  encoder: BSONEncoder
+): void {
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] != null) {
+      encoder.setString(near.str(i), value[i]);
+    } else {
+      encoder.setNull(near.str(i));
+    }
+  }
+}
+export function __near_encode_Array_Array_String(
+  value: Array<Array<String>>,
+  encoder: BSONEncoder
+): void {
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] != null) {
+      __near_encode_Array_String(value[i], encoder);
+    } else {
+      encoder.setNull(near.str(i));
+    }
+  }
+}
+export function __near_encode_FooBar(
+  value: FooBar,
+  encoder: BSONEncoder
+): void {
+  if (value.foo != null) {
+    encoder.setInteger("foo", value.foo);
+  } else {
+    encoder.setNull("foo");
+  }
+  if (value.bar != null) {
+    encoder.setInteger("bar", value.bar);
+  } else {
+    encoder.setNull("bar");
+  }
+  if (value.flag != null) {
+    encoder.setBoolean("flag", value.flag);
+  } else {
+    encoder.setNull("flag");
+  }
+  if (value.baz != null) {
+    encoder.setString("baz", value.baz);
+  } else {
+    encoder.setNull("baz");
+  }
+  if (value.foobar != null) {
+    encoder.setUint8Array("foobar", value.foobar);
+  } else {
+    encoder.setNull("foobar");
+  }
+  if (value.arr != null) {
+    __near_encode_Array_Array_String(value.arr, encoder);
+  } else {
+    encoder.setNull("arr");
+  }
+}
+export function __near_encode_AnotherContainerClass(
+  value: AnotherContainerClass,
+  encoder: BSONEncoder
+): void {
+  if (value.foobar != null) {
+    __near_encode_FooBar(value.foobar, encoder);
+  } else {
+    encoder.setNull("foobar");
+  }
 }
 export function near_func_getFoobar(): void {
   let bson = new Uint8Array(input_read_len());
@@ -357,6 +440,116 @@ export function near_func_getFoobar(): void {
   let encoder = new BSONEncoder();
   if (result != null) {
     __near_encode_AnotherContainerClass(result, encoder);
+  } else {
+    encoder.setNull("result");
+  }
+
+  return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
+}
+export class __near_BSONHandler_Array_FooBar extends BSONHandler {
+  buffer: Uint8Array;
+  decoder: BSONDecoder<__near_BSONHandler_Array_FooBar>;
+  value: Array<FooBar> = new Array<FooBar>();
+  pushObject(name: string): bool {
+    this.value[i32(parseInt(name))] = __near_decode_FooBar(
+      this.buffer,
+      this.decoder.readIndex
+    );
+    return false;
+  }
+  pushArray(name: string): bool {
+    this.value[i32(parseInt(name))] = __near_decode_FooBar(
+      this.buffer,
+      this.decoder.readIndex
+    );
+    return false;
+  }
+}
+
+export function __near_decode_Array_FooBar(
+  buffer: Uint8Array,
+  offset: i32
+): Array<FooBar> {
+  let handler = new __near_BSONHandler_Array_FooBar();
+  handler.buffer = buffer;
+  handler.decoder = new BSONDecoder<__near_BSONHandler_Array_FooBar>(handler);
+  handler.decoder.deserialize(buffer, offset);
+  return handler.value;
+}
+
+export class __near_ArgsParser_convertFoobars extends BSONHandler {
+  buffer: Uint8Array;
+  decoder: BSONDecoder<__near_ArgsParser_convertFoobars>;
+
+  __near_param_foobars: Array<FooBar>;
+  setInteger(name: string, value: i32): void {}
+  setString(name: string, value: String): void {}
+  setUint8Array(name: string, value: Uint8Array): void {}
+  setBoolean(name: string, value: bool): void {}
+  setNull(name: string): void {
+    if (name == "foobars") {
+      this.__near_param_foobars = <Array<FooBar>>null;
+    }
+  }
+
+  pushObject(name: string): bool {
+    if (name == "foobars") {
+      this.__near_param_foobars = __near_decode_Array_FooBar(
+        this.buffer,
+        this.decoder.readIndex
+      );
+      return false;
+    }
+
+    return false;
+  }
+
+  pushArray(name: string): bool {
+    if (name == "foobars") {
+      this.__near_param_foobars = __near_decode_Array_FooBar(
+        this.buffer,
+        this.decoder.readIndex
+      );
+      return false;
+    }
+
+    return false;
+  }
+}
+export function __near_encode_ContainerClass(
+  value: ContainerClass,
+  encoder: BSONEncoder
+): void {
+  if (value.foobar != null) {
+    __near_encode_FooBar(value.foobar, encoder);
+  } else {
+    encoder.setNull("foobar");
+  }
+}
+export function __near_encode_Array_ContainerClass(
+  value: Array<ContainerClass>,
+  encoder: BSONEncoder
+): void {
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] != null) {
+      __near_encode_ContainerClass(value[i], encoder);
+    } else {
+      encoder.setNull(near.str(i));
+    }
+  }
+}
+export function near_func_convertFoobars(): void {
+  let bson = new Uint8Array(input_read_len());
+  input_read_into(bson.buffer.data);
+  let handler = new __near_ArgsParser_convertFoobars();
+  handler.buffer = bson;
+  handler.decoder = new BSONDecoder<__near_ArgsParser_convertFoobars>(handler);
+  handler.decoder.deserialize(bson);
+  let result = convertFoobars(handler.__near_param_foobars);
+
+  let encoder = new BSONEncoder();
+  if (result != null) {
+    __near_encode_Array_ContainerClass(result, encoder);
   } else {
     encoder.setNull("result");
   }
