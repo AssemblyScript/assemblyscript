@@ -2,7 +2,7 @@ import "allocator/arena";
 // TODO: Why cannot import from index?
 // import { BSONEncoder, BSONDecoder } from "./bson";
 import { BSONEncoder } from "./bson/encoder";
-import { BSONDecoder, BSONHandler } from "./bson/decoder";
+import { BSONDecoder, ThrowingBSONHandler } from "./bson/decoder";
 import { near } from "./near";
 
 declare function log(str: string): void;
@@ -51,7 +51,7 @@ export function convertFoobars(foobars: Array<FooBar>): Array<ContainerClass> {
   );
 }
 
-export class __near_ArgsParser_doNothing extends BSONHandler {
+export class __near_ArgsParser_doNothing extends ThrowingBSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_ArgsParser_doNothing>;
 
@@ -59,14 +59,16 @@ export class __near_ArgsParser_doNothing extends BSONHandler {
   setString(name: string, value: String): void {}
   setUint8Array(name: string, value: Uint8Array): void {}
   setBoolean(name: string, value: bool): void {}
-  setNull(name: string): void {}
+  setNull(name: string): void {
+    super.setNull(name);
+  }
 
   pushObject(name: string): bool {
-    return false;
+    return super.pushObject(name);
   }
 
   pushArray(name: string): bool {
-    return false;
+    return super.pushArray(name);
   }
 }
 export function near_func_doNothing(): void {
@@ -78,7 +80,7 @@ export function near_func_doNothing(): void {
   handler.decoder.deserialize(bson);
   doNothing();
 }
-export class __near_ArgsParser_add extends BSONHandler {
+export class __near_ArgsParser_add extends ThrowingBSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_ArgsParser_add>;
 
@@ -100,18 +102,22 @@ export class __near_ArgsParser_add extends BSONHandler {
   setNull(name: string): void {
     if (name == "x") {
       this.__near_param_x = <i32>null;
+      return;
     }
     if (name == "y") {
       this.__near_param_y = <i32>null;
+      return;
     }
+
+    super.setNull(name);
   }
 
   pushObject(name: string): bool {
-    return false;
+    return super.pushObject(name);
   }
 
   pushArray(name: string): bool {
-    return false;
+    return super.pushArray(name);
   }
 }
 export function near_func_add(): void {
@@ -128,7 +134,7 @@ export function near_func_add(): void {
 
   return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
 }
-export class __near_BSONHandler_ContainerClass extends BSONHandler {
+export class __near_BSONHandler_ContainerClass extends ThrowingBSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_BSONHandler_ContainerClass>;
   value: ContainerClass = new ContainerClass();
@@ -139,7 +145,10 @@ export class __near_BSONHandler_ContainerClass extends BSONHandler {
   setNull(name: string): void {
     if (name == "foobar") {
       this.value.foobar = <FooBar>null;
+      return;
     }
+
+    super.setNull(name);
   }
 
   pushObject(name: string): bool {
@@ -151,7 +160,7 @@ export class __near_BSONHandler_ContainerClass extends BSONHandler {
       return false;
     }
 
-    return false;
+    return super.pushObject(name);
   }
 
   pushArray(name: string): bool {
@@ -163,11 +172,11 @@ export class __near_BSONHandler_ContainerClass extends BSONHandler {
       return false;
     }
 
-    return false;
+    return super.pushArray(name);
   }
 }
 
-export class __near_BSONHandler_FooBar extends BSONHandler {
+export class __near_BSONHandler_FooBar extends ThrowingBSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_BSONHandler_FooBar>;
   value: FooBar = new FooBar();
@@ -202,22 +211,30 @@ export class __near_BSONHandler_FooBar extends BSONHandler {
   setNull(name: string): void {
     if (name == "foo") {
       this.value.foo = <i32>null;
+      return;
     }
     if (name == "bar") {
       this.value.bar = <i32>null;
+      return;
     }
     if (name == "flag") {
       this.value.flag = <bool>null;
+      return;
     }
     if (name == "baz") {
       this.value.baz = <String>null;
+      return;
     }
     if (name == "foobar") {
       this.value.foobar = <Uint8Array>null;
+      return;
     }
     if (name == "arr") {
       this.value.arr = <Array<Array<String>>>null;
+      return;
     }
+
+    super.setNull(name);
   }
 
   pushObject(name: string): bool {
@@ -229,7 +246,7 @@ export class __near_BSONHandler_FooBar extends BSONHandler {
       return false;
     }
 
-    return false;
+    return super.pushObject(name);
   }
 
   pushArray(name: string): bool {
@@ -241,11 +258,11 @@ export class __near_BSONHandler_FooBar extends BSONHandler {
       return false;
     }
 
-    return false;
+    return super.pushArray(name);
   }
 }
 
-export class __near_BSONHandler_Array_Array_String extends BSONHandler {
+export class __near_BSONHandler_Array_Array_String extends ThrowingBSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_BSONHandler_Array_Array_String>;
   value: Array<Array<String>> = new Array<Array<String>>();
@@ -265,7 +282,7 @@ export class __near_BSONHandler_Array_Array_String extends BSONHandler {
   }
 }
 
-export class __near_BSONHandler_Array_String extends BSONHandler {
+export class __near_BSONHandler_Array_String extends ThrowingBSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_BSONHandler_Array_String>;
   value: Array<String> = new Array<String>();
@@ -320,7 +337,7 @@ export function __near_decode_ContainerClass(
   return handler.value;
 }
 
-export class __near_ArgsParser_getFoobar extends BSONHandler {
+export class __near_ArgsParser_getFoobar extends ThrowingBSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_ArgsParser_getFoobar>;
 
@@ -332,7 +349,10 @@ export class __near_ArgsParser_getFoobar extends BSONHandler {
   setNull(name: string): void {
     if (name == "container") {
       this.__near_param_container = <ContainerClass>null;
+      return;
     }
+
+    super.setNull(name);
   }
 
   pushObject(name: string): bool {
@@ -344,7 +364,7 @@ export class __near_ArgsParser_getFoobar extends BSONHandler {
       return false;
     }
 
-    return false;
+    return super.pushObject(name);
   }
 
   pushArray(name: string): bool {
@@ -356,7 +376,7 @@ export class __near_ArgsParser_getFoobar extends BSONHandler {
       return false;
     }
 
-    return false;
+    return super.pushArray(name);
   }
 }
 export function __near_encode_Array_String(
@@ -446,7 +466,7 @@ export function near_func_getFoobar(): void {
 
   return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
 }
-export class __near_BSONHandler_Array_FooBar extends BSONHandler {
+export class __near_BSONHandler_Array_FooBar extends ThrowingBSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_BSONHandler_Array_FooBar>;
   value: Array<FooBar> = new Array<FooBar>();
@@ -477,7 +497,7 @@ export function __near_decode_Array_FooBar(
   return handler.value;
 }
 
-export class __near_ArgsParser_convertFoobars extends BSONHandler {
+export class __near_ArgsParser_convertFoobars extends ThrowingBSONHandler {
   buffer: Uint8Array;
   decoder: BSONDecoder<__near_ArgsParser_convertFoobars>;
 
@@ -489,7 +509,10 @@ export class __near_ArgsParser_convertFoobars extends BSONHandler {
   setNull(name: string): void {
     if (name == "foobars") {
       this.__near_param_foobars = <Array<FooBar>>null;
+      return;
     }
+
+    super.setNull(name);
   }
 
   pushObject(name: string): bool {
@@ -501,7 +524,7 @@ export class __near_ArgsParser_convertFoobars extends BSONHandler {
       return false;
     }
 
-    return false;
+    return super.pushObject(name);
   }
 
   pushArray(name: string): bool {
@@ -513,7 +536,7 @@ export class __near_ArgsParser_convertFoobars extends BSONHandler {
       return false;
     }
 
-    return false;
+    return super.pushArray(name);
   }
 }
 export function __near_encode_ContainerClass(
