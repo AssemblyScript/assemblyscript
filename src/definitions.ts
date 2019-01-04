@@ -186,8 +186,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
 
   private generateWrapperFunction(element: Function) {
     let signature = element.signature;
-    let returnType = signature.returnType.toString();
-    this.generateEncodeFunction(signature.returnType);
+    let returnType = signature.returnType;
+    this.generateEncodeFunction(returnType);
     this.sb.push(`export function near_func_${element.simpleName}(): void {
       let bson = new Uint8Array(input_read_len());
       input_read_into(bson.buffer.data);
@@ -195,7 +195,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       handler.buffer = bson;
       handler.decoder = new BSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
       handler.decoder.deserialize(bson);`);
-    if (returnType != "void") {
+    if (returnType.toString() != "void") {
       this.sb.push(`let result = ${element.simpleName}(`);
     } else {
       this.sb.push(`${element.simpleName}(`);
@@ -204,7 +204,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.sb.push(signature.parameterNames.map(paramName => `handler.__near_param_${paramName}`).join(","));
     }
     this.sb.push(");");
-    if (returnType != "void") {
+    if (returnType.toString() != "void") {
       this.sb.push(`
         let encoder = new BSONEncoder();`);
       this.generateFieldEncoder(returnType, '"result"', "result");
@@ -370,18 +370,21 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }\n`);
   }
 
-  private generateFieldEncoder(fieldType: any, fieldExpr: string, sourceExpr: string) {
-    let setterType = this.typeMapping[fieldType];
+  private generateFieldEncoder(fieldType: Type, fieldExpr: string, sourceExpr: string) {
+    let setterType = this.typeMapping[fieldType.toString()];
     if (!setterType) {
       // Object / array
+      let pushType = fieldType.classReference!.prototype.simpleName == "Array" ? "Array" : "Object";
       this.sb.push(`if (${sourceExpr} != null) {
+          encoder.push${pushType}(${fieldExpr});
           __near_encode_${this.encodeType(fieldType)}(${sourceExpr}, encoder);
+          encoder.pop${pushType}();
         } else {
           encoder.setNull(${fieldExpr});
         }`);
     } else {
       // Basic types
-      if (this.nonNullableTypes.indexOf(fieldType) != -1) {
+      if (this.nonNullableTypes.indexOf(fieldType.toString()) != -1) {
         this.sb.push(`encoder.set${setterType}(${fieldExpr}, ${sourceExpr});`);
       } else {
         this.sb.push(`if (${sourceExpr} != null) {
