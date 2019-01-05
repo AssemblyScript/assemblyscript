@@ -10,53 +10,67 @@
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $iiv (func (param i32 i32)))
  (import "env" "memory" (memory $0 1))
- (data (i32.const 8) "\00\00\00\00\00\00\00\00")
- (data (i32.const 16) "\08\00\00\00\00\00\00\00")
- (data (i32.const 24) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 56) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
- (data (i32.const 120) "\01\00\00\000\00")
- (data (i32.const 128) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 184) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 696) "\b8\00\00\00d\00\00\00")
- (data (i32.const 704) "\03\00\00\00i\003\002\00")
- (data (i32.const 720) "\03\00\00\00i\006\004\00")
- (data (i32.const 736) "\03\00\00\00f\003\002\00")
- (data (i32.const 752) "\03\00\00\00f\006\004\00")
- (data (i32.const 768) "\07\00\00\00a\00n\00y\00f\00u\00n\00c\00")
- (data (i32.const 792) "\04\00\00\00f\00u\00n\00c\00")
- (data (i32.const 808) "\04\00\00\00n\00o\00n\00e\00")
- (data (i32.const 824) "\00\00\00\00")
- (data (i32.const 832) "\04\00\00\00n\00u\00l\00l\00")
- (data (i32.const 848) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
- (data (i32.const 880) "\02\00\00\00,\00 \00")
- (data (i32.const 888) "\04\00\00\00v\00o\00i\00d\00")
- (data (i32.const 904) "\07\00\00\00i\00n\00d\00e\00x\00:\00 \00")
- (data (i32.const 928) "\06\00\00\00f\00o\00r\00m\00:\00 \00")
- (data (i32.const 944) "\03\00\00\00,\00 \00(\00")
- (data (i32.const 960) "\05\00\00\00)\00 \00=\00>\00 \00")
- (data (i32.const 976) "\00\00\00\00\00\00\00\00")
- (data (i32.const 984) "\d0\03\00\00\00\00\00\00")
- (data (i32.const 992) "\01\00\00\00\n\00")
- (data (i32.const 1000) "\00\00\00\00\00\00\00\00")
- (data (i32.const 1008) "\e8\03\00\00\00\00\00\00")
- (data (i32.const 1016) "\00\00\00\00\00\00\00\00")
- (data (i32.const 1024) "\f8\03\00\00\00\00\00\00")
- (data (i32.const 1032) "\01\00\00\00\'\00")
- (data (i32.const 1040) "\06\00\00\00C\00u\00s\00t\00o\00m\00")
- (data (i32.const 1056) "\04\00\00\00T\00y\00p\00e\00")
- (data (i32.const 1072) "\06\00\00\00I\00m\00p\00o\00r\00t\00")
- (data (i32.const 1088) "\08\00\00\00F\00u\00n\00c\00t\00i\00o\00n\00")
- (data (i32.const 1112) "\05\00\00\00T\00a\00b\00l\00e\00")
- (data (i32.const 1128) "\06\00\00\00M\00e\00m\00o\00r\00y\00")
- (data (i32.const 1144) "\06\00\00\00G\00l\00o\00b\00a\00l\00")
- (data (i32.const 1160) "\06\00\00\00E\00x\00p\00o\00r\00t\00")
- (data (i32.const 1176) "\05\00\00\00S\00t\00a\00r\00t\00")
- (data (i32.const 1192) "\07\00\00\00E\00l\00e\00m\00e\00n\00t\00")
- (data (i32.const 1216) "\04\00\00\00C\00o\00d\00e\00")
- (data (i32.const 1232) "\04\00\00\00D\00a\00t\00a\00")
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (data (i32.const 8) "\16\00\00\00i\00n\00 \00t\00h\00e\00 \00s\00t\00a\00r\00t\00 \00f\00u\00n\00c\00t\00i\00o\00n\00!\00")
+ (data (i32.const 56) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 88) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
+ (data (i32.const 152) "\01\00\00\000\00")
+ (data (i32.const 160) "\17\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 216) "\90\01\00\00\00\00\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 728) "\d8\00\00\00d\00\00\00")
+ (data (i32.const 736) "\03\00\00\00i\003\002\00")
+ (data (i32.const 752) "\03\00\00\00i\006\004\00")
+ (data (i32.const 768) "\03\00\00\00f\003\002\00")
+ (data (i32.const 784) "\03\00\00\00f\006\004\00")
+ (data (i32.const 800) "\07\00\00\00a\00n\00y\00f\00u\00n\00c\00")
+ (data (i32.const 824) "\04\00\00\00f\00u\00n\00c\00")
+ (data (i32.const 840) "\04\00\00\00n\00o\00n\00e\00")
+ (data (i32.const 856) "\0e\00\00\00I\00n\00c\00o\00r\00r\00e\00c\00t\00 \00T\00y\00p\00e\00")
+ (data (i32.const 888) "\07\00\00\00E\00r\00r\00o\00r\00:\00 \00")
+ (data (i32.const 912) "\04\00\00\00n\00u\00l\00l\00")
+ (data (i32.const 928) "\0e\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 960) "\00\00\00\00")
+ (data (i32.const 968) "\02\00\00\00,\00 \00")
+ (data (i32.const 976) "\04\00\00\00v\00o\00i\00d\00")
+ (data (i32.const 992) "\07\00\00\00i\00n\00d\00e\00x\00:\00 \00")
+ (data (i32.const 1016) "\06\00\00\00f\00o\00r\00m\00:\00 \00")
+ (data (i32.const 1032) "\03\00\00\00,\00 \00(\00")
+ (data (i32.const 1048) "\05\00\00\00)\00 \00=\00>\00 \00")
+ (data (i32.const 1064) "\00\00\00\00\00\00\00\00")
+ (data (i32.const 1072) "(\04\00\00\00\00\00\00")
+ (data (i32.const 1080) "\01\00\00\00\n\00")
+ (data (i32.const 1088) "\00\00\00\00\00\00\00\00")
+ (data (i32.const 1096) "@\04\00\00\00\00\00\00")
+ (data (i32.const 1104) "\05\00\00\00r\00e\00f\00:\00 \00")
+ (data (i32.const 1120) "\04\00\00\00i\00d\00:\00 \00")
+ (data (i32.const 1136) "\0d\00\00\00p\00a\00y\00l\00o\00a\00d\00 \00o\00f\00f\00:\00 \00")
+ (data (i32.const 1168) "\10\00\00\00p\00a\00y\00l\00o\00a\00d\00 \00l\00e\00n\00g\00t\00h\00:\00 \00")
+ (data (i32.const 1208) "\05\00\00\00e\00n\00d\00:\00 \00")
+ (data (i32.const 1224) "\06\00\00\00n\00a\00m\00e\00:\00 \00")
+ (data (i32.const 1240) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 1304) "\12\00\00\00c\00h\00e\00c\00k\00i\00n\00g\00 \00e\00n\00d\00 \00i\00n\00d\00e\00x\00")
+ (data (i32.const 1344) "\00\00\00\00\00\00\00\00")
+ (data (i32.const 1352) "@\05\00\00\00\00\00\00")
+ (data (i32.const 1360) "\08\00\00\00s\00t\00a\00r\00t\00i\00n\00g\00")
+ (data (i32.const 1384) "\0e\00\00\00M\00a\00g\00i\00c\00 \00i\00s\00 \00v\00a\00l\00i\00d\00")
+ (data (i32.const 1416) "\01\00\00\00\'\00")
+ (data (i32.const 1424) "\06\00\00\00C\00u\00s\00t\00o\00m\00")
+ (data (i32.const 1440) "\04\00\00\00T\00y\00p\00e\00")
+ (data (i32.const 1456) "\06\00\00\00I\00m\00p\00o\00r\00t\00")
+ (data (i32.const 1472) "\08\00\00\00F\00u\00n\00c\00t\00i\00o\00n\00")
+ (data (i32.const 1496) "\05\00\00\00T\00a\00b\00l\00e\00")
+ (data (i32.const 1512) "\06\00\00\00M\00e\00m\00o\00r\00y\00")
+ (data (i32.const 1528) "\06\00\00\00G\00l\00o\00b\00a\00l\00")
+ (data (i32.const 1544) "\06\00\00\00E\00x\00p\00o\00r\00t\00")
+ (data (i32.const 1560) "\05\00\00\00S\00t\00a\00r\00t\00")
+ (data (i32.const 1576) "\07\00\00\00E\00l\00e\00m\00e\00n\00t\00")
+ (data (i32.const 1600) "\04\00\00\00C\00o\00d\00e\00")
+ (data (i32.const 1616) "\04\00\00\00D\00a\00t\00a\00")
+ (data (i32.const 1632) "\0c\00\00\00n\00o\00 \00s\00u\00c\00h\00 \00I\00D\00:\00 \00")
+ (data (i32.const 1664) "\t\00\00\00-\00-\00-\00-\00-\00-\00-\00-\00-\00")
  (import "index" "_log_str" (func $assembly/host/index/_log_str (param i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "index" "_logi" (func $assembly/host/index/_logi (param i32)))
+ (import "index" "_log" (func $assembly/host/index/_log<i32> (param i32 i32)))
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $src/common/MAX_PAGES i32 (i32.const 65535))
@@ -124,11 +138,12 @@
  (global $src/common/ExternalKind.Table (mut i32) (i32.const 1))
  (global $src/common/ExternalKind.Memory (mut i32) (i32.const 2))
  (global $src/common/ExternalKind.Global (mut i32) (i32.const 3))
- (global $HEAP_BASE i32 (i32.const 1244))
+ (global $HEAP_BASE i32 (i32.const 1688))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "getType" (func $assembly/index/getType))
  (export "getImports" (func $assembly/index/getImports))
+ (export "removeStartFunction" (func $assembly/index/removeStartFunction))
  (export "toString" (func $assembly/index/toString))
  (export "Parser#constructor" (func $assembly/index/Parser#constructor))
  (export "Parser#get:buf" (func $Parser#get:buf))
@@ -149,7 +164,7 @@
  (export "memory.free" (func $~lib/memory/memory.free))
  (export "memory.reset" (func $~lib/memory/memory.reset))
  (start $start)
- (func $~lib/internal/memory/memset (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
 <<<<<<< loader-memory-accessors
   get_global $assembly/index/off
@@ -644,13 +659,13 @@
    end
   end
  )
- (func $~lib/memory/memory.fill (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $0
   get_local $1
   get_local $2
   call $~lib/internal/memory/memset
  )
- (func $~lib/internal/memory/memcpy (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1851,7 +1866,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   get_local $0
   get_local $1
@@ -2078,13 +2093,13 @@
    end
   end
  )
- (func $~lib/memory/memory.copy (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $0
   get_local $1
   get_local $2
   call $~lib/internal/memory/memmove
  )
- (func $~lib/internal/memory/memcmp (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/memory/memcmp (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $0
   get_local $1
@@ -2138,13 +2153,13 @@
    i32.const 0
   end
  )
- (func $~lib/memory/memory.compare (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.compare (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   get_local $1
   get_local $2
   call $~lib/internal/memory/memcmp
  )
- (func $~lib/allocator/arena/__memory_allocate (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 11 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2223,28 +2238,132 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $~lib/memory/memory.allocate (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 12 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/allocator/arena/__memory_free (; 12 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 13 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/memory/memory.free (; 13 ;) (type $iv) (param $0 i32)
+ (func $~lib/memory/memory.free (; 14 ;) (type $iv) (param $0 i32)
   get_local $0
   call $~lib/allocator/arena/__memory_free
   return
  )
- (func $~lib/allocator/arena/__memory_reset (; 14 ;) (type $v)
+ (func $~lib/allocator/arena/__memory_reset (; 15 ;) (type $v)
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
  )
- (func $~lib/memory/memory.reset (; 15 ;) (type $v)
+ (func $~lib/memory/memory.reset (; 16 ;) (type $v)
   call $~lib/allocator/arena/__memory_reset
   return
  )
- (func $~lib/array/Array<SectionHeader>#pop (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/host/index/log<String> (; 17 ;) (type $iv) (param $0 i32)
+  get_local $0
+  call $assembly/host/index/_log_str
+ )
+ (func $~lib/internal/arraybuffer/computeSize (; 18 ;) (type $ii) (param $0 i32) (result i32)
+  i32.const 1
+  i32.const 32
+  get_local $0
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  i32.const 1
+  i32.sub
+  i32.clz
+  i32.sub
+  i32.shl
+ )
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 19 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  get_local $0
+  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+  i32.le_u
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 88
+   i32.const 26
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/memory/memory.allocate|inlined.0 (result i32)
+   get_local $0
+   call $~lib/internal/arraybuffer/computeSize
+   set_local $2
+   get_local $2
+   call $~lib/allocator/arena/__memory_allocate
+   br $~lib/memory/memory.allocate|inlined.0
+  end
+  set_local $1
+  get_local $1
+  get_local $0
+  i32.store
+  get_local $1
+ )
+ (func $~lib/array/Array<SectionHeader>#constructor (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  get_local $1
+  i32.const 268435454
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 56
+   i32.const 45
+   i32.const 39
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $1
+  i32.const 2
+  i32.shl
+  set_local $2
+  get_local $2
+  call $~lib/internal/arraybuffer/allocateUnsafe
+  set_local $3
+  get_local $0
+  if (result i32)
+   get_local $0
+  else   
+   block (result i32)
+    i32.const 8
+    call $~lib/memory/memory.allocate
+    set_local $4
+    get_local $4
+    i32.const 0
+    i32.store
+    get_local $4
+    i32.const 0
+    i32.store offset=4
+    get_local $4
+   end
+   tee_local $0
+  end
+  tee_local $0
+  get_local $3
+  i32.store
+  get_local $0
+  get_local $1
+  i32.store offset=4
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
+  get_local $0
+ )
+ (func $~lib/array/Array<SectionHeader>#pop (; 21 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2258,7 +2377,7 @@
   i32.lt_s
   if
    i32.const 0
-   i32.const 24
+   i32.const 56
    i32.const 246
    i32.const 20
    call $~lib/env/abort
@@ -2290,7 +2409,7 @@
   i32.store offset=4
   get_local $5
  )
- (func $~lib/array/Array<SectionHeader>#__get (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<SectionHeader>#__get (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -2317,48 +2436,7 @@
    unreachable
   end
  )
- (func $~lib/internal/arraybuffer/computeSize (; 18 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
-  i32.const 32
-  get_local $0
-  get_global $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  i32.const 1
-  i32.sub
-  i32.clz
-  i32.sub
-  i32.shl
- )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 19 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  get_local $0
-  get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.le_u
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 56
-   i32.const 26
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/memory/memory.allocate|inlined.0 (result i32)
-   get_local $0
-   call $~lib/internal/arraybuffer/computeSize
-   set_local $2
-   get_local $2
-   call $~lib/allocator/arena/__memory_allocate
-   br $~lib/memory/memory.allocate|inlined.0
-  end
-  set_local $1
-  get_local $1
-  get_local $0
-  i32.store
-  get_local $1
- )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2376,7 +2454,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 56
+    i32.const 88
     i32.const 40
     i32.const 4
     call $~lib/env/abort
@@ -2447,7 +2525,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 56
+     i32.const 88
      i32.const 62
      i32.const 4
      call $~lib/env/abort
@@ -2460,7 +2538,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<SectionHeader>#push (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<SectionHeader>#push (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2490,7 +2568,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 24
+    i32.const 56
     i32.const 184
     i32.const 42
     call $~lib/env/abort
@@ -2522,11 +2600,13 @@
   i32.store offset=8
   get_local $5
  )
- (func $assembly/module/index/Module#getID (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/module/index/Module#getID (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 16
+  i32.const 0
+  i32.const 0
+  call $~lib/array/Array<SectionHeader>#constructor
   set_local $2
   block $break|0
    loop $continue|0
@@ -2588,7 +2668,7 @@
   end
   get_local $2
  )
- (func $assembly/module/index/Section#constructor (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/module/index/Section#constructor (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   if (result i32)
@@ -2607,7 +2687,7 @@
   end
   tee_local $0
  )
- (func $assembly/buffer/index/Buffer#readVaruint (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/buffer/index/Buffer#readVaruint (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2662,7 +2742,7 @@
   i32.store offset=8
   get_local $2
  )
- (func $~lib/array/Array<FuncType>#constructor (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<FuncType>#constructor (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2672,7 +2752,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 24
+   i32.const 56
    i32.const 45
    i32.const 39
    call $~lib/env/abort
@@ -2721,7 +2801,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $assembly/buffer/index/Buffer#readVarint (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/buffer/index/Buffer#readVarint (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2792,12 +2872,12 @@
   end
   select
  )
- (func $assembly/buffer/index/Buffer#readVarint8 (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/buffer/index/Buffer#readVarint8 (; 30 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   get_local $1
   call $assembly/buffer/index/Buffer#readVarint
  )
- (func $assembly/module/index/FuncType#constructor (; 28 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $assembly/module/index/FuncType#constructor (; 31 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   get_local $0
   if (result i32)
@@ -2825,7 +2905,7 @@
   end
   tee_local $0
  )
- (func $~lib/array/Array<FuncType>#__set (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<FuncType>#__set (; 32 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2846,7 +2926,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 24
+    i32.const 56
     i32.const 109
     i32.const 41
     call $~lib/env/abort
@@ -2881,7 +2961,7 @@
   get_local $2
   i32.store offset=8
  )
- (func $~lib/array/Array<i32>#constructor (; 30 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (; 33 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2891,7 +2971,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 24
+   i32.const 56
    i32.const 45
    i32.const 39
    call $~lib/env/abort
@@ -2940,7 +3020,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/array/Array<FuncType>#__get (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<FuncType>#__get (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -2967,7 +3047,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<i32>#__set (; 32 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 35 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2988,7 +3068,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 24
+    i32.const 56
     i32.const 109
     i32.const 41
     call $~lib/env/abort
@@ -3023,7 +3103,7 @@
   get_local $2
   i32.store offset=8
  )
- (func $~lib/internal/number/decimalCount32 (; 33 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/decimalCount32 (; 36 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_local $0
   i32.const 100000
@@ -3092,7 +3172,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/string/allocateUnsafe (; 34 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 37 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -3109,7 +3189,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 128
+   i32.const 160
    i32.const 14
    i32.const 2
    call $~lib/env/abort
@@ -3132,7 +3212,7 @@
   i32.store
   get_local $2
  )
- (func $~lib/internal/number/utoa32_lut (; 35 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 38 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3142,7 +3222,7 @@
   (local $9 i64)
   (local $10 i64)
   block $~lib/internal/number/DIGITS|inlined.0 (result i32)
-   i32.const 696
+   i32.const 728
   end
   i32.load
   set_local $3
@@ -3302,13 +3382,13 @@
    i32.store16 offset=4
   end
  )
- (func $~lib/internal/number/utoa32 (; 36 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/utoa32 (; 39 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
   i32.eqz
   if
-   i32.const 120
+   i32.const 152
    return
   end
   get_local $0
@@ -3323,12 +3403,118 @@
   call $~lib/internal/number/utoa32_lut
   get_local $2
  )
- (func $~lib/internal/number/itoa<u32> (; 37 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<u32> (; 40 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $~lib/internal/number/utoa32
   return
  )
- (func $assembly/module/index/typeName (; 38 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/copyUnsafe (; 41 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  get_local $0
+  get_local $1
+  i32.const 1
+  i32.shl
+  i32.add
+  get_global $~lib/internal/string/HEADER_SIZE
+  i32.add
+  set_local $5
+  get_local $2
+  get_local $3
+  i32.const 1
+  i32.shl
+  i32.add
+  get_global $~lib/internal/string/HEADER_SIZE
+  i32.add
+  set_local $6
+  get_local $4
+  i32.const 1
+  i32.shl
+  set_local $7
+  get_local $5
+  get_local $6
+  get_local $7
+  call $~lib/internal/memory/memmove
+ )
+ (func $~lib/string/String#concat (; 42 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  get_local $0
+  i32.const 0
+>>>>>>> new Branch for parser
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 928
+   i32.const 110
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $1
+  i32.const 0
+  i32.eq
+  if
+   i32.const 912
+   set_local $1
+  end
+  get_local $0
+  i32.load
+  set_local $2
+  get_local $1
+  i32.load
+  set_local $3
+  get_local $2
+  get_local $3
+  i32.add
+  set_local $4
+  get_local $4
+  i32.const 0
+  i32.eq
+  if
+   i32.const 960
+   return
+  end
+  get_local $4
+  call $~lib/internal/string/allocateUnsafe
+  set_local $5
+  get_local $5
+  i32.const 0
+  get_local $0
+  i32.const 0
+  get_local $2
+  call $~lib/internal/string/copyUnsafe
+  get_local $5
+  get_local $2
+  get_local $1
+  i32.const 0
+  get_local $3
+  call $~lib/internal/string/copyUnsafe
+  get_local $5
+ )
+ (func $~lib/string/String.__concat (; 43 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 912
+   set_local $0
+  end
+  get_local $0
+  get_local $1
+  call $~lib/string/String#concat
+ )
+ (func $assembly/host/index/err (; 44 ;) (type $iv) (param $0 i32)
+  i32.const 888
+  get_local $0
+  call $~lib/string/String.__concat
+  call $assembly/host/index/log<String>
+  unreachable
+ )
+ (func $assembly/module/index/typeName (; 45 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case7|0
@@ -3371,34 +3557,33 @@
            br_if $case6|0
            br $case7|0
           end
-          i32.const 704
+          i32.const 736
           return
          end
-         i32.const 720
+         i32.const 752
          return
         end
-        i32.const 736
+        i32.const 768
         return
        end
-       i32.const 752
+       i32.const 784
        return
       end
-      i32.const 768
+      i32.const 800
       return
      end
-     i32.const 792
+     i32.const 824
      return
     end
-    i32.const 808
+    i32.const 840
     return
    end
-   unreachable
-   unreachable
+   i32.const 856
+   call $assembly/host/index/err
   end
-  unreachable
-  i32.const 824
+  i32.const 960
  )
- (func $~lib/array/Array<i32>#__get (; 39 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 46 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   get_local $0
@@ -3425,106 +3610,7 @@
    unreachable
   end
  )
- (func $~lib/internal/string/copyUnsafe (; 40 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  get_local $0
-  get_local $1
-  i32.const 1
-  i32.shl
-  i32.add
-  get_global $~lib/internal/string/HEADER_SIZE
-  i32.add
-  set_local $5
-  get_local $2
-  get_local $3
-  i32.const 1
-  i32.shl
-  i32.add
-  get_global $~lib/internal/string/HEADER_SIZE
-  i32.add
-  set_local $6
-  get_local $4
-  i32.const 1
-  i32.shl
-  set_local $7
-  get_local $5
-  get_local $6
-  get_local $7
-  call $~lib/internal/memory/memmove
- )
- (func $~lib/string/String#concat (; 41 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  get_local $0
-  i32.const 0
->>>>>>> new Branch for parser
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 848
-   i32.const 110
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
-  get_local $1
-  i32.const 0
-  i32.eq
-  if
-   i32.const 832
-   set_local $1
-  end
-  get_local $0
-  i32.load
-  set_local $2
-  get_local $1
-  i32.load
-  set_local $3
-  get_local $2
-  get_local $3
-  i32.add
-  set_local $4
-  get_local $4
-  i32.const 0
-  i32.eq
-  if
-   i32.const 824
-   return
-  end
-  get_local $4
-  call $~lib/internal/string/allocateUnsafe
-  set_local $5
-  get_local $5
-  i32.const 0
-  get_local $0
-  i32.const 0
-  get_local $2
-  call $~lib/internal/string/copyUnsafe
-  get_local $5
-  get_local $2
-  get_local $1
-  i32.const 0
-  get_local $3
-  call $~lib/internal/string/copyUnsafe
-  get_local $5
- )
- (func $~lib/string/String.__concat (; 42 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  i32.eqz
-  if
-   i32.const 832
-   set_local $0
-  end
-  get_local $0
-  get_local $1
-  call $~lib/string/String#concat
- )
- (func $assembly/module/index/FuncType#toString (; 43 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/module/index/FuncType#toString (; 47 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3538,7 +3624,7 @@
   i32.load8_s offset=12
   call $assembly/module/index/typeName
   set_local $2
-  i32.const 824
+  i32.const 960
   set_local $3
   block $break|0
    i32.const 0
@@ -3577,7 +3663,7 @@
      i32.lt_s
      if (result i32)
       get_local $3
-      i32.const 880
+      i32.const 968
       call $~lib/string/String.__concat
       tee_local $3
      else      
@@ -3610,32 +3696,28 @@
    call $~lib/array/Array<i32>#__get
    call $assembly/module/index/typeName
   else   
-   i32.const 888
+   i32.const 976
   end
   set_local $4
-  i32.const 904
+  i32.const 992
   get_local $1
   call $~lib/string/String.__concat
-  i32.const 880
+  i32.const 968
   call $~lib/string/String.__concat
-  i32.const 928
+  i32.const 1016
   call $~lib/string/String.__concat
   get_local $2
   call $~lib/string/String.__concat
-  i32.const 944
+  i32.const 1032
   call $~lib/string/String.__concat
   get_local $3
   call $~lib/string/String.__concat
-  i32.const 960
+  i32.const 1048
   call $~lib/string/String.__concat
   get_local $4
   call $~lib/string/String.__concat
  )
- (func $assembly/host/index/log<String> (; 44 ;) (type $iv) (param $0 i32)
-  get_local $0
-  call $assembly/host/index/_log_str
- )
- (func $assembly/module/index/TypeSection#parse (; 45 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/module/index/TypeSection#parse (; 48 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3786,7 +3868,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<String>#push (; 46 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#push (; 49 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3816,7 +3898,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 24
+    i32.const 56
     i32.const 184
     i32.const 42
     call $~lib/env/abort
@@ -3848,7 +3930,7 @@
   i32.store offset=8
   get_local $5
  )
- (func $~lib/array/Array<String>#join (; 47 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#join (; 50 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3869,10 +3951,10 @@
   i32.const 0
   i32.lt_s
   if
-   i32.const 824
+   i32.const 960
    return
   end
-  i32.const 824
+  i32.const 960
   set_local $3
   get_local $0
   i32.load
@@ -4066,11 +4148,11 @@
   get_local $8
   return
  )
- (func $assembly/module/index/TypeSection#toString (; 48 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/module/index/TypeSection#toString (; 51 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 984
+  i32.const 1072
   set_local $1
   block $break|0
    i32.const 0
@@ -4572,10 +4654,10 @@
    unreachable
   end
   get_local $1
-  i32.const 992
+  i32.const 1080
   call $~lib/array/Array<String>#join
  )
- (func $assembly/index/getType (; 49 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/getType (; 52 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -4596,11 +4678,7 @@
   get_global $assembly/index/type
   call $assembly/module/index/TypeSection#toString
  )
- (func $assembly/host/index/log<i32> (; 50 ;) (type $iv) (param $0 i32)
-  get_local $0
-  call $assembly/host/index/_logi
- )
- (func $~lib/array/Array<Import>#constructor (; 51 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Import>#constructor (; 53 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4610,7 +4688,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 24
+   i32.const 56
    i32.const 45
    i32.const 39
    call $~lib/env/abort
@@ -4659,7 +4737,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/string/String.fromUTF8 (; 52 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.fromUTF8 (; 54 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4670,7 +4748,7 @@
   i32.const 1
   i32.lt_u
   if
-   i32.const 824
+   i32.const 960
    return
   end
   i32.const 0
@@ -4740,7 +4818,7 @@
         i32.eqz
         if
          i32.const 0
-         i32.const 848
+         i32.const 928
          i32.const 510
          i32.const 8
          call $~lib/env/abort
@@ -4921,7 +4999,7 @@
          i32.eqz
          if
           i32.const 0
-          i32.const 848
+          i32.const 928
           i32.const 514
           i32.const 8
           call $~lib/env/abort
@@ -5048,7 +5126,7 @@
          i32.eqz
          if
           i32.const 0
-          i32.const 848
+          i32.const 928
           i32.const 526
           i32.const 8
           call $~lib/env/abort
@@ -5120,7 +5198,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 848
+   i32.const 928
    i32.const 535
    i32.const 4
    call $~lib/env/abort
@@ -5150,7 +5228,7 @@
   end
   get_local $7
  )
- (func $assembly/buffer/index/Buffer#readUint<u8> (; 53 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/buffer/index/Buffer#readUint<u8> (; 55 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -5166,7 +5244,7 @@
   i32.store offset=8
   get_local $2
  )
- (func $assembly/module/imports/Import#constructor (; 54 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $assembly/module/imports/Import#constructor (; 56 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   get_local $0
   if (result i32)
@@ -5191,7 +5269,7 @@
   end
   tee_local $0
  )
- (func $~lib/array/Array<Import>#__set (; 55 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Import>#__set (; 57 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5212,7 +5290,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 24
+    i32.const 56
     i32.const 109
     i32.const 41
     call $~lib/env/abort
@@ -5247,7 +5325,7 @@
   get_local $2
   i32.store offset=8
  )
- (func $assembly/module/imports/Imports#parse (; 56 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/module/imports/Imports#parse (; 58 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5453,7 +5531,7 @@
   end
   get_local $0
  )
- (func $~lib/array/Array<Imports>#push (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Imports>#push (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5483,7 +5561,7 @@
    i32.ge_u
    if
     i32.const 0
-    i32.const 24
+    i32.const 56
     i32.const 184
     i32.const 42
     call $~lib/env/abort
@@ -5515,23 +5593,17 @@
   i32.store offset=8
   get_local $5
  )
- (func $assembly/module/index/Module#getImports (; 58 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/module/index/Module#getImports (; 60 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   get_local $0
   get_global $src/common/SectionId.Import
   call $assembly/module/index/Module#getID
   set_local $1
-  i32.const 1008
+  i32.const 1096
   set_local $2
-  block $~lib/array/Array<Imports>#get:length|inlined.0 (result i32)
-   get_local $2
-   i32.load offset=4
-  end
-  call $assembly/host/index/log<i32>
   block $break|0
    i32.const 0
    set_local $3
@@ -5545,11 +5617,6 @@
     i32.eqz
     br_if $break|0
     block
-     get_local $1
-     get_local $3
-     call $~lib/array/Array<SectionHeader>#__get
-     i32.load offset=16
-     call $assembly/host/index/log<String>
      i32.const 0
      get_local $1
      get_local $3
@@ -5563,14 +5630,6 @@
      call $assembly/module/imports/Imports#parse
      call $~lib/array/Array<Imports>#push
      drop
-     block $~lib/array/Array<Import>#get:length|inlined.0 (result i32)
-      get_local $4
-      i32.load offset=4
-      set_local $5
-      get_local $5
-      i32.load offset=4
-     end
-     call $assembly/host/index/log<i32>
     end
     get_local $3
     i32.const 1
@@ -5583,13 +5642,13 @@
   end
   get_local $2
  )
- (func $assembly/index/getImports (; 59 ;) (type $iv) (param $0 i32)
+ (func $assembly/index/getImports (; 61 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
   call $assembly/module/index/Module#getImports
   set_local $1
-  block $~lib/array/Array<Imports>#get:length|inlined.2 (result i32)
+  block $~lib/array/Array<Imports>#get:length|inlined.1 (result i32)
    get_local $1
    i32.load offset=4
   end
@@ -5601,18 +5660,14 @@
     set_local $2
     loop $repeat|0
      get_local $2
-     block $~lib/array/Array<Imports>#get:length|inlined.4 (result i32)
+     block $~lib/array/Array<Imports>#get:length|inlined.3 (result i32)
       get_local $1
       i32.load offset=4
      end
      i32.lt_s
      i32.eqz
      br_if $break|0
-     block $~lib/array/Array<Imports>#get:length|inlined.5 (result i32)
-      get_local $1
-      i32.load offset=4
-     end
-     call $assembly/host/index/log<i32>
+     nop
      get_local $2
      i32.const 1
      i32.add
@@ -5624,11 +5679,399 @@
    end
   end
  )
- (func $assembly/index/toString (; 60 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/module/index/Module#get:start (; 62 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  get_global $src/common/SectionId.Start
+  call $assembly/module/index/Module#getID
+ )
+ (func $assembly/module/index/Module#get:hasStart (; 63 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $~lib/array/Array<SectionHeader>#get:length|inlined.5 (result i32)
+   get_local $0
+   call $assembly/module/index/Module#get:start
+   set_local $1
+   get_local $1
+   i32.load offset=4
+  end
+  i32.const 0
+  i32.gt_s
+ )
+ (func $assembly/module/index/SectionHeader#get:end (; 64 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.load offset=12
+  get_local $0
+  i32.load offset=8
+  i32.add
+ )
+ (func $assembly/module/index/SectionHeader#toString (; 65 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  get_local $0
+  i32.load
+  call $~lib/internal/number/itoa<u32>
+  set_local $1
+  get_local $0
+  i32.load offset=4
+  call $~lib/internal/number/itoa<u32>
+  set_local $2
+  get_local $0
+  i32.load offset=8
+  call $~lib/internal/number/itoa<u32>
+  set_local $3
+  get_local $0
+  i32.load offset=12
+  call $~lib/internal/number/itoa<u32>
+  set_local $4
+  get_local $0
+  i32.load offset=20
+  set_local $5
+  get_local $0
+  call $assembly/module/index/SectionHeader#get:end
+  call $~lib/internal/number/itoa<u32>
+  set_local $6
+  i32.const 1104
+  get_local $1
+  call $~lib/string/String.__concat
+  i32.const 1080
+  call $~lib/string/String.__concat
+  i32.const 1120
+  call $~lib/string/String.__concat
+  get_local $2
+  call $~lib/string/String.__concat
+  i32.const 1080
+  call $~lib/string/String.__concat
+  i32.const 1136
+  call $~lib/string/String.__concat
+  get_local $4
+  call $~lib/string/String.__concat
+  i32.const 1080
+  call $~lib/string/String.__concat
+  i32.const 1168
+  call $~lib/string/String.__concat
+  get_local $3
+  call $~lib/string/String.__concat
+  i32.const 1080
+  call $~lib/string/String.__concat
+  i32.const 1208
+  call $~lib/string/String.__concat
+  get_local $6
+  call $~lib/string/String.__concat
+  i32.const 1080
+  call $~lib/string/String.__concat
+  i32.const 1224
+  call $~lib/string/String.__concat
+  get_local $5
+  call $~lib/string/String.__concat
+ )
+ (func $assembly/host/index/log<u32> (; 66 ;) (type $iv) (param $0 i32)
+  get_local $0
+  call $assembly/host/index/_logi
+ )
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 67 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  get_local $1
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 1240
+   i32.const 23
+   i32.const 34
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $1
+  i32.const 0
+  i32.shl
+  set_local $2
+  get_local $2
+  call $~lib/internal/arraybuffer/allocateUnsafe
+  set_local $3
+  get_local $3
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+  set_local $4
+  i32.const 0
+  set_local $5
+  get_local $4
+  get_local $5
+  get_local $2
+  call $~lib/internal/memory/memset
+  get_local $0
+  if (result i32)
+   get_local $0
+  else   
+   block (result i32)
+    i32.const 12
+    call $~lib/memory/memory.allocate
+    set_local $5
+    get_local $5
+    i32.const 0
+    i32.store
+    get_local $5
+    i32.const 0
+    i32.store offset=4
+    get_local $5
+    i32.const 0
+    i32.store offset=8
+    get_local $5
+   end
+   tee_local $0
+  end
+  tee_local $0
+  get_local $3
+  i32.store
+  get_local $0
+  i32.const 0
+  i32.store offset=4
+  get_local $0
+  get_local $2
+  i32.store offset=8
+  get_local $0
+ )
+ (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 68 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  get_local $1
+  get_local $0
+  i32.load offset=8
+  i32.const 0
+  i32.shr_u
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 1240
+   i32.const 39
+   i32.const 63
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.0 (result i32)
+   get_local $0
+   i32.load
+   set_local $2
+   get_local $0
+   i32.load offset=4
+   set_local $3
+   get_local $2
+   get_local $1
+   i32.const 0
+   i32.shl
+   i32.add
+   get_local $3
+   i32.add
+   i32.load8_u offset=8
+  end
+ )
+ (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 69 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  get_local $1
+  get_local $0
+  i32.load offset=8
+  i32.const 0
+  i32.shr_u
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 1240
+   i32.const 50
+   i32.const 63
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $0
+  i32.load
+  set_local $3
+  get_local $0
+  i32.load offset=4
+  set_local $4
+  get_local $3
+  get_local $1
+  i32.const 0
+  i32.shl
+  i32.add
+  get_local $4
+  i32.add
+  get_local $2
+  i32.store8 offset=8
+ )
+ (func $assembly/host/index/log<usize> (; 70 ;) (type $iv) (param $0 i32)
+  get_local $0
+  call $assembly/host/index/_logi
+ )
+ (func $assembly/host/index/log<Uint8Array> (; 71 ;) (type $iv) (param $0 i32)
+  get_local $0
+  i32.const 12
+  call $assembly/host/index/_log<i32>
+ )
+ (func $assembly/host/index/log<u8> (; 72 ;) (type $iv) (param $0 i32)
+  get_local $0
+  i32.const 255
+  i32.and
+  call $assembly/host/index/_logi
+ )
+ (func $assembly/index/removeStartFunction (; 73 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  get_local $0
+  call $assembly/module/index/Module#get:hasStart
+  if
+   get_local $0
+   get_global $src/common/SectionId.Start
+   call $assembly/module/index/Module#getID
+   i32.const 0
+   call $~lib/array/Array<SectionHeader>#__get
+   set_local $1
+   get_local $1
+   call $assembly/module/index/SectionHeader#toString
+   call $assembly/host/index/log<String>
+   get_local $1
+   call $assembly/module/index/SectionHeader#get:end
+   get_local $1
+   i32.load
+   i32.sub
+   set_local $2
+   get_local $2
+   call $assembly/host/index/log<u32>
+   i32.const 0
+   get_local $0
+   i32.load offset=4
+   i32.load offset=4
+   get_local $2
+   i32.sub
+   call $~lib/internal/typedarray/TypedArray<u8>#constructor
+   set_local $3
+   get_local $1
+   i32.load offset=16
+   call $assembly/host/index/log<u32>
+   block $break|0
+    i32.const 0
+    set_local $4
+    loop $repeat|0
+     get_local $4
+     get_local $1
+     i32.load offset=16
+     i32.lt_u
+     i32.eqz
+     br_if $break|0
+     get_local $3
+     get_local $4
+     get_local $0
+     i32.load offset=4
+     i32.load
+     get_local $4
+     call $~lib/internal/typedarray/TypedArray<u8>#__get
+     i32.const 255
+     i32.and
+     call $~lib/internal/typedarray/TypedArray<u8>#__set
+     get_local $4
+     i32.const 1
+     i32.add
+     set_local $4
+     br $repeat|0
+     unreachable
+    end
+    unreachable
+   end
+   i32.const 1304
+   call $assembly/host/index/log<String>
+   get_local $0
+   i32.load offset=4
+   i32.load offset=16
+   call $assembly/host/index/log<usize>
+   get_local $0
+   i32.load offset=4
+   i32.load
+   call $assembly/host/index/log<Uint8Array>
+   get_local $0
+   i32.load offset=4
+   i32.load
+   get_local $0
+   i32.load offset=4
+   i32.load offset=4
+   i32.const 1
+   i32.sub
+   call $~lib/internal/typedarray/TypedArray<u8>#__get
+   call $assembly/host/index/log<u8>
+   get_local $1
+   i32.load offset=16
+   get_local $2
+   i32.add
+   call $assembly/host/index/log<u32>
+   block $break|1
+    get_local $1
+    i32.load offset=16
+    get_local $2
+    i32.add
+    set_local $4
+    loop $repeat|1
+     get_local $4
+     get_local $0
+     i32.load offset=4
+     i32.load offset=4
+     i32.lt_u
+     i32.eqz
+     br_if $break|1
+     block
+      get_local $4
+      get_local $0
+      i32.load offset=4
+      i32.load offset=4
+      i32.const 8000
+      i32.sub
+      i32.gt_u
+      if
+       get_local $4
+       call $assembly/host/index/log<u32>
+      end
+      get_local $3
+      get_local $4
+      get_local $2
+      i32.sub
+      get_local $0
+      i32.load offset=4
+      i32.load
+      get_local $4
+      call $~lib/internal/typedarray/TypedArray<u8>#__get
+      i32.const 255
+      i32.and
+      call $~lib/internal/typedarray/TypedArray<u8>#__set
+     end
+     get_local $4
+     i32.const 1
+     i32.add
+     set_local $4
+     br $repeat|1
+     unreachable
+    end
+    unreachable
+   end
+   get_local $3
+   return
+  else   
+   get_local $0
+   i32.load offset=4
+   i32.load
+   return
+  end
+  unreachable
+  unreachable
+ )
+ (func $assembly/index/toString (; 74 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $assembly/module/index/TypeSection#toString
  )
- (func $assembly/module/index/Module#constructor (; 61 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/module/index/Module#constructor (; 75 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   if (result i32)
@@ -5652,11 +6095,11 @@
   get_local $1
   i32.store offset=4
   get_local $0
-  i32.const 1024
+  i32.const 1352
   i32.store
   get_local $0
  )
- (func $assembly/index/Parser#constructor (; 62 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/index/Parser#constructor (; 76 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   if (result i32)
@@ -5686,7 +6129,7 @@
   i32.store offset=4
   get_local $0
  )
- (func $assembly/index/Parser#parseString (; 63 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/Parser#parseString (; 77 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load
   i32.load offset=8
@@ -5696,24 +6139,29 @@
   call $assembly/buffer/index/Buffer#readVaruint
   call $~lib/string/String.fromUTF8
  )
- (func $assembly/index/Parser#readVaruint (; 64 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/index/Parser#readVaruint (; 78 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   i32.load
   get_local $1
   call $assembly/buffer/index/Buffer#readVaruint
  )
- (func $assembly/index/Parser#get:off (; 65 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/Parser#get:off (; 79 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load
   i32.load offset=8
  )
- (func $assembly/index/Parser#set:off (; 66 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $assembly/index/Parser#set:off (; 80 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   i32.load
   get_local $1
   i32.store offset=8
  )
- (func $assembly/buffer/index/Buffer#readUint<u32> (; 67 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#get:data (; 81 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  get_global $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+ )
+ (func $assembly/buffer/index/Buffer#readUint<u32> (; 82 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   get_local $0
@@ -5729,7 +6177,7 @@
   i32.store offset=8
   get_local $2
  )
- (func $assembly/module/index/sectionName (; 68 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/module/index/sectionName (; 83 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case12|0
@@ -5797,49 +6245,49 @@
                 br_if $case11|0
                 br $case12|0
                end
-               i32.const 1040
+               i32.const 1424
                return
               end
-              i32.const 1056
+              i32.const 1440
               return
              end
-             i32.const 1072
+             i32.const 1456
              return
             end
-            i32.const 1088
+            i32.const 1472
             return
            end
-           i32.const 1112
+           i32.const 1496
            return
           end
-          i32.const 1128
+          i32.const 1512
           return
          end
-         i32.const 1144
+         i32.const 1528
          return
         end
-        i32.const 1160
+        i32.const 1544
         return
        end
-       i32.const 1176
+       i32.const 1560
        return
       end
-      i32.const 1192
+      i32.const 1576
       return
      end
-     i32.const 1216
+     i32.const 1600
      return
     end
-    i32.const 1232
+    i32.const 1616
     return
    end
    unreachable
    unreachable
   end
   unreachable
-  i32.const 824
+  i32.const 960
  )
- (func $assembly/module/index/SectionHeader#constructor (; 69 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/module/index/SectionHeader#constructor (; 84 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5848,7 +6296,7 @@
    get_local $0
   else   
    block (result i32)
-    i32.const 20
+    i32.const 24
     call $~lib/memory/memory.allocate
     set_local $2
     get_local $2
@@ -5864,8 +6312,11 @@
     i32.const 0
     i32.store offset=12
     get_local $2
-    i32.const 824
+    i32.const 0
     i32.store offset=16
+    get_local $2
+    i32.const 960
+    i32.store offset=20
     get_local $2
    end
    tee_local $0
@@ -5874,6 +6325,13 @@
   get_local $1
   i32.load offset=8
   i32.store
+  get_local $0
+  get_local $0
+  i32.load
+  get_local $1
+  i32.load offset=12
+  i32.sub
+  i32.store offset=16
   get_local $0
   get_local $1
   i32.const 7
@@ -5900,14 +6358,14 @@
    i32.load offset=8
    set_local $4
    get_local $0
-   i32.const 1032
+   i32.const 1416
    get_local $4
    get_local $3
    call $~lib/string/String.fromUTF8
    call $~lib/string/String.__concat
-   i32.const 1032
+   i32.const 1416
    call $~lib/string/String.__concat
-   i32.store offset=16
+   i32.store offset=20
    get_local $1
    get_local $1
    i32.load offset=8
@@ -5933,9 +6391,17 @@
     get_local $0
     i32.load offset=4
     call $assembly/module/index/sectionName
-    i32.store offset=16
+    i32.store offset=20
    else    
-    unreachable
+    get_local $0
+    i32.load
+    call $assembly/host/index/log<u32>
+    i32.const 1632
+    get_local $0
+    i32.load offset=4
+    call $~lib/internal/number/itoa<u32>
+    call $~lib/string/String.__concat
+    call $assembly/host/index/err
    end
   end
   get_local $0
@@ -5944,7 +6410,7 @@
   i32.store offset=12
   get_local $0
  )
- (func $assembly/module/index/Module#parseSection (; 70 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $assembly/module/index/Module#parseSection (; 85 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   get_local $0
   i32.load
@@ -5967,14 +6433,7 @@
    end
   end
  )
- (func $assembly/module/index/SectionHeader#get:end (; 71 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
-  i32.load offset=12
-  get_local $0
-  i32.load offset=8
-  i32.add
- )
- (func $assembly/index/Parser#parse (; 72 ;) (type $iv) (param $0 i32)
+ (func $assembly/index/Parser#parse (; 86 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5982,11 +6441,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  get_local $0
+  i32.load
+  i32.load offset=8
+  call $assembly/host/index/log<usize>
+  get_local $0
+  i32.load
+  i32.load
+  i32.load
+  call $~lib/arraybuffer/ArrayBuffer#get:data
+  call $assembly/host/index/log<usize>
+  get_local $0
+  i32.load
+  i32.load offset=4
+  call $assembly/host/index/log<usize>
+  get_local $0
+  call $assembly/index/Parser#get:off
+  set_local $1
+  i32.const 1360
+  call $assembly/host/index/log<String>
   get_local $0
   i32.load
   call $assembly/buffer/index/Buffer#readUint<u32>
-  set_local $1
-  get_local $1
+  set_local $2
+  get_local $2
+  call $assembly/host/index/log<u32>
+  get_local $2
   i32.const 1836278016
   i32.ne
   if
@@ -5995,21 +6476,25 @@
   get_local $0
   i32.load
   call $assembly/buffer/index/Buffer#readUint<u32>
-  set_local $2
-  get_local $2
+  set_local $3
+  get_local $3
+  call $assembly/host/index/log<u32>
+  get_local $3
   i32.const 1
   i32.ne
   if
    unreachable
   end
-  i32.const 0
-  set_local $3
+  i32.const 1384
+  call $assembly/host/index/log<String>
   i32.const 0
   set_local $4
   i32.const 0
   set_local $5
   i32.const 0
   set_local $6
+  i32.const 0
+  set_local $7
   block $break|0
    loop $continue|0
     get_local $0
@@ -6017,7 +6502,7 @@
     i32.load offset=8
     get_local $0
     i32.load
-    i32.load offset=4
+    i32.load offset=16
     i32.lt_u
     if
      block
@@ -6025,13 +6510,36 @@
       get_local $0
       i32.load
       call $assembly/module/index/SectionHeader#constructor
-      set_local $7
+      set_local $8
+      get_local $8
+      call $assembly/module/index/SectionHeader#toString
+      call $assembly/host/index/log<String>
       get_local $0
       i32.load offset=4
-      get_local $7
+      get_local $8
       call $assembly/module/index/Module#parseSection
+      i32.const 1664
+      call $assembly/host/index/log<String>
       get_local $0
-      get_local $7
+      call $assembly/index/Parser#get:off
+      call $assembly/host/index/log<usize>
+      get_local $8
+      i32.load
+      get_local $1
+      i32.sub
+      call $assembly/host/index/log<u32>
+      get_local $8
+      i32.load offset=16
+      call $assembly/host/index/log<u32>
+      get_local $8
+      call $assembly/module/index/SectionHeader#get:end
+      get_local $1
+      i32.sub
+      call $assembly/host/index/log<u32>
+      i32.const 1664
+      call $assembly/host/index/log<String>
+      get_local $0
+      get_local $8
       call $assembly/module/index/SectionHeader#get:end
       call $assembly/index/Parser#set:off
      end
@@ -6040,19 +6548,14 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#get:data (; 73 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
-  get_global $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
- )
- (func $assembly/buffer/index/Buffer#constructor (; 74 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/buffer/index/Buffer#constructor (; 87 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $0
   if (result i32)
    get_local $0
   else   
    block (result i32)
-    i32.const 12
+    i32.const 20
     call $~lib/memory/memory.allocate
     set_local $2
     get_local $2
@@ -6064,6 +6567,12 @@
     get_local $2
     i32.const 0
     i32.store offset=8
+    get_local $2
+    i32.const 0
+    i32.store offset=12
+    get_local $2
+    i32.const 0
+    i32.store offset=16
     get_local $2
    end
    tee_local $0
@@ -6081,24 +6590,47 @@
   i32.load offset=8
   i32.store offset=4
   get_local $0
+  get_local $0
+  i32.load offset=8
+  i32.store offset=12
+  get_local $0
+  get_local $0
+  i32.load offset=8
+  get_local $0
+  i32.load offset=4
+  i32.add
+  i32.store offset=16
+  get_local $0
  )
- (func $assembly/index/newParser (; 75 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/host/index/log<Buffer> (; 88 ;) (type $iv) (param $0 i32)
+  get_local $0
+  i32.const 20
+  call $assembly/host/index/_log<i32>
+ )
+ (func $assembly/index/newParser (; 89 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
+  get_local $0
+  call $assembly/host/index/log<Uint8Array>
   i32.const 0
   get_local $0
   call $assembly/buffer/index/Buffer#constructor
   set_local $1
+  get_local $1
+  call $assembly/host/index/log<Buffer>
+  get_local $1
+  i32.load offset=8
+  call $assembly/host/index/log<usize>
   i32.const 0
   get_local $1
   call $assembly/index/Parser#constructor
  )
- (func $assembly/index/parse (; 76 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/parse (; 90 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   call $assembly/index/Parser#parse
   get_local $0
   i32.load offset=4
  )
- (func $start (; 77 ;) (type $v)
+ (func $start (; 91 ;) (type $v)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
   i32.add
@@ -6110,23 +6642,25 @@
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
   nop
+  i32.const 8
+  call $assembly/host/index/log<String>
  )
- (func $null (; 78 ;) (type $v)
+ (func $null (; 92 ;) (type $v)
  )
- (func $Parser#get:buf (; 79 ;) (type $ii) (param $0 i32) (result i32)
+ (func $Parser#get:buf (; 93 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load
  )
- (func $Parser#set:buf (; 80 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $Parser#set:buf (; 94 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   i32.store
  )
- (func $Parser#get:module (; 81 ;) (type $ii) (param $0 i32) (result i32)
+ (func $Parser#get:module (; 95 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.load offset=4
  )
- (func $Parser#set:module (; 82 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $Parser#set:module (; 96 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   get_local $1
   i32.store offset=4

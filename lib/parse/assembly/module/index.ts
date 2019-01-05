@@ -10,7 +10,7 @@ import {
 
 import {Buffer} from '../buffer';
 
-import {log, log_str} from "../host";
+import {log, err} from "../host";
 
 import {itoa} from 'internal/number';
 import { Imports } from "./imports";
@@ -19,33 +19,30 @@ type byte = u8;
 
 
 export class Module {
-  Headers: SectionHeader[];
+  headers: SectionHeader[];
   buf: Buffer;
   // Custom: TypeSection[];
 
   constructor(buf: Buffer){
     this.buf = buf;
-    this.Headers = [];
+    this.headers = [];
   }
 
 
   get Type(): SectionHeader[]{
     return this.getID(SectionId.Type);
   }
-  // Import: TypeSection[];
-  // Function: TypeSection[];
-  // Table: TypeSection[];
-  // Memory: TypeSection[];
-  // Global: TypeSection[];
-  // Export: TypeSection[];
-  // Start: TypeSection[];
-  // Element: TypeSection[];
-  // Code: TypeSection[];
-  // Data: TypeSection[];
 
+  get hasStart(): boolean {
+    return this.start.length > 0;
+  }
+
+  get start(): SectionHeader[] {
+    return this.getID(SectionId.Start)
+  }
 
   parseSection(header: SectionHeader): void {
-    this.Headers.push(header);
+    this.headers.push(header);
     switch (header.id){
       case SectionId.Type:
         // this._Type.push(header);
@@ -56,14 +53,16 @@ export class Module {
   }
 
   public getID(id: SectionId): SectionHeader[] {
-    let res: SectionHeader[] = [];
+    let res: SectionHeader[] = new Array<SectionHeader>();
     while(res.length > 0){
       res.pop();
     }
-    let x: i32 = this.Headers.length;
+    let x: i32 = this.headers.length;
+    // log("length of array should be zero");
+    // log(res.length)
     for (let i=0; i < x; i++){
-      if (this.Headers[i].id == id){
-        res.push(this.Headers[i]);
+      if (this.headers[i].id == id){
+        res.push(this.headers[i]);
       }
     }
     return res;
@@ -78,12 +77,11 @@ export class Module {
   getImports(): Imports[] {
     let ImportHeaders = this.getID(SectionId.Import);
     let imports: Imports[] = [];
-    log(imports.length);
     for (let i = 0; i < ImportHeaders.length; i++){
-      log(ImportHeaders[i].name)
+      // log(ImportHeaders[i].name)
       let _import = new Imports(ImportHeaders[i]);
       imports.push(_import.parse(this.buf));
-      log(_import.imports.length);
+      // log(_import.imports.length);
     }
     return imports;
   }
@@ -107,7 +105,7 @@ function typeName(t: Type): string{
     case 0x40:
       return 'none';
     default:
-      unreachable();
+      err("Incorrect Type");
   }
   return ""
 }
@@ -150,10 +148,13 @@ export class SectionHeader {
   public id: u32;
   public payload_len: u32;
   public payload_off: u32;
+  public offset: u32;
+
   public name: string = "";
 
   constructor (buf: Buffer){
     this.ref = buf.off;
+    this.offset = this.ref - buf.start;
     this.id = buf.readVaruint(7);
     this.payload_len = buf.readVaruint(32);
     if (this.id == 0){
@@ -166,13 +167,30 @@ export class SectionHeader {
     } else if (this.id <= <u32> SectionId.Data){
       this.name = sectionName(this.id);
     } else {
-      unreachable();
+      log(this.ref);
+      err("no such ID: " + itoa<u32>(this.id));
     }
     this.payload_off = buf.off;
   }
 
   get end(): u32{
     return this.payload_off + this.payload_len;
+  }
+
+
+  toString(): string {
+    let ref = itoa<u32>(this.ref);
+    let id = itoa<u32>(this.id);
+    let payloadLen = itoa<u32>(this.payload_len);
+    let payloadOff = itoa<u32>(this.payload_off);
+    let name = this.name;
+    let end = itoa<u32>(this.end);
+    return "ref: "+ ref + "\n" +
+           "id: " + id  + "\n" +
+           "payload off: " + payloadOff + "\n" +
+           "payload length: " + payloadLen + "\n" +
+           "end: " + end + "\n" +
+           "name: " + name;
   }
 
 }
@@ -319,9 +337,9 @@ class Memory{
   }
 }
 
-class MemorySection {
+class MemorySection extends Section {
   memory: Memory[];
-  
+
   parse(buf: Buffer): MemorySection {
     let count = buf.readVaruint(32);
     this.memory = new Array<Memory>(count);
@@ -336,6 +354,10 @@ class MemorySection {
     }
     return this
   }
+}
+
+class Data extends Section {
+
 }
 /*
 case SectionId.Global: {

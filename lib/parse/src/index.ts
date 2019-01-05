@@ -68,10 +68,11 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   var nPages = ((nBytes + 0xffff) & ~0xffff) >> 16;
   memory = new WebAssembly.Memory({ initial: nPages });
   var buffer = new Uint32Array(memory.buffer);
+  var buffer16 = new Uint16Array(memory.buffer);
   // buffer.set(binary);
 
   // provide a way to read strings from memory
-  parse.readString = (offset: number, length: number): string => utf8_read(buffer, offset, offset + length);
+  parse.readString = (offset: number, length: number): string => utf8_read(new Uint8Array(memory.buffer), offset, offset + length);
 
   parse.readUint32 = (index: number): number => {
     return buffer[index];
@@ -105,7 +106,7 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
           console.log([line,output.join('\n'+line+'\n'),line].join("\n"));
         }
       },
-      _log_str:(x) => console.log(instance.getString(x)),
+      _log_str:(x) => console.log(loader.getStringImpl(buffer, buffer16, x)),
       _logi: console.log,
       _logf: console.log
     },
@@ -135,10 +136,23 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   instance  = loader.instantiate(compiled, imports);
   let array = instance.newArray(new Uint8Array(binary))
   let parserPtr = instance.newParser(array);
-  debugger;
+
   let Mod = instance.parse(parserPtr);
   console.log(instance.getString((instance as any).getType(Mod)));
   (instance as any).getImports(Mod);
+  // let arraybuf = instance.getArray(Uint8Array, array);
+  let newptr = (instance as any).removeStartFunction(Mod);
+  // debugger;
+  let buf = instance.getArray(Uint8Array, newptr);
+  // debugger;
+  // let array2 = instance.newArray(buf);
+  console.log(newptr);
+  let parserPtr2 = instance.newParser(newptr);
+  let Mod2 = instance.parse(parserPtr2);
+  debugger;
+
+  let instance2 = loader.instantiateBuffer(buf, imports);
+  instance2.start();
   // let sections = buffer.slice(instance.I32[Mod], 2);
   // console.log(sections[1])
   // let arrayBuf = sections[0]>>2;

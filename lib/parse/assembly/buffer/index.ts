@@ -4,14 +4,21 @@ export class Buffer {
   buffer: Uint8Array;
   length: usize;
   off: usize;
+  start: usize;
+  end: usize;
 
   /** Current offset in memory. */
   constructor(array: Uint8Array){
     this.buffer = array
     this.off = array.buffer.data;
     this.length = array.byteLength;
+    this.start = this.off;
+    this.end = this.off + this.length;
   }
 
+  reset(): void {
+    this.off = this.start;
+  }
 
   /** Reads an unsigned integer from memory. */
    readUint<T>(): u32 {

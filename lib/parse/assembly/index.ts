@@ -20,6 +20,7 @@ import {log} from './host';
 
 declare function debug():void;
 
+log("in the start function!");
 // type FunctionName  = string | symbol;
 // type Instance = [Function, Object];
 //
@@ -68,7 +69,7 @@ export function getImports(m: Module): void {
   // log(imports.length);
   if (imports.length>0)
   for (let i = 0; i< imports.length; i++){
-    log(imports.length);
+    // log(imports.length);
 
     // for (let j = 0; i< imports[i].imports.length; j++){
     //   let _import = imports[i].imports[j];
@@ -77,6 +78,40 @@ export function getImports(m: Module): void {
   }
   // return
 }
+
+export function removeStartFunction (m: Module):  Uint8Array {
+  if (m.hasStart) {
+    let start : SectionHeader = m.getID(SectionId.Start)[0];
+    log(start.toString());
+    let len = start.end - start.ref;
+    log(len);
+    let buf = new Uint8Array(m.buf.length - len);
+    log(start.offset)
+
+    for (let i:u32 = 0; i < start.offset; i++) {
+      buf[i] = m.buf.buffer[i];
+    }
+    log("checking end index");
+    log(m.buf.end);
+    log(m.buf.buffer);
+    log(m.buf.buffer[m.buf.length - 1]);
+    log(start.offset + len)
+    for (let i:u32 = start.offset + len; i < m.buf.length; i++) {
+      if ( i> m.buf.length - 8000) log(i);
+      buf[i-len] = m.buf.buffer[i];
+    }
+    // memory.copy(buf.buffer.byteLength, m.buf.buffer.byteOffset, start.ref);
+    // memory.copy(buf.buffer.byteLength+start.end, m.buf.buffer.byteLength + start.end, m.buf.buffer.byteLength - start.end);
+    return buf;
+  } else {
+    return m.buf.buffer;
+  }
+
+}
+
+// export function exportDataSection(m: Module): Uint8Array {
+//
+// }
 
 export function toString(t:TypeSection): string {
   return t.toString();
@@ -108,18 +143,33 @@ export class Parser {
 
 /** Starts parsing the module that has been placed in memory. */
   parse(): void {
+    log(this.buf.off)
+    log(this.buf.buffer.buffer.data)
+    log(this.buf.length)
+    let start = this.off;
+    log("starting")
     var magic = this.buf.readUint<u32>();
+    log(magic);
     if (magic != 0x6D736100) unreachable();
     var version = this.buf.readUint<u32>();
+    log(version);
     if (version != 1) unreachable();
+    log("Magic is valid");
     var fun_space_index: u32 = 0;
     var glo_space_index: u32 = 0;
     var mem_space_index: u32 = 0;
     var tbl_space_index: u32 = 0;
-    while (this.buf.off < this.buf.length) {
+    while (this.buf.off < this.buf.end) {
       // log<string>("parsing next section", true);
       let header: SectionHeader = new SectionHeader(this.buf);
+      log(header.toString());
       this.module.parseSection(header);
+      log("---------")
+      log(this.off);
+      log(header.ref - start);
+      log(header.offset);
+      log(header.end - start);
+      log("---------");
       this.off = header.end;
       // log<i32>(this.off);
     }
@@ -130,7 +180,10 @@ export class Parser {
 }
 
 export function newParser(buf: Uint8Array): Parser {
+  log(buf);
   let buffer = new Buffer(buf);
+  log(buffer);
+  log(buffer.off)
   return new Parser(buffer);
 }
 export function parse(p: Parser): Module {
