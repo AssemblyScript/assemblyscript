@@ -94,7 +94,7 @@ export class Module {
 =======
     log(imports.length);
     for (let i = 0; i < ImportHeaders.length; i++){
-      log(ImportHeaders[i].name)
+      // log(ImportHeaders[i].name)
       let _import = new Imports(ImportHeaders[i]);
       imports.push(_import.parse(this.buf));
       log(_import.imports.length);

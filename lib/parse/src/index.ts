@@ -141,6 +141,9 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   console.log(instance.getString((instance as any).getType(Mod)));
   (instance as any).getImports(Mod);
 <<<<<<< loader-memory-accessors
+<<<<<<< loader-memory-accessors
+=======
+>>>>>>> Remove start correctly.  Now need to abstract to remove any section.
   // let arraybuf = instance.getArray(Uint8Array, array);
   let newptr = (instance as any).removeStartFunction(Mod);
   // debugger;
@@ -154,8 +157,11 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
 
   let instance2 = loader.instantiateBuffer(buf, imports);
   instance2.start();
+<<<<<<< loader-memory-accessors
 =======
 >>>>>>> Working on sections.
+=======
+>>>>>>> Remove start correctly.  Now need to abstract to remove any section.
   // let sections = buffer.slice(instance.I32[Mod], 2);
   // console.log(sections[1])
   // let arrayBuf = sections[0]>>2;

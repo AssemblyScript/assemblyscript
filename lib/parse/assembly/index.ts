@@ -70,10 +70,14 @@ export function getImports(m: Module): void {
   if (imports.length>0)
   for (let i = 0; i< imports.length; i++){
 <<<<<<< loader-memory-accessors
+<<<<<<< loader-memory-accessors
     // log(imports.length);
 =======
     log(imports.length);
 >>>>>>> Working on sections.
+=======
+    // log(imports.length);
+>>>>>>> Remove start correctly.  Now need to abstract to remove any section.
 
     // for (let j = 0; i< imports[i].imports.length; j++){
     //   let _import = imports[i].imports[j];
@@ -84,6 +88,9 @@ export function getImports(m: Module): void {
 }
 
 <<<<<<< loader-memory-accessors
+<<<<<<< loader-memory-accessors
+=======
+>>>>>>> Remove start correctly.  Now need to abstract to remove any section.
 export function removeStartFunction (m: Module):  Uint8Array {
   if (m.hasStart) {
     let start : SectionHeader = m.getID(SectionId.Start)[0];
@@ -118,8 +125,11 @@ export function removeStartFunction (m: Module):  Uint8Array {
 //
 // }
 
+<<<<<<< loader-memory-accessors
 =======
 >>>>>>> Working on sections.
+=======
+>>>>>>> Remove start correctly.  Now need to abstract to remove any section.
 export function toString(t:TypeSection): string {
   return t.toString();
 }
