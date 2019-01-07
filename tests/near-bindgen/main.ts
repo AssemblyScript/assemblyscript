@@ -1,8 +1,8 @@
 import "allocator/arena";
 // TODO: Why cannot import from index?
-// import { BSONEncoder, BSONDecoder } from "./bson";
-import { BSONEncoder } from "./bson/encoder";
-import { BSONDecoder, ThrowingBSONHandler } from "./bson/decoder";
+// import { JSONEncoder, JSONDecoder } from "./json";
+import { JSONEncoder } from "./json/encoder";
+import { JSONDecoder, JSONHandler, ThrowingJSONHandler } from "./json/decoder";
 import { near } from "./near"
 
 @external("env", "log")
@@ -21,7 +21,7 @@ export class FooBar {
     bar: i32 = 1;
     flag: bool;
     baz: string = "123";
-    foobar: Uint8Array;
+    //foobar: Uint8Array;
     arr: Array<Array<string>>;
 }
 

@@ -132,7 +132,6 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private typeMapping: { [key: string]: string } = {
     "i32": "Integer",
     "String": "String",
-    "Uint8Array": "Uint8Array",
     "bool": "Boolean"
   };
 
@@ -169,9 +168,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
       return { simpleName: paramName, type: signature.parameterTypes[i] };
     }) : [];
     fields.forEach(field => this.generateDecodeFunction(field.type));
-    this.sb.push(`export class __near_ArgsParser_${element.simpleName} extends ThrowingBSONHandler {
+    this.sb.push(`export class __near_ArgsParser_${element.simpleName} extends ThrowingJSONHandler {
         buffer: Uint8Array;
-        decoder: BSONDecoder<__near_ArgsParser_${element.simpleName}>;
+        decoder: JSONDecoder<__near_ArgsParser_${element.simpleName}>;
       `);
     if (signature.parameterNames) {
       fields.forEach((field) => {
@@ -193,7 +192,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       input_read_into(bson.buffer.data);
       let handler = new __near_ArgsParser_${element.simpleName}();
       handler.buffer = bson;
-      handler.decoder = new BSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
+      handler.decoder = new JSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
       handler.decoder.deserialize(bson);`);
     if (returnType.toString() != "void") {
       this.sb.push(`let result = ${element.simpleName}(`);
@@ -206,7 +205,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.sb.push(");");
     if (returnType.toString() != "void") {
       this.sb.push(`
-        let encoder = new BSONEncoder();`);
+        let encoder = new JSONEncoder();`);
       this.generateFieldEncoder(returnType, '"result"', "result");
       this.sb.push(`
         return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
@@ -300,15 +299,15 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
     this.generatedEncodeFunctions.add(typeName);
 
-    if (type.classReference.prototype.simpleName == "Array" && type.classReference.typeArguments) {
+    if (this.isArrayType(type)) {
       // Array
-      this.generateEncodeFunction(type.classReference.typeArguments[0]);
+      this.generateEncodeFunction(type.classReference.typeArguments![0]);
 
       this.sb.push(`export function __near_encode_${typeName}(
           value: ${type.toString()},
-          encoder: BSONEncoder): void {`);
+          encoder: JSONEncoder): void {`);
       this.sb.push(`for (let i = 0; i < value.length; i++) {`);
-      this.generateFieldEncoder(type.classReference.typeArguments[0], "near.str(i)", "value[i]");
+      this.generateFieldEncoder(type.classReference.typeArguments![0], "near.str(i)", "value[i]");
       this.sb.push("}");
 
     } else {
@@ -319,7 +318,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
 
       this.sb.push(`export function __near_encode_${typeName}(
           value: ${type.toString()},
-          encoder: BSONEncoder): void {`);
+          encoder: JSONEncoder): void {`);
       this.getFields(type.classReference).forEach((field) => {
         let fieldType = field.type;
         let fieldName = field.simpleName;
@@ -333,11 +332,12 @@ export class NEARBindingsBuilder extends ExportsWalker {
 
   private generateHandler(type: Type) {
     let typeName = this.encodeType(type);
-    this.sb.push(`export class __near_BSONHandler_${typeName} extends ThrowingBSONHandler {
+    this.sb.push(`export class __near_JSONHandler_${typeName} extends ThrowingJSONHandler {
       buffer: Uint8Array;
-      decoder: BSONDecoder<__near_BSONHandler_${typeName}>;
+      decoder: JSONDecoder<__near_JSONHandler_${typeName}>;
       value: ${type} = new ${type}();`);
-    if (type.classReference!.simpleName.startsWith("Array")) {
+    if (this.isArrayType(type)) {
+      console.log(`generateHandler typeName ${type.classReference!.simpleName}`)
       this.generateArrayHandlerMethods("this.value", type.classReference!.typeArguments![0]);
     } else {
       this.generateHandlerMethods("this.value.", this.getFields(type.classReference!));
@@ -357,9 +357,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.generatedDecodeFunctions.add(typeName);
 
     this.generateHandler(type);
-    if (type.classReference.prototype.simpleName == "Array" && type.classReference.typeArguments) {
+    if (this.isArrayType(type)) {
       // Array
-      this.generateDecodeFunction(type.classReference.typeArguments[0]);
+      this.generateDecodeFunction(type.classReference.typeArguments![0]);
     } else {
       // Object
       this.getFields(type.classReference).forEach(field => {
@@ -369,9 +369,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
 
     this.sb.push(`export function __near_decode_${typeName}(
         buffer: Uint8Array, offset: i32): ${type} {
-      let handler = new __near_BSONHandler_${typeName}();
+      let handler = new __near_JSONHandler_${typeName}();
       handler.buffer = buffer;
-      handler.decoder = new BSONDecoder<__near_BSONHandler_${typeName}>(handler);
+      handler.decoder = new JSONDecoder<__near_JSONHandler_${typeName}>(handler);
       handler.decoder.deserialize(buffer, offset);
       return handler.value;
     }\n`);
@@ -381,7 +381,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let setterType = this.typeMapping[fieldType.toString()];
     if (!setterType) {
       // Object / array
-      let pushType = fieldType.classReference!.prototype.simpleName == "Array" ? "Array" : "Object";
+      let pushType = this.isArrayType(fieldType) ? "Array" : "Object";
       this.sb.push(`if (${sourceExpr} != null) {
           encoder.push${pushType}(${fieldExpr});
           __near_encode_${this.encodeType(fieldType)}(${sourceExpr}, encoder);
@@ -408,6 +408,10 @@ export class NEARBindingsBuilder extends ExportsWalker {
       .replace(/_/g, '__')
       .replace(/>/g, '')
       .replace(/</g, '_');
+  }
+
+  private isArrayType(type: Type): bool {
+    return !!(type.classReference && type.classReference.prototype.simpleName == "Array" && type.classReference.typeArguments);
   }
 
   private getFields(element: Class): Field[] {
