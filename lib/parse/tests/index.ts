@@ -91,7 +91,8 @@ function onLocalName(funcIndex: number, index: number, offset: number, length: n
   console.log("  - Function[" + funcIndex + "].local[" + index + "] name: " + name);
 }
 
-[ "../build/index.wasm",
+[ "../build/test.wasm",
+  // "../build/index.wasm",
   // "libm.wasm"
 ].forEach((filename: string): void => {
   const binary: Uint8Array = fs.readFileSync(__dirname + "/" + filename);

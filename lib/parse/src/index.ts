@@ -100,7 +100,8 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
             len = Math.max(len, line.length);
             str.push(line);
           }
-          let output = str.map((v,i,a)=> v + " ".repeat(len - v.length + 1) + "|");
+          let space = " ";
+          let output = str.map((v,i,a)=> v + (space as any).repeat(len - v.length + 1) + "|");
           let dash = "-";
           let line = (dash as any).repeat(len+2);
           console.log([line,output.join('\n'+line+'\n'),line].join("\n"));
@@ -145,7 +146,7 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
 =======
 >>>>>>> Remove start correctly.  Now need to abstract to remove any section.
   // let arraybuf = instance.getArray(Uint8Array, array);
-  let newptr = (instance as any).removeStartFunction(Mod);
+  let newptr = (instance as any).removeDataSection(Mod);
   // debugger;
   let buf = instance.getArray(Uint8Array, newptr);
   // debugger;
@@ -153,7 +154,19 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
   console.log(newptr);
   let parserPtr2 = instance.newParser(newptr);
   let Mod2 = instance.parse(parserPtr2);
+  // let dataFreePtr = (instance as any).removeDataSection(Mod2);
+  // let buf2 = instance.getArray(Uint8Array, dataFreePtr);
+
   debugger;
+  let instance1 = loader.instantiateBuffer(binary, imports);
+  (instance1 as any).overwrite();
+  // console.log(instance1.getString((instance1 as any).getString()));
+  let instance2 = loader.instantiateBuffer(buf, imports);
+  // instance2.table.grow()
+  // instance2.table.add(1, (instance2 as any).callStart)
+  console.log(instance2.getString((instance2 as any).getStr()));
+  let instance3 = loader.instantiateBuffer(binary, imports);
+  console.log(instance3.getString((instance3 as any).getStr()));
 
   let instance2 = loader.instantiateBuffer(buf, imports);
   instance2.start();
