@@ -2,7 +2,7 @@ import "allocator/arena";
 // TODO: Why cannot import from index?
 // import { JSONEncoder, JSONDecoder } from "./json";
 import { JSONEncoder } from "./json/encoder";
-import { JSONDecoder, JSONHandler, ThrowingJSONHandler } from "./json/decoder";
+import { JSONDecoder, DecoderState, JSONHandler, ThrowingJSONHandler } from "./json/decoder";
 import { near } from "./near"
 
 @external("env", "log")

@@ -260,7 +260,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     fields.forEach((field) => {
       if (!(field.type.toString() in this.typeMapping)) {
         this.sb.push(`if (name == "${field.simpleName}") {
-          ${valuePrefix}${field.simpleName} = __near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.readIndex);
+          ${valuePrefix}${field.simpleName} = __near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
           return false;
         }`);
       }
@@ -278,11 +278,11 @@ export class NEARBindingsBuilder extends ExportsWalker {
       }`);
     } else {
       this.sb.push(`pushObject(name: string): bool {
-        ${valuePrefix}[i32(parseInt(name))] = __near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.readIndex);
+        ${valuePrefix}[i32(parseInt(name))] = __near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state);
         return false;
       }
       pushArray(name: string): bool {
-        ${valuePrefix}[i32(parseInt(name))] = __near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.readIndex);
+        ${valuePrefix}[i32(parseInt(name))] = __near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state);
         return false;
       }`);
     }
@@ -337,7 +337,6 @@ export class NEARBindingsBuilder extends ExportsWalker {
       decoder: JSONDecoder<__near_JSONHandler_${typeName}>;
       value: ${type} = new ${type}();`);
     if (this.isArrayType(type)) {
-      console.log(`generateHandler typeName ${type.classReference!.simpleName}`)
       this.generateArrayHandlerMethods("this.value", type.classReference!.typeArguments![0]);
     } else {
       this.generateHandlerMethods("this.value.", this.getFields(type.classReference!));
@@ -368,11 +367,11 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
 
     this.sb.push(`export function __near_decode_${typeName}(
-        buffer: Uint8Array, offset: i32): ${type} {
+        buffer: Uint8Array, state: DecoderState): ${type} {
       let handler = new __near_JSONHandler_${typeName}();
       handler.buffer = buffer;
       handler.decoder = new JSONDecoder<__near_JSONHandler_${typeName}>(handler);
-      handler.decoder.deserialize(buffer, offset);
+      handler.decoder.deserialize(buffer, state);
       return handler.value;
     }\n`);
   }
