@@ -413,6 +413,19 @@ export class String {
     return result;
   }
 
+  slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
+    var length = this.length;
+    if (beginIndex < 0) beginIndex += length;
+    if (endIndex < 0) endIndex += length;
+    var from = min(max(beginIndex, 0), length);
+    var to = min(max(endIndex, 0), length);
+    var len = to - from;
+    if (len <= 0) return changetype<String>("");
+    var out = allocateUnsafe(len);
+    copyUnsafe(out, 0, this, from, len);
+    return out;
+  }
+
   split(separator: String = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
     if (!limit) return new Array<String>();
