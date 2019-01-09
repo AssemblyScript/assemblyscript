@@ -308,6 +308,11 @@ export class __near_JSONHandler_Array_String extends ThrowingJSONHandler {
   setNull(name: string): void {
     this.value.push(<String>null);
   }
+  pushArray(name: string): bool {
+    assert(name == null && !this.handledRoot);
+    this.handledRoot = true;
+    return true;
+  }
 }
 
 export function __near_decode_Array_String(

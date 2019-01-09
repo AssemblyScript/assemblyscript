@@ -287,6 +287,11 @@ export class NEARBindingsBuilder extends ExportsWalker {
       }
       setNull(name: string): void {
         ${valuePrefix}.push(<${fieldType}>null);
+      }
+      pushArray(name: string): bool {
+        assert(name == null && !this.handledRoot);
+        this.handledRoot = true;
+        return true;
       }`);
     } else {
       this.sb.push(`pushObject(name: string): bool {
