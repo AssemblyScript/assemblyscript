@@ -4,7 +4,6 @@ import {
   itoa32,
   utoa64,
   itoa64,
-  itoa,
   dtoa
 } from "internal/number";
 

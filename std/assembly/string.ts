@@ -415,14 +415,12 @@ export class String {
 
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
     var length = this.length;
-    if (beginIndex < 0) beginIndex += length;
-    if (endIndex < 0) endIndex += length;
-    var from = min(max(beginIndex, 0), length);
-    var to = min(max(endIndex, 0), length);
-    var len = to - from;
+    var begin = (beginIndex < 0) ? max(beginIndex + length, 0) : min(beginIndex, length);
+    var end = (endIndex < 0) ? max(endIndex + length, 0) : min(endIndex, length);
+    var len = end - begin;
     if (len <= 0) return changetype<String>("");
     var out = allocateUnsafe(len);
-    copyUnsafe(out, 0, this, from, len);
+    copyUnsafe(out, 0, this, begin, len);
     return out;
   }
 
