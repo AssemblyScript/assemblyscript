@@ -13318,13 +13318,13 @@
   i32.const 0
   get_global $std/array/newArr
   i32.load
-  tee_local $0
+  tee_local $1
   i32.load
   i32.const 2
   i32.shr_u
   i32.lt_u
   if (result f32)
-   get_local $0
+   get_local $1
    f32.load offset=8
   else   
    unreachable
@@ -13332,13 +13332,13 @@
   i32.const 0
   get_global $std/array/arr
   i32.load
-  tee_local $0
+  tee_local $1
   i32.load
   i32.const 2
   i32.shr_u
   i32.lt_u
   if (result i32)
-   get_local $0
+   get_local $1
    i32.load offset=8
   else   
    unreachable
@@ -13887,9 +13887,9 @@
   i32.const 0
   set_global $~argc
   get_global $std/array/f32ArrayTyped
-  set_local $1
-  i32.const 0
   set_local $0
+  i32.const 0
+  set_local $1
   block $1of1
    block $0of1
     block $outOfRange
@@ -13899,10 +13899,10 @@
     unreachable
    end
    i32.const 44
-   set_local $0
+   set_local $1
   end
-  get_local $1
   get_local $0
+  get_local $1
   call $~lib/array/Array<f32>#sort
   drop
   get_global $std/array/f32ArrayTyped
@@ -13919,9 +13919,9 @@
   i32.const 0
   set_global $~argc
   get_global $std/array/f64ArrayTyped
-  set_local $1
-  i32.const 0
   set_local $0
+  i32.const 0
+  set_local $1
   block $1of153
    block $0of154
     block $outOfRange55
@@ -13931,10 +13931,10 @@
     unreachable
    end
    i32.const 45
-   set_local $0
+   set_local $1
   end
-  get_local $1
   get_local $0
+  get_local $1
   call $~lib/array/Array<f64>#sort
   drop
   get_global $std/array/f64ArrayTyped
@@ -13951,9 +13951,9 @@
   i32.const 0
   set_global $~argc
   get_global $std/array/i32ArrayTyped
-  set_local $1
-  i32.const 0
   set_local $0
+  i32.const 0
+  set_local $1
   block $1of156
    block $0of157
     block $outOfRange58
@@ -13963,10 +13963,10 @@
     unreachable
    end
    i32.const 46
-   set_local $0
+   set_local $1
   end
-  get_local $1
   get_local $0
+  get_local $1
   call $~lib/array/Array<i32>#sort
   drop
   get_global $std/array/i32ArrayTyped
@@ -13985,9 +13985,9 @@
   i32.const 0
   set_global $~argc
   get_global $std/array/u32ArrayTyped
-  set_local $1
-  i32.const 0
   set_local $0
+  i32.const 0
+  set_local $1
   block $1of159
    block $0of160
     block $outOfRange61
@@ -13997,10 +13997,10 @@
     unreachable
    end
    i32.const 47
-   set_local $0
+   set_local $1
   end
-  get_local $1
   get_local $0
+  get_local $1
   call $~lib/array/Array<i32>#sort
   drop
   get_global $std/array/u32ArrayTyped

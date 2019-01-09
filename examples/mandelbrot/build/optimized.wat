@@ -3,9 +3,8 @@
  (type $FF (func (param f64) (result f64)))
  (type $v (func))
  (import "env" "memory" (memory $0 0))
- (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
- (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
  (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
+ (import "Math" "log2" (func $~lib/bindings/Math/log2 (param f64) (result f64)))
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
@@ -21,15 +20,13 @@
   (local $10 f64)
   (local $11 f64)
   (local $12 f64)
-  get_local $1
-  f64.convert_u/i32
-  tee_local $6
-  f64.const 1.6
-  f64.div
-  set_local $12
+  (local $13 f64)
+  (local $14 f64)
   f64.const 10
   f64.const 3
-  get_local $6
+  get_local $1
+  f64.convert_u/i32
+  tee_local $8
   f64.mul
   f64.const 4
   get_local $2
@@ -42,12 +39,34 @@
   get_local $0
   f64.convert_u/i32
   get_local $4
-  f64.const 2
-  f64.div
+  f64.const 0.5
+  f64.mul
   f64.sub
   get_local $9
   f64.mul
   set_local $10
+  get_local $8
+  f64.const 0.625
+  f64.mul
+  get_local $9
+  f64.mul
+  set_local $12
+  get_local $0
+  get_local $1
+  i32.mul
+  i32.const 1
+  i32.shl
+  set_local $0
+  f64.const 1
+  get_local $3
+  f64.convert_u/i32
+  tee_local $6
+  f64.div
+  set_local $13
+  f64.const 8
+  get_local $6
+  f64.min
+  set_local $8
   loop $repeat|0
    get_local $7
    get_local $1
@@ -55,10 +74,10 @@
    if
     get_local $7
     f64.convert_u/i32
-    get_local $12
-    f64.sub
     get_local $9
     f64.mul
+    get_local $12
+    f64.sub
     set_local $11
     f64.const 0
     set_local $4
@@ -70,11 +89,11 @@
      get_local $4
      get_local $4
      f64.mul
-     tee_local $6
+     tee_local $14
      get_local $5
      get_local $5
      f64.mul
-     tee_local $8
+     tee_local $6
      f64.add
      f64.const 4
      f64.le
@@ -88,8 +107,8 @@
        get_local $10
        f64.add
        set_local $5
+       get_local $14
        get_local $6
-       get_local $8
        f64.sub
        get_local $11
        f64.add
@@ -106,15 +125,10 @@
       end
      end
     end
-    f64.const 8
-    get_local $3
-    f64.convert_u/i32
-    f64.min
-    set_local $6
-    loop $repeat|2
+    loop $continue|2
      get_local $2
      f64.convert_u/i32
-     get_local $6
+     get_local $8
      f64.lt
      if
       get_local $4
@@ -126,7 +140,7 @@
       f64.sub
       get_local $11
       f64.add
-      set_local $8
+      set_local $6
       f64.const 2
       get_local $4
       f64.mul
@@ -135,22 +149,20 @@
       get_local $10
       f64.add
       set_local $5
-      get_local $8
+      get_local $6
       set_local $4
       get_local $2
       i32.const 1
       i32.add
       set_local $2
-      br $repeat|2
+      br $continue|2
      end
     end
-    get_local $0
-    get_local $1
-    i32.mul
     get_local $7
-    i32.add
     i32.const 1
     i32.shl
+    get_local $0
+    i32.add
     get_local $4
     get_local $4
     f64.mul
@@ -158,27 +170,23 @@
     get_local $5
     f64.mul
     f64.add
-    call $~lib/bindings/Math/sqrt
-    call $~lib/bindings/Math/log
-    call $~lib/bindings/Math/log
-    get_global $~lib/bindings/Math/LN2
-    f64.div
     tee_local $6
-    get_local $6
-    f64.sub
-    f64.const 0
-    f64.eq
+    f64.const 1
+    f64.gt
     if (result i32)
      f64.const 2047
      get_local $2
      i32.const 1
      i32.add
      f64.convert_u/i32
+     f64.const 0.5
      get_local $6
+     call $~lib/bindings/Math/log
+     f64.mul
+     call $~lib/bindings/Math/log2
      f64.sub
-     get_local $3
-     f64.convert_u/i32
-     f64.div
+     get_local $13
+     f64.mul
      f64.const 0
      f64.max
      f64.const 1
