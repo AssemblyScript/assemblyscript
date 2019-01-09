@@ -7458,7 +7458,6 @@
     tee_local $2
     if
      get_local $5
-<<<<<<< HEAD
      get_local $1
      i64.sub
      get_local $10
@@ -7468,17 +7467,6 @@
     get_local $2
     if
      get_local $1
-=======
-     get_local $1
-     i64.sub
-     get_local $10
-     i64.ge_u
-     set_local $2
-    end
-    get_local $2
-    if
-     get_local $1
->>>>>>> master
      get_local $10
      i64.add
      get_local $8
@@ -8600,31 +8588,6 @@
     i32.add
     set_local $1
    end
-<<<<<<< HEAD
-  end
-  get_local $2
-  set_local $0
-  block (result i32)
-   get_local $3
-   i32.const 2
-   i32.shl
-   get_local $5
-   i32.add
-   i32.load offset=8
-   if
-    get_local $2
-    get_local $1
-    i32.const 6792
-    i32.const 0
-    i32.const 15
-    call $~lib/internal/string/copyUnsafe
-    get_local $1
-    i32.const 15
-    i32.add
-    set_local $1
-   end
-=======
->>>>>>> master
    get_local $7
    get_local $1
    i32.gt_s
@@ -13936,11 +13899,7 @@
     unreachable
    end
    i32.const 44
-<<<<<<< HEAD
    set_local $1
-=======
-   set_local $0
->>>>>>> master
   end
   get_local $0
   get_local $1
@@ -13972,11 +13931,7 @@
     unreachable
    end
    i32.const 45
-<<<<<<< HEAD
    set_local $1
-=======
-   set_local $0
->>>>>>> master
   end
   get_local $0
   get_local $1
@@ -14008,11 +13963,7 @@
     unreachable
    end
    i32.const 46
-<<<<<<< HEAD
    set_local $1
-=======
-   set_local $0
->>>>>>> master
   end
   get_local $0
   get_local $1
@@ -14046,11 +13997,7 @@
     unreachable
    end
    i32.const 47
-<<<<<<< HEAD
    set_local $1
-=======
-   set_local $0
->>>>>>> master
   end
   get_local $0
   get_local $1
