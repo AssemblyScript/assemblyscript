@@ -171,6 +171,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.sb.push(`export class __near_ArgsParser_${element.simpleName} extends ThrowingJSONHandler {
         buffer: Uint8Array;
         decoder: JSONDecoder<__near_ArgsParser_${element.simpleName}>;
+        handledRoot: boolean = false;
       `);
     if (signature.parameterNames) {
       fields.forEach((field) => {
@@ -188,12 +189,12 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let returnType = signature.returnType;
     this.generateEncodeFunction(returnType);
     this.sb.push(`export function near_func_${element.simpleName}(): void {
-      let bson = new Uint8Array(input_read_len());
-      input_read_into(bson.buffer.data);
+      let json = new Uint8Array(input_read_len());
+      input_read_into(json.buffer.data);
       let handler = new __near_ArgsParser_${element.simpleName}();
-      handler.buffer = bson;
+      handler.buffer = json;
       handler.decoder = new JSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
-      handler.decoder.deserialize(bson);`);
+      handler.decoder.deserialize(json);`);
     if (returnType.toString() != "void") {
       this.sb.push(`let result = ${element.simpleName}(`);
     } else {
@@ -205,9 +206,12 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.sb.push(");");
     if (returnType.toString() != "void") {
       this.sb.push(`
-        let encoder = new JSONEncoder();`);
+        let encoder = new JSONEncoder();
+        encoder.pushObject(null);
+      `);
       this.generateFieldEncoder(returnType, '"result"', "result");
       this.sb.push(`
+        encoder.popObject();
         return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
       `);
     }
@@ -242,15 +246,23 @@ export class NEARBindingsBuilder extends ExportsWalker {
       super.setNull(name);
     }`);
 
+    let nonBasicFields = fields.filter(field => !(field.type.toString() in this.typeMapping));
     this.sb.push(`
       pushObject(name: string): bool {`);
-    this.generatePushHandler(valuePrefix, fields);
+    this.sb.push(`if (!this.handledRoot) {
+      assert(name == null);
+      this.handledRoot = true;
+      return true;
+    } else {
+      assert(name != null);
+    }`);
+    this.generatePushHandler(valuePrefix, nonBasicFields.filter(field => !this.isArrayType(field.type)));
     this.sb.push(`
         return super.pushObject(name);
       }`);
     this.sb.push(`
       pushArray(name: string): bool {`);
-    this.generatePushHandler(valuePrefix, fields);
+    this.generatePushHandler(valuePrefix, nonBasicFields.filter(field => this.isArrayType(field.type)));
     this.sb.push(`
         return super.pushArray(name);
       }`);
@@ -271,18 +283,23 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let setterType = this.typeMapping[fieldType.toString()];
     if (setterType) {
       this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {
-        ${valuePrefix}[i32(parseInt(name))] = value;
+        ${valuePrefix}.push(value);
       }
       setNull(name: string): void {
-        ${valuePrefix}[i32(parseInt(name))] = <${fieldType}>null;
+        ${valuePrefix}.push(<${fieldType}>null);
       }`);
     } else {
       this.sb.push(`pushObject(name: string): bool {
-        ${valuePrefix}[i32(parseInt(name))] = __near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state);
+        ${valuePrefix}.push(__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
         return false;
       }
       pushArray(name: string): bool {
-        ${valuePrefix}[i32(parseInt(name))] = __near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state);
+        assert(name == null);
+        if (!this.handledRoot) {
+          this.handledRoot = true;
+          return true;
+        }
+        ${valuePrefix}.push(__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
         return false;
       }`);
     }
@@ -307,7 +324,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
           value: ${type.toString()},
           encoder: JSONEncoder): void {`);
       this.sb.push(`for (let i = 0; i < value.length; i++) {`);
-      this.generateFieldEncoder(type.classReference.typeArguments![0], "near.str(i)", "value[i]");
+      this.generateFieldEncoder(type.classReference.typeArguments![0], "null", "value[i]");
       this.sb.push("}");
 
     } else {
@@ -335,6 +352,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.sb.push(`export class __near_JSONHandler_${typeName} extends ThrowingJSONHandler {
       buffer: Uint8Array;
       decoder: JSONDecoder<__near_JSONHandler_${typeName}>;
+      handledRoot: boolean = false;
       value: ${type} = new ${type}();`);
     if (this.isArrayType(type)) {
       this.generateArrayHandlerMethods("this.value", type.classReference!.typeArguments![0]);
