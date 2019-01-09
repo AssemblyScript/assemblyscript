@@ -52,8 +52,8 @@ Object.defineProperties(
 Object.defineProperties(
   globalScope["bool"] = function bool(value) { return !!value; }
 , {
-  "MIN_VALUE": { value: 0, writable: false },
-  "MAX_VALUE": { value: 1, writable: false }
+  "MIN_VALUE": { value: false, writable: false },
+  "MAX_VALUE": { value: true,  writable: false }
 });
 
 Object.defineProperties(
@@ -207,6 +207,14 @@ globalScope["isString"] = function isString(arg) {
 
 globalScope["isArray"] = Array.isArray;
 
+globalScope["isDefined"] = function isDefined(expr) {
+  return typeof expr !== "undefined";
+}
+
+globalScope["isConstant"] = function isConstant(expr) {
+  return false;
+};
+
 globalScope["unchecked"] = function unchecked(expr) {
   return expr;
 };
@@ -239,17 +247,24 @@ globalScope["memory"] = (() => {
       if ((HEAP_OFFSET += size) & 7) HEAP_OFFSET = (HEAP_OFFSET | 7) + 1;
       return ptr;
     },
+    fill: globalScope["__memory_fill"] || function fill(dest, value, size) {
+      HEAP.fill(value, dest, dest + size);
+    },
     free: globalScope["__memory_free"] || function free(ptr) { },
     copy: globalScope["__memory_copy"] || function copy(dest, src, size) {
       HEAP.copyWithin(dest, src, src + size);
+    },
+    reset: globalScope["__memory_reset"] || function reset() {
+      HEAP = new Uint8Array(0);
+      HEAP_OFFSET = 0;
     }
   };
 })();
 
 globalScope["store"] = globalScope["__store"] || function store(ptr, value, offset) {
-  HEAP[ptr + (offset | 0)] = value;
+  HEAP[(ptr | 0) + (offset | 0)] = value;
 };
 
 globalScope["load"] = globalScope["__load"] || function load(ptr, offset) {
-  return HEAP[ptr + (offset | 0)];
+  return HEAP[(ptr | 0) + (offset | 0)];
 };
