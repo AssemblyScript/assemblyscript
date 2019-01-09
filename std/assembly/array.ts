@@ -250,9 +250,8 @@ export class Array<T> {
   }
 
   forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void {
-    var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < toIndex && index < this.length_; ++index) {
-      callbackfn(LOAD<T>(buffer, index), index, this);
+      callbackfn(LOAD<T>(this.buffer_, index), index, this);
     }
   }
 
