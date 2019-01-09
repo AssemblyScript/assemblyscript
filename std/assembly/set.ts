@@ -108,6 +108,16 @@ export class Set<K> {
     }
   }
 
+  forEach(callbackfn:(value1: K, value2: K, set: Set<K>) => void): void {
+    var ptr = changetype<usize>(this.entries) + HEADER_SIZE_AB;
+    var end = ptr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
+    while (ptr != end) {
+      let oldEntry = changetype<SetEntry<K>>(ptr);
+      callbackfn(oldEntry.key, oldEntry.key, this);
+      ptr += ENTRY_SIZE<K>();
+    }
+  } 
+
   delete(key: K): bool {
     var entry = this.find(key, HASH<K>(key));
     if (!entry) return false;
