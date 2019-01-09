@@ -8,14 +8,6 @@ import { near } from "./near"
 @external("env", "log")
 declare function log(str: string): void;
 
-// Runtime functions
-@external("env", "return_value")
-declare function return_value(value_ptr: u32): void;
-@external("env", "input_read_len")
-declare function input_read_len(): u32;
-@external("env", "input_read_into")
-declare function input_read_into(ptr: usize): void;
-
 export class FooBar {
     foo: i32 = 0;
     bar: i32 = 1;

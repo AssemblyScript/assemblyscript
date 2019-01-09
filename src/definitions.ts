@@ -461,6 +461,14 @@ export class NEARBindingsBuilder extends ExportsWalker {
       import { near } from "./near";
       import { JSONEncoder} from "./json/encoder"
       import { JSONDecoder, ThrowingJSONHandler, DecoderState  } from "./json/decoder"
+
+      // Runtime functions
+      @external("env", "return_value")
+      declare function return_value(value_ptr: u32): void;
+      @external("env", "input_read_len")
+      declare function input_read_len(): u32;
+      @external("env", "input_read_into")
+      declare function input_read_into(ptr: usize): void;
     `);
     let mainSource = this.program.sources
       .filter(s => s.normalizedPath.indexOf("~lib") != 0)[0];

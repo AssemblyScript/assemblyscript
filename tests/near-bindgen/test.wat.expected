@@ -95,12 +95,6 @@
  (data (i32.const 2416) "\06\00\00\00r\00e\00s\00u\00l\00t\00")
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $json/decoder/TRUE_STR i32 (i32.const 8))
  (global $json/decoder/FALSE_STR i32 (i32.const 24))
  (global $json/decoder/NULL_STR i32 (i32.const 40))
@@ -109,6 +103,12 @@
  (global $json/decoder/CHAR_9 (mut i32) (i32.const 0))
  (global $json/decoder/CHAR_A (mut i32) (i32.const 0))
  (global $json/decoder/CHAR_A_LOWER (mut i32) (i32.const 0))
+ (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
+ (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
+ (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
+ (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
+ (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
+ (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
  (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
@@ -4355,7 +4355,7 @@
    if
     i32.const 0
     i32.const 1312
-    i32.const 253
+    i32.const 257
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -4373,7 +4373,7 @@
    if
     i32.const 0
     i32.const 1312
-    i32.const 257
+    i32.const 261
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -6372,7 +6372,7 @@
   if
    i32.const 0
    i32.const 1312
-   i32.const 312
+   i32.const 316
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -7436,7 +7436,7 @@
   if
    i32.const 0
    i32.const 1312
-   i32.const 288
+   i32.const 292
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8798,16 +8798,6 @@
   call $json/encoder/JSONEncoder#setInteger
  )
  (func $start (; 139 ;) (type $v)
-  get_global $HEAP_BASE
-  get_global $~lib/internal/allocator/AL_MASK
-  i32.add
-  get_global $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  set_global $~lib/allocator/arena/startOffset
-  get_global $~lib/allocator/arena/startOffset
-  set_global $~lib/allocator/arena/offset
   i32.const 56
   i32.const 0
   call $~lib/string/String#charCodeAt
@@ -8824,6 +8814,16 @@
   i32.const 0
   call $~lib/string/String#charCodeAt
   set_global $json/decoder/CHAR_A_LOWER
+  get_global $HEAP_BASE
+  get_global $~lib/internal/allocator/AL_MASK
+  i32.add
+  get_global $~lib/internal/allocator/AL_MASK
+  i32.const -1
+  i32.xor
+  i32.and
+  set_global $~lib/allocator/arena/startOffset
+  get_global $~lib/allocator/arena/startOffset
+  set_global $~lib/allocator/arena/offset
   call $test/runTest
  )
  (func $null (; 140 ;) (type $v)

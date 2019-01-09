@@ -1,3 +1,12 @@
+import { near } from "./near";
+import { JSONEncoder } from "./json/encoder";
+import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder";
+
+// Runtime functions
+declare function return_value(value_ptr: u32): void;
+declare function input_read_len(): u32;
+declare function input_read_into(ptr: usize): void;
+
 import "allocator/arena";
 // TODO: Why cannot import from index?
 // import { JSONEncoder, JSONDecoder } from "./json";
@@ -11,11 +20,6 @@ import {
 import { near } from "./near";
 
 declare function log(str: string): void;
-
-// Runtime functions
-declare function return_value(value_ptr: u32): void;
-declare function input_read_len(): u32;
-declare function input_read_into(ptr: usize): void;
 
 export class FooBar {
   foo: i32 = 0;
