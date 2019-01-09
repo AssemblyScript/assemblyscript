@@ -52,3 +52,44 @@ test<i64>();
 test<u64>();
 test<f32>();
 test<f64>();
+
+// forEach
+var set = new Set<i32>();
+for (let k: i32 = 0; k < 10; ++k) {
+  set.add(k);
+}
+assert(set.size == 10);
+var i: i32 = 0;
+set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+  assert(value1 == value2);
+  assert(i == value1);
+  i++;
+});
+
+i = 0;
+set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+  aset.add(11);
+  i++;
+});
+assert(set.size == 11);
+assert(11 == i);
+
+i = 0;
+set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+  if (value1 == 11) {
+    for (let index = 0; index < 100; index++) {
+      aset.add(index + 20);
+    }
+  }
+  i++;
+});
+assert(set.size == 111);
+assert(set.size == i);
+
+i = 0;
+set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+  aset.delete(value1);
+  i++;
+});
+assert(set.size == 0);
+assert(i == 111);

@@ -473,6 +473,7 @@ declare class Set<T> {
   readonly size: i32;
   has(value: T): bool;
   add(value: T): void;
+  forEach(callbackfn: (value1: T, value2: T, set: Set<T>) => void): void;
   delete(value: T): bool;
   clear(): void;
   toString(): string;
