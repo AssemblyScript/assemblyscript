@@ -135,27 +135,28 @@
    i32.const 0
    call $~lib/allocator/arena/__memory_allocate
   end
-  tee_local $0
   set_global $std/constructor/ctorConditionallyReturns
   i32.const 0
   call $~lib/allocator/arena/__memory_allocate
   set_global $std/constructor/ctorAllocates
   i32.const 0
   set_local $0
-  get_global $std/constructor/b
-  if
+  block (result i32)
+   get_global $std/constructor/b
+   if
+    i32.const 0
+    call $~lib/allocator/arena/__memory_allocate
+    set_local $0
+   end
+   get_local $0
+   i32.eqz
+  end
+  if (result i32)
    i32.const 0
    call $~lib/allocator/arena/__memory_allocate
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
-  i32.eqz
-  if
-   i32.const 0
-   call $~lib/allocator/arena/__memory_allocate
-   set_local $0
-  end
-  get_local $0
   set_global $std/constructor/ctorConditionallyAllocates
  )
  (func $null (; 2 ;) (type $v)

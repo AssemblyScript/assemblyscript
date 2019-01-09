@@ -183,15 +183,15 @@
    unreachable
   end
   get_global $std/date/date
+  tee_local $0
   get_global $std/date/creationTime
   i64.const 1
   i64.add
+  tee_local $1
   i64.store
-  get_global $std/date/date
+  get_local $0
   i64.load
-  get_global $std/date/creationTime
-  i64.const 1
-  i64.add
+  get_local $1
   i64.ne
   if
    i32.const 0
