@@ -182,24 +182,24 @@
   if
    return
   end
-  get_local $0
   i32.const 0
   get_local $0
   i32.sub
   i32.const 3
   i32.and
   tee_local $2
+  get_local $0
   i32.add
   tee_local $0
   i32.const 0
   i32.store
-  get_local $0
   get_local $1
   get_local $2
   i32.sub
   i32.const -4
   i32.and
   tee_local $1
+  get_local $0
   i32.add
   i32.const 4
   i32.sub
@@ -284,12 +284,12 @@
   i32.const 0
   i32.store
   get_local $0
-  get_local $0
   i32.const 4
   i32.and
   i32.const 24
   i32.add
   tee_local $2
+  get_local $0
   i32.add
   set_local $0
   get_local $1
@@ -371,12 +371,11 @@
   get_local $0
   i32.load offset=4
   set_local $7
-  block $break|0
-   loop $repeat|0
-    get_local $1
-    get_local $7
-    i32.ge_s
-    br_if $break|0
+  loop $repeat|0
+   get_local $1
+   get_local $7
+   i32.lt_s
+   if
     get_local $0
     i32.load
     get_local $1
@@ -413,9 +412,7 @@
     i32.add
     set_local $1
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
   i32.const 0
   get_local $0
@@ -562,12 +559,11 @@
   tee_local $12
   i32.load offset=4
   set_local $13
-  block $break|0
-   loop $repeat|0
-    get_local $3
-    get_local $13
-    i32.ge_u
-    br_if $break|0
+  loop $repeat|0
+   get_local $3
+   get_local $13
+   i32.lt_u
+   if
     get_local $12
     i32.load
     get_local $3
@@ -596,16 +592,15 @@
     get_local $0
     f64.load offset=48
     set_local $17
-    block $break|1
-     get_local $3
-     i32.const 1
-     i32.add
-     set_local $7
-     loop $repeat|1
-      get_local $7
-      get_local $13
-      i32.ge_u
-      br_if $break|1
+    get_local $3
+    i32.const 1
+    i32.add
+    set_local $7
+    loop $repeat|1
+     get_local $7
+     get_local $13
+     i32.lt_u
+     if
       get_local $14
       get_local $12
       i32.load
@@ -699,9 +694,7 @@
       i32.add
       set_local $7
       br $repeat|1
-      unreachable
      end
-     unreachable
     end
     get_local $0
     get_local $4
@@ -741,9 +734,7 @@
     i32.add
     set_local $3
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
  )
  (func $assembly/index/NBodySystem#energy (; 7 ;) (type $iF) (param $0 i32) (result f64)
@@ -757,17 +748,16 @@
   (local $8 f64)
   (local $9 f64)
   (local $10 f64)
-  block $break|0
-   get_local $0
-   i32.load
-   tee_local $4
-   i32.load offset=4
-   set_local $5
-   loop $repeat|0
-    get_local $2
-    get_local $5
-    i32.ge_u
-    br_if $break|0
+  get_local $0
+  i32.load
+  tee_local $4
+  i32.load offset=4
+  set_local $5
+  loop $repeat|0
+   get_local $2
+   get_local $5
+   i32.lt_u
+   if
     get_local $4
     i32.load
     get_local $2
@@ -810,16 +800,15 @@
     f64.mul
     f64.add
     set_local $1
-    block $break|1
-     get_local $2
-     i32.const 1
-     i32.add
-     set_local $0
-     loop $repeat|1
-      get_local $0
-      get_local $5
-      i32.ge_u
-      br_if $break|1
+    get_local $2
+    i32.const 1
+    i32.add
+    set_local $0
+    loop $repeat|1
+     get_local $0
+     get_local $5
+     i32.lt_u
+     if
       get_local $7
       get_local $4
       i32.load
@@ -865,18 +854,14 @@
       i32.add
       set_local $0
       br $repeat|1
-      unreachable
      end
-     unreachable
     end
     get_local $2
     i32.const 1
     i32.add
     set_local $2
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
   get_local $1
  )
@@ -924,10 +909,10 @@
    i32.shr_u
    i32.lt_u
    if (result i32)
-    get_local $1
     get_local $0
     i32.const 2
     i32.shl
+    get_local $1
     i32.add
     i32.load offset=8
    else    
@@ -936,7 +921,6 @@
   else   
    i32.const 0
   end
-  tee_local $0
  )
  (func $start (; 11 ;) (type $v)
   i32.const 40
