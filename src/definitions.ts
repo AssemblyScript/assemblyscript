@@ -457,6 +457,11 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   build(): string {
+    this.sb.push(`
+      import { near } from "./near";
+      import { JSONEncoder} from "./json/encoder"
+      import { JSONDecoder, ThrowingJSONHandler, DecoderState  } from "./json/decoder"
+    `);
     let mainSource = this.program.sources
       .filter(s => s.normalizedPath.indexOf("~lib") != 0)[0];
     this.sb.push(mainSource.text);
