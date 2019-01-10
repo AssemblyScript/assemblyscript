@@ -33,7 +33,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.load
   tee_local $0
   i32.load
@@ -48,7 +47,6 @@
   else   
    unreachable
   end
-  tee_local $0
  )
  (func $std/array-access/stringArrayPropertyAccess (; 2 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
@@ -65,7 +63,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.load
  )
  (func $~lib/internal/string/compareUnsafe (; 3 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
@@ -89,7 +86,6 @@
    else    
     get_local $3
    end
-   tee_local $0
    if
     get_local $3
     i32.const 1
@@ -163,7 +159,6 @@
   else   
    unreachable
   end
-  tee_local $0
   call $~lib/string/String#startsWith
  )
  (func $std/array-access/stringArrayArrayPropertyAccess (; 6 ;) (type $ii) (param $0 i32) (result i32)
@@ -182,7 +177,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.load
   tee_local $0
   i32.load
@@ -197,7 +191,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.load
  )
  (func $std/array-access/stringArrayArrayMethodCall (; 7 ;) (type $ii) (param $0 i32) (result i32)
@@ -216,7 +209,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.load
   tee_local $0
   i32.load
@@ -231,7 +223,6 @@
   else   
    unreachable
   end
-  tee_local $0
   call $~lib/string/String#startsWith
  )
  (func $null (; 8 ;) (type $v)

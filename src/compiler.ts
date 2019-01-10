@@ -5421,33 +5421,22 @@ export class Compiler extends DiagnosticEmitter {
     if (thisArg) {
       let parent = assert(instance.parent);
       assert(parent.kind == ElementKind.CLASS);
-      if (getExpressionId(thisArg) == ExpressionId.GetLocal) {
-        flow.addScopedLocalAlias(
-          getGetLocalIndex(thisArg),
-          (<Class>parent).type,
-          "this"
-        );
-        let parentBase = (<Class>parent).base;
-        if (parentBase) {
-          flow.addScopedLocalAlias(
-            getGetLocalIndex(thisArg),
-            parentBase.type,
-            "super"
-          );
-        }
-      } else {
-        let thisLocal = flow.addScopedLocal((<Class>parent).type, "this", false);
+      let thisType = assert(instance.signature.thisType);
+      let classType = thisType.classReference;
+      let superType = classType
+        ? classType.base
+          ? classType.base.type
+          : null
+        : null;
+      if (getExpressionId(thisArg) == ExpressionId.GetLocal) { // reuse this var
+        flow.addScopedLocalAlias(getGetLocalIndex(thisArg), thisType, "this");
+        if (superType) flow.addScopedLocalAlias(getGetLocalIndex(thisArg), superType, "super");
+      } else { // use a temp var
+        let thisLocal = flow.addScopedLocal(thisType, "this", false);
         body.push(
           module.createSetLocal(thisLocal.index, thisArg)
         );
-        let parentBase = (<Class>parent).base;
-        if (parentBase) {
-          flow.addScopedLocalAlias(
-            thisLocal.index,
-            parentBase.type,
-            "super"
-          );
-        }
+        if (superType) flow.addScopedLocalAlias(thisLocal.index, superType, "super");
       }
     }
     var parameterTypes = signature.parameterTypes;
@@ -5895,7 +5884,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type): ExpressionRef {
-    var target = this.resolver.resolveElementAccess(expression, this.currentFunction); // reports
+    var target = this.resolver.resolveElementAccess(expression, this.currentFunction, contextualType); // reports
     if (!target) return this.module.createUnreachable();
     switch (target.kind) {
       case ElementKind.CLASS: {
@@ -6003,7 +5992,7 @@ export class Compiler extends DiagnosticEmitter {
         if (currentFunction.is(CommonFlags.INSTANCE)) {
           let parent = assert(currentFunction.parent);
           assert(parent.kind == ElementKind.CLASS);
-          let thisType = (<Class>parent).type;
+          let thisType = assert(currentFunction.signature.thisType);
           if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
             if (!flow.is(FlowFlags.ALLOCATES)) {
               flow.set(FlowFlags.ALLOCATES);
@@ -6194,84 +6183,16 @@ export class Compiler extends DiagnosticEmitter {
             intValue
           );
         }
-        switch (contextualType.kind) {
-
-          // compile to contextualType if matching
-
-          case TypeKind.I8: {
-            if (i64_is_i8(intValue)) return module.createI32(i64_low(intValue));
-            break;
-          }
-          case TypeKind.U8: {
-            if (i64_is_u8(intValue)) return module.createI32(i64_low(intValue));
-            break;
-          }
-          case TypeKind.I16: {
-            if (i64_is_i16(intValue)) return module.createI32(i64_low(intValue));
-            break;
-          }
-          case TypeKind.U16: {
-            if (i64_is_u16(intValue)) return module.createI32(i64_low(intValue));
-            break;
-          }
-          case TypeKind.I32: {
-            if (i64_is_i32(intValue)) return module.createI32(i64_low(intValue));
-            break;
-          }
-          case TypeKind.U32: {
-            if (i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
-            break;
-          }
-          case TypeKind.BOOL: {
-            if (i64_is_bool(intValue)) return module.createI32(i64_low(intValue));
-            break;
-          }
-          case TypeKind.ISIZE: {
-            if (!this.options.isWasm64) {
-              if (i64_is_i32(intValue)) return module.createI32(i64_low(intValue));
-              break;
-            }
-            return module.createI64(i64_low(intValue), i64_high(intValue));
-          }
-          case TypeKind.USIZE: {
-            if (!this.options.isWasm64) {
-              if (i64_is_u32(intValue)) return module.createI32(i64_low(intValue));
-              break;
-            }
-            return module.createI64(i64_low(intValue), i64_high(intValue));
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            return module.createI64(i64_low(intValue), i64_high(intValue));
-          }
-          case TypeKind.F32: {
-            if (i64_is_f32(intValue)) return module.createF32(i64_to_f32(intValue));
-            break;
-          }
-          case TypeKind.F64: {
-            if (i64_is_f64(intValue)) return module.createF64(i64_to_f64(intValue));
-            break;
-          }
-          case TypeKind.VOID: {
-            break; // compiles to best fitting type below, being dropped
-          }
-          default: {
-            assert(false);
-            return module.createUnreachable();
-          }
-        }
-
-        // otherwise compile to best fitting native type
-
-        if (i64_is_i32(intValue)) {
-          this.currentType = Type.i32;
-          return module.createI32(i64_low(intValue));
-        } else if (i64_is_u32(intValue)) {
-          this.currentType = Type.u32;
-          return module.createI32(i64_low(intValue));
-        } else {
-          this.currentType = Type.i64;
-          return module.createI64(i64_low(intValue), i64_high(intValue));
+        let type = this.resolver.determineIntegerLiteralType(intValue, contextualType);
+        this.currentType = type;
+        switch (type.kind) {
+          case TypeKind.ISIZE: if (!this.options.isWasm64) return module.createI32(i64_low(intValue));
+          case TypeKind.I64: return module.createI64(i64_low(intValue), i64_high(intValue));
+          case TypeKind.USIZE: if (!this.options.isWasm64) return module.createI32(i64_low(intValue));
+          case TypeKind.U64: return module.createI64(i64_low(intValue), i64_high(intValue));
+          case TypeKind.F32: return module.createF32(i64_to_f32(intValue));
+          case TypeKind.F64: return module.createF64(i64_to_f64(intValue));
+          default: return module.createI32(i64_low(intValue));
         }
       }
       case LiteralKind.STRING: {
@@ -6749,7 +6670,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
 
-    var target = this.resolver.resolvePropertyAccess(propertyAccess, this.currentFunction); // reports
+    var target = this.resolver.resolvePropertyAccess(propertyAccess, this.currentFunction, contextualType); // reports
     if (!target) return module.createUnreachable();
 
     switch (target.kind) {

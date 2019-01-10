@@ -83,4 +83,4 @@ export declare function instantiateBuffer<T extends {}>(buffer: Uint8Array, impo
 export declare function instantiateStreaming<T extends {}>(result: Promise<Response>, imports?: ImportsObject): Promise<ASUtil & T>;
 
 /** Demangles an AssemblyScript module's exports to a friendly object structure. */
-export declare function demangle<T extends {}>(exports: {}): T;
+export declare function demangle<T extends {}>(exports: {}, baseModule?: {}): T;

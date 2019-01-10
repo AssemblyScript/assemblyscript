@@ -640,7 +640,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $3
     call $~lib/map/Map<i8,i32>#rehash
    end
    get_local $0
@@ -760,7 +759,7 @@
   select
   i32.ge_u
   tee_local $1
-  if
+  if (result i32)
    get_local $0
    i32.load offset=20
    get_local $0
@@ -770,9 +769,9 @@
    f64.mul
    i32.trunc_s/f64
    i32.lt_s
-   set_local $1
+  else   
+   get_local $1
   end
-  get_local $1
   if
    get_local $0
    get_local $2
@@ -1300,7 +1299,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $3
     call $~lib/map/Map<u8,i32>#rehash
    end
    get_local $0
@@ -1416,7 +1414,7 @@
   select
   i32.ge_u
   tee_local $1
-  if
+  if (result i32)
    get_local $0
    i32.load offset=20
    get_local $0
@@ -1426,9 +1424,9 @@
    f64.mul
    i32.trunc_s/f64
    i32.lt_s
-   set_local $1
+  else   
+   get_local $1
   end
-  get_local $1
   if
    get_local $0
    get_local $2
@@ -2019,7 +2017,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $3
     call $~lib/map/Map<i16,i32>#rehash
    end
    get_local $0
@@ -2098,7 +2095,6 @@
   else   
    unreachable
   end
-  tee_local $0
  )
  (func $~lib/map/Map<i16,i32>#delete (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2158,7 +2154,7 @@
   select
   i32.ge_u
   tee_local $1
-  if
+  if (result i32)
    get_local $0
    i32.load offset=20
    get_local $0
@@ -2168,9 +2164,9 @@
    f64.mul
    i32.trunc_s/f64
    i32.lt_s
-   set_local $1
+  else   
+   get_local $1
   end
-  get_local $1
   if
    get_local $0
    get_local $2
@@ -2726,7 +2722,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $3
     call $~lib/map/Map<u16,i32>#rehash
    end
    get_local $0
@@ -2803,7 +2798,6 @@
   else   
    unreachable
   end
-  tee_local $0
  )
  (func $~lib/map/Map<u16,i32>#delete (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2861,7 +2855,7 @@
   select
   i32.ge_u
   tee_local $1
-  if
+  if (result i32)
    get_local $0
    i32.load offset=20
    get_local $0
@@ -2871,9 +2865,9 @@
    f64.mul
    i32.trunc_s/f64
    i32.lt_s
-   set_local $1
+  else   
+   get_local $1
   end
-  get_local $1
   if
    get_local $0
    get_local $2
@@ -3446,7 +3440,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $3
     call $~lib/map/Map<i32,i32>#rehash
    end
    get_local $0
@@ -3509,7 +3502,6 @@
   else   
    unreachable
   end
-  tee_local $0
  )
  (func $~lib/map/Map<i32,i32>#delete (; 39 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -4527,7 +4519,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $3
     call $~lib/map/Map<i64,i32>#rehash
    end
    get_local $0
@@ -4590,7 +4581,6 @@
   else   
    unreachable
   end
-  tee_local $0
  )
  (func $~lib/map/Map<i64,i32>#delete (; 50 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
@@ -5510,7 +5500,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $3
     call $~lib/map/Map<f32,i32>#rehash
    end
    get_local $0
@@ -5574,7 +5563,6 @@
   else   
    unreachable
   end
-  tee_local $0
  )
  (func $~lib/map/Map<f32,i32>#delete (; 58 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
@@ -6170,7 +6158,6 @@
      i32.const 1
      i32.or
     end
-    tee_local $3
     call $~lib/map/Map<f64,i32>#rehash
    end
    get_local $0
@@ -6234,7 +6221,6 @@
   else   
    unreachable
   end
-  tee_local $0
  )
  (func $~lib/map/Map<f64,i32>#delete (; 65 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)

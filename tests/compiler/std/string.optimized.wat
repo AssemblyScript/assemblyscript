@@ -343,7 +343,6 @@
    else    
     get_local $3
    end
-   tee_local $0
    if
     get_local $3
     i32.const 1
@@ -557,12 +556,10 @@
    unreachable
   end
   get_local $1
-  i32.eqz
-  if
-   i32.const 200
-   set_local $1
-  end
+  i32.const 200
   get_local $1
+  select
+  tee_local $1
   i32.load
   tee_local $4
   i32.eqz
@@ -626,15 +623,12 @@
   (local $4 i32)
   (local $5 i32)
   loop $continue|0
+   get_local $1
+   i32.const 3
+   i32.and
    get_local $2
-   if (result i32)
-    get_local $1
-    i32.const 3
-    i32.and
-   else    
-    get_local $2
-   end
-   tee_local $3
+   get_local $2
+   select
    if
     get_local $0
     tee_local $4
@@ -726,14 +720,14 @@
     i32.add
     i32.load
     i32.store
-    get_local $0
-    i32.const 8
-    i32.add
-    set_local $0
     get_local $1
     i32.const 8
     i32.add
     set_local $1
+    get_local $0
+    i32.const 8
+    i32.add
+    set_local $0
    end
    get_local $2
    i32.const 4
@@ -743,14 +737,14 @@
     get_local $1
     i32.load
     i32.store
-    get_local $0
-    i32.const 4
-    i32.add
-    set_local $0
     get_local $1
     i32.const 4
     i32.add
     set_local $1
+    get_local $0
+    i32.const 4
+    i32.add
+    set_local $0
    end
    get_local $2
    i32.const 2
@@ -760,21 +754,19 @@
     get_local $1
     i32.load16_u
     i32.store16
-    get_local $0
-    i32.const 2
-    i32.add
-    set_local $0
     get_local $1
     i32.const 2
     i32.add
     set_local $1
+    get_local $0
+    i32.const 2
+    i32.add
+    set_local $0
    end
    get_local $2
    i32.const 1
    i32.and
    if
-    get_local $1
-    set_local $3
     get_local $0
     get_local $1
     i32.load8_u
@@ -1517,8 +1509,6 @@
   i32.const 1
   i32.and
   if
-   get_local $1
-   set_local $3
    get_local $0
    get_local $1
    i32.load8_u
@@ -1585,7 +1575,6 @@
       set_local $2
       get_local $0
       tee_local $4
-      tee_local $3
       i32.const 1
       i32.add
       set_local $0
@@ -1631,7 +1620,6 @@
     if
      get_local $0
      tee_local $4
-     tee_local $3
      i32.const 1
      i32.add
      set_local $0
@@ -2186,16 +2174,14 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 200
-   set_local $1
-  end
   get_local $0
   i32.load
   set_local $3
   get_local $1
+  i32.const 200
+  get_local $1
+  select
+  tee_local $1
   i32.load
   tee_local $4
   i32.eqz
@@ -2713,16 +2699,14 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 200
-   set_local $1
-  end
   get_local $0
   i32.load
   tee_local $3
   get_local $1
+  i32.const 200
+  get_local $1
+  select
+  tee_local $1
   i32.load
   tee_local $4
   i32.add
@@ -2750,12 +2734,9 @@
  )
  (func $~lib/string/String.__concat (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
-  i32.eqz
-  if
-   i32.const 200
-   set_local $0
-  end
+  i32.const 200
   get_local $0
+  select
   get_local $1
   call $~lib/string/String#concat
  )
@@ -2942,7 +2923,6 @@
   end
   get_local $0
   i32.eqz
-  tee_local $1
   if
    i32.const 0
    return
@@ -3500,27 +3480,26 @@
   if
    i32.const 1
    call $~lib/array/Array<String>#constructor
-   tee_local $4
+   tee_local $6
    i32.load
    get_local $0
    i32.store offset=8
-   get_local $4
+   get_local $6
    return
   end
   get_local $0
   i32.load
   set_local $3
-  get_local $1
-  i32.load
-  set_local $8
+  i32.const 2147483647
+  get_local $2
   get_local $2
   i32.const 0
   i32.lt_s
-  if
-   i32.const 2147483647
-   set_local $2
-  end
-  get_local $8
+  select
+  set_local $2
+  get_local $1
+  i32.load
+  tee_local $9
   if
    get_local $3
    i32.eqz
@@ -3537,7 +3516,6 @@
     return
    end
    get_local $3
-   tee_local $4
    get_local $2
    get_local $3
    get_local $2
@@ -3545,7 +3523,7 @@
    select
    tee_local $3
    call $~lib/array/Array<String>#constructor
-   tee_local $4
+   tee_local $6
    i32.load
    set_local $7
    i32.const 0
@@ -3579,23 +3557,23 @@
      br $repeat|0
     end
    end
-   get_local $4
+   get_local $6
    return
   end
   i32.const 0
   call $~lib/array/Array<String>#constructor
-  set_local $5
+  set_local $4
   loop $continue|1
    get_local $0
    get_local $1
-   get_local $6
+   get_local $5
    call $~lib/string/String#indexOf
-   tee_local $9
+   tee_local $8
    i32.const -1
    i32.ne
    if
-    get_local $9
-    get_local $6
+    get_local $8
+    get_local $5
     i32.sub
     tee_local $7
     i32.const 0
@@ -3603,18 +3581,18 @@
     if
      get_local $7
      call $~lib/internal/string/allocateUnsafe
-     tee_local $4
+     tee_local $6
      i32.const 0
      get_local $0
-     get_local $6
+     get_local $5
      get_local $7
      call $~lib/internal/string/copyUnsafe
-     get_local $5
      get_local $4
+     get_local $6
      call $~lib/array/Array<String>#push
      drop
     else     
-     get_local $5
+     get_local $4
      i32.const 256
      call $~lib/array/Array<String>#push
      drop
@@ -3626,17 +3604,17 @@
     get_local $2
     i32.eq
     if
-     get_local $5
+     get_local $4
      return
     end
     get_local $8
     get_local $9
     i32.add
-    set_local $6
+    set_local $5
     br $continue|1
    end
   end
-  get_local $6
+  get_local $5
   i32.eqz
   if
    i32.const 1
@@ -3649,7 +3627,7 @@
    return
   end
   get_local $3
-  get_local $6
+  get_local $5
   i32.sub
   tee_local $1
   i32.const 0
@@ -3660,20 +3638,20 @@
    tee_local $2
    i32.const 0
    get_local $0
-   get_local $6
+   get_local $5
    get_local $1
    call $~lib/internal/string/copyUnsafe
-   get_local $5
+   get_local $4
    get_local $2
    call $~lib/array/Array<String>#push
    drop
   else   
-   get_local $5
+   get_local $4
    i32.const 256
    call $~lib/array/Array<String>#push
    drop
   end
-  get_local $5
+  get_local $4
  )
  (func $~lib/string/String#split|trampoline (; 39 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -4116,19 +4094,21 @@
    i32.const 480
    return
   end
-  get_local $0
-  i64.const 0
-  i64.lt_s
-  tee_local $1
-  if
-   i64.const 0
+  block (result i32)
    get_local $0
-   i64.sub
-   set_local $0
+   i64.const 0
+   i64.lt_s
+   tee_local $1
+   if
+    i64.const 0
+    get_local $0
+    i64.sub
+    set_local $0
+   end
+   get_local $0
+   i64.const 4294967295
+   i64.le_u
   end
-  get_local $0
-  i64.const 4294967295
-  i64.le_u
   if
    get_local $0
    i32.wrap/i64
@@ -4488,93 +4468,91 @@
    i64.and
    tee_local $1
    get_local $5
-   i64.lt_u
-   if (result i32)
-    get_global $~lib/internal/number/_K
-    get_local $9
-    i32.add
-    set_global $~lib/internal/number/_K
-    get_local $12
-    i32.const 0
-    get_local $9
-    i32.sub
-    i32.const 2
-    i32.shl
-    i32.add
-    i64.load32_u offset=8
+   i64.ge_u
+   br_if $continue|3
+   get_global $~lib/internal/number/_K
+   get_local $9
+   i32.add
+   set_global $~lib/internal/number/_K
+   get_local $12
+   i32.const 0
+   get_local $9
+   i32.sub
+   i32.const 2
+   i32.shl
+   i32.add
+   i64.load32_u offset=8
+   get_local $8
+   i64.mul
+   set_local $8
+   get_local $6
+   i32.const 1
+   i32.sub
+   i32.const 1
+   i32.shl
+   get_local $0
+   i32.add
+   tee_local $7
+   i32.load16_u offset=4
+   set_local $4
+   loop $continue|4
+    get_local $1
     get_local $8
-    i64.mul
-    set_local $8
-    get_local $6
-    i32.const 1
-    i32.sub
-    i32.const 1
-    i32.shl
-    get_local $0
-    i32.add
-    tee_local $7
-    i32.load16_u offset=4
-    set_local $4
-    loop $continue|4
+    i64.lt_u
+    tee_local $2
+    if
+     get_local $5
      get_local $1
+     i64.sub
+     get_local $10
+     i64.ge_u
+     set_local $2
+    end
+    get_local $2
+    if
+     get_local $1
+     get_local $10
+     i64.add
      get_local $8
      i64.lt_u
      tee_local $2
+     i32.eqz
      if
-      get_local $5
+      get_local $8
       get_local $1
       i64.sub
-      get_local $10
-      i64.ge_u
-      set_local $2
-     end
-     get_local $2
-     if
       get_local $1
       get_local $10
       i64.add
       get_local $8
-      i64.lt_u
-      tee_local $2
-      i32.eqz
-      if
-       get_local $8
-       get_local $1
-       i64.sub
-       get_local $1
-       get_local $10
-       i64.add
-       get_local $8
-       i64.sub
-       i64.gt_u
-       set_local $2
-      end
-     end
-     get_local $2
-     if
-      get_local $4
-      i32.const 1
-      i32.sub
-      set_local $4
-      get_local $1
-      get_local $10
-      i64.add
-      set_local $1
-      br $continue|4
+      i64.sub
+      i64.gt_u
+      set_local $2
      end
     end
-    get_local $7
-    get_local $4
-    i32.store16 offset=4
-    get_local $6
-   else    
-    br $continue|3
+    get_local $2
+    if
+     get_local $4
+     i32.const 1
+     i32.sub
+     set_local $4
+     get_local $1
+     get_local $10
+     i64.add
+     set_local $1
+     br $continue|4
+    end
    end
+   get_local $7
+   get_local $4
+   i32.store16 offset=4
+   get_local $6
   end
  )
  (func $~lib/internal/number/prettify (; 49 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   get_local $2
   i32.eqz
   if
@@ -4594,11 +4572,11 @@
   get_local $1
   get_local $2
   i32.add
-  tee_local $4
+  tee_local $5
   i32.le_s
   tee_local $3
   if
-   get_local $4
+   get_local $5
    i32.const 21
    i32.le_s
    set_local $3
@@ -4610,7 +4588,7 @@
    loop $repeat|0
     block $break|0
      get_local $3
-     get_local $4
+     get_local $5
      i32.ge_s
      br_if $break|0
      get_local $3
@@ -4627,40 +4605,41 @@
      br $repeat|0
     end
    end
-   get_local $4
+   get_local $5
    i32.const 1
    i32.shl
    get_local $0
    i32.add
    i32.const 3145774
    i32.store offset=4
-   get_local $4
+   get_local $5
    i32.const 2
    i32.add
   else   
-   get_local $4
+   get_local $5
    i32.const 0
    i32.gt_s
    tee_local $3
    if
-    get_local $4
+    get_local $5
     i32.const 21
     i32.le_s
     set_local $3
    end
    get_local $3
    if (result i32)
-    get_local $4
+    get_local $5
     i32.const 1
     i32.shl
     get_local $0
     i32.add
     tee_local $3
-    i32.const 6
-    i32.add
-    get_local $3
     i32.const 4
     i32.add
+    tee_local $0
+    i32.const 2
+    i32.add
+    get_local $0
     i32.const 0
     get_local $2
     i32.sub
@@ -4675,11 +4654,11 @@
     i32.add
    else    
     i32.const -6
-    get_local $4
+    get_local $5
     i32.lt_s
     tee_local $3
     if
-     get_local $4
+     get_local $5
      i32.const 0
      i32.le_s
      set_local $3
@@ -4689,16 +4668,15 @@
      get_local $0
      i32.const 4
      i32.add
+     tee_local $2
      i32.const 2
-     get_local $4
+     get_local $5
      i32.sub
      tee_local $3
      i32.const 1
      i32.shl
      i32.add
-     get_local $0
-     i32.const 4
-     i32.add
+     get_local $2
      get_local $1
      i32.const 1
      i32.shl
@@ -4707,24 +4685,24 @@
      i32.const 3014704
      i32.store offset=4
      i32.const 2
-     set_local $2
+     set_local $4
      loop $repeat|1
       block $break|1
-       get_local $2
+       get_local $4
        get_local $3
        i32.ge_s
        br_if $break|1
-       get_local $2
+       get_local $4
        i32.const 1
        i32.shl
        get_local $0
        i32.add
        i32.const 48
        i32.store16 offset=4
-       get_local $2
+       get_local $4
        i32.const 1
        i32.add
-       set_local $2
+       set_local $4
        br $repeat|1
       end
      end
@@ -4742,48 +4720,52 @@
       get_local $0
       i32.const 4
       i32.add
-      set_local $3
-      get_local $4
-      i32.const 1
-      i32.sub
-      tee_local $2
-      i32.const 0
-      i32.lt_s
-      tee_local $0
-      if
-       i32.const 0
-       get_local $2
+      tee_local $3
+      block (result i32)
+       get_local $5
+       i32.const 1
        i32.sub
-       set_local $2
+       tee_local $4
+       i32.const 0
+       i32.lt_s
+       tee_local $2
+       if
+        i32.const 0
+        get_local $4
+        i32.sub
+        set_local $4
+       end
+       get_local $4
       end
-      get_local $3
-      get_local $2
-      get_local $2
+      get_local $4
       call $~lib/internal/number/decimalCount32
       i32.const 1
       i32.add
-      tee_local $2
+      tee_local $4
       call $~lib/internal/number/utoa32_lut
       get_local $3
       i32.const 45
       i32.const 43
-      get_local $0
+      get_local $2
       select
       i32.store16 offset=4
-      get_local $2
+      get_local $4
       i32.const 2
       i32.add
      else      
       get_local $0
-      i32.const 8
+      i32.const 4
       i32.add
-      get_local $0
-      i32.const 6
+      tee_local $3
+      i32.const 4
+      i32.add
+      get_local $3
+      i32.const 2
       i32.add
       get_local $1
       i32.const 1
       i32.shl
-      tee_local $2
+      tee_local $4
       i32.const 2
       i32.sub
       call $~lib/internal/memory/memmove
@@ -4791,7 +4773,7 @@
       i32.const 46
       i32.store16 offset=6
       get_local $0
-      get_local $2
+      get_local $4
       i32.add
       tee_local $0
       i32.const 101
@@ -4799,36 +4781,37 @@
       get_local $0
       i32.const 4
       i32.add
-      set_local $3
-      get_local $4
-      i32.const 1
-      i32.sub
-      tee_local $2
-      i32.const 0
-      i32.lt_s
-      tee_local $0
-      if
-       i32.const 0
-       get_local $2
+      tee_local $3
+      block (result i32)
+       get_local $5
+       i32.const 1
        i32.sub
-       set_local $2
+       tee_local $4
+       i32.const 0
+       i32.lt_s
+       tee_local $2
+       if
+        i32.const 0
+        get_local $4
+        i32.sub
+        set_local $4
+       end
+       get_local $4
       end
-      get_local $3
-      get_local $2
-      get_local $2
+      get_local $4
       call $~lib/internal/number/decimalCount32
       i32.const 1
       i32.add
-      tee_local $2
+      tee_local $0
       call $~lib/internal/number/utoa32_lut
       get_local $3
       i32.const 45
       i32.const 43
-      get_local $0
+      get_local $2
       select
       i32.store16 offset=4
+      get_local $0
       get_local $1
-      get_local $2
       i32.add
       i32.const 2
       i32.add
@@ -4841,8 +4824,8 @@
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i64)
+  (local $5 i64)
+  (local $6 i32)
   (local $7 i64)
   (local $8 i32)
   (local $9 i64)
@@ -4856,15 +4839,15 @@
   f64.const 0
   f64.lt
   tee_local $13
-  if
-   get_local $1
-   f64.neg
-   set_local $1
+  if (result f64)
    get_local $0
    i32.const 45
    i32.store16 offset=4
+   get_local $1
+   f64.neg
+  else   
+   get_local $1
   end
-  get_local $1
   i64.reinterpret/f64
   tee_local $2
   i64.const 9218868437227405312
@@ -4879,7 +4862,7 @@
   get_local $8
   i32.const 0
   i32.ne
-  tee_local $5
+  tee_local $6
   i64.extend_u/i32
   i64.const 52
   i64.shl
@@ -4887,24 +4870,24 @@
   set_local $2
   get_local $8
   i32.const 1
-  get_local $5
+  get_local $6
   select
   i32.const 1075
   i32.sub
   tee_local $8
   i32.const 1
   i32.sub
-  set_local $5
+  set_local $6
   get_local $2
   i64.const 1
   i64.shl
   i64.const 1
   i64.add
-  tee_local $6
+  tee_local $5
   i64.clz
   i32.wrap/i64
   set_local $4
-  get_local $6
+  get_local $5
   get_local $4
   i64.extend_s/i32
   i64.shl
@@ -4923,15 +4906,15 @@
   get_local $8
   get_local $14
   i32.sub
-  get_local $5
+  get_local $6
   get_local $4
   i32.sub
-  tee_local $5
+  tee_local $6
   i32.sub
   i64.extend_s/i32
   i64.shl
   set_global $~lib/internal/number/_frc_minus
-  get_local $5
+  get_local $6
   set_global $~lib/internal/number/_exp
   i32.const 348
   i32.const -61
@@ -4954,7 +4937,7 @@
   i32.shr_s
   i32.const 1
   i32.add
-  tee_local $5
+  tee_local $6
   i32.const 3
   i32.shl
   i32.sub
@@ -4964,14 +4947,14 @@
   set_local $4
   i32.const 4192
   i32.load
-  get_local $5
+  get_local $6
   i32.const 3
   i32.shl
   i32.add
   i64.load offset=8
   set_global $~lib/internal/number/_frc_pow
   get_local $4
-  get_local $5
+  get_local $6
   i32.const 1
   i32.shl
   i32.add
@@ -4989,13 +4972,13 @@
   i64.and
   tee_local $7
   get_global $~lib/internal/number/_frc_pow
-  tee_local $6
+  tee_local $5
   i64.const 4294967295
   i64.and
   tee_local $9
   i64.mul
   set_local $10
-  get_local $6
+  get_local $5
   i64.const 32
   i64.shr_u
   tee_local $11
@@ -5015,7 +4998,6 @@
   i64.const 4294967295
   i64.and
   i64.add
-  tee_local $2
   i64.const 2147483647
   i64.add
   i64.const 32
@@ -5029,7 +5011,7 @@
   i64.add
   i64.add
   set_local $2
-  get_local $6
+  get_local $5
   i64.const 4294967295
   i64.and
   tee_local $11
@@ -5041,7 +5023,7 @@
   i64.mul
   set_local $7
   get_local $10
-  get_local $6
+  get_local $5
   i64.const 32
   i64.shr_u
   tee_local $9
@@ -5060,7 +5042,6 @@
   i64.const 4294967295
   i64.and
   i64.add
-  tee_local $7
   i64.const 2147483647
   i64.add
   i64.const 32
@@ -5079,13 +5060,13 @@
   i64.const 4294967295
   i64.and
   tee_local $7
-  get_local $6
+  get_local $5
   i64.const 4294967295
   i64.and
   tee_local $9
   i64.mul
   set_local $10
-  get_local $6
+  get_local $5
   i64.const 32
   i64.shr_u
   tee_local $11
@@ -5105,7 +5086,7 @@
   i64.const 4294967295
   i64.and
   i64.add
-  set_local $6
+  set_local $5
   get_local $15
   i64.const 1
   i64.sub
@@ -5117,7 +5098,7 @@
   i64.const 32
   i64.shr_u
   i64.add
-  get_local $6
+  get_local $5
   i64.const 2147483647
   i64.add
   i64.const 32
@@ -5142,7 +5123,6 @@
   i32.add
   i32.const -64
   i32.sub
-  tee_local $5
   get_local $7
   get_local $4
   get_global $~lib/internal/number/_exp
@@ -5219,14 +5199,14 @@
   get_local $4
   i32.eqz
   tee_local $2
-  if
+  if (result i32)
    get_local $0
    i32.load
    get_local $1
    i32.eq
-   set_local $2
+  else   
+   get_local $2
   end
-  get_local $2
   if
    get_local $0
    return
@@ -5754,7 +5734,8 @@
    unreachable
   end
   get_global $std/string/str
-  get_global $std/string/str
+  tee_local $0
+  get_local $0
   i32.const 0
   call $~lib/string/String#indexOf
   if
@@ -6697,7 +6678,7 @@
   i32.const 1
   i32.eq
   tee_local $0
-  if
+  if (result i32)
    i32.const 0
    get_global $std/string/sa
    i32.load
@@ -6712,12 +6693,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 256
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -6754,7 +6734,7 @@
   i32.const 1
   i32.eq
   tee_local $0
-  if
+  if (result i32)
    i32.const 0
    get_global $std/string/sa
    i32.load
@@ -6769,12 +6749,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 256
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -6795,7 +6774,7 @@
   i32.const 1
   i32.eq
   tee_local $0
-  if
+  if (result i32)
    i32.const 0
    get_global $std/string/sa
    i32.load
@@ -6810,12 +6789,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 1096
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -6831,56 +6809,58 @@
   i32.const 432
   call $~lib/string/String#split|trampoline
   set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 3
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
+  block (result i32)
+   block (result i32)
+    get_global $std/string/sa
+    i32.load offset=4
+    i32.const 3
+    i32.eq
+    tee_local $0
+    if
+     i32.const 0
+     get_global $std/string/sa
+     i32.load
+     tee_local $0
+     i32.load
+     i32.const 2
+     i32.shr_u
+     i32.lt_u
+     if (result i32)
+      get_local $0
+      i32.load offset=8
+     else      
+      unreachable
+     end
+     i32.const 280
+     call $~lib/string/String.__eq
+     set_local $0
+    end
     get_local $0
-    i32.load offset=8
-   else    
-    unreachable
    end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
+   if
+    i32.const 1
+    get_global $std/string/sa
+    i32.load
+    tee_local $0
+    i32.load
+    i32.const 2
+    i32.shr_u
+    i32.lt_u
+    if (result i32)
+     get_local $0
+     i32.const 4
+     i32.add
+     i32.load offset=8
+    else     
+     unreachable
+    end
+    i32.const 648
+    call $~lib/string/String.__eq
+    set_local $0
    end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
+   get_local $0
   end
-  get_local $0
-  if
+  if (result i32)
    i32.const 2
    get_global $std/string/sa
    i32.load
@@ -6897,12 +6877,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 1120
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -6918,56 +6897,58 @@
   i32.const 1152
   call $~lib/string/String#split|trampoline
   set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 3
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
+  block (result i32)
+   block (result i32)
+    get_global $std/string/sa
+    i32.load offset=4
+    i32.const 3
+    i32.eq
+    tee_local $0
+    if
+     i32.const 0
+     get_global $std/string/sa
+     i32.load
+     tee_local $0
+     i32.load
+     i32.const 2
+     i32.shr_u
+     i32.lt_u
+     if (result i32)
+      get_local $0
+      i32.load offset=8
+     else      
+      unreachable
+     end
+     i32.const 280
+     call $~lib/string/String.__eq
+     set_local $0
+    end
     get_local $0
-    i32.load offset=8
-   else    
-    unreachable
    end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
+   if
+    i32.const 1
+    get_global $std/string/sa
+    i32.load
+    tee_local $0
+    i32.load
+    i32.const 2
+    i32.shr_u
+    i32.lt_u
+    if (result i32)
+     get_local $0
+     i32.const 4
+     i32.add
+     i32.load offset=8
+    else     
+     unreachable
+    end
+    i32.const 648
+    call $~lib/string/String.__eq
+    set_local $0
    end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
+   get_local $0
   end
-  get_local $0
-  if
+  if (result i32)
    i32.const 2
    get_global $std/string/sa
    i32.load
@@ -6984,12 +6965,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 1120
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -7005,79 +6985,82 @@
   i32.const 432
   call $~lib/string/String#split|trampoline
   set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 4
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
+  block (result i32)
+   block (result i32)
+    block (result i32)
+     get_global $std/string/sa
+     i32.load offset=4
+     i32.const 4
+     i32.eq
+     tee_local $0
+     if
+      i32.const 0
+      get_global $std/string/sa
+      i32.load
+      tee_local $0
+      i32.load
+      i32.const 2
+      i32.shr_u
+      i32.lt_u
+      if (result i32)
+       get_local $0
+       i32.load offset=8
+      else       
+       unreachable
+      end
+      i32.const 280
+      call $~lib/string/String.__eq
+      set_local $0
+     end
+     get_local $0
+    end
+    if
+     i32.const 1
+     get_global $std/string/sa
+     i32.load
+     tee_local $0
+     i32.load
+     i32.const 2
+     i32.shr_u
+     i32.lt_u
+     if (result i32)
+      get_local $0
+      i32.const 4
+      i32.add
+      i32.load offset=8
+     else      
+      unreachable
+     end
+     i32.const 648
+     call $~lib/string/String.__eq
+     set_local $0
+    end
     get_local $0
-    i32.load offset=8
-   else    
-    unreachable
    end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
+   if
+    i32.const 2
+    get_global $std/string/sa
+    i32.load
+    tee_local $0
+    i32.load
+    i32.const 2
+    i32.shr_u
+    i32.lt_u
+    if (result i32)
+     get_local $0
+     i32.const 8
+     i32.add
+     i32.load offset=8
+    else     
+     unreachable
+    end
+    i32.const 256
+    call $~lib/string/String.__eq
+    set_local $0
    end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
+   get_local $0
   end
-  get_local $0
-  if
-   i32.const 2
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 8
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 256
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
+  if (result i32)
    i32.const 3
    get_global $std/string/sa
    i32.load
@@ -7094,12 +7077,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 1120
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -7115,79 +7097,82 @@
   i32.const 432
   call $~lib/string/String#split|trampoline
   set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 4
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
+  block (result i32)
+   block (result i32)
+    block (result i32)
+     get_global $std/string/sa
+     i32.load offset=4
+     i32.const 4
+     i32.eq
+     tee_local $0
+     if
+      i32.const 0
+      get_global $std/string/sa
+      i32.load
+      tee_local $0
+      i32.load
+      i32.const 2
+      i32.shr_u
+      i32.lt_u
+      if (result i32)
+       get_local $0
+       i32.load offset=8
+      else       
+       unreachable
+      end
+      i32.const 256
+      call $~lib/string/String.__eq
+      set_local $0
+     end
+     get_local $0
+    end
+    if
+     i32.const 1
+     get_global $std/string/sa
+     i32.load
+     tee_local $0
+     i32.load
+     i32.const 2
+     i32.shr_u
+     i32.lt_u
+     if (result i32)
+      get_local $0
+      i32.const 4
+      i32.add
+      i32.load offset=8
+     else      
+      unreachable
+     end
+     i32.const 280
+     call $~lib/string/String.__eq
+     set_local $0
+    end
     get_local $0
-    i32.load offset=8
-   else    
-    unreachable
    end
-   tee_local $0
-   i32.const 256
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
+   if
+    i32.const 2
+    get_global $std/string/sa
+    i32.load
+    tee_local $0
+    i32.load
+    i32.const 2
+    i32.shr_u
+    i32.lt_u
+    if (result i32)
+     get_local $0
+     i32.const 8
+     i32.add
+     i32.load offset=8
+    else     
+     unreachable
+    end
+    i32.const 648
+    call $~lib/string/String.__eq
+    set_local $0
    end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
+   get_local $0
   end
-  get_local $0
-  if
-   i32.const 2
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 8
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
+  if (result i32)
    i32.const 3
    get_global $std/string/sa
    i32.load
@@ -7204,12 +7189,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 1120
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -7225,79 +7209,82 @@
   i32.const 432
   call $~lib/string/String#split|trampoline
   set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 4
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
+  block (result i32)
+   block (result i32)
+    block (result i32)
+     get_global $std/string/sa
+     i32.load offset=4
+     i32.const 4
+     i32.eq
+     tee_local $0
+     if
+      i32.const 0
+      get_global $std/string/sa
+      i32.load
+      tee_local $0
+      i32.load
+      i32.const 2
+      i32.shr_u
+      i32.lt_u
+      if (result i32)
+       get_local $0
+       i32.load offset=8
+      else       
+       unreachable
+      end
+      i32.const 280
+      call $~lib/string/String.__eq
+      set_local $0
+     end
+     get_local $0
+    end
+    if
+     i32.const 1
+     get_global $std/string/sa
+     i32.load
+     tee_local $0
+     i32.load
+     i32.const 2
+     i32.shr_u
+     i32.lt_u
+     if (result i32)
+      get_local $0
+      i32.const 4
+      i32.add
+      i32.load offset=8
+     else      
+      unreachable
+     end
+     i32.const 648
+     call $~lib/string/String.__eq
+     set_local $0
+    end
     get_local $0
-    i32.load offset=8
-   else    
-    unreachable
    end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
+   if
+    i32.const 2
+    get_global $std/string/sa
+    i32.load
+    tee_local $0
+    i32.load
+    i32.const 2
+    i32.shr_u
+    i32.lt_u
+    if (result i32)
+     get_local $0
+     i32.const 8
+     i32.add
+     i32.load offset=8
+    else     
+     unreachable
+    end
+    i32.const 1120
+    call $~lib/string/String.__eq
+    set_local $0
    end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
+   get_local $0
   end
-  get_local $0
-  if
-   i32.const 2
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 8
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
-   end
-   tee_local $0
-   i32.const 1120
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
+  if (result i32)
    i32.const 3
    get_global $std/string/sa
    i32.load
@@ -7314,12 +7301,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 256
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -7335,56 +7321,58 @@
   i32.const 256
   call $~lib/string/String#split|trampoline
   set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 3
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
+  block (result i32)
+   block (result i32)
+    get_global $std/string/sa
+    i32.load offset=4
+    i32.const 3
+    i32.eq
+    tee_local $0
+    if
+     i32.const 0
+     get_global $std/string/sa
+     i32.load
+     tee_local $0
+     i32.load
+     i32.const 2
+     i32.shr_u
+     i32.lt_u
+     if (result i32)
+      get_local $0
+      i32.load offset=8
+     else      
+      unreachable
+     end
+     i32.const 280
+     call $~lib/string/String.__eq
+     set_local $0
+    end
     get_local $0
-    i32.load offset=8
-   else    
-    unreachable
    end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
+   if
+    i32.const 1
+    get_global $std/string/sa
+    i32.load
+    tee_local $0
+    i32.load
+    i32.const 2
+    i32.shr_u
+    i32.lt_u
+    if (result i32)
+     get_local $0
+     i32.const 4
+     i32.add
+     i32.load offset=8
+    else     
+     unreachable
+    end
+    i32.const 648
+    call $~lib/string/String.__eq
+    set_local $0
    end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
+   get_local $0
   end
-  get_local $0
-  if
+  if (result i32)
    i32.const 2
    get_global $std/string/sa
    i32.load
@@ -7401,12 +7389,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 1120
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -7441,7 +7428,7 @@
   i32.const 1
   i32.eq
   tee_local $0
-  if
+  if (result i32)
    i32.const 0
    get_global $std/string/sa
    i32.load
@@ -7456,12 +7443,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 280
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -7481,7 +7467,7 @@
   i32.const 1
   i32.eq
   tee_local $0
-  if
+  if (result i32)
    i32.const 0
    get_global $std/string/sa
    i32.load
@@ -7496,12 +7482,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 280
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -7516,56 +7501,58 @@
   i32.const 4
   call $~lib/string/String#split
   set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 3
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
+  block (result i32)
+   block (result i32)
+    get_global $std/string/sa
+    i32.load offset=4
+    i32.const 3
+    i32.eq
+    tee_local $0
+    if
+     i32.const 0
+     get_global $std/string/sa
+     i32.load
+     tee_local $0
+     i32.load
+     i32.const 2
+     i32.shr_u
+     i32.lt_u
+     if (result i32)
+      get_local $0
+      i32.load offset=8
+     else      
+      unreachable
+     end
+     i32.const 280
+     call $~lib/string/String.__eq
+     set_local $0
+    end
     get_local $0
-    i32.load offset=8
-   else    
-    unreachable
    end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
+   if
+    i32.const 1
+    get_global $std/string/sa
+    i32.load
+    tee_local $0
+    i32.load
+    i32.const 2
+    i32.shr_u
+    i32.lt_u
+    if (result i32)
+     get_local $0
+     i32.const 4
+     i32.add
+     i32.load offset=8
+    else     
+     unreachable
+    end
+    i32.const 648
+    call $~lib/string/String.__eq
+    set_local $0
    end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
+   get_local $0
   end
-  get_local $0
-  if
+  if (result i32)
    i32.const 2
    get_global $std/string/sa
    i32.load
@@ -7582,12 +7569,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 1120
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -7602,56 +7588,58 @@
   i32.const -1
   call $~lib/string/String#split
   set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 3
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
+  block (result i32)
+   block (result i32)
+    get_global $std/string/sa
+    i32.load offset=4
+    i32.const 3
+    i32.eq
+    tee_local $0
+    if
+     i32.const 0
+     get_global $std/string/sa
+     i32.load
+     tee_local $0
+     i32.load
+     i32.const 2
+     i32.shr_u
+     i32.lt_u
+     if (result i32)
+      get_local $0
+      i32.load offset=8
+     else      
+      unreachable
+     end
+     i32.const 280
+     call $~lib/string/String.__eq
+     set_local $0
+    end
     get_local $0
-    i32.load offset=8
-   else    
-    unreachable
    end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
+   if
+    i32.const 1
+    get_global $std/string/sa
+    i32.load
+    tee_local $0
+    i32.load
+    i32.const 2
+    i32.shr_u
+    i32.lt_u
+    if (result i32)
+     get_local $0
+     i32.const 4
+     i32.add
+     i32.load offset=8
+    else     
+     unreachable
+    end
+    i32.const 648
+    call $~lib/string/String.__eq
+    set_local $0
    end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
+   get_local $0
   end
-  get_local $0
-  if
+  if (result i32)
    i32.const 2
    get_global $std/string/sa
    i32.load
@@ -7668,12 +7656,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 1120
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0
@@ -7688,56 +7675,58 @@
   i32.const -1
   call $~lib/string/String#split
   set_global $std/string/sa
-  get_global $std/string/sa
-  i32.load offset=4
-  i32.const 3
-  i32.eq
-  tee_local $0
-  if
-   i32.const 0
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
+  block (result i32)
+   block (result i32)
+    get_global $std/string/sa
+    i32.load offset=4
+    i32.const 3
+    i32.eq
+    tee_local $0
+    if
+     i32.const 0
+     get_global $std/string/sa
+     i32.load
+     tee_local $0
+     i32.load
+     i32.const 2
+     i32.shr_u
+     i32.lt_u
+     if (result i32)
+      get_local $0
+      i32.load offset=8
+     else      
+      unreachable
+     end
+     i32.const 280
+     call $~lib/string/String.__eq
+     set_local $0
+    end
     get_local $0
-    i32.load offset=8
-   else    
-    unreachable
    end
-   tee_local $0
-   i32.const 280
-   call $~lib/string/String.__eq
-   set_local $0
-  end
-  get_local $0
-  if
-   i32.const 1
-   get_global $std/string/sa
-   i32.load
-   tee_local $0
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if (result i32)
-    get_local $0
-    i32.const 4
-    i32.add
-    i32.load offset=8
-   else    
-    unreachable
+   if
+    i32.const 1
+    get_global $std/string/sa
+    i32.load
+    tee_local $0
+    i32.load
+    i32.const 2
+    i32.shr_u
+    i32.lt_u
+    if (result i32)
+     get_local $0
+     i32.const 4
+     i32.add
+     i32.load offset=8
+    else     
+     unreachable
+    end
+    i32.const 648
+    call $~lib/string/String.__eq
+    set_local $0
    end
-   tee_local $0
-   i32.const 648
-   call $~lib/string/String.__eq
-   set_local $0
+   get_local $0
   end
-  get_local $0
-  if
+  if (result i32)
    i32.const 2
    get_global $std/string/sa
    i32.load
@@ -7754,12 +7743,11 @@
    else    
     unreachable
    end
-   tee_local $0
    i32.const 1120
    call $~lib/string/String.__eq
-   set_local $0
+  else   
+   get_local $0
   end
-  get_local $0
   i32.eqz
   if
    i32.const 0

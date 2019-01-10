@@ -13,6 +13,7 @@
     "test": "node tests"
   },
   "devDependencies": {
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.1",
+    "typescript": "^3.2.2"
   }
 }
