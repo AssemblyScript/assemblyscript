@@ -537,7 +537,34 @@ assert(arr.length == 2);
 arr.push(2);
 arr.push(3);
 
-
+// Test rehash action effec
+arr.forEach((value: i32, index: i32, array: Array<i32>): void => {
+  if (index == 0) {
+    for (let i = 0; i < 4; i++) {
+      array.pop();
+    }
+    for (let i = 0; i < 100; i++) {
+      array.push(100 + i);
+    }
+    for (let i = 0; i < 100; i++) {
+      array.pop();
+    }
+    for (let i = 0; i < 100; i++) {
+      array.push(i + 200);
+    }
+  }
+  if (index == 2) {
+    assert(value == 202);
+  }
+});
+assert(arr.length == 100)
+for (let i = 0; i < 100; i++) {
+  arr.pop();
+}
+arr.push(0);
+arr.push(1);
+arr.push(2);
+arr.push(3);
 // Array#map ///////////////////////////////////////////////////////////////////////////////////////
 
 var newArr: f32[] = arr.map<f32>((value: i32, index: i32, array: Array<i32>): f32 => <f32>value);

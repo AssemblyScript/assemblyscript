@@ -460,21 +460,20 @@
   (local $4 i32)
   get_local $0
   i32.load offset=8
-  set_local $4
+  set_local $3
   get_local $1
   i32.const 1073741816
   i32.gt_u
-  tee_local $3
-  i32.eqz
-  if
+  tee_local $4
+  if (result i32)
+   get_local $4
+  else   
    get_local $1
    i32.const 4
    i32.add
-   get_local $4
+   get_local $3
    i32.gt_s
-   set_local $3
   end
-  get_local $3
   if
    i32.const 0
    i32.const 136
@@ -617,21 +616,20 @@
   (local $4 i32)
   get_local $0
   i32.load offset=8
-  set_local $4
+  set_local $3
   get_local $1
   i32.const 1073741816
   i32.gt_u
-  tee_local $3
-  i32.eqz
-  if
+  tee_local $4
+  if (result i32)
+   get_local $4
+  else   
    get_local $1
    i32.const 2
    i32.add
-   get_local $4
+   get_local $3
    i32.gt_s
-   set_local $3
   end
-  get_local $3
   if
    i32.const 0
    i32.const 136
@@ -650,8 +648,9 @@
   i32.load16_s offset=8
   set_local $0
   get_local $2
-  i32.eqz
-  if
+  if (result i32)
+   get_local $0
+  else   
    get_local $0
    i32.const 16
    i32.shl
@@ -663,30 +662,27 @@
    i32.const 8
    i32.shl
    i32.or
-   set_local $0
   end
-  get_local $0
  )
  (func $~lib/dataview/DataView#getInt32 (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
   i32.load offset=8
-  set_local $4
+  set_local $3
   get_local $1
   i32.const 1073741816
   i32.gt_u
-  tee_local $3
-  i32.eqz
-  if
+  tee_local $4
+  if (result i32)
+   get_local $4
+  else   
    get_local $1
    i32.const 4
    i32.add
-   get_local $4
+   get_local $3
    i32.gt_s
-   set_local $3
   end
-  get_local $3
   if
    i32.const 0
    i32.const 136
@@ -705,8 +701,9 @@
   i32.load offset=8
   set_local $0
   get_local $2
-  i32.eqz
-  if
+  if (result i32)
+   get_local $0
+  else   
    get_local $0
    i32.const -16711936
    i32.and
@@ -718,9 +715,7 @@
    i32.const 8
    i32.rotr
    i32.or
-   set_local $0
   end
-  get_local $0
  )
  (func $~lib/dataview/DataView#getInt64 (; 13 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
@@ -744,13 +739,12 @@
   i64.load offset=8
   set_local $2
   get_local $1
-  i32.eqz
-  if
+  if (result i64)
+   get_local $2
+  else   
    get_local $2
    call $~lib/polyfills/bswap<u64>
-   set_local $2
   end
-  get_local $2
  )
  (func $~lib/dataview/DataView#getUint8 (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -794,21 +788,20 @@
   (local $4 i32)
   get_local $0
   i32.load offset=8
-  set_local $4
+  set_local $3
   get_local $1
   i32.const 1073741816
   i32.gt_u
-  tee_local $3
-  i32.eqz
-  if
+  tee_local $4
+  if (result i32)
+   get_local $4
+  else   
    get_local $1
    i32.const 2
    i32.add
-   get_local $4
+   get_local $3
    i32.gt_s
-   set_local $3
   end
-  get_local $3
   if
    i32.const 0
    i32.const 136
@@ -827,8 +820,9 @@
   i32.load16_u offset=8
   set_local $0
   get_local $2
-  i32.eqz
-  if
+  if (result i32)
+   get_local $0
+  else   
    get_local $0
    i32.const 8
    i32.shl
@@ -838,9 +832,7 @@
    i32.const 8
    i32.shr_u
    i32.or
-   set_local $0
   end
-  get_local $0
  )
  (func $~lib/dataview/DataView#setFloat32 (; 16 ;) (type $FUNCSIG$vifi) (param $0 i32) (param $1 f32) (param $2 i32)
   (local $3 i32)
@@ -1038,16 +1030,13 @@
   get_local $0
   i32.load offset=4
   i32.add
-  set_local $0
   get_local $2
-  i32.eqz
-  if
+  if (result i64)
+   get_local $1
+  else   
    get_local $1
    call $~lib/polyfills/bswap<u64>
-   set_local $1
   end
-  get_local $0
-  get_local $1
   i64.store offset=8
  )
  (func $~lib/dataview/DataView#setUint16 (; 22 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
@@ -1088,6 +1077,7 @@
   i32.store16 offset=8
  )
  (func $start (; 23 ;) (type $v)
+  (local $0 i32)
   i32.const 216
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
@@ -1127,10 +1117,11 @@
   i32.const 95
   call $~lib/internal/typedarray/TypedArray<u8>#__set
   get_global $std/dataview/array
+  tee_local $0
   i32.load
-  get_global $std/dataview/array
+  get_local $0
   i32.load offset=4
-  get_global $std/dataview/array
+  get_local $0
   i32.load offset=8
   call $~lib/dataview/DataView#constructor
   set_global $std/dataview/view

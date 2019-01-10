@@ -80,32 +80,28 @@
  )
  (func $~lib/internal/string/compareUnsafe (; 2 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
-  get_local $0
-  set_local $3
   loop $continue|0
    get_local $2
    if (result i32)
-    get_local $3
+    get_local $0
     i32.load16_u offset=4
     get_local $1
     i32.load16_u offset=4
     i32.sub
-    tee_local $4
+    tee_local $3
     i32.eqz
    else    
     get_local $2
    end
-   tee_local $0
    if
     get_local $2
     i32.const 1
     i32.sub
     set_local $2
-    get_local $3
+    get_local $0
     i32.const 2
     i32.add
-    set_local $3
+    set_local $0
     get_local $1
     i32.const 2
     i32.add
@@ -113,7 +109,7 @@
     br $continue|0
    end
   end
-  get_local $4
+  get_local $3
  )
  (func $~lib/string/String.__eq (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -127,12 +123,11 @@
   get_local $0
   i32.eqz
   tee_local $1
-  i32.eqz
-  if
+  if (result i32)
+   get_local $1
+  else   
    i32.const 0
-   set_local $1
   end
-  get_local $1
   if
    i32.const 0
    return
