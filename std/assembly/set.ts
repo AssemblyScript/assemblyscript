@@ -123,28 +123,30 @@ export class Set<K> {
   }
 
   forEach(callbackfn: (value1: K, value2: K, set: Set<K>) => void): void {
-    var visitedKeys = new Array<K>();
     var startPtr = changetype<usize>(this.entries) + HEADER_SIZE_AB;
     var endPtr = startPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
     var oldPtr = startPtr;
     while (oldPtr != endPtr) {
       let oldEntry = changetype<SetEntry<K>>(oldPtr);
-      visitedKeys.push(oldEntry.key);
-      callbackfn(oldEntry.key, oldEntry.key, this);
-
-      let newStartPtr = changetype<usize>(this.entries) + HEADER_SIZE_AB;
-      // check if rehashing action triggered
-      if (startPtr != newStartPtr) {
-        oldPtr = EMPTY;
-        startPtr = newStartPtr;
-        while (visitedKeys.length != 0) {
-          oldPtr = this.getPtr(visitedKeys.pop());
-          if (oldPtr != EMPTY) {
-            break;
-          }
+      oldPtr += ENTRY_SIZE<K>();
+      if (!(oldEntry.taggedNext & EMPTY)) {
+        callbackfn(oldEntry.key, oldEntry.key, this);
+        let currentStartPtr = changetype<usize>(this.entries) + HEADER_SIZE_AB;
+        // check if rehashing action triggered
+        if (startPtr != currentStartPtr) {
+          let newPtr = currentStartPtr;
+          do {
+            oldPtr -= ENTRY_SIZE<K>();
+            let visitedEntry = changetype<SetEntry<K>>(oldPtr);
+            if (!(visitedEntry.taggedNext & EMPTY) && this.has(visitedEntry.key)) {
+              newPtr = this.getPtr(visitedEntry.key) + ENTRY_SIZE<K>();
+              break;
+            }
+          } while (oldPtr != startPtr);
+          startPtr = currentStartPtr;
+          oldPtr = newPtr;
         }
       }
-      oldPtr = oldPtr == EMPTY ? startPtr : oldPtr + ENTRY_SIZE<K>();
       endPtr = startPtr + <usize>this.entriesOffset * ENTRY_SIZE<K>();
     }
   }

@@ -58,6 +58,8 @@ var set = new Set<i32>();
 for (let k: i32 = 0; k < 10; ++k) {
   set.add(k);
 }
+set.add(124);
+set.delete(124);
 assert(set.size == 10);
 var i: i32 = 0;
 set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
@@ -65,6 +67,7 @@ set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
   assert(i == value1);
   i++;
 });
+assert(i == 10);
 
 i = 0;
 set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
@@ -93,3 +96,8 @@ set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
 });
 assert(set.size == 0);
 assert(i == 111);
+
+i = 0;
+set.forEach((value1: i32, value2: i32, aset: Set<i32>): void => {
+  i++;
+});
