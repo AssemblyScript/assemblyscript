@@ -52,15 +52,17 @@ interface ASUtil {
   readonly F32: Float32Array;
   /** A 64-bit float view on the memory. */
   readonly F64: Float64Array;
+  /** The extended module memory. */
+  readonly memory: ASMemory;
   /** Allocates a new string in the module's memory and returns its pointer. */
   newString(str: string): number;
-  /** Gets a string from the module's memory by its pointer. */
+  /** Gets a string from the module's memory by its pointer. Alias for memory.getString.*/
   getString(ptr: number): string;
   /** Copies a typed array into the module's memory and returns its pointer. */
   newArray(view: TypedArray, length?: number): number;
   /** Creates a typed array in the module's memory and returns its pointer. */
   newArray(ctor: TypedArrayConstructor, length: number, unsafe?: boolean): number;
-  /** Gets a view on a typed array in the module's memory by its pointer. */
+  /** Gets a view on a typed array in the module's memory by its pointer. Alias for memory.getArray. */
   getArray<T extends TypedArray = TypedArray>(ctor: TypedArrayConstructor, ptr: number): T;
   /** Frees a typed array in the module's memory. Must not be accessed anymore afterwards. */
   freeArray(ptr: number): void;
@@ -71,6 +73,33 @@ interface ASUtil {
    * WebAssembly functions, i.e. as exported by the module, are supported.
    */
   newFunction(fn: (...args: any[]) => any): number;
+}
+
+interface ASMemory extends WebAssembly.Memory {
+  /** An 8-bit signed integer view on the memory. */
+  readonly I8: Uint8Array;
+  /** An 8-bit unsigned integer view on the memory. */
+  readonly U8: Uint8Array;
+  /** A 16-bit signed integer view on the memory. */
+  readonly I16: Uint16Array;
+  /** A 16-bit unsigned integer view on the memory. */
+  readonly U16: Uint16Array;
+  /** A 32-bit signed integer view on the memory. */
+  readonly I32: Uint32Array;
+  /** A 32-bit unsigned integer view on the memory. */
+  readonly U32: Uint32Array;
+  /** A 64-bit signed integer view on the memory. */
+  readonly I64: any; // BigInt64Array
+  /** A 64-bit unsigned integer vieww on the memory. */
+  readonly U64: any; // BigUint64Array
+  /** A 32-bit float view on the memory. */
+  readonly F32: Float32Array;
+  /** A 64-bit float view on the memory. */
+  readonly F64: Float64Array;
+  /** Gets a string from the module's memory by its pointer. */
+  getString(ptr: number): string;
+  /** Gets a view on a typed array in the module's memory by its pointer. */
+  getArray<T extends TypedArray = TypedArray>(ctor: TypedArrayConstructor, ptr: number): T;
 }
 
 /** Instantiates an AssemblyScript module using the specified imports. */
@@ -84,3 +113,6 @@ export declare function instantiateStreaming<T extends {}>(result: Promise<Respo
 
 /** Demangles an AssemblyScript module's exports to a friendly object structure. */
 export declare function demangle<T extends {}>(exports: {}, baseModule?: {}): T;
+
+/** Creates a wrapped memory instance. */
+export declare function createMemory(descriptor: WebAssembly.MemoryDescriptor): ASMemory;
