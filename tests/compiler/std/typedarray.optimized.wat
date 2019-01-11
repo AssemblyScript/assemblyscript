@@ -5015,37 +5015,44 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   get_local $0
   i32.load offset=8
   set_local $3
-  block $~lib/internal/typedarray/FINDINDEX<Int8Array,i8>|inlined.0
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+  get_local $0
+  i32.load
+  set_local $4
+  get_local $0
+  i32.load offset=4
+  set_local $5
+  block $~lib/internal/typedarray/FIND_INDEX<Int8Array,i8>|inlined.0
+   loop $repeat|0
+    block $break|0
      get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
+     get_local $2
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load8_s offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
      call_indirect (type $iiii)
-     br_if $~lib/internal/typedarray/FINDINDEX<Int8Array,i8>|inlined.0
+     br_if $~lib/internal/typedarray/FIND_INDEX<Int8Array,i8>|inlined.0
      get_local $2
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const -1
@@ -5107,37 +5114,44 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   get_local $0
   i32.load offset=8
   set_local $3
-  block $~lib/internal/typedarray/FINDINDEX<Uint8Array,u8>|inlined.0
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+  get_local $0
+  i32.load
+  set_local $4
+  get_local $0
+  i32.load offset=4
+  set_local $5
+  block $~lib/internal/typedarray/FIND_INDEX<Uint8Array,u8>|inlined.0
+   loop $repeat|0
+    block $break|0
      get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
+     get_local $2
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load8_u offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
      call_indirect (type $iiii)
-     br_if $~lib/internal/typedarray/FINDINDEX<Uint8Array,u8>|inlined.0
+     br_if $~lib/internal/typedarray/FIND_INDEX<Uint8Array,u8>|inlined.0
      get_local $2
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const -1
@@ -5242,41 +5256,48 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   get_local $0
   i32.load offset=8
   i32.const 1
   i32.shr_u
   set_local $3
-  block $~lib/internal/typedarray/FINDINDEX<Int16Array,i16>|inlined.0
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+  get_local $0
+  i32.load
+  set_local $4
+  get_local $0
+  i32.load offset=4
+  set_local $5
+  block $~lib/internal/typedarray/FIND_INDEX<Int16Array,i16>|inlined.0
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 1
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load16_s offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
      call_indirect (type $iiii)
-     br_if $~lib/internal/typedarray/FINDINDEX<Int16Array,i16>|inlined.0
+     br_if $~lib/internal/typedarray/FIND_INDEX<Int16Array,i16>|inlined.0
      get_local $2
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const -1
@@ -5338,41 +5359,48 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   get_local $0
   i32.load offset=8
   i32.const 1
   i32.shr_u
   set_local $3
-  block $~lib/internal/typedarray/FINDINDEX<Uint16Array,u16>|inlined.0
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+  get_local $0
+  i32.load
+  set_local $4
+  get_local $0
+  i32.load offset=4
+  set_local $5
+  block $~lib/internal/typedarray/FIND_INDEX<Uint16Array,u16>|inlined.0
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 1
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load16_u offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
      call_indirect (type $iiii)
-     br_if $~lib/internal/typedarray/FINDINDEX<Uint16Array,u16>|inlined.0
+     br_if $~lib/internal/typedarray/FIND_INDEX<Uint16Array,u16>|inlined.0
      get_local $2
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const -1
@@ -5432,41 +5460,48 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   get_local $0
   i32.load offset=8
   i32.const 2
   i32.shr_u
   set_local $3
-  block $~lib/internal/typedarray/FINDINDEX<Int32Array,i32>|inlined.0
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+  get_local $0
+  i32.load
+  set_local $4
+  get_local $0
+  i32.load offset=4
+  set_local $5
+  block $~lib/internal/typedarray/FIND_INDEX<Int32Array,i32>|inlined.0
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 2
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
      call_indirect (type $iiii)
-     br_if $~lib/internal/typedarray/FINDINDEX<Int32Array,i32>|inlined.0
+     br_if $~lib/internal/typedarray/FIND_INDEX<Int32Array,i32>|inlined.0
      get_local $2
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const -1
@@ -5573,42 +5608,49 @@
  (func $~lib/typedarray/Int64Array#findIndex (; 122 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i64)
   get_local $0
   i32.load offset=8
   i32.const 3
   i32.shr_u
   set_local $3
-  block $~lib/internal/typedarray/FINDINDEX<Int64Array,i64>|inlined.0
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+  get_local $0
+  i32.load
+  set_local $4
+  get_local $0
+  i32.load offset=4
+  set_local $5
+  block $~lib/internal/typedarray/FIND_INDEX<Int64Array,i64>|inlined.0
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 3
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i64.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
      call_indirect (type $Iiii)
-     br_if $~lib/internal/typedarray/FINDINDEX<Int64Array,i64>|inlined.0
+     br_if $~lib/internal/typedarray/FIND_INDEX<Int64Array,i64>|inlined.0
      get_local $2
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const -1
@@ -5715,42 +5757,49 @@
  (func $~lib/typedarray/Float32Array#findIndex (; 127 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 f32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 f32)
   get_local $0
   i32.load offset=8
   i32.const 2
   i32.shr_u
   set_local $3
-  block $~lib/internal/typedarray/FINDINDEX<Float32Array,f32>|inlined.0
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+  get_local $0
+  i32.load
+  set_local $4
+  get_local $0
+  i32.load offset=4
+  set_local $5
+  block $~lib/internal/typedarray/FIND_INDEX<Float32Array,f32>|inlined.0
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 2
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      f32.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
      call_indirect (type $fiii)
-     br_if $~lib/internal/typedarray/FINDINDEX<Float32Array,f32>|inlined.0
+     br_if $~lib/internal/typedarray/FIND_INDEX<Float32Array,f32>|inlined.0
      get_local $2
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const -1
@@ -5814,42 +5863,49 @@
  (func $~lib/typedarray/Float64Array#findIndex (; 131 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 f64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 f64)
   get_local $0
   i32.load offset=8
   i32.const 3
   i32.shr_u
   set_local $3
-  block $~lib/internal/typedarray/FINDINDEX<Float64Array,f64>|inlined.0
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+  get_local $0
+  i32.load
+  set_local $4
+  get_local $0
+  i32.load offset=4
+  set_local $5
+  block $~lib/internal/typedarray/FIND_INDEX<Float64Array,f64>|inlined.0
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 3
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      f64.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
      call_indirect (type $Fiii)
-     br_if $~lib/internal/typedarray/FINDINDEX<Float64Array,f64>|inlined.0
+     br_if $~lib/internal/typedarray/FIND_INDEX<Float64Array,f64>|inlined.0
      get_local $2
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const -1
@@ -5919,28 +5975,35 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/EVERY<Int8Array,i8>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
      get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
+     get_local $2
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load8_s offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 0
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -5952,7 +6015,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 1
@@ -6008,28 +6071,35 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/EVERY<Uint8Array,u8>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
      get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
+     get_local $2
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load8_u offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 0
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -6041,7 +6111,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 1
@@ -6141,32 +6211,39 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/EVERY<Int16Array,i16>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 1
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 1
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load16_s offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 0
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -6178,7 +6255,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 1
@@ -6228,32 +6305,39 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/EVERY<Uint16Array,u16>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 1
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 1
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load16_u offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 0
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -6265,7 +6349,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 1
@@ -6321,32 +6405,39 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/EVERY<Int32Array,i32>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 2
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 0
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -6358,7 +6449,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 1
@@ -6454,33 +6545,40 @@
  (func $~lib/typedarray/Int64Array#every (; 151 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i64)
   block $~lib/internal/typedarray/EVERY<Int64Array,i64>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 3
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i64.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 0
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -6492,7 +6590,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 1
@@ -6606,12 +6704,11 @@
   i32.const 255
   i32.eq
   tee_local $3
-  i32.eqz
-  if
+  if (result i32)
+   get_local $3
+  else   
    i32.const 0
-   set_local $3
   end
-  get_local $3
   if
    get_local $0
    f32.const 2
@@ -6707,7 +6804,6 @@
    tee_local $3
    i32.shl
    set_local $1
-   get_local $4
    get_local $2
    get_local $3
    i32.sub
@@ -6729,7 +6825,7 @@
     i32.sub
     i32.shr_u
    end
-   tee_local $1
+   get_local $4
    i32.or
    f32.reinterpret/i32
    return
@@ -6747,33 +6843,40 @@
  (func $~lib/typedarray/Float32Array#every (; 157 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 f32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 f32)
   block $~lib/internal/typedarray/EVERY<Float32Array,f32>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 2
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      f32.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 0
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -6785,7 +6888,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 1
@@ -6835,8 +6938,8 @@
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
-  (local $4 i32)
-  (local $5 i64)
+  (local $4 i64)
+  (local $5 i32)
   get_local $0
   i64.reinterpret/f64
   tee_local $1
@@ -6848,17 +6951,16 @@
   get_local $1
   i64.const 63
   i64.shr_u
-  set_local $5
+  set_local $4
   get_local $2
   i64.const 2047
   i64.eq
-  tee_local $4
-  i32.eqz
-  if
+  tee_local $5
+  if (result i32)
+   get_local $5
+  else   
    i32.const 0
-   set_local $4
   end
-  get_local $4
   if
    get_local $0
    f64.const 2
@@ -6980,8 +7082,7 @@
     i64.add
     i64.shr_u
    end
-   tee_local $1
-   get_local $5
+   get_local $4
    i64.const 63
    i64.shl
    i64.or
@@ -7001,33 +7102,40 @@
  (func $~lib/typedarray/Float64Array#every (; 161 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 f64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 f64)
   block $~lib/internal/typedarray/EVERY<Float64Array,f64>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 3
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      f64.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 0
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -7039,7 +7147,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 1
@@ -7089,28 +7197,35 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SOME<Int8Array,i8>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
      get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
+     get_local $2
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load8_s offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 1
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -7121,7 +7236,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 0
@@ -7177,28 +7292,35 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SOME<Uint8Array,u8>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
      get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
+     get_local $2
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load8_u offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 1
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -7209,7 +7331,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 0
@@ -7299,32 +7421,39 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SOME<Int16Array,i16>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 1
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 1
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load16_s offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 1
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -7335,7 +7464,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 0
@@ -7391,32 +7520,39 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SOME<Uint16Array,u16>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 1
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 1
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load16_u offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 1
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -7427,7 +7563,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 0
@@ -7477,32 +7613,39 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SOME<Int32Array,i32>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 2
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i32.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 1
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -7513,7 +7656,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 0
@@ -7606,33 +7749,40 @@
  (func $~lib/typedarray/Int64Array#some (; 178 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i64)
   block $~lib/internal/typedarray/SOME<Int64Array,i64>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 3
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      i64.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 1
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -7643,7 +7793,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 0
@@ -7737,33 +7887,40 @@
  (func $~lib/typedarray/Float32Array#some (; 182 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 f32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 f32)
   block $~lib/internal/typedarray/SOME<Float32Array,f32>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 2
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 2
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      f32.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 1
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -7774,7 +7931,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 0
@@ -7828,33 +7985,40 @@
  (func $~lib/typedarray/Float64Array#some (; 185 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 f64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 f64)
   block $~lib/internal/typedarray/SOME<Float64Array,f64>|inlined.0 (result i32)
    get_local $0
    i32.load offset=8
    i32.const 3
    i32.shr_u
    set_local $3
-   loop $continue|0
-    get_local $2
-    get_local $3
-    i32.lt_s
-    if
-     get_local $0
-     i32.load offset=4
-     get_local $0
-     i32.load
+   get_local $0
+   i32.load
+   set_local $4
+   get_local $0
+   i32.load offset=4
+   set_local $5
+   loop $repeat|0
+    block $break|0
+     get_local $2
+     get_local $3
+     i32.ge_s
+     br_if $break|0
      get_local $2
      i32.const 3
      i32.shl
+     get_local $4
      i32.add
+     get_local $5
      i32.add
      f64.load offset=8
-     set_local $4
+     set_local $6
      i32.const 3
      set_global $~argc
      i32.const 1
-     get_local $4
+     get_local $6
      get_local $2
      get_local $0
      get_local $1
@@ -7865,7 +8029,7 @@
      i32.const 1
      i32.add
      set_local $2
-     br $continue|0
+     br $repeat|0
     end
    end
    i32.const 0

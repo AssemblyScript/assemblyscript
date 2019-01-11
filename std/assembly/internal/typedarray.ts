@@ -183,19 +183,19 @@ export function MAP<TArray extends TypedArray<T>, T>(
 }
 
 @inline
-export function FINDINDEX<TArray extends TypedArray<T>, T>(
+export function FIND_INDEX<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
 ): i32 {
-  var i: i32 = 0;
   var length: i32 = array.length;
   var val: T;
-  while (i < length) {
-    val = unchecked(array[i]);
+  var buffer: ArrayBuffer = array.buffer;
+  var byteOffset: i32 = array.byteOffset;
+  for (var i: i32 = 0; i < length; i++) {
+    val = LOAD<T>(buffer, i, byteOffset);
     if (callbackfn(val, i, array)) {
       return i;
     }
-    ++i;
   }
   return -1;
 }
@@ -205,15 +205,16 @@ export function SOME<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
 ): bool {
-  var i: i32 = 0;
+
   var length: i32 = array.length;
   var val: T;
-  while (i < length) {
-    val = unchecked(array[i]);
+  var buffer: ArrayBuffer = array.buffer;
+  var byteOffset: i32 = array.byteOffset;
+  for (var i: i32 = 0; i < length; i++) {
+    val = LOAD<T>(buffer, i, byteOffset);
     if (callbackfn(val, i, array)) {
       return true;
     }
-    ++i;
   }
   return false;
 }
@@ -223,15 +224,15 @@ export function EVERY<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
 ): bool {
-  var i: i32 = 0;
   var length: i32 = array.length;
   var val: T;
-  while (i < length) {
-    val = unchecked(array[i]);
+  var buffer: ArrayBuffer = array.buffer;
+  var byteOffset: i32 = array.byteOffset;
+  for (var i: i32 = 0; i < length; i++) {
+    val = LOAD<T>(buffer, i, byteOffset);
     if (!callbackfn(val, i, array)) {
       return false;
     }
-    ++i;
   }
   return true;
 }

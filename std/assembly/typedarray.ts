@@ -6,7 +6,7 @@ import {
   REDUCE,
   REDUCE_RIGHT,
   MAP,
-  FINDINDEX,
+  FIND_INDEX,
   EVERY,
   SOME,
 } from "./internal/typedarray";
@@ -49,7 +49,7 @@ export class Int8Array extends TypedArray<i8> {
   }
 
   findIndex(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): i32 {
-    return FINDINDEX<Int8Array, i8>(this, callbackfn);
+    return FIND_INDEX<Int8Array, i8>(this, callbackfn);
   }
 
   every(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): bool {
@@ -95,7 +95,7 @@ export class Uint8Array extends TypedArray<u8> {
   }
 
   findIndex(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): i32 {
-    return FINDINDEX<Uint8Array, u8>(this, callbackfn);
+    return FIND_INDEX<Uint8Array, u8>(this, callbackfn);
   }
 
   every(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): bool {
@@ -137,7 +137,7 @@ export class Uint8ClampedArray extends Uint8Array {
   }
 
   findIndex(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): i32 {
-    return FINDINDEX<Uint8ClampedArray, u8>(this, callbackfn);
+    return FIND_INDEX<Uint8ClampedArray, u8>(this, callbackfn);
   }
 
   every(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): bool {
@@ -183,7 +183,7 @@ export class Int16Array extends TypedArray<i16> {
   }
 
   findIndex(callbackfn: (value: i16, index: i32, self: Int16Array) => bool): i32 {
-    return FINDINDEX<Int16Array, i16>(this, callbackfn);
+    return FIND_INDEX<Int16Array, i16>(this, callbackfn);
   }
 
   every(callbackfn: (value: i16, index: i32, self: Int16Array) => bool): bool {
@@ -229,7 +229,7 @@ export class Uint16Array extends TypedArray<u16> {
   }
 
   findIndex(callbackfn: (value: u16, index: i32, self: Uint16Array) => bool): i32 {
-    return FINDINDEX<Uint16Array, u16>(this, callbackfn);
+    return FIND_INDEX<Uint16Array, u16>(this, callbackfn);
   }
 
   every(callbackfn: (value: u16, index: i32, self: Uint16Array) => bool): bool {
@@ -275,7 +275,7 @@ export class Int32Array extends TypedArray<i32> {
   }
 
   findIndex(callbackfn: (value: i32, index: i32, self: Int32Array) => bool): i32 {
-    return FINDINDEX<Int32Array, i32>(this, callbackfn);
+    return FIND_INDEX<Int32Array, i32>(this, callbackfn);
   }
 
   every(callbackfn: (value: i32, index: i32, self: Int32Array) => bool): bool {
@@ -321,7 +321,7 @@ export class Uint32Array extends TypedArray<u32> {
   }
 
   findIndex(callbackfn: (value: u32, index: i32, self: Uint32Array) => bool): i32 {
-    return FINDINDEX<Uint32Array, u32>(this, callbackfn);
+    return FIND_INDEX<Uint32Array, u32>(this, callbackfn);
   }
 
   every(callbackfn: (value: u32, index: i32, self: Uint32Array) => bool): bool {
@@ -367,7 +367,7 @@ export class Int64Array extends TypedArray<i64> {
   }
 
   findIndex(callbackfn: (value: i64, index: i32, self: Int64Array) => bool): i32 {
-    return FINDINDEX<Int64Array, i64>(this, callbackfn);
+    return FIND_INDEX<Int64Array, i64>(this, callbackfn);
   }
 
   every(callbackfn: (value: i64, index: i32, self: Int64Array) => bool): bool {
@@ -413,7 +413,7 @@ export class Uint64Array extends TypedArray<u64> {
   }
 
   findIndex(callbackfn: (value: u64, index: i32, self: Uint64Array) => bool): i32 {
-    return FINDINDEX<Uint64Array, u64>(this, callbackfn);
+    return FIND_INDEX<Uint64Array, u64>(this, callbackfn);
   }
 
   every(callbackfn: (value: u64, index: i32, self: Uint64Array) => bool): bool {
@@ -459,7 +459,7 @@ export class Float32Array extends TypedArray<f32> {
   }
 
   findIndex(callbackfn: (value: f32, index: i32, self: Float32Array) => bool): i32 {
-    return FINDINDEX<Float32Array, f32>(this, callbackfn);
+    return FIND_INDEX<Float32Array, f32>(this, callbackfn);
   }
 
   every(callbackfn: (value: f32, index: i32, self: Float32Array) => bool): bool {
@@ -505,7 +505,7 @@ export class Float64Array extends TypedArray<f64> {
   }
 
   findIndex(callbackfn: (value: f64, index: i32, self: Float64Array) => bool): i32 {
-    return FINDINDEX<Float64Array, f64>(this, callbackfn);
+    return FIND_INDEX<Float64Array, f64>(this, callbackfn);
   }
 
   every(callbackfn: (value: f64, index: i32, self: Float64Array) => bool): bool {
