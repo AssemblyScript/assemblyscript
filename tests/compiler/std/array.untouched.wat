@@ -4217,16 +4217,15 @@
    loop $repeat|0
     get_local $2
     get_local $3
-    i32.lt_s
     tee_local $4
-    if (result i32)
-     get_local $2
-     get_local $0
-     i32.load offset=4
-     i32.lt_s
-    else     
-     get_local $4
-    end
+    get_local $0
+    i32.load offset=4
+    tee_local $5
+    get_local $4
+    get_local $5
+    i32.lt_s
+    select
+    i32.lt_s
     i32.eqz
     br_if $break|0
     block
@@ -4474,21 +4473,21 @@
   (local $7 i32)
   (local $8 f32)
   get_local $0
-  i32.load
-  set_local $2
-  get_local $0
   i32.load offset=4
-  set_local $3
+  set_local $2
   i32.const 0
-  get_local $3
+  get_local $2
   call $~lib/array/Array<f32>#constructor
+  set_local $3
+  get_local $3
+  i32.load
   set_local $4
   block $break|0
    i32.const 0
    set_local $5
    loop $repeat|0
     get_local $5
-    get_local $3
+    get_local $2
     tee_local $6
     get_local $0
     i32.load offset=4
@@ -4501,16 +4500,16 @@
     i32.eqz
     br_if $break|0
     block
-     get_local $4
-     i32.load
-     set_local $6
      block (result f32)
       i32.const 3
       set_global $~argc
       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.15 (result i32)
+       get_local $0
+       i32.load
+       set_local $6
        i32.const 0
        set_local $7
-       get_local $2
+       get_local $6
        get_local $5
        i32.const 2
        i32.shl
@@ -4527,7 +4526,7 @@
      set_local $8
      i32.const 0
      set_local $7
-     get_local $6
+     get_local $4
      get_local $5
      i32.const 2
      i32.shl
@@ -4546,7 +4545,7 @@
    end
    unreachable
   end
-  get_local $4
+  get_local $3
  )
  (func $~lib/array/Array<f32>#__get (; 67 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
   (local $2 i32)
@@ -4593,23 +4592,22 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  get_local $0
-  i32.load
-  set_local $2
   get_local $0
   i32.load offset=4
-  set_local $3
+  set_local $2
   i32.const 0
-  get_local $3
+  get_local $2
   call $~lib/array/Array<i32>#constructor
+  set_local $3
+  get_local $3
+  i32.load
   set_local $4
   block $break|0
    i32.const 0
    set_local $5
    loop $repeat|0
     get_local $5
-    get_local $3
+    get_local $2
     tee_local $6
     get_local $0
     i32.load offset=4
@@ -4622,16 +4620,16 @@
     i32.eqz
     br_if $break|0
     block
-     get_local $4
-     i32.load
-     set_local $6
      block (result i32)
       i32.const 3
       set_global $~argc
       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.16 (result i32)
+       get_local $0
+       i32.load
+       set_local $6
        i32.const 0
        set_local $7
-       get_local $2
+       get_local $6
        get_local $5
        i32.const 2
        i32.shl
@@ -4647,13 +4645,13 @@
      end
      set_local $7
      i32.const 0
-     set_local $8
-     get_local $6
+     set_local $6
+     get_local $4
      get_local $5
      i32.const 2
      i32.shl
      i32.add
-     get_local $8
+     get_local $6
      i32.add
      get_local $7
      i32.store offset=8
@@ -4667,7 +4665,7 @@
    end
    unreachable
   end
-  get_local $4
+  get_local $3
  )
  (func $start~anonymous|24 (; 70 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_global $std/array/i

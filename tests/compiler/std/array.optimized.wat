@@ -3270,21 +3270,18 @@
   block $break|0
    get_local $0
    i32.load offset=4
-   set_local $4
+   set_local $3
    loop $repeat|0
     get_local $2
+    get_local $3
+    get_local $0
+    i32.load offset=4
+    tee_local $4
+    get_local $3
     get_local $4
     i32.lt_s
-    tee_local $3
-    if
-     get_local $2
-     get_local $0
-     i32.load offset=4
-     i32.lt_s
-     set_local $3
-    end
-    get_local $3
-    i32.eqz
+    select
+    i32.ge_s
     br_if $break|0
     i32.const 3
     set_global $~argc
@@ -3438,49 +3435,46 @@
   (local $4 i32)
   (local $5 i32)
   get_local $0
-  i32.load
-  set_local $5
-  get_local $0
   i32.load offset=4
   tee_local $3
   call $~lib/array/Array<i32>#constructor
-  set_local $4
+  tee_local $4
+  i32.load
+  set_local $5
   loop $repeat|0
-   get_local $2
+   get_local $1
    get_local $3
    get_local $0
    i32.load offset=4
-   tee_local $1
+   tee_local $2
    get_local $3
-   get_local $1
+   get_local $2
    i32.lt_s
    select
    i32.lt_s
    if
-    get_local $4
-    i32.load
-    set_local $1
     i32.const 3
     set_global $~argc
     get_local $1
-    get_local $2
     i32.const 2
     i32.shl
-    tee_local $1
-    i32.add
-    get_local $1
+    tee_local $2
     get_local $5
     i32.add
-    i32.load offset=8
+    get_local $0
+    i32.load
     get_local $2
+    i32.add
+    i32.load offset=8
+    get_local $1
     get_local $0
     i32.const 22
     call_indirect (type $iiif)
     f32.store offset=8
-    get_local $2
+    get_local $1
     i32.const 1
     i32.add
-    set_local $2
+    set_local $1
     br $repeat|0
    end
   end
@@ -3504,37 +3498,34 @@
   (local $5 i32)
   (local $6 i32)
   get_local $0
-  i32.load
-  set_local $6
-  get_local $0
   i32.load offset=4
-  tee_local $4
+  tee_local $3
   call $~lib/array/Array<i32>#constructor
+  tee_local $4
+  i32.load
   set_local $5
   loop $repeat|0
    block $break|0
     get_local $2
-    get_local $4
+    get_local $3
     get_local $0
     i32.load offset=4
-    tee_local $3
-    get_local $4
+    tee_local $6
     get_local $3
+    get_local $6
     i32.lt_s
     select
     i32.ge_s
     br_if $break|0
-    get_local $5
-    i32.load
-    set_local $3
     i32.const 3
     set_global $~argc
-    get_local $3
+    get_local $5
     get_local $2
     i32.const 2
     i32.shl
     i32.add
-    get_local $6
+    get_local $0
+    i32.load
     get_local $2
     i32.const 2
     i32.shl
@@ -3552,7 +3543,7 @@
     br $repeat|0
    end
   end
-  get_local $5
+  get_local $4
  )
  (func $start~anonymous|24 (; 54 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_global $std/array/i
