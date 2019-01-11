@@ -52,8 +52,8 @@ Object.defineProperties(
 Object.defineProperties(
   globalScope["bool"] = function bool(value) { return !!value; }
 , {
-  "MIN_VALUE": { value: 0, writable: false },
-  "MAX_VALUE": { value: 1, writable: false }
+  "MIN_VALUE": { value: false, writable: false },
+  "MAX_VALUE": { value: true,  writable: false }
 });
 
 Object.defineProperties(
@@ -64,10 +64,7 @@ Object.defineProperties(
   "MAX_VALUE": { value: Math.fround(3.4028235e+38), writable: false },
   "MIN_NORMAL_VALUE":  { value:  Math.fround(1.17549435e-38), writable: false },
   "MIN_SAFE_INTEGER":  { value: -16777215, writable: false },
-  "MAX_SAFE_INTEGER":  { value:  16777215, writable: false },
-  "POSITIVE_INFINITY": { value:  Infinity, writable: false },
-  "NEGATIVE_INFINITY": { value: -Infinity, writable: false },
-  "NaN": { value: NaN, writable: false }
+  "MAX_SAFE_INTEGER":  { value:  16777215, writable: false }
 });
 
 Object.defineProperties(
@@ -78,10 +75,7 @@ Object.defineProperties(
   "MAX_VALUE": { value: 1.7976931348623157e+308, writable: false },
   "MIN_NORMAL_VALUE":  { value: 2.2250738585072014e-308 , writable: false },
   "MIN_SAFE_INTEGER":  { value: -9007199254740991, writable: false },
-  "MAX_SAFE_INTEGER":  { value:  9007199254740991, writable: false },
-  "POSITIVE_INFINITY": { value:  Infinity, writable: false },
-  "NEGATIVE_INFINITY": { value: -Infinity, writable: false },
-  "NaN": { value: NaN, writable: false }
+  "MAX_SAFE_INTEGER":  { value:  9007199254740991, writable: false }
 });
 
 globalScope["clz"] = Math.clz32;
@@ -213,6 +207,14 @@ globalScope["isString"] = function isString(arg) {
 
 globalScope["isArray"] = Array.isArray;
 
+globalScope["isDefined"] = function isDefined(expr) {
+  return typeof expr !== "undefined";
+}
+
+globalScope["isConstant"] = function isConstant(expr) {
+  return false;
+};
+
 globalScope["unchecked"] = function unchecked(expr) {
   return expr;
 };
@@ -245,17 +247,24 @@ globalScope["memory"] = (() => {
       if ((HEAP_OFFSET += size) & 7) HEAP_OFFSET = (HEAP_OFFSET | 7) + 1;
       return ptr;
     },
+    fill: globalScope["__memory_fill"] || function fill(dest, value, size) {
+      HEAP.fill(value, dest, dest + size);
+    },
     free: globalScope["__memory_free"] || function free(ptr) { },
     copy: globalScope["__memory_copy"] || function copy(dest, src, size) {
       HEAP.copyWithin(dest, src, src + size);
+    },
+    reset: globalScope["__memory_reset"] || function reset() {
+      HEAP = new Uint8Array(0);
+      HEAP_OFFSET = 0;
     }
   };
 })();
 
 globalScope["store"] = globalScope["__store"] || function store(ptr, value, offset) {
-  HEAP[ptr + (offset | 0)] = value;
+  HEAP[(ptr | 0) + (offset | 0)] = value;
 };
 
 globalScope["load"] = globalScope["__load"] || function load(ptr, offset) {
-  return HEAP[ptr + (offset | 0)];
+  return HEAP[(ptr | 0) + (offset | 0)];
 };

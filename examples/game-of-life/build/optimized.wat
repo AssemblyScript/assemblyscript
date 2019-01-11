@@ -28,18 +28,18 @@
   get_local $1
   i32.mul
   set_global $assembly/index/s
-  block $break|0
-   i32.const 0
-   set_local $0
-   loop $repeat|0
+  i32.const 0
+  set_local $0
+  loop $repeat|0
+   block $break|0
     get_local $0
     get_global $assembly/index/h
     i32.ge_s
     br_if $break|0
-    block $break|1
-     i32.const 0
-     set_local $1
-     loop $repeat|1
+    i32.const 0
+    set_local $1
+    loop $repeat|1
+     block $break|1
       get_local $1
       get_global $assembly/index/w
       i32.ge_s
@@ -58,8 +58,8 @@
       end
       set_local $2
       get_global $assembly/index/s
-      get_local $0
       get_global $assembly/index/w
+      get_local $0
       i32.mul
       i32.add
       get_local $1
@@ -73,18 +73,14 @@
       i32.add
       set_local $1
       br $repeat|1
-      unreachable
      end
-     unreachable
     end
     get_local $0
     i32.const 1
     i32.add
     set_local $0
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
  )
  (func $assembly/index/step (; 2 ;) (type $v)
@@ -104,61 +100,54 @@
   i32.const 1
   i32.sub
   set_local $7
-  block $break|0
-   loop $repeat|0
+  loop $repeat|0
+   block $break|0
     get_local $0
     get_global $assembly/index/h
     i32.ge_s
     br_if $break|0
     get_local $0
-    if (result i32)
-     get_local $0
-     i32.const 1
-     i32.sub
-    else     
-     get_local $6
-    end
-    tee_local $2
+    i32.const 1
+    i32.sub
+    get_local $6
+    get_local $0
+    select
     set_local $4
+    i32.const 0
+    get_local $0
+    i32.const 1
+    i32.add
     get_local $0
     get_local $6
     i32.eq
-    if (result i32)
-     i32.const 0
-    else     
-     get_local $0
-     i32.const 1
-     i32.add
-    end
+    select
     set_local $5
-    block $break|1
-     i32.const 0
-     set_local $1
-     loop $repeat|1
+    i32.const 0
+    set_local $1
+    loop $repeat|1
+     block $break|1
       get_local $1
       get_global $assembly/index/w
       i32.ge_s
       br_if $break|1
-      get_local $4
-      get_global $assembly/index/w
-      i32.mul
       get_local $1
-      if (result i32)
-       get_local $1
-       i32.const 1
-       i32.sub
-      else       
-       get_local $7
-      end
+      i32.const 1
+      i32.sub
+      get_local $7
+      get_local $1
+      select
       tee_local $2
+      get_global $assembly/index/w
+      get_local $4
+      i32.mul
       i32.add
       i32.const 2
       i32.shl
       i32.load
       i32.const 1
       i32.and
-      get_local $4
       get_global $assembly/index/w
+      get_local $4
       i32.mul
       get_local $1
       i32.add
@@ -168,20 +157,18 @@
       i32.const 1
       i32.and
       i32.add
-      get_local $4
-      get_global $assembly/index/w
-      i32.mul
+      i32.const 0
+      get_local $1
+      i32.const 1
+      i32.add
       get_local $1
       get_local $7
       i32.eq
-      if (result i32)
-       i32.const 0
-      else       
-       get_local $1
-       i32.const 1
-       i32.add
-      end
+      select
       tee_local $3
+      get_global $assembly/index/w
+      get_local $4
+      i32.mul
       i32.add
       i32.const 2
       i32.shl
@@ -189,8 +176,8 @@
       i32.const 1
       i32.and
       i32.add
-      get_local $0
       get_global $assembly/index/w
+      get_local $0
       i32.mul
       get_local $2
       i32.add
@@ -200,8 +187,8 @@
       i32.const 1
       i32.and
       i32.add
-      get_local $0
       get_global $assembly/index/w
+      get_local $0
       i32.mul
       get_local $3
       i32.add
@@ -211,8 +198,8 @@
       i32.const 1
       i32.and
       i32.add
-      get_local $5
       get_global $assembly/index/w
+      get_local $5
       i32.mul
       get_local $2
       i32.add
@@ -222,8 +209,8 @@
       i32.const 1
       i32.and
       i32.add
-      get_local $5
       get_global $assembly/index/w
+      get_local $5
       i32.mul
       get_local $1
       i32.add
@@ -233,8 +220,8 @@
       i32.const 1
       i32.and
       i32.add
-      get_local $5
       get_global $assembly/index/w
+      get_local $5
       i32.mul
       get_local $3
       i32.add
@@ -245,8 +232,8 @@
       i32.and
       i32.add
       set_local $2
-      get_local $0
       get_global $assembly/index/w
+      get_local $0
       i32.mul
       get_local $1
       i32.add
@@ -264,14 +251,17 @@
        i32.eq
        if
         get_global $assembly/index/s
-        get_local $0
         get_global $assembly/index/w
+        get_local $0
         i32.mul
         i32.add
         get_local $1
         i32.add
         i32.const 2
         i32.shl
+        get_local $3
+        i32.const 16777215
+        i32.and
         get_local $3
         i32.const 24
         i32.shr_u
@@ -285,15 +275,12 @@
         select
         i32.const 24
         i32.shl
-        get_local $3
-        i32.const 16777215
-        i32.and
         i32.or
         i32.store
        else        
         get_global $assembly/index/s
-        get_local $0
         get_global $assembly/index/w
+        get_local $0
         i32.mul
         i32.add
         get_local $1
@@ -311,8 +298,8 @@
        i32.eq
        if
         get_global $assembly/index/s
-        get_local $0
         get_global $assembly/index/w
+        get_local $0
         i32.mul
         i32.add
         get_local $1
@@ -325,14 +312,17 @@
         i32.store
        else        
         get_global $assembly/index/s
-        get_local $0
         get_global $assembly/index/w
+        get_local $0
         i32.mul
         i32.add
         get_local $1
         i32.add
         i32.const 2
         i32.shl
+        get_local $3
+        i32.const 16777215
+        i32.and
         get_local $3
         i32.const 24
         i32.shr_u
@@ -346,9 +336,6 @@
         select
         i32.const 24
         i32.shl
-        get_local $3
-        i32.const 16777215
-        i32.and
         i32.or
         i32.store
        end
@@ -358,24 +345,20 @@
       i32.add
       set_local $1
       br $repeat|1
-      unreachable
      end
-     unreachable
     end
     get_local $0
     i32.const 1
     i32.add
     set_local $0
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
  )
  (func $assembly/index/fill (; 3 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
-  block $break|0
-   loop $repeat|0
+  loop $repeat|0
+   block $break|0
     get_local $3
     get_global $assembly/index/w
     i32.ge_s
@@ -385,8 +368,8 @@
     f64.lt
     if
      get_global $assembly/index/s
-     get_local $1
      get_global $assembly/index/w
+     get_local $1
      i32.mul
      i32.add
      get_local $3
@@ -403,14 +386,12 @@
     i32.add
     set_local $3
     br $repeat|0
-    unreachable
    end
-   unreachable
   end
-  block $break|1
-   i32.const 0
-   set_local $3
-   loop $repeat|1
+  i32.const 0
+  set_local $3
+  loop $repeat|1
+   block $break|1
     get_local $3
     get_global $assembly/index/h
     i32.ge_s
@@ -420,8 +401,8 @@
     f64.lt
     if
      get_global $assembly/index/s
-     get_local $3
      get_global $assembly/index/w
+     get_local $3
      i32.mul
      i32.add
      get_local $0
@@ -438,9 +419,7 @@
     i32.add
     set_local $3
     br $repeat|1
-    unreachable
    end
-   unreachable
   end
  )
  (func $null (; 4 ;) (type $v)

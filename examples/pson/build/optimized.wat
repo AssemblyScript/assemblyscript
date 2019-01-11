@@ -45,34 +45,33 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   loop $continue|0
+   get_global $assembly/pson/offset
+   tee_local $1
+   i32.const 1
+   i32.add
+   set_global $assembly/pson/offset
    get_local $0
+   get_local $1
+   i32.load8_u
+   tee_local $3
+   i32.const 127
+   i32.and
    block (result i32)
-    get_global $assembly/pson/offset
-    tee_local $0
+    get_local $2
+    tee_local $1
     i32.const 1
     i32.add
-    set_global $assembly/pson/offset
-    get_local $0
-    i32.load8_u
-    tee_local $2
-    i32.const 127
-    i32.and
-    block (result i32)
-     get_local $1
-     tee_local $0
-     i32.const 1
-     i32.add
-     set_local $1
-     get_local $0
-     i32.const 7
-     i32.mul
-    end
-    i32.shl
+    set_local $2
+    get_local $1
+    i32.const 7
+    i32.mul
    end
+   i32.shl
    i32.or
    set_local $0
-   get_local $2
+   get_local $3
    i32.const 128
    i32.and
    br_if $continue|0
@@ -83,30 +82,29 @@
   (local $0 i64)
   (local $1 i32)
   (local $2 i64)
+  (local $3 i64)
   loop $continue|0
+   get_global $assembly/pson/offset
+   tee_local $1
+   i32.const 1
+   i32.add
+   set_global $assembly/pson/offset
+   get_local $2
+   tee_local $3
+   i64.const 1
+   i64.add
+   set_local $2
    get_local $0
-   block (result i64)
-    get_global $assembly/pson/offset
-    tee_local $1
-    i32.const 1
-    i32.add
-    set_global $assembly/pson/offset
-    get_local $2
-    tee_local $0
-    i64.const 1
-    i64.add
-    set_local $2
-    get_local $1
-    i32.load8_u
-    tee_local $1
-    i32.const 127
-    i32.and
-    i64.extend_u/i32
-    get_local $0
-    i64.const 7
-    i64.mul
-    i64.shl
-   end
+   get_local $1
+   i32.load8_u
+   tee_local $1
+   i32.const 127
+   i32.and
+   i64.extend_u/i32
+   get_local $3
+   i64.const 7
+   i64.mul
+   i64.shl
    i64.or
    set_local $0
    get_local $1
@@ -138,33 +136,75 @@
                  block $case1|0
                   block (result i32)
                    get_global $assembly/pson/offset
-                   tee_local $1
+                   tee_local $0
                    i32.const 1
                    i32.add
                    set_global $assembly/pson/offset
-                   get_local $1
+                   get_local $0
                    i32.load8_u
-                   tee_local $0
                    tee_local $1
+                   tee_local $0
                    i32.const 240
                    i32.ne
                   end
                   if
-                   block $tablify|0
-                    get_local $1
-                    i32.const 241
-                    i32.sub
-                    br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $case11|0 $case12|0 $tablify|0
-                   end
-                   get_local $1
+                   get_local $0
+                   i32.const 241
+                   i32.eq
+                   br_if $case1|0
+                   get_local $0
+                   i32.const 242
+                   i32.eq
+                   br_if $case2|0
+                   get_local $0
+                   i32.const 243
+                   i32.eq
+                   br_if $case3|0
+                   get_local $0
+                   i32.const 244
+                   i32.eq
+                   br_if $case4|0
+                   get_local $0
+                   i32.const 245
+                   i32.eq
+                   br_if $case5|0
+                   get_local $0
+                   i32.const 246
+                   i32.eq
+                   br_if $case6|0
+                   get_local $0
+                   i32.const 247
+                   i32.eq
+                   br_if $case7|0
+                   get_local $0
+                   i32.const 248
+                   i32.eq
+                   br_if $case8|0
+                   get_local $0
+                   i32.const 249
+                   i32.eq
+                   br_if $case9|0
+                   get_local $0
+                   i32.const 250
+                   i32.eq
+                   br_if $case10|0
+                   get_local $0
+                   i32.const 251
+                   i32.eq
+                   br_if $case11|0
+                   get_local $0
+                   i32.const 252
+                   i32.eq
+                   br_if $case12|0
+                   get_local $0
                    i32.const 253
                    i32.eq
-                   get_local $1
+                   get_local $0
                    i32.const 254
                    i32.eq
                    i32.or
                    br_if $case14|0
-                   get_local $1
+                   get_local $0
                    i32.const 255
                    i32.eq
                    br_if $case15|0
@@ -189,16 +229,16 @@
              br $break|0
             end
             call $assembly/pson/readVarint32
-            tee_local $0
+            tee_local $1
             call $assembly/pson/onObject
             loop $continue|1
              block (result i32)
-              get_local $0
-              tee_local $1
+              get_local $1
+              tee_local $0
               i32.const 1
               i32.sub
-              set_local $0
-              get_local $1
+              set_local $1
+              get_local $0
              end
              if
               call $assembly/pson/decodeValue
@@ -209,16 +249,16 @@
             br $break|0
            end
            call $assembly/pson/readVarint32
-           tee_local $0
+           tee_local $1
            call $assembly/pson/onArray
            loop $continue|2
             block (result i32)
-             get_local $0
-             tee_local $1
+             get_local $1
+             tee_local $0
              i32.const 1
              i32.sub
-             set_local $0
-             get_local $1
+             set_local $1
+             get_local $0
             end
             if
              call $assembly/pson/decodeValue
@@ -228,11 +268,11 @@
            br $break|0
           end
           call $assembly/pson/readVarint32
-          tee_local $0
+          tee_local $1
           i32.const 1
           i32.shr_u
           i32.const 0
-          get_local $0
+          get_local $1
           i32.const 1
           i32.and
           i32.sub
@@ -278,12 +318,12 @@
        br $break|0
       end
       call $assembly/pson/readVarint32
-      set_local $0
+      set_local $1
       get_global $assembly/pson/offset
-      get_local $0
+      get_local $1
       call $assembly/pson/onString
       get_global $assembly/pson/offset
-      get_local $0
+      get_local $1
       i32.add
       set_global $assembly/pson/offset
       br $break|0
@@ -291,30 +331,30 @@
      unreachable
     end
     call $assembly/pson/readVarint32
-    set_local $0
+    set_local $1
     get_global $assembly/pson/offset
-    get_local $0
+    get_local $1
     call $assembly/pson/onBinary
     get_global $assembly/pson/offset
-    get_local $0
+    get_local $1
     i32.add
     set_global $assembly/pson/offset
     br $break|0
    end
-   get_local $0
+   get_local $1
    i32.const 239
    i32.gt_u
    if
     unreachable
    end
-   get_local $0
-   i32.const 1
-   i32.shr_u
    i32.const 0
-   get_local $0
+   get_local $1
    i32.const 1
    i32.and
    i32.sub
+   get_local $1
+   i32.const 1
+   i32.shr_u
    i32.xor
    call $assembly/pson/onInteger
   end

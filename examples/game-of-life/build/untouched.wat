@@ -49,7 +49,7 @@
       i32.lt_s
       i32.eqz
       br_if $break|1
-      block $assembly/index/set|inlined.0
+      block
        call $~lib/bindings/Math/random
        f64.const 0.1
        f64.gt
@@ -317,7 +317,7 @@
           i32.gt_s
           select
           set_local $10
-          block $assembly/index/set|inlined.1
+          block
            get_local $10
            i32.const 24
            i32.shl
@@ -389,7 +389,7 @@
           i32.gt_s
           select
           set_local $10
-          block $assembly/index/set|inlined.4
+          block
            get_local $10
            i32.const 24
            i32.shl
