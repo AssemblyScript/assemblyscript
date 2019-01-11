@@ -1,27 +1,19 @@
 import "allocator/arena";
 // TODO: Why cannot import from index?
-// import { BSONEncoder, BSONDecoder } from "./bson";
-import { BSONEncoder } from "./bson/encoder";
-import { BSONDecoder, ThrowingBSONHandler } from "./bson/decoder";
+// import { JSONEncoder, JSONDecoder } from "./json";
+import { JSONEncoder } from "./json/encoder";
+import { JSONDecoder, DecoderState, JSONHandler, ThrowingJSONHandler } from "./json/decoder";
 import { near } from "./near"
 
 @external("env", "log")
 declare function log(str: string): void;
-
-// Runtime functions
-@external("env", "return_value")
-declare function return_value(value_ptr: u32): void;
-@external("env", "input_read_len")
-declare function input_read_len(): u32;
-@external("env", "input_read_into")
-declare function input_read_into(ptr: usize): void;
 
 export class FooBar {
     foo: i32 = 0;
     bar: i32 = 1;
     flag: bool;
     baz: string = "123";
-    foobar: Uint8Array;
+    //foobar: Uint8Array;
     arr: Array<Array<string>>;
 }
 

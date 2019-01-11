@@ -1,7 +1,7 @@
 
 import * as main from "./main_near";
 
-import { BSONEncoder } from "./bson/encoder";
+import { JSONEncoder } from "./json/encoder";
 
 @external("env", "log")
 declare function log(str: string): void;
@@ -12,7 +12,7 @@ export function runTest(): void {
   original.bar = 123;
   original.flag = true;
   original.baz = "foo";
-  let encoder: BSONEncoder = new BSONEncoder();
+  let encoder: JSONEncoder = new JSONEncoder();
   main.__near_encode_FooBar(original, encoder);
   let encoded = encoder.serialize();
   let decoded = main.__near_decode_FooBar(encoded, 0);
@@ -20,12 +20,12 @@ export function runTest(): void {
   assert(original.foo == decoded.foo);
   assert(original.bar == decoded.bar);
 
-  let argsEncoder: BSONEncoder = new BSONEncoder();
+  let argsEncoder: JSONEncoder = new JSONEncoder();
   argsEncoder.setInteger("x", 1);
   argsEncoder.setInteger("y", 2);
 
   let addBsonStr = bin2hex(argsEncoder.serialize());
-  let expectedResultEncoder: BSONEncoder = new BSONEncoder();
+  let expectedResultEncoder: JSONEncoder = new JSONEncoder();
   expectedResultEncoder.setInteger("result", 3);
 
   /*
