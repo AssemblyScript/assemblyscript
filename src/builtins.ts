@@ -153,7 +153,12 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      let element = compiler.resolver.resolveExpression(operands[0], compiler.currentFunction, ReportMode.SWALLOW);
+      let element = compiler.resolver.resolveExpression(
+        operands[0],
+        compiler.currentFunction,
+        Type.void,
+        ReportMode.SWALLOW
+      );
       return module.createI32(element ? 1 : 0);
     }
     case "isConstant": { // isConstant(expression) -> bool

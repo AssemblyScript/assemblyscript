@@ -23,7 +23,7 @@ API
 * **instantiateStreaming**<`T`>(response: `Response`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
   Instantiates an AssemblyScript module from a response using the specified imports.
 
-* **demangle**<`T`>(exports: `WasmExports`): `T`<br />
+* **demangle**<`T`>(exports: `WasmExports`, baseModule?: `Object`): `T`<br />
   Demangles an AssemblyScript module's exports to a friendly object structure. You usually don't have to call this manually as instantiation does this implicitly.
 
 **Note:** `T` above can either be omitted if the structure of the module is unknown, or can reference a `.d.ts` (i.e. `typeof MyModule`) as produced by the compiler with the `-d` option.

@@ -328,6 +328,8 @@ export class Program extends DiagnosticEmitter {
   fileLevelExports: Map<string,Element> = new Map();
   /** Module-level exports by exported name. */
   moduleLevelExports: Map<string,ModuleExport> = new Map();
+  /** Classes backing basic types like `i32`. */
+  basicClasses: Map<TypeKind,Class> = new Map();
 
   /** ArrayBuffer instance reference. */
   arrayBufferInstance: Class | null = null;
@@ -641,6 +643,21 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
+    // register classes backing basic types
+    this.registerBasicClass(TypeKind.I8, "I8");
+    this.registerBasicClass(TypeKind.I16, "I16");
+    this.registerBasicClass(TypeKind.I32, "I32");
+    this.registerBasicClass(TypeKind.I64, "I64");
+    this.registerBasicClass(TypeKind.ISIZE, "Isize");
+    this.registerBasicClass(TypeKind.U8, "U8");
+    this.registerBasicClass(TypeKind.U16, "U16");
+    this.registerBasicClass(TypeKind.U32, "U32");
+    this.registerBasicClass(TypeKind.U64, "U64");
+    this.registerBasicClass(TypeKind.USIZE, "Usize");
+    this.registerBasicClass(TypeKind.BOOL, "Bool");
+    this.registerBasicClass(TypeKind.F32, "F32");
+    this.registerBasicClass(TypeKind.F64, "F64");
+
     // register 'start'
     {
       let element = assert(this.elementsLookup.get("start"));
@@ -724,6 +741,15 @@ export class Program extends DiagnosticEmitter {
       this.gcHookOffset =  gcHookOffset;
       this.gcHeaderSize = (gcHookOffset + 4 + 7) & ~7;   // + .hook index + alignment
       this.hasGC = true;
+    }
+  }
+
+  private registerBasicClass(typeKind: TypeKind, className: string): void {
+    if (this.elementsLookup.has(className)) {
+      let element = assert(this.elementsLookup.get(className));
+      assert(element.kind == ElementKind.CLASS_PROTOTYPE);
+      let classElement = this.resolver.resolveClass(<ClassPrototype>element, null);
+      if (classElement) this.basicClasses.set(typeKind, classElement);
     }
   }
 

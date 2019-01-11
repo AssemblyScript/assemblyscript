@@ -11,10 +11,10 @@
  (export "table" (table $0))
  (start $start)
  (func $start (; 0 ;) (type $v)
-  (local $0 i32)
-  (local $1 i64)
-  (local $2 f32)
-  (local $3 f64)
+  (local $0 f32)
+  (local $1 f64)
+  (local $2 i32)
+  (local $3 i64)
   get_global $unary/i
   i32.const 1
   i32.add
@@ -59,18 +59,18 @@
   i32.sub
   set_global $unary/i
   get_global $unary/i
-  tee_local $0
+  tee_local $2
   i32.const 1
   i32.add
   set_global $unary/i
-  get_local $0
+  get_local $2
   set_global $unary/i
   get_global $unary/i
-  tee_local $0
+  tee_local $2
   i32.const 1
   i32.sub
   set_global $unary/i
-  get_local $0
+  get_local $2
   set_global $unary/i
   get_global $unary/I
   i64.const 1
@@ -117,18 +117,18 @@
   i64.sub
   set_global $unary/I
   get_global $unary/I
-  tee_local $1
+  tee_local $3
   i64.const 1
   i64.add
   set_global $unary/I
-  get_local $1
+  get_local $3
   set_global $unary/I
   get_global $unary/I
-  tee_local $1
+  tee_local $3
   i64.const 1
   i64.sub
   set_global $unary/I
-  get_local $1
+  get_local $3
   set_global $unary/I
   get_global $unary/f
   f32.const 1
@@ -156,10 +156,11 @@
   f32.neg
   set_global $unary/f
   get_global $unary/f
+  tee_local $0
   f32.const 0
   f32.eq
   set_global $unary/i
-  get_global $unary/f
+  get_local $0
   f32.const 1
   f32.add
   set_global $unary/f
@@ -168,18 +169,18 @@
   f32.sub
   set_global $unary/f
   get_global $unary/f
-  tee_local $2
+  tee_local $0
   f32.const 1
   f32.add
   set_global $unary/f
-  get_local $2
+  get_local $0
   set_global $unary/f
   get_global $unary/f
-  tee_local $2
+  tee_local $0
   f32.const 1
   f32.sub
   set_global $unary/f
-  get_local $2
+  get_local $0
   set_global $unary/f
   get_global $unary/F
   f64.const 1
@@ -207,11 +208,12 @@
   f64.neg
   set_global $unary/F
   get_global $unary/F
+  tee_local $1
   f64.const 0
   f64.eq
   i64.extend_u/i32
   set_global $unary/I
-  get_global $unary/F
+  get_local $1
   f64.const 1
   f64.add
   set_global $unary/F
@@ -220,18 +222,18 @@
   f64.sub
   set_global $unary/F
   get_global $unary/F
-  tee_local $3
+  tee_local $1
   f64.const 1
   f64.add
   set_global $unary/F
-  get_local $3
+  get_local $1
   set_global $unary/F
   get_global $unary/F
-  tee_local $3
+  tee_local $1
   f64.const 1
   f64.sub
   set_global $unary/F
-  get_local $3
+  get_local $1
   set_global $unary/F
  )
  (func $null (; 1 ;) (type $v)

@@ -238,7 +238,7 @@ declare namespace i64 {
   export function parseInt(string: string, radix?: i32): i64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
-declare var isize: i32 | i64;
+declare var isize: typeof i32 | typeof i64;
 /** Converts any other numeric value to an 8-bit unsigned integer. */
 declare function u8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
 declare namespace u8 {
@@ -288,7 +288,7 @@ declare namespace u64 {
   export function parseInt(string: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
-declare var usize: u32 | u64;
+declare var usize: typeof u32 | typeof u64;
 /** Converts any other numeric value to a 1-bit unsigned integer. */
 declare function bool(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): bool;
 declare namespace bool {
@@ -330,7 +330,7 @@ declare namespace f32 {
   export function isInteger(value: f32): bool;
   /** Converts a string to a floating-point number. */
   export function parseFloat(string: string): f32;
-  /** Converts A string to an integer. */
+  /** Converts a string to an integer. */
   export function parseInt(string: string, radix?: i32): f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
@@ -352,21 +352,80 @@ declare namespace f64 {
   export function load(offset: usize, constantOffset?: usize): f64;
   /** Stores a 64-bit float to memory. */
   export function store(offset: usize, value: f64, constantOffset?: usize): void;
-  /** Returns a boolean value that indicates whether a value is the reserved value NaN (not a number). */
-  export function isNaN(value: f32): bool;
-  /** Returns true if passed value is finite. */
-  export function isFinite(value: f32): bool;
-  /** Returns true if the value passed is a safe integer. */
-  export function isSafeInteger(value: f64): bool;
-  /** Returns true if the value passed is an integer, false otherwise. */
-  export function isInteger(value: f64): bool;
-  /** Converts a string to a floating-point number. */
-  export function parseFloat(string: string): f64;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): f64;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type NATIVE<T> = T;
+
+/** Pseudo-class representing the backing class of integer types. */
+declare class _Integer {
+  /** Smallest representable value. */
+  static readonly MIN_VALUE: number;
+  /** Largest representable value. */
+  static readonly MAX_VALUE: number;
+  /** Converts a string to an integer of this type. */
+  static parseInt(value: string, radix?: number): number;
+  /** Converts this integer to a string. */
+  toString(): string;
+}
+
+/** Pseudo-class representing the backing class of floating-point types. */
+declare class _Float {
+  /** Difference between 1 and the smallest representable value greater than 1. */
+  static readonly EPSILON: f32 | f64;
+  /** Smallest representable value. */
+  static readonly MIN_VALUE: f32 | f64;
+  /** Largest representable value. */
+  static readonly MAX_VALUE: f32 | f64;
+  /** Smallest safely representable integer value. */
+  static readonly MIN_SAFE_INTEGER: f32 | f64;
+  /** Largest safely representable integer value. */
+  static readonly MAX_SAFE_INTEGER: f32 | f64;
+  /** Value representing positive infinity. */
+  static readonly POSITIVE_INFINITY: f32 | f64;
+  /** Value representing negative infinity. */
+  static readonly NEGATIVE_INFINITY: f32 | f64;
+  /** Value representing 'not a number'. */
+  static readonly NaN: f32 | f64;
+  /** Returns a boolean value that indicates whether a value is the reserved value NaN (not a number). */
+  static isNaN(value: f32 | f64): bool;
+  /** Returns true if passed value is finite. */
+  static isFinite(value: f32 | f64): bool;
+  /** Returns true if the value passed is a safe integer. */
+  static isSafeInteger(value: f32 | f64): bool;
+  /** Returns true if the value passed is an integer, false otherwise. */
+  static isInteger(value: f32 | f64): bool;
+  /** Converts A string to an integer. */
+  static parseInt(value: string, radix?: i32): f32 | f64;
+  /** Converts a string to a floating-point number. */
+  static parseFloat(value: string): f32 | f64;
+  /** Converts this floating-point number to a string. */
+  toString(this: f64): string;
+}
+
+/** Backing class of signed 8-bit integers. */
+declare const I8: typeof _Integer;
+/** Backing class of signed 16-bit integers. */
+declare const I16: typeof _Integer;
+/** Backing class of signed 32-bit integers. */
+declare const I32: typeof _Integer;
+/** Backing class of signed 64-bit integers. */
+declare const I64: typeof _Integer;
+/** Backing class of signed size integers. */
+declare const Isize: typeof _Integer;
+/** Backing class of unsigned 8-bit integers. */
+declare const U8: typeof _Integer;
+/** Backing class of unsigned 16-bit integers. */
+declare const U16: typeof _Integer;
+/** Backing class of unsigned 32-bit integers. */
+declare const U32: typeof _Integer;
+/** Backing class of unsigned 64-bit integers. */
+declare const U64: typeof _Integer;
+/** Backing class of unsigned size integers. */
+declare const Usize: typeof _Integer;
+/** Backing class of 32-bit floating-point values. */
+declare const F32: typeof _Float;
+/** Backing class of 64-bit floating-point values. */
+declare const F64: typeof _Float;
 
 // User-defined diagnostic macros
 
@@ -629,6 +688,7 @@ declare class String {
   padStart(targetLength: i32, padString?: string): string;
   padEnd(targetLength: i32, padString?: string): string;
   repeat(count?: i32): string;
+  slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
   toString(): string;
   static fromUTF8(ptr: usize, len: usize): string;

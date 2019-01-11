@@ -149,7 +149,7 @@
      get_local $2
      get_local $3
      i64.ge_u
-     if
+     if (result i64)
       get_local $2
       get_local $3
       i64.eq
@@ -157,9 +157,9 @@
       get_local $2
       get_local $3
       i64.sub
-      set_local $2
+     else      
+      get_local $2
      end
-     get_local $2
      i64.const 1
      i64.shl
      set_local $2
@@ -214,7 +214,6 @@
     i64.add
     i64.shr_u
    end
-   tee_local $2
    get_local $8
    i64.const 63
    i64.shl
@@ -395,7 +394,7 @@
      get_local $2
      get_local $4
      i32.ge_u
-     if
+     if (result i32)
       get_local $2
       get_local $4
       i32.eq
@@ -403,9 +402,9 @@
       get_local $2
       get_local $4
       i32.sub
-      set_local $2
+     else      
+      get_local $2
      end
-     get_local $2
      i32.const 1
      i32.shl
      set_local $2
@@ -437,7 +436,6 @@
    tee_local $5
    i32.shl
    set_local $2
-   get_local $8
    get_local $3
    get_local $5
    i32.sub
@@ -459,7 +457,7 @@
     i32.sub
     i32.shr_u
    end
-   tee_local $2
+   get_local $8
    i32.or
    f32.reinterpret/i32
    return
