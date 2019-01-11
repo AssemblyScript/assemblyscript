@@ -191,7 +191,7 @@ export class Array<T> {
 
   concat(items: Array<T>): Array<T> {
     var thisLen = this.length_;
-    var otherLen = items === null ? 0 : items.length_;
+    var otherLen = select(0, items.length_, items === null);
     var outLen = thisLen + otherLen;
     var out = new Array<T>(outLen);
 

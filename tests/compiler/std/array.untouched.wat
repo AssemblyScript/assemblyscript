@@ -3003,15 +3003,13 @@
   get_local $0
   i32.load offset=4
   set_local $2
+  i32.const 0
+  get_local $1
+  i32.load offset=4
   get_local $1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 0
-  else   
-   get_local $1
-   i32.load offset=4
-  end
+  select
   set_local $3
   get_local $2
   get_local $3

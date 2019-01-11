@@ -2381,12 +2381,10 @@
   i32.load offset=4
   tee_local $2
   get_local $1
-  if (result i32)
-   get_local $1
-   i32.load offset=4
-  else   
-   i32.const 0
-  end
+  i32.load offset=4
+  i32.const 0
+  get_local $1
+  select
   tee_local $4
   i32.add
   call $~lib/array/Array<i32>#constructor
