@@ -131,18 +131,13 @@ export function SUBARRAY<TArray extends TypedArray<T>, T>(
 export function REDUCE<TArray extends TypedArray<T>, T, TRet>(
   array: TArray,
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
-  initialValue: TRet
+  initialValue: TRet,
 ): TRet {
-  var index = 0;
-  var length = <i32>array.length;
-  while (index != length) {
-    initialValue = callbackfn(
-      initialValue,
-      unchecked(array[index]),
-      index,
-      array,
-    );
-    ++index;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  var length = array.length;
+  for (var i = 0; i < length; i++) {
+    initialValue = callbackfn(initialValue, LOAD<T>(buffer, i, byteOffset), i, array);
   }
   return initialValue;
 }
@@ -153,16 +148,10 @@ export function REDUCE_RIGHT<TArray extends TypedArray<T>, T, TRet>(
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var index = <i32>array.length - 1;
-  var length = -1;
-  while (index != length) {
-    initialValue = callbackfn(
-      initialValue,
-      unchecked(array[index]),
-      index,
-      array,
-    );
-    --index;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (var i = array.length - 1; i != -1; i--) {
+    initialValue = callbackfn(initialValue, LOAD<T>(buffer, i, byteOffset), i, array);
   }
   return initialValue;
 }
@@ -172,12 +161,13 @@ export function MAP<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, self: TArray) => T,
 ): TArray {
-  var length: i32 = array.length;
+  var length = array.length;
   var result = instantiate<TArray>(length);
-  var i: i32 = 0;
-  while (i < length) {
-    unchecked(result[i] = callbackfn(array[i], i, <TArray>array));
-    ++i;
+  var resultBuffer = result.buffer;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (var i = 0; i < length; i++) {
+    STORE<T>(resultBuffer, i, callbackfn(LOAD<T>(buffer, i, byteOffset), i, array));
   }
   return result;
 }
@@ -187,10 +177,10 @@ export function FIND_INDEX<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
 ): i32 {
-  var length: i32 = array.length;
+  var length = array.length;
   var val: T;
-  var buffer: ArrayBuffer = array.buffer;
-  var byteOffset: i32 = array.byteOffset;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
   for (var i = 0; i < length; i++) {
     val = LOAD<T>(buffer, i, byteOffset);
     if (callbackfn(val, i, array)) {
@@ -206,10 +196,10 @@ export function SOME<TArray extends TypedArray<T>, T>(
   callbackfn: (value: T, index: i32, array: TArray) => bool,
 ): bool {
 
-  var length: i32 = array.length;
+  var length = array.length;
   var val: T;
-  var buffer: ArrayBuffer = array.buffer;
-  var byteOffset: i32 = array.byteOffset;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
   for (var i = 0; i < length; i++) {
     val = LOAD<T>(buffer, i, byteOffset);
     if (callbackfn(val, i, array)) {
@@ -224,10 +214,10 @@ export function EVERY<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
 ): bool {
-  var length: i32 = array.length;
+  var length = array.length;
   var val: T;
-  var buffer: ArrayBuffer = array.buffer;
-  var byteOffset: i32 = array.byteOffset;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
   for (var i = 0; i < length; i++) {
     val = LOAD<T>(buffer, i, byteOffset);
     if (!callbackfn(val, i, array)) {
