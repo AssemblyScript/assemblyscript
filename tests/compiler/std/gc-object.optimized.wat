@@ -187,10 +187,10 @@
       call $~lib/allocator/arena/__memory_allocate
       set_global $~lib/collector/itcm/fromSpace
       get_global $~lib/collector/itcm/fromSpace
+      tee_local $0
       i32.const -1
       i32.store offset=8
-      get_global $~lib/collector/itcm/fromSpace
-      tee_local $0
+      get_local $0
       get_local $0
       i32.store
       get_local $0
@@ -200,10 +200,10 @@
       call $~lib/allocator/arena/__memory_allocate
       set_global $~lib/collector/itcm/toSpace
       get_global $~lib/collector/itcm/toSpace
+      tee_local $0
       i32.const -1
       i32.store offset=8
-      get_global $~lib/collector/itcm/toSpace
-      tee_local $0
+      get_local $0
       get_local $0
       i32.store
       get_local $0
@@ -404,7 +404,8 @@
   set_global $std/gc-object/obj
   call $~lib/collector/itcm/__gc_collect
   get_global $std/gc-object/obj
-  get_global $std/gc-object/obj
+  tee_local $0
+  get_local $0
   i32.store
   call $~lib/collector/itcm/__gc_collect
   i32.const 0

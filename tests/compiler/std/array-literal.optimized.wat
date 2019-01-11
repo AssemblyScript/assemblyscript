@@ -422,7 +422,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.const 255
   i32.and
   if
@@ -447,7 +446,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.const 255
   i32.and
   i32.const 1
@@ -474,7 +472,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.const 255
   i32.and
   i32.const 2
@@ -513,7 +510,6 @@
   else   
    unreachable
   end
-  tee_local $0
   if
    i32.const 0
    i32.const 32
@@ -538,7 +534,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.const 1
   i32.ne
   if
@@ -565,7 +560,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.const 2
   i32.ne
   if
@@ -590,8 +584,9 @@
   tee_local $0
   i32.load
   get_global $std/array-literal/i
+  tee_local $1
   i32.store8 offset=8
-  get_global $std/array-literal/i
+  get_local $1
   i32.const 1
   i32.add
   set_global $std/array-literal/i
@@ -600,8 +595,9 @@
   i32.const 1
   i32.add
   get_global $std/array-literal/i
+  tee_local $1
   i32.store8 offset=8
-  get_global $std/array-literal/i
+  get_local $1
   i32.const 1
   i32.add
   set_global $std/array-literal/i
@@ -637,7 +633,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.const 255
   i32.and
   if
@@ -662,7 +657,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.const 255
   i32.and
   i32.const 1
@@ -689,7 +683,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.const 255
   i32.and
   i32.const 2
@@ -708,8 +701,9 @@
   tee_local $0
   i32.load
   get_global $std/array-literal/i
+  tee_local $1
   i32.store offset=8
-  get_global $std/array-literal/i
+  get_local $1
   i32.const 1
   i32.add
   set_global $std/array-literal/i
@@ -718,8 +712,9 @@
   i32.const 4
   i32.add
   get_global $std/array-literal/i
+  tee_local $1
   i32.store offset=8
-  get_global $std/array-literal/i
+  get_local $1
   i32.const 1
   i32.add
   set_global $std/array-literal/i
@@ -757,7 +752,6 @@
   else   
    unreachable
   end
-  tee_local $0
   if
    i32.const 0
    i32.const 32
@@ -782,7 +776,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.const 1
   i32.ne
   if
@@ -809,7 +802,6 @@
   else   
    unreachable
   end
-  tee_local $0
   i32.const 2
   i32.ne
   if

@@ -195,10 +195,10 @@
       call $~lib/allocator/arena/__memory_allocate
       set_global $~lib/collector/itcm/fromSpace
       get_global $~lib/collector/itcm/fromSpace
+      tee_local $0
       i32.const -1
       i32.store offset=8
-      get_global $~lib/collector/itcm/fromSpace
-      tee_local $0
+      get_local $0
       get_local $0
       i32.store
       get_local $0
@@ -208,10 +208,10 @@
       call $~lib/allocator/arena/__memory_allocate
       set_global $~lib/collector/itcm/toSpace
       get_global $~lib/collector/itcm/toSpace
+      tee_local $0
       i32.const -1
       i32.store offset=8
-      get_global $~lib/collector/itcm/toSpace
-      tee_local $0
+      get_local $0
       get_local $0
       i32.store
       get_local $0
@@ -398,36 +398,39 @@
   call $~lib/collector/itcm/__gc_allocate
   set_global $std/gc-basics/obj
   get_global $std/gc-basics/obj
+  tee_local $0
   i32.const 123
   i32.store
-  get_global $std/gc-basics/obj
+  get_local $0
   i32.const 16
   i32.sub
-  tee_local $0
+  tee_local $1
   i32.load offset=4
   set_local $2
-  get_local $0
-  i32.load
-  i32.const -4
-  i32.and
-  tee_local $3
-  i32.const 0
-  i32.ne
-  tee_local $1
-  if
-   get_local $2
+  block (result i32)
+   get_local $1
+   i32.load
+   i32.const -4
+   i32.and
+   tee_local $3
    i32.const 0
    i32.ne
-   set_local $1
+   tee_local $0
+   if
+    get_local $2
+    i32.const 0
+    i32.ne
+    set_local $0
+   end
+   get_local $0
   end
-  get_local $1
-  if
+  if (result i32)
    get_local $2
    get_local $3
    i32.eq
-   set_local $1
+  else   
+   get_local $0
   end
-  get_local $1
   i32.eqz
   if
    i32.const 0
@@ -437,7 +440,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
+  get_local $1
   i32.load offset=8
   i32.const 1
   i32.ne
@@ -449,7 +452,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
+  get_local $1
   i32.load offset=12
   if
    i32.const 0
@@ -459,7 +462,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
+  get_local $1
   i32.load offset=16
   i32.const 123
   i32.ne
