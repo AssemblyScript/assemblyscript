@@ -72,17 +72,15 @@ export class Array<T> {
   }
 
   every(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
-    var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
-      if (!callbackfn(LOAD<T>(buffer, index), index, this)) return false;
+      if (!callbackfn(LOAD<T>(this.buffer_, index), index, this)) return false;
     }
     return true;
   }
 
   findIndex(predicate: (element: T, index: i32, array: Array<T>) => bool): i32 {
-    var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
-      if (predicate(LOAD<T>(buffer, index), index, this)) return index;
+      if (predicate(LOAD<T>(this.buffer_, index), index, this)) return index;
     }
     return -1;
   }
@@ -259,18 +257,16 @@ export class Array<T> {
     var buffer = this.buffer_;
     var length = this.length_;
     var result = new Array<U>(length);
-    var resultBuffer = result.buffer_;
     for (let index = 0; index < min(length, this.length_); ++index) {
-      STORE<U>(resultBuffer, index, callbackfn(LOAD<T>(buffer, index), index, this));
+      STORE<U>(result.buffer_, index, callbackfn(LOAD<T>(buffer, index), index, this));
     }
     return result;
   }
 
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
-    var buffer = this.buffer_;
     var result = new Array<T>();
     for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
-      let value = LOAD<T>(buffer, index);
+      let value = LOAD<T>(this.buffer_, index);
       if (callbackfn(value, index, this)) result.push(value);
     }
     return result;
@@ -281,9 +277,8 @@ export class Array<T> {
     initialValue: U
   ): U {
     var accum = initialValue;
-    var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
-      accum = callbackfn(accum, LOAD<T>(buffer, index), index, this);
+      accum = callbackfn(accum, LOAD<T>(this.buffer_, index), index, this);
     }
     return accum;
   }
@@ -293,9 +288,8 @@ export class Array<T> {
     initialValue: U
   ): U {
     var accum = initialValue;
-    var buffer = this.buffer_;
     for (let index: i32 = this.length_ - 1; index >= 0; --index) {
-      accum = callbackfn(accum, LOAD<T>(buffer, index), index, this);
+      accum = callbackfn(accum, LOAD<T>(this.buffer_, index), index, this);
     }
     return accum;
   }
@@ -317,9 +311,8 @@ export class Array<T> {
   }
 
   some(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
-    var buffer = this.buffer_;
     for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
-      if (callbackfn(LOAD<T>(buffer, index), index, this)) return true;
+      if (callbackfn(LOAD<T>(this.buffer_, index), index, this)) return true;
     }
     return false;
   }
