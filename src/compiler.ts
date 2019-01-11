@@ -392,12 +392,11 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
 
-    // determine initial page size
-    var numPages = this.memorySegments.length
-      ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
-      : 0;
+    // set up memory
     module.setMemory(
-      numPages,
+      this.options.memoryBase /* is specified */ || this.memorySegments.length
+        ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
+        : 0,
       Module.UNLIMITED_MEMORY,
       this.memorySegments,
       options.target,
