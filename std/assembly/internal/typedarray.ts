@@ -191,7 +191,7 @@ export function FIND_INDEX<TArray extends TypedArray<T>, T>(
   var val: T;
   var buffer: ArrayBuffer = array.buffer;
   var byteOffset: i32 = array.byteOffset;
-  for (var i: i32 = 0; i < length; i++) {
+  for (var i = 0; i < length; i++) {
     val = LOAD<T>(buffer, i, byteOffset);
     if (callbackfn(val, i, array)) {
       return i;
@@ -210,7 +210,7 @@ export function SOME<TArray extends TypedArray<T>, T>(
   var val: T;
   var buffer: ArrayBuffer = array.buffer;
   var byteOffset: i32 = array.byteOffset;
-  for (var i: i32 = 0; i < length; i++) {
+  for (var i = 0; i < length; i++) {
     val = LOAD<T>(buffer, i, byteOffset);
     if (callbackfn(val, i, array)) {
       return true;
@@ -228,7 +228,7 @@ export function EVERY<TArray extends TypedArray<T>, T>(
   var val: T;
   var buffer: ArrayBuffer = array.buffer;
   var byteOffset: i32 = array.byteOffset;
-  for (var i: i32 = 0; i < length; i++) {
+  for (var i = 0; i < length; i++) {
     val = LOAD<T>(buffer, i, byteOffset);
     if (!callbackfn(val, i, array)) {
       return false;
