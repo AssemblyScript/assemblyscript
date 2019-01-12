@@ -288,7 +288,7 @@ export class Array<T> {
     initialValue: U
   ): U {
     var accum = initialValue;
-    for (let index: i32 = this.length_ - 1; index >= 0; --index) {
+    for (let index = this.length_ - 1; index >= 0; --index) {
       accum = callbackfn(accum, LOAD<T>(this.buffer_, index), index, this);
     }
     return accum;
@@ -341,20 +341,16 @@ export class Array<T> {
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
-    var length = this.length_;
-    if (begin < 0) begin = max(length + begin, 0);
-    else if (begin > length) begin = length;
-    if (end < 0) end = length + end; // no need to clamp
-    else if (end > length) end = length;
-    if (end < begin) end = begin;    // ^
-    var newLength = end - begin;
-    assert(newLength >= 0);
-    var sliced = new Array<T>(newLength);
-    if (newLength) {
+    var len = this.length_;
+    begin = begin < 0 ? max(begin + len, 0) : min(begin, len);
+    end = end < 0 ? max(end + len, 0) : min(end, len);
+    len = end - begin;
+    var sliced = new Array<T>(len);
+    if (len) {
       memory.copy(
         changetype<usize>(sliced.buffer_) + HEADER_SIZE,
         changetype<usize>(this.buffer_) + HEADER_SIZE + (<usize>begin << alignof<T>()),
-        <usize>newLength << alignof<T>()
+        <usize>len << alignof<T>()
       );
     }
     return sliced;
@@ -423,9 +419,8 @@ export class Array<T> {
     var sepLen = separator.length;
     var hasSeparator = sepLen != 0;
     if (value instanceof bool) {
-      if (!lastIndex) {
-        return select<string>("true", "false", LOAD<T,bool>(buffer, 0));
-      }
+      if (!lastIndex) return select<string>("true", "false", LOAD<T,bool>(buffer, 0));
+
       let valueLen = 5; // max possible length of element len("false")
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
@@ -452,9 +447,8 @@ export class Array<T> {
       }
       return out;
     } else if (isInteger<T>()) {
-      if (!lastIndex) {
-        return changetype<string>(itoa<T>(LOAD<T>(buffer, 0)));
-      }
+      if (!lastIndex) return changetype<string>(itoa<T>(LOAD<T>(buffer, 0)));
+
       const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
@@ -476,9 +470,8 @@ export class Array<T> {
       }
       return out;
     } else if (isFloat<T>()) {
-      if (!lastIndex) {
-        return changetype<string>(dtoa(LOAD<T,f64>(buffer, 0)));
-      }
+      if (!lastIndex) return changetype<string>(dtoa(LOAD<T,f64>(buffer, 0)));
+
       const valueLen = MAX_DOUBLE_LENGTH;
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
@@ -500,9 +493,8 @@ export class Array<T> {
       }
       return out;
     } else if (isString<T>()) {
-      if (!lastIndex) {
-        return LOAD<string>(buffer, 0);
-      }
+      if (!lastIndex) return LOAD<string>(buffer, 0);
+
       let estLen = 0;
       for (let i = 0, len = lastIndex + 1; i < len; ++i) {
         estLen += LOAD<string>(buffer, i).length;
