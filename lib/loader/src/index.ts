@@ -424,6 +424,9 @@ function createContext(imports: any = {}) {
             console.log(msg)
         }
     }
+    if (env.memory instanceof MemoryWrapper) {
+        env.memory = env.memory.raw
+    }
     return ctx
 }
 
