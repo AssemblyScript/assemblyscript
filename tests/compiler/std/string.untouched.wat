@@ -3318,7 +3318,7 @@
             if
              i32.const 0
              i32.const 80
-             i32.const 639
+             i32.const 643
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -4472,7 +4472,6 @@
   (local $12 i32)
   (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
   get_local $0
   i32.const 0
   i32.ne
@@ -4688,38 +4687,44 @@
   get_local $12
   i32.eqz
   if
+   i32.const 0
+   i32.const 1
+   call $~lib/array/Array<String>#constructor
+   set_local $6
    block (result i32)
+    get_local $6
+    tee_local $3
     i32.const 0
-    i32.const 1
-    call $~lib/array/Array<String>#constructor
-    set_local $14
-    get_local $14
-    i32.const 0
+    tee_local $7
     get_local $0
     call $~lib/array/Array<String>#__unchecked_set
-    get_local $14
+    get_local $3
+    get_local $7
+    call $~lib/array/Array<String>#__unchecked_get
    end
+   drop
+   get_local $6
    return
   end
   get_local $4
   get_local $12
   i32.sub
-  set_local $15
-  get_local $15
+  set_local $14
+  get_local $14
   i32.const 0
   i32.gt_s
   if
-   get_local $15
-   call $~lib/internal/string/allocateUnsafe
-   set_local $14
    get_local $14
+   call $~lib/internal/string/allocateUnsafe
+   set_local $6
+   get_local $6
    i32.const 0
    get_local $0
    get_local $12
-   get_local $15
+   get_local $14
    call $~lib/internal/string/copyUnsafe
    get_local $10
-   get_local $14
+   get_local $6
    call $~lib/array/Array<String>#push
    drop
   else   

@@ -469,7 +469,11 @@ export class String {
       if (++i == limit) return result;
       start = end + sepLen;
     }
-    if (!start) return <String[]>[this];
+    if (!start) {
+      let result = new Array<String>(1);
+      unchecked(result[0] = this);
+      return result;
+    }
     var len = length - start;
     if (len > 0) {
       let out = allocateUnsafe(len);
