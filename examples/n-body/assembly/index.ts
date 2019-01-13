@@ -102,11 +102,14 @@ class NBodySystem {
   advance(dt: float): void {
     var bodies = this.bodies;
     var size: u32 = bodies.length;
-    // var buffer = changetype<usize>(bodies.buffer_);
+    var buffer = changetype<usize>(bodies.buffer_);
+    var si: usize = 0, sj: usize = 0;
 
     for (let i: u32 = 0; i < size; ++i) {
-      let bodyi = unchecked(bodies[i]);
-      // let bodyi = load<Body>(buffer + i * sizeof<Body>(), 8);
+      // let bodyi = unchecked(bodies[i]);
+      let bodyi = load<Body>(buffer + si, 8);
+      si += sizeof<Body>();
+      sj = 0;
 
       let ix = bodyi.x;
       let iy = bodyi.y;
@@ -118,8 +121,9 @@ class NBodySystem {
 
       let bodyim = bodyi.mass;
       for (let j: u32 = i + 1; j < size; ++j) {
-        let bodyj = unchecked(bodies[j]);
-        // let bodyj = load<Body>(buffer + j * sizeof<Body>(), 8);
+        // let bodyj = unchecked(bodies[j]);
+        let bodyj = load<Body>(buffer + sj, 8);
+        sj += sizeof<Body>();
 
         let dx = ix - bodyj.x;
         let dy = iy - bodyj.y;

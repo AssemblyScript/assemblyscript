@@ -812,23 +812,26 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 f64)
-  (local $7 f64)
-  (local $8 f64)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
   (local $12 f64)
-  (local $13 i32)
-  (local $14 i32)
+  (local $13 f64)
+  (local $14 f64)
   (local $15 f64)
-  (local $16 f64)
-  (local $17 f64)
+  (local $16 i32)
+  (local $17 i32)
   (local $18 f64)
   (local $19 f64)
   (local $20 f64)
   (local $21 f64)
   (local $22 f64)
+  (local $23 f64)
+  (local $24 f64)
+  (local $25 f64)
   get_local $0
   i32.load
   set_local $2
@@ -837,194 +840,213 @@
    i32.load offset=4
   end
   set_local $3
+  get_local $2
+  i32.load
+  set_local $4
+  i32.const 0
+  set_local $5
+  i32.const 0
+  set_local $6
   block $break|0
    i32.const 0
-   set_local $4
+   set_local $7
    loop $repeat|0
-    get_local $4
+    get_local $7
     get_local $3
     i32.lt_u
     i32.eqz
     br_if $break|0
     block
-     get_local $2
      get_local $4
-     call $~lib/array/Array<Body>#__unchecked_get
-     set_local $5
      get_local $5
-     f64.load
-     set_local $6
-     get_local $5
-     f64.load offset=8
-     set_local $7
-     get_local $5
-     f64.load offset=16
+     i32.add
+     i32.load offset=8
      set_local $8
      get_local $5
-     f64.load offset=24
+     i32.const 4
+     i32.add
+     set_local $5
+     i32.const 0
+     set_local $6
+     get_local $8
+     f64.load
      set_local $9
-     get_local $5
-     f64.load offset=32
+     get_local $8
+     f64.load offset=8
      set_local $10
-     get_local $5
-     f64.load offset=40
+     get_local $8
+     f64.load offset=16
      set_local $11
-     get_local $5
-     f64.load offset=48
+     get_local $8
+     f64.load offset=24
      set_local $12
+     get_local $8
+     f64.load offset=32
+     set_local $13
+     get_local $8
+     f64.load offset=40
+     set_local $14
+     get_local $8
+     f64.load offset=48
+     set_local $15
      block $break|1
-      get_local $4
+      get_local $7
       i32.const 1
       i32.add
-      set_local $13
+      set_local $16
       loop $repeat|1
-       get_local $13
+       get_local $16
        get_local $3
        i32.lt_u
        i32.eqz
        br_if $break|1
        block
-        get_local $2
-        get_local $13
-        call $~lib/array/Array<Body>#__unchecked_get
-        set_local $14
+        get_local $4
         get_local $6
-        get_local $14
+        i32.add
+        i32.load offset=8
+        set_local $17
+        get_local $6
+        i32.const 4
+        i32.add
+        set_local $6
+        get_local $9
+        get_local $17
         f64.load
         f64.sub
-        set_local $15
-        get_local $7
-        get_local $14
+        set_local $18
+        get_local $10
+        get_local $17
         f64.load offset=8
         f64.sub
-        set_local $16
-        get_local $8
-        get_local $14
-        f64.load offset=16
-        f64.sub
-        set_local $17
-        get_local $15
-        get_local $15
-        f64.mul
-        get_local $16
-        get_local $16
-        f64.mul
-        f64.add
-        get_local $17
-        get_local $17
-        f64.mul
-        f64.add
-        set_local $18
-        block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
-         get_local $18
-         f64.sqrt
-        end
         set_local $19
-        get_local $1
-        get_local $18
-        get_local $19
-        f64.mul
-        f64.div
-        set_local $20
-        get_local $12
-        get_local $20
-        f64.mul
-        set_local $21
-        get_local $14
-        f64.load offset=48
-        get_local $20
-        f64.mul
-        set_local $22
-        get_local $9
-        get_local $15
-        get_local $22
-        f64.mul
-        f64.sub
-        set_local $9
-        get_local $10
-        get_local $16
-        get_local $22
-        f64.mul
-        f64.sub
-        set_local $10
         get_local $11
         get_local $17
+        f64.load offset=16
+        f64.sub
+        set_local $20
+        get_local $18
+        get_local $18
+        f64.mul
+        get_local $19
+        get_local $19
+        f64.mul
+        f64.add
+        get_local $20
+        get_local $20
+        f64.mul
+        f64.add
+        set_local $21
+        block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
+         get_local $21
+         f64.sqrt
+        end
+        set_local $22
+        get_local $1
+        get_local $21
         get_local $22
         f64.mul
-        f64.sub
-        set_local $11
-        get_local $14
-        get_local $14
-        f64.load offset=24
+        f64.div
+        set_local $23
         get_local $15
-        get_local $21
+        get_local $23
+        f64.mul
+        set_local $24
+        get_local $17
+        f64.load offset=48
+        get_local $23
+        f64.mul
+        set_local $25
+        get_local $12
+        get_local $18
+        get_local $25
+        f64.mul
+        f64.sub
+        set_local $12
+        get_local $13
+        get_local $19
+        get_local $25
+        f64.mul
+        f64.sub
+        set_local $13
+        get_local $14
+        get_local $20
+        get_local $25
+        f64.mul
+        f64.sub
+        set_local $14
+        get_local $17
+        get_local $17
+        f64.load offset=24
+        get_local $18
+        get_local $24
         f64.mul
         f64.add
         f64.store offset=24
-        get_local $14
-        get_local $14
+        get_local $17
+        get_local $17
         f64.load offset=32
-        get_local $16
-        get_local $21
+        get_local $19
+        get_local $24
         f64.mul
         f64.add
         f64.store offset=32
-        get_local $14
-        get_local $14
-        f64.load offset=40
         get_local $17
-        get_local $21
+        get_local $17
+        f64.load offset=40
+        get_local $20
+        get_local $24
         f64.mul
         f64.add
         f64.store offset=40
        end
-       get_local $13
+       get_local $16
        i32.const 1
        i32.add
-       set_local $13
+       set_local $16
        br $repeat|1
        unreachable
       end
       unreachable
      end
-     get_local $5
-     get_local $9
+     get_local $8
+     get_local $12
      f64.store offset=24
-     get_local $5
-     get_local $10
+     get_local $8
+     get_local $13
      f64.store offset=32
-     get_local $5
-     get_local $11
+     get_local $8
+     get_local $14
      f64.store offset=40
-     get_local $5
-     get_local $5
+     get_local $8
+     get_local $8
      f64.load
      get_local $1
-     get_local $9
+     get_local $12
      f64.mul
      f64.add
      f64.store
-     get_local $5
-     get_local $5
+     get_local $8
+     get_local $8
      f64.load offset=8
      get_local $1
-     get_local $10
+     get_local $13
      f64.mul
      f64.add
      f64.store offset=8
-     get_local $5
-     get_local $5
+     get_local $8
+     get_local $8
      f64.load offset=16
      get_local $1
-     get_local $11
+     get_local $14
      f64.mul
      f64.add
      f64.store offset=16
     end
-    get_local $4
+    get_local $7
     i32.const 1
     i32.add
-    set_local $4
+    set_local $7
     br $repeat|0
     unreachable
    end
