@@ -451,7 +451,9 @@ export class String {
       }
       return result;
     } else if (!length) {
-      return <String[]>[changetype<String>("")];
+      let result = new Array<String>(1);
+      unchecked(result[0] = changetype<String>(""));
+      return result;
     }
     var result = new Array<String>();
     var end = 0, start = 0, i = 0;
