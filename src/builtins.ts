@@ -640,21 +640,6 @@ export function compileCall(
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.I32: {
-          /*
-          // possibly overflows, e.g. abs<i8>(-128) == 128
-          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.i32, false);
-          ret = module.createSelect( // x > 0 ? x : 0-x
-            module.createTeeLocal(tempLocal.index, arg0),
-            module.createBinary(BinaryOp.SubI32, // ifFalse
-              module.createI32(0),
-              module.createGetLocal(tempLocal.index, NativeType.I32)
-            ),
-            module.createBinary(BinaryOp.GtI32,
-              module.createGetLocal(tempLocal.index, NativeType.I32),
-              module.createI32(0)
-            )
-          );*/
-
           // possibly overflows, e.g. abs<i8>(-128) == 128
           let tempLocal1 = compiler.currentFunction.getTempLocal(Type.i32, false);
           let tempLocal2 = compiler.currentFunction.getTempLocal(Type.i32, false);
@@ -679,40 +664,30 @@ export function compileCall(
           break;
         }
         case TypeKind.ISIZE: {
-          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
-          ret = module.createSelect(
-            module.createTeeLocal(tempLocal.index, arg0),
-            module.createBinary(
-              compiler.options.isWasm64
-                ? BinaryOp.SubI64
-                : BinaryOp.SubI32,
-              compiler.options.usizeType.toNativeZero(module),
-              module.createGetLocal(tempLocal.index, compiler.options.nativeSizeType)
+          let tempLocal1 = compiler.currentFunction.getTempLocal(compiler.options.usizeType, false);
+          let tempLocal2 = compiler.currentFunction.getTempLocal(compiler.options.usizeType, false);
+          let wasm64     = compiler.options.isWasm64;
+
+          // (x ^ (x >> 63)) - (x >> 63)
+          ret = module.createBinary(wasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32,
+            module.createBinary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
+              module.createTeeLocal(
+                tempLocal2.index,
+                module.createBinary(wasm64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32,
+                  module.createTeeLocal(tempLocal1.index, arg0),
+                  wasm64 ? module.createI64(63) : module.createI32(31)
+                )
+              ),
+              module.createGetLocal(tempLocal1.index, compiler.options.nativeSizeType)
             ),
-            module.createBinary(
-              compiler.options.isWasm64
-                ? BinaryOp.GtI64
-                : BinaryOp.GtI32,
-              module.createGetLocal(tempLocal.index, compiler.options.nativeSizeType),
-              compiler.options.usizeType.toNativeZero(module)
-            )
+            module.createGetLocal(tempLocal2.index, compiler.options.nativeSizeType)
           );
+
+          compiler.currentFunction.freeTempLocal(tempLocal2);
+          compiler.currentFunction.freeTempLocal(tempLocal1);
           break;
         }
         case TypeKind.I64: {
-          /*
-          let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.i64, false);
-          ret = module.createSelect(
-            module.createTeeLocal(tempLocal.index, arg0),
-            module.createBinary(BinaryOp.SubI64,
-              module.createI64(0, 0),
-              module.createGetLocal(tempLocal.index, NativeType.I64),
-            ),
-            module.createBinary(BinaryOp.GtI64,
-              module.createGetLocal(tempLocal.index, NativeType.I64),
-              module.createI64(0, 0)
-            )
-          );*/
           let tempLocal1 = compiler.currentFunction.getTempLocal(Type.i64, false);
           let tempLocal2 = compiler.currentFunction.getTempLocal(Type.i64, false);
 
