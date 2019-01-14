@@ -230,10 +230,8 @@ exports.main = async function main(argv, options, callback) {
 
   // Begin parsing
   var parser = null;
-  debugger;
   // Include library files
   if (!args.noLib) {
-    debugger;
     Object.keys(exports.libraryFiles).forEach(libPath => {
       if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
       stats.parseCount++;
@@ -293,8 +291,6 @@ exports.main = async function main(argv, options, callback) {
     var sourcePath, sourceText;
       // Process backlog
       while ((sourcePath = parser.nextFile()) != null) {
-        console.log(`parsing backlog: ${sourcePath}`);
-
         // Load library file if explicitly requested
         if (sourcePath.startsWith(exports.libraryPrefix)) {
           const plainName = sourcePath.substring(exports.libraryPrefix.length);
@@ -362,7 +358,6 @@ exports.main = async function main(argv, options, callback) {
         if (sourceText == null) {
           return callback(Error("Import file '" + sourcePath + ".ts' not found."));
         }
-        console.log(`has source text ${sourceText.length}`)
         stats.parseCount++;
         stats.parseTime += measure(() => {
           assemblyscript.parseFile(sourceText, sourcePath, false, parser);
@@ -380,9 +375,9 @@ exports.main = async function main(argv, options, callback) {
     let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
 
     // Try entryPath.ts, then entryPath/index.ts
-    let sourceText = readFile(sourcePath + ".ts", baseDir);
+    let sourceText = await readFile(sourcePath + ".ts", baseDir);
     if (sourceText === null) {
-      sourceText = readFile(sourcePath + "/index.ts", baseDir);
+      sourceText = await readFile(sourcePath + "/index.ts", baseDir);
       if (sourceText === null) {
         return callback(Error("Entry file '" + sourcePath + ".ts' not found."));
       } else {
@@ -408,7 +403,6 @@ exports.main = async function main(argv, options, callback) {
 
   // Finish parsing
   const program = assemblyscript.finishParsing(parser);
-  debugger;
 
   // Set up optimization levels
   var optimizeLevel = 0;
@@ -470,15 +464,12 @@ exports.main = async function main(argv, options, callback) {
       assemblyscript.enableFeature(compilerOptions, flag);
     }
   }
-  console.log(program.sources);
   var module;
   stats.compileCount++;
   (() => {
     try {
       stats.compileTime += measure(() => {
         module = assemblyscript.compileProgram(program, compilerOptions);
-        console.log(compilerOptions);
-        console.log(module.toText());
       });
     } catch (e) {
       return callback(e);
@@ -718,12 +709,10 @@ exports.main = async function main(argv, options, callback) {
     try {
       let text;
       let _path = baseDir ? path.join(baseDir, filename) : filename;
-      console.log(`Reading ${_path}, ${filename}, ${baseDir}`);
       stats.readCount++;
       stats.readTime += measure(() => {
         text = fs.readFileSync(_path, { encoding: "utf8" });
       });
-      debugger;
       return text;
     } catch (e) {
       console.log(e)

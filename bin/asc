@@ -3,7 +3,6 @@ const asc = module.exports = require("../cli/asc.js");
 
 async function main(){
   if (/\basc$/.test(process.argv[1])) {
-    console.log(process.argv.slice(2));
     process.exitCode = await asc.main(process.argv.slice(2));
   }
 }
