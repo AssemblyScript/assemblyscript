@@ -98,7 +98,11 @@ exports.compileString = async (sources, options) => {
     stdout: createMemoryStream(),
     stderr: createMemoryStream()
   });
-  var argv = [];
+  var argv = [
+    "--binaryFile", "binary",
+    "--textFile", "text"
+  ];
+  options = options || {};
   Object.keys(options || {}).forEach(key => {
     if (key != "readFile" && key != 'writeFile'){
       var val = options[key];
@@ -106,6 +110,11 @@ exports.compileString = async (sources, options) => {
       else argv.push("--" + key, String(val));
     }
   });
+
+  options.readFile = options.readFile ? options.readFile : (name) => sources.hasOwnProperty(name) ? sources[name] : null;
+
+  options.writeFile = options.writeFile ? options.writeFile : (name, contents) => output[name] = contents;
+
   await exports.main(argv.concat(Object.keys(sources)), {
     stdout: output.stdout,
     stderr: output.stderr,
@@ -113,10 +122,13 @@ exports.compileString = async (sources, options) => {
       try {
         return await options.readFile(name);
       }catch (e){
+        console.err(e);
         return null;
       }
       },
-    writeFile: async (name, contents) => await options.writeFile(name, contents),
+    writeFile: async (name, contents) => {
+      await options.writeFile(path.basename(name), contents)
+    },
     listFiles: () => []
   });
   return output;
