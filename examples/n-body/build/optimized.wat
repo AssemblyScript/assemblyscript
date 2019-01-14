@@ -538,23 +538,22 @@
  (func $assembly/index/NBodySystem#advance (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 f64)
-  (local $3 f64)
+  (local $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $8 f64)
+  (local $9 f64)
   (local $10 f64)
   (local $11 f64)
   (local $12 i32)
   (local $13 i32)
-  (local $14 i32)
+  (local $14 f64)
   (local $15 f64)
   (local $16 f64)
   (local $17 f64)
   (local $18 f64)
-  (local $19 f64)
   get_local $0
   i32.load
   tee_local $0
@@ -564,30 +563,25 @@
   i32.load
   set_local $13
   loop $repeat|0
-   get_local $7
+   get_local $3
    get_local $12
    i32.lt_u
    if
+    get_local $3
+    i32.const 2
+    i32.shl
     get_local $13
-    get_local $14
     i32.add
     i32.load offset=8
-    set_local $0
-    get_local $14
-    i32.const 4
-    i32.add
-    set_local $14
-    i32.const 0
-    set_local $8
-    get_local $0
+    tee_local $0
     f64.load
-    set_local $15
+    set_local $14
     get_local $0
     f64.load offset=8
-    set_local $16
+    set_local $15
     get_local $0
     f64.load offset=16
-    set_local $17
+    set_local $16
     get_local $0
     f64.load offset=24
     set_local $4
@@ -599,84 +593,82 @@
     set_local $6
     get_local $0
     f64.load offset=48
-    set_local $18
-    get_local $7
+    set_local $17
+    get_local $3
     i32.const 1
     i32.add
-    set_local $9
+    set_local $7
     loop $repeat|1
-     get_local $9
+     get_local $7
      get_local $12
      i32.lt_u
      if
-      get_local $8
+      get_local $14
+      get_local $7
+      i32.const 2
+      i32.shl
       get_local $13
       i32.add
       i32.load offset=8
-      set_local $1
-      get_local $8
-      i32.const 4
-      i32.add
-      set_local $8
-      get_local $15
-      get_local $1
+      tee_local $1
       f64.load
       f64.sub
-      tee_local $19
+      tee_local $18
       tee_local $2
       get_local $2
       f64.mul
-      get_local $16
+      get_local $15
       get_local $1
       f64.load offset=8
+      f64.sub
+      tee_local $9
+      get_local $9
+      f64.mul
+      f64.add
+      get_local $16
+      get_local $1
+      f64.load offset=16
       f64.sub
       tee_local $10
       get_local $10
       f64.mul
       f64.add
-      get_local $17
-      get_local $1
-      f64.load offset=16
-      f64.sub
-      tee_local $11
-      get_local $11
-      f64.mul
-      f64.add
-      set_local $3
+      tee_local $8
+      f64.sqrt
+      set_local $11
       get_local $4
       get_local $2
       get_local $1
       f64.load offset=48
       f64.const 0.01
-      get_local $3
-      get_local $3
-      f64.sqrt
+      get_local $8
+      get_local $11
       f64.mul
       f64.div
-      tee_local $2
+      tee_local $11
       f64.mul
-      tee_local $3
+      tee_local $8
       f64.mul
       f64.sub
       set_local $4
       get_local $5
-      get_local $10
-      get_local $3
+      get_local $9
+      get_local $8
       f64.mul
       f64.sub
       set_local $5
       get_local $6
-      get_local $11
-      get_local $3
+      get_local $10
+      get_local $8
       f64.mul
       f64.sub
       set_local $6
       get_local $1
       get_local $1
       f64.load offset=24
-      get_local $19
       get_local $18
-      get_local $2
+      get_local $17
+      get_local $11
       f64.mul
       tee_local $2
       f64.mul
@@ -685,7 +677,7 @@
       get_local $1
       get_local $1
       f64.load offset=32
-      get_local $10
+      get_local $9
       get_local $2
       f64.mul
       f64.add
@@ -693,15 +685,15 @@
       get_local $1
       get_local $1
       f64.load offset=40
-      get_local $11
+      get_local $10
       get_local $2
       f64.mul
       f64.add
       f64.store offset=40
-      get_local $9
+      get_local $7
       i32.const 1
       i32.add
-      set_local $9
+      set_local $7
       br $repeat|1
      end
     end
@@ -738,10 +730,10 @@
     f64.mul
     f64.add
     f64.store offset=16
-    get_local $7
+    get_local $3
     i32.const 1
     i32.add
-    set_local $7
+    set_local $3
     br $repeat|0
    end
   end
