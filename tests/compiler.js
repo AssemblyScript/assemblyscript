@@ -78,7 +78,7 @@ function getExpectedErrors(filePath) {
 }
 
 // TODO: asc's callback is synchronous here. This might change.
-tests.forEach(filename => {
+Promise.all(tests.map( async (filename) => {
   console.log(colorsUtil.white("Testing compiler/" + filename) + "\n");
 
   const expectedErrors = getExpectedErrors(path.join(basedir, filename));
@@ -101,12 +101,13 @@ tests.forEach(filename => {
     "--debug",
     "--textFile" // -> stdout
   ];
+  console.log(basedir)
   if (args.createBinary)
     cmd.push("--binaryFile", basename + ".untouched.wasm");
-  asc.main(cmd, {
+  await asc.main(cmd, {
     stdout: stdout,
     stderr: stderr
-  }, err => {
+  }, async (err) => {
     console.log();
 
     if (expectedErrors) {
@@ -168,10 +169,10 @@ tests.forEach(filename => {
     ];
     if (args.create)
       cmd.push("--textFile", basename + ".optimized.wat");
-    asc.main(cmd, {
+    await asc.main(cmd, {
       stdout: stdout,
       stderr: stderr
-    }, err => {
+    }, async (err) => {
       console.log();
       if (err)
         stderr.write(err.stack + os.EOL);
@@ -259,10 +260,10 @@ tests.forEach(filename => {
       console.log();
     });
   });
-});
-
-if (failedTests.length) {
-  process.exitCode = 1;
-  console.log(colorsUtil.red("ERROR: ") + failedTests.length + " compiler tests failed: " + failedTests.join(", "));
-} else
-  console.log("[ " + colorsUtil.white("SUCCESS") + " ]");
+})).then(() =>{
+  if (failedTests.length) {
+    process.exitCode = 1;
+    console.log(colorsUtil.red("ERROR: ") + failedTests.length + " compiler tests failed: " + failedTests.join(", "));
+  } else
+    console.log("[ " + colorsUtil.white("SUCCESS") + " ]");
+})
