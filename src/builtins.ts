@@ -668,7 +668,6 @@ export function compileCall(
           let tempLocal2 = compiler.currentFunction.getTempLocal(compiler.options.usizeType, false);
           let wasm64     = compiler.options.isWasm64;
 
-          // (x ^ (x >> 63)) - (x >> 63)
           ret = module.createBinary(wasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32,
             module.createBinary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
               module.createTeeLocal(
