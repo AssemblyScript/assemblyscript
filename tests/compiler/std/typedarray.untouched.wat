@@ -82,7 +82,6 @@
  (global $~argc (mut i32) (i32.const 0))
  (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
  (global $ASC_OPTIMIZE_LEVEL i32 (i32.const 0))
- (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/typedarray/arr8 (mut i32) (i32.const 0))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $std/typedarray/sub8 (mut i32) (i32.const 0))
@@ -2707,52 +2706,22 @@
  (func $~lib/typedarray/clampToByte (; 29 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  i32.const 0
-  i32.const 2
-  i32.lt_s
+  get_local $0
   tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-   i32.const 0
-   i32.gt_s
-  end
-  if
-   get_local $0
-   tee_local $1
-   i32.const 0
-   tee_local $2
-   get_local $1
-   get_local $2
-   i32.gt_s
-   select
-   tee_local $1
-   i32.const 255
-   tee_local $2
-   get_local $1
-   get_local $2
-   i32.lt_s
-   select
-   return
-  else   
-   get_local $0
-   i32.const 31
-   i32.shr_s
-   i32.const -1
-   i32.xor
-   i32.const 255
-   get_local $0
-   i32.sub
-   i32.const 31
-   i32.shr_s
-   get_local $0
-   i32.or
-   i32.and
-   return
-  end
-  unreachable
-  unreachable
+  i32.const 0
+  tee_local $2
+  get_local $1
+  get_local $2
+  i32.gt_s
+  select
+  tee_local $1
+  i32.const 255
+  tee_local $2
+  get_local $1
+  get_local $2
+  i32.lt_s
+  select
+  return
  )
  (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)

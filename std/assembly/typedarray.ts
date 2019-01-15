@@ -13,10 +13,10 @@ import {
 } from "./internal/sort";
 
 function clampToByte(value: i32): i32 {
-  if (ASC_OPTIMIZE_LEVEL < 2 || ASC_SHRINK_LEVEL > 0) {
-    return min(max(value, 0), 255);
-  } else {
+  if (ASC_OPTIMIZE_LEVEL > 0) {
     return ~(value >> 31) & (((255 - value) >> 31) | value); // & 255
+  } else {
+    return min(max(value, 0), 255);
   }
 }
 
