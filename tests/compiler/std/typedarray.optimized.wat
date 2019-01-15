@@ -1764,8 +1764,6 @@
   i32.const -1
   i32.xor
   i32.and
-  i32.const 255
-  i32.and
   call $~lib/internal/typedarray/TypedArray<u8>#__set
  )
  (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)

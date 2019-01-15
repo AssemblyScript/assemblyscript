@@ -2785,8 +2785,6 @@
     get_local $2
     i32.or
     i32.and
-    i32.const 255
-    i32.and
     br $~lib/typedarray/clampToByte|inlined.0
    end
    unreachable
@@ -5990,8 +5988,6 @@
     i32.shr_s
     get_local $2
     i32.or
-    i32.and
-    i32.const 255
     i32.and
     br $~lib/typedarray/clampToByte|inlined.1
    end
