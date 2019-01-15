@@ -12,6 +12,15 @@ import {
   COMPARATOR
 } from "./internal/sort";
 
+@inline
+function clampToByte(value: i32): i32 {
+  if (ASC_OPTIMIZE_LEVEL < 2 || ASC_SHRINK_LEVEL > 0) {
+    return max(min(value, 255), 0);
+  } else {
+    return (((255 - value) >> 31) | (value & ~(value >> 31))) & 255;
+  }
+}
+
 export class Int8Array extends TypedArray<i8> {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
@@ -85,12 +94,12 @@ export class Uint8ClampedArray extends Uint8Array {
 
   @inline @operator("[]=")
   protected __set(index: i32, value: i32): void {
-    super.__set(index, max(min(value, 255), 0));
+    super.__set(index, clampToByte(value));
   }
 
   @inline @operator("{}=")
   protected __unchecked_set(index: i32, value: i32): void {
-    super.__unchecked_set(index, max(min(value, 255), 0));
+    super.__unchecked_set(index, clampToByte(value));
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {

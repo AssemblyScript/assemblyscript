@@ -81,6 +81,8 @@
  (global $std/typedarray/af64 (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
+ (global $ASC_OPTIMIZE_LEVEL i32 (i32.const 0))
+ (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/typedarray/arr8 (mut i32) (i32.const 0))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $std/typedarray/sub8 (mut i32) (i32.const 0))
@@ -2740,21 +2742,55 @@
   (local $4 i32)
   get_local $0
   get_local $1
-  get_local $2
-  tee_local $3
-  i32.const 255
-  tee_local $4
-  get_local $3
-  get_local $4
-  i32.lt_s
-  select
-  tee_local $3
-  i32.const 0
-  tee_local $4
-  get_local $3
-  get_local $4
-  i32.gt_s
-  select
+  block $~lib/typedarray/clampToByte|inlined.0 (result i32)
+   i32.const 0
+   i32.const 2
+   i32.lt_s
+   tee_local $3
+   if (result i32)
+    get_local $3
+   else    
+    i32.const 0
+    i32.const 0
+    i32.gt_s
+   end
+   if
+    get_local $2
+    tee_local $3
+    i32.const 255
+    tee_local $4
+    get_local $3
+    get_local $4
+    i32.lt_s
+    select
+    tee_local $3
+    i32.const 0
+    tee_local $4
+    get_local $3
+    get_local $4
+    i32.gt_s
+    select
+    br $~lib/typedarray/clampToByte|inlined.0
+   else    
+    i32.const 255
+    get_local $2
+    i32.sub
+    i32.const 31
+    i32.shr_s
+    get_local $2
+    get_local $2
+    i32.const 31
+    i32.shr_s
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.or
+    i32.const 255
+    i32.and
+    br $~lib/typedarray/clampToByte|inlined.0
+   end
+   unreachable
+  end
   call $~lib/internal/typedarray/TypedArray<u8>#__set
  )
  (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -5912,21 +5948,55 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  get_local $2
-  tee_local $3
-  i32.const 255
-  tee_local $4
-  get_local $3
-  get_local $4
-  i32.lt_s
-  select
-  tee_local $3
-  i32.const 0
-  tee_local $4
-  get_local $3
-  get_local $4
-  i32.gt_s
-  select
+  block $~lib/typedarray/clampToByte|inlined.1 (result i32)
+   i32.const 0
+   i32.const 2
+   i32.lt_s
+   tee_local $3
+   if (result i32)
+    get_local $3
+   else    
+    i32.const 0
+    i32.const 0
+    i32.gt_s
+   end
+   if
+    get_local $2
+    tee_local $3
+    i32.const 255
+    tee_local $4
+    get_local $3
+    get_local $4
+    i32.lt_s
+    select
+    tee_local $3
+    i32.const 0
+    tee_local $4
+    get_local $3
+    get_local $4
+    i32.gt_s
+    select
+    br $~lib/typedarray/clampToByte|inlined.1
+   else    
+    i32.const 255
+    get_local $2
+    i32.sub
+    i32.const 31
+    i32.shr_s
+    get_local $2
+    get_local $2
+    i32.const 31
+    i32.shr_s
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.or
+    i32.const 255
+    i32.and
+    br $~lib/typedarray/clampToByte|inlined.1
+   end
+   unreachable
+  end
   set_local $3
   block
    get_local $0
