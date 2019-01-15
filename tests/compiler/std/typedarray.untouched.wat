@@ -2772,19 +2772,19 @@
     select
     br $~lib/typedarray/clampToByte|inlined.0
    else    
+    get_local $2
+    i32.const 31
+    i32.shr_s
+    i32.const -1
+    i32.xor
     i32.const 255
     get_local $2
     i32.sub
     i32.const 31
     i32.shr_s
     get_local $2
-    get_local $2
-    i32.const 31
-    i32.shr_s
-    i32.const -1
-    i32.xor
-    i32.and
     i32.or
+    i32.and
     i32.const 255
     i32.and
     br $~lib/typedarray/clampToByte|inlined.0
@@ -5978,19 +5978,19 @@
     select
     br $~lib/typedarray/clampToByte|inlined.1
    else    
+    get_local $2
+    i32.const 31
+    i32.shr_s
+    i32.const -1
+    i32.xor
     i32.const 255
     get_local $2
     i32.sub
     i32.const 31
     i32.shr_s
     get_local $2
-    get_local $2
-    i32.const 31
-    i32.shr_s
-    i32.const -1
-    i32.xor
-    i32.and
     i32.or
+    i32.and
     i32.const 255
     i32.and
     br $~lib/typedarray/clampToByte|inlined.1
