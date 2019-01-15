@@ -2757,18 +2757,18 @@
    if
     get_local $2
     tee_local $3
-    i32.const 255
-    tee_local $4
-    get_local $3
-    get_local $4
-    i32.lt_s
-    select
-    tee_local $3
     i32.const 0
     tee_local $4
     get_local $3
     get_local $4
     i32.gt_s
+    select
+    tee_local $3
+    i32.const 255
+    tee_local $4
+    get_local $3
+    get_local $4
+    i32.lt_s
     select
     br $~lib/typedarray/clampToByte|inlined.0
    else    
@@ -5963,18 +5963,18 @@
    if
     get_local $2
     tee_local $3
-    i32.const 255
-    tee_local $4
-    get_local $3
-    get_local $4
-    i32.lt_s
-    select
-    tee_local $3
     i32.const 0
     tee_local $4
     get_local $3
     get_local $4
     i32.gt_s
+    select
+    tee_local $3
+    i32.const 255
+    tee_local $4
+    get_local $3
+    get_local $4
+    i32.lt_s
     select
     br $~lib/typedarray/clampToByte|inlined.1
    else    
