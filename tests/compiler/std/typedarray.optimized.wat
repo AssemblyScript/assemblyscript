@@ -3873,9 +3873,9 @@
  (func $~lib/typedarray/Uint8ClampedArray#__unchecked_set (; 80 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $0
   i32.load offset=4
-  get_local $1
   get_local $0
   i32.load
+  get_local $1
   i32.add
   i32.add
   i32.const 255
