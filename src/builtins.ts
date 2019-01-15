@@ -647,9 +647,9 @@ export function compileCall(
           let tempLocalIndex2 = currentFunction.getAndFreeTempLocal(Type.i32, false).index;
           let tempLocalIndex1 = tempLocal1.index;
 
-          // (x ^ (x >> 31)) - (x >> 31)
-          ret = module.createBinary(BinaryOp.SubI32,
-            module.createBinary(BinaryOp.XorI32,
+          // (x + (x >> 31)) ^ (x >> 31)
+          ret = module.createBinary(BinaryOp.XorI32,
+            module.createBinary(BinaryOp.AddI32,
               module.createTeeLocal(
                 tempLocalIndex2,
                 module.createBinary(BinaryOp.ShrI32,
@@ -674,8 +674,8 @@ export function compileCall(
           let tempLocalIndex2 = currentFunction.getAndFreeTempLocal(options.usizeType, false).index;
           let tempLocalIndex1 = tempLocal1.index;
 
-          ret = module.createBinary(wasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32,
-            module.createBinary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
+          ret = module.createBinary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
+            module.createBinary(wasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32,
               module.createTeeLocal(
                 tempLocalIndex2,
                 module.createBinary(wasm64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32,
@@ -698,9 +698,9 @@ export function compileCall(
           let tempLocalIndex2 = currentFunction.getAndFreeTempLocal(Type.i64, false).index;
           let tempLocalIndex1 = tempLocal1.index;
 
-          // (x ^ (x >> 63)) - (x >> 63)
-          ret = module.createBinary(BinaryOp.SubI64,
-            module.createBinary(BinaryOp.XorI64,
+          // (x + (x >> 63)) ^ (x >> 63)
+          ret = module.createBinary(BinaryOp.XorI64,
+            module.createBinary(BinaryOp.AddI64,
               module.createTeeLocal(
                 tempLocalIndex2,
                 module.createBinary(BinaryOp.ShrI64,

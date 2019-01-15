@@ -322,9 +322,9 @@
   i32.shr_s
   tee_local $1
   get_local $0
-  i32.xor
+  i32.add
   get_local $1
-  i32.sub
+  i32.xor
   drop
   i32.const 1
   tee_local $0
@@ -367,9 +367,9 @@
   i32.shr_s
   tee_local $1
   get_local $0
-  i32.xor
+  i32.add
   get_local $1
-  i32.sub
+  i32.xor
   set_global $builtins/i
   get_global $builtins/i
   i32.const 42
@@ -448,9 +448,9 @@
   i64.shr_s
   tee_local $3
   get_local $2
-  i64.xor
+  i64.add
   get_local $3
-  i64.sub
+  i64.xor
   drop
   i64.const 1
   i64.clz
@@ -475,9 +475,9 @@
   i64.shr_s
   tee_local $3
   get_local $2
-  i64.xor
+  i64.add
   get_local $3
-  i64.sub
+  i64.xor
   set_global $builtins/I
   get_global $builtins/I
   i64.const 42
