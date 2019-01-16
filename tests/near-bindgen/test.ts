@@ -13,46 +13,12 @@ export function runTest(): void {
   original.flag = true;
   original.baz = "foo";
   let encoder: JSONEncoder = new JSONEncoder();
+  encoder.pushObject(null);
   main.__near_encode_FooBar(original, encoder);
+  encoder.popObject();
   let encoded = encoder.serialize();
-  let decoded = main.__near_decode_FooBar(encoded, 0);
+  let decoded = main.__near_decode_FooBar(encoded, null);
 
   assert(original.foo == decoded.foo);
   assert(original.bar == decoded.bar);
-
-  let argsEncoder: JSONEncoder = new JSONEncoder();
-  argsEncoder.setInteger("x", 1);
-  argsEncoder.setInteger("y", 2);
-
-  let addBsonStr = bin2hex(argsEncoder.serialize());
-  let expectedResultEncoder: JSONEncoder = new JSONEncoder();
-  expectedResultEncoder.setInteger("result", 3);
-
-  /*
-  let bsonResult = main.near_func_add(hex2bin(addBsonStr));
-
-  let bsonResultStr = bin2hex(bsonResult);
-  let expectedBsonResultStr = bin2hex(expectedResultEncoder.serialize())
-  assert(bsonResultStr == expectedBsonResultStr, bsonResultStr + "\n" + expectedBsonResultStr);
-  */
 }
-
-function hex2bin(hex: string): Uint8Array {
-    let bin = new Uint8Array(hex.length >>> 1);
-    for (let i = 0, len = hex.length >>> 1; i < len; i++) {
-        bin[i] = u32(parseInt(hex.substr(i << 1, 2), 16));
-    }
-    return bin;
-}
-
-function bin2hex(bin: Uint8Array, uppercase: boolean = false): string {
-    let hex = uppercase ? "0123456789ABCDEF" : "0123456789abcdef";
-    let str = "";
-    for (let i = 0, len = bin.length; i < len; i++) {
-        str += hex.charAt((bin[i] >>> 4) & 0x0f) + hex.charAt(bin[i] & 0x0f);
-    }
-    return str;
-}
-
-
-runTest();
