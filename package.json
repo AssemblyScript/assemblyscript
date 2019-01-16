@@ -21,6 +21,7 @@
     "assemblyscript-json": "github:nearprotocol/assemblyscript-json",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
+    "prettier": "^1.15.3",
     "ts-loader": "^5.3.3",
     "ts-node": "^6.2.0",
     "tslint": "^5.12.0",
