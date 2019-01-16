@@ -40,5 +40,5 @@ export function getFoobar(container: ContainerClass): AnotherContainerClass {
 }
 
 export function convertFoobars(foobars: Array<FooBar>): Array<ContainerClass> {
-        return foobars.map<ContainerClass>((it: FooBar, i: i32, arr: Array<FooBar>): ContainerClass => { let container = new ContainerClass(); container.foobar = it; return container; });
+    return foobars.map<ContainerClass>((it: FooBar, i: i32, arr: Array<FooBar>): ContainerClass => { let container = new ContainerClass(); container.foobar = it; return container; });
 }
