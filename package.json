@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@types/node": "^10.12.18",
+    "assemblyscript-json": "github:nearprotocol/assemblyscript-json",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
     "ts-loader": "^5.3.3",
