@@ -459,6 +459,23 @@ export class Parser extends DiagnosticEmitter {
       let parameters = new Array<TypeNode>();
       let nullable = false;
 
+      // Identifier ('.' Identifier)+
+      while (tn.skip(Token.DOT)) {
+        if (tn.skip(Token.IDENTIFIER)) {
+          // TODO: this works for now, but the representation isn't great
+          identifier = Node.createIdentifierExpression(
+            identifier.text + "." + tn.readIdentifier(),
+            tn.range(identifier.range.start, tn.pos)
+          );
+        } else {
+          this.error(
+            DiagnosticCode.Identifier_expected,
+            tn.range(tn.pos)
+          );
+          return null;
+        }
+      }
+
       // Name<T>
       if (tn.skip(Token.LESSTHAN)) {
         do {
