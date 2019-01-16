@@ -62,7 +62,8 @@ import {
 import {
   PATH_DELIMITER,
   INSTANCE_DELIMITER,
-  CommonFlags
+  CommonFlags,
+  Symbols
 } from "./common";
 
 import {
@@ -115,7 +116,7 @@ export class Resolver extends DiagnosticEmitter {
     // now dealing with TypeNode
     assert(node.kind == NodeKind.TYPE);
     var typeNode = <TypeNode>node;
-    var simpleName = typeNode.name.text;
+    var simpleName = typeNode.name.symbol == Symbols.ARRAY ? "Array" : typeNode.name.text; // FIXME: monkey patched
     var globalName = simpleName;
     var localName = typeNode.range.source.internalPath + PATH_DELIMITER + simpleName; // TODO cache
 

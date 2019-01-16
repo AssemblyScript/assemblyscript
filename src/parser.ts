@@ -6,7 +6,8 @@
 import {
   CommonFlags,
   LIBRARY_PREFIX,
-  PATH_DELIMITER
+  PATH_DELIMITER,
+  Symbols
 } from "./common";
 
 import {
@@ -431,7 +432,7 @@ export class Parser extends DiagnosticEmitter {
     // 'void'
     } else if (token == Token.VOID) {
       type = Node.createType(
-        Node.createIdentifierExpression("void", tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createIdentifierExpression(Symbols.VOID, tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // 'this'
@@ -443,19 +444,19 @@ export class Parser extends DiagnosticEmitter {
     // 'true'
     } else if (token == Token.TRUE || token == Token.FALSE) {
       type = Node.createType(
-        Node.createIdentifierExpression("bool", tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createIdentifierExpression(Symbols.BOOL, tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // StringLiteral
     } else if (token == Token.STRINGLITERAL) {
       tn.readString();
       type = Node.createType(
-        Node.createIdentifierExpression("string", tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createIdentifierExpression(Symbols.STRING, tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // Identifier
     } else if (token == Token.IDENTIFIER) {
-      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
       let parameters = new Array<TypeNode>();
       let nullable = false;
 
@@ -531,7 +532,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
       type = Node.createType(
-        Node.createIdentifierExpression("Array", bracketRange),
+        Node.createIdentifierExpression(Symbols.ARRAY, bracketRange),
         [ type ],
         nullable,
         tn.range(startPos, tn.pos)
@@ -593,7 +594,7 @@ export class Parser extends DiagnosticEmitter {
             return null;
           }
         } else if (tn.skipIdentifier()) {
-          let name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range(tn.tokenPos, tn.pos));
+          let name = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range(tn.tokenPos, tn.pos));
           if (tn.skip(Token.QUESTION)) {
             isSignature = true;
             tn.discard(state);
@@ -696,14 +697,14 @@ export class Parser extends DiagnosticEmitter {
 
     var startPos = tn.tokenPos;
     if (tn.skipIdentifier()) {
-      let name = tn.readIdentifier();
-      let expression: Expression = Node.createIdentifierExpression(name, tn.range(startPos, tn.pos));
+      let text = tn.readIdentifier();
+      let expression: Expression = Node.createIdentifierExpression(Symbol.for(text), tn.range(tn.tokenPos, tn.pos));
       while (tn.skip(Token.DOT)) {
         if (tn.skipIdentifier()) {
-          name = tn.readIdentifier();
+          text = tn.readIdentifier();
           expression = Node.createPropertyAccessExpression(
             expression,
-            Node.createIdentifierExpression(name, tn.range()),
+            Node.createIdentifierExpression(Symbol.for(text), tn.range()),
             tn.range(startPos, tn.pos)
           );
         } else {
@@ -768,7 +769,7 @@ export class Parser extends DiagnosticEmitter {
       );
       return null;
     }
-    var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    var identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
     var flags = parentFlags;
     if (tn.skip(Token.EXCLAMATION)) {
       flags |= CommonFlags.DEFINITE_ASSIGNMENT;
@@ -836,7 +837,7 @@ export class Parser extends DiagnosticEmitter {
       );
       return null;
     }
-    var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    var identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
     if (tn.next() != Token.OPENBRACE) {
       this.error(
         DiagnosticCode._0_expected,
@@ -886,7 +887,7 @@ export class Parser extends DiagnosticEmitter {
       );
       return null;
     }
-    var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    var identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
     var value: Expression | null = null;
     if (tn.skip(Token.EQUALS)) {
       value = this.parseExpression(tn, Precedence.COMMA + 1);
@@ -970,7 +971,7 @@ export class Parser extends DiagnosticEmitter {
 
     if (tn.next() == Token.IDENTIFIER) {
       let identifier = Node.createIdentifierExpression(
-        tn.readIdentifier(),
+        Symbol.for(tn.readIdentifier()),
         tn.range()
       );
       let extendsType: TypeNode | null = null;
@@ -1155,7 +1156,7 @@ export class Parser extends DiagnosticEmitter {
     }
     if (tn.skipIdentifier()) {
       if (!isRest) startRange = tn.range();
-      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
       let type: CommonTypeNode | null = null;
       if (isOptional = tn.skip(Token.QUESTION)) {
         if (isRest) {
@@ -1234,7 +1235,7 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
 
-    var name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+    var name = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
     var signatureStart: i32 = -1;
 
     var typeParameters: TypeParameterNode[] | null = null;
@@ -1355,7 +1356,7 @@ export class Parser extends DiagnosticEmitter {
 
     if (tn.token == Token.FUNCTION) {
       if (tn.skipIdentifier()) {
-        name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+        name = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
       } else { // empty name
         name = Node.createEmptyIdentifierExpression(tn.range(tn.pos));
       }
@@ -1478,11 +1479,7 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
 
-    var identifier = Node.createIdentifierExpression(
-      tn.readIdentifier(),
-      tn.range()
-    );
-
+    var identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
     var typeParameters: TypeParameterNode[] | null;
     if (tn.skip(Token.LESSTHAN)) {
       typeParameters = this.parseTypeParameters(tn);
@@ -1576,7 +1573,7 @@ export class Parser extends DiagnosticEmitter {
     var name: IdentifierExpression;
 
     if (tn.skipIdentifier()) {
-      name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      name = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
     } else {
       name = Node.createEmptyIdentifierExpression(tn.range(tn.pos));
     }
@@ -1835,7 +1832,7 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
-      name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      name = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
     }
     var typeParameters: TypeParameterNode[] | null = null;
     if (tn.skip(Token.LESSTHAN)) {
@@ -2128,7 +2125,7 @@ export class Parser extends DiagnosticEmitter {
     // at 'namespace': Identifier '{' (Variable | Function)* '}'
 
     if (tn.skipIdentifier()) {
-      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
       if (tn.skip(Token.OPENBRACE)) {
         let members = new Array<Statement>();
         let ns = Node.createNamespaceDeclaration(
@@ -2250,11 +2247,11 @@ export class Parser extends DiagnosticEmitter {
     // before: Identifier ('as' Identifier)?
 
     if (tn.skipIdentifier()) {
-      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
       let asIdentifier: IdentifierExpression | null = null;
       if (tn.skip(Token.AS)) {
         if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
-          asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+          asIdentifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
         } else {
           this.error(
             DiagnosticCode.Identifier_expected,
@@ -2312,7 +2309,7 @@ export class Parser extends DiagnosticEmitter {
     } else if (tn.skip(Token.ASTERISK)) {
       if (tn.skip(Token.AS)) {
         if (tn.skipIdentifier()) {
-          namespaceName = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+          namespaceName = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
         } else {
           this.error(
             DiagnosticCode.Identifier_expected,
@@ -2370,11 +2367,11 @@ export class Parser extends DiagnosticEmitter {
     // before: Identifier ('as' Identifier)?
 
     if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
-      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
       let asIdentifier: IdentifierExpression | null = null;
       if (tn.skip(Token.AS)) {
         if (tn.skipIdentifier()) {
-          asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+          asIdentifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
         } else {
           this.error(
             DiagnosticCode.Identifier_expected,
@@ -2407,10 +2404,10 @@ export class Parser extends DiagnosticEmitter {
     // at 'export' 'import': Identifier ('=' Identifier)? ';'?
 
     if (tn.skipIdentifier()) {
-      let asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let asIdentifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
       if (tn.skip(Token.EQUALS)) {
         if (tn.skipIdentifier()) {
-          let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+          let identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
           let ret = Node.createExportImportStatement(identifier, asIdentifier, tn.range(startPos, tn.pos));
           tn.skip(Token.SEMICOLON);
           return ret;
@@ -2572,7 +2569,7 @@ export class Parser extends DiagnosticEmitter {
     var identifier: IdentifierExpression | null = null;
     if (tn.peek(true) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
       tn.next(IdentifierHandling.PREFER);
-      identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
     }
     var ret = Node.createBreakStatement(identifier, tn.range());
     tn.skip(Token.SEMICOLON);
@@ -2588,7 +2585,7 @@ export class Parser extends DiagnosticEmitter {
     var identifier: IdentifierExpression | null = null;
     if (tn.peek(true) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
       tn.next(IdentifierHandling.PREFER);
-      identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      identifier = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
     }
     var ret = Node.createContinueStatement(identifier, tn.range());
     tn.skip(Token.SEMICOLON);
@@ -2914,7 +2911,7 @@ export class Parser extends DiagnosticEmitter {
           );
           return null;
         }
-        catchVariable = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+        catchVariable = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
         if (!tn.skip(Token.CLOSEPAREN)) {
           this.error(
             DiagnosticCode._0_expected,
@@ -2986,7 +2983,7 @@ export class Parser extends DiagnosticEmitter {
     // at 'type': Identifier ('<' TypeParameters '>')? '=' Type ';'?
 
     if (tn.skipIdentifier()) {
-      let name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let name = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
       let typeParameters: TypeParameterNode[] | null = null;
       if (tn.skip(Token.LESSTHAN)) {
         typeParameters = this.parseTypeParameters(tn);
@@ -3257,10 +3254,10 @@ export class Parser extends DiagnosticEmitter {
               );
               return null;
             }
-            name = Node.createIdentifierExpression(tn.readString(), tn.range());
+            name = Node.createIdentifierExpression(Symbol.for(tn.readString()), tn.range());
             name.set(CommonFlags.QUOTED);
           } else {
-            name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+            name = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
           }
           names.push(name);
           if (tn.skip(Token.COLON)) {
@@ -3311,7 +3308,7 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       case Token.IDENTIFIER: {
-        return Node.createIdentifierExpression(tn.readIdentifier(), tn.range(startPos, tn.pos));
+        return Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range(startPos, tn.pos));
       }
       case Token.THIS: {
         return Node.createThisExpression(tn.range(startPos, tn.pos));
@@ -3544,7 +3541,7 @@ export class Parser extends DiagnosticEmitter {
           // PropertyAccessExpression
           if (token == Token.DOT) {
             if (tn.skipIdentifier()) {
-              next = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+              next = Node.createIdentifierExpression(Symbol.for(tn.readIdentifier()), tn.range());
             } else {
               next = this.parseExpression(tn,
                 isRightAssociative(token)

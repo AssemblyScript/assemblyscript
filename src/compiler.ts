@@ -332,21 +332,8 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFunction = startFunctionInstance;
 
     // add a mutable heap base dummy
-    if (options.isWasm64) {
-      module.addGlobal(
-        "HEAP_BASE",
-        NativeType.I64,
-        true,
-        module.createI64(0, 0)
-      );
-    } else {
-      module.addGlobal(
-        "HEAP_BASE",
-        NativeType.I32,
-        false,
-        module.createI32(0)
-      );
-    }
+    if (options.isWasm64) module.addGlobal("HEAP_BASE", NativeType.I64, true, module.createI64(0));
+    else module.addGlobal("HEAP_BASE", NativeType.I32, true, module.createI32(0));
 
     // compile entry file(s) while traversing reachable elements
     var sources = program.sources;
@@ -354,7 +341,7 @@ export class Compiler extends DiagnosticEmitter {
       if (sources[i].isEntry) this.compileSource(sources[i]);
     }
 
-    // compile the start function if not empty or called by main
+    // compile the start function if not empty / utilized by an explicit main function
     if (startFunctionBody.length || program.mainFunction !== null) {
       let signature = startFunctionInstance.signature;
       let funcRef = module.addFunction(
@@ -377,17 +364,11 @@ export class Compiler extends DiagnosticEmitter {
     this.memoryOffset = memoryOffset;
     module.removeGlobal("HEAP_BASE");
     if (options.isWasm64) {
-      module.addGlobal(
-        "HEAP_BASE",
-        NativeType.I64,
-        false,
+      module.addGlobal("HEAP_BASE", NativeType.I64, false,
         module.createI64(i64_low(memoryOffset), i64_high(memoryOffset))
       );
     } else {
-      module.addGlobal(
-        "HEAP_BASE",
-        NativeType.I32,
-        false,
+      module.addGlobal("HEAP_BASE", NativeType.I32, false,
         module.createI32(i64_low(memoryOffset))
       );
     }

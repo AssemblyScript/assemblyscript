@@ -92,7 +92,7 @@ import {
 } from "../util";
 
 import {
-  CommonFlags
+  CommonFlags, Symbols
 } from "../common";
 
 /** An AST builder. */
@@ -358,22 +358,28 @@ export class ASTBuilder {
       return;
     }
     var typeNode = <TypeNode>node;
-    assert(typeNode.name.text.length);
-    this.visitIdentifierExpression(typeNode.name);
-    var typeArguments = typeNode.typeArguments;
-    if (typeArguments) {
-      let numTypeArguments = typeArguments.length;
-      let sb = this.sb;
-      if (numTypeArguments) {
-        sb.push("<");
-        this.visitTypeNode(typeArguments[0]);
-        for (let i = 1; i < numTypeArguments; ++i) {
-          sb.push(", ");
-          this.visitTypeNode(typeArguments[i]);
+    if (typeNode.name.symbol == Symbols.ARRAY && typeNode.name.text.startsWith("[")) {
+      let typeArguments = assert(typeNode.typeArguments);
+      assert(typeArguments.length == 1);
+      this.visitTypeNode(typeArguments[0]);
+      this.sb.push("[]");
+    } else {
+      this.visitIdentifierExpression(typeNode.name);
+      let typeArguments = typeNode.typeArguments;
+      if (typeArguments) {
+        let numTypeArguments = typeArguments.length;
+        let sb = this.sb;
+        if (numTypeArguments) {
+          sb.push("<");
+          this.visitTypeNode(typeArguments[0]);
+          for (let i = 1; i < numTypeArguments; ++i) {
+            sb.push(", ");
+            this.visitTypeNode(typeArguments[i]);
+          }
+          sb.push(">");
         }
-        sb.push(">");
+        if (node.isNullable) sb.push(" | null");
       }
-      if (node.isNullable) sb.push(" | null");
     }
   }
 
@@ -423,8 +429,7 @@ export class ASTBuilder {
   // expressions
 
   visitIdentifierExpression(node: IdentifierExpression): void {
-    if (node.is(CommonFlags.QUOTED)) this.visitStringLiteral(node.text);
-    else this.sb.push(node.text);
+    this.sb.push(node.text);
   }
 
   visitArrayLiteralExpression(node: ArrayLiteralExpression): void {

@@ -8,7 +8,8 @@ import {
   PATH_DELIMITER,
   STATIC_DELIMITER,
   INSTANCE_DELIMITER,
-  LIBRARY_PREFIX
+  LIBRARY_PREFIX,
+  Symbols
 } from "./common";
 
 import {
@@ -144,6 +145,8 @@ export abstract class Node {
   parent: Node | null = null;
   /** Common flags indicating specific traits. */
   flags: CommonFlags = CommonFlags.NONE;
+  /** Underlying text. */
+  get text(): string { return this.range.source.text.substring(this.range.start, this.range.end); }
 
   /** Tests if this node has the specified flag or flags. */
   is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
@@ -172,7 +175,7 @@ export abstract class Node {
     range: Range
   ): TypeNode {
     return Node.createType(
-      Node.createIdentifierExpression("", range),
+      Node.createIdentifierExpression(Symbols.OMITTED, range),
       null,
       false,
       range
@@ -241,26 +244,24 @@ export abstract class Node {
   }
 
   static createComment(
-    text: string,
     kind: CommentKind,
     range: Range
   ): CommentNode {
     var node = new CommentNode();
     node.range = range;
     node.commentKind = kind;
-    node.text = text;
     return node;
   }
 
   // expressions
 
   static createIdentifierExpression(
-    name: string,
+    symbol: symbol,
     range: Range
   ): IdentifierExpression {
     var expr = new IdentifierExpression();
     expr.range = range;
-    expr.text = name;
+    expr.symbol = symbol;
     return expr;
   }
 
@@ -269,7 +270,7 @@ export abstract class Node {
   ): IdentifierExpression {
     var expr = new IdentifierExpression();
     expr.range = range;
-    expr.text = "";
+    expr.symbol = Symbols.EMPTY;
     return expr;
   }
 
@@ -1236,8 +1237,6 @@ export class CommentNode extends Node {
 
   /** Comment kind. */
   commentKind: CommentKind;
-  /** Comment text. */
-  text: string;
 }
 
 // expressions
@@ -1249,8 +1248,8 @@ export abstract class Expression extends Node { }
 export class IdentifierExpression extends Expression {
   kind = NodeKind.IDENTIFIER;
 
-  /** Textual name. */
-  text: string;
+  /** Symbol. */
+  symbol: symbol;
 }
 
 /** Indicates the kind of a literal. */
@@ -1340,7 +1339,7 @@ export class CommaExpression extends Expression {
 /** Represents a `constructor` expression. */
 export class ConstructorExpression extends IdentifierExpression {
   kind = NodeKind.CONSTRUCTOR;
-  text = "constructor";
+  symbol = Symbols.CONSTRUCTOR;
 }
 
 /** Represents an element access expression, e.g., array access. */
@@ -1395,7 +1394,7 @@ export class NewExpression extends CallExpression {
 /** Represents a `null` expression. */
 export class NullExpression extends IdentifierExpression {
   kind = NodeKind.NULL;
-  text = "null";
+  symbol = Symbols.NULL;
 }
 
 /** Represents an object literal expression. */
@@ -1459,25 +1458,25 @@ export class StringLiteralExpression extends LiteralExpression {
 /** Represents a `super` expression. */
 export class SuperExpression extends IdentifierExpression {
   kind = NodeKind.SUPER;
-  text = "super";
+  symbol = Symbols.SUPER;
 }
 
 /** Represents a `this` expression. */
 export class ThisExpression extends IdentifierExpression {
   kind = NodeKind.THIS;
-  text = "this";
+  symbol = Symbols.THIS;
 }
 
 /** Represents a `true` expression. */
 export class TrueExpression extends IdentifierExpression {
   kind = NodeKind.TRUE;
-  text = "true";
+  symbol = Symbols.TRUE;
 }
 
 /** Represents a `false` expression. */
 export class FalseExpression extends IdentifierExpression {
   kind = NodeKind.FALSE;
-  text = "false";
+  symbol = Symbols.FALSE;
 }
 
 /** Base class of all unary expressions. */
@@ -1544,7 +1543,7 @@ export class Source extends Node {
   /** Contained statements. */
   statements: Statement[];
   /** Full source text. */
-  text: string;
+  private _text: string;
   /** Tokenizer reference. */
   tokenizer: Tokenizer | null = null;
   /** Source map index. */
@@ -1563,13 +1562,15 @@ export class Source extends Node {
     this.simplePath = pos >= 0 ? internalPath.substring(pos + 1) : internalPath;
     this.statements = new Array();
     this.range = new Range(this, 0, text.length);
-    this.text = text;
+    this._text = text;
   }
 
   /** Tests if this source is an entry file. */
   get isEntry(): bool { return this.sourceKind == SourceKind.ENTRY; }
   /** Tests if this source is a stdlib file. */
   get isLibrary(): bool { return this.sourceKind == SourceKind.LIBRARY; }
+  /** Full source text of this source. */
+  get text(): string { return this._text; }
 }
 
 /** Base class of all declaration statements. */

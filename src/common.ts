@@ -100,3 +100,31 @@ export const LIBRARY_SUBST = "~lib";
 export const LIBRARY_PREFIX = LIBRARY_SUBST + PATH_DELIMITER;
 /** Prefix used to indicate a filespace element. */
 export const FILESPACE_PREFIX = "file:";
+
+/** Common symbols. */
+export namespace Symbols {
+  /** Symbol representing "void". */
+  export const VOID = Symbol.for("void");
+  /** Symbol representing "this". */
+  export const THIS = Symbol.for("this");
+  /** Symbol representing "super". */
+  export const SUPER = Symbol.for("super");
+  /** Symbol representing "true". */
+  export const TRUE = Symbol.for("true");
+  /** Symbol representing "false". */
+  export const FALSE = Symbol.for("false");
+  /** Symbol representing "null". */
+  export const NULL = Symbol.for("null");
+  /** Symbol representing "bool". */
+  export const BOOL = Symbol.for("bool");
+  /** Symbol representing "string". */
+  export const STRING = Symbol.for("string");
+  /** Symbol representing "Array". */
+  export const ARRAY = Symbol.for("Array");
+  /** Symbol representing "constructor". */
+  export const CONSTRUCTOR = Symbol.for("construuctor");
+  /** Symbol representing "" (empty string). */
+  export const EMPTY = Symbol.for("");
+  /** Symbol representing omitted text. */
+  export const OMITTED = Symbol();
+}
