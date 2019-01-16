@@ -94,7 +94,7 @@
  (data (i32.const 2320) "\06\00\00\00r\00e\00s\00u\00l\00t\00")
  (data (i32.const 2336) "\06\00\00\00f\00o\00o\00b\00a\00r\00")
  (table $0 2 anyfunc)
- (elem (i32.const 0) $null $main_near/convertFoobars~anonymous|1)
+ (elem (i32.const 0) $null $main/convertFoobars~anonymous|1)
  (global $json/decoder/TRUE_STR i32 (i32.const 8))
  (global $json/decoder/FALSE_STR i32 (i32.const 24))
  (global $json/decoder/NULL_STR i32 (i32.const 40))
@@ -4066,7 +4066,7 @@
    if
     i32.const 0
     i32.const 1320
-    i32.const 262
+    i32.const 218
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -4084,7 +4084,7 @@
    if
     i32.const 0
     i32.const 1320
-    i32.const 266
+    i32.const 222
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -6160,7 +6160,7 @@
   if
    i32.const 0
    i32.const 1320
-   i32.const 314
+   i32.const 270
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -7448,7 +7448,7 @@
   if
    i32.const 0
    i32.const 1320
-   i32.const 292
+   i32.const 248
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -8818,7 +8818,7 @@
    if
     i32.const 0
     i32.const 1320
-    i32.const 518
+    i32.const 474
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -8836,7 +8836,7 @@
    if
     i32.const 0
     i32.const 1320
-    i32.const 522
+    i32.const 478
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -10039,7 +10039,7 @@
   if
    i32.const 0
    i32.const 1320
-   i32.const 482
+   i32.const 438
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -10943,7 +10943,7 @@
    unreachable
   end
  )
- (func $main_near/convertFoobars~anonymous|1 (; 187 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $main/convertFoobars~anonymous|1 (; 187 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   block (result i32)
    i32.const 4
@@ -11102,7 +11102,7 @@
   end
   get_local $4
  )
- (func $main_near/convertFoobars (; 190 ;) (type $ii) (param $0 i32) (result i32)
+ (func $main/convertFoobars (; 190 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 1
   call $~lib/array/Array<FooBar>#map<ContainerClass>
@@ -11300,7 +11300,7 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#deserialize
   get_local $1
   i32.load offset=12
-  call $main_near/convertFoobars
+  call $main/convertFoobars
   set_local $2
   block (result i32)
    i32.const 12

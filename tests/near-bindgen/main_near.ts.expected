@@ -1,64 +1,20 @@
 import { near } from "./near";
 import { JSONEncoder } from "./json/encoder";
 import { JSONDecoder, ThrowingJSONHandler, DecoderState } from "./json/decoder";
+import {
+  FooBar as wrapped_FooBar,
+  ContainerClass as wrapped_ContainerClass,
+  AnotherContainerClass as wrapped_AnotherContainerClass,
+  doNothing as wrapped_doNothing,
+  add as wrapped_add,
+  getFoobar as wrapped_getFoobar,
+  convertFoobars as wrapped_convertFoobars
+} from "./main";
 
 // Runtime functions
 declare function return_value(value_ptr: u32): void;
 declare function input_read_len(): u32;
 declare function input_read_into(ptr: usize): void;
-
-import "allocator/arena";
-// TODO: Why cannot import from index?
-// import { JSONEncoder, JSONDecoder } from "./json";
-import { JSONEncoder } from "./json/encoder";
-import {
-  JSONDecoder,
-  DecoderState,
-  JSONHandler,
-  ThrowingJSONHandler
-} from "./json/decoder";
-import { near } from "./near";
-
-declare function log(str: string): void;
-
-export class FooBar {
-  foo: i32 = 0;
-  bar: i32 = 1;
-  flag: bool;
-  baz: string = "123";
-  //foobar: Uint8Array;
-  arr: Array<Array<string>>;
-}
-
-export class ContainerClass {
-  foobar: FooBar;
-}
-
-export class AnotherContainerClass {
-  foobar: FooBar;
-}
-
-export function doNothing(): void {}
-
-export function add(x: i32, y: i32): i32 {
-  return x + y;
-}
-
-export function getFoobar(container: ContainerClass): AnotherContainerClass {
-  let result = new AnotherContainerClass();
-  result.foobar = container.foobar;
-  return result;
-}
-
-export function convertFoobars(foobars: Array<FooBar>): Array<ContainerClass> {
-  return foobars.map<ContainerClass>(
-    (it: FooBar, i: i32, arr: Array<FooBar>): ContainerClass => {
-      let container = new ContainerClass();
-      container.foobar = it;
-      return container;
-    }
-  );
-}
 
 export class __near_ArgsParser_doNothing extends ThrowingJSONHandler {
   buffer: Uint8Array;
@@ -92,7 +48,7 @@ export function near_func_doNothing(): void {
   handler.buffer = json;
   handler.decoder = new JSONDecoder<__near_ArgsParser_doNothing>(handler);
   handler.decoder.deserialize(json);
-  doNothing();
+  wrapped_doNothing();
 }
 export class __near_ArgsParser_add extends ThrowingJSONHandler {
   buffer: Uint8Array;
@@ -149,7 +105,7 @@ export function near_func_add(): void {
   handler.buffer = json;
   handler.decoder = new JSONDecoder<__near_ArgsParser_add>(handler);
   handler.decoder.deserialize(json);
-  let result = add(handler.__near_param_x, handler.__near_param_y);
+  let result = wrapped_add(handler.__near_param_x, handler.__near_param_y);
 
   let encoder = new JSONEncoder();
   encoder.pushObject(null);
@@ -163,10 +119,10 @@ export class __near_JSONHandler_ContainerClass extends ThrowingJSONHandler {
   buffer: Uint8Array;
   decoder: JSONDecoder<__near_JSONHandler_ContainerClass>;
   handledRoot: boolean = false;
-  value: ContainerClass = new ContainerClass();
+  value: wrapped_ContainerClass = new wrapped_ContainerClass();
   setNull(name: string): void {
     if (name == "foobar") {
-      this.value.foobar = <FooBar>null;
+      this.value.foobar = <wrapped_FooBar>null;
       return;
     }
 
@@ -198,7 +154,7 @@ export class __near_JSONHandler_FooBar extends ThrowingJSONHandler {
   buffer: Uint8Array;
   decoder: JSONDecoder<__near_JSONHandler_FooBar>;
   handledRoot: boolean = false;
-  value: FooBar = new FooBar();
+  value: wrapped_FooBar = new wrapped_FooBar();
   setInteger(name: string, value: i32): void {
     if (name == "foo") {
       this.value.foo = value;
@@ -346,7 +302,7 @@ export function __near_decode_Array_Array_String(
 export function __near_decode_FooBar(
   buffer: Uint8Array,
   state: DecoderState
-): FooBar {
+): wrapped_FooBar {
   let handler = new __near_JSONHandler_FooBar();
   handler.buffer = buffer;
   handler.decoder = new JSONDecoder<__near_JSONHandler_FooBar>(handler);
@@ -357,7 +313,7 @@ export function __near_decode_FooBar(
 export function __near_decode_ContainerClass(
   buffer: Uint8Array,
   state: DecoderState
-): ContainerClass {
+): wrapped_ContainerClass {
   let handler = new __near_JSONHandler_ContainerClass();
   handler.buffer = buffer;
   handler.decoder = new JSONDecoder<__near_JSONHandler_ContainerClass>(handler);
@@ -370,10 +326,10 @@ export class __near_ArgsParser_getFoobar extends ThrowingJSONHandler {
   decoder: JSONDecoder<__near_ArgsParser_getFoobar>;
   handledRoot: boolean = false;
 
-  __near_param_container: ContainerClass;
+  __near_param_container: wrapped_ContainerClass;
   setNull(name: string): void {
     if (name == "container") {
-      this.__near_param_container = <ContainerClass>null;
+      this.__near_param_container = <wrapped_ContainerClass>null;
       return;
     }
 
@@ -430,7 +386,7 @@ export function __near_encode_Array_Array_String(
   }
 }
 export function __near_encode_FooBar(
-  value: FooBar,
+  value: wrapped_FooBar,
   encoder: JSONEncoder
 ): void {
   encoder.setInteger("foo", value.foo);
@@ -450,7 +406,7 @@ export function __near_encode_FooBar(
   }
 }
 export function __near_encode_AnotherContainerClass(
-  value: AnotherContainerClass,
+  value: wrapped_AnotherContainerClass,
   encoder: JSONEncoder
 ): void {
   if (value.foobar != null) {
@@ -468,7 +424,7 @@ export function near_func_getFoobar(): void {
   handler.buffer = json;
   handler.decoder = new JSONDecoder<__near_ArgsParser_getFoobar>(handler);
   handler.decoder.deserialize(json);
-  let result = getFoobar(handler.__near_param_container);
+  let result = wrapped_getFoobar(handler.__near_param_container);
 
   let encoder = new JSONEncoder();
   encoder.pushObject(null);
@@ -488,7 +444,7 @@ export class __near_JSONHandler_Array_FooBar extends ThrowingJSONHandler {
   buffer: Uint8Array;
   decoder: JSONDecoder<__near_JSONHandler_Array_FooBar>;
   handledRoot: boolean = false;
-  value: Array<FooBar> = new Array<FooBar>();
+  value: Array<wrapped_FooBar> = new Array<wrapped_FooBar>();
   pushObject(name: string): bool {
     this.value.push(__near_decode_FooBar(this.buffer, this.decoder.state));
     return false;
@@ -507,7 +463,7 @@ export class __near_JSONHandler_Array_FooBar extends ThrowingJSONHandler {
 export function __near_decode_Array_FooBar(
   buffer: Uint8Array,
   state: DecoderState
-): Array<FooBar> {
+): Array<wrapped_FooBar> {
   let handler = new __near_JSONHandler_Array_FooBar();
   handler.buffer = buffer;
   handler.decoder = new JSONDecoder<__near_JSONHandler_Array_FooBar>(handler);
@@ -520,10 +476,10 @@ export class __near_ArgsParser_convertFoobars extends ThrowingJSONHandler {
   decoder: JSONDecoder<__near_ArgsParser_convertFoobars>;
   handledRoot: boolean = false;
 
-  __near_param_foobars: Array<FooBar>;
+  __near_param_foobars: Array<wrapped_FooBar>;
   setNull(name: string): void {
     if (name == "foobars") {
-      this.__near_param_foobars = <Array<FooBar>>null;
+      this.__near_param_foobars = <Array<wrapped_FooBar>>null;
       return;
     }
 
@@ -555,7 +511,7 @@ export class __near_ArgsParser_convertFoobars extends ThrowingJSONHandler {
   }
 }
 export function __near_encode_ContainerClass(
-  value: ContainerClass,
+  value: wrapped_ContainerClass,
   encoder: JSONEncoder
 ): void {
   if (value.foobar != null) {
@@ -567,7 +523,7 @@ export function __near_encode_ContainerClass(
   }
 }
 export function __near_encode_Array_ContainerClass(
-  value: Array<ContainerClass>,
+  value: Array<wrapped_ContainerClass>,
   encoder: JSONEncoder
 ): void {
   for (let i = 0; i < value.length; i++) {
@@ -587,7 +543,7 @@ export function near_func_convertFoobars(): void {
   handler.buffer = json;
   handler.decoder = new JSONDecoder<__near_ArgsParser_convertFoobars>(handler);
   handler.decoder.deserialize(json);
-  let result = convertFoobars(handler.__near_param_foobars);
+  let result = wrapped_convertFoobars(handler.__near_param_foobars);
 
   let encoder = new JSONEncoder();
   encoder.pushObject(null);
@@ -603,3 +559,6 @@ export function near_func_convertFoobars(): void {
   encoder.popObject();
   return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
 }
+export class FooBar extends wrapped_FooBar {}
+export class ContainerClass extends wrapped_ContainerClass {}
+export class AnotherContainerClass extends wrapped_AnotherContainerClass {}
