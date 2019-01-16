@@ -122,7 +122,7 @@ export namespace Symbols {
   /** Symbol representing "Array". */
   export const ARRAY = Symbol.for("Array");
   /** Symbol representing "constructor". */
-  export const CONSTRUCTOR = Symbol.for("construuctor");
+  export const CONSTRUCTOR = Symbol.for("constructor");
   /** Symbol representing "" (empty string). */
   export const EMPTY = Symbol.for("");
   /** Symbol representing omitted text. */
