@@ -903,15 +903,15 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 interface PropertyDescriptor {
   configurable?: boolean;
   enumerable?: boolean;
-  value?: any;
   writable?: boolean;
+  value?: any;
   get?(): any;
   set?(v: any): void;
 }
 
 interface TypedPropertyDescriptor<T> {
-  enumerable?: boolean;
   configurable?: boolean;
+  enumerable?: boolean;
   writable?: boolean;
   value?: T;
   get?(): T;
