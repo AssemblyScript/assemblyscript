@@ -905,8 +905,17 @@ interface PropertyDescriptor {
   enumerable?: boolean;
   value?: any;
   writable?: boolean;
-  get? (): any;
-  set? (v: any): void;
+  get?(): any;
+  set?(v: any): void;
+}
+
+interface TypedPropertyDescriptor<T> {
+  enumerable?: boolean;
+  configurable?: boolean;
+  writable?: boolean;
+  value?: T;
+  get?(): T;
+  set?(value: T): void;
 }
 
 /** Annotates an element as a program global. */
