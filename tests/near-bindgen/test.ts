@@ -11,12 +11,8 @@ export function runTest(): void {
     original.bar = 123;
     original.flag = true;
     original.baz = "foo";
-    let encoder: JSONEncoder = new JSONEncoder();
-    encoder.pushObject(null);
-    main.__near_encode_FooBar(original, encoder);
-    encoder.popObject();
-    let encoded = encoder.serialize();
-    let decoded = main.__near_decode_FooBar(encoded, null);
+    let encoded = original.encode();
+    let decoded = main.FooBar.decode(encoded);
 
     assert(original.foo == decoded.foo);
     assert(original.bar == decoded.bar);

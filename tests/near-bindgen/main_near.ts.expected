@@ -559,6 +559,92 @@ export function near_func_convertFoobars(): void {
   encoder.popObject();
   return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
 }
-export class FooBar extends wrapped_FooBar {}
-export class ContainerClass extends wrapped_ContainerClass {}
-export class AnotherContainerClass extends wrapped_AnotherContainerClass {}
+export class __near_JSONHandler_AnotherContainerClass extends ThrowingJSONHandler {
+  buffer: Uint8Array;
+  decoder: JSONDecoder<__near_JSONHandler_AnotherContainerClass>;
+  handledRoot: boolean = false;
+  value: wrapped_AnotherContainerClass = new wrapped_AnotherContainerClass();
+  setNull(name: string): void {
+    if (name == "foobar") {
+      this.value.foobar = <wrapped_FooBar>null;
+      return;
+    }
+
+    super.setNull(name);
+  }
+
+  pushObject(name: string): bool {
+    if (!this.handledRoot) {
+      assert(name == null);
+      this.handledRoot = true;
+      return true;
+    } else {
+      assert(name != null);
+    }
+    if (name == "foobar") {
+      this.value.foobar = __near_decode_FooBar(this.buffer, this.decoder.state);
+      return false;
+    }
+
+    return super.pushObject(name);
+  }
+
+  pushArray(name: string): bool {
+    return super.pushArray(name);
+  }
+}
+
+export function __near_decode_AnotherContainerClass(
+  buffer: Uint8Array,
+  state: DecoderState
+): wrapped_AnotherContainerClass {
+  let handler = new __near_JSONHandler_AnotherContainerClass();
+  handler.buffer = buffer;
+  handler.decoder = new JSONDecoder<__near_JSONHandler_AnotherContainerClass>(
+    handler
+  );
+  handler.decoder.deserialize(buffer, state);
+  return handler.value;
+}
+
+export class FooBar extends wrapped_FooBar {
+  static decode(json: Uint8Array): FooBar {
+    return <FooBar>__near_decode_FooBar(json, null);
+  }
+
+  encode(): Uint8Array {
+    let encoder: JSONEncoder = new JSONEncoder();
+    encoder.pushObject(null);
+    __near_encode_FooBar(this, encoder);
+    encoder.popObject();
+    return encoder.serialize();
+  }
+}
+export class ContainerClass extends wrapped_ContainerClass {
+  static decode(json: Uint8Array): ContainerClass {
+    return <ContainerClass>__near_decode_ContainerClass(json, null);
+  }
+
+  encode(): Uint8Array {
+    let encoder: JSONEncoder = new JSONEncoder();
+    encoder.pushObject(null);
+    __near_encode_ContainerClass(this, encoder);
+    encoder.popObject();
+    return encoder.serialize();
+  }
+}
+export class AnotherContainerClass extends wrapped_AnotherContainerClass {
+  static decode(json: Uint8Array): AnotherContainerClass {
+    return <AnotherContainerClass>(
+      __near_decode_AnotherContainerClass(json, null)
+    );
+  }
+
+  encode(): Uint8Array {
+    let encoder: JSONEncoder = new JSONEncoder();
+    encoder.pushObject(null);
+    __near_encode_AnotherContainerClass(this, encoder);
+    encoder.popObject();
+    return encoder.serialize();
+  }
+}
