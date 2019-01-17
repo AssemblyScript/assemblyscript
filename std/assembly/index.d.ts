@@ -900,28 +900,58 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 
 // Decorators
 
+interface PropertyDescriptor {
+  configurable?: boolean;
+  enumerable?: boolean;
+  value?: any;
+  writable?: boolean;
+  get? (): any;
+  set? (v: any): void;
+}
+
 /** Annotates an element as a program global. */
-declare function global(target: Function, propertyKey: string, descriptor: any): void;
+declare function global(target: Function, propertyKey: string, descriptor: PropertyDescriptor): void;
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
-declare function operator(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+declare function operator(token: string): (
+  target: Function,
+  propertyKey: string,
+  descriptor: PropertyDescriptor
+) => void;
+
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
-  export function binary(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function binary(token: string): (
+    target: Function,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) => void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
-  export function prefix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function prefix(token: string): (
+    target: Function,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) => void;
   /** Annotates a method as an unary postfix operator overload for the specified `token`. */
-  export function postfix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function postfix(token: string): (
+    target: Function,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) => void;
 }
 
 /** Annotates a class as being unmanaged with limited capabilities. */
-declare function unmanaged(target: Function): any;
+declare function unmanaged(target: Function): void;
 
 /** Annotates a class as being sealed / non-derivable. */
-declare function sealed(target: Function): any;
+declare function sealed(target: Function): void;
 
 /** Annotates a method or function as always inlined. */
-declare function inline(target: any, propertyKey: any, descriptor: any): any;
+declare function inline(target: Function, propertyKey: string, descriptor: PropertyDescriptor): void;
 
 /** Annotates an explicit external name of a function or global. */
-declare function external(target: any, propertyKey: any, descriptor: any): any;
+declare function external(namespace: string, name: string): (
+  target: Function,
+  propertyKey: string,
+  descriptor: PropertyDescriptor
+) => void;
