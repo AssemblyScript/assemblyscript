@@ -392,10 +392,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     if (!type.classReference) {
       return type.toString();
     }
-    return this.wrappedClassName(type.classReference);
-  }
-
-  private wrappedClassName(cls: Class): string {
+    let cls = type.classReference;
     if (this.exportedClasses.indexOf(cls) != -1) {
       return "wrapped_" + cls.simpleName;
     }
@@ -466,11 +463,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private encodeType(type: Type) : string {
-    return type.classReference ? this.encodeClass(type.classReference) : type.toString();
-  }
-
-  private encodeClass(cls: Class) : string {
-    return (<any>cls.simpleName)
+    return (<any>type.toString())
       .replace(/_/g, '__')
       .replace(/>/g, '')
       .replace(/</g, '_');
@@ -515,15 +508,15 @@ export class NEARBindingsBuilder extends ExportsWalker {
       declare function input_read_into(ptr: usize): void;
     `].concat(this.sb);
     this.exportedClasses.forEach(c => {
-      this.sb.push(`export class ${c.simpleName} extends ${this.wrappedClassName(c)} {
+      this.sb.push(`export class ${c.simpleName} extends ${this.wrappedTypeName(c.type)} {
         static decode(json: Uint8Array): ${c.simpleName} {
-          return <${c.simpleName}>__near_decode_${this.encodeClass(c)}(json, null);
+          return <${c.simpleName}>__near_decode_${this.encodeType(c.type)}(json, null);
         }
 
         encode(): Uint8Array {
           let encoder: JSONEncoder = new JSONEncoder();
           encoder.pushObject(null);
-          __near_encode_${this.encodeClass(c)}(this, encoder);
+          __near_encode_${this.encodeType(c.type)}(this, encoder);
           encoder.popObject();
           return encoder.serialize();
         }
