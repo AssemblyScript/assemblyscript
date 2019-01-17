@@ -900,15 +900,6 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 
 // Decorators
 
-interface PropertyDescriptor {
-  configurable?: boolean;
-  enumerable?: boolean;
-  writable?: boolean;
-  value?: any;
-  get?(): any;
-  set?(v: any): void;
-}
-
 interface TypedPropertyDescriptor<T> {
   configurable?: boolean;
   enumerable?: boolean;
@@ -919,34 +910,38 @@ interface TypedPropertyDescriptor<T> {
 }
 
 /** Annotates an element as a program global. */
-declare function global(target: Function, propertyKey: string, descriptor: PropertyDescriptor): void;
-
-/** Annotates a method as a binary operator overload for the specified `token`. */
-declare function operator(token: string): (
+declare function global<T>(
   target: Function,
   propertyKey: string,
-  descriptor: PropertyDescriptor
-) => void;
+  descriptor: TypedPropertyDescriptor<T>
+): TypedPropertyDescriptor<T> | void;
+
+/** Annotates a method as a binary operator overload for the specified `token`. */
+declare function operator<T>(token: string): (
+  target: Function,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<T>
+) => TypedPropertyDescriptor<T> | void;
 
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
-  export function binary(token: string): (
+  export function binary<T>(token: string): (
     target: Function,
     propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) => void;
+    descriptor: TypedPropertyDescriptor<T>
+  ) => TypedPropertyDescriptor<T> | void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
-  export function prefix(token: string): (
+  export function prefix<T>(token: string): (
     target: Function,
     propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) => void;
+    descriptor: TypedPropertyDescriptor<T>
+  ) => TypedPropertyDescriptor<T> | void;
   /** Annotates a method as an unary postfix operator overload for the specified `token`. */
-  export function postfix(token: string): (
+  export function postfix<T>(token: string): (
     target: Function,
     propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) => void;
+    descriptor: TypedPropertyDescriptor<T>
+  ) => TypedPropertyDescriptor<T> | void;
 }
 
 /** Annotates a class as being unmanaged with limited capabilities. */
@@ -956,11 +951,15 @@ declare function unmanaged(target: Function): void;
 declare function sealed(target: Function): void;
 
 /** Annotates a method or function as always inlined. */
-declare function inline(target: Function, propertyKey: string, descriptor: PropertyDescriptor): void;
-
-/** Annotates an explicit external name of a function or global. */
-declare function external(namespace: string, name: string): (
+declare function inline<T>(
   target: Function,
   propertyKey: string,
-  descriptor: PropertyDescriptor
-) => void;
+  descriptor: TypedPropertyDescriptor<T>
+): TypedPropertyDescriptor<T> | void;
+
+/** Annotates an explicit external name of a function or global. */
+declare function external<T>(namespace: string, name: string): (
+  target: Function,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<T>
+) => TypedPropertyDescriptor<T> | void;
