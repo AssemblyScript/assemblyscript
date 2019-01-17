@@ -913,8 +913,8 @@ interface TypedPropertyDescriptor<T> {
 declare function global(
   target: any,
   propertyKey: string,
-  descriptor: TypedPropertyDescriptor<Function>
-): TypedPropertyDescriptor<Function> | void;
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
 declare function operator(token: string): (
@@ -945,10 +945,10 @@ declare namespace operator {
 }
 
 /** Annotates a class as being unmanaged with limited capabilities. */
-declare function unmanaged(target: Function): void;
+declare function unmanaged(constructor: Function): void;
 
 /** Annotates a class as being sealed / non-derivable. */
-declare function sealed(target: Function): void;
+declare function sealed(constructor: Function): void;
 
 /** Annotates a method or function as always inlined. */
 declare function inline(
