@@ -343,8 +343,7 @@ export namespace NativeMath {
     t = reinterpret<f64>((reinterpret<u64>(t) + 0x80000000) & 0xFFFFFFFFC0000000);
     var s = t * t;
     r = x / s;
-    var w = t + t;
-    r = (r - t) / (w + r);
+    r = (r - t) / (2 * t + r);
     t = t + t * r;
     return t;
   }
@@ -402,10 +401,7 @@ export namespace NativeMath {
     hx &= 0x7FFFFFFF;
     if (hx >= 0x4086232B) {
       if (isNaN(x)) return x;
-      if (x > overflow) {
-        x *= Ox1p1023;
-        return x;
-      }
+      if (x > overflow)  return x * Ox1p1023;
       if (x < underflow) return 0;
     }
     var hi: f64, lo: f64 = 0;
@@ -808,8 +804,9 @@ export namespace NativeMath {
       if (iy >= 0x43400000) yisint = 2;
       else if (iy >= 0x3FF00000) {
         k = (iy >> 20) - 0x3FF;
-        let offset = select<i32>(52, 20, k > 20) - k;
-        let Ly = select<i32>(ly, iy, k > 20);
+        let kcond = k > 20;
+        let offset = select<i32>(52, 20, kcond) - k;
+        let Ly = select<i32>(ly, iy, kcond);
         let jj = Ly >> offset;
         if ((jj << offset) == Ly) yisint = 2 - (jj & 1);
       }
@@ -831,19 +828,24 @@ export namespace NativeMath {
     }
     var ax = builtin_abs<f64>(x), z: f64;
     if (lx == 0) {
-      if (ix == 0x7FF00000 || ix == 0 || ix == 0x3FF00000) {
+      if (ix == 0 || ix == 0x7FF00000 || ix == 0x3FF00000) {
         z = ax;
         if (hy < 0) z = 1.0 / z;
         if (hx < 0) {
-          if (((ix - 0x3FF00000) | yisint) == 0) z = (z - z) / (z - z);
-          else if (yisint == 1) z = -z;
+          if (((ix - 0x3FF00000) | yisint) == 0) {
+            let d = z - z;
+            z = d / d;
+          } else if (yisint == 1) z = -z;
         }
         return z;
       }
     }
     var s = 1.0;
     if (hx < 0) {
-      if (yisint == 0) return (x - x) / (x - x);
+      if (yisint == 0) {
+        let d = x - x;
+        return d / d;
+      }
       if (yisint == 1) s = -1.0;
     }
     var t1: f64, t2: f64, p_h: f64, p_l: f64, r: f64, t: f64, u: f64, v: f64, w: f64;
@@ -1146,7 +1148,10 @@ export namespace NativeMath {
     var ex = <i64>(ux >> 52 & 0x7FF);
     var ey = <i64>(uy >> 52 & 0x7FF);
     var sx = <i32>(ux >> 63);
-    if (uy << 1 == 0 || ex == 0x7FF || isNaN(y)) return (x * y) / (x * y);
+    if (uy << 1 == 0 || ex == 0x7FF || isNaN(y)) {
+      let m = x * y;
+      return m / m;
+    }
     if (ux << 1 == 0) return x;
     var uxi = ux;
     if (!ex) {
@@ -1225,7 +1230,7 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   const                        // see: musl/src/math/__expo2f.c
     k    = <u32>235,
     kln2 = reinterpret<f32>(0x4322E3BC); // 0x1.45c778p+7f
-  var scale = reinterpret<f32>(<u32>(0x7F + k / 2) << 23);
+  var scale = reinterpret<f32>(<u32>(0x7F + (k >> 1)) << 23);
   return NativeMathf.exp(x - kln2) * scale * scale;
 }
 
@@ -1878,8 +1883,9 @@ export namespace NativeMathf {
       if (iy >= 0x4B800000) yisint = 2;
       else if (iy >= 0x3F800000) {
         k = (iy >> 23) - 0x7F;
-        j = iy >> (23 - k);
-        if ((j << (23 - k)) == iy) yisint = 2 - (j & 1);
+        let ki = 23 - k;
+        j = iy >> ki;
+        if ((j << ki) == iy) yisint = 2 - (j & 1);
       }
     }
     if (iy == 0x7F800000) { // y is +-inf
@@ -1898,14 +1904,20 @@ export namespace NativeMathf {
       z = ax;
       if (hy < 0) z = 1.0 / z;
       if (hx < 0) {
-        if (((ix - 0x3F800000) | yisint) == 0) z = (z - z) / (z - z);
+        if (((ix - 0x3F800000) | yisint) == 0) {
+          let d = z - z;
+          z = d / d;
+        }
         else if (yisint == 1) z = -z;
       }
       return z;
     }
     var sn = <f32>1.0;
     if (hx < 0) {
-      if (yisint == 0) return (x - x) / (x - x);
+      if (yisint == 0) {
+        let d = x - x;
+        return d / d;
+      }
       if (yisint == 1) sn = -1.0;
     }
     var t1: f32, t2: f32, r: f32, s: f32, t: f32, u: f32, v: f32, w: f32, p_h: f32, p_l: f32;
