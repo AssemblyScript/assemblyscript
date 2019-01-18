@@ -2381,3 +2381,43 @@ export function ipow64(x: i64, e: i32): i64 {
   }
   return out;
 }
+
+function ipow32f(x: f32, e: i32): f32 {
+  if (ASC_SHRINK_LEVEL < 1) {
+    switch (e) {
+      case -2: return 1.0 / (x * x);
+      case -1: return 1.0 / x;
+      case 0:  return 1.0;
+      case 1:  return x;
+      case 2:  return x * x;
+    }
+  }
+  var sign = e < 0;
+  var out: f32 = 1;
+  while (e) {
+    if (e & 1) out *= x;
+    e /= 2;
+    x *= x;
+  }
+  return sign ? <f32>1.0 / out : out;
+}
+
+function ipow64f(x: f64, e: i32): f64 {
+  if (ASC_SHRINK_LEVEL < 1) {
+    switch (e) {
+      case -2: return 1.0 / (x * x);
+      case -1: return 1.0 / x;
+      case 0:  return 1.0;
+      case 1:  return x;
+      case 2:  return x * x;
+    }
+  }
+  var sign = e < 0;
+  var out = 1.0;
+  while (e) {
+    if (e & 1) out *= x;
+    e /= 2;
+    x *= x;
+  }
+  return sign ? 1.0 / out : out;
+}
