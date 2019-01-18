@@ -2385,9 +2385,9 @@ export function ipow64(x: i64, e: i32): i64 {
 function ipow32f(x: f32, e: i32): f32 {
   if (ASC_SHRINK_LEVEL < 1) {
     switch (e) {
-      case -2: return 1.0 / (x * x);
-      case -1: return 1.0 / x;
-      case 0:  return 1.0;
+      case -2: return <f32>1.0 / (x * x);
+      case -1: return <f32>1.0 / x;
+      case 0:  return <f32>1.0;
       case 1:  return x;
       case 2:  return x * x;
     }
