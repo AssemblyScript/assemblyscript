@@ -2393,10 +2393,11 @@ function ipow32f(x: f32, e: i32): f32 {
     }
   }
   var sign = e < 0;
+  e = abs(e);
   var out: f32 = 1;
   while (e) {
     if (e & 1) out *= x;
-    e /= 2;
+    e >>= 1;
     x *= x;
   }
   return sign ? <f32>1.0 / out : out;
@@ -2413,10 +2414,11 @@ function ipow64f(x: f64, e: i32): f64 {
     }
   }
   var sign = e < 0;
+  e = abs(e);
   var out = 1.0;
   while (e) {
     if (e & 1) out *= x;
-    e /= 2;
+    e >>= 1;
     x *= x;
   }
   return sign ? 1.0 / out : out;
