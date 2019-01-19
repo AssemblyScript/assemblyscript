@@ -2382,7 +2382,7 @@ export function ipow64(x: i64, e: i32): i64 {
   return out;
 }
 
-function ipow32f(x: f32, e: i32): f32 {
+export function ipow32f(x: f32, e: i32): f32 {
   if (ASC_SHRINK_LEVEL < 1) {
     switch (e) {
       case -2: return <f32>1.0 / (x * x);
@@ -2403,7 +2403,7 @@ function ipow32f(x: f32, e: i32): f32 {
   return sign ? <f32>1.0 / out : out;
 }
 
-function ipow64f(x: f64, e: i32): f64 {
+export function ipow64f(x: f64, e: i32): f64 {
   if (ASC_SHRINK_LEVEL < 1) {
     switch (e) {
       case -2: return 1.0 / (x * x);

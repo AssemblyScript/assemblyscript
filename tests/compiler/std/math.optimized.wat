@@ -9378,11 +9378,211 @@
   end
   get_local $2
  )
- (func $start (; 146 ;) (type $v)
-  (local $0 i32)
-  (local $1 i32)
+ (func $~lib/math/ipow32f (; 146 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+  (local $2 f32)
+  (local $3 i32)
+  (local $4 i32)
+  block $break|0
+   block $case4|0
+    block $case3|0
+     block $case2|0
+      block $case1|0
+       get_local $1
+       i32.const -2
+       i32.ne
+       if
+        get_local $1
+        i32.const -1
+        i32.eq
+        br_if $case1|0
+        get_local $1
+        i32.eqz
+        br_if $case2|0
+        get_local $1
+        i32.const 1
+        i32.eq
+        br_if $case3|0
+        get_local $1
+        i32.const 2
+        i32.eq
+        br_if $case4|0
+        br $break|0
+       end
+       f32.const 1
+       get_local $0
+       get_local $0
+       f32.mul
+       f32.div
+       return
+      end
+      f32.const 1
+      get_local $0
+      f32.div
+      return
+     end
+     f32.const 1
+     return
+    end
+    get_local $0
+    return
+   end
+   get_local $0
+   get_local $0
+   f32.mul
+   return
+  end
+  get_local $1
+  i32.const 0
+  i32.lt_s
+  set_local $3
+  get_local $1
+  i32.const 31
+  i32.shr_s
+  tee_local $4
+  get_local $1
+  get_local $4
+  i32.add
+  i32.xor
+  set_local $1
+  f32.const 1
+  set_local $2
+  loop $continue|1
+   get_local $1
+   if
+    get_local $2
+    get_local $0
+    f32.mul
+    get_local $2
+    get_local $1
+    i32.const 1
+    i32.and
+    select
+    set_local $2
+    get_local $1
+    i32.const 1
+    i32.shr_s
+    set_local $1
+    get_local $0
+    get_local $0
+    f32.mul
+    set_local $0
+    br $continue|1
+   end
+  end
+  get_local $3
+  if
+   f32.const 1
+   get_local $2
+   f32.div
+   set_local $2
+  end
+  get_local $2
+ )
+ (func $~lib/math/ipow64f (; 147 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
-  (local $3 f32)
+  (local $3 i32)
+  (local $4 i32)
+  block $break|0
+   block $case4|0
+    block $case3|0
+     block $case2|0
+      block $case1|0
+       get_local $1
+       i32.const -2
+       i32.ne
+       if
+        get_local $1
+        i32.const -1
+        i32.eq
+        br_if $case1|0
+        get_local $1
+        i32.eqz
+        br_if $case2|0
+        get_local $1
+        i32.const 1
+        i32.eq
+        br_if $case3|0
+        get_local $1
+        i32.const 2
+        i32.eq
+        br_if $case4|0
+        br $break|0
+       end
+       f64.const 1
+       get_local $0
+       get_local $0
+       f64.mul
+       f64.div
+       return
+      end
+      f64.const 1
+      get_local $0
+      f64.div
+      return
+     end
+     f64.const 1
+     return
+    end
+    get_local $0
+    return
+   end
+   get_local $0
+   get_local $0
+   f64.mul
+   return
+  end
+  get_local $1
+  i32.const 0
+  i32.lt_s
+  set_local $3
+  get_local $1
+  i32.const 31
+  i32.shr_s
+  tee_local $4
+  get_local $1
+  get_local $4
+  i32.add
+  i32.xor
+  set_local $1
+  f64.const 1
+  set_local $2
+  loop $continue|1
+   get_local $1
+   if
+    get_local $2
+    get_local $0
+    f64.mul
+    get_local $2
+    get_local $1
+    i32.const 1
+    i32.and
+    select
+    set_local $2
+    get_local $1
+    i32.const 1
+    i32.shr_s
+    set_local $1
+    get_local $0
+    get_local $0
+    f64.mul
+    set_local $0
+    br $continue|1
+   end
+  end
+  get_local $3
+  if
+   f64.const 1
+   get_local $2
+   f64.div
+   set_local $2
+  end
+  get_local $2
+ )
+ (func $start (; 148 ;) (type $v)
+  (local $0 f64)
+  (local $1 f32)
+  (local $2 i32)
+  (local $3 i32)
   f64.const 2.718281828459045
   get_global $~lib/bindings/Math/E
   f64.const 0
@@ -31296,30 +31496,28 @@
   i64.reinterpret/f64
   call $~lib/math/NativeMath.seedRandom
   loop $repeat|0
-   block $break|0
-    get_local $0
-    f64.convert_s/i32
-    f64.const 1e6
-    f64.lt
-    i32.eqz
-    br_if $break|0
+   get_local $2
+   f64.convert_s/i32
+   f64.const 1e6
+   f64.lt
+   if
     call $~lib/math/NativeMath.random
-    tee_local $2
+    tee_local $0
     f64.const 0
     f64.ge
-    tee_local $1
-    if
-     get_local $2
+    tee_local $3
+    if (result i32)
+     get_local $0
      f64.const 1
      f64.lt
-     set_local $1
+    else     
+     get_local $3
     end
-    get_local $1
     if
-     get_local $0
+     get_local $2
      i32.const 1
      i32.add
-     set_local $0
+     set_local $2
      br $repeat|0
     else     
      i32.const 0
@@ -31336,32 +31534,30 @@
   i64.reinterpret/f64
   call $~lib/math/NativeMath.seedRandom
   i32.const 0
-  set_local $0
+  set_local $2
   loop $repeat|1
-   block $break|1
-    get_local $0
-    f64.convert_s/i32
-    f64.const 1e6
-    f64.lt
-    i32.eqz
-    br_if $break|1
+   get_local $2
+   f64.convert_s/i32
+   f64.const 1e6
+   f64.lt
+   if
     call $~lib/math/NativeMathf.random
-    tee_local $3
+    tee_local $1
     f32.const 0
     f32.ge
-    tee_local $1
-    if
-     get_local $3
+    tee_local $3
+    if (result i32)
+     get_local $1
      f32.const 1
      f32.lt
-     set_local $1
+    else     
+     get_local $3
     end
-    get_local $1
     if
-     get_local $0
+     get_local $2
      i32.const 1
      i32.add
-     set_local $0
+     set_local $2
      br $repeat|1
     else     
      i32.const 0
@@ -37930,8 +38126,430 @@
    call $~lib/env/abort
    unreachable
   end
+  f32.const 0
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3311
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3312
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  i32.const 1
+  call $~lib/math/ipow32f
+  tee_local $1
+  get_local $1
+  f32.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3313
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  i32.const -1
+  call $~lib/math/ipow32f
+  tee_local $1
+  get_local $1
+  f32.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3314
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  i32.const 2
+  call $~lib/math/ipow32f
+  tee_local $1
+  get_local $1
+  f32.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3315
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const inf
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3316
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const inf
+  i32.const 1
+  call $~lib/math/ipow32f
+  f32.const inf
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3317
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const -inf
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3318
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const -inf
+  i32.const 1
+  call $~lib/math/ipow32f
+  f32.const -inf
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3319
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const -inf
+  i32.const 2
+  call $~lib/math/ipow32f
+  f32.const inf
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3320
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 1
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3321
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 3402823466385288598117041e14
+  i32.const 2
+  call $~lib/math/ipow32f
+  f32.const inf
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3322
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 1.401298464324817e-45
+  i32.const 2
+  call $~lib/math/ipow32f
+  f32.const 0
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3323
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 3402823466385288598117041e14
+  i32.const -1
+  call $~lib/math/ipow32f
+  f32.const 2.938735877055719e-39
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3324
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 10
+  i32.const 36
+  call $~lib/math/ipow32f
+  f32.const 1000000040918478759629753e12
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3325
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 10
+  i32.const -36
+  call $~lib/math/ipow32f
+  f32.const 9.999999462560281e-37
+  f32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3326
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 0
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3330
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3331
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const 1
+  call $~lib/math/ipow64f
+  tee_local $0
+  get_local $0
+  f64.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3332
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const -1
+  call $~lib/math/ipow64f
+  tee_local $0
+  get_local $0
+  f64.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3333
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const 2
+  call $~lib/math/ipow64f
+  tee_local $0
+  get_local $0
+  f64.eq
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3334
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const inf
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3335
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const inf
+  i32.const 1
+  call $~lib/math/ipow64f
+  f64.const inf
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3336
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const -inf
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3337
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const -inf
+  i32.const 1
+  call $~lib/math/ipow64f
+  f64.const -inf
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3338
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const -inf
+  i32.const 2
+  call $~lib/math/ipow64f
+  f64.const inf
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3339
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 1
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3340
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 1797693134862315708145274e284
+  i32.const 2
+  call $~lib/math/ipow64f
+  f64.const inf
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3341
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 5e-324
+  i32.const 2
+  call $~lib/math/ipow64f
+  f64.const 0
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3342
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 1797693134862315708145274e284
+  i32.const -1
+  call $~lib/math/ipow64f
+  f64.const 5.562684646268003e-309
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3343
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 10
+  i32.const 127
+  call $~lib/math/ipow64f
+  f64.const 1000000000000000195419867e103
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3344
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 10
+  i32.const -127
+  call $~lib/math/ipow64f
+  f64.const 9.999999999999998e-128
+  f64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3345
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $null (; 147 ;) (type $v)
+ (func $null (; 149 ;) (type $v)
   nop
  )
 )

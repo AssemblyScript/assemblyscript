@@ -94,6 +94,9 @@
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
  (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
+ (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const 1.401298464324817e-45))
+ (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
  (global $HEAP_BASE i32 (i32.const 68))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -11351,7 +11354,227 @@
   end
   get_local $2
  )
- (func $start (; 154 ;) (type $v)
+ (func $~lib/math/ipow32f (; 154 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 f32)
+  block $break|0
+   block $case4|0
+    block $case3|0
+     block $case2|0
+      block $case1|0
+       block $case0|0
+        get_local $1
+        set_local $2
+        get_local $2
+        i32.const -2
+        i32.eq
+        br_if $case0|0
+        get_local $2
+        i32.const -1
+        i32.eq
+        br_if $case1|0
+        get_local $2
+        i32.const 0
+        i32.eq
+        br_if $case2|0
+        get_local $2
+        i32.const 1
+        i32.eq
+        br_if $case3|0
+        get_local $2
+        i32.const 2
+        i32.eq
+        br_if $case4|0
+        br $break|0
+       end
+       f32.const 1
+       get_local $0
+       get_local $0
+       f32.mul
+       f32.div
+       return
+      end
+      f32.const 1
+      get_local $0
+      f32.div
+      return
+     end
+     f32.const 1
+     return
+    end
+    get_local $0
+    return
+   end
+   get_local $0
+   get_local $0
+   f32.mul
+   return
+  end
+  get_local $1
+  i32.const 0
+  i32.lt_s
+  set_local $3
+  get_local $1
+  tee_local $2
+  i32.const 31
+  i32.shr_s
+  tee_local $4
+  get_local $2
+  i32.add
+  get_local $4
+  i32.xor
+  set_local $1
+  f32.const 1
+  set_local $5
+  block $break|1
+   loop $continue|1
+    get_local $1
+    if
+     block
+      get_local $1
+      i32.const 1
+      i32.and
+      if
+       get_local $5
+       get_local $0
+       f32.mul
+       set_local $5
+      end
+      get_local $1
+      i32.const 1
+      i32.shr_s
+      set_local $1
+      get_local $0
+      get_local $0
+      f32.mul
+      set_local $0
+     end
+     br $continue|1
+    end
+   end
+  end
+  get_local $3
+  if (result f32)
+   f32.const 1
+   get_local $5
+   f32.div
+  else   
+   get_local $5
+  end
+ )
+ (func $~lib/math/ipow64f (; 155 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 f64)
+  block $break|0
+   block $case4|0
+    block $case3|0
+     block $case2|0
+      block $case1|0
+       block $case0|0
+        get_local $1
+        set_local $2
+        get_local $2
+        i32.const -2
+        i32.eq
+        br_if $case0|0
+        get_local $2
+        i32.const -1
+        i32.eq
+        br_if $case1|0
+        get_local $2
+        i32.const 0
+        i32.eq
+        br_if $case2|0
+        get_local $2
+        i32.const 1
+        i32.eq
+        br_if $case3|0
+        get_local $2
+        i32.const 2
+        i32.eq
+        br_if $case4|0
+        br $break|0
+       end
+       f64.const 1
+       get_local $0
+       get_local $0
+       f64.mul
+       f64.div
+       return
+      end
+      f64.const 1
+      get_local $0
+      f64.div
+      return
+     end
+     f64.const 1
+     return
+    end
+    get_local $0
+    return
+   end
+   get_local $0
+   get_local $0
+   f64.mul
+   return
+  end
+  get_local $1
+  i32.const 0
+  i32.lt_s
+  set_local $3
+  get_local $1
+  tee_local $2
+  i32.const 31
+  i32.shr_s
+  tee_local $4
+  get_local $2
+  i32.add
+  get_local $4
+  i32.xor
+  set_local $1
+  f64.const 1
+  set_local $5
+  block $break|1
+   loop $continue|1
+    get_local $1
+    if
+     block
+      get_local $1
+      i32.const 1
+      i32.and
+      if
+       get_local $5
+       get_local $0
+       f64.mul
+       set_local $5
+      end
+      get_local $1
+      i32.const 1
+      i32.shr_s
+      set_local $1
+      get_local $0
+      get_local $0
+      f64.mul
+      set_local $0
+     end
+     br $continue|1
+    end
+   end
+  end
+  get_local $3
+  if (result f64)
+   f64.const 1
+   get_local $5
+   f64.div
+  else   
+   get_local $5
+  end
+ )
+ (func $start (; 156 ;) (type $v)
   (local $0 i32)
   (local $1 f64)
   (local $2 i32)
@@ -42118,7 +42341,478 @@
    call $~lib/env/abort
    unreachable
   end
+  f32.const 0
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3311
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const nan:0x400000
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3312
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/isNaN<f32>|inlined.2 (result i32)
+   f32.const nan:0x400000
+   i32.const 1
+   call $~lib/math/ipow32f
+   set_local $4
+   get_local $4
+   get_local $4
+   f32.ne
+  end
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3313
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/isNaN<f32>|inlined.3 (result i32)
+   f32.const nan:0x400000
+   i32.const -1
+   call $~lib/math/ipow32f
+   set_local $4
+   get_local $4
+   get_local $4
+   f32.ne
+  end
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3314
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/builtins/isNaN<f32>|inlined.4 (result i32)
+   f32.const nan:0x400000
+   i32.const 2
+   call $~lib/math/ipow32f
+   set_local $4
+   get_local $4
+   get_local $4
+   f32.ne
+  end
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3315
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const inf
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3316
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const inf
+  i32.const 1
+  call $~lib/math/ipow32f
+  f32.const inf
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3317
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const inf
+  f32.neg
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3318
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const inf
+  f32.neg
+  i32.const 1
+  call $~lib/math/ipow32f
+  f32.const inf
+  f32.neg
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3319
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const inf
+  f32.neg
+  i32.const 2
+  call $~lib/math/ipow32f
+  f32.const inf
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3320
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 1
+  i32.const 0
+  call $~lib/math/ipow32f
+  f32.const 1
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3321
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f32.MAX_VALUE
+  i32.const 2
+  call $~lib/math/ipow32f
+  f32.const inf
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3322
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f32.MIN_VALUE
+  i32.const 2
+  call $~lib/math/ipow32f
+  f32.const 0
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3323
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f32.MAX_VALUE
+  i32.const -1
+  call $~lib/math/ipow32f
+  f32.const 2.938735877055719e-39
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3324
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 10
+  i32.const 36
+  call $~lib/math/ipow32f
+  f32.const 1000000040918478759629753e12
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3325
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f32.const 10
+  i32.const -36
+  call $~lib/math/ipow32f
+  f32.const 9.999999462560281e-37
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3326
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 0
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3330
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3331
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const 1
+  call $~lib/math/ipow64f
+  call $~lib/builtins/isNaN<f64>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3332
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const -1
+  call $~lib/math/ipow64f
+  call $~lib/builtins/isNaN<f64>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3333
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  i32.const 2
+  call $~lib/math/ipow64f
+  call $~lib/builtins/isNaN<f64>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3334
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const inf
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3335
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const inf
+  i32.const 1
+  call $~lib/math/ipow64f
+  f64.const inf
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3336
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const inf
+  f64.neg
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3337
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const inf
+  f64.neg
+  i32.const 1
+  call $~lib/math/ipow64f
+  f64.const inf
+  f64.neg
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3338
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const inf
+  f64.neg
+  i32.const 2
+  call $~lib/math/ipow64f
+  f64.const inf
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3339
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 1
+  i32.const 0
+  call $~lib/math/ipow64f
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3340
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f64.MAX_VALUE
+  i32.const 2
+  call $~lib/math/ipow64f
+  f64.const inf
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3341
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f64.MIN_VALUE
+  i32.const 2
+  call $~lib/math/ipow64f
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3342
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  get_global $~lib/builtins/f64.MAX_VALUE
+  i32.const -1
+  call $~lib/math/ipow64f
+  f64.const 5.562684646268003e-309
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3343
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 10
+  i32.const 127
+  call $~lib/math/ipow64f
+  f64.const 1000000000000000195419867e103
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3344
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 10
+  i32.const -127
+  call $~lib/math/ipow64f
+  f64.const 9.999999999999998e-128
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3345
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $null (; 155 ;) (type $v)
+ (func $null (; 157 ;) (type $v)
  )
 )
