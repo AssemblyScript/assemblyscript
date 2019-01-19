@@ -607,6 +607,8 @@ export function __near_decode_AnotherContainerClass(
   return handler.value;
 }
 
+import { near } from "./near";
+import { near as bazinga_near } from "./near";
 export class FooBar extends wrapped_FooBar {
   static decode(json: Uint8Array): FooBar {
     return <FooBar>__near_decode_FooBar(json, null);

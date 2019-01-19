@@ -1,9 +1,8 @@
 import "allocator/arena";
-// TODO: Why cannot import from index?
-// import { JSONEncoder, JSONDecoder } from "./json";
-import { JSONEncoder } from "./json/encoder";
-import { JSONDecoder, DecoderState, JSONHandler, ThrowingJSONHandler } from "./json/decoder";
+
+// These imports need to be copied properly
 import { near } from "./near"
+import { near as bazinga_near } from "./near"
 
 @external("env", "log")
 declare function log(str: string): void;

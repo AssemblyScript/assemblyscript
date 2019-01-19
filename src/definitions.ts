@@ -33,6 +33,7 @@ import {
 import {
   indent
 } from "./util";
+import { Source, NodeKind, ImportStatement } from "./ast";
 
 /** Walker base class. */
 abstract class ExportsWalker {
@@ -489,10 +490,12 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.generateDecodeFunction(c.type);
     });
 
-    let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions);
-    let allImportsStr = allExported.map(c => `${c.simpleName} as wrapped_${c.simpleName}`).join(", ");
     let mainSource = this.program.sources
       .filter(s => s.normalizedPath.indexOf("~lib") != 0)[0];
+    this.copyImports(mainSource);
+
+    let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions);
+    let allImportsStr = allExported.map(c => `${c.simpleName} as wrapped_${c.simpleName}`).join(", ");
     this.sb = [`
       import { near } from "./near";
       import { JSONEncoder} from "./json/encoder"
@@ -523,6 +526,20 @@ export class NEARBindingsBuilder extends ExportsWalker {
       }`);
     })
     return this.sb.join("\n");
+  }
+
+  private copyImports(mainSource: Source): any {
+    let imports = <ImportStatement[]>mainSource.statements
+      .filter(statement => statement.kind == NodeKind.IMPORT);
+
+    imports.forEach(statement => {
+      if (statement.declarations) {
+        let declarationsStr = statement.declarations!
+          .map(declaration => `${declaration.externalName.text} as ${declaration.name.text}`)
+          .join(",");
+        this.sb.push(`import {${declarationsStr}} from "${statement.path.value}";`);
+      }
+    });
   }
 }
 
