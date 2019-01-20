@@ -1096,7 +1096,10 @@ export namespace NativeMath {
     var ey = <i64>(uy >> 52 & 0x7FF);
     var sx = ux >> 63;
     var uy1 = uy << 1;
-    if (uy1 == 0 || ex == 0x7FF || isNaN<f64>(y)) return (x * y) / (x * y);
+    if (uy1 == 0 || ex == 0x7FF || isNaN<f64>(y)) {
+      let m = x * y;
+      return m / m;
+    }
     var ux1 = ux << 1;
     if (ux1 <= uy1) {
       if (ux1 == uy1) return 0 * x;
@@ -1418,7 +1421,7 @@ export namespace NativeMathf {
     if (iy == 0) {
       switch (m) {
         case 0:
-        case 1: return y;
+        case 1: return  y;
         case 2: return  pi;
         case 3: return -pi;
       }
@@ -1532,12 +1535,8 @@ export namespace NativeMathf {
     hx &= 0x7FFFFFFF;
     if (hx >= 0x42AEAC50) {
       if (hx >= 0x42B17218) {
-        if (!sign_) {
-          x *= Ox1p127f;
-          return x;
-        } else {
-          if (hx >= 0x42CFF1B5) return 0;
-        }
+        if (!sign_) return x * Ox1p127f;
+        else if (hx >= 0x42CFF1B5) return 0;
       }
     }
     var hi: f32, lo: f32;
@@ -2160,7 +2159,10 @@ export namespace NativeMathf {
     var ey = <i32>(uy >> 23 & 0xFF);
     var sx = ux & 0x80000000;
     var uy1 = uy << 1;
-    if (uy1 == 0 || ex == 0xFF || isNaN<f32>(y)) return (x * y) / (x * y);
+    if (uy1 == 0 || ex == 0xFF || isNaN<f32>(y)) {
+      let m = x * y;
+      return m / m;
+    }
     var ux1 = ux << 1;
     if (ux1 <= uy1) {
       if (ux1 == uy1) return 0 * x;
@@ -2291,27 +2293,27 @@ export function ipow32(x: i32, e: i32): i32 {
       // But some extra cases needs for properly overflowing
       switch (log) {
         case 5: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
           e >>= 1;
           x *= x;
         }
         case 4: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
           e >>= 1;
           x *= x;
         }
         case 3: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
           e >>= 1;
           x *= x;
         }
         case 2: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
           e >>= 1;
           x *= x;
         }
         case 1: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
         }
       }
       return out;
@@ -2319,7 +2321,7 @@ export function ipow32(x: i32, e: i32): i32 {
   }
 
   while (e > 0) {
-    out *= select(x, 1, e & 1);
+    if (e & 1) out *= x;
     e >>= 1;
     x *= x;
   }
@@ -2342,32 +2344,32 @@ export function ipow64(x: i64, e: i32): i64 {
       // But some extra cases needs for properly overflowing
       switch (log) {
         case 6: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
           e >>= 1;
           x *= x;
         }
         case 5: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
           e >>= 1;
           x *= x;
         }
         case 4: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
           e >>= 1;
           x *= x;
         }
         case 3: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
           e >>= 1;
           x *= x;
         }
         case 2: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
           e >>= 1;
           x *= x;
         }
         case 1: {
-          out *= select(x, 1, e & 1);
+          if (e & 1) out *= x;
         }
       }
       return out;
@@ -2375,7 +2377,7 @@ export function ipow64(x: i64, e: i32): i64 {
   }
 
   while (e > 0) {
-    out *= select(x, 1, e & 1);
+    if (e & 1) out *= x;
     e >>= 1;
     x *= x;
   }

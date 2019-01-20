@@ -8114,7 +8114,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 2041
+   i32.const 2040
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -9267,13 +9267,13 @@
          set_local $0
         end
         get_local $0
-        i64.const 1
+        get_local $2
+        i64.mul
+        get_local $2
         get_local $1
         i32.const 1
         i32.and
         select
-        get_local $2
-        i64.mul
         set_local $2
         get_local $1
         i32.const 1
@@ -9285,13 +9285,13 @@
         set_local $0
        end
        get_local $0
-       i64.const 1
+       get_local $2
+       i64.mul
+       get_local $2
        get_local $1
        i32.const 1
        i32.and
        select
-       get_local $2
-       i64.mul
        set_local $2
        get_local $1
        i32.const 1
@@ -9303,13 +9303,13 @@
        set_local $0
       end
       get_local $0
-      i64.const 1
+      get_local $2
+      i64.mul
+      get_local $2
       get_local $1
       i32.const 1
       i32.and
       select
-      get_local $2
-      i64.mul
       set_local $2
       get_local $1
       i32.const 1
@@ -9321,13 +9321,13 @@
       set_local $0
      end
      get_local $0
-     i64.const 1
+     get_local $2
+     i64.mul
+     get_local $2
      get_local $1
      i32.const 1
      i32.and
      select
-     get_local $2
-     i64.mul
      set_local $2
      get_local $1
      i32.const 1
@@ -9339,13 +9339,13 @@
      set_local $0
     end
     get_local $0
-    i64.const 1
+    get_local $2
+    i64.mul
+    get_local $2
     get_local $1
     i32.const 1
     i32.and
     select
-    get_local $2
-    i64.mul
     set_local $2
    end
    get_local $2
@@ -9357,13 +9357,13 @@
    i32.gt_s
    if
     get_local $0
-    i64.const 1
+    get_local $2
+    i64.mul
+    get_local $2
     get_local $1
     i32.const 1
     i32.and
     select
-    get_local $2
-    i64.mul
     set_local $2
     get_local $1
     i32.const 1
