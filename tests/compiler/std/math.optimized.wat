@@ -9432,8 +9432,8 @@
    return
   end
   get_local $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   set_local $3
   get_local $1
   i32.const 31
@@ -9532,8 +9532,8 @@
    return
   end
   get_local $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   set_local $3
   get_local $1
   i32.const 31
