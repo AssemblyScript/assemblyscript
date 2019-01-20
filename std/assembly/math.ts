@@ -2291,27 +2291,27 @@ export function ipow32(x: i32, e: i32): i32 {
       // But some extra cases needs for properly overflowing
       switch (log) {
         case 5: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
           e >>= 1;
           x *= x;
         }
         case 4: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
           e >>= 1;
           x *= x;
         }
         case 3: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
           e >>= 1;
           x *= x;
         }
         case 2: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
           e >>= 1;
           x *= x;
         }
         case 1: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
         }
       }
       return out;
@@ -2319,7 +2319,7 @@ export function ipow32(x: i32, e: i32): i32 {
   }
 
   while (e > 0) {
-    if (e & 1) out *= x;
+    out *= select(x, 1, e & 1);
     e >>= 1;
     x *= x;
   }
@@ -2342,32 +2342,32 @@ export function ipow64(x: i64, e: i32): i64 {
       // But some extra cases needs for properly overflowing
       switch (log) {
         case 6: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
           e >>= 1;
           x *= x;
         }
         case 5: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
           e >>= 1;
           x *= x;
         }
         case 4: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
           e >>= 1;
           x *= x;
         }
         case 3: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
           e >>= 1;
           x *= x;
         }
         case 2: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
           e >>= 1;
           x *= x;
         }
         case 1: {
-          if (e & 1) out *= x;
+          out *= select(x, 1, e & 1);
         }
       }
       return out;
@@ -2375,7 +2375,7 @@ export function ipow64(x: i64, e: i32): i64 {
   }
 
   while (e > 0) {
-    if (e & 1) out *= x;
+    out *= select(x, 1, e & 1);
     e >>= 1;
     x *= x;
   }
@@ -2396,7 +2396,7 @@ export function ipow32f(x: f32, e: i32): f32 {
   e = (e + sign) ^ sign; // abs(e)
   var out: f32 = 1;
   while (e) {
-    if (e & 1) out *= x;
+    out *= select<f32>(x, 1.0, e & 1);
     e >>= 1;
     x *= x;
   }
@@ -2417,7 +2417,7 @@ export function ipow64f(x: f64, e: i32): f64 {
   e = (e + sign) ^ sign; // abs(e)
   var out = 1.0;
   while (e) {
-    if (e & 1) out *= x;
+    out *= select(x, 1.0, e & 1);
     e >>= 1;
     x *= x;
   }

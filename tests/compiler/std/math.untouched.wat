@@ -11211,15 +11211,15 @@
           br $break|1
          end
          block
+          get_local $2
+          get_local $0
+          i64.const 1
           get_local $1
           i32.const 1
           i32.and
-          if
-           get_local $2
-           get_local $0
-           i64.mul
-           set_local $2
-          end
+          select
+          i64.mul
+          set_local $2
           get_local $1
           i32.const 1
           i32.shr_s
@@ -11231,15 +11231,15 @@
          end
         end
         block
+         get_local $2
+         get_local $0
+         i64.const 1
          get_local $1
          i32.const 1
          i32.and
-         if
-          get_local $2
-          get_local $0
-          i64.mul
-          set_local $2
-         end
+         select
+         i64.mul
+         set_local $2
          get_local $1
          i32.const 1
          i32.shr_s
@@ -11251,15 +11251,15 @@
         end
        end
        block
+        get_local $2
+        get_local $0
+        i64.const 1
         get_local $1
         i32.const 1
         i32.and
-        if
-         get_local $2
-         get_local $0
-         i64.mul
-         set_local $2
-        end
+        select
+        i64.mul
+        set_local $2
         get_local $1
         i32.const 1
         i32.shr_s
@@ -11271,15 +11271,15 @@
        end
       end
       block
+       get_local $2
+       get_local $0
+       i64.const 1
        get_local $1
        i32.const 1
        i32.and
-       if
-        get_local $2
-        get_local $0
-        i64.mul
-        set_local $2
-       end
+       select
+       i64.mul
+       set_local $2
        get_local $1
        i32.const 1
        i32.shr_s
@@ -11291,15 +11291,15 @@
       end
      end
      block
+      get_local $2
+      get_local $0
+      i64.const 1
       get_local $1
       i32.const 1
       i32.and
-      if
-       get_local $2
-       get_local $0
-       i64.mul
-       set_local $2
-      end
+      select
+      i64.mul
+      set_local $2
       get_local $1
       i32.const 1
       i32.shr_s
@@ -11310,15 +11310,15 @@
       set_local $0
      end
     end
+    get_local $2
+    get_local $0
+    i64.const 1
     get_local $1
     i32.const 1
     i32.and
-    if
-     get_local $2
-     get_local $0
-     i64.mul
-     set_local $2
-    end
+    select
+    i64.mul
+    set_local $2
    end
    get_local $2
    return
@@ -11330,15 +11330,15 @@
     i32.gt_s
     if
      block
+      get_local $2
+      get_local $0
+      i64.const 1
       get_local $1
       i32.const 1
       i32.and
-      if
-       get_local $2
-       get_local $0
-       i64.mul
-       set_local $2
-      end
+      select
+      i64.mul
+      set_local $2
       get_local $1
       i32.const 1
       i32.shr_s
@@ -11428,15 +11428,15 @@
     get_local $1
     if
      block
+      get_local $4
+      get_local $0
+      f32.const 1
       get_local $1
       i32.const 1
       i32.and
-      if
-       get_local $4
-       get_local $0
-       f32.mul
-       set_local $4
-      end
+      select
+      f32.mul
+      set_local $4
       get_local $1
       i32.const 1
       i32.shr_s
@@ -11533,15 +11533,15 @@
     get_local $1
     if
      block
+      get_local $4
+      get_local $0
+      f64.const 1
       get_local $1
       i32.const 1
       i32.and
-      if
-       get_local $4
-       get_local $0
-       f64.mul
-       set_local $4
-      end
+      select
+      f64.mul
+      set_local $4
       get_local $1
       i32.const 1
       i32.shr_s
