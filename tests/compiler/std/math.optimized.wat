@@ -9381,55 +9381,6 @@
  (func $~lib/math/ipow32f (; 146 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
-  block $break|0
-   block $case4|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       get_local $1
-       i32.const -2
-       i32.ne
-       if
-        get_local $1
-        i32.const -1
-        i32.eq
-        br_if $case1|0
-        get_local $1
-        i32.eqz
-        br_if $case2|0
-        get_local $1
-        i32.const 1
-        i32.eq
-        br_if $case3|0
-        get_local $1
-        i32.const 2
-        i32.eq
-        br_if $case4|0
-        br $break|0
-       end
-       f32.const 1
-       get_local $0
-       get_local $0
-       f32.mul
-       f32.div
-       return
-      end
-      f32.const 1
-      get_local $0
-      f32.div
-      return
-     end
-     f32.const 1
-     return
-    end
-    get_local $0
-    return
-   end
-   get_local $0
-   get_local $0
-   f32.mul
-   return
-  end
   get_local $1
   i32.const 31
   i32.shr_s
@@ -9441,7 +9392,7 @@
   set_local $1
   f32.const 1
   set_local $2
-  loop $continue|1
+  loop $continue|0
    get_local $1
    if
     get_local $2
@@ -9461,7 +9412,7 @@
     get_local $0
     f32.mul
     set_local $0
-    br $continue|1
+    br $continue|0
    end
   end
   get_local $3
@@ -9476,55 +9427,6 @@
  (func $~lib/math/ipow64f (; 147 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
-  block $break|0
-   block $case4|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       get_local $1
-       i32.const -2
-       i32.ne
-       if
-        get_local $1
-        i32.const -1
-        i32.eq
-        br_if $case1|0
-        get_local $1
-        i32.eqz
-        br_if $case2|0
-        get_local $1
-        i32.const 1
-        i32.eq
-        br_if $case3|0
-        get_local $1
-        i32.const 2
-        i32.eq
-        br_if $case4|0
-        br $break|0
-       end
-       f64.const 1
-       get_local $0
-       get_local $0
-       f64.mul
-       f64.div
-       return
-      end
-      f64.const 1
-      get_local $0
-      f64.div
-      return
-     end
-     f64.const 1
-     return
-    end
-    get_local $0
-    return
-   end
-   get_local $0
-   get_local $0
-   f64.mul
-   return
-  end
   get_local $1
   i32.const 31
   i32.shr_s
@@ -9536,7 +9438,7 @@
   set_local $1
   f64.const 1
   set_local $2
-  loop $continue|1
+  loop $continue|0
    get_local $1
    if
     get_local $2
@@ -9556,7 +9458,7 @@
     get_local $0
     f64.mul
     set_local $0
-    br $continue|1
+    br $continue|0
    end
   end
   get_local $3

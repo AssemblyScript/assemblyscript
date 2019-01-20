@@ -11356,79 +11356,25 @@
  )
  (func $~lib/math/ipow32f (; 154 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 f32)
-  block $break|0
-   block $case4|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        get_local $1
-        set_local $2
-        get_local $2
-        i32.const -2
-        i32.eq
-        br_if $case0|0
-        get_local $2
-        i32.const -1
-        i32.eq
-        br_if $case1|0
-        get_local $2
-        i32.const 0
-        i32.eq
-        br_if $case2|0
-        get_local $2
-        i32.const 1
-        i32.eq
-        br_if $case3|0
-        get_local $2
-        i32.const 2
-        i32.eq
-        br_if $case4|0
-        br $break|0
-       end
-       f32.const 1
-       get_local $0
-       get_local $0
-       f32.mul
-       f32.div
-       return
-      end
-      f32.const 1
-      get_local $0
-      f32.div
-      return
-     end
-     f32.const 1
-     return
-    end
-    get_local $0
-    return
-   end
-   get_local $0
-   get_local $0
-   f32.mul
-   return
-  end
+  (local $3 f32)
   get_local $1
   i32.const 31
   i32.shr_s
-  set_local $3
+  set_local $2
   get_local $1
-  get_local $3
+  get_local $2
   i32.add
-  get_local $3
+  get_local $2
   i32.xor
   set_local $1
   f32.const 1
-  set_local $4
-  block $break|1
-   loop $continue|1
+  set_local $3
+  block $break|0
+   loop $continue|0
     get_local $1
     if
      block
-      get_local $4
+      get_local $3
       get_local $0
       f32.const 1
       get_local $1
@@ -11436,7 +11382,7 @@
       i32.and
       select
       f32.mul
-      set_local $4
+      set_local $3
       get_local $1
       i32.const 1
       i32.shr_s
@@ -11446,94 +11392,40 @@
       f32.mul
       set_local $0
      end
-     br $continue|1
+     br $continue|0
     end
    end
   end
-  get_local $3
+  get_local $2
   if (result f32)
    f32.const 1
-   get_local $4
+   get_local $3
    f32.div
   else   
-   get_local $4
+   get_local $3
   end
  )
  (func $~lib/math/ipow64f (; 155 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 f64)
-  block $break|0
-   block $case4|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        get_local $1
-        set_local $2
-        get_local $2
-        i32.const -2
-        i32.eq
-        br_if $case0|0
-        get_local $2
-        i32.const -1
-        i32.eq
-        br_if $case1|0
-        get_local $2
-        i32.const 0
-        i32.eq
-        br_if $case2|0
-        get_local $2
-        i32.const 1
-        i32.eq
-        br_if $case3|0
-        get_local $2
-        i32.const 2
-        i32.eq
-        br_if $case4|0
-        br $break|0
-       end
-       f64.const 1
-       get_local $0
-       get_local $0
-       f64.mul
-       f64.div
-       return
-      end
-      f64.const 1
-      get_local $0
-      f64.div
-      return
-     end
-     f64.const 1
-     return
-    end
-    get_local $0
-    return
-   end
-   get_local $0
-   get_local $0
-   f64.mul
-   return
-  end
+  (local $3 f64)
   get_local $1
   i32.const 31
   i32.shr_s
-  set_local $3
+  set_local $2
   get_local $1
-  get_local $3
+  get_local $2
   i32.add
-  get_local $3
+  get_local $2
   i32.xor
   set_local $1
   f64.const 1
-  set_local $4
-  block $break|1
-   loop $continue|1
+  set_local $3
+  block $break|0
+   loop $continue|0
     get_local $1
     if
      block
-      get_local $4
+      get_local $3
       get_local $0
       f64.const 1
       get_local $1
@@ -11541,7 +11433,7 @@
       i32.and
       select
       f64.mul
-      set_local $4
+      set_local $3
       get_local $1
       i32.const 1
       i32.shr_s
@@ -11551,17 +11443,17 @@
       f64.mul
       set_local $0
      end
-     br $continue|1
+     br $continue|0
     end
    end
   end
-  get_local $3
+  get_local $2
   if (result f64)
    f64.const 1
-   get_local $4
+   get_local $3
    f64.div
   else   
-   get_local $4
+   get_local $3
   end
  )
  (func $start (; 156 ;) (type $v)
