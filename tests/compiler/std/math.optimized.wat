@@ -9381,7 +9381,6 @@
  (func $~lib/math/ipow32f (; 146 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
-  (local $4 i32)
   block $break|0
    block $case4|0
     block $case3|0
@@ -9433,14 +9432,10 @@
   end
   get_local $1
   i32.const 31
-  i32.shr_u
-  set_local $3
-  get_local $1
-  i32.const 31
   i32.shr_s
-  tee_local $4
+  tee_local $3
   get_local $1
-  get_local $4
+  get_local $3
   i32.add
   i32.xor
   set_local $1
@@ -9481,7 +9476,6 @@
  (func $~lib/math/ipow64f (; 147 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
-  (local $4 i32)
   block $break|0
    block $case4|0
     block $case3|0
@@ -9533,14 +9527,10 @@
   end
   get_local $1
   i32.const 31
-  i32.shr_u
-  set_local $3
-  get_local $1
-  i32.const 31
   i32.shr_s
-  tee_local $4
+  tee_local $3
   get_local $1
-  get_local $4
+  get_local $3
   i32.add
   i32.xor
   set_local $1

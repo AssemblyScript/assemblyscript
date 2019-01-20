@@ -2392,8 +2392,8 @@ export function ipow32f(x: f32, e: i32): f32 {
       case 2:  return x * x;
     }
   }
-  var sign = e >>> 31;
-  e = abs(e);
+  var sign = e >> 31;
+  e = (e + sign) ^ sign; // abs(e)
   var out: f32 = 1;
   while (e) {
     if (e & 1) out *= x;
@@ -2413,8 +2413,8 @@ export function ipow64f(x: f64, e: i32): f64 {
       case 2:  return x * x;
     }
   }
-  var sign = e >>> 31;
-  e = abs(e);
+  var sign = e >> 31;
+  e = (e + sign) ^ sign; // abs(e)
   var out = 1.0;
   while (e) {
     if (e & 1) out *= x;

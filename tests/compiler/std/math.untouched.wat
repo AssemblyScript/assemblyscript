@@ -11357,8 +11357,7 @@
  (func $~lib/math/ipow32f (; 154 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 f32)
+  (local $4 f32)
   block $break|0
    block $case4|0
     block $case3|0
@@ -11414,20 +11413,16 @@
   end
   get_local $1
   i32.const 31
-  i32.shr_u
+  i32.shr_s
   set_local $3
   get_local $1
-  tee_local $2
-  i32.const 31
-  i32.shr_s
-  tee_local $4
-  get_local $2
+  get_local $3
   i32.add
-  get_local $4
+  get_local $3
   i32.xor
   set_local $1
   f32.const 1
-  set_local $5
+  set_local $4
   block $break|1
    loop $continue|1
     get_local $1
@@ -11437,10 +11432,10 @@
       i32.const 1
       i32.and
       if
-       get_local $5
+       get_local $4
        get_local $0
        f32.mul
-       set_local $5
+       set_local $4
       end
       get_local $1
       i32.const 1
@@ -11458,17 +11453,16 @@
   get_local $3
   if (result f32)
    f32.const 1
-   get_local $5
+   get_local $4
    f32.div
   else   
-   get_local $5
+   get_local $4
   end
  )
  (func $~lib/math/ipow64f (; 155 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 f64)
+  (local $4 f64)
   block $break|0
    block $case4|0
     block $case3|0
@@ -11524,20 +11518,16 @@
   end
   get_local $1
   i32.const 31
-  i32.shr_u
+  i32.shr_s
   set_local $3
   get_local $1
-  tee_local $2
-  i32.const 31
-  i32.shr_s
-  tee_local $4
-  get_local $2
+  get_local $3
   i32.add
-  get_local $4
+  get_local $3
   i32.xor
   set_local $1
   f64.const 1
-  set_local $5
+  set_local $4
   block $break|1
    loop $continue|1
     get_local $1
@@ -11547,10 +11537,10 @@
       i32.const 1
       i32.and
       if
-       get_local $5
+       get_local $4
        get_local $0
        f64.mul
-       set_local $5
+       set_local $4
       end
       get_local $1
       i32.const 1
@@ -11568,10 +11558,10 @@
   get_local $3
   if (result f64)
    f64.const 1
-   get_local $5
+   get_local $4
    f64.div
   else   
-   get_local $5
+   get_local $4
   end
  )
  (func $start (; 156 ;) (type $v)
