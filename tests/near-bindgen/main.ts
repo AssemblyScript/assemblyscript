@@ -3,26 +3,10 @@ import "allocator/arena";
 // These imports need to be copied properly
 import { near } from "./near"
 import { near as bazinga_near } from "./near"
+import { FooBar, ContainerClass, AnotherContainerClass } from "./model_near";
 
 @external("env", "log")
 declare function log(str: string): void;
-
-export class FooBar {
-    foo: i32 = 0;
-    bar: i32 = 1;
-    flag: bool;
-    baz: string = "123";
-    //foobar: Uint8Array;
-    arr: Array<Array<string>>;
-}
-
-export class ContainerClass {
-    foobar: FooBar
-}
-
-export class AnotherContainerClass {
-    foobar: FooBar
-}
 
 export function doNothing(): void {
 
