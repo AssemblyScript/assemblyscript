@@ -95,7 +95,7 @@ declare function isString(value: any): value is string | String;
 /** Tests if the specified value can be used as an array. */
 declare function isArray(value: any): value is Array<any>;
 /** Tests if the specified type *or* expression can be used as an typed array. Compiles to a constant. */
-declare function isArrayBufferView(value: any): value is Array<any>;
+declare function isArrayBufferView(value: any): value is ArrayBufferView<any>;
 /** Tests if the specified expression resolves to a defined element. */
 declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. */
