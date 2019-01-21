@@ -143,11 +143,12 @@ export function compileCall(
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
       if (
-        classType &&
-        classType.members &&
-        classType.members.get("buffer") &&
-        classType.members.get("byteOffset") &&
-        classType.members.get("byteLength")
+        classType !== null &&
+        classType.members !== null &&
+        classType.members.get("buffer") != null &&
+        classType.members.get("byteOffset") != null &&
+        classType.members.get("byteLength") != null &&
+        classType.lookupOverload(OperatorKind.INDEXED_GET) !== null
       ) {
         return module.createI32(1);
       }
