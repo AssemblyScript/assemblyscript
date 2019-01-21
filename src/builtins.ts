@@ -145,9 +145,9 @@ export function compileCall(
       if (
         classType !== null &&
         classType.members !== null &&
-        classType.members.get("buffer") != null &&
-        classType.members.get("byteOffset") != null &&
-        classType.members.get("byteLength") != null &&
+        classType.members.has("buffer") &&
+        classType.members.has("byteOffset") &&
+        classType.members.has("byteLength") &&
         classType.lookupOverload(OperatorKind.INDEXED_GET) !== null
       ) {
         return module.createI32(1);
