@@ -294,7 +294,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     fields.forEach((field) => {
       if (!(field.type.toString() in this.typeMapping)) {
         this.sb.push(`if (name == "${field.simpleName}") {
-          ${valuePrefix}${field.simpleName} = __near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
+          ${valuePrefix}${field.simpleName} = <${field.type}>__near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
           return false;
         }`);
       }
@@ -444,7 +444,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       let pushType = this.isArrayType(fieldType) ? "Array" : "Object";
       this.sb.push(`if (${sourceExpr} != null) {
           encoder.push${pushType}(${fieldExpr});
-          __near_encode_${this.encodeType(fieldType)}(${sourceExpr}, encoder);
+          __near_encode_${this.encodeType(fieldType)}(<${fieldType}>${sourceExpr}, encoder);
           encoder.pop${pushType}();
         } else {
           encoder.setNull(${fieldExpr});
@@ -483,16 +483,16 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   build(): string {
+    let mainSource = this.program.sources
+      .filter(s => s.normalizedPath.indexOf("~lib") != 0)[0];
+    this.copyImports(mainSource);
+
     this.walk();
 
     this.exportedClasses.forEach(c => {
       this.generateEncodeFunction(c.type);
       this.generateDecodeFunction(c.type);
     });
-
-    let mainSource = this.program.sources
-      .filter(s => s.normalizedPath.indexOf("~lib") != 0)[0];
-    this.copyImports(mainSource);
 
     let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions);
     let allImportsStr = allExported.map(c => `${c.simpleName} as wrapped_${c.simpleName}`).join(", ");
@@ -519,7 +519,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
         encode(): Uint8Array {
           let encoder: JSONEncoder = new JSONEncoder();
           encoder.pushObject(null);
-          __near_encode_${this.encodeType(c.type)}(this, encoder);
+          __near_encode_${this.encodeType(c.type)}(<${c.simpleName}>this, encoder);
           encoder.popObject();
           return encoder.serialize();
         }

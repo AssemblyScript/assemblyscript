@@ -1,18 +1,18 @@
 
 import * as main from "./main_near";
-import { JSONEncoder } from "./json/encoder";
+import * as model from "./model_near";
 
 @external("env", "log")
 declare function log(str: string): void;
 
 export function runTest(): void {
-    let original = new main.FooBar();
+    let original = new model.FooBar();
     original.foo = 321;
     original.bar = 123;
     original.flag = true;
     original.baz = "foo";
     let encoded = original.encode();
-    let decoded = main.FooBar.decode(encoded);
+    let decoded = model.FooBar.decode(encoded);
 
     assert(original.foo == decoded.foo);
     assert(original.bar == decoded.bar);
