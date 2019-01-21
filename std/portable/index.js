@@ -205,7 +205,7 @@ globalScope["isFloat"] = function isFloat(arg) {
 };
 
 globalScope["isReference"] = function isReference(arg) {
-  return typeof arg === "object" || typeof arg === "string";
+  return typeof arg === "object" || typeof arg === "string" || typeof arg === "symbol";
 };
 
 globalScope["isString"] = function isString(arg) {
