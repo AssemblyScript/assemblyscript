@@ -410,7 +410,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 16
+   i32.const 24
    i32.const 40
    call $~lib/env/abort
    unreachable
@@ -1976,12 +1976,8 @@
   get_local $2
   call $~lib/arraybuffer/ArrayBuffer#slice
  )
- (func $~lib/arraybuffer/ArrayBuffer#get:data (; 10 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
-  get_global $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
- )
- (func $start (; 11 ;) (type $v)
+ (func $start (; 10 ;) (type $v)
+  (local $0 i32)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
   i32.add
@@ -2032,10 +2028,20 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $std/arraybuffer/sliced
-  call $~lib/arraybuffer/ArrayBuffer#get:data
-  get_global $std/arraybuffer/buffer
-  call $~lib/arraybuffer/ArrayBuffer#get:data
+  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.0 (result i32)
+   get_global $std/arraybuffer/sliced
+   set_local $0
+   get_local $0
+   get_global $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+  end
+  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.1 (result i32)
+   get_global $std/arraybuffer/buffer
+   set_local $0
+   get_local $0
+   get_global $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+  end
   i32.ne
   i32.eqz
   if
@@ -2209,6 +2215,6 @@
    unreachable
   end
  )
- (func $null (; 12 ;) (type $v)
+ (func $null (; 11 ;) (type $v)
  )
 )

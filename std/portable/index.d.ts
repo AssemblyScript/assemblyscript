@@ -315,6 +315,8 @@ declare namespace memory {
 declare class ArrayBuffer {
   /** The size, in bytes, of the array. */
   readonly byteLength: i32;
+  /** Returns true if value is one of the ArrayBuffer views, such as typed array or a DataView **/
+  static isView<T>(value: T): bool;
   /** Constructs a new array buffer of the given length in bytes. */
   constructor(length: i32);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */

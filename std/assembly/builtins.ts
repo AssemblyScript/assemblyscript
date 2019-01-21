@@ -9,6 +9,7 @@
 @builtin export declare function isReference<T>(value?: T): bool;
 @builtin export declare function isString<T>(value?: T): bool;
 @builtin export declare function isArray<T>(value?: T): bool;
+@builtin export declare function isArrayBufferView<T>(value?: T): bool;
 @builtin export declare function isDefined(expression: void): bool;
 @builtin export declare function isConstant(expression: void): bool;
 @builtin export declare function isManaged<T>(value?: T): bool;

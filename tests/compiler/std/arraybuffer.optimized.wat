@@ -1564,8 +1564,6 @@
   end
   get_global $std/arraybuffer/sliced
   get_global $std/arraybuffer/buffer
-  i32.const 0
-  i32.add
   i32.eq
   if
    i32.const 0
