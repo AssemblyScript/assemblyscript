@@ -10,6 +10,10 @@ assert(isReference<string>());
 assert(!isReference<usize>());
 assert(isArray<i32[]>());
 assert(!isArray<usize>());
+assert(!isArrayBufferView<i32[]>());
+assert(!isArrayBufferView<usize>());
+assert(isArrayBufferView<Uint8Array>());
+assert(isArrayBufferView<Int32Array>());
 
 assert(isInteger(<i32>1));
 assert(!isInteger(<f32>1));
@@ -21,6 +25,10 @@ assert(isString("1"));
 assert(!isString(1));
 assert(isArray(changetype<i32[]>(null)));
 assert(!isArray(changetype<usize>(null)));
+assert(!isArrayBufferView<i32[]>(null));
+assert(!isArrayBufferView<usize>(null));
+assert(isArrayBufferView<Uint8Array>(null));
+assert(isArrayBufferView<Int32Array>(null));
 
 // evaluation
 

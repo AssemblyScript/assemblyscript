@@ -113,7 +113,6 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
-      compiler.currentType = Type.bool;
       return type.is(TypeFlags.REFERENCE)
         ? module.createI32(1)
         : module.createI32(0);
@@ -137,6 +136,22 @@ export function compileCall(
       return classType !== null && classType.lookupOverload(OperatorKind.INDEXED_GET) !== null
         ? module.createI32(1)
         : module.createI32(0);
+    }
+    case "isArrayBufferView": { // isArrayBufferView<T!>() / isArrayBufferView<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
+      let classType = type.classReference;
+      if (
+        classType &&
+        classType.members &&
+        classType.members.get("buffer") &&
+        classType.members.get("byteOffset") &&
+        classType.members.get("byteLength")
+      ) {
+        return module.createI32(1);
+      }
+      return module.createI32(0);
     }
     case "isDefined": { // isDefined(expression) -> bool
       compiler.currentType = Type.bool;

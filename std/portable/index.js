@@ -206,6 +206,7 @@ globalScope["isString"] = function isString(arg) {
 };
 
 globalScope["isArray"] = Array.isArray;
+globalScope["isArrayBufferView"] = ArrayBuffer.isView;
 
 globalScope["isDefined"] = function isDefined(expr) {
   return typeof expr !== "undefined";
