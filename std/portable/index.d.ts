@@ -16,6 +16,7 @@
 
 // Types
 
+declare type bool = boolean;
 declare type i8 = number;
 declare type i16 = number;
 declare type i32 = number;
@@ -23,7 +24,6 @@ declare type isize = number;
 declare type u8 = number;
 declare type u16 = number;
 declare type u32 = number;
-declare type bool = boolean;
 declare type usize = number;
 declare type f32 = number;
 declare type f64 = number;
@@ -32,6 +32,20 @@ declare type f64 = number;
 
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
 declare const ASC_TARGET: i32;
+/** Provided noTreeshaking option. */
+declare const ASC_NO_TREESHAKING: bool;
+/** Provided noAssert option. */
+declare const ASC_NO_ASSERT: bool;
+/** Provided memoryBase option. */
+declare const ASC_MEMORY_BASE: i32;
+/** Provided optimizeLevel option. */
+declare const ASC_OPTIMIZE_LEVEL: i32;
+/** Provided shrinkLevel option. */
+declare const ASC_SHRINK_LEVEL: i32;
+/** Whether the mutable global feature is enabled. */
+declare const ASC_FEATURE_MUTABLE_GLOBAL: bool;
+/** Whether the sign extension feature is enabled. */
+declare const ASC_FEATURE_SIGN_EXTENSION: bool;
 
 // Builtins
 
@@ -95,7 +109,7 @@ declare function isString(value: any): value is string | String;
 /** Tests if the specified value can be used as an array. */
 declare function isArray(value: any): value is Array<any>;
 /** Tests if the specified type *or* expression can be used as an typed array. Compiles to a constant. */
-declare function isArrayBufferView(value: any): value is ArrayBufferView<any>;
+declare function isArrayBufferView(value: any): value is ArrayBufferView<number>;
 /** Tests if the specified expression resolves to a defined element. */
 declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. */
