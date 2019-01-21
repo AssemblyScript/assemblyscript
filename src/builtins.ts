@@ -43,6 +43,7 @@ import {
 } from "./module";
 
 import {
+  Element,
   ElementKind,
   FunctionPrototype,
   Class,
@@ -133,26 +134,31 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
-      return classType !== null && classType.lookupOverload(OperatorKind.INDEXED_GET) !== null
-        ? module.createI32(1)
-        : module.createI32(0);
+      let field: Element | null = null;
+      return (
+        classType !== null &&
+        classType.members !== null &&
+        (field = classType.members.get("buffer_")) && field.kind == ElementKind.FIELD &&
+        (field = classType.members.get("length_")) && field.kind == ElementKind.FIELD &&
+        classType.lookupOverload(OperatorKind.INDEXED_GET) !== null &&
+        classType.lookupOverload(OperatorKind.INDEXED_SET) !== null
+      ) ? module.createI32(1) : module.createI32(0);
     }
     case "isArrayBufferView": { // isArrayBufferView<T!>() / isArrayBufferView<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
-      if (
+      let field: Element | null = null;
+      return (
         classType !== null &&
         classType.members !== null &&
-        classType.members.has("buffer") &&
-        classType.members.has("byteOffset") &&
-        classType.members.has("byteLength") &&
-        classType.lookupOverload(OperatorKind.INDEXED_GET) !== null
-      ) {
-        return module.createI32(1);
-      }
-      return module.createI32(0);
+        (field = classType.members.get("buffer"))     && field.kind == ElementKind.FIELD &&
+        (field = classType.members.get("byteOffset")) && field.kind == ElementKind.FIELD &&
+        (field = classType.members.get("byteLength")) && field.kind == ElementKind.FIELD &&
+        classType.lookupOverload(OperatorKind.INDEXED_GET) !== null &&
+        classType.lookupOverload(OperatorKind.INDEXED_SET) !== null
+      ) ? module.createI32(1) : module.createI32(0);
     }
     case "isDefined": { // isDefined(expression) -> bool
       compiler.currentType = Type.bool;
