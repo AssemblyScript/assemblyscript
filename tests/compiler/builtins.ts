@@ -14,6 +14,7 @@ assert(!isArrayBufferView<i32[]>());
 assert(!isArrayBufferView<usize>());
 assert(isArrayBufferView<Uint8Array>());
 assert(isArrayBufferView<Int32Array>());
+assert(isArrayBufferView<DataView>());
 
 assert(isInteger(<i32>1));
 assert(!isInteger(<f32>1));
@@ -29,6 +30,7 @@ assert(!isArrayBufferView<i32[]>(null));
 assert(!isArrayBufferView<usize>(null));
 assert(isArrayBufferView<Uint8Array>(null));
 assert(isArrayBufferView<Int32Array>(null));
+assert(isArrayBufferView<DataView>(null));
 
 // evaluation
 

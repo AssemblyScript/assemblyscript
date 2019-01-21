@@ -155,9 +155,7 @@ export function compileCall(
         classType.members !== null &&
         (field = classType.members.get("buffer"))     && field.kind == ElementKind.FIELD &&
         (field = classType.members.get("byteOffset")) && field.kind == ElementKind.FIELD &&
-        (field = classType.members.get("byteLength")) && field.kind == ElementKind.FIELD &&
-        classType.lookupOverload(OperatorKind.INDEXED_GET) !== null &&
-        classType.lookupOverload(OperatorKind.INDEXED_SET) !== null
+        (field = classType.members.get("byteLength")) && field.kind == ElementKind.FIELD
       ) ? module.createI32(1) : module.createI32(0);
     }
     case "isDefined": { // isDefined(expression) -> bool
