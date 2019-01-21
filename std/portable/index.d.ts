@@ -399,6 +399,17 @@ declare class Int32Array extends Array<i32> {}
 declare class Float32Array extends Array<f32> {}
 declare class Float64Array extends Array<f64> {}
 
+/** Interface for a typed view on an array buffer. */
+interface ArrayBufferView<T> {
+  [key: number]: T;
+  /** The {@link ArrayBuffer} referenced by this view. */
+  readonly buffer: ArrayBuffer;
+  /** The offset in bytes from the start of the referenced {@link ArrayBuffer}. */
+  readonly byteOffset: i32;
+  /** The length in bytes from the start of the referenced {@link ArrayBuffer}. */
+  readonly byteLength: i32;
+}
+
 declare class String {
 
   static fromCharCode(ls: i32, hs?: i32): string;
