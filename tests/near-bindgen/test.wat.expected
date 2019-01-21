@@ -60,7 +60,7 @@
  (data (i32.const 1168) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 1232) "\14\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00i\00n\00p\00u\00t\00 \00e\00n\00d\00")
  (data (i32.const 1280) "\0f\00\00\00j\00s\00o\00n\00/\00d\00e\00c\00o\00d\00e\00r\00.\00t\00s\00")
- (data (i32.const 1320) "\0c\00\00\00m\00a\00i\00n\00_\00n\00e\00a\00r\00.\00t\00s\00")
+ (data (i32.const 1320) "\0d\00\00\00m\00o\00d\00e\00l\00_\00n\00e\00a\00r\00.\00t\00s\00")
  (data (i32.const 1352) "\18\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00o\00b\00j\00e\00c\00t\00 \00f\00i\00e\00l\00d\00 \00")
  (data (i32.const 1408) "\0c\00\00\00E\00x\00p\00e\00c\00t\00e\00d\00 \00\'\00,\00\'\00")
  (data (i32.const 1440) "\1d\00\00\00E\00x\00p\00e\00c\00t\00e\00d\00 \00d\00o\00u\00b\00l\00e\00-\00q\00u\00o\00t\00e\00d\00 \00s\00t\00r\00i\00n\00g\00")
@@ -88,11 +88,12 @@
  (data (i32.const 2144) "\16\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00 \00f\00i\00e\00l\00d\00 \00")
  (data (i32.const 2192) "\17\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00a\00r\00r\00a\00y\00 \00f\00i\00e\00l\00d\00 \00")
  (data (i32.const 2248) "\07\00\00\00t\00e\00s\00t\00.\00t\00s\00")
- (data (i32.const 2272) "\07\00\00\00f\00o\00o\00b\00a\00r\00s\00")
- (data (i32.const 2296) "\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2312) "\f8\08\00\00\01\00\00\00")
- (data (i32.const 2320) "\06\00\00\00r\00e\00s\00u\00l\00t\00")
- (data (i32.const 2336) "\06\00\00\00f\00o\00o\00b\00a\00r\00")
+ (data (i32.const 2272) "\0c\00\00\00m\00a\00i\00n\00_\00n\00e\00a\00r\00.\00t\00s\00")
+ (data (i32.const 2304) "\07\00\00\00f\00o\00o\00b\00a\00r\00s\00")
+ (data (i32.const 2328) "\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2344) "\18\t\00\00\01\00\00\00")
+ (data (i32.const 2352) "\06\00\00\00r\00e\00s\00u\00l\00t\00")
+ (data (i32.const 2368) "\06\00\00\00f\00o\00o\00b\00a\00r\00")
  (table $0 2 anyfunc)
  (elem (i32.const 0) $null $main/convertFoobars~anonymous|1)
  (global $json/decoder/TRUE_STR i32 (i32.const 8))
@@ -141,7 +142,7 @@
  (global $~lib/internal/string/CharCode.x i32 (i32.const 120))
  (global $~lib/internal/string/CharCode.z i32 (i32.const 122))
  (global $~argc (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 2352))
+ (global $HEAP_BASE i32 (i32.const 2384))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "runTest" (func $test/runTest))
@@ -3123,7 +3124,7 @@
    unreachable
   end
  )
- (func $main_near/__near_encode_Array_String (; 41 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_Array_String (; 41 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $break|0
    i32.const 0
@@ -3169,7 +3170,7 @@
   i32.const 1152
   call $json/encoder/JSONEncoder#write
  )
- (func $main_near/__near_encode_Array_Array_String (; 43 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_Array_Array_String (; 43 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $break|0
    i32.const 0
@@ -3197,7 +3198,7 @@
      get_local $2
      call $~lib/array/Array<Array<String>>#__get
      get_local $1
-     call $main_near/__near_encode_Array_String
+     call $model_near/__near_encode_Array_String
      get_local $1
      call $json/encoder/JSONEncoder#popArray
     else     
@@ -3215,7 +3216,7 @@
    unreachable
   end
  )
- (func $main_near/__near_encode_FooBar (; 44 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_FooBar (; 44 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $1
   i32.const 136
   get_local $0
@@ -3258,7 +3259,7 @@
    get_local $0
    i32.load offset=16
    get_local $1
-   call $main_near/__near_encode_Array_Array_String
+   call $model_near/__near_encode_Array_Array_String
    get_local $1
    call $json/encoder/JSONEncoder#popArray
   else   
@@ -3860,7 +3861,7 @@
   i32.sub
   call $~lib/typedarray/Uint8Array#subarray
  )
- (func $main_near/FooBar#encode (; 52 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model_near/FooBar#encode (; 52 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   block (result i32)
    i32.const 12
@@ -3884,7 +3885,7 @@
   drop
   get_local $0
   get_local $1
-  call $main_near/__near_encode_FooBar
+  call $model_near/__near_encode_FooBar
   get_local $1
   call $json/encoder/JSONEncoder#popObject
   get_local $1
@@ -4082,7 +4083,7 @@
   end
   i32.const 1
  )
- (func $main_near/__near_JSONHandler_FooBar#pushObject (; 60 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_FooBar#pushObject (; 60 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   i32.load8_u offset=8
   i32.const 0
@@ -4096,7 +4097,7 @@
    if
     i32.const 0
     i32.const 1320
-    i32.const 218
+    i32.const 118
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -4114,7 +4115,7 @@
    if
     i32.const 0
     i32.const 1320
-    i32.const 222
+    i32.const 122
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -5300,7 +5301,7 @@
   get_local $0
   i32.load
   get_local $1
-  call $main_near/__near_JSONHandler_FooBar#pushObject
+  call $model_near/__near_JSONHandler_FooBar#pushObject
   if
    get_local $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar
@@ -6171,7 +6172,7 @@
   call $json/decoder/JSONHandler#popObject
   i32.const 1
  )
- (func $main_near/__near_JSONHandler_Array_String#pushArray (; 92 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_String#pushArray (; 92 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   get_local $1
   i32.const 0
@@ -6190,7 +6191,7 @@
   if
    i32.const 0
    i32.const 1320
-   i32.const 270
+   i32.const 170
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -6227,7 +6228,7 @@
   get_local $0
   i32.load
   get_local $1
-  call $main_near/__near_JSONHandler_Array_String#pushArray
+  call $model_near/__near_JSONHandler_Array_String#pushArray
   if
    get_local $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readChar
@@ -6298,7 +6299,7 @@
   i32.const 1
   return
  )
- (func $main_near/__near_JSONHandler_Array_String#setString (; 95 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $model_near/__near_JSONHandler_Array_String#setString (; 95 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $0
   i32.load offset=12
   get_local $2
@@ -6323,7 +6324,7 @@
   i32.load offset=8
   get_local $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readString
-  call $main_near/__near_JSONHandler_Array_String#setString
+  call $model_near/__near_JSONHandler_Array_String#setString
   i32.const 1
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readAndAssert (; 97 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -6775,7 +6776,7 @@
   end
   i32.const 0
  )
- (func $main_near/__near_JSONHandler_Array_String#setNull (; 104 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_JSONHandler_Array_String#setNull (; 104 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   i32.load offset=12
   i32.const 0
@@ -6798,7 +6799,7 @@
    get_local $0
    i32.load offset=4
    i32.load offset=8
-   call $main_near/__near_JSONHandler_Array_String#setNull
+   call $model_near/__near_JSONHandler_Array_String#setNull
    i32.const 1
    return
   end
@@ -6902,7 +6903,7 @@
    unreachable
   end
  )
- (func $main_near/__near_decode_Array_String (; 108 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_decode_Array_String (; 108 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block (result i32)
    i32.const 16
@@ -7003,7 +7004,7 @@
   i32.store offset=8
   get_local $5
  )
- (func $main_near/__near_JSONHandler_Array_Array_String#pushObject (; 110 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_Array_String#pushObject (; 110 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $0
   i32.load offset=12
   get_local $0
@@ -7011,7 +7012,7 @@
   get_local $0
   i32.load offset=4
   i32.load offset=4
-  call $main_near/__near_decode_Array_String
+  call $model_near/__near_decode_Array_String
   call $~lib/array/Array<Array<String>>#push
   drop
   i32.const 0
@@ -7398,7 +7399,7 @@
   get_local $0
   i32.load
   get_local $1
-  call $main_near/__near_JSONHandler_Array_Array_String#pushObject
+  call $model_near/__near_JSONHandler_Array_Array_String#pushObject
   if
    get_local $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar
@@ -7470,7 +7471,7 @@
   call $json/decoder/JSONHandler#popObject
   i32.const 1
  )
- (func $main_near/__near_JSONHandler_Array_Array_String#pushArray (; 116 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_Array_String#pushArray (; 116 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $1
   i32.const 0
   call $~lib/string/String.__eq
@@ -7478,7 +7479,7 @@
   if
    i32.const 0
    i32.const 1320
-   i32.const 248
+   i32.const 148
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -7502,7 +7503,7 @@
   get_local $0
   i32.load offset=4
   i32.load offset=4
-  call $main_near/__near_decode_Array_String
+  call $model_near/__near_decode_Array_String
   call $~lib/array/Array<Array<String>>#push
   drop
   i32.const 0
@@ -7531,7 +7532,7 @@
   get_local $0
   i32.load
   get_local $1
-  call $main_near/__near_JSONHandler_Array_Array_String#pushArray
+  call $model_near/__near_JSONHandler_Array_Array_String#pushArray
   if
    get_local $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar
@@ -7942,7 +7943,7 @@
    unreachable
   end
  )
- (func $main_near/__near_decode_Array_Array_String (; 127 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_decode_Array_Array_String (; 127 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block (result i32)
    i32.const 16
@@ -7996,7 +7997,7 @@
   end
   i32.const 1
  )
- (func $main_near/__near_JSONHandler_FooBar#pushArray (; 129 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_FooBar#pushArray (; 129 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $1
   i32.const 1128
   call $~lib/string/String.__eq
@@ -8008,7 +8009,7 @@
    get_local $0
    i32.load offset=4
    i32.load offset=4
-   call $main_near/__near_decode_Array_Array_String
+   call $model_near/__near_decode_Array_Array_String
    i32.store offset=16
    i32.const 0
    return
@@ -8041,7 +8042,7 @@
   get_local $0
   i32.load
   get_local $1
-  call $main_near/__near_JSONHandler_FooBar#pushArray
+  call $model_near/__near_JSONHandler_FooBar#pushArray
   if
    get_local $0
    call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar
@@ -8112,7 +8113,7 @@
   i32.const 1
   return
  )
- (func $main_near/__near_JSONHandler_FooBar#setString (; 131 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $model_near/__near_JSONHandler_FooBar#setString (; 131 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $1
   i32.const 1112
   call $~lib/string/String.__eq
@@ -8146,7 +8147,7 @@
   i32.load offset=8
   get_local $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readString
-  call $main_near/__near_JSONHandler_FooBar#setString
+  call $model_near/__near_JSONHandler_FooBar#setString
   i32.const 1
  )
  (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readAndAssert (; 133 ;) (type $iiv) (param $0 i32) (param $1 i32)
@@ -8190,7 +8191,7 @@
    unreachable
   end
  )
- (func $main_near/__near_JSONHandler_FooBar#setBoolean (; 134 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $model_near/__near_JSONHandler_FooBar#setBoolean (; 134 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $1
   i32.const 1096
   call $~lib/string/String.__eq
@@ -8225,7 +8226,7 @@
    i32.load offset=4
    i32.load offset=8
    i32.const 0
-   call $main_near/__near_JSONHandler_FooBar#setBoolean
+   call $model_near/__near_JSONHandler_FooBar#setBoolean
    i32.const 1
    return
   end
@@ -8245,13 +8246,13 @@
    i32.load offset=4
    i32.load offset=8
    i32.const 1
-   call $main_near/__near_JSONHandler_FooBar#setBoolean
+   call $model_near/__near_JSONHandler_FooBar#setBoolean
    i32.const 1
    return
   end
   i32.const 0
  )
- (func $main_near/__near_JSONHandler_FooBar#setInteger (; 136 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $model_near/__near_JSONHandler_FooBar#setInteger (; 136 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   get_local $1
   i32.const 136
   call $~lib/string/String.__eq
@@ -8352,13 +8353,13 @@
    get_local $1
    get_local $2
    i32.mul
-   call $main_near/__near_JSONHandler_FooBar#setInteger
+   call $model_near/__near_JSONHandler_FooBar#setInteger
    i32.const 1
    return
   end
   i32.const 0
  )
- (func $main_near/__near_JSONHandler_FooBar#setNull (; 138 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_JSONHandler_FooBar#setNull (; 138 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $1
   i32.const 136
   call $~lib/string/String.__eq
@@ -8429,7 +8430,7 @@
    get_local $0
    i32.load offset=4
    i32.load offset=8
-   call $main_near/__near_JSONHandler_FooBar#setNull
+   call $model_near/__near_JSONHandler_FooBar#setNull
    i32.const 1
    return
   end
@@ -8533,7 +8534,7 @@
    unreachable
   end
  )
- (func $main_near/__near_decode_FooBar (; 142 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_decode_FooBar (; 142 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block (result i32)
@@ -8591,10 +8592,10 @@
   get_local $2
   i32.load offset=12
  )
- (func $main_near/FooBar.decode (; 143 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model_near/FooBar.decode (; 143 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
   i32.const 0
-  call $main_near/__near_decode_FooBar
+  call $model_near/__near_decode_FooBar
  )
  (func $test/runTest (; 144 ;) (type $v)
   (local $0 i32)
@@ -8635,10 +8636,10 @@
   i32.const 136
   i32.store offset=12
   get_local $0
-  call $main_near/FooBar#encode
+  call $model_near/FooBar#encode
   set_local $1
   get_local $1
-  call $main_near/FooBar.decode
+  call $model_near/FooBar.decode
   set_local $2
   get_local $0
   i32.load
@@ -8825,8 +8826,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1320
-    i32.const 474
+    i32.const 2272
+    i32.const 236
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -8843,8 +8844,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1320
-    i32.const 478
+    i32.const 2272
+    i32.const 240
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -9580,7 +9581,7 @@
   get_local $0
   i32.load offset=4
   i32.load offset=4
-  call $main_near/__near_decode_FooBar
+  call $model_near/__near_decode_FooBar
   call $~lib/array/Array<FooBar>#push
   drop
   i32.const 0
@@ -10046,8 +10047,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1320
-   i32.const 438
+   i32.const 2272
+   i32.const 199
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -10071,7 +10072,7 @@
   get_local $0
   i32.load offset=4
   i32.load offset=4
-  call $main_near/__near_decode_FooBar
+  call $model_near/__near_decode_FooBar
   call $~lib/array/Array<FooBar>#push
   drop
   i32.const 0
@@ -10518,7 +10519,7 @@
  )
  (func $main_near/__near_ArgsParser_convertFoobars#pushArray (; 179 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   get_local $1
-  i32.const 2272
+  i32.const 2304
   call $~lib/string/String.__eq
   if
    get_local $0
@@ -10819,7 +10820,7 @@
  )
  (func $main_near/__near_ArgsParser_convertFoobars#setNull (; 185 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $1
-  i32.const 2272
+  i32.const 2304
   call $~lib/string/String.__eq
   if
    get_local $0
@@ -11142,25 +11143,25 @@
    unreachable
   end
  )
- (func $main_near/__near_encode_ContainerClass (; 194 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_ContainerClass (; 194 ;) (type $iiv) (param $0 i32) (param $1 i32)
   get_local $0
   i32.load
   i32.const 0
   i32.ne
   if
    get_local $1
-   i32.const 2336
+   i32.const 2368
    call $json/encoder/JSONEncoder#pushObject
    drop
    get_local $0
    i32.load
    get_local $1
-   call $main_near/__near_encode_FooBar
+   call $model_near/__near_encode_FooBar
    get_local $1
    call $json/encoder/JSONEncoder#popObject
   else   
    get_local $1
-   i32.const 2336
+   i32.const 2368
    call $json/encoder/JSONEncoder#setNull
   end
  )
@@ -11192,7 +11193,7 @@
      get_local $2
      call $~lib/array/Array<ContainerClass>#__get
      get_local $1
-     call $main_near/__near_encode_ContainerClass
+     call $model_near/__near_encode_ContainerClass
      get_local $1
      call $json/encoder/JSONEncoder#popObject
     else     
@@ -11318,7 +11319,7 @@
    i32.const 1
    i32.store8
    get_local $3
-   i32.const 2312
+   i32.const 2344
    i32.store offset=4
    get_local $3
    i32.const 176
@@ -11335,7 +11336,7 @@
   i32.ne
   if
    get_local $3
-   i32.const 2320
+   i32.const 2352
    call $json/encoder/JSONEncoder#pushArray
    drop
    get_local $2
@@ -11345,7 +11346,7 @@
    call $json/encoder/JSONEncoder#popArray
   else   
    get_local $3
-   i32.const 2320
+   i32.const 2352
    call $json/encoder/JSONEncoder#setNull
   end
   get_local $3
