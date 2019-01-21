@@ -43,7 +43,6 @@ import {
 } from "./module";
 
 import {
-  Element,
   ElementKind,
   FunctionPrototype,
   Class,
@@ -134,12 +133,10 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
-      let field: Element | null = null;
       return (
         classType !== null &&
-        classType.members !== null &&
-        (field = classType.members.get("buffer_")) && field.kind == ElementKind.FIELD &&
-        (field = classType.members.get("length_")) && field.kind == ElementKind.FIELD &&
+        classType.lookupField("buffer_") !== null &&
+        classType.lookupField("length_") !== null &&
         classType.lookupOverload(OperatorKind.INDEXED_GET) !== null &&
         classType.lookupOverload(OperatorKind.INDEXED_SET) !== null
       ) ? module.createI32(1) : module.createI32(0);
@@ -149,13 +146,11 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
-      let field: Element | null = null;
       return (
         classType !== null &&
-        classType.members !== null &&
-        (field = classType.members.get("buffer"))     && field.kind == ElementKind.FIELD &&
-        (field = classType.members.get("byteOffset")) && field.kind == ElementKind.FIELD &&
-        (field = classType.members.get("byteLength")) && field.kind == ElementKind.FIELD
+        classType.lookupField("buffer",     true) !== null &&
+        classType.lookupField("byteOffset", true) !== null &&
+        classType.lookupField("byteLength", true) !== null
       ) ? module.createI32(1) : module.createI32(0);
     }
     case "isDefined": { // isDefined(expression) -> bool

@@ -2967,6 +2967,16 @@ export class Class extends Element {
     return null;
   }
 
+  lookupField(name: string, shouldReadonly: boolean = false): Element | null {
+    if (this.members == null) return null;
+    var member = this.members.get(name);
+    if (
+      member == null || member.kind != ElementKind.FIELD ||
+      (shouldReadonly && !member.is(CommonFlags.READONLY))
+    ) return null;
+    return member;
+  }
+
   offsetof(fieldName: string): u32 {
     var members = assert(this.members);
     assert(members.has(fieldName));
