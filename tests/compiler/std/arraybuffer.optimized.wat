@@ -1481,9 +1481,9 @@
   i32.const 0
   i32.gt_s
   select
-  tee_local $2
-  call $~lib/internal/arraybuffer/allocateUnsafe
   tee_local $3
+  call $~lib/internal/arraybuffer/allocateUnsafe
+  tee_local $2
   i32.const 8
   i32.add
   get_local $0
@@ -1491,9 +1491,9 @@
   i32.add
   get_local $1
   i32.add
-  get_local $2
-  call $~lib/internal/memory/memmove
   get_local $3
+  call $~lib/internal/memory/memmove
+  get_local $2
  )
  (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

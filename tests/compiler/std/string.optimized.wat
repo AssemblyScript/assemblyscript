@@ -3083,20 +3083,20 @@
   end
   get_local $4
   i32.sub
-  tee_local $2
+  tee_local $3
   i32.const 0
   i32.le_s
   if
    i32.const 256
    return
   end
-  get_local $2
+  get_local $3
   call $~lib/internal/string/allocateUnsafe
   tee_local $1
   i32.const 0
   get_local $0
   get_local $4
-  get_local $2
+  get_local $3
   call $~lib/internal/string/copyUnsafe
   get_local $1
  )

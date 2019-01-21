@@ -1869,14 +1869,13 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   get_local $0
   i32.load
   set_local $3
   get_local $1
   i32.const 0
   i32.lt_s
-  if
+  if (result i32)
    get_local $3
    get_local $1
    i32.add
@@ -1887,7 +1886,6 @@
    get_local $5
    i32.gt_s
    select
-   set_local $1
   else   
    get_local $1
    tee_local $4
@@ -1897,12 +1895,12 @@
    get_local $5
    i32.lt_s
    select
-   set_local $1
   end
+  set_local $1
   get_local $2
   i32.const 0
   i32.lt_s
-  if
+  if (result i32)
    get_local $3
    get_local $2
    i32.add
@@ -1913,7 +1911,6 @@
    get_local $5
    i32.gt_s
    select
-   set_local $2
   else   
    get_local $2
    tee_local $4
@@ -1923,8 +1920,8 @@
    get_local $5
    i32.lt_s
    select
-   set_local $2
   end
+  set_local $2
   get_local $2
   get_local $1
   i32.sub
@@ -1935,11 +1932,11 @@
   get_local $5
   i32.gt_s
   select
+  set_local $3
+  get_local $3
+  call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $6
   get_local $6
-  call $~lib/internal/arraybuffer/allocateUnsafe
-  set_local $7
-  get_local $7
   get_global $~lib/internal/arraybuffer/HEADER_SIZE
   i32.add
   set_local $4
@@ -1951,9 +1948,9 @@
   set_local $5
   get_local $4
   get_local $5
-  get_local $6
+  get_local $3
   call $~lib/internal/memory/memmove
-  get_local $7
+  get_local $6
  )
  (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
