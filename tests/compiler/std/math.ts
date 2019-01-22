@@ -3279,6 +3279,7 @@ assert(NativeMath.imul(0xfffffffe, 5) == -10.0);
 assert(NativeMath.imul(1e+60, 1e+60) == 0.0);
 assert(NativeMath.imul(1e+60,-1e+60) == 0.0);
 assert(NativeMath.imul(-1e+60,-1e+60) == 0.0);
+assert(NativeMath.imul(1e+24, 1e2) == -2147483648);
 
 // ipow64 /////////////////////////////////////////////////////////////////////////////////////
 

@@ -550,10 +550,9 @@ export namespace NativeMath {
   }
 
   export function imul(x: f64, y: f64): f64 {
-    // TODO use saturation float to int convertions in future
-    x = max(min(x, f64.MAX_SAFE_INTEGER + 1), -f64.MAX_SAFE_INTEGER - 1);
-    y = max(min(y, f64.MAX_SAFE_INTEGER + 1), -f64.MAX_SAFE_INTEGER - 1);
-    return <f64><i32>(<i64>x * <i64>y);
+    var a = <i32><i64>(x % 4294967296);
+    var b = <i32><i64>(y % 4294967296);
+    return a * b;
   }
 
   export function log(x: f64): f64 { // see: musl/src/math/log.c and SUN COPYRIGHT NOTICE above
