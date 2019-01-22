@@ -2349,10 +2349,19 @@
  )
  (func $std/libm/imul (; 34 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   get_local $0
-  i32.trunc_s/f64
+  f64.const 9007199254740992
+  f64.min
+  f64.const -9007199254740992
+  f64.max
+  i64.trunc_s/f64
   get_local $1
-  i32.trunc_s/f64
-  i32.mul
+  f64.const 9007199254740992
+  f64.min
+  f64.const -9007199254740992
+  f64.max
+  i64.trunc_s/f64
+  i64.mul
+  i32.wrap/i64
   f64.convert_s/i32
  )
  (func $std/libm/log (; 35 ;) (type $FF) (param $0 f64) (result f64)

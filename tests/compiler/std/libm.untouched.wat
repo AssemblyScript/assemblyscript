@@ -24,6 +24,7 @@
  (global $std/libm/SQRT1_2 f64 (f64.const 0.7071067811865476))
  (global $~lib/math/NativeMath.SQRT2 f64 (f64.const 1.4142135623730951))
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
+ (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
@@ -2826,11 +2827,56 @@
   call $~lib/math/NativeMath.hypot
  )
  (func $~lib/math/NativeMath.imul (; 36 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+  (local $2 f64)
+  (local $3 f64)
+  block $~lib/math/NativeMath.max|inlined.0 (result f64)
+   block $~lib/math/NativeMath.min|inlined.0 (result f64)
+    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+    f64.const 1
+    f64.add
+    set_local $2
+    get_local $0
+    get_local $2
+    f64.min
+   end
+   set_local $2
+   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+   f64.neg
+   f64.const 1
+   f64.sub
+   set_local $3
+   get_local $2
+   get_local $3
+   f64.max
+  end
+  set_local $0
+  block $~lib/math/NativeMath.max|inlined.1 (result f64)
+   block $~lib/math/NativeMath.min|inlined.1 (result f64)
+    get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+    f64.const 1
+    f64.add
+    set_local $3
+    get_local $1
+    get_local $3
+    f64.min
+   end
+   set_local $3
+   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+   f64.neg
+   f64.const 1
+   f64.sub
+   set_local $2
+   get_local $3
+   get_local $2
+   f64.max
+  end
+  set_local $1
   get_local $0
-  i32.trunc_s/f64
+  i64.trunc_s/f64
   get_local $1
-  i32.trunc_s/f64
-  i32.mul
+  i64.trunc_s/f64
+  i64.mul
+  i32.wrap/i64
   f64.convert_s/i32
  )
  (func $std/libm/imul (; 37 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
