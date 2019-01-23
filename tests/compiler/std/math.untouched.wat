@@ -9713,7 +9713,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 967
+   i32.const 968
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9745,7 +9745,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 976
+   i32.const 977
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -9802,7 +9802,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 2037
+   i32.const 2038
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -11125,7 +11125,6 @@
  (func $~lib/math/NativeMath.imul (; 153 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
-  (local $4 f64)
   get_local $0
   f64.abs
   f64.const 4294967296
@@ -11133,16 +11132,10 @@
   if (result f64)
    get_local $0
    f64.const 4294967296
-   block $~lib/math/NativeMath.floor|inlined.1 (result f64)
-    get_local $0
-    f64.const 1
-    f64.const 4294967296
-    f64.div
-    f64.mul
-    set_local $4
-    get_local $4
-    f64.floor
-   end
+   get_local $0
+   f64.const 2.3283064365386963e-10
+   f64.mul
+   f64.floor
    f64.mul
    f64.sub
   else   
@@ -11156,16 +11149,10 @@
   if (result f64)
    get_local $1
    f64.const 4294967296
-   block $~lib/math/NativeMath.floor|inlined.2 (result f64)
-    get_local $1
-    f64.const 1
-    f64.const 4294967296
-    f64.div
-    f64.mul
-    set_local $4
-    get_local $4
-    f64.floor
-   end
+   get_local $1
+   f64.const 2.3283064365386963e-10
+   f64.mul
+   f64.floor
    f64.mul
    f64.sub
   else   
