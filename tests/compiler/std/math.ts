@@ -3282,6 +3282,7 @@ assert(NativeMath.imul(-1e+60,-1e+60) == 0);
 assert(NativeMath.imul(1e+24, 1e2) == -2147483648);
 assert(NativeMath.imul(NaN, 1) == 0);
 assert(NativeMath.imul(1, Infinity) == 0);
+assert(NativeMath.imul(f64.MAX_VALUE, f64.MAX_VALUE) == 0);
 
 // ipow64 /////////////////////////////////////////////////////////////////////////////////////
 
