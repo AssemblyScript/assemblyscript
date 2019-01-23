@@ -2827,44 +2827,64 @@
  )
  (func $~lib/math/NativeMath.imul (; 36 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
-  (local $3 i32)
-  (local $4 i32)
-  get_local $0
-  f64.const 4294967296
-  block $~lib/math/NativeMath.floor|inlined.1 (result f64)
+  (local $3 f64)
+  (local $4 f64)
+  block $~lib/math/NativeMath.abs|inlined.2 (result f64)
    get_local $0
-   f64.const 1
-   f64.const 4294967296
-   f64.div
-   f64.mul
-   set_local $2
-   get_local $2
-   f64.floor
+   f64.abs
   end
-  f64.mul
-  f64.sub
-  i64.trunc_s/f64
-  i32.wrap/i64
-  set_local $3
-  get_local $1
   f64.const 4294967296
-  block $~lib/math/NativeMath.floor|inlined.2 (result f64)
-   get_local $1
-   f64.const 1
+  f64.ge
+  if (result f64)
+   get_local $0
    f64.const 4294967296
-   f64.div
+   block $~lib/math/NativeMath.floor|inlined.1 (result f64)
+    get_local $0
+    f64.const 1
+    f64.const 4294967296
+    f64.div
+    f64.mul
+    set_local $2
+    get_local $2
+    f64.floor
+   end
    f64.mul
-   set_local $2
-   get_local $2
-   f64.floor
+   f64.sub
+  else   
+   get_local $0
   end
-  f64.mul
-  f64.sub
-  i64.trunc_s/f64
-  i32.wrap/i64
+  set_local $3
+  block $~lib/math/NativeMath.abs|inlined.4 (result f64)
+   get_local $1
+   f64.abs
+  end
+  f64.const 4294967296
+  f64.ge
+  if (result f64)
+   get_local $1
+   f64.const 4294967296
+   block $~lib/math/NativeMath.floor|inlined.2 (result f64)
+    get_local $1
+    f64.const 1
+    f64.const 4294967296
+    f64.div
+    f64.mul
+    set_local $2
+    get_local $2
+    f64.floor
+   end
+   f64.mul
+   f64.sub
+  else   
+   get_local $1
+  end
   set_local $4
   get_local $3
+  i64.trunc_s/f64
+  i32.wrap/i64
   get_local $4
+  i64.trunc_s/f64
+  i32.wrap/i64
   i32.mul
   f64.convert_s/i32
  )

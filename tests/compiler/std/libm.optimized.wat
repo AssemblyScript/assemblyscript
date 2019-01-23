@@ -2349,23 +2349,39 @@
  )
  (func $~lib/math/NativeMath.imul (; 34 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   get_local $0
+  f64.abs
   f64.const 4294967296
+  f64.ge
+  if
+   get_local $0
+   f64.const 4294967296
+   get_local $0
+   f64.const 2.3283064365386963e-10
+   f64.mul
+   f64.floor
+   f64.mul
+   f64.sub
+   set_local $0
+  end
+  get_local $1
+  f64.abs
+  f64.const 4294967296
+  f64.ge
+  if
+   get_local $1
+   f64.const 4294967296
+   get_local $1
+   f64.const 2.3283064365386963e-10
+   f64.mul
+   f64.floor
+   f64.mul
+   f64.sub
+   set_local $1
+  end
   get_local $0
-  f64.const 2.3283064365386963e-10
-  f64.mul
-  f64.floor
-  f64.mul
-  f64.sub
   i64.trunc_s/f64
   i32.wrap/i64
   get_local $1
-  f64.const 4294967296
-  get_local $1
-  f64.const 2.3283064365386963e-10
-  f64.mul
-  f64.floor
-  f64.mul
-  f64.sub
   i64.trunc_s/f64
   i32.wrap/i64
   i32.mul
