@@ -136,7 +136,7 @@ export function REDUCE<TArray extends TypedArray<T>, T, TRet>(
   var length = array.length;
   var buffer = array.buffer;
   var byteOffset = array.byteOffset;
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     initialValue = callbackfn(
       initialValue,
       LOAD<T>(buffer, i, byteOffset),
@@ -155,7 +155,7 @@ export function REDUCE_RIGHT<TArray extends TypedArray<T>, T, TRet>(
 ): TRet {
   var buffer = array.buffer;
   var byteOffset = array.byteOffset;
-  for (var i = array.length - 1; i >= 0; i--) {
+  for (let i = array.length - 1; i >= 0; i--) {
     initialValue = callbackfn(
       initialValue,
       LOAD<T>(buffer, i, byteOffset),
@@ -176,7 +176,7 @@ export function MAP<TArray extends TypedArray<T>, T>(
   var byteOffset = array.byteOffset;
   var result = instantiate<TArray>(length);
   var resultBuffer = result.buffer;
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     STORE<T, NATIVE<T>>(resultBuffer, i, <NATIVE<T>>callbackfn(LOAD<T>(buffer, i, byteOffset), i, array));
   }
 
@@ -191,7 +191,7 @@ export function FIND_INDEX<TArray extends TypedArray<T>, T>(
   var length = array.length;
   var buffer = array.buffer;
   var byteOffset = array.byteOffset;
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
       return i;
     }
@@ -207,7 +207,7 @@ export function SOME<TArray extends TypedArray<T>, T>(
   var length = array.length;
   var buffer = array.buffer;
   var byteOffset = array.byteOffset;
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
       return true;
     }
@@ -223,7 +223,7 @@ export function EVERY<TArray extends TypedArray<T>, T>(
   var length = array.length;
   var buffer = array.buffer;
   var byteOffset = array.byteOffset;
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
       continue;
     }
