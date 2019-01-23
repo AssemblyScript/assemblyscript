@@ -24,8 +24,8 @@
  (global $std/libm/SQRT1_2 f64 (f64.const 0.7071067811865476))
  (global $~lib/math/NativeMath.SQRT2 f64 (f64.const 1.4142135623730951))
  (global $std/libm/SQRT2 f64 (f64.const 1.4142135623730951))
- (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $NaN f64 (f64.const nan:0x8000000000000))
+ (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -2833,8 +2833,6 @@
   f64.eq
  )
  (func $~lib/math/NativeMath.imul (; 37 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
-  (local $2 f64)
-  (local $3 f64)
   get_local $0
   get_local $1
   f64.add
@@ -2845,43 +2843,23 @@
    return
   end
   get_local $0
-  f64.abs
   f64.const 4294967296
-  f64.ge
-  if (result f64)
-   get_local $0
-   f64.const 4294967296
-   get_local $0
-   f64.const 2.3283064365386963e-10
-   f64.mul
-   f64.floor
-   f64.mul
-   f64.sub
-  else   
-   get_local $0
-  end
-  set_local $2
-  get_local $1
-  f64.abs
-  f64.const 4294967296
-  f64.ge
-  if (result f64)
-   get_local $1
-   f64.const 4294967296
-   get_local $1
-   f64.const 2.3283064365386963e-10
-   f64.mul
-   f64.floor
-   f64.mul
-   f64.sub
-  else   
-   get_local $1
-  end
-  set_local $3
-  get_local $2
+  get_local $0
+  f64.const 2.3283064365386963e-10
+  f64.mul
+  f64.floor
+  f64.mul
+  f64.sub
   i64.trunc_s/f64
   i32.wrap/i64
-  get_local $3
+  get_local $1
+  f64.const 4294967296
+  get_local $1
+  f64.const 2.3283064365386963e-10
+  f64.mul
+  f64.floor
+  f64.mul
+  f64.sub
   i64.trunc_s/f64
   i32.wrap/i64
   i32.mul

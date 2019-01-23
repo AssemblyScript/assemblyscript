@@ -551,16 +551,11 @@ export namespace NativeMath {
 
   export function imul(x: f64, y: f64): f64 {
     if (!isFinite(x + y)) return 0;
-    var a: f64, b: f64;
     const inv32 = 1.0 / 4294967296;
-    if (ASC_SHRINK_LEVEL > 0) {
-      a = x - 4294967296 * builtin_floor(x * inv32);
-      b = y - 4294967296 * builtin_floor(y * inv32);
-    } else {
-      a = builtin_abs(x) >= 4294967296 ? (x - 4294967296 * builtin_floor(x * inv32)) : x;
-      b = builtin_abs(y) >= 4294967296 ? (y - 4294967296 * builtin_floor(y * inv32)) : y;
-    }
-    return <i32><i64>a * <i32><i64>b;
+    return (
+      <i32><i64>(x - 4294967296 * builtin_floor(x * inv32)) *
+      <i32><i64>(y - 4294967296 * builtin_floor(y * inv32))
+    );
   }
 
   export function log(x: f64): f64 { // see: musl/src/math/log.c and SUN COPYRIGHT NOTICE above
