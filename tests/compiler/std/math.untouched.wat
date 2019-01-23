@@ -11126,10 +11126,8 @@
   (local $2 f64)
   (local $3 f64)
   (local $4 f64)
-  block $~lib/math/NativeMath.abs|inlined.2 (result f64)
-   get_local $0
-   f64.abs
-  end
+  get_local $0
+  f64.abs
   f64.const 4294967296
   f64.ge
   if (result f64)
@@ -11151,10 +11149,8 @@
    get_local $0
   end
   set_local $2
-  block $~lib/math/NativeMath.abs|inlined.4 (result f64)
-   get_local $1
-   f64.abs
-  end
+  get_local $1
+  f64.abs
   f64.const 4294967296
   f64.ge
   if (result f64)
