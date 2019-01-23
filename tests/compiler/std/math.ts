@@ -3271,15 +3271,17 @@ assert(test_truncf(-7.888609052e-31, -0.0, 0.0, INEXACT));
 
 // Math.imul //////////////////////////////////////////////////////////////////////////////////
 
-assert(NativeMath.imul(2, 4) == 8.0);
-assert(NativeMath.imul(-1, 8) == -8.0);
-assert(NativeMath.imul(-2, -2) == 4.0);
-assert(NativeMath.imul(0xffffffff, 5) == -5.0);
-assert(NativeMath.imul(0xfffffffe, 5) == -10.0);
-assert(NativeMath.imul(1e+60, 1e+60) == 0.0);
-assert(NativeMath.imul(1e+60,-1e+60) == 0.0);
-assert(NativeMath.imul(-1e+60,-1e+60) == 0.0);
+assert(NativeMath.imul(2, 4) == 8);
+assert(NativeMath.imul(-1, 8) == -8);
+assert(NativeMath.imul(-2, -2) == 4);
+assert(NativeMath.imul(0xffffffff, 5) == -5);
+assert(NativeMath.imul(0xfffffffe, 5) == -10);
+assert(NativeMath.imul(1e+60, 1e+60) == 0);
+assert(NativeMath.imul(1e+60,-1e+60) == 0);
+assert(NativeMath.imul(-1e+60,-1e+60) == 0);
 assert(NativeMath.imul(1e+24, 1e2) == -2147483648);
+assert(NativeMath.imul(NaN, 1) == 0);
+assert(NativeMath.imul(1, Infinity) == 0);
 
 // ipow64 /////////////////////////////////////////////////////////////////////////////////////
 
