@@ -550,8 +550,8 @@ export namespace NativeMath {
   }
 
   export function imul(x: f64, y: f64): f64 {
-    var a = <i32><i64>(x % 4294967296);
-    var b = <i32><i64>(y % 4294967296);
+    var a = <i32><i64>(x - 4294967296 * floor(x * (1.0 / 4294967296)));
+    var b = <i32><i64>(y - 4294967296 * floor(y * (1.0 / 4294967296)));
     return a * b;
   }
 

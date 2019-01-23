@@ -11123,22 +11123,45 @@
   call $std/math/check<f32>
  )
  (func $~lib/math/NativeMath.imul (; 153 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
-  (local $2 i32)
+  (local $2 f64)
   (local $3 i32)
+  (local $4 i32)
   get_local $0
   f64.const 4294967296
-  call $~lib/math/NativeMath.mod
-  i64.trunc_s/f64
-  i32.wrap/i64
-  set_local $2
-  get_local $1
-  f64.const 4294967296
-  call $~lib/math/NativeMath.mod
+  block $~lib/math/NativeMath.floor|inlined.1 (result f64)
+   get_local $0
+   f64.const 1
+   f64.const 4294967296
+   f64.div
+   f64.mul
+   set_local $2
+   get_local $2
+   f64.floor
+  end
+  f64.mul
+  f64.sub
   i64.trunc_s/f64
   i32.wrap/i64
   set_local $3
-  get_local $2
+  get_local $1
+  f64.const 4294967296
+  block $~lib/math/NativeMath.floor|inlined.2 (result f64)
+   get_local $1
+   f64.const 1
+   f64.const 4294967296
+   f64.div
+   f64.mul
+   set_local $2
+   get_local $2
+   f64.floor
+  end
+  f64.mul
+  f64.sub
+  i64.trunc_s/f64
+  i32.wrap/i64
+  set_local $4
   get_local $3
+  get_local $4
   i32.mul
   f64.convert_s/i32
  )
