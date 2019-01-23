@@ -550,8 +550,14 @@ export namespace NativeMath {
   }
 
   export function imul(x: f64, y: f64): f64 {
-    var a = abs(x) >= 4294967296 ? (x - 4294967296 * floor(x * (1.0 / 4294967296))) : x;
-    var b = abs(y) >= 4294967296 ? (y - 4294967296 * floor(y * (1.0 / 4294967296))) : y;
+    var a: f64, b: f64;
+    if (ASC_SHRINK_LEVEL > 0) {
+      a = x - 4294967296 * floor(x * (1.0 / 4294967296));
+      b = y - 4294967296 * floor(y * (1.0 / 4294967296));
+    } else {
+      a = abs(x) >= 4294967296 ? (x - 4294967296 * floor(x * (1.0 / 4294967296))) : x;
+      b = abs(y) >= 4294967296 ? (y - 4294967296 * floor(y * (1.0 / 4294967296))) : y;
+    }
     return <i32><i64>a * <i32><i64>b;
   }
 

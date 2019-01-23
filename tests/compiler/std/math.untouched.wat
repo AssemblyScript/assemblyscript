@@ -9713,7 +9713,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 961
+   i32.const 967
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9745,7 +9745,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 970
+   i32.const 976
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -9802,7 +9802,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 2031
+   i32.const 2037
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -11141,8 +11141,8 @@
     f64.const 4294967296
     f64.div
     f64.mul
-    set_local $2
-    get_local $2
+    set_local $4
+    get_local $4
     f64.floor
    end
    f64.mul
@@ -11150,7 +11150,7 @@
   else   
    get_local $0
   end
-  set_local $3
+  set_local $2
   block $~lib/math/NativeMath.abs|inlined.4 (result f64)
    get_local $1
    f64.abs
@@ -11166,8 +11166,8 @@
     f64.const 4294967296
     f64.div
     f64.mul
-    set_local $2
-    get_local $2
+    set_local $4
+    get_local $4
     f64.floor
    end
    f64.mul
@@ -11175,11 +11175,11 @@
   else   
    get_local $1
   end
-  set_local $4
-  get_local $3
+  set_local $3
+  get_local $2
   i64.trunc_s/f64
   i32.wrap/i64
-  get_local $4
+  get_local $3
   i64.trunc_s/f64
   i32.wrap/i64
   i32.mul
