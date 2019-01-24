@@ -912,28 +912,66 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 
 // Decorators
 
+interface TypedPropertyDescriptor<T> {
+  configurable?: boolean;
+  enumerable?: boolean;
+  writable?: boolean;
+  value?: T;
+  get?(): T;
+  set?(value: T): void;
+}
+
 /** Annotates an element as a program global. */
-declare function global(target: Function, propertyKey: string, descriptor: any): void;
+declare function global(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
-declare function operator(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+declare function operator(token: string): (
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<Function>
+) => TypedPropertyDescriptor<Function> | void;
+
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
-  export function binary(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function binary(token: string): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<Function>
+  ) => TypedPropertyDescriptor<Function> | void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
-  export function prefix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function prefix(token: string): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<Function>
+  ) => TypedPropertyDescriptor<Function> | void;
   /** Annotates a method as an unary postfix operator overload for the specified `token`. */
-  export function postfix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function postfix(token: string): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<Function>
+  ) => TypedPropertyDescriptor<Function> | void;
 }
 
 /** Annotates a class as being unmanaged with limited capabilities. */
-declare function unmanaged(target: Function): any;
+declare function unmanaged(constructor: Function): void;
 
 /** Annotates a class as being sealed / non-derivable. */
-declare function sealed(target: Function): any;
+declare function sealed(constructor: Function): void;
 
 /** Annotates a method or function as always inlined. */
-declare function inline(target: any, propertyKey: any, descriptor: any): any;
+declare function inline(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<Function>
+): TypedPropertyDescriptor<Function> | void;
 
 /** Annotates an explicit external name of a function or global. */
-declare function external(target: any, propertyKey: any, descriptor: any): any;
+declare function external(namespace: string, name: string): (
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<Function>
+) => TypedPropertyDescriptor<Function> | void;
