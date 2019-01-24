@@ -932,28 +932,28 @@ declare function global(
 declare function operator(token: string): (
   target: any,
   propertyKey: string,
-  descriptor: TypedPropertyDescriptor<Function>
-) => TypedPropertyDescriptor<Function> | void;
+  descriptor: TypedPropertyDescriptor<any>
+) => TypedPropertyDescriptor<any> | void;
 
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
   export function binary(token: string): (
     target: any,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<Function>
-  ) => TypedPropertyDescriptor<Function> | void;
+    descriptor: TypedPropertyDescriptor<any>
+  ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
   export function prefix(token: string): (
     target: any,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<Function>
-  ) => TypedPropertyDescriptor<Function> | void;
+    descriptor: TypedPropertyDescriptor<any>
+  ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary postfix operator overload for the specified `token`. */
   export function postfix(token: string): (
     target: any,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<Function>
-  ) => TypedPropertyDescriptor<Function> | void;
+    descriptor: TypedPropertyDescriptor<any>
+  ) => TypedPropertyDescriptor<any> | void;
 }
 
 /** Annotates a class as being unmanaged with limited capabilities. */
@@ -966,12 +966,12 @@ declare function sealed(constructor: Function): void;
 declare function inline(
   target: any,
   propertyKey: string,
-  descriptor: TypedPropertyDescriptor<Function>
-): TypedPropertyDescriptor<Function> | void;
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
 
 /** Annotates an explicit external name of a function or global. */
 declare function external(namespace: string, name: string): (
   target: any,
   propertyKey: string,
-  descriptor: TypedPropertyDescriptor<Function>
-) => TypedPropertyDescriptor<Function> | void;
+  descriptor: TypedPropertyDescriptor<any>
+) => TypedPropertyDescriptor<any> | void;
