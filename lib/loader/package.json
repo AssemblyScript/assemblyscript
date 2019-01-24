@@ -1,19 +1,20 @@
 {
   "name": "@assemblyscript/loader",
-  "version": "1.0.0",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "version": "2.0.0",
+  "license": "Apache-2.0",
+  "main": "./lib/index",
+  "typings": "./lib/index",
   "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc",
     "test:build": "asc tests/assembly/index.ts -b tests/build/untouched.wasm",
     "test": "node tests"
   },
   "files": [
-    "index.d.ts",
-    "index.js",
-    "package.json",
-    "README.md"
+    "lib/*"
   ],
-  "dependencies": {
-    "@types/webassembly-js-api": "0.0.1"
+  "devDependencies": {
+    "@types/webassembly-js-api": "0.0.1",
+    "typescript": "^3.2.2"
   }
 }
