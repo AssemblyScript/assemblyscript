@@ -3,13 +3,13 @@ import * as loader from "../../loader";
 //tslint:disable
 let instance: loader.ASInstance
 
-export let host = {
-  debug : (): void=>{
+export class Host{
+  debug (): void {
     // tslint:disable-next-line
     debugger;
-  },
+  }
 
-  _log : (start: number, sizeof: number): void=>{
+  _log(start: number, sizeof: number): void {
     let begin = start >> 2;
     let size = sizeof >> 2;
     if (size == 1 ){
@@ -28,16 +28,16 @@ export let host = {
       let line = (dash as any).repeat(len+2);
       console.log([line,output.join('\n'+line+'\n'),line].join("\n"));
     }
-  },
+  }
 
-  _log_str : (x: number): void =>{
+  _log_str(x: number): void {
       return console.log(instance.memory.getString(x))
-    },
+    }
 
-   _logi:console.log,
-   _logf:console.log,
+   _logi = console.log
+   _logf = console.log
 
-    bootstrap: (_instance: loader.ASInstance):void => {
+    bootstrap(_instance: loader.ASInstance):void {
       instance = _instance;
     }
 }
