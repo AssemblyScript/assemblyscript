@@ -11738,8 +11738,9 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
+  (local $9 f32)
   (local $10 i32)
+  (local $11 i32)
   get_local $0
   i32.reinterpret/f32
   set_local $2
@@ -11791,21 +11792,21 @@
    get_local $0
    get_local $1
    f32.mul
-   get_local $0
-   get_local $1
-   f32.mul
+   set_local $9
+   get_local $9
+   get_local $9
    f32.div
    return
   end
   get_local $2
   i32.const 1
   i32.shl
-  set_local $9
-  get_local $9
+  set_local $10
+  get_local $10
   get_local $7
   i32.le_u
   if
-   get_local $9
+   get_local $10
    get_local $7
    i32.eq
    if
@@ -11941,13 +11942,13 @@
   i32.const 8
   i32.shl
   i32.clz
-  set_local $10
+  set_local $11
   get_local $4
-  get_local $10
+  get_local $11
   i32.sub
   set_local $4
   get_local $2
-  get_local $10
+  get_local $11
   i32.shl
   set_local $2
   get_local $4
@@ -12128,8 +12129,9 @@
   (local $6 i64)
   (local $7 i64)
   (local $8 i32)
-  (local $9 i64)
+  (local $9 f64)
   (local $10 i64)
+  (local $11 i64)
   get_local $0
   i64.reinterpret/f64
   set_local $2
@@ -12181,21 +12183,21 @@
    get_local $0
    get_local $1
    f64.mul
-   get_local $0
-   get_local $1
-   f64.mul
+   set_local $9
+   get_local $9
+   get_local $9
    f64.div
    return
   end
   get_local $2
   i64.const 1
   i64.shl
-  set_local $9
-  get_local $9
+  set_local $10
+  get_local $10
   get_local $7
   i64.le_u
   if
-   get_local $9
+   get_local $10
    get_local $7
    i64.eq
    if
@@ -12331,13 +12333,13 @@
   i64.const 11
   i64.shl
   i64.clz
-  set_local $10
+  set_local $11
   get_local $4
-  get_local $10
+  get_local $11
   i64.sub
   set_local $4
   get_local $2
-  get_local $10
+  get_local $11
   i64.shl
   set_local $2
   get_local $4
