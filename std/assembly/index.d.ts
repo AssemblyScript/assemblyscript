@@ -591,6 +591,18 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
     callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
     initialValue: W,
   ): W;
+  /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some().*/
+  some(callbackfn: (value: T, index: i32, self: this) => bool): bool;
+  /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. This method has the same algorithm as Array.prototype.map().*/
+  map(callbackfn: (value: T, index: i32, self: this) => T): this;
+  /** The sort() method sorts the elements of a typed array numerically in place and returns the typed array. This method has the same algorithm as Array.prototype.sort(), except that sorts the values numerically instead of as strings. TypedArray is one of the typed array types here. */
+  sort(callback?: (a: T, b: T) => i32): this;
+  /** The fill() method fills all the elements of a typed array from a start index to an end index with a static value. This method has the same algorithm as Array.prototype.fill(). */
+  fill(value: T, start?: i32, end?: i32): this;
+  /** The findIndex() method returns an index in the typed array, if an element in the typed array satisfies the provided testing function. Otherwise -1 is returned. See also the find() [not implemented] method, which returns the value of a found element in the typed array instead of its index. */
+  findIndex(callbackfn: (value: T, index: i32, self: this) => bool): i32;
+  /** The every() method tests whether all elements in the typed array pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.every(). */
+  every(callbackfn: (value: T, index: i32, self: this) => bool): i32;
 }
 
 /** An array of twos-complement 8-bit signed integers. */
@@ -900,28 +912,66 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 
 // Decorators
 
+interface TypedPropertyDescriptor<T> {
+  configurable?: boolean;
+  enumerable?: boolean;
+  writable?: boolean;
+  value?: T;
+  get?(): T;
+  set?(value: T): void;
+}
+
 /** Annotates an element as a program global. */
-declare function global(target: Function, propertyKey: string, descriptor: any): void;
+declare function global(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
-declare function operator(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+declare function operator(token: string): (
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<Function>
+) => TypedPropertyDescriptor<Function> | void;
+
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
-  export function binary(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function binary(token: string): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<Function>
+  ) => TypedPropertyDescriptor<Function> | void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
-  export function prefix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function prefix(token: string): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<Function>
+  ) => TypedPropertyDescriptor<Function> | void;
   /** Annotates a method as an unary postfix operator overload for the specified `token`. */
-  export function postfix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function postfix(token: string): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<Function>
+  ) => TypedPropertyDescriptor<Function> | void;
 }
 
 /** Annotates a class as being unmanaged with limited capabilities. */
-declare function unmanaged(target: Function): any;
+declare function unmanaged(constructor: Function): void;
 
 /** Annotates a class as being sealed / non-derivable. */
-declare function sealed(target: Function): any;
+declare function sealed(constructor: Function): void;
 
 /** Annotates a method or function as always inlined. */
-declare function inline(target: any, propertyKey: any, descriptor: any): any;
+declare function inline(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<Function>
+): TypedPropertyDescriptor<Function> | void;
 
 /** Annotates an explicit external name of a function or global. */
-declare function external(target: any, propertyKey: any, descriptor: any): any;
+declare function external(namespace: string, name: string): (
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<Function>
+) => TypedPropertyDescriptor<Function> | void;
