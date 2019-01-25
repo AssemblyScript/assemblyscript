@@ -5,8 +5,20 @@ import {
 } from "./internal/arraybuffer";
 
 import {
-  isArrayBufferView as builtin_isArrayBufferView
-} from "./builtins";
+  Uint8ClampedArray,
+  Uint8Array,
+  Int8Array,
+  Uint16Array,
+  Int16Array,
+  Uint32Array,
+  Int32Array,
+  Uint64Array,
+  Int64Array
+} from "./typedarray";
+
+import {
+  DataView
+} from "./dataview";
 
 @sealed
 export class ArrayBuffer {
@@ -14,7 +26,18 @@ export class ArrayBuffer {
   readonly byteLength: i32; // capped to [0, MAX_LENGTH]
 
   @inline static isView<T>(value: T): bool {
-    return builtin_isArrayBufferView(value) && value !== null;
+    return (
+      value instanceof Uint8ClampedArray ||
+      value instanceof Uint8Array  ||
+      value instanceof Int8Array   ||
+      value instanceof Uint16Array ||
+      value instanceof Int16Array  ||
+      value instanceof Uint32Array ||
+      value instanceof Int32Array  ||
+      value instanceof Uint64Array ||
+      value instanceof Int64Array  ||
+      value instanceof DataView
+    ) && value !== null;
   }
 
   // @unsafe

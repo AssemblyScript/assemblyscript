@@ -141,18 +141,6 @@ export function compileCall(
         classType.lookupOverload(OperatorKind.INDEXED_SET) !== null
       ) ? module.createI32(1) : module.createI32(0);
     }
-    case "isArrayBufferView": { // isArrayBufferView<T!>() / isArrayBufferView<T?>(value: T) -> bool
-      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
-      compiler.currentType = Type.bool;
-      if (!type) return module.createUnreachable();
-      let classType = type.classReference;
-      return (
-        classType !== null &&
-        classType.lookupField("buffer",     true) !== null &&
-        classType.lookupField("byteOffset", true) !== null &&
-        classType.lookupField("byteLength", true) !== null
-      ) ? module.createI32(1) : module.createI32(0);
-    }
     case "isDefined": { // isDefined(expression) -> bool
       compiler.currentType = Type.bool;
       if (typeArguments) {

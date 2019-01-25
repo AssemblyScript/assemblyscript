@@ -3,14 +3,21 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
+ (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $v (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (data (i32.const 56) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (data (i32.const 120) "\12\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 160) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 224) "\08\00\00\00\00\00\00\00\01\00\00\00\02")
+ (data (i32.const 240) "\e0\00\00\00\02")
+ (data (i32.const 248) "\10\00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
@@ -18,6 +25,7 @@
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
+ (global $std/arraybuffer/arr8 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -1517,9 +1525,248 @@
   get_local $2
   call $~lib/arraybuffer/ArrayBuffer#slice
  )
- (func $start (; 8 ;) (type $v)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array> (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const 1
+  tee_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  if
+   get_local $0
+   i32.const 0
+   i32.ne
+   set_local $1
+  end
+  get_local $1
+ )
+ (func $~lib/arraybuffer/ArrayBuffer.isView<Int32Array> (; 9 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const 1
+  tee_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  i32.eqz
+  if
+   i32.const 0
+   set_local $1
+  end
+  get_local $1
+  if
+   get_local $0
+   i32.const 0
+   i32.ne
+   set_local $1
+  end
+  get_local $1
+ )
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 10 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
-  i32.const 160
+  (local $1 i32)
+  i32.const 1
+  call $~lib/internal/arraybuffer/allocateUnsafe
+  tee_local $1
+  i32.const 8
+  i32.add
+  i32.const 1
+  call $~lib/internal/memory/memset
+  i32.const 12
+  call $~lib/allocator/arena/__memory_allocate
+  tee_local $0
+  i32.const 0
+  i32.store
+  get_local $0
+  i32.const 0
+  i32.store offset=4
+  get_local $0
+  i32.const 0
+  i32.store offset=8
+  get_local $0
+  get_local $1
+  i32.store
+  get_local $0
+  i32.const 0
+  i32.store offset=4
+  get_local $0
+  i32.const 1
+  i32.store offset=8
+  get_local $0
+ )
+ (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 11 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  i32.const 4
+  call $~lib/internal/arraybuffer/allocateUnsafe
+  tee_local $1
+  i32.const 8
+  i32.add
+  i32.const 4
+  call $~lib/internal/memory/memset
+  i32.const 12
+  call $~lib/allocator/arena/__memory_allocate
+  tee_local $0
+  i32.const 0
+  i32.store
+  get_local $0
+  i32.const 0
+  i32.store offset=4
+  get_local $0
+  i32.const 0
+  i32.store offset=8
+  get_local $0
+  get_local $1
+  i32.store
+  get_local $0
+  i32.const 0
+  i32.store offset=4
+  get_local $0
+  i32.const 4
+  i32.store offset=8
+  get_local $0
+ )
+ (func $~lib/dataview/DataView#constructor (; 12 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  get_local $3
+  i32.const -2147483648
+  i32.eq
+  if
+   get_local $1
+   i32.load
+   get_local $2
+   i32.sub
+   set_local $3
+  end
+  get_local $2
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 248
+   i32.const 14
+   i32.const 44
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $3
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 248
+   i32.const 15
+   i32.const 44
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $2
+  get_local $3
+  i32.add
+  get_local $1
+  i32.load
+  i32.gt_s
+  if
+   i32.const 0
+   i32.const 248
+   i32.const 16
+   i32.const 53
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $0
+  i32.eqz
+  if
+   i32.const 12
+   call $~lib/allocator/arena/__memory_allocate
+   tee_local $0
+   get_local $1
+   i32.store
+   get_local $0
+   get_local $2
+   i32.store offset=4
+   get_local $0
+   get_local $3
+   i32.store offset=8
+  end
+  get_local $0
+ )
+ (func $~lib/dataview/DataView#constructor|trampoline (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $2of2
+   block $1of2
+    block $outOfRange
+     get_global $~argc
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   i32.const -2147483648
+   set_local $1
+  end
+  i32.const 0
+  get_local $0
+  i32.const 0
+  get_local $1
+  call $~lib/dataview/DataView#constructor
+ )
+ (func $start (; 14 ;) (type $v)
+  (local $0 i32)
+  i32.const 288
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
@@ -1714,8 +1961,66 @@
    call $~lib/env/abort
    unreachable
   end
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+  if
+   i32.const 0
+   i32.const 120
+   i32.const 44
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+  if
+   i32.const 0
+   i32.const 120
+   i32.const 45
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
+  set_global $std/arraybuffer/arr8
+  get_global $std/arraybuffer/arr8
+  call $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 120
+   i32.const 50
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  call $~lib/internal/typedarray/TypedArray<i32>#constructor
+  call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 120
+   i32.const 51
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  set_global $~argc
+  get_global $std/arraybuffer/arr8
+  i32.load
+  call $~lib/dataview/DataView#constructor|trampoline
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 120
+   i32.const 52
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $null (; 9 ;) (type $v)
+ (func $null (; 15 ;) (type $v)
   nop
  )
 )
