@@ -526,16 +526,36 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
     };
 }
 
+type idFunc<T> = (t: T) => T
+
+type postResolve<T> = idFunc<ASInstance & T>;
+type preResolve = idFunc<ArrayBuffer | Uint8Array>;
+type postArr<T> = Array<postResolve<T>>;
+
+
+
 /** Instantiates an AssemblyScript module using the specified imports. */
-export function instantiate<T = ASExport>(module: WebAssembly.Module, imports: any = {}): ASInstance & T {
+export function instantiate<T = ASExport>(module: WebAssembly.Module, imports: {post?: postArr<T>} = {}): ASInstance & T {
     const ctx = createContext(imports);
     const instance = new WebAssembly.Instance(module, ctx.imports);
-    return resolveContext(instance, ctx);
+    var res = resolveContext<T>(instance, ctx);
+    if (imports.post){
+      imports.post.map((fn)=>{
+        res = fn(res);
+      })
+    }
+    return res;
 }
 
 /** Instantiates an AssemblyScript module from a buffer using the specified imports. */
-export function instantiateBuffer<T = ASExport>(buffer: any, imports: any = {}): ASInstance & T {
-    return instantiate(new WebAssembly.Module(buffer), imports);
+export function instantiateBuffer<T = ASExport>(buffer: any, imports: {pre?:Array<preResolve>, post?:postArr<T>} = {}): ASInstance & T {
+   var _buffer = buffer;
+    if (imports.pre){
+      imports.pre.map((fn)=>{
+        _buffer = fn(_buffer);
+      })
+    }
+    return instantiate(new WebAssembly.Module(_buffer), imports);
 }
 
 /** Instantiates an AssemblyScript module from a response using the specified imports. */
