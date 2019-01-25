@@ -26,18 +26,18 @@ export class ArrayBuffer {
   readonly byteLength: i32; // capped to [0, MAX_LENGTH]
 
   @inline static isView<T>(value: T): bool {
-    return (
-      value instanceof Uint8ClampedArray ||
-      value instanceof Uint8Array  ||
-      value instanceof Int8Array   ||
-      value instanceof Uint16Array ||
-      value instanceof Int16Array  ||
-      value instanceof Uint32Array ||
-      value instanceof Int32Array  ||
-      value instanceof Uint64Array ||
-      value instanceof Int64Array  ||
-      value instanceof DataView
-    ) && value !== null;
+    if (value === null) return false;
+    if (value instanceof Uint8ClampedArray) return true;
+    if (value instanceof Uint8Array) return true;
+    if (value instanceof Int8Array) return true;
+    if (value instanceof Uint16Array) return true;
+    if (value instanceof Int16Array) return true;
+    if (value instanceof Uint32Array) return true;
+    if (value instanceof Int32Array) return true;
+    if (value instanceof Uint64Array) return true;
+    if (value instanceof Int64Array) return true;
+    if (value instanceof DataView) return true;
+    return false;
   }
 
   // @unsafe

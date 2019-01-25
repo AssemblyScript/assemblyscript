@@ -1985,329 +1985,57 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>> (; 10 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+  get_local $0
   i32.const 0
-  if (result i32)
+  i32.eq
+  if
    i32.const 0
-  else   
-   i32.const 0
+   return
   end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $0
-   i32.const 0
-   i32.ne
-  else   
-   get_local $1
-  end
+  i32.const 0
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<usize> (; 11 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+  get_local $0
   i32.const 0
-  if (result i32)
+  i32.eq
+  if
    i32.const 0
-  else   
-   i32.const 0
+   return
   end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $0
-   i32.const 0
-   i32.ne
-  else   
-   get_local $1
-  end
+  i32.const 0
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array> (; 12 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+  get_local $0
   i32.const 0
-  if (result i32)
+  i32.eq
+  if
    i32.const 0
-  else   
-   i32.const 1
+   return
   end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $0
-   i32.const 0
-   i32.ne
-  else   
-   get_local $1
-  end
+  i32.const 1
+  return
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<Int32Array> (; 13 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+  get_local $0
   i32.const 0
-  if (result i32)
+  i32.eq
+  if
    i32.const 0
-  else   
-   i32.const 0
+   return
   end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 1
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $0
-   i32.const 0
-   i32.ne
-  else   
-   get_local $1
-  end
+  i32.const 1
+  return
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<DataView> (; 14 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+  get_local $0
   i32.const 0
-  if (result i32)
+  i32.eq
+  if
    i32.const 0
-  else   
-   i32.const 0
+   return
   end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 0
-  end
-  tee_local $1
-  if (result i32)
-   get_local $1
-  else   
-   i32.const 1
-  end
-  tee_local $1
-  if (result i32)
-   get_local $0
-   i32.const 0
-   i32.ne
-  else   
-   get_local $1
-  end
+  i32.const 1
+  return
  )
  (func $~lib/memory/memory.allocate (; 15 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0

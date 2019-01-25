@@ -1525,97 +1525,7 @@
   get_local $2
   call $~lib/arraybuffer/ArrayBuffer#slice
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array> (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  i32.const 1
-  tee_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  if
-   get_local $0
-   i32.const 0
-   i32.ne
-   set_local $1
-  end
-  get_local $1
- )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Int32Array> (; 9 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  i32.const 1
-  tee_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  i32.eqz
-  if
-   i32.const 0
-   set_local $1
-  end
-  get_local $1
-  if
-   get_local $0
-   i32.const 0
-   i32.ne
-   set_local $1
-  end
-  get_local $1
- )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 10 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 1
@@ -1647,7 +1557,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 11 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 9 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 4
@@ -1679,7 +1589,7 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/dataview/DataView#constructor (; 12 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 10 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $3
   i32.const -2147483648
   i32.eq
@@ -1743,7 +1653,7 @@
   end
   get_local $0
  )
- (func $~lib/dataview/DataView#constructor|trampoline (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor|trampoline (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block $2of2
    block $1of2
@@ -1764,7 +1674,7 @@
   get_local $1
   call $~lib/dataview/DataView#constructor
  )
- (func $start (; 14 ;) (type $v)
+ (func $start (; 12 ;) (type $v)
   (local $0 i32)
   i32.const 288
   set_global $~lib/allocator/arena/startOffset
@@ -1961,30 +1871,14 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
-  if
-   i32.const 0
-   i32.const 120
-   i32.const 44
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
-  if
-   i32.const 0
-   i32.const 120
-   i32.const 45
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
   call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_global $std/arraybuffer/arr8
   get_global $std/arraybuffer/arr8
-  call $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+  if (result i32)
+   i32.const 1
+  else   
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -1994,8 +1888,14 @@
    call $~lib/env/abort
    unreachable
   end
-  call $~lib/internal/typedarray/TypedArray<i32>#constructor
-  call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>5 (result i32)
+   i32.const 0
+   call $~lib/internal/typedarray/TypedArray<i32>#constructor
+   i32.eqz
+   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>5
+   drop
+   i32.const 1
+  end
   i32.eqz
   if
    i32.const 0
@@ -2007,9 +1907,16 @@
   end
   i32.const 1
   set_global $~argc
-  get_global $std/arraybuffer/arr8
-  i32.load
-  call $~lib/dataview/DataView#constructor|trampoline
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>6 (result i32)
+   i32.const 0
+   get_global $std/arraybuffer/arr8
+   i32.load
+   call $~lib/dataview/DataView#constructor|trampoline
+   i32.eqz
+   br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>6
+   drop
+   i32.const 1
+  end
   i32.eqz
   if
    i32.const 0
@@ -2020,7 +1927,7 @@
    unreachable
   end
  )
- (func $null (; 15 ;) (type $v)
+ (func $null (; 13 ;) (type $v)
   nop
  )
 )
