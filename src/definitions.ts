@@ -33,6 +33,7 @@ import {
 import {
   indent
 } from "./util";
+import { Source, NodeKind, ImportStatement, DeclarationStatement, ExportStatement } from "./ast";
 
 /** Walker base class. */
 abstract class ExportsWalker {
@@ -140,6 +141,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private sb: string[] = [];
   private generatedEncodeFunctions = new Set<string>();
   private generatedDecodeFunctions = new Set<string>();
+  private exportedClasses: Class[] = [];
+  private exportedFunctions: Function[] = [];
+  private filesByImport = new Map<string, string>();
 
   static build(program: Program): string {
     return new NEARBindingsBuilder(program).build();
@@ -154,12 +158,31 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   visitClass(element: Class): void {
-    // Do nothing
+    if (!element.is(CommonFlags.EXPORT)) {
+      return;
+    }
+    this.exportedClasses.push(element);
   }
 
   visitFunction(element: Function): void {
+    if (!element.is(CommonFlags.EXPORT)) {
+      return;
+    }
+    this.exportedFunctions.push(element);
     this.generateArgsParser(element);
     this.generateWrapperFunction(element);
+  }
+
+  visitInterface(element: Interface): void {
+    // Do nothing
+  }
+
+  visitField(element: Field): void {
+    throw new Error("Shouldn't be called");
+  }
+
+  visitNamespace(element: Element): void {
+    // Do nothing
   }
 
   private generateArgsParser(element: Function) {
@@ -175,7 +198,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       `);
     if (signature.parameterNames) {
       fields.forEach((field) => {
-        this.sb.push(`__near_param_${field.simpleName}: ${field.type};`);
+        this.sb.push(`__near_param_${field.simpleName}: ${this.wrappedTypeName(field.type)};`);
       });
       this.generateHandlerMethods("this.__near_param_", fields);
     } else {
@@ -196,9 +219,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
       handler.decoder = new JSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
       handler.decoder.deserialize(json);`);
     if (returnType.toString() != "void") {
-      this.sb.push(`let result = ${element.simpleName}(`);
+      this.sb.push(`let result = wrapped_${element.simpleName}(`);
     } else {
-      this.sb.push(`${element.simpleName}(`);
+      this.sb.push(`wrapped_${element.simpleName}(`);
     }
     if (signature.parameterNames) {
       this.sb.push(signature.parameterNames.map(paramName => `handler.__near_param_${paramName}`).join(","));
@@ -238,7 +261,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.sb.push("setNull(name: string): void {");
     fields.forEach((field) => {
       this.sb.push(`if (name == "${field.simpleName}") {
-        ${valuePrefix}${field.simpleName} = <${field.type.toString()}>null;
+        ${valuePrefix}${field.simpleName} = <${this.wrappedTypeName(field.type)}>null;
         return;
       }`);
     });
@@ -272,7 +295,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     fields.forEach((field) => {
       if (!(field.type.toString() in this.typeMapping)) {
         this.sb.push(`if (name == "${field.simpleName}") {
-          ${valuePrefix}${field.simpleName} = __near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
+          ${valuePrefix}${field.simpleName} = <${field.type}>__near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
           return false;
         }`);
       }
@@ -295,7 +318,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       }`);
     } else {
       this.sb.push(`pushObject(name: string): bool {
-        ${valuePrefix}.push(__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
+        ${valuePrefix}.push(<${fieldType}>__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
         return false;
       }
       pushArray(name: string): bool {
@@ -304,11 +327,12 @@ export class NEARBindingsBuilder extends ExportsWalker {
           this.handledRoot = true;
           return true;
         }
-        ${valuePrefix}.push(__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
+        ${valuePrefix}.push(<${fieldType}>__near_decode_${this.encodeType(fieldType)}(this.buffer, this.decoder.state));
         return false;
       }`);
     }
   }
+
 
   private generateEncodeFunction(type: Type) {
     if (!type.classReference) {
@@ -321,12 +345,17 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
     this.generatedEncodeFunctions.add(typeName);
 
+    let methodName = `__near_encode_${typeName}`;
+    if (this.tryUsingImport(type, methodName)) {
+      return;
+    }
+
     if (this.isArrayType(type)) {
       // Array
       this.generateEncodeFunction(type.classReference.typeArguments![0]);
 
       this.sb.push(`export function __near_encode_${typeName}(
-          value: ${type.toString()},
+          value: ${this.wrappedTypeName(type)},
           encoder: JSONEncoder): void {`);
       this.sb.push(`for (let i = 0; i < value.length; i++) {`);
       this.generateFieldEncoder(type.classReference.typeArguments![0], "null", "value[i]");
@@ -339,7 +368,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       });
 
       this.sb.push(`export function __near_encode_${typeName}(
-          value: ${type.toString()},
+          value: ${this.wrappedTypeName(type)},
           encoder: JSONEncoder): void {`);
       this.getFields(type.classReference).forEach((field) => {
         let fieldType = field.type;
@@ -352,19 +381,53 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.sb.push("}");
   }
 
+  private tryUsingImport(type: Type, methodName: string): bool {
+    let importedFile = this.filesByImport.get(type.classReference!.simpleName);
+    if (importedFile) {
+      if (this.hasExport(importedFile, methodName)) {
+        this.sb.push(`import { ${methodName} } from "${importedFile}";`);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private hasExport(importedFile: string, name: string): bool {
+    let importedSource = this.program.sources.filter(
+      s => "./" + s.normalizedPath == importedFile + ".ts")[0];
+
+    return this.getExports(importedSource).filter(d => d.name.text == name).length > 0;
+  }
+
   private generateHandler(type: Type) {
     let typeName = this.encodeType(type);
     this.sb.push(`export class __near_JSONHandler_${typeName} extends ThrowingJSONHandler {
       buffer: Uint8Array;
       decoder: JSONDecoder<__near_JSONHandler_${typeName}>;
       handledRoot: boolean = false;
-      value: ${type} = new ${type}();`);
+      value: ${this.wrappedTypeName(type)} = new ${this.wrappedTypeName(type)}();`);
     if (this.isArrayType(type)) {
       this.generateArrayHandlerMethods("this.value", type.classReference!.typeArguments![0]);
     } else {
       this.generateHandlerMethods("this.value.", this.getFields(type.classReference!));
     }
     this.sb.push("}\n");
+  }
+
+  private wrappedTypeName(type: Type): string {
+    if (!type.classReference) {
+      return type.toString();
+    }
+    let cls = type.classReference;
+    if (this.exportedClasses.indexOf(cls) != -1) {
+      return "wrapped_" + cls.simpleName;
+    }
+    if (cls.typeArguments && cls.typeArguments.length > 0) {
+      return cls.prototype.simpleName + "<" +
+        cls.typeArguments.map(argType => this.wrappedTypeName(argType)).join(", ") +
+      ">"
+    }
+    return cls.simpleName;
   }
 
   private generateDecodeFunction(type: Type) {
@@ -378,6 +441,11 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
     this.generatedDecodeFunctions.add(typeName);
 
+    let methodName = `__near_decode_${typeName}`;
+    if (this.tryUsingImport(type, methodName)) {
+      return;
+    }
+
     this.generateHandler(type);
     if (this.isArrayType(type)) {
       // Array
@@ -390,7 +458,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
 
     this.sb.push(`export function __near_decode_${typeName}(
-        buffer: Uint8Array, state: DecoderState): ${type} {
+        buffer: Uint8Array, state: DecoderState):${this.wrappedTypeName(type)} {
       let handler = new __near_JSONHandler_${typeName}();
       handler.buffer = buffer;
       handler.decoder = new JSONDecoder<__near_JSONHandler_${typeName}>(handler);
@@ -406,7 +474,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       let pushType = this.isArrayType(fieldType) ? "Array" : "Object";
       this.sb.push(`if (${sourceExpr} != null) {
           encoder.push${pushType}(${fieldExpr});
-          __near_encode_${this.encodeType(fieldType)}(${sourceExpr}, encoder);
+          __near_encode_${this.encodeType(fieldType)}(<${fieldType}>${sourceExpr}, encoder);
           encoder.pop${pushType}();
         } else {
           encoder.setNull(${fieldExpr});
@@ -444,23 +512,25 @@ export class NEARBindingsBuilder extends ExportsWalker {
     return <Field[]>[...element.members.values()].filter(member => member instanceof Field);
   }
 
-  visitInterface(element: Interface): void {
-    // Do nothing
-  }
-
-  visitField(element: Field): void {
-    throw new Error("Shouldn't be called");
-  }
-
-  visitNamespace(element: Element): void {
-    // Do nothing
-  }
-
   build(): string {
-    this.sb.push(`
+    let mainSource = this.program.sources
+      .filter(s => s.normalizedPath.indexOf("~lib") != 0)[0];
+    this.copyImports(mainSource);
+
+    this.walk();
+
+    this.exportedClasses.forEach(c => {
+      this.generateEncodeFunction(c.type);
+      this.generateDecodeFunction(c.type);
+    });
+
+    let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions);
+    let allImportsStr = allExported.map(c => `${c.simpleName} as wrapped_${c.simpleName}`).join(", ");
+    this.sb = [`
       import { near } from "./near";
       import { JSONEncoder} from "./json/encoder"
       import { JSONDecoder, ThrowingJSONHandler, DecoderState  } from "./json/decoder"
+      import {${allImportsStr}} from "./${mainSource.normalizedPath.replace(".ts", "")}";
 
       // Runtime functions
       @external("env", "return_value")
@@ -469,12 +539,50 @@ export class NEARBindingsBuilder extends ExportsWalker {
       declare function input_read_len(): u32;
       @external("env", "input_read_into")
       declare function input_read_into(ptr: usize): void;
-    `);
-    let mainSource = this.program.sources
-      .filter(s => s.normalizedPath.indexOf("~lib") != 0)[0];
-    this.sb.push(mainSource.text);
-    this.walk();
+    `].concat(this.sb);
+    this.exportedClasses.forEach(c => {
+      this.sb.push(`export class ${c.simpleName} extends ${this.wrappedTypeName(c.type)} {
+        static decode(json: Uint8Array): ${c.simpleName} {
+          return <${c.simpleName}>__near_decode_${this.encodeType(c.type)}(json, null);
+        }
+
+        encode(): Uint8Array {
+          let encoder: JSONEncoder = new JSONEncoder();
+          encoder.pushObject(null);
+          __near_encode_${this.encodeType(c.type)}(<${c.simpleName}>this, encoder);
+          encoder.popObject();
+          return encoder.serialize();
+        }
+      }`);
+    })
     return this.sb.join("\n");
+  }
+
+  private copyImports(mainSource: Source): any {
+    this.getImports(mainSource).forEach(statement => {
+      if (statement.declarations) {
+        let declarationsStr = statement.declarations!
+          .map(declaration => `${declaration.externalName.text} as ${declaration.name.text}`)
+          .join(",");
+        this.sb.push(`import {${declarationsStr}} from "${statement.path.value}";`);
+        statement.declarations.forEach(d => {
+          this.filesByImport.set(d.name.text, statement.path.value);
+        });
+      }
+    });
+  }
+
+  private getImports(source: Source): ImportStatement[] {
+    return <ImportStatement[]>source.statements
+      .filter(statement => statement.kind == NodeKind.IMPORT);
+  }
+
+  private getExports(source: Source): DeclarationStatement[] {
+    let declarations = <DeclarationStatement[]>source.statements
+      .filter(statement =>
+        statement.kind == NodeKind.FUNCTIONDECLARATION ||
+        statement.kind == NodeKind.CLASSDECLARATION);
+    return declarations.filter(d => d.isTopLevelExport);
   }
 }
 
