@@ -286,7 +286,7 @@ function asmFunc(global, env, buffer) {
  
  function assembly_index_NBodySystem_advance($0) {
   $0 = $0 | 0;
-  var $1 = 0, $2 = 0.0, $8 = 0.0, $3 = 0, $4 = 0.0, $5 = 0.0, $6 = 0.0, $7 = 0, $9 = 0.0, $10 = 0.0, $11 = 0.0, $12 = 0, $13 = 0, $18 = 0.0, $14 = 0.0, $15 = 0.0, $16 = 0.0, $17 = 0.0, wasm2js_i32$0 = 0, wasm2js_f64$0 = 0.0;
+  var $1 = 0, $2 = 0.0, $8 = 0.0, $3 = 0, $4 = 0.0, $5 = 0.0, $6 = 0.0, $7 = 0, $9 = 0.0, $10 = 0.0, $11 = 0.0, $12 = 0, $13 = 0, $14 = 0.0, $15 = 0.0, $16 = 0.0, $18 = 0.0, $17 = 0.0, wasm2js_i32$0 = 0, wasm2js_f64$0 = 0.0;
   $0 = HEAPU32[$0 >> 2] | 0;
   $12 = HEAP32[($0 + 4 | 0) >> 2] | 0;
   $13 = HEAPU32[$0 >> 2] | 0;
@@ -340,13 +340,13 @@ function asmFunc(global, env, buffer) {
     wasm2js_f64$0 = $6;
     HEAPF64[(wasm2js_i32$0 + 40 | 0) >> 3] = wasm2js_f64$0;
     wasm2js_i32$0 = $0;
-    wasm2js_f64$0 = +HEAPF64[$0 >> 3] + .01 * $4;
+    wasm2js_f64$0 = $14 + .01 * $4;
     HEAPF64[wasm2js_i32$0 >> 3] = wasm2js_f64$0;
     wasm2js_i32$0 = $0;
-    wasm2js_f64$0 = +HEAPF64[($0 + 8 | 0) >> 3] + .01 * $5;
+    wasm2js_f64$0 = $15 + .01 * $5;
     HEAPF64[(wasm2js_i32$0 + 8 | 0) >> 3] = wasm2js_f64$0;
     wasm2js_i32$0 = $0;
-    wasm2js_f64$0 = +HEAPF64[($0 + 16 | 0) >> 3] + .01 * $6;
+    wasm2js_f64$0 = $16 + .01 * $6;
     HEAPF64[(wasm2js_i32$0 + 16 | 0) >> 3] = wasm2js_f64$0;
     $3 = $3 + 1 | 0;
     continue repeat_0;
@@ -405,15 +405,17 @@ function asmFunc(global, env, buffer) {
  function assembly_index_bench($0) {
   $0 = $0 | 0;
   var $1 = 0;
-  break_0 : {
-   repeat_0 : do {
-    if ($1 >>> 0 >= $0 >>> 0) break break_0;
-    assembly_index_NBodySystem_advance(assembly_index_system | 0);
-    $1 = $1 + 1 | 0;
+  $1 = assembly_index_system;
+  $0 = $0 - 1 | 0;
+  repeat_0 : do {
+   break_0 : {
+    if (($0 | 0) < (0 | 0)) break break_0;
+    assembly_index_NBodySystem_advance($1 | 0);
+    $0 = $0 - 1 | 0;
     continue repeat_0;
-    break repeat_0;
-   } while (1);
-  };
+   };
+   break repeat_0;
+  } while (1);
  }
  
  function assembly_index_getBody($0) {

@@ -1007,24 +1007,21 @@
      get_local $12
      f64.store offset=40
      get_local $6
-     get_local $6
-     f64.load
+     get_local $7
      get_local $1
      get_local $10
      f64.mul
      f64.add
      f64.store
      get_local $6
-     get_local $6
-     f64.load offset=8
+     get_local $8
      get_local $1
      get_local $11
      f64.mul
      f64.add
      f64.store offset=8
      get_local $6
-     get_local $6
-     f64.load offset=16
+     get_local $9
      get_local $1
      get_local $12
      f64.mul
@@ -1213,22 +1210,27 @@
  )
  (func $assembly/index/bench (; 22 ;) (type $iv) (param $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  get_global $assembly/index/system
+  set_local $1
   block $break|0
-   i32.const 0
-   set_local $1
+   get_local $0
+   i32.const 1
+   i32.sub
+   set_local $2
    loop $repeat|0
-    get_local $1
-    get_local $0
-    i32.lt_u
+    get_local $2
+    i32.const 0
+    i32.ge_s
     i32.eqz
     br_if $break|0
-    get_global $assembly/index/system
+    get_local $1
     f64.const 0.01
     call $assembly/index/NBodySystem#advance
-    get_local $1
+    get_local $2
     i32.const 1
-    i32.add
-    set_local $1
+    i32.sub
+    set_local $2
     br $repeat|0
     unreachable
    end

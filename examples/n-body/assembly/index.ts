@@ -144,9 +144,9 @@ class NBodySystem {
       bodyi.vy = bivy;
       bodyi.vz = bivz;
 
-      bodyi.x += dt * bivx;
-      bodyi.y += dt * bivy;
-      bodyi.z += dt * bivz;
+      bodyi.x = ix + dt * bivx;
+      bodyi.y = iy + dt * bivy;
+      bodyi.z = iz + dt * bivz;
     }
   }
 
@@ -200,7 +200,12 @@ export function step(): float {
 }
 
 export function bench(steps: u32): void {
-  for (let i: u32 = 0; i < steps; ++i) system.advance(0.01);
+  // Took 3474.198315ms
+  // for (let i: u32 = 0; i < steps; ++i) system.advance(0.01);
+
+  // Took 3425.746351ms
+  var _system = system;
+  for (let i: i32 = steps - 1; i >= 0; --i) _system.advance(0.01);
 }
 
 export function getBody(index: i32): Body | null {
