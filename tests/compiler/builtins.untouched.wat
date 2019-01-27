@@ -318,13 +318,13 @@
   drop
   i32.const -42
   tee_local $0
-  i32.const 0
+  i32.const 31
+  i32.shr_s
+  tee_local $1
   get_local $0
-  i32.sub
-  get_local $0
-  i32.const 0
-  i32.gt_s
-  select
+  i32.add
+  get_local $1
+  i32.xor
   drop
   i32.const 1
   tee_local $0
@@ -363,13 +363,13 @@
   set_global $builtins/i
   i32.const -42
   tee_local $0
-  i32.const 0
+  i32.const 31
+  i32.shr_s
+  tee_local $1
   get_local $0
-  i32.sub
-  get_local $0
-  i32.const 0
-  i32.gt_s
-  select
+  i32.add
+  get_local $1
+  i32.xor
   set_global $builtins/i
   get_global $builtins/i
   i32.const 42
@@ -444,13 +444,13 @@
   drop
   i64.const -42
   tee_local $2
-  i64.const 0
+  i64.const 63
+  i64.shr_s
+  tee_local $3
   get_local $2
-  i64.sub
-  get_local $2
-  i64.const 0
-  i64.gt_s
-  select
+  i64.add
+  get_local $3
+  i64.xor
   drop
   i64.const 1
   i64.clz
@@ -471,13 +471,13 @@
   set_global $builtins/I
   i64.const -42
   tee_local $2
-  i64.const 0
+  i64.const 63
+  i64.shr_s
+  tee_local $3
   get_local $2
-  i64.sub
-  get_local $2
-  i64.const 0
-  i64.gt_s
-  select
+  i64.add
+  get_local $3
+  i64.xor
   set_global $builtins/I
   get_global $builtins/I
   i64.const 42

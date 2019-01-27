@@ -72,17 +72,15 @@ export class Array<T> {
   }
 
   every(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
-    var buffer = this.buffer_;
-    for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
-      if (!callbackfn(LOAD<T>(buffer, index), index, this)) return false;
+    for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
+      if (!callbackfn(LOAD<T>(this.buffer_, index), index, this)) return false;
     }
     return true;
   }
 
   findIndex(predicate: (element: T, index: i32, array: Array<T>) => bool): i32 {
-    var buffer = this.buffer_;
-    for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
-      if (predicate(LOAD<T>(buffer, index), index, this)) return index;
+    for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
+      if (predicate(LOAD<T>(this.buffer_, index), index, this)) return index;
     }
     return -1;
   }
@@ -193,7 +191,7 @@ export class Array<T> {
 
   concat(items: Array<T>): Array<T> {
     var thisLen = this.length_;
-    var otherLen = items === null ? 0 : items.length_;
+    var otherLen = select(0, items.length_, items === null);
     var outLen = thisLen + otherLen;
     var out = new Array<T>(outLen);
 
@@ -250,27 +248,25 @@ export class Array<T> {
   }
 
   forEach(callbackfn: (value: T, index: i32, array: Array<T>) => void): void {
-    for (let index = 0, toIndex = this.length_; index < toIndex && index < this.length_; ++index) {
+    for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
       callbackfn(LOAD<T>(this.buffer_, index), index, this);
     }
   }
 
   map<U>(callbackfn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
-    var buffer = this.buffer_;
     var length = this.length_;
     var result = new Array<U>(length);
-    var resultBuffer = result.buffer_;
+    var buffer = result.buffer_;
     for (let index = 0; index < min(length, this.length_); ++index) {
-      STORE<U>(resultBuffer, index, callbackfn(LOAD<T>(buffer, index), index, this));
+      STORE<U>(buffer, index, callbackfn(LOAD<T>(this.buffer_, index), index, this));
     }
     return result;
   }
 
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
-    var buffer = this.buffer_;
     var result = new Array<T>();
-    for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
-      let value = LOAD<T>(buffer, index);
+    for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
+      let value = LOAD<T>(this.buffer_, index);
       if (callbackfn(value, index, this)) result.push(value);
     }
     return result;
@@ -281,9 +277,8 @@ export class Array<T> {
     initialValue: U
   ): U {
     var accum = initialValue;
-    var buffer = this.buffer_;
-    for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
-      accum = callbackfn(accum, LOAD<T>(buffer, index), index, this);
+    for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
+      accum = callbackfn(accum, LOAD<T>(this.buffer_, index), index, this);
     }
     return accum;
   }
@@ -293,9 +288,8 @@ export class Array<T> {
     initialValue: U
   ): U {
     var accum = initialValue;
-    var buffer = this.buffer_;
-    for (let index: i32 = this.length_ - 1; index >= 0; --index) {
-      accum = callbackfn(accum, LOAD<T>(buffer, index), index, this);
+    for (let index = this.length_ - 1; index >= 0; --index) {
+      accum = callbackfn(accum, LOAD<T>(this.buffer_, index), index, this);
     }
     return accum;
   }
@@ -317,9 +311,8 @@ export class Array<T> {
   }
 
   some(callbackfn: (element: T, index: i32, array: Array<T>) => bool): bool {
-    var buffer = this.buffer_;
-    for (let index = 0, toIndex = this.length_; index < min(toIndex, this.length_); ++index) {
-      if (callbackfn(LOAD<T>(buffer, index), index, this)) return true;
+    for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
+      if (callbackfn(LOAD<T>(this.buffer_, index), index, this)) return true;
     }
     return false;
   }
@@ -348,20 +341,16 @@ export class Array<T> {
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
-    var length = this.length_;
-    if (begin < 0) begin = max(length + begin, 0);
-    else if (begin > length) begin = length;
-    if (end < 0) end = length + end; // no need to clamp
-    else if (end > length) end = length;
-    if (end < begin) end = begin;    // ^
-    var newLength = end - begin;
-    assert(newLength >= 0);
-    var sliced = new Array<T>(newLength);
-    if (newLength) {
+    var len = this.length_;
+    begin = begin < 0 ? max(begin + len, 0) : min(begin, len);
+    end = end < 0 ? max(end + len, 0) : min(end, len);
+    len = end - begin;
+    var sliced = new Array<T>(len);
+    if (len) {
       memory.copy(
         changetype<usize>(sliced.buffer_) + HEADER_SIZE,
         changetype<usize>(this.buffer_) + HEADER_SIZE + (<usize>begin << alignof<T>()),
-        <usize>newLength << alignof<T>()
+        <usize>len << alignof<T>()
       );
     }
     return sliced;
@@ -430,9 +419,8 @@ export class Array<T> {
     var sepLen = separator.length;
     var hasSeparator = sepLen != 0;
     if (value instanceof bool) {
-      if (!lastIndex) {
-        return select<string>("true", "false", LOAD<T,bool>(buffer, 0));
-      }
+      if (!lastIndex) return select<string>("true", "false", LOAD<T,bool>(buffer, 0));
+
       let valueLen = 5; // max possible length of element len("false")
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
@@ -459,9 +447,8 @@ export class Array<T> {
       }
       return out;
     } else if (isInteger<T>()) {
-      if (!lastIndex) {
-        return changetype<string>(itoa<T>(LOAD<T>(buffer, 0)));
-      }
+      if (!lastIndex) return changetype<string>(itoa<T>(LOAD<T>(buffer, 0)));
+
       const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + <i32>isSigned<T>();
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
@@ -483,9 +470,8 @@ export class Array<T> {
       }
       return out;
     } else if (isFloat<T>()) {
-      if (!lastIndex) {
-        return changetype<string>(dtoa(LOAD<T,f64>(buffer, 0)));
-      }
+      if (!lastIndex) return changetype<string>(dtoa(LOAD<T,f64>(buffer, 0)));
+
       const valueLen = MAX_DOUBLE_LENGTH;
       let estLen = (valueLen + sepLen) * lastIndex + valueLen;
       let result = allocateUnsafeString(estLen);
@@ -507,9 +493,8 @@ export class Array<T> {
       }
       return out;
     } else if (isString<T>()) {
-      if (!lastIndex) {
-        return LOAD<string>(buffer, 0);
-      }
+      if (!lastIndex) return LOAD<string>(buffer, 0);
+
       let estLen = 0;
       for (let i = 0, len = lastIndex + 1; i < len; ++i) {
         estLen += LOAD<string>(buffer, i).length;

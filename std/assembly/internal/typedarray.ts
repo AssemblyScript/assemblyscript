@@ -60,7 +60,7 @@ export abstract class TypedArray<T> {
 }
 
 @inline
-export function FILL<TArray extends TypedArray<T>, T>(
+export function FILL<TArray extends TypedArray<T>, T extends number>(
   array: TArray,
   value: NATIVE<T>,
   start: i32,
@@ -133,16 +133,16 @@ export function REDUCE<TArray extends TypedArray<T>, T, TRet>(
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var index = 0;
-  var length = <i32>array.length;
-  while (index != length) {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
     initialValue = callbackfn(
       initialValue,
-      unchecked(array[index]),
-      index,
+      LOAD<T>(buffer, i, byteOffset),
+      i,
       array,
     );
-    ++index;
   }
   return initialValue;
 }
@@ -153,16 +153,15 @@ export function REDUCE_RIGHT<TArray extends TypedArray<T>, T, TRet>(
   callbackfn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var index = <i32>array.length - 1;
-  var length = -1;
-  while (index != length) {
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = array.length - 1; i >= 0; i--) {
     initialValue = callbackfn(
       initialValue,
-      unchecked(array[index]),
-      index,
+      LOAD<T>(buffer, i, byteOffset),
+      i,
       array,
     );
-    --index;
   }
   return initialValue;
 }
@@ -172,12 +171,63 @@ export function MAP<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, self: TArray) => T,
 ): TArray {
-  var length: i32 = array.length;
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
   var result = instantiate<TArray>(length);
-  var i: i32 = 0;
-  while (i < length) {
-    unchecked(result[i] = callbackfn(array[i], i, <TArray>array));
-    ++i;
+  var resultBuffer = result.buffer;
+  for (let i = 0; i < length; i++) {
+    STORE<T, NATIVE<T>>(resultBuffer, i, <NATIVE<T>>callbackfn(LOAD<T>(buffer, i, byteOffset), i, array));
   }
+
   return result;
+}
+
+@inline
+export function FIND_INDEX<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): i32 {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
+    if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+@inline
+export function SOME<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): bool {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
+    if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+@inline
+export function EVERY<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): bool {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
+    if (callbackfn(LOAD<T>(buffer, i, byteOffset), i, array)) {
+      continue;
+    }
+    return false;
+  }
+  return true;
 }
