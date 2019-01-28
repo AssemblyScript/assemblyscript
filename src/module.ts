@@ -386,13 +386,12 @@ export class Module {
     result: NativeType,
     paramTypes: NativeType[] | null
   ): FunctionRef {
-    var cStr = allocString(name);
+    var cStr = this.allocStringCached(name);
     var cArr = allocI32Array(paramTypes);
     try {
       return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
     } finally {
       memory.free(cArr);
-      memory.free(cStr);
     }
   }
 
@@ -409,12 +408,8 @@ export class Module {
   }
 
   removeFunctionType(name: string): void {
-    var cStr = allocString(name);
-    try {
-      _BinaryenRemoveFunctionType(this.ref, cStr);
-    } finally {
-      memory.free(cStr);
-    }
+    var cStr = this.allocStringCached(name);
+    _BinaryenRemoveFunctionType(this.ref, cStr);
   }
 
   // constants
@@ -465,13 +460,12 @@ export class Module {
     name: string | null = null,
     operands: ExpressionRef[] | null = null
   ): ExpressionRef {
-    var cStr = allocString(name);
+    var cStr = this.allocStringCached(name);
     var cArr = allocPtrArray(operands);
     try {
       return _BinaryenHost(this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0);
     } finally {
       memory.free(cArr);
-      memory.free(cStr);
     }
   }
 
@@ -493,12 +487,8 @@ export class Module {
     name: string,
     type: NativeType
   ): ExpressionRef {
-    var cStr = allocString(name);
-    try {
-      return _BinaryenGetGlobal(this.ref, cStr, type);
-    } finally {
-      memory.free(cStr);
-    }
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetGlobal(this.ref, cStr, type);
   }
 
   createLoad(
@@ -591,12 +581,8 @@ export class Module {
     name: string,
     value: ExpressionRef
   ): ExpressionRef {
-    var cStr = allocString(name);
-    try {
-      return _BinaryenSetGlobal(this.ref, cStr, value);
-    } finally {
-      memory.free(cStr);
-    }
+    var cStr = this.allocStringCached(name);
+    return _BinaryenSetGlobal(this.ref, cStr, value);
   }
 
   createBlock(
@@ -604,13 +590,12 @@ export class Module {
     children: ExpressionRef[],
     type: NativeType = NativeType.None
   ): ExpressionRef {
-    var cStr = allocString(label);
+    var cStr = this.allocStringCached(label);
     var cArr = allocPtrArray(children);
     try {
       return _BinaryenBlock(this.ref, cStr, cArr, children.length, type);
     } finally {
       memory.free(cArr);
-      memory.free(cStr);
     }
   }
 
@@ -619,12 +604,8 @@ export class Module {
     condition: ExpressionRef = 0,
     value: ExpressionRef = 0
   ): ExpressionRef {
-    var cStr = allocString(label);
-    try {
-      return _BinaryenBreak(this.ref, cStr, condition, value);
-    } finally {
-      memory.free(cStr);
-    }
+    var cStr = this.allocStringCached(label);
+    return _BinaryenBreak(this.ref, cStr, condition, value);
   }
 
   createDrop(
@@ -637,12 +618,8 @@ export class Module {
     label: string | null,
     body: ExpressionRef
   ): ExpressionRef {
-    var cStr = allocString(label);
-    try {
-      return _BinaryenLoop(this.ref, cStr, body);
-    } finally {
-      memory.free(cStr);
-    }
+    var cStr = this.allocStringCached(label);
+    return _BinaryenLoop(this.ref, cStr, body);
   }
 
   createIf(
@@ -680,16 +657,14 @@ export class Module {
     var numNames = names.length;
     var strs = new Array<usize>(numNames);
     for (let i = 0; i < numNames; ++i) {
-      strs[i] = allocString(names[i]);
+      strs[i] = this.allocStringCached(names[i]);
     }
     var cArr = allocI32Array(strs);
-    var cStr = allocString(defaultName);
+    var cStr = this.allocStringCached(defaultName);
     try {
       return _BinaryenSwitch(this.ref, cArr, numNames, cStr, condition, value);
     } finally {
-      memory.free(cStr);
       memory.free(cArr);
-      for (let i = numNames - 1; i >= 0; --i) memory.free(strs[i]);
     }
   }
 
@@ -698,13 +673,12 @@ export class Module {
     operands: ExpressionRef[] | null,
     returnType: NativeType
   ): ExpressionRef {
-    var cStr = allocString(target);
+    var cStr = this.allocStringCached(target);
     var cArr = allocPtrArray(operands);
     try {
       return _BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
     } finally {
       memory.free(cArr);
-      memory.free(cStr);
     }
   }
 
@@ -713,12 +687,11 @@ export class Module {
     operands: ExpressionRef[] | null,
     typeName: string
   ): ExpressionRef {
+    var cStr = this.allocStringCached(typeName);
     var cArr = allocPtrArray(operands);
-    var cStr = allocString(typeName);
     try {
       return _BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
     } finally {
-      memory.free(cStr);
       memory.free(cArr);
     }
   }
@@ -735,23 +708,15 @@ export class Module {
     mutable: bool,
     initializer: ExpressionRef
   ): GlobalRef {
-    var cStr = allocString(name);
-    try {
-      return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
-    } finally {
-      memory.free(cStr);
-    }
+    var cStr = this.allocStringCached(name);
+    return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
   }
 
   removeGlobal(
     name: string
   ): void {
-    var cStr = allocString(name);
-    try {
-      _BinaryenRemoveGlobal(this.ref, cStr);
-    } finally {
-      memory.free(cStr);
-    }
+    var cStr = this.allocStringCached(name);
+    _BinaryenRemoveGlobal(this.ref, cStr);
   }
 
   addFunction(
@@ -760,32 +725,25 @@ export class Module {
     varTypes: NativeType[] | null,
     body: ExpressionRef
   ): FunctionRef {
-    var cStr = allocString(name);
+    var cStr = this.allocStringCached(name);
     var cArr = allocI32Array(varTypes);
     try {
       return _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes ? varTypes.length : 0, body);
     } finally {
       memory.free(cArr);
-      memory.free(cStr);
     }
   }
 
   removeFunction(name: string): void {
-    var cStr = allocString(name);
-    try {
-      _BinaryenRemoveFunction(this.ref, cStr);
-    } finally {
-      memory.free(cStr);
-    }
+    var cStr = this.allocStringCached(name);
+    _BinaryenRemoveFunction(this.ref, cStr);
   }
 
-  private cachedTemporaryName: usize = 0;
   private hasTemporaryFunction: bool = false;
 
   addTemporaryFunction(result: NativeType, paramTypes: NativeType[] | null, body: ExpressionRef): FunctionRef {
     this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
-    var tempName = this.cachedTemporaryName;
-    if (!tempName) this.cachedTemporaryName = tempName = allocString(""); // works because strings are interned
+    var tempName = this.allocStringCached("");
     var cArr = allocI32Array(paramTypes);
     try {
       let typeRef = _BinaryenAddFunctionType(this.ref, tempName, result, cArr, paramTypes ? paramTypes.length : 0);
@@ -797,7 +755,7 @@ export class Module {
 
   removeTemporaryFunction(): void {
     this.hasTemporaryFunction = !assert(this.hasTemporaryFunction);
-    var tempName = assert(this.cachedTemporaryName);
+    var tempName = this.allocStringCached("");
     _BinaryenRemoveFunction(this.ref, tempName);
     _BinaryenRemoveFunctionType(this.ref, tempName);
   }
@@ -806,65 +764,41 @@ export class Module {
     internalName: string,
     externalName: string
   ): ExportRef {
-    var cStr1 = allocString(internalName);
-    var cStr2 = allocString(externalName);
-    try {
-      return _BinaryenAddFunctionExport(this.ref, cStr1, cStr2);
-    } finally {
-      memory.free(cStr2);
-      memory.free(cStr1);
-    }
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalName);
+    return _BinaryenAddFunctionExport(this.ref, cStr1, cStr2);
   }
 
   addTableExport(
     internalName: string,
     externalName: string
   ): ExportRef {
-    var cStr1 = allocString(internalName);
-    var cStr2 = allocString(externalName);
-    try {
-      return _BinaryenAddTableExport(this.ref, cStr1, cStr2);
-    } finally {
-      memory.free(cStr2);
-      memory.free(cStr1);
-    }
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalName);
+    return _BinaryenAddTableExport(this.ref, cStr1, cStr2);
   }
 
   addMemoryExport(
     internalName: string,
     externalName: string
   ): ExportRef {
-    var cStr1 = allocString(internalName);
-    var cStr2 = allocString(externalName);
-    try {
-      return _BinaryenAddMemoryExport(this.ref, cStr1, cStr2);
-    } finally {
-      memory.free(cStr2);
-      memory.free(cStr1);
-    }
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalName);
+    return _BinaryenAddMemoryExport(this.ref, cStr1, cStr2);
   }
 
   addGlobalExport(
     internalName: string,
     externalName: string
   ): ExportRef {
-    var cStr1 = allocString(internalName);
-    var cStr2 = allocString(externalName);
-    try {
-      return _BinaryenAddGlobalExport(this.ref, cStr1, cStr2);
-    } finally {
-      memory.free(cStr2);
-      memory.free(cStr1);
-    }
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalName);
+    return _BinaryenAddGlobalExport(this.ref, cStr1, cStr2);
   }
 
   removeExport(externalName: string): void {
-    var cStr = allocString(externalName);
-    try {
-      _BinaryenRemoveExport(this.ref, cStr);
-    } finally {
-      memory.free(cStr);
-    }
+    var cStr = this.allocStringCached(externalName);
+    _BinaryenRemoveExport(this.ref, cStr);
   }
 
   addFunctionImport(
@@ -873,16 +807,10 @@ export class Module {
     externalBaseName: string,
     functionType: FunctionTypeRef
   ): ImportRef {
-    var cStr1 = allocString(internalName);
-    var cStr2 = allocString(externalModuleName);
-    var cStr3 = allocString(externalBaseName);
-    try {
-      return _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
-    } finally {
-      memory.free(cStr3);
-      memory.free(cStr2);
-      memory.free(cStr1);
-    }
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalModuleName);
+    var cStr3 = this.allocStringCached(externalBaseName);
+    return _BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
   }
 
   addTableImport(
@@ -890,16 +818,10 @@ export class Module {
     externalModuleName: string,
     externalBaseName: string
   ): ImportRef {
-    var cStr1 = allocString(internalName);
-    var cStr2 = allocString(externalModuleName);
-    var cStr3 = allocString(externalBaseName);
-    try {
-      return _BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
-    } finally {
-      memory.free(cStr3);
-      memory.free(cStr2);
-      memory.free(cStr1);
-    }
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalModuleName);
+    var cStr3 = this.allocStringCached(externalBaseName);
+    return _BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
   }
 
   addMemoryImport(
@@ -908,9 +830,9 @@ export class Module {
     externalBaseName: string,
     shared: bool = false,
   ): ImportRef {
-    var cStr1 = allocString(internalName);
-    var cStr2 = allocString(externalModuleName);
-    var cStr3 = allocString(externalBaseName);
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalModuleName);
+    var cStr3 = this.allocStringCached(externalBaseName);
     return _BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3, shared);
   }
 
@@ -920,16 +842,10 @@ export class Module {
     externalBaseName: string,
     globalType: NativeType
   ): ImportRef {
-    var cStr1 = allocString(internalName);
-    var cStr2 = allocString(externalModuleName);
-    var cStr3 = allocString(externalBaseName);
-    try {
-      return _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType);
-    } finally {
-      memory.free(cStr3);
-      memory.free(cStr2);
-      memory.free(cStr1);
-    }
+    var cStr1 = this.allocStringCached(internalName);
+    var cStr2 = this.allocStringCached(externalModuleName);
+    var cStr3 = this.allocStringCached(externalBaseName);
+    return _BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType);
   }
 
   /** Unlimited memory constant. */
@@ -943,7 +859,7 @@ export class Module {
     exportName: string | null = null,
     shared: bool = false
   ): void {
-    var cStr = allocString(exportName);
+    var cStr = this.allocStringCached(exportName);
     var k = segments.length;
     var segs = new Array<usize>(k);
     var offs = new Array<ExpressionRef>(k);
@@ -967,7 +883,6 @@ export class Module {
       memory.free(cArr2);
       memory.free(cArr1);
       for (let i = k - 1; i >= 0; --i) memory.free(segs[i]);
-      memory.free(cStr);
     }
   }
 
@@ -979,14 +894,13 @@ export class Module {
     var numNames = funcs.length;
     var names = new Array<usize>(numNames);
     for (let i = 0; i < numNames; ++i) {
-      names[i] = allocString(funcs[i]);
+      names[i] = this.allocStringCached(funcs[i]);
     }
     var cArr = allocI32Array(names);
     try {
       _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames);
     } finally {
       memory.free(cArr);
-      for (let i = numNames; i >= 0; --i) memory.free(names[i]);
     }
   }
 
@@ -1041,7 +955,6 @@ export class Module {
     }
   }
 
-  private cachedPrecomputeName: usize = 0; // for free'ing
   private cachedPrecomputeNames: usize = 0;
 
   precomputeExpression(expr: ExpressionRef): ExpressionRef {
@@ -1058,9 +971,7 @@ export class Module {
     var func = this.addTemporaryFunction(type, null, expr);
     var names = this.cachedPrecomputeNames;
     if (!names) {
-      let name = allocString("precompute");
-      this.cachedPrecomputeName = name;
-      this.cachedPrecomputeNames = names = allocI32Array([ name ]);
+      this.cachedPrecomputeNames = names = allocI32Array([ this.allocStringCached("precompute") ]);
     }
     _BinaryenFunctionRunPasses(func, this.ref, names, 1);
     expr = _BinaryenFunctionGetBody(func);
@@ -1110,12 +1021,23 @@ export class Module {
     throw new Error("not implemented"); // JS glue overrides this
   }
 
+  private cachedStrings: Map<string,usize> = new Map();
+
+  private allocStringCached(str: string | null): usize {
+    if (str == null) return 0;
+    if (cachedStrings.has(str)) return <usize>cachedStrings.get(str);
+    var ptr = allocString(str);
+    cachedStrings.set(str, ptr);
+    return ptr;
+  }
+
   dispose(): void {
     assert(this.ref);
+    for (let ptr of this.cachedStrings.values()) memory.free(ptr);
+    this.cachedStrings = new Map();
     memory.free(this.cachedByValue);
-    memory.free(this.cachedTemporaryName);
-    memory.free(this.cachedPrecomputeName);
     memory.free(this.cachedPrecomputeNames);
+    this.cachedPrecomputeNames = 0;
     _BinaryenModuleDispose(this.ref);
     this.ref = 0;
   }
@@ -1587,8 +1509,11 @@ function stringLengthUTF8(str: string): usize {
   return len;
 }
 
+var cachedStrings = new Map<string | null,usize>();
+
 function allocString(str: string | null): usize {
   if (str == null) return 0;
+  if (cachedStrings.has(str)) return <usize>cachedStrings.get(str);
   var ptr = memory.allocate(stringLengthUTF8(str) + 1);
   // the following is based on Emscripten's stringToUTF8Array
   var idx = ptr;
@@ -1627,6 +1552,7 @@ function allocString(str: string | null): usize {
     }
   }
   store<u8>(idx, 0);
+  cachedStrings.set(str, ptr);
   return ptr;
 }
 
