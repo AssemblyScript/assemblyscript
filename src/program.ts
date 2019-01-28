@@ -3240,6 +3240,7 @@ export class Flow {
     if (cachedGlobals.has(exprId)) return <Global>cachedGlobals.get(exprId);
     var global = assert(this.currentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
     assert(global.kind == ElementKind.GLOBAL);
+    assert((<Global>global).type);
     cachedGlobals.set(exprId, <Global>global);
     return <Global>global;
   }
@@ -3398,7 +3399,7 @@ export class Flow {
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GetGlobal: {
         let global = this.getGlobal(expr);
-        return canConversionOverflow(assert(global.type), type);
+        return canConversionOverflow(global.type, type);
       }
 
       case ExpressionId.Binary: {
