@@ -709,13 +709,13 @@ export function compileCall(
                   module.createTeeLocal(tempLocalIndex1, arg0),
                   module.createI64(63)
                 )
-                ),
-                module.createGetLocal(tempLocalIndex1, NativeType.I64)
               ),
-              module.createGetLocal(tempLocalIndex2, NativeType.I64)
-            );
+              module.createGetLocal(tempLocalIndex1, NativeType.I64)
+            ),
+            module.createGetLocal(tempLocalIndex2, NativeType.I64)
+          );
 
-            currentFunction.freeTempLocal(tempLocal1);
+          currentFunction.freeTempLocal(tempLocal1);
           break;
         }
         case TypeKind.USIZE: {
