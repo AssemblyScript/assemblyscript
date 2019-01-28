@@ -4547,7 +4547,6 @@ export class Compiler extends DiagnosticEmitter {
 
         // simplify if cloning left without side effects is possible
         if (expr = module.cloneExpression(leftExpr, true, 0)) {
-          this.makeIsTrueish(leftExpr, this.currentType);
           expr = module.createIf(
             this.makeIsTrueish(leftExpr, this.currentType),
             rightExpr,
