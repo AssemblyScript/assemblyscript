@@ -6388,14 +6388,16 @@ export class Compiler extends DiagnosticEmitter {
     var arrayOffset = arraySegment.offset;
     if (hasGC) arrayOffset = i64_add(arrayOffset, i64_new(gcHeaderSize));
     this.currentType = arrayInstance.type;
+    var buffer_offset = pos + arrayInstance.offsetof("buffer_");
+    var length_offset = pos + arrayInstance.offsetof("length_");
     if (usizeTypeSize == 8) {
-      writeI64(bufferOffset, buf, pos + arrayInstance.offsetof("buffer_"));
-      writeI32(length, buf, pos + arrayInstance.offsetof("length_"));
+      writeI64(bufferOffset, buf, buffer_offset);
+      writeI32(length, buf, length_offset);
       return this.module.createI64(i64_low(arrayOffset), i64_high(arrayOffset));
     } else {
       assert(i64_is_u32(bufferOffset));
-      writeI32(i64_low(bufferOffset), buf, pos + arrayInstance.offsetof("buffer_"));
-      writeI32(length, buf, pos + arrayInstance.offsetof("length_"));
+      writeI32(i64_low(bufferOffset), buf, buffer_offset);
+      writeI32(length, buf, length_offset);
       assert(i64_is_u32(arrayOffset));
       return this.module.createI32(i64_low(arrayOffset));
     }
