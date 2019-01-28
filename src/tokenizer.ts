@@ -185,19 +185,28 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.b: {
-      switch (text) {
-        case "break": return Token.BREAK;
-      }
+      if (text == "break") return Token.BREAK;
       break;
     }
     case CharCode.c: {
-      switch (text) {
-        case "case": return Token.CASE;
-        case "catch": return Token.CATCH;
-        case "class": return Token.CLASS;
-        case "continue": return Token.CONTINUE;
-        case "const": return Token.CONST;
-        case "constructor": return Token.CONSTRUCTOR;
+      switch (text.charCodeAt(1)) {
+        case CharCode.a: {
+          if (text == "case")  return Token.CASE;
+          if (text == "catch") return Token.CATCH;
+          break;
+        }
+        case CharCode.o: {
+          switch (text) {
+            case "continue": return Token.CONTINUE;
+            case "const": return Token.CONST;
+            case "constructor": return Token.CONSTRUCTOR;
+          }
+          break;
+        }
+        case CharCode.l: {
+          if (text == "class") return Token.CLASS;
+          break;
+        }
       }
       break;
     }
@@ -231,39 +240,40 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.g: {
-      switch (text) {
-        case "get": return Token.GET;
-      }
+      if (text == "get") return Token.GET;
       break;
     }
     case CharCode.i: {
-      switch (text) {
-        case "if": return Token.IF;
-        case "implements": return Token.IMPLEMENTS;
-        case "import": return Token.IMPORT;
-        case "in": return Token.IN;
-        case "instanceof": return Token.INSTANCEOF;
-        case "interface": return Token.INTERFACE;
-        case "is": return Token.IS;
+      switch (text.charCodeAt(1)) {
+        case CharCode.f: return Token.IF;
+        case CharCode.m: {
+          if (text == "import") return Token.IMPORT;
+          if (text == "implements") return Token.IMPLEMENTS;
+          break;
+        }
+        case CharCode.n: {
+          if (text == "in") return Token.IN;
+          if (text == "interface") return Token.INTERFACE;
+          if (text == "instanceof") return Token.INSTANCEOF;
+          break;
+        }
+        case CharCode.s: {
+          if (text == "is") return Token.IS;
+          break;
+        }
       }
       break;
     }
     case CharCode.k: {
-      switch (text) {
-        case "keyof": return Token.KEYOF;
-      }
+      if (text == "keyof") return Token.KEYOF;
       break;
     }
     case CharCode.l: {
-      switch (text) {
-        case "let": return Token.LET;
-      }
+      if (text == "let") return Token.LET;
       break;
     }
     case CharCode.m: {
-      switch (text) {
-        case "module": return Token.MODULE;
-      }
+      if (text == "module") return Token.MODULE;
       break;
     }
     case CharCode.n: {
@@ -275,9 +285,7 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.o: {
-      switch (text) {
-        case "of": return Token.OF;
-      }
+      if (text == "of") return Token.OF;
       break;
     }
     case CharCode.p: {
@@ -306,13 +314,22 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.t: {
-      switch (text) {
-        case "this": return Token.THIS;
-        case "throw": return Token.THROW;
-        case "true": return Token.TRUE;
-        case "try": return Token.TRY;
-        case "type": return Token.TYPE;
-        case "typeof": return Token.TYPEOF;
+      switch (text.charCodeAt(1)) {
+        case CharCode.h: {
+          if (text == "this") return Token.THIS;
+          if (text == "throw") return Token.THROW;
+          break;
+        }
+        case CharCode.r: {
+          if (text == "true") return Token.TRUE;
+          if (text == "try") return Token.TRY;
+          break;
+        }
+        case CharCode.y: {
+          if (text == "type") return Token.TYPE;
+          if (text == "typeof") return Token.TYPEOF;
+          break;
+        }
       }
       break;
     }
@@ -331,9 +348,7 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.y: {
-      switch (text) {
-        case "yield": return Token.YIELD;
-      }
+      if (text == "yield") return Token.YIELD;
       break;
     }
   }
@@ -598,11 +613,12 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode.AMPERSAND: {
           ++this.pos;
           if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.AMPERSAND) {
+            let chr = text.charCodeAt(this.pos);
+            if (chr == CharCode.AMPERSAND) {
               ++this.pos;
               return Token.AMPERSAND_AMPERSAND;
             }
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
+            if (chr == CharCode.EQUALS) {
               ++this.pos;
               return Token.AMPERSAND_EQUALS;
             }
