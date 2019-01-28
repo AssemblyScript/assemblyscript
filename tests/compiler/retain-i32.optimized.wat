@@ -69,7 +69,9 @@
   i32.const -128
   set_global $retain-i32/si
   get_global $retain-i32/si
-  i32.const -128
+  i32.const 255
+  i32.and
+  i32.const 128
   i32.ne
   if
    i32.const 0

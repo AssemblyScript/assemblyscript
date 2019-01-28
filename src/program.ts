@@ -188,6 +188,8 @@ export enum OperatorKind {
   // LOGICAL_OR           // a || b
 }
 
+var cachedGlobals = new Map<string,Global>();
+
 /** Returns the operator kind represented by the specified decorator and string argument. */
 function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): OperatorKind {
   assert(arg.length);
@@ -3233,6 +3235,15 @@ export class Flow {
     return this.currentFunction.localsByName.get(name);
   }
 
+  getGlobal(expr: ExpressionRef): Global {
+    var exprId = expr.toString();
+    if (cachedGlobals.has(exprId)) return <Global>cachedGlobals.get(exprId);
+    var global = assert(this.currentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
+    assert(global.kind == ElementKind.GLOBAL);
+    cachedGlobals.set(exprId, <Global>global);
+    return <Global>global;
+  }
+
   /** Tests if the local with the specified index is considered wrapped. */
   isLocalWrapped(index: i32): bool {
     var map: I64;
@@ -3386,10 +3397,8 @@ export class Flow {
 
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GetGlobal: {
-        // TODO: this is inefficient because it has to read a string
-        let global = assert(this.currentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
-        assert(global.kind == ElementKind.GLOBAL);
-        return canConversionOverflow(assert((<Global>global).type), type);
+        let global = this.getGlobal(expr);
+        return canConversionOverflow(assert(global.type), type);
       }
 
       case ExpressionId.Binary: {
