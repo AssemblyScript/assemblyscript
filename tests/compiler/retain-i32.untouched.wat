@@ -532,10 +532,6 @@
   i32.shr_s
   set_global $retain-i32/si
   get_global $retain-i32/si
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
   i32.const -128
   i32.eq
   i32.eqz

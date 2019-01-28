@@ -188,8 +188,6 @@ export enum OperatorKind {
   // LOGICAL_OR           // a || b
 }
 
-var cachedGlobals = new Map<string,Global>();
-
 /** Returns the operator kind represented by the specified decorator and string argument. */
 function operatorKindFromDecorator(decoratorKind: DecoratorKind, arg: string): OperatorKind {
   assert(arg.length);
@@ -3114,6 +3112,8 @@ export class Flow {
   /** Local variable wrap states for locals with index >= 64. */
   wrappedLocalsExt: I64[] | null;
 
+  cachedGlobals: Map<string,Global> = new Map<string,Global>();
+
   /** Creates the parent flow of the specified function. */
   static create(currentFunction: Function): Flow {
     var parentFlow = new Flow();
@@ -3237,11 +3237,11 @@ export class Flow {
 
   getGlobal(expr: ExpressionRef): Global {
     var exprId = expr.toString();
-    if (cachedGlobals.has(exprId)) return <Global>cachedGlobals.get(exprId);
+    if (this.cachedGlobals.has(exprId)) return <Global>this.cachedGlobals.get(exprId);
     var global = assert(this.currentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
     assert(global.kind == ElementKind.GLOBAL);
     assert((<Global>global).type);
-    cachedGlobals.set(exprId, <Global>global);
+    this.cachedGlobals.set(exprId, <Global>global);
     return <Global>global;
   }
 
