@@ -3295,23 +3295,8 @@ export class Flow {
       map = ext[off];
       index -= (off + 1) * 64;
     }
-    map = wrapped
-      ? i64_or(
-          map,
-          i64_shl(
-            i64_one,
-            i64_new(index)
-          )
-        )
-      : i64_and(
-          map,
-          i64_not(
-            i64_shl(
-              i64_one,
-              i64_new(index)
-            )
-          )
-        );
+    var mask = i64_shl(i64_one, i64_new(index));
+    map = wrapped ? i64_or(map, mask) : i64_and(map, i64_not(mask));
     if (off >= 0) (<I64[]>this.wrappedLocalsExt)[off] = map;
     else this.wrappedLocals = map;
   }
