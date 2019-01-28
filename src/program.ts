@@ -1959,38 +1959,39 @@ export class Program extends DiagnosticEmitter {
 
     var members = declaration.members;
     for (let i = 0, k = members.length; i < k; ++i) {
-      switch (members[i].kind) {
+      let member = members[i];
+      switch (member.kind) {
         case NodeKind.CLASSDECLARATION: {
-          this.initializeClass(<ClassDeclaration>members[i], queuedExtends, queuedImplements, namespace);
+          this.initializeClass(<ClassDeclaration>member, queuedExtends, queuedImplements, namespace);
           break;
         }
         case NodeKind.ENUMDECLARATION: {
-          this.initializeEnum(<EnumDeclaration>members[i], namespace);
+          this.initializeEnum(<EnumDeclaration>member, namespace);
           break;
         }
         case NodeKind.FUNCTIONDECLARATION: {
-          this.initializeFunction(<FunctionDeclaration>members[i], namespace);
+          this.initializeFunction(<FunctionDeclaration>member, namespace);
           break;
         }
         case NodeKind.INTERFACEDECLARATION: {
-          this.initializeInterface(<InterfaceDeclaration>members[i], namespace);
+          this.initializeInterface(<InterfaceDeclaration>member, namespace);
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
-          this.initializeNamespace(<NamespaceDeclaration>members[i], queuedExtends, queuedImplements, namespace);
+          this.initializeNamespace(<NamespaceDeclaration>member, queuedExtends, queuedImplements, namespace);
           break;
         }
         case NodeKind.TYPEDECLARATION: {
-          // this.initializeTypeAlias(<TypeDeclaration>members[i], namespace);
+          // this.initializeTypeAlias(<TypeDeclaration>member, namespace);
           // TODO: what about namespaced types?
           this.error(
             DiagnosticCode.Operation_not_supported,
-            members[i].range
+            member.range
           );
           break;
         }
         case NodeKind.VARIABLE: {
-          this.initializeVariables(<VariableStatement>members[i], namespace);
+          this.initializeVariables(<VariableStatement>member, namespace);
           break;
         }
         default: {
