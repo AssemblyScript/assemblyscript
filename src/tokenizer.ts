@@ -741,7 +741,8 @@ export class Tokenizer extends DiagnosticEmitter {
           let commentStartPos = this.pos;
           ++this.pos;
           if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.SLASH) { // single-line
+            let chr = text.charCodeAt(this.pos);
+            if (chr == CharCode.SLASH) { // single-line
               let commentKind = CommentKind.LINE;
               if (
                 this.pos + 1 < this.end &&
@@ -765,7 +766,7 @@ export class Tokenizer extends DiagnosticEmitter {
               }
               break;
             }
-            if (text.charCodeAt(this.pos) == CharCode.ASTERISK) { // multi-line
+            if (chr == CharCode.ASTERISK) { // multi-line
               let closed = false;
               while (++this.pos < this.end) {
                 c = text.charCodeAt(this.pos);
@@ -793,7 +794,7 @@ export class Tokenizer extends DiagnosticEmitter {
               }
               break;
             }
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
+            if (chr == CharCode.EQUALS) {
               ++this.pos;
               return Token.SLASH_EQUALS;
             }
