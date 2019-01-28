@@ -6416,12 +6416,13 @@ export class Compiler extends DiagnosticEmitter {
     var nativeElementType = elementType.toNativeType();
     var isStatic = true;
     for (let i = 0; i < length; ++i) {
-      let expr = expressions[i]
-        ? this.compileExpression(<Expression>expressions[i], elementType, ConversionKind.IMPLICIT, WrapMode.NONE)
+      let expression = expressions[i];
+      let expr = expression
+        ? this.compileExpression(<Expression>expression, elementType, ConversionKind.IMPLICIT, WrapMode.NONE)
         : elementType.toNativeZero(module);
       compiledValues[i] = expr;
       if (isStatic) {
-        expr = module.precomputeExpression(compiledValues[i]);
+        expr = module.precomputeExpression(expr);
         if (getExpressionId(expr) == ExpressionId.Const) {
           assert(getExpressionType(expr) == nativeElementType);
           constantValues[i] = expr;
@@ -6570,7 +6571,6 @@ export class Compiler extends DiagnosticEmitter {
 
   compileNewExpression(expression: NewExpression, contextualType: Type): ExpressionRef {
     var module = this.module;
-    var options = this.options;
     var currentFunction = this.currentFunction;
 
     // obtain the class being instantiated
@@ -6792,9 +6792,11 @@ export class Compiler extends DiagnosticEmitter {
         getExpressionId(condExprPrecomp) == ExpressionId.Const &&
         getExpressionType(condExprPrecomp) == NativeType.I32
       ) {
-        return getConstValueI32(condExprPrecomp)
-          ? this.compileExpressionRetainType(ifThen, contextualType, WrapMode.NONE)
-          : this.compileExpressionRetainType(ifElse, contextualType, WrapMode.NONE);
+        return this.compileExpressionRetainType(
+          getConstValueI32(condExprPrecomp) ? ifThen : ifElse,
+          contextualType,
+          WrapMode.NONE
+        );
 
       // Otherwise recompile to the original and let the optimizer decide
       } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
