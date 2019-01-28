@@ -3107,12 +3107,12 @@ export class Flow {
   contextualTypeArguments: Map<string,Type> | null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
+  /** cached global variables. */
+  cachedGlobals: Map<string,Global> | null = null;
   /** Local variable wrap states for the first 64 locals. */
   wrappedLocals: I64;
   /** Local variable wrap states for locals with index >= 64. */
   wrappedLocalsExt: I64[] | null;
-
-  cachedGlobals: Map<string,Global> = new Map<string,Global>();
 
   /** Creates the parent flow of the specified function. */
   static create(currentFunction: Function): Flow {
@@ -3237,7 +3237,12 @@ export class Flow {
 
   getGlobal(expr: ExpressionRef): Global {
     var exprId = expr.toString();
-    if (this.cachedGlobals.has(exprId)) return <Global>this.cachedGlobals.get(exprId);
+    if (!this.cachedGlobals) {
+      this.cachedGlobals = new Map();
+    }
+    if (this.cachedGlobals.has(exprId)) {
+      return <Global>this.cachedGlobals.get(exprId);
+    }
     var global = assert(this.currentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
     assert(global.kind == ElementKind.GLOBAL);
     assert((<Global>global).type);
