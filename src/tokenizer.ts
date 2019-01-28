@@ -185,14 +185,18 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.b: {
-      if (text == "break") return Token.BREAK;
+      switch (text) {
+        case "break": return Token.BREAK;
+      }
       break;
     }
     case CharCode.c: {
       switch (text.charCodeAt(1)) {
         case CharCode.a: {
-          if (text == "case")  return Token.CASE;
-          if (text == "catch") return Token.CATCH;
+          switch (text) {
+            case "case": return Token.CASE;
+            case "catch": return Token.CATCH;
+          }
           break;
         }
         case CharCode.o: {
@@ -204,7 +208,9 @@ export function tokenFromKeyword(text: string): Token {
           break;
         }
         case CharCode.l: {
-          if (text == "class") return Token.CLASS;
+          switch (text) {
+            case "class": return Token.CLASS;
+          }
           break;
         }
       }
