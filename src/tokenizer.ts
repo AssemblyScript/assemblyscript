@@ -240,40 +240,54 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.g: {
-      if (text == "get") return Token.GET;
+      switch (text) {
+        case "get": return Token.GET;
+      }
       break;
     }
     case CharCode.i: {
       switch (text.charCodeAt(1)) {
         case CharCode.f: return Token.IF;
         case CharCode.m: {
-          if (text == "import") return Token.IMPORT;
-          if (text == "implements") return Token.IMPLEMENTS;
+          switch (text) {
+            case "import": return Token.IMPORT;
+            case "implements": return Token.IMPLEMENTS;
+          }
           break;
         }
         case CharCode.n: {
-          if (text == "in") return Token.IN;
-          if (text == "interface") return Token.INTERFACE;
-          if (text == "instanceof") return Token.INSTANCEOF;
+          switch (text) {
+            case "in": return Token.IN;
+            case "interface": return Token.INTERFACE;
+            case "instanceof": return Token.INSTANCEOF;
+          }
           break;
         }
         case CharCode.s: {
-          if (text == "is") return Token.IS;
+          switch (text) {
+            case "is": return Token.IS;
+          }
           break;
         }
       }
       break;
     }
     case CharCode.k: {
-      if (text == "keyof") return Token.KEYOF;
+      switch (text) {
+        case "keyof": return Token.KEYOF;
+      }
       break;
     }
     case CharCode.l: {
-      if (text == "let") return Token.LET;
+      switch (text) {
+        case "let": return Token.LET;
+      }
       break;
     }
     case CharCode.m: {
-      if (text == "module") return Token.MODULE;
+      switch (text) {
+        case "module": return Token.MODULE;
+      }
       break;
     }
     case CharCode.n: {
@@ -285,7 +299,9 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.o: {
-      if (text == "of") return Token.OF;
+      switch (text) {
+        case "of": return Token.OF;
+      }
       break;
     }
     case CharCode.p: {
@@ -316,18 +332,24 @@ export function tokenFromKeyword(text: string): Token {
     case CharCode.t: {
       switch (text.charCodeAt(1)) {
         case CharCode.h: {
-          if (text == "this") return Token.THIS;
-          if (text == "throw") return Token.THROW;
+          switch (text) {
+            case "this": return Token.THIS;
+            case "throw": return Token.THROW;
+          }
           break;
         }
         case CharCode.r: {
-          if (text == "true") return Token.TRUE;
-          if (text == "try") return Token.TRY;
+          switch (text) {
+            case "true": return Token.TRUE;
+            case "try": return Token.TRY;
+          }
           break;
         }
         case CharCode.y: {
-          if (text == "type") return Token.TYPE;
-          if (text == "typeof") return Token.TYPEOF;
+          switch (text) {
+            case "type": return Token.TYPE;
+            case "typeof": return Token.TYPEOF;
+          }
           break;
         }
       }
@@ -348,7 +370,9 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.y: {
-      if (text == "yield") return Token.YIELD;
+      switch (text) {
+        case "yield": return Token.YIELD;
+      }
       break;
     }
   }
@@ -485,7 +509,7 @@ export class Range {
   }
 
   toString(): string {
-    return this.source.text.substring(this.start, this.end);
+    return this.source.text.substr(this.start, this.end - this.start);
   }
 
   debugInfoRef: usize = 0;
@@ -729,7 +753,7 @@ export class Tokenizer extends DiagnosticEmitter {
               if (this.onComment) {
                 this.onComment(
                   commentKind,
-                  text.substring(commentStartPos, this.pos),
+                  text.substr(commentStartPos, this.pos - commentStartPos),
                   this.range(commentStartPos, this.pos)
                 );
               }
@@ -757,7 +781,7 @@ export class Tokenizer extends DiagnosticEmitter {
               } else if (this.onComment) {
                 this.onComment(
                   CommentKind.BLOCK,
-                  text.substring(commentStartPos, this.pos),
+                  text.substr(commentStartPos, this.pos - commentStartPos),
                   this.range(commentStartPos, this.pos)
                 );
               }
@@ -937,7 +961,7 @@ export class Tokenizer extends DiagnosticEmitter {
                   return Token.IDENTIFIER;
                 }
               }
-              let keywordText = text.substring(posBefore, this.pos);
+              let keywordText = text.substr(posBefore, this.pos - posBefore);
               let keywordToken = tokenFromKeyword(keywordText);
               if (
                 keywordToken !== Token.INVALID &&
@@ -1065,7 +1089,7 @@ export class Tokenizer extends DiagnosticEmitter {
       ++this.pos < this.end &&
       isIdentifierPart(text.charCodeAt(this.pos))
     );
-    return text.substring(start, this.pos);
+    return text.substr(start, this.pos - start);
   }
 
   readString(): string {
@@ -1075,7 +1099,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var result = "";
     while (true) {
       if (this.pos >= this.end) {
-        result += text.substring(start, this.pos);
+        result += text.substr(start, this.pos - start);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
           this.range(start - 1, this.end)
@@ -1088,13 +1112,13 @@ export class Tokenizer extends DiagnosticEmitter {
         break;
       }
       if (c == CharCode.BACKSLASH) {
-        result += text.substring(start, this.pos);
+        result += text.substr(start, this.pos - start);
         result += this.readEscapeSequence();
         start = this.pos;
         continue;
       }
       if (isLineBreak(c)) {
-        result += text.substring(start, this.pos);
+        result += text.substr(start, this.pos - start);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
           this.range(start - 1, this.pos)
@@ -1182,7 +1206,7 @@ export class Tokenizer extends DiagnosticEmitter {
       ++this.pos;
       escaped = false;
     }
-    return text.substring(start, this.pos);
+    return text.substr(start, this.pos - start);
   }
 
   readRegexpFlags(): string {
@@ -1220,7 +1244,7 @@ export class Tokenizer extends DiagnosticEmitter {
         this.range(start, this.pos)
       );
     }
-    return text.substring(start, this.pos);
+    return text.substr(start, this.pos - start);
   }
 
   testInteger(): bool {
@@ -1521,7 +1545,7 @@ export class Tokenizer extends DiagnosticEmitter {
         }
       }
     }
-    return parseFloat(text.substring(start, this.pos));
+    return parseFloat(text.substr(start, this.pos - start));
   }
 
   readHexFloat(): f64 {
