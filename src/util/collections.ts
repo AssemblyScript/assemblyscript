@@ -1,7 +1,8 @@
 export function makeArray<V>(original: Array<V> | null = null): Array<V> {
   if (original) {
-    let cloned = new Array<V>(original.length);
-    for (let i = 0, k = original.length; i < k; ++i) unchecked(cloned[i] = original[i]);
+    let k = original.length;
+    let cloned = new Array<V>(k);
+    for (let i = 0; i < k; ++i) unchecked(cloned[i] = original[i]);
     return cloned;
   }
   return new Array<V>();
