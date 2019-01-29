@@ -4,6 +4,10 @@ import {
   CharCode
 } from "./charcode";
 
+import {
+  PATH_DELIMITER
+} from "../common";
+
 const separator = CharCode.SLASH;
 
 /**
@@ -99,7 +103,7 @@ export function resolvePath(normalizedPath: string, origin: string): string {
     return normalizedPath;
   }
   return normalizePath(
-    dirname(origin) + "/" + normalizedPath
+    dirname(origin) + PATH_DELIMITER + normalizedPath
   );
 }
 
