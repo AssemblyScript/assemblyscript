@@ -3,7 +3,8 @@ import {
   MAX_BLENGTH as AB_MAX_BLENGTH,
   allocateUnsafe,
   LOAD,
-  STORE
+  STORE,
+  reallocateUnsafe
 } from "./arraybuffer";
 
 import {
@@ -230,4 +231,48 @@ export function EVERY<TArray extends TypedArray<T>, T>(
     return false;
   }
   return true;
+}
+
+@inline
+export function FOR_EACH<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => void,
+): void {
+  var buffer = array.buffer;
+  var length = array.length;
+  var byteOffset = array.byteOffset;
+
+  for (let i = 0; i < length; i++) {
+    callbackfn(LOAD<T>(buffer, i, byteOffset), i, array);
+  }
+}
+
+@inline
+export function FILTER<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => bool,
+): TArray {
+  var backingBuffer = new ArrayBuffer(sizeof<T>());
+  var count = 0;
+  var buffer = array.buffer;
+  var length = array.length;
+  var byteOffset = array.byteOffset;
+  var backByteLength = backingBuffer.byteLength;
+  var value: T;
+  for (let i = 0; i < length; i++) {
+    value = LOAD<T>(buffer, i, byteOffset);
+    if (callbackfn(value, i, array)) {
+      backByteLength = backingBuffer.byteLength;
+      if (backByteLength < (count + 1) << alignof<T>()) {
+        backingBuffer = reallocateUnsafe(backingBuffer, backByteLength << 1);
+      }
+      STORE<T, NATIVE<T>>(backingBuffer, count, <NATIVE<T>>value);
+      ++count;
+    }
+  }
+  backingBuffer = reallocateUnsafe(backingBuffer, count << alignof<T>());
+  var result = instantiate<TArray>(0);
+  store<ArrayBuffer>(changetype<usize>(result) + offsetof<TArray>("buffer"), backingBuffer);
+  store<i32>(changetype<usize>(result) + offsetof<TArray>("byteLength"), backByteLength * 2);
+  return result;
 }

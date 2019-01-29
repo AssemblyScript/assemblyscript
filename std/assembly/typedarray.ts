@@ -1,3 +1,4 @@
+
 import {
   TypedArray,
   FILL,
@@ -9,6 +10,8 @@ import {
   FIND_INDEX,
   SOME,
   EVERY,
+  FOR_EACH,
+  FILTER,
 } from "./internal/typedarray";
 
 import {
@@ -59,6 +62,14 @@ export class Int8Array extends TypedArray<i8> {
   every(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): bool {
     return EVERY<Int8Array, i8>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: i8, index: i32, array: Int8Array) => void): void {
+    FOR_EACH<Int8Array, i8>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): Int8Array {
+    return FILTER<Int8Array, i8>(this, callbackfn);
+  }
 }
 
 export class Uint8Array extends TypedArray<u8> {
@@ -105,6 +116,14 @@ export class Uint8Array extends TypedArray<u8> {
   every(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): bool {
     return EVERY<Uint8Array, u8>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: u8, index: i32, array: Uint8Array) => void): void {
+    FOR_EACH<Uint8Array, u8>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): Uint8Array {
+    return FILTER<Uint8Array, u8>(this, callbackfn);
+  }
 }
 
 export class Uint8ClampedArray extends Uint8Array {
@@ -146,6 +165,14 @@ export class Uint8ClampedArray extends Uint8Array {
 
   every(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): bool {
     return EVERY<Uint8ClampedArray, u8>(this, callbackfn);
+  }
+
+  forEach(callbackfn: (value: u8, index: i32, array: Uint8ClampedArray) => void): void {
+    FOR_EACH<Uint8ClampedArray, u8>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): Uint8ClampedArray {
+    return FILTER<Uint8ClampedArray, u8>(this, callbackfn);
   }
 }
 
@@ -193,6 +220,14 @@ export class Int16Array extends TypedArray<i16> {
   every(callbackfn: (value: i16, index: i32, self: Int16Array) => bool): bool {
     return EVERY<Int16Array, i16>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: i16, index: i32, array: Int16Array) => void): void {
+    FOR_EACH<Int16Array, i16>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value:  i16, index: i32, self: Int16Array) => bool): Int16Array {
+    return FILTER<Int16Array, i16>(this, callbackfn);
+  }
 }
 
 export class Uint16Array extends TypedArray<u16> {
@@ -238,6 +273,14 @@ export class Uint16Array extends TypedArray<u16> {
 
   every(callbackfn: (value: u16, index: i32, self: Uint16Array) => bool): bool {
     return EVERY<Uint16Array, u16>(this, callbackfn);
+  }
+
+  forEach(callbackfn: (value: u16, index: i32, array: Uint16Array) => void): void {
+    FOR_EACH<Uint16Array, u16>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value:  u16, index: i32, self: Uint16Array) => bool): Uint16Array {
+    return FILTER<Uint16Array, u16>(this, callbackfn);
   }
 }
 
@@ -285,6 +328,14 @@ export class Int32Array extends TypedArray<i32> {
   every(callbackfn: (value: i32, index: i32, self: Int32Array) => bool): bool {
     return EVERY<Int32Array, i32>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: i32, index: i32, array: Int32Array) => void): void {
+    FOR_EACH<Int32Array, i32>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value:  i32, index: i32, self: Int32Array) => bool): Int32Array {
+    return FILTER<Int32Array, i32>(this, callbackfn);
+  }
 }
 
 export class Uint32Array extends TypedArray<u32> {
@@ -330,6 +381,14 @@ export class Uint32Array extends TypedArray<u32> {
 
   every(callbackfn: (value: u32, index: i32, self: Uint32Array) => bool): bool {
     return EVERY<Uint32Array, u32>(this, callbackfn);
+  }
+
+  forEach(callbackfn: (value: u32, index: i32, array: Uint32Array) => void): void {
+    FOR_EACH<Uint32Array, u32>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value:  u32, index: i32, self: Uint32Array) => bool): Uint32Array {
+    return FILTER<Uint32Array, u32>(this, callbackfn);
   }
 }
 
@@ -377,6 +436,14 @@ export class Int64Array extends TypedArray<i64> {
   every(callbackfn: (value: i64, index: i32, self: Int64Array) => bool): bool {
     return EVERY<Int64Array, i64>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: i64, index: i32, array: Int64Array) => void): void {
+    FOR_EACH<Int64Array, i64>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value:  i64, index: i32, self: Int64Array) => bool): Int64Array {
+    return FILTER<Int64Array, i64>(this, callbackfn);
+  }
 }
 
 export class Uint64Array extends TypedArray<u64> {
@@ -422,6 +489,14 @@ export class Uint64Array extends TypedArray<u64> {
 
   every(callbackfn: (value: u64, index: i32, self: Uint64Array) => bool): bool {
     return EVERY<Uint64Array, u64>(this, callbackfn);
+  }
+
+  forEach(callbackfn: (value: u64, index: i32, array: Uint64Array) => void): void {
+    FOR_EACH<Uint64Array, u64>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value:  u64, index: i32, self: Uint64Array) => bool): Uint64Array {
+    return FILTER<Uint64Array, u64>(this, callbackfn);
   }
 }
 
@@ -469,6 +544,14 @@ export class Float32Array extends TypedArray<f32> {
   every(callbackfn: (value: f32, index: i32, self: Float32Array) => bool): bool {
     return EVERY<Float32Array, f32>(this, callbackfn);
   }
+
+  forEach(callbackfn: (value: f32, index: i32, array: Float32Array) => void): void {
+    FOR_EACH<Float32Array, f32>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value:  f32, index: i32, self: Float32Array) => bool): Float32Array {
+    return FILTER<Float32Array, f32>(this, callbackfn);
+  }
 }
 
 export class Float64Array extends TypedArray<f64> {
@@ -514,5 +597,13 @@ export class Float64Array extends TypedArray<f64> {
 
   every(callbackfn: (value: f64, index: i32, self: Float64Array) => bool): bool {
     return EVERY<Float64Array, f64>(this, callbackfn);
+  }
+
+  forEach(callbackfn: (value: f64, index: i32, array: Float64Array) => void): void {
+    FOR_EACH<Float64Array, f64>(this, callbackfn);
+  }
+
+  filter(callbackfn: (value:  f64, index: i32, self: Float64Array) => bool): Float64Array {
+    return FILTER<Float64Array, f64>(this, callbackfn);
   }
 }

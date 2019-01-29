@@ -409,3 +409,68 @@ testArrayEvery<Int64Array, i64>();
 testArrayEvery<Uint64Array, u64>();
 testArrayEvery<Float32Array, f32>();
 testArrayEvery<Float64Array, f64>();
+
+var forEachCount = 0;
+function testArrayForEach<ArrayType extends TypedArray<T>, T extends number>(): void {
+  var array = instantiate<ArrayType>(5);
+  array[0] = <T>0;
+  array[1] = <T>1;
+  array[2] = <T>2;
+  array[3] = <T>3;
+  array[4] = <T>4;
+
+  forEachCount = 0;
+  array.forEach((value: T, index: i32, self: ArrayType): void => {
+    assert(value == <T>index);
+    ++forEachCount;
+  });
+  assert(forEachCount == 5);
+}
+
+testArrayForEach<Int8Array, i8>();
+testArrayForEach<Uint8Array, u8>();
+testArrayForEach<Uint8ClampedArray, u8>();
+testArrayForEach<Int16Array, i16>();
+testArrayForEach<Uint16Array, u16>();
+testArrayForEach<Int32Array, i32>();
+testArrayForEach<Uint32Array, u32>();
+testArrayForEach<Int64Array, i64>();
+testArrayForEach<Uint64Array, u64>();
+testArrayForEach<Float32Array, f32>();
+testArrayForEach<Float64Array, f64>();
+
+var filterCount = 0;
+function testArrayFilter<ArrayType extends TypedArray<T>, T extends number>(): void {
+  var array = instantiate<ArrayType>(5);
+  array[0] = <T>0;
+  array[1] = <T>1;
+  array[2] = <T>2;
+  array[3] = <T>3;
+  array[4] = <T>4;
+
+  filterCount = 0;
+
+  var result = array.filter((value: T, index: i32, self: ArrayType): bool => {
+    assert(value == <T>index);
+    ++filterCount;
+    return <bool>(<i32>value & 1);
+  });
+  assert(filterCount == 5, "filter call count not 5");
+  assert(result.length == 2, "result length is not 2");
+  assert(result.byteLength == (2 << alignof<T>()), "bytelength not expected");
+  assert(result.byteOffset == 0, "byte offset should be 0");
+  assert(result[0] == <T>1, "first filter result is not <T>1");
+  assert(result[1] == <T>3, "second filter result is not <T>3");
+}
+
+testArrayFilter<Int8Array, i8>();
+testArrayFilter<Uint8Array, u8>();
+testArrayFilter<Uint8ClampedArray, u8>();
+testArrayFilter<Int16Array, i16>();
+testArrayFilter<Uint16Array, u16>();
+testArrayFilter<Int32Array, i32>();
+testArrayFilter<Uint32Array, u32>();
+testArrayFilter<Int64Array, i64>();
+testArrayFilter<Uint64Array, u64>();
+testArrayFilter<Float32Array, f32>();
+testArrayFilter<Float64Array, f64>();
