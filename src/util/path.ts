@@ -99,13 +99,19 @@ export function resolvePath(normalizedPath: string, origin: string): string {
     return normalizedPath;
   }
   return normalizePath(
-    dirname(origin) + String.fromCharCode(separator) + normalizedPath
+    dirname(origin) + "/" + normalizedPath
   );
 }
 
 /** Obtains the directory portion of a normalized path. */
 export function dirname(normalizedPath: string): string {
   var pos = normalizedPath.length;
+  if (pos <= 1) {
+    if (pos == 0) return ".";
+    if (normalizedPath.charCodeAt(0) == separator) {
+      return normalizedPath;
+    }
+  }
   while (--pos > 0) {
     if (normalizedPath.charCodeAt(pos) == separator) {
       return normalizedPath.substring(0, pos);
