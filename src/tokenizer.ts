@@ -515,7 +515,7 @@ export class Range {
   }
 
   toString(): string {
-    return this.source.text.substr(this.start, this.end - this.start);
+    return this.source.text.substring(this.start, this.end);
   }
 
   debugInfoRef: usize = 0;
@@ -760,7 +760,7 @@ export class Tokenizer extends DiagnosticEmitter {
               if (this.onComment) {
                 this.onComment(
                   commentKind,
-                  text.substr(commentStartPos, this.pos - commentStartPos),
+                  text.substring(commentStartPos, this.pos),
                   this.range(commentStartPos, this.pos)
                 );
               }
@@ -788,7 +788,7 @@ export class Tokenizer extends DiagnosticEmitter {
               } else if (this.onComment) {
                 this.onComment(
                   CommentKind.BLOCK,
-                  text.substr(commentStartPos, this.pos - commentStartPos),
+                  text.substring(commentStartPos, this.pos),
                   this.range(commentStartPos, this.pos)
                 );
               }
@@ -968,7 +968,7 @@ export class Tokenizer extends DiagnosticEmitter {
                   return Token.IDENTIFIER;
                 }
               }
-              let keywordText = text.substr(posBefore, this.pos - posBefore);
+              let keywordText = text.substring(posBefore, this.pos);
               let keywordToken = tokenFromKeyword(keywordText);
               if (
                 keywordToken !== Token.INVALID &&
@@ -1096,7 +1096,7 @@ export class Tokenizer extends DiagnosticEmitter {
       ++this.pos < this.end &&
       isIdentifierPart(text.charCodeAt(this.pos))
     );
-    return text.substr(start, this.pos - start);
+    return text.substring(start, this.pos);
   }
 
   readString(): string {
@@ -1106,7 +1106,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var result = "";
     while (true) {
       if (this.pos >= this.end) {
-        result += text.substr(start, this.pos - start);
+        result += text.substring(start, this.pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
           this.range(start - 1, this.end)
@@ -1125,7 +1125,7 @@ export class Tokenizer extends DiagnosticEmitter {
         continue;
       }
       if (isLineBreak(c)) {
-        result += text.substr(start, this.pos - start);
+        result += text.substring(start, this.pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
           this.range(start - 1, this.pos)
@@ -1213,7 +1213,7 @@ export class Tokenizer extends DiagnosticEmitter {
       ++this.pos;
       escaped = false;
     }
-    return text.substr(start, this.pos - start);
+    return text.substring(start, this.pos);
   }
 
   readRegexpFlags(): string {
@@ -1251,7 +1251,7 @@ export class Tokenizer extends DiagnosticEmitter {
         this.range(start, this.pos)
       );
     }
-    return text.substr(start, this.pos - start);
+    return text.substring(start, this.pos);
   }
 
   testInteger(): bool {
@@ -1552,7 +1552,7 @@ export class Tokenizer extends DiagnosticEmitter {
         }
       }
     }
-    return parseFloat(text.substr(start, this.pos - start));
+    return parseFloat(text.substring(start, this.pos));
   }
 
   readHexFloat(): f64 {
