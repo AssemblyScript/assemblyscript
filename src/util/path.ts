@@ -23,8 +23,8 @@ export function normalizePath(path: string): string {
   }
 
   if (pos > 0 || len < path.length) {
+    path = path.substring(pos, len);
     len -= pos;
-    path = path.substr(pos, len);
     pos = 0;
   }
 
@@ -44,8 +44,8 @@ export function normalizePath(path: string): string {
         path.charCodeAt(pos + 2) == separator
       ) {
         path = atEnd
-          ? path.substr(0, pos)
-          : path.substr(0, pos) + path.substr(pos + 2);
+          ? path.substring(0, pos)
+          : path.substring(0, pos) + path.substring(pos + 2);
         len -= 2;
         continue;
       }
@@ -66,8 +66,8 @@ export function normalizePath(path: string): string {
               path.charCodeAt(ipos + 2) != CharCode.DOT
             ) { // exclude '..' itself
               path = atEnd
-                ? path.substr(0, ipos)
-                : path.substr(0, ipos) + path.substr(pos + 3);
+                ? path.substring(0, ipos)
+                : path.substring(0, ipos) + path.substring(pos + 3);
               len -= pos + 3 - ipos;
               pos = ipos - 1; // incremented again at end of loop
             }
@@ -81,7 +81,7 @@ export function normalizePath(path: string): string {
             path.charCodeAt(0) != CharCode.DOT ||
             path.charCodeAt(1) != CharCode.DOT
           ) { // exclude '..' itself
-            path = path.substr(pos + 4);
+            path = path.substring(pos + 4);
             len = path.length;
             continue;
           }
@@ -108,7 +108,7 @@ export function dirname(normalizedPath: string): string {
   var pos = normalizedPath.length;
   while (--pos > 0) {
     if (normalizedPath.charCodeAt(pos) == separator) {
-      return normalizedPath.substr(0, pos);
+      return normalizedPath.substring(0, pos);
     }
   }
   return ".";
