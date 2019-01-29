@@ -191,28 +191,13 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.c: {
-      switch (text.charCodeAt(1)) {
-        case CharCode.a: {
-          switch (text) {
-            case "case": return Token.CASE;
-            case "catch": return Token.CATCH;
-          }
-          break;
-        }
-        case CharCode.o: {
-          switch (text) {
-            case "continue": return Token.CONTINUE;
-            case "const": return Token.CONST;
-            case "constructor": return Token.CONSTRUCTOR;
-          }
-          break;
-        }
-        case CharCode.l: {
-          switch (text) {
-            case "class": return Token.CLASS;
-          }
-          break;
-        }
+      switch (text) {
+        case "case": return Token.CASE;
+        case "catch": return Token.CATCH;
+        case "class": return Token.CLASS;
+        case "continue": return Token.CONTINUE;
+        case "const": return Token.CONST;
+        case "constructor": return Token.CONSTRUCTOR;
       }
       break;
     }
@@ -252,34 +237,14 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.i: {
-      switch (text.charCodeAt(1)) {
-        case CharCode.f: {
-          switch (text) {
-            case "if": return Token.IF;
-          }
-          break;
-        }
-        case CharCode.m: {
-          switch (text) {
-            case "import": return Token.IMPORT;
-            case "implements": return Token.IMPLEMENTS;
-          }
-          break;
-        }
-        case CharCode.n: {
-          switch (text) {
-            case "in": return Token.IN;
-            case "interface": return Token.INTERFACE;
-            case "instanceof": return Token.INSTANCEOF;
-          }
-          break;
-        }
-        case CharCode.s: {
-          switch (text) {
-            case "is": return Token.IS;
-          }
-          break;
-        }
+      switch (text) {
+        case "if": return Token.IF;
+        case "implements": return Token.IMPLEMENTS;
+        case "import": return Token.IMPORT;
+        case "in": return Token.IN;
+        case "instanceof": return Token.INSTANCEOF;
+        case "interface": return Token.INTERFACE;
+        case "is": return Token.IS;
       }
       break;
     }
@@ -341,28 +306,13 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.t: {
-      switch (text.charCodeAt(1)) {
-        case CharCode.h: {
-          switch (text) {
-            case "this": return Token.THIS;
-            case "throw": return Token.THROW;
-          }
-          break;
-        }
-        case CharCode.r: {
-          switch (text) {
-            case "true": return Token.TRUE;
-            case "try": return Token.TRY;
-          }
-          break;
-        }
-        case CharCode.y: {
-          switch (text) {
-            case "type": return Token.TYPE;
-            case "typeof": return Token.TYPEOF;
-          }
-          break;
-        }
+      switch (text) {
+        case "this": return Token.THIS;
+        case "throw": return Token.THROW;
+        case "true": return Token.TRUE;
+        case "try": return Token.TRY;
+        case "type": return Token.TYPE;
+        case "typeof": return Token.TYPEOF;
       }
       break;
     }
