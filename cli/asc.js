@@ -92,7 +92,7 @@ exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : (() => { // se
 })();
 
 /** Convenience function that parses and compiles source strings directly. */
-exports.compileString = async (sources, options) => {
+exports.compileString = (sources, options) => {
   if (typeof sources === "string") sources = { "input.ts": sources };
   const output = Object.create({
     stdout: createMemoryStream(),
@@ -100,35 +100,27 @@ exports.compileString = async (sources, options) => {
     binary: null,
     text: null
   });
-  debugger;
-  var argv = [];
+  var argv = [
+    "--binaryFile", "binary",
+    "--textFile", "text",
+  ];
   Object.keys(options || {}).forEach(key => {
-    if (key != "readFile" && key != 'writeFile'){
-      var val = options[key];
-      debugger;
-      if (Array.isArray(val)) val.forEach(val => argv.push("--" + key, String(val)));
-      else argv.push("--" + key, String(val));
-    }
+    var val = options[key];
+    if (Array.isArray(val)) val.forEach(val => argv.push("--" + key, String(val)));
+    else argv.push("--" + key, String(val));
   });
-  await exports.main(argv.concat(Object.keys(sources)), {
+  exports.main(argv.concat(Object.keys(sources)), {
     stdout: output.stdout,
     stderr: output.stderr,
-    readFile: async (name) =>  {
-      try {
-        return await options.readFile(name);
-      }catch (e){
-        return null;
-      }
-      },
-    writeFile: async (name, contents) => await options.writeFile(name, contents),
+    readFile: name => sources.hasOwnProperty(name) ? sources[name] : null,
+    writeFile: (name, contents) => output[name] = contents,
     listFiles: () => []
   });
-  debugger;
   return output;
 }
 
 /** Runs the command line utility using the specified arguments array. */
-exports.main = async function main(argv, options, callback) {
+exports.main = function main(argv, options, callback) {
   if (typeof options === "function") {
     callback = options;
     options = {};
@@ -236,7 +228,7 @@ exports.main = async function main(argv, options, callback) {
 
   // Begin parsing
   var parser = null;
-  debugger;
+
   // Include library files
   if (!args.noLib) {
     Object.keys(exports.libraryFiles).forEach(libPath => {
@@ -278,7 +270,7 @@ exports.main = async function main(argv, options, callback) {
       }
       for (let j = 0, l = libFiles.length; j < l; ++j) {
         let libPath = libFiles[j];
-        let libText = await readFile(path.join(libDir, libPath));
+        let libText = readFile(path.join(libDir, libPath));
         if (libText === null) return callback(Error("Library file '" + libPath + "' not found."));
         stats.parseCount++;
         stats.parseTime += measure(() => {
@@ -296,14 +288,13 @@ exports.main = async function main(argv, options, callback) {
   // Include entry files
   for (let i = 0, k = argv.length; i < k; ++i) {
     const filename = argv[i];
-    if (filename == "undefined") continue;
 
     let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
 
     // Try entryPath.ts, then entryPath/index.ts
-    let sourceText = await readFile(path.join(baseDir, sourcePath) + ".ts");
+    let sourceText = readFile(path.join(baseDir, sourcePath) + ".ts");
     if (sourceText === null) {
-      sourceText = await readFile(path.join(baseDir, sourcePath, "index.ts"));
+      sourceText = readFile(path.join(baseDir, sourcePath, "index.ts"));
       if (sourceText === null) {
         return callback(Error("Entry file '" + sourcePath + ".ts' not found."));
       } else {
@@ -312,7 +303,6 @@ exports.main = async function main(argv, options, callback) {
     } else {
       sourcePath += ".ts";
     }
-    debugger;
 
     stats.parseCount++;
     stats.parseTime += measure(() => {
@@ -336,12 +326,12 @@ exports.main = async function main(argv, options, callback) {
         } else {
           for (let i = 0, k = customLibDirs.length; i < k; ++i) {
             const dir = customLibDirs[i];
-            sourceText = await readFile(path.join(dir, plainName + ".ts"));
+            sourceText = readFile(path.join(dir, plainName + ".ts"));
             if (sourceText !== null) {
               sourcePath = exports.libraryPrefix + plainName + ".ts";
               break;
             } else {
-              sourceText = await readFile(path.join(dir, indexName + ".ts"));
+              sourceText = readFile(path.join(dir, indexName + ".ts"));
               if (sourceText !== null) {
                 sourcePath = exports.libraryPrefix + indexName + ".ts";
                 break;
@@ -354,11 +344,11 @@ exports.main = async function main(argv, options, callback) {
       } else {
         const plainName = sourcePath;
         const indexName = sourcePath + "/index";
-        sourceText = await readFile(path.join(baseDir, plainName + ".ts"));
+        sourceText = readFile(path.join(baseDir, plainName + ".ts"));
         if (sourceText !== null) {
           sourcePath = plainName + ".ts";
         } else {
-          sourceText = await readFile(path.join(baseDir, indexName + ".ts"));
+          sourceText = readFile(path.join(baseDir, indexName + ".ts"));
           if (sourceText !== null) {
             sourcePath = indexName + ".ts";
           } else if (!plainName.startsWith(".")) {
@@ -371,12 +361,12 @@ exports.main = async function main(argv, options, callback) {
             } else {
               for (let i = 0, k = customLibDirs.length; i < k; ++i) {
                 const dir = customLibDirs[i];
-                sourceText = await readFile(path.join(dir, plainName + ".ts"));
+                sourceText = readFile(path.join(dir, plainName + ".ts"));
                 if (sourceText !== null) {
                   sourcePath = exports.libraryPrefix + plainName + ".ts";
                   break;
                 } else {
-                  sourceText = await readFile(path.join(dir, indexName + ".ts"));
+                  sourceText = readFile(path.join(dir, indexName + ".ts"));
                   if (sourceText !== null) {
                     sourcePath = exports.libraryPrefix + indexName + ".ts";
                     break;
@@ -562,7 +552,7 @@ exports.main = async function main(argv, options, callback) {
         args.binaryFile = args.outFile;
       }
     }
-    debugger;
+
     // Write binary
     if (args.binaryFile != null) {
       let sourceMapURL = args.sourceMap != null
@@ -578,7 +568,7 @@ exports.main = async function main(argv, options, callback) {
       });
 
       if (args.binaryFile.length) {
-        await writeFile(path.join(baseDir, args.binaryFile), wasm.output);
+        writeFile(path.join(baseDir, args.binaryFile), wasm.output);
       } else {
         writeStdout(wasm.output);
         hasStdout = true;
@@ -590,7 +580,7 @@ exports.main = async function main(argv, options, callback) {
         if (args.binaryFile.length) {
           let sourceMap = JSON.parse(wasm.sourceMap);
           sourceMap.sourceRoot = exports.sourceMapRoot;
-          sourceMap.sources.forEach(async (name, index) => {
+          sourceMap.sources.forEach((name, index) => {
             let text = null;
             if (name.startsWith(exports.libraryPrefix)) {
               let stdName = name.substring(exports.libraryPrefix.length).replace(/\.ts$/, "");
@@ -598,7 +588,7 @@ exports.main = async function main(argv, options, callback) {
                 text = exports.libraryFiles[stdName];
               } else {
                 for (let i = 0, k = customLibDirs.length; i < k; ++i) {
-                  text = await readFile(path.join(
+                  text = readFile(path.join(
                     customLibDirs[i],
                     name.substring(exports.libraryPrefix.length))
                   );
@@ -606,7 +596,7 @@ exports.main = async function main(argv, options, callback) {
                 }
               }
             } else {
-              text = await readFile(path.join(baseDir, name));
+              text = readFile(path.join(baseDir, name));
             }
             if (text === null) {
               return callback(Error("Source file '" + name + "' not found."));
@@ -614,7 +604,7 @@ exports.main = async function main(argv, options, callback) {
             if (!sourceMap.sourceContents) sourceMap.sourceContents = [];
             sourceMap.sourceContents[index] = text;
           });
-          await writeFile(path.join(
+          writeFile(path.join(
             baseDir,
             path.dirname(args.binaryFile),
             path.basename(sourceMapURL)
@@ -633,7 +623,7 @@ exports.main = async function main(argv, options, callback) {
         stats.emitTime += measure(() => {
           asm = module.toAsmjs();
         });
-        await writeFile(path.join(baseDir, args.asmjsFile), asm);
+        writeFile(path.join(baseDir, args.asmjsFile), asm);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -653,7 +643,7 @@ exports.main = async function main(argv, options, callback) {
         stats.emitTime += measure(() => {
           idl = assemblyscript.buildIDL(program);
         });
-        await writeFile(path.join(baseDir, args.idlFile), idl);
+        writeFile(path.join(baseDir, args.idlFile), idl);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -673,7 +663,7 @@ exports.main = async function main(argv, options, callback) {
         stats.emitTime += measure(() => {
           tsd = assemblyscript.buildTSD(program);
         });
-        await writeFile(path.join(baseDir, args.tsdFile), tsd);
+        writeFile(path.join(baseDir, args.tsdFile), tsd);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -693,7 +683,7 @@ exports.main = async function main(argv, options, callback) {
         stats.emitTime += measure(() => {
           wat = module.toText();
         });
-        await writeFile(path.join(baseDir, args.textFile), wat);
+        writeFile(path.join(baseDir, args.textFile), wat);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
