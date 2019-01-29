@@ -91,6 +91,7 @@ import {
   Source,
   Range,
   DecoratorKind,
+  AssertionKind,
 
   Statement,
   BlockStatement,
@@ -2704,11 +2705,17 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
-    var toType = this.resolver.resolveType( // reports
-      expression.toType,
-      this.currentFunction.flow.contextualTypeArguments
-    );
-    if (!toType) return this.module.createUnreachable();
+    var toType: Type | null;
+    if (expression.assertionKind == AssertionKind.NONNULL) {
+      assert(!expression.toType);
+      toType = contextualType.nonNullableType;
+    } else {
+      toType = this.resolver.resolveType( // reports
+        assert(expression.toType),
+        this.currentFunction.flow.contextualTypeArguments
+      );
+      if (!toType) return this.module.createUnreachable();
+    }
     return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT, WrapMode.NONE);
   }
 

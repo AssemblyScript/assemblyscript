@@ -48,7 +48,8 @@ import {
   Expression,
   IntegerLiteralExpression,
   UnaryPrefixExpression,
-  UnaryPostfixExpression
+  UnaryPostfixExpression,
+  AssertionKind
 } from "./ast";
 
 import {
@@ -685,8 +686,16 @@ export class Resolver extends DiagnosticEmitter {
     }
     switch (expression.kind) {
       case NodeKind.ASSERTION: {
+        if ((<AssertionExpression>expression).assertionKind == AssertionKind.NONNULL) {
+          return this.resolveExpression(
+            (<AssertionExpression>expression).expression,
+            contextualFunction,
+            contextualType,
+            reportMode
+          );
+        }
         let type = this.resolveType(
-          (<AssertionExpression>expression).toType,
+          assert((<AssertionExpression>expression).toType),
           contextualFunction.flow.contextualTypeArguments,
           reportMode
         );
