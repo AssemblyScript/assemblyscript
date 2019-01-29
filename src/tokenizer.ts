@@ -1226,7 +1226,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var pos = this.pos;
     while (pos < this.end) {
       let c = text.charCodeAt(pos);
-      if (c == CharCode.DOT || c == CharCode.E || c == CharCode.e) {
+      if (c == CharCode.DOT || c == CharCode.e || c == CharCode.E) {
         return false;
       }
       if ((c < CharCode._0 || c > CharCode._9) && c != CharCode._) break;
@@ -1274,7 +1274,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var start = this.pos;
     var value = i64_new(0, 0);
-    var i64_16 = i64_new(16, 0);
+    var i64_4 = i64_new(4, 0);
     var sepEnd = start;
     while (this.pos < this.end) {
       let pos = this.pos;
@@ -1282,19 +1282,19 @@ export class Tokenizer extends DiagnosticEmitter {
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 16 + c - CharCode._0;
         value = i64_add(
-          i64_mul(value, i64_16),
+          i64_shl(value, i64_4),
           i64_new(c - CharCode._0, 0)
         );
        } else if (c >= CharCode.A && c <= CharCode.F) {
         // value = value * 16 + 10 + c - CharCode.A;
         value = i64_add(
-          i64_mul(value, i64_16),
+          i64_shl(value, i64_4),
           i64_new(10 + c - CharCode.A, 0)
         );
       } else if (c >= CharCode.a && c <= CharCode.f) {
         // value = value * 16 + 10 + c - CharCode.a;
         value = i64_add(
-          i64_mul(value, i64_16),
+          i64_shl(value, i64_4),
           i64_new(10 + c - CharCode.a, 0)
         );
       } else if (c == CharCode._) {
@@ -1374,7 +1374,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var start = this.pos;
     var value = i64_new(0, 0);
-    var i64_8 = i64_new(8, 0);
+    var i64_3 = i64_new(3, 0);
     var sepEnd = start;
     while (this.pos < this.end) {
       let pos = this.pos;
@@ -1382,7 +1382,7 @@ export class Tokenizer extends DiagnosticEmitter {
       if (c >= CharCode._0 && c <= CharCode._7) {
         // value = value * 8 + c - CharCode._0;
         value = i64_add(
-          i64_mul(value, i64_8),
+          i64_shl(value, i64_3),
           i64_new(c - CharCode._0, 0)
         );
       } else if (c == CharCode._) {
@@ -1418,7 +1418,6 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var start = this.pos;
     var value = i64_new(0, 0);
-    var i64_2 = i64_new(2, 0);
     var i64_1 = i64_new(1, 0);
     var sepEnd = start;
     while (this.pos < this.end) {
@@ -1426,14 +1425,11 @@ export class Tokenizer extends DiagnosticEmitter {
       let c = text.charCodeAt(pos);
       if (c == CharCode._0) {
         // value = value * 2;
-        value = i64_mul(
-          value,
-          i64_2
-        );
+        value = i64_shl(value, i64_1);
       } else if (c == CharCode._1) {
         // value = value * 2 + 1;
         value = i64_add(
-          i64_mul(value, i64_2),
+          i64_shl(value, i64_1),
           i64_1
         );
       } else if (c == CharCode._) {
@@ -1523,11 +1519,11 @@ export class Tokenizer extends DiagnosticEmitter {
     while (this.pos < this.end) {
       let c = text.charCodeAt(this.pos++);
       if (c >= CharCode._0 && c <= CharCode._9) {
-        value = value * 16 + c - CharCode._0;
+        value = (value << 4) + c - CharCode._0;
       } else if (c >= CharCode.A && c <= CharCode.F) {
-        value = value * 16 + c + (10 - CharCode.A);
+        value = (value << 4) + c + (10 - CharCode.A);
       } else if (c >= CharCode.a && c <= CharCode.f) {
-        value = value * 16 + c + (10 - CharCode.a);
+        value = (value << 4) + c + (10 - CharCode.a);
       } else {
         this.error(
           DiagnosticCode.Hexadecimal_digit_expected,
