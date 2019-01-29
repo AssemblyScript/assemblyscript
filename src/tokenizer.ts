@@ -677,13 +677,14 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode.DOT: {
           ++this.pos;
           if (maxTokenLength > 1 && this.pos < this.end) {
-            if (isDecimalDigit(text.charCodeAt(this.pos))) {
+            let chr = text.charCodeAt(this.pos);
+            if (isDecimalDigit(chr)) {
               --this.pos;
               return Token.FLOATLITERAL; // expects a call to readFloat
             }
             if (
               maxTokenLength > 2 && this.pos + 1 < this.end &&
-              text.charCodeAt(this.pos) == CharCode.DOT &&
+              chr == CharCode.DOT &&
               text.charCodeAt(this.pos + 1) == CharCode.DOT
             ) {
               this.pos += 2;
@@ -831,7 +832,8 @@ export class Tokenizer extends DiagnosticEmitter {
             if (chr == CharCode.GREATERTHAN) {
               ++this.pos;
               if (maxTokenLength > 2 && this.pos < this.end) {
-                if (text.charCodeAt(this.pos) == CharCode.GREATERTHAN) {
+                chr = text.charCodeAt(this.pos);
+                if (chr == CharCode.GREATERTHAN) {
                   ++this.pos;
                   if (
                     maxTokenLength > 3 && this.pos < this.end &&
@@ -842,7 +844,7 @@ export class Tokenizer extends DiagnosticEmitter {
                   }
                   return Token.GREATERTHAN_GREATERTHAN_GREATERTHAN;
                 }
-                if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
+                if (chr == CharCode.EQUALS) {
                   ++this.pos;
                   return Token.GREATERTHAN_GREATERTHAN_EQUALS;
                 }
