@@ -1074,7 +1074,7 @@ export class Tokenizer extends DiagnosticEmitter {
         break;
       }
       if (c == CharCode.BACKSLASH) {
-        result += text.substr(start, this.pos - start);
+        result += text.substring(start, this.pos);
         result += this.readEscapeSequence();
         start = this.pos;
         continue;
