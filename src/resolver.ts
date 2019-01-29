@@ -700,11 +700,15 @@ export class Resolver extends DiagnosticEmitter {
           reportMode
         );
         if (!type) return null;
-        let classType = type.classReference;
-        if (!classType) return null;
+        let element: Element | null = type.classReference;
+        if (!element) {
+          let signature = type.signatureReference;
+          if (!signature) return null;
+          element = signature.asFunctionTarget(this.program);
+        }
         this.currentThisExpression = null;
         this.currentElementExpression = null;
-        return classType;
+        return element;
       }
       case NodeKind.UNARYPREFIX: {
         // TODO: overloads
@@ -894,11 +898,7 @@ export class Resolver extends DiagnosticEmitter {
           } else {
             let signature = returnType.signatureReference;
             if (signature) {
-              let functionTarget = signature.cachedFunctionTarget;
-              if (!functionTarget) {
-                functionTarget = new FunctionTarget(this.program, signature);
-                signature.cachedFunctionTarget = functionTarget;
-              }
+              let functionTarget = signature.asFunctionTarget(this.program);
               // reuse resolvedThisExpression (might be property access)
               // reuse resolvedElementExpression (might be element access)
               return functionTarget;

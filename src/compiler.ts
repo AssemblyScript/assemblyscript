@@ -2705,18 +2705,25 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
-    var toType: Type | null;
-    if (expression.assertionKind == AssertionKind.NONNULL) {
-      assert(!expression.toType);
-      toType = contextualType.nonNullableType;
-    } else {
-      toType = this.resolver.resolveType( // reports
-        assert(expression.toType),
-        this.currentFunction.flow.contextualTypeArguments
-      );
-      if (!toType) return this.module.createUnreachable();
+    switch (expression.assertionKind) {
+      case AssertionKind.PREFIX:
+      case AssertionKind.AS: {
+        let toType = this.resolver.resolveType( // reports
+          assert(expression.toType),
+          this.currentFunction.flow.contextualTypeArguments
+        );
+        if (!toType) return this.module.createUnreachable();
+        return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT, WrapMode.NONE);
+      }
+      case AssertionKind.NONNULL: {
+        assert(!expression.toType);
+        let expr = this.compileExpressionRetainType(expression.expression, contextualType, WrapMode.NONE);
+        this.currentType = this.currentType.nonNullableType;
+        return expr;
+      }
+      default: assert(false);
     }
-    return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT, WrapMode.NONE);
+    return this.module.createUnreachable();
   }
 
   private f32ModInstance: Function | null = null;
