@@ -112,16 +112,13 @@ export default class Thread {
 
 
 
-  static onMessageReceived(e) {
+  static onMessageReceived(e): void {
     try {
         const data = e.data;
-        debugger;
         switch (data.command) {
           case "start": {
-            (async (address: string) =>{
-            let thread = await Thread.create(address);
-            thread.start();
-            debugger;
+            (async (address: string): Promise<void> =>{
+            (await Thread.create(address)).start();
           })(data.address);
             break;
           }
