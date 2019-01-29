@@ -253,7 +253,12 @@ export function tokenFromKeyword(text: string): Token {
     }
     case CharCode.i: {
       switch (text.charCodeAt(1)) {
-        case CharCode.f: return Token.IF;
+        case CharCode.f: {
+          switch (text) {
+            case "if": return Token.IF;
+          }
+          break;
+        }
         case CharCode.m: {
           switch (text) {
             case "import": return Token.IMPORT;
