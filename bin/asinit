@@ -4,7 +4,7 @@ const path = require("path");
 const colors = require("../cli/util/colors");
 const version = require("../package.json").version;
 
-if (process.argv.length < 3) printHelp();
+if (process.argv.length != 3 || process.argv[2] == "--help" || process.argv[2] == "-h") printHelp();
 
 function printHelp() {
   console.log([

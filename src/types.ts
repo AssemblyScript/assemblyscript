@@ -526,6 +526,13 @@ export class Signature {
     this.type = Type.u32.asFunction(this);
   }
 
+  asFunctionTarget(program: Program): FunctionTarget {
+    var target = this.cachedFunctionTarget;
+    if (!target) this.cachedFunctionTarget = target = new FunctionTarget(program, this);
+    else assert(target.program == program);
+    return target;
+  }
+
   /** Gets the known or, alternatively, generic parameter name at the specified index. */
   getParameterName(index: i32): string {
     var parameterNames = this.parameterNames;
