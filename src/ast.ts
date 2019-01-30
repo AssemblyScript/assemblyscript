@@ -1829,7 +1829,7 @@ export class FunctionDeclaration extends DeclarationStatement {
     var body = this.body;
     if (!(body && body.kind == NodeKind.BLOCK)) return null;
     var statements = (<BlockStatement>body).statements;
-    if (statements.length < 0) return null;
+    if (!statements.length) return null;
     return statements[0];
   }
 }
