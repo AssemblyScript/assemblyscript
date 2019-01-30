@@ -196,6 +196,14 @@ export class Resolver extends DiagnosticEmitter {
         (type = typesLookup.get(localName)) ||
         (type = typesLookup.get(globalName))
       ) {
+        if (!type.is(TypeFlags.REFERENCE) && node.isNullable) {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Basic_type_0_cannot_be_nullable,
+              node.range, type.toString()
+            );
+          }
+        }
         return type;
       }
     }
