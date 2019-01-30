@@ -94,6 +94,7 @@ export enum DiagnosticCode {
   Index_signature_is_missing_in_type_0 = 2329,
   _this_cannot_be_referenced_in_current_location = 2332,
   _super_can_only_be_referenced_in_a_derived_class = 2335,
+  Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors = 2337,
   Property_0_does_not_exist_on_type_1 = 2339,
   Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures = 2349,
   Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature = 2351,
@@ -219,6 +220,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2329: return "Index signature is missing in type '{0}'.";
     case 2332: return "'this' cannot be referenced in current location.";
     case 2335: return "'super' can only be referenced in a derived class.";
+    case 2337: return "Super calls are not permitted outside constructors or in nested functions inside constructors.";
     case 2339: return "Property '{0}' does not exist on type '{1}'.";
     case 2349: return "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.";
     case 2351: return "Cannot use 'new' with an expression whose type lacks a construct signature.";

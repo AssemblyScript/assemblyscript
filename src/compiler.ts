@@ -5242,9 +5242,17 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
 
-      // call to `super()`
       case ElementKind.CLASS: {
-        if (expression.expression.kind == NodeKind.SUPER && currentFunction.is(CommonFlags.CONSTRUCTOR)) {
+
+        // call to `super()`
+        if (expression.expression.kind == NodeKind.SUPER) {
+          if (!currentFunction.is(CommonFlags.CONSTRUCTOR)) {
+            this.error(
+              DiagnosticCode.Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors,
+              expression.range
+            );
+            return module.createUnreachable();
+          }
           if (expression.parent != currentFunction.prototype.declaration.firstStatement) {
             this.error(
               DiagnosticCode.A_super_call_must_be_the_first_statement_in_the_constructor,
