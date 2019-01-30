@@ -38,11 +38,12 @@ Instructions are similar to those for bug reports. Please provide the following 
 * Use a **clear and descriptive title** for the pull request.
 * Provide a **description of the suggested changes** in as many details as necessary.
 * **Document your new code** where necessary.
+* Please **refrain from refactoring (unrelated code)** as it makes your pull request easier to review.
 * **Create tests for your new code** where necessary. For creating or updating tests, please see the [Test Instructions](./tests).
 
 Before submitting your pull request, please make sure that the following conditions are met:
 
 * Your new code **adheres to the code style** through running `npm run check`.
-* Your new code **passes all existing and new tests** through running `npm run test:pr`.
+* Your new code **passes all existing and new tests** through running `npm run test`.
 * Your PR **excludes distribution files** in `dist/**`.
 * You appended yourself to the **list of contributors** in the [NOTICE](./NOTICE) file.
