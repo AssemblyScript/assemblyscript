@@ -48,7 +48,8 @@ import {
   Expression,
   IntegerLiteralExpression,
   UnaryPrefixExpression,
-  UnaryPostfixExpression
+  UnaryPostfixExpression,
+  AssertionKind
 } from "./ast";
 
 import {
@@ -685,17 +686,29 @@ export class Resolver extends DiagnosticEmitter {
     }
     switch (expression.kind) {
       case NodeKind.ASSERTION: {
+        if ((<AssertionExpression>expression).assertionKind == AssertionKind.NONNULL) {
+          return this.resolveExpression(
+            (<AssertionExpression>expression).expression,
+            contextualFunction,
+            contextualType,
+            reportMode
+          );
+        }
         let type = this.resolveType(
-          (<AssertionExpression>expression).toType,
+          assert((<AssertionExpression>expression).toType),
           contextualFunction.flow.contextualTypeArguments,
           reportMode
         );
         if (!type) return null;
-        let classType = type.classReference;
-        if (!classType) return null;
+        let element: Element | null = type.classReference;
+        if (!element) {
+          let signature = type.signatureReference;
+          if (!signature) return null;
+          element = signature.asFunctionTarget(this.program);
+        }
         this.currentThisExpression = null;
         this.currentElementExpression = null;
-        return classType;
+        return element;
       }
       case NodeKind.UNARYPREFIX: {
         // TODO: overloads
@@ -885,11 +898,7 @@ export class Resolver extends DiagnosticEmitter {
           } else {
             let signature = returnType.signatureReference;
             if (signature) {
-              let functionTarget = signature.cachedFunctionTarget;
-              if (!functionTarget) {
-                functionTarget = new FunctionTarget(this.program, signature);
-                signature.cachedFunctionTarget = functionTarget;
-              }
+              let functionTarget = signature.asFunctionTarget(this.program);
               // reuse resolvedThisExpression (might be property access)
               // reuse resolvedElementExpression (might be element access)
               return functionTarget;

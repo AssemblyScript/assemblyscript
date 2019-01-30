@@ -3472,6 +3472,15 @@ export class Parser extends DiagnosticEmitter {
           );
           break;
         }
+        case Token.EXCLAMATION: {
+          expr = Node.createAssertionExpression(
+            AssertionKind.NONNULL,
+            expr,
+            null,
+            tn.range(startPos, tn.pos)
+          );
+          break;
+        }
         // InstanceOfExpression
         case Token.INSTANCEOF: {
           let isType = this.parseType(tn); // reports
@@ -3835,7 +3844,8 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.MINUS_MINUS: return Precedence.UNARY_POSTFIX;
     case Token.DOT:
     case Token.NEW:
-    case Token.OPENBRACKET: return Precedence.MEMBERACCESS;
+    case Token.OPENBRACKET:
+    case Token.EXCLAMATION: return Precedence.MEMBERACCESS;
   }
   return Precedence.NONE;
 }
