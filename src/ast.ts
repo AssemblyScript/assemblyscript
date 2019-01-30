@@ -1824,14 +1824,6 @@ export class FunctionDeclaration extends DeclarationStatement {
     var typeParameters = this.typeParameters;
     return typeParameters != null && typeParameters.length > 0;
   }
-
-  get firstStatement(): Statement | null {
-    var body = this.body;
-    if (!(body && body.kind == NodeKind.BLOCK)) return null;
-    var statements = (<BlockStatement>body).statements;
-    if (!statements.length) return null;
-    return statements[0];
-  }
 }
 
 /** Represents an `if` statement. */
