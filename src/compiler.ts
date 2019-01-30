@@ -5244,7 +5244,14 @@ export class Compiler extends DiagnosticEmitter {
 
       // call to `super()`
       case ElementKind.CLASS: {
-        if (expression.expression.kind == NodeKind.SUPER) {
+        if (expression.expression.kind == NodeKind.SUPER && currentFunction.is(CommonFlags.CONSTRUCTOR)) {
+          if (expression.parent != currentFunction.prototype.declaration.firstStatement) {
+            this.error(
+              DiagnosticCode.A_super_call_must_be_the_first_statement_in_the_constructor,
+              expression.range
+            );
+            return module.createUnreachable();
+          }
           let classInstance = assert(currentFunction.parent);
           assert(classInstance.kind == ElementKind.CLASS);
           let expr = this.compileSuperInstantiate(<Class>classInstance, expression.arguments, expression);
