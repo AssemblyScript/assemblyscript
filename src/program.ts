@@ -2931,6 +2931,21 @@ export class Class extends Element {
     }
   }
 
+  /** Gets the first applicable constructor. */
+  getfirstConstructor(includingThis: bool = true): Function | null {
+    if (includingThis && this.constructorInstance) return this.constructorInstance;
+
+    // traverse to the top-most derived constructor
+    var currentBase: Class | null = this.base;
+    var instance: Function | null = null;
+    while (currentBase) {
+      instance = currentBase.constructorInstance;
+      if (instance) return instance;
+      currentBase = currentBase.base;
+    }
+    return null;
+  }
+
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;

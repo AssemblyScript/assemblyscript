@@ -144,7 +144,6 @@ import {
   FieldDeclaration,
 
   nodeIsConstantValue,
-  nodeIsSuperCall,
   isLastStatement,
   findDecorator
 } from "./ast";
@@ -1076,8 +1075,7 @@ export class Compiler extends DiagnosticEmitter {
         flow.finalize();
       } else {
         assert(body.kind == NodeKind.BLOCK);
-        let statements = (<BlockStatement>body).statements;
-        let stmts = this.compileStatements(statements);
+        let stmts = this.compileStatements((<BlockStatement>body).statements);
         if (instance.is(CommonFlags.MAIN)) {
           module.addGlobal("~started", NativeType.I32, true, module.createI32(0));
           stmts.unshift(
