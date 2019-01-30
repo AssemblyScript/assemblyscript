@@ -3078,7 +3078,8 @@ export const enum FlowFlags {
                   | FlowFlags.THROWS
                   | FlowFlags.BREAKS
                   | FlowFlags.CONTINUES
-                  | FlowFlags.ALLOCATES,
+                  | FlowFlags.ALLOCATES
+                  | FlowFlags.CALLS_SUPER,
 
   /** Any conditional flag. */
   ANY_CONDITIONAL = FlowFlags.CONDITIONALLY_RETURNS
