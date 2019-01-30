@@ -5230,6 +5230,19 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
 
+      // call to `super()`
+      case ElementKind.CLASS: {
+        if (expression.expression.kind == NodeKind.SUPER) {
+          let classInstance = assert(currentFunction.parent);
+          assert(classInstance.kind == ElementKind.CLASS);
+          let expr = this.compileSuperInstantiate(<Class>classInstance, expression.arguments, expression);
+          this.currentType = Type.void;
+          let thisLocal = assert(this.currentFunction.flow.getScopedLocal("this"));
+          return module.createSetLocal(thisLocal.index, expr);
+        }
+        // otherwise fall-through
+      }
+
       // not supported
       default: {
         this.error(
@@ -6654,6 +6667,37 @@ export class Compiler extends DiagnosticEmitter {
       expr = this.makeAllocate(classInstance, reportNode);
     }
 
+    this.currentType = classInstance.type;
+    return expr;
+  }
+
+  compileSuperInstantiate(classInstance: Class, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
+    // traverse to the top-most visible constructor (except the current one)
+    var currentClassInstance: Class | null = classInstance.base;
+    var constructorInstance: Function | null = null;
+    while (currentClassInstance) {
+      constructorInstance = currentClassInstance.constructorInstance;
+      if (constructorInstance) break; // TODO: check visibility
+      currentClassInstance = currentClassInstance.base;
+    }
+
+    // if a constructor is present, allocate the necessary memory for `this` and call it
+    var expr: ExpressionRef;
+    if (constructorInstance) {
+      expr = this.compileCallDirect(constructorInstance, argumentExpressions, reportNode,
+        this.makeAllocate(classInstance, reportNode)
+      );
+
+    // otherwise simply allocate a new instance and initialize its fields
+    } else {
+      if (argumentExpressions.length) {
+        this.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "0", argumentExpressions.length.toString(10)
+        );
+      }
+      expr = this.makeAllocate(classInstance, reportNode);
+    }
     this.currentType = classInstance.type;
     return expr;
   }

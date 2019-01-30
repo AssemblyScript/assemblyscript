@@ -1242,8 +1242,16 @@ export class Resolver extends DiagnosticEmitter {
 
           // Lay out fields in advance
           case ElementKind.FIELD_PROTOTYPE: {
-            if (!instance.members) instance.members = new Map();
             let fieldDeclaration = (<FieldPrototype>member).declaration;
+            if (!instance.members) instance.members = new Map();
+            else if (instance.members.has(member.simpleName)) {
+              this.error(
+                DiagnosticCode.Duplicate_identifier_0,
+                fieldDeclaration.name.range,
+                member.simpleName
+              );
+              break;
+            }
             let fieldType: Type | null = null;
             // TODO: handle duplicate non-private fields
             if (!fieldDeclaration.type) {
