@@ -103,7 +103,7 @@ export enum DiagnosticCode {
   The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
   Operator_0_cannot_be_applied_to_types_1_and_2 = 2365,
   A_super_call_must_be_the_first_statement_in_the_constructor = 2376,
-  Constructors_for_derived_classes_must_call_super_first = 2377,
+  Constructors_for_derived_classes_must_contain_a_super_call = 2377,
   _get_and_set_accessor_must_have_the_same_type = 2380,
   Constructor_implementation_is_missing = 2390,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
@@ -127,7 +127,8 @@ export enum DiagnosticCode {
   Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
   File_0_not_found = 6054,
   Numeric_separators_are_not_allowed_here = 6188,
-  Multiple_consecutive_numeric_separators_are_not_permitted = 6189
+  Multiple_consecutive_numeric_separators_are_not_permitted = 6189,
+  _super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class = 17009
 }
 
 /** Translates a diagnostic code to its respective string. */
@@ -229,7 +230,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2364: return "The left-hand side of an assignment expression must be a variable or a property access.";
     case 2365: return "Operator '{0}' cannot be applied to types '{1}' and '{2}'.";
     case 2376: return "A 'super' call must be the first statement in the constructor.";
-    case 2377: return "Constructors for derived classes must call 'super' first.";
+    case 2377: return "Constructors for derived classes must contain a 'super' call.";
     case 2380: return "'get' and 'set' accessor must have the same type.";
     case 2390: return "Constructor implementation is missing.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
@@ -254,6 +255,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 6054: return "File '{0}' not found.";
     case 6188: return "Numeric separators are not allowed here.";
     case 6189: return "Multiple consecutive numeric separators are not permitted.";
+    case 17009: return "'super' must be called before accessing 'this' in the constructor of a derived class.";
     default: return "";
   }
 }

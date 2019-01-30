@@ -1077,16 +1077,6 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         assert(body.kind == NodeKind.BLOCK);
         let statements = (<BlockStatement>body).statements;
-        if (isConstructor) { // make sure super() is called first if this is a derived class
-          let parent = assert(instance.parent);
-          assert(parent.kind == ElementKind.CLASS);
-          if ((<Class>parent).base && !(statements.length >= 1 && nodeIsSuperCall(statements[0]))) {
-            this.error(
-              DiagnosticCode.Constructors_for_derived_classes_must_call_super_first,
-              statements[0].range.atStart
-            );
-          }
-        }
         let stmts = this.compileStatements(statements);
         if (instance.is(CommonFlags.MAIN)) {
           module.addGlobal("~started", NativeType.I32, true, module.createI32(0));
@@ -1107,6 +1097,8 @@ export class Compiler extends DiagnosticEmitter {
         if (isConstructor) {
           let nativeSizeType = this.options.nativeSizeType;
           assert(instance.is(CommonFlags.INSTANCE));
+          let parent = assert(instance.parent);
+          assert(parent.kind == ElementKind.CLASS);
 
           // implicitly return `this` if the constructor doesn't always return on its own
           if (!flow.is(FlowFlags.RETURNS)) {
@@ -1117,12 +1109,18 @@ export class Compiler extends DiagnosticEmitter {
 
             // if not all branches are guaranteed to allocate, also append a conditional allocation
             } else {
-              let parent = assert(instance.parent);
-              assert(parent.kind == ElementKind.CLASS);
               stmts.push(module.createTeeLocal(0,
                 this.makeConditionalAllocate(<Class>parent, declaration.name)
               ));
             }
+          }
+
+          // check that super has been called if this is a derived class
+          if ((<Class>parent).base && !flow.is(FlowFlags.CALLS_SUPER)) {
+            this.error(
+              DiagnosticCode.Constructors_for_derived_classes_must_contain_a_super_call,
+              instance.prototype.declaration.range
+            );
           }
 
         // make sure all branches return
@@ -5253,17 +5251,26 @@ export class Compiler extends DiagnosticEmitter {
             );
             return module.createUnreachable();
           }
-          if (expression.parent != currentFunction.prototype.declaration.firstStatement) {
-            this.error(
-              DiagnosticCode.A_super_call_must_be_the_first_statement_in_the_constructor,
-              expression.range
-            );
-            return module.createUnreachable();
-          }
+
           let classInstance = assert(currentFunction.parent);
           assert(classInstance.kind == ElementKind.CLASS);
           let expr = this.compileSuperInstantiate(<Class>classInstance, expression.arguments, expression);
           this.currentType = Type.void;
+
+          // check that super() is called before allocation is performed (incl. in super arguments)
+          let flow = currentFunction.flow;
+          if (flow.isAny(
+            FlowFlags.ALLOCATES |
+            FlowFlags.CONDITIONALLY_ALLOCATES
+          )) {
+            this.error(
+              DiagnosticCode._super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class,
+              expression.range
+            );
+            return module.createUnreachable();
+          }
+          flow.set(FlowFlags.ALLOCATES | FlowFlags.CALLS_SUPER);
+
           let thisLocal = assert(this.currentFunction.flow.getScopedLocal("this"));
           return module.createSetLocal(thisLocal.index, expr);
         }

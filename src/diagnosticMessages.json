@@ -97,7 +97,7 @@
   "The left-hand side of an assignment expression must be a variable or a property access.": 2364,
   "Operator '{0}' cannot be applied to types '{1}' and '{2}'.": 2365,
   "A 'super' call must be the first statement in the constructor.": 2376,
-  "Constructors for derived classes must call 'super' first.": 2377,
+  "Constructors for derived classes must contain a 'super' call.": 2377,
   "'get' and 'set' accessor must have the same type.": 2380,
   "Constructor implementation is missing.": 2390,
   "Function implementation is missing or not immediately following the declaration.": 2391,
@@ -122,5 +122,6 @@
 
   "File '{0}' not found.": 6054,
   "Numeric separators are not allowed here.": 6188,
-  "Multiple consecutive numeric separators are not permitted.": 6189
+  "Multiple consecutive numeric separators are not permitted.": 6189,
+  "'super' must be called before accessing 'this' in the constructor of a derived class.": 17009
 }

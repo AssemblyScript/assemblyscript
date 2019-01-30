@@ -95,18 +95,6 @@
    i32.store
   end
   get_local $0
-  i32.eqz
-  if
-   i32.const 8
-   call $~lib/allocator/arena/__memory_allocate
-   tee_local $0
-   i32.const 1
-   i32.store
-   get_local $0
-   i32.const 2
-   i32.store offset=4
-  end
-  get_local $0
   i32.load
   i32.const 1
   i32.ne

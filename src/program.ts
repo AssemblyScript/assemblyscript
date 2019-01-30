@@ -3041,26 +3041,28 @@ export const enum FlowFlags {
   CONTINUES = 1 << 4,
   /** This branch always allocates. Constructors only. */
   ALLOCATES = 1 << 5,
+  /** This branch always calls super. Constructors only. */
+  CALLS_SUPER = 1 << 6,
 
   // conditional
 
   /** This branch conditionally returns in a child branch. */
-  CONDITIONALLY_RETURNS = 1 << 6,
+  CONDITIONALLY_RETURNS = 1 << 7,
   /** This branch conditionally throws in a child branch. */
-  CONDITIONALLY_THROWS = 1 << 7,
+  CONDITIONALLY_THROWS = 1 << 8,
   /** This branch conditionally breaks in a child branch. */
-  CONDITIONALLY_BREAKS = 1 << 8,
+  CONDITIONALLY_BREAKS = 1 << 9,
   /** This branch conditionally continues in a child branch. */
-  CONDITIONALLY_CONTINUES = 1 << 9,
+  CONDITIONALLY_CONTINUES = 1 << 10,
   /** This branch conditionally allocates in a child branch. Constructors only. */
-  CONDITIONALLY_ALLOCATES = 1 << 10,
+  CONDITIONALLY_ALLOCATES = 1 << 11,
 
   // special
 
   /** This branch is part of inlining a function. */
-  INLINE_CONTEXT = 1 << 11,
+  INLINE_CONTEXT = 1 << 12,
   /** This branch explicitly requests no bounds checking. */
-  UNCHECKED_CONTEXT = 1 << 12,
+  UNCHECKED_CONTEXT = 1 << 13,
 
   // masks
 
