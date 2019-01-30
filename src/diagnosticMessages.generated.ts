@@ -66,6 +66,7 @@ export enum DiagnosticCode {
   Unexpected_end_of_text = 1126,
   Invalid_character = 1127,
   _case_or_default_expected = 1130,
+  _super_must_be_followed_by_an_argument_list_or_member_access = 1034,
   A_declare_modifier_cannot_be_used_in_an_already_ambient_context = 1038,
   Type_argument_expected = 1140,
   String_literal_expected = 1141,
@@ -194,6 +195,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1126: return "Unexpected end of text.";
     case 1127: return "Invalid character.";
     case 1130: return "'case' or 'default' expected.";
+    case 1034: return "'super' must be followed by an argument list or member access.";
     case 1038: return "A 'declare' modifier cannot be used in an already ambient context.";
     case 1140: return "Type argument expected.";
     case 1141: return "String literal expected.";

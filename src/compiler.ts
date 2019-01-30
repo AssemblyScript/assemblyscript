@@ -6076,6 +6076,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.SUPER: {
         if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
           if (!currentFunction.flow.is(FlowFlags.CALLS_SUPER)) {
+            // TS1034 in the parser effectively limits this to property accesses
             this.error(
               DiagnosticCode._super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class,
               expression.range

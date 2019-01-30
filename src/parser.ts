@@ -3337,6 +3337,12 @@ export class Parser extends DiagnosticEmitter {
         return Node.createConstructorExpression(tn.range(startPos, tn.pos));
       }
       case Token.SUPER: {
+        if (tn.peek() != Token.DOT && tn.nextToken != Token.OPENPAREN) {
+          this.error(
+            DiagnosticCode._super_must_be_followed_by_an_argument_list_or_member_access,
+            tn.range()
+          );
+        }
         return Node.createSuperExpression(tn.range(startPos, tn.pos));
       }
       case Token.STRINGLITERAL: {
