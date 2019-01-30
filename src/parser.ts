@@ -494,7 +494,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
       // ... | null
-      if (tn.skip(Token.BAR)) {
+      while (tn.skip(Token.BAR)) {
         if (tn.skip(Token.NULL)) {
           nullable = true;
         } else {
