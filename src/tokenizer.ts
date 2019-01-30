@@ -500,6 +500,7 @@ export class Tokenizer extends DiagnosticEmitter {
   /** Constructs a new tokenizer. */
   constructor(source: Source, diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
+
     this.source = source;
     this.pos = 0;
     this.end = source.text.length;
@@ -1273,29 +1274,29 @@ export class Tokenizer extends DiagnosticEmitter {
   readHexInteger(): I64 {
     var text = this.source.text;
     var start = this.pos;
-    var value = i64_new(0, 0);
-    var i64_4 = i64_new(4, 0);
+    var value = i64_new(0);
+    var i64_4 = i64_new(4);
     var sepEnd = start;
     while (this.pos < this.end) {
       let pos = this.pos;
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
-        // value = value * 16 + c - CharCode._0;
+        // value = (value << 4) + c - CharCode._0;
         value = i64_add(
           i64_shl(value, i64_4),
-          i64_new(c - CharCode._0, 0)
+          i64_new(c - CharCode._0)
         );
        } else if (c >= CharCode.A && c <= CharCode.F) {
-        // value = value * 16 + 10 + c - CharCode.A;
+        // value = (value << 4) + 10 + c - CharCode.A;
         value = i64_add(
           i64_shl(value, i64_4),
-          i64_new(10 + c - CharCode.A, 0)
+          i64_new(10 + c - CharCode.A)
         );
       } else if (c >= CharCode.a && c <= CharCode.f) {
-        // value = value * 16 + 10 + c - CharCode.a;
+        // value = (value << 4) + 10 + c - CharCode.a;
         value = i64_add(
           i64_shl(value, i64_4),
-          i64_new(10 + c - CharCode.a, 0)
+          i64_new(10 + c - CharCode.a)
         );
       } else if (c == CharCode._) {
         if (sepEnd == pos) {
@@ -1329,8 +1330,8 @@ export class Tokenizer extends DiagnosticEmitter {
   readDecimalInteger(): I64 {
     var text = this.source.text;
     var start = this.pos;
-    var value = i64_new(0, 0);
-    var i64_10 = i64_new(10, 0);
+    var value = i64_new(0);
+    var i64_10 = i64_new(10);
     var sepEnd = start;
     while (this.pos < this.end) {
       let pos = this.pos;
@@ -1339,7 +1340,7 @@ export class Tokenizer extends DiagnosticEmitter {
         // value = value * 10 + c - CharCode._0;
         value = i64_add(
           i64_mul(value, i64_10),
-          i64_new(c - CharCode._0, 0)
+          i64_new(c - CharCode._0)
         );
       } else if (c == CharCode._) {
         if (sepEnd == pos) {
@@ -1373,17 +1374,17 @@ export class Tokenizer extends DiagnosticEmitter {
   readOctalInteger(): I64 {
     var text = this.source.text;
     var start = this.pos;
-    var value = i64_new(0, 0);
-    var i64_3 = i64_new(3, 0);
+    var value = i64_new(0);
+    var i64_3 = i64_new(3);
     var sepEnd = start;
     while (this.pos < this.end) {
       let pos = this.pos;
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._7) {
-        // value = value * 8 + c - CharCode._0;
+        // value = (value << 3) + c - CharCode._0;
         value = i64_add(
           i64_shl(value, i64_3),
-          i64_new(c - CharCode._0, 0)
+          i64_new(c - CharCode._0)
         );
       } else if (c == CharCode._) {
         if (sepEnd == pos) {
@@ -1417,17 +1418,17 @@ export class Tokenizer extends DiagnosticEmitter {
   readBinaryInteger(): I64 {
     var text = this.source.text;
     var start = this.pos;
-    var value = i64_new(0, 0);
-    var i64_1 = i64_new(1, 0);
+    var value = i64_new(0);
+    var i64_1 = i64_new(1);
     var sepEnd = start;
     while (this.pos < this.end) {
       let pos = this.pos;
       let c = text.charCodeAt(pos);
       if (c == CharCode._0) {
-        // value = value * 2;
+        // value = (value << 1);
         value = i64_shl(value, i64_1);
       } else if (c == CharCode._1) {
-        // value = value * 2 + 1;
+        // value = (value << 1) + 1;
         value = i64_add(
           i64_shl(value, i64_1),
           i64_1
@@ -1492,10 +1493,8 @@ export class Tokenizer extends DiagnosticEmitter {
       let c = text.charCodeAt(this.pos);
       if (c == CharCode.e || c == CharCode.E) {
         if (
-          ++this.pos < this.end && (
-            text.charCodeAt(this.pos) == CharCode.MINUS ||
-            text.charCodeAt(this.pos) == CharCode.PLUS
-          ) &&
+          ++this.pos < this.end &&
+          (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
           isDecimalDigit(text.charCodeAt(this.pos + 1))
         ) {
           ++this.pos;
