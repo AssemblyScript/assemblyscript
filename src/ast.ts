@@ -135,6 +135,12 @@ export function nodeIsGenericCallable(kind: NodeKind): bool {
   return false;
 }
 
+export function nodeIsSuperCall(node: Node): bool {
+  if (node.kind == NodeKind.EXPRESSION) node = (<ExpressionStatement>node).expression;
+  return node.kind == NodeKind.CALL
+      && (<CallExpression>node).expression.kind == NodeKind.SUPER;
+}
+
 /** Base class of all nodes. */
 export abstract class Node {
 

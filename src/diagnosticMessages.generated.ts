@@ -101,6 +101,7 @@ export enum DiagnosticCode {
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
   The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
   Operator_0_cannot_be_applied_to_types_1_and_2 = 2365,
+  Constructors_for_derived_classes_must_call_super_first = 2377,
   _get_and_set_accessor_must_have_the_same_type = 2380,
   Constructor_implementation_is_missing = 2390,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
@@ -224,6 +225,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
     case 2364: return "The left-hand side of an assignment expression must be a variable or a property access.";
     case 2365: return "Operator '{0}' cannot be applied to types '{1}' and '{2}'.";
+    case 2377: return "Constructors for derived classes must call 'super' first.";
     case 2380: return "'get' and 'set' accessor must have the same type.";
     case 2390: return "Constructor implementation is missing.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";

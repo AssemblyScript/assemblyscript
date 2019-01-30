@@ -144,6 +144,7 @@ import {
   FieldDeclaration,
 
   nodeIsConstantValue,
+  nodeIsSuperCall,
   isLastStatement,
   findDecorator
 } from "./ast";
@@ -1075,7 +1076,18 @@ export class Compiler extends DiagnosticEmitter {
         flow.finalize();
       } else {
         assert(body.kind == NodeKind.BLOCK);
-        let stmts = this.compileStatements((<BlockStatement>body).statements);
+        let statements = (<BlockStatement>body).statements;
+        if (isConstructor) { // make sure super() is called first if this is a derived class
+          let parent = assert(instance.parent);
+          assert(parent.kind == ElementKind.CLASS);
+          if ((<Class>parent).base && !(statements.length >= 1 && nodeIsSuperCall(statements[0]))) {
+            this.error(
+              DiagnosticCode.Constructors_for_derived_classes_must_call_super_first,
+              statements[0].range.atStart
+            );
+          }
+        }
+        let stmts = this.compileStatements(statements);
         if (instance.is(CommonFlags.MAIN)) {
           module.addGlobal("~started", NativeType.I32, true, module.createI32(0));
           stmts.unshift(

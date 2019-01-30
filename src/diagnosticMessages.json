@@ -95,6 +95,7 @@
   "The operand of an increment or decrement operator must be a variable or a property access.": 2357,
   "The left-hand side of an assignment expression must be a variable or a property access.": 2364,
   "Operator '{0}' cannot be applied to types '{1}' and '{2}'.": 2365,
+  "Constructors for derived classes must call 'super' first.": 2377,
   "'get' and 'set' accessor must have the same type.": 2380,
   "Constructor implementation is missing.": 2390,
   "Function implementation is missing or not immediately following the declaration.": 2391,
