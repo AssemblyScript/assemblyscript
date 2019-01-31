@@ -91,6 +91,7 @@ import {
   Source,
   Range,
   DecoratorKind,
+  AssertionKind,
 
   Statement,
   BlockStatement,
@@ -1094,6 +1095,8 @@ export class Compiler extends DiagnosticEmitter {
         if (isConstructor) {
           let nativeSizeType = this.options.nativeSizeType;
           assert(instance.is(CommonFlags.INSTANCE));
+          let parent = assert(instance.parent);
+          assert(parent.kind == ElementKind.CLASS);
 
           // implicitly return `this` if the constructor doesn't always return on its own
           if (!flow.is(FlowFlags.RETURNS)) {
@@ -1104,12 +1107,18 @@ export class Compiler extends DiagnosticEmitter {
 
             // if not all branches are guaranteed to allocate, also append a conditional allocation
             } else {
-              let parent = assert(instance.parent);
-              assert(parent.kind == ElementKind.CLASS);
               stmts.push(module.createTeeLocal(0,
                 this.makeConditionalAllocate(<Class>parent, declaration.name)
               ));
             }
+          }
+
+          // check that super has been called if this is a derived class
+          if ((<Class>parent).base && !flow.is(FlowFlags.CALLS_SUPER)) {
+            this.error(
+              DiagnosticCode.Constructors_for_derived_classes_must_contain_a_super_call,
+              instance.prototype.declaration.range
+            );
           }
 
         // make sure all branches return
@@ -2704,12 +2713,25 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileAssertionExpression(expression: AssertionExpression, contextualType: Type): ExpressionRef {
-    var toType = this.resolver.resolveType( // reports
-      expression.toType,
-      this.currentFunction.flow.contextualTypeArguments
-    );
-    if (!toType) return this.module.createUnreachable();
-    return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT, WrapMode.NONE);
+    switch (expression.assertionKind) {
+      case AssertionKind.PREFIX:
+      case AssertionKind.AS: {
+        let toType = this.resolver.resolveType( // reports
+          assert(expression.toType),
+          this.currentFunction.flow.contextualTypeArguments
+        );
+        if (!toType) return this.module.createUnreachable();
+        return this.compileExpression(expression.expression, toType, ConversionKind.EXPLICIT, WrapMode.NONE);
+      }
+      case AssertionKind.NONNULL: {
+        assert(!expression.toType);
+        let expr = this.compileExpressionRetainType(expression.expression, contextualType, WrapMode.NONE);
+        this.currentType = this.currentType.nonNullableType;
+        return expr;
+      }
+      default: assert(false);
+    }
+    return this.module.createUnreachable();
   }
 
   private f32ModInstance: Function | null = null;
@@ -5215,6 +5237,43 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
 
+      case ElementKind.CLASS: {
+
+        // call to `super()`
+        if (expression.expression.kind == NodeKind.SUPER) {
+          if (!currentFunction.is(CommonFlags.CONSTRUCTOR)) {
+            this.error(
+              DiagnosticCode.Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors,
+              expression.range
+            );
+            return module.createUnreachable();
+          }
+
+          let classInstance = assert(currentFunction.parent);
+          assert(classInstance.kind == ElementKind.CLASS);
+          let expr = this.compileSuperInstantiate(<Class>classInstance, expression.arguments, expression);
+          this.currentType = Type.void;
+
+          // check that super() is called before allocation is performed (incl. in super arguments)
+          let flow = currentFunction.flow;
+          if (flow.isAny(
+            FlowFlags.ALLOCATES |
+            FlowFlags.CONDITIONALLY_ALLOCATES
+          )) {
+            this.error(
+              DiagnosticCode._super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class,
+              expression.range
+            );
+            return module.createUnreachable();
+          }
+          flow.set(FlowFlags.ALLOCATES | FlowFlags.CALLS_SUPER);
+
+          let thisLocal = assert(this.currentFunction.flow.getScopedLocal("this"));
+          return module.createSetLocal(thisLocal.index, expr);
+        }
+        // otherwise fall-through
+      }
+
       // not supported
       default: {
         this.error(
@@ -6012,6 +6071,15 @@ export class Compiler extends DiagnosticEmitter {
         return module.createUnreachable();
       }
       case NodeKind.SUPER: {
+        if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
+          if (!currentFunction.flow.is(FlowFlags.CALLS_SUPER)) {
+            // TS1034 in the parser effectively limits this to property accesses
+            this.error(
+              DiagnosticCode._super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class,
+              expression.range
+            );
+          }
+        }
         let flow = currentFunction.flow;
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
           let scopedThis = flow.getScopedLocal("this");
@@ -6641,6 +6709,37 @@ export class Compiler extends DiagnosticEmitter {
       expr = this.makeAllocate(classInstance, reportNode);
     }
 
+    this.currentType = classInstance.type;
+    return expr;
+  }
+
+  compileSuperInstantiate(classInstance: Class, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
+    // traverse to the top-most visible constructor (except the current one)
+    var currentClassInstance: Class | null = classInstance.base;
+    var constructorInstance: Function | null = null;
+    while (currentClassInstance) {
+      constructorInstance = currentClassInstance.constructorInstance;
+      if (constructorInstance) break; // TODO: check visibility
+      currentClassInstance = currentClassInstance.base;
+    }
+
+    // if a constructor is present, allocate the necessary memory for `this` and call it
+    var expr: ExpressionRef;
+    if (constructorInstance) {
+      expr = this.compileCallDirect(constructorInstance, argumentExpressions, reportNode,
+        this.makeAllocate(classInstance, reportNode)
+      );
+
+    // otherwise simply allocate a new instance and initialize its fields
+    } else {
+      if (argumentExpressions.length) {
+        this.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "0", argumentExpressions.length.toString(10)
+        );
+      }
+      expr = this.makeAllocate(classInstance, reportNode);
+    }
     this.currentType = classInstance.type;
     return expr;
   }
