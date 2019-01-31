@@ -2,6 +2,7 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
+ (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
  (type $iiI (func (param i32 i32) (result i64)))
@@ -1874,16 +1875,16 @@
    end
   end
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   get_local $0
   i32.load
-  set_local $2
+  set_local $3
   get_local $1
-  get_local $2
+  get_local $3
   i32.gt_s
   if
    get_local $1
@@ -1899,7 +1900,7 @@
     unreachable
    end
    get_local $1
-   get_local $2
+   get_local $3
    call $~lib/internal/arraybuffer/computeSize
    get_global $~lib/internal/arraybuffer/HEADER_SIZE
    i32.sub
@@ -1911,18 +1912,18 @@
    else    
     get_local $1
     call $~lib/internal/arraybuffer/allocateUnsafe
-    set_local $3
-    get_local $3
-    get_global $~lib/internal/arraybuffer/HEADER_SIZE
-    i32.add
     set_local $4
-    get_local $0
+    get_local $4
     get_global $~lib/internal/arraybuffer/HEADER_SIZE
     i32.add
     set_local $5
-    get_local $4
+    get_local $0
+    get_global $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+    set_local $6
     get_local $5
-    get_local $2
+    get_local $6
+    get_local $3
     call $~lib/internal/memory/memmove
     block $~lib/memory/memory.free|inlined.0
      block
@@ -1933,28 +1934,33 @@
      end
      unreachable
     end
-    get_local $3
+    get_local $4
     set_local $0
    end
-   get_local $0
-   get_global $~lib/internal/arraybuffer/HEADER_SIZE
-   i32.add
    get_local $2
-   i32.add
-   set_local $3
    i32.const 0
-   set_local $5
-   get_local $1
-   get_local $2
-   i32.sub
-   set_local $4
-   get_local $3
-   get_local $5
-   get_local $4
-   call $~lib/internal/memory/memset
+   i32.ne
+   if
+    get_local $0
+    get_global $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+    get_local $3
+    i32.add
+    set_local $4
+    i32.const 0
+    set_local $6
+    get_local $1
+    get_local $3
+    i32.sub
+    set_local $5
+    get_local $4
+    get_local $6
+    get_local $5
+    call $~lib/internal/memory/memset
+   end
   else   
    get_local $1
-   get_local $2
+   get_local $3
    i32.lt_s
    if
     get_local $1
@@ -1964,7 +1970,7 @@
     if
      i32.const 0
      i32.const 216
-     i32.const 62
+     i32.const 64
      i32.const 4
      call $~lib/env/abort
      unreachable
@@ -2009,6 +2015,7 @@
    i32.add
    i32.const 2
    i32.shl
+   i32.const 0
    call $~lib/internal/arraybuffer/reallocateUnsafe
    set_local $3
    get_local $0
@@ -2092,6 +2099,7 @@
    i32.add
    i32.const 3
    i32.shl
+   i32.const 0
    call $~lib/internal/arraybuffer/reallocateUnsafe
    set_local $3
    get_local $0
@@ -2175,6 +2183,7 @@
    i32.add
    i32.const 2
    i32.shl
+   i32.const 0
    call $~lib/internal/arraybuffer/reallocateUnsafe
    set_local $3
    get_local $0
@@ -2258,6 +2267,7 @@
    i32.add
    i32.const 3
    i32.shl
+   i32.const 0
    call $~lib/internal/arraybuffer/reallocateUnsafe
    set_local $3
    get_local $0

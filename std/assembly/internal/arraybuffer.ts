@@ -34,7 +34,7 @@ export function allocateUnsafe(byteLength: i32): ArrayBuffer {
   return changetype<ArrayBuffer>(buffer);
 }
 
-export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuffer {
+export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32, zeroFill: bool = false): ArrayBuffer {
   var oldByteLength = buffer.byteLength;
   if (newByteLength > oldByteLength) {
     assert(newByteLength <= MAX_BLENGTH);
@@ -52,42 +52,17 @@ export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): Array
       }
       buffer = newBuffer;
     }
-    memory.fill(
-      changetype<usize>(buffer) + HEADER_SIZE + <usize>oldByteLength,
-      0,
-      <usize>(newByteLength - oldByteLength)
-    );
+    if (zeroFill) {
+      memory.fill(
+        changetype<usize>(buffer) + HEADER_SIZE + <usize>oldByteLength,
+        0,
+        <usize>(newByteLength - oldByteLength)
+      );
+    }
   } else if (newByteLength < oldByteLength) { // fast path: override size
     // TBD: worth to copy and release if size is significantly less than before?
     assert(newByteLength >= 0);
     store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
-  }
-  return buffer;
-}
-
-/**
- * This method grows the ArrayBuffer, using the same algorithm as allocateUnsafe, except it skips
- * zeroing out the data with memory.fill and only assumes it will grow the array buffer.
- */
-@inline
-export function growUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuffer {
-  var oldByteLength = buffer.byteLength;
-  assert(oldByteLength < newByteLength && newByteLength < MAX_BLENGTH);
-  if (newByteLength <= <i32>(computeSize(oldByteLength) - HEADER_SIZE)) {
-    // fast path: change the byteLength value because the memory is already allocated
-    store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
-  } else {
-    // slow path: allocate a new ArrayBuffer, copy the data, leave the leading bytes unchanged
-    let newBuffer = allocateUnsafe(newByteLength);
-    memory.copy(
-      changetype<usize>(newBuffer) + HEADER_SIZE,
-      changetype<usize>(buffer) + HEADER_SIZE,
-      <usize>oldByteLength
-    );
-    if (!isManaged<ArrayBuffer>()) {
-      memory.free(changetype<usize>(buffer));
-    }
-    buffer = newBuffer;
   }
   return buffer;
 }

@@ -4,7 +4,7 @@ import {
   allocateUnsafe,
   LOAD,
   STORE,
-  growUnsafe,
+  reallocateUnsafe,
 } from "./arraybuffer";
 
 import {
@@ -264,7 +264,7 @@ export function FILTER<TArray extends TypedArray<T>, T>(
     if (callbackfn(value, i, array)) {
       backByteLength = backingBuffer.byteLength;
       if (backByteLength < (count + 1) << alignof<T>()) {
-        backingBuffer = growUnsafe(backingBuffer, backByteLength << 1);
+        backingBuffer = reallocateUnsafe(backingBuffer, backByteLength << 1);
       }
       STORE<T, NATIVE<T>>(backingBuffer, count, <NATIVE<T>>value);
       ++count;

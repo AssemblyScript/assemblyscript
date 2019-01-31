@@ -15306,7 +15306,114 @@
    end
   end
  )
- (func $~lib/typedarray/Int8Array#filter (; 322 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 322 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  get_local $0
+  i32.load
+  set_local $3
+  get_local $1
+  get_local $3
+  i32.gt_s
+  if
+   get_local $1
+   get_global $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.le_s
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 112
+    i32.const 40
+    i32.const 4
+    call $~lib/env/abort
+    unreachable
+   end
+   get_local $1
+   get_local $3
+   call $~lib/internal/arraybuffer/computeSize
+   get_global $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.sub
+   i32.le_s
+   if
+    get_local $0
+    get_local $1
+    i32.store
+   else    
+    get_local $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    set_local $4
+    get_local $4
+    get_global $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+    set_local $5
+    get_local $0
+    get_global $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+    set_local $6
+    get_local $5
+    get_local $6
+    get_local $3
+    call $~lib/internal/memory/memmove
+    block $~lib/memory/memory.free|inlined.1
+     block
+      get_local $0
+      call $~lib/allocator/arena/__memory_free
+      br $~lib/memory/memory.free|inlined.1
+      unreachable
+     end
+     unreachable
+    end
+    get_local $4
+    set_local $0
+   end
+   get_local $2
+   i32.const 0
+   i32.ne
+   if
+    get_local $0
+    get_global $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+    get_local $3
+    i32.add
+    set_local $4
+    i32.const 0
+    set_local $6
+    get_local $1
+    get_local $3
+    i32.sub
+    set_local $5
+    get_local $4
+    get_local $6
+    get_local $5
+    call $~lib/internal/memory/memset
+   end
+  else   
+   get_local $1
+   get_local $3
+   i32.lt_s
+   if
+    get_local $1
+    i32.const 0
+    i32.ge_s
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 112
+     i32.const 64
+     i32.const 4
+     call $~lib/env/abort
+     unreachable
+    end
+    get_local $0
+    get_local $1
+    i32.store
+   end
+  end
+  get_local $0
+ )
+ (func $~lib/typedarray/Int8Array#filter (; 323 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -15317,9 +15424,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 1
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -15385,74 +15489,12 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.0 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.1
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.1
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       get_local $8
@@ -15460,17 +15502,17 @@
       i32.shl
       i32.const 24
       i32.shr_s
-      set_local $11
-      i32.const 0
       set_local $10
+      i32.const 0
+      set_local $11
       get_local $2
       get_local $3
       i32.const 0
       i32.shl
       i32.add
-      get_local $10
-      i32.add
       get_local $11
+      i32.add
+      get_local $10
       i32.store8 offset=8
       get_local $3
       i32.const 1
@@ -15511,7 +15553,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Int8Array,i8> (; 323 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Int8Array,i8> (; 324 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -15638,7 +15680,7 @@
    unreachable
   end
  )
- (func $std/typedarray/testArrayFilter<Uint8Array,u8>~anonymous|113 (; 324 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/typedarray/testArrayFilter<Uint8Array,u8>~anonymous|113 (; 325 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 255
   i32.and
@@ -15665,7 +15707,7 @@
   i32.const 1
   i32.and
  )
- (func $~lib/typedarray/Uint8Array#filter (; 325 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#filter (; 326 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -15676,9 +15718,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 1
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -15744,90 +15783,28 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.1 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.2
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.2
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       get_local $8
       i32.const 255
       i32.and
-      set_local $11
-      i32.const 0
       set_local $10
+      i32.const 0
+      set_local $11
       get_local $2
       get_local $3
       i32.const 0
       i32.shl
       i32.add
-      get_local $10
-      i32.add
       get_local $11
+      i32.add
+      get_local $10
       i32.store8 offset=8
       get_local $3
       i32.const 1
@@ -15868,7 +15845,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Uint8Array,u8> (; 326 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Uint8Array,u8> (; 327 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -15991,7 +15968,7 @@
    unreachable
   end
  )
- (func $std/typedarray/testArrayFilter<Uint8ClampedArray,u8>~anonymous|114 (; 327 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/typedarray/testArrayFilter<Uint8ClampedArray,u8>~anonymous|114 (; 328 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 255
   i32.and
@@ -16018,7 +15995,7 @@
   i32.const 1
   i32.and
  )
- (func $~lib/typedarray/Uint8ClampedArray#filter (; 328 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8ClampedArray#filter (; 329 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16029,9 +16006,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 1
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -16097,90 +16071,28 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.2 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.3
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.3
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       get_local $8
       i32.const 255
       i32.and
-      set_local $11
-      i32.const 0
       set_local $10
+      i32.const 0
+      set_local $11
       get_local $2
       get_local $3
       i32.const 0
       i32.shl
       i32.add
-      get_local $10
-      i32.add
       get_local $11
+      i32.add
+      get_local $10
       i32.store8 offset=8
       get_local $3
       i32.const 1
@@ -16221,7 +16133,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Uint8ClampedArray,u8> (; 329 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Uint8ClampedArray,u8> (; 330 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -16344,7 +16256,7 @@
    unreachable
   end
  )
- (func $std/typedarray/testArrayFilter<Int16Array,i16>~anonymous|115 (; 330 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/typedarray/testArrayFilter<Int16Array,i16>~anonymous|115 (; 331 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 16
   i32.shl
@@ -16377,7 +16289,7 @@
   i32.const 1
   i32.and
  )
- (func $~lib/typedarray/Int16Array#filter (; 331 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int16Array#filter (; 332 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16388,9 +16300,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -16456,74 +16365,12 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.3 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.4
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.4
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       get_local $8
@@ -16531,17 +16378,17 @@
       i32.shl
       i32.const 16
       i32.shr_s
-      set_local $11
-      i32.const 0
       set_local $10
+      i32.const 0
+      set_local $11
       get_local $2
       get_local $3
       i32.const 1
       i32.shl
       i32.add
-      get_local $10
-      i32.add
       get_local $11
+      i32.add
+      get_local $10
       i32.store16 offset=8
       get_local $3
       i32.const 1
@@ -16582,7 +16429,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Int16Array,i16> (; 332 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Int16Array,i16> (; 333 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -16709,7 +16556,7 @@
    unreachable
   end
  )
- (func $std/typedarray/testArrayFilter<Uint16Array,u16>~anonymous|116 (; 333 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/typedarray/testArrayFilter<Uint16Array,u16>~anonymous|116 (; 334 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   i32.const 65535
   i32.and
@@ -16736,7 +16583,7 @@
   i32.const 1
   i32.and
  )
- (func $~lib/typedarray/Uint16Array#filter (; 334 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint16Array#filter (; 335 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16747,9 +16594,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -16815,90 +16659,28 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.4 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.5
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.5
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       get_local $8
       i32.const 65535
       i32.and
-      set_local $11
-      i32.const 0
       set_local $10
+      i32.const 0
+      set_local $11
       get_local $2
       get_local $3
       i32.const 1
       i32.shl
       i32.add
-      get_local $10
-      i32.add
       get_local $11
+      i32.add
+      get_local $10
       i32.store16 offset=8
       get_local $3
       i32.const 1
@@ -16939,7 +16721,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Uint16Array,u16> (; 335 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Uint16Array,u16> (; 336 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -17062,7 +16844,7 @@
    unreachable
   end
  )
- (func $std/typedarray/testArrayFilter<Int32Array,i32>~anonymous|117 (; 336 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/typedarray/testArrayFilter<Int32Array,i32>~anonymous|117 (; 337 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   get_local $1
   i32.eq
@@ -17083,7 +16865,7 @@
   i32.const 1
   i32.and
  )
- (func $~lib/typedarray/Int32Array#filter (; 337 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#filter (; 338 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -17093,10 +16875,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 4
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -17162,84 +16940,22 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.5 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.6
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.6
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       i32.const 0
-      set_local $11
+      set_local $10
       get_local $2
       get_local $3
       i32.const 2
       i32.shl
       i32.add
-      get_local $11
+      get_local $10
       i32.add
       get_local $8
       i32.store offset=8
@@ -17282,7 +16998,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Int32Array,i32> (; 338 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Int32Array,i32> (; 339 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -17401,7 +17117,7 @@
    unreachable
   end
  )
- (func $std/typedarray/testArrayFilter<Uint32Array,u32>~anonymous|118 (; 339 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/typedarray/testArrayFilter<Uint32Array,u32>~anonymous|118 (; 340 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   get_local $1
   i32.eq
@@ -17422,7 +17138,7 @@
   i32.const 1
   i32.and
  )
- (func $~lib/typedarray/Uint32Array#filter (; 340 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint32Array#filter (; 341 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -17432,10 +17148,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 4
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -17501,84 +17213,22 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.6 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.7
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.7
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       i32.const 0
-      set_local $11
+      set_local $10
       get_local $2
       get_local $3
       i32.const 2
       i32.shl
       i32.add
-      get_local $11
+      get_local $10
       i32.add
       get_local $8
       i32.store offset=8
@@ -17621,7 +17271,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Uint32Array,u32> (; 341 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Uint32Array,u32> (; 342 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -17740,7 +17390,7 @@
    unreachable
   end
  )
- (func $std/typedarray/testArrayFilter<Int64Array,i64>~anonymous|119 (; 342 ;) (type $Iiii) (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/typedarray/testArrayFilter<Int64Array,i64>~anonymous|119 (; 343 ;) (type $Iiii) (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   get_local $1
   i64.extend_s/i32
@@ -17763,7 +17413,7 @@
   i32.const 1
   i32.and
  )
- (func $~lib/typedarray/Int64Array#filter (; 343 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int64Array#filter (; 344 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -17773,10 +17423,6 @@
   (local $8 i64)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 8
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -17842,84 +17488,22 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.7 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.8
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.8
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       i32.const 0
-      set_local $11
+      set_local $10
       get_local $2
       get_local $3
       i32.const 3
       i32.shl
       i32.add
-      get_local $11
+      get_local $10
       i32.add
       get_local $8
       i64.store offset=8
@@ -17962,7 +17546,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Int64Array,i64> (; 344 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Int64Array,i64> (; 345 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -18081,7 +17665,7 @@
    unreachable
   end
  )
- (func $std/typedarray/testArrayFilter<Uint64Array,u64>~anonymous|120 (; 345 ;) (type $Iiii) (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/typedarray/testArrayFilter<Uint64Array,u64>~anonymous|120 (; 346 ;) (type $Iiii) (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   get_local $1
   i64.extend_s/i32
@@ -18104,7 +17688,7 @@
   i32.const 1
   i32.and
  )
- (func $~lib/typedarray/Uint64Array#filter (; 346 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint64Array#filter (; 347 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -18114,10 +17698,6 @@
   (local $8 i64)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 8
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -18183,84 +17763,22 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.8 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.9
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.9
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       i32.const 0
-      set_local $11
+      set_local $10
       get_local $2
       get_local $3
       i32.const 3
       i32.shl
       i32.add
-      get_local $11
+      get_local $10
       i32.add
       get_local $8
       i64.store offset=8
@@ -18303,7 +17821,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Uint64Array,u64> (; 347 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Uint64Array,u64> (; 348 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -18422,7 +17940,7 @@
    unreachable
   end
  )
- (func $std/typedarray/testArrayFilter<Float32Array,f32>~anonymous|121 (; 348 ;) (type $fiii) (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/typedarray/testArrayFilter<Float32Array,f32>~anonymous|121 (; 349 ;) (type $fiii) (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   get_local $1
   f32.convert_s/i32
@@ -18445,7 +17963,7 @@
   i32.const 1
   i32.and
  )
- (func $~lib/typedarray/Float32Array#filter (; 349 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Float32Array#filter (; 350 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -18455,10 +17973,6 @@
   (local $8 f32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 4
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -18524,84 +18038,22 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.9 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.10
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.10
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       i32.const 0
-      set_local $11
+      set_local $10
       get_local $2
       get_local $3
       i32.const 2
       i32.shl
       i32.add
-      get_local $11
+      get_local $10
       i32.add
       get_local $8
       f32.store offset=8
@@ -18644,7 +18096,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Float32Array,f32> (; 350 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Float32Array,f32> (; 351 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -18763,7 +18215,7 @@
    unreachable
   end
  )
- (func $std/typedarray/testArrayFilter<Float64Array,f64>~anonymous|122 (; 351 ;) (type $Fiii) (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/typedarray/testArrayFilter<Float64Array,f64>~anonymous|122 (; 352 ;) (type $Fiii) (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
   get_local $0
   get_local $1
   f64.convert_s/i32
@@ -18786,7 +18238,7 @@
   i32.const 1
   i32.and
  )
- (func $~lib/typedarray/Float64Array#filter (; 352 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Float64Array#filter (; 353 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -18796,10 +18248,6 @@
   (local $8 f64)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 8
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $2
@@ -18865,84 +18313,22 @@
       i32.shl
       i32.lt_s
       if
-       block $~lib/internal/arraybuffer/growUnsafe|inlined.10 (result i32)
-        get_local $7
-        i32.const 1
-        i32.shl
-        set_local $10
-        get_local $2
-        i32.load
-        set_local $11
-        get_local $11
-        get_local $10
-        i32.lt_s
-        tee_local $12
-        if (result i32)
-         get_local $10
-         get_global $~lib/internal/arraybuffer/MAX_BLENGTH
-         i32.lt_s
-        else         
-         get_local $12
-        end
-        i32.eqz
-        if
-         i32.const 0
-         i32.const 112
-         i32.const 75
-         i32.const 2
-         call $~lib/env/abort
-         unreachable
-        end
-        get_local $10
-        get_local $11
-        call $~lib/internal/arraybuffer/computeSize
-        get_global $~lib/internal/arraybuffer/HEADER_SIZE
-        i32.sub
-        i32.le_s
-        if
-         get_local $2
-         get_local $10
-         i32.store
-        else         
-         get_local $10
-         call $~lib/internal/arraybuffer/allocateUnsafe
-         set_local $12
-         get_local $12
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $13
-         get_local $2
-         get_global $~lib/internal/arraybuffer/HEADER_SIZE
-         i32.add
-         set_local $14
-         get_local $13
-         get_local $14
-         get_local $11
-         call $~lib/internal/memory/memmove
-         block $~lib/memory/memory.free|inlined.11
-          block
-           get_local $2
-           call $~lib/allocator/arena/__memory_free
-           br $~lib/memory/memory.free|inlined.11
-           unreachable
-          end
-          unreachable
-         end
-         get_local $12
-         set_local $2
-        end
-        get_local $2
-       end
+       get_local $2
+       get_local $7
+       i32.const 1
+       i32.shl
+       i32.const 0
+       call $~lib/internal/arraybuffer/reallocateUnsafe
        set_local $2
       end
       i32.const 0
-      set_local $11
+      set_local $10
       get_local $2
       get_local $3
       i32.const 3
       i32.shl
       i32.add
-      get_local $11
+      get_local $10
       i32.add
       get_local $8
       f64.store offset=8
@@ -18985,7 +18371,7 @@
   i32.store
   get_local $9
  )
- (func $std/typedarray/testArrayFilter<Float64Array,f64> (; 353 ;) (type $v)
+ (func $std/typedarray/testArrayFilter<Float64Array,f64> (; 354 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -19104,7 +18490,7 @@
    unreachable
   end
  )
- (func $start (; 354 ;) (type $v)
+ (func $start (; 355 ;) (type $v)
   (local $0 i32)
   get_global $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT
   i32.const 1
@@ -20372,6 +19758,6 @@
   call $std/typedarray/testArrayFilter<Float32Array,f32>
   call $std/typedarray/testArrayFilter<Float64Array,f64>
  )
- (func $null (; 355 ;) (type $v)
+ (func $null (; 356 ;) (type $v)
  )
 )

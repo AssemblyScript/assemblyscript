@@ -3408,9 +3408,8 @@
   call $~lib/internal/memory/memset
   get_local $1
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 38 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   get_local $1
   get_local $0
   i32.load
@@ -3447,7 +3446,7 @@
    else    
     get_local $1
     call $~lib/internal/arraybuffer/allocateUnsafe
-    tee_local $3
+    tee_local $1
     i32.const 8
     i32.add
     get_local $0
@@ -3455,18 +3454,9 @@
     i32.add
     get_local $2
     call $~lib/internal/memory/memmove
-    get_local $3
+    get_local $1
     set_local $0
    end
-   get_local $0
-   i32.const 8
-   i32.add
-   get_local $2
-   i32.add
-   get_local $1
-   get_local $2
-   i32.sub
-   call $~lib/internal/memory/memset
   else   
    get_local $1
    get_local $2
@@ -3478,7 +3468,7 @@
     if
      i32.const 0
      i32.const 1128
-     i32.const 62
+     i32.const 64
      i32.const 4
      call $~lib/env/abort
      unreachable
