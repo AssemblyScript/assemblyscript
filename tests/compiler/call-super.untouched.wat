@@ -119,6 +119,19 @@
    tee_local $0
   end
   tee_local $0
+  i32.load
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 6
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $0
  )
  (func $call-super/B#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -144,7 +157,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 13
+   i32.const 15
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -157,14 +170,14 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 14
+   i32.const 16
    i32.const 4
    call $~lib/env/abort
    unreachable
   end
   get_local $0
  )
- (func $call-super/test (; 5 ;) (type $v)
+ (func $call-super/test1 (; 5 ;) (type $v)
   (local $0 i32)
   i32.const 0
   call $call-super/B#constructor
@@ -177,7 +190,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 20
+   i32.const 22
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -190,13 +203,139 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 21
+   i32.const 23
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $start (; 6 ;) (type $v)
+ (func $call-super/D#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  block (result i32)
+   i32.const 8
+   call $~lib/memory/memory.allocate
+   set_local $1
+   get_local $1
+   i32.const 1
+   i32.store
+   get_local $1
+   i32.const 2
+   i32.store offset=4
+   get_local $1
+  end
+  set_local $0
+  get_local $0
+  i32.load
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 36
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $0
+  i32.load offset=4
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 37
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $0
+ )
+ (func $call-super/test2 (; 7 ;) (type $v)
+  (local $0 i32)
+  i32.const 0
+  call $call-super/D#constructor
+  set_local $0
+  get_local $0
+  i32.load
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 43
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $0
+  i32.load offset=4
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 44
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $call-super/E#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  get_local $0
+  if (result i32)
+   get_local $0
+  else   
+   block (result i32)
+    i32.const 4
+    call $~lib/memory/memory.allocate
+    set_local $1
+    get_local $1
+    i32.const 1
+    i32.store
+    get_local $1
+   end
+   tee_local $0
+  end
+  tee_local $0
+  i32.load
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 52
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $0
+ )
+ (func $call-super/test3 (; 9 ;) (type $v)
+  (local $0 i32)
+  i32.const 0
+  call $call-super/E#constructor
+  set_local $0
+  get_local $0
+  i32.load
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 62
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $start (; 10 ;) (type $v)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
   i32.add
@@ -207,8 +346,10 @@
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
-  call $call-super/test
+  call $call-super/test1
+  call $call-super/test2
+  call $call-super/test3
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 11 ;) (type $v)
  )
 )
