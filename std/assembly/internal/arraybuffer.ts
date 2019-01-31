@@ -65,6 +65,33 @@ export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): Array
   return buffer;
 }
 
+/**
+ * This method grows the ArrayBuffer, using the same algorithm as allocateUnsafe, except it skips
+ * zeroing out the data with memory.fill and only assumes it will grow the array buffer.
+ */
+@inline
+export function growUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuffer {
+  var oldByteLength = buffer.byteLength;
+  assert(oldByteLength < newByteLength && newByteLength < MAX_BLENGTH);
+  if (newByteLength <= <i32>(computeSize(oldByteLength) - HEADER_SIZE)) {
+    // fast path: change the byteLength value because the memory is already allocated
+    store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
+  } else {
+    // slow path: allocate a new ArrayBuffer, copy the data, leave the leading bytes unchanged
+    let newBuffer = allocateUnsafe(newByteLength);
+    memory.copy(
+      changetype<usize>(newBuffer) + HEADER_SIZE,
+      changetype<usize>(buffer) + HEADER_SIZE,
+      <usize>oldByteLength
+    );
+    if (!isManaged<ArrayBuffer>()) {
+      memory.free(changetype<usize>(buffer));
+    }
+    buffer = newBuffer;
+  }
+  return buffer;
+}
+
 // The helpers below use two different types in order to emit loads and stores that load respectively
 // store one type to/from memory while returning/taking the desired output/input type. This allows to
 // emit instructions like

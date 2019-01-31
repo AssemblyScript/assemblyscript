@@ -4,7 +4,7 @@ import {
   allocateUnsafe,
   LOAD,
   STORE,
-  reallocateUnsafe
+  growUnsafe,
 } from "./arraybuffer";
 
 import {
@@ -252,7 +252,7 @@ export function FILTER<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,
 ): TArray {
-  var backingBuffer = new ArrayBuffer(sizeof<T>());
+  var backingBuffer = allocateUnsafe(sizeof<T>());
   var count = 0;
   var buffer = array.buffer;
   var length = array.length;
@@ -264,15 +264,20 @@ export function FILTER<TArray extends TypedArray<T>, T>(
     if (callbackfn(value, i, array)) {
       backByteLength = backingBuffer.byteLength;
       if (backByteLength < (count + 1) << alignof<T>()) {
-        backingBuffer = reallocateUnsafe(backingBuffer, backByteLength << 1);
+        backingBuffer = growUnsafe(backingBuffer, backByteLength << 1);
       }
       STORE<T, NATIVE<T>>(backingBuffer, count, <NATIVE<T>>value);
       ++count;
     }
   }
-  backingBuffer = reallocateUnsafe(backingBuffer, count << alignof<T>());
+
+  // reallocateUnsafe calls this to reduce ArrayBuffer size
+  store<i32>(changetype<usize>(backingBuffer) + offsetof<ArrayBuffer>("byteLength"), count << alignof<T>());
+
+  // instantiate the result
   var result = instantiate<TArray>(0);
   store<ArrayBuffer>(changetype<usize>(result) + offsetof<TArray>("buffer"), backingBuffer);
-  store<i32>(changetype<usize>(result) + offsetof<TArray>("byteLength"), backByteLength * 2);
+  store<i32>(changetype<usize>(result) + offsetof<TArray>("byteLength"), backingBuffer.byteLength);
+
   return result;
 }
