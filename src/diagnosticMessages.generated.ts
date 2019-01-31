@@ -66,6 +66,7 @@ export enum DiagnosticCode {
   Unexpected_end_of_text = 1126,
   Invalid_character = 1127,
   _case_or_default_expected = 1130,
+  _super_must_be_followed_by_an_argument_list_or_member_access = 1034,
   A_declare_modifier_cannot_be_used_in_an_already_ambient_context = 1038,
   Type_argument_expected = 1140,
   String_literal_expected = 1141,
@@ -94,6 +95,7 @@ export enum DiagnosticCode {
   Index_signature_is_missing_in_type_0 = 2329,
   _this_cannot_be_referenced_in_current_location = 2332,
   _super_can_only_be_referenced_in_a_derived_class = 2335,
+  Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors = 2337,
   Property_0_does_not_exist_on_type_1 = 2339,
   Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures = 2349,
   Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature = 2351,
@@ -101,6 +103,8 @@ export enum DiagnosticCode {
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
   The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
   Operator_0_cannot_be_applied_to_types_1_and_2 = 2365,
+  A_super_call_must_be_the_first_statement_in_the_constructor = 2376,
+  Constructors_for_derived_classes_must_contain_a_super_call = 2377,
   _get_and_set_accessor_must_have_the_same_type = 2380,
   Constructor_implementation_is_missing = 2390,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
@@ -124,7 +128,9 @@ export enum DiagnosticCode {
   Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
   File_0_not_found = 6054,
   Numeric_separators_are_not_allowed_here = 6188,
-  Multiple_consecutive_numeric_separators_are_not_permitted = 6189
+  Multiple_consecutive_numeric_separators_are_not_permitted = 6189,
+  _super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class = 17009,
+  _super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class = 17011
 }
 
 /** Translates a diagnostic code to its respective string. */
@@ -189,6 +195,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1126: return "Unexpected end of text.";
     case 1127: return "Invalid character.";
     case 1130: return "'case' or 'default' expected.";
+    case 1034: return "'super' must be followed by an argument list or member access.";
     case 1038: return "A 'declare' modifier cannot be used in an already ambient context.";
     case 1140: return "Type argument expected.";
     case 1141: return "String literal expected.";
@@ -217,6 +224,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2329: return "Index signature is missing in type '{0}'.";
     case 2332: return "'this' cannot be referenced in current location.";
     case 2335: return "'super' can only be referenced in a derived class.";
+    case 2337: return "Super calls are not permitted outside constructors or in nested functions inside constructors.";
     case 2339: return "Property '{0}' does not exist on type '{1}'.";
     case 2349: return "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.";
     case 2351: return "Cannot use 'new' with an expression whose type lacks a construct signature.";
@@ -224,6 +232,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
     case 2364: return "The left-hand side of an assignment expression must be a variable or a property access.";
     case 2365: return "Operator '{0}' cannot be applied to types '{1}' and '{2}'.";
+    case 2376: return "A 'super' call must be the first statement in the constructor.";
+    case 2377: return "Constructors for derived classes must contain a 'super' call.";
     case 2380: return "'get' and 'set' accessor must have the same type.";
     case 2390: return "Constructor implementation is missing.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
@@ -248,6 +258,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 6054: return "File '{0}' not found.";
     case 6188: return "Numeric separators are not allowed here.";
     case 6189: return "Multiple consecutive numeric separators are not permitted.";
+    case 17009: return "'super' must be called before accessing 'this' in the constructor of a derived class.";
+    case 17011: return "'super' must be called before accessing a property of 'super' in the constructor of a derived class.";
     default: return "";
   }
 }
