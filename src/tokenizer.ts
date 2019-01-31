@@ -420,7 +420,6 @@ export function operatorTokenToString(token: Token): string {
 }
 
 export class Range {
-
   source: Source;
   start: i32;
   end: i32;

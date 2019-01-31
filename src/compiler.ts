@@ -3,7 +3,7 @@
  * @module compiler
  *//***/
 
-import {
+ import {
   compileCall as compileBuiltinCall,
   compileAbort,
   compileIterateRoots,
@@ -1022,128 +1022,56 @@ export class Compiler extends DiagnosticEmitter {
     return typeRef;
   }
 
+  /** Compiles just the body of a function in whatever is the current context. */
+  private compileFunctionBody(instance: Function): ExpressionRef[] {
+    var declaration = instance.prototype.declaration;
+    var body = assert(declaration.body);
+    if (body.kind == NodeKind.BLOCK) {
+      return this.compileStatements((<BlockStatement>body).statements);
+    } else {
+      assert(body.kind == NodeKind.EXPRESSION);
+      assert(instance.is(CommonFlags.ARROW));
+      assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET | CommonFlags.MAIN));
+      let returnType = instance.signature.returnType;
+      let flow = instance.flow;
+      let stmt = this.compileExpression(
+        (<ExpressionStatement>body).expression,
+        returnType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      flow.set(FlowFlags.RETURNS);
+      if (!flow.canOverflow(stmt, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
+      return [ stmt ];
+    }
+  }
+
   /** Compiles a readily resolved function instance. */
   compileFunction(instance: Function): bool {
     if (instance.is(CommonFlags.COMPILED)) return true;
     assert(!(instance.is(CommonFlags.AMBIENT) && instance.hasDecorator(DecoratorFlags.BUILTIN)));
     instance.set(CommonFlags.COMPILED);
 
-    // check that modifiers are matching
+    var module = this.module;
+    var signature = instance.signature;
     var declaration = instance.prototype.declaration;
     var body = declaration.body;
+
+    var typeRef = this.ensureFunctionType(signature.parameterTypes, signature.returnType, signature.thisType);
+    var funcRef: FunctionRef;
+
+    // concrete function
     if (body) {
+
+      // must not be ambient
       if (instance.is(CommonFlags.AMBIENT)) {
         this.error(
           DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts,
           declaration.name.range
         );
       }
-    } else {
-      if (!instance.is(CommonFlags.AMBIENT)) {
-        this.error(
-          DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
-          declaration.name.range
-        );
-      }
-    }
 
-    var ref: FunctionRef;
-    var signature = instance.signature;
-    var typeRef = this.ensureFunctionType(signature.parameterTypes, signature.returnType, signature.thisType);
-    var module = this.module;
-    if (body) {
-      let isConstructor = instance.is(CommonFlags.CONSTRUCTOR);
-      let returnType = instance.signature.returnType;
-
-      // compile body
-      let previousFunction = this.currentFunction;
-      this.currentFunction = instance;
-      let flow = instance.flow;
-      let stmt: ExpressionRef;
-      if (body.kind == NodeKind.EXPRESSION) { // () => expression
-        assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET | CommonFlags.MAIN));
-        assert(instance.is(CommonFlags.ARROW));
-        stmt = this.compileExpression(
-          (<ExpressionStatement>body).expression,
-          returnType,
-          ConversionKind.IMPLICIT,
-          WrapMode.NONE
-        );
-        flow.set(FlowFlags.RETURNS);
-        if (!flow.canOverflow(stmt, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
-        flow.finalize();
-      } else {
-        assert(body.kind == NodeKind.BLOCK);
-        let stmts = this.compileStatements((<BlockStatement>body).statements);
-        if (instance.is(CommonFlags.MAIN)) {
-          module.addGlobal("~started", NativeType.I32, true, module.createI32(0));
-          stmts.unshift(
-            module.createIf(
-              module.createUnary(
-                UnaryOp.EqzI32,
-                module.createGetGlobal("~started", NativeType.I32)
-              ),
-              module.createBlock(null, [
-                module.createCall("start", null, NativeType.None),
-                module.createSetGlobal("~started", module.createI32(1))
-              ])
-            )
-          );
-        }
-        flow.finalize();
-        if (isConstructor) {
-          let nativeSizeType = this.options.nativeSizeType;
-          assert(instance.is(CommonFlags.INSTANCE));
-          let parent = assert(instance.parent);
-          assert(parent.kind == ElementKind.CLASS);
-
-          // implicitly return `this` if the constructor doesn't always return on its own
-          if (!flow.is(FlowFlags.RETURNS)) {
-
-            // if all branches are guaranteed to allocate, skip the final conditional allocation
-            if (flow.is(FlowFlags.ALLOCATES)) {
-              stmts.push(module.createGetLocal(0, nativeSizeType));
-
-            // if not all branches are guaranteed to allocate, also append a conditional allocation
-            } else {
-              stmts.push(module.createTeeLocal(0,
-                this.makeConditionalAllocation(<Class>parent, declaration.name)
-              ));
-            }
-          }
-
-          // check that super has been called if this is a derived class
-          if ((<Class>parent).base && !flow.is(FlowFlags.CALLS_SUPER)) {
-            this.error(
-              DiagnosticCode.Constructors_for_derived_classes_must_contain_a_super_call,
-              instance.prototype.declaration.range
-            );
-          }
-
-        // make sure all branches return
-        } else if (returnType != Type.void && !flow.is(FlowFlags.RETURNS)) {
-          this.error(
-            DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
-            declaration.signature.returnType.range
-          );
-        }
-        stmt = !stmts.length
-          ? module.createNop()
-          : stmts.length == 1
-            ? stmts[0]
-            : module.createBlock(null, stmts, returnType.toNativeType());
-      }
-      this.currentFunction = previousFunction;
-
-      // create the function
-      ref = module.addFunction(
-        instance.internalName,
-        typeRef,
-        typesToNativeTypes(instance.additionalLocals),
-        stmt
-      );
-
-      // concrete functions cannot have an annotated external name
+      // cannot have an annotated external name
       if (instance.hasDecorator(DecoratorFlags.EXTERNAL)) {
         let decorator = assert(findDecorator(DecoratorKind.EXTERNAL, declaration.decorators));
         this.error(
@@ -1152,12 +1080,97 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
+      // compile body in this function's context
+      let previousFunction = this.currentFunction;
+      this.currentFunction = instance;
+      let flow = instance.flow;
+      let returnType = instance.signature.returnType;
+      let stmts = this.compileFunctionBody(instance);
+      flow.finalize();
+
+      // make the main function call `start` implicitly
+      if (instance.is(CommonFlags.MAIN)) {
+        module.addGlobal("~started", NativeType.I32, true, module.createI32(0));
+        stmts.unshift(
+          module.createIf(
+            module.createUnary(
+              UnaryOp.EqzI32,
+              module.createGetGlobal("~started", NativeType.I32)
+            ),
+            module.createBlock(null, [
+              module.createCall("start", null, NativeType.None),
+              module.createSetGlobal("~started", module.createI32(1))
+            ])
+          )
+        );
+      }
+
+      // make constructors return their instance pointer
+      if (instance.is(CommonFlags.CONSTRUCTOR)) {
+        let nativeSizeType = this.options.nativeSizeType;
+        assert(instance.is(CommonFlags.INSTANCE));
+        let parent = assert(instance.parent);
+        assert(parent.kind == ElementKind.CLASS);
+
+        // implicitly return `this` if the constructor doesn't always return on its own
+        if (!flow.is(FlowFlags.RETURNS)) {
+
+          // if all branches are guaranteed to allocate, skip the final conditional allocation
+          if (flow.is(FlowFlags.ALLOCATES)) {
+            stmts.push(module.createGetLocal(0, nativeSizeType));
+
+          // if not all branches are guaranteed to allocate, also append a conditional allocation
+          } else {
+            stmts.push(module.createTeeLocal(0,
+              this.makeConditionalAllocation(<Class>parent, declaration.name)
+            ));
+          }
+        }
+
+        // check that super has been called if this is a derived class
+        if ((<Class>parent).base && !flow.is(FlowFlags.CALLS_SUPER)) {
+          this.error(
+            DiagnosticCode.Constructors_for_derived_classes_must_contain_a_super_call,
+            instance.prototype.declaration.range
+          );
+        }
+
+      // if this is a normal function, make sure that all branches return
+      } else if (returnType != Type.void && !flow.is(FlowFlags.RETURNS)) {
+        this.error(
+          DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
+          declaration.signature.returnType.range
+        );
+      }
+
+      this.currentFunction = previousFunction;
+
+      // create the function
+      funcRef = module.addFunction(
+        instance.internalName,
+        typeRef,
+        typesToNativeTypes(instance.additionalLocals),
+        stmts.length
+          ? stmts.length == 1
+            ? stmts[0]
+            : module.createBlock(null, stmts, returnType.toNativeType())
+          : module.createNop()
+      );
+
+    // imported function
     } else {
+      if (!instance.is(CommonFlags.AMBIENT)) {
+        this.error(
+          DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
+          declaration.name.range
+        );
+      }
+
       instance.set(CommonFlags.MODULE_IMPORT);
       mangleImportName(instance, declaration); // TODO: check for duplicates
 
-      // create the function import
-      ref = module.addFunctionImport(
+      // create the import
+      funcRef = module.addFunctionImport(
         instance.internalName,
         mangleImportName_moduleName,
         mangleImportName_elementName,
@@ -1165,7 +1178,7 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
 
-    instance.finalize(module, ref);
+    instance.finalize(module, funcRef);
     return true;
   }
 
