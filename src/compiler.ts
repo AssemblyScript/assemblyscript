@@ -3,7 +3,7 @@
  * @module compiler
  *//***/
 
- import {
+import {
   compileCall as compileBuiltinCall,
   compileAbort,
   compileIterateRoots,
