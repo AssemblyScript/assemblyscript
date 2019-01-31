@@ -5,7 +5,6 @@
 
 import {
   compileCall as compileBuiltinCall,
-  compileAllocate,
   compileAbort,
   compileIterateRoots,
   ensureGCHook
@@ -1108,7 +1107,7 @@ export class Compiler extends DiagnosticEmitter {
             // if not all branches are guaranteed to allocate, also append a conditional allocation
             } else {
               stmts.push(module.createTeeLocal(0,
-                this.makeConditionalAllocate(<Class>parent, declaration.name)
+                this.makeConditionalAllocation(<Class>parent, declaration.name)
               ));
             }
           }
@@ -6057,7 +6056,7 @@ export class Compiler extends DiagnosticEmitter {
               // must be conditional because `this` could have been provided by a derived class
               this.currentType = thisType;
               return module.createTeeLocal(0,
-                this.makeConditionalAllocate(<Class>parent, expression)
+                this.makeConditionalAllocation(<Class>parent, expression)
               );
             }
           }
@@ -6628,7 +6627,7 @@ export class Compiler extends DiagnosticEmitter {
     // allocate a new instance first and assign 'this' to the temp. local
     exprs[0] = module.createSetLocal(
       tempLocal.index,
-      compileAllocate(this, classReference, expression)
+      this.makeBareAllocation(classReference, expression)
     );
 
     // once all field values have been set, return 'this'
@@ -6705,7 +6704,7 @@ export class Compiler extends DiagnosticEmitter {
           reportNode.range, "0", argumentExpressions.length.toString(10)
         );
       }
-      expr = this.makeAllocate(classInstance, reportNode);
+      expr = this.makeAllocation(classInstance, reportNode);
     }
 
     this.currentType = classInstance.type;
@@ -6726,7 +6725,7 @@ export class Compiler extends DiagnosticEmitter {
     var expr: ExpressionRef;
     if (constructorInstance) {
       expr = this.compileCallDirect(constructorInstance, argumentExpressions, reportNode,
-        this.makeAllocate(classInstance, reportNode)
+        this.makeAllocation(classInstance, reportNode)
       );
 
     // otherwise simply allocate a new instance and initialize its fields
@@ -6737,7 +6736,7 @@ export class Compiler extends DiagnosticEmitter {
           reportNode.range, "0", argumentExpressions.length.toString(10)
         );
       }
-      expr = this.makeAllocate(classInstance, reportNode);
+      expr = this.makeAllocation(classInstance, reportNode);
     }
     this.currentType = classInstance.type;
     return expr;
@@ -7679,8 +7678,56 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
+  /** Makes a bare allocation suitable to hold the data of an instance of the given class. */
+  makeBareAllocation(classInstance: Class, reportNode: Node): ExpressionRef {
+    var program = this.program;
+    assert(classInstance.program == program);
+    var module = this.module;
+    var options = this.options;
+
+    // __gc_allocate(size, markFn)
+    if (program.hasGC && classInstance.type.isManaged(program)) {
+      let allocateInstance = assert(program.gcAllocateInstance);
+      if (!this.compileFunction(allocateInstance)) return module.createUnreachable();
+      this.currentType = classInstance.type;
+      return module.createCall(
+        allocateInstance.internalName, [
+          options.isWasm64
+            ? module.createI64(classInstance.currentMemoryOffset)
+            : module.createI32(classInstance.currentMemoryOffset),
+          module.createI32(
+            ensureGCHook(this, classInstance)
+          )
+        ],
+        options.nativeSizeType
+      );
+
+    // memory.allocate(size)
+    } else {
+      let allocateInstance = program.memoryAllocateInstance;
+      if (!allocateInstance) {
+        program.error(
+          DiagnosticCode.Cannot_find_name_0,
+          reportNode.range, "memory.allocate"
+        );
+        return module.createUnreachable();
+      }
+      if (!this.compileFunction(allocateInstance)) return module.createUnreachable();
+
+      this.currentType = classInstance.type;
+      return module.createCall(
+        allocateInstance.internalName, [
+          options.isWasm64
+            ? module.createI64(classInstance.currentMemoryOffset)
+            : module.createI32(classInstance.currentMemoryOffset)
+        ],
+        options.nativeSizeType
+      );
+    }
+  }
+
   /** Makes an allocation expression for an instance of the specified class. */
-  makeAllocate(classInstance: Class, reportNode: Node): ExpressionRef {
+  makeAllocation(classInstance: Class, reportNode: Node): ExpressionRef {
     var module = this.module;
     var currentFunction = this.currentFunction;
     var nativeSizeType = this.options.nativeSizeType;
@@ -7690,7 +7737,7 @@ export class Compiler extends DiagnosticEmitter {
     var initializers = new Array<ExpressionRef>();
     initializers.push(
       module.createSetLocal(tempLocal.index,
-        compileAllocate(this, classInstance, reportNode)
+        this.makeBareAllocation(classInstance, reportNode)
       )
     );
 
@@ -7742,7 +7789,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Makes a conditional allocation expression inside of the constructor of the specified class. */
-  makeConditionalAllocate(classInstance: Class, reportNode: Node): ExpressionRef {
+  makeConditionalAllocation(classInstance: Class, reportNode: Node): ExpressionRef {
     // requires that `this` is the first local
     var module = this.module;
     var nativeSizeType = this.options.nativeSizeType;
@@ -7757,7 +7804,7 @@ export class Compiler extends DiagnosticEmitter {
         : module.createGetLocal(0, NativeType.I32),
       module.createGetLocal(0, nativeSizeType),
       module.createTeeLocal(0,
-        this.makeAllocate(classInstance, reportNode)
+        this.makeAllocation(classInstance, reportNode)
       )
     );
   }
