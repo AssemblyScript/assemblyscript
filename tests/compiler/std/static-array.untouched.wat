@@ -2015,7 +2015,7 @@
    i32.add
    i32.const 2
    i32.shl
-   i32.const 0
+   i32.const 1
    call $~lib/internal/arraybuffer/reallocateUnsafe
    set_local $3
    get_local $0
@@ -2099,7 +2099,7 @@
    i32.add
    i32.const 3
    i32.shl
-   i32.const 0
+   i32.const 1
    call $~lib/internal/arraybuffer/reallocateUnsafe
    set_local $3
    get_local $0
@@ -2183,7 +2183,7 @@
    i32.add
    i32.const 2
    i32.shl
-   i32.const 0
+   i32.const 1
    call $~lib/internal/arraybuffer/reallocateUnsafe
    set_local $3
    get_local $0
@@ -2267,7 +2267,7 @@
    i32.add
    i32.const 3
    i32.shl
-   i32.const 0
+   i32.const 1
    call $~lib/internal/arraybuffer/reallocateUnsafe
    set_local $3
    get_local $0

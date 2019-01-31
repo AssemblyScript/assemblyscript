@@ -264,7 +264,7 @@ export function FILTER<TArray extends TypedArray<T>, T>(
     if (callbackfn(value, i, array)) {
       backByteLength = backingBuffer.byteLength;
       if (backByteLength < (count + 1) << alignof<T>()) {
-        backingBuffer = reallocateUnsafe(backingBuffer, backByteLength << 1);
+        backingBuffer = reallocateUnsafe(backingBuffer, backByteLength << 1, false);
       }
       STORE<T, NATIVE<T>>(backingBuffer, count, <NATIVE<T>>value);
       ++count;

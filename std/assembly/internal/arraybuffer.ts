@@ -34,7 +34,7 @@ export function allocateUnsafe(byteLength: i32): ArrayBuffer {
   return changetype<ArrayBuffer>(buffer);
 }
 
-export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32, zeroFill: bool = false): ArrayBuffer {
+export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32, zeroFill: bool = true): ArrayBuffer {
   var oldByteLength = buffer.byteLength;
   if (newByteLength > oldByteLength) {
     assert(newByteLength <= MAX_BLENGTH);
