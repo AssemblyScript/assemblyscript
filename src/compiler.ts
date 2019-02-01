@@ -6768,6 +6768,8 @@ export class Compiler extends DiagnosticEmitter {
     );
     ctorInstance.set(CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR | CommonFlags.COMPILED);
     classInstance.constructorInstance = ctorInstance;
+    var previousFunction = this.currentFunction;
+    this.currentFunction = ctorInstance;
 
     // generate body
     var module = this.module;
@@ -6799,6 +6801,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0; i < numParameters; ++i) {
         operands[i + 1] = module.createGetLocal(i + 1, parameterTypes[i].toNativeType());
       }
+      // TODO: base constructor might be inlined, but makeCallDirect can't do this
       stmts.push(
         module.createSetLocal(0,
           this.makeCallDirect(assert(baseClass.constructorInstance), operands)
@@ -6818,16 +6821,19 @@ export class Compiler extends DiagnosticEmitter {
         : module.createBlock(null, stmts, nativeSizeType)
     );
     ctorInstance.finalize(module, funcRef);
+    this.currentFunction = previousFunction;
     return ctorInstance;
   }
 
   compileInstantiate(classInstance: Class, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
+    var ctor = this.ensureConstructor(classInstance, reportNode);
     var expr = this.compileCallDirect(
-      this.ensureConstructor(classInstance, reportNode),
+      ctor,
       argumentExpressions,
       reportNode,
-      this.options.usizeType.toNativeZero(this.module)
-      // TODO: inlining
+      this.options.usizeType.toNativeZero(this.module),
+      ctor.hasDecorator(DecoratorFlags.INLINE)
+      // FIXME: trying to inline a constructor that doesn't return a custom value doesn't work
     );
     this.currentType = classInstance.type;
     return expr;
@@ -7809,6 +7815,10 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes the initializers for a class's fields. */
   makeFieldInitialization(classInstance: Class, stmts: ExpressionRef[] = []): ExpressionRef[] {
+
+    // must not be used in an inline context as it makes assumptions about local indexes
+    assert(!this.currentFunction.flow.is(FlowFlags.INLINE_CONTEXT));
+
     if (classInstance.members) {
       let module = this.module;
       let nativeSizeType = this.options.nativeSizeType;
@@ -7833,6 +7843,8 @@ export class Compiler extends DiagnosticEmitter {
               field.memoryOffset
             ));
           } else {
+            // NOTE: if all fields have initializers then this way is best, but if they don't,
+            // it would be more efficient to categorically zero memory on allocation.
             let parameterIndex = (<FieldDeclaration>field.prototype.declaration).parameterIndex;
             stmts.push(module.createStore(fieldType.byteSize,
               module.createGetLocal(0, nativeSizeType),
