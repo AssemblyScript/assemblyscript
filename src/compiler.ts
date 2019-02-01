@@ -1109,8 +1109,7 @@ export class Compiler extends DiagnosticEmitter {
       if (instance.is(CommonFlags.CONSTRUCTOR)) {
         let nativeSizeType = this.options.nativeSizeType;
         assert(instance.is(CommonFlags.INSTANCE));
-        let parent = assert(instance.parent);
-        assert(parent.kind == ElementKind.CLASS);
+        let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
 
         // implicitly return `this` if the constructor doesn't always return on its own
         if (!flow.is(FlowFlags.RETURNS)) {
@@ -1128,11 +1127,11 @@ export class Compiler extends DiagnosticEmitter {
                   module.createGetLocal(0, nativeSizeType)
                 ),
                 module.createSetLocal(0,
-                  this.makeAllocation(<Class>parent)
+                  this.makeAllocation(<Class>classInstance)
                 )
               )
             );
-            this.makeFieldInitialization(<Class>parent, stmts);
+            this.makeFieldInitialization(<Class>classInstance, stmts);
           }
           stmts.push(
             module.createGetLocal(0, nativeSizeType)
@@ -1140,7 +1139,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         // check that super has been called if this is a derived class
-        if ((<Class>parent).base && !flow.is(FlowFlags.CALLS_SUPER)) {
+        if ((<Class>classInstance).base && !flow.is(FlowFlags.CALLS_SUPER)) {
           this.error(
             DiagnosticCode.Constructors_for_derived_classes_must_contain_a_super_call,
             instance.prototype.declaration.range
@@ -4699,8 +4698,7 @@ export class Compiler extends DiagnosticEmitter {
     var argumentExpressions: Expression[];
     var thisArg: ExpressionRef = 0;
     if (operatorInstance.is(CommonFlags.INSTANCE)) {
-      let parent = assert(operatorInstance.parent);
-      assert(parent.kind == ElementKind.CLASS);
+      let classInstance = assert(operatorInstance.parent); assert(classInstance.kind == ElementKind.CLASS);
       thisArg = leftExpr; // can reuse the previously evaluated leftExpr as the this value here
       argumentExpressions = [ right ];
     } else {
@@ -5521,8 +5519,7 @@ export class Compiler extends DiagnosticEmitter {
     // here, with their respective locals being blocked. There is no 'makeCallInline'.
     var body = [];
     if (thisArg) {
-      let parent = assert(instance.parent);
-      assert(parent.kind == ElementKind.CLASS);
+      let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
       let thisType = assert(instance.signature.thisType);
       let classType = thisType.classReference;
       let superType = classType
@@ -6093,8 +6090,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         if (currentFunction.is(CommonFlags.INSTANCE)) {
           let thisLocal = assert(flow.getScopedLocal("this"));
-          let parent = assert(currentFunction.parent);
-          assert(parent.kind == ElementKind.CLASS);
+          let classInstance = assert(currentFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
           let nativeSizeType = this.options.nativeSizeType;
           if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
             if (!flow.is(FlowFlags.ALLOCATES)) {
@@ -6111,11 +6107,11 @@ export class Compiler extends DiagnosticEmitter {
                     module.createGetLocal(thisLocal.index, nativeSizeType)
                   ),
                   module.createSetLocal(thisLocal.index,
-                    this.makeAllocation(<Class>parent)
+                    this.makeAllocation(<Class>classInstance)
                   )
                 )
               ];
-              this.makeFieldInitialization(<Class>parent, stmts);
+              this.makeFieldInitialization(<Class>classInstance, stmts);
               stmts.push(
                 module.createGetLocal(thisLocal.index, nativeSizeType)
               );
@@ -6158,11 +6154,10 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         if (currentFunction.is(CommonFlags.INSTANCE)) {
-          let parent = assert(currentFunction.parent);
-          assert(parent.kind == ElementKind.CLASS);
-          let base = (<Class>parent).base;
-          if (base) {
-            let superType = base.type;
+          let classInstance = assert(currentFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
+          let baseClassInstance = (<Class>classInstance).base;
+          if (baseClassInstance) {
+            let superType = baseClassInstance.type;
             this.currentType = superType;
             return module.createGetLocal(0, superType.toNativeType());
           }
@@ -6774,10 +6769,18 @@ export class Compiler extends DiagnosticEmitter {
     ctorInstance.set(CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR | CommonFlags.COMPILED);
     classInstance.constructorInstance = ctorInstance;
 
-    // start with a conditional allocation (i.e. if called with zero as the first argument)
+    // generate body
     var module = this.module;
     var nativeSizeType = this.options.nativeSizeType;
     var stmts = new Array<ExpressionRef>();
+
+    // {
+    //   if (!this) this = <ALLOC>
+    //   IF_DERIVED: this = super(this, ...args)
+    //   this.a = X
+    //   this.b = Y
+    //   return this
+    // }
     stmts.push(
       module.createIf(
         module.createUnary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
@@ -6788,8 +6791,6 @@ export class Compiler extends DiagnosticEmitter {
         )
       )
     );
-
-    // call the super constructor if this is a derived class
     if (baseClass) {
       let parameterTypes = signature.parameterTypes;
       let numParameters = parameterTypes.length;
@@ -6804,8 +6805,6 @@ export class Compiler extends DiagnosticEmitter {
         )
       );
     }
-
-    // initialize own fields and return `this`
     this.makeFieldInitialization(classInstance, stmts);
     stmts.push(
       module.createGetLocal(0, nativeSizeType)
@@ -6876,9 +6875,8 @@ export class Compiler extends DiagnosticEmitter {
         return module.createGetGlobal((<Global>target).internalName, globalType.toNativeType());
       }
       case ElementKind.ENUMVALUE: { // enum value
-        let parent = (<EnumValue>target).parent;
-        assert(parent !== null && parent.kind == ElementKind.ENUM);
-        if (!this.compileEnum(<Enum>parent)) {
+        let theEnum = assert((<EnumValue>target).parent); assert(theEnum.kind == ElementKind.ENUM);
+        if (!this.compileEnum(<Enum>theEnum)) {
           this.currentType = Type.i32;
           return this.module.createUnreachable();
         }
@@ -6939,8 +6937,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       let inline = (instance.decoratorFlags & DecoratorFlags.INLINE) != 0;
       if (instance.is(CommonFlags.INSTANCE)) {
-        let parent = assert(instance.parent);
-        assert(parent.kind == ElementKind.CLASS);
+        let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
         let thisExpression = assert(this.resolver.currentThisExpression); //!!!
         let thisExpr = this.compileExpressionRetainType(
           thisExpression,
