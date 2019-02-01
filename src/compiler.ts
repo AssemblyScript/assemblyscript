@@ -1088,7 +1088,7 @@ export class Compiler extends DiagnosticEmitter {
       let stmts = this.compileFunctionBody(instance);
       flow.finalize();
 
-      // make the main function call `start` implicitly
+      // make the main function call `start` implicitly once
       if (instance.is(CommonFlags.MAIN)) {
         module.addGlobal("~started", NativeType.I32, true, module.createI32(0));
         stmts.unshift(
@@ -1115,16 +1115,28 @@ export class Compiler extends DiagnosticEmitter {
         // implicitly return `this` if the constructor doesn't always return on its own
         if (!flow.is(FlowFlags.RETURNS)) {
 
-          // if all branches are guaranteed to allocate, skip the final conditional allocation
-          if (flow.is(FlowFlags.ALLOCATES)) {
-            stmts.push(module.createGetLocal(0, nativeSizeType));
-
-          // if not all branches are guaranteed to allocate, also append a conditional allocation
-          } else {
-            stmts.push(module.createTeeLocal(0,
-              this.makeConditionalAllocation(<Class>parent, declaration.name)
-            ));
+          // if `this` wasn't accessed before, allocate if necessary and initialize `this`
+          if (!flow.is(FlowFlags.ALLOCATES)) {
+            // {
+            //   if (!this) this = <ALLOC>
+            //   this.a = X
+            //   this.b = Y
+            // }
+            stmts.push(
+              module.createIf(
+                module.createUnary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
+                  module.createGetLocal(0, nativeSizeType)
+                ),
+                module.createSetLocal(0,
+                  this.makeAllocation(<Class>parent)
+                )
+              )
+            );
+            this.makeFieldInitialization(<Class>parent, stmts);
           }
+          stmts.push(
+            module.createGetLocal(0, nativeSizeType)
+          );
         }
 
         // check that super has been called if this is a derived class
@@ -5262,12 +5274,33 @@ export class Compiler extends DiagnosticEmitter {
             return module.createUnreachable();
           }
 
-          let classInstance = assert(currentFunction.parent);
-          assert(classInstance.kind == ElementKind.CLASS);
-          let expr = this.compileSuperInstantiate(<Class>classInstance, expression.arguments, expression);
-          this.currentType = Type.void;
+          let classInstance = assert(currentFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
+          let baseClassInstance = assert((<Class>classInstance).base);
+          let thisLocal = assert(currentFunction.flow.getScopedLocal("this"));
+          let nativeSizeType = this.options.nativeSizeType;
 
-          // check that super() is called before allocation is performed (incl. in super arguments)
+          // {
+          //   this = super(this || <ALLOC>, ...args)
+          //   this.a = X
+          //   this.b = Y
+          // }
+          let stmts: ExpressionRef[] = [
+            module.createSetLocal(thisLocal.index,
+              this.compileCallDirect(
+                this.ensureConstructor(baseClassInstance, expression),
+                expression.arguments,
+                expression,
+                module.createIf(
+                  module.createGetLocal(thisLocal.index, nativeSizeType),
+                  module.createGetLocal(thisLocal.index, nativeSizeType),
+                  this.makeAllocation(<Class>classInstance)
+                )
+              )
+            )
+          ];
+          this.makeFieldInitialization(<Class>classInstance, stmts);
+
+          // check that super had been called before accessing allocating `this`
           let flow = currentFunction.flow;
           if (flow.isAny(
             FlowFlags.ALLOCATES |
@@ -5280,9 +5313,8 @@ export class Compiler extends DiagnosticEmitter {
             return module.createUnreachable();
           }
           flow.set(FlowFlags.ALLOCATES | FlowFlags.CALLS_SUPER);
-
-          let thisLocal = assert(this.currentFunction.flow.getScopedLocal("this"));
-          return module.createSetLocal(thisLocal.index, expr);
+          this.currentType = Type.void;
+          return module.createBlock(null, stmts);
         }
         // otherwise fall-through
       }
@@ -6053,26 +6085,46 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.THIS: {
         let flow = currentFunction.flow;
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let scopedThis = flow.getScopedLocal("this");
-          if (scopedThis) {
-            this.currentType = scopedThis.type;
-            return module.createGetLocal(scopedThis.index, scopedThis.type.toNativeType());
+          let thisLocal = assert(flow.getScopedLocal("this"));
+          if (thisLocal) {
+            this.currentType = thisLocal.type;
+            return module.createGetLocal(thisLocal.index, thisLocal.type.toNativeType());
           }
         }
         if (currentFunction.is(CommonFlags.INSTANCE)) {
+          let thisLocal = assert(flow.getScopedLocal("this"));
           let parent = assert(currentFunction.parent);
           assert(parent.kind == ElementKind.CLASS);
-          let thisType = assert(currentFunction.signature.thisType);
+          let nativeSizeType = this.options.nativeSizeType;
           if (currentFunction.is(CommonFlags.CONSTRUCTOR)) {
             if (!flow.is(FlowFlags.ALLOCATES)) {
               flow.set(FlowFlags.ALLOCATES);
-              // must be conditional because `this` could have been provided by a derived class
-              this.currentType = thisType;
-              return module.createTeeLocal(0,
-                this.makeConditionalAllocation(<Class>parent, expression)
+              // {
+              //   if (!this) this = <ALLOC>
+              //   this.a = X
+              //   this.b = Y
+              //   return this
+              // }
+              let stmts: ExpressionRef[] = [
+                module.createIf(
+                  module.createUnary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
+                    module.createGetLocal(thisLocal.index, nativeSizeType)
+                  ),
+                  module.createSetLocal(thisLocal.index,
+                    this.makeAllocation(<Class>parent)
+                  )
+                )
+              ];
+              this.makeFieldInitialization(<Class>parent, stmts);
+              stmts.push(
+                module.createGetLocal(thisLocal.index, nativeSizeType)
               );
+              this.currentType = thisLocal.type;
+              return module.createBlock(null, stmts, nativeSizeType);
             }
           }
+          // if not a constructor, `this` type can differ
+          let thisType = assert(currentFunction.signature.thisType);
           this.currentType = thisType;
           return module.createGetLocal(0, thisType.toNativeType());
         }
@@ -6640,7 +6692,7 @@ export class Compiler extends DiagnosticEmitter {
     // allocate a new instance first and assign 'this' to the temp. local
     exprs[0] = module.createSetLocal(
       tempLocal.index,
-      this.makeBareAllocation(classReference, expression)
+      this.makeAllocation(classReference)
     );
 
     // once all field values have been set, return 'this'
@@ -6693,64 +6745,91 @@ export class Compiler extends DiagnosticEmitter {
     return this.compileInstantiate(classInstance, expression.arguments, expression);
   }
 
-  compileInstantiate(classInstance: Class, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
-    // traverse to the top-most visible constructor
-    var currentClassInstance: Class | null = classInstance;
-    var constructorInstance: Function | null = null;
-    do {
-      constructorInstance = currentClassInstance.constructorInstance;
-      if (constructorInstance) break; // TODO: check visibility
-    } while (currentClassInstance = currentClassInstance.base);
-
-    // if a constructor is present, call it with a zero `this`
-    var expr: ExpressionRef;
-    if (constructorInstance) {
-      expr = this.compileCallDirect(constructorInstance, argumentExpressions, reportNode,
-        this.options.usizeType.toNativeZero(this.module)
-      );
-
-    // otherwise simply allocate a new instance and initialize its fields
-    } else {
-      if (argumentExpressions.length) {
-        this.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "0", argumentExpressions.length.toString(10)
-        );
-      }
-      expr = this.makeAllocation(classInstance, reportNode);
+  /** Gets the compiled constructor of the specified class or generates one if none is present. */
+  ensureConstructor(classInstance: Class, reportNode: Node): Function {
+    var ctorInstance = classInstance.constructorInstance;
+    if (ctorInstance) {
+      this.compileFunction(ctorInstance);
+      return ctorInstance;
     }
 
-    this.currentType = classInstance.type;
-    return expr;
+    // use the signature of the parent constructor if a derived class
+    var baseClass = classInstance.base;
+    var signature = baseClass
+      ? this.ensureConstructor(baseClass, reportNode).signature
+      : new Signature(null, classInstance.type, classInstance.type);
+
+    var internalName = classInstance.internalName + INSTANCE_DELIMITER + "constructor";
+
+    var nativeDummy = assert(this.program.elementsLookup.get("NATIVE_CODE"));
+    assert(nativeDummy.kind == ElementKind.FUNCTION_PROTOTYPE);
+
+    ctorInstance = new Function(
+      <FunctionPrototype>nativeDummy,
+      internalName,
+      signature,
+      classInstance,
+      null
+    );
+    ctorInstance.set(CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR | CommonFlags.COMPILED);
+    classInstance.constructorInstance = ctorInstance;
+
+    // start with a conditional allocation (i.e. if called with zero as the first argument)
+    var module = this.module;
+    var nativeSizeType = this.options.nativeSizeType;
+    var stmts = new Array<ExpressionRef>();
+    stmts.push(
+      module.createIf(
+        module.createUnary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
+          module.createGetLocal(0, nativeSizeType)
+        ),
+        module.createSetLocal(0,
+          this.makeAllocation(classInstance)
+        )
+      )
+    );
+
+    // call the super constructor if this is a derived class
+    if (baseClass) {
+      let parameterTypes = signature.parameterTypes;
+      let numParameters = parameterTypes.length;
+      let operands = new Array<ExpressionRef>(1 + numParameters);
+      operands[0] = module.createGetLocal(0, nativeSizeType);
+      for (let i = 0; i < numParameters; ++i) {
+        operands[i + 1] = module.createGetLocal(i + 1, parameterTypes[i].toNativeType());
+      }
+      stmts.push(
+        module.createSetLocal(0,
+          this.makeCallDirect(assert(baseClass.constructorInstance), operands)
+        )
+      );
+    }
+
+    // initialize own fields and return `this`
+    this.makeFieldInitialization(classInstance, stmts);
+    stmts.push(
+      module.createGetLocal(0, nativeSizeType)
+    );
+
+    // make the function
+    var typeRef = this.ensureFunctionType(signature.parameterTypes, signature.returnType, signature.thisType);
+    var funcRef = module.addFunction(ctorInstance.internalName, typeRef, null,
+      stmts.length == 1
+        ? stmts[0]
+        : module.createBlock(null, stmts, nativeSizeType)
+    );
+    ctorInstance.finalize(module, funcRef);
+    return ctorInstance;
   }
 
-  compileSuperInstantiate(classInstance: Class, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
-    // traverse to the top-most visible constructor (except the current one)
-    var currentClassInstance: Class | null = classInstance.base;
-    var constructorInstance: Function | null = null;
-    while (currentClassInstance) {
-      constructorInstance = currentClassInstance.constructorInstance;
-      if (constructorInstance) break; // TODO: check visibility
-      currentClassInstance = currentClassInstance.base;
-    }
-
-    // if a constructor is present, allocate the necessary memory for `this` and call it
-    var expr: ExpressionRef;
-    if (constructorInstance) {
-      expr = this.compileCallDirect(constructorInstance, argumentExpressions, reportNode,
-        this.makeAllocation(classInstance, reportNode)
-      );
-
-    // otherwise simply allocate a new instance and initialize its fields
-    } else {
-      if (argumentExpressions.length) {
-        this.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "0", argumentExpressions.length.toString(10)
-        );
-      }
-      expr = this.makeAllocation(classInstance, reportNode);
-    }
+  compileInstantiate(classInstance: Class, argumentExpressions: Expression[], reportNode: Node): ExpressionRef {
+    var expr = this.compileCallDirect(
+      this.ensureConstructor(classInstance, reportNode),
+      argumentExpressions,
+      reportNode,
+      this.options.usizeType.toNativeZero(this.module)
+      // TODO: inlining
+    );
     this.currentType = classInstance.type;
     return expr;
   }
@@ -7691,8 +7770,8 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  /** Makes a bare allocation suitable to hold the data of an instance of the given class. */
-  makeBareAllocation(classInstance: Class, reportNode: Node): ExpressionRef {
+  /** Makes an allocation suitable to hold the data of an instance of the given class. */
+  makeAllocation(classInstance: Class): ExpressionRef {
     var program = this.program;
     assert(classInstance.program == program);
     var module = this.module;
@@ -7718,15 +7797,7 @@ export class Compiler extends DiagnosticEmitter {
     // memory.allocate(size)
     } else {
       let allocateInstance = program.memoryAllocateInstance;
-      if (!allocateInstance) {
-        program.error(
-          DiagnosticCode.Cannot_find_name_0,
-          reportNode.range, "memory.allocate"
-        );
-        return module.createUnreachable();
-      }
-      if (!this.compileFunction(allocateInstance)) return module.createUnreachable();
-
+      if (!allocateInstance || !this.compileFunction(allocateInstance)) return module.createUnreachable();
       this.currentType = classInstance.type;
       return module.createCall(
         allocateInstance.internalName, [
@@ -7739,24 +7810,13 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  /** Makes an allocation expression for an instance of the specified class. */
-  makeAllocation(classInstance: Class, reportNode: Node): ExpressionRef {
-    var module = this.module;
-    var currentFunction = this.currentFunction;
-    var nativeSizeType = this.options.nativeSizeType;
-
-    // allocate the necessary memory and tee the pointer to a temp. local for reuse
-    var tempLocal = currentFunction.getTempLocal(classInstance.type, false);
-    var initializers = new Array<ExpressionRef>();
-    initializers.push(
-      module.createSetLocal(tempLocal.index,
-        this.makeBareAllocation(classInstance, reportNode)
-      )
-    );
-
-    // apply field initializers
+  /** Makes the initializers for a class's fields. */
+  makeFieldInitialization(classInstance: Class, stmts: ExpressionRef[] = []): ExpressionRef[] {
     if (classInstance.members) {
+      let module = this.module;
+      let nativeSizeType = this.options.nativeSizeType;
       for (let member of classInstance.members.values()) {
+        if (member.parent != classInstance) continue;
         if (member.kind == ElementKind.FIELD) {
           let field = <Field>member;
           let fieldType = field.type;
@@ -7764,8 +7824,8 @@ export class Compiler extends DiagnosticEmitter {
           let fieldDeclaration = field.prototype.declaration;
           assert(!field.isAny(CommonFlags.CONST));
           if (fieldDeclaration.initializer) { // use initializer
-            initializers.push(module.createStore(fieldType.byteSize,
-              module.createGetLocal(tempLocal.index, nativeSizeType),
+            stmts.push(module.createStore(fieldType.byteSize,
+              module.createGetLocal(0, nativeSizeType),
               this.compileExpression( // reports
                 fieldDeclaration.initializer,
                 fieldType,
@@ -7775,11 +7835,10 @@ export class Compiler extends DiagnosticEmitter {
               nativeFieldType,
               field.memoryOffset
             ));
-          } else { // initialize with zero
-            // TODO: might be unnecessary if the ctor initializes the field
+          } else {
             let parameterIndex = (<FieldDeclaration>field.prototype.declaration).parameterIndex;
-            initializers.push(module.createStore(fieldType.byteSize,
-              module.createGetLocal(tempLocal.index, nativeSizeType),
+            stmts.push(module.createStore(fieldType.byteSize,
+              module.createGetLocal(0, nativeSizeType),
               parameterIndex >= 0 // initialized via parameter
                 ? module.createGetLocal(1 + parameterIndex, nativeFieldType)
                 : fieldType.toNativeZero(module),
@@ -7790,36 +7849,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
     }
-
-    // return `this`
-    initializers.push(
-      module.createGetLocal(tempLocal.index, nativeSizeType)
-    );
-
-    currentFunction.freeTempLocal(tempLocal);
-    this.currentType = classInstance.type;
-    return module.createBlock(null, initializers, nativeSizeType);
-  }
-
-  /** Makes a conditional allocation expression inside of the constructor of the specified class. */
-  makeConditionalAllocation(classInstance: Class, reportNode: Node): ExpressionRef {
-    // requires that `this` is the first local
-    var module = this.module;
-    var nativeSizeType = this.options.nativeSizeType;
-    this.currentType = classInstance.type;
-    return module.createIf(
-      nativeSizeType == NativeType.I64
-        ? module.createBinary(
-            BinaryOp.NeI64,
-            module.createGetLocal(0, NativeType.I64),
-            module.createI64(0)
-          )
-        : module.createGetLocal(0, NativeType.I32),
-      module.createGetLocal(0, nativeSizeType),
-      module.createTeeLocal(0,
-        this.makeAllocation(classInstance, reportNode)
-      )
-    );
+    return stmts;
   }
 
   /** Adds the debug location of the specified expression at the specified range to the source map. */

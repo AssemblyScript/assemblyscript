@@ -489,38 +489,34 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<i8>#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 24
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-    i32.const 0
-    i32.store offset=4
-    get_local $1
-    i32.const 0
-    i32.store offset=8
-    get_local $1
-    i32.const 0
-    i32.store offset=12
-    get_local $1
-    i32.const 0
-    i32.store offset=16
-    get_local $1
-    i32.const 0
-    i32.store offset=20
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
+   i32.const 0
+   i32.store offset=12
+   get_local $0
+   i32.const 0
+   i32.store offset=16
+   get_local $0
+   i32.const 0
+   i32.store offset=20
+   get_local $0
   end
-  tee_local $0
   call $~lib/set/Set<i8>#clear
   get_local $0
  )
@@ -1226,38 +1222,34 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<u8>#constructor (; 19 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 24
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-    i32.const 0
-    i32.store offset=4
-    get_local $1
-    i32.const 0
-    i32.store offset=8
-    get_local $1
-    i32.const 0
-    i32.store offset=12
-    get_local $1
-    i32.const 0
-    i32.store offset=16
-    get_local $1
-    i32.const 0
-    i32.store offset=20
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
+   i32.const 0
+   i32.store offset=12
+   get_local $0
+   i32.const 0
+   i32.store offset=16
+   get_local $0
+   i32.const 0
+   i32.store offset=20
+   get_local $0
   end
-  tee_local $0
   call $~lib/set/Set<u8>#clear
   get_local $0
  )
@@ -1950,38 +1942,34 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<i16>#constructor (; 29 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 24
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-    i32.const 0
-    i32.store offset=4
-    get_local $1
-    i32.const 0
-    i32.store offset=8
-    get_local $1
-    i32.const 0
-    i32.store offset=12
-    get_local $1
-    i32.const 0
-    i32.store offset=16
-    get_local $1
-    i32.const 0
-    i32.store offset=20
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
+   i32.const 0
+   i32.store offset=12
+   get_local $0
+   i32.const 0
+   i32.store offset=16
+   get_local $0
+   i32.const 0
+   i32.store offset=20
+   get_local $0
   end
-  tee_local $0
   call $~lib/set/Set<i16>#clear
   get_local $0
  )
@@ -2702,38 +2690,34 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<u16>#constructor (; 40 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 24
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-    i32.const 0
-    i32.store offset=4
-    get_local $1
-    i32.const 0
-    i32.store offset=8
-    get_local $1
-    i32.const 0
-    i32.store offset=12
-    get_local $1
-    i32.const 0
-    i32.store offset=16
-    get_local $1
-    i32.const 0
-    i32.store offset=20
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
+   i32.const 0
+   i32.store offset=12
+   get_local $0
+   i32.const 0
+   i32.store offset=16
+   get_local $0
+   i32.const 0
+   i32.store offset=20
+   get_local $0
   end
-  tee_local $0
   call $~lib/set/Set<u16>#clear
   get_local $0
  )
@@ -3426,38 +3410,34 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<i32>#constructor (; 50 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 24
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-    i32.const 0
-    i32.store offset=4
-    get_local $1
-    i32.const 0
-    i32.store offset=8
-    get_local $1
-    i32.const 0
-    i32.store offset=12
-    get_local $1
-    i32.const 0
-    i32.store offset=16
-    get_local $1
-    i32.const 0
-    i32.store offset=20
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
+   i32.const 0
+   i32.store offset=12
+   get_local $0
+   i32.const 0
+   i32.store offset=16
+   get_local $0
+   i32.const 0
+   i32.store offset=20
+   get_local $0
   end
-  tee_local $0
   call $~lib/set/Set<i32>#clear
   get_local $0
  )
@@ -4186,38 +4166,34 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<u32>#constructor (; 61 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 24
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-    i32.const 0
-    i32.store offset=4
-    get_local $1
-    i32.const 0
-    i32.store offset=8
-    get_local $1
-    i32.const 0
-    i32.store offset=12
-    get_local $1
-    i32.const 0
-    i32.store offset=16
-    get_local $1
-    i32.const 0
-    i32.store offset=20
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
+   i32.const 0
+   i32.store offset=12
+   get_local $0
+   i32.const 0
+   i32.store offset=16
+   get_local $0
+   i32.const 0
+   i32.store offset=20
+   get_local $0
   end
-  tee_local $0
   call $~lib/set/Set<u32>#clear
   get_local $0
  )
@@ -4904,38 +4880,34 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<i64>#constructor (; 71 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 24
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-    i32.const 0
-    i32.store offset=4
-    get_local $1
-    i32.const 0
-    i32.store offset=8
-    get_local $1
-    i32.const 0
-    i32.store offset=12
-    get_local $1
-    i32.const 0
-    i32.store offset=16
-    get_local $1
-    i32.const 0
-    i32.store offset=20
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
+   i32.const 0
+   i32.store offset=12
+   get_local $0
+   i32.const 0
+   i32.store offset=16
+   get_local $0
+   i32.const 0
+   i32.store offset=20
+   get_local $0
   end
-  tee_local $0
   call $~lib/set/Set<i64>#clear
   get_local $0
  )
@@ -5711,38 +5683,34 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<u64>#constructor (; 82 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 24
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-    i32.const 0
-    i32.store offset=4
-    get_local $1
-    i32.const 0
-    i32.store offset=8
-    get_local $1
-    i32.const 0
-    i32.store offset=12
-    get_local $1
-    i32.const 0
-    i32.store offset=16
-    get_local $1
-    i32.const 0
-    i32.store offset=20
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
+   i32.const 0
+   i32.store offset=12
+   get_local $0
+   i32.const 0
+   i32.store offset=16
+   get_local $0
+   i32.const 0
+   i32.store offset=20
+   get_local $0
   end
-  tee_local $0
   call $~lib/set/Set<u64>#clear
   get_local $0
  )
@@ -6430,38 +6398,34 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<f32>#constructor (; 92 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 24
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-    i32.const 0
-    i32.store offset=4
-    get_local $1
-    i32.const 0
-    i32.store offset=8
-    get_local $1
-    i32.const 0
-    i32.store offset=12
-    get_local $1
-    i32.const 0
-    i32.store offset=16
-    get_local $1
-    i32.const 0
-    i32.store offset=20
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
+   i32.const 0
+   i32.store offset=12
+   get_local $0
+   i32.const 0
+   i32.store offset=16
+   get_local $0
+   i32.const 0
+   i32.store offset=20
+   get_local $0
   end
-  tee_local $0
   call $~lib/set/Set<f32>#clear
   get_local $0
  )
@@ -7152,38 +7116,34 @@
   i32.store offset=20
  )
  (func $~lib/set/Set<f64>#constructor (; 102 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 24
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-    i32.const 0
-    i32.store offset=4
-    get_local $1
-    i32.const 0
-    i32.store offset=8
-    get_local $1
-    i32.const 0
-    i32.store offset=12
-    get_local $1
-    i32.const 0
-    i32.store offset=16
-    get_local $1
-    i32.const 0
-    i32.store offset=20
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
+   i32.const 0
+   i32.store offset=12
+   get_local $0
+   i32.const 0
+   i32.store offset=16
+   get_local $0
+   i32.const 0
+   i32.store offset=20
+   get_local $0
   end
-  tee_local $0
   call $~lib/set/Set<f64>#clear
   get_local $0
  )

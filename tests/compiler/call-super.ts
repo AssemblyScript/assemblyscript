@@ -60,7 +60,26 @@ class F extends E {
 function test3(): void {
   var f = new F();
   assert(f.a == 1);
-  // assert(f.b == 2); // FIXME: uses E#constructor, not initializing fields
+  assert(f.b == 2);
 }
 
 test3();
+
+class G {
+  a: i32 = 1;
+  constructor() {
+    // no access to this
+  }
+}
+
+class H extends G {
+  b: i32 = 2;
+}
+
+function test4(): void {
+  var h = new H();
+  assert(h.a == 1);
+  assert(h.b == 2);
+}
+
+test4();

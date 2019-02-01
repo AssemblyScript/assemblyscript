@@ -2509,43 +2509,45 @@ export class Function extends Element {
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
-    if (!(prototype.is(CommonFlags.AMBIENT))) {
-      let localIndex = 0;
-      if (parent && parent.kind == ElementKind.CLASS) {
-        assert(this.is(CommonFlags.INSTANCE));
-        let local = new Local(
-          prototype.program,
-          "this",
-          localIndex++,
-          assert(signature.thisType)
-        );
-        this.localsByName.set("this", local);
-        this.localsByIndex[local.index] = local;
-        let inheritedTypeArguments = (<Class>parent).contextualTypeArguments;
-        if (inheritedTypeArguments) {
-          if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
-          for (let [inheritedName, inheritedType] of inheritedTypeArguments) {
-            if (!this.contextualTypeArguments.has(inheritedName)) {
-              this.contextualTypeArguments.set(inheritedName, inheritedType);
+    if (prototype.internalName != "NATIVE_CODE") { // e.g. generated constructor without a real prototype
+      if (!(prototype.is(CommonFlags.AMBIENT))) {
+        let localIndex = 0;
+        if (parent && parent.kind == ElementKind.CLASS) {
+          assert(this.is(CommonFlags.INSTANCE));
+          let local = new Local(
+            prototype.program,
+            "this",
+            localIndex++,
+            assert(signature.thisType)
+          );
+          this.localsByName.set("this", local);
+          this.localsByIndex[local.index] = local;
+          let inheritedTypeArguments = (<Class>parent).contextualTypeArguments;
+          if (inheritedTypeArguments) {
+            if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
+            for (let [inheritedName, inheritedType] of inheritedTypeArguments) {
+              if (!this.contextualTypeArguments.has(inheritedName)) {
+                this.contextualTypeArguments.set(inheritedName, inheritedType);
+              }
             }
           }
+        } else {
+          assert(!this.is(CommonFlags.INSTANCE)); // internal error
         }
-      } else {
-        assert(!this.is(CommonFlags.INSTANCE)); // internal error
-      }
-      let parameterTypes = signature.parameterTypes;
-      for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-        let parameterType = parameterTypes[i];
-        let parameterName = signature.getParameterName(i);
-        let local = new Local(
-          prototype.program,
-          parameterName,
-          localIndex++,
-          parameterType
-          // FIXME: declaration?
-        );
-        this.localsByName.set(parameterName, local);
-        this.localsByIndex[local.index] = local;
+        let parameterTypes = signature.parameterTypes;
+        for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+          let parameterType = parameterTypes[i];
+          let parameterName = signature.getParameterName(i);
+          let local = new Local(
+            prototype.program,
+            parameterName,
+            localIndex++,
+            parameterType
+            // FIXME: declaration?
+          );
+          this.localsByName.set(parameterName, local);
+          this.localsByIndex[local.index] = local;
+        }
       }
     }
     this.flow = Flow.create(this);

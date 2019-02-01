@@ -81,10 +81,11 @@
   if
    i32.const 4
    call $~lib/allocator/arena/__memory_allocate
-   tee_local $0
-   i32.const 1
-   i32.store
+   set_local $0
   end
+  get_local $0
+  i32.const 1
+  i32.store
   get_local $0
   i32.load
   i32.const 1
@@ -103,15 +104,11 @@
   (local $0 i32)
   i32.const 8
   call $~lib/allocator/arena/__memory_allocate
+  call $call-super/A#constructor
   tee_local $0
-  i32.const 1
-  i32.store
-  get_local $0
   i32.const 2
   i32.store offset=4
   get_local $0
-  call $call-super/A#constructor
-  tee_local $0
   i32.load
   i32.const 1
   i32.ne
@@ -165,14 +162,25 @@
    unreachable
   end
  )
- (func $call-super/D#constructor (; 5 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  i32.const 8
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
+ (func $call-super/C#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 4
+   call $~lib/allocator/arena/__memory_allocate
+   set_local $0
+  end
+  get_local $0
   i32.const 1
   i32.store
   get_local $0
+ )
+ (func $call-super/D#constructor (; 6 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  i32.const 8
+  call $~lib/allocator/arena/__memory_allocate
+  call $call-super/C#constructor
+  tee_local $0
   i32.const 2
   i32.store offset=4
   get_local $0
@@ -201,7 +209,7 @@
   end
   get_local $0
  )
- (func $call-super/test2 (; 6 ;) (type $v)
+ (func $call-super/test2 (; 7 ;) (type $v)
   (local $0 i32)
   call $call-super/D#constructor
   tee_local $0
@@ -229,11 +237,15 @@
    unreachable
   end
  )
- (func $call-super/E#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  i32.const 4
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
+ (func $call-super/E#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 4
+   call $~lib/allocator/arena/__memory_allocate
+   set_local $0
+  end
+  get_local $0
   i32.const 1
   i32.store
   get_local $0
@@ -250,14 +262,15 @@
   end
   get_local $0
  )
- (func $start (; 8 ;) (type $v)
-  i32.const 40
-  set_global $~lib/allocator/arena/startOffset
-  get_global $~lib/allocator/arena/startOffset
-  set_global $~lib/allocator/arena/offset
-  call $call-super/test1
-  call $call-super/test2
+ (func $call-super/test3 (; 9 ;) (type $v)
+  (local $0 i32)
+  i32.const 8
+  call $~lib/allocator/arena/__memory_allocate
   call $call-super/E#constructor
+  tee_local $0
+  i32.const 2
+  i32.store offset=4
+  get_local $0
   i32.load
   i32.const 1
   i32.ne
@@ -269,8 +282,63 @@
    call $~lib/env/abort
    unreachable
   end
+  get_local $0
+  i32.load offset=4
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 63
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $null (; 9 ;) (type $v)
+ (func $call-super/test4 (; 10 ;) (type $v)
+  (local $0 i32)
+  i32.const 8
+  call $~lib/allocator/arena/__memory_allocate
+  call $call-super/C#constructor
+  tee_local $0
+  i32.const 2
+  i32.store offset=4
+  get_local $0
+  i32.load
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 81
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $0
+  i32.load offset=4
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 82
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $start (; 11 ;) (type $v)
+  i32.const 40
+  set_global $~lib/allocator/arena/startOffset
+  get_global $~lib/allocator/arena/startOffset
+  set_global $~lib/allocator/arena/offset
+  call $call-super/test1
+  call $call-super/test2
+  call $call-super/test3
+  call $call-super/test4
+ )
+ (func $null (; 12 ;) (type $v)
   nop
  )
 )
