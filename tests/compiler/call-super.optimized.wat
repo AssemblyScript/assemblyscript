@@ -93,7 +93,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 6
+   i32.const 8
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -115,7 +115,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 15
+   i32.const 17
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -127,7 +127,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 16
+   i32.const 18
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -144,7 +144,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 22
+   i32.const 24
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -156,7 +156,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 23
+   i32.const 25
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -190,7 +190,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 36
+   i32.const 40
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -202,7 +202,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 37
+   i32.const 41
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -219,7 +219,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 43
+   i32.const 47
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -231,7 +231,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 44
+   i32.const 48
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -255,7 +255,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 52
+   i32.const 58
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -277,7 +277,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 62
+   i32.const 68
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -289,13 +289,13 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 63
+   i32.const 69
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $call-super/test4 (; 10 ;) (type $v)
+ (func $call-super/H#constructor (; 10 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
   call $~lib/allocator/arena/__memory_allocate
@@ -304,13 +304,18 @@
   i32.const 2
   i32.store offset=4
   get_local $0
+ )
+ (func $call-super/test4 (; 11 ;) (type $v)
+  (local $0 i32)
+  call $call-super/H#constructor
+  tee_local $0
   i32.load
   i32.const 1
   i32.ne
   if
    i32.const 0
    i32.const 8
-   i32.const 81
+   i32.const 86
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -322,13 +327,41 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 82
+   i32.const 87
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $start (; 11 ;) (type $v)
+ (func $call-super/test5 (; 12 ;) (type $v)
+  (local $0 i32)
+  call $call-super/H#constructor
+  tee_local $0
+  i32.load
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 106
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $0
+  i32.load offset=4
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 107
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $start (; 13 ;) (type $v)
   i32.const 40
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
@@ -337,8 +370,9 @@
   call $call-super/test2
   call $call-super/test3
   call $call-super/test4
+  call $call-super/test5
  )
- (func $null (; 12 ;) (type $v)
+ (func $null (; 14 ;) (type $v)
   nop
  )
 )
