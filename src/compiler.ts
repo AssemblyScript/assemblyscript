@@ -1111,8 +1111,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(instance.is(CommonFlags.INSTANCE));
         let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
 
-        // implicitly return `this` if the constructor doesn't always return on its own
-        if (!flow.is(FlowFlags.RETURNS)) {
+        if (!flow.isAny(FlowFlags.ANY_TERMINATING)) {
 
           // if `this` wasn't accessed before, allocate if necessary and initialize `this`
           if (!flow.is(FlowFlags.ALLOCATES)) {
@@ -1133,6 +1132,8 @@ export class Compiler extends DiagnosticEmitter {
             );
             this.makeFieldInitialization(<Class>classInstance, stmts);
           }
+
+          // implicitly return `this`
           stmts.push(
             module.createGetLocal(0, nativeSizeType)
           );
