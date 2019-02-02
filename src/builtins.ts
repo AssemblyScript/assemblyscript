@@ -133,12 +133,14 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
+      let arrayPrototype = compiler.program.arrayPrototype;
       return (
-        classType !== null &&
-        // classType.lookupField("buffer_") !== null &&
-        // classType.lookupField("length_") !== null &&
-        classType.lookupOverload(OperatorKind.INDEXED_GET) !== null
-        // classType.lookupOverload(OperatorKind.INDEXED_SET) !== null
+        classType !== null && (
+          classType.prototype == arrayPrototype || (
+            classType.base !== null &&
+            classType.base.prototype == arrayPrototype
+          )
+        )
       ) ? module.createI32(1) : module.createI32(0);
     }
     case "isDefined": { // isDefined(expression) -> bool
