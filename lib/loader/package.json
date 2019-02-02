@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "tsc",
+    "dist": "tsc && cp lib/index.js ../../dist/loader.js && cp lib/index.d.ts ../../dist/loader.d.ts",
     "test:build": "asc tests/assembly/index.ts -b tests/build/untouched.wasm",
     "test": "node tests"
   },
