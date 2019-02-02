@@ -430,11 +430,11 @@ declare const F64: typeof _Float;
 // User-defined diagnostic macros
 
 /** Emits a user-defined diagnostic error when encountered. */
-declare function ERROR(message?: any): void;
+declare function ERROR(message?: unknown): void;
 /** Emits a user-defined diagnostic warning when encountered. */
-declare function WARNING(message?: any): void;
+declare function WARNING(message?: unknown): void;
 /** Emits a user-defined diagnostic info when encountered. */
-declare function INFO(message?: any): void;
+declare function INFO(message?: unknown): void;
 
 // Polyfills
 
@@ -631,7 +631,7 @@ declare class Float64Array extends TypedArray<f64> {}
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {
 
-  static isArray<U>(value: any): value is Array<any>;
+  static isArray<U>(value: unknown): value is Array<unknown>;
 
   [key: number]: T;
   /** Current length of the array. */
