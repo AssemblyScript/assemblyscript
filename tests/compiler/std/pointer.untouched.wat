@@ -1760,13 +1760,21 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 f32)
-  i32.const 0
-  i32.const 8
-  call $std/pointer/Pointer<Entry>#constructor
+  block $std/pointer/Pointer<Entry>#constructor|inlined.0 (result i32)
+   i32.const 0
+   set_local $0
+   i32.const 8
+   set_local $1
+   get_local $1
+  end
   set_global $std/pointer/one
-  i32.const 0
-  i32.const 24
-  call $std/pointer/Pointer<Entry>#constructor
+  block $std/pointer/Pointer<Entry>#constructor|inlined.1 (result i32)
+   i32.const 0
+   set_local $1
+   i32.const 24
+   set_local $0
+   get_local $0
+  end
   set_global $std/pointer/two
   block $std/pointer/Pointer<Entry>#get:offset|inlined.0 (result i32)
    get_global $std/pointer/one
@@ -2108,9 +2116,13 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  i32.const 0
-  call $std/pointer/Pointer<f32>#constructor
+  block $std/pointer/Pointer<f32>#constructor|inlined.0 (result i32)
+   i32.const 0
+   set_local $0
+   i32.const 0
+   set_local $1
+   get_local $1
+  end
   set_global $std/pointer/buf
   get_global $std/pointer/buf
   i32.const 0
@@ -2150,11 +2162,11 @@
   end
   block $std/pointer/Pointer<f32>#get|inlined.0 (result f32)
    get_global $std/pointer/buf
-   set_local $0
-   i32.const 0
    set_local $1
-   get_local $0
+   i32.const 0
+   set_local $0
    get_local $1
+   get_local $0
    i32.const 4
    i32.mul
    i32.add
@@ -2173,11 +2185,11 @@
   end
   block $std/pointer/Pointer<f32>#get|inlined.1 (result f32)
    get_global $std/pointer/buf
-   set_local $1
-   i32.const 1
    set_local $0
-   get_local $1
+   i32.const 1
+   set_local $1
    get_local $0
+   get_local $1
    i32.const 4
    i32.mul
    i32.add
@@ -2222,13 +2234,13 @@
   end
   block
    get_global $std/pointer/buf
-   set_local $0
-   i32.const 2
    set_local $1
+   i32.const 2
+   set_local $0
    f32.const 1.2999999523162842
    set_local $2
-   get_local $0
    get_local $1
+   get_local $0
    i32.const 4
    i32.mul
    i32.add
@@ -2251,11 +2263,11 @@
   end
   block $std/pointer/Pointer<f32>#get|inlined.2 (result f32)
    get_global $std/pointer/buf
-   set_local $1
-   i32.const 2
    set_local $0
-   get_local $1
+   i32.const 2
+   set_local $1
    get_local $0
+   get_local $1
    i32.const 4
    i32.mul
    i32.add
@@ -2290,8 +2302,8 @@
   call $std/pointer/Pointer<f32>#set:value
   block $std/pointer/Pointer<f32>#get:value|inlined.0 (result f32)
    get_global $std/pointer/buf
-   set_local $0
-   get_local $0
+   set_local $1
+   get_local $1
    f32.load
    br $std/pointer/Pointer<f32>#get:value|inlined.0
   end

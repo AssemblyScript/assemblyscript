@@ -1,4 +1,5 @@
 (module
+ (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
  (type $ii (func (param i32) (result i32)))
  (type $iv (func (param i32)))
@@ -6,7 +7,7 @@
  (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 4 anyfunc)
- (elem (i32.const 0) $null $~lib/collector/itcm/__gc_mark $std/gc-object/Custom~gc $std/gc-object/Base~gc)
+ (elem (i32.const 0) $null $~lib/collector/itcm/__gc_mark $std/gc-object/Base~gc $std/gc-object/Custom~gc)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
@@ -302,26 +303,34 @@
    end
   end
  )
- (func $~lib/collector/itcm/__gc_allocate (; 5 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
+ (func $~lib/collector/itcm/__gc_allocate (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  get_local $0
+  i32.const 1073741808
+  i32.gt_u
+  if
+   unreachable
+  end
   call $~lib/collector/itcm/step
-  i32.const 24
+  get_local $0
+  i32.const 16
+  i32.add
   call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
-  i32.const 2
+  tee_local $2
+  get_local $1
   i32.store offset=8
-  get_local $0
+  get_local $2
   get_global $~lib/collector/itcm/white
-  get_local $0
+  get_local $2
   i32.load
   i32.const -4
   i32.and
   i32.or
   i32.store
   get_global $~lib/collector/itcm/fromSpace
-  get_local $0
+  get_local $2
   call $~lib/collector/itcm/ManagedObjectList#push
-  get_local $0
+  get_local $2
   i32.const 16
   i32.add
  )
@@ -341,7 +350,7 @@
    return
   end
   get_local $0
-  i32.const 3
+  i32.const 2
   call_indirect (type $iv)
   get_local $0
   i32.load
@@ -350,7 +359,28 @@
   i32.load offset=4
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/collector/itcm/__gc_collect (; 8 ;) (type $v)
+ (func $std/gc-object/Custom#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  i32.const 8
+  i32.const 3
+  call $~lib/collector/itcm/__gc_allocate
+  tee_local $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 2
+   call $~lib/collector/itcm/__gc_allocate
+   set_local $0
+  end
+  get_local $0
+  i32.const 0
+  i32.store
+  get_local $0
+  i32.const 0
+  i32.store offset=4
+  get_local $0
+ )
+ (func $~lib/collector/itcm/__gc_collect (; 9 ;) (type $v)
   (local $0 i32)
   block $break|0
    block $case1|0
@@ -376,7 +406,7 @@
    end
   end
  )
- (func $std/gc-object/main (; 9 ;) (type $v)
+ (func $std/gc-object/main (; 10 ;) (type $v)
   get_global $~started
   i32.eqz
   if
@@ -385,7 +415,7 @@
    set_global $~started
   end
  )
- (func $start (; 10 ;) (type $v)
+ (func $start (; 11 ;) (type $v)
   (local $0 i32)
   i32.const 8
   set_global $~lib/allocator/arena/startOffset
@@ -393,14 +423,7 @@
   set_global $~lib/allocator/arena/offset
   i32.const 0
   set_global $~lib/collector/itcm/state
-  call $~lib/collector/itcm/__gc_allocate
-  tee_local $0
-  i32.const 0
-  i32.store
-  get_local $0
-  i32.const 0
-  i32.store offset=4
-  get_local $0
+  call $std/gc-object/Custom#constructor
   set_global $std/gc-object/obj
   call $~lib/collector/itcm/__gc_collect
   get_global $std/gc-object/obj
@@ -412,7 +435,7 @@
   set_global $std/gc-object/obj
   call $~lib/collector/itcm/__gc_collect
  )
- (func $null (; 11 ;) (type $v)
+ (func $null (; 12 ;) (type $v)
   nop
  )
 )

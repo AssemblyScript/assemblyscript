@@ -477,15 +477,26 @@ export class ASTBuilder {
 
   visitAssertionExpression(node: AssertionExpression): void {
     var sb = this.sb;
-    if (node.assertionKind == AssertionKind.PREFIX) {
-      sb.push("<");
-      this.visitTypeNode(node.toType);
-      sb.push(">");
-      this.visitNode(node.expression);
-    } else {
-      this.visitNode(node.expression);
-      sb.push(" as ");
-      this.visitTypeNode(node.toType);
+    switch (node.assertionKind) {
+      case AssertionKind.PREFIX: {
+        sb.push("<");
+        this.visitTypeNode(assert(node.toType));
+        sb.push(">");
+        this.visitNode(node.expression);
+        break;
+      }
+      case AssertionKind.AS: {
+        this.visitNode(node.expression);
+        sb.push(" as ");
+        this.visitTypeNode(assert(node.toType));
+        break;
+      }
+      case AssertionKind.NONNULL: {
+        this.visitNode(node.expression);
+        sb.push("!");
+        break;
+      }
+      default: assert(false);
     }
   }
 

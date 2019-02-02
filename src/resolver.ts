@@ -48,7 +48,8 @@ import {
   Expression,
   IntegerLiteralExpression,
   UnaryPrefixExpression,
-  UnaryPostfixExpression
+  UnaryPostfixExpression,
+  AssertionKind
 } from "./ast";
 
 import {
@@ -195,6 +196,14 @@ export class Resolver extends DiagnosticEmitter {
         (type = typesLookup.get(localName)) ||
         (type = typesLookup.get(globalName))
       ) {
+        if (!type.is(TypeFlags.REFERENCE) && node.isNullable) {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Basic_type_0_cannot_be_nullable,
+              node.range, type.toString()
+            );
+          }
+        }
         return type;
       }
     }
@@ -685,17 +694,29 @@ export class Resolver extends DiagnosticEmitter {
     }
     switch (expression.kind) {
       case NodeKind.ASSERTION: {
+        if ((<AssertionExpression>expression).assertionKind == AssertionKind.NONNULL) {
+          return this.resolveExpression(
+            (<AssertionExpression>expression).expression,
+            contextualFunction,
+            contextualType,
+            reportMode
+          );
+        }
         let type = this.resolveType(
-          (<AssertionExpression>expression).toType,
+          assert((<AssertionExpression>expression).toType),
           contextualFunction.flow.contextualTypeArguments,
           reportMode
         );
         if (!type) return null;
-        let classType = type.classReference;
-        if (!classType) return null;
+        let element: Element | null = type.classReference;
+        if (!element) {
+          let signature = type.signatureReference;
+          if (!signature) return null;
+          element = signature.asFunctionTarget(this.program);
+        }
         this.currentThisExpression = null;
         this.currentElementExpression = null;
-        return classType;
+        return element;
       }
       case NodeKind.UNARYPREFIX: {
         // TODO: overloads
@@ -885,11 +906,7 @@ export class Resolver extends DiagnosticEmitter {
           } else {
             let signature = returnType.signatureReference;
             if (signature) {
-              let functionTarget = signature.cachedFunctionTarget;
-              if (!functionTarget) {
-                functionTarget = new FunctionTarget(this.program, signature);
-                signature.cachedFunctionTarget = functionTarget;
-              }
+              let functionTarget = signature.asFunctionTarget(this.program);
               // reuse resolvedThisExpression (might be property access)
               // reuse resolvedElementExpression (might be element access)
               return functionTarget;
@@ -1225,8 +1242,16 @@ export class Resolver extends DiagnosticEmitter {
 
           // Lay out fields in advance
           case ElementKind.FIELD_PROTOTYPE: {
-            if (!instance.members) instance.members = new Map();
             let fieldDeclaration = (<FieldPrototype>member).declaration;
+            if (!instance.members) instance.members = new Map();
+            else if (instance.members.has(member.simpleName)) {
+              this.error(
+                DiagnosticCode.Duplicate_identifier_0,
+                fieldDeclaration.name.range,
+                member.simpleName
+              );
+              break;
+            }
             let fieldType: Type | null = null;
             // TODO: handle duplicate non-private fields
             if (!fieldDeclaration.type) {
