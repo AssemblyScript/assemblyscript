@@ -77,7 +77,7 @@ declare const NaN: f32 | f64;
 /** Positive infinity as a 32-bit or 64-bit float depending on context. */
 declare const Infinity: f32 | f64;
 /** Changes the type of any value of `usize` kind to another one of `usize` kind. Useful for casting class instances to their pointer values and vice-versa. Beware that this is unsafe.*/
-declare function changetype<T>(value: any): T;
+declare function changetype<T>(value: unknown): T;
 /** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
 declare function unchecked<T>(value: T): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
@@ -85,19 +85,19 @@ declare function isNaN<T = f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
 declare function isFinite<T = f32 | f64>(value: T): bool;
 /** Tests if the specified value is a valid integer. Can't distinguish an integer from an integral float. */
-declare function isInteger(value: any): value is number;
+declare function isInteger(value: unknown): value is number;
 /** Tests if the specified value is a valid float. Can't distinguish a float from an integer. */
-declare function isFloat(value: any): value is number;
+declare function isFloat(value: unknown): value is number;
 /** Tests if the specified value is of a reference type. */
-declare function isReference(value: any): value is object | string;
+declare function isReference(value: unknown): value is object | string;
 /** Tests if the specified value can be used as a string. */
-declare function isString(value: any): value is string | String;
+declare function isString(value: unknown): value is string | String;
 /** Tests if the specified value can be used as an array. */
-declare function isArray(value: any): value is Array<any>;
+declare function isArray(value: unknown): value is Array<unknown>;
 /** Tests if the specified expression resolves to a defined element. */
-declare function isDefined(expression: any): bool;
+declare function isDefined(expression: unknown): bool;
 /** Tests if the specified expression evaluates to a constant value. */
-declare function isConstant(expression: any): bool;
+declare function isConstant(expression: unknown): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the value. */
 declare function assert<T>(isTrueish: T | null, message?: string): T;
 /** Parses an integer string to a 64-bit float. */
