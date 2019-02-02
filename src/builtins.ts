@@ -135,10 +135,10 @@ export function compileCall(
       let classType = type.classReference;
       return (
         classType !== null &&
-        classType.lookupField("buffer_") !== null &&
-        classType.lookupField("length_") !== null &&
-        classType.lookupOverload(OperatorKind.INDEXED_GET) !== null &&
-        classType.lookupOverload(OperatorKind.INDEXED_SET) !== null
+        // classType.lookupField("buffer_") !== null &&
+        // classType.lookupField("length_") !== null &&
+        classType.lookupOverload(OperatorKind.INDEXED_GET) !== null
+        // classType.lookupOverload(OperatorKind.INDEXED_SET) !== null
       ) ? module.createI32(1) : module.createI32(0);
     }
     case "isDefined": { // isDefined(expression) -> bool
