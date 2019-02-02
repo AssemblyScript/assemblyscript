@@ -493,25 +493,22 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 8
     call $~lib/memory/memory.allocate
-    set_local $4
-    get_local $4
-    i32.const 0
-    i32.store
-    get_local $4
-    i32.const 0
-    i32.store offset=4
-    get_local $4
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
   end
-  tee_local $0
   get_local $3
   i32.store
   get_local $0
@@ -570,25 +567,22 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 8
     call $~lib/memory/memory.allocate
-    set_local $4
-    get_local $4
-    i32.const 0
-    i32.store
-    get_local $4
-    i32.const 0
-    i32.store offset=4
-    get_local $4
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
   end
-  tee_local $0
   get_local $3
   i32.store
   get_local $0
@@ -624,7 +618,17 @@
   get_local $2
   i32.store offset=8
  )
- (func $~lib/array/Array<Ref>#constructor (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array-literal/Ref#constructor (; 12 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   call $~lib/memory/memory.allocate
+   set_local $0
+  end
+  get_local $0
+ )
+ (func $~lib/array/Array<Ref>#constructor (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -647,25 +651,22 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 8
     call $~lib/memory/memory.allocate
-    set_local $4
-    get_local $4
-    i32.const 0
-    i32.store
-    get_local $4
-    i32.const 0
-    i32.store offset=4
-    get_local $4
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
   end
-  tee_local $0
   get_local $3
   i32.store
   get_local $0
@@ -683,7 +684,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/array/Array<Ref>#__unchecked_set (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref>#__unchecked_set (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -701,23 +702,17 @@
   get_local $2
   i32.store offset=8
  )
- (func $std/array-literal/RefWithCtor#constructor (; 14 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $std/array-literal/RefWithCtor#constructor (; 15 ;) (type $ii) (param $0 i32) (result i32)
   get_local $0
-  if (result i32)
-   get_local $0
-  else   
-   block (result i32)
-    i32.const 0
-    call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-   end
-   tee_local $0
+  i32.eqz
+  if
+   i32.const 0
+   call $~lib/memory/memory.allocate
+   set_local $0
   end
-  tee_local $0
+  get_local $0
  )
- (func $~lib/array/Array<RefWithCtor>#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<RefWithCtor>#constructor (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -740,25 +735,22 @@
   get_local $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   set_local $3
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 8
     call $~lib/memory/memory.allocate
-    set_local $4
-    get_local $4
-    i32.const 0
-    i32.store
-    get_local $4
-    i32.const 0
-    i32.store offset=4
-    get_local $4
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
   end
-  tee_local $0
   get_local $3
   i32.store
   get_local $0
@@ -776,7 +768,7 @@
   call $~lib/internal/memory/memset
   get_local $0
  )
- (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 16 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 17 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   get_local $0
@@ -794,7 +786,7 @@
   get_local $2
   i32.store offset=8
  )
- (func $start (; 17 ;) (type $v)
+ (func $start (; 18 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1160,30 +1152,18 @@
    set_local $3
    get_local $3
    i32.const 0
-   block (result i32)
-    i32.const 0
-    call $~lib/memory/memory.allocate
-    set_local $2
-    get_local $2
-   end
+   i32.const 0
+   call $std/array-literal/Ref#constructor
    call $~lib/array/Array<Ref>#__unchecked_set
    get_local $3
    i32.const 1
-   block (result i32)
-    i32.const 0
-    call $~lib/memory/memory.allocate
-    set_local $2
-    get_local $2
-   end
+   i32.const 0
+   call $std/array-literal/Ref#constructor
    call $~lib/array/Array<Ref>#__unchecked_set
    get_local $3
    i32.const 2
-   block (result i32)
-    i32.const 0
-    call $~lib/memory/memory.allocate
-    set_local $2
-    get_local $2
-   end
+   i32.const 0
+   call $std/array-literal/Ref#constructor
    call $~lib/array/Array<Ref>#__unchecked_set
    get_local $3
   end
@@ -1246,6 +1226,6 @@
    unreachable
   end
  )
- (func $null (; 18 ;) (type $v)
+ (func $null (; 19 ;) (type $v)
  )
 )

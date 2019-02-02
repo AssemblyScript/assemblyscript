@@ -110,60 +110,78 @@
   return
  )
  (func $std/constructor/EmptyCtor#constructor (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   get_local $0
-  if (result i32)
-   get_local $0
-  else   
-   block (result i32)
-    i32.const 0
-    call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-   end
-   tee_local $0
+  i32.eqz
+  if
+   i32.const 0
+   call $~lib/memory/memory.allocate
+   set_local $0
   end
-  tee_local $0
+  get_local $0
  )
  (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   get_local $0
-  if (result i32)
-   get_local $0
-  else   
-   block (result i32)
-    i32.const 4
-    call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 1
-    i32.store
-    get_local $1
-   end
-   tee_local $0
+  i32.eqz
+  if
+   i32.const 4
+   call $~lib/memory/memory.allocate
+   set_local $0
   end
-  tee_local $0
+  get_local $0
+  i32.const 1
+  i32.store
+  get_local $0
  )
  (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   get_local $0
-  if (result i32)
-   get_local $0
-  else   
-   block (result i32)
-    i32.const 4
-    call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-    i32.const 0
-    i32.store
-    get_local $1
-   end
-   tee_local $0
+  i32.eqz
+  if
+   i32.const 4
+   call $~lib/memory/memory.allocate
+   set_local $0
   end
-  tee_local $0
+  get_local $0
+  i32.const 0
+  i32.store
+  get_local $0
  )
- (func $std/constructor/CtorReturns#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/None#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   call $~lib/memory/memory.allocate
+   set_local $0
+  end
+  get_local $0
+ )
+ (func $std/constructor/JustFieldInit#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 4
+   call $~lib/memory/memory.allocate
+   set_local $0
+  end
+  get_local $0
+  i32.const 1
+  i32.store
+  get_local $0
+ )
+ (func $std/constructor/JustFieldNoInit#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 4
+   call $~lib/memory/memory.allocate
+   set_local $0
+  end
+  get_local $0
+  i32.const 0
+  i32.store
+  get_local $0
+ )
+ (func $std/constructor/CtorReturns#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   block $~lib/memory/memory.allocate|inlined.0 (result i32)
    i32.const 0
@@ -173,7 +191,7 @@
    br $~lib/memory/memory.allocate|inlined.0
   end
  )
- (func $std/constructor/CtorConditionallyReturns#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/constructor/CtorConditionallyReturns#constructor (; 9 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   get_global $std/constructor/b
   if
@@ -187,72 +205,53 @@
    return
   end
   get_local $0
-  if (result i32)
-   get_local $0
-  else   
-   block (result i32)
-    i32.const 0
-    call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-   end
-   tee_local $0
+  i32.eqz
+  if
+   i32.const 0
+   call $~lib/memory/memory.allocate
+   set_local $0
   end
-  tee_local $0
- )
- (func $std/constructor/CtorAllocates#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
   get_local $0
-  if (result i32)
+ )
+ (func $std/constructor/CtorAllocates#constructor (; 10 ;) (type $ii) (param $0 i32) (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 0
     call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
+    set_local $0
    end
-   tee_local $0
+   get_local $0
   end
-  tee_local $0
   drop
   get_local $0
  )
- (func $std/constructor/CtorConditionallyAllocates#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $std/constructor/CtorConditionallyAllocates#constructor (; 11 ;) (type $ii) (param $0 i32) (result i32)
   get_global $std/constructor/b
   if
-   get_local $0
-   if (result i32)
+   block (result i32)
     get_local $0
-   else    
-    block (result i32)
+    i32.eqz
+    if
      i32.const 0
      call $~lib/memory/memory.allocate
-     set_local $1
-     get_local $1
+     set_local $0
     end
-    tee_local $0
+    get_local $0
    end
-   tee_local $0
    drop
   end
   get_local $0
-  if (result i32)
-   get_local $0
-  else   
-   block (result i32)
-    i32.const 0
-    call $~lib/memory/memory.allocate
-    set_local $1
-    get_local $1
-   end
-   tee_local $0
+  i32.eqz
+  if
+   i32.const 0
+   call $~lib/memory/memory.allocate
+   set_local $0
   end
-  tee_local $0
+  get_local $0
  )
- (func $start (; 9 ;) (type $v)
-  (local $0 i32)
+ (func $start (; 12 ;) (type $v)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
   i32.add
@@ -272,32 +271,14 @@
   i32.const 0
   call $std/constructor/EmptyCtorWithFieldNoInit#constructor
   set_global $std/constructor/emptyCtorWithFieldNoInit
-  block (result i32)
-   i32.const 0
-   call $~lib/memory/memory.allocate
-   set_local $0
-   get_local $0
-  end
+  i32.const 0
+  call $std/constructor/None#constructor
   set_global $std/constructor/none
-  block (result i32)
-   i32.const 4
-   call $~lib/memory/memory.allocate
-   set_local $0
-   get_local $0
-   i32.const 1
-   i32.store
-   get_local $0
-  end
+  i32.const 0
+  call $std/constructor/JustFieldInit#constructor
   set_global $std/constructor/justFieldInit
-  block (result i32)
-   i32.const 4
-   call $~lib/memory/memory.allocate
-   set_local $0
-   get_local $0
-   i32.const 0
-   i32.store
-   get_local $0
-  end
+  i32.const 0
+  call $std/constructor/JustFieldNoInit#constructor
   set_global $std/constructor/justFieldNoInit
   i32.const 0
   call $std/constructor/CtorReturns#constructor
@@ -312,6 +293,6 @@
   call $std/constructor/CtorConditionallyAllocates#constructor
   set_global $std/constructor/ctorConditionallyAllocates
  )
- (func $null (; 10 ;) (type $v)
+ (func $null (; 13 ;) (type $v)
  )
 )

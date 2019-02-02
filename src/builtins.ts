@@ -2933,58 +2933,6 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
   return value;
 }
 
-/** Compiles a memory allocation for an instance of the specified class. */
-export function compileAllocate(
-  compiler: Compiler,
-  classInstance: Class,
-  reportNode: Node
-): ExpressionRef {
-  var program = compiler.program;
-  assert(classInstance.program == program);
-  var module = compiler.module;
-  var options = compiler.options;
-
-  // __gc_allocate(size, markFn)
-  if (program.hasGC && classInstance.type.isManaged(program)) {
-    let allocateInstance = assert(program.gcAllocateInstance);
-    if (!compiler.compileFunction(allocateInstance)) return module.createUnreachable();
-    compiler.currentType = classInstance.type;
-    return module.createCall(
-      allocateInstance.internalName, [
-        options.isWasm64
-          ? module.createI64(classInstance.currentMemoryOffset)
-          : module.createI32(classInstance.currentMemoryOffset),
-        module.createI32(
-          ensureGCHook(compiler, classInstance)
-        )
-      ],
-      options.nativeSizeType
-    );
-
-  // memory.allocate(size)
-  } else {
-    let allocateInstance = program.memoryAllocateInstance;
-    if (!allocateInstance) {
-      program.error(
-        DiagnosticCode.Cannot_find_name_0,
-        reportNode.range, "memory.allocate"
-      );
-      return module.createUnreachable();
-    }
-    if (!compiler.compileFunction(allocateInstance)) return module.createUnreachable();
-
-    compiler.currentType = classInstance.type;
-    return module.createCall(
-      allocateInstance.internalName, [
-        options.isWasm64
-          ? module.createI64(classInstance.currentMemoryOffset)
-          : module.createI32(classInstance.currentMemoryOffset)
-      ],
-      options.nativeSizeType
-    );
-  }
-}
-
 /** Compiles an abort wired to the conditionally imported 'abort' function. */
 export function compileAbort(
   compiler: Compiler,
