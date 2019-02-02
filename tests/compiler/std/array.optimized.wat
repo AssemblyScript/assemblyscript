@@ -22,10 +22,10 @@
  (type $iiIi (func (param i32 i32 i64) (result i32)))
  (type $v (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
+ (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
  (memory $0 1)
@@ -764,20 +764,35 @@
   call $~lib/internal/memory/memset
   get_local $1
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 6 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  i32.const 1
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  get_local $1
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 152
+   i32.const 23
+   i32.const 34
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $1
   call $~lib/internal/arraybuffer/allocateUnsafe
-  tee_local $1
+  tee_local $2
   i32.const 8
   i32.add
   i32.const 0
-  i32.const 1
+  get_local $1
   call $~lib/internal/memory/memset
-  i32.const 12
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
+  get_local $0
+  i32.eqz
+  if
+   i32.const 12
+   call $~lib/allocator/arena/__memory_allocate
+   set_local $0
+  end
+  get_local $0
   i32.const 0
   i32.store
   get_local $0
@@ -787,13 +802,13 @@
   i32.const 0
   i32.store offset=8
   get_local $0
-  get_local $1
+  get_local $2
   i32.store
   get_local $0
   i32.const 0
   i32.store offset=4
   get_local $0
-  i32.const 1
+  get_local $1
   i32.store offset=8
   get_local $0
  )
@@ -10073,6 +10088,9 @@
   i32.const 0
   call $~lib/allocator/arena/__memory_allocate
   drop
+  i32.const 12
+  call $~lib/allocator/arena/__memory_allocate
+  i32.const 1
   call $~lib/internal/typedarray/TypedArray<u8>#constructor
   drop
   get_global $std/array/arr8

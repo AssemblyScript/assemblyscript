@@ -3,11 +3,11 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
+ (type $iii (func (param i32 i32) (result i32)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $v (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -1525,19 +1525,34 @@
   get_local $2
   call $~lib/arraybuffer/ArrayBuffer#slice
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  i32.const 1
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  get_local $1
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 160
+   i32.const 23
+   i32.const 34
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $1
   call $~lib/internal/arraybuffer/allocateUnsafe
-  tee_local $1
+  tee_local $2
   i32.const 8
   i32.add
-  i32.const 1
+  get_local $1
   call $~lib/internal/memory/memset
-  i32.const 12
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
+  get_local $0
+  i32.eqz
+  if
+   i32.const 12
+   call $~lib/allocator/arena/__memory_allocate
+   set_local $0
+  end
+  get_local $0
   i32.const 0
   i32.store
   get_local $0
@@ -1547,29 +1562,47 @@
   i32.const 0
   i32.store offset=8
   get_local $0
-  get_local $1
+  get_local $2
   i32.store
   get_local $0
   i32.const 0
   i32.store offset=4
   get_local $0
-  i32.const 1
+  get_local $1
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 9 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  i32.const 4
-  call $~lib/internal/arraybuffer/allocateUnsafe
+ (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  get_local $1
+  i32.const 268435454
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 160
+   i32.const 23
+   i32.const 34
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $1
+  i32.const 2
+  i32.shl
   tee_local $1
+  call $~lib/internal/arraybuffer/allocateUnsafe
+  tee_local $2
   i32.const 8
   i32.add
-  i32.const 4
+  get_local $1
   call $~lib/internal/memory/memset
-  i32.const 12
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
+  get_local $0
+  i32.eqz
+  if
+   i32.const 12
+   call $~lib/allocator/arena/__memory_allocate
+   set_local $0
+  end
+  get_local $0
   i32.const 0
   i32.store
   get_local $0
@@ -1579,13 +1612,13 @@
   i32.const 0
   i32.store offset=8
   get_local $0
-  get_local $1
+  get_local $2
   i32.store
   get_local $0
   i32.const 0
   i32.store offset=4
   get_local $0
-  i32.const 4
+  get_local $1
   i32.store offset=8
   get_local $0
  )
@@ -1641,16 +1674,17 @@
   if
    i32.const 12
    call $~lib/allocator/arena/__memory_allocate
-   tee_local $0
-   get_local $1
-   i32.store
-   get_local $0
-   get_local $2
-   i32.store offset=4
-   get_local $0
-   get_local $3
-   i32.store offset=8
+   set_local $0
   end
+  get_local $0
+  get_local $1
+  i32.store
+  get_local $0
+  get_local $2
+  i32.store offset=4
+  get_local $0
+  get_local $3
+  i32.store offset=8
   get_local $0
  )
  (func $~lib/dataview/DataView#constructor|trampoline (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1871,14 +1905,15 @@
    call $~lib/env/abort
    unreachable
   end
+  i32.const 12
+  call $~lib/allocator/arena/__memory_allocate
+  i32.const 1
   call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_global $std/arraybuffer/arr8
+  i32.const 1
+  i32.const 0
   get_global $std/arraybuffer/arr8
-  if (result i32)
-   i32.const 1
-  else   
-   i32.const 0
-  end
+  select
   i32.eqz
   if
    i32.const 0
@@ -1890,6 +1925,9 @@
   end
   block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>5 (result i32)
    i32.const 0
+   i32.const 12
+   call $~lib/allocator/arena/__memory_allocate
+   i32.const 1
    call $~lib/internal/typedarray/TypedArray<i32>#constructor
    i32.eqz
    br_if $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>5

@@ -2075,28 +2075,25 @@
   get_local $5
   get_local $2
   call $~lib/internal/memory/memset
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 12
     call $~lib/memory/memory.allocate
-    set_local $5
-    get_local $5
-    i32.const 0
-    i32.store
-    get_local $5
-    i32.const 0
-    i32.store offset=4
-    get_local $5
-    i32.const 0
-    i32.store offset=8
-    get_local $5
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
   end
-  tee_local $0
   get_local $3
   i32.store
   get_local $0
@@ -2107,7 +2104,21 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 12
+   call $~lib/memory/memory.allocate
+   set_local $0
+  end
+  get_local $0
+  get_local $1
+  call $~lib/internal/typedarray/TypedArray<u8>#constructor
+  set_local $0
+  get_local $0
+ )
+ (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2140,28 +2151,25 @@
   get_local $5
   get_local $2
   call $~lib/internal/memory/memset
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 12
     call $~lib/memory/memory.allocate
-    set_local $5
-    get_local $5
-    i32.const 0
-    i32.store
-    get_local $5
-    i32.const 0
-    i32.store offset=4
-    get_local $5
-    i32.const 0
-    i32.store offset=8
-    get_local $5
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i32.const 0
+   i32.store
+   get_local $0
+   i32.const 0
+   i32.store offset=4
+   get_local $0
+   i32.const 0
+   i32.store offset=8
+   get_local $0
   end
-  tee_local $0
   get_local $3
   i32.store
   get_local $0
@@ -2172,8 +2180,21 @@
   i32.store offset=8
   get_local $0
  )
- (func $~lib/dataview/DataView#constructor (; 18 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $~lib/typedarray/Int32Array#constructor (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 12
+   call $~lib/memory/memory.allocate
+   set_local $0
+  end
+  get_local $0
+  get_local $1
+  call $~lib/internal/typedarray/TypedArray<i32>#constructor
+  set_local $0
+  get_local $0
+ )
+ (func $~lib/dataview/DataView#constructor (; 20 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   get_local $3
   get_global $~lib/builtins/i32.MIN_VALUE
   i32.eq
@@ -2221,29 +2242,24 @@
    unreachable
   end
   get_local $0
-  if (result i32)
-   get_local $0
-  else   
-   block (result i32)
-    i32.const 12
-    call $~lib/memory/memory.allocate
-    set_local $4
-    get_local $4
-    get_local $1
-    i32.store
-    get_local $4
-    get_local $2
-    i32.store offset=4
-    get_local $4
-    get_local $3
-    i32.store offset=8
-    get_local $4
-   end
-   tee_local $0
+  i32.eqz
+  if
+   i32.const 12
+   call $~lib/memory/memory.allocate
+   set_local $0
   end
-  tee_local $0
+  get_local $0
+  get_local $1
+  i32.store
+  get_local $0
+  get_local $2
+  i32.store offset=4
+  get_local $0
+  get_local $3
+  i32.store offset=8
+  get_local $0
  )
- (func $~lib/dataview/DataView#constructor|trampoline (; 19 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor|trampoline (; 21 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -2267,7 +2283,7 @@
   get_local $3
   call $~lib/dataview/DataView#constructor
  )
- (func $start (; 20 ;) (type $v)
+ (func $start (; 22 ;) (type $v)
   (local $0 i32)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
@@ -2567,7 +2583,7 @@
   end
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<u8>#constructor
+  call $~lib/typedarray/Uint8Array#constructor
   set_global $std/arraybuffer/arr8
   i32.const 240
   call $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>
@@ -2594,7 +2610,7 @@
   end
   i32.const 0
   i32.const 1
-  call $~lib/internal/typedarray/TypedArray<i32>#constructor
+  call $~lib/typedarray/Int32Array#constructor
   call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
   i32.eqz
   if
@@ -2626,6 +2642,6 @@
    unreachable
   end
  )
- (func $null (; 21 ;) (type $v)
+ (func $null (; 23 ;) (type $v)
  )
 )
