@@ -6,7 +6,7 @@
  (type $iiv (func (param i32 i32)))
  (memory $0 0)
  (table $0 4 anyfunc)
- (elem (i32.const 0) $null $~lib/collector/itcm/__gc_mark $std/gc-object/Custom~gc $std/gc-object/Base~gc)
+ (elem (i32.const 0) $null $~lib/collector/itcm/__gc_mark $std/gc-object/Base~gc $std/gc-object/Custom~gc)
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
@@ -444,14 +444,25 @@
   get_local $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $std/gc-object/Custom~gc (; 14 ;) (type $iv) (param $0 i32)
+ (func $std/gc-object/Base#constructor (; 14 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 2
+   call $~lib/collector/itcm/__gc_allocate
+   set_local $0
+  end
+  get_local $0
+ )
+ (func $std/gc-object/Custom~gc (; 15 ;) (type $iv) (param $0 i32)
   get_local $0
   i32.eqz
   if
    return
   end
   get_local $0
-  i32.const 3
+  i32.const 2
   call_indirect (type $iv)
   get_local $0
   i32.load
@@ -460,7 +471,27 @@
   i32.load offset=4
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/collector/itcm/__gc_collect (; 15 ;) (type $v)
+ (func $std/gc-object/Custom#constructor (; 16 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 8
+   i32.const 3
+   call $~lib/collector/itcm/__gc_allocate
+   set_local $0
+  end
+  get_local $0
+  call $std/gc-object/Base#constructor
+  set_local $0
+  get_local $0
+  i32.const 0
+  i32.store
+  get_local $0
+  i32.const 0
+  i32.store offset=4
+  get_local $0
+ )
+ (func $~lib/collector/itcm/__gc_collect (; 17 ;) (type $v)
   (local $0 i32)
   block $break|0
    block $case1|0
@@ -492,11 +523,11 @@
    end
   end
  )
- (func $~lib/gc/gc.collect (; 16 ;) (type $v)
+ (func $~lib/gc/gc.collect (; 18 ;) (type $v)
   call $~lib/collector/itcm/__gc_collect
   return
  )
- (func $std/gc-object/main (; 17 ;) (type $v)
+ (func $std/gc-object/main (; 19 ;) (type $v)
   get_global $~started
   i32.eqz
   if
@@ -505,8 +536,7 @@
    set_global $~started
   end
  )
- (func $start (; 18 ;) (type $v)
-  (local $0 i32)
+ (func $start (; 20 ;) (type $v)
   get_global $HEAP_BASE
   get_global $~lib/internal/allocator/AL_MASK
   i32.add
@@ -519,19 +549,8 @@
   set_global $~lib/allocator/arena/offset
   get_global $~lib/collector/itcm/State.INIT
   set_global $~lib/collector/itcm/state
-  block (result i32)
-   i32.const 8
-   i32.const 2
-   call $~lib/collector/itcm/__gc_allocate
-   set_local $0
-   get_local $0
-   i32.const 0
-   i32.store
-   get_local $0
-   i32.const 0
-   i32.store offset=4
-   get_local $0
-  end
+  i32.const 0
+  call $std/gc-object/Custom#constructor
   set_global $std/gc-object/obj
   call $~lib/gc/gc.collect
   get_global $std/gc-object/obj
@@ -542,9 +561,9 @@
   set_global $std/gc-object/obj
   call $~lib/gc/gc.collect
  )
- (func $null (; 19 ;) (type $v)
+ (func $null (; 21 ;) (type $v)
  )
- (func $~iterateRoots (; 20 ;) (type $iv) (param $0 i32)
+ (func $~iterateRoots (; 22 ;) (type $iv) (param $0 i32)
   get_global $std/gc-object/obj
   get_local $0
   call_indirect (type $iv)

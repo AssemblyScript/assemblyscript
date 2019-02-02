@@ -1,6 +1,7 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $v (func))
+ (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 1 anyfunc)
  (elem (i32.const 0) $null)
@@ -82,7 +83,25 @@
   set_global $~lib/allocator/arena/offset
   get_local $1
  )
- (func $start (; 1 ;) (type $v)
+ (func $std/constructor/EmptyCtorWithFieldInit#constructor (; 1 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  i32.const 4
+  call $~lib/allocator/arena/__memory_allocate
+  tee_local $0
+  i32.const 1
+  i32.store
+  get_local $0
+ )
+ (func $std/constructor/EmptyCtorWithFieldNoInit#constructor (; 2 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
+  i32.const 4
+  call $~lib/allocator/arena/__memory_allocate
+  tee_local $0
+  i32.const 0
+  i32.store
+  get_local $0
+ )
+ (func $start (; 3 ;) (type $v)
   (local $0 i32)
   i32.const 8
   set_global $~lib/allocator/arena/startOffset
@@ -91,36 +110,16 @@
   i32.const 0
   call $~lib/allocator/arena/__memory_allocate
   set_global $std/constructor/emptyCtor
-  i32.const 4
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
-  i32.const 1
-  i32.store
-  get_local $0
+  call $std/constructor/EmptyCtorWithFieldInit#constructor
   set_global $std/constructor/emptyCtorWithFieldInit
-  i32.const 4
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
-  i32.const 0
-  i32.store
-  get_local $0
+  call $std/constructor/EmptyCtorWithFieldNoInit#constructor
   set_global $std/constructor/emptyCtorWithFieldNoInit
   i32.const 0
   call $~lib/allocator/arena/__memory_allocate
   set_global $std/constructor/none
-  i32.const 4
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
-  i32.const 1
-  i32.store
-  get_local $0
+  call $std/constructor/EmptyCtorWithFieldInit#constructor
   set_global $std/constructor/justFieldInit
-  i32.const 4
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
-  i32.const 0
-  i32.store
-  get_local $0
+  call $std/constructor/EmptyCtorWithFieldNoInit#constructor
   set_global $std/constructor/justFieldNoInit
   i32.const 0
   call $~lib/allocator/arena/__memory_allocate
@@ -139,8 +138,6 @@
   i32.const 0
   call $~lib/allocator/arena/__memory_allocate
   set_global $std/constructor/ctorAllocates
-  i32.const 0
-  set_local $0
   block (result i32)
    get_global $std/constructor/b
    if
@@ -151,15 +148,15 @@
    get_local $0
    i32.eqz
   end
-  if (result i32)
+  if
    i32.const 0
    call $~lib/allocator/arena/__memory_allocate
-  else   
-   get_local $0
+   set_local $0
   end
+  get_local $0
   set_global $std/constructor/ctorConditionallyAllocates
  )
- (func $null (; 2 ;) (type $v)
+ (func $null (; 4 ;) (type $v)
   nop
  )
 )

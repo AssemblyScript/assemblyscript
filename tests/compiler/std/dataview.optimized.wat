@@ -8,7 +8,6 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $v (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$dii (func (param i32 i32) (result f64)))
  (type $FUNCSIG$jii (func (param i32 i32) (result i64)))
@@ -339,19 +338,34 @@
    end
   end
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  i32.const 8
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  get_local $1
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 23
+   i32.const 34
+   call $~lib/env/abort
+   unreachable
+  end
+  get_local $1
   call $~lib/internal/arraybuffer/allocateUnsafe
-  tee_local $1
+  tee_local $2
   i32.const 8
   i32.add
-  i32.const 8
+  get_local $1
   call $~lib/internal/memory/memset
-  i32.const 12
-  call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
+  get_local $0
+  i32.eqz
+  if
+   i32.const 12
+   call $~lib/allocator/arena/__memory_allocate
+   set_local $0
+  end
+  get_local $0
   i32.const 0
   i32.store
   get_local $0
@@ -361,13 +375,13 @@
   i32.const 0
   i32.store offset=8
   get_local $0
-  get_local $1
+  get_local $2
   i32.store
   get_local $0
   i32.const 0
   i32.store offset=4
   get_local $0
-  i32.const 8
+  get_local $1
   i32.store offset=8
   get_local $0
  )
@@ -1082,6 +1096,9 @@
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
+  i32.const 12
+  call $~lib/allocator/arena/__memory_allocate
+  i32.const 8
   call $~lib/internal/typedarray/TypedArray<u8>#constructor
   set_global $std/dataview/array
   get_global $std/dataview/array

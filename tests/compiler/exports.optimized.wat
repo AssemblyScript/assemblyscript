@@ -181,10 +181,11 @@
   if
    i32.const 4
    call $~lib/allocator/arena/__memory_allocate
-   tee_local $0
-   get_local $1
-   i32.store
+   set_local $0
   end
+  get_local $0
+  get_local $1
+  i32.store
   get_local $0
   get_local $1
   i32.store

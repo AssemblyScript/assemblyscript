@@ -108,18 +108,37 @@
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (; 4 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   call $~lib/memory/memory.allocate
+   set_local $0
+  end
+  get_local $0
+ )
+ (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   get_local $1
   get_local $2
   i32.add
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (; 5 ;) (type $iFFF) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
+ (func $optional-typeparameters/TestDerived<f64,f64>#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
+  get_local $0
+  i32.eqz
+  if
+   i32.const 0
+   call $~lib/memory/memory.allocate
+   set_local $0
+  end
+  get_local $0
+ )
+ (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (; 7 ;) (type $iFFF) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
   get_local $1
   get_local $2
   f64.add
  )
- (func $start (; 6 ;) (type $v)
-  (local $0 i32)
+ (func $start (; 8 ;) (type $v)
   i32.const 1
   call $optional-typeparameters/testConcrete<i32,i32>
   drop
@@ -136,24 +155,16 @@
   set_global $~lib/allocator/arena/startOffset
   get_global $~lib/allocator/arena/startOffset
   set_global $~lib/allocator/arena/offset
-  block (result i32)
-   i32.const 0
-   call $~lib/memory/memory.allocate
-   set_local $0
-   get_local $0
-  end
+  i32.const 0
+  call $optional-typeparameters/TestConcrete<i32,i32>#constructor
   set_global $optional-typeparameters/tConcrete
   get_global $optional-typeparameters/tConcrete
   i32.const 1
   i32.const 2
   call $optional-typeparameters/TestConcrete<i32,i32>#test<i32>
   drop
-  block (result i32)
-   i32.const 0
-   call $~lib/memory/memory.allocate
-   set_local $0
-   get_local $0
-  end
+  i32.const 0
+  call $optional-typeparameters/TestDerived<f64,f64>#constructor
   set_global $optional-typeparameters/tDerived
   get_global $optional-typeparameters/tDerived
   f64.const 1
@@ -161,6 +172,6 @@
   call $optional-typeparameters/TestDerived<f64,f64>#test<f64>
   drop
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 9 ;) (type $v)
  )
 )

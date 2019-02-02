@@ -111,23 +111,19 @@
   return
  )
  (func $~lib/date/Date#constructor (; 5 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i32)
-  get_local $0
-  if (result i32)
+  block (result i32)
    get_local $0
-  else   
-   block (result i32)
+   i32.eqz
+   if
     i32.const 8
     call $~lib/memory/memory.allocate
-    set_local $2
-    get_local $2
-    i64.const 0
-    i64.store
-    get_local $2
+    set_local $0
    end
-   tee_local $0
+   get_local $0
+   i64.const 0
+   i64.store
+   get_local $0
   end
-  tee_local $0
   get_local $1
   i64.store
   get_local $0
