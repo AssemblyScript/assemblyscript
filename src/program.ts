@@ -2857,7 +2857,6 @@ export class ClassPrototype extends Element {
   }
 
   extends(basePtototype: ClassPrototype | null): bool {
-    if (!basePtototype) return false;
     var current: ClassPrototype | null = this;
     do {
       if (current == basePtototype) return true;
