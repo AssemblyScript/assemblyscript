@@ -2856,6 +2856,14 @@ export class ClassPrototype extends Element {
     this.decoratorFlags = decoratorFlags;
   }
 
+  extends(basePtototype: ClassPrototype | null): bool {
+    var current: ClassPrototype | null = this;
+    do {
+      if (current === basePtototype) return true;
+    } while (current = current.basePrototype);
+    return false;
+  }
+
   toString(): string {
     return this.simpleName;
   }
@@ -2967,6 +2975,16 @@ export class Class extends Element {
       }
     } while (instance = instance.base);
     return null;
+  }
+
+  lookupField(name: string, shouldReadonly: boolean = false): Element | null {
+    if (this.members == null) return null;
+    var member = this.members.get(name);
+    if (
+      member == null || member.kind != ElementKind.FIELD ||
+      (shouldReadonly && !member.is(CommonFlags.READONLY))
+    ) return null;
+    return member;
   }
 
   offsetof(fieldName: string): u32 {

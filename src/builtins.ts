@@ -113,7 +113,6 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
-      compiler.currentType = Type.bool;
       return type.is(TypeFlags.REFERENCE)
         ? module.createI32(1)
         : module.createI32(0);
@@ -134,9 +133,9 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
-      return classType !== null && classType.lookupOverload(OperatorKind.INDEXED_GET) !== null
-        ? module.createI32(1)
-        : module.createI32(0);
+      return (
+        classType !== null && classType.prototype.extends(compiler.program.arrayPrototype)
+      ) ? module.createI32(1) : module.createI32(0);
     }
     case "isDefined": { // isDefined(expression) -> bool
       compiler.currentType = Type.bool;

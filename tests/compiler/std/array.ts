@@ -33,11 +33,13 @@ var arr = new Array<i32>();
 class P {}
 var num = 1;
 var Null: i32[] | null = null;
+var str = "abc";
 assert(Array.isArray(Null) == false);
 assert(Array.isArray(arr) == true);
 assert(Array.isArray(new P()) == false);
-// assert(Array.isArray(new Uint8Array(1)) == false); fail
+assert(Array.isArray(new Uint8Array(1)) == false);
 assert(Array.isArray(num) == false);
+assert(Array.isArray(str) == false);
 
 // Array#fill //////////////////////////////////////////////////////////////////////////////////////
 
