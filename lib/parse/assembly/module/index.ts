@@ -84,6 +84,14 @@ export class Module {
     return imports;
   }
 
+  print(): void {
+    for (let i = 0; i< this.headers.length; i++){
+      log(this.headers[i].toString());
+      log("");
+    }
+
+  }
+
 }
 
 function typeName(t: Type): string{
@@ -183,12 +191,13 @@ export class SectionHeader {
     let payloadOff = itoa<u32>(this.payload_off);
     let name = this.name;
     let end = itoa<u32>(this.end);
-    return "ref: "+ ref + "\n" +
+    return "name: " + name + "\n" +
+           "ref: "+ ref + "\n" +
            "id: " + id  + "\n" +
            "payload off: " + payloadOff + "\n" +
            "payload length: " + payloadLen + "\n" +
-           "end: " + end + "\n" +
-           "name: " + name;
+           "end: " + end;
+
   }
 
 }

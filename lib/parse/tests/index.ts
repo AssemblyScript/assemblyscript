@@ -15,4 +15,5 @@ import {
   debugger;
   let parser = new WasmParser(binary);
   console.log(parser.Type);
+  parser.printModule();
 });

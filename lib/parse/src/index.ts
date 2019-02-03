@@ -74,6 +74,10 @@ export class WasmParser {
     return this.memory.getString(this.instance.getType(this.mod))
 
   }
+
+  printModule(): void {
+    this.instance.printModule(this.mod);
+  }
 }
 
 

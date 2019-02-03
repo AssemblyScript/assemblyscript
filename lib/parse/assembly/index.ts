@@ -57,6 +57,10 @@ declare function debug():void;
 
 let type: TypeSection;
 
+export function printModule(m: Module): void {
+  m.print();
+}
+
 export function getType(m: Module): string {
   let headers:SectionHeader[] = m.getID(SectionId.Type);
   let section = new TypeSection(headers[0]);
@@ -146,18 +150,11 @@ export class Parser {
 
 /** Starts parsing the module that has been placed in memory. */
   parse(): void {
-    log(this.buf.off)
-    log(this.buf.buffer.buffer.data)
-    log(this.buf.length)
     let start = this.off;
-    log("starting")
     var magic = this.buf.readUint<u32>();
-    log(magic);
     if (magic != 0x6D736100) unreachable();
     var version = this.buf.readUint<u32>();
-    log(version);
     if (version != 1) unreachable();
-    log("Magic is valid");
     var fun_space_index: u32 = 0;
     var glo_space_index: u32 = 0;
     var mem_space_index: u32 = 0;
@@ -165,14 +162,14 @@ export class Parser {
     while (this.buf.off < this.buf.end) {
       // log<string>("parsing next section", true);
       let header: SectionHeader = new SectionHeader(this.buf);
-      log(header.toString());
+      // log(header.toString());
       this.module.parseSection(header);
-      log("---------")
-      log(this.off);
-      log(header.ref - start);
-      log(header.offset);
-      log(header.end - start);
-      log("---------");
+      // log("---------")
+      // log(this.off);
+      // log(header.ref - start);
+      // log(header.offset);
+      // log(header.end - start);
+      // log("---------");
       this.off = header.end;
       // log<i32>(this.off);
     }
@@ -183,10 +180,10 @@ export class Parser {
 }
 
 export function newParser(buf: Uint8Array): Parser {
-  log(buf);
+  // log(buf);
   let buffer = new Buffer(buf);
-  log(buffer);
-  log(buffer.off)
+  // log(buffer);
+  // log(buffer.off)
   return new Parser(buffer);
 }
 export function parse(p: Parser): Module {

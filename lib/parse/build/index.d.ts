@@ -8,6 +8,7 @@ declare module ASModule {
   type f32 = number;
   type f64 = number;
   type bool = any;
+  function printModule(m: u32): void;
   function getType(m: u32): u32;
   function getImports(m: u32): void;
   function removeStartFunction(m: u32): u32;
@@ -48,6 +49,7 @@ declare module ASModule {
     getID(id: i32): u32;
     getType(): u32;
     getImports(): u32;
+    print(): void;
   }
 }
 export default ASModule;
