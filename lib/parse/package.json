@@ -5,7 +5,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "asbuild": "asc assembly/index.ts -O3 -b build/index.wasm -t build/index.wat --importMemory --sourceMap --validate",
+    "asbuild": "asc assembly/index.ts -O3 -b build/index.wasm -t build/index.wat --importMemory --sourceMap --validate -d build/index.d.ts",
     "asbuild:untouched": "asc assembly/index.ts -b build/index.wasm -t build/index.wat --debug --importMemory --sourceMap --validate",
     "build": "npm run asbuild && webpack --mode production --display-modules",
     "asbuild:test": "asc tests/assembly/index.ts -b build/test.wasm -t build/test.wat --debug --importMemory --sourceMap --validate",
