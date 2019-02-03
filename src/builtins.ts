@@ -133,14 +133,8 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
-      let arrayPrototype = compiler.program.arrayPrototype;
       return (
-        classType !== null && (
-          classType.prototype == arrayPrototype || (
-            classType.base !== null &&
-            classType.base.prototype == arrayPrototype
-          )
-        )
+        classType !== null && classType.prototype.extends(compiler.program.arrayPrototype)
       ) ? module.createI32(1) : module.createI32(0);
     }
     case "isDefined": { // isDefined(expression) -> bool

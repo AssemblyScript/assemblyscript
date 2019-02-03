@@ -2856,6 +2856,15 @@ export class ClassPrototype extends Element {
     this.decoratorFlags = decoratorFlags;
   }
 
+  extends(basePtototype: ClassPrototype | null): bool {
+    if (!basePtototype) return false;
+    var current: ClassPrototype | null = this;
+    do {
+      if (current == basePtototype) return true;
+    } while (current = current.basePrototype);
+    return false;
+  }
+
   toString(): string {
     return this.simpleName;
   }
