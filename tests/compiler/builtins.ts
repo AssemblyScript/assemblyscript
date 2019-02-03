@@ -1,5 +1,8 @@
-var b: bool;
+class ArrayLikeObject {
+  length: i32;
+}
 
+var b: bool;
 // type checks
 
 assert(isInteger<i32>());
@@ -10,6 +13,11 @@ assert(isReference<string>());
 assert(!isReference<usize>());
 assert(isArray<i32[]>());
 assert(!isArray<usize>());
+assert(isArrayLike<i32[]>());
+assert(isArrayLike<string>());
+assert(isArrayLike<Uint8Array>());
+assert(isArrayLike<ArrayLikeObject>());
+assert(!isArrayLike<i32>());
 
 assert(isInteger(<i32>1));
 assert(!isInteger(<f32>1));
@@ -20,7 +28,12 @@ assert(!isReference(changetype<usize>(null)));
 assert(isString("1"));
 assert(!isString(1));
 assert(isArray(changetype<i32[]>(null)));
+assert(isArrayLike(changetype<i32[]>(null)));
+assert(isArrayLike(changetype<string>(null)));
+assert(isArrayLike(changetype<Uint8Array>(null)));
+assert(isArrayLike(changetype<ArrayLikeObject>(null)));
 assert(!isArray(changetype<usize>(null)));
+
 
 // evaluation
 

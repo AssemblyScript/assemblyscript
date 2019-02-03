@@ -2981,7 +2981,10 @@ export class Class extends Element {
     if (this.members == null) return null;
     var member = this.members.get(name);
     if (
-      member == null || member.kind != ElementKind.FIELD ||
+      member == null || (
+        member.kind != ElementKind.FIELD &&
+        member.kind != ElementKind.FIELD_PROTOTYPE
+      ) ||
       (shouldReadonly && !member.is(CommonFlags.READONLY))
     ) return null;
     return member;
