@@ -2977,7 +2977,7 @@ export class Class extends Element {
     return null;
   }
 
-  lookupFieldOrPrototype(name: string, shouldReadonly: boolean = false): Element | null {
+  lookupFieldOrProperty(name: string, shouldReadonly: boolean = false): Element | null {
     if (this.members == null) return null;
     var member = this.members.get(name);
     if (
