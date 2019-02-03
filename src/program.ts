@@ -2977,13 +2977,14 @@ export class Class extends Element {
     return null;
   }
 
-  lookupField(name: string, shouldReadonly: boolean = false): Element | null {
+  lookupFieldOrPrototype(name: string, shouldReadonly: boolean = false): Element | null {
     if (this.members == null) return null;
     var member = this.members.get(name);
     if (
       member == null || (
         member.kind != ElementKind.FIELD &&
-        member.kind != ElementKind.FIELD_PROTOTYPE
+        member.kind != ElementKind.FIELD_PROTOTYPE &&
+        member.kind != ElementKind.PROPERTY
       ) ||
       (shouldReadonly && !member.is(CommonFlags.READONLY))
     ) return null;

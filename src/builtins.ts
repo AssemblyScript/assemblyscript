@@ -143,7 +143,7 @@ export function compileCall(
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
       return (
-        classType !== null && classType.lookupField("length")
+        classType !== null && classType.lookupFieldOrPrototype("length")
       ) ? module.createI32(1) : module.createI32(0);
     }
     case "isDefined": { // isDefined(expression) -> bool
