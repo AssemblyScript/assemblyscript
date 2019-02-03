@@ -86,32 +86,32 @@ export function getImports(m: Module): void {
   // return
 }
 
-export function removeStartFunction (m: Module):  Uint8Array {
-  if (m.hasStart) {
-    let start : SectionHeader = m.getID(SectionId.Start)[0];
+export function removeStartFunction (mod: Module):  Uint8Array {
+  if (mod.hasStart) {
+    let start : SectionHeader = mod.getID(SectionId.Start)[0];
     log(start.toString());
     let len = start.end - start.ref;
     log(len);
-    let buf = new Uint8Array(m.buf.length - len);
+    let buf = new Uint8Array(mod.buf.length - len);
     log(start.offset)
 
     for (let i:u32 = 0; i < start.offset; i++) {
-      buf[i] = m.buf.buffer[i];
+      buf[i] = mod.buf.buffer[i];
     }
     log("checking end index");
-    log(m.buf.end);
-    log(m.buf.buffer);
-    log(m.buf.buffer[m.buf.length - 1]);
+    log(mod.buf.end);
+    log(mod.buf.buffer);
+    log(mod.buf.buffer[mod.buf.length - 1]);
     log(start.offset + len)
-    for (let i:u32 = start.offset + len; i < m.buf.length; i++) {
-      if ( i> m.buf.length - 8000) log(i);
-      buf[i-len] = m.buf.buffer[i];
+    for (let i:u32 = start.offset + len; i < mod.buf.length; i++) {
+      if ( i> mod.buf.length - 8000) log(i);
+      buf[i-len] = mod.buf.buffer[i];
     }
-    // memory.copy(buf.buffer.byteLength, m.buf.buffer.byteOffset, start.ref);
+    // modemory.copy(buf.buffer.byteLength, m.buf.buffer.byteOffset, start.ref);
     // memory.copy(buf.buffer.byteLength+start.end, m.buf.buffer.byteLength + start.end, m.buf.buffer.byteLength - start.end);
     return buf;
   } else {
-    return m.buf.buffer;
+    return mod.buf.buffer;
   }
 
 }

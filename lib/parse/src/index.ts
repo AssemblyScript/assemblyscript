@@ -65,7 +65,7 @@ export class WasmParser {
       options: {},
       }
     this.instance  = loader.instantiate(compiled, imports);
-    let array = this.memory.newArray(new Uint8Array(binary))
+    let array = this.memory.newArray(binary);
     let parserPtr = this.instance.newParser(array);
     this.mod = this.instance.parse(parserPtr);
   }
@@ -77,6 +77,11 @@ export class WasmParser {
 
   printModule(): void {
     this.instance.printModule(this.mod);
+  }
+
+  removeStartFunction(): Uint8Array {
+    let binary = <Uint8Array>this.memory.getArray(Uint8Array, this.instance.removeStartFunction(this.mod));
+    return binary;
   }
 }
 

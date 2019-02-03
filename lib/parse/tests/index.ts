@@ -16,4 +16,7 @@ import {
   let parser = new WasmParser(binary);
   console.log(parser.Type);
   parser.printModule();
+  let strippedBinary = parser.removeStartFunction();
+  let parser2 = new WasmParser(strippedBinary);
+  parser2.printModule();
 });
