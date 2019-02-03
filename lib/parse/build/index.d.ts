@@ -12,6 +12,7 @@ declare module ASModule {
   function getType(m: u32): u32;
   function getImports(m: u32): void;
   function removeStartFunction(mod: u32): u32;
+  function exportDataSection(m: u32): u32;
   function toString(t: u32): u32;
   function hasStart(mod: u32): bool;
   class Parser {

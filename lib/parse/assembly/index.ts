@@ -55,40 +55,39 @@ import { log } from "./host";
 //
 //   }
 
-var type: TypeSection;
 
 export function printModule(m: Module): void {
   m.print();
 }
 
 export function getType(m: Module): string {
-  var headers: SectionHeader[] = m.getID(SectionId.Type);
-  var section = new TypeSection(headers[0]);
-  type = section.parse(m.buf);
+  var type = m.getType();
+  if (type == null){
+    return "No Type Section"
+  }
   return type.toString();
 }
 
 export function getImports(m: Module): void {
-  var imports = m.getImports();
-  // log(imports.length);
-  if (imports.length > 0) {
-    for (let i = 0; i < imports.length; i++) {
-      log(imports.length);
+  var _import = m.getImports();
 
-      // log(imports.length);
-      // for (let j = 0; i< imports[i].imports.length; j++){
-      //   let _import = imports[i].imports[j];
-      //   log(_import.toString())
-      // }
-    }
+  // log(imports.length);
+  if (_import != null) {
+    // for (let i = 0; i < imports.length; i++) {
+    //
+    //   // log(imports.length);
+    //   // for (let j = 0; i< imports[i].imports.length; j++){
+    //   //   let _import = imports[i].imports[j];
+    //   //   log(_import.toString())
+    //   // }
+    // }
   }
   // return
 }
 
 export function removeStartFunction (mod: Module):  Uint8Array {
-  if (mod.hasStart) {
-    let sections : SectionHeader[] = mod.getID(SectionId.Start);
-    let start = sections[0];
+  var start = mod.getID(SectionId.Start);
+  if (start != null) {
     // log(start.toString());
     let len = start.end - start.ref;
     // log(len);
@@ -110,12 +109,17 @@ export function removeStartFunction (mod: Module):  Uint8Array {
   } else {
     return mod.buf.buffer;
   }
-
 }
 
-// export function exportDataSection(m: Module): Uint8Array {
-//
-// }
+export function exportDataSection(m: Module): Uint8Array | null {
+  var header = m.getID(SectionId.Data);
+  if (header == null){
+    return null;
+  }
+  var len = header.end - header.ref;
+  var res = new Uint8Array(len);
+  return m.buf.buffer;
+}
 
 export function toString(t:TypeSection): string {
   return t.toString();

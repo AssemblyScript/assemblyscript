@@ -28,15 +28,15 @@ export class Module {
     this.headers = [];
   }
 
-  get Type(): SectionHeader[]{
+  get Type(): SectionHeader | null {
     return this.getID(SectionId.Type);
   }
 
   get hasStart(): boolean {
-    return this.start.length > 0;
+    return this.start != null;
   }
 
-  get start(): SectionHeader[] {
+  get start(): SectionHeader | null {
     return this.getID(SectionId.Start)
   }
 
@@ -51,37 +51,33 @@ export class Module {
     // log_str(header.name);
   }
 
-  getID(id: SectionId): SectionHeader[] {
-    var res: SectionHeader[] = new Array<SectionHeader>();
-    assert(res.length == 0);
+  getID(id: SectionId): SectionHeader | null {
     var x: i32 = this.headers.length;
-    // log("length of array should be zero");
-    // log(res.length)
     for (let i = 0; i < x; i++) {
       if (this.headers[i].id == id) {
-        res.push(this.headers[i]);
+        return this.headers[i];
       }
     }
-    return res;
+    return null;
   }
 
-  getType(): TypeSection {
-    let Types = this.Type;
-    let section = new TypeSection(Types[0]);
-    return section.parse(this.buf);
-  }
-
-  getImports(): Imports[] {
-    let ImportHeaders = this.getID(SectionId.Import);
-    let imports: Imports[] = [];
-    log(imports.length);
-    for (let i = 0; i < ImportHeaders.length; i++){
-      // log(ImportHeaders[i].name)
-      let _import = new Imports(ImportHeaders[i]);
-      imports.push(_import.parse(this.buf));
-      log(_import.imports.length);
+  getType(): TypeSection | null {
+    let header = this.getID(SectionId.Type);
+    if (header == null){
+      return null;
+    }else {
+      let section = new TypeSection(<SectionHeader>header);
+      return section.parse(this.buf);
     }
-    return imports;
+  }
+
+  getImports(): Imports | null {
+    var header = this.getID(SectionId.Import);
+    if (!header){
+      return null;
+    }
+    var _import = new Imports(<SectionHeader> header);
+    return _import.parse(this.buf);
   }
 
   print(): void {
@@ -145,7 +141,6 @@ function sectionName(s: SectionId): string {
      default:
       unreachable();
   }
-
   return "";
 }
 
@@ -155,15 +150,14 @@ export class SectionHeader {
   public payload_len: u32;
   public payload_off: u32;
   public offset: u32;
-
   public name: string = "";
 
-  constructor (buf: Buffer){
+  constructor(buf: Buffer) {
     this.ref = buf.off;
     this.offset = this.ref - buf.start;
     this.id = buf.readVaruint(7);
     this.payload_len = buf.readVaruint(32);
-    if (this.id == 0){
+    if (this.id == SectionId.Custom){
       let before = buf.off;
       let name_len = buf.readVaruint(32);
       let name_off = buf.off;
@@ -336,8 +330,10 @@ class TableSection extends Section {
 
 
 
-class Memory{
-  constructor(public flags: u8, public initial: u32, public maximum: u32){}
+class Memory {
+  constructor(public flags: u8,
+              public initial: u32,
+              public maximum: u32){}
 
   get shared(): boolean {
     return this.flags > 1;
