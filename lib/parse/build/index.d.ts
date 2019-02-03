@@ -9,6 +9,8 @@ declare module ASModule {
   type f64 = number;
   type bool = any;
   function getType(m: u32): u32;
+  function getImports(m: u32): void;
+  function removeStartFunction(m: u32): u32;
   function toString(t: u32): u32;
   class Parser {
     constructor(buf: u32);
@@ -28,6 +30,24 @@ declare module ASModule {
     function allocate(size: u32): u32;
     function free(ptr: u32): void;
     function reset(): void;
+  }
+  class TypeSection {
+    header: u32;
+    funcs: u32;
+    parse(buf: u32): u32;
+    toString(): u32;
+  }
+  class Module {
+    constructor(buf: u32);
+    headers: u32;
+    buf: u32;
+    Type: u32;
+    hasStart: bool;
+    start: u32;
+    parseSection(header: u32): void;
+    getID(id: i32): u32;
+    getType(): u32;
+    getImports(): u32;
   }
 }
 export default ASModule;

@@ -3,7 +3,7 @@ import {
   Type,
   SectionId,
   ExternalKind,
-  parse
+  WasmParser
 } from "../src";
 
 [ "../build/test.wasm",
@@ -12,6 +12,7 @@ import {
 ].forEach((filename: string): void => {
   const binary: Uint8Array = fs.readFileSync(__dirname + "/" + filename);
   console.log("Testing '" + filename + "' ...");
-  
-  console.log();
+  debugger;
+  let parser = new WasmParser(binary);
+  console.log(parser.Type);
 });

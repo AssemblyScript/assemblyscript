@@ -20,7 +20,7 @@ import {log} from './host';
 
 declare function debug():void;
 
-log("in the start function!");
+// log("in the start function!");
 // type FunctionName  = string | symbol;
 // type Instance = [Function, Object];
 //
@@ -193,3 +193,5 @@ export function parse(p: Parser): Module {
   p.parse();
   return p.module;
 }
+
+export {TypeSection, Module}
