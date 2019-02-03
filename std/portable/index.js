@@ -213,6 +213,13 @@ globalScope["isString"] = function isString(arg) {
 };
 
 globalScope["isArray"] = Array.isArray;
+globalScope["isArrayLike"] = function isArrayLike(expr) {
+  return expr
+		&& typeof expr === 'object'
+		&& typeof expr.length === 'number'
+		&& expr.length >= 0
+    && Math.trunc(expr.length) === expr.length;
+}
 
 globalScope["isDefined"] = function isDefined(expr) {
   return typeof expr !== "undefined";
