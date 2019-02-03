@@ -2244,7 +2244,14 @@ export class Compiler extends DiagnosticEmitter {
         ) { // here: not top-level
           local = flow.addScopedLocal(type, name, false, declaration); // reports
         } else {
-          local = currentFunction.addLocal(type, name, declaration); // reports
+          if (currentFunction.flow.getScopedLocal(name)) {
+            this.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              declaration.name.range, name
+            );
+            continue;
+          }
+          local = currentFunction.addLocal(type, name, declaration);
         }
         if (initExpr) {
           initializers.push(this.compileAssignmentWithValue(declaration.name, initExpr));
