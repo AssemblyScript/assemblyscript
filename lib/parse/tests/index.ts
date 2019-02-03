@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as assert from "assert";
 import {
   Type,
   SectionId,
@@ -13,10 +14,14 @@ import {
   const binary: Uint8Array = fs.readFileSync(__dirname + "/" + filename);
   console.log("Testing '" + filename + "' ...");
   debugger;
-  let parser = new WasmParser(binary);
+  var parser = new WasmParser(binary);
+  assert(parser.hasStart());
+  console.log("\nType Section\n------------------------------");
   console.log(parser.Type);
-  parser.printModule();
-  let strippedBinary = parser.removeStartFunction();
-  let parser2 = new WasmParser(strippedBinary);
-  parser2.printModule();
+  // parser.printModule();
+  var strippedBinary = parser.removeStartFunction();
+  var parser2 = new WasmParser(strippedBinary);
+  assert(!parser2.hasStart());
+  // parser2.printModule();
 });
+console.log("Tests Pass!")

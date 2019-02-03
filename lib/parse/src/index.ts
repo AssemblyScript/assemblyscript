@@ -15,59 +15,60 @@ var WASM_DATA: string; // injected by webpack
 if (typeof WASM_DATA !== "string") WASM_DATA = require("fs").readFileSync(__dirname + "/../build/index.wasm", "base64");
 
 export class WasmParser {
-  // public memory: loader.ASMemory;
-  public instance: Instance & loader.ASInstance;
-  public mod: number;
+  instance: Instance & loader.ASInstance & loader.ASExport;
+  mod: number;
 
   get memory(): loader.ASMemory{
     return this.instance.memory;
   }
 
-  constructor(public binary: Uint8Array){
+  constructor(public binary: Uint8Array) {
     // compile the parser if not yet compiled
     if (!compiled) compiled = new WebAssembly.Module(base64_decode(WASM_DATA));
 
     // use the binary as the parser's memory
     var nBytes = binary.length;
     var nPages = ((nBytes + 0xffff) & ~0xffff) >> 16;
-    let memory = loader.createMemory({ initial: nPages });
+    var memory = loader.createMemory({ initial: nPages });
     var imports = {
       env: {
         abort: console.error,
         memory
       },
       index: {
-        debug: () => {debugger; },
-        _log: (start, sizeof) => {
-          let begin = start >> 2;
-          let size = sizeof >> 2;
-          if (size == 1 ){
+        //tslint:disable-next-line
+        debug: ():void => {debugger; },
+        _log: (start: number, sizeof: number):void => {
+          var begin = start >> 2;
+          var size = sizeof >> 2;
+          if (size == 1 ) {
             console.log(start);
           } else {
             let str = []
             let len = 0;
-            for (let i = begin; i < begin+size; i++){
-              let line = `| ${i} | ${memory.I32[i]>>2}`;
+            for (let i = begin; i < begin + size; i++){
+              let line = `| ${i} | ${memory.I32[i] >> 2}`;
               len = Math.max(len, line.length);
               str.push(line);
             }
             let space = " ";
-            let output = str.map((v,i,a)=> v + (space as any).repeat(len - v.length + 1) + "|");
+            let output = str.map((v: string): string => v + (space as any).repeat(len - v.length + 1) + "|");
             let dash = "-";
-            let line = (dash as any).repeat(len+2);
-            console.log([line,output.join('\n'+line+'\n'),line].join("\n"));
+            let line = (dash as any).repeat(len + 2);
+            console.log([line,output.join("\n" + line + "\n"),line].join("\n"));
           }
         },
-        _log_str:(x) => console.log(loader.utils.readString(memory.U32, memory.U16, x)),
+        _log_str: (x: number): void => console.log(loader.utils.readString(memory.U32, memory.U16, x)),
         _logi: console.log,
         _logf: console.log
       },
       options: {},
       }
     this.instance  = loader.instantiate(compiled, imports);
-    let array = this.memory.newArray(binary);
-    let parserPtr = this.instance.newParser(array);
-    this.mod = this.instance.parse(parserPtr);
+    var array = this.memory.newArray(binary);
+    var parser = new this.instance.Parser(array)
+    parser.parse()
+    this.mod = parser.module;
   }
 
   get Type(): string {
@@ -80,8 +81,12 @@ export class WasmParser {
   }
 
   removeStartFunction(): Uint8Array {
-    let binary = <Uint8Array>this.memory.getArray(Uint8Array, this.instance.removeStartFunction(this.mod));
+    var binary = <Uint8Array>this.memory.getArray(Uint8Array, this.instance.removeStartFunction(this.mod));
     return binary;
+  }
+
+  hasStart(): boolean {
+    return this.instance.hasStart(this.mod) != 0;
   }
 }
 

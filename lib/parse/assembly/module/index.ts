@@ -51,14 +51,14 @@ export class Module {
     // log_str(header.name);
   }
 
-  public getID(id: SectionId): SectionHeader[] {
-    let res: SectionHeader[] = new Array<SectionHeader>();
+  getID(id: SectionId): SectionHeader[] {
+    var res: SectionHeader[] = new Array<SectionHeader>();
     assert(res.length == 0);
-    let x: i32 = this.headers.length;
+    var x: i32 = this.headers.length;
     // log("length of array should be zero");
     // log(res.length)
-    for (let i=0; i < x; i++){
-      if (this.headers[i].id == id){
+    for (let i = 0; i < x; i++) {
+      if (this.headers[i].id == id) {
         res.push(this.headers[i]);
       }
     }

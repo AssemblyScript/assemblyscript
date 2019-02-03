@@ -11,14 +11,14 @@ import {
   Opcode
 } from "../src/common";
 
-export {memory}
-import {Buffer} from './buffer';
-import {SectionHeader,
-        TypeSection,
-        Module} from './module';
-import {log} from './host';
-
-declare function debug():void;
+export { memory }
+import { Buffer } from "./buffer";
+import {
+  SectionHeader,
+  TypeSection,
+  Module
+} from "./module";
+import { log } from "./host";
 
 // log("in the start function!");
 // type FunctionName  = string | symbol;
@@ -55,60 +55,57 @@ declare function debug():void;
 //
 //   }
 
-let type: TypeSection;
+var type: TypeSection;
 
 export function printModule(m: Module): void {
   m.print();
 }
 
 export function getType(m: Module): string {
-  let headers:SectionHeader[] = m.getID(SectionId.Type);
-  let section = new TypeSection(headers[0]);
+  var headers: SectionHeader[] = m.getID(SectionId.Type);
+  var section = new TypeSection(headers[0]);
   type = section.parse(m.buf);
   return type.toString();
 }
 
 export function getImports(m: Module): void {
-  let imports = m.getImports();
+  var imports = m.getImports();
   // log(imports.length);
-  if (imports.length>0)
-  for (let i = 0; i< imports.length; i++){
+  if (imports.length > 0) {
+    for (let i = 0; i < imports.length; i++) {
+      log(imports.length);
 
-    // log(imports.length);
-    log(imports.length);
-
-    // log(imports.length);
-    // for (let j = 0; i< imports[i].imports.length; j++){
-    //   let _import = imports[i].imports[j];
-    //   log(_import.toString())
-    // }
+      // log(imports.length);
+      // for (let j = 0; i< imports[i].imports.length; j++){
+      //   let _import = imports[i].imports[j];
+      //   log(_import.toString())
+      // }
+    }
   }
   // return
 }
 
 export function removeStartFunction (mod: Module):  Uint8Array {
   if (mod.hasStart) {
-    let start : SectionHeader = mod.getID(SectionId.Start)[0];
-    log(start.toString());
+    let sections : SectionHeader[] = mod.getID(SectionId.Start);
+    let start = sections[0];
+    // log(start.toString());
     let len = start.end - start.ref;
-    log(len);
+    // log(len);
     let buf = new Uint8Array(mod.buf.length - len);
-    log(start.offset)
+    // log(start.offset)
 
-    for (let i:u32 = 0; i < start.offset; i++) {
+    for (let i: u32 = 0; i < start.offset; i++) {
       buf[i] = mod.buf.buffer[i];
     }
-    log("checking end index");
-    log(mod.buf.end);
-    log(mod.buf.buffer);
-    log(mod.buf.buffer[mod.buf.length - 1]);
-    log(start.offset + len)
-    for (let i:u32 = start.offset + len; i < mod.buf.length; i++) {
-      if ( i> mod.buf.length - 8000) log(i);
-      buf[i-len] = mod.buf.buffer[i];
+    // log("checking end index");
+    // log(mod.buf.end);
+    // log(mod.buf.buffer);
+    // log(mod.buf.buffer[mod.buf.length - 1]);
+    // log(start.offset + len)
+    for (let i: u32 = start.offset + len; i < mod.buf.length; i++) {
+      buf[i - len] = mod.buf.buffer[i];
     }
-    // modemory.copy(buf.buffer.byteLength, m.buf.buffer.byteOffset, start.ref);
-    // memory.copy(buf.buffer.byteLength+start.end, m.buf.buffer.byteLength + start.end, m.buf.buffer.byteLength - start.end);
     return buf;
   } else {
     return mod.buf.buffer;
@@ -123,17 +120,20 @@ export function removeStartFunction (mod: Module):  Uint8Array {
 export function toString(t:TypeSection): string {
   return t.toString();
 }
+export function hasStart(mod: Module): boolean {
+  return mod.hasStart;
+}
 
 export class Parser {
   buf: Buffer;
   module: Module;
-  constructor(buf: Buffer){
-   this.buf = buf;
-   this.module = new Module(buf);
+  constructor(binary: Uint8Array){
+   this.buf = new Buffer(binary);
+   this.module = new Module(this.buf);
  }
 
  parseString(): String {
-   return String.fromUTF8(this.buf.off,this.buf.readVaruint(32));
+   return String.fromUTF8(this.buf.off, this.buf.readVaruint(32));
  }
 
  readVaruint(len: usize): u32 {
@@ -150,7 +150,7 @@ export class Parser {
 
 /** Starts parsing the module that has been placed in memory. */
   parse(): void {
-    let start = this.off;
+    var start = this.off;
     var magic = this.buf.readUint<u32>();
     if (magic != 0x6D736100) unreachable();
     var version = this.buf.readUint<u32>();
@@ -180,11 +180,7 @@ export class Parser {
 }
 
 export function newParser(buf: Uint8Array): Parser {
-  // log(buf);
-  let buffer = new Buffer(buf);
-  // log(buffer);
-  // log(buffer.off)
-  return new Parser(buffer);
+  return new Parser(buf);
 }
 export function parse(p: Parser): Module {
   p.parse();

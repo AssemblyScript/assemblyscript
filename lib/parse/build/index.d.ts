@@ -11,10 +11,11 @@ declare module ASModule {
   function printModule(m: u32): void;
   function getType(m: u32): u32;
   function getImports(m: u32): void;
-  function removeStartFunction(m: u32): u32;
+  function removeStartFunction(mod: u32): u32;
   function toString(t: u32): u32;
+  function hasStart(mod: u32): bool;
   class Parser {
-    constructor(buf: u32);
+    constructor(binary: u32);
     buf: u32;
     module: u32;
     parseString(): u32;
