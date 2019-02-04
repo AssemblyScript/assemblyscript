@@ -11,8 +11,9 @@ declare module ASModule {
   function printModule(m: u32): void;
   function getType(m: u32): u32;
   function getImports(m: u32): void;
+  function removeSection(mod: u32, id: i32): u32;
   function removeStartFunction(mod: u32): u32;
-  function exportDataSection(m: u32): u32;
+  function exportDataSection(mod: u32): u32;
   function toString(t: u32): u32;
   function hasStart(mod: u32): bool;
   class Parser {
@@ -26,6 +27,7 @@ declare module ASModule {
   }
   function newParser(buf: u32): u32;
   function parse(p: u32): u32;
+  function hasSection(mod: u32, id: i32): bool;
   namespace memory {
     function fill(dest: u32, c: u8, n: u32): void;
     function copy(dest: u32, src: u32, n: u32): void;

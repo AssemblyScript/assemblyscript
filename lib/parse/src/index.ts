@@ -22,6 +22,10 @@ export class WasmParser {
     return this.instance.memory;
   }
 
+  getByteArray(addr: number): Uint8Array {
+    return this.memory.getArray(Uint8Array, addr);
+  }
+
   constructor(public binary: Uint8Array) {
     // compile the parser if not yet compiled
     if (!compiled) compiled = new WebAssembly.Module(base64_decode(WASM_DATA));
@@ -83,6 +87,19 @@ export class WasmParser {
   removeStartFunction(): Uint8Array {
     var binary = <Uint8Array>this.memory.getArray(Uint8Array, this.instance.removeStartFunction(this.mod));
     return binary;
+  }
+
+  hasSection(id: SectionId): boolean {
+    return this.instance.hasSection(this.mod, id) != 0;
+  }
+
+
+  removeDataSection(): Uint8Array {
+    return this.getByteArray(this.instance.removeSection(this.mod, SectionId.Data));
+  }
+
+  exportDataSection(): Uint8Array {
+    return this.memory.getArray(Uint8Array, this.instance.exportDataSection(this.mod));
   }
 
   hasStart(): boolean {

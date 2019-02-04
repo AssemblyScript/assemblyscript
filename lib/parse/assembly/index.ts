@@ -85,16 +85,16 @@ export function getImports(m: Module): void {
   // return
 }
 
-export function removeStartFunction (mod: Module):  Uint8Array {
-  var start = mod.getID(SectionId.Start);
-  if (start != null) {
+export function removeSection(mod: Module, id: SectionId): Uint8Array {
+  var section = mod.getID(id);
+  if (section != null) {
     // log(start.toString());
-    let len = start.end - start.ref;
+    let len = section.end - section.ref;
     // log(len);
     let buf = new Uint8Array(mod.buf.length - len);
     // log(start.offset)
 
-    for (let i: u32 = 0; i < start.offset; i++) {
+    for (let i: u32 = 0; i < section.offset; i++) {
       buf[i] = mod.buf.buffer[i];
     }
     // log("checking end index");
@@ -102,7 +102,7 @@ export function removeStartFunction (mod: Module):  Uint8Array {
     // log(mod.buf.buffer);
     // log(mod.buf.buffer[mod.buf.length - 1]);
     // log(start.offset + len)
-    for (let i: u32 = start.offset + len; i < mod.buf.length; i++) {
+    for (let i: u32 = section.offset + len; i < mod.buf.length; i++) {
       buf[i - len] = mod.buf.buffer[i];
     }
     return buf;
@@ -111,14 +111,45 @@ export function removeStartFunction (mod: Module):  Uint8Array {
   }
 }
 
-export function exportDataSection(m: Module): Uint8Array | null {
-  var header = m.getID(SectionId.Data);
+export function removeStartFunction (mod: Module):  Uint8Array {
+  return removeSection(mod, SectionId.Start);
+}
+
+//Most Also include Memory Section
+export function exportDataSection(mod: Module): Uint8Array | null {
+  var header = mod.getID(SectionId.Data);
+  var mem = mod.getID(SectionId.Memory);
+  log<i32>((<SectionHeader>header).offset);
+  log<i32>((<SectionHeader>mem).offset);
+  log(header == null);
+  log(mem ==null)
   if (header == null){
     return null;
   }
-  var len = header.end - header.ref;
-  var res = new Uint8Array(len);
-  return m.buf.buffer;
+  if (mem == null){
+    return null;
+  }
+  var len = header.len + mem.len;
+  var res = new Uint8Array(len + 8); //Make room for preamble
+  res.fill(0,0,8);
+  //Magic Number
+  res[0] = 0;
+  res[1] = 0x61;
+  res[2] = 0x73;
+  res[3] = 0x6D;
+  //Version number
+  res[4] = 0x01;
+  log(res)
+  for (let i = mem.offset; i < mem.offset + mem.len - 1; i++){
+    res[i - mem.offset + 8] = mod.buf.buffer[i];
+  }
+  log(res[8])
+  log(mod.buf.buffer[mem.offset]);
+  for (let i = header.offset; i < header.offset + header.len - 1; i++){
+    let offset = i - header.offset + 8 + mem.len;
+    res[offset] = mod.buf.buffer[i];
+  }
+  return res;
 }
 
 export function toString(t:TypeSection): string {
@@ -189,6 +220,10 @@ export function newParser(buf: Uint8Array): Parser {
 export function parse(p: Parser): Module {
   p.parse();
   return p.module;
+}
+
+export function hasSection(mod: Module, id: SectionId): boolean {
+  return mod.getID(id) != null;
 }
 
 export {TypeSection, Module}

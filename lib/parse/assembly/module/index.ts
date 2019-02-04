@@ -173,10 +173,14 @@ export class SectionHeader {
     this.payload_off = buf.off;
   }
 
-  get end(): u32{
+  get end(): u32 {
     return this.payload_off + this.payload_len;
   }
 
+  //Length of section header and payload
+  get len(): u32 {
+    return this.end - this.ref;
+  }
 
   toString(): string {
     let ref = itoa<u32>(this.ref);
