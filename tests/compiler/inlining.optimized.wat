@@ -6,8 +6,8 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
- (table $0 2 anyfunc)
- (elem (i32.const 0) $null $inlining/test_funcs~anonymous|1)
+ (table $0 2 funcref)
+ (elem (i32.const 0) $null $inlining/func_ii_opt)
  (global $~argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -16,12 +16,12 @@
  (func $inlining/test (; 1 ;) (type $i) (result i32)
   i32.const 3
  )
- (func $inlining/test_funcs~anonymous|1 (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
+ (func $inlining/func_ii_opt (; 2 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
  )
  (func $inlining/test_funcs (; 3 ;) (type $v)
   i32.const 1
-  set_global $~argc
+  global.set $~argc
   i32.const 2
   i32.const 1
   call_indirect (type $ii)
@@ -30,7 +30,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 68
+   i32.const 67
    i32.const 2
    call $~lib/env/abort
    unreachable

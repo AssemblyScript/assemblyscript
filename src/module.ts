@@ -908,6 +908,10 @@ export class Module {
     _BinaryenSetStart(this.ref, func);
   }
 
+  forceInline(func: FunctionRef, call: ExpressionRef): bool {
+    return _BinaryenForceInline(this.ref, func, call);
+  }
+
   getOptimizeLevel(): i32 {
     return _BinaryenGetOptimizeLevel();
   }

@@ -2,7 +2,7 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $v (func))
  (memory $0 0)
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
@@ -16,13 +16,13 @@
  (export "renamed_renamed_b" (global $export/b))
  (start $start)
  (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.add
  )
  (func $export/mul (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.mul
  )
  (func $start (; 2 ;) (type $v)

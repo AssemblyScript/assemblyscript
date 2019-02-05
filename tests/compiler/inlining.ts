@@ -43,7 +43,6 @@ function func_fe(): (a: i32) => i32 {
    return (a: i32): i32 => a;
 }
 
-
 class Foo {
   @inline
   static method_static(a: i32, b: i32 = 2): i32 {
@@ -72,3 +71,19 @@ function test_funcs(): void {
 }
 
 test_funcs();
+
+@inline function recursive_a(doIt: bool): void {
+  ;
+  if (doIt) recursive_b(doIt);
+}
+
+@inline function recursive_b(doIt: bool): void {
+  ;
+  if (doIt) recursive_a(doIt);
+}
+
+function test_recursive(): void {
+  recursive_a(false);
+}
+
+test_recursive();

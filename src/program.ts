@@ -3079,10 +3079,8 @@ export const enum FlowFlags {
 
   // special
 
-  /** This branch is part of inlining a function. */
-  INLINE_CONTEXT = 1 << 12,
   /** This branch explicitly requests no bounds checking. */
-  UNCHECKED_CONTEXT = 1 << 13,
+  UNCHECKED_CONTEXT = 1 << 12,
 
   // masks
 

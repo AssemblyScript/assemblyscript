@@ -605,3 +605,4 @@ declare function _BinaryenGetDebugInfo(): bool;
 declare function _BinaryenSetDebugInfo(on: bool): void;
 
 declare function _BinaryenSetAPITracing(on: i32): void;
+declare function _BinaryenForceInline(module: BinaryenModuleRef, caller: BinaryenFunctionRef, call: BinaryenExportRef): bool;

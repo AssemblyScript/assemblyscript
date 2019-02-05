@@ -2,7 +2,7 @@
  (type $i (func (result i32)))
  (type $v (func))
  (memory $0 0)
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $void/u8Val1 (mut i32) (i32.const 1))
  (global $void/u8Val2 (mut i32) (i32.const 255))
@@ -18,8 +18,8 @@
   drop
   call $void/anInt
   drop
-  get_global $void/u8Val1
-  get_global $void/u8Val2
+  global.get $void/u8Val1
+  global.get $void/u8Val2
   i32.add
   drop
  )

@@ -255,6 +255,14 @@ export const enum WrapMode {
   WRAP
 }
 
+/** Queued inline action to be performed on finalization. */
+class InlineAction {
+  /** Enclosing function. */
+  caller: Function;
+  /** Call to be inlined. */
+  callRef: ExpressionRef;
+}
+
 /** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {
 
@@ -270,8 +278,6 @@ export class Compiler extends DiagnosticEmitter {
   currentFunction: Function;
   /** Current outer function in compilation, if compiling a function expression. */
   currentOuterFunction: Function | null = null;
-  /** Current inline functions stack. */
-  currentInlineFunctions: Function[] = [];
   /** Current enum in compilation. */
   currentEnum: Enum | null = null;
   /** Current type in compilation. */
@@ -294,6 +300,8 @@ export class Compiler extends DiagnosticEmitter {
   argcSet: FunctionRef = 0;
   /** Indicates whether the iterateRoots function must be generated. */
   needsIterateRoots: bool = false;
+  /** Queued inlining actions. */
+  inlineActions: InlineAction[] = [];
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -369,6 +377,13 @@ export class Compiler extends DiagnosticEmitter {
       );
       startFunctionInstance.finalize(module, funcRef);
       if (!program.mainFunction) module.setStart(funcRef);
+    }
+
+    // process queued inline actions
+    var inlineActions = this.inlineActions;
+    for (let i = 0, k = inlineActions.length; i < k; ++i) {
+      let action = inlineActions[i];
+      module.forceInline(action.caller.ref, action.callRef);
     }
 
     // update the heap base pointer
@@ -1960,11 +1975,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // If the last statement anyway, make it the block's return value
     if (isLastStatement(statement)) return expr ? expr : module.createNop();
-
-    // When inlining, break to the end of the inlined function's block (no need to wrap)
-    return flow.is(FlowFlags.INLINE_CONTEXT)
-      ? module.createBreak(assert(flow.returnLabel), 0, expr)
-      : module.createReturn(expr);
+    
+    return module.createReturn(expr);
   }
 
   compileSwitchStatement(statement: SwitchStatement): ExpressionRef {
@@ -2238,10 +2250,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       if (!isInlined) {
         let local: Local;
-        if (
-          declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
-          flow.is(FlowFlags.INLINE_CONTEXT)
-        ) { // here: not top-level
+        if (declaration.isAny(CommonFlags.LET | CommonFlags.CONST)) {
           local = flow.addScopedLocal(type, name, false, declaration); // reports
         } else {
           if (currentFunction.flow.getScopedLocal(name)) {
@@ -4691,8 +4700,7 @@ export class Compiler extends DiagnosticEmitter {
       operatorInstance,
       argumentExpressions,
       reportNode,
-      thisArg,
-      operatorInstance.hasDecorator(DecoratorFlags.INLINE)
+      thisArg
     );
   }
 
@@ -4716,8 +4724,7 @@ export class Compiler extends DiagnosticEmitter {
       operatorInstance,
       argumentExpressions,
       reportNode,
-      thisArg,
-      operatorInstance.hasDecorator(DecoratorFlags.INLINE)
+      thisArg
     );
     return ret;
   }
@@ -5160,9 +5167,6 @@ export class Compiler extends DiagnosticEmitter {
           );
           if (!instance) return this.module.createUnreachable();
           return this.makeCallDirect(instance, argumentExprs);
-          // TODO: this skips inlining because inlining requires compiling its temporary locals in
-          // the scope of the inlined flow. might need another mechanism to lock temp. locals early,
-          // so inlining can be performed in `makeCallDirect` instead?
 
         // otherwise resolve the non-generic call as usual
         } else {
@@ -5179,13 +5183,11 @@ export class Compiler extends DiagnosticEmitter {
             WrapMode.NONE
           );
         }
-
         return this.compileCallDirect(
           instance,
           expression.arguments,
           expression,
-          thisExpr,
-          instance.hasDecorator(DecoratorFlags.INLINE)
+          thisExpr
         );
       }
 
@@ -5448,8 +5450,7 @@ export class Compiler extends DiagnosticEmitter {
     instance: Function,
     argumentExpressions: Expression[],
     reportNode: Node,
-    thisArg: ExpressionRef = 0,
-    inline: bool = false
+    thisArg: ExpressionRef = 0
   ): ExpressionRef {
     var numArguments = argumentExpressions.length;
     var signature = instance.signature;
@@ -5462,24 +5463,6 @@ export class Compiler extends DiagnosticEmitter {
     )) {
       return this.module.createUnreachable();
     }
-
-    // Inline if explicitly requested
-    if (inline) {
-      assert(!instance.is(CommonFlags.TRAMPOLINE)); // doesn't make sense
-      if (this.currentInlineFunctions.includes(instance)) {
-        this.warning(
-          DiagnosticCode.Function_0_cannot_be_inlined_into_itself,
-          reportNode.range, instance.internalName
-        );
-      } else {
-        this.currentInlineFunctions.push(instance);
-        let expr = this.compileCallInlineUnchecked(instance, argumentExpressions, reportNode, thisArg);
-        this.currentInlineFunctions.pop();
-        return expr;
-      }
-    }
-
-    // Otherwise compile to just a call
     var numArgumentsInclThis = thisArg ? numArguments + 1 : numArguments;
     var operands = new Array<ExpressionRef>(numArgumentsInclThis);
     var index = 0;
@@ -5498,145 +5481,6 @@ export class Compiler extends DiagnosticEmitter {
     }
     assert(index == numArgumentsInclThis);
     return this.makeCallDirect(instance, operands);
-  }
-
-  // Depends on being pre-checked in compileCallDirect
-  private compileCallInlineUnchecked(
-    instance: Function,
-    argumentExpressions: Expression[],
-    reportNode: Node,
-    thisArg: ExpressionRef = 0
-  ): ExpressionRef {
-    var numArguments = argumentExpressions.length;
-    var signature = instance.signature;
-    var currentFunction = this.currentFunction;
-    var module = this.module;
-    var declaration = instance.prototype.declaration;
-
-    // Create an empty child flow with its own scope and mark it for inlining
-    var previousFlow = currentFunction.flow;
-    var returnLabel = instance.internalName + "|inlined." + (instance.nextInlineId++).toString(10);
-    var returnType = instance.signature.returnType;
-    var flow = Flow.create(currentFunction);
-    flow.set(FlowFlags.INLINE_CONTEXT);
-    flow.returnLabel = returnLabel;
-    flow.returnType = returnType;
-    flow.contextualTypeArguments = instance.contextualTypeArguments;
-
-    // Convert provided call arguments to temporary locals. It is important that these are compiled
-    // here, with their respective locals being blocked. There is no 'makeCallInline'.
-    var body = [];
-    if (thisArg) {
-      let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
-      let thisType = assert(instance.signature.thisType);
-      let classType = thisType.classReference;
-      let superType = classType
-        ? classType.base
-          ? classType.base.type
-          : null
-        : null;
-      if (getExpressionId(thisArg) == ExpressionId.GetLocal) { // reuse this var
-        flow.addScopedLocalAlias(getGetLocalIndex(thisArg), thisType, "this");
-        if (superType) flow.addScopedLocalAlias(getGetLocalIndex(thisArg), superType, "super");
-      } else { // use a temp var
-        let thisLocal = flow.addScopedLocal(thisType, "this", false);
-        body.push(
-          module.createSetLocal(thisLocal.index, thisArg)
-        );
-        if (superType) flow.addScopedLocalAlias(thisLocal.index, superType, "super");
-      }
-    }
-    var parameterTypes = signature.parameterTypes;
-    for (let i = 0; i < numArguments; ++i) {
-      let paramExpr = this.compileExpression(
-        argumentExpressions[i],
-        parameterTypes[i],
-        ConversionKind.IMPLICIT,
-        WrapMode.NONE
-      );
-      if (getExpressionId(paramExpr) == ExpressionId.GetLocal) {
-        flow.addScopedLocalAlias(
-          getGetLocalIndex(paramExpr),
-          parameterTypes[i],
-          signature.getParameterName(i)
-        );
-        // inherits wrap status
-      } else {
-        let argumentLocal = flow.addScopedLocal(
-          parameterTypes[i],
-          signature.getParameterName(i),
-          !flow.canOverflow(paramExpr, parameterTypes[i])
-        );
-        body.push(
-          module.createSetLocal(argumentLocal.index, paramExpr)
-        );
-      }
-    }
-
-    // Compile optional parameter initializers in the scope of the inlined flow
-    currentFunction.flow = flow;
-    var numParameters = signature.parameterTypes.length;
-    for (let i = numArguments; i < numParameters; ++i) {
-      let initExpr = this.compileExpression(
-        assert(declaration.signature.parameters[i].initializer),
-        parameterTypes[i],
-        ConversionKind.IMPLICIT,
-        WrapMode.WRAP
-      );
-      let argumentLocal = flow.addScopedLocal(
-        parameterTypes[i],
-        signature.getParameterName(i),
-        !flow.canOverflow(initExpr, parameterTypes[i])
-      );
-      body.push(
-        module.createSetLocal(argumentLocal.index, initExpr)
-      );
-    }
-
-    // Compile the called function's body in the scope of the inlined flow
-    var bodyStatement = assert(declaration.body);
-    if (bodyStatement.kind == NodeKind.BLOCK) {
-      let statements = (<BlockStatement>bodyStatement).statements;
-      for (let i = 0, k = statements.length; i < k; ++i) {
-        let stmt = this.compileStatement(statements[i]);
-        if (getExpressionId(stmt) != ExpressionId.Nop) {
-          body.push(stmt);
-          if (flow.isAny(FlowFlags.ANY_TERMINATING)) break;
-        }
-      }
-    } else {
-      body.push(this.compileStatement(bodyStatement));
-    }
-
-    // Free any new scoped locals and reset to the original flow
-    var scopedLocals = flow.scopedLocals;
-    if (scopedLocals) {
-      for (let scopedLocal of scopedLocals.values()) {
-        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
-          currentFunction.freeTempLocal(scopedLocal);
-        }
-      }
-      flow.scopedLocals = null;
-    }
-    flow.finalize();
-    this.currentFunction.flow = previousFlow;
-    this.currentType = returnType;
-
-    // Check that all branches are terminated
-    if (returnType != Type.void && !flow.isAny(FlowFlags.ANY_TERMINATING)) {
-      this.error(
-        DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
-        declaration.signature.returnType.range
-      );
-      return module.createUnreachable();
-    }
-    return flow.is(FlowFlags.RETURNS)
-      ? module.createBlock(returnLabel, body, returnType.toNativeType())
-      : body.length > 1
-        ? module.createBlock(null, body, returnType.toNativeType())
-        : body.length
-          ? body[0]
-          : module.createNop();
   }
 
   /** Gets the trampoline for the specified function. */
@@ -5873,17 +5717,31 @@ export class Compiler extends DiagnosticEmitter {
           this.program.instancesLookup.set(instance.internalName, instance); // so canOverflow can find it
           let nativeReturnType = returnType.toNativeType();
           this.currentType = returnType;
-          return module.createBlock(null, [
+          let call: ExpressionRef;
+          let ret = module.createBlock(null, [
             module.createSetGlobal(this.ensureArgcVar(), module.createI32(numArguments)),
-            module.createCall(instance.internalName, operands, nativeReturnType)
+            call = module.createCall(instance.internalName, operands, nativeReturnType)
           ], nativeReturnType);
+          this.maybeInline(instance, call);
+          return ret;
         }
       }
     }
 
     // otherwise just call through
     this.currentType = returnType;
-    return module.createCall(instance.internalName, operands, returnType.toNativeType());
+    var call = module.createCall(instance.internalName, operands, returnType.toNativeType());
+    this.maybeInline(instance, call);
+    return call;
+  }
+
+  private maybeInline(caller: Function, callRef: ExpressionRef): void {
+    if (caller.hasDecorator(DecoratorFlags.INLINE)) {
+      let action = new InlineAction();
+      action.caller = this.currentFunction;
+      action.callRef = callRef;
+      this.inlineActions.push(action);
+    }
   }
 
   /** Compiles an indirect call using an index argument and a signature. */
@@ -6089,13 +5947,6 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.THIS: {
         let flow = currentFunction.flow;
-        if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let thisLocal = assert(flow.getScopedLocal("this"));
-          if (thisLocal) {
-            this.currentType = thisLocal.type;
-            return module.createGetLocal(thisLocal.index, thisLocal.type.toNativeType());
-          }
-        }
         if (currentFunction.is(CommonFlags.INSTANCE)) {
           let thisLocal = assert(flow.getScopedLocal("this"));
           let classInstance = assert(currentFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
@@ -6147,18 +5998,6 @@ export class Compiler extends DiagnosticEmitter {
               DiagnosticCode._super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class,
               expression.range
             );
-          }
-        }
-        let flow = currentFunction.flow;
-        if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let scopedThis = flow.getScopedLocal("this");
-          if (scopedThis) {
-            let scopedThisClass = assert(scopedThis.type.classReference);
-            let base = scopedThisClass.base;
-            if (base) {
-              this.currentType = base.type;
-              return module.createGetLocal(scopedThis.index, base.type.toNativeType());
-            }
           }
         }
         if (currentFunction.is(CommonFlags.INSTANCE)) {
@@ -6809,7 +6648,6 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0; i < numParameters; ++i) {
         operands[i + 1] = module.createGetLocal(i + 1, parameterTypes[i].toNativeType());
       }
-      // TODO: base constructor might be inlined, but makeCallDirect can't do this
       stmts.push(
         module.createSetLocal(0,
           this.makeCallDirect(assert(baseClass.constructorInstance), operands)
@@ -6839,9 +6677,7 @@ export class Compiler extends DiagnosticEmitter {
       ctor,
       argumentExpressions,
       reportNode,
-      this.options.usizeType.toNativeZero(this.module),
-      ctor.hasDecorator(DecoratorFlags.INLINE)
-      // FIXME: trying to inline a constructor that doesn't return a custom value doesn't work
+      this.options.usizeType.toNativeZero(this.module)
     );
     this.currentType = classInstance.type;
     return expr;
@@ -6949,7 +6785,6 @@ export class Compiler extends DiagnosticEmitter {
       )) {
         return this.module.createUnreachable();
       }
-      let inline = (instance.decoratorFlags & DecoratorFlags.INLINE) != 0;
       if (instance.is(CommonFlags.INSTANCE)) {
         let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
         let thisExpression = assert(this.resolver.currentThisExpression); //!!!
@@ -6959,10 +6794,10 @@ export class Compiler extends DiagnosticEmitter {
           WrapMode.NONE
         );
         this.currentType = signature.returnType;
-        return this.compileCallDirect(instance, [], reportNode, thisExpr, inline);
+        return this.compileCallDirect(instance, [], reportNode, thisExpr);
       } else {
         this.currentType = signature.returnType;
-        return this.compileCallDirect(instance, [], reportNode, 0, inline);
+        return this.compileCallDirect(instance, [], reportNode, 0);
       }
     } else {
       this.error(
@@ -7823,10 +7658,6 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes the initializers for a class's fields. */
   makeFieldInitialization(classInstance: Class, stmts: ExpressionRef[] = []): ExpressionRef[] {
-
-    // must not be used in an inline context as it makes assumptions about local indexes
-    assert(!this.currentFunction.flow.is(FlowFlags.INLINE_CONTEXT));
-
     if (classInstance.members) {
       let module = this.module;
       let nativeSizeType = this.options.nativeSizeType;
