@@ -17,17 +17,17 @@
     "long": "^4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^10.12.18",
+    "@types/node": "^10.12.21",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
     "ts-loader": "^5.3.3",
     "ts-node": "^6.2.0",
-    "tslint": "^5.12.0",
+    "tslint": "^5.12.1",
     "typedoc": "^0.13.0",
     "typedoc-plugin-external-module-name": "^1.1.3",
-    "typescript": "^3.2.2",
-    "webpack": "^4.28.1",
-    "webpack-cli": "^3.2.1"
+    "typescript": "^3.3.1",
+    "webpack": "^4.29.1",
+    "webpack-cli": "^3.2.3"
   },
   "main": "index.js",
   "types": "index.d.ts",
