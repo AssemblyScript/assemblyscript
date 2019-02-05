@@ -4324,15 +4324,45 @@
   local.get $5
   i32.store offset=8
  )
- (func $~lib/allocator/arena/__memory_free (; 46 ;) (type $iv) (param $0 i32)
+ (func $~lib/internal/arraybuffer/LOAD<String,String> (; 46 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $2
+  i32.add
+  i32.load offset=8
+ )
+ (func $~lib/array/Array<String>#__unchecked_get (; 47 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  i32.load
+  local.set $2
+  local.get $1
+  local.set $3
+  i32.const 0
+  local.set $4
+  local.get $2
+  local.get $3
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $4
+  i32.add
+  i32.load offset=8
+ )
+ (func $~lib/allocator/arena/__memory_free (; 48 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/memory/memory.free (; 47 ;) (type $iv) (param $0 i32)
+ (func $~lib/memory/memory.free (; 49 ;) (type $iv) (param $0 i32)
   local.get $0
   call $~lib/allocator/arena/__memory_free
   return
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 48 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 50 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4448,117 +4478,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<String>#__set (; 49 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  local.get $0
-  i32.load
-  local.set $3
-  local.get $3
-  i32.load
-  i32.const 2
-  i32.shr_u
-  local.set $4
-  local.get $1
-  local.get $4
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 268435454
-   i32.ge_u
-   if
-    i32.const 0
-    i32.const 1096
-    i32.const 107
-    i32.const 41
-    call $~lib/env/abort
-    unreachable
-   end
-   local.get $3
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 2
-   i32.shl
-   call $~lib/internal/arraybuffer/reallocateUnsafe
-   local.set $3
-   local.get $0
-   local.get $3
-   i32.store
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.store offset=4
-  end
-  block $__inlined_func$~lib/internal/arraybuffer/STORE<String,String>
-   local.get $3
-   local.set $5
-   local.get $1
-   local.set $6
-   local.get $2
-   local.set $7
-   i32.const 0
-   local.set $8
-   local.get $5
-   local.get $6
-   i32.const 2
-   i32.shl
-   i32.add
-   local.get $8
-   i32.add
-   local.get $7
-   i32.store offset=8
-  end
- )
- (func $~lib/internal/arraybuffer/LOAD<String,String> (; 50 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $2
-  i32.add
-  i32.load offset=8
- )
- (func $~lib/array/Array<String>#__get (; 51 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $0
-  i32.load
-  local.set $2
-  local.get $1
-  local.get $2
-  i32.load
-  i32.const 2
-  i32.shr_u
-  i32.lt_u
-  if (result i32)
-   local.get $2
-   local.set $3
-   local.get $1
-   local.set $4
-   i32.const 0
-   local.set $5
-   local.get $3
-   local.get $4
-   i32.const 2
-   i32.shl
-   i32.add
-   local.get $5
-   i32.add
-   i32.load offset=8
-  else   
-   unreachable
-  end
- )
- (func $~lib/array/Array<String>#push (; 52 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#push (; 51 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4631,7 +4551,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String#split (; 53 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#split (; 52 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4790,10 +4710,10 @@
      i32.const 0
      local.tee $7
      i32.const 256
-     call $~lib/array/Array<String>#__set
+     call $~lib/array/Array<String>#__unchecked_set
      local.get $3
      local.get $7
-     call $~lib/array/Array<String>#__get
+     call $~lib/array/Array<String>#__unchecked_get
     end
     drop
     local.get $6
@@ -4880,10 +4800,10 @@
     i32.const 0
     local.tee $7
     local.get $0
-    call $~lib/array/Array<String>#__set
+    call $~lib/array/Array<String>#__unchecked_set
     local.get $3
     local.get $7
-    call $~lib/array/Array<String>#__get
+    call $~lib/array/Array<String>#__unchecked_get
    end
    drop
    local.get $6
@@ -4918,7 +4838,7 @@
   end
   local.get $9
  )
- (func $~lib/string/String#split|trampoline (; 54 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#split|trampoline (; 53 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -4939,9 +4859,42 @@
   local.get $2
   call $~lib/string/String#split
  )
- (func $~lib/array/Array<String>#get:length (; 55 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<String>#get:length (; 54 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
+ )
+ (func $~lib/array/Array<String>#__get (; 55 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.load
+  local.set $2
+  local.get $1
+  local.get $2
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if (result i32)
+   local.get $2
+   local.set $3
+   local.get $1
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $3
+   local.get $4
+   i32.const 2
+   i32.shl
+   i32.add
+   local.get $5
+   i32.add
+   i32.load offset=8
+  else   
+   unreachable
+  end
  )
  (func $~lib/internal/number/decimalCount32 (; 56 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
