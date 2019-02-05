@@ -788,14 +788,6 @@ export class Resolver extends DiagnosticEmitter {
         throw new Error("not implemented");
       }
       case NodeKind.THIS: { // -> Class / ClassPrototype
-        if (contextualFunction.flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let explicitLocal = contextualFunction.flow.getScopedLocal("this");
-          if (explicitLocal) {
-            this.currentThisExpression = null;
-            this.currentElementExpression = null;
-            return explicitLocal;
-          }
-        }
         let parent = contextualFunction.parent;
         if (parent) {
           this.currentThisExpression = null;
@@ -811,14 +803,6 @@ export class Resolver extends DiagnosticEmitter {
         return null;
       }
       case NodeKind.SUPER: { // -> Class
-        if (contextualFunction.flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let explicitLocal = contextualFunction.flow.getScopedLocal("super");
-          if (explicitLocal) {
-            this.currentThisExpression = null;
-            this.currentElementExpression = null;
-            return explicitLocal;
-          }
-        }
         let parent = contextualFunction.parent;
         if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
           this.currentThisExpression = null;
