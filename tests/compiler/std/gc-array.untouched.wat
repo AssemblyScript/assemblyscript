@@ -50,18 +50,13 @@
   local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/collector/itcm/refToObj (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  global.get $~lib/collector/itcm/HEADER_SIZE
-  i32.sub
- )
- (func $~lib/collector/itcm/ManagedObject#get:color (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:color (; 2 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const 3
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#get:next (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:next (; 3 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const 3
@@ -69,7 +64,7 @@
   i32.xor
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#set:next (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:next (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   local.get $0
@@ -79,7 +74,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/ManagedObject#unlink (; 6 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#unlink (; 5 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -95,7 +90,7 @@
   local.get $1
   call $~lib/collector/itcm/ManagedObject#set:next
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 7 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 6 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load offset=4
@@ -113,7 +108,7 @@
   local.get $1
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 8 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 7 ;) (type $iv) (param $0 i32)
   local.get $0
   global.get $~lib/collector/itcm/iter
   i32.eq
@@ -138,15 +133,12 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/__gc_mark (; 9 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/__gc_mark (; 8 ;) (type $iv) (param $0 i32)
   (local $1 i32)
-  (local $2 i32)
   local.get $0
   if
-   block $__inlined_func$~lib/collector/itcm/refToObj (result i32)
+   block $~lib/collector/itcm/refToObj|inlined.0 (result i32)
     local.get $0
-    local.set $2
-    local.get $2
     global.get $~lib/collector/itcm/HEADER_SIZE
     i32.sub
    end
@@ -161,7 +153,7 @@
    end
   end
  )
- (func $~lib/array/Array<Foo>~gc (; 10 ;) (type $iv) (param $0 i32)
+ (func $~lib/array/Array<Foo>~gc (; 9 ;) (type $iv) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -199,7 +191,7 @@
    end
   end
  )
- (func $~lib/allocator/arena/__memory_allocate (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 10 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -278,12 +270,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 12 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/allocator/arena/__memory_allocate
-  return
- )
- (func $~lib/collector/itcm/ManagedObjectList#clear (; 13 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#clear (; 11 ;) (type $iv) (param $0 i32)
   local.get $0
   local.get $0
   i32.store
@@ -291,7 +278,7 @@
   local.get $0
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#set:color (; 14 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:color (; 12 ;) (type $iiv) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $0
   i32.load
@@ -303,26 +290,12 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/objToRef (; 15 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  global.get $~lib/collector/itcm/HEADER_SIZE
-  i32.add
- )
- (func $~lib/allocator/arena/__memory_free (; 16 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 13 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/memory/memory.free (; 17 ;) (type $iv) (param $0 i32)
-  local.get $0
-  call $~lib/allocator/arena/__memory_free
-  return
- )
- (func $~lib/collector/itcm/step (; 18 ;) (type $v)
+ (func $~lib/collector/itcm/step (; 14 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
   block $break|0
    block $case3|0
     block $case2|0
@@ -349,12 +322,12 @@
        br $break|0
       end
       block
-       block $__inlined_func$~lib/memory/memory.allocate (result i32)
+       block $~lib/memory/memory.allocate|inlined.0 (result i32)
         global.get $~lib/collector/itcm/HEADER_SIZE
-        local.set $2
-        local.get $2
+        local.set $1
+        local.get $1
         call $~lib/allocator/arena/__memory_allocate
-        br $__inlined_func$~lib/memory/memory.allocate
+        br $~lib/memory/memory.allocate|inlined.0
        end
        global.set $~lib/collector/itcm/fromSpace
        global.get $~lib/collector/itcm/fromSpace
@@ -362,12 +335,12 @@
        i32.store offset=8
        global.get $~lib/collector/itcm/fromSpace
        call $~lib/collector/itcm/ManagedObjectList#clear
-       block $__inlined_func$~lib/memory/memory.allocate0 (result i32)
+       block $~lib/memory/memory.allocate|inlined.1 (result i32)
         global.get $~lib/collector/itcm/HEADER_SIZE
-        local.set $3
-        local.get $3
+        local.set $1
+        local.get $1
         call $~lib/allocator/arena/__memory_allocate
-        br $__inlined_func$~lib/memory/memory.allocate0
+        br $~lib/memory/memory.allocate|inlined.1
        end
        global.set $~lib/collector/itcm/toSpace
        global.get $~lib/collector/itcm/toSpace
@@ -407,10 +380,8 @@
       call $~lib/collector/itcm/ManagedObject#set:color
       i32.const 1
       global.set $~argc
-      block $__inlined_func$~lib/collector/itcm/objToRef (result i32)
+      block $~lib/collector/itcm/objToRef|inlined.0 (result i32)
        local.get $0
-       local.set $4
-       local.get $4
        global.get $~lib/collector/itcm/HEADER_SIZE
        i32.add
       end
@@ -462,17 +433,14 @@
      global.get $HEAP_BASE
      i32.ge_u
      if
-      block $__inlined_func$~lib/memory/memory.free
-       local.get $0
-       local.set $5
+      block $~lib/memory/memory.free|inlined.0
        block
-        local.get $5
+        local.get $0
         call $~lib/allocator/arena/__memory_free
-        br $__inlined_func$~lib/memory/memory.free
+        br $~lib/memory/memory.free|inlined.0
         unreachable
        end
        unreachable
-       br $__inlined_func$~lib/memory/memory.free
       end
      end
     else     
@@ -487,7 +455,7 @@
    unreachable
   end
  )
- (func $~lib/collector/itcm/__gc_collect (; 19 ;) (type $v)
+ (func $~lib/collector/itcm/__gc_collect (; 15 ;) (type $v)
   (local $0 i32)
   block $break|0
    block $case1|0
@@ -519,14 +487,13 @@
    end
   end
  )
- (func $~lib/gc/gc.collect (; 20 ;) (type $v)
+ (func $~lib/gc/gc.collect (; 16 ;) (type $v)
   call $~lib/collector/itcm/__gc_collect
   return
  )
- (func $~lib/collector/itcm/__gc_allocate (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/collector/itcm/__gc_allocate (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   global.get $~lib/internal/allocator/MAX_SIZE_32
   global.get $~lib/collector/itcm/HEADER_SIZE
@@ -536,34 +503,32 @@
    unreachable
   end
   call $~lib/collector/itcm/step
-  block $__inlined_func$~lib/memory/memory.allocate (result i32)
+  block $~lib/memory/memory.allocate|inlined.2 (result i32)
    global.get $~lib/collector/itcm/HEADER_SIZE
    local.get $0
    i32.add
-   local.set $3
-   local.get $3
+   local.set $2
+   local.get $2
    call $~lib/allocator/arena/__memory_allocate
-   br $__inlined_func$~lib/memory/memory.allocate
+   br $~lib/memory/memory.allocate|inlined.2
   end
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   local.get $1
   i32.store offset=8
-  local.get $2
+  local.get $3
   global.get $~lib/collector/itcm/white
   call $~lib/collector/itcm/ManagedObject#set:color
   global.get $~lib/collector/itcm/fromSpace
-  local.get $2
+  local.get $3
   call $~lib/collector/itcm/ManagedObjectList#push
-  block $__inlined_func$~lib/collector/itcm/objToRef (result i32)
-   local.get $2
-   local.set $4
-   local.get $4
+  block $~lib/collector/itcm/objToRef|inlined.1 (result i32)
+   local.get $3
    global.get $~lib/collector/itcm/HEADER_SIZE
    i32.add
   end
  )
- (func $std/gc-array/Foo~gc (; 22 ;) (type $iv) (param $0 i32)
+ (func $std/gc-array/Foo~gc (; 18 ;) (type $iv) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -572,7 +537,7 @@
   local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/string/String~gc (; 23 ;) (type $iv) (param $0 i32)
+ (func $~lib/string/String~gc (; 19 ;) (type $iv) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -581,7 +546,7 @@
   local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/internal/arraybuffer/computeSize (; 24 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 20 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -593,10 +558,10 @@
   i32.sub
   i32.shl
  )
- (func $~lib/internal/arraybuffer/__gc (; 25 ;) (type $iv) (param $0 i32)
+ (func $~lib/internal/arraybuffer/__gc (; 21 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 26 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 22 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
@@ -620,7 +585,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memcpy (; 27 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 23 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1821,7 +1786,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 28 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 24 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -2048,13 +2013,7 @@
    end
   end
  )
- (func $~lib/memory/memory.copy (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/internal/memory/memmove
- )
- (func $~lib/internal/memory/memset (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 25 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -2308,21 +2267,11 @@
    end
   end
  )
- (func $~lib/memory/memory.fill (; 31 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/internal/memory/memset
- )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
   local.get $0
   i32.load
   local.set $2
@@ -2356,43 +2305,37 @@
     local.get $1
     call $~lib/internal/arraybuffer/allocateUnsafe
     local.set $3
-    block $__inlined_func$~lib/memory/memory.copy
-     local.get $3
-     global.get $~lib/internal/arraybuffer/HEADER_SIZE
-     i32.add
-     local.set $4
-     local.get $0
-     global.get $~lib/internal/arraybuffer/HEADER_SIZE
-     i32.add
-     local.set $5
-     local.get $2
-     local.set $6
-     local.get $4
-     local.get $5
-     local.get $6
-     call $~lib/internal/memory/memmove
-    end
     local.get $3
-    local.set $0
-   end
-   block $__inlined_func$~lib/memory/memory.fill
+    global.get $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+    local.set $4
     local.get $0
     global.get $~lib/internal/arraybuffer/HEADER_SIZE
     i32.add
+    local.set $5
+    local.get $4
+    local.get $5
     local.get $2
-    i32.add
-    local.set $7
-    i32.const 0
-    local.set $8
-    local.get $1
-    local.get $2
-    i32.sub
-    local.set $9
-    local.get $7
-    local.get $8
-    local.get $9
-    call $~lib/internal/memory/memset
+    call $~lib/internal/memory/memmove
+    local.get $3
+    local.set $0
    end
+   local.get $0
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.get $2
+   i32.add
+   local.set $3
+   i32.const 0
+   local.set $5
+   local.get $1
+   local.get $2
+   i32.sub
+   local.set $4
+   local.get $3
+   local.get $5
+   local.get $4
+   call $~lib/internal/memory/memset
   else   
    local.get $1
    local.get $2
@@ -2417,26 +2360,11 @@
   end
   local.get $0
  )
- (func $~lib/internal/arraybuffer/STORE<Foo,Foo> (; 33 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
-  local.get $0
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $3
-  i32.add
-  local.get $2
-  i32.store offset=8
- )
- (func $~lib/collector/itcm/__gc_link (; 34 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/__gc_link (; 27 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  block $__inlined_func$~lib/collector/itcm/refToObj (result i32)
+  block $~lib/collector/itcm/refToObj|inlined.1 (result i32)
    local.get $0
-   local.set $4
-   local.get $4
    global.get $~lib/collector/itcm/HEADER_SIZE
    i32.sub
   end
@@ -2448,10 +2376,8 @@
   i32.eq
   local.tee $3
   if (result i32)
-   block $__inlined_func$~lib/collector/itcm/refToObj0 (result i32)
+   block $~lib/collector/itcm/refToObj|inlined.3 (result i32)
     local.get $1
-    local.set $5
-    local.get $5
     global.get $~lib/collector/itcm/HEADER_SIZE
     i32.sub
    end
@@ -2466,13 +2392,10 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/array/Array<Foo>#__set (; 35 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Foo>#__set (; 28 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
   local.get $0
   i32.load
   local.set $3
@@ -2513,30 +2436,22 @@
    i32.add
    i32.store offset=4
   end
-  block $__inlined_func$~lib/internal/arraybuffer/STORE<Foo,Foo>
-   local.get $3
-   local.set $5
-   local.get $1
-   local.set $6
-   local.get $2
-   local.set $7
-   i32.const 0
-   local.set $8
-   local.get $5
-   local.get $6
-   i32.const 2
-   i32.shl
-   i32.add
-   local.get $8
-   i32.add
-   local.get $7
-   i32.store offset=8
-  end
+  i32.const 0
+  local.set $5
+  local.get $3
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $5
+  i32.add
+  local.get $2
+  i32.store offset=8
   local.get $0
   local.get $2
   call $~lib/collector/itcm/__gc_link
  )
- (func $std/gc-array/main (; 36 ;) (type $i) (result i32)
+ (func $std/gc-array/main (; 29 ;) (type $i) (result i32)
   global.get $~started
   i32.eqz
   if
@@ -2546,7 +2461,7 @@
   end
   i32.const 0
  )
- (func $start (; 37 ;) (type $v)
+ (func $start (; 30 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2597,9 +2512,9 @@
   call $~lib/array/Array<Foo>#__set
   call $~lib/gc/gc.collect
  )
- (func $null (; 38 ;) (type $v)
+ (func $null (; 31 ;) (type $v)
  )
- (func $~iterateRoots (; 39 ;) (type $iv) (param $0 i32)
+ (func $~iterateRoots (; 32 ;) (type $iv) (param $0 i32)
   global.get $std/gc-array/arr
   local.get $0
   call_indirect (type $iv)

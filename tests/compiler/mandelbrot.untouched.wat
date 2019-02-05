@@ -506,9 +506,6 @@
   (local $19 f64)
   (local $20 i32)
   (local $21 f64)
-  (local $22 f64)
-  (local $23 f64)
-  (local $24 f64)
   local.get $1
   f64.convert_i32_u
   f64.const 1
@@ -692,26 +689,17 @@
       i32.const 1
       i32.sub
       f64.convert_i32_s
-      block $__inlined_func$../../examples/mandelbrot/assembly/index/clamp<f64> (result f64)
-       local.get $18
-       i32.const 1
-       i32.add
-       f64.convert_i32_u
-       local.get $21
-       f64.sub
-       local.get $10
-       f64.mul
-       local.set $22
-       f64.const 0
-       local.set $23
-       f64.const 1
-       local.set $24
-       local.get $22
-       local.get $23
-       f64.max
-       local.get $24
-       f64.min
-      end
+      local.get $18
+      i32.const 1
+      i32.add
+      f64.convert_i32_u
+      local.get $21
+      f64.sub
+      local.get $10
+      f64.mul
+      f64.const 0
+      f64.const 1
+      call $../../examples/mandelbrot/assembly/index/clamp<f64>
       f64.mul
       i32.trunc_f64_u
       local.set $20

@@ -13,12 +13,10 @@
   call $inlining-recursive/foo
  )
  (func $inlining-recursive/baz (; 1 ;) (type $v)
-  call $inlining-recursive/baz
+  call $inlining-recursive/bar
  )
  (func $inlining-recursive/bar (; 2 ;) (type $v)
-  block $__inlined_func$inlining-recursive/bar
-   call $inlining-recursive/baz
-  end
+  call $inlining-recursive/baz
  )
  (func $null (; 3 ;) (type $v)
  )

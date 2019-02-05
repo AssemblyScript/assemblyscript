@@ -184,87 +184,8 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap16<u8> (; 11 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  return
- )
- (func $~lib/polyfills/bswap16<i8> (; 12 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  return
- )
- (func $~lib/polyfills/bswap16<u16> (; 13 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 8
-  i32.shl
-  local.get $0
-  i32.const 65535
-  i32.and
-  i32.const 8
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.or
-  return
- )
- (func $~lib/polyfills/bswap16<i16> (; 14 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 8
-  i32.shl
-  local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  i32.const 8
-  i32.shr_s
-  i32.const 255
-  i32.and
-  i32.or
-  return
- )
- (func $~lib/polyfills/bswap16<u32> (; 15 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 8
-  i32.shl
-  i32.const 65280
-  i32.and
-  local.get $0
-  i32.const 8
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.or
-  local.get $0
-  i32.const -65536
-  i32.and
-  i32.or
-  return
- )
- (func $~lib/polyfills/bswap16<i32> (; 16 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 8
-  i32.shl
-  i32.const 65280
-  i32.and
-  local.get $0
-  i32.const 8
-  i32.shr_s
-  i32.const 255
-  i32.and
-  i32.or
-  local.get $0
-  i32.const -65536
-  i32.and
-  i32.or
-  return
- )
- (func $start (; 17 ;) (type $v)
+ (func $start (; 11 ;) (type $v)
   (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
   i32.const 170
   call $~lib/polyfills/bswap<u8>
   i32.const 255
@@ -415,11 +336,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/polyfills/bswap16<u8> (result i32)
+  block $~lib/polyfills/bswap16<u8>|inlined.0 (result i32)
    i32.const 170
    local.set $0
    local.get $0
-   br $__inlined_func$~lib/polyfills/bswap16<u8>
+   br $~lib/polyfills/bswap16<u8>|inlined.0
   end
   i32.const 255
   i32.and
@@ -434,11 +355,11 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/polyfills/bswap16<i8> (result i32)
+  block $~lib/polyfills/bswap16<i8>|inlined.0 (result i32)
    i32.const 170
-   local.set $1
-   local.get $1
-   br $__inlined_func$~lib/polyfills/bswap16<i8>
+   local.set $0
+   local.get $0
+   br $~lib/polyfills/bswap16<i8>|inlined.0
   end
   i32.const 24
   i32.shl
@@ -459,21 +380,19 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/polyfills/bswap16<u16> (result i32)
+  block $~lib/polyfills/bswap16<u16>|inlined.0 (result i32)
    i32.const 43707
-   local.set $2
-   local.get $2
+   local.set $0
+   local.get $0
    i32.const 8
    i32.shl
-   local.get $2
-   i32.const 65535
-   i32.and
+   local.get $0
    i32.const 8
    i32.shr_u
    i32.const 255
    i32.and
    i32.or
-   br $__inlined_func$~lib/polyfills/bswap16<u16>
+   br $~lib/polyfills/bswap16<u16>|inlined.0
   end
   i32.const 65535
   i32.and
@@ -488,13 +407,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/polyfills/bswap16<i16> (result i32)
+  block $~lib/polyfills/bswap16<i16>|inlined.0 (result i32)
    i32.const 43707
-   local.set $3
-   local.get $3
+   local.set $0
+   local.get $0
    i32.const 8
    i32.shl
-   local.get $3
+   local.get $0
    i32.const 16
    i32.shl
    i32.const 16
@@ -504,7 +423,7 @@
    i32.const 255
    i32.and
    i32.or
-   br $__inlined_func$~lib/polyfills/bswap16<i16>
+   br $~lib/polyfills/bswap16<i16>|inlined.0
   end
   i32.const 16
   i32.shl
@@ -525,25 +444,25 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/polyfills/bswap16<u32> (result i32)
+  block $~lib/polyfills/bswap16<u32>|inlined.0 (result i32)
    i32.const -7820613
-   local.set $4
-   local.get $4
+   local.set $0
+   local.get $0
    i32.const 8
    i32.shl
    i32.const 65280
    i32.and
-   local.get $4
+   local.get $0
    i32.const 8
    i32.shr_u
    i32.const 255
    i32.and
    i32.or
-   local.get $4
+   local.get $0
    i32.const -65536
    i32.and
    i32.or
-   br $__inlined_func$~lib/polyfills/bswap16<u32>
+   br $~lib/polyfills/bswap16<u32>|inlined.0
   end
   i32.const -7816278
   i32.eq
@@ -556,25 +475,25 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/polyfills/bswap16<i32> (result i32)
+  block $~lib/polyfills/bswap16<i32>|inlined.0 (result i32)
    i32.const -7820613
-   local.set $5
-   local.get $5
+   local.set $0
+   local.get $0
    i32.const 8
    i32.shl
    i32.const 65280
    i32.and
-   local.get $5
+   local.get $0
    i32.const 8
    i32.shr_s
    i32.const 255
    i32.and
    i32.or
-   local.get $5
+   local.get $0
    i32.const -65536
    i32.and
    i32.or
-   br $__inlined_func$~lib/polyfills/bswap16<i32>
+   br $~lib/polyfills/bswap16<i32>|inlined.0
   end
   i32.const -7816278
   i32.eq
@@ -588,6 +507,6 @@
    unreachable
   end
  )
- (func $null (; 18 ;) (type $v)
+ (func $null (; 12 ;) (type $v)
  )
 )

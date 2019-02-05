@@ -2,20 +2,14 @@
  (type $ii (func (param i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
- (type $i (func (result i32)))
- (type $iiiI (func (param i32 i32 i32) (result i64)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $Fi (func (param f64) (result i32)))
  (type $iFi (func (param i32 f64) (result i32)))
- (type $Fiii (func (param f64 i32 i32) (result i32)))
- (type $Iiv (func (param i64 i32)))
- (type $iv (func (param i32)))
- (type $III (func (param i64 i64) (result i64)))
  (type $iIiIiIii (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
- (type $iiIIIIv (func (param i32 i32 i64 i64 i64 i64)))
+ (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
+ (type $iv (func (param i32)))
  (type $fi (func (param f32) (result i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -254,15 +248,9 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/allocator/arena/__memory_allocate
-  return
- )
- (func $~lib/internal/string/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   i32.const 0
   i32.gt_s
@@ -283,16 +271,16 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/memory/memory.allocate (result i32)
+  block $~lib/memory/memory.allocate|inlined.0 (result i32)
    global.get $~lib/internal/string/HEADER_SIZE
    local.get $0
    i32.const 1
    i32.shl
    i32.add
-   local.set $3
-   local.get $3
+   local.set $1
+   local.get $1
    call $~lib/allocator/arena/__memory_allocate
-   br $__inlined_func$~lib/memory/memory.allocate
+   br $~lib/memory/memory.allocate|inlined.0
   end
   local.set $2
   local.get $2
@@ -300,50 +288,16 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/number/DIGITS (; 5 ;) (type $i) (result i32)
-  i32.const 584
- )
- (func $~lib/internal/arraybuffer/LOAD<u32,u64> (; 6 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
-  local.get $0
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $2
-  i32.add
-  i64.load32_u offset=8
- )
- (func $~lib/internal/arraybuffer/LOAD<u32,u32> (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $2
-  i32.add
-  i32.load offset=8
- )
- (func $~lib/internal/number/utoa32_lut (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i64)
+  (local $8 i32)
   (local $9 i64)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
-  (local $15 i32)
-  (local $16 i32)
-  (local $17 i32)
-  (local $18 i32)
-  (local $19 i32)
-  (local $20 i32)
-  (local $21 i32)
-  block $__inlined_func$~lib/internal/number/DIGITS (result i32)
+  (local $10 i64)
+  block $~lib/internal/number/DIGITS|inlined.0 (result i32)
    i32.const 584
   end
   i32.load
@@ -373,40 +327,32 @@
       i32.const 100
       i32.rem_u
       local.set $7
-      block $__inlined_func$~lib/internal/arraybuffer/LOAD<u32,u64> (result i64)
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.0 (result i64)
+       i32.const 0
+       local.set $8
        local.get $3
-       local.set $10
        local.get $6
-       local.set $11
-       i32.const 0
-       local.set $12
-       local.get $10
-       local.get $11
        i32.const 2
        i32.shl
        i32.add
-       local.get $12
-       i32.add
-       i64.load32_u offset=8
-      end
-      local.set $8
-      block $__inlined_func$~lib/internal/arraybuffer/LOAD<u32,u64>0 (result i64)
-       local.get $3
-       local.set $13
-       local.get $7
-       local.set $14
-       i32.const 0
-       local.set $15
-       local.get $13
-       local.get $14
-       i32.const 2
-       i32.shl
-       i32.add
-       local.get $15
+       local.get $8
        i32.add
        i64.load32_u offset=8
       end
       local.set $9
+      block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.1 (result i64)
+       i32.const 0
+       local.set $8
+       local.get $3
+       local.get $7
+       i32.const 2
+       i32.shl
+       i32.add
+       local.get $8
+       i32.add
+       i64.load32_u offset=8
+      end
+      local.set $10
       local.get $2
       i32.const 4
       i32.sub
@@ -416,8 +362,8 @@
       i32.const 1
       i32.shl
       i32.add
-      local.get $8
       local.get $9
+      local.get $10
       i64.const 32
       i64.shl
       i64.or
@@ -445,19 +391,15 @@
    i32.const 2
    i32.sub
    local.set $2
-   block $__inlined_func$~lib/internal/arraybuffer/LOAD<u32,u32> (result i32)
-    local.get $3
-    local.set $16
-    local.get $6
-    local.set $17
+   block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.0 (result i32)
     i32.const 0
-    local.set $18
-    local.get $16
-    local.get $17
+    local.set $5
+    local.get $3
+    local.get $6
     i32.const 2
     i32.shl
     i32.add
-    local.get $18
+    local.get $5
     i32.add
     i32.load offset=8
    end
@@ -478,19 +420,15 @@
    i32.const 2
    i32.sub
    local.set $2
-   block $__inlined_func$~lib/internal/arraybuffer/LOAD<u32,u32>0 (result i32)
-    local.get $3
-    local.set $19
-    local.get $1
-    local.set $20
+   block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.1 (result i32)
     i32.const 0
-    local.set $21
-    local.get $19
-    local.get $20
+    local.set $5
+    local.get $3
+    local.get $1
     i32.const 2
     i32.shl
     i32.add
-    local.get $21
+    local.get $5
     i32.add
     i32.load offset=8
    end
@@ -520,19 +458,10 @@
    i32.store16 offset=4
   end
  )
- (func $~lib/internal/number/utoa32_core (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/internal/number/utoa32_lut
- )
- (func $~lib/internal/number/itoa32 (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa32 (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   local.get $0
   i32.eqz
   if
@@ -558,18 +487,10 @@
   local.get $2
   call $~lib/internal/string/allocateUnsafe
   local.set $3
-  block $__inlined_func$~lib/internal/number/utoa32_core
-   local.get $3
-   local.set $4
-   local.get $0
-   local.set $5
-   local.get $2
-   local.set $6
-   local.get $4
-   local.get $5
-   local.get $6
-   call $~lib/internal/number/utoa32_lut
-  end
+  local.get $3
+  local.get $0
+  local.get $2
+  call $~lib/internal/number/utoa32_lut
   local.get $1
   if
    local.get $3
@@ -578,16 +499,16 @@
   end
   local.get $3
  )
- (func $~lib/internal/number/itoa<i32> (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i32> (; 6 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/internal/number/itoa32
   return
  )
- (func $~lib/number/I32#toString (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (; 7 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/internal/number/itoa<i32>
  )
- (func $~lib/internal/string/compareUnsafe (; 13 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 8 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -640,7 +561,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -684,333 +605,19 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $~lib/builtins/isFinite<f64> (; 15 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 10 ;) (type $Fi) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $~lib/builtins/isNaN<f64> (; 16 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 11 ;) (type $Fi) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
  )
- (func $~lib/internal/number/normalizedBoundaries (; 17 ;) (type $Iiv) (param $0 i64) (param $1 i32)
-  (local $2 i64)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $0
-  i64.const 1
-  i64.shl
-  i64.const 1
-  i64.add
-  local.set $2
-  local.get $1
-  i32.const 1
-  i32.sub
-  local.set $3
-  local.get $2
-  i64.clz
-  i32.wrap_i64
-  local.set $4
-  local.get $2
-  local.get $4
-  i64.extend_i32_s
-  i64.shl
-  local.set $2
-  local.get $3
-  local.get $4
-  i32.sub
-  local.set $3
-  i32.const 1
-  local.get $0
-  i64.const 4503599627370496
-  i64.eq
-  i32.add
-  local.set $5
-  local.get $2
-  global.set $~lib/internal/number/_frc_plus
-  local.get $0
-  local.get $5
-  i64.extend_i32_s
-  i64.shl
-  i64.const 1
-  i64.sub
-  local.get $1
-  local.get $5
-  i32.sub
-  local.get $3
-  i32.sub
-  i64.extend_i32_s
-  i64.shl
-  global.set $~lib/internal/number/_frc_minus
-  local.get $3
-  global.set $~lib/internal/number/_exp
- )
- (func $~lib/internal/number/FRC_POWERS (; 18 ;) (type $i) (result i32)
-  i32.const 1728
- )
- (func $~lib/internal/number/EXP_POWERS (; 19 ;) (type $i) (result i32)
-  i32.const 1992
- )
- (func $~lib/internal/arraybuffer/LOAD<u64,u64> (; 20 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
-  local.get $0
-  local.get $1
-  i32.const 3
-  i32.shl
-  i32.add
-  local.get $2
-  i32.add
-  i64.load offset=8
- )
- (func $~lib/internal/arraybuffer/LOAD<i16,i32> (; 21 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  local.get $2
-  i32.add
-  i32.load16_s offset=8
- )
- (func $~lib/internal/number/getCachedPower (; 22 ;) (type $iv) (param $0 i32)
-  (local $1 f64)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  i32.const -61
-  local.get $0
-  i32.sub
-  f64.convert_i32_s
-  f64.const 0.30102999566398114
-  f64.mul
-  f64.const 347
-  f64.add
-  local.set $1
-  local.get $1
-  i32.trunc_f64_s
-  local.set $2
-  local.get $2
-  local.get $2
-  f64.convert_i32_s
-  local.get $1
-  f64.ne
-  i32.add
-  local.set $2
-  local.get $2
-  i32.const 3
-  i32.shr_s
-  i32.const 1
-  i32.add
-  local.set $3
-  i32.const 348
-  local.get $3
-  i32.const 3
-  i32.shl
-  i32.sub
-  global.set $~lib/internal/number/_K
-  block $__inlined_func$~lib/internal/number/FRC_POWERS (result i32)
-   i32.const 1728
-  end
-  i32.load
-  local.set $4
-  block $__inlined_func$~lib/internal/number/EXP_POWERS (result i32)
-   i32.const 1992
-  end
-  i32.load
-  local.set $5
-  block $__inlined_func$~lib/internal/arraybuffer/LOAD<u64,u64> (result i64)
-   local.get $4
-   local.set $6
-   local.get $3
-   local.set $7
-   i32.const 0
-   local.set $8
-   local.get $6
-   local.get $7
-   i32.const 3
-   i32.shl
-   i32.add
-   local.get $8
-   i32.add
-   i64.load offset=8
-  end
-  global.set $~lib/internal/number/_frc_pow
-  block $__inlined_func$~lib/internal/arraybuffer/LOAD<i16,i32> (result i32)
-   local.get $5
-   local.set $9
-   local.get $3
-   local.set $10
-   i32.const 0
-   local.set $11
-   local.get $9
-   local.get $10
-   i32.const 1
-   i32.shl
-   i32.add
-   local.get $11
-   i32.add
-   i32.load16_s offset=8
-  end
-  global.set $~lib/internal/number/_exp_pow
- )
- (func $~lib/internal/number/umul64f (; 23 ;) (type $III) (param $0 i64) (param $1 i64) (result i64)
-  (local $2 i64)
-  (local $3 i64)
-  (local $4 i64)
-  (local $5 i64)
-  (local $6 i64)
-  (local $7 i64)
-  (local $8 i64)
-  local.get $0
-  i64.const 4294967295
-  i64.and
-  local.set $2
-  local.get $1
-  i64.const 4294967295
-  i64.and
-  local.set $3
-  local.get $0
-  i64.const 32
-  i64.shr_u
-  local.set $4
-  local.get $1
-  i64.const 32
-  i64.shr_u
-  local.set $5
-  local.get $2
-  local.get $3
-  i64.mul
-  local.set $6
-  local.get $4
-  local.get $3
-  i64.mul
-  local.get $6
-  i64.const 32
-  i64.shr_u
-  i64.add
-  local.set $7
-  local.get $2
-  local.get $5
-  i64.mul
-  local.get $7
-  i64.const 4294967295
-  i64.and
-  i64.add
-  local.set $8
-  local.get $8
-  i64.const 2147483647
-  i64.add
-  local.set $8
-  local.get $7
-  i64.const 32
-  i64.shr_u
-  local.set $7
-  local.get $8
-  i64.const 32
-  i64.shr_u
-  local.set $8
-  local.get $4
-  local.get $5
-  i64.mul
-  local.get $7
-  i64.add
-  local.get $8
-  i64.add
- )
- (func $~lib/internal/number/umul64e (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.add
-  i32.const 64
-  i32.add
- )
- (func $~lib/internal/number/POWERS10 (; 25 ;) (type $i) (result i32)
-  i32.const 2064
- )
- (func $~lib/internal/number/grisuRound (; 26 ;) (type $iiIIIIv) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i64) (param $4 i64) (param $5 i64)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.sub
-  i32.const 1
-  i32.shl
-  i32.add
-  local.set $6
-  local.get $6
-  i32.load16_u offset=4
-  local.set $7
-  block $break|0
-   loop $continue|0
-    local.get $3
-    local.get $5
-    i64.lt_u
-    local.tee $8
-    if (result i32)
-     local.get $2
-     local.get $3
-     i64.sub
-     local.get $4
-     i64.ge_u
-    else     
-     local.get $8
-    end
-    local.tee $8
-    if (result i32)
-     local.get $3
-     local.get $4
-     i64.add
-     local.get $5
-     i64.lt_u
-     local.tee $8
-     if (result i32)
-      local.get $8
-     else      
-      local.get $5
-      local.get $3
-      i64.sub
-      local.get $3
-      local.get $4
-      i64.add
-      local.get $5
-      i64.sub
-      i64.gt_u
-     end
-    else     
-     local.get $8
-    end
-    if
-     block
-      local.get $7
-      i32.const 1
-      i32.sub
-      local.set $7
-      local.get $3
-      local.get $4
-      i64.add
-      local.set $3
-     end
-     br $continue|0
-    end
-   end
-  end
-  local.get $6
-  local.get $7
-  i32.store16 offset=4
- )
- (func $~lib/internal/number/genDigits (; 27 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/number/genDigits (; 12 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -1024,30 +631,9 @@
   (local $17 i32)
   (local $18 i32)
   (local $19 i64)
-  (local $20 i32)
+  (local $20 i64)
   (local $21 i32)
   (local $22 i32)
-  (local $23 i32)
-  (local $24 i32)
-  (local $25 i64)
-  (local $26 i64)
-  (local $27 i64)
-  (local $28 i64)
-  (local $29 i32)
-  (local $30 i32)
-  (local $31 i32)
-  (local $32 i32)
-  (local $33 i32)
-  (local $34 i32)
-  (local $35 i32)
-  (local $36 i32)
-  (local $37 i64)
-  (local $38 i64)
-  (local $39 i64)
-  (local $40 i64)
-  (local $41 i32)
-  (local $42 i32)
-  (local $43 i32)
   i32.const 0
   local.get $4
   i32.sub
@@ -1082,7 +668,7 @@
   local.set $14
   local.get $6
   local.set $15
-  block $__inlined_func$~lib/internal/number/POWERS10 (result i32)
+  block $~lib/internal/number/POWERS10|inlined.0 (result i32)
    i32.const 2064
   end
   i32.load
@@ -1337,114 +923,90 @@
        local.get $14
        i32.add
        global.set $~lib/internal/number/_K
-       block $__inlined_func$~lib/internal/number/grisuRound
-        local.get $0
-        local.set $23
-        local.get $15
-        local.set $24
-        local.get $5
-        local.set $25
-        local.get $19
-        local.set $26
-        block $__inlined_func$~lib/internal/arraybuffer/LOAD<u32,u64> (result i64)
-         local.get $16
-         local.set $20
-         local.get $14
-         local.set $21
-         i32.const 0
-         local.set $22
-         local.get $20
-         local.get $21
-         i32.const 2
-         i32.shl
-         i32.add
-         local.get $22
-         i32.add
-         i64.load32_u offset=8
-        end
-        local.get $7
-        i64.extend_i32_s
-        i64.shl
-        local.set $27
-        local.get $10
-        local.set $28
+       block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.2 (result i64)
         i32.const 0
-        local.set $29
-        i32.const 0
-        local.set $30
-        i32.const 0
-        local.set $31
-        block
-         local.get $23
-         local.get $24
-         i32.const 1
-         i32.sub
-         i32.const 1
-         i32.shl
-         i32.add
-         local.set $29
-         local.get $29
-         i32.load16_u offset=4
-         local.set $30
-         block $break|00
-          loop $continue|01
-           local.get $26
-           local.get $28
-           i64.lt_u
-           local.tee $31
-           if (result i32)
-            local.get $25
-            local.get $26
-            i64.sub
-            local.get $27
-            i64.ge_u
-           else            
-            local.get $31
-           end
-           local.tee $31
-           if (result i32)
-            local.get $26
-            local.get $27
-            i64.add
-            local.get $28
-            i64.lt_u
-            local.tee $31
-            if (result i32)
-             local.get $31
-            else             
-             local.get $28
-             local.get $26
-             i64.sub
-             local.get $26
-             local.get $27
-             i64.add
-             local.get $28
-             i64.sub
-             i64.gt_u
-            end
-           else            
-            local.get $31
-           end
-           if
-            block
-             local.get $30
-             i32.const 1
-             i32.sub
-             local.set $30
-             local.get $26
-             local.get $27
-             i64.add
-             local.set $26
-            end
-            br $continue|01
-           end
-          end
+        local.set $18
+        local.get $16
+        local.get $14
+        i32.const 2
+        i32.shl
+        i32.add
+        local.get $18
+        i32.add
+        i64.load32_u offset=8
+       end
+       local.get $7
+       i64.extend_i32_s
+       i64.shl
+       local.set $20
+       local.get $0
+       local.get $15
+       i32.const 1
+       i32.sub
+       i32.const 1
+       i32.shl
+       i32.add
+       local.set $18
+       local.get $18
+       i32.load16_u offset=4
+       local.set $21
+       block $break|2
+        loop $continue|2
+         local.get $19
+         local.get $10
+         i64.lt_u
+         local.tee $22
+         if (result i32)
+          local.get $5
+          local.get $19
+          i64.sub
+          local.get $20
+          i64.ge_u
+         else          
+          local.get $22
          end
-         local.get $29
-         local.get $30
-         i32.store16 offset=4
+         local.tee $22
+         if (result i32)
+          local.get $19
+          local.get $20
+          i64.add
+          local.get $10
+          i64.lt_u
+          local.tee $22
+          if (result i32)
+           local.get $22
+          else           
+           local.get $10
+           local.get $19
+           i64.sub
+           local.get $19
+           local.get $20
+           i64.add
+           local.get $10
+           i64.sub
+           i64.gt_u
+          end
+         else          
+          local.get $22
+         end
+         if
+          block
+           local.get $21
+           i32.const 1
+           i32.sub
+           local.set $21
+           local.get $19
+           local.get $20
+           i64.add
+           local.set $19
+          end
+          br $continue|2
+         end
         end
        end
+       local.get $18
+       local.get $21
+       i32.store16 offset=4
        local.get $15
        return
       end
@@ -1453,8 +1015,8 @@
     end
    end
   end
-  block $break|2
-   loop $continue|2
+  block $break|3
+   loop $continue|3
     i32.const 1
     if
      block
@@ -1515,682 +1077,103 @@
        i32.add
        global.set $~lib/internal/number/_K
        local.get $10
-       block $__inlined_func$~lib/internal/arraybuffer/LOAD<u32,u64>0 (result i64)
-        local.get $16
-        local.set $32
+       block $~lib/internal/arraybuffer/LOAD<u32,u64>|inlined.3 (result i64)
         i32.const 0
         local.get $14
         i32.sub
-        local.set $33
+        local.set $17
         i32.const 0
-        local.set $34
-        local.get $32
-        local.get $33
+        local.set $21
+        local.get $16
+        local.get $17
         i32.const 2
         i32.shl
         i32.add
-        local.get $34
+        local.get $21
         i32.add
         i64.load32_u offset=8
        end
        i64.mul
        local.set $10
-       block $__inlined_func$~lib/internal/number/grisuRound0
-        local.get $0
-        local.set $35
-        local.get $15
-        local.set $36
-        local.get $5
-        local.set $37
-        local.get $13
-        local.set $38
-        local.get $8
-        local.set $39
-        local.get $10
-        local.set $40
-        i32.const 0
-        local.set $41
-        i32.const 0
-        local.set $42
-        i32.const 0
-        local.set $43
-        block
-         local.get $35
-         local.get $36
-         i32.const 1
-         i32.sub
-         i32.const 1
-         i32.shl
-         i32.add
-         local.set $41
-         local.get $41
-         i32.load16_u offset=4
-         local.set $42
-         block $break|01
-          loop $continue|02
-           local.get $38
-           local.get $40
-           i64.lt_u
-           local.tee $43
-           if (result i32)
-            local.get $37
-            local.get $38
-            i64.sub
-            local.get $39
-            i64.ge_u
-           else            
-            local.get $43
-           end
-           local.tee $43
-           if (result i32)
-            local.get $38
-            local.get $39
-            i64.add
-            local.get $40
-            i64.lt_u
-            local.tee $43
-            if (result i32)
-             local.get $43
-            else             
-             local.get $40
-             local.get $38
-             i64.sub
-             local.get $38
-             local.get $39
-             i64.add
-             local.get $40
-             i64.sub
-             i64.gt_u
-            end
-           else            
-            local.get $43
-           end
-           if
-            block
-             local.get $42
-             i32.const 1
-             i32.sub
-             local.set $42
-             local.get $38
-             local.get $39
-             i64.add
-             local.set $38
-            end
-            br $continue|02
-           end
-          end
+       local.get $0
+       local.get $15
+       i32.const 1
+       i32.sub
+       i32.const 1
+       i32.shl
+       i32.add
+       local.set $21
+       local.get $21
+       i32.load16_u offset=4
+       local.set $17
+       block $break|4
+        loop $continue|4
+         local.get $13
+         local.get $10
+         i64.lt_u
+         local.tee $18
+         if (result i32)
+          local.get $5
+          local.get $13
+          i64.sub
+          local.get $8
+          i64.ge_u
+         else          
+          local.get $18
          end
-         local.get $41
-         local.get $42
-         i32.store16 offset=4
+         local.tee $18
+         if (result i32)
+          local.get $13
+          local.get $8
+          i64.add
+          local.get $10
+          i64.lt_u
+          local.tee $18
+          if (result i32)
+           local.get $18
+          else           
+           local.get $10
+           local.get $13
+           i64.sub
+           local.get $13
+           local.get $8
+           i64.add
+           local.get $10
+           i64.sub
+           i64.gt_u
+          end
+         else          
+          local.get $18
+         end
+         if
+          block
+           local.get $17
+           i32.const 1
+           i32.sub
+           local.set $17
+           local.get $13
+           local.get $8
+           i64.add
+           local.set $13
+          end
+          br $continue|4
+         end
         end
        end
+       local.get $21
+       local.get $17
+       i32.store16 offset=4
        local.get $15
        return
       end
      end
-     br $continue|2
+     br $continue|3
     end
    end
   end
   local.get $15
  )
- (func $~lib/internal/number/grisu2 (; 28 ;) (type $Fiii) (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i64)
-  (local $4 i32)
-  (local $5 i64)
-  (local $6 i64)
-  (local $7 i32)
-  (local $8 i64)
-  (local $9 i32)
-  (local $10 i64)
-  (local $11 i32)
-  (local $12 i64)
-  (local $13 i32)
-  (local $14 i64)
-  (local $15 i64)
-  (local $16 i64)
-  (local $17 i32)
-  (local $18 i64)
-  (local $19 i32)
-  (local $20 i32)
-  (local $21 i32)
-  (local $22 i32)
-  (local $23 f64)
-  (local $24 i32)
-  (local $25 i32)
-  (local $26 i32)
-  (local $27 i32)
-  (local $28 i32)
-  (local $29 i32)
-  (local $30 i32)
-  (local $31 i32)
-  (local $32 i32)
-  (local $33 i32)
-  (local $34 i64)
-  (local $35 i64)
-  (local $36 i64)
-  (local $37 i64)
-  (local $38 i64)
-  (local $39 i64)
-  (local $40 i64)
-  (local $41 i64)
-  (local $42 i64)
-  (local $43 i32)
-  (local $44 i32)
-  (local $45 i64)
-  (local $46 i64)
-  (local $47 i64)
-  (local $48 i64)
-  (local $49 i64)
-  (local $50 i64)
-  (local $51 i64)
-  (local $52 i64)
-  (local $53 i64)
-  (local $54 i32)
-  (local $55 i32)
-  (local $56 i64)
-  (local $57 i64)
-  (local $58 i64)
-  (local $59 i64)
-  (local $60 i64)
-  (local $61 i64)
-  (local $62 i64)
-  (local $63 i64)
-  (local $64 i64)
-  local.get $0
-  i64.reinterpret_f64
-  local.set $3
-  local.get $3
-  i64.const 9218868437227405312
-  i64.and
-  i64.const 52
-  i64.shr_u
-  i32.wrap_i64
-  local.set $4
-  local.get $3
-  i64.const 4503599627370495
-  i64.and
-  local.set $5
-  local.get $4
-  i32.const 0
-  i32.ne
-  i64.extend_i32_u
-  i64.const 52
-  i64.shl
-  local.get $5
-  i64.add
-  local.set $6
-  local.get $4
-  i32.const 1
-  local.get $4
-  i32.const 0
-  i32.ne
-  select
-  i32.const 1023
-  i32.const 52
-  i32.add
-  i32.sub
-  local.set $4
-  block $__inlined_func$~lib/internal/number/normalizedBoundaries
-   local.get $6
-   local.set $16
-   local.get $4
-   local.set $17
-   i64.const 0
-   local.set $18
-   i32.const 0
-   local.set $19
-   i32.const 0
-   local.set $20
-   i32.const 0
-   local.set $21
-   block
-    local.get $16
-    i64.const 1
-    i64.shl
-    i64.const 1
-    i64.add
-    local.set $18
-    local.get $17
-    i32.const 1
-    i32.sub
-    local.set $19
-    local.get $18
-    i64.clz
-    i32.wrap_i64
-    local.set $20
-    local.get $18
-    local.get $20
-    i64.extend_i32_s
-    i64.shl
-    local.set $18
-    local.get $19
-    local.get $20
-    i32.sub
-    local.set $19
-    i32.const 1
-    local.get $16
-    i64.const 4503599627370496
-    i64.eq
-    i32.add
-    local.set $21
-    local.get $18
-    global.set $~lib/internal/number/_frc_plus
-    local.get $16
-    local.get $21
-    i64.extend_i32_s
-    i64.shl
-    i64.const 1
-    i64.sub
-    local.get $17
-    local.get $21
-    i32.sub
-    local.get $19
-    i32.sub
-    i64.extend_i32_s
-    i64.shl
-    global.set $~lib/internal/number/_frc_minus
-    local.get $19
-    global.set $~lib/internal/number/_exp
-   end
-  end
-  block $__inlined_func$~lib/internal/number/getCachedPower
-   global.get $~lib/internal/number/_exp
-   local.set $22
-   f64.const 0
-   local.set $23
-   i32.const 0
-   local.set $24
-   i32.const 0
-   local.set $25
-   i32.const 0
-   local.set $26
-   i32.const 0
-   local.set $27
-   i32.const 0
-   local.set $28
-   i32.const 0
-   local.set $29
-   i32.const 0
-   local.set $30
-   i32.const 0
-   local.set $31
-   i32.const 0
-   local.set $32
-   i32.const 0
-   local.set $33
-   block
-    i32.const -61
-    local.get $22
-    i32.sub
-    f64.convert_i32_s
-    f64.const 0.30102999566398114
-    f64.mul
-    f64.const 347
-    f64.add
-    local.set $23
-    local.get $23
-    i32.trunc_f64_s
-    local.set $24
-    local.get $24
-    local.get $24
-    f64.convert_i32_s
-    local.get $23
-    f64.ne
-    i32.add
-    local.set $24
-    local.get $24
-    i32.const 3
-    i32.shr_s
-    i32.const 1
-    i32.add
-    local.set $25
-    i32.const 348
-    local.get $25
-    i32.const 3
-    i32.shl
-    i32.sub
-    global.set $~lib/internal/number/_K
-    block $__inlined_func$~lib/internal/number/FRC_POWERS (result i32)
-     i32.const 1728
-    end
-    i32.load
-    local.set $26
-    block $__inlined_func$~lib/internal/number/EXP_POWERS (result i32)
-     i32.const 1992
-    end
-    i32.load
-    local.set $27
-    block $__inlined_func$~lib/internal/arraybuffer/LOAD<u64,u64> (result i64)
-     local.get $26
-     local.set $28
-     local.get $25
-     local.set $29
-     i32.const 0
-     local.set $30
-     local.get $28
-     local.get $29
-     i32.const 3
-     i32.shl
-     i32.add
-     local.get $30
-     i32.add
-     i64.load offset=8
-    end
-    global.set $~lib/internal/number/_frc_pow
-    block $__inlined_func$~lib/internal/arraybuffer/LOAD<i16,i32> (result i32)
-     local.get $27
-     local.set $31
-     local.get $25
-     local.set $32
-     i32.const 0
-     local.set $33
-     local.get $31
-     local.get $32
-     i32.const 1
-     i32.shl
-     i32.add
-     local.get $33
-     i32.add
-     i32.load16_s offset=8
-    end
-    global.set $~lib/internal/number/_exp_pow
-   end
-  end
-  local.get $6
-  i64.clz
-  i32.wrap_i64
-  local.set $7
-  local.get $6
-  local.get $7
-  i64.extend_i32_s
-  i64.shl
-  local.set $6
-  local.get $4
-  local.get $7
-  i32.sub
-  local.set $4
-  global.get $~lib/internal/number/_frc_pow
-  local.set $8
-  global.get $~lib/internal/number/_exp_pow
-  local.set $9
-  block $__inlined_func$~lib/internal/number/umul64f (result i64)
-   local.get $6
-   local.set $34
-   local.get $8
-   local.set $35
-   i64.const 0
-   local.set $36
-   i64.const 0
-   local.set $37
-   i64.const 0
-   local.set $38
-   i64.const 0
-   local.set $39
-   i64.const 0
-   local.set $40
-   i64.const 0
-   local.set $41
-   i64.const 0
-   local.set $42
-   block (result i64)
-    local.get $34
-    i64.const 4294967295
-    i64.and
-    local.set $36
-    local.get $35
-    i64.const 4294967295
-    i64.and
-    local.set $37
-    local.get $34
-    i64.const 32
-    i64.shr_u
-    local.set $38
-    local.get $35
-    i64.const 32
-    i64.shr_u
-    local.set $39
-    local.get $36
-    local.get $37
-    i64.mul
-    local.set $40
-    local.get $38
-    local.get $37
-    i64.mul
-    local.get $40
-    i64.const 32
-    i64.shr_u
-    i64.add
-    local.set $41
-    local.get $36
-    local.get $39
-    i64.mul
-    local.get $41
-    i64.const 4294967295
-    i64.and
-    i64.add
-    local.set $42
-    local.get $42
-    i64.const 2147483647
-    i64.add
-    local.set $42
-    local.get $41
-    i64.const 32
-    i64.shr_u
-    local.set $41
-    local.get $42
-    i64.const 32
-    i64.shr_u
-    local.set $42
-    local.get $38
-    local.get $39
-    i64.mul
-    local.get $41
-    i64.add
-    local.get $42
-    i64.add
-   end
-  end
-  local.set $10
-  block $__inlined_func$~lib/internal/number/umul64e (result i32)
-   local.get $4
-   local.set $43
-   local.get $9
-   local.set $44
-   local.get $43
-   local.get $44
-   i32.add
-   i32.const 64
-   i32.add
-  end
-  local.set $11
-  block $__inlined_func$~lib/internal/number/umul64f0 (result i64)
-   global.get $~lib/internal/number/_frc_plus
-   local.set $45
-   local.get $8
-   local.set $46
-   i64.const 0
-   local.set $47
-   i64.const 0
-   local.set $48
-   i64.const 0
-   local.set $49
-   i64.const 0
-   local.set $50
-   i64.const 0
-   local.set $51
-   i64.const 0
-   local.set $52
-   i64.const 0
-   local.set $53
-   block (result i64)
-    local.get $45
-    i64.const 4294967295
-    i64.and
-    local.set $47
-    local.get $46
-    i64.const 4294967295
-    i64.and
-    local.set $48
-    local.get $45
-    i64.const 32
-    i64.shr_u
-    local.set $49
-    local.get $46
-    i64.const 32
-    i64.shr_u
-    local.set $50
-    local.get $47
-    local.get $48
-    i64.mul
-    local.set $51
-    local.get $49
-    local.get $48
-    i64.mul
-    local.get $51
-    i64.const 32
-    i64.shr_u
-    i64.add
-    local.set $52
-    local.get $47
-    local.get $50
-    i64.mul
-    local.get $52
-    i64.const 4294967295
-    i64.and
-    i64.add
-    local.set $53
-    local.get $53
-    i64.const 2147483647
-    i64.add
-    local.set $53
-    local.get $52
-    i64.const 32
-    i64.shr_u
-    local.set $52
-    local.get $53
-    i64.const 32
-    i64.shr_u
-    local.set $53
-    local.get $49
-    local.get $50
-    i64.mul
-    local.get $52
-    i64.add
-    local.get $53
-    i64.add
-   end
-  end
-  i64.const 1
-  i64.sub
-  local.set $12
-  block $__inlined_func$~lib/internal/number/umul64e0 (result i32)
-   global.get $~lib/internal/number/_exp
-   local.set $54
-   local.get $9
-   local.set $55
-   local.get $54
-   local.get $55
-   i32.add
-   i32.const 64
-   i32.add
-  end
-  local.set $13
-  block $__inlined_func$~lib/internal/number/umul64f1 (result i64)
-   global.get $~lib/internal/number/_frc_minus
-   local.set $56
-   local.get $8
-   local.set $57
-   i64.const 0
-   local.set $58
-   i64.const 0
-   local.set $59
-   i64.const 0
-   local.set $60
-   i64.const 0
-   local.set $61
-   i64.const 0
-   local.set $62
-   i64.const 0
-   local.set $63
-   i64.const 0
-   local.set $64
-   block (result i64)
-    local.get $56
-    i64.const 4294967295
-    i64.and
-    local.set $58
-    local.get $57
-    i64.const 4294967295
-    i64.and
-    local.set $59
-    local.get $56
-    i64.const 32
-    i64.shr_u
-    local.set $60
-    local.get $57
-    i64.const 32
-    i64.shr_u
-    local.set $61
-    local.get $58
-    local.get $59
-    i64.mul
-    local.set $62
-    local.get $60
-    local.get $59
-    i64.mul
-    local.get $62
-    i64.const 32
-    i64.shr_u
-    i64.add
-    local.set $63
-    local.get $58
-    local.get $61
-    i64.mul
-    local.get $63
-    i64.const 4294967295
-    i64.and
-    i64.add
-    local.set $64
-    local.get $64
-    i64.const 2147483647
-    i64.add
-    local.set $64
-    local.get $63
-    i64.const 32
-    i64.shr_u
-    local.set $63
-    local.get $64
-    i64.const 32
-    i64.shr_u
-    local.set $64
-    local.get $60
-    local.get $61
-    i64.mul
-    local.get $63
-    i64.add
-    local.get $64
-    i64.add
-   end
-  end
-  i64.const 1
-  i64.add
-  local.set $14
-  local.get $12
-  local.get $14
-  i64.sub
-  local.set $15
-  local.get $1
-  local.get $10
-  local.get $11
-  local.get $12
-  local.get $13
-  local.get $15
-  local.get $2
-  call $~lib/internal/number/genDigits
- )
- (func $~lib/internal/memory/memcpy (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3391,7 +2374,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -3618,81 +2601,13 @@
    end
   end
  )
- (func $~lib/memory/memory.copy (; 31 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/internal/memory/memmove
- )
- (func $~lib/internal/number/genExponent (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  local.get $1
-  i32.const 0
-  i32.lt_s
-  local.set $2
-  local.get $2
-  if
-   i32.const 0
-   local.get $1
-   i32.sub
-   local.set $1
-  end
-  local.get $1
-  call $~lib/internal/number/decimalCount32
-  i32.const 1
-  i32.add
-  local.set $3
-  block $__inlined_func$~lib/internal/number/utoa32_core
-   local.get $0
-   local.set $4
-   local.get $1
-   local.set $5
-   local.get $3
-   local.set $6
-   local.get $4
-   local.get $5
-   local.get $6
-   call $~lib/internal/number/utoa32_lut
-  end
-  local.get $0
-  global.get $~lib/internal/string/CharCode.MINUS
-  global.get $~lib/internal/string/CharCode.PLUS
-  local.get $2
-  select
-  i32.store16 offset=4
-  local.get $3
- )
- (func $~lib/internal/number/prettify (; 33 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/prettify (; 15 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
-  (local $15 i32)
-  (local $16 i32)
-  (local $17 i32)
-  (local $18 i32)
-  (local $19 i32)
-  (local $20 i32)
-  (local $21 i32)
-  (local $22 i32)
-  (local $23 i32)
-  (local $24 i32)
-  (local $25 i32)
-  (local $26 i32)
-  (local $27 i32)
-  (local $28 i32)
   local.get $2
   i32.eqz
   if
@@ -3787,28 +2702,26 @@
     i32.shl
     i32.add
     local.set $4
-    block $__inlined_func$~lib/memory/memory.copy
-     local.get $4
-     global.get $~lib/internal/string/HEADER_SIZE
-     i32.add
-     i32.const 2
-     i32.add
-     local.set $6
-     local.get $4
-     global.get $~lib/internal/string/HEADER_SIZE
-     i32.add
-     local.set $7
-     i32.const 0
-     local.get $2
-     i32.sub
-     i32.const 1
-     i32.shl
-     local.set $8
-     local.get $6
-     local.get $7
-     local.get $8
-     call $~lib/internal/memory/memmove
-    end
+    local.get $4
+    global.get $~lib/internal/string/HEADER_SIZE
+    i32.add
+    i32.const 2
+    i32.add
+    local.set $5
+    local.get $4
+    global.get $~lib/internal/string/HEADER_SIZE
+    i32.add
+    local.set $6
+    i32.const 0
+    local.get $2
+    i32.sub
+    i32.const 1
+    i32.shl
+    local.set $7
+    local.get $5
+    local.get $6
+    local.get $7
+    call $~lib/internal/memory/memmove
     local.get $0
     local.get $3
     i32.const 1
@@ -3837,28 +2750,26 @@
      local.get $3
      i32.sub
      local.set $4
-     block $__inlined_func$~lib/memory/memory.copy0
-      local.get $0
-      global.get $~lib/internal/string/HEADER_SIZE
-      i32.add
-      local.get $4
-      i32.const 1
-      i32.shl
-      i32.add
-      local.set $9
-      local.get $0
-      global.get $~lib/internal/string/HEADER_SIZE
-      i32.add
-      local.set $10
-      local.get $1
-      i32.const 1
-      i32.shl
-      local.set $11
-      local.get $9
-      local.get $10
-      local.get $11
-      call $~lib/internal/memory/memmove
-     end
+     local.get $0
+     global.get $~lib/internal/string/HEADER_SIZE
+     i32.add
+     local.get $4
+     i32.const 1
+     i32.shl
+     i32.add
+     local.set $7
+     local.get $0
+     global.get $~lib/internal/string/HEADER_SIZE
+     i32.add
+     local.set $6
+     local.get $1
+     i32.const 1
+     i32.shl
+     local.set $5
+     local.get $7
+     local.get $6
+     local.get $5
+     call $~lib/internal/memory/memmove
      local.get $0
      global.get $~lib/internal/string/CharCode._0
      global.get $~lib/internal/string/CharCode.DOT
@@ -3903,62 +2814,42 @@
       local.get $0
       global.get $~lib/internal/string/CharCode.e
       i32.store16 offset=6
-      block $__inlined_func$~lib/internal/number/genExponent (result i32)
+      block $~lib/internal/number/genExponent|inlined.0 (result i32)
        local.get $0
        i32.const 4
        i32.add
-       local.set $12
+       local.set $4
        local.get $3
        i32.const 1
        i32.sub
-       local.set $13
+       local.set $5
+       local.get $5
        i32.const 0
-       local.set $14
-       i32.const 0
-       local.set $15
-       i32.const 0
-       local.set $16
-       i32.const 0
-       local.set $17
-       i32.const 0
-       local.set $18
-       block (result i32)
-        local.get $13
+       i32.lt_s
+       local.set $6
+       local.get $6
+       if
         i32.const 0
-        i32.lt_s
-        local.set $14
-        local.get $14
-        if
-         i32.const 0
-         local.get $13
-         i32.sub
-         local.set $13
-        end
-        local.get $13
-        call $~lib/internal/number/decimalCount32
-        i32.const 1
-        i32.add
-        local.set $15
-        block $__inlined_func$~lib/internal/number/utoa32_core
-         local.get $12
-         local.set $16
-         local.get $13
-         local.set $17
-         local.get $15
-         local.set $18
-         local.get $16
-         local.get $17
-         local.get $18
-         call $~lib/internal/number/utoa32_lut
-        end
-        local.get $12
-        global.get $~lib/internal/string/CharCode.MINUS
-        global.get $~lib/internal/string/CharCode.PLUS
-        local.get $14
-        select
-        i32.store16 offset=4
-        local.get $15
+        local.get $5
+        i32.sub
+        local.set $5
        end
+       local.get $5
+       call $~lib/internal/number/decimalCount32
+       i32.const 1
+       i32.add
+       local.set $7
+       local.get $4
+       local.get $5
+       local.get $7
+       call $~lib/internal/number/utoa32_lut
+       local.get $4
+       global.get $~lib/internal/string/CharCode.MINUS
+       global.get $~lib/internal/string/CharCode.PLUS
+       local.get $6
+       select
+       i32.store16 offset=4
+       local.get $7
       end
       local.set $1
       local.get $1
@@ -3969,96 +2860,74 @@
       local.get $1
       i32.const 1
       i32.shl
+      local.set $7
+      local.get $0
+      global.get $~lib/internal/string/HEADER_SIZE
+      i32.add
+      i32.const 4
+      i32.add
+      local.set $6
+      local.get $0
+      global.get $~lib/internal/string/HEADER_SIZE
+      i32.add
+      i32.const 2
+      i32.add
+      local.set $5
+      local.get $7
+      i32.const 2
+      i32.sub
       local.set $4
-      block $__inlined_func$~lib/memory/memory.copy1
-       local.get $0
-       global.get $~lib/internal/string/HEADER_SIZE
-       i32.add
-       i32.const 4
-       i32.add
-       local.set $19
-       local.get $0
-       global.get $~lib/internal/string/HEADER_SIZE
-       i32.add
-       i32.const 2
-       i32.add
-       local.set $20
-       local.get $4
-       i32.const 2
-       i32.sub
-       local.set $21
-       local.get $19
-       local.get $20
-       local.get $21
-       call $~lib/internal/memory/memmove
-      end
+      local.get $6
+      local.get $5
+      local.get $4
+      call $~lib/internal/memory/memmove
       local.get $0
       global.get $~lib/internal/string/CharCode.DOT
       i32.store16 offset=6
       local.get $0
-      local.get $4
+      local.get $7
       i32.add
       global.get $~lib/internal/string/CharCode.e
       i32.store16 offset=6
       local.get $1
-      block $__inlined_func$~lib/internal/number/genExponent0 (result i32)
+      block $~lib/internal/number/genExponent|inlined.1 (result i32)
        local.get $0
-       local.get $4
+       local.get $7
        i32.add
        i32.const 4
        i32.add
-       local.set $22
+       local.set $4
        local.get $3
        i32.const 1
        i32.sub
-       local.set $23
+       local.set $5
+       local.get $5
        i32.const 0
-       local.set $24
-       i32.const 0
-       local.set $25
-       i32.const 0
-       local.set $26
-       i32.const 0
-       local.set $27
-       i32.const 0
-       local.set $28
-       block (result i32)
-        local.get $23
+       i32.lt_s
+       local.set $6
+       local.get $6
+       if
         i32.const 0
-        i32.lt_s
-        local.set $24
-        local.get $24
-        if
-         i32.const 0
-         local.get $23
-         i32.sub
-         local.set $23
-        end
-        local.get $23
-        call $~lib/internal/number/decimalCount32
-        i32.const 1
-        i32.add
-        local.set $25
-        block $__inlined_func$~lib/internal/number/utoa32_core1
-         local.get $22
-         local.set $26
-         local.get $23
-         local.set $27
-         local.get $25
-         local.set $28
-         local.get $26
-         local.get $27
-         local.get $28
-         call $~lib/internal/number/utoa32_lut
-        end
-        local.get $22
-        global.get $~lib/internal/string/CharCode.MINUS
-        global.get $~lib/internal/string/CharCode.PLUS
-        local.get $24
-        select
-        i32.store16 offset=4
-        local.get $25
+        local.get $5
+        i32.sub
+        local.set $5
        end
+       local.get $5
+       call $~lib/internal/number/decimalCount32
+       i32.const 1
+       i32.add
+       local.set $8
+       local.get $4
+       local.get $5
+       local.get $8
+       call $~lib/internal/number/utoa32_lut
+       local.get $4
+       global.get $~lib/internal/string/CharCode.MINUS
+       global.get $~lib/internal/string/CharCode.PLUS
+       local.get $6
+       select
+       i32.store16 offset=4
+       local.get $8
       end
       i32.add
       local.set $1
@@ -4076,74 +2945,31 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/dtoa_core (; 34 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/internal/number/dtoa_core (; 16 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 f64)
-  (local $5 i32)
-  (local $6 i32)
+  (local $3 i64)
+  (local $4 i32)
+  (local $5 i64)
+  (local $6 i64)
   (local $7 i64)
   (local $8 i32)
-  (local $9 i64)
-  (local $10 i64)
-  (local $11 i32)
-  (local $12 i64)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 f64)
+  (local $12 i32)
   (local $13 i32)
-  (local $14 i64)
-  (local $15 i32)
+  (local $14 i32)
+  (local $15 i64)
   (local $16 i64)
-  (local $17 i32)
+  (local $17 i64)
   (local $18 i64)
   (local $19 i64)
   (local $20 i64)
-  (local $21 i32)
+  (local $21 i64)
   (local $22 i64)
-  (local $23 i32)
-  (local $24 i32)
+  (local $23 i64)
+  (local $24 i64)
   (local $25 i32)
-  (local $26 i32)
-  (local $27 f64)
-  (local $28 i32)
-  (local $29 i32)
-  (local $30 i32)
-  (local $31 i32)
-  (local $32 i32)
-  (local $33 i32)
-  (local $34 i32)
-  (local $35 i32)
-  (local $36 i32)
-  (local $37 i32)
-  (local $38 i64)
-  (local $39 i64)
-  (local $40 i64)
-  (local $41 i64)
-  (local $42 i64)
-  (local $43 i64)
-  (local $44 i64)
-  (local $45 i64)
-  (local $46 i64)
-  (local $47 i32)
-  (local $48 i32)
-  (local $49 i64)
-  (local $50 i64)
-  (local $51 i64)
-  (local $52 i64)
-  (local $53 i64)
-  (local $54 i64)
-  (local $55 i64)
-  (local $56 i64)
-  (local $57 i64)
-  (local $58 i32)
-  (local $59 i32)
-  (local $60 i64)
-  (local $61 i64)
-  (local $62 i64)
-  (local $63 i64)
-  (local $64 i64)
-  (local $65 i64)
-  (local $66 i64)
-  (local $67 i64)
-  (local $68 i64)
   local.get $1
   f64.const 0
   f64.lt
@@ -4157,648 +2983,408 @@
    global.get $~lib/internal/string/CharCode.MINUS
    i32.store16 offset=4
   end
-  block $__inlined_func$~lib/internal/number/grisu2 (result i32)
+  block $~lib/internal/number/grisu2|inlined.0 (result i32)
    local.get $1
+   i64.reinterpret_f64
+   local.set $3
+   local.get $3
+   i64.const 9218868437227405312
+   i64.and
+   i64.const 52
+   i64.shr_u
+   i32.wrap_i64
    local.set $4
-   local.get $0
+   local.get $3
+   i64.const 4503599627370495
+   i64.and
    local.set $5
-   local.get $2
+   local.get $4
+   i32.const 0
+   i32.ne
+   i64.extend_i32_u
+   i64.const 52
+   i64.shl
+   local.get $5
+   i64.add
    local.set $6
-   i64.const 0
-   local.set $7
+   local.get $4
+   i32.const 1
+   local.get $4
    i32.const 0
-   local.set $8
-   i64.const 0
-   local.set $9
-   i64.const 0
-   local.set $10
-   i32.const 0
-   local.set $11
-   i64.const 0
-   local.set $12
-   i32.const 0
-   local.set $13
-   i64.const 0
-   local.set $14
-   i32.const 0
-   local.set $15
-   i64.const 0
-   local.set $16
-   i32.const 0
-   local.set $17
-   i64.const 0
-   local.set $18
-   i64.const 0
-   local.set $19
-   i64.const 0
-   local.set $20
-   i32.const 0
-   local.set $21
-   i64.const 0
-   local.set $22
-   i32.const 0
-   local.set $23
-   i32.const 0
-   local.set $24
-   i32.const 0
-   local.set $25
-   i32.const 0
-   local.set $26
-   f64.const 0
-   local.set $27
-   i32.const 0
-   local.set $28
-   i32.const 0
-   local.set $29
-   i32.const 0
-   local.set $30
-   i32.const 0
-   local.set $31
-   i32.const 0
-   local.set $32
-   i32.const 0
-   local.set $33
-   i32.const 0
-   local.set $34
-   i32.const 0
-   local.set $35
-   i32.const 0
-   local.set $36
-   i32.const 0
-   local.set $37
-   i64.const 0
-   local.set $38
-   i64.const 0
-   local.set $39
-   i64.const 0
-   local.set $40
-   i64.const 0
-   local.set $41
-   i64.const 0
-   local.set $42
-   i64.const 0
-   local.set $43
-   i64.const 0
-   local.set $44
-   i64.const 0
-   local.set $45
-   i64.const 0
-   local.set $46
-   i32.const 0
-   local.set $47
-   i32.const 0
-   local.set $48
-   i64.const 0
-   local.set $49
-   i64.const 0
-   local.set $50
-   i64.const 0
-   local.set $51
-   i64.const 0
-   local.set $52
-   i64.const 0
-   local.set $53
-   i64.const 0
-   local.set $54
-   i64.const 0
-   local.set $55
-   i64.const 0
-   local.set $56
-   i64.const 0
-   local.set $57
-   i32.const 0
-   local.set $58
-   i32.const 0
-   local.set $59
-   i64.const 0
-   local.set $60
-   i64.const 0
-   local.set $61
-   i64.const 0
-   local.set $62
-   i64.const 0
-   local.set $63
-   i64.const 0
-   local.set $64
-   i64.const 0
-   local.set $65
-   i64.const 0
-   local.set $66
-   i64.const 0
-   local.set $67
-   i64.const 0
-   local.set $68
-   block (result i32)
-    local.get $4
-    i64.reinterpret_f64
-    local.set $7
-    local.get $7
-    i64.const 9218868437227405312
-    i64.and
-    i64.const 52
-    i64.shr_u
-    i32.wrap_i64
-    local.set $8
-    local.get $7
-    i64.const 4503599627370495
-    i64.and
-    local.set $9
-    local.get $8
-    i32.const 0
-    i32.ne
-    i64.extend_i32_u
-    i64.const 52
+   i32.ne
+   select
+   i32.const 1023
+   i32.const 52
+   i32.add
+   i32.sub
+   local.set $4
+   block
+    local.get $6
+    i64.const 1
     i64.shl
-    local.get $9
+    i64.const 1
     i64.add
-    local.set $10
-    local.get $8
+    local.set $7
+    local.get $4
     i32.const 1
-    local.get $8
-    i32.const 0
-    i32.ne
-    select
-    i32.const 1023
-    i32.const 52
-    i32.add
     i32.sub
     local.set $8
-    block $__inlined_func$~lib/internal/number/normalizedBoundaries
-     local.get $10
-     local.set $20
-     local.get $8
-     local.set $21
-     i64.const 0
-     local.set $22
-     i32.const 0
-     local.set $23
-     i32.const 0
-     local.set $24
-     i32.const 0
-     local.set $25
-     block
-      local.get $20
-      i64.const 1
-      i64.shl
-      i64.const 1
-      i64.add
-      local.set $22
-      local.get $21
-      i32.const 1
-      i32.sub
-      local.set $23
-      local.get $22
-      i64.clz
-      i32.wrap_i64
-      local.set $24
-      local.get $22
-      local.get $24
-      i64.extend_i32_s
-      i64.shl
-      local.set $22
-      local.get $23
-      local.get $24
-      i32.sub
-      local.set $23
-      i32.const 1
-      local.get $20
-      i64.const 4503599627370496
-      i64.eq
-      i32.add
-      local.set $25
-      local.get $22
-      global.set $~lib/internal/number/_frc_plus
-      local.get $20
-      local.get $25
-      i64.extend_i32_s
-      i64.shl
-      i64.const 1
-      i64.sub
-      local.get $21
-      local.get $25
-      i32.sub
-      local.get $23
-      i32.sub
-      i64.extend_i32_s
-      i64.shl
-      global.set $~lib/internal/number/_frc_minus
-      local.get $23
-      global.set $~lib/internal/number/_exp
-     end
-    end
-    block $__inlined_func$~lib/internal/number/getCachedPower
-     global.get $~lib/internal/number/_exp
-     local.set $26
-     f64.const 0
-     local.set $27
-     i32.const 0
-     local.set $28
-     i32.const 0
-     local.set $29
-     i32.const 0
-     local.set $30
-     i32.const 0
-     local.set $31
-     i32.const 0
-     local.set $32
-     i32.const 0
-     local.set $33
-     i32.const 0
-     local.set $34
-     i32.const 0
-     local.set $35
-     i32.const 0
-     local.set $36
-     i32.const 0
-     local.set $37
-     block
-      i32.const -61
-      local.get $26
-      i32.sub
-      f64.convert_i32_s
-      f64.const 0.30102999566398114
-      f64.mul
-      f64.const 347
-      f64.add
-      local.set $27
-      local.get $27
-      i32.trunc_f64_s
-      local.set $28
-      local.get $28
-      local.get $28
-      f64.convert_i32_s
-      local.get $27
-      f64.ne
-      i32.add
-      local.set $28
-      local.get $28
-      i32.const 3
-      i32.shr_s
-      i32.const 1
-      i32.add
-      local.set $29
-      i32.const 348
-      local.get $29
-      i32.const 3
-      i32.shl
-      i32.sub
-      global.set $~lib/internal/number/_K
-      block $__inlined_func$~lib/internal/number/FRC_POWERS (result i32)
-       i32.const 1728
-      end
-      i32.load
-      local.set $30
-      block $__inlined_func$~lib/internal/number/EXP_POWERS (result i32)
-       i32.const 1992
-      end
-      i32.load
-      local.set $31
-      block $__inlined_func$~lib/internal/arraybuffer/LOAD<u64,u64> (result i64)
-       local.get $30
-       local.set $32
-       local.get $29
-       local.set $33
-       i32.const 0
-       local.set $34
-       local.get $32
-       local.get $33
-       i32.const 3
-       i32.shl
-       i32.add
-       local.get $34
-       i32.add
-       i64.load offset=8
-      end
-      global.set $~lib/internal/number/_frc_pow
-      block $__inlined_func$~lib/internal/arraybuffer/LOAD<i16,i32> (result i32)
-       local.get $31
-       local.set $35
-       local.get $29
-       local.set $36
-       i32.const 0
-       local.set $37
-       local.get $35
-       local.get $36
-       i32.const 1
-       i32.shl
-       i32.add
-       local.get $37
-       i32.add
-       i32.load16_s offset=8
-      end
-      global.set $~lib/internal/number/_exp_pow
-     end
-    end
-    local.get $10
+    local.get $7
     i64.clz
     i32.wrap_i64
-    local.set $11
-    local.get $10
-    local.get $11
+    local.set $9
+    local.get $7
+    local.get $9
     i64.extend_i32_s
     i64.shl
-    local.set $10
+    local.set $7
     local.get $8
-    local.get $11
+    local.get $9
     i32.sub
     local.set $8
-    global.get $~lib/internal/number/_frc_pow
+    i32.const 1
+    local.get $6
+    i64.const 4503599627370496
+    i64.eq
+    i32.add
+    local.set $10
+    local.get $7
+    global.set $~lib/internal/number/_frc_plus
+    local.get $6
+    local.get $10
+    i64.extend_i32_s
+    i64.shl
+    i64.const 1
+    i64.sub
+    local.get $4
+    local.get $10
+    i32.sub
+    local.get $8
+    i32.sub
+    i64.extend_i32_s
+    i64.shl
+    global.set $~lib/internal/number/_frc_minus
+    local.get $8
+    global.set $~lib/internal/number/_exp
+   end
+   block
+    global.get $~lib/internal/number/_exp
+    local.set $10
+    i32.const -61
+    local.get $10
+    i32.sub
+    f64.convert_i32_s
+    f64.const 0.30102999566398114
+    f64.mul
+    f64.const 347
+    f64.add
+    local.set $11
+    local.get $11
+    i32.trunc_f64_s
+    local.set $9
+    local.get $9
+    local.get $9
+    f64.convert_i32_s
+    local.get $11
+    f64.ne
+    i32.add
+    local.set $9
+    local.get $9
+    i32.const 3
+    i32.shr_s
+    i32.const 1
+    i32.add
+    local.set $8
+    i32.const 348
+    local.get $8
+    i32.const 3
+    i32.shl
+    i32.sub
+    global.set $~lib/internal/number/_K
+    block $~lib/internal/number/FRC_POWERS|inlined.0 (result i32)
+     i32.const 1728
+    end
+    i32.load
     local.set $12
-    global.get $~lib/internal/number/_exp_pow
+    block $~lib/internal/number/EXP_POWERS|inlined.0 (result i32)
+     i32.const 1992
+    end
+    i32.load
     local.set $13
-    block $__inlined_func$~lib/internal/number/umul64f (result i64)
-     local.get $10
-     local.set $38
+    block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.0 (result i64)
+     i32.const 0
+     local.set $14
      local.get $12
-     local.set $39
-     i64.const 0
-     local.set $40
-     i64.const 0
-     local.set $41
-     i64.const 0
-     local.set $42
-     i64.const 0
-     local.set $43
-     i64.const 0
-     local.set $44
-     i64.const 0
-     local.set $45
-     i64.const 0
-     local.set $46
-     block (result i64)
-      local.get $38
-      i64.const 4294967295
-      i64.and
-      local.set $40
-      local.get $39
-      i64.const 4294967295
-      i64.and
-      local.set $41
-      local.get $38
-      i64.const 32
-      i64.shr_u
-      local.set $42
-      local.get $39
-      i64.const 32
-      i64.shr_u
-      local.set $43
-      local.get $40
-      local.get $41
-      i64.mul
-      local.set $44
-      local.get $42
-      local.get $41
-      i64.mul
-      local.get $44
-      i64.const 32
-      i64.shr_u
-      i64.add
-      local.set $45
-      local.get $40
-      local.get $43
-      i64.mul
-      local.get $45
-      i64.const 4294967295
-      i64.and
-      i64.add
-      local.set $46
-      local.get $46
-      i64.const 2147483647
-      i64.add
-      local.set $46
-      local.get $45
-      i64.const 32
-      i64.shr_u
-      local.set $45
-      local.get $46
-      i64.const 32
-      i64.shr_u
-      local.set $46
-      local.get $42
-      local.get $43
-      i64.mul
-      local.get $45
-      i64.add
-      local.get $46
-      i64.add
-     end
-    end
-    local.set $14
-    block $__inlined_func$~lib/internal/number/umul64e (result i32)
      local.get $8
-     local.set $47
-     local.get $13
-     local.set $48
-     local.get $47
-     local.get $48
+     i32.const 3
+     i32.shl
      i32.add
-     i32.const 64
+     local.get $14
      i32.add
+     i64.load offset=8
     end
+    global.set $~lib/internal/number/_frc_pow
+    block $~lib/internal/arraybuffer/LOAD<i16,i32>|inlined.0 (result i32)
+     i32.const 0
+     local.set $14
+     local.get $13
+     local.get $8
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $14
+     i32.add
+     i32.load16_s offset=8
+    end
+    global.set $~lib/internal/number/_exp_pow
+   end
+   local.get $6
+   i64.clz
+   i32.wrap_i64
+   local.set $13
+   local.get $6
+   local.get $13
+   i64.extend_i32_s
+   i64.shl
+   local.set $6
+   local.get $4
+   local.get $13
+   i32.sub
+   local.set $4
+   global.get $~lib/internal/number/_frc_pow
+   local.set $7
+   global.get $~lib/internal/number/_exp_pow
+   local.set $12
+   block $~lib/internal/number/umul64f|inlined.0 (result i64)
+    local.get $6
+    i64.const 4294967295
+    i64.and
     local.set $15
-    block $__inlined_func$~lib/internal/number/umul64f0 (result i64)
-     global.get $~lib/internal/number/_frc_plus
-     local.set $49
-     local.get $12
-     local.set $50
-     i64.const 0
-     local.set $51
-     i64.const 0
-     local.set $52
-     i64.const 0
-     local.set $53
-     i64.const 0
-     local.set $54
-     i64.const 0
-     local.set $55
-     i64.const 0
-     local.set $56
-     i64.const 0
-     local.set $57
-     block (result i64)
-      local.get $49
-      i64.const 4294967295
-      i64.and
-      local.set $51
-      local.get $50
-      i64.const 4294967295
-      i64.and
-      local.set $52
-      local.get $49
-      i64.const 32
-      i64.shr_u
-      local.set $53
-      local.get $50
-      i64.const 32
-      i64.shr_u
-      local.set $54
-      local.get $51
-      local.get $52
-      i64.mul
-      local.set $55
-      local.get $53
-      local.get $52
-      i64.mul
-      local.get $55
-      i64.const 32
-      i64.shr_u
-      i64.add
-      local.set $56
-      local.get $51
-      local.get $54
-      i64.mul
-      local.get $56
-      i64.const 4294967295
-      i64.and
-      i64.add
-      local.set $57
-      local.get $57
-      i64.const 2147483647
-      i64.add
-      local.set $57
-      local.get $56
-      i64.const 32
-      i64.shr_u
-      local.set $56
-      local.get $57
-      i64.const 32
-      i64.shr_u
-      local.set $57
-      local.get $53
-      local.get $54
-      i64.mul
-      local.get $56
-      i64.add
-      local.get $57
-      i64.add
-     end
-    end
-    i64.const 1
-    i64.sub
+    local.get $7
+    i64.const 4294967295
+    i64.and
     local.set $16
-    block $__inlined_func$~lib/internal/number/umul64e0 (result i32)
-     global.get $~lib/internal/number/_exp
-     local.set $58
-     local.get $13
-     local.set $59
-     local.get $58
-     local.get $59
-     i32.add
-     i32.const 64
-     i32.add
-    end
+    local.get $6
+    i64.const 32
+    i64.shr_u
     local.set $17
-    block $__inlined_func$~lib/internal/number/umul64f1 (result i64)
-     global.get $~lib/internal/number/_frc_minus
-     local.set $60
-     local.get $12
-     local.set $61
-     i64.const 0
-     local.set $62
-     i64.const 0
-     local.set $63
-     i64.const 0
-     local.set $64
-     i64.const 0
-     local.set $65
-     i64.const 0
-     local.set $66
-     i64.const 0
-     local.set $67
-     i64.const 0
-     local.set $68
-     block (result i64)
-      local.get $60
-      i64.const 4294967295
-      i64.and
-      local.set $62
-      local.get $61
-      i64.const 4294967295
-      i64.and
-      local.set $63
-      local.get $60
-      i64.const 32
-      i64.shr_u
-      local.set $64
-      local.get $61
-      i64.const 32
-      i64.shr_u
-      local.set $65
-      local.get $62
-      local.get $63
-      i64.mul
-      local.set $66
-      local.get $64
-      local.get $63
-      i64.mul
-      local.get $66
-      i64.const 32
-      i64.shr_u
-      i64.add
-      local.set $67
-      local.get $62
-      local.get $65
-      i64.mul
-      local.get $67
-      i64.const 4294967295
-      i64.and
-      i64.add
-      local.set $68
-      local.get $68
-      i64.const 2147483647
-      i64.add
-      local.set $68
-      local.get $67
-      i64.const 32
-      i64.shr_u
-      local.set $67
-      local.get $68
-      i64.const 32
-      i64.shr_u
-      local.set $68
-      local.get $64
-      local.get $65
-      i64.mul
-      local.get $67
-      i64.add
-      local.get $68
-      i64.add
-     end
-    end
-    i64.const 1
-    i64.add
+    local.get $7
+    i64.const 32
+    i64.shr_u
     local.set $18
-    local.get $16
-    local.get $18
-    i64.sub
-    local.set $19
-    local.get $5
-    local.get $14
     local.get $15
     local.get $16
+    i64.mul
+    local.set $19
     local.get $17
+    local.get $16
+    i64.mul
     local.get $19
-    local.get $6
-    call $~lib/internal/number/genDigits
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $20
+    local.get $15
+    local.get $18
+    i64.mul
+    local.get $20
+    i64.const 4294967295
+    i64.and
+    i64.add
+    local.set $21
+    local.get $21
+    i64.const 2147483647
+    i64.add
+    local.set $21
+    local.get $20
+    i64.const 32
+    i64.shr_u
+    local.set $20
+    local.get $21
+    i64.const 32
+    i64.shr_u
+    local.set $21
+    local.get $17
+    local.get $18
+    i64.mul
+    local.get $20
+    i64.add
+    local.get $21
+    i64.add
    end
+   local.set $21
+   block $~lib/internal/number/umul64e|inlined.0 (result i32)
+    local.get $4
+    local.get $12
+    i32.add
+    i32.const 64
+    i32.add
+   end
+   local.set $8
+   block $~lib/internal/number/umul64f|inlined.1 (result i64)
+    global.get $~lib/internal/number/_frc_plus
+    local.set $20
+    local.get $20
+    i64.const 4294967295
+    i64.and
+    local.set $19
+    local.get $7
+    i64.const 4294967295
+    i64.and
+    local.set $18
+    local.get $20
+    i64.const 32
+    i64.shr_u
+    local.set $17
+    local.get $7
+    i64.const 32
+    i64.shr_u
+    local.set $16
+    local.get $19
+    local.get $18
+    i64.mul
+    local.set $15
+    local.get $17
+    local.get $18
+    i64.mul
+    local.get $15
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $22
+    local.get $19
+    local.get $16
+    i64.mul
+    local.get $22
+    i64.const 4294967295
+    i64.and
+    i64.add
+    local.set $23
+    local.get $23
+    i64.const 2147483647
+    i64.add
+    local.set $23
+    local.get $22
+    i64.const 32
+    i64.shr_u
+    local.set $22
+    local.get $23
+    i64.const 32
+    i64.shr_u
+    local.set $23
+    local.get $17
+    local.get $16
+    i64.mul
+    local.get $22
+    i64.add
+    local.get $23
+    i64.add
+   end
+   i64.const 1
+   i64.sub
+   local.set $23
+   block $~lib/internal/number/umul64e|inlined.1 (result i32)
+    global.get $~lib/internal/number/_exp
+    local.set $9
+    local.get $9
+    local.get $12
+    i32.add
+    i32.const 64
+    i32.add
+   end
+   local.set $9
+   block $~lib/internal/number/umul64f|inlined.2 (result i64)
+    global.get $~lib/internal/number/_frc_minus
+    local.set $22
+    local.get $22
+    i64.const 4294967295
+    i64.and
+    local.set $15
+    local.get $7
+    i64.const 4294967295
+    i64.and
+    local.set $16
+    local.get $22
+    i64.const 32
+    i64.shr_u
+    local.set $17
+    local.get $7
+    i64.const 32
+    i64.shr_u
+    local.set $18
+    local.get $15
+    local.get $16
+    i64.mul
+    local.set $19
+    local.get $17
+    local.get $16
+    i64.mul
+    local.get $19
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $20
+    local.get $15
+    local.get $18
+    i64.mul
+    local.get $20
+    i64.const 4294967295
+    i64.and
+    i64.add
+    local.set $24
+    local.get $24
+    i64.const 2147483647
+    i64.add
+    local.set $24
+    local.get $20
+    i64.const 32
+    i64.shr_u
+    local.set $20
+    local.get $24
+    i64.const 32
+    i64.shr_u
+    local.set $24
+    local.get $17
+    local.get $18
+    i64.mul
+    local.get $20
+    i64.add
+    local.get $24
+    i64.add
+   end
+   i64.const 1
+   i64.add
+   local.set $24
+   local.get $23
+   local.get $24
+   i64.sub
+   local.set $20
+   local.get $0
+   local.get $21
+   local.get $8
+   local.get $23
+   local.get $9
+   local.get $20
+   local.get $2
+   call $~lib/internal/number/genDigits
   end
-  local.set $3
+  local.set $25
   local.get $0
   local.get $2
   i32.const 1
   i32.shl
   i32.add
-  local.get $3
+  local.get $25
   local.get $2
   i32.sub
   global.get $~lib/internal/number/_K
   call $~lib/internal/number/prettify
-  local.set $3
-  local.get $3
+  local.set $25
+  local.get $25
   local.get $2
   i32.add
  )
- (func $~lib/internal/string/copyUnsafe (; 35 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 17 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -4827,7 +3413,7 @@
   local.get $7
   call $~lib/internal/memory/memmove
  )
- (func $~lib/string/String#substring (; 36 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (; 18 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4937,47 +3523,13 @@
   call $~lib/internal/string/copyUnsafe
   local.get $10
  )
- (func $~lib/allocator/arena/__memory_free (; 37 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 19 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/memory/memory.free (; 38 ;) (type $iv) (param $0 i32)
-  local.get $0
-  call $~lib/allocator/arena/__memory_free
-  return
- )
- (func $~lib/internal/string/freeUnsafe (; 39 ;) (type $iv) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 16
-   i32.const 28
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
-  block $__inlined_func$~lib/memory/memory.free
-   local.get $0
-   local.set $1
-   block
-    local.get $1
-    call $~lib/allocator/arena/__memory_free
-    br $__inlined_func$~lib/memory/memory.free
-    unreachable
-   end
-   unreachable
-   br $__inlined_func$~lib/memory/memory.free
-  end
- )
- (func $~lib/internal/number/dtoa (; 40 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/number/dtoa (; 20 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 f64)
-  (local $5 f64)
-  (local $6 i32)
-  (local $7 i32)
   local.get $0
   f64.const 0
   f64.eq
@@ -4985,24 +3537,12 @@
    i32.const 624
    return
   end
-  block $__inlined_func$~lib/builtins/isFinite<f64> (result i32)
-   local.get $0
-   local.set $4
-   local.get $4
-   local.get $4
-   f64.sub
-   f64.const 0
-   f64.eq
-  end
+  local.get $0
+  call $~lib/builtins/isFinite<f64>
   i32.eqz
   if
-   block $__inlined_func$~lib/builtins/isNaN<f64> (result i32)
-    local.get $0
-    local.set $5
-    local.get $5
-    local.get $5
-    f64.ne
-   end
+   local.get $0
+   call $~lib/builtins/isNaN<f64>
    if
     i32.const 640
     return
@@ -5027,43 +3567,32 @@
   local.get $2
   call $~lib/string/String#substring
   local.set $3
-  block $__inlined_func$~lib/internal/string/freeUnsafe
-   local.get $1
-   local.set $6
+  local.get $1
+  i32.eqz
+  if
    i32.const 0
-   local.set $7
+   i32.const 16
+   i32.const 28
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/memory/memory.free|inlined.0
    block
-    local.get $6
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 16
-     i32.const 28
-     i32.const 4
-     call $~lib/env/abort
-     unreachable
-    end
-    block $__inlined_func$~lib/memory/memory.free
-     local.get $6
-     local.set $7
-     block
-      local.get $7
-      call $~lib/allocator/arena/__memory_free
-      br $__inlined_func$~lib/memory/memory.free
-      unreachable
-     end
-     unreachable
-     br $__inlined_func$~lib/memory/memory.free
-    end
+    local.get $1
+    call $~lib/allocator/arena/__memory_free
+    br $~lib/memory/memory.free|inlined.0
+    unreachable
    end
+   unreachable
   end
   local.get $3
  )
- (func $~lib/number/F64#toString (; 41 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/number/F64#toString (; 21 ;) (type $Fi) (param $0 f64) (result i32)
   local.get $0
   call $~lib/internal/number/dtoa
  )
- (func $~lib/number/Bool#toString (; 42 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/number/Bool#toString (; 22 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -5073,12 +3602,7 @@
    i32.const 2176
   end
  )
- (func $~lib/builtins/isNaN<f32> (; 43 ;) (type $fi) (param $0 f32) (result i32)
-  local.get $0
-  local.get $0
-  f32.ne
- )
- (func $~lib/number/F32.isSafeInteger (; 44 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/number/F32.isSafeInteger (; 23 ;) (type $fi) (param $0 f32) (result i32)
   (local $1 i32)
   local.get $0
   f32.abs
@@ -5094,26 +3618,18 @@
    local.get $1
   end
  )
- (func $~lib/builtins/isFinite<f32> (; 45 ;) (type $fi) (param $0 f32) (result i32)
-  local.get $0
-  local.get $0
-  f32.sub
-  f32.const 0
-  f32.eq
- )
- (func $~lib/number/F32.isInteger (; 46 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/number/F32.isInteger (; 24 ;) (type $fi) (param $0 f32) (result i32)
   (local $1 i32)
-  (local $2 f32)
-  block $__inlined_func$~lib/builtins/isFinite<f32> (result i32)
+  block $~lib/builtins/isFinite<f32>|inlined.0 (result i32)
    local.get $0
-   local.set $2
-   local.get $2
-   local.get $2
+   local.get $0
    f32.sub
    f32.const 0
    f32.eq
   end
   local.tee $1
+  i32.const 0
+  i32.ne
   if (result i32)
    local.get $0
    f32.trunc
@@ -5123,7 +3639,7 @@
    local.get $1
   end
  )
- (func $~lib/number/F64.isSafeInteger (; 47 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isSafeInteger (; 25 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   local.get $0
   f64.abs
@@ -5139,19 +3655,18 @@
    local.get $1
   end
  )
- (func $~lib/number/F64.isInteger (; 48 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isInteger (; 26 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
-  (local $2 f64)
-  block $__inlined_func$~lib/builtins/isFinite<f64> (result i32)
+  block $~lib/builtins/isFinite<f64>|inlined.0 (result i32)
    local.get $0
-   local.set $2
-   local.get $2
-   local.get $2
+   local.get $0
    f64.sub
    f64.const 0
    f64.eq
   end
   local.tee $1
+  i32.const 0
+  i32.ne
   if (result i32)
    local.get $0
    f64.trunc
@@ -5161,7 +3676,7 @@
    local.get $1
   end
  )
- (func $start (; 49 ;) (type $v)
+ (func $start (; 27 ;) (type $v)
   (local $0 i32)
   (local $1 f32)
   (local $2 f64)
@@ -5346,13 +3861,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/builtins/isNaN<f32> (result i32)
+  block $~lib/builtins/isNaN<f32>|inlined.0 (result i32)
    global.get $~lib/number/F32.NaN
    local.set $1
    local.get $1
    local.get $1
    f32.ne
   end
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -5485,6 +4002,8 @@
   end
   f32.const 0
   call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5498,6 +4017,8 @@
   end
   f32.const -0
   call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5512,6 +4033,8 @@
   f32.const nan:0x400000
   call $~lib/number/F32.isInteger
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -5524,6 +4047,8 @@
   end
   f32.const inf
   call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -5538,6 +4063,8 @@
   global.get $~lib/builtins/f32.EPSILON
   call $~lib/number/F32.isInteger
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -5550,6 +4077,8 @@
   end
   f32.const 1
   call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5563,6 +4092,8 @@
   end
   f32.const -1
   call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5576,6 +4107,8 @@
   end
   global.get $~lib/builtins/f32.MIN_SAFE_INTEGER
   call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5589,6 +4122,8 @@
   end
   global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
   call $~lib/number/F32.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5603,6 +4138,8 @@
   f32.const 0.5
   call $~lib/number/F32.isInteger
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -5616,6 +4153,8 @@
   f32.const -1.5
   call $~lib/number/F32.isInteger
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -5626,13 +4165,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/builtins/isNaN<f64> (result i32)
+  block $~lib/builtins/isNaN<f64>|inlined.0 (result i32)
    global.get $~lib/number/F64.NaN
    local.set $2
    local.get $2
    local.get $2
    f64.ne
   end
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -5765,6 +4306,8 @@
   end
   f64.const 0
   call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5778,6 +4321,8 @@
   end
   f64.const -0
   call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5792,6 +4337,8 @@
   f64.const nan:0x8000000000000
   call $~lib/number/F64.isInteger
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -5804,6 +4351,8 @@
   end
   f64.const inf
   call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -5818,6 +4367,8 @@
   global.get $~lib/builtins/f64.EPSILON
   call $~lib/number/F64.isInteger
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -5830,6 +4381,8 @@
   end
   f64.const 1
   call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5843,6 +4396,8 @@
   end
   f64.const -1
   call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5856,6 +4411,8 @@
   end
   global.get $~lib/builtins/f64.MIN_SAFE_INTEGER
   call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5869,6 +4426,8 @@
   end
   global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   call $~lib/number/F64.isInteger
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -5883,6 +4442,8 @@
   f64.const 0.5
   call $~lib/number/F64.isInteger
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -5896,6 +4457,8 @@
   f64.const -1.5
   call $~lib/number/F64.isInteger
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -5907,6 +4470,6 @@
    unreachable
   end
  )
- (func $null (; 50 ;) (type $v)
+ (func $null (; 28 ;) (type $v)
  )
 )

@@ -226,12 +226,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/allocator/arena/__memory_allocate
-  return
- )
- (func $~lib/string/String#toUTF8 (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#toUTF8 (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -239,108 +234,107 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  block $__inlined_func$~lib/memory/memory.allocate (result i32)
+  block $~lib/memory/memory.allocate|inlined.0 (result i32)
    local.get $0
    call $~lib/string/String#get:lengthUTF8
-   local.set $8
-   local.get $8
+   local.set $1
+   local.get $1
    call $~lib/allocator/arena/__memory_allocate
-   br $__inlined_func$~lib/memory/memory.allocate
+   br $~lib/memory/memory.allocate|inlined.0
   end
-  local.set $1
-  i32.const 0
   local.set $2
+  i32.const 0
+  local.set $3
   local.get $0
   i32.load
-  local.set $3
-  i32.const 0
   local.set $4
+  i32.const 0
+  local.set $5
   block $break|0
    loop $continue|0
-    local.get $2
     local.get $3
+    local.get $4
     i32.lt_u
     if
      block
       local.get $0
-      local.get $2
+      local.get $3
       i32.const 1
       i32.shl
       i32.add
       i32.load16_u offset=4
-      local.set $5
-      local.get $5
+      local.set $1
+      local.get $1
       i32.const 128
       i32.lt_u
       if
-       local.get $1
-       local.get $4
-       i32.add
-       local.get $5
-       i32.store8
-       local.get $4
-       i32.const 1
-       i32.add
-       local.set $4
        local.get $2
+       local.get $5
+       i32.add
+       local.get $1
+       i32.store8
+       local.get $5
        i32.const 1
        i32.add
-       local.set $2
+       local.set $5
+       local.get $3
+       i32.const 1
+       i32.add
+       local.set $3
       else       
-       local.get $5
+       local.get $1
        i32.const 2048
        i32.lt_u
        if
-        local.get $1
-        local.get $4
+        local.get $2
+        local.get $5
         i32.add
         local.set $6
         local.get $6
-        local.get $5
+        local.get $1
         i32.const 6
         i32.shr_u
         i32.const 192
         i32.or
         i32.store8
         local.get $6
-        local.get $5
+        local.get $1
         i32.const 63
         i32.and
         i32.const 128
         i32.or
         i32.store8 offset=1
-        local.get $4
+        local.get $5
         i32.const 2
         i32.add
-        local.set $4
-        local.get $2
+        local.set $5
+        local.get $3
         i32.const 1
         i32.add
-        local.set $2
+        local.set $3
        else        
-        local.get $1
-        local.get $4
+        local.get $2
+        local.get $5
         i32.add
         local.set $6
-        local.get $5
+        local.get $1
         i32.const 64512
         i32.and
         i32.const 55296
         i32.eq
         local.tee $7
         if (result i32)
-         local.get $2
+         local.get $3
          i32.const 1
          i32.add
-         local.get $3
+         local.get $4
          i32.lt_u
         else         
          local.get $7
         end
         if
          local.get $0
-         local.get $2
+         local.get $3
          i32.const 1
          i32.add
          i32.const 1
@@ -355,7 +349,7 @@
          i32.eq
          if
           i32.const 65536
-          local.get $5
+          local.get $1
           i32.const 1023
           i32.and
           i32.const 10
@@ -365,16 +359,16 @@
           i32.const 1023
           i32.and
           i32.add
-          local.set $5
+          local.set $1
           local.get $6
-          local.get $5
+          local.get $1
           i32.const 18
           i32.shr_u
           i32.const 240
           i32.or
           i32.store8
           local.get $6
-          local.get $5
+          local.get $1
           i32.const 12
           i32.shr_u
           i32.const 63
@@ -383,7 +377,7 @@
           i32.or
           i32.store8 offset=1
           local.get $6
-          local.get $5
+          local.get $1
           i32.const 6
           i32.shr_u
           i32.const 63
@@ -392,32 +386,32 @@
           i32.or
           i32.store8 offset=2
           local.get $6
-          local.get $5
+          local.get $1
           i32.const 63
           i32.and
           i32.const 128
           i32.or
           i32.store8 offset=3
-          local.get $4
+          local.get $5
           i32.const 4
           i32.add
-          local.set $4
-          local.get $2
+          local.set $5
+          local.get $3
           i32.const 2
           i32.add
-          local.set $2
+          local.set $3
           br $continue|0
          end
         end
         local.get $6
-        local.get $5
+        local.get $1
         i32.const 12
         i32.shr_u
         i32.const 224
         i32.or
         i32.store8
         local.get $6
-        local.get $5
+        local.get $1
         i32.const 6
         i32.shr_u
         i32.const 63
@@ -426,20 +420,20 @@
         i32.or
         i32.store8 offset=1
         local.get $6
-        local.get $5
+        local.get $1
         i32.const 63
         i32.and
         i32.const 128
         i32.or
         i32.store8 offset=2
-        local.get $4
+        local.get $5
         i32.const 3
         i32.add
-        local.set $4
-        local.get $2
+        local.set $5
+        local.get $3
         i32.const 1
         i32.add
-        local.set $2
+        local.set $3
        end
       end
      end
@@ -447,17 +441,16 @@
     end
    end
   end
-  local.get $1
-  local.get $4
+  local.get $2
+  local.get $5
   i32.add
   i32.const 0
   i32.store8
-  local.get $1
+  local.get $2
  )
- (func $~lib/internal/string/allocateUnsafe (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   i32.const 0
   i32.gt_s
@@ -478,16 +471,16 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/memory/memory.allocate (result i32)
+  block $~lib/memory/memory.allocate|inlined.2 (result i32)
    global.get $~lib/internal/string/HEADER_SIZE
    local.get $0
    i32.const 1
    i32.shl
    i32.add
-   local.set $3
-   local.get $3
+   local.set $1
+   local.get $1
    call $~lib/allocator/arena/__memory_allocate
-   br $__inlined_func$~lib/memory/memory.allocate
+   br $~lib/memory/memory.allocate|inlined.2
   end
   local.set $2
   local.get $2
@@ -495,7 +488,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/memory/memcpy (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1696,7 +1689,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1923,32 +1916,16 @@
    end
   end
  )
- (func $~lib/memory/memory.copy (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/internal/memory/memmove
- )
- (func $~lib/allocator/arena/__memory_free (; 9 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 7 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/memory/memory.free (; 10 ;) (type $iv) (param $0 i32)
-  local.get $0
-  call $~lib/allocator/arena/__memory_free
-  return
- )
- (func $~lib/string/String.fromUTF8 (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.fromUTF8 (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
   local.get $1
   i32.const 1
   i32.lt_u
@@ -1958,18 +1935,18 @@
   end
   i32.const 0
   local.set $2
-  block $__inlined_func$~lib/memory/memory.allocate (result i32)
+  block $~lib/memory/memory.allocate|inlined.1 (result i32)
    local.get $1
    i32.const 1
    i32.shl
-   local.set $8
-   local.get $8
+   local.set $3
+   local.get $3
    call $~lib/allocator/arena/__memory_allocate
-   br $__inlined_func$~lib/memory/memory.allocate
+   br $~lib/memory/memory.allocate|inlined.1
   end
-  local.set $3
-  i32.const 0
   local.set $4
+  i32.const 0
+  local.set $5
   block $break|0
    loop $continue|0
     local.get $2
@@ -1980,35 +1957,35 @@
       local.get $0
       block (result i32)
        local.get $2
-       local.tee $5
+       local.tee $3
        i32.const 1
        i32.add
        local.set $2
-       local.get $5
+       local.get $3
       end
       i32.add
       i32.load8_u
-      local.set $5
-      local.get $5
+      local.set $3
+      local.get $3
       i32.const 128
       i32.lt_u
       if
-       local.get $3
        local.get $4
-       i32.add
        local.get $5
+       i32.add
+       local.get $3
        i32.store16
-       local.get $4
+       local.get $5
        i32.const 2
        i32.add
-       local.set $4
+       local.set $5
       else       
-       local.get $5
+       local.get $3
        i32.const 191
        i32.gt_u
        local.tee $6
        if (result i32)
-        local.get $5
+        local.get $3
         i32.const 224
         i32.lt_u
        else        
@@ -2029,10 +2006,10 @@
          call $~lib/env/abort
          unreachable
         end
-        local.get $3
         local.get $4
-        i32.add
         local.get $5
+        i32.add
+        local.get $3
         i32.const 31
         i32.and
         i32.const 6
@@ -2052,17 +2029,17 @@
         i32.and
         i32.or
         i32.store16
-        local.get $4
+        local.get $5
         i32.const 2
         i32.add
-        local.set $4
+        local.set $5
        else        
-        local.get $5
+        local.get $3
         i32.const 239
         i32.gt_u
         local.tee $6
         if (result i32)
-         local.get $5
+         local.get $3
          i32.const 365
          i32.lt_u
         else         
@@ -2083,7 +2060,7 @@
           call $~lib/env/abort
           unreachable
          end
-         local.get $5
+         local.get $3
          i32.const 7
          i32.and
          i32.const 18
@@ -2136,33 +2113,33 @@
          i32.or
          i32.const 65536
          i32.sub
-         local.set $5
-         local.get $3
+         local.set $3
          local.get $4
+         local.get $5
          i32.add
          i32.const 55296
-         local.get $5
+         local.get $3
          i32.const 10
          i32.shr_u
          i32.add
          i32.store16
-         local.get $4
+         local.get $5
          i32.const 2
          i32.add
-         local.set $4
-         local.get $3
+         local.set $5
          local.get $4
+         local.get $5
          i32.add
          i32.const 56320
-         local.get $5
+         local.get $3
          i32.const 1023
          i32.and
          i32.add
          i32.store16
-         local.get $4
+         local.get $5
          i32.const 2
          i32.add
-         local.set $4
+         local.set $5
         else         
          local.get $2
          i32.const 2
@@ -2178,10 +2155,10 @@
           call $~lib/env/abort
           unreachable
          end
-         local.get $3
          local.get $4
-         i32.add
          local.get $5
+         i32.add
+         local.get $3
          i32.const 15
          i32.and
          i32.const 12
@@ -2217,10 +2194,10 @@
          i32.and
          i32.or
          i32.store16
-         local.get $4
+         local.get $5
          i32.const 2
          i32.add
-         local.set $4
+         local.set $5
         end
        end
       end
@@ -2241,40 +2218,31 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $4
+  local.get $5
   i32.const 1
   i32.shr_u
   call $~lib/internal/string/allocateUnsafe
   local.set $7
-  block $__inlined_func$~lib/memory/memory.copy
-   local.get $7
-   global.get $~lib/internal/string/HEADER_SIZE
-   i32.add
-   local.set $9
-   local.get $3
-   local.set $10
-   local.get $4
-   local.set $11
-   local.get $9
-   local.get $10
-   local.get $11
-   call $~lib/internal/memory/memmove
-  end
-  block $__inlined_func$~lib/memory/memory.free
-   local.get $3
-   local.set $12
+  local.get $7
+  global.get $~lib/internal/string/HEADER_SIZE
+  i32.add
+  local.set $3
+  local.get $3
+  local.get $4
+  local.get $5
+  call $~lib/internal/memory/memmove
+  block $~lib/memory/memory.free|inlined.0
    block
-    local.get $12
+    local.get $4
     call $~lib/allocator/arena/__memory_free
-    br $__inlined_func$~lib/memory/memory.free
+    br $~lib/memory/memory.free|inlined.0
     unreachable
    end
    unreachable
-   br $__inlined_func$~lib/memory/memory.free
   end
   local.get $7
  )
- (func $~lib/internal/string/compareUnsafe (; 12 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 9 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -2327,7 +2295,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -2371,7 +2339,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $start (; 14 ;) (type $v)
+ (func $start (; 11 ;) (type $v)
   (local $0 i32)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
@@ -2636,19 +2604,18 @@
    call $~lib/env/abort
    unreachable
   end
-  block $__inlined_func$~lib/memory/memory.free
+  block $~lib/memory/memory.free|inlined.1
    global.get $std/string-utf8/ptr
    local.set $0
    block
     local.get $0
     call $~lib/allocator/arena/__memory_free
-    br $__inlined_func$~lib/memory/memory.free
+    br $~lib/memory/memory.free|inlined.1
     unreachable
    end
    unreachable
-   br $__inlined_func$~lib/memory/memory.free
   end
  )
- (func $null (; 15 ;) (type $v)
+ (func $null (; 12 ;) (type $v)
  )
 )

@@ -4,7 +4,6 @@
  (type $iv (func (param i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiiv (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $iIi (func (param i32 i64) (result i32)))
@@ -12,11 +11,14 @@
  (type $iIii (func (param i32 i64 i32) (result i32)))
  (type $iIv (func (param i32 i64)))
  (type $ifi (func (param i32 f32) (result i32)))
+ (type $fi (func (param f32) (result i32)))
  (type $ifii (func (param i32 f32 i32) (result i32)))
  (type $ifv (func (param i32 f32)))
  (type $iFi (func (param i32 f64) (result i32)))
+ (type $Fi (func (param f64) (result i32)))
  (type $iFii (func (param i32 f64 i32) (result i32)))
  (type $iFv (func (param i32 f64)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -120,25 +122,24 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i64)
-  local.get $2
+ (func $~lib/internal/memory/memset (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $1
   i32.eqz
   if
    return
   end
   local.get $0
-  local.get $1
+  i32.const 0
   i32.store8
   local.get $0
-  local.get $2
+  local.get $1
   i32.add
   i32.const 1
   i32.sub
-  local.get $1
+  i32.const 0
   i32.store8
-  local.get $2
+  local.get $1
   i32.const 2
   i32.le_u
   if
@@ -147,27 +148,27 @@
   local.get $0
   i32.const 1
   i32.add
-  local.get $1
+  i32.const 0
   i32.store8
   local.get $0
   i32.const 2
   i32.add
-  local.get $1
+  i32.const 0
   i32.store8
   local.get $0
-  local.get $2
+  local.get $1
   i32.add
-  local.tee $3
+  local.tee $2
   i32.const 2
   i32.sub
-  local.get $1
+  i32.const 0
   i32.store8
-  local.get $3
+  local.get $2
   i32.const 3
   i32.sub
-  local.get $1
+  i32.const 0
   i32.store8
-  local.get $2
+  local.get $1
   i32.const 6
   i32.le_u
   if
@@ -176,52 +177,45 @@
   local.get $0
   i32.const 3
   i32.add
-  local.get $1
+  i32.const 0
   i32.store8
   local.get $0
-  local.get $2
+  local.get $1
   i32.add
   i32.const 4
   i32.sub
-  local.get $1
+  i32.const 0
   i32.store8
-  local.get $2
+  local.get $1
   i32.const 8
   i32.le_u
   if
    return
   end
-  local.get $2
   i32.const 0
   local.get $0
   i32.sub
   i32.const 3
   i32.and
-  local.tee $3
-  i32.sub
-  local.set $2
-  local.get $0
-  local.get $3
-  i32.add
-  local.tee $0
-  local.get $1
-  i32.const 255
-  i32.and
-  i32.const 16843009
-  i32.mul
-  local.tee $1
-  i32.store
-  local.get $2
-  i32.const -4
-  i32.and
   local.tee $2
   local.get $0
   i32.add
+  local.tee $0
+  i32.const 0
+  i32.store
+  local.get $1
+  local.get $2
+  i32.sub
+  i32.const -4
+  i32.and
+  local.tee $1
+  local.get $0
+  i32.add
   i32.const 4
   i32.sub
-  local.get $1
+  i32.const 0
   i32.store
-  local.get $2
+  local.get $1
   i32.const 8
   i32.le_u
   if
@@ -230,27 +224,27 @@
   local.get $0
   i32.const 4
   i32.add
-  local.get $1
+  i32.const 0
   i32.store
   local.get $0
   i32.const 8
   i32.add
-  local.get $1
+  i32.const 0
   i32.store
   local.get $0
-  local.get $2
+  local.get $1
   i32.add
-  local.tee $3
+  local.tee $2
   i32.const 12
   i32.sub
-  local.get $1
-  i32.store
-  local.get $3
-  i32.const 8
-  i32.sub
-  local.get $1
+  i32.const 0
   i32.store
   local.get $2
+  i32.const 8
+  i32.sub
+  i32.const 0
+  i32.store
+  local.get $1
   i32.const 24
   i32.le_u
   if
@@ -259,94 +253,86 @@
   local.get $0
   i32.const 12
   i32.add
-  local.get $1
+  i32.const 0
   i32.store
   local.get $0
   i32.const 16
   i32.add
-  local.get $1
+  i32.const 0
   i32.store
   local.get $0
   i32.const 20
   i32.add
-  local.get $1
+  i32.const 0
   i32.store
   local.get $0
   i32.const 24
   i32.add
-  local.get $1
+  i32.const 0
   i32.store
   local.get $0
-  local.get $2
+  local.get $1
   i32.add
-  local.tee $3
+  local.tee $2
   i32.const 28
   i32.sub
-  local.get $1
+  i32.const 0
   i32.store
-  local.get $3
+  local.get $2
   i32.const 24
   i32.sub
-  local.get $1
+  i32.const 0
   i32.store
-  local.get $3
+  local.get $2
   i32.const 20
   i32.sub
-  local.get $1
+  i32.const 0
   i32.store
-  local.get $3
+  local.get $2
   i32.const 16
   i32.sub
-  local.get $1
+  i32.const 0
   i32.store
   local.get $0
   i32.const 4
   i32.and
   i32.const 24
   i32.add
-  local.tee $3
+  local.tee $2
   local.get $0
   i32.add
   local.set $0
-  local.get $2
-  local.get $3
-  i32.sub
-  local.set $2
   local.get $1
-  i64.extend_i32_u
-  local.tee $4
-  local.get $4
-  i64.const 32
-  i64.shl
-  i64.or
-  local.set $4
+  local.get $2
+  i32.sub
+  local.set $1
   loop $continue|0
-   local.get $2
+   local.get $1
    i32.const 32
    i32.ge_u
    if
     local.get $0
-    local.get $4
+    i64.const 0
     i64.store
     local.get $0
     i32.const 8
     i32.add
-    local.get $4
+    i64.const 0
     i64.store
     local.get $0
     i32.const 16
     i32.add
-    local.get $4
+    i64.const 0
     i64.store
     local.get $0
     i32.const 24
     i32.add
-    local.get $4
+    i64.const 0
     i64.store
-    local.get $2
+    local.get $1
     i32.const 32
     i32.sub
-    local.set $2
+    local.set $1
     local.get $0
     i32.const 32
     i32.add
@@ -377,7 +363,6 @@
    local.get $2
    i32.const 8
    i32.add
-   i32.const 0
    local.get $0
    call $~lib/internal/memory/memset
   end
@@ -2903,11 +2888,13 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $0
-  local.get $1
   local.get $1
   call $~lib/internal/hash/hash32
-  local.tee $4
+  local.tee $2
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $2
   call $~lib/set/Set<i32>#find
   i32.eqz
   if
@@ -3815,11 +3802,13 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $0
-  local.get $1
   local.get $1
   call $~lib/internal/hash/hash64
-  local.tee $4
+  local.tee $2
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $2
   call $~lib/set/Set<i64>#find
   i32.eqz
   if
@@ -4453,7 +4442,12 @@
    unreachable
   end
  )
- (func $~lib/set/Set<f32>#find (; 47 ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/internal/hash/HASH<f32> (; 47 ;) (type $fi) (param $0 f32) (result i32)
+  local.get $0
+  i32.reinterpret_f32
+  call $~lib/internal/hash/hash32
+ )
+ (func $~lib/set/Set<f32>#find (; 48 ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -4496,17 +4490,16 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f32>#has (; 48 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#has (; 49 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   local.get $1
-  i32.reinterpret_f32
-  call $~lib/internal/hash/hash32
+  call $~lib/internal/hash/HASH<f32>
   call $~lib/set/Set<f32>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f32>#rehash (; 49 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f32>#rehash (; 50 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4610,15 +4603,14 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f32>#add (; 50 ;) (type $ifv) (param $0 i32) (param $1 f32)
+ (func $~lib/set/Set<f32>#add (; 51 ;) (type $ifv) (param $0 i32) (param $1 f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
   local.get $1
   local.get $1
-  i32.reinterpret_f32
-  call $~lib/internal/hash/hash32
+  call $~lib/internal/hash/HASH<f32>
   local.tee $4
   call $~lib/set/Set<f32>#find
   i32.eqz
@@ -4696,7 +4688,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<f32>#delete (; 51 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#delete (; 52 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -4760,7 +4752,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<f32> (; 52 ;) (type $v)
+ (func $std/set/test<f32> (; 53 ;) (type $v)
   (local $0 f32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -5007,7 +4999,12 @@
    unreachable
   end
  )
- (func $~lib/set/Set<f64>#find (; 53 ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/internal/hash/HASH<f64> (; 54 ;) (type $Fi) (param $0 f64) (result i32)
+  local.get $0
+  i64.reinterpret_f64
+  call $~lib/internal/hash/hash64
+ )
+ (func $~lib/set/Set<f64>#find (; 55 ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -5050,17 +5047,16 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f64>#has (; 54 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#has (; 56 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   local.get $1
-  i64.reinterpret_f64
-  call $~lib/internal/hash/hash64
+  call $~lib/internal/hash/HASH<f64>
   call $~lib/set/Set<f64>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f64>#rehash (; 55 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f64>#rehash (; 57 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5164,15 +5160,14 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f64>#add (; 56 ;) (type $iFv) (param $0 i32) (param $1 f64)
+ (func $~lib/set/Set<f64>#add (; 58 ;) (type $iFv) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
   local.get $1
   local.get $1
-  i64.reinterpret_f64
-  call $~lib/internal/hash/hash64
+  call $~lib/internal/hash/HASH<f64>
   local.tee $4
   call $~lib/set/Set<f64>#find
   i32.eqz
@@ -5250,7 +5245,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<f64>#delete (; 57 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#delete (; 59 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -5314,7 +5309,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<f64> (; 58 ;) (type $v)
+ (func $std/set/test<f64> (; 60 ;) (type $v)
   (local $0 f64)
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
@@ -5561,7 +5556,7 @@
    unreachable
   end
  )
- (func $start (; 59 ;) (type $v)
+ (func $start (; 61 ;) (type $v)
   i32.const 144
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -5577,7 +5572,7 @@
   call $std/set/test<f32>
   call $std/set/test<f64>
  )
- (func $null (; 60 ;) (type $v)
+ (func $null (; 62 ;) (type $v)
   nop
  )
 )

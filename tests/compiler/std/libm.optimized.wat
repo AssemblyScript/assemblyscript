@@ -25,7 +25,7 @@
  (export "PI" (global $std/libm/PI))
  (export "SQRT1_2" (global $std/libm/SQRT1_2))
  (export "SQRT2" (global $std/libm/SQRT2))
- (export "abs" (func $~lib/math/NativeMath.abs))
+ (export "abs" (func $std/libm/abs))
  (export "acos" (func $std/libm/acos))
  (export "acosh" (func $std/libm/acosh))
  (export "asin" (func $std/libm/asin))
@@ -34,32 +34,32 @@
  (export "atanh" (func $std/libm/atanh))
  (export "atan2" (func $std/libm/atan2))
  (export "cbrt" (func $std/libm/cbrt))
- (export "ceil" (func $~lib/math/NativeMath.ceil))
- (export "clz32" (func $~lib/math/NativeMath.clz32))
+ (export "ceil" (func $std/libm/ceil))
+ (export "clz32" (func $std/libm/clz32))
  (export "cos" (func $std/libm/cos))
  (export "cosh" (func $std/libm/cosh))
  (export "exp" (func $std/libm/exp))
  (export "expm1" (func $std/libm/expm1))
- (export "floor" (func $~lib/math/NativeMath.floor))
- (export "fround" (func $~lib/math/NativeMath.fround))
+ (export "floor" (func $std/libm/floor))
+ (export "fround" (func $std/libm/fround))
  (export "hypot" (func $std/libm/hypot))
  (export "imul" (func $std/libm/imul))
  (export "log" (func $std/libm/log))
  (export "log10" (func $std/libm/log10))
  (export "log1p" (func $std/libm/log1p))
  (export "log2" (func $std/libm/log2))
- (export "max" (func $~lib/math/NativeMath.max))
- (export "min" (func $~lib/math/NativeMath.min))
+ (export "max" (func $std/libm/max))
+ (export "min" (func $std/libm/min))
  (export "pow" (func $std/libm/pow))
- (export "round" (func $~lib/math/NativeMath.round))
- (export "sign" (func $~lib/math/NativeMath.sign))
+ (export "round" (func $std/libm/round))
+ (export "sign" (func $std/libm/sign))
  (export "sin" (func $std/libm/cos))
  (export "sinh" (func $std/libm/sinh))
- (export "sqrt" (func $~lib/math/NativeMath.sqrt))
+ (export "sqrt" (func $std/libm/sqrt))
  (export "tan" (func $std/libm/cos))
  (export "tanh" (func $std/libm/tanh))
- (export "trunc" (func $~lib/math/NativeMath.trunc))
- (func $~lib/math/NativeMath.abs (; 0 ;) (type $FF) (param $0 f64) (result f64)
+ (export "trunc" (func $std/libm/trunc))
+ (func $std/libm/abs (; 0 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   f64.abs
  )
@@ -1067,13 +1067,10 @@
       block $case1|0
        local.get $2
        if
-        block $tablify|0
-         local.get $2
-         i32.const 1
-         i32.sub
-         br_table $case1|0 $case2|0 $case3|0 $tablify|0
-        end
-        br $case4|0
+        local.get $2
+        i32.const 1
+        i32.sub
+        br_table $case1|0 $case2|0 $case3|0 $case4|0
        end
        f64.const 0.4636476090008061
        local.get $1
@@ -1199,14 +1196,13 @@
   local.get $1
   f64.ne
   local.tee $2
-  i32.eqz
-  if
+  if (result i32)
+   local.get $2
+  else   
    local.get $0
    local.get $0
    f64.ne
-   local.set $2
   end
-  local.get $2
   if
    local.get $1
    local.get $0
@@ -1360,28 +1356,27 @@
    local.get $5
    i32.lt_u
    local.tee $2
-   i32.eqz
-   if
+   if (result i32)
+    local.get $2
+   else    
     local.get $5
     i32.const 2146435072
     i32.eq
-    local.set $2
    end
-   local.get $2
    br_if $folding-inner0
    local.get $3
    i32.const 2
    i32.and
    local.tee $2
-   if
+   if (result i32)
     local.get $5
     i32.const 67108864
     i32.add
     local.get $4
     i32.lt_u
-    local.set $2
+   else    
+    local.get $2
    end
-   local.get $2
    if (result f64)
     f64.const 0
    else    
@@ -1564,11 +1559,11 @@
   local.get $0
   call $~lib/math/NativeMath.cbrt
  )
- (func $~lib/math/NativeMath.ceil (; 20 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/ceil (; 20 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   f64.ceil
  )
- (func $~lib/math/NativeMath.clz32 (; 21 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/clz32 (; 21 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   i32.trunc_f64_s
   i32.clz
@@ -1798,14 +1793,13 @@
   i32.const 0
   i32.lt_s
   local.tee $4
-  i32.eqz
-  if
+  if (result i32)
+   local.get $4
+  else   
    local.get $3
    i32.const 56
    i32.gt_s
-   local.set $4
   end
-  local.get $4
   if
    local.get $0
    local.get $1
@@ -1831,6 +1825,8 @@
    f64.sub
    return
   end
+  local.get $0
+  f64.const 1
   i64.const 1023
   local.get $3
   i64.extend_i32_s
@@ -1838,10 +1834,7 @@
   i64.const 52
   i64.shl
   f64.reinterpret_i64
-  local.set $2
-  local.get $0
-  f64.const 1
-  local.get $2
+  local.tee $2
   f64.sub
   local.get $1
   f64.sub
@@ -1941,8 +1934,8 @@
   (local $3 i32)
   (local $4 f64)
   (local $5 f64)
-  (local $6 f64)
-  (local $7 i32)
+  (local $6 i32)
+  (local $7 f64)
   local.get $0
   i64.reinterpret_f64
   i64.const 32
@@ -1951,7 +1944,7 @@
   local.tee $1
   i32.const 31
   i32.shr_u
-  local.set $7
+  local.set $6
   local.get $1
   i32.const 2147483647
   i32.and
@@ -2002,7 +1995,7 @@
     i32.trunc_f64_s
    else    
     i32.const 1
-    local.get $7
+    local.get $6
     i32.const 1
     i32.shl
     i32.sub
@@ -2013,26 +2006,25 @@
    f64.const 0.6931471803691238
    f64.mul
    f64.sub
-   local.tee $5
+   local.tee $4
    local.get $0
    f64.const 1.9082149292705877e-10
    f64.mul
-   local.tee $4
+   local.tee $7
    f64.sub
    local.set $0
   else   
    local.get $1
    i32.const 1043333120
-   i32.gt_u
-   if (result f64)
-    local.get $0
-   else    
+   i32.le_u
+   if
     f64.const 1
     local.get $0
     f64.add
     return
    end
-   local.set $5
+   local.get $0
+   local.set $4
   end
   local.get $0
   local.get $0
@@ -2040,20 +2032,20 @@
   local.tee $2
   local.get $2
   f64.mul
-  local.set $6
+  local.set $5
   f64.const 1
   local.get $0
   local.get $0
   local.get $2
   f64.const 0.16666666666666602
   f64.mul
-  local.get $6
+  local.get $5
   f64.const -2.7777777777015593e-03
   local.get $2
   f64.const 6.613756321437934e-05
   f64.mul
   f64.add
-  local.get $6
+  local.get $5
   f64.const -1.6533902205465252e-06
   local.get $2
   f64.const 4.1381367970572385e-08
@@ -2070,9 +2062,9 @@
   local.get $0
   f64.sub
   f64.div
-  local.get $4
+  local.get $7
   f64.sub
-  local.get $5
+  local.get $4
   f64.add
   f64.add
   local.set $0
@@ -2162,11 +2154,11 @@
   local.get $0
   call $~lib/math/NativeMath.expm1
  )
- (func $~lib/math/NativeMath.floor (; 30 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/floor (; 30 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   f64.floor
  )
- (func $~lib/math/NativeMath.fround (; 31 ;) (type $Ff) (param $0 f64) (result f32)
+ (func $std/libm/fround (; 31 ;) (type $Ff) (param $0 f64) (result f32)
   local.get $0
   f32.demote_f64
  )
@@ -2830,12 +2822,12 @@
   local.get $0
   call $~lib/math/NativeMath.log2
  )
- (func $~lib/math/NativeMath.max (; 42 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/max (; 42 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.max
  )
- (func $~lib/math/NativeMath.min (; 43 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/min (; 43 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.min
@@ -3795,7 +3787,7 @@
   local.get $1
   call $~lib/math/NativeMath.pow
  )
- (func $~lib/math/NativeMath.round (; 46 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/round (; 46 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   f64.const 0.5
   f64.add
@@ -3803,7 +3795,7 @@
   local.get $0
   f64.copysign
  )
- (func $~lib/math/NativeMath.sign (; 47 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sign (; 47 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   f64.const 0
   f64.gt
@@ -3902,7 +3894,7 @@
   local.get $0
   call $~lib/math/NativeMath.sinh
  )
- (func $~lib/math/NativeMath.sqrt (; 50 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sqrt (; 50 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   f64.sqrt
  )
@@ -3989,7 +3981,7 @@
   local.get $0
   call $~lib/math/NativeMath.tanh
  )
- (func $~lib/math/NativeMath.trunc (; 53 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/trunc (; 53 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   f64.trunc
  )

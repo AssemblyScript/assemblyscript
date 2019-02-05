@@ -1760,33 +1760,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/TesterInlineStatic.postInc (; 33 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 0
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.add
-  local.get $0
-  i32.load offset=4
-  i32.const 1
-  i32.add
-  call $std/operator-overloading/TesterInlineStatic#constructor
- )
- (func $std/operator-overloading/TesterInlineStatic.add (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  i32.const 0
-  local.get $0
-  i32.load
-  local.get $1
-  i32.load
-  i32.add
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.load offset=4
-  i32.add
-  call $std/operator-overloading/TesterInlineStatic#constructor
- )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 35 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 33 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1802,40 +1776,9 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/TesterInlineInstance#postInc (; 36 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 0
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.add
-  local.get $0
-  i32.load offset=4
-  i32.const 1
-  i32.add
-  call $std/operator-overloading/TesterInlineInstance#constructor
- )
- (func $std/operator-overloading/TesterInlineInstance#add (; 37 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  i32.const 0
-  local.get $0
-  i32.load
-  local.get $1
-  i32.load
-  i32.add
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.load offset=4
-  i32.add
-  call $std/operator-overloading/TesterInlineInstance#constructor
- )
- (func $start (; 38 ;) (type $v)
+ (func $start (; 34 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -2766,15 +2709,15 @@
   i32.const 2
   call $std/operator-overloading/TesterInlineStatic#constructor
   global.set $std/operator-overloading/ais1
-  block $__inlined_func$std/operator-overloading/TesterInlineStatic.postInc (result i32)
+  block $std/operator-overloading/TesterInlineStatic.postInc|inlined.0 (result i32)
    global.get $std/operator-overloading/ais1
-   local.set $1
+   local.set $0
    i32.const 0
-   local.get $1
+   local.get $0
    i32.load
    i32.const 1
    i32.add
-   local.get $1
+   local.get $0
    i32.load offset=4
    i32.const 1
    i32.add
@@ -2786,20 +2729,20 @@
   i32.const 3
   call $std/operator-overloading/TesterInlineStatic#constructor
   global.set $std/operator-overloading/ais2
-  block $__inlined_func$std/operator-overloading/TesterInlineStatic.add (result i32)
+  block $std/operator-overloading/TesterInlineStatic.add|inlined.0 (result i32)
    global.get $std/operator-overloading/ais1
-   local.set $2
+   local.set $0
    global.get $std/operator-overloading/ais2
-   local.set $3
+   local.set $1
    i32.const 0
-   local.get $2
+   local.get $0
    i32.load
-   local.get $3
+   local.get $1
    i32.load
    i32.add
-   local.get $2
+   local.get $0
    i32.load offset=4
-   local.get $3
+   local.get $1
    i32.load offset=4
    i32.add
    call $std/operator-overloading/TesterInlineStatic#constructor
@@ -2809,14 +2752,14 @@
   i32.load
   i32.const 4
   i32.eq
-  local.tee $0
+  local.tee $1
   if (result i32)
    global.get $std/operator-overloading/ais
    i32.load offset=4
    i32.const 6
    i32.eq
   else   
-   local.get $0
+   local.get $1
   end
   i32.eqz
   if
@@ -2832,15 +2775,15 @@
   i32.const 2
   call $std/operator-overloading/TesterInlineInstance#constructor
   global.set $std/operator-overloading/aii1
-  block $__inlined_func$std/operator-overloading/TesterInlineInstance#postInc (result i32)
+  block $std/operator-overloading/TesterInlineInstance#postInc|inlined.0 (result i32)
    global.get $std/operator-overloading/aii1
-   local.set $4
+   local.set $1
    i32.const 0
-   local.get $4
+   local.get $1
    i32.load
    i32.const 1
    i32.add
-   local.get $4
+   local.get $1
    i32.load offset=4
    i32.const 1
    i32.add
@@ -2852,20 +2795,20 @@
   i32.const 3
   call $std/operator-overloading/TesterInlineInstance#constructor
   global.set $std/operator-overloading/aii2
-  block $__inlined_func$std/operator-overloading/TesterInlineInstance#add (result i32)
+  block $std/operator-overloading/TesterInlineInstance#add|inlined.0 (result i32)
    global.get $std/operator-overloading/aii1
-   local.set $5
+   local.set $1
    global.get $std/operator-overloading/aii2
-   local.set $6
+   local.set $0
    i32.const 0
-   local.get $5
+   local.get $1
    i32.load
-   local.get $6
+   local.get $0
    i32.load
    i32.add
-   local.get $5
+   local.get $1
    i32.load offset=4
-   local.get $6
+   local.get $0
    i32.load offset=4
    i32.add
    call $std/operator-overloading/TesterInlineInstance#constructor
@@ -2894,6 +2837,6 @@
    unreachable
   end
  )
- (func $null (; 39 ;) (type $v)
+ (func $null (; 35 ;) (type $v)
  )
 )
