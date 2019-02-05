@@ -4,7 +4,7 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\06\00\00\00f\00o\00r\00.\00t\00s")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $for/i (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -14,21 +14,21 @@
   (local $0 i32)
   (local $1 i32)
   i32.const 0
-  set_global $for/i
+  global.set $for/i
   loop $repeat|0
    block $break|0
-    get_global $for/i
+    global.get $for/i
     i32.const 10
     i32.ge_s
     br_if $break|0
-    get_global $for/i
+    global.get $for/i
     i32.const 1
     i32.add
-    set_global $for/i
+    global.set $for/i
     br $repeat|0
    end
   end
-  get_global $for/i
+  global.get $for/i
   i32.const 10
   i32.ne
   if
@@ -41,31 +41,31 @@
   end
   loop $repeat|1
    block $break|1
-    get_local $0
+    local.get $0
     i32.const 10
     i32.ge_s
     br_if $break|1
-    get_local $0
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
+    local.set $0
     br $repeat|1
    end
   end
   loop $repeat|2
-   get_global $for/i
+   global.get $for/i
    i32.const 0
    i32.le_s
    i32.eqz
    if
-    get_global $for/i
+    global.get $for/i
     i32.const 1
     i32.sub
-    set_global $for/i
+    global.set $for/i
     br $repeat|2
    end
   end
-  get_global $for/i
+  global.get $for/i
   if
    i32.const 0
    i32.const 8
@@ -75,42 +75,42 @@
    unreachable
   end
   loop $repeat|3
-   get_global $for/i
+   global.get $for/i
    i32.const 10
    i32.eq
    i32.eqz
    if
-    get_global $for/i
+    global.get $for/i
     i32.const 1
     i32.add
-    set_global $for/i
+    global.set $for/i
     br $repeat|3
    end
   end
   loop $repeat|4
-   get_global $for/i
+   global.get $for/i
    i32.const 1
    i32.sub
-   set_global $for/i
-   get_global $for/i
+   global.set $for/i
+   global.get $for/i
    br_if $repeat|4
   end
   i32.const 0
-  set_local $0
+  local.set $0
   loop $repeat|5
    block $break|5
-    get_local $0
+    local.get $0
     i32.const 10
     i32.ge_s
     br_if $break|5
-    get_local $0
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
+    local.set $0
     br $repeat|5
    end
   end
-  get_local $0
+  local.get $0
   i32.const 10
   i32.ne
   if
@@ -122,38 +122,38 @@
    unreachable
   end
   i32.const 0
-  set_local $0
+  local.set $0
   loop $repeat|6
    block $break|6
-    get_local $0
+    local.get $0
     i32.const 10
     i32.ge_s
     br_if $break|6
     i32.const 0
-    set_local $1
+    local.set $1
     loop $repeat|7
      block $break|7
-      get_local $1
+      local.get $1
       i32.const 10
       i32.ge_s
       br_if $break|7
       block $continue|7
-       get_local $0
-       get_local $1
+       local.get $0
+       local.get $1
        i32.eq
        br_if $continue|7
       end
-      get_local $1
+      local.get $1
       i32.const 1
       i32.add
-      set_local $1
+      local.set $1
       br $repeat|7
      end
     end
-    get_local $0
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
+    local.set $0
     br $repeat|6
    end
   end
