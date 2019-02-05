@@ -2,7 +2,9 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $fff (func (param f32 f32) (result f32)))
+ (type $fi (func (param f32) (result i32)))
  (type $fif (func (param f32 i32) (result f32)))
+ (type $Fi (func (param f64) (result i32)))
  (type $v (func))
  (memory $0 0)
  (table $0 1 funcref)
@@ -1196,7 +1198,12 @@
   local.get $16
   f64.mul
  )
- (func $~lib/math/NativeMathf.mod (; 2 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/builtins/isNaN<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
+  local.get $0
+  local.get $0
+  f32.ne
+ )
+ (func $~lib/math/NativeMathf.mod (; 3 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1207,6 +1214,7 @@
   (local $9 f32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 f32)
   local.get $0
   i32.reinterpret_f32
   local.set $2
@@ -1249,11 +1257,11 @@
    local.get $8
   else   
    local.get $1
-   local.get $1
+   local.set $12
+   local.get $12
+   local.get $12
    f32.ne
   end
-  i32.const 0
-  i32.ne
   if
    local.get $0
    local.get $1
@@ -1450,7 +1458,7 @@
   local.get $2
   f32.reinterpret_i32
  )
- (func $~lib/math/NativeMathf.scalbn (; 3 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/NativeMathf.scalbn (; 4 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -1540,7 +1548,7 @@
   f32.reinterpret_i32
   f32.mul
  )
- (func $~lib/math/NativeMathf.pow (; 4 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 5 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2478,7 +2486,12 @@
   local.get $11
   f32.mul
  )
- (func $~lib/math/NativeMath.mod (; 5 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/builtins/isNaN<f64> (; 6 ;) (type $Fi) (param $0 f64) (result i32)
+  local.get $0
+  local.get $0
+  f64.ne
+ )
+ (func $~lib/math/NativeMath.mod (; 7 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -2489,6 +2502,7 @@
   (local $9 f64)
   (local $10 i64)
   (local $11 i64)
+  (local $12 f64)
   local.get $0
   i64.reinterpret_f64
   local.set $2
@@ -2531,11 +2545,11 @@
    local.get $8
   else   
    local.get $1
-   local.get $1
+   local.set $12
+   local.get $12
+   local.get $12
    f64.ne
   end
-  i32.const 0
-  i32.ne
   if
    local.get $0
    local.get $1
@@ -2734,7 +2748,7 @@
   local.get $2
   f64.reinterpret_i64
  )
- (func $start (; 6 ;) (type $v)
+ (func $start (; 8 ;) (type $v)
   global.get $binary/i
   i32.const 1
   i32.lt_s
@@ -3342,6 +3356,6 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 9 ;) (type $v)
  )
 )

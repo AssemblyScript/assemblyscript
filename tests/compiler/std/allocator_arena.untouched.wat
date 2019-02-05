@@ -103,7 +103,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/allocator/arena/__memory_allocate
+  return
+ )
+ (func $~lib/internal/memory/memset (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -357,7 +362,13 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/internal/memory/memset
+ )
+ (func $~lib/internal/memory/memcpy (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1558,7 +1569,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1785,7 +1796,13 @@
    end
   end
  )
- (func $~lib/internal/memory/memcmp (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.copy (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/internal/memory/memmove
+ )
+ (func $~lib/internal/memory/memcmp (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1839,17 +1856,43 @@
    i32.const 0
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 6 ;) (type $iv) (param $0 i32)
+ (func $~lib/memory/memory.compare (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/internal/memory/memcmp
+ )
+ (func $~lib/allocator/arena/__memory_free (; 10 ;) (type $iv) (param $0 i32)
   nop
  )
- (func $~lib/allocator/arena/__memory_reset (; 7 ;) (type $v)
+ (func $~lib/memory/memory.free (; 11 ;) (type $iv) (param $0 i32)
+  local.get $0
+  call $~lib/allocator/arena/__memory_free
+  return
+ )
+ (func $~lib/allocator/arena/__memory_reset (; 12 ;) (type $v)
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $start (; 8 ;) (type $v)
+ (func $~lib/memory/memory.reset (; 13 ;) (type $v)
+  call $~lib/allocator/arena/__memory_reset
+  return
+ )
+ (func $start (; 14 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -1860,20 +1903,20 @@
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  block $~lib/memory/memory.allocate|inlined.0 (result i32)
+  block $__inlined_func$~lib/memory/memory.allocate (result i32)
    global.get $std/allocator_arena/size
    local.set $0
    local.get $0
    call $~lib/allocator/arena/__memory_allocate
-   br $~lib/memory/memory.allocate|inlined.0
+   br $__inlined_func$~lib/memory/memory.allocate
   end
   global.set $std/allocator_arena/ptr1
-  block $~lib/memory/memory.allocate|inlined.1 (result i32)
+  block $__inlined_func$~lib/memory/memory.allocate0 (result i32)
    global.get $std/allocator_arena/size
-   local.set $0
-   local.get $0
+   local.set $1
+   local.get $1
    call $~lib/allocator/arena/__memory_allocate
-   br $~lib/memory/memory.allocate|inlined.1
+   br $__inlined_func$~lib/memory/memory.allocate0
   end
   global.set $std/allocator_arena/ptr2
   global.get $std/allocator_arena/ptr1
@@ -1888,16 +1931,16 @@
    call $~lib/env/abort
    unreachable
   end
-  block
+  block $__inlined_func$~lib/memory/memory.fill
    global.get $std/allocator_arena/ptr1
-   local.set $0
-   i32.const 18
-   local.set $1
-   global.get $std/allocator_arena/size
    local.set $2
-   local.get $0
-   local.get $1
+   i32.const 18
+   local.set $3
+   global.get $std/allocator_arena/size
+   local.set $4
    local.get $2
+   local.get $3
+   local.get $4
    call $~lib/internal/memory/memset
   end
   block $break|0
@@ -1933,16 +1976,16 @@
    end
    unreachable
   end
-  block
+  block $__inlined_func$~lib/memory/memory.copy
    global.get $std/allocator_arena/ptr2
-   local.set $2
+   local.set $5
    global.get $std/allocator_arena/ptr1
-   local.set $1
+   local.set $6
    global.get $std/allocator_arena/size
-   local.set $0
-   local.get $2
-   local.get $1
-   local.get $0
+   local.set $7
+   local.get $5
+   local.get $6
+   local.get $7
    call $~lib/internal/memory/memmove
   end
   block $break|1
@@ -1978,16 +2021,16 @@
    end
    unreachable
   end
-  block $~lib/memory/memory.compare|inlined.0 (result i32)
+  block $__inlined_func$~lib/memory/memory.compare (result i32)
    global.get $std/allocator_arena/ptr1
-   local.set $0
+   local.set $8
    global.get $std/allocator_arena/ptr2
-   local.set $1
+   local.set $9
    global.get $std/allocator_arena/size
-   local.set $2
-   local.get $0
-   local.get $1
-   local.get $2
+   local.set $10
+   local.get $8
+   local.get $9
+   local.get $10
    call $~lib/internal/memory/memcmp
   end
   i32.const 0
@@ -2001,42 +2044,45 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/memory/memory.free|inlined.0
+  block $__inlined_func$~lib/memory/memory.free
    global.get $std/allocator_arena/ptr1
-   local.set $2
+   local.set $11
    block
-    local.get $2
+    local.get $11
     call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.0
+    br $__inlined_func$~lib/memory/memory.free
     unreachable
    end
    unreachable
+   br $__inlined_func$~lib/memory/memory.free
   end
-  block $~lib/memory/memory.free|inlined.1
+  block $__inlined_func$~lib/memory/memory.free0
    global.get $std/allocator_arena/ptr2
-   local.set $2
+   local.set $12
    block
-    local.get $2
+    local.get $12
     call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.1
+    br $__inlined_func$~lib/memory/memory.free0
     unreachable
    end
    unreachable
+   br $__inlined_func$~lib/memory/memory.free0
   end
-  block $~lib/memory/memory.reset|inlined.0
+  block $__inlined_func$~lib/memory/memory.reset
    block
     call $~lib/allocator/arena/__memory_reset
-    br $~lib/memory/memory.reset|inlined.0
+    br $__inlined_func$~lib/memory/memory.reset
     unreachable
    end
    unreachable
+   br $__inlined_func$~lib/memory/memory.reset
   end
-  block $~lib/memory/memory.allocate|inlined.2 (result i32)
+  block $__inlined_func$~lib/memory/memory.allocate1 (result i32)
    global.get $std/allocator_arena/size
-   local.set $2
-   local.get $2
+   local.set $13
+   local.get $13
    call $~lib/allocator/arena/__memory_allocate
-   br $~lib/memory/memory.allocate|inlined.2
+   br $__inlined_func$~lib/memory/memory.allocate1
   end
   global.set $std/allocator_arena/ptr1
   global.get $std/allocator_arena/ptr1
@@ -2058,6 +2104,6 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (type $v)
+ (func $null (; 15 ;) (type $v)
  )
 )

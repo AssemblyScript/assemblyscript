@@ -127,7 +127,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/allocator/arena/__memory_allocate
+  return
+ )
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -142,13 +147,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/memory/memory.allocate|inlined.0 (result i32)
+  block $__inlined_func$~lib/memory/memory.allocate (result i32)
    local.get $0
    call $~lib/internal/arraybuffer/computeSize
    local.set $2
    local.get $2
    call $~lib/allocator/arena/__memory_allocate
-   br $~lib/memory/memory.allocate|inlined.0
+   br $__inlined_func$~lib/memory/memory.allocate
   end
   local.set $1
   local.get $1
@@ -156,7 +161,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -410,16 +415,18 @@
    end
   end
  )
- (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.fill (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
-  call $~lib/allocator/arena/__memory_allocate
-  return
+  local.get $1
+  local.get $2
+  call $~lib/internal/memory/memset
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 1073741816
   i32.gt_u
@@ -438,16 +445,20 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  local.get $3
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $2
-  call $~lib/internal/memory/memset
+  block $__inlined_func$~lib/memory/memory.fill
+   local.get $3
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
   block (result i32)
    local.get $0
    i32.eqz
@@ -477,7 +488,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -491,9 +502,22 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/arraybuffer/STORE<u8,u32> (; 9 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.shl
+  i32.add
+  local.get $3
+  i32.add
+  local.get $2
+  i32.store8 offset=8
+ )
+ (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -508,23 +532,29 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $0
-  i32.load
-  local.set $3
-  local.get $0
-  i32.load offset=4
-  local.set $4
-  local.get $3
-  local.get $1
-  i32.const 0
-  i32.shl
-  i32.add
-  local.get $4
-  i32.add
-  local.get $2
-  i32.store8 offset=8
+  block $__inlined_func$~lib/internal/arraybuffer/STORE<u8,u32>
+   local.get $0
+   i32.load
+   local.set $3
+   local.get $1
+   local.set $4
+   local.get $2
+   local.set $5
+   local.get $0
+   i32.load offset=4
+   local.set $6
+   local.get $3
+   local.get $4
+   i32.const 0
+   i32.shl
+   i32.add
+   local.get $6
+   i32.add
+   local.get $5
+   i32.store8 offset=8
+  end
  )
- (func $~lib/dataview/DataView#constructor (; 9 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 11 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $3
   global.get $~lib/builtins/i32.MIN_VALUE
   i32.eq
@@ -589,7 +619,31 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/polyfills/bswap<u32> (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/dataview/checkOffset (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  local.get $0
+  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+  i32.gt_u
+  local.tee $3
+  if (result i32)
+   local.get $3
+  else   
+   local.get $0
+   local.get $1
+   i32.add
+   local.get $2
+   i32.gt_s
+  end
+  if
+   i32.const 0
+   i32.const 136
+   i32.const 188
+   i32.const 73
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $~lib/polyfills/bswap<u32> (; 13 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -603,35 +657,42 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getFloat32 (; 11 ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $~lib/dataview/DataView#getFloat32 (; 14 ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  i32.const 4
-  local.set $3
-  local.get $0
-  i32.load offset=8
-  local.set $4
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  (local $6 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $3
-   i32.add
-   local.get $4
-   i32.gt_s
-  end
-  if
+   local.set $3
+   i32.const 4
+   local.set $4
+   local.get $0
+   i32.load offset=8
+   local.set $5
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $6
+   local.get $3
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $6
+   if (result i32)
+    local.get $6
+   else    
+    local.get $3
+    local.get $4
+    i32.add
+    local.get $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $2
   i32.const 0
@@ -658,7 +719,7 @@
    f32.reinterpret_i32
   end
  )
- (func $~lib/polyfills/bswap<u64> (; 12 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 15 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -697,35 +758,42 @@
   i64.rotr
   return
  )
- (func $~lib/dataview/DataView#getFloat64 (; 13 ;) (type $iiiF) (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
+ (func $~lib/dataview/DataView#getFloat64 (; 16 ;) (type $iiiF) (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  i32.const 8
-  local.set $3
-  local.get $0
-  i32.load offset=8
-  local.set $4
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  (local $6 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $3
-   i32.add
-   local.get $4
-   i32.gt_s
-  end
-  if
+   local.set $3
+   i32.const 8
+   local.set $4
+   local.get $0
+   i32.load offset=8
+   local.set $5
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $6
+   local.get $3
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $6
+   if (result i32)
+    local.get $6
+   else    
+    local.get $3
+    local.get $4
+    i32.add
+    local.get $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $2
   i32.const 0
@@ -752,35 +820,42 @@
    f64.reinterpret_i64
   end
  )
- (func $~lib/dataview/DataView#getInt8 (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt8 (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 1
-  local.set $2
-  local.get $0
-  i32.load offset=8
-  local.set $3
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $4
-  if (result i32)
-   local.get $4
-  else   
+  (local $5 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $2
-   i32.add
-   local.get $3
-   i32.gt_s
-  end
-  if
+   local.set $2
+   i32.const 1
+   local.set $3
+   local.get $0
+   i32.load offset=8
+   local.set $4
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $5
+   local.get $2
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $5
+   if (result i32)
+    local.get $5
+   else    
+    local.get $2
+    local.get $3
+    i32.add
+    local.get $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -791,7 +866,7 @@
   i32.add
   i32.load8_s offset=8
  )
- (func $~lib/polyfills/bswap<i16> (; 15 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 18 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -807,36 +882,43 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getInt16 (; 16 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt16 (; 19 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 2
-  local.set $3
-  local.get $0
-  i32.load offset=8
-  local.set $4
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $3
-   i32.add
-   local.get $4
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 2
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -846,18 +928,18 @@
   local.get $1
   i32.add
   i32.load16_s offset=8
-  local.set $6
+  local.set $3
   local.get $2
   i32.const 0
   i32.ne
   if (result i32)
-   local.get $6
+   local.get $3
   else   
-   local.get $6
+   local.get $3
    call $~lib/polyfills/bswap<i16>
   end
  )
- (func $~lib/polyfills/bswap<i32> (; 17 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i32> (; 20 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -871,36 +953,43 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getInt32 (; 18 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt32 (; 21 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 4
-  local.set $3
-  local.get $0
-  i32.load offset=8
-  local.set $4
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $3
-   i32.add
-   local.get $4
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 4
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -910,18 +999,18 @@
   local.get $1
   i32.add
   i32.load offset=8
-  local.set $6
+  local.set $3
   local.get $2
   i32.const 0
   i32.ne
   if (result i32)
-   local.get $6
+   local.get $3
   else   
-   local.get $6
+   local.get $3
    call $~lib/polyfills/bswap<i32>
   end
  )
- (func $~lib/polyfills/bswap<i64> (; 19 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<i64> (; 22 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -960,36 +1049,43 @@
   i64.rotr
   return
  )
- (func $~lib/dataview/DataView#getInt64 (; 20 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
-  (local $3 i32)
+ (func $~lib/dataview/DataView#getInt64 (; 23 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
+  (local $3 i64)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i64)
-  i32.const 8
-  local.set $3
-  local.get $0
-  i32.load offset=8
-  local.set $4
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  (local $6 i32)
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $3
-   i32.add
-   local.get $4
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 8
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -999,46 +1095,53 @@
   local.get $1
   i32.add
   i64.load offset=8
-  local.set $6
+  local.set $3
   local.get $2
   i32.const 0
   i32.ne
   if (result i64)
-   local.get $6
+   local.get $3
   else   
-   local.get $6
+   local.get $3
    call $~lib/polyfills/bswap<i64>
   end
  )
- (func $~lib/dataview/DataView#getUint8 (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint8 (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 1
-  local.set $2
-  local.get $0
-  i32.load offset=8
-  local.set $3
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $4
-  if (result i32)
-   local.get $4
-  else   
+  (local $5 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $2
-   i32.add
-   local.get $3
-   i32.gt_s
-  end
-  if
+   local.set $2
+   i32.const 1
+   local.set $3
+   local.get $0
+   i32.load offset=8
+   local.set $4
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $5
+   local.get $2
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $5
+   if (result i32)
+    local.get $5
+   else    
+    local.get $2
+    local.get $3
+    i32.add
+    local.get $4
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1049,7 +1152,7 @@
   i32.add
   i32.load8_u offset=8
  )
- (func $~lib/polyfills/bswap<u16> (; 22 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 25 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -1063,36 +1166,43 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getUint16 (; 23 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint16 (; 26 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 2
-  local.set $3
-  local.get $0
-  i32.load offset=8
-  local.set $4
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $3
-   i32.add
-   local.get $4
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 2
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1102,47 +1212,54 @@
   local.get $1
   i32.add
   i32.load16_u offset=8
-  local.set $6
+  local.set $3
   local.get $2
   i32.const 0
   i32.ne
   if (result i32)
-   local.get $6
+   local.get $3
   else   
-   local.get $6
+   local.get $3
    call $~lib/polyfills/bswap<u16>
   end
  )
- (func $~lib/dataview/DataView#getUint32 (; 24 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint32 (; 27 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 4
-  local.set $3
-  local.get $0
-  i32.load offset=8
-  local.set $4
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $3
-   i32.add
-   local.get $4
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 4
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1152,47 +1269,54 @@
   local.get $1
   i32.add
   i32.load offset=8
-  local.set $6
+  local.set $3
   local.get $2
   i32.const 0
   i32.ne
   if (result i32)
-   local.get $6
+   local.get $3
   else   
-   local.get $6
+   local.get $3
    call $~lib/polyfills/bswap<u32>
   end
  )
- (func $~lib/dataview/DataView#getUint64 (; 25 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
-  (local $3 i32)
+ (func $~lib/dataview/DataView#getUint64 (; 28 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
+  (local $3 i64)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i64)
-  i32.const 8
-  local.set $3
-  local.get $0
-  i32.load offset=8
-  local.set $4
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  (local $6 i32)
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $3
-   i32.add
-   local.get $4
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 8
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1202,46 +1326,53 @@
   local.get $1
   i32.add
   i64.load offset=8
-  local.set $6
+  local.set $3
   local.get $2
   i32.const 0
   i32.ne
   if (result i64)
-   local.get $6
+   local.get $3
   else   
-   local.get $6
+   local.get $3
    call $~lib/polyfills/bswap<u64>
   end
  )
- (func $~lib/dataview/DataView#setFloat32 (; 26 ;) (type $iifiv) (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
+ (func $~lib/dataview/DataView#setFloat32 (; 29 ;) (type $iifiv) (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 4
-  local.set $4
-  local.get $0
-  i32.load offset=8
-  local.set $5
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $6
-  if (result i32)
-   local.get $6
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $4
-   i32.add
-   local.get $5
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 4
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $3
   i32.const 0
@@ -1270,35 +1401,42 @@
    i32.store offset=8
   end
  )
- (func $~lib/dataview/DataView#setFloat64 (; 27 ;) (type $iiFiv) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
+ (func $~lib/dataview/DataView#setFloat64 (; 30 ;) (type $iiFiv) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 8
-  local.set $4
-  local.get $0
-  i32.load offset=8
-  local.set $5
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $6
-  if (result i32)
-   local.get $6
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $4
-   i32.add
-   local.get $5
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 8
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $3
   i32.const 0
@@ -1327,35 +1465,42 @@
    i64.store offset=8
   end
  )
- (func $~lib/dataview/DataView#setInt8 (; 28 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt8 (; 31 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  i32.const 1
-  local.set $3
-  local.get $0
-  i32.load offset=8
-  local.set $4
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  (local $6 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $3
-   i32.add
-   local.get $4
-   i32.gt_s
-  end
-  if
+   local.set $3
+   i32.const 1
+   local.set $4
+   local.get $0
+   i32.load offset=8
+   local.set $5
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $6
+   local.get $3
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $6
+   if (result i32)
+    local.get $6
+   else    
+    local.get $3
+    local.get $4
+    i32.add
+    local.get $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1367,35 +1512,42 @@
   local.get $2
   i32.store8 offset=8
  )
- (func $~lib/dataview/DataView#setInt16 (; 29 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt16 (; 32 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 2
-  local.set $4
-  local.get $0
-  i32.load offset=8
-  local.set $5
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $6
-  if (result i32)
-   local.get $6
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $4
-   i32.add
-   local.get $5
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 2
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1415,35 +1567,42 @@
   end
   i32.store16 offset=8
  )
- (func $~lib/dataview/DataView#setInt32 (; 30 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt32 (; 33 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 4
-  local.set $4
-  local.get $0
-  i32.load offset=8
-  local.set $5
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $6
-  if (result i32)
-   local.get $6
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $4
-   i32.add
-   local.get $5
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 4
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1463,35 +1622,42 @@
   end
   i32.store offset=8
  )
- (func $~lib/dataview/DataView#setInt64 (; 31 ;) (type $iiIiv) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt64 (; 34 ;) (type $iiIiv) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 8
-  local.set $4
-  local.get $0
-  i32.load offset=8
-  local.set $5
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $6
-  if (result i32)
-   local.get $6
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $4
-   i32.add
-   local.get $5
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 8
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1511,35 +1677,42 @@
   end
   i64.store offset=8
  )
- (func $~lib/dataview/DataView#setUint8 (; 32 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint8 (; 35 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  i32.const 1
-  local.set $3
-  local.get $0
-  i32.load offset=8
-  local.set $4
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $5
-  if (result i32)
-   local.get $5
-  else   
+  (local $6 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $3
-   i32.add
-   local.get $4
-   i32.gt_s
-  end
-  if
+   local.set $3
+   i32.const 1
+   local.set $4
+   local.get $0
+   i32.load offset=8
+   local.set $5
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $6
+   local.get $3
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $6
+   if (result i32)
+    local.get $6
+   else    
+    local.get $3
+    local.get $4
+    i32.add
+    local.get $5
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1551,35 +1724,42 @@
   local.get $2
   i32.store8 offset=8
  )
- (func $~lib/dataview/DataView#setUint16 (; 33 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint16 (; 36 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 2
-  local.set $4
-  local.get $0
-  i32.load offset=8
-  local.set $5
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $6
-  if (result i32)
-   local.get $6
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $4
-   i32.add
-   local.get $5
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 2
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1599,35 +1779,42 @@
   end
   i32.store16 offset=8
  )
- (func $~lib/dataview/DataView#setUint32 (; 34 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint32 (; 37 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 4
-  local.set $4
-  local.get $0
-  i32.load offset=8
-  local.set $5
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $6
-  if (result i32)
-   local.get $6
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $4
-   i32.add
-   local.get $5
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 4
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1647,35 +1834,42 @@
   end
   i32.store offset=8
  )
- (func $~lib/dataview/DataView#setUint64 (; 35 ;) (type $iiIiv) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint64 (; 38 ;) (type $iiIiv) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 8
-  local.set $4
-  local.get $0
-  i32.load offset=8
-  local.set $5
-  local.get $1
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.gt_u
-  local.tee $6
-  if (result i32)
-   local.get $6
-  else   
+  (local $7 i32)
+  block $__inlined_func$~lib/dataview/checkOffset
    local.get $1
-   local.get $4
-   i32.add
-   local.get $5
-   i32.gt_s
-  end
-  if
+   local.set $4
+   i32.const 8
+   local.set $5
+   local.get $0
+   i32.load offset=8
+   local.set $6
    i32.const 0
-   i32.const 136
-   i32.const 188
-   i32.const 73
-   call $~lib/env/abort
-   unreachable
+   local.set $7
+   local.get $4
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.gt_u
+   local.tee $7
+   if (result i32)
+    local.get $7
+   else    
+    local.get $4
+    local.get $5
+    i32.add
+    local.get $6
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    i32.const 136
+    i32.const 188
+    i32.const 73
+    call $~lib/env/abort
+    unreachable
+   end
   end
   local.get $0
   i32.load
@@ -1695,7 +1889,7 @@
   end
   i64.store offset=8
  )
- (func $start (; 36 ;) (type $v)
+ (func $start (; 39 ;) (type $v)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -3388,6 +3582,6 @@
    unreachable
   end
  )
- (func $null (; 37 ;) (type $v)
+ (func $null (; 40 ;) (type $v)
  )
 )

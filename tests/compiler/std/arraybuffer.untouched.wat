@@ -125,7 +125,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/allocator/arena/__memory_allocate
+  return
+ )
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -140,13 +145,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/memory/memory.allocate|inlined.0 (result i32)
+  block $__inlined_func$~lib/memory/memory.allocate (result i32)
    local.get $0
    call $~lib/internal/arraybuffer/computeSize
    local.set $2
    local.get $2
    call $~lib/allocator/arena/__memory_allocate
-   br $~lib/memory/memory.allocate|inlined.0
+   br $__inlined_func$~lib/memory/memory.allocate
   end
   local.set $1
   local.get $1
@@ -154,7 +159,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -408,10 +413,17 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.fill (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/internal/memory/memset
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
   i32.gt_u
@@ -437,14 +449,16 @@
    local.set $4
    i32.const 0
    local.set $5
+   local.get $1
+   local.set $6
    local.get $4
    local.get $5
-   local.get $1
+   local.get $6
    call $~lib/internal/memory/memset
   end
   local.get $3
  )
- (func $~lib/internal/memory/memcpy (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1645,7 +1659,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1872,12 +1886,21 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.copy (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/internal/memory/memmove
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#slice (; 11 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   local.get $0
   i32.load
   local.set $3
@@ -1947,23 +1970,27 @@
   local.get $6
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $7
-  local.get $7
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  local.get $0
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.get $1
-  i32.add
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $6
-  call $~lib/internal/memory/memmove
+  block $__inlined_func$~lib/memory/memory.copy
+   local.get $7
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $8
+   local.get $0
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.get $1
+   i32.add
+   local.set $9
+   local.get $6
+   local.set $10
+   local.get $8
+   local.get $9
+   local.get $10
+   call $~lib/internal/memory/memmove
+  end
   local.get $7
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -1984,7 +2011,12 @@
   local.get $2
   call $~lib/arraybuffer/ArrayBuffer#slice
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>> (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#get:data (; 13 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  global.get $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.add
+ )
+ (func $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>> (; 14 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -1994,7 +2026,7 @@
   end
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<usize> (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<usize> (; 15 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2004,18 +2036,7 @@
   end
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array> (; 12 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 0
-  i32.eq
-  if
-   i32.const 0
-   return
-  end
-  i32.const 1
-  return
- )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Int32Array> (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array> (; 16 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2026,7 +2047,7 @@
   i32.const 1
   return
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<DataView> (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<Int32Array> (; 17 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2037,16 +2058,23 @@
   i32.const 1
   return
  )
- (func $~lib/memory/memory.allocate (; 15 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<DataView> (; 18 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
-  call $~lib/allocator/arena/__memory_allocate
+  i32.const 0
+  i32.eq
+  if
+   i32.const 0
+   return
+  end
+  i32.const 1
   return
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 1073741816
   i32.gt_u
@@ -2065,16 +2093,20 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  local.get $3
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $2
-  call $~lib/internal/memory/memset
+  block $__inlined_func$~lib/memory/memory.fill
+   local.get $3
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
   block (result i32)
    local.get $0
    i32.eqz
@@ -2104,7 +2136,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#constructor (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -2118,11 +2150,12 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 268435454
   i32.gt_u
@@ -2141,16 +2174,20 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  local.get $3
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $2
-  call $~lib/internal/memory/memset
+  block $__inlined_func$~lib/memory/memory.fill
+   local.get $3
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
   block (result i32)
    local.get $0
    i32.eqz
@@ -2180,7 +2217,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Int32Array#constructor (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#constructor (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -2194,7 +2231,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor (; 20 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 23 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $3
   global.get $~lib/builtins/i32.MIN_VALUE
   i32.eq
@@ -2259,7 +2296,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor|trampoline (; 21 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor|trampoline (; 24 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -2283,8 +2320,18 @@
   local.get $3
   call $~lib/dataview/DataView#constructor
  )
- (func $start (; 22 ;) (type $v)
+ (func $start (; 25 ;) (type $v)
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -2335,17 +2382,17 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.0 (result i32)
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer#get:data (result i32)
    global.get $std/arraybuffer/sliced
    local.set $0
    local.get $0
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
   end
-  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.1 (result i32)
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer#get:data0 (result i32)
    global.get $std/arraybuffer/buffer
-   local.set $0
-   local.get $0
+   local.set $1
+   local.get $1
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
   end
@@ -2521,8 +2568,20 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Array<i32>> (result i32)
+   i32.const 0
+   local.set $2
+   block (result i32)
+    local.get $2
+    i32.const 0
+    i32.eq
+    if
+     i32.const 0
+     br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>
+    end
+    i32.const 0
+   end
+  end
   i32.eqz
   i32.eqz
   if
@@ -2533,8 +2592,20 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<usize>
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<usize> (result i32)
+   i32.const 0
+   local.set $3
+   block (result i32)
+    local.get $3
+    i32.const 0
+    i32.eq
+    if
+     i32.const 0
+     br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<usize>
+    end
+    i32.const 0
+   end
+  end
   i32.eqz
   i32.eqz
   if
@@ -2545,8 +2616,21 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array> (result i32)
+   i32.const 0
+   local.set $4
+   block (result i32)
+    local.get $4
+    i32.const 0
+    i32.eq
+    if
+     i32.const 0
+     br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+    end
+    i32.const 1
+    br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+   end
+  end
   i32.eqz
   i32.eqz
   if
@@ -2557,8 +2641,21 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Int32Array> (result i32)
+   i32.const 0
+   local.set $5
+   block (result i32)
+    local.get $5
+    i32.const 0
+    i32.eq
+    if
+     i32.const 0
+     br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+    end
+    i32.const 1
+    br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+   end
+  end
   i32.eqz
   i32.eqz
   if
@@ -2569,8 +2666,21 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<DataView>
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<DataView> (result i32)
+   i32.const 0
+   local.set $6
+   block (result i32)
+    local.get $6
+    i32.const 0
+    i32.eq
+    if
+     i32.const 0
+     br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<DataView>
+    end
+    i32.const 1
+    br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<DataView>
+   end
+  end
   i32.eqz
   i32.eqz
   if
@@ -2585,8 +2695,20 @@
   i32.const 1
   call $~lib/typedarray/Uint8Array#constructor
   global.set $std/arraybuffer/arr8
-  i32.const 240
-  call $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>0 (result i32)
+   i32.const 240
+   local.set $7
+   block (result i32)
+    local.get $7
+    i32.const 0
+    i32.eq
+    if
+     i32.const 0
+     br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Array<i32>>0
+    end
+    i32.const 0
+   end
+  end
   i32.eqz
   i32.eqz
   if
@@ -2597,8 +2719,21 @@
    call $~lib/env/abort
    unreachable
   end
-  global.get $std/arraybuffer/arr8
-  call $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>0 (result i32)
+   global.get $std/arraybuffer/arr8
+   local.set $8
+   block (result i32)
+    local.get $8
+    i32.const 0
+    i32.eq
+    if
+     i32.const 0
+     br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>0
+    end
+    i32.const 1
+    br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>0
+   end
+  end
   i32.eqz
   if
    i32.const 0
@@ -2608,10 +2743,23 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  i32.const 1
-  call $~lib/typedarray/Int32Array#constructor
-  call $~lib/arraybuffer/ArrayBuffer.isView<Int32Array>
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Int32Array>0 (result i32)
+   i32.const 0
+   i32.const 1
+   call $~lib/typedarray/Int32Array#constructor
+   local.set $9
+   block (result i32)
+    local.get $9
+    i32.const 0
+    i32.eq
+    if
+     i32.const 0
+     br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Int32Array>0
+    end
+    i32.const 1
+    br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Int32Array>0
+   end
+  end
   i32.eqz
   if
    i32.const 0
@@ -2621,17 +2769,30 @@
    call $~lib/env/abort
    unreachable
   end
-  block (result i32)
-   i32.const 1
-   global.set $~argc
-   i32.const 0
-   global.get $std/arraybuffer/arr8
-   i32.load
-   i32.const 0
-   i32.const 0
-   call $~lib/dataview/DataView#constructor|trampoline
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<DataView>0 (result i32)
+   block (result i32)
+    i32.const 1
+    global.set $~argc
+    i32.const 0
+    global.get $std/arraybuffer/arr8
+    i32.load
+    i32.const 0
+    i32.const 0
+    call $~lib/dataview/DataView#constructor|trampoline
+   end
+   local.set $10
+   block (result i32)
+    local.get $10
+    i32.const 0
+    i32.eq
+    if
+     i32.const 0
+     br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<DataView>0
+    end
+    i32.const 1
+    br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<DataView>0
+   end
   end
-  call $~lib/arraybuffer/ArrayBuffer.isView<DataView>
   i32.eqz
   if
    i32.const 0
@@ -2642,6 +2803,6 @@
    unreachable
   end
  )
- (func $null (; 23 ;) (type $v)
+ (func $null (; 26 ;) (type $v)
  )
 )

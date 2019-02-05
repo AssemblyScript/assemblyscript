@@ -1,5 +1,7 @@
 (module
  (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $fi (func (param f32) (result i32)))
+ (type $Fi (func (param f64) (result i32)))
  (type $iiv (func (param i32 i32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -55,19 +57,66 @@
  (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $start~anonymous|1 (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/builtins/isNaN<f32> (; 1 ;) (type $fi) (param $0 f32) (result i32)
+  local.get $0
+  local.get $0
+  f32.ne
+ )
+ (func $~lib/builtins/isFinite<f32> (; 2 ;) (type $fi) (param $0 f32) (result i32)
+  local.get $0
+  local.get $0
+  f32.sub
+  f32.const 0
+  f32.eq
+ )
+ (func $~lib/builtins/isNaN<f64> (; 3 ;) (type $Fi) (param $0 f64) (result i32)
+  local.get $0
+  local.get $0
+  f64.ne
+ )
+ (func $~lib/builtins/isFinite<f64> (; 4 ;) (type $Fi) (param $0 f64) (result i32)
+  local.get $0
+  local.get $0
+  f64.sub
+  f64.const 0
+  f64.eq
+ )
+ (func $start~anonymous|1 (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
   nop
  )
- (func $builtins/test (; 2 ;) (type $v)
+ (func $builtins/test (; 6 ;) (type $v)
   nop
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 7 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
   (local $4 f32)
-  (local $5 f64)
+  (local $5 f32)
+  (local $6 f32)
+  (local $7 f32)
+  (local $8 f32)
+  (local $9 f32)
+  (local $10 f32)
+  (local $11 f32)
+  (local $12 f64)
+  (local $13 f64)
+  (local $14 f64)
+  (local $15 f64)
+  (local $16 f64)
+  (local $17 f64)
+  (local $18 f64)
+  (local $19 f64)
+  (local $20 f32)
+  (local $21 f64)
+  (local $22 f32)
+  (local $23 f32)
+  (local $24 f64)
+  (local $25 f64)
+  (local $26 f32)
+  (local $27 f64)
+  (local $28 f64)
   i32.const 1
   i32.eqz
   if
@@ -567,15 +616,13 @@
   f32.const 1.25
   f32.trunc
   drop
-  block $~lib/builtins/isNaN<f32>|inlined.0 (result i32)
+  block $__inlined_func$~lib/builtins/isNaN<f32> (result i32)
    f32.const 1.25
    local.set $4
    local.get $4
    local.get $4
    f32.ne
   end
-  i32.const 0
-  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -587,15 +634,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isNaN<f32>|inlined.1 (result i32)
+  block $__inlined_func$~lib/builtins/isNaN<f32>0 (result i32)
    f32.const nan:0x400000
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $5
+   local.get $5
+   local.get $5
    f32.ne
   end
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -607,17 +652,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f32>|inlined.0 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f32> (result i32)
    f32.const 1.25
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $6
+   local.get $6
+   local.get $6
    f32.sub
    f32.const 0
    f32.eq
   end
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -629,17 +672,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f32>|inlined.1 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f32>0 (result i32)
    f32.const inf
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $7
+   local.get $7
+   local.get $7
    f32.sub
    f32.const 0
    f32.eq
   end
-  i32.const 0
-  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -651,18 +692,16 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f32>|inlined.2 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f32>1 (result i32)
    f32.const inf
    f32.neg
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $8
+   local.get $8
+   local.get $8
    f32.sub
    f32.const 0
    f32.eq
   end
-  i32.const 0
-  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -674,17 +713,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f32>|inlined.3 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f32>2 (result i32)
    f32.const nan:0x400000
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $9
+   local.get $9
+   local.get $9
    f32.sub
    f32.const 0
    f32.eq
   end
-  i32.const 0
-  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -730,27 +767,23 @@
   f32.const 1.25
   f32.trunc
   global.set $builtins/f
-  block $~lib/builtins/isNaN<f32>|inlined.2 (result i32)
+  block $__inlined_func$~lib/builtins/isNaN<f32>1 (result i32)
    f32.const 1.25
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $10
+   local.get $10
+   local.get $10
    f32.ne
   end
-  i32.const 0
-  i32.ne
   global.set $builtins/b
-  block $~lib/builtins/isFinite<f32>|inlined.4 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f32>3 (result i32)
    f32.const 1.25
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $11
+   local.get $11
+   local.get $11
    f32.sub
    f32.const 0
    f32.eq
   end
-  i32.const 0
-  i32.ne
   global.set $builtins/b
   f64.const nan:0x8000000000000
   drop
@@ -790,15 +823,13 @@
   f64.const 1.25
   f64.trunc
   drop
-  block $~lib/builtins/isNaN<f64>|inlined.0 (result i32)
+  block $__inlined_func$~lib/builtins/isNaN<f64> (result i32)
    f64.const 1.25
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $12
+   local.get $12
+   local.get $12
    f64.ne
   end
-  i32.const 0
-  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -810,15 +841,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isNaN<f64>|inlined.1 (result i32)
+  block $__inlined_func$~lib/builtins/isNaN<f64>0 (result i32)
    f64.const nan:0x8000000000000
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $13
+   local.get $13
+   local.get $13
    f64.ne
   end
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -830,17 +859,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f64>|inlined.0 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f64> (result i32)
    f64.const 1.25
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $14
+   local.get $14
+   local.get $14
    f64.sub
    f64.const 0
    f64.eq
   end
-  i32.const 0
-  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -852,17 +879,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f64>|inlined.1 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f64>0 (result i32)
    f64.const inf
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $15
+   local.get $15
+   local.get $15
    f64.sub
    f64.const 0
    f64.eq
   end
-  i32.const 0
-  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -874,18 +899,16 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f64>|inlined.2 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f64>1 (result i32)
    f64.const inf
    f64.neg
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $16
+   local.get $16
+   local.get $16
    f64.sub
    f64.const 0
    f64.eq
   end
-  i32.const 0
-  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -897,17 +920,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f64>|inlined.3 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f64>2 (result i32)
    f64.const nan:0x8000000000000
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $17
+   local.get $17
+   local.get $17
    f64.sub
    f64.const 0
    f64.eq
   end
-  i32.const 0
-  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -953,27 +974,23 @@
   f64.const 1.25
   f64.trunc
   global.set $builtins/F
-  block $~lib/builtins/isNaN<f64>|inlined.2 (result i32)
+  block $__inlined_func$~lib/builtins/isNaN<f64>1 (result i32)
    f64.const 1.25
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $18
+   local.get $18
+   local.get $18
    f64.ne
   end
-  i32.const 0
-  i32.ne
   global.set $builtins/b
-  block $~lib/builtins/isFinite<f64>|inlined.4 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f64>3 (result i32)
    f64.const 1.25
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $19
+   local.get $19
+   local.get $19
    f64.sub
    f64.const 0
    f64.eq
   end
-  i32.const 0
-  i32.ne
   global.set $builtins/b
   i32.const 8
   i32.load
@@ -1443,15 +1460,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isNaN<f32>|inlined.3 (result i32)
+  block $__inlined_func$~lib/builtins/isNaN<f32>2 (result i32)
    f32.const nan:0x400000
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $20
+   local.get $20
+   local.get $20
    f32.ne
   end
-  i32.const 0
-  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1461,15 +1476,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isNaN<f64>|inlined.3 (result i32)
+  block $__inlined_func$~lib/builtins/isNaN<f64>2 (result i32)
    f64.const nan:0x8000000000000
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $21
+   local.get $21
+   local.get $21
    f64.ne
   end
-  i32.const 0
-  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1479,17 +1492,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f32>|inlined.5 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f32>4 (result i32)
    f32.const nan:0x400000
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $22
+   local.get $22
+   local.get $22
    f32.sub
    f32.const 0
    f32.eq
   end
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -1500,17 +1511,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f32>|inlined.6 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f32>5 (result i32)
    f32.const inf
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $23
+   local.get $23
+   local.get $23
    f32.sub
    f32.const 0
    f32.eq
   end
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -1521,17 +1530,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f64>|inlined.5 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f64>4 (result i32)
    f64.const nan:0x8000000000000
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $24
+   local.get $24
+   local.get $24
    f64.sub
    f64.const 0
    f64.eq
   end
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -1542,17 +1549,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f64>|inlined.6 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f64>5 (result i32)
    f64.const inf
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $25
+   local.get $25
+   local.get $25
    f64.sub
    f64.const 0
    f64.eq
   end
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -1563,17 +1568,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f32>|inlined.7 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f32>6 (result i32)
    f32.const 0
-   local.set $4
-   local.get $4
-   local.get $4
+   local.set $26
+   local.get $26
+   local.get $26
    f32.sub
    f32.const 0
    f32.eq
   end
-  i32.const 0
-  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1583,17 +1586,15 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/builtins/isFinite<f64>|inlined.7 (result i32)
+  block $__inlined_func$~lib/builtins/isFinite<f64>6 (result i32)
    f64.const 0
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $27
+   local.get $27
+   local.get $27
    f64.sub
    f64.const 0
    f64.eq
   end
-  i32.const 0
-  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -2170,15 +2171,15 @@
   f64.const 1
   f64.trunc
   drop
-  block $~lib/builtins/isNaN<f64>|inlined.4 (result i32)
+  block $__inlined_func$~lib/builtins/isNaN<f64>3 (result i32)
    f64.const 1
-   local.set $5
-   local.get $5
-   local.get $5
+   local.set $28
+   local.get $28
+   local.get $28
    f64.ne
   end
   drop
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 8 ;) (type $v)
  )
 )

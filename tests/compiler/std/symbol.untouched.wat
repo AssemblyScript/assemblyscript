@@ -4,6 +4,7 @@
  (type $iv (func (param i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiiv (func (param i32 i32 i32)))
+ (type $i (func (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $iiv (func (param i32 i32)))
@@ -204,13 +205,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/memory/memory.allocate|inlined.0 (result i32)
+  block $__inlined_func$~lib/memory/memory.allocate (result i32)
    local.get $0
    call $~lib/internal/arraybuffer/computeSize
    local.set $2
    local.get $2
    call $~lib/allocator/arena/__memory_allocate
-   br $~lib/memory/memory.allocate|inlined.0
+   br $__inlined_func$~lib/memory/memory.allocate
   end
   local.set $1
   local.get $1
@@ -472,10 +473,17 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.fill (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/internal/memory/memset
+ )
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 8 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
   i32.gt_u
@@ -501,14 +509,39 @@
    local.set $4
    i32.const 0
    local.set $5
+   local.get $1
+   local.set $6
    local.get $4
    local.get $5
-   local.get $1
+   local.get $6
    call $~lib/internal/memory/memset
   end
   local.get $3
  )
- (func $~lib/map/Map<String,usize>#clear (; 8 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/ENTRY_ALIGN<String,usize> (; 9 ;) (type $i) (result i32)
+  i32.const 3
+ )
+ (func $~lib/map/ENTRY_SIZE<String,usize> (; 10 ;) (type $i) (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  block $__inlined_func$~lib/map/ENTRY_ALIGN<String,usize> (result i32)
+   i32.const 3
+  end
+  local.set $0
+  i32.const 12
+  local.get $0
+  i32.add
+  local.get $0
+  i32.const -1
+  i32.xor
+  i32.and
+  local.set $1
+  local.get $1
+ )
+ (func $~lib/map/Map<String,usize>#clear (; 11 ;) (type $iv) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -520,9 +553,33 @@
   i32.const 1
   i32.sub
   i32.store offset=4
+  i32.const 4
+  block $__inlined_func$~lib/map/ENTRY_SIZE<String,usize> (result i32)
+   i32.const 0
+   local.set $2
+   i32.const 0
+   local.set $3
+   block (result i32)
+    block $__inlined_func$~lib/map/ENTRY_ALIGN<String,usize> (result i32)
+     i32.const 3
+    end
+    local.set $2
+    i32.const 12
+    local.get $2
+    i32.add
+    local.get $2
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    local.get $3
+   end
+  end
+  i32.mul
+  local.set $1
   local.get $0
   i32.const 0
-  i32.const 48
+  local.get $1
   i32.const 1
   call $~lib/arraybuffer/ArrayBuffer#constructor
   i32.store offset=8
@@ -536,7 +593,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<String,usize>#constructor (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#constructor (; 12 ;) (type $ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -568,7 +625,30 @@
   call $~lib/map/Map<String,usize>#clear
   local.get $0
  )
- (func $~lib/map/Map<usize,String>#clear (; 10 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/ENTRY_ALIGN<usize,String> (; 13 ;) (type $i) (result i32)
+  i32.const 3
+ )
+ (func $~lib/map/ENTRY_SIZE<usize,String> (; 14 ;) (type $i) (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  block $__inlined_func$~lib/map/ENTRY_ALIGN<usize,String> (result i32)
+   i32.const 3
+  end
+  local.set $0
+  i32.const 12
+  local.get $0
+  i32.add
+  local.get $0
+  i32.const -1
+  i32.xor
+  i32.and
+  local.set $1
+  local.get $1
+ )
+ (func $~lib/map/Map<usize,String>#clear (; 15 ;) (type $iv) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -580,9 +660,33 @@
   i32.const 1
   i32.sub
   i32.store offset=4
+  i32.const 4
+  block $__inlined_func$~lib/map/ENTRY_SIZE<usize,String> (result i32)
+   i32.const 0
+   local.set $2
+   i32.const 0
+   local.set $3
+   block (result i32)
+    block $__inlined_func$~lib/map/ENTRY_ALIGN<usize,String> (result i32)
+     i32.const 3
+    end
+    local.set $2
+    i32.const 12
+    local.get $2
+    i32.add
+    local.get $2
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    local.get $3
+   end
+  end
+  i32.mul
+  local.set $1
   local.get $0
   i32.const 0
-  i32.const 48
+  local.get $1
   i32.const 1
   call $~lib/arraybuffer/ArrayBuffer#constructor
   i32.store offset=8
@@ -596,7 +700,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<usize,String>#constructor (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#constructor (; 16 ;) (type $ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -628,7 +732,7 @@
   call $~lib/map/Map<usize,String>#clear
   local.get $0
  )
- (func $~lib/internal/hash/hashStr (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hashStr (; 17 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -670,7 +774,12 @@
   end
   local.get $1
  )
- (func $~lib/internal/string/compareUnsafe (; 13 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/hash/HASH<String> (; 18 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/internal/hash/hashStr
+  return
+ )
+ (func $~lib/internal/string/compareUnsafe (; 19 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -723,7 +832,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -767,7 +876,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $~lib/map/Map<String,usize>#find (; 15 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#find (; 21 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -818,26 +927,32 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<String,usize>#has (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#has (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/internal/hash/HASH<String>|inlined.0 (result i32)
+  block $__inlined_func$~lib/internal/hash/HASH<String> (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/HASH<String>|inlined.0
+   br $__inlined_func$~lib/internal/hash/HASH<String>
   end
   call $~lib/map/Map<String,usize>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<String,usize>#get (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#get (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   local.get $1
-  block $~lib/internal/hash/HASH<String>|inlined.1 (result i32)
+  block $__inlined_func$~lib/internal/hash/HASH<String> (result i32)
    local.get $1
+   local.set $3
+   local.get $3
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/HASH<String>|inlined.1
+   br $__inlined_func$~lib/internal/hash/HASH<String>
   end
   call $~lib/map/Map<String,usize>#find
   local.set $2
@@ -849,7 +964,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<String,usize>#rehash (; 18 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<String,usize>#rehash (; 24 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -861,6 +976,15 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
+  (local $21 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -880,8 +1004,26 @@
   local.set $4
   i32.const 0
   local.get $4
-  block $~lib/map/ENTRY_SIZE<String,usize>|inlined.1 (result i32)
-   i32.const 12
+  block $__inlined_func$~lib/map/ENTRY_SIZE<String,usize> (result i32)
+   i32.const 0
+   local.set $13
+   i32.const 0
+   local.set $14
+   block (result i32)
+    block $__inlined_func$~lib/map/ENTRY_ALIGN<String,usize> (result i32)
+     i32.const 3
+    end
+    local.set $13
+    i32.const 12
+    local.get $13
+    i32.add
+    local.get $13
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $14
+    local.get $14
+   end
   end
   i32.mul
   i32.const 1
@@ -895,8 +1037,26 @@
   local.get $6
   local.get $0
   i32.load offset=16
-  block $~lib/map/ENTRY_SIZE<String,usize>|inlined.2 (result i32)
-   i32.const 12
+  block $__inlined_func$~lib/map/ENTRY_SIZE<String,usize>0 (result i32)
+   i32.const 0
+   local.set $15
+   i32.const 0
+   local.set $16
+   block (result i32)
+    block $__inlined_func$~lib/map/ENTRY_ALIGN<String,usize>1 (result i32)
+     i32.const 3
+    end
+    local.set $15
+    i32.const 12
+    local.get $15
+    i32.add
+    local.get $15
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $16
+    local.get $16
+   end
   end
   i32.mul
   i32.add
@@ -930,13 +1090,13 @@
        local.get $9
        i32.load offset=4
        i32.store offset=4
-       block $~lib/internal/hash/HASH<String>|inlined.3 (result i32)
+       block $__inlined_func$~lib/internal/hash/HASH<String> (result i32)
         local.get $9
         i32.load
-        local.set $11
-        local.get $11
+        local.set $17
+        local.get $17
         call $~lib/internal/hash/hashStr
-        br $~lib/internal/hash/HASH<String>|inlined.3
+        br $__inlined_func$~lib/internal/hash/HASH<String>
        end
        local.get $1
        i32.and
@@ -955,15 +1115,51 @@
        local.get $8
        i32.store offset=8
        local.get $8
-       block $~lib/map/ENTRY_SIZE<String,usize>|inlined.3 (result i32)
-        i32.const 12
+       block $__inlined_func$~lib/map/ENTRY_SIZE<String,usize>1 (result i32)
+        i32.const 0
+        local.set $18
+        i32.const 0
+        local.set $19
+        block (result i32)
+         block $__inlined_func$~lib/map/ENTRY_ALIGN<String,usize>2 (result i32)
+          i32.const 3
+         end
+         local.set $18
+         i32.const 12
+         local.get $18
+         i32.add
+         local.get $18
+         i32.const -1
+         i32.xor
+         i32.and
+         local.set $19
+         local.get $19
+        end
        end
        i32.add
        local.set $8
       end
       local.get $6
-      block $~lib/map/ENTRY_SIZE<String,usize>|inlined.4 (result i32)
-       i32.const 12
+      block $__inlined_func$~lib/map/ENTRY_SIZE<String,usize>2 (result i32)
+       i32.const 0
+       local.set $20
+       i32.const 0
+       local.set $21
+       block (result i32)
+        block $__inlined_func$~lib/map/ENTRY_ALIGN<String,usize>3 (result i32)
+         i32.const 3
+        end
+        local.set $20
+        i32.const 12
+        local.get $20
+        i32.add
+        local.get $20
+        i32.const -1
+        i32.xor
+        i32.and
+        local.set $21
+        local.get $21
+       end
       end
       i32.add
       local.set $6
@@ -989,15 +1185,20 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<String,usize>#set (; 19 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<String,usize>#set (; 25 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/HASH<String>|inlined.2 (result i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  block $__inlined_func$~lib/internal/hash/HASH<String> (result i32)
    local.get $1
+   local.set $7
+   local.get $7
    call $~lib/internal/hash/hashStr
-   br $~lib/internal/hash/HASH<String>|inlined.2
+   br $__inlined_func$~lib/internal/hash/HASH<String>
   end
   local.set $3
   local.get $0
@@ -1056,8 +1257,26 @@
     i32.store offset=16
     local.get $6
    end
-   block $~lib/map/ENTRY_SIZE<String,usize>|inlined.5 (result i32)
-    i32.const 12
+   block $__inlined_func$~lib/map/ENTRY_SIZE<String,usize> (result i32)
+    i32.const 0
+    local.set $8
+    i32.const 0
+    local.set $9
+    block (result i32)
+     block $__inlined_func$~lib/map/ENTRY_ALIGN<String,usize> (result i32)
+      i32.const 3
+     end
+     local.set $8
+     i32.const 12
+     local.get $8
+     i32.add
+     local.get $8
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $9
+     local.get $9
+    end
    end
    i32.mul
    i32.add
@@ -1093,7 +1312,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/internal/hash/hash32 (; 20 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 26 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/internal/hash/FNV_OFFSET
   local.set $1
@@ -1135,7 +1354,12 @@
   local.set $1
   local.get $1
  )
- (func $~lib/map/Map<usize,String>#find (; 21 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/hash/HASH<usize> (; 27 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/internal/hash/hash32
+  return
+ )
+ (func $~lib/map/Map<usize,String>#find (; 28 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1186,7 +1410,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<usize,String>#rehash (; 22 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,String>#rehash (; 29 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1198,6 +1422,15 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
+  (local $21 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -1217,8 +1450,26 @@
   local.set $4
   i32.const 0
   local.get $4
-  block $~lib/map/ENTRY_SIZE<usize,String>|inlined.1 (result i32)
-   i32.const 12
+  block $__inlined_func$~lib/map/ENTRY_SIZE<usize,String> (result i32)
+   i32.const 0
+   local.set $13
+   i32.const 0
+   local.set $14
+   block (result i32)
+    block $__inlined_func$~lib/map/ENTRY_ALIGN<usize,String> (result i32)
+     i32.const 3
+    end
+    local.set $13
+    i32.const 12
+    local.get $13
+    i32.add
+    local.get $13
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $14
+    local.get $14
+   end
   end
   i32.mul
   i32.const 1
@@ -1232,8 +1483,26 @@
   local.get $6
   local.get $0
   i32.load offset=16
-  block $~lib/map/ENTRY_SIZE<usize,String>|inlined.2 (result i32)
-   i32.const 12
+  block $__inlined_func$~lib/map/ENTRY_SIZE<usize,String>0 (result i32)
+   i32.const 0
+   local.set $15
+   i32.const 0
+   local.set $16
+   block (result i32)
+    block $__inlined_func$~lib/map/ENTRY_ALIGN<usize,String>1 (result i32)
+     i32.const 3
+    end
+    local.set $15
+    i32.const 12
+    local.get $15
+    i32.add
+    local.get $15
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $16
+    local.get $16
+   end
   end
   i32.mul
   i32.add
@@ -1267,13 +1536,13 @@
        local.get $9
        i32.load offset=4
        i32.store offset=4
-       block $~lib/internal/hash/HASH<usize>|inlined.1 (result i32)
+       block $__inlined_func$~lib/internal/hash/HASH<usize> (result i32)
         local.get $9
         i32.load
-        local.set $11
-        local.get $11
+        local.set $17
+        local.get $17
         call $~lib/internal/hash/hash32
-        br $~lib/internal/hash/HASH<usize>|inlined.1
+        br $__inlined_func$~lib/internal/hash/HASH<usize>
        end
        local.get $1
        i32.and
@@ -1292,15 +1561,51 @@
        local.get $8
        i32.store offset=8
        local.get $8
-       block $~lib/map/ENTRY_SIZE<usize,String>|inlined.3 (result i32)
-        i32.const 12
+       block $__inlined_func$~lib/map/ENTRY_SIZE<usize,String>1 (result i32)
+        i32.const 0
+        local.set $18
+        i32.const 0
+        local.set $19
+        block (result i32)
+         block $__inlined_func$~lib/map/ENTRY_ALIGN<usize,String>2 (result i32)
+          i32.const 3
+         end
+         local.set $18
+         i32.const 12
+         local.get $18
+         i32.add
+         local.get $18
+         i32.const -1
+         i32.xor
+         i32.and
+         local.set $19
+         local.get $19
+        end
        end
        i32.add
        local.set $8
       end
       local.get $6
-      block $~lib/map/ENTRY_SIZE<usize,String>|inlined.4 (result i32)
-       i32.const 12
+      block $__inlined_func$~lib/map/ENTRY_SIZE<usize,String>2 (result i32)
+       i32.const 0
+       local.set $20
+       i32.const 0
+       local.set $21
+       block (result i32)
+        block $__inlined_func$~lib/map/ENTRY_ALIGN<usize,String>3 (result i32)
+         i32.const 3
+        end
+        local.set $20
+        i32.const 12
+        local.get $20
+        i32.add
+        local.get $20
+        i32.const -1
+        i32.xor
+        i32.and
+        local.set $21
+        local.get $21
+       end
       end
       i32.add
       local.set $6
@@ -1326,15 +1631,20 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<usize,String>#set (; 23 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<usize,String>#set (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/internal/hash/HASH<usize>|inlined.0 (result i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  block $__inlined_func$~lib/internal/hash/HASH<usize> (result i32)
    local.get $1
+   local.set $7
+   local.get $7
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/HASH<usize>|inlined.0
+   br $__inlined_func$~lib/internal/hash/HASH<usize>
   end
   local.set $3
   local.get $0
@@ -1393,8 +1703,26 @@
     i32.store offset=16
     local.get $6
    end
-   block $~lib/map/ENTRY_SIZE<usize,String>|inlined.5 (result i32)
-    i32.const 12
+   block $__inlined_func$~lib/map/ENTRY_SIZE<usize,String> (result i32)
+    i32.const 0
+    local.set $8
+    i32.const 0
+    local.set $9
+    block (result i32)
+     block $__inlined_func$~lib/map/ENTRY_ALIGN<usize,String> (result i32)
+      i32.const 3
+     end
+     local.set $8
+     i32.const 12
+     local.get $8
+     i32.add
+     local.get $8
+     i32.const -1
+     i32.xor
+     i32.and
+     local.set $9
+     local.get $9
+    end
    end
    i32.mul
    i32.add
@@ -1430,7 +1758,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/symbol/Symbol.for (; 24 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/Symbol.for (; 31 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/symbol/stringToId
@@ -1477,26 +1805,32 @@
   call $~lib/map/Map<usize,String>#set
   local.get $2
  )
- (func $~lib/map/Map<usize,String>#has (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#has (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/internal/hash/HASH<usize>|inlined.2 (result i32)
+  block $__inlined_func$~lib/internal/hash/HASH<usize> (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/HASH<usize>|inlined.2
+   br $__inlined_func$~lib/internal/hash/HASH<usize>
   end
   call $~lib/map/Map<usize,String>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<usize,String>#get (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,String>#get (; 33 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   local.get $1
-  block $~lib/internal/hash/HASH<usize>|inlined.3 (result i32)
+  block $__inlined_func$~lib/internal/hash/HASH<usize> (result i32)
    local.get $1
+   local.set $3
+   local.get $3
    call $~lib/internal/hash/hash32
-   br $~lib/internal/hash/HASH<usize>|inlined.3
+   br $__inlined_func$~lib/internal/hash/HASH<usize>
   end
   call $~lib/map/Map<usize,String>#find
   local.set $2
@@ -1508,7 +1842,7 @@
    unreachable
   end
  )
- (func $~lib/symbol/Symbol.keyFor (; 27 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/Symbol.keyFor (; 34 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/symbol/idToString
   i32.const 0
@@ -1529,9 +1863,10 @@
    i32.const 0
   end
  )
- (func $~lib/internal/string/allocateUnsafe (; 28 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 35 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.const 0
   i32.gt_s
@@ -1552,16 +1887,16 @@
    call $~lib/env/abort
    unreachable
   end
-  block $~lib/memory/memory.allocate|inlined.1 (result i32)
+  block $__inlined_func$~lib/memory/memory.allocate (result i32)
    global.get $~lib/internal/string/HEADER_SIZE
    local.get $0
    i32.const 1
    i32.shl
    i32.add
-   local.set $1
-   local.get $1
+   local.set $3
+   local.get $3
    call $~lib/allocator/arena/__memory_allocate
-   br $~lib/memory/memory.allocate|inlined.1
+   br $__inlined_func$~lib/memory/memory.allocate
   end
   local.set $2
   local.get $2
@@ -1569,7 +1904,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/memory/memcpy (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 36 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2770,7 +3105,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 37 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -2997,7 +3332,13 @@
    end
   end
  )
- (func $~lib/internal/string/copyUnsafe (; 31 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/memory/memory.copy (; 38 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/internal/memory/memmove
+ )
+ (func $~lib/internal/string/copyUnsafe (; 39 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -3026,7 +3367,7 @@
   local.get $7
   call $~lib/internal/memory/memmove
  )
- (func $~lib/string/String#concat (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 40 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3084,7 +3425,7 @@
   call $~lib/internal/string/copyUnsafe
   local.get $5
  )
- (func $~lib/string/String.__concat (; 33 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 41 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -3095,7 +3436,7 @@
   local.get $1
   call $~lib/string/String#concat
  )
- (func $~lib/symbol/symbol#toString (; 34 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/symbol/symbol#toString (; 42 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3281,7 +3622,7 @@
   i32.const 592
   call $~lib/string/String.__concat
  )
- (func $start (; 35 ;) (type $v)
+ (func $start (; 43 ;) (type $v)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -3450,6 +3791,6 @@
   global.get $~lib/symbol/Symbol.isConcatSpreadable
   drop
  )
- (func $null (; 36 ;) (type $v)
+ (func $null (; 44 ;) (type $v)
  )
 )
