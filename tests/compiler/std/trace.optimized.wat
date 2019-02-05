@@ -11,19 +11,19 @@
  (data (i32.const 144) "\08\00\00\00f\00o\00u\00r\00_\00i\00n\00t")
  (data (i32.const 168) "\08\00\00\00f\00i\00v\00e\00_\00i\00n\00t")
  (data (i32.const 192) "\08\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/trace/main))
  (func $std/trace/main (; 1 ;) (type $v)
-  get_global $~started
+  global.get $~started
   i32.eqz
   if
    call $start
    i32.const 1
-   set_global $~started
+   global.set $~started
   end
  )
  (func $start (; 2 ;) (type $v)

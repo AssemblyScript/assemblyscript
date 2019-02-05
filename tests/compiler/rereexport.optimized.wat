@@ -1,7 +1,7 @@
 (module
  (type $v (func))
  (memory $0 0)
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $start)
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))

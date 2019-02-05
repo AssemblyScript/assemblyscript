@@ -4,7 +4,7 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\07\00\00\00b\00o\00o\00l\00.\00t\00s")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $bool/i (mut i32) (i32.const 2))
  (global $bool/I (mut i64) (i64.const 2))
@@ -17,7 +17,7 @@
  (export "table" (table $0))
  (start $start)
  (func $start (; 1 ;) (type $v)
-  get_global $bool/i
+  global.get $bool/i
   i32.const 0
   i32.ne
   i32.const 1
@@ -30,7 +30,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $bool/I
+  global.get $bool/I
   i64.const 0
   i64.ne
   i32.const 1
@@ -43,7 +43,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $bool/u
+  global.get $bool/u
   i32.const 0
   i32.ne
   i32.const 1
@@ -56,7 +56,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $bool/U
+  global.get $bool/U
   i64.const 0
   i64.ne
   i32.const 1
@@ -69,7 +69,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $bool/f
+  global.get $bool/f
   f32.const 0
   f32.ne
   i32.const 1
@@ -82,7 +82,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $bool/F
+  global.get $bool/F
   f64.const 0
   f64.ne
   i32.const 1
@@ -95,7 +95,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $bool/uu
+  global.get $bool/uu
   i32.const 0
   i32.ne
   i32.const 1
