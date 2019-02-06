@@ -1,10 +1,8 @@
 (module
- (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiv (func (param i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $iifv (func (param i32 i32 f32)))
- (type $iif (func (param i32 i32) (result f32)))
  (type $ifv (func (param i32 f32)))
  (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -22,10 +20,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $std/pointer/Pointer<Entry>#constructor (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
- )
- (func $~lib/internal/memory/memset (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 1 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -279,7 +274,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1480,7 +1475,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1707,34 +1702,38 @@
    end
   end
  )
- (func $std/pointer/Pointer<Entry>#set:value (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/pointer/Pointer<Entry>#set:value (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 0
   i32.eq
   if
-   i32.const 0
-   local.set $2
-   i32.const 8
-   local.set $3
    local.get $0
+   local.set $2
+   i32.const 0
+   local.set $3
+   i32.const 8
+   local.set $4
    local.get $2
    local.get $3
+   local.get $4
    call $~lib/internal/memory/memset
   else   
-   i32.const 8
-   local.set $3
    local.get $0
+   local.set $4
    local.get $1
+   local.set $3
+   i32.const 8
+   local.set $2
+   local.get $4
    local.get $3
+   local.get $2
    call $~lib/internal/memory/memmove
   end
  )
- (func $std/pointer/Pointer<f32>#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
- )
- (func $std/pointer/Pointer<f32>#set (; 7 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $std/pointer/Pointer<f32>#set (; 5 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
   local.get $0
   local.get $1
   i32.const 4
@@ -1743,20 +1742,12 @@
   local.get $2
   f32.store
  )
- (func $std/pointer/Pointer<f32>#get (; 8 ;) (type $iif) (param $0 i32) (param $1 i32) (result f32)
-  local.get $0
-  local.get $1
-  i32.const 4
-  i32.mul
-  i32.add
-  f32.load
- )
- (func $std/pointer/Pointer<f32>#set:value (; 9 ;) (type $ifv) (param $0 i32) (param $1 f32)
+ (func $std/pointer/Pointer<f32>#set:value (; 6 ;) (type $ifv) (param $0 i32) (param $1 f32)
   local.get $0
   local.get $1
   f32.store
  )
- (func $start (; 10 ;) (type $v)
+ (func $start (; 7 ;) (type $v)
   (local $0 i32)
   (local $1 i32)
   (local $2 f32)
@@ -2132,9 +2123,18 @@
   i32.const 1
   f32.const 1.2000000476837158
   call $std/pointer/Pointer<f32>#set
-  global.get $std/pointer/buf
-  i32.const 0
-  call $std/pointer/Pointer<f32>#get
+  block $std/pointer/Pointer<f32>#get|inlined.0 (result f32)
+   global.get $std/pointer/buf
+   local.set $1
+   i32.const 0
+   local.set $0
+   local.get $1
+   local.get $0
+   i32.const 4
+   i32.mul
+   i32.add
+   f32.load
+  end
   f32.const 1.100000023841858
   f32.eq
   i32.eqz
@@ -2146,9 +2146,18 @@
    call $~lib/env/abort
    unreachable
   end
-  global.get $std/pointer/buf
-  i32.const 1
-  call $std/pointer/Pointer<f32>#get
+  block $std/pointer/Pointer<f32>#get|inlined.1 (result f32)
+   global.get $std/pointer/buf
+   local.set $0
+   i32.const 1
+   local.set $1
+   local.get $0
+   local.get $1
+   i32.const 4
+   i32.mul
+   i32.add
+   f32.load
+  end
   f32.const 1.2000000476837158
   f32.eq
   i32.eqz
@@ -2160,7 +2169,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $std/pointer/Pointer<f32>#get|inlined.0 (result f32)
+  block $std/pointer/Pointer<f32>#get|inlined.2 (result f32)
    global.get $std/pointer/buf
    local.set $1
    i32.const 0
@@ -2183,7 +2192,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $std/pointer/Pointer<f32>#get|inlined.1 (result f32)
+  block $std/pointer/Pointer<f32>#get|inlined.3 (result f32)
    global.get $std/pointer/buf
    local.set $0
    i32.const 1
@@ -2232,7 +2241,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block
+  block $std/pointer/Pointer<f32>#set|inlined.0
    global.get $std/pointer/buf
    local.set $1
    i32.const 2
@@ -2247,9 +2256,18 @@
    local.get $2
    f32.store
   end
-  global.get $std/pointer/buf
-  i32.const 2
-  call $std/pointer/Pointer<f32>#get
+  block $std/pointer/Pointer<f32>#get|inlined.4 (result f32)
+   global.get $std/pointer/buf
+   local.set $0
+   i32.const 2
+   local.set $1
+   local.get $0
+   local.get $1
+   i32.const 4
+   i32.mul
+   i32.add
+   f32.load
+  end
   f32.const 1.2999999523162842
   f32.eq
   i32.eqz
@@ -2261,13 +2279,13 @@
    call $~lib/env/abort
    unreachable
   end
-  block $std/pointer/Pointer<f32>#get|inlined.2 (result f32)
+  block $std/pointer/Pointer<f32>#get|inlined.5 (result f32)
    global.get $std/pointer/buf
-   local.set $0
-   i32.const 2
    local.set $1
-   local.get $0
+   i32.const 2
+   local.set $0
    local.get $1
+   local.get $0
    i32.const 4
    i32.mul
    i32.add
@@ -2302,8 +2320,8 @@
   call $std/pointer/Pointer<f32>#set:value
   block $std/pointer/Pointer<f32>#get:value|inlined.0 (result f32)
    global.get $std/pointer/buf
-   local.set $1
-   local.get $1
+   local.set $0
+   local.get $0
    f32.load
    br $std/pointer/Pointer<f32>#get:value|inlined.0
   end
@@ -2332,6 +2350,6 @@
    unreachable
   end
  )
- (func $null (; 11 ;) (type $v)
+ (func $null (; 8 ;) (type $v)
  )
 )

@@ -44,6 +44,8 @@
  (func $~lib/array/Array<Foo>#__get (; 3 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.load
   local.set $2
@@ -54,14 +56,18 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
-   i32.const 0
-   local.set $3
    local.get $2
+   local.set $3
    local.get $1
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $3
+   local.get $4
    i32.const 2
    i32.shl
    i32.add
-   local.get $3
+   local.get $5
    i32.add
    i32.load offset=8
   else   
@@ -76,6 +82,8 @@
  (func $~lib/array/Array<Foo | null>#__get (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.load
   local.set $2
@@ -86,14 +94,18 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
-   i32.const 0
-   local.set $3
    local.get $2
+   local.set $3
    local.get $1
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $3
+   local.get $4
    i32.const 2
    i32.shl
    i32.add
-   local.get $3
+   local.get $5
    i32.add
    i32.load offset=8
   else   
