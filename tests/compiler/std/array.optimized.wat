@@ -5969,6 +5969,7 @@
  (func $~lib/internal/sort/COMPARATOR<String>~anonymous|55 (; 100 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   local.get $1
   i32.eq
@@ -5996,7 +5997,20 @@
   local.set $3
   local.get $0
   i32.load
+  local.tee $4
+  i32.eqz
   local.tee $2
+  if
+   local.get $3
+   i32.eqz
+   local.set $2
+  end
+  local.get $2
+  if
+   i32.const 0
+   return
+  end
+  local.get $4
   i32.eqz
   if
    i32.const -1
@@ -6010,7 +6024,8 @@
   end
   local.get $0
   local.get $1
-  local.get $2
+  local.get $4
+  local.tee $2
   local.get $3
   local.get $2
   local.get $3

@@ -11075,6 +11075,19 @@
   local.set $4
   local.get $3
   i32.eqz
+  local.tee $2
+  if (result i32)
+   local.get $4
+   i32.eqz
+  else   
+   local.get $2
+  end
+  if
+   i32.const 0
+   return
+  end
+  local.get $3
+  i32.eqz
   if
    i32.const -1
    return
