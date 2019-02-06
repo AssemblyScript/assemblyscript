@@ -4,7 +4,7 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00o\00m\00m\00a\00.\00t\00s")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
@@ -13,14 +13,14 @@
  (start $start)
  (func $start (; 1 ;) (type $v)
   (local $0 i32)
-  get_global $comma/a
-  tee_local $0
+  global.get $comma/a
+  local.tee $0
   i32.const 1
   i32.add
-  set_global $comma/a
-  get_local $0
-  set_global $comma/b
-  get_global $comma/a
+  global.set $comma/a
+  local.get $0
+  global.set $comma/b
+  global.get $comma/a
   i32.const 1
   i32.ne
   if
@@ -31,7 +31,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   if
    i32.const 0
    i32.const 8
@@ -40,14 +40,14 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $comma/a
+  global.get $comma/a
   i32.const 1
   i32.add
-  set_global $comma/a
-  get_global $comma/a
-  tee_local $0
-  set_global $comma/b
-  get_local $0
+  global.set $comma/a
+  global.get $comma/a
+  local.tee $0
+  global.set $comma/b
+  local.get $0
   i32.const 2
   i32.ne
   if
@@ -58,7 +58,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   i32.const 2
   i32.ne
   if
@@ -70,17 +70,17 @@
    unreachable
   end
   i32.const 0
-  set_global $comma/b
-  get_global $comma/b
-  set_global $comma/a
-  get_global $comma/a
+  global.set $comma/b
+  global.get $comma/b
+  global.set $comma/a
+  global.get $comma/a
   i32.const 1
   i32.add
-  set_global $comma/a
-  get_global $comma/a
-  tee_local $0
-  set_global $comma/b
-  get_local $0
+  global.set $comma/a
+  global.get $comma/a
+  local.tee $0
+  global.set $comma/b
+  local.get $0
   i32.const 1
   i32.ne
   if
@@ -91,7 +91,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   i32.const 1
   i32.ne
   if
@@ -102,15 +102,15 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $comma/a
+  global.get $comma/a
   i32.const 1
   i32.add
-  set_global $comma/a
-  get_global $comma/a
-  set_global $comma/b
-  get_global $comma/b
-  set_global $comma/a
-  get_global $comma/a
+  global.set $comma/a
+  global.get $comma/a
+  global.set $comma/b
+  global.get $comma/b
+  global.set $comma/a
+  global.get $comma/a
   i32.const 2
   i32.ne
   if
@@ -121,7 +121,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   i32.const 2
   i32.ne
   if
@@ -133,25 +133,25 @@
    unreachable
   end
   i32.const 0
-  set_local $0
+  local.set $0
   loop $repeat|0
    block $break|0
-    get_local $0
-    get_global $comma/a
+    local.get $0
+    global.get $comma/a
     i32.ge_s
     br_if $break|0
-    get_global $comma/a
+    global.get $comma/a
     i32.const 1
     i32.sub
-    set_global $comma/a
-    get_local $0
+    global.set $comma/a
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
+    local.set $0
     br $repeat|0
    end
   end
-  get_local $0
+  local.get $0
   i32.const 1
   i32.ne
   if

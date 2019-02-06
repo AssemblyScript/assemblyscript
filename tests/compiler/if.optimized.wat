@@ -5,7 +5,7 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\05\00\00\00i\00f\00.\00t\00s")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $start)
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -16,11 +16,11 @@
  (func $if/ifThenElse (; 1 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 0
-  get_local $0
+  local.get $0
   select
  )
  (func $if/ifThen (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
+  local.get $0
   if
    i32.const 1
    return
@@ -28,7 +28,7 @@
   i32.const 0
  )
  (func $if/ifAlwaysReturns (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
+  local.get $0
   if (result i32)
    i32.const 1
   else   

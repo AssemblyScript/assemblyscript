@@ -2,7 +2,7 @@
  (type $i (func (result i32)))
  (type $v (func))
  (memory $0 0)
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
@@ -44,14 +44,14 @@
  )
  (func $start (; 1 ;) (type $v)
   call $enum/getZero
-  set_global $enum/NonConstant.ZERO
+  global.set $enum/NonConstant.ZERO
   call $enum/getZero
   i32.const 1
   i32.add
-  set_global $enum/NonConstant.ONE
-  get_global $enum/NonConstant.ZERO
+  global.set $enum/NonConstant.ONE
+  global.get $enum/NonConstant.ZERO
   drop
-  get_global $enum/NonConstant.ONE
+  global.get $enum/NonConstant.ONE
   drop
  )
  (func $null (; 2 ;) (type $v)

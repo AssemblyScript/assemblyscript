@@ -15,7 +15,7 @@
  (type $fff (func (param f32 f32) (result f32)))
  (type $FFF (func (param f64 f64) (result f64)))
  (memory $0 0)
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
@@ -40,39 +40,39 @@
   nop
  )
  (func $function/ii (; 6 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
+  local.get $0
  )
  (func $function/II (; 7 ;) (type $II) (param $0 i64) (result i64)
-  get_local $0
+  local.get $0
  )
  (func $function/ff (; 8 ;) (type $ff) (param $0 f32) (result f32)
-  get_local $0
+  local.get $0
  )
  (func $function/FF (; 9 ;) (type $FF) (param $0 f64) (result f64)
-  get_local $0
+  local.get $0
  )
  (func $function/iiv (; 10 ;) (type $iiv) (param $0 i32) (param $1 i32)
   nop
  )
  (func $function/iii (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.add
  )
  (func $function/III (; 12 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
-  get_local $0
-  get_local $1
-  i64.extend_s/i32
+  local.get $0
+  local.get $1
+  i64.extend_i32_s
   i64.add
  )
  (func $function/fff (; 13 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   f32.add
  )
  (func $function/FFF (; 14 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   f64.add
  )
  (func $start (; 15 ;) (type $v)

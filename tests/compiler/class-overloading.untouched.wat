@@ -2,7 +2,7 @@
  (type $iv (func (param i32)))
  (type $v (func))
  (memory $0 0)
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
@@ -13,7 +13,7 @@
   nop
  )
  (func $class-overloading/test (; 1 ;) (type $iv) (param $0 i32)
-  get_local $0
+  local.get $0
   call $class-overloading/Foo#baz
  )
  (func $start (; 2 ;) (type $v)

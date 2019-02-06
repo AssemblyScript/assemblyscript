@@ -16,6 +16,7 @@
 
 // Types
 
+declare type bool = boolean;
 declare type i8 = number;
 declare type i16 = number;
 declare type i32 = number;
@@ -23,7 +24,6 @@ declare type isize = number;
 declare type u8 = number;
 declare type u16 = number;
 declare type u32 = number;
-declare type bool = boolean;
 declare type usize = number;
 declare type f32 = number;
 declare type f64 = number;
@@ -32,6 +32,20 @@ declare type f64 = number;
 
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
 declare const ASC_TARGET: i32;
+/** Provided noTreeshaking option. */
+declare const ASC_NO_TREESHAKING: bool;
+/** Provided noAssert option. */
+declare const ASC_NO_ASSERT: bool;
+/** Provided memoryBase option. */
+declare const ASC_MEMORY_BASE: i32;
+/** Provided optimizeLevel option. */
+declare const ASC_OPTIMIZE_LEVEL: i32;
+/** Provided shrinkLevel option. */
+declare const ASC_SHRINK_LEVEL: i32;
+/** Whether the mutable global feature is enabled. */
+declare const ASC_FEATURE_MUTABLE_GLOBAL: bool;
+/** Whether the sign extension feature is enabled. */
+declare const ASC_FEATURE_SIGN_EXTENSION: bool;
 
 // Builtins
 
@@ -299,6 +313,8 @@ declare namespace memory {
 declare class ArrayBuffer {
   /** The size, in bytes, of the array. */
   readonly byteLength: i32;
+  /** Returns true if value is one of the ArrayBuffer views, such as typed array or a DataView **/
+  static isView<T>(value: T): bool;
   /** Constructs a new array buffer of the given length in bytes. */
   constructor(length: i32);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
@@ -396,6 +412,17 @@ declare class Int16Array extends Array<i16> {}
 declare class Int32Array extends Array<i32> {}
 declare class Float32Array extends Array<f32> {}
 declare class Float64Array extends Array<f64> {}
+
+/** Interface for a typed view on an array buffer. */
+interface ArrayBufferView<T> {
+  [key: number]: T;
+  /** The {@link ArrayBuffer} referenced by this view. */
+  readonly buffer: ArrayBuffer;
+  /** The offset in bytes from the start of the referenced {@link ArrayBuffer}. */
+  readonly byteOffset: i32;
+  /** The length in bytes from the start of the referenced {@link ArrayBuffer}. */
+  readonly byteLength: i32;
+}
 
 declare class String {
 

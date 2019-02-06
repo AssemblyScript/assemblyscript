@@ -4,7 +4,7 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00o\00m\00m\00a\00.\00t\00s\00")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
@@ -17,18 +17,18 @@
   (local $1 i32)
   block
    block (result i32)
-    get_global $comma/a
-    tee_local $0
+    global.get $comma/a
+    local.tee $0
     i32.const 1
     i32.add
-    set_global $comma/a
-    get_local $0
+    global.set $comma/a
+    local.get $0
    end
-   set_global $comma/b
-   get_global $comma/a
+   global.set $comma/b
+   global.get $comma/a
    drop
   end
-  get_global $comma/a
+  global.get $comma/a
   i32.const 1
   i32.eq
   i32.eqz
@@ -40,7 +40,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   i32.const 0
   i32.eq
   i32.eqz
@@ -53,14 +53,14 @@
    unreachable
   end
   block
-   get_global $comma/a
+   global.get $comma/a
    i32.const 1
    i32.add
-   set_global $comma/a
-   get_global $comma/a
-   set_global $comma/b
+   global.set $comma/a
+   global.get $comma/a
+   global.set $comma/b
   end
-  get_global $comma/a
+  global.get $comma/a
   i32.const 2
   i32.eq
   i32.eqz
@@ -72,7 +72,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   i32.const 2
   i32.eq
   i32.eqz
@@ -86,19 +86,19 @@
   end
   block (result i32)
    i32.const 0
-   set_global $comma/b
-   get_global $comma/b
+   global.set $comma/b
+   global.get $comma/b
   end
-  set_global $comma/a
+  global.set $comma/a
   block (result i32)
-   get_global $comma/a
+   global.get $comma/a
    i32.const 1
    i32.add
-   set_global $comma/a
-   get_global $comma/a
+   global.set $comma/a
+   global.get $comma/a
   end
-  set_global $comma/b
-  get_global $comma/a
+  global.set $comma/b
+  global.get $comma/a
   i32.const 1
   i32.eq
   i32.eqz
@@ -110,7 +110,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   i32.const 1
   i32.eq
   i32.eqz
@@ -123,18 +123,18 @@
    unreachable
   end
   block (result i32)
-   get_global $comma/a
+   global.get $comma/a
    i32.const 1
    i32.add
-   set_global $comma/a
+   global.set $comma/a
    block (result i32)
-    get_global $comma/a
-    set_global $comma/b
-    get_global $comma/b
+    global.get $comma/a
+    global.set $comma/b
+    global.get $comma/b
    end
   end
-  set_global $comma/a
-  get_global $comma/a
+  global.set $comma/a
+  global.get $comma/a
   i32.const 2
   i32.eq
   i32.eqz
@@ -146,7 +146,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   i32.const 2
   i32.eq
   i32.eqz
@@ -160,30 +160,30 @@
   end
   block $break|0
    i32.const 0
-   set_local $1
+   local.set $1
    loop $repeat|0
-    get_local $1
-    get_global $comma/a
+    local.get $1
+    global.get $comma/a
     i32.lt_s
     i32.eqz
     br_if $break|0
     nop
     block
-     get_global $comma/a
+     global.get $comma/a
      i32.const 1
      i32.sub
-     set_global $comma/a
-     get_local $1
+     global.set $comma/a
+     local.get $1
      i32.const 1
      i32.add
-     set_local $1
+     local.set $1
     end
     br $repeat|0
     unreachable
    end
    unreachable
   end
-  get_local $1
+  local.get $1
   i32.const 1
   i32.eq
   i32.eqz

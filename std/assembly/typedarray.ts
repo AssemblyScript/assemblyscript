@@ -6,6 +6,9 @@ import {
   REDUCE,
   REDUCE_RIGHT,
   MAP,
+  FIND_INDEX,
+  SOME,
+  EVERY,
 } from "./internal/typedarray";
 
 import {
@@ -44,6 +47,18 @@ export class Int8Array extends TypedArray<i8> {
   map(callbackfn: (value: i8, index: i32, self: Int8Array) => i8): Int8Array {
     return MAP<Int8Array, i8>(this, callbackfn);
   }
+
+  findIndex(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): i32 {
+    return FIND_INDEX<Int8Array, i8>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): bool {
+    return SOME<Int8Array, i8>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): bool {
+    return EVERY<Int8Array, i8>(this, callbackfn);
+  }
 }
 
 export class Uint8Array extends TypedArray<u8> {
@@ -78,6 +93,18 @@ export class Uint8Array extends TypedArray<u8> {
   map(callbackfn: (value: u8, index: i32, self: Uint8Array) => u8): Uint8Array {
     return MAP<Uint8Array, u8>(this, callbackfn);
   }
+
+  findIndex(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): i32 {
+    return FIND_INDEX<Uint8Array, u8>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): bool {
+    return SOME<Uint8Array, u8>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): bool {
+    return EVERY<Uint8Array, u8>(this, callbackfn);
+  }
 }
 
 export class Uint8ClampedArray extends Uint8Array {
@@ -107,6 +134,18 @@ export class Uint8ClampedArray extends Uint8Array {
 
   map(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => u8): Uint8ClampedArray {
     return MAP<Uint8ClampedArray, u8>(this, callbackfn);
+  }
+
+  findIndex(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): i32 {
+    return FIND_INDEX<Uint8ClampedArray, u8>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): bool {
+    return SOME<Uint8ClampedArray, u8>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): bool {
+    return EVERY<Uint8ClampedArray, u8>(this, callbackfn);
   }
 }
 
@@ -142,6 +181,18 @@ export class Int16Array extends TypedArray<i16> {
   map(callbackfn: (value: i16, index: i32, self: Int16Array) => i16): Int16Array {
     return MAP<Int16Array, i16>(this, callbackfn);
   }
+
+  findIndex(callbackfn: (value: i16, index: i32, self: Int16Array) => bool): i32 {
+    return FIND_INDEX<Int16Array, i16>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: i16, index: i32, self: Int16Array) => bool): bool {
+    return SOME<Int16Array, i16>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: i16, index: i32, self: Int16Array) => bool): bool {
+    return EVERY<Int16Array, i16>(this, callbackfn);
+  }
 }
 
 export class Uint16Array extends TypedArray<u16> {
@@ -175,6 +226,18 @@ export class Uint16Array extends TypedArray<u16> {
 
   map(callbackfn: (value: u16, index: i32, self: Uint16Array) => u16): Uint16Array {
     return MAP<Uint16Array, u16>(this, callbackfn);
+  }
+
+  findIndex(callbackfn: (value: u16, index: i32, self: Uint16Array) => bool): i32 {
+    return FIND_INDEX<Uint16Array, u16>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: u16, index: i32, self: Uint16Array) => bool): bool {
+    return SOME<Uint16Array, u16>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: u16, index: i32, self: Uint16Array) => bool): bool {
+    return EVERY<Uint16Array, u16>(this, callbackfn);
   }
 }
 
@@ -210,6 +273,18 @@ export class Int32Array extends TypedArray<i32> {
   map(callbackfn: (value: i32, index: i32, self: Int32Array) => i32): Int32Array {
     return MAP<Int32Array, i32>(this, callbackfn);
   }
+
+  findIndex(callbackfn: (value: i32, index: i32, self: Int32Array) => bool): i32 {
+    return FIND_INDEX<Int32Array, i32>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: i32, index: i32, self: Int32Array) => bool): bool {
+    return SOME<Int32Array, i32>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: i32, index: i32, self: Int32Array) => bool): bool {
+    return EVERY<Int32Array, i32>(this, callbackfn);
+  }
 }
 
 export class Uint32Array extends TypedArray<u32> {
@@ -243,6 +318,18 @@ export class Uint32Array extends TypedArray<u32> {
 
   map(callbackfn: (value: u32, index: i32, self: Uint32Array) => u32): Uint32Array {
     return MAP<Uint32Array, u32>(this, callbackfn);
+  }
+
+  findIndex(callbackfn: (value: u32, index: i32, self: Uint32Array) => bool): i32 {
+    return FIND_INDEX<Uint32Array, u32>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: u32, index: i32, self: Uint32Array) => bool): bool {
+    return SOME<Uint32Array, u32>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: u32, index: i32, self: Uint32Array) => bool): bool {
+    return EVERY<Uint32Array, u32>(this, callbackfn);
   }
 }
 
@@ -278,6 +365,18 @@ export class Int64Array extends TypedArray<i64> {
   map(callbackfn: (value: i64, index: i32, self: Int64Array) => i64): Int64Array {
     return MAP<Int64Array, i64>(this, callbackfn);
   }
+
+  findIndex(callbackfn: (value: i64, index: i32, self: Int64Array) => bool): i32 {
+    return FIND_INDEX<Int64Array, i64>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: i64, index: i32, self: Int64Array) => bool): bool {
+    return SOME<Int64Array, i64>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: i64, index: i32, self: Int64Array) => bool): bool {
+    return EVERY<Int64Array, i64>(this, callbackfn);
+  }
 }
 
 export class Uint64Array extends TypedArray<u64> {
@@ -311,6 +410,18 @@ export class Uint64Array extends TypedArray<u64> {
 
   map(callbackfn: (value: u64, index: i32, self: Uint64Array) => u64): Uint64Array {
     return MAP<Uint64Array, u64>(this, callbackfn);
+  }
+
+  findIndex(callbackfn: (value: u64, index: i32, self: Uint64Array) => bool): i32 {
+    return FIND_INDEX<Uint64Array, u64>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: u64, index: i32, self: Uint64Array) => bool): bool {
+    return SOME<Uint64Array, u64>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: u64, index: i32, self: Uint64Array) => bool): bool {
+    return EVERY<Uint64Array, u64>(this, callbackfn);
   }
 }
 
@@ -346,6 +457,18 @@ export class Float32Array extends TypedArray<f32> {
   map(callbackfn: (value: f32, index: i32, self: Float32Array) => f32): Float32Array {
     return MAP<Float32Array, f32>(this, callbackfn);
   }
+
+  findIndex(callbackfn: (value: f32, index: i32, self: Float32Array) => bool): i32 {
+    return FIND_INDEX<Float32Array, f32>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: f32, index: i32, self: Float32Array) => bool): bool {
+    return SOME<Float32Array, f32>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: f32, index: i32, self: Float32Array) => bool): bool {
+    return EVERY<Float32Array, f32>(this, callbackfn);
+  }
 }
 
 export class Float64Array extends TypedArray<f64> {
@@ -379,5 +502,17 @@ export class Float64Array extends TypedArray<f64> {
 
   map(callbackfn: (value: f64, index: i32, self: Float64Array) => f64): Float64Array {
     return MAP<Float64Array, f64>(this, callbackfn);
+  }
+
+  findIndex(callbackfn: (value: f64, index: i32, self: Float64Array) => bool): i32 {
+    return FIND_INDEX<Float64Array, f64>(this, callbackfn);
+  }
+
+  some(callbackfn: (value: f64, index: i32, self: Float64Array) => bool): bool {
+    return SOME<Float64Array, f64>(this, callbackfn);
+  }
+
+  every(callbackfn: (value: f64, index: i32, self: Float64Array) => bool): bool {
+    return EVERY<Float64Array, f64>(this, callbackfn);
   }
 }
