@@ -2505,7 +2505,7 @@ export class Function extends Element {
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
-    if (!(prototype.is(CommonFlags.AMBIENT))) {
+    if (!prototype.is(CommonFlags.AMBIENT)) {
       let localIndex = 0;
       if (parent && parent.kind == ElementKind.CLASS) {
         let local = new Local(
