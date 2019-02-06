@@ -5795,8 +5795,8 @@
    local.get $0
    local.get $1
    f64.mul
-   local.tee $0
-   local.get $0
+   local.tee $1
+   local.get $1
    f64.div
    return
   end
@@ -6020,8 +6020,8 @@
    local.get $0
    local.get $1
    f32.mul
-   local.tee $0
-   local.get $0
+   local.tee $1
+   local.get $1
    f32.div
    return
   end
@@ -8175,11 +8175,14 @@
   call $std/math/check<f32>
  )
  (func $std/math/test_sign (; 127 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
-  (local $2 i32)
+  (local $2 f64)
+  (local $3 i32)
+  local.get $0
+  local.set $2
   f64.const 1
   f64.const -1
-  local.get $0
-  local.get $0
+  local.get $2
+  local.get $2
   f64.const 0
   f64.lt
   select
@@ -8190,16 +8193,16 @@
   local.get $1
   f64.const 0
   call $std/math/check<f64>
-  local.tee $2
+  local.tee $3
   if
    local.get $0
    call $~lib/bindings/Math/sign
    local.get $1
    f64.const 0
    call $std/math/check<f64>
-   local.set $2
+   local.set $3
   end
-  local.get $2
+  local.get $3
  )
  (func $std/math/test_signf (; 128 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   f32.const 1

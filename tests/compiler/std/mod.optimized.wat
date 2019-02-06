@@ -73,8 +73,8 @@
    local.get $0
    local.get $1
    f64.mul
-   local.tee $0
-   local.get $0
+   local.tee $1
+   local.get $1
    f64.div
    return
   end
@@ -324,8 +324,8 @@
    local.get $0
    local.get $1
    f32.mul
-   local.tee $0
-   local.get $0
+   local.tee $1
+   local.get $1
    f32.div
    return
   end

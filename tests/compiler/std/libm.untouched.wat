@@ -72,7 +72,10 @@
  (export "tanh" (func $std/libm/tanh))
  (export "trunc" (func $std/libm/trunc))
  (func $std/libm/abs (; 0 ;) (type $FF) (param $0 f64) (result f64)
+  (local $1 f64)
   local.get $0
+  local.set $1
+  local.get $1
   f64.abs
  )
  (func $~lib/math/R (; 1 ;) (type $FF) (param $0 f64) (result f64)
@@ -871,6 +874,8 @@
    else    
     local.get $3
    end
+   i32.const 0
+   i32.ne
    if
     local.get $0
     return
@@ -1915,11 +1920,17 @@
   call $~lib/math/NativeMath.cbrt
  )
  (func $std/libm/ceil (; 21 ;) (type $FF) (param $0 f64) (result f64)
+  (local $1 f64)
   local.get $0
+  local.set $1
+  local.get $1
   f64.ceil
  )
  (func $std/libm/clz32 (; 22 ;) (type $FF) (param $0 f64) (result f64)
+  (local $1 f64)
   local.get $0
+  local.set $1
+  local.get $1
   i32.trunc_f64_s
   i32.clz
   f64.convert_i32_s
@@ -2507,6 +2518,7 @@
   (local $2 i32)
   (local $3 f64)
   (local $4 f64)
+  (local $5 f64)
   local.get $0
   i64.reinterpret_f64
   local.set $1
@@ -2570,6 +2582,8 @@
    return
   end
   block $~lib/math/expo2|inlined.0 (result f64)
+   local.get $0
+   local.set $4
    i32.const 1023
    i32.const 2043
    i32.const 2
@@ -2581,14 +2595,14 @@
    i64.const 32
    i64.shl
    f64.reinterpret_i64
-   local.set $4
-   local.get $0
+   local.set $5
+   local.get $4
    f64.const 1416.0996898839683
    f64.sub
    call $~lib/math/NativeMath.exp
-   local.get $4
+   local.get $5
    f64.mul
-   local.get $4
+   local.get $5
    f64.mul
   end
   local.set $3
@@ -2607,11 +2621,17 @@
   call $~lib/math/NativeMath.expm1
  )
  (func $std/libm/floor (; 32 ;) (type $FF) (param $0 f64) (result f64)
+  (local $1 f64)
   local.get $0
+  local.set $1
+  local.get $1
   f64.floor
  )
  (func $std/libm/fround (; 33 ;) (type $Ff) (param $0 f64) (result f32)
+  (local $1 f64)
   local.get $0
+  local.set $1
+  local.get $1
   f32.demote_f64
  )
  (func $~lib/math/NativeMath.hypot (; 34 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -3401,13 +3421,25 @@
   call $~lib/math/NativeMath.log2
  )
  (func $std/libm/max (; 45 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+  (local $2 f64)
+  (local $3 f64)
   local.get $0
+  local.set $2
   local.get $1
+  local.set $3
+  local.get $2
+  local.get $3
   f64.max
  )
  (func $std/libm/min (; 46 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+  (local $2 f64)
+  (local $3 f64)
   local.get $0
+  local.set $2
   local.get $1
+  local.set $3
+  local.get $2
+  local.get $3
   f64.min
  )
  (func $~lib/math/NativeMath.pow (; 47 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
@@ -3705,6 +3737,8 @@
     i32.eq
    end
    local.tee $14
+   i32.const 0
+   i32.ne
    if (result i32)
     local.get $14
    else    
@@ -3712,6 +3746,8 @@
     i32.const 1072693248
     i32.eq
    end
+   i32.const 0
+   i32.ne
    if
     local.get $15
     local.set $16
@@ -4504,28 +4540,34 @@
   call $~lib/math/NativeMath.pow
  )
  (func $std/libm/round (; 49 ;) (type $FF) (param $0 f64) (result f64)
+  (local $1 f64)
   local.get $0
+  local.set $1
+  local.get $1
   f64.const 0.5
   f64.add
   f64.floor
-  local.get $0
+  local.get $1
   f64.copysign
  )
  (func $std/libm/sign (; 50 ;) (type $FF) (param $0 f64) (result f64)
+  (local $1 f64)
   block $~lib/math/NativeMath.sign|inlined.0 (result f64)
    local.get $0
+   local.set $1
+   local.get $1
    f64.const 0
    f64.gt
    if (result f64)
     f64.const 1
    else    
-    local.get $0
+    local.get $1
     f64.const 0
     f64.lt
     if (result f64)
      f64.const -1
     else     
-     local.get $0
+     local.get $1
     end
    end
    br $~lib/math/NativeMath.sign|inlined.0
@@ -4546,6 +4588,7 @@
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
+  (local $7 f64)
   local.get $0
   i64.reinterpret_f64
   i64.const 9223372036854775807
@@ -4615,6 +4658,8 @@
   local.get $5
   f64.mul
   block $~lib/math/expo2|inlined.1 (result f64)
+   local.get $2
+   local.set $6
    i32.const 1023
    i32.const 2043
    i32.const 2
@@ -4626,14 +4671,14 @@
    i64.const 32
    i64.shl
    f64.reinterpret_i64
-   local.set $6
-   local.get $2
+   local.set $7
+   local.get $6
    f64.const 1416.0996898839683
    f64.sub
    call $~lib/math/NativeMath.exp
-   local.get $6
+   local.get $7
    f64.mul
-   local.get $6
+   local.get $7
    f64.mul
   end
   f64.mul
@@ -4645,7 +4690,10 @@
   call $~lib/math/NativeMath.sinh
  )
  (func $std/libm/sqrt (; 55 ;) (type $FF) (param $0 f64) (result f64)
+  (local $1 f64)
   local.get $0
+  local.set $1
+  local.get $1
   f64.sqrt
  )
  (func $~lib/math/NativeMath.tan (; 56 ;) (type $FF) (param $0 f64) (result f64)
@@ -4753,7 +4801,10 @@
   call $~lib/math/NativeMath.tanh
  )
  (func $std/libm/trunc (; 60 ;) (type $FF) (param $0 f64) (result f64)
+  (local $1 f64)
   local.get $0
+  local.set $1
+  local.get $1
   f64.trunc
  )
  (func $null (; 61 ;) (type $v)

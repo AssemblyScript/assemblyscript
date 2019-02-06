@@ -584,7 +584,7 @@ export class Program extends DiagnosticEmitter {
       let derivedPrototype = queuedExtends[i];
       let derivedDeclaration = derivedPrototype.declaration;
       let derivedType = assert(derivedDeclaration.extendsType);
-      let baseElement = resolver.resolveIdentifier(derivedType.name, null); // reports
+      let baseElement = resolver.resolveIdentifier(derivedType.name, null, null); // reports
       if (!baseElement) continue;
       if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
         let basePrototype = <ClassPrototype>baseElement;
@@ -3117,13 +3117,11 @@ export class Flow {
   /** Flow flags indicating specific conditions. */
   flags: FlowFlags;
   /** Function this flow belongs to. */
-  currentFunction: Function;
+  parentFunction: Function;
   /** The label we break to when encountering a continue statement. */
   continueLabel: string | null;
   /** The label we break to when encountering a break statement. */
   breakLabel: string | null;
-  /** The label we break to when encountering a return statement, when inlining. */
-  returnLabel: string | null;
   /** The current return type. */
   returnType: Type;
   /** The current contextual type arguments. */
@@ -3134,24 +3132,45 @@ export class Flow {
   wrappedLocals: I64;
   /** Local variable wrap states for locals with index >= 64. */
   wrappedLocalsExt: I64[] | null;
+  /** Function being inlined, when inlining. */
+  inlineFunction: Function | null;
+  /** The label we break to when encountering a return statement, when inlining. */
+  inlineReturnLabel: string | null;
 
   /** Creates the parent flow of the specified function. */
-  static create(currentFunction: Function): Flow {
-    var parentFlow = new Flow();
-    parentFlow.parent = null;
-    parentFlow.flags = FlowFlags.NONE;
-    parentFlow.currentFunction = currentFunction;
-    parentFlow.continueLabel = null;
-    parentFlow.breakLabel = null;
-    parentFlow.returnLabel = null;
-    parentFlow.returnType = currentFunction.signature.returnType;
-    parentFlow.contextualTypeArguments = currentFunction.contextualTypeArguments;
-    parentFlow.wrappedLocals = i64_new(0);
-    parentFlow.wrappedLocalsExt = null;
-    return parentFlow;
+  static create(parentFunction: Function): Flow {
+    var flow = new Flow();
+    flow.parent = null;
+    flow.flags = FlowFlags.NONE;
+    flow.parentFunction = parentFunction;
+    flow.continueLabel = null;
+    flow.breakLabel = null;
+    flow.returnType = parentFunction.signature.returnType;
+    flow.contextualTypeArguments = parentFunction.contextualTypeArguments;
+    flow.wrappedLocals = i64_new(0);
+    flow.wrappedLocalsExt = null;
+    flow.inlineFunction = null;
+    flow.inlineReturnLabel = null;
+    return flow;
+  }
+
+  /** Creates an inline flow within `currentFunction`. */
+  static createInline(parentFunction: Function, inlineFunction: Function): Flow {
+    var flow = Flow.create(parentFunction);
+    flow.set(FlowFlags.INLINE_CONTEXT);
+    flow.inlineFunction = inlineFunction;
+    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString(10);
+    flow.returnType = inlineFunction.signature.returnType;
+    flow.contextualTypeArguments = inlineFunction.contextualTypeArguments;
+    return flow;
   }
 
   private constructor() { }
+
+  /** Gets the actual function being compiled, i.e. the inlined function when inlining. */
+  get actualFunction(): Function {
+    return this.inlineFunction || this.parentFunction;
+  }
 
   /** Tests if this flow has the specified flag or flags. */
   is(flag: FlowFlags): bool { return (this.flags & flag) == flag; }
@@ -3167,24 +3186,25 @@ export class Flow {
     var branch = new Flow();
     branch.parent = this;
     branch.flags = this.flags;
-    branch.currentFunction = this.currentFunction;
+    branch.parentFunction = this.parentFunction;
     branch.continueLabel = this.continueLabel;
     branch.breakLabel = this.breakLabel;
-    branch.returnLabel = this.returnLabel;
     branch.returnType = this.returnType;
     branch.contextualTypeArguments = this.contextualTypeArguments;
     branch.wrappedLocals = this.wrappedLocals;
     branch.wrappedLocalsExt = this.wrappedLocalsExt ? this.wrappedLocalsExt.slice() : null;
+    branch.inlineFunction = this.inlineFunction;
+    branch.inlineReturnLabel = this.inlineReturnLabel;
     return branch;
   }
 
-  /** Frees this flow's scoped variables. */
+  /** Frees this flow's scoped variables and returns its parent flow. */
   free(): Flow {
     var parent = assert(this.parent);
     if (this.scopedLocals) { // free block-scoped locals
       for (let scopedLocal of this.scopedLocals.values()) {
         if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
-          this.currentFunction.freeTempLocal(scopedLocal);
+          this.parentFunction.freeTempLocal(scopedLocal);
         }
       }
       this.scopedLocals = null;
@@ -3194,13 +3214,13 @@ export class Flow {
 
   /** Adds a new scoped local of the specified name. */
   addScopedLocal(type: Type, name: string, wrapped: bool, declaration?: VariableDeclaration): Local {
-    var scopedLocal = this.currentFunction.getTempLocal(type, false);
+    var scopedLocal = this.parentFunction.getTempLocal(type, false);
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else {
       let existingLocal = this.scopedLocals.get(name);
       if (existingLocal) {
         if (declaration) {
-          this.currentFunction.program.error(
+          this.parentFunction.program.error(
             DiagnosticCode.Duplicate_identifier_0,
             declaration.name.range
           );
@@ -3224,7 +3244,7 @@ export class Flow {
       if (existingLocal) {
         let declaration = existingLocal.declaration;
         if (declaration) {
-          this.currentFunction.program.error(
+          this.parentFunction.program.error(
             DiagnosticCode.Duplicate_identifier_0,
             declaration.name.range
           );
@@ -3232,9 +3252,9 @@ export class Flow {
         return existingLocal;
       }
     }
-    assert(index < this.currentFunction.localsByIndex.length);
+    assert(index < this.parentFunction.localsByIndex.length);
     var scopedAlias = new Local( // not SCOPED as an indicator that it isn't automatically free'd
-      this.currentFunction.program,
+      this.parentFunction.program,
       name,
       index,
       type,
@@ -3253,7 +3273,7 @@ export class Flow {
         return local;
       }
     } while (current = current.parent);
-    return this.currentFunction.localsByName.get(name);
+    return this.parentFunction.localsByName.get(name);
   }
 
   /** Tests if the local with the specified index is considered wrapped. */
@@ -3395,9 +3415,8 @@ export class Flow {
 
       // overflows if the local isn't wrapped or the conversion does
       case ExpressionId.GetLocal: {
-        let currentFunction = this.currentFunction;
-        let local = currentFunction.localsByIndex[getGetLocalIndex(expr)];
-        return !currentFunction.flow.isLocalWrapped(local.index)
+        let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
+        return !this.isLocalWrapped(local.index)
             || canConversionOverflow(local.type, type);
       }
 
@@ -3410,7 +3429,7 @@ export class Flow {
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GetGlobal: {
         // TODO: this is inefficient because it has to read a string
-        let global = assert(this.currentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
+        let global = assert(this.parentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
         assert(global.kind == ElementKind.GLOBAL);
         return canConversionOverflow(assert((<Global>global).type), type);
       }
@@ -3612,7 +3631,7 @@ export class Flow {
 
       // overflows if the call does not return a wrapped value or the conversion does
       case ExpressionId.Call: {
-        let program = this.currentFunction.program;
+        let program = this.parentFunction.program;
         let instance = assert(program.instancesLookup.get(assert(getCallTarget(expr))));
         assert(instance.kind == ElementKind.FUNCTION);
         let returnType = (<Function>instance).signature.returnType;
@@ -3631,8 +3650,31 @@ export class Flow {
     assert(this.parent == null); // must be the topmost parent flow
     this.continueLabel = null;
     this.breakLabel = null;
-    this.returnLabel = null;
     this.contextualTypeArguments = null;
+    this.inlineFunction = null;
+    this.inlineReturnLabel = null;
+  }
+
+  toString(): string {
+    var sb = [
+      "Flow(", this.parentFunction.internalName
+    ];
+    var inlineFunction = this.inlineFunction;
+    if (inlineFunction) {
+      sb.push(", inlining");
+      sb.push(inlineFunction.internalName);
+    }
+    sb.push(")");
+    var scopedLocals = this.scopedLocals;
+    if (scopedLocals) {
+      for (let [k, v] of scopedLocals) {
+        sb.push(" ");
+        sb.push(k);
+        sb.push("@");
+        sb.push(v.index.toString());
+      }
+    }
+    return sb.join("");
   }
 }
 

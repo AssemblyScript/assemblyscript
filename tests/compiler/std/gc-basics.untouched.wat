@@ -215,6 +215,8 @@
   if
    block $~lib/collector/itcm/refToObj|inlined.0 (result i32)
     local.get $0
+    local.set $1
+    local.get $1
     global.get $~lib/collector/itcm/HEADER_SIZE
     i32.sub
    end
@@ -333,6 +335,8 @@
       global.set $~argc
       block $~lib/collector/itcm/objToRef|inlined.0 (result i32)
        local.get $0
+       local.set $1
+       local.get $1
        global.get $~lib/collector/itcm/HEADER_SIZE
        i32.add
       end
@@ -385,13 +389,11 @@
      i32.ge_u
      if
       block $~lib/memory/memory.free|inlined.0
-       block
-        local.get $0
-        call $~lib/allocator/arena/__memory_free
-        br $~lib/memory/memory.free|inlined.0
-        unreachable
-       end
-       unreachable
+       local.get $0
+       local.set $1
+       local.get $1
+       call $~lib/allocator/arena/__memory_free
+       br $~lib/memory/memory.free|inlined.0
       end
      end
     else     
@@ -439,6 +441,8 @@
   call $~lib/collector/itcm/ManagedObjectList#push
   block $~lib/collector/itcm/objToRef|inlined.1 (result i32)
    local.get $3
+   local.set $2
+   local.get $2
    global.get $~lib/collector/itcm/HEADER_SIZE
    i32.add
   end
@@ -551,6 +555,8 @@
     local.get $3
    end
    local.tee $3
+   i32.const 0
+   i32.ne
    if (result i32)
     local.get $1
     local.get $2
@@ -558,6 +564,8 @@
    else    
     local.get $3
    end
+   i32.const 0
+   i32.ne
    i32.eqz
    if
     i32.const 0

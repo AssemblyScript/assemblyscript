@@ -103,6 +103,8 @@
          local.get $5
         end
         local.tee $5
+        i32.const 0
+        i32.ne
         if (result i32)
          local.get $0
          local.get $2
@@ -119,6 +121,8 @@
         else         
          local.get $5
         end
+        i32.const 0
+        i32.ne
         if
          local.get $1
          i32.const 4
@@ -332,6 +336,8 @@
         else         
          local.get $7
         end
+        i32.const 0
+        i32.ne
         if
          local.get $0
          local.get $3
@@ -1926,6 +1932,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   local.get $1
   i32.const 1
   i32.lt_u
@@ -1991,6 +1998,8 @@
        else        
         local.get $6
        end
+       i32.const 0
+       i32.ne
        if
         local.get $2
         i32.const 1
@@ -2045,6 +2054,8 @@
         else         
          local.get $6
         end
+        i32.const 0
+        i32.ne
         if
          local.get $2
          i32.const 3
@@ -2223,22 +2234,26 @@
   i32.shr_u
   call $~lib/internal/string/allocateUnsafe
   local.set $7
-  local.get $7
-  global.get $~lib/internal/string/HEADER_SIZE
-  i32.add
-  local.set $3
-  local.get $3
-  local.get $4
-  local.get $5
-  call $~lib/internal/memory/memmove
+  block $~lib/memory/memory.copy|inlined.0
+   local.get $7
+   global.get $~lib/internal/string/HEADER_SIZE
+   i32.add
+   local.set $3
+   local.get $4
+   local.set $6
+   local.get $5
+   local.set $8
+   local.get $3
+   local.get $6
+   local.get $8
+   call $~lib/internal/memory/memmove
+  end
   block $~lib/memory/memory.free|inlined.0
-   block
-    local.get $4
-    call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.0
-    unreachable
-   end
-   unreachable
+   local.get $4
+   local.set $8
+   local.get $8
+   call $~lib/allocator/arena/__memory_free
+   br $~lib/memory/memory.free|inlined.0
   end
   local.get $7
  )
@@ -2607,13 +2622,9 @@
   block $~lib/memory/memory.free|inlined.1
    global.get $std/string-utf8/ptr
    local.set $0
-   block
-    local.get $0
-    call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.1
-    unreachable
-   end
-   unreachable
+   local.get $0
+   call $~lib/allocator/arena/__memory_free
+   br $~lib/memory/memory.free|inlined.1
   end
  )
  (func $null (; 12 ;) (type $v)

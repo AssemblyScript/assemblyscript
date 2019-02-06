@@ -7,7 +7,7 @@
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
  (table $0 2 funcref)
- (elem (i32.const 0) $null $inlining/test_funcs~anonymous|1)
+ (elem (i32.const 0) $null $inlining/func_fe~anonymous|1)
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~argc (mut i32) (i32.const 0))
  (global $HEAP_BASE i32 (i32.const 36))
@@ -20,7 +20,7 @@
   i32.const 2
   i32.add
  )
- (func $inlining/test_funcs~anonymous|1 (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $inlining/func_fe~anonymous|1 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
  )
  (func $inlining/test_funcs (; 3 ;) (type $v)
@@ -163,16 +163,14 @@
    local.set $2
    local.get $2
    local.set $3
-   block
-    local.get $3
-    local.set $5
-    local.get $5
-    local.set $6
-    local.get $6
-    i32.const 1
-    i32.add
-    local.set $4
-   end
+   local.get $3
+   local.set $5
+   local.get $5
+   local.set $6
+   local.get $6
+   i32.const 1
+   i32.add
+   local.set $4
    local.get $4
   end
   i32.const 3
@@ -191,16 +189,14 @@
    local.set $4
    local.get $4
    local.set $3
-   block
-    local.get $3
-    local.set $6
-    local.get $6
-    local.set $5
-    local.get $5
-    i32.const 1
-    i32.add
-    local.set $2
-   end
+   local.get $3
+   local.set $6
+   local.get $6
+   local.set $5
+   local.get $5
+   i32.const 1
+   i32.add
+   local.set $2
    local.get $2
   end
   i32.const 4
@@ -214,8 +210,10 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 0
-  local.set $2
+  block $inlining/func_iv|inlined.0
+   i32.const 0
+   local.set $2
+  end
   block (result i32)
    i32.const 1
    global.set $~argc
@@ -259,11 +257,13 @@
   i32.const 123
   local.set $7
   block $inlining/Foo#method_this|inlined.0 (result i32)
-   i32.const 43
-   local.set $3
-   i32.const 3
-   local.set $2
    local.get $7
+   local.set $3
+   i32.const 43
+   local.set $2
+   i32.const 3
+   local.set $4
+   local.get $3
   end
   i32.const 123
   i32.eq

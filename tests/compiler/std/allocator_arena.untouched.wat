@@ -1888,7 +1888,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block
+  block $~lib/memory/memory.fill|inlined.0
    global.get $std/allocator_arena/ptr1
    local.set $0
    i32.const 18
@@ -1933,7 +1933,7 @@
    end
    unreachable
   end
-  block
+  block $~lib/memory/memory.copy|inlined.0
    global.get $std/allocator_arena/ptr2
    local.set $2
    global.get $std/allocator_arena/ptr1
@@ -2004,32 +2004,20 @@
   block $~lib/memory/memory.free|inlined.0
    global.get $std/allocator_arena/ptr1
    local.set $2
-   block
-    local.get $2
-    call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.0
-    unreachable
-   end
-   unreachable
+   local.get $2
+   call $~lib/allocator/arena/__memory_free
+   br $~lib/memory/memory.free|inlined.0
   end
   block $~lib/memory/memory.free|inlined.1
    global.get $std/allocator_arena/ptr2
    local.set $2
-   block
-    local.get $2
-    call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.1
-    unreachable
-   end
-   unreachable
+   local.get $2
+   call $~lib/allocator/arena/__memory_free
+   br $~lib/memory/memory.free|inlined.1
   end
   block $~lib/memory/memory.reset|inlined.0
-   block
-    call $~lib/allocator/arena/__memory_reset
-    br $~lib/memory/memory.reset|inlined.0
-    unreachable
-   end
-   unreachable
+   call $~lib/allocator/arena/__memory_reset
+   br $~lib/memory/memory.reset|inlined.0
   end
   block $~lib/memory/memory.allocate|inlined.2 (result i32)
    global.get $std/allocator_arena/size

@@ -476,6 +476,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
   i32.gt_u
@@ -501,9 +502,11 @@
    local.set $4
    i32.const 0
    local.set $5
+   local.get $1
+   local.set $6
    local.get $4
    local.get $5
-   local.get $1
+   local.get $6
    call $~lib/internal/memory/memset
   end
   local.get $3
@@ -800,6 +803,8 @@
       else       
        local.get $4
       end
+      i32.const 0
+      i32.ne
       if
        local.get $3
        return
@@ -819,10 +824,13 @@
   i32.const 0
  )
  (func $~lib/map/Map<String,usize>#has (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<String>|inlined.0 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hashStr
    br $~lib/internal/hash/HASH<String>|inlined.0
   end
@@ -832,18 +840,21 @@
  )
  (func $~lib/map/Map<String,usize>#get (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<String>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hashStr
    br $~lib/internal/hash/HASH<String>|inlined.1
   end
   call $~lib/map/Map<String,usize>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   if (result i32)
-   local.get $2
+   local.get $3
    i32.load offset=4
   else   
    unreachable
@@ -996,18 +1007,20 @@
   (local $6 i32)
   block $~lib/internal/hash/HASH<String>|inlined.2 (result i32)
    local.get $1
+   local.set $3
+   local.get $3
    call $~lib/internal/hash/hashStr
    br $~lib/internal/hash/HASH<String>|inlined.2
   end
-  local.set $3
+  local.set $4
   local.get $0
   local.get $1
-  local.get $3
-  call $~lib/map/Map<String,usize>#find
-  local.set $4
   local.get $4
+  call $~lib/map/Map<String,usize>#find
+  local.set $5
+  local.get $5
   if
-   local.get $4
+   local.get $5
    local.get $2
    i32.store offset=4
   else   
@@ -1042,8 +1055,8 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $5
-   local.get $5
+   local.set $3
+   local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
    block (result i32)
@@ -1061,11 +1074,11 @@
    end
    i32.mul
    i32.add
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    local.get $1
    i32.store
-   local.get $4
+   local.get $5
    local.get $2
    i32.store offset=4
    local.get $0
@@ -1076,7 +1089,7 @@
    i32.store offset=20
    local.get $0
    i32.load
-   local.get $3
+   local.get $4
    local.get $0
    i32.load offset=4
    i32.and
@@ -1084,12 +1097,12 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $4
+   local.get $5
    local.get $6
    i32.load offset=8
    i32.store offset=8
    local.get $6
-   local.get $4
+   local.get $5
    i32.store offset=8
   end
  )
@@ -1168,6 +1181,8 @@
       else       
        local.get $4
       end
+      i32.const 0
+      i32.ne
       if
        local.get $3
        return
@@ -1333,18 +1348,20 @@
   (local $6 i32)
   block $~lib/internal/hash/HASH<usize>|inlined.0 (result i32)
    local.get $1
+   local.set $3
+   local.get $3
    call $~lib/internal/hash/hash32
    br $~lib/internal/hash/HASH<usize>|inlined.0
   end
-  local.set $3
+  local.set $4
   local.get $0
   local.get $1
-  local.get $3
-  call $~lib/map/Map<usize,String>#find
-  local.set $4
   local.get $4
+  call $~lib/map/Map<usize,String>#find
+  local.set $5
+  local.get $5
   if
-   local.get $4
+   local.get $5
    local.get $2
    i32.store offset=4
   else   
@@ -1379,8 +1396,8 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $5
-   local.get $5
+   local.set $3
+   local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
    block (result i32)
@@ -1398,11 +1415,11 @@
    end
    i32.mul
    i32.add
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    local.get $1
    i32.store
-   local.get $4
+   local.get $5
    local.get $2
    i32.store offset=4
    local.get $0
@@ -1413,7 +1430,7 @@
    i32.store offset=20
    local.get $0
    i32.load
-   local.get $3
+   local.get $4
    local.get $0
    i32.load offset=4
    i32.and
@@ -1421,12 +1438,12 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $4
+   local.get $5
    local.get $6
    i32.load offset=8
    i32.store offset=8
    local.get $6
-   local.get $4
+   local.get $5
    i32.store offset=8
   end
  )
@@ -1478,10 +1495,13 @@
   local.get $2
  )
  (func $~lib/map/Map<usize,String>#has (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<usize>|inlined.2 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hash32
    br $~lib/internal/hash/HASH<usize>|inlined.2
   end
@@ -1491,18 +1511,21 @@
  )
  (func $~lib/map/Map<usize,String>#get (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<usize>|inlined.3 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hash32
    br $~lib/internal/hash/HASH<usize>|inlined.3
   end
   call $~lib/map/Map<usize,String>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   if (result i32)
-   local.get $2
+   local.get $3
    i32.load offset=4
   else   
    unreachable
@@ -3264,6 +3287,8 @@
     else     
      local.get $3
     end
+    i32.const 0
+    i32.ne
     if
      global.get $~lib/symbol/idToString
      local.get $1

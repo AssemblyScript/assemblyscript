@@ -16,7 +16,9 @@
   call $inlining-recursive/bar
  )
  (func $inlining-recursive/bar (; 2 ;) (type $v)
-  call $inlining-recursive/baz
+  block $inlining-recursive/bar|inlined.0
+   call $inlining-recursive/baz
+  end
  )
  (func $null (; 3 ;) (type $v)
  )

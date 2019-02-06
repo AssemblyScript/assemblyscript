@@ -1477,14 +1477,12 @@
    unreachable
   end
   global.get $std/pointer/buf
-  local.tee $0
   i32.const 8
   i32.add
+  local.tee $0
   f32.const 1.2999999523162842
   f32.store
   local.get $0
-  i32.const 8
-  i32.add
   f32.load
   f32.const 1.2999999523162842
   f32.ne
