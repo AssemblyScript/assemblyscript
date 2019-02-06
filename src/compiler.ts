@@ -1165,7 +1165,6 @@ export class Compiler extends DiagnosticEmitter {
       let previousFlow = this.currentFlow;
       this.currentFlow = instance.flow;
       let stmts = this.compileFunctionBody(instance);
-      instance.flow.finalize();
       this.currentFlow = previousFlow;
 
       // create the function
@@ -1675,7 +1674,7 @@ export class Compiler extends DiagnosticEmitter {
         ? stmts[0]
         : this.module.createBlock(null, stmts,getExpressionType(stmts[stmts.length - 1]));
 
-    innerFlow.free();
+    innerFlow.freeScopedLocals();
     outerFlow.inherit(innerFlow);
     this.currentFlow = outerFlow;
     return stmt;
@@ -1747,7 +1746,7 @@ export class Compiler extends DiagnosticEmitter {
     // TODO: check if condition is always false and if so, omit it (just a block)
 
     // Switch back to the parent flow
-    innerFlow.free();
+    innerFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
     outerFlow.parentFunction.leaveBreakContext();
     var terminated = innerFlow.isAny(FlowFlags.ANY_TERMINATING);
@@ -1838,7 +1837,7 @@ export class Compiler extends DiagnosticEmitter {
       : this.compileStatement(bodyStatement);
 
     // Switch back to the parent flow
-    innerFlow.free();
+    innerFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
     outerFlow.parentFunction.leaveBreakContext();
     var usesContinue = innerFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
@@ -1922,7 +1921,7 @@ export class Compiler extends DiagnosticEmitter {
     var ifTrueFlow = outerFlow.fork();
     this.currentFlow = ifTrueFlow;
     var ifTrueExpr = this.compileStatement(ifTrue);
-    ifTrueFlow.free();
+    ifTrueFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
 
     var ifFalseExpr: ExpressionRef = 0;
@@ -1930,7 +1929,7 @@ export class Compiler extends DiagnosticEmitter {
       let ifFalseFlow = outerFlow.fork();
       this.currentFlow = ifFalseFlow;
       ifFalseExpr = this.compileStatement(ifFalse);
-      ifFalseFlow.free();
+      ifFalseFlow.freeScopedLocals();
       this.currentFlow = outerFlow;
       outerFlow.inheritMutual(ifTrueFlow, ifFalseFlow);
     } else {
@@ -2077,7 +2076,7 @@ export class Compiler extends DiagnosticEmitter {
         FlowFlags.BREAKS |
         FlowFlags.CONDITIONALLY_BREAKS
       );
-      innerFlow.free();
+      innerFlow.freeScopedLocals();
       this.currentFlow = outerFlow;
       currentBlock = module.createBlock(nextLabel, stmts, NativeType.None); // must be a labeled block
     }
@@ -2334,7 +2333,7 @@ export class Compiler extends DiagnosticEmitter {
     var terminated = innerFlow.isAny(FlowFlags.ANY_TERMINATING);
 
     // Switch back to the parent flow
-    innerFlow.free();
+    innerFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
     outerFlow.parentFunction.leaveBreakContext();
     innerFlow.unset(
@@ -5482,7 +5481,7 @@ export class Compiler extends DiagnosticEmitter {
         );
       } else {
         this.currentInlineFunctions.push(instance);
-        let expr = this.compileCallInlinePrechecked(instance, argumentExpressions, reportNode, thisArg);
+        let expr = this.compileCallInlinePrechecked(instance, argumentExpressions, thisArg);
         this.currentInlineFunctions.pop();
         return expr;
       }
@@ -5513,7 +5512,6 @@ export class Compiler extends DiagnosticEmitter {
   private compileCallInlinePrechecked(
     instance: Function,
     argumentExpressions: Expression[],
-    reportNode: Node,
     thisArg: ExpressionRef = 0
   ): ExpressionRef {
     var module = this.module;
@@ -5579,32 +5577,19 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Compile the called function's body in the scope of the inlined flow
-    var stmts = this.compileFunctionBody(instance);
-    for (let i = 0, k = stmts.length; i < k; ++i) body.push(stmts[i]);
+    {
+      let stmts = this.compileFunctionBody(instance);
+      for (let i = 0, k = stmts.length; i < k; ++i) body.push(stmts[i]);
+    }
 
     // Free any new scoped locals and reset to the original flow
-    var scopedLocals = flow.scopedLocals;
-    if (scopedLocals) {
-      for (let scopedLocal of scopedLocals.values()) {
-        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
-          flow.parentFunction.freeTempLocal(scopedLocal);
-        }
-      }
-      flow.scopedLocals = null;
-    }
-    var inlineReturnLabel = flow.inlineReturnLabel;
+    flow.freeScopedLocals();
     var returnType = flow.returnType;
-    flow.finalize();
     this.currentFlow = previousFlow;
     this.currentType = returnType;
-    return module.createBlock(inlineReturnLabel, body, returnType.toNativeType());
-    // return flow.is(FlowFlags.RETURNS)
-    //   ? module.createBlock(inlineReturnLabel, body, returnType.toNativeType())
-    //   : body.length > 1
-    //     ? module.createBlock(null, body, returnType.toNativeType())
-    //     : body.length
-    //       ? body[0]
-    //       : module.createNop();
+
+    // Create an outer block that we can break to when returning a value out of order
+    return module.createBlock(flow.inlineReturnLabel, body, returnType.toNativeType());
   }
 
   /** Gets the trampoline for the specified function. */
@@ -6976,13 +6961,13 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = ifThenFlow;
     var ifThenExpr = this.compileExpressionRetainType(ifThen, contextualType, WrapMode.NONE);
     var ifThenType = this.currentType;
-    ifThenFlow.free();
+    ifThenFlow.freeScopedLocals();
 
     var ifElseFlow = outerFlow.fork();
     this.currentFlow = ifElseFlow;
     var ifElseExpr = this.compileExpressionRetainType(ifElse, contextualType, WrapMode.NONE);
     var ifElseType = this.currentType;
-    ifElseFlow.free();
+    ifElseFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
 
     outerFlow.inheritMutual(ifThenFlow, ifElseFlow);

@@ -3198,20 +3198,6 @@ export class Flow {
     return branch;
   }
 
-  /** Frees this flow's scoped variables and returns its parent flow. */
-  free(): Flow {
-    var parent = assert(this.parent);
-    if (this.scopedLocals) { // free block-scoped locals
-      for (let scopedLocal of this.scopedLocals.values()) {
-        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
-          this.parentFunction.freeTempLocal(scopedLocal);
-        }
-      }
-      this.scopedLocals = null;
-    }
-    return parent;
-  }
-
   /** Adds a new scoped local of the specified name. */
   addScopedLocal(name: string, type: Type, wrapped: bool, reportNode: Node | null = null): Local {
     var scopedLocal = this.parentFunction.getTempLocal(type, false);
@@ -3262,6 +3248,18 @@ export class Flow {
     // not flagged as SCOPED as it must not be free'd when the flow is finalized
     this.scopedLocals.set(name, scopedAlias);
     return scopedAlias;
+  }
+
+  /** Frees this flow's scoped variables and returns its parent flow. */
+  freeScopedLocals(): void {
+    if (this.scopedLocals) {
+      for (let scopedLocal of this.scopedLocals.values()) {
+        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
+          this.parentFunction.freeTempLocal(scopedLocal);
+        }
+      }
+      this.scopedLocals = null;
+    }
   }
 
   /** Looks up the local of the specified name in the current scope. */
@@ -3643,16 +3641,6 @@ export class Flow {
       case ExpressionId.Unreachable: return false;
     }
     return true;
-  }
-
-  /** Finalizes this flow. Must be the topmost parent flow of the function. */
-  finalize(): void {
-    assert(this.parent == null); // must be the topmost parent flow
-    this.continueLabel = null;
-    this.breakLabel = null;
-    this.contextualTypeArguments = null;
-    this.inlineFunction = null;
-    this.inlineReturnLabel = null;
   }
 
   /** Returns a string representation of this flow for debugging purposes. */
