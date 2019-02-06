@@ -6,7 +6,7 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s\00")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $instanceof/a (mut i32) (i32.const 0))
  (global $instanceof/b (mut i32) (i32.const 0))
@@ -236,7 +236,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $instanceof/an
+  global.get $instanceof/an
   i32.const 0
   i32.ne
   i32.eqz
@@ -260,8 +260,8 @@
    unreachable
   end
   i32.const 1
-  set_global $instanceof/an
-  get_global $instanceof/an
+  global.set $instanceof/an
+  global.get $instanceof/an
   i32.const 0
   i32.ne
   i32.eqz

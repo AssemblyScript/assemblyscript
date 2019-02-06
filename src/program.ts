@@ -584,7 +584,7 @@ export class Program extends DiagnosticEmitter {
       let derivedPrototype = queuedExtends[i];
       let derivedDeclaration = derivedPrototype.declaration;
       let derivedType = assert(derivedDeclaration.extendsType);
-      let baseElement = resolver.resolveIdentifier(derivedType.name, null); // reports
+      let baseElement = resolver.resolveIdentifier(derivedType.name, null, null); // reports
       if (!baseElement) continue;
       if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
         let basePrototype = <ClassPrototype>baseElement;
@@ -2474,8 +2474,6 @@ export class Function extends Element {
   localsByIndex: Local[] = [];
   /** List of additional non-parameter locals. */
   additionalLocals: Type[] = [];
-  /** Current break context label. */
-  breakContext: string | null = null;
   /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> | null;
   /** Current control flow. */
@@ -2491,8 +2489,6 @@ export class Function extends Element {
   /** The outer scope, if a function expression. */
   outerScope: Flow | null = null;
 
-  private nextBreakId: i32 = 0;
-  private breakStack: i32[] | null = null;
   nextInlineId: i32 = 0;
 
   /** Constructs a new concrete function. */
@@ -2510,10 +2506,9 @@ export class Function extends Element {
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
-    if (!(prototype.is(CommonFlags.AMBIENT))) {
+    if (!prototype.is(CommonFlags.AMBIENT)) {
       let localIndex = 0;
       if (parent && parent.kind == ElementKind.CLASS) {
-        assert(this.is(CommonFlags.INSTANCE));
         let local = new Local(
           prototype.program,
           "this",
@@ -2575,140 +2570,23 @@ export class Function extends Element {
     return local;
   }
 
-  private tempI32s: Local[] | null = null;
-  private tempI64s: Local[] | null = null;
-  private tempF32s: Local[] | null = null;
-  private tempF64s: Local[] | null = null;
+  // used by flows to keep track of temporary locals
+  tempI32s: Local[] | null = null;
+  tempI64s: Local[] | null = null;
+  tempF32s: Local[] | null = null;
+  tempF64s: Local[] | null = null;
 
-  /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, wrapped: bool = false): Local {
-    var temps: Local[] | null;
-    switch (type.toNativeType()) {
-      case NativeType.I32: {
-        temps = this.tempI32s;
-        break;
-      }
-      case NativeType.I64: {
-        temps = this.tempI64s;
-        break;
-      }
-      case NativeType.F32: {
-        temps = this.tempF32s;
-        break;
-      }
-      case NativeType.F64: {
-        temps = this.tempF64s;
-        break;
-      }
-      default: throw new Error("concrete type expected");
-    }
-    var local: Local;
-    if (temps && temps.length) {
-      local = temps.pop();
-      local.type = type;
-      local.flags = CommonFlags.NONE;
-    } else {
-      local = this.addLocal(type);
-    }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      this.flow.setLocalWrapped(local.index, wrapped);
-    }
-    return local;
-  }
-
-  /** Frees the temporary local for reuse. */
-  freeTempLocal(local: Local): void {
-    if (local.is(CommonFlags.INLINED)) return;
-    assert(local.index >= 0);
-    var temps: Local[];
-    assert(local.type != null); // internal error
-    switch ((<Type>local.type).toNativeType()) {
-      case NativeType.I32: {
-        temps = this.tempI32s || (this.tempI32s = []);
-        break;
-      }
-      case NativeType.I64: {
-        temps = this.tempI64s || (this.tempI64s = []);
-        break;
-      }
-      case NativeType.F32: {
-        temps = this.tempF32s || (this.tempF32s = []);
-        break;
-      }
-      case NativeType.F64: {
-        temps = this.tempF64s || (this.tempF64s = []);
-        break;
-      }
-      default: throw new Error("concrete type expected");
-    }
-    assert(local.index >= 0);
-    temps.push(local);
-  }
-
-  /** Gets and immediately frees a temporary local of the specified type. */
-  getAndFreeTempLocal(type: Type, wrapped: bool): Local {
-    var temps: Local[];
-    switch (type.toNativeType()) {
-      case NativeType.I32: {
-        temps = this.tempI32s || (this.tempI32s = []);
-        break;
-      }
-      case NativeType.I64: {
-        temps = this.tempI64s || (this.tempI64s = []);
-        break;
-      }
-      case NativeType.F32: {
-        temps = this.tempF32s || (this.tempF32s = []);
-        break;
-      }
-      case NativeType.F64: {
-        temps = this.tempF64s || (this.tempF64s = []);
-        break;
-      }
-      default: throw new Error("concrete type expected");
-    }
-    var local: Local;
-    if (temps.length) {
-      local = temps[temps.length - 1];
-      local.type = type;
-    } else {
-      local = this.addLocal(type);
-      temps.push(local);
-    }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      this.flow.setLocalWrapped(local.index, wrapped);
-    }
-    return local;
-  }
-
-  /** Enters a(nother) break context. */
-  enterBreakContext(): string {
-    var id = this.nextBreakId++;
-    if (!this.breakStack) this.breakStack = [ id ];
-    else this.breakStack.push(id);
-    return this.breakContext = id.toString(10);
-  }
-
-  /** Leaves the current break context. */
-  leaveBreakContext(): void {
-    assert(this.breakStack != null);
-    var length = (<i32[]>this.breakStack).length;
-    assert(length > 0);
-    (<i32[]>this.breakStack).pop();
-    if (length > 1) {
-      this.breakContext = (<i32[]>this.breakStack)[length - 2].toString(10);
-    } else {
-      this.breakContext = null;
-      this.breakStack = null;
-    }
-  }
+  // used by flows to keep track of break labels
+  nextBreakId: i32 = 0;
+  breakStack: i32[] | null = null;
+  breakLabel: string | null = null;
 
   /** Finalizes the function once compiled, releasing no longer needed resources. */
   finalize(module: Module, ref: FunctionRef): void {
     this.ref = ref;
     assert(!this.breakStack || !this.breakStack.length); // internal error
     this.breakStack = null;
-    this.breakContext = null;
+    this.breakLabel = null;
     this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
     if (this.program.options.sourceMap) {
       let debugLocations = this.debugLocations;
@@ -2855,6 +2733,14 @@ export class ClassPrototype extends Element {
     this.decoratorFlags = decoratorFlags;
   }
 
+  extends(basePtototype: ClassPrototype | null): bool {
+    var current: ClassPrototype | null = this;
+    do {
+      if (current === basePtototype) return true;
+    } while (current = current.basePrototype);
+    return false;
+  }
+
   toString(): string {
     return this.simpleName;
   }
@@ -2968,6 +2854,16 @@ export class Class extends Element {
     return null;
   }
 
+  lookupField(name: string, shouldReadonly: boolean = false): Element | null {
+    if (this.members == null) return null;
+    var member = this.members.get(name);
+    if (
+      member == null || member.kind != ElementKind.FIELD ||
+      (shouldReadonly && !member.is(CommonFlags.READONLY))
+    ) return null;
+    return member;
+  }
+
   offsetof(fieldName: string): u32 {
     var members = assert(this.members);
     assert(members.has(fieldName));
@@ -3030,39 +2926,39 @@ export const enum FlowFlags {
 
   // categorical
 
-  /** This branch always returns. */
+  /** This flow returns. */
   RETURNS = 1 << 0,
-  /** This branch always returns a wrapped value. */
+  /** This flow returns a wrapped value. */
   RETURNS_WRAPPED = 1 << 1,
-  /** This branch always throws. */
+  /** This flow throws. */
   THROWS = 1 << 2,
-  /** This branch always breaks. */
+  /** This flow breaks. */
   BREAKS = 1 << 3,
-  /** This branch always continues. */
+  /** This flow continues. */
   CONTINUES = 1 << 4,
-  /** This branch always allocates. Constructors only. */
+  /** This flow allocates. Constructors only. */
   ALLOCATES = 1 << 5,
-  /** This branch always calls super. Constructors only. */
+  /** This flow calls super. Constructors only. */
   CALLS_SUPER = 1 << 6,
 
   // conditional
 
-  /** This branch conditionally returns in a child branch. */
+  /** This flow conditionally returns in a child flow. */
   CONDITIONALLY_RETURNS = 1 << 7,
-  /** This branch conditionally throws in a child branch. */
+  /** This flow conditionally throws in a child flow. */
   CONDITIONALLY_THROWS = 1 << 8,
-  /** This branch conditionally breaks in a child branch. */
+  /** This flow conditionally breaks in a child flow. */
   CONDITIONALLY_BREAKS = 1 << 9,
-  /** This branch conditionally continues in a child branch. */
+  /** This flow conditionally continues in a child flow. */
   CONDITIONALLY_CONTINUES = 1 << 10,
-  /** This branch conditionally allocates in a child branch. Constructors only. */
+  /** This flow conditionally allocates in a child flow. Constructors only. */
   CONDITIONALLY_ALLOCATES = 1 << 11,
 
   // special
 
-  /** This branch is part of inlining a function. */
+  /** This is an inlining flow. */
   INLINE_CONTEXT = 1 << 12,
-  /** This branch explicitly requests no bounds checking. */
+  /** This is a flow with explicitly disabled bounds checking. */
   UNCHECKED_CONTEXT = 1 << 13,
 
   // masks
@@ -3098,13 +2994,11 @@ export class Flow {
   /** Flow flags indicating specific conditions. */
   flags: FlowFlags;
   /** Function this flow belongs to. */
-  currentFunction: Function;
+  parentFunction: Function;
   /** The label we break to when encountering a continue statement. */
   continueLabel: string | null;
   /** The label we break to when encountering a break statement. */
   breakLabel: string | null;
-  /** The label we break to when encountering a return statement, when inlining. */
-  returnLabel: string | null;
   /** The current return type. */
   returnType: Type;
   /** The current contextual type arguments. */
@@ -3117,24 +3011,45 @@ export class Flow {
   wrappedLocals: I64;
   /** Local variable wrap states for locals with index >= 64. */
   wrappedLocalsExt: I64[] | null;
+  /** Function being inlined, when inlining. */
+  inlineFunction: Function | null;
+  /** The label we break to when encountering a return statement, when inlining. */
+  inlineReturnLabel: string | null;
 
   /** Creates the parent flow of the specified function. */
-  static create(currentFunction: Function): Flow {
-    var parentFlow = new Flow();
-    parentFlow.parent = null;
-    parentFlow.flags = FlowFlags.NONE;
-    parentFlow.currentFunction = currentFunction;
-    parentFlow.continueLabel = null;
-    parentFlow.breakLabel = null;
-    parentFlow.returnLabel = null;
-    parentFlow.returnType = currentFunction.signature.returnType;
-    parentFlow.contextualTypeArguments = currentFunction.contextualTypeArguments;
-    parentFlow.wrappedLocals = i64_new(0);
-    parentFlow.wrappedLocalsExt = null;
-    return parentFlow;
+  static create(parentFunction: Function): Flow {
+    var flow = new Flow();
+    flow.parent = null;
+    flow.flags = FlowFlags.NONE;
+    flow.parentFunction = parentFunction;
+    flow.continueLabel = null;
+    flow.breakLabel = null;
+    flow.returnType = parentFunction.signature.returnType;
+    flow.contextualTypeArguments = parentFunction.contextualTypeArguments;
+    flow.wrappedLocals = i64_new(0);
+    flow.wrappedLocalsExt = null;
+    flow.inlineFunction = null;
+    flow.inlineReturnLabel = null;
+    return flow;
+  }
+
+  /** Creates an inline flow within `currentFunction`. */
+  static createInline(parentFunction: Function, inlineFunction: Function): Flow {
+    var flow = Flow.create(parentFunction);
+    flow.set(FlowFlags.INLINE_CONTEXT);
+    flow.inlineFunction = inlineFunction;
+    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString(10);
+    flow.returnType = inlineFunction.signature.returnType;
+    flow.contextualTypeArguments = inlineFunction.contextualTypeArguments;
+    return flow;
   }
 
   private constructor() { }
+
+  /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
+  get actualFunction(): Function {
+    return this.inlineFunction || this.parentFunction;
+  }
 
   /** Tests if this flow has the specified flag or flags. */
   is(flag: FlowFlags): bool { return (this.flags & flag) == flag; }
@@ -3150,44 +3065,119 @@ export class Flow {
     var branch = new Flow();
     branch.parent = this;
     branch.flags = this.flags;
-    branch.currentFunction = this.currentFunction;
+    branch.parentFunction = this.parentFunction;
     branch.continueLabel = this.continueLabel;
     branch.breakLabel = this.breakLabel;
-    branch.returnLabel = this.returnLabel;
     branch.returnType = this.returnType;
     branch.contextualTypeArguments = this.contextualTypeArguments;
     branch.wrappedLocals = this.wrappedLocals;
     branch.wrappedLocalsExt = this.wrappedLocalsExt ? this.wrappedLocalsExt.slice() : null;
+    branch.inlineFunction = this.inlineFunction;
+    branch.inlineReturnLabel = this.inlineReturnLabel;
     return branch;
   }
 
-  /** Frees this flow's scoped variables. */
-  free(): Flow {
-    var parent = assert(this.parent);
-    if (this.scopedLocals) { // free block-scoped locals
-      for (let scopedLocal of this.scopedLocals.values()) {
-        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
-          this.currentFunction.freeTempLocal(scopedLocal);
-        }
-      }
-      this.scopedLocals = null;
+  /** Gets a free temporary local of the specified type. */
+  getTempLocal(type: Type, wrapped: bool = false): Local {
+    var parentFunction = this.parentFunction;
+    var temps: Local[] | null;
+    switch (type.toNativeType()) {
+      case NativeType.I32: { temps = parentFunction.tempI32s; break; }
+      case NativeType.I64: { temps = parentFunction.tempI64s; break; }
+      case NativeType.F32: { temps = parentFunction.tempF32s; break; }
+      case NativeType.F64: { temps = parentFunction.tempF64s; break; }
+      default: throw new Error("concrete type expected");
     }
-    return parent;
+    var local: Local;
+    if (temps && temps.length) {
+      local = temps.pop();
+      local.type = type;
+      local.flags = CommonFlags.NONE;
+    } else {
+      local = parentFunction.addLocal(type);
+    }
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) this.setLocalWrapped(local.index, wrapped);
+    return local;
+  }
+
+  /** Frees the temporary local for reuse. */
+  freeTempLocal(local: Local): void {
+    if (local.is(CommonFlags.INLINED)) return;
+    assert(local.index >= 0);
+    var parentFunction = this.parentFunction;
+    var temps: Local[];
+    assert(local.type != null); // internal error
+    switch ((<Type>local.type).toNativeType()) {
+      case NativeType.I32: {
+        temps = parentFunction.tempI32s || (parentFunction.tempI32s = []);
+        break;
+      }
+      case NativeType.I64: {
+        temps = parentFunction.tempI64s || (parentFunction.tempI64s = []);
+        break;
+      }
+      case NativeType.F32: {
+        temps = parentFunction.tempF32s || (parentFunction.tempF32s = []);
+        break;
+      }
+      case NativeType.F64: {
+        temps = parentFunction.tempF64s || (parentFunction.tempF64s = []);
+        break;
+      }
+      default: throw new Error("concrete type expected");
+    }
+    assert(local.index >= 0);
+    temps.push(local);
+  }
+
+  /** Gets and immediately frees a temporary local of the specified type. */
+  getAndFreeTempLocal(type: Type, wrapped: bool): Local {
+    var parentFunction = this.parentFunction;
+    var temps: Local[];
+    switch (type.toNativeType()) {
+      case NativeType.I32: {
+        temps = parentFunction.tempI32s || (parentFunction.tempI32s = []);
+        break;
+      }
+      case NativeType.I64: {
+        temps = parentFunction.tempI64s || (parentFunction.tempI64s = []);
+        break;
+      }
+      case NativeType.F32: {
+        temps = parentFunction.tempF32s || (parentFunction.tempF32s = []);
+        break;
+      }
+      case NativeType.F64: {
+        temps = parentFunction.tempF64s || (parentFunction.tempF64s = []);
+        break;
+      }
+      default: throw new Error("concrete type expected");
+    }
+    var local: Local;
+    if (temps.length) {
+      local = temps[temps.length - 1];
+      local.type = type;
+    } else {
+      local = parentFunction.addLocal(type);
+      temps.push(local);
+    }
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) this.setLocalWrapped(local.index, wrapped);
+    return local;
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(type: Type, name: string, wrapped: bool, declaration?: VariableDeclaration): Local {
-    var scopedLocal = this.currentFunction.getTempLocal(type, false);
+  addScopedLocal(name: string, type: Type, wrapped: bool, reportNode: Node | null = null): Local {
+    var scopedLocal = this.getTempLocal(type, false);
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else {
       let existingLocal = this.scopedLocals.get(name);
       if (existingLocal) {
-        if (declaration) {
-          this.currentFunction.program.error(
+        if (reportNode) {
+          this.parentFunction.program.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range
+            reportNode.range
           );
-        } else assert(false);
+        }
         return existingLocal;
       }
     }
@@ -3199,44 +3189,53 @@ export class Flow {
     return scopedLocal;
   }
 
-  /** Adds a new scoped alias for the specified local. */
-  addScopedLocalAlias(index: i32, type: Type, name: string): Local {
+  /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
+  addScopedAlias(name: string, type: Type, index: i32, reportNode: Node | null = null): Local {
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else {
       let existingLocal = this.scopedLocals.get(name);
       if (existingLocal) {
-        let declaration = existingLocal.declaration;
-        if (declaration) {
-          this.currentFunction.program.error(
+        if (reportNode) {
+          this.parentFunction.program.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range
+            reportNode.range
           );
-        } else assert(false);
+        }
         return existingLocal;
       }
     }
-    assert(index < this.currentFunction.localsByIndex.length);
-    var scopedAlias = new Local( // not SCOPED as an indicator that it isn't automatically free'd
-      this.currentFunction.program,
+    assert(index < this.parentFunction.localsByIndex.length);
+    var scopedAlias = new Local(
+      this.parentFunction.program,
       name,
       index,
       type,
       null
     );
+    // not flagged as SCOPED as it must not be free'd when the flow is finalized
     this.scopedLocals.set(name, scopedAlias);
     return scopedAlias;
   }
 
-  /** Gets the local of the specified name in the current scope. */
-  getScopedLocal(name: string): Local | null {
+  /** Frees this flow's scoped variables and returns its parent flow. */
+  freeScopedLocals(): void {
+    if (this.scopedLocals) {
+      for (let scopedLocal of this.scopedLocals.values()) {
+        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
+          this.freeTempLocal(scopedLocal);
+        }
+      }
+      this.scopedLocals = null;
+    }
+  }
+
+  /** Looks up the local of the specified name in the current scope. */
+  lookupLocal(name: string): Local | null {
     var local: Local | null;
     var current: Flow | null = this;
-    do {
-      if (current.scopedLocals && (local = current.scopedLocals.get(name))) {
-        return local;
-      }
-    } while (current = current.parent);
-    return this.currentFunction.localsByName.get(name);
+    do if (current.scopedLocals && (local = current.scopedLocals.get(name))) return local;
+    while (current = current.parent);
+    return this.parentFunction.localsByName.get(name);
   }
 
   getGlobal(expr: ExpressionRef): Global {
@@ -3254,7 +3253,7 @@ export class Flow {
     return <Global>global;
   }
 
-  /** Tests if the local with the specified index is considered wrapped. */
+  /** Tests if the value of the local at the specified index is considered wrapped. */
   isLocalWrapped(index: i32): bool {
     var map: I64;
     var ext: I64[] | null;
@@ -3281,7 +3280,7 @@ export class Flow {
     );
   }
 
-  /** Sets if the local with the specified index is considered wrapped. */
+  /** Sets if the value of the local at the specified index is considered wrapped. */
   setLocalWrapped(index: i32, wrapped: bool): void {
     var map: I64;
     var off: i32 = -1;
@@ -3303,6 +3302,30 @@ export class Flow {
     map = wrapped ? i64_or(map, mask) : i64_and(map, i64_not(mask));
     if (off >= 0) (<I64[]>this.wrappedLocalsExt)[off] = map;
     else this.wrappedLocals = map;
+  }
+
+  /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
+  pushBreakLabel(): string {
+    var parentFunction = this.parentFunction;
+    var id = parentFunction.nextBreakId++;
+    var stack = parentFunction.breakStack;
+    if (!stack) parentFunction.breakStack = [ id ];
+    else stack.push(id);
+    return parentFunction.breakLabel = id.toString(10);
+  }
+
+  /** Pops the most recent break label from the stack. */
+  popBreakLabel(): void {
+    var parentFunction = this.parentFunction;
+    var stack = assert(parentFunction.breakStack);
+    var length = assert(stack.length);
+    stack.pop();
+    if (length > 1) {
+      parentFunction.breakLabel = stack[length - 2].toString(10);
+    } else {
+      parentFunction.breakLabel = null;
+      parentFunction.breakStack = null;
+    }
   }
 
   /** Inherits flags and local wrap states from the specified flow (e.g. blocks). */
@@ -3378,9 +3401,8 @@ export class Flow {
 
       // overflows if the local isn't wrapped or the conversion does
       case ExpressionId.GetLocal: {
-        let currentFunction = this.currentFunction;
-        let local = currentFunction.localsByIndex[getGetLocalIndex(expr)];
-        return !currentFunction.flow.isLocalWrapped(local.index)
+        let local = this.parentFunction.localsByIndex[getGetLocalIndex(expr)];
+        return !this.isLocalWrapped(local.index)
             || canConversionOverflow(local.type, type);
       }
 
@@ -3575,7 +3597,6 @@ export class Flow {
           let last = getBlockChild(expr, size - 1);
           return this.canOverflow(last, type);
         }
-        // actually, brs with a value that'd be handled here is not emitted atm
         break;
       }
 
@@ -3593,7 +3614,7 @@ export class Flow {
 
       // overflows if the call does not return a wrapped value or the conversion does
       case ExpressionId.Call: {
-        let program = this.currentFunction.program;
+        let program = this.parentFunction.program;
         let instance = assert(program.instancesLookup.get(assert(getCallTarget(expr))));
         assert(instance.kind == ElementKind.FUNCTION);
         let returnType = (<Function>instance).signature.returnType;
@@ -3605,15 +3626,6 @@ export class Flow {
       case ExpressionId.Unreachable: return false;
     }
     return true;
-  }
-
-  /** Finalizes this flow. Must be the topmost parent flow of the function. */
-  finalize(): void {
-    assert(this.parent == null); // must be the topmost parent flow
-    this.continueLabel = null;
-    this.breakLabel = null;
-    this.returnLabel = null;
-    this.contextualTypeArguments = null;
   }
 }
 
