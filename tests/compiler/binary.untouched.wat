@@ -1249,7 +1249,9 @@
    local.get $8
   else   
    local.get $1
-   local.get $1
+   local.set $9
+   local.get $9
+   local.get $9
    f32.ne
   end
   i32.const 0
@@ -2531,7 +2533,9 @@
    local.get $8
   else   
    local.get $1
-   local.get $1
+   local.set $9
+   local.get $9
+   local.get $9
    f64.ne
   end
   i32.const 0

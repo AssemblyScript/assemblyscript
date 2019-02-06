@@ -428,6 +428,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
   i32.gt_u
@@ -453,9 +454,11 @@
    local.set $4
    i32.const 0
    local.set $5
+   local.get $1
+   local.set $6
    local.get $4
    local.get $5
-   local.get $1
+   local.get $6
    call $~lib/internal/memory/memset
   end
   local.get $3
@@ -844,6 +847,8 @@
   local.get $1
   block $~lib/internal/hash/HASH<i8>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    i32.const 24
    i32.shl
    i32.const 24
@@ -852,15 +857,15 @@
    br $~lib/internal/hash/HASH<i8>|inlined.1
   end
   call $~lib/set/Set<i8>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $2
-  local.get $2
+  local.get $3
+  local.get $3
   i32.load offset=4
   global.get $~lib/set/EMPTY
   i32.or
@@ -875,21 +880,21 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 1
   i32.add
   global.get $~lib/set/INITIAL_CAPACITY
-  local.tee $4
+  local.tee $2
   local.get $0
   i32.load offset=20
   local.tee $5
-  local.get $4
+  local.get $2
   local.get $5
   i32.gt_u
   select
   i32.ge_u
-  local.tee $4
+  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -901,11 +906,11 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $4
+   local.get $2
   end
   if
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/set/Set<i8>#rehash
   end
   i32.const 1
@@ -1566,21 +1571,23 @@
   local.get $1
   block $~lib/internal/hash/HASH<u8>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    i32.const 255
    i32.and
    call $~lib/internal/hash/hash8
    br $~lib/internal/hash/HASH<u8>|inlined.1
   end
   call $~lib/set/Set<u8>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $2
-  local.get $2
+  local.get $3
+  local.get $3
   i32.load offset=4
   global.get $~lib/set/EMPTY
   i32.or
@@ -1595,21 +1602,21 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 1
   i32.add
   global.get $~lib/set/INITIAL_CAPACITY
-  local.tee $4
+  local.tee $2
   local.get $0
   i32.load offset=20
   local.tee $5
-  local.get $4
+  local.get $2
   local.get $5
   i32.gt_u
   select
   i32.ge_u
-  local.tee $4
+  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -1621,11 +1628,11 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $4
+   local.get $2
   end
   if
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/set/Set<u8>#rehash
   end
   i32.const 1
@@ -2312,6 +2319,8 @@
   local.get $1
   block $~lib/internal/hash/HASH<i16>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    i32.const 16
    i32.shl
    i32.const 16
@@ -2320,15 +2329,15 @@
    br $~lib/internal/hash/HASH<i16>|inlined.1
   end
   call $~lib/set/Set<i16>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $2
-  local.get $2
+  local.get $3
+  local.get $3
   i32.load offset=4
   global.get $~lib/set/EMPTY
   i32.or
@@ -2343,21 +2352,21 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 1
   i32.add
   global.get $~lib/set/INITIAL_CAPACITY
-  local.tee $4
+  local.tee $2
   local.get $0
   i32.load offset=20
   local.tee $5
-  local.get $4
+  local.get $2
   local.get $5
   i32.gt_u
   select
   i32.ge_u
-  local.tee $4
+  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -2369,11 +2378,11 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $4
+   local.get $2
   end
   if
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/set/Set<i16>#rehash
   end
   i32.const 1
@@ -3034,21 +3043,23 @@
   local.get $1
   block $~lib/internal/hash/HASH<u16>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    i32.const 65535
    i32.and
    call $~lib/internal/hash/hash16
    br $~lib/internal/hash/HASH<u16>|inlined.1
   end
   call $~lib/set/Set<u16>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $2
-  local.get $2
+  local.get $3
+  local.get $3
   i32.load offset=4
   global.get $~lib/set/EMPTY
   i32.or
@@ -3063,21 +3074,21 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 1
   i32.add
   global.get $~lib/set/INITIAL_CAPACITY
-  local.tee $4
+  local.tee $2
   local.get $0
   i32.load offset=20
   local.tee $5
-  local.get $4
+  local.get $2
   local.get $5
   i32.gt_u
   select
   i32.ge_u
-  local.tee $4
+  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -3089,11 +3100,11 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $4
+   local.get $2
   end
   if
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/set/Set<u16>#rehash
   end
   i32.const 1
@@ -3792,19 +3803,21 @@
   local.get $1
   block $~lib/internal/hash/HASH<i32>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hash32
    br $~lib/internal/hash/HASH<i32>|inlined.1
   end
   call $~lib/set/Set<i32>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $2
-  local.get $2
+  local.get $3
+  local.get $3
   i32.load offset=4
   global.get $~lib/set/EMPTY
   i32.or
@@ -3819,21 +3832,21 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 1
   i32.add
   global.get $~lib/set/INITIAL_CAPACITY
-  local.tee $4
+  local.tee $2
   local.get $0
   i32.load offset=20
   local.tee $5
-  local.get $4
+  local.get $2
   local.get $5
   i32.gt_u
   select
   i32.ge_u
-  local.tee $4
+  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -3845,11 +3858,11 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $4
+   local.get $2
   end
   if
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/set/Set<i32>#rehash
   end
   i32.const 1
@@ -4506,19 +4519,21 @@
   local.get $1
   block $~lib/internal/hash/HASH<u32>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hash32
    br $~lib/internal/hash/HASH<u32>|inlined.1
   end
   call $~lib/set/Set<u32>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $2
-  local.get $2
+  local.get $3
+  local.get $3
   i32.load offset=4
   global.get $~lib/set/EMPTY
   i32.or
@@ -4533,21 +4548,21 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 1
   i32.add
   global.get $~lib/set/INITIAL_CAPACITY
-  local.tee $4
+  local.tee $2
   local.get $0
   i32.load offset=20
   local.tee $5
-  local.get $4
+  local.get $2
   local.get $5
   i32.gt_u
   select
   i32.ge_u
-  local.tee $4
+  local.tee $2
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -4559,11 +4574,11 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $4
+   local.get $2
   end
   if
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/set/Set<u32>#rehash
   end
   i32.const 1
@@ -5301,27 +5316,30 @@
   i32.load offset=20
  )
  (func $~lib/set/Set<i64>#delete (; 79 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i32)
+  (local $2 i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<i64>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hash64
    br $~lib/internal/hash/HASH<i64>|inlined.1
   end
   call $~lib/set/Set<i64>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $2
-  local.get $2
+  local.get $3
+  local.get $3
   i32.load offset=8
   global.get $~lib/set/EMPTY
   i32.or
@@ -5336,21 +5354,21 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 1
   i32.add
   global.get $~lib/set/INITIAL_CAPACITY
-  local.tee $4
+  local.tee $5
   local.get $0
   i32.load offset=20
-  local.tee $5
-  local.get $4
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
-  local.tee $4
+  local.tee $5
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -5362,11 +5380,11 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $4
+   local.get $5
   end
   if
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/set/Set<i64>#rehash
   end
   i32.const 1
@@ -6016,27 +6034,30 @@
   i32.load offset=20
  )
  (func $~lib/set/Set<u64>#delete (; 89 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i32)
+  (local $2 i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<u64>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hash64
    br $~lib/internal/hash/HASH<u64>|inlined.1
   end
   call $~lib/set/Set<u64>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $2
-  local.get $2
+  local.get $3
+  local.get $3
   i32.load offset=8
   global.get $~lib/set/EMPTY
   i32.or
@@ -6051,21 +6072,21 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 1
   i32.add
   global.get $~lib/set/INITIAL_CAPACITY
-  local.tee $4
+  local.tee $5
   local.get $0
   i32.load offset=20
-  local.tee $5
-  local.get $4
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
-  local.tee $4
+  local.tee $5
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -6077,11 +6098,11 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $4
+   local.get $5
   end
   if
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/set/Set<u64>#rehash
   end
   i32.const 1
@@ -6733,28 +6754,31 @@
   i32.load offset=20
  )
  (func $~lib/set/Set<f32>#delete (; 99 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
-  (local $2 i32)
+  (local $2 f32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<f32>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    i32.reinterpret_f32
    call $~lib/internal/hash/hash32
    br $~lib/internal/hash/HASH<f32>|inlined.1
   end
   call $~lib/set/Set<f32>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $2
-  local.get $2
+  local.get $3
+  local.get $3
   i32.load offset=4
   global.get $~lib/set/EMPTY
   i32.or
@@ -6769,21 +6793,21 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 1
   i32.add
   global.get $~lib/set/INITIAL_CAPACITY
-  local.tee $4
+  local.tee $5
   local.get $0
   i32.load offset=20
-  local.tee $5
-  local.get $4
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
-  local.tee $4
+  local.tee $5
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -6795,11 +6819,11 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $4
+   local.get $5
   end
   if
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/set/Set<f32>#rehash
   end
   i32.const 1
@@ -7451,28 +7475,31 @@
   i32.load offset=20
  )
  (func $~lib/set/Set<f64>#delete (; 109 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
-  (local $2 i32)
+  (local $2 f64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<f64>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    i64.reinterpret_f64
    call $~lib/internal/hash/hash64
    br $~lib/internal/hash/HASH<f64>|inlined.1
   end
   call $~lib/set/Set<f64>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   i32.eqz
   if
    i32.const 0
    return
   end
-  local.get $2
-  local.get $2
+  local.get $3
+  local.get $3
   i32.load offset=8
   global.get $~lib/set/EMPTY
   i32.or
@@ -7487,21 +7514,21 @@
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   i32.const 1
   i32.add
   global.get $~lib/set/INITIAL_CAPACITY
-  local.tee $4
+  local.tee $5
   local.get $0
   i32.load offset=20
-  local.tee $5
-  local.get $4
+  local.tee $6
   local.get $5
+  local.get $6
   i32.gt_u
   select
   i32.ge_u
-  local.tee $4
+  local.tee $5
   if (result i32)
    local.get $0
    i32.load offset=20
@@ -7513,11 +7540,11 @@
    i32.trunc_f64_s
    i32.lt_s
   else   
-   local.get $4
+   local.get $5
   end
   if
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/set/Set<f64>#rehash
   end
   i32.const 1
