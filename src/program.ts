@@ -3238,21 +3238,6 @@ export class Flow {
     return this.parentFunction.localsByName.get(name);
   }
 
-  getGlobal(expr: ExpressionRef): Global {
-    var exprId = expr.toString();
-    if (!this.cachedGlobals) {
-      this.cachedGlobals = new Map();
-    }
-    if (this.cachedGlobals.has(exprId)) {
-      return <Global>this.cachedGlobals.get(exprId);
-    }
-    var global = assert(this.parentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
-    assert(global.kind == ElementKind.GLOBAL);
-    assert((<Global>global).type);
-    this.cachedGlobals.set(exprId, <Global>global);
-    return <Global>global;
-  }
-
   /** Tests if the value of the local at the specified index is considered wrapped. */
   isLocalWrapped(index: i32): bool {
     var map: I64;
@@ -3414,8 +3399,10 @@ export class Flow {
 
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GetGlobal: {
-        let global = this.getGlobal(expr);
-        return canConversionOverflow(global.type, type);
+        // TODO: this is inefficient because it has to read a string
+        let global = assert(this.parentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
+        assert(global.kind == ElementKind.GLOBAL);
+        return canConversionOverflow(assert((<Global>global).type), type);
       }
 
       case ExpressionId.Binary: {
