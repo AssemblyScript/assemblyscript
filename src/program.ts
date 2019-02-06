@@ -2581,14 +2581,14 @@ export class Function extends Element {
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;
   breakStack: i32[] | null = null;
-  breakContext: string | null = null;
+  breakLabel: string | null = null;
 
   /** Finalizes the function once compiled, releasing no longer needed resources. */
   finalize(module: Module, ref: FunctionRef): void {
     this.ref = ref;
     assert(!this.breakStack || !this.breakStack.length); // internal error
     this.breakStack = null;
-    this.breakContext = null;
+    this.breakLabel = null;
     this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
     if (this.program.options.sourceMap) {
       let debugLocations = this.debugLocations;
@@ -3082,22 +3082,10 @@ export class Flow {
     var parentFunction = this.parentFunction;
     var temps: Local[] | null;
     switch (type.toNativeType()) {
-      case NativeType.I32: {
-        temps = parentFunction.tempI32s;
-        break;
-      }
-      case NativeType.I64: {
-        temps = parentFunction.tempI64s;
-        break;
-      }
-      case NativeType.F32: {
-        temps = parentFunction.tempF32s;
-        break;
-      }
-      case NativeType.F64: {
-        temps = parentFunction.tempF64s;
-        break;
-      }
+      case NativeType.I32: { temps = parentFunction.tempI32s; break; }
+      case NativeType.I64: { temps = parentFunction.tempI64s; break; }
+      case NativeType.F32: { temps = parentFunction.tempF32s; break; }
+      case NativeType.F64: { temps = parentFunction.tempF64s; break; }
       default: throw new Error("concrete type expected");
     }
     var local: Local;
@@ -3108,9 +3096,7 @@ export class Flow {
     } else {
       local = parentFunction.addLocal(type);
     }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      this.setLocalWrapped(local.index, wrapped);
-    }
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) this.setLocalWrapped(local.index, wrapped);
     return local;
   }
 
@@ -3175,9 +3161,7 @@ export class Flow {
       local = parentFunction.addLocal(type);
       temps.push(local);
     }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      this.setLocalWrapped(local.index, wrapped);
-    }
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) this.setLocalWrapped(local.index, wrapped);
     return local;
   }
 
@@ -3249,15 +3233,12 @@ export class Flow {
   lookupLocal(name: string): Local | null {
     var local: Local | null;
     var current: Flow | null = this;
-    do {
-      if (current.scopedLocals && (local = current.scopedLocals.get(name))) {
-        return local;
-      }
-    } while (current = current.parent);
+    do if (current.scopedLocals && (local = current.scopedLocals.get(name))) return local;
+    while (current = current.parent);
     return this.parentFunction.localsByName.get(name);
   }
 
-  /** Tests if the local with the specified index is considered wrapped. */
+  /** Tests if the value of the local at the specified index is considered wrapped. */
   isLocalWrapped(index: i32): bool {
     var map: I64;
     var ext: I64[] | null;
@@ -3284,7 +3265,7 @@ export class Flow {
     );
   }
 
-  /** Sets if the local with the specified index is considered wrapped. */
+  /** Sets if the value of the local at the specified index is considered wrapped. */
   setLocalWrapped(index: i32, wrapped: bool): void {
     var map: I64;
     var off: i32 = -1;
@@ -3323,26 +3304,26 @@ export class Flow {
     else this.wrappedLocals = map;
   }
 
-  /** Enters a(nother) break context. */
-  enterBreakContext(): string {
+  /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
+  pushBreakLabel(): string {
     var parentFunction = this.parentFunction;
     var id = parentFunction.nextBreakId++;
-    if (!parentFunction.breakStack) parentFunction.breakStack = [ id ];
-    else parentFunction.breakStack.push(id);
-    return parentFunction.breakContext = id.toString(10);
+    var stack = parentFunction.breakStack;
+    if (!stack) parentFunction.breakStack = [ id ];
+    else stack.push(id);
+    return parentFunction.breakLabel = id.toString(10);
   }
 
-  /** Leaves the current break context. */
-  leaveBreakContext(): void {
+  /** Pops the most recent break label from the stack. */
+  popBreakLabel(): void {
     var parentFunction = this.parentFunction;
-    assert(parentFunction.breakStack != null);
-    var length = (<i32[]>parentFunction.breakStack).length;
-    assert(length > 0);
-    (<i32[]>parentFunction.breakStack).pop();
+    var stack = assert(parentFunction.breakStack);
+    var length = assert(stack.length);
+    stack.pop();
     if (length > 1) {
-      parentFunction.breakContext = (<i32[]>parentFunction.breakStack)[length - 2].toString(10);
+      parentFunction.breakLabel = stack[length - 2].toString(10);
     } else {
-      parentFunction.breakContext = null;
+      parentFunction.breakLabel = null;
       parentFunction.breakStack = null;
     }
   }
@@ -3618,7 +3599,6 @@ export class Flow {
           let last = getBlockChild(expr, size - 1);
           return this.canOverflow(last, type);
         }
-        // actually, brs with a value that'd be handled here is not emitted atm
         break;
       }
 
@@ -3648,29 +3628,6 @@ export class Flow {
       case ExpressionId.Unreachable: return false;
     }
     return true;
-  }
-
-  /** Returns a string representation of this flow for debugging purposes. */
-  toString(): string {
-    var sb = [
-      "Flow(", this.parentFunction.internalName
-    ];
-    var inlineFunction = this.inlineFunction;
-    if (inlineFunction) {
-      sb.push(", inlining");
-      sb.push(inlineFunction.internalName);
-    }
-    sb.push(")");
-    var scopedLocals = this.scopedLocals;
-    if (scopedLocals) {
-      for (let [k, v] of scopedLocals) {
-        sb.push(" ");
-        sb.push(k);
-        sb.push("@");
-        sb.push(v.index.toString());
-      }
-    }
-    return sb.join("");
   }
 }
 

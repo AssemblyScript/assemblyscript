@@ -1730,7 +1730,7 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
 
     var outerFlow = this.currentFlow;
-    var label = outerFlow.enterBreakContext();
+    var label = outerFlow.pushBreakLabel();
     var innerFlow = outerFlow.fork();
     this.currentFlow = innerFlow;
     var breakLabel = "break|" + label;
@@ -1747,8 +1747,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // Switch back to the parent flow
     innerFlow.freeScopedLocals();
+    outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
-    outerFlow.leaveBreakContext();
     var terminated = innerFlow.isAny(FlowFlags.ANY_TERMINATING);
     innerFlow.unset(
       FlowFlags.BREAKS |
@@ -1789,7 +1789,7 @@ export class Compiler extends DiagnosticEmitter {
     // A for statement initiates a new branch with its own scoped variables
     // possibly declared in its initializer, and break context.
     var outerFlow = this.currentFlow;
-    var label = outerFlow.enterBreakContext();
+    var label = outerFlow.pushBreakLabel();
     var innerFlow = outerFlow.fork();
     this.currentFlow = innerFlow;
     var breakLabel = innerFlow.breakLabel = "break|" + label;
@@ -1838,8 +1838,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // Switch back to the parent flow
     innerFlow.freeScopedLocals();
+    outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
-    outerFlow.leaveBreakContext();
     var usesContinue = innerFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
     innerFlow.unset(
       FlowFlags.BREAKS |
@@ -1990,7 +1990,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Everything within a switch uses the same break context
     var outerFlow = this.currentFlow;
-    var context = outerFlow.enterBreakContext();
+    var context = outerFlow.pushBreakLabel();
 
     // introduce a local for evaluating the condition (exactly once)
     var tempLocal = outerFlow.getTempLocal(Type.u32, false);
@@ -2079,7 +2079,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFlow = outerFlow;
       currentBlock = module.createBlock(nextLabel, stmts, NativeType.None); // must be a labeled block
     }
-    outerFlow.leaveBreakContext();
+    outerFlow.popBreakLabel();
 
     // If the switch has a default (guaranteed to handle any value), propagate common flags
     if (defaultIndex >= 0) {
@@ -2319,7 +2319,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Statements initiate a new branch with its own break context
-    var label = outerFlow.enterBreakContext();
+    var label = outerFlow.pushBreakLabel();
     var innerFlow = outerFlow.fork();
     this.currentFlow = innerFlow;
     var breakLabel = "break|" + label;
@@ -2333,8 +2333,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // Switch back to the parent flow
     innerFlow.freeScopedLocals();
+    outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
-    outerFlow.leaveBreakContext();
     innerFlow.unset(
       FlowFlags.BREAKS |
       FlowFlags.CONDITIONALLY_BREAKS |
