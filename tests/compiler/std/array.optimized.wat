@@ -339,7 +339,7 @@
  (data (i32.const 8408) "\04\00\00\00\00\00\00\00\d0 ")
  (data (i32.const 8424) "\d8 \00\00\01")
  (table $0 56 funcref)
- (elem (i32.const 0) $null $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|3 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|17 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $start~anonymous|23 $start~anonymous|24 $start~anonymous|25 $start~anonymous|26 $start~anonymous|27 $start~anonymous|28 $start~anonymous|29 $start~anonymous|30 $start~anonymous|30 $start~anonymous|32 $start~anonymous|33 $start~anonymous|34 $start~anonymous|30 $start~anonymous|36 $start~anonymous|30 $start~anonymous|30 $start~anonymous|32 $start~anonymous|33 $start~anonymous|34 $start~anonymous|30 $start~anonymous|36 $~lib/array/Array<f32>#sort|trampoline~anonymous|44 $~lib/array/Array<f64>#sort|trampoline~anonymous|45 $~lib/array/Array<i32>#sort|trampoline~anonymous|46 $~lib/array/Array<u32>#sort|trampoline~anonymous|47 $~lib/array/Array<i32>#sort|trampoline~anonymous|46 $~lib/array/Array<i32>#sort|trampoline~anonymous|46 $start~anonymous|50 $~lib/array/Array<i32>#sort|trampoline~anonymous|46 $start~anonymous|50 $start~anonymous|53 $start~anonymous|54 $std/array/assertSorted<String>|trampoline~anonymous|55)
+ (elem (i32.const 0) $null $start~anonymous|1 $start~anonymous|2 $start~anonymous|3 $start~anonymous|4 $start~anonymous|3 $start~anonymous|6 $start~anonymous|7 $start~anonymous|8 $start~anonymous|9 $start~anonymous|10 $start~anonymous|11 $start~anonymous|12 $start~anonymous|13 $start~anonymous|14 $start~anonymous|15 $start~anonymous|16 $start~anonymous|17 $start~anonymous|18 $start~anonymous|17 $start~anonymous|20 $start~anonymous|21 $start~anonymous|22 $start~anonymous|23 $start~anonymous|24 $start~anonymous|25 $start~anonymous|26 $start~anonymous|27 $start~anonymous|28 $start~anonymous|29 $start~anonymous|30 $start~anonymous|30 $start~anonymous|32 $start~anonymous|33 $start~anonymous|34 $start~anonymous|30 $start~anonymous|36 $start~anonymous|30 $start~anonymous|30 $start~anonymous|32 $start~anonymous|33 $start~anonymous|34 $start~anonymous|30 $start~anonymous|36 $~lib/internal/sort/COMPARATOR<f32>~anonymous|44 $~lib/internal/sort/COMPARATOR<f64>~anonymous|45 $~lib/internal/sort/COMPARATOR<i32>~anonymous|46 $~lib/internal/sort/COMPARATOR<u32>~anonymous|47 $~lib/internal/sort/COMPARATOR<i32>~anonymous|46 $~lib/internal/sort/COMPARATOR<i32>~anonymous|46 $start~anonymous|50 $~lib/internal/sort/COMPARATOR<i32>~anonymous|46 $start~anonymous|50 $start~anonymous|53 $start~anonymous|54 $~lib/internal/sort/COMPARATOR<String>~anonymous|55)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/internal/number/_K (mut i32) (i32.const 0))
@@ -5966,7 +5966,7 @@
   end
   local.get $3
  )
- (func $std/array/assertSorted<String>|trampoline~anonymous|55 (; 100 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/sort/COMPARATOR<String>~anonymous|55 (; 100 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
