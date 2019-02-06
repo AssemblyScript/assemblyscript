@@ -6773,7 +6773,14 @@ export class Compiler extends DiagnosticEmitter {
 
     // make the function
     var typeRef = this.ensureFunctionType(signature.parameterTypes, signature.returnType, signature.thisType);
-    var funcRef = module.addFunction(ctorInstance.internalName, typeRef, null,
+    var locals = ctorInstance.localsByIndex;
+    var varTypes = new Array<NativeType>(); // of temp. vars added while compiling initializers
+    var numOperands = 1 + signature.parameterTypes.length;
+    var numLocals = locals.length;
+    if (numLocals > numOperands) {
+      for (let i = numOperands; i < numLocals; ++i) varTypes.push(locals[i].type.toNativeType());
+    }
+    var funcRef = module.addFunction(ctorInstance.internalName, typeRef, varTypes,
       stmts.length == 1
         ? stmts[0]
         : module.createBlock(null, stmts, nativeSizeType)
