@@ -5063,6 +5063,62 @@ export class Compiler extends DiagnosticEmitter {
   compileCallExpression(expression: CallExpression, contextualType: Type): ExpressionRef {
     var module = this.module;
     var flow = this.currentFlow;
+
+    // handle call to super
+    if (expression.expression.kind == NodeKind.SUPER) {
+      let flow = this.currentFlow;
+      let actualFunction = flow.actualFunction;
+      if (!actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+        this.error(
+          DiagnosticCode.Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors,
+          expression.range
+        );
+        return module.createUnreachable();
+      }
+
+      let classInstance = assert(actualFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
+      let baseClassInstance = assert((<Class>classInstance).base);
+      let thisLocal = assert(flow.getScopedLocal("this"));
+      let nativeSizeType = this.options.nativeSizeType;
+
+      // {
+      //   this = super(this || <ALLOC>, ...args)
+      //   this.a = X
+      //   this.b = Y
+      // }
+      let stmts: ExpressionRef[] = [
+        module.createSetLocal(thisLocal.index,
+          this.compileCallDirect(
+            this.ensureConstructor(baseClassInstance, expression),
+            expression.arguments,
+            expression,
+            module.createIf(
+              module.createGetLocal(thisLocal.index, nativeSizeType),
+              module.createGetLocal(thisLocal.index, nativeSizeType),
+              this.makeAllocation(<Class>classInstance)
+            )
+          )
+        )
+      ];
+      this.makeFieldInitialization(<Class>classInstance, stmts);
+
+      // check that super had been called before accessing allocating `this`
+      if (flow.isAny(
+        FlowFlags.ALLOCATES |
+        FlowFlags.CONDITIONALLY_ALLOCATES
+      )) {
+        this.error(
+          DiagnosticCode._super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class,
+          expression.range
+        );
+        return module.createUnreachable();
+      }
+      flow.set(FlowFlags.ALLOCATES | FlowFlags.CALLS_SUPER);
+      this.currentType = Type.void;
+      return module.createBlock(null, stmts);
+    }
+
+    // otherwise resolve normally
     var target = this.resolver.resolveExpression(expression.expression, flow); // reports
     if (!target) return module.createUnreachable();
 
@@ -5279,64 +5335,6 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
 
-      case ElementKind.CLASS: {
-        let flow = this.currentFlow;
-        let actualFunction = flow.actualFunction;
-
-        // call to `super()`
-        if (expression.expression.kind == NodeKind.SUPER) {
-          if (!actualFunction.is(CommonFlags.CONSTRUCTOR)) {
-            this.error(
-              DiagnosticCode.Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors,
-              expression.range
-            );
-            return module.createUnreachable();
-          }
-
-          let classInstance = assert(actualFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
-          let baseClassInstance = assert((<Class>classInstance).base);
-          let thisLocal = assert(flow.getScopedLocal("this"));
-          let nativeSizeType = this.options.nativeSizeType;
-
-          // {
-          //   this = super(this || <ALLOC>, ...args)
-          //   this.a = X
-          //   this.b = Y
-          // }
-          let stmts: ExpressionRef[] = [
-            module.createSetLocal(thisLocal.index,
-              this.compileCallDirect(
-                this.ensureConstructor(baseClassInstance, expression),
-                expression.arguments,
-                expression,
-                module.createIf(
-                  module.createGetLocal(thisLocal.index, nativeSizeType),
-                  module.createGetLocal(thisLocal.index, nativeSizeType),
-                  this.makeAllocation(<Class>classInstance)
-                )
-              )
-            )
-          ];
-          this.makeFieldInitialization(<Class>classInstance, stmts);
-
-          // check that super had been called before accessing allocating `this`
-          if (flow.isAny(
-            FlowFlags.ALLOCATES |
-            FlowFlags.CONDITIONALLY_ALLOCATES
-          )) {
-            this.error(
-              DiagnosticCode._super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class,
-              expression.range
-            );
-            return module.createUnreachable();
-          }
-          flow.set(FlowFlags.ALLOCATES | FlowFlags.CALLS_SUPER);
-          this.currentType = Type.void;
-          return module.createBlock(null, stmts);
-        }
-        // otherwise fall-through
-      }
-
       // not supported
       default: {
         this.error(
@@ -5484,7 +5482,7 @@ export class Compiler extends DiagnosticEmitter {
         );
       } else {
         this.currentInlineFunctions.push(instance);
-        let expr = this.compileCallInlineUnchecked(instance, argumentExpressions, reportNode, thisArg);
+        let expr = this.compileCallInlinePrechecked(instance, argumentExpressions, reportNode, thisArg);
         this.currentInlineFunctions.pop();
         return expr;
       }
@@ -5512,7 +5510,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   // Depends on being pre-checked in compileCallDirect
-  private compileCallInlineUnchecked(
+  private compileCallInlinePrechecked(
     instance: Function,
     argumentExpressions: Expression[],
     reportNode: Node,
@@ -5520,7 +5518,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
 
-    // Create an empty child flow with its own scope and mark it for inlining
+    // Create a new inline flow and use it to compile the function as a block
     var previousFlow = this.currentFlow;
     var flow = Flow.createInline(previousFlow.parentFunction, instance);
 
@@ -6721,7 +6719,8 @@ export class Compiler extends DiagnosticEmitter {
   ensureConstructor(classInstance: Class, reportNode: Node): Function {
     var ctorInstance = classInstance.constructorInstance;
     if (ctorInstance) {
-      this.compileFunction(ctorInstance);
+      // do not attempt to compile it if inlined anyway
+      if (!ctorInstance.hasDecorator(DecoratorFlags.INLINE)) this.compileFunction(ctorInstance);
       return ctorInstance;
     }
 

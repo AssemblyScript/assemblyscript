@@ -824,7 +824,7 @@ export class Resolver extends DiagnosticEmitter {
             return explicitLocal;
           }
         }
-        let parent = flow.parentFunction.parent;
+        let parent = flow.actualFunction.parent;
         if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
           this.currentThisExpression = null;
           this.currentElementExpression = null;
