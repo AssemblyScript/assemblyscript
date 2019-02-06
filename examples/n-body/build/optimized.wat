@@ -556,21 +556,21 @@
   (local $18 f64)
   local.get $0
   i32.load
-  tee_local $0
+  local.tee $0
   i32.load offset=4
-  set_local $12
-  get_local $0
+  local.set $12
+  local.get $0
   i32.load
-  set_local $13
+  local.set $13
   loop $repeat|0
-   get_local $3
-   get_local $12
+   local.get $3
+   local.get $12
    i32.lt_u
    if
-    get_local $3
+    local.get $3
     i32.const 2
     i32.shl
-    get_local $13
+    local.get $13
     i32.add
     i32.load offset=8
     local.tee $0
@@ -599,15 +599,15 @@
     i32.add
     local.set $7
     loop $repeat|1
-     get_local $7
-     get_local $12
+     local.get $7
+     local.get $12
      i32.lt_u
      if
-      get_local $14
-      get_local $7
+      local.get $14
+      local.get $7
       i32.const 2
       i32.shl
-      get_local $13
+      local.get $13
       i32.add
       i32.load offset=8
       local.tee $1
@@ -706,22 +706,22 @@
     local.get $0
     local.get $6
     f64.store offset=40
-    get_local $0
-    get_local $14
+    local.get $0
+    local.get $14
     f64.const 0.01
     local.get $4
     f64.mul
     f64.add
     f64.store
-    get_local $0
-    get_local $15
+    local.get $0
+    local.get $15
     f64.const 0.01
     local.get $5
     f64.mul
     f64.add
     f64.store offset=8
-    get_local $0
-    get_local $16
+    local.get $0
+    local.get $16
     f64.const 0.01
     local.get $6
     f64.mul
@@ -871,24 +871,24 @@
  )
  (func $assembly/index/bench (; 9 ;) (type $iv) (param $0 i32)
   (local $1 i32)
-  get_global $assembly/index/system
-  set_local $1
-  get_local $0
+  global.get $assembly/index/system
+  local.set $1
+  local.get $0
   i32.const 1
   i32.sub
-  set_local $0
+  local.set $0
   loop $repeat|0
    block $break|0
-    get_local $0
+    local.get $0
     i32.const 0
     i32.lt_s
     br_if $break|0
-    get_local $1
+    local.get $1
     call $assembly/index/NBodySystem#advance
-    get_local $0
+    local.get $0
     i32.const 1
     i32.sub
-    set_local $0
+    local.set $0
     br $repeat|0
    end
   end
