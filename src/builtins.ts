@@ -640,11 +640,10 @@ export function compileCall(
         case TypeKind.I16:
         case TypeKind.I32: {
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
 
           // possibly overflows, e.g. abs<i8>(-128) == 128
-          let tempLocal1 = parentFunction.getTempLocal(Type.i32, false);
-          let tempLocalIndex2 = parentFunction.getAndFreeTempLocal(Type.i32, false).index;
+          let tempLocal1 = flow.getTempLocal(Type.i32, false);
+          let tempLocalIndex2 = flow.getAndFreeTempLocal(Type.i32, false).index;
           let tempLocalIndex1 = tempLocal1.index;
 
           // (x + (x >> 31)) ^ (x >> 31)
@@ -662,17 +661,16 @@ export function compileCall(
             module.createGetLocal(tempLocalIndex2, NativeType.I32)
           );
 
-          parentFunction.freeTempLocal(tempLocal1);
+          flow.freeTempLocal(tempLocal1);
           break;
         }
         case TypeKind.ISIZE: {
           let options = compiler.options;
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
           let wasm64 = options.isWasm64;
 
-          let tempLocal1 = parentFunction.getTempLocal(options.usizeType, false);
-          let tempLocalIndex2 = parentFunction.getAndFreeTempLocal(options.usizeType, false).index;
+          let tempLocal1 = flow.getTempLocal(options.usizeType, false);
+          let tempLocalIndex2 = flow.getAndFreeTempLocal(options.usizeType, false).index;
           let tempLocalIndex1 = tempLocal1.index;
 
           ret = module.createBinary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
@@ -689,15 +687,14 @@ export function compileCall(
             module.createGetLocal(tempLocalIndex2, options.nativeSizeType)
           );
 
-          parentFunction.freeTempLocal(tempLocal1);
+          flow.freeTempLocal(tempLocal1);
           break;
         }
         case TypeKind.I64: {
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
 
-          let tempLocal1 = parentFunction.getTempLocal(Type.i64, false);
-          let tempLocalIndex2 = parentFunction.getAndFreeTempLocal(Type.i64, false).index;
+          let tempLocal1 = flow.getTempLocal(Type.i64, false);
+          let tempLocalIndex2 = flow.getAndFreeTempLocal(Type.i64, false).index;
           let tempLocalIndex1 = tempLocal1.index;
 
           // (x + (x >> 63)) ^ (x >> 63)
@@ -715,7 +712,7 @@ export function compileCall(
             module.createGetLocal(tempLocalIndex2, NativeType.I64)
           );
 
-          parentFunction.freeTempLocal(tempLocal1);
+          flow.freeTempLocal(tempLocal1);
           break;
         }
         case TypeKind.USIZE: {
@@ -796,16 +793,15 @@ export function compileCall(
         case TypeKind.I16:
         case TypeKind.I32: {
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(
+          let tempLocal0 = flow.getTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg0, compiler.currentType)
           );
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(
+          let tempLocal1 = flow.getAndFreeTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg1, compiler.currentType)
           );
-          parentFunction.freeTempLocal(tempLocal0);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -821,16 +817,15 @@ export function compileCall(
         case TypeKind.U32:
         case TypeKind.BOOL: {
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(
+          let tempLocal0 = flow.getTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg0, compiler.currentType)
           );
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(
+          let tempLocal1 = flow.getAndFreeTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg1, compiler.currentType)
           );
-          parentFunction.freeTempLocal(tempLocal0);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -843,10 +838,9 @@ export function compileCall(
         }
         case TypeKind.I64: {
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(Type.i64, false);
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(Type.i64, false);
-          parentFunction.freeTempLocal(tempLocal0);
+          let tempLocal0 = flow.getTempLocal(Type.i64, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -859,10 +853,9 @@ export function compileCall(
         }
         case TypeKind.U64: {
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(Type.i64, false);
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(Type.i64, false);
-          parentFunction.freeTempLocal(tempLocal0);
+          let tempLocal0 = flow.getTempLocal(Type.i64, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -875,10 +868,9 @@ export function compileCall(
         }
         case TypeKind.ISIZE: {
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
-          parentFunction.freeTempLocal(tempLocal0);
+          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -902,10 +894,9 @@ export function compileCall(
             break;
           }
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
-          parentFunction.freeTempLocal(tempLocal0);
+          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -974,16 +965,15 @@ export function compileCall(
         case TypeKind.I16:
         case TypeKind.I32: {
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(
+          let tempLocal0 = flow.getTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg0, compiler.currentType)
           );
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(
+          let tempLocal1 = flow.getAndFreeTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg1, compiler.currentType)
           );
-          parentFunction.freeTempLocal(tempLocal0);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -999,16 +989,15 @@ export function compileCall(
         case TypeKind.U32:
         case TypeKind.BOOL: {
           let flow = compiler.currentFlow;
-          let parentFunction = flow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(
+          let tempLocal0 = flow.getTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg0, compiler.currentType)
           );
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(
+          let tempLocal1 = flow.getAndFreeTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg1, compiler.currentType)
           );
-          parentFunction.freeTempLocal(tempLocal0);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -1020,10 +1009,10 @@ export function compileCall(
           break;
         }
         case TypeKind.I64: {
-          let parentFunction = compiler.currentFlow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(Type.i64, false);
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(Type.i64, false);
-          parentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(Type.i64, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -1035,10 +1024,10 @@ export function compileCall(
           break;
         }
         case TypeKind.U64: {
-          let parentFunction = compiler.currentFlow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(Type.i64, false);
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(Type.i64, false);
-          parentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(Type.i64, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -1050,10 +1039,10 @@ export function compileCall(
           break;
         }
         case TypeKind.ISIZE: {
-          let parentFunction = compiler.currentFlow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
-          parentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -1076,10 +1065,10 @@ export function compileCall(
             ret = module.createUnreachable();
             break;
           }
-          let parentFunction = compiler.currentFlow.parentFunction;
-          let tempLocal0 = parentFunction.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = parentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
-          parentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -2206,7 +2195,7 @@ export function compileCall(
           case TypeKind.U16:
           case TypeKind.BOOL: {
             let flow = compiler.currentFlow;
-            let tempLocal = flow.parentFunction.getAndFreeTempLocal(
+            let tempLocal = flow.getAndFreeTempLocal(
               compiler.currentType,
               !flow.canOverflow(arg0, compiler.currentType)
             );
@@ -2220,7 +2209,7 @@ export function compileCall(
           case TypeKind.I32:
           case TypeKind.U32:
           default: {
-            let tempLocal = compiler.currentFlow.parentFunction.getAndFreeTempLocal(Type.i32, false);
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.i32, false);
             ret = module.createIf(
               module.createTeeLocal(tempLocal.index, arg0),
               module.createGetLocal(tempLocal.index, NativeType.I32),
@@ -2230,7 +2219,7 @@ export function compileCall(
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            let tempLocal = compiler.currentFlow.parentFunction.getAndFreeTempLocal(Type.i64, false);
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.i64, false);
             ret = module.createIf(
               module.createUnary(UnaryOp.EqzI64,
                 module.createTeeLocal(tempLocal.index, arg0)
@@ -2242,7 +2231,7 @@ export function compileCall(
           }
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
-            let tempLocal = compiler.currentFlow.parentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(compiler.options.usizeType, false);
             ret = module.createIf(
               module.createUnary(
                 compiler.options.isWasm64
@@ -2256,7 +2245,7 @@ export function compileCall(
             break;
           }
           case TypeKind.F32: {
-            let tempLocal = compiler.currentFlow.parentFunction.getAndFreeTempLocal(Type.f32, false);
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f32, false);
             ret = module.createIf(
               module.createBinary(BinaryOp.EqF32,
                 module.createTeeLocal(tempLocal.index, arg0),
@@ -2268,7 +2257,7 @@ export function compileCall(
             break;
           }
           case TypeKind.F64: {
-            let tempLocal = compiler.currentFlow.parentFunction.getAndFreeTempLocal(Type.f64, false);
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f64, false);
             ret = module.createIf(
               module.createBinary(BinaryOp.EqF64,
                 module.createTeeLocal(tempLocal.index, arg0),

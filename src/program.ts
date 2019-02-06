@@ -2473,8 +2473,6 @@ export class Function extends Element {
   localsByIndex: Local[] = [];
   /** List of additional non-parameter locals. */
   additionalLocals: Type[] = [];
-  /** Current break context label. */
-  breakContext: string | null = null;
   /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> | null;
   /** Current control flow. */
@@ -2490,8 +2488,6 @@ export class Function extends Element {
   /** The outer scope, if a function expression. */
   outerScope: Flow | null = null;
 
-  private nextBreakId: i32 = 0;
-  private breakStack: i32[] | null = null;
   nextInlineId: i32 = 0;
 
   /** Constructs a new concrete function. */
@@ -2576,133 +2572,16 @@ export class Function extends Element {
     return local;
   }
 
-  private tempI32s: Local[] | null = null;
-  private tempI64s: Local[] | null = null;
-  private tempF32s: Local[] | null = null;
-  private tempF64s: Local[] | null = null;
+  // used by flows to keep track of temporary locals
+  tempI32s: Local[] | null = null;
+  tempI64s: Local[] | null = null;
+  tempF32s: Local[] | null = null;
+  tempF64s: Local[] | null = null;
 
-  /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, wrapped: bool = false): Local {
-    var temps: Local[] | null;
-    switch (type.toNativeType()) {
-      case NativeType.I32: {
-        temps = this.tempI32s;
-        break;
-      }
-      case NativeType.I64: {
-        temps = this.tempI64s;
-        break;
-      }
-      case NativeType.F32: {
-        temps = this.tempF32s;
-        break;
-      }
-      case NativeType.F64: {
-        temps = this.tempF64s;
-        break;
-      }
-      default: throw new Error("concrete type expected");
-    }
-    var local: Local;
-    if (temps && temps.length) {
-      local = temps.pop();
-      local.type = type;
-      local.flags = CommonFlags.NONE;
-    } else {
-      local = this.addLocal(type);
-    }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      this.flow.setLocalWrapped(local.index, wrapped);
-    }
-    return local;
-  }
-
-  /** Frees the temporary local for reuse. */
-  freeTempLocal(local: Local): void {
-    if (local.is(CommonFlags.INLINED)) return;
-    assert(local.index >= 0);
-    var temps: Local[];
-    assert(local.type != null); // internal error
-    switch ((<Type>local.type).toNativeType()) {
-      case NativeType.I32: {
-        temps = this.tempI32s || (this.tempI32s = []);
-        break;
-      }
-      case NativeType.I64: {
-        temps = this.tempI64s || (this.tempI64s = []);
-        break;
-      }
-      case NativeType.F32: {
-        temps = this.tempF32s || (this.tempF32s = []);
-        break;
-      }
-      case NativeType.F64: {
-        temps = this.tempF64s || (this.tempF64s = []);
-        break;
-      }
-      default: throw new Error("concrete type expected");
-    }
-    assert(local.index >= 0);
-    temps.push(local);
-  }
-
-  /** Gets and immediately frees a temporary local of the specified type. */
-  getAndFreeTempLocal(type: Type, wrapped: bool): Local {
-    var temps: Local[];
-    switch (type.toNativeType()) {
-      case NativeType.I32: {
-        temps = this.tempI32s || (this.tempI32s = []);
-        break;
-      }
-      case NativeType.I64: {
-        temps = this.tempI64s || (this.tempI64s = []);
-        break;
-      }
-      case NativeType.F32: {
-        temps = this.tempF32s || (this.tempF32s = []);
-        break;
-      }
-      case NativeType.F64: {
-        temps = this.tempF64s || (this.tempF64s = []);
-        break;
-      }
-      default: throw new Error("concrete type expected");
-    }
-    var local: Local;
-    if (temps.length) {
-      local = temps[temps.length - 1];
-      local.type = type;
-    } else {
-      local = this.addLocal(type);
-      temps.push(local);
-    }
-    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
-      this.flow.setLocalWrapped(local.index, wrapped);
-    }
-    return local;
-  }
-
-  /** Enters a(nother) break context. */
-  enterBreakContext(): string {
-    var id = this.nextBreakId++;
-    if (!this.breakStack) this.breakStack = [ id ];
-    else this.breakStack.push(id);
-    return this.breakContext = id.toString(10);
-  }
-
-  /** Leaves the current break context. */
-  leaveBreakContext(): void {
-    assert(this.breakStack != null);
-    var length = (<i32[]>this.breakStack).length;
-    assert(length > 0);
-    (<i32[]>this.breakStack).pop();
-    if (length > 1) {
-      this.breakContext = (<i32[]>this.breakStack)[length - 2].toString(10);
-    } else {
-      this.breakContext = null;
-      this.breakStack = null;
-    }
-  }
+  // used by flows to keep track of break labels
+  nextBreakId: i32 = 0;
+  breakStack: i32[] | null = null;
+  breakContext: string | null = null;
 
   /** Finalizes the function once compiled, releasing no longer needed resources. */
   finalize(module: Module, ref: FunctionRef): void {
@@ -3198,9 +3077,113 @@ export class Flow {
     return branch;
   }
 
+  /** Gets a free temporary local of the specified type. */
+  getTempLocal(type: Type, wrapped: bool = false): Local {
+    var parentFunction = this.parentFunction;
+    var temps: Local[] | null;
+    switch (type.toNativeType()) {
+      case NativeType.I32: {
+        temps = parentFunction.tempI32s;
+        break;
+      }
+      case NativeType.I64: {
+        temps = parentFunction.tempI64s;
+        break;
+      }
+      case NativeType.F32: {
+        temps = parentFunction.tempF32s;
+        break;
+      }
+      case NativeType.F64: {
+        temps = parentFunction.tempF64s;
+        break;
+      }
+      default: throw new Error("concrete type expected");
+    }
+    var local: Local;
+    if (temps && temps.length) {
+      local = temps.pop();
+      local.type = type;
+      local.flags = CommonFlags.NONE;
+    } else {
+      local = parentFunction.addLocal(type);
+    }
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+      this.setLocalWrapped(local.index, wrapped);
+    }
+    return local;
+  }
+
+  /** Frees the temporary local for reuse. */
+  freeTempLocal(local: Local): void {
+    if (local.is(CommonFlags.INLINED)) return;
+    assert(local.index >= 0);
+    var parentFunction = this.parentFunction;
+    var temps: Local[];
+    assert(local.type != null); // internal error
+    switch ((<Type>local.type).toNativeType()) {
+      case NativeType.I32: {
+        temps = parentFunction.tempI32s || (parentFunction.tempI32s = []);
+        break;
+      }
+      case NativeType.I64: {
+        temps = parentFunction.tempI64s || (parentFunction.tempI64s = []);
+        break;
+      }
+      case NativeType.F32: {
+        temps = parentFunction.tempF32s || (parentFunction.tempF32s = []);
+        break;
+      }
+      case NativeType.F64: {
+        temps = parentFunction.tempF64s || (parentFunction.tempF64s = []);
+        break;
+      }
+      default: throw new Error("concrete type expected");
+    }
+    assert(local.index >= 0);
+    temps.push(local);
+  }
+
+  /** Gets and immediately frees a temporary local of the specified type. */
+  getAndFreeTempLocal(type: Type, wrapped: bool): Local {
+    var parentFunction = this.parentFunction;
+    var temps: Local[];
+    switch (type.toNativeType()) {
+      case NativeType.I32: {
+        temps = parentFunction.tempI32s || (parentFunction.tempI32s = []);
+        break;
+      }
+      case NativeType.I64: {
+        temps = parentFunction.tempI64s || (parentFunction.tempI64s = []);
+        break;
+      }
+      case NativeType.F32: {
+        temps = parentFunction.tempF32s || (parentFunction.tempF32s = []);
+        break;
+      }
+      case NativeType.F64: {
+        temps = parentFunction.tempF64s || (parentFunction.tempF64s = []);
+        break;
+      }
+      default: throw new Error("concrete type expected");
+    }
+    var local: Local;
+    if (temps.length) {
+      local = temps[temps.length - 1];
+      local.type = type;
+    } else {
+      local = parentFunction.addLocal(type);
+      temps.push(local);
+    }
+    if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+      this.setLocalWrapped(local.index, wrapped);
+    }
+    return local;
+  }
+
   /** Adds a new scoped local of the specified name. */
   addScopedLocal(name: string, type: Type, wrapped: bool, reportNode: Node | null = null): Local {
-    var scopedLocal = this.parentFunction.getTempLocal(type, false);
+    var scopedLocal = this.getTempLocal(type, false);
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else {
       let existingLocal = this.scopedLocals.get(name);
@@ -3255,7 +3238,7 @@ export class Flow {
     if (this.scopedLocals) {
       for (let scopedLocal of this.scopedLocals.values()) {
         if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
-          this.parentFunction.freeTempLocal(scopedLocal);
+          this.freeTempLocal(scopedLocal);
         }
       }
       this.scopedLocals = null;
@@ -3338,6 +3321,30 @@ export class Flow {
         );
     if (off >= 0) (<I64[]>this.wrappedLocalsExt)[off] = map;
     else this.wrappedLocals = map;
+  }
+
+  /** Enters a(nother) break context. */
+  enterBreakContext(): string {
+    var parentFunction = this.parentFunction;
+    var id = parentFunction.nextBreakId++;
+    if (!parentFunction.breakStack) parentFunction.breakStack = [ id ];
+    else parentFunction.breakStack.push(id);
+    return parentFunction.breakContext = id.toString(10);
+  }
+
+  /** Leaves the current break context. */
+  leaveBreakContext(): void {
+    var parentFunction = this.parentFunction;
+    assert(parentFunction.breakStack != null);
+    var length = (<i32[]>parentFunction.breakStack).length;
+    assert(length > 0);
+    (<i32[]>parentFunction.breakStack).pop();
+    if (length > 1) {
+      parentFunction.breakContext = (<i32[]>parentFunction.breakStack)[length - 2].toString(10);
+    } else {
+      parentFunction.breakContext = null;
+      parentFunction.breakStack = null;
+    }
   }
 
   /** Inherits flags and local wrap states from the specified flow (e.g. blocks). */

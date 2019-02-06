@@ -1015,8 +1015,6 @@
            local.get $23
           end
           local.tee $23
-          i32.const 0
-          i32.ne
           if (result i32)
            local.get $22
            local.get $26
@@ -1040,8 +1038,6 @@
           else           
            local.get $23
           end
-          i32.const 0
-          i32.ne
           if
            block
             local.get $24
@@ -1191,8 +1187,6 @@
            local.get $18
           end
           local.tee $18
-          i32.const 0
-          i32.ne
           if (result i32)
            local.get $26
            local.get $22
@@ -1216,8 +1210,6 @@
           else           
            local.get $18
           end
-          i32.const 0
-          i32.ne
           if
            block
             local.get $20

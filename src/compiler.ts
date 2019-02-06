@@ -1730,7 +1730,7 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
 
     var outerFlow = this.currentFlow;
-    var label = outerFlow.parentFunction.enterBreakContext();
+    var label = outerFlow.enterBreakContext();
     var innerFlow = outerFlow.fork();
     this.currentFlow = innerFlow;
     var breakLabel = "break|" + label;
@@ -1748,7 +1748,7 @@ export class Compiler extends DiagnosticEmitter {
     // Switch back to the parent flow
     innerFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
-    outerFlow.parentFunction.leaveBreakContext();
+    outerFlow.leaveBreakContext();
     var terminated = innerFlow.isAny(FlowFlags.ANY_TERMINATING);
     innerFlow.unset(
       FlowFlags.BREAKS |
@@ -1789,7 +1789,7 @@ export class Compiler extends DiagnosticEmitter {
     // A for statement initiates a new branch with its own scoped variables
     // possibly declared in its initializer, and break context.
     var outerFlow = this.currentFlow;
-    var label = outerFlow.parentFunction.enterBreakContext();
+    var label = outerFlow.enterBreakContext();
     var innerFlow = outerFlow.fork();
     this.currentFlow = innerFlow;
     var breakLabel = innerFlow.breakLabel = "break|" + label;
@@ -1839,7 +1839,7 @@ export class Compiler extends DiagnosticEmitter {
     // Switch back to the parent flow
     innerFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
-    outerFlow.parentFunction.leaveBreakContext();
+    outerFlow.leaveBreakContext();
     var usesContinue = innerFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
     innerFlow.unset(
       FlowFlags.BREAKS |
@@ -1974,7 +1974,7 @@ export class Compiler extends DiagnosticEmitter {
     if (isLastStatement(statement)) return expr ? expr : module.createNop();
 
     // When inlining, break to the end of the inlined function's block (no need to wrap)
-    if (flow.is(FlowFlags.INLINE_CONTEXT)) return module.createBreak(assert(flow.inlineReturnLabel), 0, expr)
+    if (flow.is(FlowFlags.INLINE_CONTEXT)) return module.createBreak(assert(flow.inlineReturnLabel), 0, expr);
 
     return module.createReturn(expr);
   }
@@ -1990,11 +1990,10 @@ export class Compiler extends DiagnosticEmitter {
 
     // Everything within a switch uses the same break context
     var outerFlow = this.currentFlow;
-    var parentFunction = outerFlow.parentFunction;
-    var context = parentFunction.enterBreakContext();
+    var context = outerFlow.enterBreakContext();
 
     // introduce a local for evaluating the condition (exactly once)
-    var tempLocal = parentFunction.getTempLocal(Type.u32, false);
+    var tempLocal = outerFlow.getTempLocal(Type.u32, false);
     var tempLocalIndex = tempLocal.index;
 
     // Prepend initializer to inner block. Does not initiate a new branch, yet.
@@ -2022,7 +2021,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    parentFunction.freeTempLocal(tempLocal);
+    outerFlow.freeTempLocal(tempLocal);
 
     // otherwise br to default respectively out of the switch if there is no default case
     breaks[breakIndex] = module.createBreak((defaultIndex >= 0
@@ -2080,7 +2079,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFlow = outerFlow;
       currentBlock = module.createBlock(nextLabel, stmts, NativeType.None); // must be a labeled block
     }
-    parentFunction.leaveBreakContext();
+    outerFlow.leaveBreakContext();
 
     // If the switch has a default (guaranteed to handle any value), propagate common flags
     if (defaultIndex >= 0) {
@@ -2320,7 +2319,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Statements initiate a new branch with its own break context
-    var label = outerFlow.parentFunction.enterBreakContext();
+    var label = outerFlow.enterBreakContext();
     var innerFlow = outerFlow.fork();
     this.currentFlow = innerFlow;
     var breakLabel = "break|" + label;
@@ -2335,7 +2334,7 @@ export class Compiler extends DiagnosticEmitter {
     // Switch back to the parent flow
     innerFlow.freeScopedLocals();
     this.currentFlow = outerFlow;
-    outerFlow.parentFunction.leaveBreakContext();
+    outerFlow.leaveBreakContext();
     innerFlow.unset(
       FlowFlags.BREAKS |
       FlowFlags.CONDITIONALLY_BREAKS |
@@ -4624,7 +4623,7 @@ export class Compiler extends DiagnosticEmitter {
         // if not possible, tee left to a temp. local
         } else {
           let flow = this.currentFlow;
-          let tempLocal = flow.parentFunction.getAndFreeTempLocal(
+          let tempLocal = flow.getAndFreeTempLocal(
             this.currentType,
             !flow.canOverflow(leftExpr, this.currentType)
           );
@@ -4659,7 +4658,7 @@ export class Compiler extends DiagnosticEmitter {
         // if not possible, tee left to a temp. local
         } else {
           let flow = this.currentFlow;
-          let tempLocal = flow.parentFunction.getAndFreeTempLocal(
+          let tempLocal = flow.getAndFreeTempLocal(
             this.currentType,
             !flow.canOverflow(leftExpr, this.currentType)
           );
@@ -4900,7 +4899,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         if (tee) {
           let flow = this.currentFlow;
-          let tempLocal = flow.parentFunction.getAndFreeTempLocal(
+          let tempLocal = flow.getAndFreeTempLocal(
             type,
             !flow.canOverflow(valueWithCorrectType, type)
           );
@@ -4964,7 +4963,7 @@ export class Compiler extends DiagnosticEmitter {
               this.options.usizeType,
               WrapMode.NONE
             );
-            let tempLocal = flow.parentFunction.getAndFreeTempLocal(returnType, false);
+            let tempLocal = flow.getAndFreeTempLocal(returnType, false);
             let tempLocalIndex = tempLocal.index;
             return module.createBlock(null, [
               this.makeCallDirect(setterInstance, [ // set and remember the target
@@ -5025,11 +5024,10 @@ export class Compiler extends DiagnosticEmitter {
             WrapMode.NONE
           );
           if (tee) {
-            let parentFunction = flow.parentFunction;
-            let tempLocalTarget = parentFunction.getTempLocal(targetType, false);
-            let tempLocalElement = parentFunction.getAndFreeTempLocal(this.currentType, false);
+            let tempLocalTarget = flow.getTempLocal(targetType, false);
+            let tempLocalElement = flow.getAndFreeTempLocal(this.currentType, false);
             let returnType = indexedGet.signature.returnType;
-            parentFunction.freeTempLocal(tempLocalTarget);
+            flow.freeTempLocal(tempLocalTarget);
             return module.createBlock(null, [
               this.makeCallDirect(indexedSet, [
                 module.createTeeLocal(tempLocalTarget.index, thisExpr),
@@ -6548,8 +6546,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var nativeArrayType = arrayType.toNativeType();
     var flow = this.currentFlow;
-    var parentFunction = flow.parentFunction;
-    var tempLocal = parentFunction.addLocal(arrayType); // can't reuse a temp (used in compiledValues)
+    var tempLocal = flow.parentFunction.addLocal(arrayType); // can't reuse a temp (used in compiledValues)
     var stmts = new Array<ExpressionRef>(2 + length);
     var index = 0;
     stmts[index++] = module.createSetLocal(tempLocal.index,
@@ -6567,7 +6564,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     assert(index + 1 == stmts.length);
     stmts[index] = module.createGetLocal(tempLocal.index, nativeArrayType);
-    parentFunction.freeTempLocal(tempLocal); // but can be reused now
+    flow.freeTempLocal(tempLocal); // but can be reused now
     this.currentType = arrayType;
     return module.createBlock(null, stmts, nativeArrayType);
   }
@@ -6621,7 +6618,7 @@ export class Compiler extends DiagnosticEmitter {
     var hasErrors = false;
     var exprs = new Array<ExpressionRef>(numNames + 2);
     var flow = this.currentFlow;
-    var tempLocal = flow.parentFunction.getTempLocal(this.options.usizeType);
+    var tempLocal = flow.getTempLocal(this.options.usizeType);
     assert(numNames == values.length);
     for (let i = 0, k = numNames; i < k; ++i) {
       let member = members ? members.get(names[i].text) : null;
@@ -7023,7 +7020,7 @@ export class Compiler extends DiagnosticEmitter {
     // if the value isn't dropped, a temp. local is required to remember the original value
     var tempLocal: Local | null = null;
     if (contextualType != Type.void) {
-      tempLocal = flow.parentFunction.getTempLocal(currentType, false);
+      tempLocal = flow.getTempLocal(currentType, false);
       getValue = module.createTeeLocal(
         tempLocal.index,
         getValue
@@ -7209,7 +7206,7 @@ export class Compiler extends DiagnosticEmitter {
     );
 
     this.currentType = tempLocal.type;
-    flow.parentFunction.freeTempLocal(tempLocal);
+    flow.freeTempLocal(tempLocal);
     var nativeType = tempLocal.type.toNativeType();
 
     return module.createBlock(null, [

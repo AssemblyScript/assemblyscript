@@ -103,8 +103,6 @@
          local.get $5
         end
         local.tee $5
-        i32.const 0
-        i32.ne
         if (result i32)
          local.get $0
          local.get $2
@@ -121,8 +119,6 @@
         else         
          local.get $5
         end
-        i32.const 0
-        i32.ne
         if
          local.get $1
          i32.const 4
@@ -336,8 +332,6 @@
         else         
          local.get $7
         end
-        i32.const 0
-        i32.ne
         if
          local.get $0
          local.get $3
@@ -1998,8 +1992,6 @@
        else        
         local.get $6
        end
-       i32.const 0
-       i32.ne
        if
         local.get $2
         i32.const 1
@@ -2054,8 +2046,6 @@
         else         
          local.get $6
         end
-        i32.const 0
-        i32.ne
         if
          local.get $2
          i32.const 3

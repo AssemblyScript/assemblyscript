@@ -803,8 +803,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -1181,8 +1179,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -3287,8 +3283,6 @@
     else     
      local.get $3
     end
-    i32.const 0
-    i32.ne
     if
      global.get $~lib/symbol/idToString
      local.get $1

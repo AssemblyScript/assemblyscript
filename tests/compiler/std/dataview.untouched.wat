@@ -642,8 +642,6 @@
     local.get $5
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -743,8 +741,6 @@
     local.get $5
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -805,8 +801,6 @@
     local.get $4
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -868,8 +862,6 @@
     local.get $5
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -939,8 +931,6 @@
     local.get $5
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1035,8 +1025,6 @@
     local.get $5
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1091,8 +1079,6 @@
     local.get $4
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1152,8 +1138,6 @@
     local.get $5
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1209,8 +1193,6 @@
     local.get $5
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1266,8 +1248,6 @@
     local.get $5
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1322,8 +1302,6 @@
     local.get $6
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1386,8 +1364,6 @@
     local.get $6
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1450,8 +1426,6 @@
     local.get $5
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1497,8 +1471,6 @@
     local.get $6
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1552,8 +1524,6 @@
     local.get $6
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1607,8 +1577,6 @@
     local.get $6
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1662,8 +1630,6 @@
     local.get $5
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1709,8 +1675,6 @@
     local.get $6
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1764,8 +1728,6 @@
     local.get $6
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136
@@ -1819,8 +1781,6 @@
     local.get $6
     i32.gt_s
    end
-   i32.const 0
-   i32.ne
    if
     i32.const 0
     i32.const 136

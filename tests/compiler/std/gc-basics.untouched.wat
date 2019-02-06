@@ -555,8 +555,6 @@
     local.get $3
    end
    local.tee $3
-   i32.const 0
-   i32.ne
    if (result i32)
     local.get $1
     local.get $2
@@ -564,8 +562,6 @@
    else    
     local.get $3
    end
-   i32.const 0
-   i32.ne
    i32.eqz
    if
     i32.const 0

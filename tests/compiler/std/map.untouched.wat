@@ -565,8 +565,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -1440,8 +1438,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -2317,8 +2313,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -3192,8 +3186,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -4085,8 +4077,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -4914,8 +4904,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -5831,8 +5819,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -6670,8 +6656,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -7509,8 +7493,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return
@@ -8353,8 +8335,6 @@
       else       
        local.get $4
       end
-      i32.const 0
-      i32.ne
       if
        local.get $3
        return

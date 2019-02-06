@@ -403,8 +403,6 @@
     i32.eq
    end
    local.tee $14
-   i32.const 0
-   i32.ne
    if (result i32)
     local.get $14
    else    
@@ -412,8 +410,6 @@
     i32.const 1072693248
     i32.eq
    end
-   i32.const 0
-   i32.ne
    if
     local.get $15
     local.set $16
