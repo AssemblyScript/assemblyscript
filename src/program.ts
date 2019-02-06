@@ -3246,7 +3246,7 @@ export class Flow {
     if (this.cachedGlobals.has(exprId)) {
       return <Global>this.cachedGlobals.get(exprId);
     }
-    var global = assert(this.currentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
+    var global = assert(this.parentFunction.program.elementsLookup.get(assert(getGetGlobalName(expr))));
     assert(global.kind == ElementKind.GLOBAL);
     assert((<Global>global).type);
     this.cachedGlobals.set(exprId, <Global>global);
