@@ -1079,7 +1079,7 @@ export class Compiler extends DiagnosticEmitter {
 
       if (!flow.isAny(FlowFlags.ANY_TERMINATING)) {
         let thisLocalIndex = flow.is(FlowFlags.INLINE_CONTEXT)
-          ? assert(flow.getScopedLocal("this")).index
+          ? assert(flow.lookupLocal("this")).index
           : 0;
 
         // if `this` wasn't accessed before, allocate if necessary and initialize `this`
@@ -2255,9 +2255,9 @@ export class Compiler extends DiagnosticEmitter {
           declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
           flow.is(FlowFlags.INLINE_CONTEXT)
         ) { // here: not top-level
-          local = flow.addScopedLocal(type, name, false, declaration); // reports
+          local = flow.addScopedLocal(name, type, false, declaration.name); // reports if duplicate
         } else {
-          if (flow.getScopedLocal(name)) {
+          if (flow.lookupLocal(name)) {
             this.error(
               DiagnosticCode.Duplicate_identifier_0,
               declaration.name.range, name
@@ -5078,7 +5078,7 @@ export class Compiler extends DiagnosticEmitter {
 
       let classInstance = assert(actualFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
       let baseClassInstance = assert((<Class>classInstance).base);
-      let thisLocal = assert(flow.getScopedLocal("this"));
+      let thisLocal = assert(flow.lookupLocal("this"));
       let nativeSizeType = this.options.nativeSizeType;
 
       // {
@@ -5529,12 +5529,12 @@ export class Compiler extends DiagnosticEmitter {
     if (thisArg) {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
       let thisType = assert(instance.signature.thisType);
-      let thisLocal = flow.addScopedLocal(thisType, "this", false);
+      let thisLocal = flow.addScopedLocal("this", thisType, false);
       body.push(
         module.createSetLocal(thisLocal.index, thisArg)
       );
       let baseInstance = (<Class>classInstance).base;
-      if (baseInstance) flow.addScopedLocalAlias(thisLocal.index, baseInstance.type, "super");
+      if (baseInstance) flow.addScopedAlias("super", baseInstance.type, thisLocal.index);
     }
 
     var numArguments = argumentExpressions.length;
@@ -5548,8 +5548,8 @@ export class Compiler extends DiagnosticEmitter {
         WrapMode.NONE
       );
       let argumentLocal = flow.addScopedLocal(
-        parameterTypes[i],
         signature.getParameterName(i),
+        parameterTypes[i],
         !previousFlow.canOverflow(paramExpr, parameterTypes[i])
       );
       body.push(
@@ -5569,8 +5569,8 @@ export class Compiler extends DiagnosticEmitter {
         WrapMode.WRAP
       );
       let argumentLocal = flow.addScopedLocal(
-        parameterTypes[i],
         signature.getParameterName(i),
+        parameterTypes[i],
         !flow.canOverflow(initExpr, parameterTypes[i])
       );
       body.push(
@@ -6061,7 +6061,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.THIS: {
         if (actualFunction.is(CommonFlags.INSTANCE)) {
-          let thisLocal = assert(flow.getScopedLocal("this"));
+          let thisLocal = assert(flow.lookupLocal("this"));
           let classInstance = assert(actualFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
           let nativeSizeType = this.options.nativeSizeType;
           if (actualFunction.is(CommonFlags.CONSTRUCTOR)) {
@@ -6116,7 +6116,7 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let scopedThis = flow.getScopedLocal("this");
+          let scopedThis = flow.lookupLocal("this");
           if (scopedThis) {
             let scopedThisClass = assert(scopedThis.type.classReference);
             let base = scopedThisClass.base;
@@ -7796,7 +7796,7 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var isInline = flow.is(FlowFlags.INLINE_CONTEXT);
     var thisLocalIndex = isInline
-      ? assert(flow.getScopedLocal("this")).index
+      ? assert(flow.lookupLocal("this")).index
       : 0;
     var nativeSizeType = this.options.nativeSizeType;
 
@@ -7833,7 +7833,7 @@ export class Compiler extends DiagnosticEmitter {
             parameterIndex >= 0 // initialized via parameter (here: a local)
               ? module.createGetLocal(
                   isInline
-                    ? assert(flow.getScopedLocal(field.simpleName)).index
+                    ? assert(flow.lookupLocal(field.simpleName)).index
                     : 1 + parameterIndex, // this is local 0
                   nativeFieldType
                 )

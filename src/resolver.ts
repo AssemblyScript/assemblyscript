@@ -364,7 +364,7 @@ export class Resolver extends DiagnosticEmitter {
     var element: Element | null;
 
     if (flow) {
-      let local = flow.getScopedLocal(name);
+      let local = flow.lookupLocal(name);
       if (local) {
         this.currentThisExpression = null;
         this.currentElementExpression = null;
@@ -794,7 +794,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       case NodeKind.THIS: { // -> Class / ClassPrototype
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let explicitLocal = flow.getScopedLocal("this");
+          let explicitLocal = flow.lookupLocal("this");
           if (explicitLocal) {
             this.currentThisExpression = null;
             this.currentElementExpression = null;
@@ -817,7 +817,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       case NodeKind.SUPER: { // -> Class
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let explicitLocal = flow.getScopedLocal("super");
+          let explicitLocal = flow.lookupLocal("super");
           if (explicitLocal) {
             this.currentThisExpression = null;
             this.currentElementExpression = null;

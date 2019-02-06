@@ -3049,39 +3049,39 @@ export const enum FlowFlags {
 
   // categorical
 
-  /** This branch always returns. */
+  /** This flow returns. */
   RETURNS = 1 << 0,
-  /** This branch always returns a wrapped value. */
+  /** This flow returns a wrapped value. */
   RETURNS_WRAPPED = 1 << 1,
-  /** This branch always throws. */
+  /** This flow throws. */
   THROWS = 1 << 2,
-  /** This branch always breaks. */
+  /** This flow breaks. */
   BREAKS = 1 << 3,
-  /** This branch always continues. */
+  /** This flow continues. */
   CONTINUES = 1 << 4,
-  /** This branch always allocates. Constructors only. */
+  /** This flow allocates. Constructors only. */
   ALLOCATES = 1 << 5,
-  /** This branch always calls super. Constructors only. */
+  /** This flow calls super. Constructors only. */
   CALLS_SUPER = 1 << 6,
 
   // conditional
 
-  /** This branch conditionally returns in a child branch. */
+  /** This flow conditionally returns in a child flow. */
   CONDITIONALLY_RETURNS = 1 << 7,
-  /** This branch conditionally throws in a child branch. */
+  /** This flow conditionally throws in a child flow. */
   CONDITIONALLY_THROWS = 1 << 8,
-  /** This branch conditionally breaks in a child branch. */
+  /** This flow conditionally breaks in a child flow. */
   CONDITIONALLY_BREAKS = 1 << 9,
-  /** This branch conditionally continues in a child branch. */
+  /** This flow conditionally continues in a child flow. */
   CONDITIONALLY_CONTINUES = 1 << 10,
-  /** This branch conditionally allocates in a child branch. Constructors only. */
+  /** This flow conditionally allocates in a child flow. Constructors only. */
   CONDITIONALLY_ALLOCATES = 1 << 11,
 
   // special
 
-  /** This branch is part of inlining a function. */
+  /** This is an inlining flow. */
   INLINE_CONTEXT = 1 << 12,
-  /** This branch explicitly requests no bounds checking. */
+  /** This is a flow with explicitly disabled bounds checking. */
   UNCHECKED_CONTEXT = 1 << 13,
 
   // masks
@@ -3167,7 +3167,7 @@ export class Flow {
 
   private constructor() { }
 
-  /** Gets the actual function being compiled, i.e. the inlined function when inlining. */
+  /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
   get actualFunction(): Function {
     return this.inlineFunction || this.parentFunction;
   }
@@ -3213,18 +3213,18 @@ export class Flow {
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(type: Type, name: string, wrapped: bool, declaration?: VariableDeclaration): Local {
+  addScopedLocal(name: string, type: Type, wrapped: bool, reportNode: Node | null = null): Local {
     var scopedLocal = this.parentFunction.getTempLocal(type, false);
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else {
       let existingLocal = this.scopedLocals.get(name);
       if (existingLocal) {
-        if (declaration) {
+        if (reportNode) {
           this.parentFunction.program.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range
+            reportNode.range
           );
-        } else assert(false);
+        }
         return existingLocal;
       }
     }
@@ -3236,36 +3236,36 @@ export class Flow {
     return scopedLocal;
   }
 
-  /** Adds a new scoped alias for the specified local. */
-  addScopedLocalAlias(index: i32, type: Type, name: string): Local {
+  /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
+  addScopedAlias(name: string, type: Type, index: i32, reportNode: Node | null = null): Local {
     if (!this.scopedLocals) this.scopedLocals = new Map();
     else {
       let existingLocal = this.scopedLocals.get(name);
       if (existingLocal) {
-        let declaration = existingLocal.declaration;
-        if (declaration) {
+        if (reportNode) {
           this.parentFunction.program.error(
             DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range
+            reportNode.range
           );
-        } else assert(false);
+        }
         return existingLocal;
       }
     }
     assert(index < this.parentFunction.localsByIndex.length);
-    var scopedAlias = new Local( // not SCOPED as an indicator that it isn't automatically free'd
+    var scopedAlias = new Local(
       this.parentFunction.program,
       name,
       index,
       type,
       null
     );
+    // not flagged as SCOPED as it must not be free'd when the flow is finalized
     this.scopedLocals.set(name, scopedAlias);
     return scopedAlias;
   }
 
-  /** Gets the local of the specified name in the current scope. */
-  getScopedLocal(name: string): Local | null {
+  /** Looks up the local of the specified name in the current scope. */
+  lookupLocal(name: string): Local | null {
     var local: Local | null;
     var current: Flow | null = this;
     do {
@@ -3655,6 +3655,7 @@ export class Flow {
     this.inlineReturnLabel = null;
   }
 
+  /** Returns a string representation of this flow for debugging purposes. */
   toString(): string {
     var sb = [
       "Flow(", this.parentFunction.internalName
