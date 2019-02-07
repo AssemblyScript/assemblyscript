@@ -132,6 +132,8 @@ export const FEATURE_MUTABLE_GLOBAL = Feature.MUTABLE_GLOBAL;
 export const FEATURE_BULK_MEMORY = Feature.BULK_MEMORY;
 /** SIMD types and operations. */
 export const FEATURE_SIMD = Feature.SIMD;
+/** Threading and atomic operations. */
+export const FEATURE_THREADS = Feature.THREADS;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {

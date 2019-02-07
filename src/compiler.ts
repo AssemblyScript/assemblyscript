@@ -237,7 +237,9 @@ export const enum Feature {
   /** Bulk memory operations. */
   BULK_MEMORY = 1 << 2, // see: https://github.com/WebAssembly/bulk-memory-operations
   /** SIMD types and operations. */
-  SIMD = 1 << 3 // see: https://github.com/WebAssembly/simd
+  SIMD = 1 << 3, // see: https://github.com/WebAssembly/simd
+  /** Threading and atomic operations. */
+  THREADS = 1 << 4 // see: https://github.com/WebAssembly/threads
 }
 
 /** Indicates the desired kind of a conversion. */
