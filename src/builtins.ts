@@ -20,7 +20,8 @@ import {
   Expression,
   LiteralKind,
   LiteralExpression,
-  StringLiteralExpression
+  StringLiteralExpression,
+  CallExpression
 } from "./ast";
 
 import {
@@ -71,7 +72,7 @@ export function compileCall(
   typeArguments: Type[] | null,
   operands: Expression[],
   contextualType: Type,
-  reportNode: Node
+  reportNode: CallExpression
 ): ExpressionRef {
   var module = compiler.module;
 
@@ -1678,7 +1679,8 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
     }
-    case "Atomic.load": { // Atomic.load<T!>(offset: usize, constantOffset?: usize) -> *
+    case "atomic.load": { // Atomic.load<T!>(offset: usize, constantOffset?: usize) -> *
+      if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (operands.length < 1 || operands.length > 2) {
         if (!(typeArguments && typeArguments.length == 1)) {
           compiler.error(
@@ -1729,7 +1731,8 @@ export function compileCall(
         offset
       );
     }
-    case "Atomic.store": { // Atomic.store<T!>(offset: usize, value: *, constantOffset?: usize) -> void
+    case "atomic.store": { // Atomic.store<T!>(offset: usize, value: *, constantOffset?: usize) -> void
+      if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.void;
       if (operands.length < 2 || operands.length > 3) {
         if (!(typeArguments && typeArguments.length == 1)) {
@@ -1798,13 +1801,14 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createAtomicStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
     }
-    case "Atomic.add":  // add<T!>(ptr: usize, value: T, constantOffset?: usize): T;
-    case "Atomic.sub":  // sub<T!>(ptr: usize, value: T, constantOffset?: usize): T;
-    case "Atomic.and":  // and<T!>(ptr: usize, value: T, constantOffset?: usize): T;
-    case "Atomic.or":   // or<T!>(ptr: usize, value: T, constantOffset?: usize): T;
-    case "Atomic.xor":  // xor<T!>(ptr: usize, value: T, constantOffset?: usize): T;
-    case "Atomic.xchg": // xchg<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "atomic.add":  // add<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "atomic.sub":  // sub<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "atomic.and":  // and<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "atomic.or":   // or<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "atomic.xor":  // xor<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "atomic.xchg": // xchg<T!>(ptr: usize, value: T, constantOffset?: usize): T;
     {
+      if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (operands.length < 2 || operands.length > 3) {
         if (!(typeArguments && typeArguments.length == 1)) {
           compiler.error(
@@ -1872,13 +1876,13 @@ export function compileCall(
         return module.createUnreachable();
       }
       let RMWOp: AtomicRMWOp | null = null;
-      switch (prototype.internalName) {
-        case "Atomic.add": { RMWOp = AtomicRMWOp.Add; break; }
-        case "Atomic.sub": { RMWOp = AtomicRMWOp.Sub; break; }
-        case "Atomic.and": { RMWOp = AtomicRMWOp.And; break; }
-        case "Atomic.or": { RMWOp = AtomicRMWOp.Or; break; }
-        case "Atomic.xor": { RMWOp = AtomicRMWOp.Xor; break; }
-        case "Atomic.xchg": { RMWOp = AtomicRMWOp.Xchg; break; }
+      switch (prototype.simpleName) {
+        case "add": { RMWOp = AtomicRMWOp.Add; break; }
+        case "sub": { RMWOp = AtomicRMWOp.Sub; break; }
+        case "and": { RMWOp = AtomicRMWOp.And; break; }
+        case "or": { RMWOp = AtomicRMWOp.Or; break; }
+        case "xor": { RMWOp = AtomicRMWOp.Xor; break; }
+        case "xchg": { RMWOp = AtomicRMWOp.Xchg; break; }
       }
       compiler.currentType = typeArguments[0];
       if (RMWOp !== null) {
@@ -1893,7 +1897,8 @@ export function compileCall(
         return module.createUnreachable();
       }
     }
-    case "Atomic.cmpxchg": { // cmpxchg<T!>(ptr: usize, expected:T, replacement: T, constantOffset?: usize): T;
+    case "atomic.cmpxchg": { // cmpxchg<T!>(ptr: usize, expected:T, replacement: T, constantOffset?: usize): T;
+      if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (operands.length < 3 || operands.length > 4) {
         if (!(typeArguments && typeArguments.length == 1)) {
           compiler.error(
@@ -1980,7 +1985,8 @@ export function compileCall(
         typeArguments[0].byteSize, offset, arg0, arg1, arg2, type.toNativeType()
       );
     }
-    case "Atomic.wait": { // wait<T!>(ptr: usize, expected:T, timeout: i64): i32;
+    case "atomic.wait": { // wait<T!>(ptr: usize, expected:T, timeout: i64): i32;
+      if (!compiler.options.hasFeature(Feature.THREADS)) break;
       let hasError = typeArguments == null;
       if (operands.length != 3) {
         compiler.error(
@@ -2050,7 +2056,8 @@ export function compileCall(
         arg0, arg1, arg2, type.toNativeType()
       );
     }
-    case "Atomic.notify": { // notify<T!>(ptr: usize, count: u32): u32;
+    case "atomic.notify": { // notify<T!>(ptr: usize, count: u32): u32;
+      if (!compiler.options.hasFeature(Feature.THREADS)) break;
       let hasError = typeArguments == null;
       if (operands.length != 2) {
         compiler.error(
@@ -3171,8 +3178,8 @@ export function compileCall(
     return expr;
   }
   compiler.error(
-    DiagnosticCode.Operation_not_supported,
-    reportNode.range
+    DiagnosticCode.Cannot_find_name_0,
+    reportNode.expression.range, prototype.internalName
   );
   return module.createUnreachable();
 }
@@ -3183,8 +3190,9 @@ function deferASMCall(
   prototype: FunctionPrototype,
   operands: Expression[],
   contextualType: Type,
-  reportNode: Node
+  reportNode: CallExpression
 ): ExpressionRef {
+  /* tslint:disable:max-line-length */
   switch (prototype.internalName) {
 
     // TODO: Operators can't be just deferred (don't have a corresponding generic built-in)
@@ -3263,84 +3271,88 @@ function deferASMCall(
     case "i64.store": return deferASM("store", compiler, Type.i64, operands, Type.i64, reportNode);
     case "f32.store": return deferASM("store", compiler, Type.f32, operands, Type.f32, reportNode);
     case "f64.store": return deferASM("store", compiler, Type.f64, operands, Type.f64, reportNode);
-
-    case "i32.atomic.load8_u": return deferASM("Atomic.load", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.load16_u": return deferASM("Atomic.load", compiler, Type.u16, operands, Type.u32, reportNode);
-    case "i32.atomic.load": return deferASM("Atomic.load", compiler, Type.i32, operands, Type.i32, reportNode);
-    case "i64.atomic.load8_u": return deferASM("Atomic.load", compiler, Type.u8, operands, Type.u64, reportNode);
-    case "i64.atomic.load16_u": return deferASM("Atomic.load", compiler, Type.u16, operands, Type.u64, reportNode);
-    case "i64.atomic.load32_u": return deferASM("Atomic.load", compiler, Type.u32, operands, Type.u64, reportNode);
-    case "i64.atomic.load": return deferASM("Atomic.load", compiler, Type.i64, operands, Type.i64, reportNode);
-
-    case "i32.atomic.store8": return deferASM("Atomic.store", compiler, Type.i8, operands, Type.i32, reportNode);
-    case "i32.atomic.store16": return deferASM("Atomic.store", compiler, Type.i16, operands, Type.i32, reportNode);
-    case "i32.atomic.store": return deferASM("Atomic.store", compiler, Type.i32, operands, Type.i32, reportNode);
-    case "i64.atomic.store8": return deferASM("Atomic.store", compiler, Type.i8, operands, Type.i64, reportNode);
-    case "i64.atomic.store16": return deferASM("Atomic.store", compiler, Type.i16, operands, Type.i64, reportNode);
-    case "i64.atomic.store32": return deferASM("Atomic.store", compiler, Type.i32, operands, Type.i64, reportNode);
-    case "i64.atomic.store": return deferASM("Atomic.store", compiler, Type.i64, operands, Type.i64, reportNode);
-
-    case "i32.atomic.rmw8_u.add": return deferASM("Atomic.add", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw16_u.add": return deferASM("Atomic.add", compiler, Type.u16, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw.add": return deferASM("Atomic.add", compiler, Type.u32, operands, Type.u32, reportNode);
-    case "i64.atomic.rmw8_u.add": return deferASM("Atomic.add", compiler, Type.u8, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw16_u.add": return deferASM("Atomic.add", compiler, Type.u16, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw32_u.add": return deferASM("Atomic.add", compiler, Type.u32, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw.add": return deferASM("Atomic.add", compiler, Type.u64, operands, Type.u64, reportNode);
-
-    case "i32.atomic.rmw8_u.sub": return deferASM("Atomic.sub", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw16_u.sub": return deferASM("Atomic.sub", compiler, Type.u16, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw.sub": return deferASM("Atomic.sub", compiler, Type.u32, operands, Type.u32, reportNode);
-    case "i64.atomic.rmw8_u.sub": return deferASM("Atomic.sub", compiler, Type.u8, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw16_u.sub": return deferASM("Atomic.sub", compiler, Type.u16, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw32_u.sub": return deferASM("Atomic.sub", compiler, Type.u32, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw.sub": return deferASM("Atomic.sub", compiler, Type.u64, operands, Type.u64, reportNode);
-
-    case "i32.atomic.rmw8_u.and": return deferASM("Atomic.and", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw16_u.and": return deferASM("Atomic.and", compiler, Type.u16, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw.and": return deferASM("Atomic.and", compiler, Type.u32, operands, Type.u32, reportNode);
-    case "i64.atomic.rmw8_u.and": return deferASM("Atomic.and", compiler, Type.u8, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw16_u.and": return deferASM("Atomic.and", compiler, Type.u16, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw32_u.and": return deferASM("Atomic.and", compiler, Type.u32, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw.and": return deferASM("Atomic.and", compiler, Type.u64, operands, Type.u64, reportNode);
-
-    case "i32.atomic.rmw8_u.or": return deferASM("Atomic.or", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw16_u.or": return deferASM("Atomic.or", compiler, Type.u16, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw.or": return deferASM("Atomic.or", compiler, Type.u32, operands, Type.u32, reportNode);
-    case "i64.atomic.rmw8_u.or": return deferASM("Atomic.or", compiler, Type.u8, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw16_u.or": return deferASM("Atomic.or", compiler, Type.u16, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw32_u.or": return deferASM("Atomic.or", compiler, Type.u32, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw.or": return deferASM("Atomic.or", compiler, Type.u64, operands, Type.u64, reportNode);
-
-    case "i32.atomic.rmw8_u.xor": return deferASM("Atomic.xor", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw16_u.xor": return deferASM("Atomic.xor", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw.xor": return deferASM("Atomic.xor", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i64.atomic.rmw8_u.xor": return deferASM("Atomic.xor", compiler, Type.u8, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw16_u.xor": return deferASM("Atomic.xor", compiler, Type.u16, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw32_u.xor": return deferASM("Atomic.xor", compiler, Type.u32, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw.xor": return deferASM("Atomic.xor", compiler, Type.u64, operands, Type.u64, reportNode);
-
-    case "i32.atomic.rmw8_u.xchg": return deferASM("Atomic.xchg", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw16_u.xchg": return deferASM("Atomic.xchg", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw.xchg": return deferASM("Atomic.xchg", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i64.atomic.rmw8_u.xchg": return deferASM("Atomic.xchg", compiler, Type.u8, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw16_u.xchg": return deferASM("Atomic.xchg", compiler, Type.u16, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw32_u.xchg": return deferASM("Atomic.xchg", compiler, Type.u32, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw.xchg": return deferASM("Atomic.xchg", compiler, Type.u64, operands, Type.u64, reportNode);
-
-    case "i32.atomic.rmw8_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw16_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i32.atomic.rmw.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u8, operands, Type.u32, reportNode);
-    case "i64.atomic.rmw8_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u8, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw16_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u16, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw32_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u32, operands, Type.u64, reportNode);
-    case "i64.atomic.rmw.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u64, operands, Type.u64, reportNode);
-
-    case "i32.wait": return deferASM("Atomic.wait", compiler, Type.i32, operands, Type.u32, reportNode);
-    case "i64.wait": return deferASM("Atomic.wait", compiler, Type.i64, operands, Type.i64, reportNode);
-    case "i32.notify": return deferASM("Atomic.notify", compiler, Type.i32, operands, Type.u32, reportNode);
-    case "i64.notify": return deferASM("Atomic.notify", compiler, Type.i64, operands, Type.i64, reportNode);
   }
+  if (compiler.options.hasFeature(Feature.THREADS)) {
+    switch (prototype.internalName) {
+      case "i32.atomic.load8_u": return deferASM("atomic.load", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.load16_u": return deferASM("atomic.load", compiler, Type.u16, operands, Type.u32, reportNode);
+      case "i32.atomic.load": return deferASM("atomic.load", compiler, Type.i32, operands, Type.i32, reportNode);
+      case "i64.atomic.load8_u": return deferASM("atomic.load", compiler, Type.u8, operands, Type.u64, reportNode);
+      case "i64.atomic.load16_u": return deferASM("atomic.load", compiler, Type.u16, operands, Type.u64, reportNode);
+      case "i64.atomic.load32_u": return deferASM("atomic.load", compiler, Type.u32, operands, Type.u64, reportNode);
+      case "i64.atomic.load": return deferASM("atomic.load", compiler, Type.i64, operands, Type.i64, reportNode);
+
+      case "i32.atomic.store8": return deferASM("atomic.store", compiler, Type.i8, operands, Type.i32, reportNode);
+      case "i32.atomic.store16": return deferASM("atomic.store", compiler, Type.i16, operands, Type.i32, reportNode);
+      case "i32.atomic.store": return deferASM("atomic.store", compiler, Type.i32, operands, Type.i32, reportNode);
+      case "i64.atomic.store8": return deferASM("atomic.store", compiler, Type.i8, operands, Type.i64, reportNode);
+      case "i64.atomic.store16": return deferASM("atomic.store", compiler, Type.i16, operands, Type.i64, reportNode);
+      case "i64.atomic.store32": return deferASM("atomic.store", compiler, Type.i32, operands, Type.i64, reportNode);
+      case "i64.atomic.store": return deferASM("atomic.store", compiler, Type.i64, operands, Type.i64, reportNode);
+
+      case "i32.atomic.rmw8_u.add": return deferASM("atomic.add", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw16_u.add": return deferASM("atomic.add", compiler, Type.u16, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw.add": return deferASM("atomic.add", compiler, Type.u32, operands, Type.u32, reportNode);
+      case "i64.atomic.rmw8_u.add": return deferASM("atomic.add", compiler, Type.u8, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw16_u.add": return deferASM("atomic.add", compiler, Type.u16, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw32_u.add": return deferASM("atomic.add", compiler, Type.u32, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw.add": return deferASM("atomic.add", compiler, Type.u64, operands, Type.u64, reportNode);
+
+      case "i32.atomic.rmw8_u.sub": return deferASM("atomic.sub", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw16_u.sub": return deferASM("atomic.sub", compiler, Type.u16, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw.sub": return deferASM("atomic.sub", compiler, Type.u32, operands, Type.u32, reportNode);
+      case "i64.atomic.rmw8_u.sub": return deferASM("atomic.sub", compiler, Type.u8, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw16_u.sub": return deferASM("atomic.sub", compiler, Type.u16, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw32_u.sub": return deferASM("atomic.sub", compiler, Type.u32, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw.sub": return deferASM("atomic.sub", compiler, Type.u64, operands, Type.u64, reportNode);
+
+      case "i32.atomic.rmw8_u.and": return deferASM("atomic.and", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw16_u.and": return deferASM("atomic.and", compiler, Type.u16, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw.and": return deferASM("atomic.and", compiler, Type.u32, operands, Type.u32, reportNode);
+      case "i64.atomic.rmw8_u.and": return deferASM("atomic.and", compiler, Type.u8, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw16_u.and": return deferASM("atomic.and", compiler, Type.u16, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw32_u.and": return deferASM("atomic.and", compiler, Type.u32, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw.and": return deferASM("atomic.and", compiler, Type.u64, operands, Type.u64, reportNode);
+
+      case "i32.atomic.rmw8_u.or": return deferASM("atomic.or", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw16_u.or": return deferASM("atomic.or", compiler, Type.u16, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw.or": return deferASM("atomic.or", compiler, Type.u32, operands, Type.u32, reportNode);
+      case "i64.atomic.rmw8_u.or": return deferASM("atomic.or", compiler, Type.u8, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw16_u.or": return deferASM("atomic.or", compiler, Type.u16, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw32_u.or": return deferASM("atomic.or", compiler, Type.u32, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw.or": return deferASM("atomic.or", compiler, Type.u64, operands, Type.u64, reportNode);
+
+      case "i32.atomic.rmw8_u.xor": return deferASM("atomic.xor", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw16_u.xor": return deferASM("atomic.xor", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw.xor": return deferASM("atomic.xor", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i64.atomic.rmw8_u.xor": return deferASM("atomic.xor", compiler, Type.u8, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw16_u.xor": return deferASM("atomic.xor", compiler, Type.u16, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw32_u.xor": return deferASM("atomic.xor", compiler, Type.u32, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw.xor": return deferASM("atomic.xor", compiler, Type.u64, operands, Type.u64, reportNode);
+
+      case "i32.atomic.rmw8_u.xchg": return deferASM("atomic.xchg", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw16_u.xchg": return deferASM("atomic.xchg", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw.xchg": return deferASM("atomic.xchg", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i64.atomic.rmw8_u.xchg": return deferASM("atomic.xchg", compiler, Type.u8, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw16_u.xchg": return deferASM("atomic.xchg", compiler, Type.u16, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw32_u.xchg": return deferASM("atomic.xchg", compiler, Type.u32, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw.xchg": return deferASM("atomic.xchg", compiler, Type.u64, operands, Type.u64, reportNode);
+
+      case "i32.atomic.rmw8_u.cmpxchg": return deferASM("atomic.cmpxchg", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw16_u.cmpxchg": return deferASM("atomic.cmpxchg", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i32.atomic.rmw.cmpxchg": return deferASM("atomic.cmpxchg", compiler, Type.u8, operands, Type.u32, reportNode);
+      case "i64.atomic.rmw8_u.cmpxchg": return deferASM("atomic.cmpxchg", compiler, Type.u8, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw16_u.cmpxchg": return deferASM("atomic.cmpxchg", compiler, Type.u16, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw32_u.cmpxchg": return deferASM("atomic.cmpxchg", compiler, Type.u32, operands, Type.u64, reportNode);
+      case "i64.atomic.rmw.cmpxchg": return deferASM("atomic.cmpxchg", compiler, Type.u64, operands, Type.u64, reportNode);
+
+      case "i32.wait": return deferASM("atomic.wait", compiler, Type.i32, operands, Type.u32, reportNode);
+      case "i64.wait": return deferASM("atomic.wait", compiler, Type.i64, operands, Type.i64, reportNode);
+      case "i32.notify": return deferASM("atomic.notify", compiler, Type.i32, operands, Type.u32, reportNode);
+      case "i64.notify": return deferASM("atomic.notify", compiler, Type.i64, operands, Type.i64, reportNode);
+    }
+  }
+  /* tslint:enable:max-line-length */
   return 0;
 }
 
@@ -3351,10 +3363,11 @@ function deferASM(
   typeArgument: Type,
   operands: Expression[],
   valueType: Type,
-  reportNode: Node
+  reportNode: CallExpression
 ): ExpressionRef {
-  // Built-in wasm functions can be namespaced like Atomic.{OPERATION}
+  // Built-in wasm functions can be namespaced like atomic.{OPERATION}
   // Split name by '.' to find member function prototype
+  // FIXME: This is slower than it needs to be due to the way resolving works atm
   var names = name.split(".");
   var prototype: Element = assert(compiler.program.elementsLookup.get(names[0]));
   if (names.length > 1) {
