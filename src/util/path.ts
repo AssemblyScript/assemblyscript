@@ -8,6 +8,8 @@ import {
   PATH_DELIMITER
 } from "../common";
 
+const separator = CharCode.SLASH;
+
 /**
  * Normalizes the specified path, removing interior placeholders.
  * Expects a posix-compatible relative path (not Windows compatible).
@@ -19,7 +21,7 @@ export function normalizePath(path: string): string {
   // trim leading './'
   while (pos + 1 < len &&
     path.charCodeAt(pos) == CharCode.DOT &&
-    path.charCodeAt(pos + 1) == CharCode.SLASH
+    path.charCodeAt(pos + 1) == separator
   ) {
     pos += 2;
   }
@@ -36,14 +38,14 @@ export function normalizePath(path: string): string {
 
     // we are only interested in '/.' sequences ...
     if (
-      path.charCodeAt(pos) == CharCode.SLASH &&
+      path.charCodeAt(pos) == separator &&
       path.charCodeAt(pos + 1) == CharCode.DOT
     ) {
       // '/.' ( '/' | $ )
       atEnd = pos + 2 == len;
       if (atEnd ||
         pos + 2 < len &&
-        path.charCodeAt(pos + 2) == CharCode.SLASH
+        path.charCodeAt(pos + 2) == separator
       ) {
         path = atEnd
           ? path.substring(0, pos)
@@ -57,12 +59,12 @@ export function normalizePath(path: string): string {
       if (atEnd && path.charCodeAt(pos + 2) == CharCode.DOT ||
         pos + 3 < len &&
         path.charCodeAt(pos + 2) == CharCode.DOT &&
-        path.charCodeAt(pos + 3) == CharCode.SLASH
+        path.charCodeAt(pos + 3) == separator
       ) {
         // find preceeding '/'
         let ipos = pos;
         while (--ipos >= 0) {
-          if (path.charCodeAt(ipos) == CharCode.SLASH) {
+          if (path.charCodeAt(ipos) == separator) {
             if (pos - ipos != 3 ||
               path.charCodeAt(ipos + 1) != CharCode.DOT ||
               path.charCodeAt(ipos + 2) != CharCode.DOT
@@ -110,12 +112,12 @@ export function dirname(normalizedPath: string): string {
   var pos = normalizedPath.length;
   if (pos <= 1) {
     if (pos == 0) return ".";
-    if (normalizedPath.charCodeAt(0) == CharCode.SLASH) {
+    if (normalizedPath.charCodeAt(0) == separator) {
       return normalizedPath;
     }
   }
   while (--pos > 0) {
-    if (normalizedPath.charCodeAt(pos) == CharCode.SLASH) {
+    if (normalizedPath.charCodeAt(pos) == separator) {
       return normalizedPath.substring(0, pos);
     }
   }
