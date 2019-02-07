@@ -130,6 +130,8 @@ export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 export const FEATURE_MUTABLE_GLOBAL = Feature.MUTABLE_GLOBAL;
 /** Bulk memory operations. */
 export const FEATURE_BULK_MEMORY = Feature.BULK_MEMORY;
+/** SIMD types and operations. */
+export const FEATURE_SIMD = Feature.SIMD;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {

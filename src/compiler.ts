@@ -235,7 +235,9 @@ export const enum Feature {
   /** Mutable global imports and exports. */
   MUTABLE_GLOBAL = 1 << 1, // see: https://github.com/WebAssembly/mutable-global
   /** Bulk memory operations. */
-  BULK_MEMORY = 1 << 2 // see: https://github.com/WebAssembly/bulk-memory-operations
+  BULK_MEMORY = 1 << 2, // see: https://github.com/WebAssembly/bulk-memory-operations
+  /** SIMD types and operations. */
+  SIMD = 1 << 3 // see: https://github.com/WebAssembly/simd
 }
 
 /** Indicates the desired kind of a conversion. */

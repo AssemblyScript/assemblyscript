@@ -411,11 +411,11 @@ export class Program extends DiagnosticEmitter {
       ["bool", Type.bool],
       ["f32", Type.f32],
       ["f64", Type.f64],
-      // ["v128", Type.v128],
       ["void", Type.void],
       ["number", Type.f64],
       ["boolean", Type.bool]
     ]);
+    if (options.hasFeature(Feature.SIMD)) this.typesLookup.set("v128", Type.v128);
 
     // add compiler hints
     this.setConstantInteger("ASC_TARGET", Type.i32,
@@ -660,6 +660,7 @@ export class Program extends DiagnosticEmitter {
     this.registerBasicClass(TypeKind.BOOL, "Bool");
     this.registerBasicClass(TypeKind.F32, "F32");
     this.registerBasicClass(TypeKind.F64, "F64");
+    if (options.hasFeature(Feature.SIMD)) this.registerBasicClass(TypeKind.V128, "V128");
 
     // register 'start'
     {
