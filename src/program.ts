@@ -2558,7 +2558,7 @@ export class Function extends Element {
       this.prototype.program,
       name
         ? name
-        : "var$" + localIndex.toString(),
+        : "var$" + localIndex.toString(10),
       localIndex,
       type,
       declaration
@@ -3040,7 +3040,7 @@ export class Flow {
     var flow = Flow.create(parentFunction);
     flow.set(FlowFlags.INLINE_CONTEXT);
     flow.inlineFunction = inlineFunction;
-    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString();
+    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString(10);
     flow.returnType = inlineFunction.signature.returnType;
     flow.contextualTypeArguments = inlineFunction.contextualTypeArguments;
     return flow;
@@ -3245,9 +3245,9 @@ export class Flow {
     if (index < 0) return true; // inlined constant
     if (index < 64) return bitsetIs(this.wrappedLocals, index);
     var ext = this.wrappedLocalsExt;
-    var i = ((index - 64) / 64) | 0;
+    var i = (index - 64) >> 6;
     if (!(ext && i < ext.length)) return false;
-    return bitsetIs(ext[i], index - (i + 1) * 64);
+    return bitsetIs(ext[i], index - ((i + 1) << 6));
   }
 
   /** Sets if the value of the local at the specified index is considered wrapped. */
@@ -3258,14 +3258,14 @@ export class Flow {
       return;
     }
     var ext = this.wrappedLocalsExt;
-    var i = ((index - 64) / 64) | 0;
+    var i = (index - 64) >> 6;
     if (!ext) {
       this.wrappedLocalsExt = ext = new Array(i + 1);
       for (let j = 0; j <= i; ++j) ext[j] = i64_new(0);
     } else {
       while (ext.length <= i) ext.push(i64_new(0));
     }
-    ext[i] = bitsetSet(ext[i], index - (i + 1) * 64, wrapped);
+    ext[i] = bitsetSet(ext[i], index - ((i + 1) << 6), wrapped);
   }
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
@@ -3275,7 +3275,7 @@ export class Flow {
     var stack = parentFunction.breakStack;
     if (!stack) parentFunction.breakStack = [ id ];
     else stack.push(id);
-    return parentFunction.breakLabel = id.toString();
+    return parentFunction.breakLabel = id.toString(10);
   }
 
   /** Pops the most recent break label from the stack. */
@@ -3285,7 +3285,7 @@ export class Flow {
     var length = assert(stack.length);
     stack.pop();
     if (length > 1) {
-      parentFunction.breakLabel = stack[length - 2].toString();
+      parentFunction.breakLabel = stack[length - 2].toString(10);
     } else {
       parentFunction.breakLabel = null;
       parentFunction.breakStack = null;
