@@ -1,5 +1,5 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $FFFii (func (param f64 f64 f64 i32) (result i32)))
  (type $Fi (func (param f64) (result i32)))
  (type $FFFF (func (param f64 f64 f64) (result f64)))
@@ -17,12 +17,12 @@
  (type $ffffii (func (param f32 f32 f32 f32 i32) (result i32)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $F (func (result f64)))
- (type $Iv (func (param i64)))
+ (type $I_ (func (param i64)))
  (type $II (func (param i64) (result i64)))
  (type $ii (func (param i32) (result i32)))
  (type $f (func (result f32)))
  (type $IiI (func (param i64 i32) (result i64)))
- (type $v (func))
+ (type $_ (func))
  (import "Math" "E" (global $~lib/bindings/Math/E f64))
  (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
  (import "Math" "LN10" (global $~lib/bindings/Math/LN10 f64))
@@ -9768,7 +9768,7 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/math/NativeMath.seedRandom (; 130 ;) (type $Iv) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 130 ;) (type $I_) (param $0 i64)
   local.get $0
   i64.eqz
   if
@@ -11581,7 +11581,7 @@
    local.get $3
   end
  )
- (func $start (; 157 ;) (type $v)
+ (func $start (; 157 ;) (type $_)
   (local $0 i32)
   (local $1 f64)
   (local $2 i32)
@@ -42988,6 +42988,6 @@
    unreachable
   end
  )
- (func $null (; 158 ;) (type $v)
+ (func $null (; 158 ;) (type $_)
  )
 )

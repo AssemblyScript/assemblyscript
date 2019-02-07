@@ -18,6 +18,7 @@ declare function _BinaryenTypeInt32(): BinaryenType;
 declare function _BinaryenTypeInt64(): BinaryenType;
 declare function _BinaryenTypeFloat32(): BinaryenType;
 declare function _BinaryenTypeFloat64(): BinaryenType;
+declare function _BinaryenTypeVec128(): BinaryenType;
 declare function _BinaryenTypeUnreachable(): BinaryenType;
 declare function _BinaryenTypeAuto(): BinaryenType;
 

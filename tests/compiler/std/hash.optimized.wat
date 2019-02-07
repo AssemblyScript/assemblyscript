@@ -1,7 +1,7 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $Ii (func (param i64) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 1)
  (data (i32.const 16) "\01\00\00\00a")
  (data (i32.const 24) "\02\00\00\00a\00b")
@@ -143,7 +143,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
   i32.const 0
   call $~lib/internal/hash/hashStr
   drop
@@ -196,7 +196,7 @@
   call $~lib/internal/hash/hash64
   drop
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )

@@ -18,14 +18,15 @@ export type RelooperRef = usize;
 export type RelooperBlockRef = usize;
 export type Index = u32;
 
-export const enum NativeType {
-  None = 0,        // _BinaryenTypeNone(),
-  I32  = 1,        // _BinaryenTypeInt32(),
-  I64  = 2,        // _BinaryenTypeInt64(),
-  F32  = 3,        // _BinaryenTypeFloat32(),
-  F64  = 4,        // _BinaryenTypeFloat64(),
-  Unreachable = 5, // _BinaryenTypeUnreachable(),
-  Auto = -1        // _BinaryenTypeAuto()
+export enum NativeType {
+  None = _BinaryenTypeNone(),
+  I32  = _BinaryenTypeInt32(),
+  I64  = _BinaryenTypeInt64(),
+  F32  = _BinaryenTypeFloat32(),
+  F64  = _BinaryenTypeFloat64(),
+  V128 = _BinaryenTypeVec128(),
+  Unreachable = _BinaryenTypeUnreachable(),
+  Auto = _BinaryenTypeAuto()
 }
 
 export enum ExpressionId {
@@ -439,6 +440,15 @@ export class Module {
   createF64(value: f64): ExpressionRef {
     var out = this.lit;
     _BinaryenLiteralFloat64(out, value);
+    return _BinaryenConst(this.ref, out);
+  }
+
+  createV128(bytes: Uint8Array): ExpressionRef {
+    assert(bytes.length == 16);
+    var out = this.lit;
+    // FIXME: does this work or do we need to malloc?
+    for (let i = 0; i < 16; ++i) store<u8>(out + i, bytes[i]);
+    _BinaryenLiteralVec128(out, out);
     return _BinaryenConst(this.ref, out);
   }
 

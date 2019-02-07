@@ -1,11 +1,11 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
@@ -337,7 +337,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1234,7 +1234,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1710,7 +1710,7 @@
   local.get $1
   call $~lib/dataview/DataView#constructor
  )
- (func $start (; 12 ;) (type $v)
+ (func $start (; 12 ;) (type $_)
   (local $0 i32)
   i32.const 288
   global.set $~lib/allocator/arena/startOffset
@@ -1967,7 +1967,7 @@
    unreachable
   end
  )
- (func $null (; 13 ;) (type $v)
+ (func $null (; 13 ;) (type $_)
   nop
  )
 )

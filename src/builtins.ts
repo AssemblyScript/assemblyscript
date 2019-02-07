@@ -3513,7 +3513,7 @@ export function compileIterateRoots(compiler: Compiler): void {
                 ? module.createI64(i64_low(value), i64_high(value))
                 : module.createI32(i64_low(value))
             ],
-            "iv"
+            "i_"
           )
         );
       } else {
@@ -3526,7 +3526,7 @@ export function compileIterateRoots(compiler: Compiler): void {
                 compiler.options.nativeSizeType
               )
             ],
-            "iv"
+            "i_"
           )
         );
       }
@@ -3610,7 +3610,7 @@ export function ensureGCHook(
         [
           module.createGetLocal(0, nativeSizeType)
         ],
-        nativeSizeType == NativeType.I64 ? "Iv" : "iv"
+        nativeSizeType == NativeType.I64 ? "I_" : "i_"
       )
     );
 

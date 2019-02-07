@@ -1,6 +1,6 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s")
@@ -10,7 +10,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $v)
+ (func $start (; 1 ;) (type $_)
   global.get $getter-setter/Foo._bar
   if
    i32.const 0
@@ -47,7 +47,7 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $v)
+ (func $null (; 2 ;) (type $_)
   nop
  )
 )

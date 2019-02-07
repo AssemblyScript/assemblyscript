@@ -1,7 +1,7 @@
 (module
  (type $i (func (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -21,7 +21,7 @@
  (func $inlining/func_fe~anonymous|1 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $inlining/test_funcs (; 3 ;) (type $v)
+ (func $inlining/test_funcs (; 3 ;) (type $_)
   i32.const 1
   global.set $~argc
   i32.const 2
@@ -100,7 +100,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $inlining/test_ctor (; 5 ;) (type $v)
+ (func $inlining/test_ctor (; 5 ;) (type $_)
   (local $0 i32)
   i32.const 16
   call $~lib/allocator/arena/__memory_allocate
@@ -178,7 +178,7 @@
    unreachable
   end
  )
- (func $start (; 6 ;) (type $v)
+ (func $start (; 6 ;) (type $_)
   call $inlining/test_funcs
   i32.const 40
   global.set $~lib/allocator/arena/startOffset
@@ -186,7 +186,7 @@
   global.set $~lib/allocator/arena/offset
   call $inlining/test_ctor
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 7 ;) (type $_)
   nop
  )
 )

@@ -1,16 +1,16 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iv (func (param i32)))
+ (type $i_ (func (param i32)))
  (type $iiI (func (param i32 i32) (result i64)))
- (type $iiIv (func (param i32 i32 i64)))
+ (type $iiI_ (func (param i32 i32 i64)))
  (type $iif (func (param i32 i32) (result f32)))
- (type $iifv (func (param i32 i32 f32)))
+ (type $iif_ (func (param i32 i32 f32)))
  (type $iiF (func (param i32 i32) (result f64)))
- (type $iiFv (func (param i32 i32 f64)))
- (type $v (func))
+ (type $iiF_ (func (param i32 i32 f64)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00")
@@ -195,7 +195,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memcpy (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1396,7 +1396,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 6 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1623,10 +1623,10 @@
    end
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 7 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 7 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $~lib/internal/memory/memset (; 8 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 8 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -1987,7 +1987,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<i32>#__set (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 10 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2087,7 +2087,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<i64>#__set (; 12 ;) (type $iiIv) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/array/Array<i64>#__set (; 12 ;) (type $iiI_) (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2187,7 +2187,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<f32>#__set (; 14 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $~lib/array/Array<f32>#__set (; 14 ;) (type $iif_) (param $0 i32) (param $1 i32) (param $2 f32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2287,7 +2287,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<f64>#__set (; 16 ;) (type $iiFv) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $~lib/array/Array<f64>#__set (; 16 ;) (type $iiF_) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2354,7 +2354,7 @@
    f64.store offset=8
   end
  )
- (func $start (; 17 ;) (type $v)
+ (func $start (; 17 ;) (type $_)
   (local $0 i32)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
@@ -2619,6 +2619,6 @@
    unreachable
   end
  )
- (func $null (; 18 ;) (type $v)
+ (func $null (; 18 ;) (type $_)
  )
 )

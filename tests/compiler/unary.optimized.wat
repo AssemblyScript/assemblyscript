@@ -1,5 +1,5 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -10,7 +10,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 0 ;) (type $v)
+ (func $start (; 0 ;) (type $_)
   (local $0 f32)
   (local $1 f64)
   (local $2 i32)
@@ -236,7 +236,7 @@
   local.get $1
   global.set $unary/F
  )
- (func $null (; 1 ;) (type $v)
+ (func $null (; 1 ;) (type $_)
   nop
  )
 )

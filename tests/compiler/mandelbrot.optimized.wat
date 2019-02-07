@@ -1,7 +1,7 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $FF (func (param f64) (result f64)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -392,7 +392,7 @@
   local.get $0
   f64.add
  )
- (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
@@ -587,7 +587,7 @@
    end
   end
  )
- (func $null (; 3 ;) (type $v)
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

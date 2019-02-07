@@ -2,9 +2,9 @@
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00")
@@ -316,6 +316,6 @@
   i32.const 0
   call $~lib/string/String#startsWith
  )
- (func $null (; 12 ;) (type $v)
+ (func $null (; 12 ;) (type $_)
  )
 )

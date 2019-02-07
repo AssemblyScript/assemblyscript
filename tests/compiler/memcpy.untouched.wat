@@ -1,7 +1,7 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\t\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s\00")
@@ -1208,7 +1208,7 @@
   end
   local.get $3
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $_)
   global.get $memcpy/base
   i64.const 1229782938247303441
   i64.store
@@ -1428,6 +1428,6 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $v)
+ (func $null (; 3 ;) (type $_)
  )
 )

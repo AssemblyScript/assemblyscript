@@ -1,12 +1,12 @@
 (module
  (type $iiiiiiFF (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $F (func (result f64)))
  (type $iIi (func (param i32 i64) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iI (func (param i32) (result i64)))
  (type $iII (func (param i32 i64) (result i64)))
- (type $v (func))
+ (type $_ (func))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
@@ -138,7 +138,7 @@
   i64.store
   local.get $1
  )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 8 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -323,6 +323,6 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (type $v)
+ (func $null (; 9 ;) (type $_)
  )
 )

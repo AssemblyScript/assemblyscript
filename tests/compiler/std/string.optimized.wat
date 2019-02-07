@@ -1,19 +1,19 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
- (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
+ (type $iiiii_ (func (param i32 i32 i32 i32 i32)))
  (type $i (func (result i32)))
  (type $iiF (func (param i32 i32) (result f64)))
  (type $iF (func (param i32) (result f64)))
  (type $Ii (func (param i64) (result i32)))
- (type $iIiv (func (param i32 i64 i32)))
+ (type $iIi_ (func (param i32 i64 i32)))
  (type $Fi (func (param f64) (result i32)))
  (type $iFi (func (param i32 f64) (result i32)))
  (type $iIiIiIii (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
@@ -621,7 +621,7 @@
   end
   i32.const -1
  )
- (func $~lib/internal/memory/memcpy (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 11 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1518,7 +1518,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 12 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1716,7 +1716,7 @@
    end
   end
  )
- (func $~lib/internal/string/repeatUnsafe (; 13 ;) (type $iiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/string/repeatUnsafe (; 13 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1921,7 +1921,7 @@
    end
   end
  )
- (func $~lib/internal/string/copyUnsafe (; 14 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 14 ;) (type $iiiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   local.get $1
   i32.const 1
   i32.shl
@@ -3834,7 +3834,7 @@
    end
   end
  )
- (func $~lib/internal/number/utoa32_lut (; 43 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 43 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   i32.const 1816
@@ -4055,7 +4055,7 @@
    end
   end
  )
- (func $~lib/internal/number/utoa64_lut (; 47 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/internal/number/utoa64_lut (; 47 ;) (type $iIi_) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5386,7 +5386,7 @@
   end
   local.get $1
  )
- (func $start (; 55 ;) (type $v)
+ (func $start (; 55 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   i32.const 5880
@@ -9163,7 +9163,7 @@
    unreachable
   end
  )
- (func $null (; 56 ;) (type $v)
+ (func $null (; 56 ;) (type $_)
   nop
  )
 )

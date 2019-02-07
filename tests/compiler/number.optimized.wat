@@ -1,13 +1,13 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $Fi (func (param f64) (result i32)))
  (type $iFi (func (param i32 f64) (result i32)))
  (type $iIiIiIii (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -199,7 +199,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/number/utoa32_lut (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   i32.const 584
@@ -833,7 +833,7 @@
    local.get $10
   end
  )
- (func $~lib/internal/memory/memcpy (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 9 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1730,7 +1730,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 10 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -2661,7 +2661,7 @@
   end
   local.get $1
  )
- (func $start (; 15 ;) (type $v)
+ (func $start (; 15 ;) (type $_)
   (local $0 i32)
   i32.const 2192
   global.set $~lib/allocator/arena/startOffset
@@ -2827,7 +2827,7 @@
    unreachable
   end
  )
- (func $null (; 16 ;) (type $v)
+ (func $null (; 16 ;) (type $_)
   nop
  )
 )

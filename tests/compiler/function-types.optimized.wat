@@ -1,9 +1,9 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $III (func (param i64 i64) (result i64)))
  (type $FFF (func (param f64 f64) (result f64)))
- (type $v (func))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\11\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00t\00y\00p\00e\00s\00.\00t\00s")
@@ -30,7 +30,7 @@
   local.get $1
   f64.add
  )
- (func $start (; 4 ;) (type $v)
+ (func $start (; 4 ;) (type $_)
   (local $0 i32)
   i32.const 1
   global.set $function-types/i32Adder
@@ -180,7 +180,7 @@
    unreachable
   end
  )
- (func $null (; 5 ;) (type $v)
+ (func $null (; 5 ;) (type $_)
   nop
  )
 )

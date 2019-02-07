@@ -2,7 +2,7 @@
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $i (func (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -164,7 +164,7 @@
   i32.load offset=4
   call_indirect (type $i)
  )
- (func $start (; 14 ;) (type $v)
+ (func $start (; 14 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -176,6 +176,6 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 15 ;) (type $v)
+ (func $null (; 15 ;) (type $_)
  )
 )

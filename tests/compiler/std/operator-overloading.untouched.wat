@@ -2,10 +2,10 @@
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
- (type $v (func))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
@@ -1776,7 +1776,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $start (; 34 ;) (type $v)
+ (func $start (; 34 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   global.get $HEAP_BASE
@@ -2837,6 +2837,6 @@
    unreachable
   end
  )
- (func $null (; 35 ;) (type $v)
+ (func $null (; 35 ;) (type $_)
  )
 )

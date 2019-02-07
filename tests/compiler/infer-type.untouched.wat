@@ -1,10 +1,10 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (type $i (func (result i32)))
  (type $I (func (result i64)))
  (type $f (func (result f32)))
  (type $F (func (result f64)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s\00")
@@ -23,7 +23,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $infer-type/locals (; 1 ;) (type $v)
+ (func $infer-type/locals (; 1 ;) (type $_)
   (local $0 i32)
   (local $1 i64)
   (local $2 f64)
@@ -55,7 +55,7 @@
  (func $infer-type/refF (; 5 ;) (type $F) (result f64)
   f64.const 0
  )
- (func $start (; 6 ;) (type $v)
+ (func $start (; 6 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   global.get $infer-type/i
@@ -126,6 +126,6 @@
    unreachable
   end
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 7 ;) (type $_)
  )
 )
