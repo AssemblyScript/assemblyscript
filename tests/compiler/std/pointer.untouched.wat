@@ -1,10 +1,10 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiv (func (param i32 i32)))
- (type $iiiv (func (param i32 i32 i32)))
- (type $iifv (func (param i32 i32 f32)))
- (type $ifv (func (param i32 f32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $ii_ (func (param i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
+ (type $iif_ (func (param i32 i32 f32)))
+ (type $if_ (func (param i32 f32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0e\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s\00")
@@ -20,7 +20,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/internal/memory/memset (; 1 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 1 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -274,7 +274,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 2 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1475,7 +1475,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 3 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1702,7 +1702,7 @@
    end
   end
  )
- (func $std/pointer/Pointer<Entry>#set:value (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $std/pointer/Pointer<Entry>#set:value (; 4 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1733,7 +1733,7 @@
    call $~lib/internal/memory/memmove
   end
  )
- (func $std/pointer/Pointer<f32>#set (; 5 ;) (type $iifv) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $std/pointer/Pointer<f32>#set (; 5 ;) (type $iif_) (param $0 i32) (param $1 i32) (param $2 f32)
   local.get $0
   local.get $1
   i32.const 4
@@ -1742,12 +1742,12 @@
   local.get $2
   f32.store
  )
- (func $std/pointer/Pointer<f32>#set:value (; 6 ;) (type $ifv) (param $0 i32) (param $1 f32)
+ (func $std/pointer/Pointer<f32>#set:value (; 6 ;) (type $if_) (param $0 i32) (param $1 f32)
   local.get $0
   local.get $1
   f32.store
  )
- (func $start (; 7 ;) (type $v)
+ (func $start (; 7 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 f32)
@@ -2350,6 +2350,6 @@
    unreachable
   end
  )
- (func $null (; 8 ;) (type $v)
+ (func $null (; 8 ;) (type $_)
  )
 )

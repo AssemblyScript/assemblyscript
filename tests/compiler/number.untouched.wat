@@ -1,17 +1,17 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $Fi (func (param f64) (result i32)))
  (type $iFi (func (param i32 f64) (result i32)))
  (type $iIiIiIii (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
- (type $iv (func (param i32)))
+ (type $iiiii_ (func (param i32 i32 i32 i32 i32)))
+ (type $i_ (func (param i32)))
  (type $fi (func (param f32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\000\00")
@@ -288,7 +288,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/number/utoa32_lut (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1239,7 +1239,7 @@
   end
   local.get $15
  )
- (func $~lib/internal/memory/memcpy (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 13 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2440,7 +2440,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 14 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -3513,7 +3513,7 @@
   local.get $2
   i32.add
  )
- (func $~lib/internal/string/copyUnsafe (; 17 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 17 ;) (type $iiiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -3652,7 +3652,7 @@
   call $~lib/internal/string/copyUnsafe
   local.get $10
  )
- (func $~lib/allocator/arena/__memory_free (; 19 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 19 ;) (type $i_) (param $0 i32)
   nop
  )
  (func $~lib/internal/number/dtoa (; 20 ;) (type $Fi) (param $0 f64) (result i32)
@@ -3815,7 +3815,7 @@
    local.get $2
   end
  )
- (func $start (; 27 ;) (type $v)
+ (func $start (; 27 ;) (type $_)
   (local $0 i32)
   (local $1 f32)
   (local $2 f64)
@@ -4609,6 +4609,6 @@
    unreachable
   end
  )
- (func $null (; 28 ;) (type $v)
+ (func $null (; 28 ;) (type $_)
  )
 )

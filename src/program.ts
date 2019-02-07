@@ -411,6 +411,7 @@ export class Program extends DiagnosticEmitter {
       ["bool", Type.bool],
       ["f32", Type.f32],
       ["f64", Type.f64],
+      // ["v128", Type.v128],
       ["void", Type.void],
       ["number", Type.f64],
       ["boolean", Type.bool]

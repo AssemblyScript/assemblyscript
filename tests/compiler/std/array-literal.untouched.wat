@@ -1,9 +1,9 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
- (type $v (func))
+ (type $iii_ (func (param i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\03\00\00\00\00\00\00\00\00\01\02\00\00\00\00\00")
@@ -228,7 +228,7 @@
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/memory/memset (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 7 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -543,7 +543,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<i8>#__unchecked_set (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i8>#__unchecked_set (; 9 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -628,7 +628,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<i32>#__unchecked_set (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__unchecked_set (; 11 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -723,7 +723,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#__unchecked_set (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref>#__unchecked_set (; 14 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -818,7 +818,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 17 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 17 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -842,7 +842,7 @@
   local.get $5
   i32.store offset=8
  )
- (func $start (; 18 ;) (type $v)
+ (func $start (; 18 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1282,6 +1282,6 @@
    unreachable
   end
  )
- (func $null (; 19 ;) (type $v)
+ (func $null (; 19 ;) (type $_)
  )
 )

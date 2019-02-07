@@ -1,5 +1,5 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $start)
@@ -11,7 +11,7 @@
  (export "renamed_a" (global $export/a))
  (export "renamed_b" (global $export/b))
  (export "renamed_renamed_b" (global $export/b))
- (func $start (; 0 ;) (type $v)
+ (func $start (; 0 ;) (type $_)
   nop
  )
 )

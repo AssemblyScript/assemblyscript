@@ -1,7 +1,7 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiv (func (param i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $ii_ (func (param i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s\00")
@@ -55,13 +55,13 @@
  (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $start~anonymous|1 (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $start~anonymous|1 (; 1 ;) (type $ii_) (param $0 i32) (param $1 i32)
   nop
  )
- (func $builtins/test (; 2 ;) (type $v)
+ (func $builtins/test (; 2 ;) (type $_)
   nop
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -1222,7 +1222,7 @@
   i32.const 1
   i32.const 2
   global.get $builtins/fn
-  call_indirect (type $iiv)
+  call_indirect (type $ii_)
   i32.const 1
   i32.const 1
   i32.eq
@@ -2179,6 +2179,6 @@
   end
   drop
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $_)
  )
 )

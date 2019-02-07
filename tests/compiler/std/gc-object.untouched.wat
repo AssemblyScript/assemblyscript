@@ -1,9 +1,9 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
- (type $iv (func (param i32)))
- (type $iiv (func (param i32 i32)))
+ (type $i_ (func (param i32)))
+ (type $ii_ (func (param i32 i32)))
  (memory $0 0)
  (table $0 4 funcref)
  (elem (i32.const 0) $null $~lib/collector/itcm/__gc_mark $std/gc-object/Base~gc $std/gc-object/Custom~gc)
@@ -110,7 +110,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/collector/itcm/ManagedObjectList#clear (; 1 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#clear (; 1 ;) (type $i_) (param $0 i32)
   local.get $0
   local.get $0
   i32.store
@@ -132,7 +132,7 @@
   i32.xor
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#set:next (; 4 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:next (; 4 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   local.get $0
@@ -142,7 +142,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/ManagedObject#unlink (; 5 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#unlink (; 5 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -158,7 +158,7 @@
   local.get $1
   call $~lib/collector/itcm/ManagedObject#set:next
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 6 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 6 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load offset=4
@@ -176,7 +176,7 @@
   local.get $1
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 7 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 7 ;) (type $i_) (param $0 i32)
   local.get $0
   global.get $~lib/collector/itcm/iter
   i32.eq
@@ -201,7 +201,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/__gc_mark (; 8 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/__gc_mark (; 8 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   local.get $0
   if
@@ -223,7 +223,7 @@
    end
   end
  )
- (func $~lib/collector/itcm/ManagedObject#set:color (; 9 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:color (; 9 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $0
   i32.load
@@ -235,10 +235,10 @@
   i32.or
   i32.store
  )
- (func $~lib/allocator/arena/__memory_free (; 10 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 10 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $~lib/collector/itcm/step (; 11 ;) (type $v)
+ (func $~lib/collector/itcm/step (; 11 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   block $break|0
@@ -334,7 +334,7 @@
       end
       local.get $0
       i32.load offset=8
-      call_indirect (type $iv)
+      call_indirect (type $i_)
      else      
       i32.const 1
       call $~iterateRoots
@@ -439,7 +439,7 @@
    i32.add
   end
  )
- (func $std/gc-object/Base~gc (; 13 ;) (type $iv) (param $0 i32)
+ (func $std/gc-object/Base~gc (; 13 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -459,7 +459,7 @@
   end
   local.get $0
  )
- (func $std/gc-object/Custom~gc (; 15 ;) (type $iv) (param $0 i32)
+ (func $std/gc-object/Custom~gc (; 15 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -467,7 +467,7 @@
   end
   local.get $0
   i32.const 2
-  call_indirect (type $iv)
+  call_indirect (type $i_)
   local.get $0
   i32.load
   call $~lib/collector/itcm/__gc_mark
@@ -495,7 +495,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/collector/itcm/__gc_collect (; 17 ;) (type $v)
+ (func $~lib/collector/itcm/__gc_collect (; 17 ;) (type $_)
   (local $0 i32)
   block $break|0
    block $case1|0
@@ -527,11 +527,11 @@
    end
   end
  )
- (func $~lib/gc/gc.collect (; 18 ;) (type $v)
+ (func $~lib/gc/gc.collect (; 18 ;) (type $_)
   call $~lib/collector/itcm/__gc_collect
   return
  )
- (func $std/gc-object/main (; 19 ;) (type $v)
+ (func $std/gc-object/main (; 19 ;) (type $_)
   global.get $~started
   i32.eqz
   if
@@ -540,7 +540,7 @@
    global.set $~started
   end
  )
- (func $start (; 20 ;) (type $v)
+ (func $start (; 20 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -565,11 +565,11 @@
   global.set $std/gc-object/obj
   call $~lib/gc/gc.collect
  )
- (func $null (; 21 ;) (type $v)
+ (func $null (; 21 ;) (type $_)
  )
- (func $~iterateRoots (; 22 ;) (type $iv) (param $0 i32)
+ (func $~iterateRoots (; 22 ;) (type $i_) (param $0 i32)
   global.get $std/gc-object/obj
   local.get $0
-  call_indirect (type $iv)
+  call_indirect (type $i_)
  )
 )

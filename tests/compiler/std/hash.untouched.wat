@@ -1,7 +1,7 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $Ii (func (param i64) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00")
  (data (i32.const 16) "\01\00\00\00a\00")
@@ -200,7 +200,7 @@
   local.set $3
   local.get $3
  )
- (func $start (; 4 ;) (type $v)
+ (func $start (; 4 ;) (type $_)
   (local $0 i32)
   (local $1 f32)
   (local $2 f64)
@@ -370,6 +370,6 @@
   call $std/hash/check
   drop
  )
- (func $null (; 5 ;) (type $v)
+ (func $null (; 5 ;) (type $_)
  )
 )

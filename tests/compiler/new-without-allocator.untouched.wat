@@ -1,7 +1,7 @@
 (module
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -29,6 +29,6 @@
   local.set $0
   i32.const 3
  )
- (func $null (; 3 ;) (type $v)
+ (func $null (; 3 ;) (type $_)
  )
 )

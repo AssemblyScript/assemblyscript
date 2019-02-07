@@ -3,7 +3,7 @@
  (type $FiF (func (param f64 i32) (result f64)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $fif (func (param f32 i32) (result f32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -2738,7 +2738,7 @@
   local.get $2
   f64.reinterpret_i64
  )
- (func $start (; 6 ;) (type $v)
+ (func $start (; 6 ;) (type $_)
   global.get $binary/i
   i32.const 1
   i32.lt_s
@@ -3346,6 +3346,6 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 7 ;) (type $_)
  )
 )

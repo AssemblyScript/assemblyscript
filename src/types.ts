@@ -54,6 +54,9 @@ export const enum TypeKind {
   /** A 64-bit double. */
   F64,
 
+  // vectors
+  V128,
+
   // other
 
   /** No return type. */
@@ -82,8 +85,12 @@ export const enum TypeFlags {
   /** Is a reference type. */
   REFERENCE = 1 << 8,
   /** Is a nullable type. */
-  NULLABLE = 1 << 9
+  NULLABLE = 1 << 9,
+  /** Is a vector type. */
+  VECTOR = 1 << 10
 }
+
+const v128_zero = new Uint8Array(16);
 
 /** Represents a resolved type. */
 export class Type {
@@ -229,6 +236,10 @@ export class Type {
         if (target.is(TypeFlags.FLOAT)) {
           return this.size <= target.size;
         }
+      } else if (this.is(TypeFlags.VECTOR)) {
+        if (target.is(TypeFlags.VECTOR)) {
+          return this.size == target.size;
+        }
       }
     }
     return false;
@@ -272,6 +283,7 @@ export class Type {
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
+      case TypeKind.V128: return "v128";
       default: assert(false);
       case TypeKind.VOID: return "void";
     }
@@ -289,6 +301,7 @@ export class Type {
       case TypeKind.USIZE: return this.size == 64 ? NativeType.I64 : NativeType.I32;
       case TypeKind.F32: return NativeType.F32;
       case TypeKind.F64: return NativeType.F64;
+      case TypeKind.V128: return NativeType.V128;
       case TypeKind.VOID:  return NativeType.None;
     }
   }
@@ -304,12 +317,14 @@ export class Type {
       case TypeKind.U64: return module.createI64(0);
       case TypeKind.F32: return module.createF32(0);
       case TypeKind.F64: return module.createF64(0);
+      case TypeKind.V128: return module.createV128(v128_zero);
     }
   }
 
   /** Converts this type to its native `1` value. */
   toNativeOne(module: Module): ExpressionRef {
     switch (this.kind) {
+      case TypeKind.V128:
       case TypeKind.VOID: assert(false);
       default: return module.createI32(1);
       case TypeKind.ISIZE:
@@ -324,6 +339,7 @@ export class Type {
   /** Converts this type to its native `-1` value. */
   toNativeNegOne(module: Module): ExpressionRef {
     switch (this.kind) {
+      case TypeKind.V128:
       case TypeKind.VOID: assert(false);
       default: return module.createI32(-1);
       case TypeKind.ISIZE:
@@ -345,7 +361,8 @@ export class Type {
       case TypeKind.USIZE: return this.size == 64 ? "I" : "i";
       case TypeKind.F32: return "f";
       case TypeKind.F64: return "F";
-      case TypeKind.VOID: return "v";
+      case TypeKind.V128: return "v";
+      case TypeKind.VOID: return "_";
     }
   }
 
@@ -468,6 +485,12 @@ export class Type {
     TypeFlags.LONG     |
     TypeFlags.FLOAT    |
     TypeFlags.VALUE,  64
+  );
+
+  /** A 128-bit vector. */
+  static readonly v128: Type = new Type(TypeKind.V128,
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128
   );
 
   /** No return type. */
