@@ -1679,7 +1679,7 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
     }
-    case "atomic.load": { // Atomic.load<T!>(offset: usize, constantOffset?: usize) -> *
+    case "atomic.load": { // load<T!>(offset: usize, constantOffset?: usize) -> *
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (operands.length < 1 || operands.length > 2) {
         if (!(typeArguments && typeArguments.length == 1)) {
@@ -1731,7 +1731,7 @@ export function compileCall(
         offset
       );
     }
-    case "atomic.store": { // Atomic.store<T!>(offset: usize, value: *, constantOffset?: usize) -> void
+    case "atomic.store": { // store<T!>(offset: usize, value: *, constantOffset?: usize) -> void
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.void;
       if (operands.length < 2 || operands.length > 3) {
