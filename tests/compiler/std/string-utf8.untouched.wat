@@ -2224,7 +2224,7 @@
   i32.shr_u
   call $~lib/internal/string/allocateUnsafe
   local.set $7
-  block $~lib/memory/memory.copy|inlined.0
+  block $memory.copy|inlined.0
    local.get $7
    global.get $~lib/internal/string/HEADER_SIZE
    i32.add
