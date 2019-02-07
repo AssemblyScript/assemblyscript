@@ -6,9 +6,9 @@
   "types": "index.d.ts",
   "scripts": {
     "asbuild": "asc assembly/index.ts -O3 -b build/index.wasm -t build/index.wat --importMemory --sourceMap --validate -d build/index.d.ts",
-    "asbuild:untouched": "asc assembly/index.ts -b build/index.wasm -t build/index.wat --debug --importMemory --sourceMap --validate",
+    "asbuild:untouched": "asc assembly/index.ts -b build/index.wasm -t build/index.wat --debug --importMemory --sourceMap --validate -d build/index.d.ts",
     "build": "npm run asbuild && webpack --mode production --display-modules",
-    "asbuild:test": "asc tests/assembly/index.ts -b build/test.wasm -t build/test.wat --debug --sourceMap --validate",
+    "asbuild:test": "npm run asbuild:untouched && asc tests/assembly/index.ts -b build/test.wasm -t build/test.wat --debug --sourceMap --validate",
     "test": "ts-node tests/"
   },
   "files": [
@@ -22,10 +22,10 @@
   "dependencies": {},
   "devDependencies": {
     "@types/webassembly-js-api": "0.0.1",
-    "assemblyscript": "AssemblyScript/assemblyscript",
+    "assemblyscript": "file:../..",
     "ts-loader": "^5.2.1",
     "ts-node": "^6.2.0",
-    "typescript": "^3.1.2",
+    "typescript": "^3.3.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2"
   }

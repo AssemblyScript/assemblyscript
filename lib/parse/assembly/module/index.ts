@@ -61,6 +61,10 @@ export class Module {
     return null;
   }
 
+   hasSection(id: SectionId): boolean {
+     return this.getID(id) != null;
+   }
+
   getType(): TypeSection | null {
     let header = this.getID(SectionId.Type);
     if (header == null){

@@ -18,51 +18,11 @@ import {
   TypeSection,
   Module
 } from "./module";
-import { log } from "./host";
 
-// log("in the start function!");
-// type FunctionName  = string | symbol;
-// type Instance = [Function, Object];
-//
-// let instance: Object;
-// let methods: Map<FunctionName, Function> = new Map<FunctionName, Function>();
-
-// function registerClass<T extends { new(...args: any[]): {} }>(name:string): any {
-//     type Ctor = new (...args: any[]) => T;
-//     return (target: T): Ctor => {
-//       // Save a reference to the original constructor
-//       const Original = target;
-//           let self:T = this;
-//           debugger;
-//       // the new constructor behaviour
-//       let decoratedConstructor: any = function(...args: any[]): void {
-//         // log<string>("Before construction:");
-//         //
-//         Original.apply(this, args);
-//         instance = this;
-//         // console.log("After construction: ", self.instance !== undefined);
-//       };
-//
-//       // Copy prototype so intanceof operator still works
-//       decoratedConstructor.prototype = Original.prototype;
-//       // Copy static members too
-//       Object.keys(Original).forEach((name: string) =>
-//                     { decoratedConstructor[name] = (<any>Original)[name]; });
-//
-//       // Return new constructor (will override original)
-//       return decoratedConstructor;
-//     };
-//
-//   }
-
-
-export function printModule(m: Module): void {
-  m.print();
-}
 
 export function getType(m: Module): string {
   var type = m.getType();
-  if (type == null){
+  if (type == null) {
     return "No Type Section"
   }
   return type.toString();
@@ -119,14 +79,11 @@ export function removeStartFunction (mod: Module):  Uint8Array {
 export function exportDataSection(mod: Module): Uint8Array | null {
   var header = mod.getID(SectionId.Data);
   var mem = mod.getID(SectionId.Memory);
-  log<i32>((<SectionHeader>header).offset);
-  log<i32>((<SectionHeader>mem).offset);
-  log(header == null);
-  log(mem ==null)
-  if (header == null){
+
+  if (header == null) {
     return null;
   }
-  if (mem == null){
+  if (mem == null) {
     return null;
   }
   var len = header.len + mem.len;
@@ -139,13 +96,12 @@ export function exportDataSection(mod: Module): Uint8Array | null {
   res[3] = 0x6D;
   //Version number
   res[4] = 0x01;
-  log(res)
-  for (let i = mem.offset; i < mem.offset + mem.len - 1; i++){
+
+  for (let i = mem.offset; i < mem.offset + mem.len - 1; i++) {
     res[i - mem.offset + 8] = mod.buf.buffer[i];
   }
-  log(res[8])
-  log(mod.buf.buffer[mem.offset]);
-  for (let i = header.offset; i < header.offset + header.len - 1; i++){
+
+  for (let i = header.offset; i < header.offset + header.len - 1; i++) {
     let offset = i - header.offset + 8 + mem.len;
     res[offset] = mod.buf.buffer[i];
   }
@@ -212,18 +168,6 @@ export class Parser {
     // if (this.off != this.buf.length) unreachable();
   }
 
-}
-
-export function newParser(buf: Uint8Array): Parser {
-  return new Parser(buf);
-}
-export function parse(p: Parser): Module {
-  p.parse();
-  return p.module;
-}
-
-export function hasSection(mod: Module, id: SectionId): boolean {
-  return mod.getID(id) != null;
 }
 
 export {TypeSection, Module}

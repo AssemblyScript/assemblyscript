@@ -1,5 +1,5 @@
 import { Type, SectionId, ExternalKind, newParser } from "./common";
-import assert = require("assert");
+import  * as assert from "assert";
 export { Type, SectionId, ExternalKind };
 import  * as loader from "../../../dist/assemblyscript-loader";
 import ASModule from "../build";
@@ -16,9 +16,10 @@ if (typeof WASM_DATA !== "string") WASM_DATA = require("fs").readFileSync(__dirn
 
 export class WasmParser {
   instance: Instance & loader.ASInstance & loader.ASExport;
-  mod: number;
+  mod: ASModule.Module;
+  parser: ASModule.Parser;
 
-  get memory(): loader.ASMemory{
+  get memory(): loader.ASMemory {
     return this.instance.memory;
   }
 
@@ -71,39 +72,39 @@ export class WasmParser {
     this.instance  = loader.instantiate(compiled, imports);
     var array = this.memory.newArray(binary);
     var parser = new this.instance.Parser(array)
-    parser.parse()
-    this.mod = parser.module;
+    this.parser = parser;
+    parser.parse();
+    this.mod = <ASModule.Module>(<any>this.instance.Module).wrap(parser.module);
   }
 
   get Type(): string {
-    return this.memory.getString(this.instance.getType(this.mod))
+    return this.memory.getString(this.mod.getType());
 
   }
 
   printModule(): void {
-    this.instance.printModule(this.mod);
+    this.mod.print();
   }
 
   removeStartFunction(): Uint8Array {
-    var binary = <Uint8Array>this.memory.getArray(Uint8Array, this.instance.removeStartFunction(this.mod));
+    var binary = <Uint8Array>this.memory.getArray(Uint8Array, this.instance.removeStartFunction(this.parser.module));
     return binary;
   }
 
   hasSection(id: SectionId): boolean {
-    return this.instance.hasSection(this.mod, id) != 0;
+    return this.mod.hasSection(id);
   }
 
-
   removeDataSection(): Uint8Array {
-    return this.getByteArray(this.instance.removeSection(this.mod, SectionId.Data));
+    return this.getByteArray(this.instance.removeSection(this.parser.module, SectionId.Data));
   }
 
   exportDataSection(): Uint8Array {
-    return this.memory.getArray(Uint8Array, this.instance.exportDataSection(this.mod));
+    return this.memory.getArray(Uint8Array, this.instance.exportDataSection(this.parser.module));
   }
 
   hasStart(): boolean {
-    return this.instance.hasStart(this.mod) != 0;
+    return this.mod.hasStart;
   }
 }
 

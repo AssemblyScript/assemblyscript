@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2015"
+    "lib":["es2017", "esnext", "esnext.bigint", "es2017.typedarrays"],
+    "target": "es2016"
   },
   "include": [
     "./**/*.ts"

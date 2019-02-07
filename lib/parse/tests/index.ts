@@ -17,7 +17,6 @@ type CompileError = WebAssembly.CompileError;
 ].forEach((filename: string): void => {
   const binary: Uint8Array = fs.readFileSync(__dirname + "/" + filename);
   console.log("Testing '" + filename + "' ...");
-  debugger;
   var parser = new WasmParser(binary);
   assert(parser.hasStart());
   console.log("Test binary has start section");

@@ -8,7 +8,6 @@ declare module ASModule {
   type f32 = number;
   type f64 = number;
   type bool = any;
-  function printModule(m: u32): void;
   function getType(m: u32): u32;
   function getImports(m: u32): void;
   function removeSection(mod: u32, id: i32): u32;
@@ -25,9 +24,6 @@ declare module ASModule {
     off: u32;
     parse(): void;
   }
-  function newParser(buf: u32): u32;
-  function parse(p: u32): u32;
-  function hasSection(mod: u32, id: i32): bool;
   namespace memory {
     function fill(dest: u32, c: u8, n: u32): void;
     function copy(dest: u32, src: u32, n: u32): void;
@@ -37,6 +33,7 @@ declare module ASModule {
     function reset(): void;
   }
   class TypeSection {
+    NATIVE_CODE(header: u32);
     header: u32;
     funcs: u32;
     parse(buf: u32): u32;
@@ -51,6 +48,7 @@ declare module ASModule {
     start: u32;
     parseSection(header: u32): void;
     getID(id: i32): u32;
+    hasSection(id: i32): bool;
     getType(): u32;
     getImports(): u32;
     print(): void;

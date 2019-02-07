@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib":["es2017", "esnext"],
+    "target": "es6"
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}
