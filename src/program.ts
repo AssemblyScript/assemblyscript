@@ -1239,7 +1239,7 @@ export class Program extends DiagnosticEmitter {
             } else {
               this.error(
                 DiagnosticCode.Expected_0_arguments_but_got_1,
-                decorator.range, "1", numArgs.toString(0)
+                decorator.range, "1", numArgs.toString()
               );
             }
           }
@@ -2556,7 +2556,7 @@ export class Function extends Element {
       this.prototype.program,
       name
         ? name
-        : "var$" + localIndex.toString(10),
+        : "var$" + localIndex.toString(),
       localIndex,
       type,
       declaration
@@ -3038,7 +3038,7 @@ export class Flow {
     var flow = Flow.create(parentFunction);
     flow.set(FlowFlags.INLINE_CONTEXT);
     flow.inlineFunction = inlineFunction;
-    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString(10);
+    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString();
     flow.returnType = inlineFunction.signature.returnType;
     flow.contextualTypeArguments = inlineFunction.contextualTypeArguments;
     return flow;
@@ -3246,10 +3246,10 @@ export class Flow {
       if (index < 0) return true; // inlined constant
       map = this.wrappedLocals;
     } else if (ext = this.wrappedLocalsExt) {
-      let i = ((index - 64) / 64) | 0;
+      let i = (index - 64) >> 6;
       if (i >= ext.length) return false;
       map = ext[i];
-      index -= (i + 1) * 64;
+      index -= (i + 1) << 6;
     } else {
       return false;
     }
@@ -3274,14 +3274,14 @@ export class Flow {
       map = this.wrappedLocals;
     } else {
       let ext = this.wrappedLocalsExt;
-      off = ((index - 64) / 64) | 0;
+      off = (index - 64) >> 6;
       if (!ext) {
         this.wrappedLocalsExt = ext = new Array(off + 1);
         ext.length = 0;
       }
       while (ext.length <= off) ext.push(i64_new(0));
       map = ext[off];
-      index -= (off + 1) * 64;
+      index -= (off + 1) << 6;
     }
     var mask = i64_shl(i64_one, i64_new(index));
     map = wrapped ? i64_or(map, mask) : i64_and(map, i64_not(mask));
@@ -3296,7 +3296,7 @@ export class Flow {
     var stack = parentFunction.breakStack;
     if (!stack) parentFunction.breakStack = [ id ];
     else stack.push(id);
-    return parentFunction.breakLabel = id.toString(10);
+    return parentFunction.breakLabel = id.toString();
   }
 
   /** Pops the most recent break label from the stack. */
@@ -3306,7 +3306,7 @@ export class Flow {
     var length = assert(stack.length);
     stack.pop();
     if (length > 1) {
-      parentFunction.breakLabel = stack[length - 2].toString(10);
+      parentFunction.breakLabel = stack[length - 2].toString();
     } else {
       parentFunction.breakLabel = null;
       parentFunction.breakStack = null;
@@ -3345,7 +3345,7 @@ export class Flow {
     this.flags |= left.flags & right.flags & FlowFlags.ANY_CATEGORICAL;
 
     // conditional flags set in at least one arm
-    this.flags |= left.flags & FlowFlags.ANY_CONDITIONAL;
+    this.flags |= left.flags  & FlowFlags.ANY_CONDITIONAL;
     this.flags |= right.flags & FlowFlags.ANY_CONDITIONAL;
 
     // locals wrapped in both arms
@@ -3555,10 +3555,10 @@ export class Flow {
           default: assert(false);
         }
         switch (type.kind) {
-          case TypeKind.I8: return value < i8.MIN_VALUE || value > i8.MAX_VALUE;
-          case TypeKind.I16: return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
-          case TypeKind.U8: return value < 0 || value > u8.MAX_VALUE;
-          case TypeKind.U16: return value < 0 || value > u16.MAX_VALUE;
+          case TypeKind.I8:   return value < i8.MIN_VALUE  || value > i8.MAX_VALUE;
+          case TypeKind.I16:  return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
+          case TypeKind.U8:   return value < 0 || value > u8.MAX_VALUE;
+          case TypeKind.U16:  return value < 0 || value > u16.MAX_VALUE;
           case TypeKind.BOOL: return (value & ~1) != 0;
         }
         break;
@@ -3568,7 +3568,7 @@ export class Flow {
       case ExpressionId.Load: {
         let fromType: Type;
         switch (getLoadBytes(expr)) {
-          case 1:  { fromType = isLoadSigned(expr) ? Type.i8 : Type.u8; break; }
+          case 1:  { fromType = isLoadSigned(expr) ? Type.i8  : Type.u8;  break; }
           case 2:  { fromType = isLoadSigned(expr) ? Type.i16 : Type.u16; break; }
           default: { fromType = isLoadSigned(expr) ? Type.i32 : Type.u32; break; }
         }
@@ -3618,7 +3618,7 @@ export class Flow {
 
 /** Tests if a conversion from one type to another can technically overflow. */
 function canConversionOverflow(fromType: Type, toType: Type): bool {
-  return !fromType.is(TypeFlags.INTEGER) // non-i32 locals or returns
-      || fromType.size > toType.size
+  return fromType.size > toType.size
+      || !fromType.is(TypeFlags.INTEGER) // non-i32 locals or returns
       || fromType.is(TypeFlags.SIGNED) != toType.is(TypeFlags.SIGNED);
 }
