@@ -2771,7 +2771,7 @@
     i32.shl
     i32.add
     local.set $4
-    block $~lib/memory/memory.copy|inlined.0
+    block $memory.copy|inlined.0
      local.get $4
      global.get $~lib/internal/string/HEADER_SIZE
      i32.add
@@ -2821,7 +2821,7 @@
      local.get $3
      i32.sub
      local.set $4
-     block $~lib/memory/memory.copy|inlined.1
+     block $memory.copy|inlined.1
       local.get $0
       global.get $~lib/internal/string/HEADER_SIZE
       i32.add
@@ -2942,7 +2942,7 @@
       i32.const 1
       i32.shl
       local.set $7
-      block $~lib/memory/memory.copy|inlined.2
+      block $memory.copy|inlined.2
        local.get $0
        global.get $~lib/internal/string/HEADER_SIZE
        i32.add

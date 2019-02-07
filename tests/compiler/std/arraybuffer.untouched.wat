@@ -1951,7 +1951,7 @@
   local.get $6
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $7
-  block $~lib/memory/memory.copy|inlined.0
+  block $memory.copy|inlined.0
    local.get $7
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -2074,7 +2074,7 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $~lib/memory/memory.fill|inlined.1
+  block $memory.fill|inlined.1
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -2155,7 +2155,7 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $~lib/memory/memory.fill|inlined.2
+  block $memory.fill|inlined.2
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add

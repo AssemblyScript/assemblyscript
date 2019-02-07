@@ -233,7 +233,9 @@ export const enum Feature {
   /** Sign extension operations. */
   SIGN_EXTENSION = 1 << 0, // see: https://github.com/WebAssembly/sign-extension-ops
   /** Mutable global imports and exports. */
-  MUTABLE_GLOBAL = 1 << 1  // see: https://github.com/WebAssembly/mutable-global
+  MUTABLE_GLOBAL = 1 << 1, // see: https://github.com/WebAssembly/mutable-global
+  /** Bulk memory operations. */
+  BULK_MEMORY = 1 << 2 // see: https://github.com/WebAssembly/bulk-memory-operations
 }
 
 /** Indicates the desired kind of a conversion. */

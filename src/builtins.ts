@@ -6,7 +6,8 @@
  import {
   Compiler,
   ConversionKind,
-  WrapMode
+  WrapMode,
+  Feature
 } from "./compiler";
 
 import {
@@ -1958,6 +1959,12 @@ export function compileCall(
     }
     // see: https://github.com/WebAssembly/bulk-memory-operations
     case "memory.copy": { // memory.copy(dest: usize, src: usize: n: usize) -> void
+      if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
+        let instance = compiler.resolver.resolveFunction(prototype, null); // reports
+        compiler.currentType = Type.void;
+        if (!instance) return module.createUnreachable();
+        return compiler.compileCallDirect(instance, operands, reportNode);
+      }
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -1972,29 +1979,35 @@ export function compileCall(
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
+      let usizeType = compiler.options.usizeType;
       arg0 = compiler.compileExpression(
         operands[0],
-        compiler.options.usizeType,
+        usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        compiler.options.usizeType,
+        usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       arg2 = compiler.compileExpression(
         operands[2],
-        compiler.options.usizeType,
+        usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       compiler.currentType = Type.void;
-      throw new Error("not implemented");
-      // return module.createHost(HostOp.MoveMemory, null, [ arg0, arg1, arg2 ]);
+      return module.createMemoryCopy(arg0, arg1, arg2);
     }
     case "memory.fill": { // memory.fill(dest: usize, value: u8, n: usize) -> void
+      if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
+        let instance = compiler.resolver.resolveFunction(prototype, null); // reports
+        compiler.currentType = Type.void;
+        if (!instance) return module.createUnreachable();
+        return compiler.compileCallDirect(instance, operands, reportNode);
+      }
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -2028,8 +2041,7 @@ export function compileCall(
         WrapMode.NONE
       );
       compiler.currentType = Type.void;
-      throw new Error("not implemented");
-      // return module.createHost(HostOp.SetMemory, null, [ arg0, arg1, arg2 ]);
+      return module.createMemoryFill(arg0, arg1, arg2);
     }
 
     // other

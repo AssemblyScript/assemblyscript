@@ -439,7 +439,7 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $~lib/memory/memory.fill|inlined.0
+  block $memory.fill|inlined.0
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
