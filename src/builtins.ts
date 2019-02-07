@@ -3444,7 +3444,7 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
       (value = getConstValueI64Low(expr)) < 0
     ) {
       compiler.error(
-        DiagnosticCode.Operation_not_supported,
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
         expression.range
       );
       value = -1;
@@ -3457,7 +3457,7 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
       (value = getConstValueI32(expr)) < 0
     ) {
       compiler.error(
-        DiagnosticCode.Operation_not_supported,
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
         expression.range
       );
       value = -1;
