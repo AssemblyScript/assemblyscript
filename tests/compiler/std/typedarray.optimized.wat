@@ -1813,17 +1813,17 @@
   local.get $2
   i32.store8 offset=8
  )
- (func $~lib/typedarray/Uint8ClampedArray#__set (; 20 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
-  get_local $0
-  get_local $1
+ (func $~lib/typedarray/Uint8ClampedArray#__set (; 25 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  local.get $1
   i32.const 255
-  get_local $2
+  local.get $2
   i32.sub
   i32.const 31
   i32.shr_s
-  get_local $2
+  local.get $2
   i32.or
-  get_local $2
+  local.get $2
   i32.const 31
   i32.shr_s
   i32.const -1
