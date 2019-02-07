@@ -106,7 +106,9 @@ import {
 } from "./module";
 
 import {
-  CharCode
+  CharCode,
+  bitsetIs,
+  bitsetSet
 } from "./util";
 
 import {
@@ -1239,7 +1241,7 @@ export class Program extends DiagnosticEmitter {
             } else {
               this.error(
                 DiagnosticCode.Expected_0_arguments_but_got_1,
-                decorator.range, "1", numArgs.toString()
+                decorator.range, "1", numArgs.toString(10)
               );
             }
           }
@@ -3240,53 +3242,30 @@ export class Flow {
 
   /** Tests if the value of the local at the specified index is considered wrapped. */
   isLocalWrapped(index: i32): bool {
-    var map: I64;
-    var ext: I64[] | null;
-    if (index < 64) {
-      if (index < 0) return true; // inlined constant
-      map = this.wrappedLocals;
-    } else if (ext = this.wrappedLocalsExt) {
-      let i = (index - 64) >> 6;
-      if (i >= ext.length) return false;
-      map = ext[i];
-      index -= (i + 1) << 6;
-    } else {
-      return false;
-    }
-    return i64_ne(
-      i64_and(
-        map,
-        i64_shl(
-          i64_one,
-          i64_new(index)
-        )
-      ),
-      i64_zero
-    );
+    if (index < 0) return true; // inlined constant
+    if (index < 64) return bitsetIs(this.wrappedLocals, index);
+    var ext = this.wrappedLocalsExt;
+    var i = ((index - 64) / 64) | 0;
+    if (!(ext && i < ext.length)) return false;
+    return bitsetIs(ext[i], index - (i + 1) * 64);
   }
 
   /** Sets if the value of the local at the specified index is considered wrapped. */
   setLocalWrapped(index: i32, wrapped: bool): void {
-    var map: I64;
-    var off: i32 = -1;
+    if (index < 0) return; // inlined constant
     if (index < 64) {
-      if (index < 0) return; // inlined constant
-      map = this.wrappedLocals;
-    } else {
-      let ext = this.wrappedLocalsExt;
-      off = (index - 64) >> 6;
-      if (!ext) {
-        this.wrappedLocalsExt = ext = new Array(off + 1);
-        ext.length = 0;
-      }
-      while (ext.length <= off) ext.push(i64_new(0));
-      map = ext[off];
-      index -= (off + 1) << 6;
+      this.wrappedLocals = bitsetSet(this.wrappedLocals, index, wrapped);
+      return;
     }
-    var mask = i64_shl(i64_one, i64_new(index));
-    map = wrapped ? i64_or(map, mask) : i64_and(map, i64_not(mask));
-    if (off >= 0) (<I64[]>this.wrappedLocalsExt)[off] = map;
-    else this.wrappedLocals = map;
+    var ext = this.wrappedLocalsExt;
+    var i = ((index - 64) / 64) | 0;
+    if (!ext) {
+      this.wrappedLocalsExt = ext = new Array(i + 1);
+      for (let j = 0; j <= i; ++j) ext[j] = i64_new(0);
+    } else {
+      while (ext.length <= i) ext.push(i64_new(0));
+    }
+    ext[i] = bitsetSet(ext[i], index - (i + 1) * 64, wrapped);
   }
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */

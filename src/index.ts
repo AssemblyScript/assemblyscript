@@ -128,6 +128,8 @@ export function setGlobalAlias(options: Options, name: string, alias: string): v
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */
 export const FEATURE_MUTABLE_GLOBAL = Feature.MUTABLE_GLOBAL;
+/** Bulk memory operations. */
+export const FEATURE_BULK_MEMORY = Feature.BULK_MEMORY;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {

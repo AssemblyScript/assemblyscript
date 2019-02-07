@@ -527,7 +527,7 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  block $~lib/memory/memory.fill|inlined.0
+  block $memory.fill|inlined.0
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -612,7 +612,7 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  block $~lib/memory/memory.fill|inlined.1
+  block $memory.fill|inlined.1
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -707,7 +707,7 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  block $~lib/memory/memory.fill|inlined.2
+  block $memory.fill|inlined.2
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -802,7 +802,7 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  block $~lib/memory/memory.fill|inlined.3
+  block $memory.fill|inlined.3
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
