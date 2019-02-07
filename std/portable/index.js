@@ -10,6 +10,8 @@ globalScope.ASC_OPTIMIZE_LEVEL = 3;
 globalScope.ASC_SHRINK_LEVEL = 0;
 globalScope.ASC_FEATURE_MUTABLE_GLOBAL = false;
 globalScope.ASC_FEATURE_SIGN_EXTENSION = false;
+globalScope.ASC_FEATURE_BULK_MEMORY = false;
+globalScope.ASC_FEATURE_SIMD = false;
 
 var F64 = new Float64Array(1);
 var U64 = new Uint32Array(F64.buffer);
