@@ -3007,8 +3007,6 @@ export class Flow {
   contextualTypeArguments: Map<string,Type> | null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
-  /** cached global variables. */
-  cachedGlobals: Map<string,Global> | null = null;
   /** Local variable wrap states for the first 64 locals. */
   wrappedLocals: I64;
   /** Local variable wrap states for locals with index >= 64. */
