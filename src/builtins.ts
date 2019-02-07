@@ -2022,9 +2022,10 @@ export function compileCall(
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
+      let usizeType = compiler.options.usizeType;
       arg0 = compiler.compileExpression(
         operands[0],
-        compiler.options.usizeType,
+        usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
@@ -2036,7 +2037,7 @@ export function compileCall(
       );
       arg2 = compiler.compileExpression(
         operands[2],
-        compiler.options.usizeType,
+        usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
