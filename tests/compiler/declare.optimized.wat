@@ -1,6 +1,6 @@
 (module
- (type $v (func))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $_ (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (import "declare" "externalConstant" (global $declare/externalConstant i32))
  (import "declare" "my.externalConstant" (global $declare/my.externalConstant i32))
  (import "declare" "externalFunction" (func $declare/externalFunction))
@@ -8,14 +8,14 @@
  (import "declare" "my.externalFunction" (func $declare/my.externalFunction))
  (memory $0 1)
  (data (i32.const 8) "\n\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
   call $declare/externalFunction
-  get_global $declare/externalConstant
+  global.get $declare/externalConstant
   i32.const 1
   i32.ne
   if
@@ -27,7 +27,7 @@
    unreachable
   end
   call $declare/my.externalFunction
-  get_global $declare/my.externalConstant
+  global.get $declare/my.externalConstant
   i32.const 2
   i32.ne
   if
@@ -39,7 +39,7 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )

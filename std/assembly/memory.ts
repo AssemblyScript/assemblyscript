@@ -10,18 +10,17 @@ export namespace memory {
 
   @builtin export declare function grow(pages: i32): i32;
 
-  @inline export function fill(dest: usize, c: u8, n: usize): void { // see: musl/src/string/memset
-    if (isDefined(__memory_fill)) { __memory_fill(dest, c, n); return; }
-    memset(dest, c, n);
+  @builtin @inline
+  export function fill(dest: usize, c: u8, n: usize): void { // see: musl/src/string/memset
+    memset(dest, c, n); // fallback if "bulk-memory" isn't enabled
   }
 
-  @inline export function copy(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
-    if (isDefined(__memory_copy)) { __memory_copy(dest, src, n); return; }
-    memmove(dest, src, n);
+  @builtin @inline
+  export function copy(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
+    memmove(dest, src, n); // fallback if "bulk-memory" isn't enabled
   }
 
   @inline export function compare(vl: usize, vr: usize, n: usize): i32 { // see: musl/src/string/memcmp.c
-    if (isDefined(__memory_compare)) return __memory_compare(vl, vr, n);
     return memcmp(vl, vr, n);
   }
 

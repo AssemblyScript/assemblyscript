@@ -1,8 +1,8 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $export/ns.two)
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
@@ -21,21 +21,21 @@
  (export "rerenamed_sub" (func $export/mul))
  (export "renamed_ns.two" (func $export/ns.two))
  (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.add
  )
  (func $export/sub (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.sub
  )
  (func $export/mul (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.mul
  )
- (func $export/ns.two (; 3 ;) (type $v)
+ (func $export/ns.two (; 3 ;) (type $_)
   nop
  )
 )

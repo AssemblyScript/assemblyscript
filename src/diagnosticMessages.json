@@ -59,6 +59,7 @@
   "Unexpected end of text.": 1126,
   "Invalid character.": 1127,
   "'case' or 'default' expected.": 1130,
+  "'super' must be followed by an argument list or member access.": 1034,
   "A 'declare' modifier cannot be used in an already ambient context.": 1038,
   "Type argument expected.": 1140,
   "String literal expected.": 1141,
@@ -88,6 +89,7 @@
   "Index signature is missing in type '{0}'.": 2329,
   "'this' cannot be referenced in current location.": 2332,
   "'super' can only be referenced in a derived class.": 2335,
+  "Super calls are not permitted outside constructors or in nested functions inside constructors.": 2337,
   "Property '{0}' does not exist on type '{1}'.": 2339,
   "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.": 2349,
   "Cannot use 'new' with an expression whose type lacks a construct signature.": 2351,
@@ -95,6 +97,8 @@
   "The operand of an increment or decrement operator must be a variable or a property access.": 2357,
   "The left-hand side of an assignment expression must be a variable or a property access.": 2364,
   "Operator '{0}' cannot be applied to types '{1}' and '{2}'.": 2365,
+  "A 'super' call must be the first statement in the constructor.": 2376,
+  "Constructors for derived classes must contain a 'super' call.": 2377,
   "'get' and 'set' accessor must have the same type.": 2380,
   "Constructor implementation is missing.": 2390,
   "Function implementation is missing or not immediately following the declaration.": 2391,
@@ -119,5 +123,7 @@
 
   "File '{0}' not found.": 6054,
   "Numeric separators are not allowed here.": 6188,
-  "Multiple consecutive numeric separators are not permitted.": 6189
+  "Multiple consecutive numeric separators are not permitted.": 6189,
+  "'super' must be called before accessing 'this' in the constructor of a derived class.": 17009,
+  "'super' must be called before accessing a property of 'super' in the constructor of a derived class.": 17011
 }

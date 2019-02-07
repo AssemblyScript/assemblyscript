@@ -6,7 +6,8 @@
  import {
   Compiler,
   ConversionKind,
-  WrapMode
+  WrapMode,
+  Feature
 } from "./compiler";
 
 import {
@@ -39,7 +40,8 @@ import {
   getExpressionType,
   getConstValueI64High,
   getConstValueI64Low,
-  getConstValueI32
+  getConstValueI32,
+  AtomicRMWOp
 } from "./module";
 
 import {
@@ -50,7 +52,8 @@ import {
   OperatorKind,
   FlowFlags,
   Global,
-  DecoratorFlags
+  DecoratorFlags,
+  Element
 } from "./program";
 
 import {
@@ -113,7 +116,6 @@ export function compileCall(
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
-      compiler.currentType = Type.bool;
       return type.is(TypeFlags.REFERENCE)
         ? module.createI32(1)
         : module.createI32(0);
@@ -134,9 +136,9 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.createUnreachable();
       let classType = type.classReference;
-      return classType !== null && classType.lookupOverload(OperatorKind.INDEXED_GET) !== null
-        ? module.createI32(1)
-        : module.createI32(0);
+      return (
+        classType !== null && classType.prototype.extends(compiler.program.arrayPrototype)
+      ) ? module.createI32(1) : module.createI32(0);
     }
     case "isDefined": { // isDefined(expression) -> bool
       compiler.currentType = Type.bool;
@@ -155,7 +157,7 @@ export function compileCall(
       }
       let element = compiler.resolver.resolveExpression(
         operands[0],
-        compiler.currentFunction,
+        compiler.currentFlow,
         Type.void,
         ReportMode.SWALLOW
       );
@@ -640,11 +642,11 @@ export function compileCall(
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.I32: {
-          let currentFunction = compiler.currentFunction;
+          let flow = compiler.currentFlow;
 
           // possibly overflows, e.g. abs<i8>(-128) == 128
-          let tempLocal1 = currentFunction.getTempLocal(Type.i32, false);
-          let tempLocalIndex2 = currentFunction.getAndFreeTempLocal(Type.i32, false).index;
+          let tempLocal1 = flow.getTempLocal(Type.i32, false);
+          let tempLocalIndex2 = flow.getAndFreeTempLocal(Type.i32, false).index;
           let tempLocalIndex1 = tempLocal1.index;
 
           // (x + (x >> 31)) ^ (x >> 31)
@@ -662,16 +664,16 @@ export function compileCall(
             module.createGetLocal(tempLocalIndex2, NativeType.I32)
           );
 
-          currentFunction.freeTempLocal(tempLocal1);
+          flow.freeTempLocal(tempLocal1);
           break;
         }
         case TypeKind.ISIZE: {
           let options = compiler.options;
-          let currentFunction = compiler.currentFunction;
+          let flow = compiler.currentFlow;
           let wasm64 = options.isWasm64;
 
-          let tempLocal1 = currentFunction.getTempLocal(options.usizeType, false);
-          let tempLocalIndex2 = currentFunction.getAndFreeTempLocal(options.usizeType, false).index;
+          let tempLocal1 = flow.getTempLocal(options.usizeType, false);
+          let tempLocalIndex2 = flow.getAndFreeTempLocal(options.usizeType, false).index;
           let tempLocalIndex1 = tempLocal1.index;
 
           ret = module.createBinary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
@@ -688,14 +690,14 @@ export function compileCall(
             module.createGetLocal(tempLocalIndex2, options.nativeSizeType)
           );
 
-          currentFunction.freeTempLocal(tempLocal1);
+          flow.freeTempLocal(tempLocal1);
           break;
         }
         case TypeKind.I64: {
-          let currentFunction = compiler.currentFunction;
+          let flow = compiler.currentFlow;
 
-          let tempLocal1 = currentFunction.getTempLocal(Type.i64, false);
-          let tempLocalIndex2 = currentFunction.getAndFreeTempLocal(Type.i64, false).index;
+          let tempLocal1 = flow.getTempLocal(Type.i64, false);
+          let tempLocalIndex2 = flow.getAndFreeTempLocal(Type.i64, false).index;
           let tempLocalIndex1 = tempLocal1.index;
 
           // (x + (x >> 63)) ^ (x >> 63)
@@ -713,7 +715,7 @@ export function compileCall(
             module.createGetLocal(tempLocalIndex2, NativeType.I64)
           );
 
-          currentFunction.freeTempLocal(tempLocal1);
+          flow.freeTempLocal(tempLocal1);
           break;
         }
         case TypeKind.USIZE: {
@@ -793,16 +795,16 @@ export function compileCall(
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.I32: {
-          let flow = compiler.currentFunction.flow;
-          let tempLocal0 = compiler.currentFunction.getTempLocal(
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg0, compiler.currentType)
           );
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(
+          let tempLocal1 = flow.getAndFreeTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg1, compiler.currentType)
           );
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -817,16 +819,16 @@ export function compileCall(
         case TypeKind.U16:
         case TypeKind.U32:
         case TypeKind.BOOL: {
-          let flow = compiler.currentFunction.flow;
-          let tempLocal0 = compiler.currentFunction.getTempLocal(
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg0, compiler.currentType)
           );
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(
+          let tempLocal1 = flow.getAndFreeTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg1, compiler.currentType)
           );
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -838,9 +840,10 @@ export function compileCall(
           break;
         }
         case TypeKind.I64: {
-          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64, false);
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64, false);
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(Type.i64, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -852,9 +855,10 @@ export function compileCall(
           break;
         }
         case TypeKind.U64: {
-          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64, false);
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64, false);
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(Type.i64, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -866,9 +870,10 @@ export function compileCall(
           break;
         }
         case TypeKind.ISIZE: {
-          let tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -891,9 +896,10 @@ export function compileCall(
             ret = module.createUnreachable();
             break;
           }
-          let tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -961,16 +967,16 @@ export function compileCall(
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.I32: {
-          let flow = compiler.currentFunction.flow;
-          let tempLocal0 = compiler.currentFunction.getTempLocal(
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg0, compiler.currentType)
           );
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(
+          let tempLocal1 = flow.getAndFreeTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg1, compiler.currentType)
           );
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -985,16 +991,16 @@ export function compileCall(
         case TypeKind.U16:
         case TypeKind.U32:
         case TypeKind.BOOL: {
-          let flow = compiler.currentFunction.flow;
-          let tempLocal0 = compiler.currentFunction.getTempLocal(
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg0, compiler.currentType)
           );
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(
+          let tempLocal1 = flow.getAndFreeTempLocal(
             compiler.currentType,
             !flow.canOverflow(arg1, compiler.currentType)
           );
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -1006,9 +1012,10 @@ export function compileCall(
           break;
         }
         case TypeKind.I64: {
-          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64, false);
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64, false);
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(Type.i64, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -1020,9 +1027,10 @@ export function compileCall(
           break;
         }
         case TypeKind.U64: {
-          let tempLocal0 = compiler.currentFunction.getTempLocal(Type.i64, false);
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(Type.i64, false);
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(Type.i64, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -1034,9 +1042,10 @@ export function compileCall(
           break;
         }
         case TypeKind.ISIZE: {
-          let tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -1059,9 +1068,10 @@ export function compileCall(
             ret = module.createUnreachable();
             break;
           }
-          let tempLocal0 = compiler.currentFunction.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
-          compiler.currentFunction.freeTempLocal(tempLocal0);
+          let flow = compiler.currentFlow;
+          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
+          flow.freeTempLocal(tempLocal0);
           ret = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
@@ -1668,6 +1678,416 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
     }
+    case "Atomic.load": { // Atomic.load<T!>(offset: usize, constantOffset?: usize) -> *
+      if (operands.length < 1 || operands.length > 2) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        if (operands.length < 1) {
+          compiler.error(
+            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+            reportNode.range, "1", operands.length.toString(10)
+          );
+        } else {
+          compiler.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            reportNode.range, "2", operands.length.toString(10)
+          );
+        }
+        return module.createUnreachable();
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        if (typeArguments && typeArguments.length) compiler.currentType = typeArguments[0];
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      let offset = operands.length == 2 ? evaluateConstantOffset(compiler, operands[1]) : 0; // reports
+      if (offset < 0) { // reported in evaluateConstantOffset
+        return module.createUnreachable();
+      }
+      compiler.currentType = typeArguments[0];
+      return module.createAtomicLoad(
+        typeArguments[0].byteSize,
+        arg0,
+        typeArguments[0].is(TypeFlags.INTEGER) &&
+        contextualType.is(TypeFlags.INTEGER) &&
+        contextualType.size > typeArguments[0].size
+          ? (compiler.currentType = contextualType).toNativeType()
+          : (compiler.currentType = typeArguments[0]).toNativeType(),
+        offset
+      );
+    }
+    case "Atomic.store": { // Atomic.store<T!>(offset: usize, value: *, constantOffset?: usize) -> void
+      compiler.currentType = Type.void;
+      if (operands.length < 2 || operands.length > 3) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        if (operands.length < 2) {
+          compiler.error(
+            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+            reportNode.range, "2", operands.length.toString(10)
+          );
+        } else {
+          compiler.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            reportNode.range, "3", operands.length.toString(10)
+          );
+        }
+        return module.createUnreachable();
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg1 = compiler.compileExpression(
+        operands[1],
+        typeArguments[0],
+        typeArguments[0].is(TypeFlags.INTEGER)
+          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+          : ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      let type: Type;
+      if (
+        typeArguments[0].is(TypeFlags.INTEGER) &&
+        (
+          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
+          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+        )
+      ) {
+        arg1 = compiler.convertExpression(
+          arg1,
+          compiler.currentType, typeArguments[0],
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[1]
+        );
+        type = typeArguments[0];
+      } else {
+        type = compiler.currentType;
+      }
+      let offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
+      if (offset < 0) { // reported in evaluateConstantOffset
+        return module.createUnreachable();
+      }
+      compiler.currentType = Type.void;
+      return module.createAtomicStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
+    }
+    case "Atomic.add":  // add<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "Atomic.sub":  // sub<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "Atomic.and":  // and<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "Atomic.or":   // or<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "Atomic.xor":  // xor<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case "Atomic.xchg": // xchg<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    {
+      if (operands.length < 2 || operands.length > 3) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        if (operands.length < 2) {
+          compiler.error(
+            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+            reportNode.range, "2", operands.length.toString(10)
+          );
+        } else {
+          compiler.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            reportNode.range, "3", operands.length.toString(10)
+          );
+        }
+        return module.createUnreachable();
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg1 = compiler.compileExpression(
+        operands[1],
+        typeArguments[0],
+        typeArguments[0].is(TypeFlags.INTEGER)
+          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+          : ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+
+      let type: Type;
+      if (
+        typeArguments[0].is(TypeFlags.INTEGER) &&
+        (
+          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
+          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+        )
+      ) {
+        arg1 = compiler.convertExpression(
+          arg1,
+          compiler.currentType, typeArguments[0],
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[1]
+        );
+        type = typeArguments[0];
+      } else {
+        type = compiler.currentType;
+      }
+
+      let offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
+      if (offset < 0) { // reported in evaluateConstantOffset
+        return module.createUnreachable();
+      }
+      let RMWOp: AtomicRMWOp | null = null;
+      switch (prototype.internalName) {
+        case "Atomic.add": { RMWOp = AtomicRMWOp.Add; break; }
+        case "Atomic.sub": { RMWOp = AtomicRMWOp.Sub; break; }
+        case "Atomic.and": { RMWOp = AtomicRMWOp.And; break; }
+        case "Atomic.or": { RMWOp = AtomicRMWOp.Or; break; }
+        case "Atomic.xor": { RMWOp = AtomicRMWOp.Xor; break; }
+        case "Atomic.xchg": { RMWOp = AtomicRMWOp.Xchg; break; }
+      }
+      compiler.currentType = typeArguments[0];
+      if (RMWOp !== null) {
+        return module.createAtomicRMW(
+          RMWOp, typeArguments[0].byteSize, offset, arg0, arg1, type.toNativeType()
+        );
+      } else {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+    }
+    case "Atomic.cmpxchg": { // cmpxchg<T!>(ptr: usize, expected:T, replacement: T, constantOffset?: usize): T;
+      if (operands.length < 3 || operands.length > 4) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        if (operands.length < 3) {
+          compiler.error(
+            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+            reportNode.range, "2", operands.length.toString(10)
+          );
+        } else {
+          compiler.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            reportNode.range, "3", operands.length.toString(10)
+          );
+        }
+        return module.createUnreachable();
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg1 = compiler.compileExpression(
+        operands[1],
+        typeArguments[0],
+        typeArguments[0].is(TypeFlags.INTEGER)
+          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+          : ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg2 = compiler.compileExpression(
+        operands[2],
+        typeArguments[0],
+        typeArguments[0].is(TypeFlags.INTEGER)
+          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+          : ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+
+      let type: Type;
+      if (
+        typeArguments[0].is(TypeFlags.INTEGER) &&
+        (
+          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
+          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+        )
+      ) {
+        arg1 = compiler.convertExpression(
+          arg1,
+          compiler.currentType, typeArguments[0],
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[1]
+        );
+        arg2 = compiler.convertExpression(
+          arg2,
+          compiler.currentType, typeArguments[0],
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[2]
+        );
+        type = typeArguments[0];
+      } else {
+        type = compiler.currentType;
+      }
+
+      let offset = operands.length == 4 ? evaluateConstantOffset(compiler, operands[3]) : 0; // reports
+      if (offset < 0) { // reported in evaluateConstantOffset
+        return module.createUnreachable();
+      }
+      compiler.currentType = typeArguments[0];
+      return module.createAtomicCmpxchg(
+        typeArguments[0].byteSize, offset, arg0, arg1, arg2, type.toNativeType()
+      );
+    }
+    case "Atomic.wait": { // wait<T!>(ptr: usize, expected:T, timeout: i64): i32;
+      let hasError = typeArguments == null;
+      if (operands.length != 3) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "3", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        hasError = true;
+      }
+
+      if (!typeArguments || hasError) {
+        return module.createUnreachable();
+      }
+
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg1 = compiler.compileExpression(
+        operands[1],
+        typeArguments[0],
+        typeArguments[0].is(TypeFlags.INTEGER)
+          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+          : ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg2 = compiler.compileExpression(
+        operands[2],
+        Type.i64,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+
+      let type: Type = typeArguments[0];
+      if (
+        typeArguments[0].is(TypeFlags.INTEGER) &&
+        (
+          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
+          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+        )
+      ) {
+        arg1 = compiler.convertExpression(
+          arg1,
+          compiler.currentType, typeArguments[0],
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[1]
+        );
+        arg2 = compiler.convertExpression(
+          arg2,
+          compiler.currentType, typeArguments[0],
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[2]
+        );
+      }
+
+      return module.createAtomicWait(
+        arg0, arg1, arg2, type.toNativeType()
+      );
+    }
+    case "Atomic.notify": { // notify<T!>(ptr: usize, count: u32): u32;
+      let hasError = typeArguments == null;
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        hasError = true;
+      }
+
+      if (!typeArguments || hasError) {
+        return module.createUnreachable();
+      }
+
+      arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      arg1 = compiler.compileExpression(
+        operands[1],
+        Type.i32,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+
+      return module.createAtomicWake(
+        arg0, arg1
+      );
+    }
     case "sizeof": { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
       if (operands.length != 0) {
@@ -1951,6 +2371,12 @@ export function compileCall(
     }
     // see: https://github.com/WebAssembly/bulk-memory-operations
     case "memory.copy": { // memory.copy(dest: usize, src: usize: n: usize) -> void
+      if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
+        let instance = compiler.resolver.resolveFunction(prototype, null); // reports
+        compiler.currentType = Type.void;
+        if (!instance) return module.createUnreachable();
+        return compiler.compileCallDirect(instance, operands, reportNode);
+      }
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -1965,29 +2391,35 @@ export function compileCall(
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
+      let usizeType = compiler.options.usizeType;
       arg0 = compiler.compileExpression(
         operands[0],
-        compiler.options.usizeType,
+        usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        compiler.options.usizeType,
+        usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       arg2 = compiler.compileExpression(
         operands[2],
-        compiler.options.usizeType,
+        usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       compiler.currentType = Type.void;
-      throw new Error("not implemented");
-      // return module.createHost(HostOp.MoveMemory, null, [ arg0, arg1, arg2 ]);
+      return module.createMemoryCopy(arg0, arg1, arg2);
     }
     case "memory.fill": { // memory.fill(dest: usize, value: u8, n: usize) -> void
+      if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
+        let instance = compiler.resolver.resolveFunction(prototype, null); // reports
+        compiler.currentType = Type.void;
+        if (!instance) return module.createUnreachable();
+        return compiler.compileCallDirect(instance, operands, reportNode);
+      }
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -2002,9 +2434,10 @@ export function compileCall(
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
+      let usizeType = compiler.options.usizeType;
       arg0 = compiler.compileExpression(
         operands[0],
-        compiler.options.usizeType,
+        usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
@@ -2016,13 +2449,12 @@ export function compileCall(
       );
       arg2 = compiler.compileExpression(
         operands[2],
-        compiler.options.usizeType,
+        usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       compiler.currentType = Type.void;
-      throw new Error("not implemented");
-      // return module.createHost(HostOp.SetMemory, null, [ arg0, arg1, arg2 ]);
+      return module.createMemoryFill(arg0, arg1, arg2);
     }
 
     // other
@@ -2187,8 +2619,8 @@ export function compileCall(
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.BOOL: {
-            let flow = compiler.currentFunction.flow;
-            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(
+            let flow = compiler.currentFlow;
+            let tempLocal = flow.getAndFreeTempLocal(
               compiler.currentType,
               !flow.canOverflow(arg0, compiler.currentType)
             );
@@ -2202,7 +2634,7 @@ export function compileCall(
           case TypeKind.I32:
           case TypeKind.U32:
           default: {
-            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.i32, false);
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.i32, false);
             ret = module.createIf(
               module.createTeeLocal(tempLocal.index, arg0),
               module.createGetLocal(tempLocal.index, NativeType.I32),
@@ -2212,7 +2644,7 @@ export function compileCall(
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.i64, false);
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.i64, false);
             ret = module.createIf(
               module.createUnary(UnaryOp.EqzI64,
                 module.createTeeLocal(tempLocal.index, arg0)
@@ -2224,7 +2656,7 @@ export function compileCall(
           }
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
-            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(compiler.options.usizeType, false);
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(compiler.options.usizeType, false);
             ret = module.createIf(
               module.createUnary(
                 compiler.options.isWasm64
@@ -2238,7 +2670,7 @@ export function compileCall(
             break;
           }
           case TypeKind.F32: {
-            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f32, false);
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f32, false);
             ret = module.createIf(
               module.createBinary(BinaryOp.EqF32,
                 module.createTeeLocal(tempLocal.index, arg0),
@@ -2250,7 +2682,7 @@ export function compileCall(
             break;
           }
           case TypeKind.F64: {
-            let tempLocal = compiler.currentFunction.getAndFreeTempLocal(Type.f64, false);
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f64, false);
             ret = module.createIf(
               module.createBinary(BinaryOp.EqF64,
                 module.createTeeLocal(tempLocal.index, arg0),
@@ -2287,7 +2719,7 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      let flow = compiler.currentFunction.flow;
+      let flow = compiler.currentFlow;
       flow.set(FlowFlags.UNCHECKED_CONTEXT);
       ret = compiler.compileExpressionRetainType(operands[0], contextualType, WrapMode.NONE);
       flow.unset(FlowFlags.UNCHECKED_CONTEXT);
@@ -2831,6 +3263,83 @@ function deferASMCall(
     case "i64.store": return deferASM("store", compiler, Type.i64, operands, Type.i64, reportNode);
     case "f32.store": return deferASM("store", compiler, Type.f32, operands, Type.f32, reportNode);
     case "f64.store": return deferASM("store", compiler, Type.f64, operands, Type.f64, reportNode);
+
+    case "i32.atomic.load8_u": return deferASM("Atomic.load", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.load16_u": return deferASM("Atomic.load", compiler, Type.u16, operands, Type.u32, reportNode);
+    case "i32.atomic.load": return deferASM("Atomic.load", compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.atomic.load8_u": return deferASM("Atomic.load", compiler, Type.u8, operands, Type.u64, reportNode);
+    case "i64.atomic.load16_u": return deferASM("Atomic.load", compiler, Type.u16, operands, Type.u64, reportNode);
+    case "i64.atomic.load32_u": return deferASM("Atomic.load", compiler, Type.u32, operands, Type.u64, reportNode);
+    case "i64.atomic.load": return deferASM("Atomic.load", compiler, Type.i64, operands, Type.i64, reportNode);
+
+    case "i32.atomic.store8": return deferASM("Atomic.store", compiler, Type.i8, operands, Type.i32, reportNode);
+    case "i32.atomic.store16": return deferASM("Atomic.store", compiler, Type.i16, operands, Type.i32, reportNode);
+    case "i32.atomic.store": return deferASM("Atomic.store", compiler, Type.i32, operands, Type.i32, reportNode);
+    case "i64.atomic.store8": return deferASM("Atomic.store", compiler, Type.i8, operands, Type.i64, reportNode);
+    case "i64.atomic.store16": return deferASM("Atomic.store", compiler, Type.i16, operands, Type.i64, reportNode);
+    case "i64.atomic.store32": return deferASM("Atomic.store", compiler, Type.i32, operands, Type.i64, reportNode);
+    case "i64.atomic.store": return deferASM("Atomic.store", compiler, Type.i64, operands, Type.i64, reportNode);
+
+    case "i32.atomic.rmw8_u.add": return deferASM("Atomic.add", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw16_u.add": return deferASM("Atomic.add", compiler, Type.u16, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw.add": return deferASM("Atomic.add", compiler, Type.u32, operands, Type.u32, reportNode);
+    case "i64.atomic.rmw8_u.add": return deferASM("Atomic.add", compiler, Type.u8, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw16_u.add": return deferASM("Atomic.add", compiler, Type.u16, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw32_u.add": return deferASM("Atomic.add", compiler, Type.u32, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw.add": return deferASM("Atomic.add", compiler, Type.u64, operands, Type.u64, reportNode);
+
+    case "i32.atomic.rmw8_u.sub": return deferASM("Atomic.sub", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw16_u.sub": return deferASM("Atomic.sub", compiler, Type.u16, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw.sub": return deferASM("Atomic.sub", compiler, Type.u32, operands, Type.u32, reportNode);
+    case "i64.atomic.rmw8_u.sub": return deferASM("Atomic.sub", compiler, Type.u8, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw16_u.sub": return deferASM("Atomic.sub", compiler, Type.u16, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw32_u.sub": return deferASM("Atomic.sub", compiler, Type.u32, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw.sub": return deferASM("Atomic.sub", compiler, Type.u64, operands, Type.u64, reportNode);
+
+    case "i32.atomic.rmw8_u.and": return deferASM("Atomic.and", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw16_u.and": return deferASM("Atomic.and", compiler, Type.u16, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw.and": return deferASM("Atomic.and", compiler, Type.u32, operands, Type.u32, reportNode);
+    case "i64.atomic.rmw8_u.and": return deferASM("Atomic.and", compiler, Type.u8, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw16_u.and": return deferASM("Atomic.and", compiler, Type.u16, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw32_u.and": return deferASM("Atomic.and", compiler, Type.u32, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw.and": return deferASM("Atomic.and", compiler, Type.u64, operands, Type.u64, reportNode);
+
+    case "i32.atomic.rmw8_u.or": return deferASM("Atomic.or", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw16_u.or": return deferASM("Atomic.or", compiler, Type.u16, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw.or": return deferASM("Atomic.or", compiler, Type.u32, operands, Type.u32, reportNode);
+    case "i64.atomic.rmw8_u.or": return deferASM("Atomic.or", compiler, Type.u8, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw16_u.or": return deferASM("Atomic.or", compiler, Type.u16, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw32_u.or": return deferASM("Atomic.or", compiler, Type.u32, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw.or": return deferASM("Atomic.or", compiler, Type.u64, operands, Type.u64, reportNode);
+
+    case "i32.atomic.rmw8_u.xor": return deferASM("Atomic.xor", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw16_u.xor": return deferASM("Atomic.xor", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw.xor": return deferASM("Atomic.xor", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i64.atomic.rmw8_u.xor": return deferASM("Atomic.xor", compiler, Type.u8, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw16_u.xor": return deferASM("Atomic.xor", compiler, Type.u16, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw32_u.xor": return deferASM("Atomic.xor", compiler, Type.u32, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw.xor": return deferASM("Atomic.xor", compiler, Type.u64, operands, Type.u64, reportNode);
+
+    case "i32.atomic.rmw8_u.xchg": return deferASM("Atomic.xchg", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw16_u.xchg": return deferASM("Atomic.xchg", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw.xchg": return deferASM("Atomic.xchg", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i64.atomic.rmw8_u.xchg": return deferASM("Atomic.xchg", compiler, Type.u8, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw16_u.xchg": return deferASM("Atomic.xchg", compiler, Type.u16, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw32_u.xchg": return deferASM("Atomic.xchg", compiler, Type.u32, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw.xchg": return deferASM("Atomic.xchg", compiler, Type.u64, operands, Type.u64, reportNode);
+
+    case "i32.atomic.rmw8_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw16_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i32.atomic.rmw.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u8, operands, Type.u32, reportNode);
+    case "i64.atomic.rmw8_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u8, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw16_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u16, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw32_u.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u32, operands, Type.u64, reportNode);
+    case "i64.atomic.rmw.cmpxchg": return deferASM("Atomic.cmpxchg", compiler, Type.u64, operands, Type.u64, reportNode);
+
+    case "i32.wait": return deferASM("Atomic.wait", compiler, Type.i32, operands, Type.u32, reportNode);
+    case "i64.wait": return deferASM("Atomic.wait", compiler, Type.i64, operands, Type.i64, reportNode);
+    case "i32.notify": return deferASM("Atomic.notify", compiler, Type.i32, operands, Type.u32, reportNode);
+    case "i64.notify": return deferASM("Atomic.notify", compiler, Type.i64, operands, Type.i64, reportNode);
   }
   return 0;
 }
@@ -2844,7 +3353,18 @@ function deferASM(
   valueType: Type,
   reportNode: Node
 ): ExpressionRef {
-  var prototype = assert(compiler.program.elementsLookup.get(name));
+  // Built-in wasm functions can be namespaced like Atomic.{OPERATION}
+  // Split name by '.' to find member function prototype
+  var names = name.split(".");
+  var prototype: Element = assert(compiler.program.elementsLookup.get(names[0]));
+  if (names.length > 1) {
+    for (let i = 1; i < names.length; i++) {
+      const subName = names[i];
+      if (prototype && prototype.members) {
+        prototype = assert(prototype.members.get(subName));
+      }
+    }
+  }
   assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
   return compileCall(compiler, <FunctionPrototype>prototype, [ typeArgument ], operands, valueType, reportNode);
 }
@@ -2933,58 +3453,6 @@ function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32
   return value;
 }
 
-/** Compiles a memory allocation for an instance of the specified class. */
-export function compileAllocate(
-  compiler: Compiler,
-  classInstance: Class,
-  reportNode: Node
-): ExpressionRef {
-  var program = compiler.program;
-  assert(classInstance.program == program);
-  var module = compiler.module;
-  var options = compiler.options;
-
-  // __gc_allocate(size, markFn)
-  if (program.hasGC && classInstance.type.isManaged(program)) {
-    let allocateInstance = assert(program.gcAllocateInstance);
-    if (!compiler.compileFunction(allocateInstance)) return module.createUnreachable();
-    compiler.currentType = classInstance.type;
-    return module.createCall(
-      allocateInstance.internalName, [
-        options.isWasm64
-          ? module.createI64(classInstance.currentMemoryOffset)
-          : module.createI32(classInstance.currentMemoryOffset),
-        module.createI32(
-          ensureGCHook(compiler, classInstance)
-        )
-      ],
-      options.nativeSizeType
-    );
-
-  // memory.allocate(size)
-  } else {
-    let allocateInstance = program.memoryAllocateInstance;
-    if (!allocateInstance) {
-      program.error(
-        DiagnosticCode.Cannot_find_name_0,
-        reportNode.range, "memory.allocate"
-      );
-      return module.createUnreachable();
-    }
-    if (!compiler.compileFunction(allocateInstance)) return module.createUnreachable();
-
-    compiler.currentType = classInstance.type;
-    return module.createCall(
-      allocateInstance.internalName, [
-        options.isWasm64
-          ? module.createI64(classInstance.currentMemoryOffset)
-          : module.createI32(classInstance.currentMemoryOffset)
-      ],
-      options.nativeSizeType
-    );
-  }
-}
-
 /** Compiles an abort wired to the conditionally imported 'abort' function. */
 export function compileAbort(
   compiler: Compiler,
@@ -3045,7 +3513,7 @@ export function compileIterateRoots(compiler: Compiler): void {
                 ? module.createI64(i64_low(value), i64_high(value))
                 : module.createI32(i64_low(value))
             ],
-            "iv"
+            "i_"
           )
         );
       } else {
@@ -3058,7 +3526,7 @@ export function compileIterateRoots(compiler: Compiler): void {
                 compiler.options.nativeSizeType
               )
             ],
-            "iv"
+            "i_"
           )
         );
       }
@@ -3142,7 +3610,7 @@ export function ensureGCHook(
         [
           module.createGetLocal(0, nativeSizeType)
         ],
-        nativeSizeType == NativeType.I64 ? "Iv" : "iv"
+        nativeSizeType == NativeType.I64 ? "I_" : "i_"
       )
     );
 
