@@ -32,7 +32,7 @@ function __gc(ref: usize): void {}
 function _allocateUnsafe(byteLength: i32): ArrayBuffer {
   assert(<u32>byteLength <= <u32>MAX_BLENGTH);
   var buffer: usize = isManaged<ArrayBuffer>()
-    ? __gc_allocate(computeSize(byteLength), __gc)
+    ? __gc_allocate(computeSize(byteLength), __gc) // tslint:disable-line
     : memory.allocate(computeSize(byteLength));
   return _resize(changetype<ArrayBuffer>(buffer), byteLength);
 }
@@ -71,8 +71,9 @@ export function allocateUnsafe(byteLength: i32): ArrayBuffer {
   // fastest path: buffer should be the same length
   if (newByteLength === oldByteLength) return buffer;
   // fast path: byteLength is less than or equal to currently allocated size (this is safe)
-  if (newByteLength <= <i32>(computeSize(oldByteLength) - HEADER_SIZE))
+  if (newByteLength <= <i32>(computeSize(oldByteLength) - HEADER_SIZE)) {
     return _resize(buffer, newByteLength);
+  }
 
   // slow path: buffer needs new allocation (_growUnsafe frees the old buffer)
   return _growUnsafe(buffer, oldByteLength, newByteLength);
