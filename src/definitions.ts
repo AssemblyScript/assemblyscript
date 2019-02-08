@@ -480,6 +480,7 @@ export class TSDBuilder extends ExportsWalker {
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
+      case TypeKind.V128: return "v128";
       case TypeKind.VOID: return "void";
       default: {
         assert(false);

@@ -1,15 +1,15 @@
 (module
- (type $iv (func (param i32)))
- (type $v (func))
+ (type $i_ (func (param i32)))
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
- (type $iiv (func (param i32 i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $ii_ (func (param i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\03\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s")
- (table $0 4 anyfunc)
+ (table $0 4 funcref)
  (elem (i32.const 0) $null $std/gc-basics/MyObject_visit $~lib/collector/itcm/__gc_mark $~lib/string/String~gc)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -25,24 +25,24 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-basics/main))
- (func $std/gc-basics/MyObject_visit (; 1 ;) (type $iv) (param $0 i32)
+ (func $std/gc-basics/MyObject_visit (; 1 ;) (type $i_) (param $0 i32)
   nop
  )
  (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  get_local $0
+  local.get $0
   i32.const 1073741824
   i32.gt_u
   if
    unreachable
   end
-  get_global $~lib/allocator/arena/offset
-  tee_local $1
-  get_local $0
+  global.get $~lib/allocator/arena/offset
+  local.tee $1
+  local.get $0
   i32.const 1
-  get_local $0
+  local.get $0
   i32.const 1
   i32.gt_u
   select
@@ -51,16 +51,16 @@
   i32.add
   i32.const -8
   i32.and
-  tee_local $2
+  local.tee $2
   current_memory
-  tee_local $3
+  local.tee $3
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   get_local $3
-   get_local $2
-   get_local $1
+   local.get $3
+   local.get $2
+   local.get $1
    i32.sub
    i32.const 65535
    i32.add
@@ -68,16 +68,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   tee_local $0
-   get_local $3
-   get_local $0
+   local.tee $0
+   local.get $3
+   local.get $0
    i32.gt_s
    select
    grow_memory
    i32.const 0
    i32.lt_s
    if
-    get_local $0
+    local.get $0
     grow_memory
     i32.const 0
     i32.lt_s
@@ -86,71 +86,71 @@
     end
    end
   end
-  get_local $2
-  set_global $~lib/allocator/arena/offset
-  get_local $1
+  local.get $2
+  global.set $~lib/allocator/arena/offset
+  local.get $1
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 3 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 3 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  get_local $0
+  local.get $0
   i32.load offset=4
-  set_local $2
-  get_local $1
-  get_local $1
+  local.set $2
+  local.get $1
+  local.get $1
   i32.load
   i32.const 3
   i32.and
-  get_local $0
+  local.get $0
   i32.or
   i32.store
-  get_local $1
-  get_local $2
+  local.get $1
+  local.get $2
   i32.store offset=4
-  get_local $2
-  get_local $2
+  local.get $2
+  local.get $2
   i32.load
   i32.const 3
   i32.and
-  get_local $1
+  local.get $1
   i32.or
   i32.store
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 4 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 4 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  get_global $~lib/collector/itcm/iter
-  get_local $0
+  global.get $~lib/collector/itcm/iter
+  local.get $0
   i32.eq
   if
-   get_local $0
+   local.get $0
    i32.load offset=4
-   set_global $~lib/collector/itcm/iter
+   global.set $~lib/collector/itcm/iter
   end
-  get_local $0
+  local.get $0
   i32.load
   i32.const -4
   i32.and
-  tee_local $2
-  get_local $0
+  local.tee $2
+  local.get $0
   i32.load offset=4
-  tee_local $1
+  local.tee $1
   i32.store offset=4
-  get_local $1
-  get_local $1
+  local.get $1
+  local.get $1
   i32.load
   i32.const 3
   i32.and
-  get_local $2
+  local.get $2
   i32.or
   i32.store
-  get_global $~lib/collector/itcm/toSpace
-  get_local $0
+  global.get $~lib/collector/itcm/toSpace
+  local.get $0
   call $~lib/collector/itcm/ManagedObjectList#push
-  get_local $0
-  get_local $0
+  local.get $0
+  local.get $0
   i32.load
   i32.const -4
   i32.and
@@ -158,161 +158,161 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/__gc_mark (; 5 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/__gc_mark (; 5 ;) (type $i_) (param $0 i32)
   (local $1 i32)
-  get_local $0
+  local.get $0
   if
-   get_global $~lib/collector/itcm/white
-   get_local $0
+   global.get $~lib/collector/itcm/white
+   local.get $0
    i32.const 16
    i32.sub
-   tee_local $1
+   local.tee $1
    i32.load
    i32.const 3
    i32.and
    i32.eq
    if
-    get_local $1
+    local.get $1
     call $~lib/collector/itcm/ManagedObject#makeGray
    end
   end
  )
- (func $~lib/collector/itcm/step (; 6 ;) (type $v)
+ (func $~lib/collector/itcm/step (; 6 ;) (type $_)
   (local $0 i32)
   block $break|0
    block $case3|0
     block $case2|0
      block $case1|0
-      get_global $~lib/collector/itcm/state
-      tee_local $0
+      global.get $~lib/collector/itcm/state
+      local.tee $0
       if
-       get_local $0
+       local.get $0
        i32.const 1
        i32.sub
        br_table $case1|0 $case2|0 $case3|0 $break|0
       end
       i32.const 16
       call $~lib/allocator/arena/__memory_allocate
-      set_global $~lib/collector/itcm/fromSpace
-      get_global $~lib/collector/itcm/fromSpace
-      tee_local $0
+      global.set $~lib/collector/itcm/fromSpace
+      global.get $~lib/collector/itcm/fromSpace
+      local.tee $0
       i32.const -1
       i32.store offset=8
-      get_local $0
-      get_local $0
+      local.get $0
+      local.get $0
       i32.store
-      get_local $0
-      get_local $0
+      local.get $0
+      local.get $0
       i32.store offset=4
       i32.const 16
       call $~lib/allocator/arena/__memory_allocate
-      set_global $~lib/collector/itcm/toSpace
-      get_global $~lib/collector/itcm/toSpace
-      tee_local $0
+      global.set $~lib/collector/itcm/toSpace
+      global.get $~lib/collector/itcm/toSpace
+      local.tee $0
       i32.const -1
       i32.store offset=8
-      get_local $0
-      get_local $0
+      local.get $0
+      local.get $0
       i32.store
-      get_local $0
-      get_local $0
+      local.get $0
+      local.get $0
       i32.store offset=4
-      get_global $~lib/collector/itcm/toSpace
-      set_global $~lib/collector/itcm/iter
+      global.get $~lib/collector/itcm/toSpace
+      global.set $~lib/collector/itcm/iter
       i32.const 1
-      set_global $~lib/collector/itcm/state
+      global.set $~lib/collector/itcm/state
      end
-     get_global $std/gc-basics/obj
+     global.get $std/gc-basics/obj
      i32.const 2
-     call_indirect (type $iv)
-     get_global $std/gc-basics/obj2
+     call_indirect (type $i_)
+     global.get $std/gc-basics/obj2
      i32.const 2
-     call_indirect (type $iv)
+     call_indirect (type $i_)
      i32.const 2
-     set_global $~lib/collector/itcm/state
+     global.set $~lib/collector/itcm/state
      br $break|0
     end
-    get_global $~lib/collector/itcm/iter
+    global.get $~lib/collector/itcm/iter
     i32.load
     i32.const -4
     i32.and
-    tee_local $0
-    get_global $~lib/collector/itcm/toSpace
+    local.tee $0
+    global.get $~lib/collector/itcm/toSpace
     i32.ne
     if
-     get_local $0
-     set_global $~lib/collector/itcm/iter
-     get_local $0
-     get_global $~lib/collector/itcm/white
+     local.get $0
+     global.set $~lib/collector/itcm/iter
+     local.get $0
+     global.get $~lib/collector/itcm/white
      i32.eqz
-     get_local $0
+     local.get $0
      i32.load
      i32.const -4
      i32.and
      i32.or
      i32.store
      i32.const 1
-     set_global $~argc
-     get_local $0
+     global.set $~argc
+     local.get $0
      i32.const 16
      i32.add
-     get_local $0
+     local.get $0
      i32.load offset=8
-     call_indirect (type $iv)
+     call_indirect (type $i_)
     else     
-     get_global $std/gc-basics/obj
+     global.get $std/gc-basics/obj
      i32.const 2
-     call_indirect (type $iv)
-     get_global $std/gc-basics/obj2
+     call_indirect (type $i_)
+     global.get $std/gc-basics/obj2
      i32.const 2
-     call_indirect (type $iv)
-     get_global $~lib/collector/itcm/toSpace
-     get_global $~lib/collector/itcm/iter
+     call_indirect (type $i_)
+     global.get $~lib/collector/itcm/toSpace
+     global.get $~lib/collector/itcm/iter
      i32.load
      i32.const -4
      i32.and
      i32.eq
      if
-      get_global $~lib/collector/itcm/fromSpace
-      set_local $0
-      get_global $~lib/collector/itcm/toSpace
-      set_global $~lib/collector/itcm/fromSpace
-      get_local $0
-      set_global $~lib/collector/itcm/toSpace
-      get_global $~lib/collector/itcm/white
+      global.get $~lib/collector/itcm/fromSpace
+      local.set $0
+      global.get $~lib/collector/itcm/toSpace
+      global.set $~lib/collector/itcm/fromSpace
+      local.get $0
+      global.set $~lib/collector/itcm/toSpace
+      global.get $~lib/collector/itcm/white
       i32.eqz
-      set_global $~lib/collector/itcm/white
-      get_local $0
+      global.set $~lib/collector/itcm/white
+      local.get $0
       i32.load
       i32.const -4
       i32.and
-      set_global $~lib/collector/itcm/iter
+      global.set $~lib/collector/itcm/iter
       i32.const 3
-      set_global $~lib/collector/itcm/state
+      global.set $~lib/collector/itcm/state
      end
     end
     br $break|0
    end
-   get_global $~lib/collector/itcm/iter
-   tee_local $0
-   get_global $~lib/collector/itcm/toSpace
+   global.get $~lib/collector/itcm/iter
+   local.tee $0
+   global.get $~lib/collector/itcm/toSpace
    i32.ne
    if
-    get_local $0
+    local.get $0
     i32.load
     i32.const -4
     i32.and
-    set_global $~lib/collector/itcm/iter
+    global.set $~lib/collector/itcm/iter
    else    
-    get_global $~lib/collector/itcm/toSpace
-    tee_local $0
-    get_local $0
+    global.get $~lib/collector/itcm/toSpace
+    local.tee $0
+    local.get $0
     i32.store
-    get_local $0
-    get_local $0
+    local.get $0
+    local.get $0
     i32.store offset=4
     i32.const 1
-    set_global $~lib/collector/itcm/state
+    global.set $~lib/collector/itcm/state
    end
   end
  )
@@ -321,42 +321,42 @@
   call $~lib/collector/itcm/step
   i32.const 20
   call $~lib/allocator/arena/__memory_allocate
-  tee_local $0
+  local.tee $0
   i32.const 1
   i32.store offset=8
-  get_local $0
-  get_global $~lib/collector/itcm/white
-  get_local $0
+  local.get $0
+  global.get $~lib/collector/itcm/white
+  local.get $0
   i32.load
   i32.const -4
   i32.and
   i32.or
   i32.store
-  get_global $~lib/collector/itcm/fromSpace
-  get_local $0
+  global.get $~lib/collector/itcm/fromSpace
+  local.get $0
   call $~lib/collector/itcm/ManagedObjectList#push
-  get_local $0
+  local.get $0
   i32.const 16
   i32.add
  )
- (func $~lib/string/String~gc (; 8 ;) (type $iv) (param $0 i32)
-  get_local $0
+ (func $~lib/string/String~gc (; 8 ;) (type $i_) (param $0 i32)
+  local.get $0
   i32.eqz
   if
    return
   end
-  get_local $0
+  local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/collector/itcm/__gc_collect (; 9 ;) (type $v)
+ (func $~lib/collector/itcm/__gc_collect (; 9 ;) (type $_)
   (local $0 i32)
   block $break|0
    block $case1|0
-    get_global $~lib/collector/itcm/state
-    tee_local $0
+    global.get $~lib/collector/itcm/state
+    local.tee $0
     i32.eqz
     br_if $case1|0
-    get_local $0
+    local.get $0
     i32.const 1
     i32.eq
     br_if $case1|0
@@ -365,7 +365,7 @@
    call $~lib/collector/itcm/step
   end
   loop $continue|1
-   get_global $~lib/collector/itcm/state
+   global.get $~lib/collector/itcm/state
    i32.const 1
    i32.ne
    if
@@ -375,61 +375,61 @@
   end
  )
  (func $std/gc-basics/main (; 10 ;) (type $i) (result i32)
-  get_global $~started
+  global.get $~started
   i32.eqz
   if
    call $start
    i32.const 1
-   set_global $~started
+   global.set $~started
   end
   i32.const 0
  )
- (func $start (; 11 ;) (type $v)
+ (func $start (; 11 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 64
-  set_global $~lib/allocator/arena/startOffset
-  get_global $~lib/allocator/arena/startOffset
-  set_global $~lib/allocator/arena/offset
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
   i32.const 0
-  set_global $~lib/collector/itcm/state
+  global.set $~lib/collector/itcm/state
   call $~lib/collector/itcm/__gc_allocate
-  set_global $std/gc-basics/obj
-  get_global $std/gc-basics/obj
-  tee_local $0
+  global.set $std/gc-basics/obj
+  global.get $std/gc-basics/obj
+  local.tee $0
   i32.const 123
   i32.store
-  get_local $0
+  local.get $0
   i32.const 16
   i32.sub
-  tee_local $1
+  local.tee $1
   i32.load offset=4
-  set_local $2
+  local.set $2
   block (result i32)
-   get_local $1
+   local.get $1
    i32.load
    i32.const -4
    i32.and
-   tee_local $3
+   local.tee $3
    i32.const 0
    i32.ne
-   tee_local $0
+   local.tee $0
    if
-    get_local $2
+    local.get $2
     i32.const 0
     i32.ne
-    set_local $0
+    local.set $0
    end
-   get_local $0
+   local.get $0
   end
   if (result i32)
-   get_local $2
-   get_local $3
+   local.get $2
+   local.get $3
    i32.eq
   else   
-   get_local $0
+   local.get $0
   end
   i32.eqz
   if
@@ -440,7 +440,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $1
+  local.get $1
   i32.load offset=8
   i32.const 1
   i32.ne
@@ -452,7 +452,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $1
+  local.get $1
   i32.load offset=12
   if
    i32.const 0
@@ -462,7 +462,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $1
+  local.get $1
   i32.load offset=16
   i32.const 123
   i32.ne
@@ -476,10 +476,10 @@
   end
   call $~lib/collector/itcm/__gc_collect
   i32.const 0
-  set_global $std/gc-basics/obj
+  global.set $std/gc-basics/obj
   call $~lib/collector/itcm/__gc_collect
  )
- (func $null (; 12 ;) (type $v)
+ (func $null (; 12 ;) (type $_)
   nop
  )
 )

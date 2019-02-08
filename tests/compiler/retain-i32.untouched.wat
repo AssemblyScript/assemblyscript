@@ -1,11 +1,11 @@
 (module
- (type $iiv (func (param i32 i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $ii_ (func (param i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
@@ -22,16 +22,16 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $retain-i32/test (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  get_local $0
-  get_local $1
+ (func $retain-i32/test (; 1 ;) (type $ii_) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
   i32.add
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.add
   i32.const 24
   i32.shl
@@ -47,15 +47,15 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.sub
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.sub
   i32.const 24
   i32.shl
@@ -71,15 +71,15 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.mul
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.mul
   i32.const 24
   i32.shl
@@ -95,15 +95,15 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.and
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.and
   i32.const 24
   i32.shl
@@ -119,15 +119,15 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.or
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.or
   i32.const 24
   i32.shl
@@ -143,15 +143,15 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.xor
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.xor
   i32.const 24
   i32.shl
@@ -167,15 +167,15 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.shl
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.shl
   i32.const 24
   i32.shl
@@ -191,13 +191,13 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.add
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.add
   i32.const 255
   i32.and
@@ -211,13 +211,13 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.sub
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.sub
   i32.const 255
   i32.and
@@ -231,13 +231,13 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.mul
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.mul
   i32.const 255
   i32.and
@@ -251,13 +251,13 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.and
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.and
   i32.const 255
   i32.and
@@ -271,13 +271,13 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.or
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.or
   i32.const 255
   i32.and
@@ -291,13 +291,13 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.xor
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.xor
   i32.const 255
   i32.and
@@ -311,13 +311,13 @@
    call $~lib/env/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.shl
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.shl
   i32.const 255
   i32.and
@@ -332,128 +332,128 @@
    unreachable
   end
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $_)
   (local $0 i32)
   i32.const 0
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   i32.const 0
   call $retain-i32/test
   i32.const 1
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   i32.const 1
   call $retain-i32/test
   i32.const -1
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   i32.const -1
   call $retain-i32/test
   i32.const 0
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   i32.const 0
   call $retain-i32/test
   i32.const 1
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   i32.const 1
   call $retain-i32/test
   i32.const -1
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   i32.const -1
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MAX_VALUE
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MIN_VALUE
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MAX_VALUE
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MIN_VALUE
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
   i32.const 0
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   i32.const 0
   call $retain-i32/test
   i32.const 1
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   i32.const 1
   call $retain-i32/test
   i32.const -1
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   i32.const -1
   call $retain-i32/test
-  get_global $~lib/builtins/u8.MAX_VALUE
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   call $retain-i32/test
   block $break|0
-   get_global $~lib/builtins/i8.MIN_VALUE
-   set_local $0
+   global.get $~lib/builtins/i8.MIN_VALUE
+   local.set $0
    loop $repeat|0
-    get_local $0
-    get_global $~lib/builtins/u8.MAX_VALUE
+    local.get $0
+    global.get $~lib/builtins/u8.MAX_VALUE
     i32.le_s
     i32.eqz
     br_if $break|0
     block
      i32.const 0
-     get_local $0
+     local.get $0
      call $retain-i32/test
      i32.const 1
-     get_local $0
+     local.get $0
      call $retain-i32/test
      i32.const -1
-     get_local $0
+     local.get $0
      call $retain-i32/test
-     get_global $~lib/builtins/i8.MIN_VALUE
-     get_local $0
+     global.get $~lib/builtins/i8.MIN_VALUE
+     local.get $0
      call $retain-i32/test
-     get_global $~lib/builtins/i8.MAX_VALUE
-     get_local $0
+     global.get $~lib/builtins/i8.MAX_VALUE
+     local.get $0
      call $retain-i32/test
-     get_global $~lib/builtins/u8.MAX_VALUE
-     get_local $0
+     global.get $~lib/builtins/u8.MAX_VALUE
+     local.get $0
      call $retain-i32/test
-     get_global $~lib/builtins/i16.MIN_VALUE
-     get_local $0
+     global.get $~lib/builtins/i16.MIN_VALUE
+     local.get $0
      call $retain-i32/test
-     get_global $~lib/builtins/i16.MAX_VALUE
-     get_local $0
+     global.get $~lib/builtins/i16.MAX_VALUE
+     local.get $0
      call $retain-i32/test
-     get_global $~lib/builtins/u16.MAX_VALUE
-     get_local $0
+     global.get $~lib/builtins/u16.MAX_VALUE
+     local.get $0
      call $retain-i32/test
-     get_global $~lib/builtins/i32.MAX_VALUE
-     get_local $0
+     global.get $~lib/builtins/i32.MAX_VALUE
+     local.get $0
      call $retain-i32/test
-     get_global $~lib/builtins/i32.MIN_VALUE
-     get_local $0
+     global.get $~lib/builtins/i32.MIN_VALUE
+     local.get $0
      call $retain-i32/test
-     get_global $~lib/builtins/u32.MAX_VALUE
-     get_local $0
+     global.get $~lib/builtins/u32.MAX_VALUE
+     local.get $0
      call $retain-i32/test
     end
-    get_local $0
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
+    local.set $0
     br $repeat|0
     unreachable
    end
@@ -468,8 +468,8 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -1
   i32.eq
   i32.eqz
@@ -490,8 +490,8 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -1
   i32.eq
   i32.eqz
@@ -510,8 +510,8 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -2
   i32.eq
   i32.eqz
@@ -530,8 +530,8 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -128
   i32.eq
   i32.eqz
@@ -550,8 +550,8 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -128
   i32.eq
   i32.eqz
@@ -570,8 +570,8 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -127
   i32.eq
   i32.eqz
@@ -590,8 +590,8 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -128
   i32.eq
   i32.eqz
@@ -606,8 +606,8 @@
   i32.const 127
   i32.const 2
   i32.rem_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const 1
   i32.eq
   i32.eqz
@@ -622,8 +622,8 @@
   i32.const 1
   i32.const 127
   i32.rem_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const 1
   i32.eq
   i32.eqz
@@ -638,8 +638,8 @@
   i32.const -128
   i32.const 2
   i32.rem_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const 0
   i32.eq
   i32.eqz
@@ -654,8 +654,8 @@
   i32.const 1
   i32.const -128
   i32.rem_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const 1
   i32.eq
   i32.eqz
@@ -674,8 +674,8 @@
   i32.add
   i32.const 255
   i32.and
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 255
   i32.eq
   i32.eqz
@@ -694,8 +694,8 @@
   i32.sub
   i32.const 255
   i32.and
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 255
   i32.eq
   i32.eqz
@@ -712,8 +712,8 @@
   i32.mul
   i32.const 255
   i32.and
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 254
   i32.eq
   i32.eqz
@@ -730,8 +730,8 @@
   i32.mul
   i32.const 255
   i32.and
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 1
   i32.eq
   i32.eqz
@@ -746,8 +746,8 @@
   i32.const 255
   i32.const 255
   i32.div_u
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 1
   i32.eq
   i32.eqz
@@ -762,8 +762,8 @@
   i32.const 255
   i32.const 2
   i32.rem_u
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 1
   i32.eq
   i32.eqz
@@ -778,8 +778,8 @@
   i32.const 255
   i32.const 255
   i32.rem_u
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 0
   i32.eq
   i32.eqz
@@ -792,6 +792,6 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $v)
+ (func $null (; 3 ;) (type $_)
  )
 )

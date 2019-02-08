@@ -494,7 +494,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
       // ... | null
-      if (tn.skip(Token.BAR)) {
+      while (tn.skip(Token.BAR)) {
         if (tn.skip(Token.NULL)) {
           nullable = true;
         } else {
@@ -3337,6 +3337,12 @@ export class Parser extends DiagnosticEmitter {
         return Node.createConstructorExpression(tn.range(startPos, tn.pos));
       }
       case Token.SUPER: {
+        if (tn.peek() != Token.DOT && tn.nextToken != Token.OPENPAREN) {
+          this.error(
+            DiagnosticCode._super_must_be_followed_by_an_argument_list_or_member_access,
+            tn.range()
+          );
+        }
         return Node.createSuperExpression(tn.range(startPos, tn.pos));
       }
       case Token.STRINGLITERAL: {
@@ -3468,6 +3474,15 @@ export class Parser extends DiagnosticEmitter {
             AssertionKind.AS,
             expr,
             toType,
+            tn.range(startPos, tn.pos)
+          );
+          break;
+        }
+        case Token.EXCLAMATION: {
+          expr = Node.createAssertionExpression(
+            AssertionKind.NONNULL,
+            expr,
+            null,
             tn.range(startPos, tn.pos)
           );
           break;
@@ -3835,7 +3850,8 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.MINUS_MINUS: return Precedence.UNARY_POSTFIX;
     case Token.DOT:
     case Token.NEW:
-    case Token.OPENBRACKET: return Precedence.MEMBERACCESS;
+    case Token.OPENBRACKET:
+    case Token.EXCLAMATION: return Precedence.MEMBERACCESS;
   }
   return Precedence.NONE;
 }

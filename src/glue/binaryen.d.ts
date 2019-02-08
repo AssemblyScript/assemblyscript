@@ -18,6 +18,7 @@ declare function _BinaryenTypeInt32(): BinaryenType;
 declare function _BinaryenTypeInt64(): BinaryenType;
 declare function _BinaryenTypeFloat32(): BinaryenType;
 declare function _BinaryenTypeFloat64(): BinaryenType;
+declare function _BinaryenTypeVec128(): BinaryenType;
 declare function _BinaryenTypeUnreachable(): BinaryenType;
 declare function _BinaryenTypeAuto(): BinaryenType;
 
@@ -55,6 +56,10 @@ declare function _BinaryenSIMDReplaceId(): BinaryenExpressionId;
 declare function _BinaryenSIMDShuffleId(): BinaryenExpressionId;
 declare function _BinaryenSIMDBitselectId(): BinaryenExpressionId;
 declare function _BinaryenSIMDShiftId(): BinaryenExpressionId;
+declare function _BinaryenMemoryInitId(): BinaryenExpressionId;
+declare function _BinaryenDataDropId(): BinaryenExpressionId;
+declare function _BinaryenMemoryCopyId(): BinaryenExpressionId;
+declare function _BinaryenMemoryFillId(): BinaryenExpressionId;
 
 declare type BinaryenModuleRef = usize;
 declare type v128ptr = usize; // TODO: LLVM C-abi for const uint8_t[16]?
@@ -63,7 +68,8 @@ declare function _BinaryenModuleCreate(): BinaryenModuleRef;
 declare function _BinaryenModuleDispose(module: BinaryenModuleRef): void;
 
 // LLVM C ABI with `out` being a large enough buffer receiving the
-// BinaryenLiteral struct.
+// BinaryenLiteral struct of size `_BinaryenSizeofLiteral()`.
+declare function _BinaryenSizeofLiteral(): usize;
 declare function _BinaryenLiteralInt32(out: usize, x: i32): void;
 declare function _BinaryenLiteralInt64(out: usize, x: i32, y: i32): void;
 declare function _BinaryenLiteralFloat32(out: usize, x: f32): void;
@@ -394,6 +400,11 @@ declare function _BinaryenSIMDShuffle(module: BinaryenModuleRef, left: BinaryenE
 declare function _BinaryenSIMDBitselect(module: BinaryenModuleRef, left: BinaryenExpressionRef, right: BinaryenExpressionRef, cond: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenSIMDShift(module: BinaryenModuleRef, op: BinaryenSIMDOp, vec: BinaryenExpressionRef, shift: BinaryenExpressionRef): BinaryenExpressionRef;
 
+declare function _BinaryenMemoryInit(module: BinaryenModuleRef, segment: u32, dest: BinaryenExpressionRef, offset: BinaryenExpressionRef, size: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenDataDrop(module: BinaryenModuleRef, segment: u32): BinaryenExpressionRef;
+declare function _BinaryenMemoryCopy(module: BinaryenModuleRef, dest: BinaryenExpressionRef, source: BinaryenExpressionRef, size: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenMemoryFill(module: BinaryenModuleRef, dest: BinaryenExpressionRef, value: BinaryenExpressionRef, size: BinaryenExpressionRef): BinaryenExpressionRef;
+
 declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): BinaryenExpressionId;
 declare function _BinaryenExpressionGetType(expr: BinaryenExpressionRef): BinaryenType;
 declare function _BinaryenExpressionPrint(expr: BinaryenExpressionRef): void;
@@ -518,6 +529,21 @@ declare function _BinaryenSIMDBitselectGetCond(expr: BinaryenExpressionRef): Bin
 declare function _BinaryenSIMDShiftGetOp(expr: BinaryenExpressionRef): BinaryenSIMDOp;
 declare function _BinaryenSIMDShiftGetVec(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 declare function _BinaryenSIMDShiftGetShift(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenMemoryInitGetSegment(expr: BinaryenExpressionRef): u32;
+declare function _BinaryenMemoryInitGetDest(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenMemoryInitGetOffset(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenMemoryInitGetSize(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenDataDropGetSegment(expr: BinaryenExpressionRef): u32;
+
+declare function _BinaryenMemoryCopyGetDest(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenMemoryCopyGetSource(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenMemoryCopyGetSize(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+declare function _BinaryenMemoryFillGetDest(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenMemoryFillGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+declare function _BinaryenMemoryFillGetSize(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 declare type BinaryenFunctionTypeRef = usize;
 

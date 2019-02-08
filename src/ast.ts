@@ -116,10 +116,12 @@ export function nodeIsConstantValue(kind: NodeKind): bool {
 export function nodeIsCallable(kind: NodeKind): bool {
   switch (kind) {
     case NodeKind.IDENTIFIER:
+    case NodeKind.ASSERTION: // if kind=NONNULL
     case NodeKind.CALL:
     case NodeKind.ELEMENTACCESS:
+    case NodeKind.PARENTHESIZED:
     case NodeKind.PROPERTYACCESS:
-    case NodeKind.PARENTHESIZED: return true;
+    case NodeKind.SUPER: return true;
   }
   return false;
 }
@@ -286,14 +288,14 @@ export abstract class Node {
   static createAssertionExpression(
     assertionKind: AssertionKind,
     expression: Expression,
-    toType: CommonTypeNode,
+    toType: CommonTypeNode | null,
     range: Range
   ): AssertionExpression {
     var expr = new AssertionExpression();
     expr.range = range;
     expr.assertionKind = assertionKind;
     expr.expression = expression; expression.parent = expr;
-    expr.toType = toType; toType.parent = expr;
+    expr.toType = toType; if (toType) toType.parent = expr;
     return expr;
   }
 
@@ -1282,7 +1284,8 @@ export class ArrayLiteralExpression extends LiteralExpression {
 /** Indicates the kind of an assertion. */
 export enum AssertionKind {
   PREFIX,
-  AS
+  AS,
+  NONNULL
 }
 
 /** Represents an assertion expression. */
@@ -1294,7 +1297,7 @@ export class AssertionExpression extends Expression {
   /** Expression being asserted. */
   expression: Expression;
   /** Target type. */
-  toType: CommonTypeNode;
+  toType: CommonTypeNode | null;
 }
 
 /** Represents a binary expression. */
