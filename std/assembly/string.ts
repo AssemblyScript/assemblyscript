@@ -427,7 +427,11 @@ export class String {
   split(separator: String = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
     if (!limit) return new Array<String>();
-    if (separator === null) return <String[]>[this];
+    if (separator === null) {
+      let result = new Array<String>(1);
+      unchecked(result[0] = this);
+      return result;
+    }
     var length: isize = this.length;
     var sepLen: isize = separator.length;
     if (limit < 0) limit = i32.MAX_VALUE;

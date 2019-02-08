@@ -3324,7 +3324,7 @@
             if
              i32.const 0
              i32.const 80
-             i32.const 643
+             i32.const 647
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -4532,25 +4532,31 @@
   i32.const 0
   i32.eq
   if
+   i32.const 0
+   i32.const 1
+   call $~lib/array/Array<String>#constructor
+   local.set $3
    block (result i32)
-    i32.const 0
-    i32.const 1
-    call $~lib/array/Array<String>#constructor
-    local.set $3
     local.get $3
+    local.tee $4
     i32.const 0
+    local.tee $5
     local.get $0
     call $~lib/array/Array<String>#__unchecked_set
-    local.get $3
+    local.get $4
+    local.get $5
+    call $~lib/array/Array<String>#__unchecked_get
    end
+   drop
+   local.get $3
    return
   end
   local.get $0
   i32.load
-  local.set $4
+  local.set $6
   local.get $1
   i32.load
-  local.set $5
+  local.set $7
   local.get $2
   i32.const 0
   i32.lt_s
@@ -4558,10 +4564,10 @@
    global.get $~lib/builtins/i32.MAX_VALUE
    local.set $2
   end
-  local.get $5
+  local.get $7
   i32.eqz
   if
-   local.get $4
+   local.get $6
    i32.eqz
    if
     i32.const 0
@@ -4569,28 +4575,28 @@
     call $~lib/array/Array<String>#constructor
     return
    end
-   local.get $4
+   local.get $6
    local.tee $3
    local.get $2
-   local.tee $6
+   local.tee $4
    local.get $3
-   local.get $6
+   local.get $4
    i32.lt_s
    select
-   local.set $4
+   local.set $6
    i32.const 0
-   local.get $4
+   local.get $6
    call $~lib/array/Array<String>#constructor
    local.set $3
    local.get $3
    i32.load
-   local.set $6
+   local.set $4
    block $break|0
     i32.const 0
-    local.set $7
+    local.set $5
     loop $repeat|0
-     local.get $7
-     local.get $4
+     local.get $5
+     local.get $6
      i32.lt_s
      i32.eqz
      br_if $break|0
@@ -4600,16 +4606,16 @@
       local.set $8
       local.get $8
       local.get $0
-      local.get $7
+      local.get $5
       i32.const 1
       i32.shl
       i32.add
       i32.load16_u offset=4
       i32.store16 offset=4
       block $~lib/internal/arraybuffer/STORE<String,String>|inlined.1
-       local.get $6
+       local.get $4
        local.set $9
-       local.get $7
+       local.get $5
        local.set $10
        local.get $8
        local.set $11
@@ -4626,10 +4632,10 @@
        i32.store offset=8
       end
      end
-     local.get $7
+     local.get $5
      i32.const 1
      i32.add
-     local.set $7
+     local.set $5
      br $repeat|0
      unreachable
     end
@@ -4638,26 +4644,26 @@
    local.get $3
    return
   else   
-   local.get $4
+   local.get $6
    i32.eqz
    if
     i32.const 0
     i32.const 1
     call $~lib/array/Array<String>#constructor
-    local.set $6
+    local.set $4
     block (result i32)
-     local.get $6
+     local.get $4
      local.tee $3
      i32.const 0
-     local.tee $7
+     local.tee $5
      i32.const 256
      call $~lib/array/Array<String>#__unchecked_set
      local.get $3
-     local.get $7
+     local.get $5
      call $~lib/array/Array<String>#__unchecked_get
     end
     drop
-    local.get $6
+    local.get $4
     return
    end
   end
@@ -4685,19 +4691,19 @@
       local.get $14
       local.get $15
       i32.sub
-      local.set $6
-      local.get $6
+      local.set $4
+      local.get $4
       i32.const 0
       i32.gt_s
       if
-       local.get $6
+       local.get $4
        call $~lib/internal/string/allocateUnsafe
        local.set $3
        local.get $3
        i32.const 0
        local.get $0
        local.get $15
-       local.get $6
+       local.get $4
        call $~lib/internal/string/copyUnsafe
        local.get $13
        local.get $3
@@ -4720,7 +4726,7 @@
        return
       end
       local.get $14
-      local.get $5
+      local.get $7
       i32.add
       local.set $15
      end
@@ -4734,23 +4740,23 @@
    i32.const 0
    i32.const 1
    call $~lib/array/Array<String>#constructor
-   local.set $6
+   local.set $4
    block (result i32)
-    local.get $6
+    local.get $4
     local.tee $3
     i32.const 0
-    local.tee $7
+    local.tee $5
     local.get $0
     call $~lib/array/Array<String>#__unchecked_set
     local.get $3
-    local.get $7
+    local.get $5
     call $~lib/array/Array<String>#__unchecked_get
    end
    drop
-   local.get $6
+   local.get $4
    return
   end
-  local.get $4
+  local.get $6
   local.get $15
   i32.sub
   local.set $17
@@ -4760,15 +4766,15 @@
   if
    local.get $17
    call $~lib/internal/string/allocateUnsafe
-   local.set $6
-   local.get $6
+   local.set $4
+   local.get $4
    i32.const 0
    local.get $0
    local.get $15
    local.get $17
    call $~lib/internal/string/copyUnsafe
    local.get $13
-   local.get $6
+   local.get $4
    call $~lib/array/Array<String>#push
    drop
   else   
