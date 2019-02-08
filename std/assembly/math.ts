@@ -356,7 +356,7 @@ export namespace NativeMath {
   export function clz32(x: f64): f64 {
     if (!isFinite(x)) return 32;
     /*
-     * Wasm (MVP) and JS have different approachas for double->int conversions.
+     * Wasm (MVP) and JS have different approaches for double->int conversions.
      *
      * For emulate JS conversion behavior and avoid trapping from wasm we should modulate by MAX_INT
      * our float-point arguments before actual convertion to integers.
@@ -555,7 +555,7 @@ export namespace NativeMath {
 
   export function imul(x: f64, y: f64): f64 {
     /*
-     * Wasm (MVP) and JS have different approachas for double->int conversions.
+     * Wasm (MVP) and JS have different approaches for double->int conversions.
      *
      * For emulate JS conversion behavior and avoid trapping from wasm we should modulate by MAX_INT
      * our float-point arguments before actual convertion to integers.
