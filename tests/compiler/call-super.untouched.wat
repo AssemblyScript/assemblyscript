@@ -1,7 +1,7 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00c\00a\00l\00l\00-\00s\00u\00p\00e\00r\00.\00t\00s\00")
@@ -170,7 +170,7 @@
   end
   local.get $0
  )
- (func $call-super/test1 (; 5 ;) (type $v)
+ (func $call-super/test1 (; 5 ;) (type $_)
   (local $0 i32)
   i32.const 0
   call $call-super/B#constructor
@@ -256,7 +256,7 @@
   end
   local.get $0
  )
- (func $call-super/test2 (; 8 ;) (type $v)
+ (func $call-super/test2 (; 8 ;) (type $_)
   (local $0 i32)
   i32.const 0
   call $call-super/D#constructor
@@ -332,7 +332,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test3 (; 11 ;) (type $v)
+ (func $call-super/test3 (; 11 ;) (type $_)
   (local $0 i32)
   i32.const 0
   call $call-super/F#constructor
@@ -393,7 +393,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test4 (; 14 ;) (type $v)
+ (func $call-super/test4 (; 14 ;) (type $_)
   (local $0 i32)
   i32.const 0
   call $call-super/H#constructor
@@ -454,7 +454,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test5 (; 17 ;) (type $v)
+ (func $call-super/test5 (; 17 ;) (type $_)
   (local $0 i32)
   i32.const 0
   call $call-super/J#constructor
@@ -486,7 +486,7 @@
    unreachable
   end
  )
- (func $start (; 18 ;) (type $v)
+ (func $start (; 18 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -503,6 +503,6 @@
   call $call-super/test4
   call $call-super/test5
  )
- (func $null (; 19 ;) (type $v)
+ (func $null (; 19 ;) (type $_)
  )
 )

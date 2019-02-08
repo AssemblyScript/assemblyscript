@@ -1,12 +1,12 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iiif (func (param i32 i32 i32) (result f32)))
  (type $II (func (param i64) (result i64)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$dii (func (param i32 i32) (result f64)))
@@ -385,7 +385,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -474,18 +474,19 @@
   (local $4 i32)
   local.get $0
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $1
+  local.tee $3
   i32.const 1073741816
   i32.gt_u
-  local.tee $4
+  local.tee $1
   if (result i32)
-   local.get $4
-  else   
    local.get $1
+  else   
+   local.get $3
    i32.const 4
    i32.add
-   local.get $3
+   local.get $4
    i32.gt_s
   end
   if
@@ -503,7 +504,7 @@
    local.get $0
    i32.load offset=4
    i32.add
-   local.get $1
+   local.get $3
    i32.add
    f32.load offset=8
   else   
@@ -512,7 +513,7 @@
    local.get $0
    i32.load offset=4
    i32.add
-   local.get $1
+   local.get $3
    i32.add
    i32.load offset=8
    local.tee $0
@@ -595,19 +596,20 @@
   i32.load offset=8
   local.set $3
   local.get $1
+  local.tee $2
   i32.const 1073741816
   i32.gt_u
-  local.tee $2
+  local.tee $1
   i32.eqz
   if
-   local.get $1
+   local.get $2
    i32.const 1
    i32.add
    local.get $3
    i32.gt_s
-   local.set $2
+   local.set $1
   end
-  local.get $2
+  local.get $1
   if
    i32.const 0
    i32.const 136
@@ -621,7 +623,7 @@
   local.get $0
   i32.load offset=4
   i32.add
-  local.get $1
+  local.get $2
   i32.add
   i32.load8_s offset=8
  )
@@ -630,18 +632,19 @@
   (local $4 i32)
   local.get $0
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $1
+  local.tee $3
   i32.const 1073741816
   i32.gt_u
-  local.tee $4
+  local.tee $1
   if (result i32)
-   local.get $4
-  else   
    local.get $1
+  else   
+   local.get $3
    i32.const 2
    i32.add
-   local.get $3
+   local.get $4
    i32.gt_s
   end
   if
@@ -657,7 +660,7 @@
   local.get $0
   i32.load offset=4
   i32.add
-  local.get $1
+  local.get $3
   i32.add
   i32.load16_s offset=8
   local.set $0
@@ -683,18 +686,19 @@
   (local $4 i32)
   local.get $0
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $1
+  local.tee $3
   i32.const 1073741816
   i32.gt_u
-  local.tee $4
+  local.tee $1
   if (result i32)
-   local.get $4
-  else   
    local.get $1
+  else   
+   local.get $3
    i32.const 4
    i32.add
-   local.get $3
+   local.get $4
    i32.gt_s
   end
   if
@@ -710,7 +714,7 @@
   local.get $0
   i32.load offset=4
   i32.add
-  local.get $1
+  local.get $3
   i32.add
   i32.load offset=8
   local.set $0
@@ -767,19 +771,20 @@
   i32.load offset=8
   local.set $3
   local.get $1
+  local.tee $2
   i32.const 1073741816
   i32.gt_u
-  local.tee $2
+  local.tee $1
   i32.eqz
   if
-   local.get $1
+   local.get $2
    i32.const 1
    i32.add
    local.get $3
    i32.gt_s
-   local.set $2
+   local.set $1
   end
-  local.get $2
+  local.get $1
   if
    i32.const 0
    i32.const 136
@@ -793,7 +798,7 @@
   local.get $0
   i32.load offset=4
   i32.add
-  local.get $1
+  local.get $2
   i32.add
   i32.load8_u offset=8
  )
@@ -802,18 +807,19 @@
   (local $4 i32)
   local.get $0
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $1
+  local.tee $3
   i32.const 1073741816
   i32.gt_u
-  local.tee $4
+  local.tee $1
   if (result i32)
-   local.get $4
-  else   
    local.get $1
+  else   
+   local.get $3
    i32.const 2
    i32.add
-   local.get $3
+   local.get $4
    i32.gt_s
   end
   if
@@ -829,7 +835,7 @@
   local.get $0
   i32.load offset=4
   i32.add
-  local.get $1
+  local.get $3
   i32.add
   i32.load16_u offset=8
   local.set $0
@@ -1090,7 +1096,7 @@
   local.get $1
   i32.store16 offset=8
  )
- (func $start (; 23 ;) (type $v)
+ (func $start (; 23 ;) (type $_)
   (local $0 i32)
   i32.const 216
   global.set $~lib/allocator/arena/startOffset
@@ -2619,7 +2625,7 @@
    unreachable
   end
  )
- (func $null (; 24 ;) (type $v)
+ (func $null (; 24 ;) (type $_)
   nop
  )
 )

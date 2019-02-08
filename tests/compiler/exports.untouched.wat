@@ -2,9 +2,9 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiv (func (param i32 i32)))
- (type $iv (func (param i32)))
- (type $v (func))
+ (type $ii_ (func (param i32 i32)))
+ (type $i_ (func (param i32)))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -175,12 +175,12 @@
   local.get $0
   i32.load
  )
- (func $exports/Car#set:numDoors (; 8 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (; 8 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#openDoors (; 9 ;) (type $iv) (param $0 i32)
+ (func $exports/Car#openDoors (; 9 ;) (type $i_) (param $0 i32)
   nop
  )
  (func $exports/vehicles.Car.getNumTires (; 10 ;) (type $i) (result i32)
@@ -208,15 +208,15 @@
   local.get $0
   i32.load
  )
- (func $exports/vehicles.Car#set:numDoors (; 13 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $exports/vehicles.Car#set:numDoors (; 13 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/vehicles.Car#openDoors (; 14 ;) (type $iv) (param $0 i32)
+ (func $exports/vehicles.Car#openDoors (; 14 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $start (; 15 ;) (type $v)
+ (func $start (; 15 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -228,7 +228,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 16 ;) (type $v)
+ (func $null (; 16 ;) (type $_)
  )
  (func $exports/subOpt|trampoline (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
@@ -248,7 +248,7 @@
   local.get $1
   call $exports/subOpt
  )
- (func $~setargc (; 18 ;) (type $iv) (param $0 i32)
+ (func $~setargc (; 18 ;) (type $i_) (param $0 i32)
   local.get $0
   global.set $~argc
  )
@@ -272,7 +272,7 @@
   local.get $0
   i32.load
  )
- (func $Car#set:doors (; 21 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $Car#set:doors (; 21 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
@@ -297,7 +297,7 @@
   local.get $0
   i32.load
  )
- (func $vehicles.Car#set:doors (; 24 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $vehicles.Car#set:doors (; 24 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store

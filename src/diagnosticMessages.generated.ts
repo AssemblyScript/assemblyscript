@@ -30,6 +30,7 @@ export enum DiagnosticCode {
   Function_0_cannot_be_inlined_into_itself = 217,
   Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set = 218,
   Optional_properties_are_not_supported = 219,
+  Expression_must_be_a_compile_time_constant = 220,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -159,6 +160,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 217: return "Function '{0}' cannot be inlined into itself.";
     case 218: return "Cannot access method '{0}' without calling it as it requires 'this' to be set.";
     case 219: return "Optional properties are not supported.";
+    case 220: return "Expression must be a compile-time constant.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

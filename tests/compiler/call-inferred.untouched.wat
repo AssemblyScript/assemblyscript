@@ -1,9 +1,9 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $FF (func (param f64) (result f64)))
  (type $ff (func (param f32) (result f32)))
- (type $v (func))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00c\00a\00l\00l\00-\00i\00n\00f\00e\00r\00r\00e\00d\00.\00t\00s\00")
@@ -25,7 +25,7 @@
  (func $call-inferred/bar<f32> (; 4 ;) (type $ff) (param $0 f32) (result f32)
   local.get $0
  )
- (func $start (; 5 ;) (type $v)
+ (func $start (; 5 ;) (type $_)
   i32.const 42
   call $call-inferred/foo<i32>
   i32.const 42
@@ -79,6 +79,6 @@
    unreachable
   end
  )
- (func $null (; 6 ;) (type $v)
+ (func $null (; 6 ;) (type $_)
  )
 )

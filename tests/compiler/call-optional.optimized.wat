@@ -1,7 +1,7 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s")
@@ -36,7 +36,7 @@
   local.get $2
   i32.add
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   i32.const 1
@@ -159,7 +159,7 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $v)
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

@@ -1,10 +1,10 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iv (func (param i32)))
- (type $v (func))
+ (type $i_ (func (param i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s\00")
@@ -103,7 +103,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 2 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -357,7 +357,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 3 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1558,7 +1558,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1839,14 +1839,14 @@
    i32.const 0
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 6 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 6 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $~lib/allocator/arena/__memory_reset (; 7 ;) (type $v)
+ (func $~lib/allocator/arena/__memory_reset (; 7 ;) (type $_)
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 8 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1888,7 +1888,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block
+  block $memory.fill|inlined.0
    global.get $std/allocator_arena/ptr1
    local.set $0
    i32.const 18
@@ -1933,7 +1933,7 @@
    end
    unreachable
   end
-  block
+  block $memory.copy|inlined.0
    global.get $std/allocator_arena/ptr2
    local.set $2
    global.get $std/allocator_arena/ptr1
@@ -2004,32 +2004,20 @@
   block $~lib/memory/memory.free|inlined.0
    global.get $std/allocator_arena/ptr1
    local.set $2
-   block
-    local.get $2
-    call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.0
-    unreachable
-   end
-   unreachable
+   local.get $2
+   call $~lib/allocator/arena/__memory_free
+   br $~lib/memory/memory.free|inlined.0
   end
   block $~lib/memory/memory.free|inlined.1
    global.get $std/allocator_arena/ptr2
    local.set $2
-   block
-    local.get $2
-    call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.1
-    unreachable
-   end
-   unreachable
+   local.get $2
+   call $~lib/allocator/arena/__memory_free
+   br $~lib/memory/memory.free|inlined.1
   end
   block $~lib/memory/memory.reset|inlined.0
-   block
-    call $~lib/allocator/arena/__memory_reset
-    br $~lib/memory/memory.reset|inlined.0
-    unreachable
-   end
-   unreachable
+   call $~lib/allocator/arena/__memory_reset
+   br $~lib/memory/memory.reset|inlined.0
   end
   block $~lib/memory/memory.allocate|inlined.2 (result i32)
    global.get $std/allocator_arena/size
@@ -2058,6 +2046,6 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (type $v)
+ (func $null (; 9 ;) (type $_)
  )
 )

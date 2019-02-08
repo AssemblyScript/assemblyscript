@@ -1,15 +1,15 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (type $i (func (result i32)))
  (type $I (func (result i64)))
  (type $f (func (result f32)))
  (type $F (func (result f64)))
- (type $iv (func (param i32)))
+ (type $i_ (func (param i32)))
  (type $ii (func (param i32) (result i32)))
  (type $II (func (param i64) (result i64)))
  (type $ff (func (param f32) (result f32)))
  (type $FF (func (param f64) (result f64)))
- (type $iiv (func (param i32 i32)))
+ (type $ii_ (func (param i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $IiI (func (param i64 i32) (result i64)))
  (type $fff (func (param f32 f32) (result f32)))
@@ -21,7 +21,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $function/v (; 0 ;) (type $v)
+ (func $function/v (; 0 ;) (type $_)
   nop
  )
  (func $function/i (; 1 ;) (type $i) (result i32)
@@ -36,7 +36,7 @@
  (func $function/F (; 4 ;) (type $F) (result f64)
   f64.const 0
  )
- (func $function/iv (; 5 ;) (type $iv) (param $0 i32)
+ (func $function/iv (; 5 ;) (type $i_) (param $0 i32)
   nop
  )
  (func $function/ii (; 6 ;) (type $ii) (param $0 i32) (result i32)
@@ -51,7 +51,7 @@
  (func $function/FF (; 9 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
  )
- (func $function/iiv (; 10 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $function/iiv (; 10 ;) (type $ii_) (param $0 i32) (param $1 i32)
   nop
  )
  (func $function/iii (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -75,7 +75,7 @@
   local.get $1
   f64.add
  )
- (func $start (; 15 ;) (type $v)
+ (func $start (; 15 ;) (type $_)
   call $function/v
   call $function/i
   drop
@@ -119,6 +119,6 @@
   call $function/FFF
   drop
  )
- (func $null (; 16 ;) (type $v)
+ (func $null (; 16 ;) (type $_)
  )
 )

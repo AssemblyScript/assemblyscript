@@ -1,6 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 1)
  (data (i32.const 8) "\0e\00\00\00m\00a\00n\00y\00-\00l\00o\00c\00a\00l\00s\00.\00t\00s")
  (table $0 1 funcref)
@@ -19,7 +19,7 @@
   i32.const 24
   i32.shr_s
  )
- (func $start (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $_)
   nop
  )
 )

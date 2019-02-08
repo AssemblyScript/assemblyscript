@@ -1,7 +1,7 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (type $i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -23,13 +23,13 @@
  (func $start~anonymous|2 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $start~someName|3 (; 3 ;) (type $v)
+ (func $start~someName|3 (; 3 ;) (type $_)
   nop
  )
  (func $start~anonymous|4 (; 4 ;) (type $i) (result i32)
   i32.const 1
  )
- (func $start (; 5 ;) (type $v)
+ (func $start (; 5 ;) (type $_)
   block (result i32)
    i32.const 1
    global.set $~argc
@@ -70,7 +70,7 @@
    i32.const 0
    global.set $~argc
    global.get $function-expression/f3
-   call_indirect (type $v)
+   call_indirect (type $_)
   end
   block (result i32)
    i32.const 0
@@ -90,6 +90,6 @@
    unreachable
   end
  )
- (func $null (; 6 ;) (type $v)
+ (func $null (; 6 ;) (type $_)
  )
 )

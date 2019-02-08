@@ -1,9 +1,9 @@
 (module
  (type $iiiiiiFF (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $F (func (result f64)))
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
@@ -80,7 +80,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $start (; 4 ;) (type $v)
+ (func $start (; 4 ;) (type $_)
   (local $0 i32)
   (local $1 i64)
   i32.const 40
@@ -202,7 +202,7 @@
    unreachable
   end
  )
- (func $null (; 5 ;) (type $v)
+ (func $null (; 5 ;) (type $_)
   nop
  )
 )

@@ -1,11 +1,11 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
@@ -337,7 +337,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1234,7 +1234,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1437,25 +1437,26 @@
   (local $4 i32)
   local.get $0
   i32.load
-  local.set $3
+  local.set $4
   local.get $1
   i32.const 0
   i32.lt_s
   if (result i32)
    local.get $1
-   local.get $3
-   i32.add
-   local.tee $4
-   i32.const 0
    local.get $4
+   i32.add
+   local.tee $3
+   i32.const 0
+   local.get $3
    i32.const 0
    i32.gt_s
    select
   else   
    local.get $1
+   local.tee $3
+   local.get $4
    local.get $3
-   local.get $1
-   local.get $3
+   local.get $4
    i32.lt_s
    select
   end
@@ -1465,33 +1466,34 @@
   i32.lt_s
   if (result i32)
    local.get $2
-   local.get $3
-   i32.add
-   local.tee $4
-   i32.const 0
    local.get $4
+   i32.add
+   local.tee $3
+   i32.const 0
+   local.get $3
    i32.const 0
    i32.gt_s
    select
   else   
    local.get $2
+   local.tee $3
+   local.get $4
    local.get $3
-   local.get $2
-   local.get $3
+   local.get $4
    i32.lt_s
    select
   end
   local.get $1
   i32.sub
-  local.tee $4
+  local.tee $3
   i32.const 0
-  local.get $4
+  local.get $3
   i32.const 0
   i32.gt_s
   select
-  local.tee $2
-  call $~lib/internal/arraybuffer/allocateUnsafe
   local.tee $3
+  call $~lib/internal/arraybuffer/allocateUnsafe
+  local.tee $2
   i32.const 8
   i32.add
   local.get $0
@@ -1499,9 +1501,9 @@
   i32.add
   local.get $1
   i32.add
-  local.get $2
-  call $~lib/internal/memory/memmove
   local.get $3
+  call $~lib/internal/memory/memmove
+  local.get $2
  )
  (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -1708,7 +1710,7 @@
   local.get $1
   call $~lib/dataview/DataView#constructor
  )
- (func $start (; 12 ;) (type $v)
+ (func $start (; 12 ;) (type $_)
   (local $0 i32)
   i32.const 288
   global.set $~lib/allocator/arena/startOffset
@@ -1965,7 +1967,7 @@
    unreachable
   end
  )
- (func $null (; 13 ;) (type $v)
+ (func $null (; 13 ;) (type $_)
   nop
  )
 )

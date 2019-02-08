@@ -4,6 +4,7 @@
  * @preferred
  *//***/
 
+export * from "./bitset";
 export * from "./charcode";
 export * from "./collections";
 export * from "./path";

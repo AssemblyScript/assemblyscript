@@ -72,3 +72,32 @@ function test_funcs(): void {
 }
 
 test_funcs();
+
+import "allocator/arena";
+
+class Baz {
+  a: i32 = 1;
+  b: i32;
+  @inline constructor(c: i32) {
+    this.b = c;
+  }
+}
+
+class Bar extends Baz {
+  d: i32 = 3;
+  e: i32;
+  @inline constructor(f: i32) {
+    super(2);
+    this.e = f;
+  }
+}
+
+function test_ctor(): void {
+  var bar = new Bar(4);
+  assert(bar.a == 1);
+  assert(bar.b == 2);
+  assert(bar.d == 3);
+  assert(bar.e == 4);
+}
+
+test_ctor();

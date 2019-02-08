@@ -1,11 +1,11 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $ii (func (param i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $ifff (func (param i32 f32 f32) (result f32)))
- (type $v (func))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s\00")
@@ -92,7 +92,7 @@
   local.set $2
   local.get $2
  )
- (func $start (; 6 ;) (type $v)
+ (func $start (; 6 ;) (type $_)
   i32.const 4
   i32.const 4
   i32.eq
@@ -116,6 +116,6 @@
   call $class/Animal.sub<f32>
   drop
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 7 ;) (type $_)
  )
 )

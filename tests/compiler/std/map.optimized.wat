@@ -1,22 +1,22 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
- (type $iv (func (param i32)))
+ (type $i_ (func (param i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiv (func (param i32 i32)))
+ (type $ii_ (func (param i32 i32)))
  (type $iIi (func (param i32 i64) (result i32)))
  (type $Ii (func (param i64) (result i32)))
  (type $iIii (func (param i32 i64 i32) (result i32)))
- (type $iIiv (func (param i32 i64 i32)))
+ (type $iIi_ (func (param i32 i64 i32)))
  (type $ifi (func (param i32 f32) (result i32)))
  (type $ifii (func (param i32 f32 i32) (result i32)))
- (type $ifiv (func (param i32 f32 i32)))
+ (type $ifi_ (func (param i32 f32 i32)))
  (type $iFi (func (param i32 f64) (result i32)))
  (type $iFii (func (param i32 f64 i32) (result i32)))
- (type $iFiv (func (param i32 f64 i32)))
+ (type $iFi_ (func (param i32 f64 i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
@@ -367,7 +367,7 @@
   end
   local.get $2
  )
- (func $~lib/map/Map<i8,i32>#clear (; 5 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<i8,i32>#clear (; 5 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 16
   i32.const 0
@@ -478,7 +478,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i8,i32>#rehash (; 9 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>#rehash (; 9 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -588,7 +588,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<i8,i32>#set (; 10 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i8,i32>#set (; 10 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -779,7 +779,7 @@
   end
   i32.const 1
  )
- (func $std/map/test<i8,i32> (; 13 ;) (type $v)
+ (func $std/map/test<i8,i32> (; 13 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -1139,7 +1139,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<u8,i32>#rehash (; 15 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#rehash (; 15 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1249,7 +1249,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<u8,i32>#set (; 16 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u8,i32>#set (; 16 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1434,7 +1434,7 @@
   end
   i32.const 1
  )
- (func $std/map/test<u8,i32> (; 19 ;) (type $v)
+ (func $std/map/test<u8,i32> (; 19 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -1837,7 +1837,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i16,i32>#rehash (; 22 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#rehash (; 22 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1956,7 +1956,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<i16,i32>#set (; 23 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i16,i32>#set (; 23 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2174,7 +2174,7 @@
   end
   i32.const 1
  )
- (func $std/map/test<i16,i32> (; 26 ;) (type $v)
+ (func $std/map/test<i16,i32> (; 26 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -2544,7 +2544,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<u16,i32>#rehash (; 28 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#rehash (; 28 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2663,7 +2663,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<u16,i32>#set (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u16,i32>#set (; 29 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2875,7 +2875,7 @@
   end
   i32.const 1
  )
- (func $std/map/test<u16,i32> (; 32 ;) (type $v)
+ (func $std/map/test<u16,i32> (; 32 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -3290,7 +3290,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i32,i32>#rehash (; 36 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i32,i32>#rehash (; 36 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3397,7 +3397,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<i32,i32>#set (; 37 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i32,i32>#set (; 37 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3565,7 +3565,7 @@
   end
   i32.const 1
  )
- (func $std/map/test<i32,i32> (; 40 ;) (type $v)
+ (func $std/map/test<i32,i32> (; 40 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -3883,7 +3883,7 @@
    unreachable
   end
  )
- (func $std/map/test<u32,i32> (; 41 ;) (type $v)
+ (func $std/map/test<u32,i32> (; 41 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -4201,7 +4201,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<i64,i32>#clear (; 42 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<i64,i32>#clear (; 42 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 16
   i32.const 0
@@ -4369,7 +4369,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i64,i32>#rehash (; 47 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i32>#rehash (; 47 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4476,7 +4476,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<i64,i32>#set (; 48 ;) (type $iIiv) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/map/Map<i64,i32>#set (; 48 ;) (type $iIi_) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4645,7 +4645,7 @@
   end
   i32.const 1
  )
- (func $std/map/test<i64,i32> (; 51 ;) (type $v)
+ (func $std/map/test<i64,i32> (; 51 ;) (type $_)
   (local $0 i64)
   (local $1 i32)
   call $~lib/map/Map<i64,i32>#constructor
@@ -4970,7 +4970,7 @@
    unreachable
   end
  )
- (func $std/map/test<u64,i32> (; 52 ;) (type $v)
+ (func $std/map/test<u64,i32> (; 52 ;) (type $_)
   (local $0 i64)
   (local $1 i32)
   call $~lib/map/Map<i64,i32>#constructor
@@ -5348,7 +5348,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<f32,i32>#rehash (; 55 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f32,i32>#rehash (; 55 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5456,7 +5456,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<f32,i32>#set (; 56 ;) (type $ifiv) (param $0 i32) (param $1 f32) (param $2 i32)
+ (func $~lib/map/Map<f32,i32>#set (; 56 ;) (type $ifi_) (param $0 i32) (param $1 f32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5628,7 +5628,7 @@
   end
   i32.const 1
  )
- (func $std/map/test<f32,i32> (; 59 ;) (type $v)
+ (func $std/map/test<f32,i32> (; 59 ;) (type $_)
   (local $0 f32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -6006,7 +6006,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<f64,i32>#rehash (; 62 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f64,i32>#rehash (; 62 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6114,7 +6114,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<f64,i32>#set (; 63 ;) (type $iFiv) (param $0 i32) (param $1 f64) (param $2 i32)
+ (func $~lib/map/Map<f64,i32>#set (; 63 ;) (type $iFi_) (param $0 i32) (param $1 f64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6286,7 +6286,7 @@
   end
   i32.const 1
  )
- (func $std/map/test<f64,i32> (; 66 ;) (type $v)
+ (func $std/map/test<f64,i32> (; 66 ;) (type $_)
   (local $0 f64)
   (local $1 i32)
   call $~lib/map/Map<i64,i32>#constructor
@@ -6611,7 +6611,7 @@
    unreachable
   end
  )
- (func $start (; 67 ;) (type $v)
+ (func $start (; 67 ;) (type $_)
   i32.const 144
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -6627,7 +6627,7 @@
   call $std/map/test<f32,i32>
   call $std/map/test<f64,i32>
  )
- (func $null (; 68 ;) (type $v)
+ (func $null (; 68 ;) (type $_)
   nop
  )
 )

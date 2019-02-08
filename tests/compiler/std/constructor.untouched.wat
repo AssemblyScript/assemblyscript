@@ -1,6 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -251,7 +251,7 @@
   end
   local.get $0
  )
- (func $start (; 12 ;) (type $v)
+ (func $start (; 12 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -293,6 +293,6 @@
   call $std/constructor/CtorConditionallyAllocates#constructor
   global.set $std/constructor/ctorConditionallyAllocates
  )
- (func $null (; 13 ;) (type $v)
+ (func $null (; 13 ;) (type $_)
  )
 )

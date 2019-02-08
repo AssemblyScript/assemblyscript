@@ -1,23 +1,23 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
- (type $iv (func (param i32)))
+ (type $i_ (func (param i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiv (func (param i32 i32)))
+ (type $ii_ (func (param i32 i32)))
  (type $iIi (func (param i32 i64) (result i32)))
  (type $Ii (func (param i64) (result i32)))
  (type $iIii (func (param i32 i64 i32) (result i32)))
- (type $iIv (func (param i32 i64)))
+ (type $iI_ (func (param i32 i64)))
  (type $ifi (func (param i32 f32) (result i32)))
  (type $fi (func (param f32) (result i32)))
  (type $ifii (func (param i32 f32 i32) (result i32)))
- (type $ifv (func (param i32 f32)))
+ (type $if_ (func (param i32 f32)))
  (type $iFi (func (param i32 f64) (result i32)))
  (type $Fi (func (param f64) (result i32)))
  (type $iFii (func (param i32 f64 i32) (result i32)))
- (type $iFv (func (param i32 f64)))
+ (type $iF_ (func (param i32 f64)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
@@ -368,7 +368,7 @@
   end
   local.get $2
  )
- (func $~lib/set/Set<i8>#clear (; 5 ;) (type $iv) (param $0 i32)
+ (func $~lib/set/Set<i8>#clear (; 5 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 16
   i32.const 0
@@ -479,7 +479,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i8>#rehash (; 9 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>#rehash (; 9 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -585,7 +585,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i8>#add (; 10 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>#add (; 10 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -748,7 +748,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i8> (; 12 ;) (type $v)
+ (func $std/set/test<i8> (; 12 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -1009,7 +1009,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u8>#rehash (; 14 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#rehash (; 14 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1115,7 +1115,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u8>#add (; 15 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#add (; 15 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1274,7 +1274,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u8> (; 17 ;) (type $v)
+ (func $std/set/test<u8> (; 17 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -1592,7 +1592,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i16>#rehash (; 20 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#rehash (; 20 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1707,7 +1707,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i16>#add (; 21 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#add (; 21 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1888,7 +1888,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i16> (; 23 ;) (type $v)
+ (func $std/set/test<i16> (; 23 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -2159,7 +2159,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u16>#rehash (; 25 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#rehash (; 25 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2274,7 +2274,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u16>#add (; 26 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#add (; 26 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2451,7 +2451,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u16> (; 28 ;) (type $v)
+ (func $std/set/test<u16> (; 28 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -2781,7 +2781,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i32>#rehash (; 32 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#rehash (; 32 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2884,7 +2884,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i32>#add (; 33 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#add (; 33 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3033,7 +3033,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i32> (; 35 ;) (type $v)
+ (func $std/set/test<i32> (; 35 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -3280,7 +3280,7 @@
    unreachable
   end
  )
- (func $std/set/test<u32> (; 36 ;) (type $v)
+ (func $std/set/test<u32> (; 36 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -3527,7 +3527,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<i64>#clear (; 37 ;) (type $iv) (param $0 i32)
+ (func $~lib/set/Set<i64>#clear (; 37 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 16
   i32.const 0
@@ -3695,7 +3695,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i64>#rehash (; 42 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i64>#rehash (; 42 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3798,7 +3798,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i64>#add (; 43 ;) (type $iIv) (param $0 i32) (param $1 i64)
+ (func $~lib/set/Set<i64>#add (; 43 ;) (type $iI_) (param $0 i32) (param $1 i64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3948,7 +3948,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i64> (; 45 ;) (type $v)
+ (func $std/set/test<i64> (; 45 ;) (type $_)
   (local $0 i64)
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
@@ -4195,7 +4195,7 @@
    unreachable
   end
  )
- (func $std/set/test<u64> (; 46 ;) (type $v)
+ (func $std/set/test<u64> (; 46 ;) (type $_)
   (local $0 i64)
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
@@ -4499,7 +4499,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f32>#rehash (; 50 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f32>#rehash (; 50 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4603,7 +4603,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f32>#add (; 51 ;) (type $ifv) (param $0 i32) (param $1 f32)
+ (func $~lib/set/Set<f32>#add (; 51 ;) (type $if_) (param $0 i32) (param $1 f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4752,7 +4752,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<f32> (; 53 ;) (type $v)
+ (func $std/set/test<f32> (; 53 ;) (type $_)
   (local $0 f32)
   (local $1 i32)
   call $~lib/set/Set<i8>#constructor
@@ -5056,7 +5056,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f64>#rehash (; 57 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f64>#rehash (; 57 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5160,7 +5160,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f64>#add (; 58 ;) (type $iFv) (param $0 i32) (param $1 f64)
+ (func $~lib/set/Set<f64>#add (; 58 ;) (type $iF_) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5309,7 +5309,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<f64> (; 60 ;) (type $v)
+ (func $std/set/test<f64> (; 60 ;) (type $_)
   (local $0 f64)
   (local $1 i32)
   call $~lib/set/Set<i64>#constructor
@@ -5556,7 +5556,7 @@
    unreachable
   end
  )
- (func $start (; 61 ;) (type $v)
+ (func $start (; 61 ;) (type $_)
   i32.const 144
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -5572,7 +5572,7 @@
   call $std/set/test<f32>
   call $std/set/test<f64>
  )
- (func $null (; 62 ;) (type $v)
+ (func $null (; 62 ;) (type $_)
   nop
  )
 )

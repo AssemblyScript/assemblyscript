@@ -1,7 +1,7 @@
 (module
  (type $ifi (func (param i32 f32) (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -127,7 +127,7 @@
   f32.store offset=4
   local.get $0
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -143,6 +143,6 @@
   call $std/new/AClass#constructor
   global.set $std/new/aClass
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $_)
  )
 )
