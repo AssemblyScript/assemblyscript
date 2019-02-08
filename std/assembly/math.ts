@@ -353,9 +353,17 @@ export namespace NativeMath {
     return builtin_ceil<f64>(x);
   }
 
-  @inline
   export function clz32(x: f64): f64 {
-    return <f64>builtin_clz<i32>(<i32>x);
+    if (!isFinite(x)) return 32;
+    /*
+     * Wasm (MVP) and JS have different approachas for double->int conversions.
+     *
+     * For emulate JS conversion behavior and avoid trapping from wasm we should modulate by MAX_INT
+     * our float-point arguments before actual convertion to integers.
+     */
+    return builtin_clz(
+      <i32><i64>(x - 4294967296 * builtin_floor(x * (1.0 / 4294967296)))
+    );
   }
 
   export function cos(x: f64): f64 { // TODO
@@ -1500,9 +1508,11 @@ export namespace NativeMathf {
     return builtin_ceil<f32>(x);
   }
 
-  @inline
   export function clz32(x: f32): f32 {
-    return <f32>builtin_clz<i32>(<i32>x);
+    if (!isFinite(x)) return 32;
+    return builtin_clz(
+      <i32><i64>(x - 4294967296 * builtin_floor(x * (1.0 / 4294967296)))
+    );
   }
 
   export function cos(x: f32): f32 { // TODO
