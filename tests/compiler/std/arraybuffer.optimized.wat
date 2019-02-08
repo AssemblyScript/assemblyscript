@@ -91,34 +91,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 1073741816
-  i32.gt_u
-  if
-   i32.const 0
-   i32.const 56
-   i32.const 26
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const 32
-  local.get $0
-  i32.const 7
-  i32.add
-  i32.clz
-  i32.sub
-  i32.shl
-  call $~lib/allocator/arena/__memory_allocate
-  local.tee $1
-  local.get $0
-  i32.store
-  local.get $1
- )
- (func $~lib/internal/memory/memset (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/internal/memory/memset (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.eqz
@@ -336,6 +309,38 @@
     br $continue|0
    end
   end
+ )
+ (func $~lib/internal/arraybuffer/allocateZeroedUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 56
+   i32.const 33
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  i32.const 32
+  local.get $0
+  i32.const 7
+  i32.add
+  i32.clz
+  i32.sub
+  i32.shl
+  call $~lib/allocator/arena/__memory_allocate
+  local.tee $1
+  local.get $0
+  i32.store
+  local.get $1
+  i32.const 8
+  i32.add
+  local.get $0
+  call $~lib/internal/memory/memset
+  local.get $1
  )
  (func $~lib/internal/memory/memcpy (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -1492,7 +1497,7 @@
   i32.gt_s
   select
   local.tee $3
-  call $~lib/internal/arraybuffer/allocateUnsafe
+  call $~lib/internal/arraybuffer/allocateZeroedUnsafe
   local.tee $2
   i32.const 8
   i32.add
@@ -1541,7 +1546,7 @@
    unreachable
   end
   local.get $1
-  call $~lib/internal/arraybuffer/allocateUnsafe
+  call $~lib/internal/arraybuffer/allocateZeroedUnsafe
   local.tee $2
   i32.const 8
   i32.add
@@ -1591,7 +1596,7 @@
   i32.const 2
   i32.shl
   local.tee $1
-  call $~lib/internal/arraybuffer/allocateUnsafe
+  call $~lib/internal/arraybuffer/allocateZeroedUnsafe
   local.tee $2
   i32.const 8
   i32.add
@@ -1717,7 +1722,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
   i32.const 8
-  call $~lib/internal/arraybuffer/allocateUnsafe
+  call $~lib/internal/arraybuffer/allocateZeroedUnsafe
   local.tee $0
   i32.const 8
   i32.add

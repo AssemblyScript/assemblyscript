@@ -22,46 +22,72 @@ function computeSize(byteLength: i32): usize {
 
 function __gc(ref: usize): void {}
 
-export function allocateUnsafe(byteLength: i32): ArrayBuffer {
+
+@inline function _resize(buffer: ArrayBuffer, newByteLength: i32): ArrayBuffer {
+  store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
+  return buffer;
+}
+
+@inline
+function _allocateUnsafe(byteLength: i32): ArrayBuffer {
   assert(<u32>byteLength <= <u32>MAX_BLENGTH);
-  var buffer: usize;
-  if (isManaged<ArrayBuffer>()) {
-    buffer = __gc_allocate(computeSize(byteLength), __gc); // tslint:disable-line
-  } else {
-    buffer = memory.allocate(computeSize(byteLength));
-  }
-  store<i32>(buffer, byteLength, offsetof<ArrayBuffer>("byteLength"));
+  var buffer: usize = isManaged<ArrayBuffer>()
+    ? __gc_allocate(computeSize(byteLength), __gc)
+    : memory.allocate(computeSize(byteLength));
+  return _resize(changetype<ArrayBuffer>(buffer), byteLength);
+}
+
+export function allocateZeroedUnsafe(byteLength: i32): ArrayBuffer {
+  var buffer = _allocateUnsafe(byteLength);
+
+  // zero out the buffer
+  memory.fill(buffer.data, 0, byteLength);
   return changetype<ArrayBuffer>(buffer);
 }
 
-export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuffer {
-  var oldByteLength = buffer.byteLength;
-  if (newByteLength > oldByteLength) {
-    assert(newByteLength <= MAX_BLENGTH);
-    if (newByteLength <= <i32>(computeSize(oldByteLength) - HEADER_SIZE)) { // fast path: zero out additional space
-      store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
-    } else { // slow path: copy to new buffer
-      let newBuffer = allocateUnsafe(newByteLength);
-      memory.copy(
-        changetype<usize>(newBuffer) + HEADER_SIZE,
-        changetype<usize>(buffer) + HEADER_SIZE,
-        <usize>oldByteLength
-      );
-      if (!isManaged<ArrayBuffer>()) {
-        memory.free(changetype<usize>(buffer));
-      }
-      buffer = newBuffer;
-    }
-    memory.fill(
-      changetype<usize>(buffer) + HEADER_SIZE + <usize>oldByteLength,
-      0,
-      <usize>(newByteLength - oldByteLength)
-    );
-  } else if (newByteLength < oldByteLength) { // fast path: override size
-    // TBD: worth to copy and release if size is significantly less than before?
-    assert(newByteLength >= 0);
-    store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
+export function allocateUnsafe(byteLength: i32): ArrayBuffer {
+  return _allocateUnsafe(byteLength);
+}
+
+/**
+ * This inline grow method allocates a new ArrayBuffer, then frees the old one.
+ */
+@inline function _growUnsafe(buffer: ArrayBuffer, oldByteLength: i32, newByteLength: i32): ArrayBuffer {
+  assert(newByteLength > buffer.byteLength && newByteLength <= MAX_BLENGTH);
+  var newBuffer = _allocateUnsafe(newByteLength);
+  memory.copy(newBuffer.data, buffer.data, oldByteLength);
+  if (!isManaged<ArrayBuffer>()) {
+    memory.free(changetype<usize>(buffer));
   }
+  return newBuffer;
+}
+
+/**
+ * This function perform
+ */
+@inline function _realocateUnsafe(buffer: ArrayBuffer, oldByteLength: i32, newByteLength: i32): ArrayBuffer {
+  // non-negative values should be unreachable()
+  assert(newByteLength >= 0);
+  // fastest path: buffer should be the same length
+  if (newByteLength === oldByteLength) return buffer;
+  // fast path: byteLength is less than or equal to currently allocated size (this is safe)
+  if (newByteLength <= <i32>(computeSize(oldByteLength) - HEADER_SIZE))
+    return _resize(buffer, newByteLength);
+
+  // slow path: buffer needs new allocation (_growUnsafe frees the old buffer)
+  return _growUnsafe(buffer, oldByteLength, newByteLength);
+}
+
+export function reallocateUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuffer {
+  return _realocateUnsafe(buffer, buffer.byteLength, newByteLength);
+}
+
+export function reallocateZeroedUnsafe(buffer: ArrayBuffer, newByteLength: i32): ArrayBuffer {
+  var oldByteLength = buffer.byteLength;
+  buffer = _realocateUnsafe(buffer, oldByteLength, newByteLength);
+
+  // zero out the allocated values that weren't copied
+  memory.fill(buffer.data + oldByteLength, 0, newByteLength - oldByteLength);
   return buffer;
 }
 

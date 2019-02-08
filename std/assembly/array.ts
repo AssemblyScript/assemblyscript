@@ -1,10 +1,10 @@
 import {
   MAX_BLENGTH,
   HEADER_SIZE,
-  allocateUnsafe,
-  reallocateUnsafe,
+  reallocateZeroedUnsafe,
   LOAD,
-  STORE
+  STORE,
+  allocateZeroedUnsafe
 } from "./internal/arraybuffer";
 
 import {
@@ -44,7 +44,7 @@ export class Array<T> {
     const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
     if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
     var byteLength = length << alignof<T>();
-    var buffer = allocateUnsafe(byteLength);
+    var buffer = allocateZeroedUnsafe(byteLength);
     this.buffer_ = buffer;
     this.length_ = length;
     memory.fill(
@@ -65,7 +65,7 @@ export class Array<T> {
     if (<u32>length > <u32>capacity) {
       const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
       if (<u32>length > <u32>MAX_LENGTH) throw new RangeError("Invalid array length");
-      buffer = reallocateUnsafe(buffer, length << alignof<T>());
+      buffer = reallocateZeroedUnsafe(buffer, length << alignof<T>());
       this.buffer_ = buffer;
     }
     this.length_ = length;
@@ -105,7 +105,7 @@ export class Array<T> {
     if (<u32>index >= <u32>capacity) {
       const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
       if (<u32>index >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-      buffer = reallocateUnsafe(buffer, (index + 1) << alignof<T>());
+      buffer = reallocateZeroedUnsafe(buffer, (index + 1) << alignof<T>());
       this.buffer_ = buffer;
       this.length_ = index + 1;
     }
@@ -180,7 +180,7 @@ export class Array<T> {
     if (<u32>length >= <u32>capacity) {
       const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
       if (<u32>length >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-      buffer = reallocateUnsafe(buffer, newLength << alignof<T>());
+      buffer = reallocateZeroedUnsafe(buffer, newLength << alignof<T>());
       this.buffer_ = buffer;
     }
     this.length_ = newLength;
@@ -325,7 +325,7 @@ export class Array<T> {
     if (<u32>length >= <u32>capacity) {
       const MAX_LENGTH = MAX_BLENGTH >>> alignof<T>();
       if (<u32>length >= <u32>MAX_LENGTH) throw new Error("Invalid array length");
-      buffer = reallocateUnsafe(buffer, newLength << alignof<T>());
+      buffer = reallocateZeroedUnsafe(buffer, newLength << alignof<T>());
       capacity = buffer.byteLength >>> alignof<T>();
       this.buffer_ = buffer;
     }

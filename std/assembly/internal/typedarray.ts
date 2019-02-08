@@ -1,9 +1,9 @@
 import {
   HEADER_SIZE as AB_HEADER_SIZE,
   MAX_BLENGTH as AB_MAX_BLENGTH,
-  allocateUnsafe,
   LOAD,
-  STORE
+  STORE,
+  allocateZeroedUnsafe
 } from "./arraybuffer";
 
 import {
@@ -22,7 +22,7 @@ export abstract class TypedArray<T> {
     const MAX_LENGTH = <u32>AB_MAX_BLENGTH / sizeof<T>();
     if (<u32>length > MAX_LENGTH) throw new RangeError("Invalid typed array length");
     var byteLength = length << alignof<T>();
-    var buffer = allocateUnsafe(byteLength);
+    var buffer = allocateZeroedUnsafe(byteLength);
     memory.fill(changetype<usize>(buffer) + AB_HEADER_SIZE, 0, <usize>byteLength);
     this.buffer = buffer;
     this.byteOffset = 0;

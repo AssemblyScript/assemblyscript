@@ -3120,34 +3120,7 @@
   local.get $2
   call $~lib/string/String#slice
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 35 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 1073741816
-  i32.gt_u
-  if
-   i32.const 0
-   i32.const 1128
-   i32.const 26
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const 32
-  local.get $0
-  i32.const 7
-  i32.add
-  i32.clz
-  i32.sub
-  i32.shl
-  call $~lib/allocator/arena/__memory_allocate
-  local.tee $1
-  local.get $0
-  i32.store
-  local.get $1
- )
- (func $~lib/internal/memory/memset (; 36 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/internal/memory/memset (; 35 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.eqz
@@ -3366,6 +3339,38 @@
    end
   end
  )
+ (func $~lib/internal/arraybuffer/allocateZeroedUnsafe (; 36 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 1073741816
+  i32.gt_u
+  if
+   i32.const 0
+   i32.const 1128
+   i32.const 33
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  i32.const 32
+  local.get $0
+  i32.const 7
+  i32.add
+  i32.clz
+  i32.sub
+  i32.shl
+  call $~lib/allocator/arena/__memory_allocate
+  local.tee $1
+  local.get $0
+  i32.store
+  local.get $1
+  i32.const 8
+  i32.add
+  local.get $0
+  call $~lib/internal/memory/memset
+  local.get $1
+ )
  (func $~lib/array/Array<String>#constructor (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -3385,7 +3390,7 @@
   i32.const 2
   i32.shl
   local.tee $3
-  call $~lib/internal/arraybuffer/allocateUnsafe
+  call $~lib/internal/arraybuffer/allocateZeroedUnsafe
   local.set $2
   i32.const 8
   call $~lib/allocator/arena/__memory_allocate
@@ -3408,30 +3413,36 @@
   call $~lib/internal/memory/memset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 38 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateZeroedUnsafe (; 38 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $1
+  (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.load
+  local.tee $4
+  local.set $3
+  local.get $1
   local.tee $2
-  i32.gt_s
+  i32.const 0
+  i32.lt_s
   if
-   local.get $1
-   i32.const 1073741816
-   i32.gt_s
-   if
-    i32.const 0
-    i32.const 1128
-    i32.const 40
-    i32.const 4
-    call $~lib/env/abort
-    unreachable
-   end
-   local.get $1
+   i32.const 0
+   i32.const 1128
+   i32.const 70
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/internal/arraybuffer/_realocateUnsafe|inlined.0
+   local.get $2
+   local.get $3
+   i32.eq
+   br_if $~lib/internal/arraybuffer/_realocateUnsafe|inlined.0
+   local.get $2
    i32.const 1
    i32.const 32
-   local.get $2
+   local.get $3
    i32.const 7
    i32.add
    i32.clz
@@ -3442,52 +3453,79 @@
    i32.le_s
    if
     local.get $0
-    local.get $1
-    i32.store
-   else    
-    local.get $1
-    call $~lib/internal/arraybuffer/allocateUnsafe
-    local.tee $3
-    i32.const 8
-    i32.add
-    local.get $0
-    i32.const 8
-    i32.add
     local.get $2
-    call $~lib/internal/memory/memmove
-    local.get $3
-    local.set $0
+    i32.store
+    br $~lib/internal/arraybuffer/_realocateUnsafe|inlined.0
    end
    local.get $0
+   local.set $5
+   local.get $3
+   local.set $0
+   local.get $2
+   local.get $5
+   i32.load
+   i32.gt_s
+   local.tee $3
+   if (result i32)
+    local.get $2
+    i32.const 1073741816
+    i32.le_s
+   else    
+    local.get $3
+   end
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1128
+    i32.const 56
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+   local.get $2
+   local.tee $3
+   i32.const 1073741816
+   i32.gt_u
+   if
+    i32.const 0
+    i32.const 1128
+    i32.const 33
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+   i32.const 1
+   i32.const 32
+   local.get $3
+   i32.const 7
+   i32.add
+   i32.clz
+   i32.sub
+   i32.shl
+   call $~lib/allocator/arena/__memory_allocate
+   local.tee $2
+   local.get $3
+   i32.store
+   local.get $2
    i32.const 8
    i32.add
-   local.get $2
+   local.get $5
+   i32.const 8
    i32.add
-   local.get $1
+   local.get $0
+   call $~lib/internal/memory/memmove
    local.get $2
-   i32.sub
-   call $~lib/internal/memory/memset
-  else   
-   local.get $1
-   local.get $2
-   i32.lt_s
-   if
-    local.get $1
-    i32.const 0
-    i32.lt_s
-    if
-     i32.const 0
-     i32.const 1128
-     i32.const 62
-     i32.const 4
-     call $~lib/env/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    i32.store
-   end
+   local.set $0
   end
+  local.get $0
+  i32.const 8
+  i32.add
+  local.get $4
+  i32.add
+  local.get $1
+  local.get $4
+  i32.sub
+  call $~lib/internal/memory/memset
   local.get $0
  )
  (func $~lib/array/Array<String>#push (; 39 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -3525,7 +3563,7 @@
    local.get $3
    i32.const 2
    i32.shl
-   call $~lib/internal/arraybuffer/reallocateUnsafe
+   call $~lib/internal/arraybuffer/reallocateZeroedUnsafe
    local.tee $4
    i32.store
   end

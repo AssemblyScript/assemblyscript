@@ -194,41 +194,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 5 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
-  i32.le_u
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 168
-   i32.const 26
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/memory/memory.allocate|inlined.0 (result i32)
-   local.get $0
-   call $~lib/internal/arraybuffer/computeSize
-   local.set $2
-   local.get $2
-   call $~lib/allocator/arena/__memory_allocate
-   br $~lib/memory/memory.allocate|inlined.0
-  end
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.store
-  local.get $1
- )
- (func $~lib/memory/memory.allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/allocator/arena/__memory_allocate
-  return
- )
- (func $~lib/internal/memory/memset (; 7 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -482,6 +448,73 @@
    end
   end
  )
+ (func $~lib/internal/arraybuffer/allocateZeroedUnsafe (; 6 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  block $~lib/internal/arraybuffer/_allocateUnsafe|inlined.0 (result i32)
+   local.get $0
+   local.set $1
+   local.get $1
+   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.le_u
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 168
+    i32.const 33
+    i32.const 2
+    call $~lib/env/abort
+    unreachable
+   end
+   block $~lib/memory/memory.allocate|inlined.0 (result i32)
+    local.get $1
+    call $~lib/internal/arraybuffer/computeSize
+    local.set $2
+    local.get $2
+    call $~lib/allocator/arena/__memory_allocate
+    br $~lib/memory/memory.allocate|inlined.0
+   end
+   local.set $2
+   block $~lib/internal/arraybuffer/_resize|inlined.0 (result i32)
+    local.get $2
+    local.set $3
+    local.get $1
+    local.set $4
+    local.get $3
+    local.get $4
+    i32.store
+    local.get $3
+   end
+  end
+  local.set $5
+  block $memory.fill|inlined.0
+   block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.0 (result i32)
+    local.get $5
+    local.set $2
+    local.get $2
+    global.get $~lib/internal/arraybuffer/HEADER_SIZE
+    i32.add
+   end
+   local.set $2
+   i32.const 0
+   local.set $1
+   local.get $0
+   local.set $4
+   local.get $2
+   local.get $1
+   local.get $4
+   call $~lib/internal/memory/memset
+  end
+  local.get $5
+ )
+ (func $~lib/memory/memory.allocate (; 7 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/allocator/arena/__memory_allocate
+  return
+ )
  (func $~lib/array/Array<i8>#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -504,7 +537,7 @@
   i32.shl
   local.set $2
   local.get $2
-  call $~lib/internal/arraybuffer/allocateUnsafe
+  call $~lib/internal/arraybuffer/allocateZeroedUnsafe
   local.set $3
   block (result i32)
    local.get $0
@@ -527,7 +560,7 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  block $memory.fill|inlined.0
+  block $memory.fill|inlined.1
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -589,7 +622,7 @@
   i32.shl
   local.set $2
   local.get $2
-  call $~lib/internal/arraybuffer/allocateUnsafe
+  call $~lib/internal/arraybuffer/allocateZeroedUnsafe
   local.set $3
   block (result i32)
    local.get $0
@@ -612,7 +645,7 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  block $memory.fill|inlined.1
+  block $memory.fill|inlined.2
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -684,7 +717,7 @@
   i32.shl
   local.set $2
   local.get $2
-  call $~lib/internal/arraybuffer/allocateUnsafe
+  call $~lib/internal/arraybuffer/allocateZeroedUnsafe
   local.set $3
   block (result i32)
    local.get $0
@@ -707,7 +740,7 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  block $memory.fill|inlined.2
+  block $memory.fill|inlined.3
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
@@ -779,7 +812,7 @@
   i32.shl
   local.set $2
   local.get $2
-  call $~lib/internal/arraybuffer/allocateUnsafe
+  call $~lib/internal/arraybuffer/allocateZeroedUnsafe
   local.set $3
   block (result i32)
    local.get $0
@@ -802,7 +835,7 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  block $memory.fill|inlined.3
+  block $memory.fill|inlined.4
    local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
