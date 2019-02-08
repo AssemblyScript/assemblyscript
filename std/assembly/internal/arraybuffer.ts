@@ -19,17 +19,14 @@ function computeSize(byteLength: i32): usize {
 }
 
 // Low-level utility
-
 function __gc(ref: usize): void {}
-
 
 @inline function _resize(buffer: ArrayBuffer, newByteLength: i32): ArrayBuffer {
   store<i32>(changetype<usize>(buffer), newByteLength, offsetof<ArrayBuffer>("byteLength"));
   return buffer;
 }
 
-@inline
-function _allocateUnsafe(byteLength: i32): ArrayBuffer {
+@inline function _allocateUnsafe(byteLength: i32): ArrayBuffer {
   assert(<u32>byteLength <= <u32>MAX_BLENGTH);
   var buffer: usize = isManaged<ArrayBuffer>()
     ? __gc_allocate(computeSize(byteLength), __gc) // tslint:disable-line
