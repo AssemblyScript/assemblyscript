@@ -1,16 +1,16 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iFFFi (func (param i32 f64 f64 f64) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $i (func (result i32)))
  (type $iFFFFFFFi (func (param i32 f64 f64 f64 f64 f64 f64 f64) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $F (func (result f64)))
- (type $iFv (func (param i32 f64)))
+ (type $iF_ (func (param i32 f64)))
  (type $iF (func (param i32) (result f64)))
- (type $iv (func (param i32)))
+ (type $i_ (func (param i32)))
  (import "env" "memory" (memory $0 1))
  (data (i32.const 8) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 40) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
@@ -40,23 +40,28 @@
  (func $~lib/array/Array<Body>#__unchecked_get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   i32.load
   local.set $2
-  i32.const 0
-  local.set $3
-  local.get $2
   local.get $1
+  local.set $3
+  i32.const 0
+  local.set $4
+  local.get $2
+  local.get $3
   i32.const 2
   i32.shl
   i32.add
-  local.get $3
+  local.get $4
   i32.add
   i32.load offset=8
  )
  (func $~lib/array/Array<Body>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.load
   local.set $2
@@ -67,14 +72,18 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
-   i32.const 0
-   local.set $3
    local.get $2
+   local.set $3
    local.get $1
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $3
+   local.get $4
    i32.const 2
    i32.shl
    i32.add
-   local.get $3
+   local.get $5
    i32.add
    i32.load offset=8
   else   
@@ -202,21 +211,23 @@
   local.set $4
   block $~lib/array/Array<Body>#get:length|inlined.0 (result i32)
    local.get $1
+   local.set $5
+   local.get $5
    i32.load offset=4
   end
-  local.set $5
+  local.set $6
   block $break|0
    i32.const 0
-   local.set $6
+   local.set $5
    loop $repeat|0
-    local.get $6
     local.get $5
+    local.get $6
     i32.lt_s
     i32.eqz
     br_if $break|0
     block
      local.get $1
-     local.get $6
+     local.get $5
      call $~lib/array/Array<Body>#__unchecked_get
      local.set $7
      local.get $7
@@ -244,10 +255,10 @@
      f64.add
      local.set $4
     end
-    local.get $6
+    local.get $5
     i32.const 1
     i32.add
-    local.set $6
+    local.set $5
     br $repeat|0
     unreachable
    end
@@ -432,7 +443,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 15 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 15 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -691,6 +702,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 268435454
   i32.gt_u
@@ -730,37 +742,47 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  local.get $3
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $2
-  call $~lib/internal/memory/memset
+  block $memory.fill|inlined.0
+   local.get $3
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
   local.get $0
  )
- (func $~lib/array/Array<Body>#__unchecked_set (; 17 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Body>#__unchecked_set (; 17 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   i32.load
   local.set $3
-  i32.const 0
-  local.set $4
-  local.get $3
   local.get $1
+  local.set $4
+  local.get $2
+  local.set $5
+  i32.const 0
+  local.set $6
+  local.get $3
+  local.get $4
   i32.const 2
   i32.shl
   i32.add
-  local.get $4
+  local.get $6
   i32.add
-  local.get $2
+  local.get $5
   i32.store offset=8
  )
- (func $assembly/index/init (; 18 ;) (type $v)
+ (func $assembly/index/init (; 18 ;) (type $_)
   (local $0 i32)
   i32.const 0
   block (result i32)
@@ -793,7 +815,7 @@
   call $assembly/index/NBodySystem#constructor
   global.set $assembly/index/system
  )
- (func $assembly/index/NBodySystem#advance (; 19 ;) (type $iFv) (param $0 i32) (param $1 f64)
+ (func $assembly/index/NBodySystem#advance (; 19 ;) (type $iF_) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -820,21 +842,23 @@
   local.set $2
   block $~lib/array/Array<Body>#get:length|inlined.1 (result i32)
    local.get $2
+   local.set $3
+   local.get $3
    i32.load offset=4
   end
-  local.set $3
+  local.set $4
   block $break|0
    i32.const 0
-   local.set $4
+   local.set $3
    loop $repeat|0
-    local.get $4
     local.get $3
+    local.get $4
     i32.lt_u
     i32.eqz
     br_if $break|0
     block
      local.get $2
-     local.get $4
+     local.get $3
      call $~lib/array/Array<Body>#__unchecked_get
      local.set $5
      local.get $5
@@ -859,13 +883,13 @@
      f64.load offset=48
      local.set $12
      block $break|1
-      local.get $4
+      local.get $3
       i32.const 1
       i32.add
       local.set $13
       loop $repeat|1
        local.get $13
-       local.get $3
+       local.get $4
        i32.lt_u
        i32.eqz
        br_if $break|1
@@ -903,6 +927,8 @@
         local.set $18
         block $~lib/math/NativeMath.sqrt|inlined.0 (result f64)
          local.get $18
+         local.set $19
+         local.get $19
          f64.sqrt
         end
         local.set $19
@@ -1007,10 +1033,10 @@
      f64.add
      f64.store offset=16
     end
-    local.get $4
+    local.get $3
     i32.const 1
     i32.add
-    local.set $4
+    local.set $3
     br $repeat|0
     unreachable
    end
@@ -1047,6 +1073,8 @@
     local.set $3
     block $~lib/array/Array<Body>#get:length|inlined.2 (result i32)
      local.get $2
+     local.set $4
+     local.get $4
      i32.load offset=4
     end
     local.set $4
@@ -1187,7 +1215,7 @@
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 22 ;) (type $iv) (param $0 i32)
+ (func $assembly/index/bench (; 22 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   block $break|0
    i32.const 0
@@ -1213,12 +1241,15 @@
  )
  (func $assembly/index/getBody (; 23 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   global.get $assembly/index/system
   i32.load
   local.set $1
   local.get $0
   block $~lib/array/Array<Body>#get:length|inlined.4 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    i32.load offset=4
   end
   i32.lt_u
@@ -1230,7 +1261,7 @@
    i32.const 0
   end
  )
- (func $start (; 24 ;) (type $v)
+ (func $start (; 24 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -1243,6 +1274,6 @@
   global.set $~lib/allocator/arena/offset
   nop
  )
- (func $null (; 25 ;) (type $v)
+ (func $null (; 25 ;) (type $_)
  )
 )

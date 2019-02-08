@@ -1,9 +1,9 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
  (type $F (func (result f64)))
  (type $iF (func (param i32) (result f64)))
- (type $iv (func (param i32)))
+ (type $i_ (func (param i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iddddddd (func (param f64 f64 f64 f64 f64 f64 f64) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
@@ -453,7 +453,7 @@
   call $~lib/internal/memory/memset
   local.get $0
  )
- (func $assembly/index/init (; 5 ;) (type $v)
+ (func $assembly/index/init (; 5 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/array/Array<Body>#constructor
@@ -871,7 +871,7 @@
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 9 ;) (type $iv) (param $0 i32)
+ (func $assembly/index/bench (; 9 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   block $break|0
    loop $repeat|0
@@ -922,13 +922,13 @@
    i32.const 0
   end
  )
- (func $start (; 11 ;) (type $v)
+ (func $start (; 11 ;) (type $_)
   i32.const 40
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 12 ;) (type $v)
+ (func $null (; 12 ;) (type $_)
   nop
  )
 )
