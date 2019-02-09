@@ -464,7 +464,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 244
+   i32.const 224
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -553,7 +553,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 213
+   i32.const 193
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -1951,7 +1951,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 360
+   i32.const 340
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2061,7 +2061,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 380
+   i32.const 360
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2172,7 +2172,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 229
+   i32.const 209
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2629,7 +2629,7 @@
          if
           i32.const 0
           i32.const 80
-          i32.const 643
+          i32.const 623
           i32.const 10
           call $~lib/env/abort
           unreachable
@@ -2804,62 +2804,7 @@
   i32.const 0
   i32.gt_s
  )
- (func $~lib/string/String.__gte (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  local.get $1
-  i32.eq
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
-  i32.eqz
-  local.tee $2
-  i32.eqz
-  if
-   local.get $1
-   i32.eqz
-   local.set $2
-  end
-  local.get $2
-  if
-   i32.const 0
-   return
-  end
-  local.get $1
-  i32.load
-  local.set $3
-  local.get $0
-  i32.load
-  local.tee $2
-  i32.eqz
-  if
-   local.get $3
-   i32.eqz
-   return
-  end
-  local.get $3
-  i32.eqz
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
-  i32.const 0
-  local.get $1
-  local.get $2
-  local.get $3
-  local.get $2
-  local.get $3
-  i32.lt_s
-  select
-  call $~lib/internal/string/compareUnsafe
-  i32.const 0
-  i32.ge_s
- )
- (func $~lib/string/String.__lt (; 30 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lt (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -2914,52 +2859,17 @@
   i32.const 0
   i32.lt_s
  )
+ (func $~lib/string/String.__gte (; 30 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  call $~lib/string/String.__lt
+  i32.eqz
+ )
  (func $~lib/string/String.__lte (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
   i32.const 256
-  i32.eq
-  if
-   i32.const 1
-   return
-  end
   local.get $0
+  call $~lib/string/String.__gt
   i32.eqz
-  if
-   i32.const 0
-   return
-  end
-  i32.const 256
-  i32.load
-  local.set $1
-  local.get $0
-  i32.load
-  local.tee $2
-  i32.eqz
-  if
-   local.get $1
-   i32.eqz
-   return
-  end
-  local.get $1
-  i32.eqz
-  if
-   i32.const 1
-   return
-  end
-  i32.const 256
-  i32.const 0
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $1
-  local.get $2
-  i32.lt_s
-  select
-  call $~lib/internal/string/compareUnsafe
-  i32.const 0
-  i32.le_s
  )
  (func $~lib/string/String#repeat (; 32 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2969,7 +2879,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 400
+   i32.const 380
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2994,7 +2904,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 405
+   i32.const 385
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -3555,7 +3465,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 428
+   i32.const 408
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -5260,7 +5170,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 269
+   i32.const 249
    i32.const 4
    call $~lib/env/abort
    unreachable
