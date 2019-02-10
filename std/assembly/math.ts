@@ -2287,6 +2287,101 @@ export namespace NativeMathf {
   }
 }
 
+export namespace SafeMath {
+
+  @inline
+  export function clz<T>(x: T): T {
+    if (isInteger<T>()) {
+      return builtin_clz<T>(x);
+    }
+    throw new Error("Unexpected generic type");
+  }
+
+  @inline
+  export function clz32<T>(x: T): T {
+    if (isInteger<T>() && sizeof<T>() <= 4) {
+      return builtin_clz<T>(x);
+    }
+    throw new Error("Unexpected generic type");
+  }
+
+  @inline
+  export function min<T>(x: T, y: T): T {
+    if (isInteger<T>()) {
+      return builtin_min<T>(x, y);
+    }
+    throw new Error("Unexpected generic type");
+  }
+
+  @inline
+  export function max<T>(x: T, y: T): T {
+    if (isInteger<T>()) {
+      return builtin_max<T>(x, y);
+    }
+    throw new Error("Unexpected generic type");
+  }
+
+  @inline
+  export function abs<T>(x: T): T {
+    if (isInteger<T>()) {
+      return builtin_abs<T>(x);
+    }
+    throw new Error("Unexpected generic type");
+  }
+
+  @inline
+  export function imul<T>(x: T, y: T): T {
+    if (isInteger<T>()) {
+      return x * y;
+    }
+    throw new Error("Unexpected generic type");
+  }
+
+  @inline
+  export function pow<T>(x: T, y: i32): T {
+    if (isInteger<T>()) {
+      if (sizeof<T>() == 8) return <T>ipow64(<i64>x, y);
+      if (sizeof<T>() <= 4) return <T>ipow32(<i32>x, y);
+    }
+    throw new Error("Unexpected generic type");
+  }
+
+  @inline
+  export function sign<T>(x: T): T {
+    if (isInteger<T>()) {
+      if (!x) return <T>0;
+      if (isSigned<T>()) {
+        return 1 - (x >> (sizeof<T>() * 4 - 1) << 1);
+      } else {
+        return <T>1;
+      }
+    }
+    throw new Error("Unexpected generic type");
+  }
+
+  @inline
+  export function sqrt<T>(x: T): T {
+    if (isInteger<T>()) {
+      if (x <= 1) return x;
+      if (x <= 3) return <T>1;
+
+      let res = <T>0;
+      let add = <T>1 << (sizeof<T>() * 4 - 1)
+      let tmp: T;
+      for (let i = 0; i < sizeof<T>() * 4; ++i) {
+        tmp = res | add;
+        let sqr = tmp * tmp;
+        if (x >= sqr) {
+          res = tmp;
+        }
+        add >>= 1;
+      }
+      return <T>res;
+    }
+    throw new Error("Unexpected generic type");
+  }
+}
+
 export function ipow32(x: i32, e: i32): i32 {
   var out = 1;
   if (ASC_SHRINK_LEVEL < 1) {
