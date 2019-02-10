@@ -33,7 +33,6 @@ declare module ASModule {
     function reset(): void;
   }
   class TypeSection {
-    NATIVE_CODE(header: u32);
     header: u32;
     funcs: u32;
     parse(buf: u32): u32;

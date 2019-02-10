@@ -48,7 +48,6 @@ export class Module {
         break;
       default:
     }
-    // log_str(header.name);
   }
 
   getID(id: SectionId): SectionHeader | null {
@@ -60,10 +59,6 @@ export class Module {
     }
     return null;
   }
-
-   hasSection(id: SectionId): boolean {
-     return this.getID(id) != null;
-   }
 
   getType(): TypeSection | null {
     let header = this.getID(SectionId.Type);

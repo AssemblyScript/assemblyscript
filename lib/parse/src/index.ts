@@ -3,9 +3,44 @@ import  * as assert from "assert";
 export { Type, SectionId, ExternalKind };
 import  * as loader from "../../../dist/assemblyscript-loader";
 import ASModule from "../build";
+import {ASImport} from "./asImport";
 
 
 type Instance = typeof ASModule;
+
+class index extends ASImport {
+  debug():void {debugger; }
+  _log(start: number, sizeof: number):void {
+    var begin = start >> 2;
+    var size = sizeof >> 2;
+    if (size == 1 ) {
+      console.log(start);
+    } else {
+      let str = []
+      let len = 0;
+      for (let i = begin; i < begin + size; i++){
+        let line = `| ${i} | ${this.__memory__.I32[i] >> 2}`;
+        len = Math.max(len, line.length);
+        str.push(line);
+      }
+      let space = " ";
+      let output = str.map((v: string): string => v + (space as any).repeat(len - v.length + 1) + "|");
+      let dash = "-";
+      let line = (dash as any).repeat(len + 2);
+      console.log([line,output.join("\n" + line + "\n"),line].join("\n"));
+    }
+  }
+
+  _log_str(x: number): void {
+    console.log(loader.utils.readString(this.__memory__.U32, this.__memory__.U16, x))
+  }
+  _logi(x: number): void {
+    console.log(x);
+  }
+  _logf(x: number): void {
+    console.log(x);
+  }
+}
 
 // type Parser = {parse: (any)=> any, newParser: (any)=>any};
 /** Cached compiled parser. */
@@ -35,46 +70,24 @@ export class WasmParser {
     var nBytes = binary.length;
     var nPages = ((nBytes + 0xffff) & ~0xffff) >> 16;
     var memory = loader.createMemory({ initial: nPages });
+    let Index = new index();
+    console.log((Index.__imports__))
     var imports = {
+      ...(Index.__imports__),
       env: {
         abort: console.error,
         memory
       },
-      index: {
-        //tslint:disable-next-line
-        debug: ():void => {debugger; },
-        _log: (start: number, sizeof: number):void => {
-          var begin = start >> 2;
-          var size = sizeof >> 2;
-          if (size == 1 ) {
-            console.log(start);
-          } else {
-            let str = []
-            let len = 0;
-            for (let i = begin; i < begin + size; i++){
-              let line = `| ${i} | ${memory.I32[i] >> 2}`;
-              len = Math.max(len, line.length);
-              str.push(line);
-            }
-            let space = " ";
-            let output = str.map((v: string): string => v + (space as any).repeat(len - v.length + 1) + "|");
-            let dash = "-";
-            let line = (dash as any).repeat(len + 2);
-            console.log([line,output.join("\n" + line + "\n"),line].join("\n"));
-          }
-        },
-        _log_str: (x: number): void => console.log(loader.utils.readString(memory.U32, memory.U16, x)),
-        _logi: console.log,
-        _logf: console.log
-      },
       options: {},
       }
     this.instance  = loader.instantiate(compiled, imports);
+    Index.instance = this.instance;
     var array = this.memory.newArray(binary);
     var parser = new this.instance.Parser(array)
     this.parser = parser;
     parser.parse();
     this.mod = <ASModule.Module>(<any>this.instance.Module).wrap(parser.module);
+    console.log(this.mod['self']);
   }
 
   get Type(): string {
