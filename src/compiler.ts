@@ -235,7 +235,11 @@ export const enum Feature {
   /** Mutable global imports and exports. */
   MUTABLE_GLOBAL = 1 << 1, // see: https://github.com/WebAssembly/mutable-global
   /** Bulk memory operations. */
-  BULK_MEMORY = 1 << 2 // see: https://github.com/WebAssembly/bulk-memory-operations
+  BULK_MEMORY = 1 << 2, // see: https://github.com/WebAssembly/bulk-memory-operations
+  /** SIMD types and operations. */
+  SIMD = 1 << 3, // see: https://github.com/WebAssembly/simd
+  /** Threading and atomic operations. */
+  THREADS = 1 << 4 // see: https://github.com/WebAssembly/threads
 }
 
 /** Indicates the desired kind of a conversion. */
@@ -1944,12 +1948,12 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var expr: ExpressionRef = 0;
     var flow = this.currentFlow;
+    var returnType = flow.returnType;
 
     // Remember that this flow returns
     flow.set(FlowFlags.RETURNS);
 
     if (statement.value) {
-      let returnType = flow.returnType;
       if (returnType == Type.void) {
         this.compileExpressionRetainType(statement.value, returnType, WrapMode.NONE);
         this.error(
@@ -1970,6 +1974,13 @@ export class Compiler extends DiagnosticEmitter {
 
       // Remember whether returning a properly wrapped value
       if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
+
+    } else if (returnType != Type.void) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        statement.range, "void", returnType.toString()
+      );
+      expr = module.createUnreachable();
     }
 
     // If the last statement anyway, make it the block's return value

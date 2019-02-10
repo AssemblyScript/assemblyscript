@@ -415,6 +415,7 @@ export class Program extends DiagnosticEmitter {
       ["number", Type.f64],
       ["boolean", Type.bool]
     ]);
+    if (options.hasFeature(Feature.SIMD)) this.typesLookup.set("v128", Type.v128);
 
     // add compiler hints
     this.setConstantInteger("ASC_TARGET", Type.i32,
@@ -433,6 +434,10 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.MUTABLE_GLOBAL) ? 1 : 0, 0));
     this.setConstantInteger("ASC_FEATURE_SIGN_EXTENSION", Type.bool,
       i64_new(options.hasFeature(Feature.SIGN_EXTENSION) ? 1 : 0, 0));
+    this.setConstantInteger("ASC_FEATURE_BULK_MEMORY", Type.bool,
+      i64_new(options.hasFeature(Feature.BULK_MEMORY) ? 1 : 0, 0));
+    this.setConstantInteger("ASC_FEATURE_SIMD", Type.bool,
+      i64_new(options.hasFeature(Feature.SIMD) ? 1 : 0, 0));
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
@@ -659,6 +664,7 @@ export class Program extends DiagnosticEmitter {
     this.registerBasicClass(TypeKind.BOOL, "Bool");
     this.registerBasicClass(TypeKind.F32, "F32");
     this.registerBasicClass(TypeKind.F64, "F64");
+    if (options.hasFeature(Feature.SIMD)) this.registerBasicClass(TypeKind.V128, "V128");
 
     // register 'start'
     {

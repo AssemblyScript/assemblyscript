@@ -1,7 +1,7 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiiv (func (param i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
+ (type $_ (func))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -62,7 +62,7 @@
   i32.const 0
   i32.store8
  )
- (func $~lib/internal/memory/memcpy (; 2 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 2 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1159,7 +1159,7 @@
    end
   end
  )
- (func $start (; 4 ;) (type $v)
+ (func $start (; 4 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   i32.const 8
@@ -1548,7 +1548,7 @@
    unreachable
   end
  )
- (func $null (; 5 ;) (type $v)
+ (func $null (; 5 ;) (type $_)
   nop
  )
 )

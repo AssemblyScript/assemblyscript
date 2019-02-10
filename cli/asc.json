@@ -162,6 +162,8 @@
       " sign-extension  Enables sign-extension operations",
       " mutable-global  Enables mutable global imports and exports",
       " bulk-memory     Enables bulk memory operations",
+      " simd            Enables SIMD types and operations.",
+      " threads         Enables threading and atomic operations.",
       ""
     ],
     "type": "s"

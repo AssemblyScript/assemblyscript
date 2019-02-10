@@ -1,7 +1,7 @@
 (module
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 2 funcref)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
@@ -128,7 +128,7 @@
   call $getter-call/C#get:x
   call_indirect (type $i)
  )
- (func $start (; 6 ;) (type $v)
+ (func $start (; 6 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -140,6 +140,6 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 7 ;) (type $_)
  )
 )

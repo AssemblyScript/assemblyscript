@@ -1,11 +1,11 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
@@ -154,7 +154,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -447,7 +447,7 @@
   end
   local.get $3
  )
- (func $~lib/internal/memory/memcpy (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 6 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1648,7 +1648,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 7 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -2301,7 +2301,7 @@
   local.get $3
   call $~lib/dataview/DataView#constructor
  )
- (func $start (; 22 ;) (type $v)
+ (func $start (; 22 ;) (type $_)
   (local $0 i32)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
@@ -2660,6 +2660,6 @@
    unreachable
   end
  )
- (func $null (; 23 ;) (type $v)
+ (func $null (; 23 ;) (type $_)
  )
 )

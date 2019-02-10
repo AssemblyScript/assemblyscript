@@ -4,7 +4,7 @@
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
  (type $Ff (func (param f64) (result f32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -4801,6 +4801,6 @@
   local.get $1
   f64.trunc
  )
- (func $null (; 61 ;) (type $v)
+ (func $null (; 61 ;) (type $_)
  )
 )

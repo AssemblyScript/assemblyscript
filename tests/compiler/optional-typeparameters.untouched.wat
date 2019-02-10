@@ -2,7 +2,7 @@
  (type $ii (func (param i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iFFF (func (param i32 f64 f64) (result f64)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -138,7 +138,7 @@
   local.get $2
   f64.add
  )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 8 ;) (type $_)
   i32.const 1
   call $optional-typeparameters/testConcrete<i32,i32>
   drop
@@ -172,6 +172,6 @@
   call $optional-typeparameters/TestDerived<f64,f64>#test<f64>
   drop
  )
- (func $null (; 9 ;) (type $v)
+ (func $null (; 9 ;) (type $_)
  )
 )

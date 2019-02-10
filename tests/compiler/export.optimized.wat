@@ -1,6 +1,6 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $export/ns.two)
@@ -31,7 +31,7 @@
   local.get $1
   i32.mul
  )
- (func $export/ns.two (; 3 ;) (type $v)
+ (func $export/ns.two (; 3 ;) (type $_)
   nop
  )
 )

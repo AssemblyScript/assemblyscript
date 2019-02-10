@@ -2,9 +2,9 @@
  (type $iii (func (param i32 i32) (result i32)))
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiv (func (param i32 i32)))
- (type $iv (func (param i32)))
- (type $v (func))
+ (type $ii_ (func (param i32 i32)))
+ (type $i_ (func (param i32)))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -125,21 +125,21 @@
   local.get $0
   i32.load
  )
- (func $exports/Car#set:numDoors (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (; 5 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#openDoors (; 6 ;) (type $iv) (param $0 i32)
+ (func $exports/Car#openDoors (; 6 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $start (; 7 ;) (type $v)
+ (func $start (; 7 ;) (type $_)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 8 ;) (type $v)
+ (func $null (; 8 ;) (type $_)
   nop
  )
  (func $exports/subOpt|trampoline (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -160,7 +160,7 @@
   local.get $1
   i32.sub
  )
- (func $~setargc (; 10 ;) (type $iv) (param $0 i32)
+ (func $~setargc (; 10 ;) (type $i_) (param $0 i32)
   local.get $0
   global.set $~argc
  )

@@ -1,12 +1,12 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iiif (func (param i32 i32 i32) (result f32)))
  (type $II (func (param i64) (result i64)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$dii (func (param i32 i32) (result f64)))
@@ -385,7 +385,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1096,7 +1096,7 @@
   local.get $1
   i32.store16 offset=8
  )
- (func $start (; 23 ;) (type $v)
+ (func $start (; 23 ;) (type $_)
   (local $0 i32)
   i32.const 216
   global.set $~lib/allocator/arena/startOffset
@@ -2625,7 +2625,7 @@
    unreachable
   end
  )
- (func $null (; 24 ;) (type $v)
+ (func $null (; 24 ;) (type $_)
   nop
  )
 )

@@ -1,14 +1,14 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iv (func (param i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $i_ (func (param i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $iiv (func (param i32 i32)))
- (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
- (type $v (func))
+ (type $ii_ (func (param i32 i32)))
+ (type $iiiii_ (func (param i32 i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\03\00\00\001\002\003\00")
@@ -218,7 +218,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 6 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -511,7 +511,7 @@
   end
   local.get $3
  )
- (func $~lib/map/Map<String,usize>#clear (; 8 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<String,usize>#clear (; 8 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -571,7 +571,7 @@
   call $~lib/map/Map<String,usize>#clear
   local.get $0
  )
- (func $~lib/map/Map<usize,String>#clear (; 10 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<usize,String>#clear (; 10 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -858,7 +858,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<String,usize>#rehash (; 18 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<String,usize>#rehash (; 18 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -998,7 +998,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<String,usize>#set (; 19 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<String,usize>#set (; 19 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1197,7 +1197,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<usize,String>#rehash (; 22 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,String>#rehash (; 22 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1337,7 +1337,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<usize,String>#set (; 23 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<usize,String>#set (; 23 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1588,7 +1588,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/memory/memcpy (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 29 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2789,7 +2789,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 30 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -3016,7 +3016,7 @@
    end
   end
  )
- (func $~lib/internal/string/copyUnsafe (; 31 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 31 ;) (type $iiiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -3300,7 +3300,7 @@
   i32.const 592
   call $~lib/string/String.__concat
  )
- (func $start (; 35 ;) (type $v)
+ (func $start (; 35 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -3469,6 +3469,6 @@
   global.get $~lib/symbol/Symbol.isConcatSpreadable
   drop
  )
- (func $null (; 36 ;) (type $v)
+ (func $null (; 36 ;) (type $_)
  )
 )

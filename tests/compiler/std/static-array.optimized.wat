@@ -1,9 +1,9 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -117,7 +117,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memcpy (; 3 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 3 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1014,7 +1014,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1613,7 +1613,7 @@
   f64.const 2.25
   f64.store offset=8
  )
- (func $start (; 11 ;) (type $v)
+ (func $start (; 11 ;) (type $_)
   (local $0 i32)
   i32.const 280
   global.set $~lib/allocator/arena/startOffset
@@ -1968,7 +1968,7 @@
    unreachable
   end
  )
- (func $null (; 12 ;) (type $v)
+ (func $null (; 12 ;) (type $_)
   nop
  )
 )
