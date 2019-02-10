@@ -1,139 +1,127 @@
-import { Type, SectionId, ExternalKind } from "./common";
+import { Type, SectionId, ExternalKind, newParser } from "./common";
+import  * as assert from "assert";
 export { Type, SectionId, ExternalKind };
+import  * as loader from "../../../dist/assemblyscript-loader";
+import ASModule from "../build";
+import {ASImport} from "./asImport";
 
+
+type Instance = typeof ASModule;
+
+class index extends ASImport {
+  debug():void {debugger; }
+  _log(start: number, sizeof: number):void {
+    var begin = start >> 2;
+    var size = sizeof >> 2;
+    if (size == 1 ) {
+      console.log(start);
+    } else {
+      let str = []
+      let len = 0;
+      for (let i = begin; i < begin + size; i++){
+        let line = `| ${i} | ${this.__memory__.I32[i] >> 2}`;
+        len = Math.max(len, line.length);
+        str.push(line);
+      }
+      let space = " ";
+      let output = str.map((v: string): string => v + (space as any).repeat(len - v.length + 1) + "|");
+      let dash = "-";
+      let line = (dash as any).repeat(len + 2);
+      console.log([line,output.join("\n" + line + "\n"),line].join("\n"));
+    }
+  }
+
+  _log_str(x: number): void {
+    console.log(loader.utils.readString(this.__memory__.U32, this.__memory__.U16, x))
+  }
+  _logi(x: number): void {
+    console.log(x);
+  }
+  _logf(x: number): void {
+    console.log(x);
+  }
+}
+
+// type Parser = {parse: (any)=> any, newParser: (any)=>any};
 /** Cached compiled parser. */
 var compiled: WebAssembly.Module | null = null;
 
-declare var WASM_DATA: string; // injected by webpack
+var WASM_DATA: string; // injected by webpack
 if (typeof WASM_DATA !== "string") WASM_DATA = require("fs").readFileSync(__dirname + "/../build/index.wasm", "base64");
 
-/** Options specified to the parser. The `onSection` callback determines the sections being evaluated in detail. */
-export interface ParseOptions {
-  /** Called with each section in the binary. Returning `true` evaluates the section. */
-  onSection?(id: SectionId, payloadOff: number, payloadLen: number, nameOff: number, nameLen: number): boolean;
-  /** Called with each function type if the type section is evaluated. */
-  onType?(index: number, form: number): void;
-  /** Called with each function parameter if the type section is evaluated. */
-  onTypeParam?(index: number, paramIndex: number, paramType: Type): void;
-  /** Called with each function return type if the type section is evaluated. */
-  onTypeReturn?(index: number, returnIndex: number, returnType: Type): void;
-  /** Called with each import if the import section is evaluated. */
-  onImport?(index: number, kind: ExternalKind, moduleOff: number, moduleLen: number, fieldOff: number, fieldLen: number): void;
-  /** Called with each function import if the import section is evaluated. */
-  onFunctionImport?(index: number, type: number): void;
-  /** Called with each table import if the import section is evaluated. */
-  onTableImport?(index: number, type: Type, initial: number, maximum: number, flags: number): void;
-  /** Called with each memory import if the import section is evaluated. */
-  onMemoryImport?(index: number, initial: number, maximum: number, flags: number): void;
-  /** Called with each global import if the import section is evaluated. */
-  onGlobalImport?(index: number, type: Type, mutability: number): void;
-  /** Called with each memory if the memory section is evaluated.*/
-  onMemory?(index: number, initial: number, maximum: number, flags: number): void;
-  /** Called with each function if the function section is evaluated. */
-  onFunction?(index: number, typeIndex: number): void;
-  /** Called with each table if the table section is evaluated.*/
-  onTable?(index: number, type: Type, initial: number, maximum: number, flags: number): void;
-  /** Called with each global if the global section is evaluated. */
-  onGlobal?(index: number, type: Type, mutability: number): void;
-  /** Called with the start function index if the start section is evaluated. */
-  onStart?(index: number): void;
-  /** Called with each export if the export section is evaluated. */
-  onExport?(index: number, kind: ExternalKind, kindIndex: number, nameOff: number, nameLen: number): void;
-  /** Called with the source map URL if the 'sourceMappingURL' section is evaluated. */
-  onSourceMappingURL?(offset: number, length: number): void;
-  /** Called with the module name if present and the 'name' section is evaluated. */
-  onModuleName?(offset: number, length: number): void;
-  /** Called with each function name if present and the 'name' section is evaluated. */
-  onFunctionName?(index: number, offset: number, length: number): void;
-  /** Called with each local name if present and the 'name' section is evaluated. */
-  onLocalName?(funcIndex: number, index: number, offset: number, length: number): void;
-}
+export class WasmParser {
+  instance: Instance & loader.ASInstance & loader.ASExport;
+  mod: ASModule.Module;
+  parser: ASModule.Parser;
 
-/** Parses the contents of a WebAssembly binary according to the specified options. */
-export function parse(binary: Uint8Array, options?: ParseOptions): void {
-  if (!options) options = {};
-
-  // compile the parser if not yet compiled
-  if (!compiled) compiled = new WebAssembly.Module(base64_decode(WASM_DATA));
-
-  // use the binary as the parser's memory
-  var nBytes = binary.length;
-  var nPages = ((nBytes + 0xffff) & ~0xffff) >> 16;
-  var memory = new WebAssembly.Memory({ initial: nPages });
-  var buffer = new Uint8Array(memory.buffer);
-  buffer.set(binary);
-
-  // provide a way to read strings from memory
-  parse.readString = (offset: number, length: number): string => utf8_read(buffer, offset, offset + length);
-
-  // instantiate the parser and return its exports
-  var imports = {
-    env: {
-      memory
-    },
-    options: {}
-  };
-  [ "onSection",
-    "onType",
-    "onTypeParam",
-    "onTypeReturn",
-    "onImport",
-    "onFunctionImport",
-    "onTableImport",
-    "onMemoryImport",
-    "onGlobalImport",
-    "onMemory",
-    "onFunction",
-    "onTable",
-    "onGlobal",
-    "onExport",
-    "onStart",
-    "onSourceMappingURL",
-    "onModuleName",
-    "onFunctionName",
-    "onLocalName"
-  ].forEach((name: string): void => imports.options[name] = options[name] || function() {});
-  var instance = new WebAssembly.Instance(compiled, imports);
-  instance.exports.parse(0, nBytes);
-}
-
-export declare namespace parse {
-  /** Utility function for reading an UTF8 encoded string from memory while parsing. */
-  function readString(offset: number, length: number): string;
-}
-
-// see: https://github.com/dcodeIO/protobuf.js/tree/master/lib/utf8
-function utf8_read(buffer: Uint8Array, start: number, end: number): string {
-  var len = end - start;
-  if (len < 1) return "";
-  var parts: string[] | null = null,
-      chunk: number[] = [],
-      i = 0, // char offset
-      t = 0; // temporary
-  while (start < end) {
-    t = buffer[start++];
-    if (t < 128) {
-      chunk[i++] = t;
-    } else if (t > 191 && t < 224) {
-      chunk[i++] = (t & 31) << 6 | buffer[start++] & 63;
-    } else if (t > 239 && t < 365) {
-      t = ((t & 7) << 18 | (buffer[start++] & 63) << 12 | (buffer[start++] & 63) << 6 | buffer[start++] & 63) - 0x10000;
-      chunk[i++] = 0xD800 + (t >> 10);
-      chunk[i++] = 0xDC00 + (t & 1023);
-    } else {
-      chunk[i++] = (t & 15) << 12 | (buffer[start++] & 63) << 6 | buffer[start++] & 63;
-    }
-    if (i > 8191) {
-      (parts || (parts = [])).push(String.fromCharCode.apply(String, chunk));
-      i = 0;
-    }
+  get memory(): loader.ASMemory {
+    return this.instance.memory;
   }
-  if (parts) {
-    if (i) parts.push(String.fromCharCode.apply(String, chunk.slice(0, i)));
-    return parts.join("");
+
+  getByteArray(addr: number): Uint8Array {
+    return this.memory.getArray(Uint8Array, addr);
   }
-  return String.fromCharCode.apply(String, chunk.slice(0, i));
+
+  constructor(public binary: Uint8Array) {
+    // compile the parser if not yet compiled
+    if (!compiled) compiled = new WebAssembly.Module(base64_decode(WASM_DATA));
+
+    // use the binary as the parser's memory
+    var nBytes = binary.length;
+    var nPages = ((nBytes + 0xffff) & ~0xffff) >> 16;
+    var memory = loader.createMemory({ initial: nPages });
+    let Index = new index();
+    console.log((Index.__imports__))
+    var imports = {
+      ...(Index.__imports__),
+      env: {
+        abort: console.error,
+        memory
+      },
+      options: {},
+      }
+    this.instance  = loader.instantiate(compiled, imports);
+    Index.instance = this.instance;
+    var array = this.memory.newArray(binary);
+    var parser = new this.instance.Parser(array)
+    this.parser = parser;
+    parser.parse();
+    this.mod = <ASModule.Module>(<any>this.instance.Module).wrap(parser.module);
+    console.log(this.mod['self']);
+  }
+
+  get Type(): string {
+    return this.memory.getString(this.mod.getType());
+
+  }
+
+  printModule(): void {
+    this.mod.print();
+  }
+
+  removeStartFunction(): Uint8Array {
+    var binary = <Uint8Array>this.memory.getArray(Uint8Array, this.instance.removeStartFunction(this.parser.module));
+    return binary;
+  }
+
+  hasSection(id: SectionId): boolean {
+    return this.mod.hasSection(id);
+  }
+
+  removeDataSection(): Uint8Array {
+    return this.getByteArray(this.instance.removeSection(this.parser.module, SectionId.Data));
+  }
+
+  exportDataSection(): Uint8Array {
+    return this.memory.getArray(Uint8Array, this.instance.exportDataSection(this.parser.module));
+  }
+
+  hasStart(): boolean {
+    return this.mod.hasStart;
+  }
 }
+
+
 
 // see: https://github.com/dcodeIO/protobuf.js/tree/master/lib/base64
 function base64_decode(string: string): Uint8Array {
