@@ -2360,6 +2360,19 @@ export namespace SafeMath {
   }
 
   @inline
+  export function signbit<T>(x: T): bool {
+    if (isInteger<T>()) {
+      if (!x) return <T>0;
+      if (isSigned<T>()) {
+        return <bool>(x >> (sizeof<T>() * 4 - 1));
+      } else {
+        return <T>1;
+      }
+    }
+    throw new Error("Unexpected generic type");
+  }
+
+  @inline
   export function sqrt<T>(x: T): T {
     if (isInteger<T>()) {
       if (x <= 1) return x;
