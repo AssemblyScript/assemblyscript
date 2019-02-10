@@ -1,9 +1,9 @@
 (module
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
- (table $0 2 anyfunc)
+ (table $0 2 funcref)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -16,17 +16,17 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  get_local $0
+  local.get $0
   i32.const 1073741824
   i32.gt_u
   if
    unreachable
   end
-  get_global $~lib/allocator/arena/offset
-  tee_local $1
-  get_local $0
+  global.get $~lib/allocator/arena/offset
+  local.tee $1
+  local.get $0
   i32.const 1
-  get_local $0
+  local.get $0
   i32.const 1
   i32.gt_u
   select
@@ -35,16 +35,16 @@
   i32.add
   i32.const -8
   i32.and
-  tee_local $2
+  local.tee $2
   current_memory
-  tee_local $3
+  local.tee $3
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   get_local $3
-   get_local $2
-   get_local $1
+   local.get $3
+   local.get $2
+   local.get $1
    i32.sub
    i32.const 65535
    i32.add
@@ -52,16 +52,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   tee_local $0
-   get_local $3
-   get_local $0
+   local.tee $0
+   local.get $3
+   local.get $0
    i32.gt_s
    select
    grow_memory
    i32.const 0
    i32.lt_s
    if
-    get_local $0
+    local.get $0
     grow_memory
     i32.const 0
     i32.lt_s
@@ -70,9 +70,9 @@
     end
    end
   end
-  get_local $2
-  set_global $~lib/allocator/arena/offset
-  get_local $1
+  local.get $2
+  global.set $~lib/allocator/arena/offset
+  local.get $1
  )
  (func $getter-call/C#get:x~anonymous|1 (; 1 ;) (type $i) (result i32)
   i32.const 42
@@ -82,17 +82,17 @@
   call $~lib/allocator/arena/__memory_allocate
   drop
   i32.const 0
-  set_global $~argc
+  global.set $~argc
   i32.const 1
   call_indirect (type $i)
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
   i32.const 8
-  set_global $~lib/allocator/arena/startOffset
-  get_global $~lib/allocator/arena/startOffset
-  set_global $~lib/allocator/arena/offset
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )

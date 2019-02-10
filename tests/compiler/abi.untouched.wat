@@ -1,11 +1,11 @@
 (module
  (type $i (func (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\06\00\00\00a\00b\00i\00.\00t\00s\00")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $abi/condition (mut i32) (i32.const 0))
  (global $abi/y (mut i32) (i32.const 0))
@@ -36,18 +36,18 @@
   i32.const 24
   i32.shr_s
  )
- (func $start (; 5 ;) (type $v)
+ (func $start (; 5 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $abi/internal
   drop
   i32.const 0
   i32.eqz
-  set_global $abi/condition
+  global.set $abi/condition
   block
    i32.const 256
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 24
    i32.shl
    i32.const 24
@@ -65,28 +65,28 @@
   end
   block
    i32.const 256
-   set_local $0
-   get_global $abi/condition
+   local.set $0
+   global.get $abi/condition
    if
-    get_local $0
+    local.get $0
     i32.const 24
     i32.shl
     i32.const 24
     i32.shr_s
     i32.const 2
     i32.div_s
-    set_local $0
+    local.set $0
    else    
-    get_local $0
+    local.get $0
     i32.const 24
     i32.shl
     i32.const 24
     i32.shr_s
     i32.const 2
     i32.div_s
-    set_local $0
+    local.set $0
    end
-   get_local $0
+   local.get $0
    i32.const 24
    i32.shl
    i32.const 24
@@ -104,24 +104,24 @@
   end
   block
    i32.const 256
-   set_local $0
-   get_global $abi/condition
+   local.set $0
+   global.get $abi/condition
    if
-    get_local $0
+    local.get $0
     i32.const 24
     i32.shl
     i32.const 24
     i32.shr_s
     i32.const 24
     i32.shr_s
-    set_local $0
+    local.set $0
    else    
-    get_local $0
+    local.get $0
     i32.const 127
     i32.and
-    set_local $0
+    local.set $0
    end
-   get_local $0
+   local.get $0
    i32.eqz
    i32.eqz
    if
@@ -139,8 +139,8 @@
    i32.shl
    i32.const 24
    i32.shr_s
-   set_global $abi/y
-   get_global $abi/y
+   global.set $abi/y
+   global.get $abi/y
    i32.eqz
    i32.eqz
    if
@@ -155,8 +155,8 @@
   block
    i32.const 2
    i32.ctz
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 0
    i32.ne
    i32.eqz
@@ -170,8 +170,8 @@
    end
    i32.const 1
    i32.clz
-   set_local $0
-   get_local $0
+   local.set $0
+   local.get $0
    i32.const 0
    i32.ne
    i32.eqz
@@ -185,8 +185,8 @@
    end
    i32.const 2
    i32.ctz
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.eqz
    if
     i32.const 0
@@ -198,8 +198,8 @@
    end
    i32.const 1
    i32.clz
-   set_local $1
-   get_local $1
+   local.set $1
+   local.get $1
    i32.eqz
    if
     i32.const 0
@@ -211,6 +211,6 @@
    end
   end
  )
- (func $null (; 6 ;) (type $v)
+ (func $null (; 6 ;) (type $_)
  )
 )

@@ -1,14 +1,14 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (type $i (func (result i32)))
  (type $I (func (result i64)))
  (type $f (func (result f32)))
  (type $F (func (result f64)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s\00")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $infer-type/i i32 (i32.const 10))
  (global $infer-type/I i64 (i64.const 4294967296))
@@ -23,7 +23,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $infer-type/locals (; 1 ;) (type $v)
+ (func $infer-type/locals (; 1 ;) (type $_)
   (local $0 i32)
   (local $1 i64)
   (local $2 f64)
@@ -31,17 +31,17 @@
   (local $4 i64)
   (local $5 f64)
   i32.const 10
-  set_local $0
+  local.set $0
   i64.const 4294967296
-  set_local $1
+  local.set $1
   f64.const 1.5
-  set_local $2
-  get_global $infer-type/i
-  set_local $3
-  get_global $infer-type/I
-  set_local $4
-  get_global $infer-type/F
-  set_local $5
+  local.set $2
+  global.get $infer-type/i
+  local.set $3
+  global.get $infer-type/I
+  local.set $4
+  global.get $infer-type/F
+  local.set $5
  )
  (func $infer-type/reti (; 2 ;) (type $i) (result i32)
   i32.const 0
@@ -55,50 +55,50 @@
  (func $infer-type/refF (; 5 ;) (type $F) (result f64)
   f64.const 0
  )
- (func $start (; 6 ;) (type $v)
+ (func $start (; 6 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
-  get_global $infer-type/i
+  global.get $infer-type/i
   drop
-  get_global $infer-type/I
+  global.get $infer-type/I
   drop
-  get_global $infer-type/F
+  global.get $infer-type/F
   drop
   call $infer-type/locals
   call $infer-type/reti
-  set_global $infer-type/ri
-  get_global $infer-type/ri
+  global.set $infer-type/ri
+  global.get $infer-type/ri
   drop
   call $infer-type/retI
-  set_global $infer-type/rI
-  get_global $infer-type/rI
+  global.set $infer-type/rI
+  global.get $infer-type/rI
   drop
   call $infer-type/retf
-  set_global $infer-type/rf
-  get_global $infer-type/rf
+  global.set $infer-type/rf
+  global.get $infer-type/rf
   drop
   call $infer-type/refF
-  set_global $infer-type/rF
-  get_global $infer-type/rF
+  global.set $infer-type/rF
+  global.get $infer-type/rF
   drop
   block $break|0
    block
     i32.const 0
-    set_local $0
+    local.set $0
     i32.const 10
-    set_local $1
+    local.set $1
    end
    loop $repeat|0
-    get_local $0
-    get_local $1
+    local.get $0
+    local.get $1
     i32.lt_s
     i32.eqz
     br_if $break|0
     nop
-    get_local $0
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
+    local.set $0
     br $repeat|0
     unreachable
    end
@@ -126,6 +126,6 @@
    unreachable
   end
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 7 ;) (type $_)
  )
 )
