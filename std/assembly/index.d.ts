@@ -935,8 +935,7 @@ declare function global(
 /** Annotates a method as a binary operator overload for the specified `token`. */
 declare function operator(token:
   "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
-  "&"  | "|"   | "^"  | "+"   | "-"  | "*"  | "/" | "%" | "**" |
-  ">>" | ">>>" | "<<"
+  ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
 ): (
   target: any,
   propertyKey: string,
@@ -947,8 +946,7 @@ declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
   export function binary(token:
     "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
-    "&"  | "|"   | "^"  | "+"   | "-"  | "*"  | "/" | "%" | "**" |
-    ">>" | ">>>" | "<<"
+    ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
   ): (
     target: any,
     propertyKey: string,
