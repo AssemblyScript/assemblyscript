@@ -1,11 +1,11 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
- (type $iv (func (param i32)))
+ (type $iii_ (func (param i32 i32 i32)))
+ (type $i_ (func (param i32)))
  (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\06\00\00\00\01\d87\dch\00i\00R\d8b\df")
@@ -488,7 +488,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/memory/memcpy (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1689,7 +1689,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 6 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1916,7 +1916,7 @@
    end
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 7 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 7 ;) (type $i_) (param $0 i32)
   nop
  )
  (func $~lib/string/String.fromUTF8 (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -1926,6 +1926,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   local.get $1
   i32.const 1
   i32.lt_u
@@ -2223,22 +2224,26 @@
   i32.shr_u
   call $~lib/internal/string/allocateUnsafe
   local.set $7
-  local.get $7
-  global.get $~lib/internal/string/HEADER_SIZE
-  i32.add
-  local.set $3
-  local.get $3
-  local.get $4
-  local.get $5
-  call $~lib/internal/memory/memmove
+  block $memory.copy|inlined.0
+   local.get $7
+   global.get $~lib/internal/string/HEADER_SIZE
+   i32.add
+   local.set $3
+   local.get $4
+   local.set $6
+   local.get $5
+   local.set $8
+   local.get $3
+   local.get $6
+   local.get $8
+   call $~lib/internal/memory/memmove
+  end
   block $~lib/memory/memory.free|inlined.0
-   block
-    local.get $4
-    call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.0
-    unreachable
-   end
-   unreachable
+   local.get $4
+   local.set $8
+   local.get $8
+   call $~lib/allocator/arena/__memory_free
+   br $~lib/memory/memory.free|inlined.0
   end
   local.get $7
  )
@@ -2339,7 +2344,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $start (; 11 ;) (type $v)
+ (func $start (; 11 ;) (type $_)
   (local $0 i32)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
@@ -2607,15 +2612,11 @@
   block $~lib/memory/memory.free|inlined.1
    global.get $std/string-utf8/ptr
    local.set $0
-   block
-    local.get $0
-    call $~lib/allocator/arena/__memory_free
-    br $~lib/memory/memory.free|inlined.1
-    unreachable
-   end
-   unreachable
+   local.get $0
+   call $~lib/allocator/arena/__memory_free
+   br $~lib/memory/memory.free|inlined.1
   end
  )
- (func $null (; 12 ;) (type $v)
+ (func $null (; 12 ;) (type $_)
  )
 )

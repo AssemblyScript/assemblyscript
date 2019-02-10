@@ -1,6 +1,6 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -20,10 +20,10 @@
   end
   global.get $main/code
  )
- (func $start (; 1 ;) (type $v)
+ (func $start (; 1 ;) (type $_)
   i32.const 1
   global.set $main/code
  )
- (func $null (; 2 ;) (type $v)
+ (func $null (; 2 ;) (type $_)
  )
 )

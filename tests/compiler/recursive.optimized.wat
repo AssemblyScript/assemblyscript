@@ -1,6 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -25,7 +25,7 @@
   call $recursive/fib
   i32.add
  )
- (func $null (; 1 ;) (type $v)
+ (func $null (; 1 ;) (type $_)
   nop
  )
 )

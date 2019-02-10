@@ -1,6 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -73,7 +73,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $start (; 1 ;) (type $v)
+ (func $start (; 1 ;) (type $_)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -85,7 +85,7 @@
   call $~lib/allocator/arena/__memory_allocate
   global.set $optional-typeparameters/tDerived
  )
- (func $null (; 2 ;) (type $v)
+ (func $null (; 2 ;) (type $_)
   nop
  )
 )

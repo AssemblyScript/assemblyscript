@@ -18,14 +18,15 @@ export type RelooperRef = usize;
 export type RelooperBlockRef = usize;
 export type Index = u32;
 
-export const enum NativeType {
-  None = 0,        // _BinaryenTypeNone(),
-  I32  = 1,        // _BinaryenTypeInt32(),
-  I64  = 2,        // _BinaryenTypeInt64(),
-  F32  = 3,        // _BinaryenTypeFloat32(),
-  F64  = 4,        // _BinaryenTypeFloat64(),
-  Unreachable = 5, // _BinaryenTypeUnreachable(),
-  Auto = -1        // _BinaryenTypeAuto()
+export enum NativeType {
+  None = _BinaryenTypeNone(),
+  I32  = _BinaryenTypeInt32(),
+  I64  = _BinaryenTypeInt64(),
+  F32  = _BinaryenTypeFloat32(),
+  F64  = _BinaryenTypeFloat64(),
+  V128 = _BinaryenTypeVec128(),
+  Unreachable = _BinaryenTypeUnreachable(),
+  Auto = _BinaryenTypeAuto()
 }
 
 export enum ExpressionId {
@@ -55,12 +56,16 @@ export enum ExpressionId {
   AtomicCmpxchg = _BinaryenAtomicCmpxchgId(),
   AtomicRMW = _BinaryenAtomicRMWId(),
   AtomicWait = _BinaryenAtomicWaitId(),
-  AtomicWake = _BinaryenAtomicWakeId()
-  // SIMDExtract = _BinaryenSIMDExtractId(),
-  // SIMDReplace = _BinaryenSIMDReplaceId(),
-  // SIMDShuffle = _BinaryenSIMDShuffleId(),
-  // SIMDBitselect = _BinaryenSIMDBitselectId(),
-  // SIMDShift = _BinaryenSIMDShiftId()
+  AtomicWake = _BinaryenAtomicWakeId(),
+  SIMDExtract = _BinaryenSIMDExtractId(),
+  SIMDReplace = _BinaryenSIMDReplaceId(),
+  SIMDShuffle = _BinaryenSIMDShuffleId(),
+  SIMDBitselect = _BinaryenSIMDBitselectId(),
+  SIMDShift = _BinaryenSIMDShiftId(),
+  MemoryInit = _BinaryenMemoryInitId(),
+  DataDrop = _BinaryenDataDropId(),
+  MemoryCopy = _BinaryenMemoryCopyId(),
+  MemoryFill = _BinaryenMemoryFillId()
 }
 
 export enum UnaryOp {
@@ -227,117 +232,117 @@ export enum AtomicRMWOp {
   Xchg = _BinaryenAtomicRMWXchg()
 }
 
-// export enum SIMDOp {
-//   SplatVecI8x16 = _BinaryenSplatVecI8x16(),
-//   SplatVecI16x8 = _BinaryenSplatVecI16x8(),
-//   SplatVecI32x4 = _BinaryenSplatVecI32x4(),
-//   SplatVecI64x2 = _BinaryenSplatVecI64x2(),
-//   SplatVecF32x4 = _BinaryenSplatVecF32x4(),
-//   SplatVecF64x2 = _BinaryenSplatVecF64x2(),
-//   NotVec128 = _BinaryenNotVec128(),
-//   NegVecI8x16 = _BinaryenNegVecI8x16(),
-//   AnyTrueVecI8x16 = _BinaryenAnyTrueVecI8x16(),
-//   AllTrueVecI8x16 = _BinaryenAllTrueVecI8x16(),
-//   NegVecI16x8 = _BinaryenNegVecI16x8(),
-//   AnyTrueVecI16x8 = _BinaryenAnyTrueVecI16x8(),
-//   AllTrueVecI16x8 = _BinaryenAllTrueVecI16x8(),
-//   NegVecI32x4 = _BinaryenNegVecI32x4(),
-//   AnyTrueVecI32x4 = _BinaryenAnyTrueVecI32x4(),
-//   AllTrueVecI32x4 = _BinaryenAllTrueVecI32x4(),
-//   NegVecI64x2 = _BinaryenNegVecI64x2(),
-//   AnyTrueVecI64x2 = _BinaryenAnyTrueVecI64x2(),
-//   AllTrueVecI64x2 = _BinaryenAllTrueVecI64x2(),
-//   AbsVecF32x4 = _BinaryenAbsVecF32x4(),
-//   NegVecF32x4 = _BinaryenNegVecF32x4(),
-//   SqrtVecF32x4 = _BinaryenSqrtVecF32x4(),
-//   AbsVecF64x2 = _BinaryenAbsVecF64x2(),
-//   NegVecF64x2 = _BinaryenNegVecF64x2(),
-//   SqrtVecF64x2 = _BinaryenSqrtVecF64x2(),
-//   TruncSatSVecF32x4ToVecI32x4 = _BinaryenTruncSatSVecF32x4ToVecI32x4(),
-//   TruncSatUVecF32x4ToVecI32x4 = _BinaryenTruncSatUVecF32x4ToVecI32x4(),
-//   TruncSatSVecF64x2ToVecI64x2 = _BinaryenTruncSatSVecF64x2ToVecI64x2(),
-//   TruncSatUVecF64x2ToVecI64x2 = _BinaryenTruncSatUVecF64x2ToVecI64x2(),
-//   ConvertSVecI32x4ToVecF32x4 = _BinaryenConvertSVecI32x4ToVecF32x4(),
-//   ConvertUVecI32x4ToVecF32x4 = _BinaryenConvertUVecI32x4ToVecF32x4(),
-//   ConvertSVecI64x2ToVecF64x2 = _BinaryenConvertSVecI64x2ToVecF64x2(),
-//   ConvertUVecI64x2ToVecF64x2 = _BinaryenConvertUVecI64x2ToVecF64x2(),
-//   EqVecI8x16 = _BinaryenEqVecI8x16(),
-//   NeVecI8x16 = _BinaryenNeVecI8x16(),
-//   LtSVecI8x16 = _BinaryenLtSVecI8x16(),
-//   LtUVecI8x16 = _BinaryenLtUVecI8x16(),
-//   LeSVecI8x16 = _BinaryenLeSVecI8x16(),
-//   LeUVecI8x16 = _BinaryenLeUVecI8x16(),
-//   GtSVecI8x16 = _BinaryenGtSVecI8x16(),
-//   GtUVecI8x16 = _BinaryenGtUVecI8x16(),
-//   GeSVecI8x16 = _BinaryenGeSVecI8x16(),
-//   GeUVecI8x16 = _BinaryenGeUVecI8x16(),
-//   EqVecI16x8 = _BinaryenEqVecI16x8(),
-//   NeVecI16x8 = _BinaryenNeVecI16x8(),
-//   LtSVecI16x8 = _BinaryenLtSVecI16x8(),
-//   LtUVecI16x8 = _BinaryenLtUVecI16x8(),
-//   LeSVecI16x8 = _BinaryenLeSVecI16x8(),
-//   LeUVecI16x8 = _BinaryenLeUVecI16x8(),
-//   GtSVecI16x8 = _BinaryenGtSVecI16x8(),
-//   GtUVecI16x8 = _BinaryenGtUVecI16x8(),
-//   GeSVecI16x8 = _BinaryenGeSVecI16x8(),
-//   GeUVecI16x8 = _BinaryenGeUVecI16x8(),
-//   EqVecI32x4 = _BinaryenEqVecI32x4(),
-//   NeVecI32x4 = _BinaryenNeVecI32x4(),
-//   LtSVecI32x4 = _BinaryenLtSVecI32x4(),
-//   LtUVecI32x4 = _BinaryenLtUVecI32x4(),
-//   LeSVecI32x4 = _BinaryenLeSVecI32x4(),
-//   LeUVecI32x4 = _BinaryenLeUVecI32x4(),
-//   GtSVecI32x4 = _BinaryenGtSVecI32x4(),
-//   GtUVecI32x4 = _BinaryenGtUVecI32x4(),
-//   GeSVecI32x4 = _BinaryenGeSVecI32x4(),
-//   GeUVecI32x4 = _BinaryenGeUVecI32x4(),
-//   EqVecF32x4 = _BinaryenEqVecF32x4(),
-//   NeVecF32x4 = _BinaryenNeVecF32x4(),
-//   LtVecF32x4 = _BinaryenLtVecF32x4(),
-//   LeVecF32x4 = _BinaryenLeVecF32x4(),
-//   GtVecF32x4 = _BinaryenGtVecF32x4(),
-//   GeVecF32x4 = _BinaryenGeVecF32x4(),
-//   EqVecF64x2 = _BinaryenEqVecF64x2(),
-//   NeVecF64x2 = _BinaryenNeVecF64x2(),
-//   LtVecF64x2 = _BinaryenLtVecF64x2(),
-//   LeVecF64x2 = _BinaryenLeVecF64x2(),
-//   GtVecF64x2 = _BinaryenGtVecF64x2(),
-//   GeVecF64x2 = _BinaryenGeVecF64x2(),
-//   AndVec128 = _BinaryenAndVec128(),
-//   OrVec128 = _BinaryenOrVec128(),
-//   XorVec128 = _BinaryenXorVec128(),
-//   AddVecI8x16 = _BinaryenAddVecI8x16(),
-//   AddSatSVecI8x16 = _BinaryenAddSatSVecI8x16(),
-//   AddSatUVecI8x16 = _BinaryenAddSatUVecI8x16(),
-//   SubVecI8x16 = _BinaryenSubVecI8x16(),
-//   SubSatSVecI8x16 = _BinaryenSubSatSVecI8x16(),
-//   SubSatUVecI8x16 = _BinaryenSubSatUVecI8x16(),
-//   MulVecI8x16 = _BinaryenMulVecI8x16(),
-//   AddVecI16x8 = _BinaryenAddVecI16x8(),
-//   AddSatSVecI16x8 = _BinaryenAddSatSVecI16x8(),
-//   AddSatUVecI16x8 = _BinaryenAddSatUVecI16x8(),
-//   SubVecI16x8 = _BinaryenSubVecI16x8(),
-//   SubSatSVecI16x8 = _BinaryenSubSatSVecI16x8(),
-//   SubSatUVecI16x8 = _BinaryenSubSatUVecI16x8(),
-//   MulVecI16x8 = _BinaryenMulVecI16x8(),
-//   AddVecI32x4 = _BinaryenAddVecI32x4(),
-//   SubVecI32x4 = _BinaryenSubVecI32x4(),
-//   MulVecI32x4 = _BinaryenMulVecI32x4(),
-//   AddVecI64x2 = _BinaryenAddVecI64x2(),
-//   SubVecI64x2 = _BinaryenSubVecI64x2(),
-//   AddVecF32x4 = _BinaryenAddVecF32x4(),
-//   SubVecF32x4 = _BinaryenSubVecF32x4(),
-//   MulVecF32x4 = _BinaryenMulVecF32x4(),
-//   DivVecF32x4 = _BinaryenDivVecF32x4(),
-//   MinVecF32x4 = _BinaryenMinVecF32x4(),
-//   MaxVecF32x4 = _BinaryenMaxVecF32x4(),
-//   AddVecF64x2 = _BinaryenAddVecF64x2(),
-//   SubVecF64x2 = _BinaryenSubVecF64x2(),
-//   MulVecF64x2 = _BinaryenMulVecF64x2(),
-//   DivVecF64x2 = _BinaryenDivVecF64x2(),
-//   MinVecF64x2 = _BinaryenMinVecF64x2(),
-//   MaxVecF64x2 = _BinaryenMaxVecF64x2()
-// }
+export enum SIMDOp {
+  SplatVecI8x16 = _BinaryenSplatVecI8x16(),
+  SplatVecI16x8 = _BinaryenSplatVecI16x8(),
+  SplatVecI32x4 = _BinaryenSplatVecI32x4(),
+  SplatVecI64x2 = _BinaryenSplatVecI64x2(),
+  SplatVecF32x4 = _BinaryenSplatVecF32x4(),
+  SplatVecF64x2 = _BinaryenSplatVecF64x2(),
+  NotVec128 = _BinaryenNotVec128(),
+  NegVecI8x16 = _BinaryenNegVecI8x16(),
+  AnyTrueVecI8x16 = _BinaryenAnyTrueVecI8x16(),
+  AllTrueVecI8x16 = _BinaryenAllTrueVecI8x16(),
+  NegVecI16x8 = _BinaryenNegVecI16x8(),
+  AnyTrueVecI16x8 = _BinaryenAnyTrueVecI16x8(),
+  AllTrueVecI16x8 = _BinaryenAllTrueVecI16x8(),
+  NegVecI32x4 = _BinaryenNegVecI32x4(),
+  AnyTrueVecI32x4 = _BinaryenAnyTrueVecI32x4(),
+  AllTrueVecI32x4 = _BinaryenAllTrueVecI32x4(),
+  NegVecI64x2 = _BinaryenNegVecI64x2(),
+  AnyTrueVecI64x2 = _BinaryenAnyTrueVecI64x2(),
+  AllTrueVecI64x2 = _BinaryenAllTrueVecI64x2(),
+  AbsVecF32x4 = _BinaryenAbsVecF32x4(),
+  NegVecF32x4 = _BinaryenNegVecF32x4(),
+  SqrtVecF32x4 = _BinaryenSqrtVecF32x4(),
+  AbsVecF64x2 = _BinaryenAbsVecF64x2(),
+  NegVecF64x2 = _BinaryenNegVecF64x2(),
+  SqrtVecF64x2 = _BinaryenSqrtVecF64x2(),
+  TruncSatSVecF32x4ToVecI32x4 = _BinaryenTruncSatSVecF32x4ToVecI32x4(),
+  TruncSatUVecF32x4ToVecI32x4 = _BinaryenTruncSatUVecF32x4ToVecI32x4(),
+  TruncSatSVecF64x2ToVecI64x2 = _BinaryenTruncSatSVecF64x2ToVecI64x2(),
+  TruncSatUVecF64x2ToVecI64x2 = _BinaryenTruncSatUVecF64x2ToVecI64x2(),
+  ConvertSVecI32x4ToVecF32x4 = _BinaryenConvertSVecI32x4ToVecF32x4(),
+  ConvertUVecI32x4ToVecF32x4 = _BinaryenConvertUVecI32x4ToVecF32x4(),
+  ConvertSVecI64x2ToVecF64x2 = _BinaryenConvertSVecI64x2ToVecF64x2(),
+  ConvertUVecI64x2ToVecF64x2 = _BinaryenConvertUVecI64x2ToVecF64x2(),
+  EqVecI8x16 = _BinaryenEqVecI8x16(),
+  NeVecI8x16 = _BinaryenNeVecI8x16(),
+  LtSVecI8x16 = _BinaryenLtSVecI8x16(),
+  LtUVecI8x16 = _BinaryenLtUVecI8x16(),
+  LeSVecI8x16 = _BinaryenLeSVecI8x16(),
+  LeUVecI8x16 = _BinaryenLeUVecI8x16(),
+  GtSVecI8x16 = _BinaryenGtSVecI8x16(),
+  GtUVecI8x16 = _BinaryenGtUVecI8x16(),
+  GeSVecI8x16 = _BinaryenGeSVecI8x16(),
+  GeUVecI8x16 = _BinaryenGeUVecI8x16(),
+  EqVecI16x8 = _BinaryenEqVecI16x8(),
+  NeVecI16x8 = _BinaryenNeVecI16x8(),
+  LtSVecI16x8 = _BinaryenLtSVecI16x8(),
+  LtUVecI16x8 = _BinaryenLtUVecI16x8(),
+  LeSVecI16x8 = _BinaryenLeSVecI16x8(),
+  LeUVecI16x8 = _BinaryenLeUVecI16x8(),
+  GtSVecI16x8 = _BinaryenGtSVecI16x8(),
+  GtUVecI16x8 = _BinaryenGtUVecI16x8(),
+  GeSVecI16x8 = _BinaryenGeSVecI16x8(),
+  GeUVecI16x8 = _BinaryenGeUVecI16x8(),
+  EqVecI32x4 = _BinaryenEqVecI32x4(),
+  NeVecI32x4 = _BinaryenNeVecI32x4(),
+  LtSVecI32x4 = _BinaryenLtSVecI32x4(),
+  LtUVecI32x4 = _BinaryenLtUVecI32x4(),
+  LeSVecI32x4 = _BinaryenLeSVecI32x4(),
+  LeUVecI32x4 = _BinaryenLeUVecI32x4(),
+  GtSVecI32x4 = _BinaryenGtSVecI32x4(),
+  GtUVecI32x4 = _BinaryenGtUVecI32x4(),
+  GeSVecI32x4 = _BinaryenGeSVecI32x4(),
+  GeUVecI32x4 = _BinaryenGeUVecI32x4(),
+  EqVecF32x4 = _BinaryenEqVecF32x4(),
+  NeVecF32x4 = _BinaryenNeVecF32x4(),
+  LtVecF32x4 = _BinaryenLtVecF32x4(),
+  LeVecF32x4 = _BinaryenLeVecF32x4(),
+  GtVecF32x4 = _BinaryenGtVecF32x4(),
+  GeVecF32x4 = _BinaryenGeVecF32x4(),
+  EqVecF64x2 = _BinaryenEqVecF64x2(),
+  NeVecF64x2 = _BinaryenNeVecF64x2(),
+  LtVecF64x2 = _BinaryenLtVecF64x2(),
+  LeVecF64x2 = _BinaryenLeVecF64x2(),
+  GtVecF64x2 = _BinaryenGtVecF64x2(),
+  GeVecF64x2 = _BinaryenGeVecF64x2(),
+  AndVec128 = _BinaryenAndVec128(),
+  OrVec128 = _BinaryenOrVec128(),
+  XorVec128 = _BinaryenXorVec128(),
+  AddVecI8x16 = _BinaryenAddVecI8x16(),
+  AddSatSVecI8x16 = _BinaryenAddSatSVecI8x16(),
+  AddSatUVecI8x16 = _BinaryenAddSatUVecI8x16(),
+  SubVecI8x16 = _BinaryenSubVecI8x16(),
+  SubSatSVecI8x16 = _BinaryenSubSatSVecI8x16(),
+  SubSatUVecI8x16 = _BinaryenSubSatUVecI8x16(),
+  MulVecI8x16 = _BinaryenMulVecI8x16(),
+  AddVecI16x8 = _BinaryenAddVecI16x8(),
+  AddSatSVecI16x8 = _BinaryenAddSatSVecI16x8(),
+  AddSatUVecI16x8 = _BinaryenAddSatUVecI16x8(),
+  SubVecI16x8 = _BinaryenSubVecI16x8(),
+  SubSatSVecI16x8 = _BinaryenSubSatSVecI16x8(),
+  SubSatUVecI16x8 = _BinaryenSubSatUVecI16x8(),
+  MulVecI16x8 = _BinaryenMulVecI16x8(),
+  AddVecI32x4 = _BinaryenAddVecI32x4(),
+  SubVecI32x4 = _BinaryenSubVecI32x4(),
+  MulVecI32x4 = _BinaryenMulVecI32x4(),
+  AddVecI64x2 = _BinaryenAddVecI64x2(),
+  SubVecI64x2 = _BinaryenSubVecI64x2(),
+  AddVecF32x4 = _BinaryenAddVecF32x4(),
+  SubVecF32x4 = _BinaryenSubVecF32x4(),
+  MulVecF32x4 = _BinaryenMulVecF32x4(),
+  DivVecF32x4 = _BinaryenDivVecF32x4(),
+  MinVecF32x4 = _BinaryenMinVecF32x4(),
+  MaxVecF32x4 = _BinaryenMaxVecF32x4(),
+  AddVecF64x2 = _BinaryenAddVecF64x2(),
+  SubVecF64x2 = _BinaryenSubVecF64x2(),
+  MulVecF64x2 = _BinaryenMulVecF64x2(),
+  DivVecF64x2 = _BinaryenDivVecF64x2(),
+  MinVecF64x2 = _BinaryenMinVecF64x2(),
+  MaxVecF64x2 = _BinaryenMaxVecF64x2()
+}
 
 export class MemorySegment {
 
@@ -356,12 +361,12 @@ export class Module {
 
   ref: ModuleRef;
 
-  private cachedByValue: usize;
+  private lit: usize;
 
   static create(): Module {
     var module = new Module();
     module.ref = _BinaryenModuleCreate();
-    module.cachedByValue = memory.allocate(16);
+    module.lit = memory.allocate(_BinaryenSizeofLiteral());
     return module;
   }
 
@@ -370,7 +375,7 @@ export class Module {
     try {
       let module = new Module();
       module.ref = _BinaryenModuleRead(cArr, buffer.length);
-      module.cachedByValue = memory.allocate(3 * 8); // LLVM C-ABI, max used is 3 * usize
+      module.lit = memory.allocate(_BinaryenSizeofLiteral());
       return module;
     } finally {
       memory.free(changetype<usize>(cArr));
@@ -415,26 +420,35 @@ export class Module {
   // constants
 
   createI32(value: i32): ExpressionRef {
-    var out = this.cachedByValue;
+    var out = this.lit;
     _BinaryenLiteralInt32(out, value);
     return _BinaryenConst(this.ref, out);
   }
 
   createI64(valueLow: i32, valueHigh: i32 = 0): ExpressionRef {
-    var out = this.cachedByValue;
+    var out = this.lit;
     _BinaryenLiteralInt64(out, valueLow, valueHigh);
     return _BinaryenConst(this.ref, out);
   }
 
   createF32(value: f32): ExpressionRef {
-    var out = this.cachedByValue;
+    var out = this.lit;
     _BinaryenLiteralFloat32(out, value);
     return _BinaryenConst(this.ref, out);
   }
 
   createF64(value: f64): ExpressionRef {
-    var out = this.cachedByValue;
+    var out = this.lit;
     _BinaryenLiteralFloat64(out, value);
+    return _BinaryenConst(this.ref, out);
+  }
+
+  createV128(bytes: Uint8Array): ExpressionRef {
+    assert(bytes.length == 16);
+    var out = this.lit;
+    // FIXME: does this work or do we need to malloc?
+    for (let i = 0; i < 16; ++i) store<u8>(out + i, bytes[i]);
+    _BinaryenLiteralVec128(out, out);
     return _BinaryenConst(this.ref, out);
   }
 
@@ -698,6 +712,24 @@ export class Module {
 
   createUnreachable(): ExpressionRef {
     return _BinaryenUnreachable(this.ref);
+  }
+
+  // bulk memory
+
+  createMemoryCopy(
+    dest: ExpressionRef,
+    source: ExpressionRef,
+    size: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenMemoryCopy(this.ref, dest, source, size);
+  }
+
+  createMemoryFill(
+    dest: ExpressionRef,
+    value: ExpressionRef,
+    size: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenMemoryFill(this.ref, dest, value, size);
   }
 
   // meta
@@ -993,7 +1025,8 @@ export class Module {
   }
 
   toBinary(sourceMapUrl: string | null): BinaryModule {
-    var out = this.cachedByValue;
+    var out = this.lit; // safe to reuse as long as..
+    assert(_BinaryenSizeofLiteral() >= 12);
     var cStr = allocString(sourceMapUrl);
     var binaryPtr: usize = 0;
     var sourceMapPtr: usize = 0;
@@ -1035,7 +1068,7 @@ export class Module {
     assert(this.ref);
     for (let ptr of this.cachedStrings.values()) memory.free(ptr);
     this.cachedStrings = new Map();
-    memory.free(this.cachedByValue);
+    memory.free(this.lit);
     memory.free(this.cachedPrecomputeNames);
     this.cachedPrecomputeNames = 0;
     _BinaryenModuleDispose(this.ref);

@@ -1,6 +1,6 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
@@ -101,7 +101,7 @@
   i32.store
   local.get $0
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
   (local $0 i32)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
@@ -156,7 +156,7 @@
   local.get $0
   global.set $std/constructor/ctorConditionallyAllocates
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )

@@ -25,7 +25,8 @@ import {
   DecoratorFlags,
   FieldPrototype,
   Field,
-  Global
+  Global,
+  Flow
 } from "./program";
 
 import {
@@ -233,6 +234,7 @@ export class Resolver extends DiagnosticEmitter {
         case TypeKind.U64: return Type.u64;
         case TypeKind.F32: return Type.f32;
         case TypeKind.F64: return Type.f64;
+        case TypeKind.V128: return Type.v128;
         case TypeKind.VOID: return Type.void;
         default: assert(false);
       }
@@ -355,22 +357,26 @@ export class Resolver extends DiagnosticEmitter {
   /** Resolves an identifier to the element it refers to. */
   resolveIdentifier(
     identifier: IdentifierExpression,
+    flow: Flow | null,
     context: Element | null,
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
     var name = identifier.text;
     var element: Element | null;
 
+    if (flow) {
+      let local = flow.lookupLocal(name);
+      if (local) {
+        this.currentThisExpression = null;
+        this.currentElementExpression = null;
+        return local;
+      }
+    }
+
     if (context) {
 
       switch (context.kind) {
-        case ElementKind.FUNCTION: { // search locals, use prototype
-          element = (<Function>context).flow.getScopedLocal(name);
-          if (element) {
-            this.currentThisExpression = null;
-            this.currentElementExpression = null;
-            return element;
-          }
+        case ElementKind.FUNCTION: { // use prototype
           context = (<Function>context).prototype.parent;
           break;
         }
@@ -433,13 +439,13 @@ export class Resolver extends DiagnosticEmitter {
   /** Resolves a property access to the element it refers to. */
   resolvePropertyAccess(
     propertyAccess: PropertyAccessExpression,
-    contextualFunction: Function,
+    flow: Flow,
     contextualType: Type,
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
     // start by resolving the lhs target (expression before the last dot)
     var targetExpression = propertyAccess.expression;
-    var target = this.resolveExpression(targetExpression, contextualFunction, contextualType, reportMode); // reports
+    var target = this.resolveExpression(targetExpression, flow, contextualType, reportMode); // reports
     if (!target) return null;
 
     // at this point we know exactly what the target is, so look up the element within
@@ -565,12 +571,12 @@ export class Resolver extends DiagnosticEmitter {
 
   resolveElementAccess(
     elementAccess: ElementAccessExpression,
-    contextualFunction: Function,
+    flow: Flow,
     contextualType: Type,
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
     var targetExpression = elementAccess.expression;
-    var target = this.resolveExpression(targetExpression, contextualFunction, contextualType, reportMode);
+    var target = this.resolveExpression(targetExpression, flow, contextualType, reportMode);
     if (!target) return null;
     switch (target.kind) {
       case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
@@ -685,7 +691,7 @@ export class Resolver extends DiagnosticEmitter {
 
   resolveExpression(
     expression: Expression,
-    contextualFunction: Function,
+    flow: Flow,
     contextualType: Type = Type.void,
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
@@ -697,14 +703,14 @@ export class Resolver extends DiagnosticEmitter {
         if ((<AssertionExpression>expression).assertionKind == AssertionKind.NONNULL) {
           return this.resolveExpression(
             (<AssertionExpression>expression).expression,
-            contextualFunction,
+            flow,
             contextualType,
             reportMode
           );
         }
         let type = this.resolveType(
           assert((<AssertionExpression>expression).toType),
-          contextualFunction.flow.contextualTypeArguments,
+          flow.contextualTypeArguments,
           reportMode
         );
         if (!type) return null;
@@ -733,7 +739,7 @@ export class Resolver extends DiagnosticEmitter {
             }
             return this.resolveExpression(
               operand,
-              contextualFunction,
+              flow,
               contextualType,
               reportMode
             );
@@ -743,7 +749,7 @@ export class Resolver extends DiagnosticEmitter {
           case Token.MINUS_MINUS: {
             return this.resolveExpression(
               (<UnaryPrefixExpression>expression).operand,
-              contextualFunction,
+              flow,
               contextualType,
               reportMode
             );
@@ -754,7 +760,7 @@ export class Resolver extends DiagnosticEmitter {
           case Token.TILDE: {
             let resolvedOperand = this.resolveExpression(
               (<UnaryPrefixExpression>expression).operand,
-              contextualFunction,
+              flow,
               contextualType,
               reportMode
             );
@@ -772,7 +778,7 @@ export class Resolver extends DiagnosticEmitter {
           case Token.MINUS_MINUS: {
             return this.resolveExpression(
               (<UnaryPostfixExpression>expression).operand,
-              contextualFunction,
+              flow,
               contextualType,
               reportMode
             );
@@ -788,15 +794,15 @@ export class Resolver extends DiagnosticEmitter {
         throw new Error("not implemented");
       }
       case NodeKind.THIS: { // -> Class / ClassPrototype
-        if (contextualFunction.flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let explicitLocal = contextualFunction.flow.getScopedLocal("this");
+        if (flow.is(FlowFlags.INLINE_CONTEXT)) {
+          let explicitLocal = flow.lookupLocal("this");
           if (explicitLocal) {
             this.currentThisExpression = null;
             this.currentElementExpression = null;
             return explicitLocal;
           }
         }
-        let parent = contextualFunction.parent;
+        let parent = flow.parentFunction.parent;
         if (parent) {
           this.currentThisExpression = null;
           this.currentElementExpression = null;
@@ -811,15 +817,15 @@ export class Resolver extends DiagnosticEmitter {
         return null;
       }
       case NodeKind.SUPER: { // -> Class
-        if (contextualFunction.flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let explicitLocal = contextualFunction.flow.getScopedLocal("super");
+        if (flow.is(FlowFlags.INLINE_CONTEXT)) {
+          let explicitLocal = flow.lookupLocal("super");
           if (explicitLocal) {
             this.currentThisExpression = null;
             this.currentElementExpression = null;
             return explicitLocal;
           }
         }
-        let parent = contextualFunction.parent;
+        let parent = flow.actualFunction.parent;
         if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
           this.currentThisExpression = null;
           this.currentElementExpression = null;
@@ -834,7 +840,7 @@ export class Resolver extends DiagnosticEmitter {
         return null;
       }
       case NodeKind.IDENTIFIER: {
-        return this.resolveIdentifier(<IdentifierExpression>expression, contextualFunction, reportMode);
+        return this.resolveIdentifier(<IdentifierExpression>expression, flow, flow.actualFunction, reportMode);
       }
       case NodeKind.LITERAL: {
         switch ((<LiteralExpression>expression).literalKind) {
@@ -871,7 +877,7 @@ export class Resolver extends DiagnosticEmitter {
       case NodeKind.PROPERTYACCESS: {
         return this.resolvePropertyAccess(
           <PropertyAccessExpression>expression,
-          contextualFunction,
+          flow,
           contextualType,
           reportMode
         );
@@ -879,20 +885,20 @@ export class Resolver extends DiagnosticEmitter {
       case NodeKind.ELEMENTACCESS: {
         return this.resolveElementAccess(
           <ElementAccessExpression>expression,
-          contextualFunction,
+          flow,
           contextualType,
           reportMode
         );
       }
       case NodeKind.CALL: {
         let targetExpression = (<CallExpression>expression).expression;
-        let target = this.resolveExpression(targetExpression, contextualFunction, contextualType, reportMode);
+        let target = this.resolveExpression(targetExpression, flow, contextualType, reportMode);
         if (!target) return null;
         if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
           let instance = this.resolveFunctionInclTypeArguments(
             <FunctionPrototype>target,
             (<CallExpression>expression).typeArguments,
-            makeMap<string,Type>(contextualFunction.flow.contextualTypeArguments),
+            makeMap<string,Type>(flow.contextualTypeArguments),
             expression,
             reportMode
           );

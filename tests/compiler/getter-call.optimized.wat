@@ -1,7 +1,7 @@
 (module
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 2 funcref)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
@@ -86,13 +86,13 @@
   i32.const 1
   call_indirect (type $i)
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )

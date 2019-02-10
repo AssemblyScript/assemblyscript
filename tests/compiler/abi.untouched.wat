@@ -1,7 +1,7 @@
 (module
  (type $i (func (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\06\00\00\00a\00b\00i\00.\00t\00s\00")
@@ -36,7 +36,7 @@
   i32.const 24
   i32.shr_s
  )
- (func $start (; 5 ;) (type $v)
+ (func $start (; 5 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $abi/internal
@@ -211,6 +211,6 @@
    end
   end
  )
- (func $null (; 6 ;) (type $v)
+ (func $null (; 6 ;) (type $_)
  )
 )

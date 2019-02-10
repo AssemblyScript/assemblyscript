@@ -1,9 +1,9 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
- (type $v (func))
+ (type $iii_ (func (param i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\03\00\00\00\00\00\00\00\00\01\02\00\00\00\00\00")
@@ -40,6 +40,8 @@
  (func $~lib/array/Array<i8>#__get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.load
   local.set $2
@@ -50,14 +52,18 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
-   i32.const 0
-   local.set $3
    local.get $2
+   local.set $3
    local.get $1
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $3
+   local.get $4
    i32.const 0
    i32.shl
    i32.add
-   local.get $3
+   local.get $5
    i32.add
    i32.load8_s offset=8
   else   
@@ -67,6 +73,8 @@
  (func $~lib/array/Array<i32>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.load
   local.set $2
@@ -77,14 +85,18 @@
   i32.shr_u
   i32.lt_u
   if (result i32)
-   i32.const 0
-   local.set $3
    local.get $2
+   local.set $3
    local.get $1
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $3
+   local.get $4
    i32.const 2
    i32.shl
    i32.add
-   local.get $3
+   local.get $5
    i32.add
    i32.load offset=8
   else   
@@ -216,7 +228,7 @@
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/memory/memset (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 7 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -475,6 +487,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 1073741816
   i32.gt_u
@@ -514,34 +527,44 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  local.get $3
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $2
-  call $~lib/internal/memory/memset
+  block $memory.fill|inlined.0
+   local.get $3
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
   local.get $0
  )
- (func $~lib/array/Array<i8>#__unchecked_set (; 9 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i8>#__unchecked_set (; 9 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   i32.load
   local.set $3
-  i32.const 0
-  local.set $4
-  local.get $3
   local.get $1
+  local.set $4
+  local.get $2
+  local.set $5
+  i32.const 0
+  local.set $6
+  local.get $3
+  local.get $4
   i32.const 0
   i32.shl
   i32.add
-  local.get $4
+  local.get $6
   i32.add
-  local.get $2
+  local.get $5
   i32.store8 offset=8
  )
  (func $~lib/array/Array<i32>#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -549,6 +572,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 268435454
   i32.gt_u
@@ -588,34 +612,44 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  local.get $3
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $2
-  call $~lib/internal/memory/memset
+  block $memory.fill|inlined.1
+   local.get $3
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
   local.get $0
  )
- (func $~lib/array/Array<i32>#__unchecked_set (; 11 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__unchecked_set (; 11 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   i32.load
   local.set $3
-  i32.const 0
-  local.set $4
-  local.get $3
   local.get $1
+  local.set $4
+  local.get $2
+  local.set $5
+  i32.const 0
+  local.set $6
+  local.get $3
+  local.get $4
   i32.const 2
   i32.shl
   i32.add
-  local.get $4
+  local.get $6
   i32.add
-  local.get $2
+  local.get $5
   i32.store offset=8
  )
  (func $std/array-literal/Ref#constructor (; 12 ;) (type $ii) (param $0 i32) (result i32)
@@ -633,6 +667,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 268435454
   i32.gt_u
@@ -672,34 +707,44 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  local.get $3
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $2
-  call $~lib/internal/memory/memset
+  block $memory.fill|inlined.2
+   local.get $3
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#__unchecked_set (; 14 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref>#__unchecked_set (; 14 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   i32.load
   local.set $3
-  i32.const 0
-  local.set $4
-  local.get $3
   local.get $1
+  local.set $4
+  local.get $2
+  local.set $5
+  i32.const 0
+  local.set $6
+  local.get $3
+  local.get $4
   i32.const 2
   i32.shl
   i32.add
-  local.get $4
+  local.get $6
   i32.add
-  local.get $2
+  local.get $5
   i32.store offset=8
  )
  (func $std/array-literal/RefWithCtor#constructor (; 15 ;) (type $ii) (param $0 i32) (result i32)
@@ -717,6 +762,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 268435454
   i32.gt_u
@@ -756,37 +802,47 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  local.get $3
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $2
-  call $~lib/internal/memory/memset
+  block $memory.fill|inlined.3
+   local.get $3
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 17 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 17 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   i32.load
   local.set $3
-  i32.const 0
-  local.set $4
-  local.get $3
   local.get $1
+  local.set $4
+  local.get $2
+  local.set $5
+  i32.const 0
+  local.set $6
+  local.get $3
+  local.get $4
   i32.const 2
   i32.shl
   i32.add
-  local.get $4
+  local.get $6
   i32.add
-  local.get $2
+  local.get $5
   i32.store offset=8
  )
- (func $start (; 18 ;) (type $v)
+ (func $start (; 18 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1226,6 +1282,6 @@
    unreachable
   end
  )
- (func $null (; 19 ;) (type $v)
+ (func $null (; 19 ;) (type $_)
  )
 )

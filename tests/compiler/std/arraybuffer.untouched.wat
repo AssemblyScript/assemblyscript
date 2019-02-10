@@ -1,11 +1,11 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
@@ -154,7 +154,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -412,6 +412,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
   i32.gt_u
@@ -437,14 +438,16 @@
    local.set $4
    i32.const 0
    local.set $5
+   local.get $1
+   local.set $6
    local.get $4
    local.get $5
-   local.get $1
+   local.get $6
    call $~lib/internal/memory/memset
   end
   local.get $3
  )
- (func $~lib/internal/memory/memcpy (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 6 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1645,7 +1648,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 7 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 7 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1878,6 +1881,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   local.get $0
   i32.load
   local.set $3
@@ -1947,20 +1951,24 @@
   local.get $6
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $7
-  local.get $7
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  local.get $0
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.get $1
-  i32.add
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $6
-  call $~lib/internal/memory/memmove
+  block $memory.copy|inlined.0
+   local.get $7
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   local.get $0
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.get $1
+   i32.add
+   local.set $5
+   local.get $6
+   local.set $8
+   local.get $4
+   local.get $5
+   local.get $8
+   call $~lib/internal/memory/memmove
+  end
   local.get $7
  )
  (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -2047,6 +2055,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 1073741816
   i32.gt_u
@@ -2065,16 +2074,20 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  local.get $3
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $2
-  call $~lib/internal/memory/memset
+  block $memory.fill|inlined.1
+   local.get $3
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
   block (result i32)
    local.get $0
    i32.eqz
@@ -2123,6 +2136,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 268435454
   i32.gt_u
@@ -2141,16 +2155,20 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  local.get $3
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
-  i32.add
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $4
-  local.get $5
-  local.get $2
-  call $~lib/internal/memory/memset
+  block $memory.fill|inlined.2
+   local.get $3
+   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.add
+   local.set $4
+   i32.const 0
+   local.set $5
+   local.get $2
+   local.set $6
+   local.get $4
+   local.get $5
+   local.get $6
+   call $~lib/internal/memory/memset
+  end
   block (result i32)
    local.get $0
    i32.eqz
@@ -2283,7 +2301,7 @@
   local.get $3
   call $~lib/dataview/DataView#constructor
  )
- (func $start (; 22 ;) (type $v)
+ (func $start (; 22 ;) (type $_)
   (local $0 i32)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
@@ -2642,6 +2660,6 @@
    unreachable
   end
  )
- (func $null (; 23 ;) (type $v)
+ (func $null (; 23 ;) (type $_)
  )
 )

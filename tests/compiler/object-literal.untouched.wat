@@ -1,10 +1,10 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iv (func (param i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $i_ (func (param i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d\00")
@@ -203,7 +203,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $object-literal/bar (; 5 ;) (type $iv) (param $0 i32)
+ (func $object-literal/bar (; 5 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -231,7 +231,7 @@
    unreachable
   end
  )
- (func $object-literal/bar2 (; 6 ;) (type $iv) (param $0 i32)
+ (func $object-literal/bar2 (; 6 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.load
   i32.const 2
@@ -246,7 +246,7 @@
    unreachable
   end
  )
- (func $object-literal/Foo2#test (; 7 ;) (type $iv) (param $0 i32)
+ (func $object-literal/Foo2#test (; 7 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.load
   i32.const 3
@@ -261,7 +261,7 @@
    unreachable
   end
  )
- (func $start (; 8 ;) (type $v)
+ (func $start (; 8 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -309,6 +309,6 @@
   end
   call $object-literal/Foo2#test
  )
- (func $null (; 9 ;) (type $v)
+ (func $null (; 9 ;) (type $_)
  )
 )

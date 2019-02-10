@@ -1,14 +1,14 @@
 (module
  (type $ii (func (param i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iv (func (param i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $i_ (func (param i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $iiv (func (param i32 i32)))
- (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
- (type $v (func))
+ (type $ii_ (func (param i32 i32)))
+ (type $iiiii_ (func (param i32 i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\03\00\00\001\002\003\00")
@@ -218,7 +218,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 6 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 6 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -476,6 +476,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
   i32.gt_u
@@ -501,14 +502,16 @@
    local.set $4
    i32.const 0
    local.set $5
+   local.get $1
+   local.set $6
    local.get $4
    local.get $5
-   local.get $1
+   local.get $6
    call $~lib/internal/memory/memset
   end
   local.get $3
  )
- (func $~lib/map/Map<String,usize>#clear (; 8 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<String,usize>#clear (; 8 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -568,7 +571,7 @@
   call $~lib/map/Map<String,usize>#clear
   local.get $0
  )
- (func $~lib/map/Map<usize,String>#clear (; 10 ;) (type $iv) (param $0 i32)
+ (func $~lib/map/Map<usize,String>#clear (; 10 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -819,10 +822,13 @@
   i32.const 0
  )
  (func $~lib/map/Map<String,usize>#has (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<String>|inlined.0 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hashStr
    br $~lib/internal/hash/HASH<String>|inlined.0
   end
@@ -832,24 +838,27 @@
  )
  (func $~lib/map/Map<String,usize>#get (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<String>|inlined.1 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hashStr
    br $~lib/internal/hash/HASH<String>|inlined.1
   end
   call $~lib/map/Map<String,usize>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   if (result i32)
-   local.get $2
+   local.get $3
    i32.load offset=4
   else   
    unreachable
   end
  )
- (func $~lib/map/Map<String,usize>#rehash (; 18 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<String,usize>#rehash (; 18 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -989,25 +998,27 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<String,usize>#set (; 19 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<String,usize>#set (; 19 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   block $~lib/internal/hash/HASH<String>|inlined.2 (result i32)
    local.get $1
+   local.set $3
+   local.get $3
    call $~lib/internal/hash/hashStr
    br $~lib/internal/hash/HASH<String>|inlined.2
   end
-  local.set $3
+  local.set $4
   local.get $0
   local.get $1
-  local.get $3
-  call $~lib/map/Map<String,usize>#find
-  local.set $4
   local.get $4
+  call $~lib/map/Map<String,usize>#find
+  local.set $5
+  local.get $5
   if
-   local.get $4
+   local.get $5
    local.get $2
    i32.store offset=4
   else   
@@ -1042,8 +1053,8 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $5
-   local.get $5
+   local.set $3
+   local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
    block (result i32)
@@ -1061,11 +1072,11 @@
    end
    i32.mul
    i32.add
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    local.get $1
    i32.store
-   local.get $4
+   local.get $5
    local.get $2
    i32.store offset=4
    local.get $0
@@ -1076,7 +1087,7 @@
    i32.store offset=20
    local.get $0
    i32.load
-   local.get $3
+   local.get $4
    local.get $0
    i32.load offset=4
    i32.and
@@ -1084,12 +1095,12 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $4
+   local.get $5
    local.get $6
    i32.load offset=8
    i32.store offset=8
    local.get $6
-   local.get $4
+   local.get $5
    i32.store offset=8
   end
  )
@@ -1186,7 +1197,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<usize,String>#rehash (; 22 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,String>#rehash (; 22 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1326,25 +1337,27 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<usize,String>#set (; 23 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<usize,String>#set (; 23 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   block $~lib/internal/hash/HASH<usize>|inlined.0 (result i32)
    local.get $1
+   local.set $3
+   local.get $3
    call $~lib/internal/hash/hash32
    br $~lib/internal/hash/HASH<usize>|inlined.0
   end
-  local.set $3
+  local.set $4
   local.get $0
   local.get $1
-  local.get $3
-  call $~lib/map/Map<usize,String>#find
-  local.set $4
   local.get $4
+  call $~lib/map/Map<usize,String>#find
+  local.set $5
+  local.get $5
   if
-   local.get $4
+   local.get $5
    local.get $2
    i32.store offset=4
   else   
@@ -1379,8 +1392,8 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $5
-   local.get $5
+   local.set $3
+   local.get $3
    global.get $~lib/internal/arraybuffer/HEADER_SIZE
    i32.add
    block (result i32)
@@ -1398,11 +1411,11 @@
    end
    i32.mul
    i32.add
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    local.get $1
    i32.store
-   local.get $4
+   local.get $5
    local.get $2
    i32.store offset=4
    local.get $0
@@ -1413,7 +1426,7 @@
    i32.store offset=20
    local.get $0
    i32.load
-   local.get $3
+   local.get $4
    local.get $0
    i32.load offset=4
    i32.and
@@ -1421,12 +1434,12 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $4
+   local.get $5
    local.get $6
    i32.load offset=8
    i32.store offset=8
    local.get $6
-   local.get $4
+   local.get $5
    i32.store offset=8
   end
  )
@@ -1478,10 +1491,13 @@
   local.get $2
  )
  (func $~lib/map/Map<usize,String>#has (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<usize>|inlined.2 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hash32
    br $~lib/internal/hash/HASH<usize>|inlined.2
   end
@@ -1491,18 +1507,21 @@
  )
  (func $~lib/map/Map<usize,String>#get (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   local.get $1
   block $~lib/internal/hash/HASH<usize>|inlined.3 (result i32)
    local.get $1
+   local.set $2
+   local.get $2
    call $~lib/internal/hash/hash32
    br $~lib/internal/hash/HASH<usize>|inlined.3
   end
   call $~lib/map/Map<usize,String>#find
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
   if (result i32)
-   local.get $2
+   local.get $3
    i32.load offset=4
   else   
    unreachable
@@ -1569,7 +1588,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/memory/memcpy (; 29 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 29 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2770,7 +2789,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 30 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 30 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -2997,7 +3016,7 @@
    end
   end
  )
- (func $~lib/internal/string/copyUnsafe (; 31 ;) (type $iiiiiv) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 31 ;) (type $iiiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -3281,7 +3300,7 @@
   i32.const 592
   call $~lib/string/String.__concat
  )
- (func $start (; 35 ;) (type $v)
+ (func $start (; 35 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -3450,6 +3469,6 @@
   global.get $~lib/symbol/Symbol.isConcatSpreadable
   drop
  )
- (func $null (; 36 ;) (type $v)
+ (func $null (; 36 ;) (type $_)
  )
 )

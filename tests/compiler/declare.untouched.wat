@@ -1,6 +1,6 @@
 (module
- (type $v (func))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $_ (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (import "declare" "externalConstant" (global $declare/externalConstant i32))
  (import "declare" "my.externalConstant" (global $declare/my.externalConstant i32))
  (import "declare" "externalFunction" (func $declare/externalFunction))
@@ -14,7 +14,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
   call $declare/externalFunction
   global.get $declare/externalConstant
   i32.const 1
@@ -42,6 +42,6 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $_)
  )
 )
