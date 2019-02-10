@@ -2366,7 +2366,7 @@ export namespace SafeMath {
       if (x <= 3) return <T>1;
 
       let res = <T>0;
-      let add = <T>1 << (sizeof<T>() * 4 - 1)
+      let add = <T>1 << (sizeof<T>() * 4 / 2 - 1);
       let tmp: T;
       for (let i = 0; i < sizeof<T>() * 4; ++i) {
         tmp = res | add;
