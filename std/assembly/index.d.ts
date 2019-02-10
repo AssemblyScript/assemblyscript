@@ -933,7 +933,11 @@ declare function global(
 ): TypedPropertyDescriptor<any> | void;
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
-declare function operator(token: string): (
+declare function operator(token:
+  "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
+  "&"  | "|"   | "^"  | "+"   | "-"  | "*"  | "/" | "%" | "**" |
+  ">>" | ">>>" | "<<"
+): (
   target: any,
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<any>
@@ -941,19 +945,23 @@ declare function operator(token: string): (
 
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
-  export function binary(token: string): (
+  export function binary(token:
+    "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
+    "&"  | "|"   | "^"  | "+"   | "-"  | "*"  | "/" | "%" | "**" |
+    ">>" | ">>>" | "<<"
+  ): (
     target: any,
     propertyKey: string,
     descriptor: TypedPropertyDescriptor<any>
   ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
-  export function prefix(token: string): (
+  export function prefix(token: "!" | "~" | "+" | "-" | "++" | "--"): (
     target: any,
     propertyKey: string,
     descriptor: TypedPropertyDescriptor<any>
   ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary postfix operator overload for the specified `token`. */
-  export function postfix(token: string): (
+  export function postfix(token: "++" | "--"): (
     target: any,
     propertyKey: string,
     descriptor: TypedPropertyDescriptor<any>
