@@ -4,7 +4,6 @@
     "lib": ["dom", "es2015", "esnext.bigint", "es2017.typedarrays"],
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "lib",
     "target": "es6",
     "strict": true,
     "plugins": [
@@ -12,6 +11,9 @@
     ]
   },
   "include": [
-    "src/**/*.ts"
+    "**/*.ts"
+  ],
+  "exclude": [
+    "assembly/**/*.ts"
   ]
 }

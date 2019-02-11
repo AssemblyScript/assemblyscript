@@ -427,6 +427,11 @@ function createContext(imports: any = {}) {
     if (env.memory instanceof MemoryWrapper) {
         env.memory = env.memory.raw;
     }
+    for (let _import in ctx.imports){
+      if (ctx.imports[_import]._bindMemory) {
+        ctx.imports[_import]._bindMemory(ctx.memory)
+      }
+    }
     return ctx;
 }
 
@@ -437,7 +442,7 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
     ctx.memory = MemoryWrapper.resolve(instance.exports.memory);
     ctx.memory.setExports(instance.exports);
 
-    const resolved: any = {};
+    let resolved: any = {};
     for (const internalName in instance.exports) {
         if (!utils.hasOwnProperty(instance.exports, internalName)) { continue; }
         // resolve nested objects
@@ -519,11 +524,17 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
             }
         }
     }
-    return {
+    resolved = {
         memory: ctx.memory,
         table,
         ...resolved,
     };
+    for (let _import in ctx.imports){
+      if (ctx.imports[_import]._bindInstance){
+        ctx.imports[_import]._bindInstance(resolved);
+      }
+    }
+    return resolved;
 }
 
 type idFunc<T> = (t: T) => T
@@ -539,23 +550,17 @@ export function instantiate<T = ASExport>(module: WebAssembly.Module, imports: {
     const ctx = createContext(imports);
     const instance = new WebAssembly.Instance(module, ctx.imports);
     var res = resolveContext<T>(instance, ctx);
-    if (imports.post){
-      imports.post.map((fn)=>{
-        res = fn(res);
-      })
-    }
     return res;
 }
 
 /** Instantiates an AssemblyScript module from a buffer using the specified imports. */
 export function instantiateBuffer<T = ASExport>(buffer: any, imports: {pre?:Array<preResolve>, post?:postArr<T>} = {}): ASInstance & T {
-   var _buffer = buffer;
-    if (imports.pre){
-      imports.pre.map((fn)=>{
-        _buffer = fn(_buffer);
-      })
-    }
-    return instantiate(new WebAssembly.Module(_buffer), imports);
+    // if (imports.pre){
+    //   imports.pre.map((fn)=>{
+    //     _buffer = fn(_buffer);
+    //   })
+    // }
+    return instantiate(new WebAssembly.Module(buffer), imports);
 }
 
 /** Instantiates an AssemblyScript module from a response using the specified imports. */

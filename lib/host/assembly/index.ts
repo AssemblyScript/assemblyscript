@@ -20,10 +20,6 @@ export function log<T>(item: T):void {
   }
 }
 
-export function log_str(item: string): void {
-  log<string>(item);
-}
-
 export function err(message: string): void {
   log("Error: " + message);
   unreachable();

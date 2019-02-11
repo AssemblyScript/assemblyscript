@@ -8,10 +8,15 @@ declare module ASModule {
   type f32 = number;
   type f64 = number;
   type bool = any;
+  class Car {
+    static i(): i32;
+    constructor();
+    weight: i32;
+    length: i32;
+    createAnother(): u32;
+  }
   function runTest(): void;
   namespace memory {
-    function fill(dest: u32, c: u8, n: u32): void;
-    function copy(dest: u32, src: u32, n: u32): void;
     function compare(vl: u32, vr: u32, n: u32): i32;
     function allocate(size: u32): u32;
     function free(ptr: u32): void;

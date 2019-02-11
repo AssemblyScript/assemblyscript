@@ -64,11 +64,21 @@ export declare namespace utils {
     function computeBufferSize(byteLength: number): number;
     function hasOwnProperty(obj: any, key: any): boolean;
 }
+declare type idFunc<T> = (t: T) => T;
+declare type postResolve<T> = idFunc<ASInstance & T>;
+declare type preResolve = idFunc<ArrayBuffer | Uint8Array>;
+declare type postArr<T> = Array<postResolve<T>>;
 /** Instantiates an AssemblyScript module using the specified imports. */
-export declare function instantiate<T = ASExport>(module: WebAssembly.Module, imports?: any): ASInstance & T;
+export declare function instantiate<T = ASExport>(module: WebAssembly.Module, imports?: {
+    post?: postArr<T>;
+}): ASInstance & T;
 /** Instantiates an AssemblyScript module from a buffer using the specified imports. */
-export declare function instantiateBuffer<T = ASExport>(buffer: any, imports?: any): ASInstance & T;
+export declare function instantiateBuffer<T = ASExport>(buffer: any, imports?: {
+    pre?: Array<preResolve>;
+    post?: postArr<T>;
+}): ASInstance & T;
 /** Creates a wrapped memory instance. */
 export declare function createMemory(descriptor: WebAssembly.MemoryDescriptor): ASMemory;
 /** Demangles an AssemblyScript module's exports to a friendly object structure. */
 export declare function demangle<T = ASExport>(instance: WebAssembly.Instance): ASInstance & ASExport;
+export {};
