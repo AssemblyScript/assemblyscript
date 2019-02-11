@@ -2392,6 +2392,12 @@ export namespace SafeMath {
     }
     throw new Error("Unexpected generic type");
   }
+
+  // floor(log2(x))
+  @inline
+  export function log2<T>(x: T): T {
+    return <T>(sizeof<T>() * 4 - 1) - builtin_clz<T>(x);
+  }
 }
 
 export function ipow32(x: i32, e: i32): i32 {
