@@ -2396,7 +2396,13 @@ export namespace SafeMath {
   // floor(log2(x))
   @inline
   export function log2<T>(x: T): T {
-    return <T>(sizeof<T>() * 4 - 1) - builtin_clz<T>(x);
+    if (isInteger<T>()) {
+      if (isSigned<T>()) {
+        if (x <= 0) return <T>-1;
+      }
+      return <T>(sizeof<T>() * 4 - 1) - builtin_clz<T>(x);
+    }
+    throw new Error("Unexpected generic type");
   }
 }
 
