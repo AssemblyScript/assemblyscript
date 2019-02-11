@@ -2347,13 +2347,13 @@ export namespace SafeMath {
   }
 
   @inline
-  export function sign<T>(x: T): T {
+  export function sign<T>(x: T): i32 {
     if (isInteger<T>()) {
-      if (!x) return <T>0;
+      if (!x) return 0;
       if (isSigned<T>()) {
-        return 1 - (x >> (sizeof<T>() * 4 - 1) << 1);
+        return 1 - <i32>(x >>> (sizeof<T>() * 4 - 1) << 1);
       } else {
-        return <T>1;
+        return 1;
       }
     }
     throw new Error("Unexpected generic type");
@@ -2362,11 +2362,10 @@ export namespace SafeMath {
   @inline
   export function signbit<T>(x: T): bool {
     if (isInteger<T>()) {
-      if (!x) return <T>0;
       if (isSigned<T>()) {
-        return <bool>(x >> (sizeof<T>() * 4 - 1));
+        return <bool>(x >>> (sizeof<T>() * 4 - 1));
       } else {
-        return <T>1;
+        return true;
       }
     }
     throw new Error("Unexpected generic type");
