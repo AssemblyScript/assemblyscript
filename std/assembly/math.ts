@@ -2351,7 +2351,7 @@ export namespace SafeMath {
     if (isInteger<T>()) {
       if (!x) return 0;
       if (isSigned<T>()) {
-        return 1 - <i32>(x >>> (sizeof<T>() * 4 - 1) << 1);
+        return 1 - <i32>(x >>> (sizeof<T>() * 8 - 1) << 1);
       } else {
         return 1;
       }
@@ -2363,7 +2363,7 @@ export namespace SafeMath {
   export function signbit<T>(x: T): bool {
     if (isInteger<T>()) {
       if (isSigned<T>()) {
-        return <bool>(x >>> (sizeof<T>() * 4 - 1));
+        return <bool>(x >>> (sizeof<T>() * 8 - 1));
       } else {
         return true;
       }
@@ -2378,9 +2378,9 @@ export namespace SafeMath {
       if (x <= 3) return <T>1;
 
       let res = <T>0;
-      let add = <T>1 << (sizeof<T>() * 4 / 2 - 1);
+      let add = <T>1 << (sizeof<T>() * 8 / 2 - 1);
       let tmp: T;
-      for (let i = 0; i < sizeof<T>() * 4; ++i) {
+      for (let i = 0; i < sizeof<T>() * 8; ++i) {
         tmp = res | add;
         let sqr = tmp * tmp;
         if (x >= sqr) {
@@ -2400,7 +2400,7 @@ export namespace SafeMath {
       if (isSigned<T>()) {
         if (x <= 0) return <T>-1;
       }
-      return <T>(sizeof<T>() * 4 - 1) - builtin_clz<T>(x);
+      return <T>(sizeof<T>() * 8 - 1) - builtin_clz<T>(x);
     }
     throw new Error("Unexpected generic type");
   }
