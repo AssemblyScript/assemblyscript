@@ -27,7 +27,8 @@ import {
 
 import {
   Type,
-  TypeKind
+  TypeKind,
+  TypeFlags
 } from "./types";
 
 import {
@@ -464,6 +465,9 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   typeToString(type: Type): string {
+    if (type.is(TypeFlags.REFERENCE)){
+      return type.toString();
+    }
     switch (type.kind) {
       case TypeKind.I8: return "i8";
       case TypeKind.I16: return "i16";
@@ -491,7 +495,7 @@ export class TSDBuilder extends ExportsWalker {
 
   build(): string {
     var sb = this.sb;
-    sb.push("declare module ASModule {\n");
+    sb.push("declare namespace ASModule {\n");
     sb.push("  type i8 = number;\n");
     sb.push("  type i16 = number;\n");
     sb.push("  type i32 = number;\n");

@@ -1,0 +1,24 @@
+{
+  "name": "@assemblyscript/host",
+  "version": "2.0.0",
+  "license": "Apache-2.0",
+  "main": "./lib/index",
+  "typings": "./lib/index",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc",
+    "asbuild:test": "../../bin/asc tests/assembly/index.ts --importMemory -b tests/build/untouched.wasm -t tests/build/untouched.wat -d tests/build/index.d.ts --debug",
+    "test": "ts-node tests",
+    "debug": "node -r ts-node/register --inspect-brk=5858 tests/index.ts"
+  },
+  "files": [
+    "lib/*",
+    "assembly/*"
+  ],
+  "devDependencies": {
+    "@types/node": "^10.12.24",
+    "@types/webassembly-js-api": "0.0.1",
+    "typescript": "^3.2.2"
+  },
+  "dependencies": {}
+}

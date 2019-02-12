@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "lib": ["dom", "es2015", "esnext.bigint", "es2017.typedarrays"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es6",
+    "strict": true,
+    "plugins": [
+      { "transform": "ts-transformer-keys/transformer" }
+    ]
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "assembly/**/*.ts"
+  ]
+}

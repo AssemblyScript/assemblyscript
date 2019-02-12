@@ -427,6 +427,11 @@ function createContext(imports: any = {}) {
     if (env.memory instanceof MemoryWrapper) {
         env.memory = env.memory.raw;
     }
+    for (let _import in ctx.imports){
+      if (ctx.imports[_import]._bindMemory) {
+        ctx.imports[_import]._bindMemory(ctx.memory)
+      }
+    }
     return ctx;
 }
 
@@ -437,7 +442,7 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
     ctx.memory = MemoryWrapper.resolve(instance.exports.memory);
     ctx.memory.setExports(instance.exports);
 
-    const resolved: any = {};
+    let resolved: any = {};
     for (const internalName in instance.exports) {
         if (!utils.hasOwnProperty(instance.exports, internalName)) { continue; }
         // resolve nested objects
@@ -455,13 +460,20 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
         }
         const elem = instance.exports[internalName];
         const hash = name.indexOf('#');
+        let bang = name.indexOf('!');
+        let refType = bang > 0 ? name.substring(bang + 1): null;
+        if (refType){
+          name = name.substring(0, bang);
+        }
         if (hash >= 0) {
             // resolve classes
             const className = name.substring(0, hash);
             const classElem = curr[className];
             if (typeof classElem === 'undefined' || !classElem.prototype) {
                 const ctor: any = function(...args: any[]) {
-                    return ctor.wrap(ctor.prototype.constructor(0, ...args));
+                    let _args = args.map(e => e[SELF_REF] | e);
+                    debugger;
+                    return ctor.wrap(ctor.prototype.constructor(0, ..._args));
                 };
                 ctor.prototype = {};
                 ctor.wrap = function(thisValue: any) {
@@ -471,6 +483,7 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
                 };
                 if (classElem) {
                     Object.getOwnPropertyNames(classElem).forEach((propName) => {
+                      console.log(classElem.constructor.name + " " + propName)
                         Object.defineProperty(ctor, propName, Object.getOwnPropertyDescriptor(classElem, propName)!);
                     });
                 }
@@ -484,8 +497,11 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
                     const getter = instance.exports[internalName.replace('set:', 'get:')];
                     const setter = instance.exports[internalName.replace('get:', 'set:')];
                     Object.defineProperty(curr, name, {
-                        get() { return getter(this[SELF_REF]); },
-                        set(value) { setter(this[SELF_REF], value); },
+                        get() {
+                          let ptr = getter(this[SELF_REF]);
+                          return refType ? resolved[refType].wrap(ptr) : ptr;
+                        },
+                        set(value) { setter(this[SELF_REF], value[SELF_REF] | value); },
                         enumerable: true,
                     });
                 }
@@ -496,7 +512,9 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
                     Object.defineProperty(curr, name, {
                         value(...args: any[]) {
                             table.setargc(args.length);
-                            return elem(this[SELF_REF], ...args);
+                            let _args = args.map(e => e[SELF_REF] | e);
+                            let ptr = elem(this[SELF_REF], ..._args);
+                            return refType ? resolved[refType].wrap(ptr) : ptr;
                         },
                     });
                 }
@@ -519,22 +537,42 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
             }
         }
     }
-    return {
+    resolved = {
         memory: ctx.memory,
         table,
         ...resolved,
     };
+    for (let _import in ctx.imports){
+      if (ctx.imports[_import]._bindInstance){
+        ctx.imports[_import]._bindInstance(resolved);
+      }
+    }
+    return resolved;
 }
 
+type idFunc<T> = (t: T) => T
+
+type postResolve<T> = idFunc<ASInstance & T>;
+type preResolve = idFunc<ArrayBuffer | Uint8Array>;
+type postArr<T> = Array<postResolve<T>>;
+
+
+
 /** Instantiates an AssemblyScript module using the specified imports. */
-export function instantiate<T = ASExport>(module: WebAssembly.Module, imports: any = {}): ASInstance & T {
+export function instantiate<T = ASExport>(module: WebAssembly.Module, imports: {post?: postArr<T>} = {}): ASInstance & T {
     const ctx = createContext(imports);
     const instance = new WebAssembly.Instance(module, ctx.imports);
-    return resolveContext(instance, ctx);
+    var res = resolveContext<T>(instance, ctx);
+    return res;
 }
 
 /** Instantiates an AssemblyScript module from a buffer using the specified imports. */
-export function instantiateBuffer<T = ASExport>(buffer: any, imports: any = {}): ASInstance & T {
+export function instantiateBuffer<T = ASExport>(buffer: any, imports: {pre?:Array<preResolve>, post?:postArr<T>} = {}): ASInstance & T {
+    // if (imports.pre){
+    //   imports.pre.map((fn)=>{
+    //     _buffer = fn(_buffer);
+    //   })
+    // }
     return instantiate(new WebAssembly.Module(buffer), imports);
 }
 

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "lib": ["dom", "es2015", "esnext.bigint", "es2017.typedarrays"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "lib",
+    "target": "es6",
+    "strict": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
