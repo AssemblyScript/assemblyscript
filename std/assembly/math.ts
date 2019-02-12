@@ -2290,6 +2290,14 @@ export namespace NativeMathf {
 export namespace SafeMath {
 
   @inline
+  export function abs<T>(x: T): T {
+    if (isInteger<T>()) {
+      return builtin_abs<T>(x);
+    }
+    throw new TypeError("Unexpected generic type");
+  }
+
+  @inline
   export function clz<T>(x: T): T {
     if (isInteger<T>()) {
       return builtin_clz<T>(x);
@@ -2317,14 +2325,6 @@ export namespace SafeMath {
   export function max<T>(x: T, y: T): T {
     if (isInteger<T>()) {
       return builtin_max<T>(x, y);
-    }
-    throw new TypeError("Unexpected generic type");
-  }
-
-  @inline
-  export function abs<T>(x: T): T {
-    if (isInteger<T>()) {
-      return builtin_abs<T>(x);
     }
     throw new TypeError("Unexpected generic type");
   }
@@ -2384,7 +2384,7 @@ export namespace SafeMath {
   export function sign<T>(x: T): i32 {
     if (isInteger<T>()) {
       if (isSigned<T>()) {
-        return select<i32>(0, 1 - <i32>(x >>> (sizeof<T>() * 8 - 1) << 1), !x);
+        return <i32>(x > 0) - <i32>(x < 0);
       } else {
         return <i32>(x != 0);
       }
@@ -2396,7 +2396,7 @@ export namespace SafeMath {
   export function signbit<T>(x: T): bool {
     if (isInteger<T>()) {
       if (isSigned<T>()) {
-        return <bool>(x >>> (sizeof<T>() * 8 - 1));
+        return x < 0;
       } else {
         return false;
       }
