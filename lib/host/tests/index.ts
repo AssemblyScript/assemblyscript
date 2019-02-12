@@ -1,4 +1,4 @@
-import {Host,ASImport, Env} from "../src";
+import {Host, ASImport, Env} from "../src";
 import * as loader from "../../loader/src";
 import * as fs from "fs";
 import ASModule from "./build";

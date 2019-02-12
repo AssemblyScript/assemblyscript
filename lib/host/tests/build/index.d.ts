@@ -9,9 +9,7 @@ declare namespace ASModule {
   type f64 = number;
   type bool = any;
   class Car {
-    static i(): i32;
     constructor(weight: i32);
-    length: i32;
     weight: i32;
     createAnother(weight: i32): Car;
     combine(c: Car): Car;

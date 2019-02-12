@@ -2,6 +2,8 @@
 
 Each Webassembly module with any declared inputs requires an imports object.  Currently this must be handled by the each project, however, there should be a core set of host functions that a WebAssembly module can expect to be present.
 
+## NOTE
+Since this package currently modifiers the compiler you must first run `npm run build` at the root of the project to rebuild the compiler.
 
 ## ASImport
 
@@ -70,3 +72,91 @@ becomes
 ```
 
 The loader then will call the `_bindMemory` before the the module is instantiated and then call `_bindInstance` after.
+
+## Improved loader
+
+The recently improved loader allows you to demangle the names of functions like `Car#function` into methods on a `Car` object.  This makes it easy to interact with the Wasm instance.  Most notably you could use a constructor to construct objects, returning the wrapped AssemblyScript object.  However, values returned from methods would remain unwrapped integers.  This is because only integers and floats can be returned.  To solve this problem the complier was edited to add a suffix to functions that returned a reference type, the loader then uses this information to call the correct wrap function.  Furthermore, the loader now unwraps objects passed to wrapped AssemblyScript methods.
+
+For example, consider the following AssemblyScript class:
+
+```ts
+export class Car {
+  constructor(public weight: i32){};
+
+  createAnother(weight: i32): Car {
+    return new Car(weight);
+  }
+
+  combine(c: Car): Car {
+    return new Car(this.weight + c.weight);
+  }
+}
+```
+This then generates the following WebAssembly:
+```
+(export "Car#constructor" (func $tests/assembly/index/Car#constructor))
+(export "Car#get:length" (func $Car#get:length))
+(export "Car#set:length" (func $Car#set:length))
+(export "Car#get:weight" (func $Car#get:weight))
+(export "Car#set:weight" (func $Car#set:weight))
+(export "Car#createAnother!Car" (func $tests/assembly/index/Car#createAnother))
+(export "Car#combine!Car" (func $tests/assembly/index/Car#combine))
+```
+Note that methods that return `Car` now have the suffix `!Car`, which the loader can use to know that the returned value should be wrapped.
+
+Furthermore, the compiler can generate a type declaration file for the exported class.  Previously it would resolve reference types to their underlying integer references.  Now, however, it returns the reference types, which allows you to use provide the loader with the proper types.
+
+To generate a declaration file you use the compiler option `-d ./build/index.d.ts`, which is the case of the `Car` class would generate:
+
+```ts
+declare namespace ASModule {
+  type i8 = number;
+  type i16 = number;
+  type i32 = number;
+  type u8 = number;
+  type u16 = number;
+  type u32 = number;
+  type f32 = number;
+  type f64 = number;
+  type bool = any;
+  class Car {
+    constructor(weight: i32);
+    weight: i32;
+    createAnother(weight: i32): Car;
+    combine(c: Car): Car;
+  }
+  function runTest(): void;
+  namespace memory {
+    function compare(vl: u32, vr: u32, n: u32): i32;
+    function allocate(size: u32): u32;
+    function free(ptr: u32): void;
+    function reset(): void;
+  }
+}
+export default ASModule;
+```
+
+Lastly, this all means that the TypeScript needed to run the compiled AS is:
+```ts
+import {Host, ASImport, Env} from "../src";
+import * as loader from "../../loader/src";
+import * as fs from "fs";
+import ASModule from "./build";
+type testMod = typeof ASModule; //namespace is a value
+
+
+var wasm = fs.readFileSync(`${__dirname}/build/untouched.wasm`);
+let env = new Env({initial:50})
+let imports = ASImport.createImport(Host, env);
+var instance = loader.instantiateBuffer<testMod>(wasm, imports);
+//Using imports from above and providing the type `testMod` to the loader.
+
+let car: ASModule.Car = new instance.Car(10);
+//Constructor wraps newly allocated Car.
+let car2 = car.createAnother(32);
+//Wraps return Car
+let car3 = car.combine(car2);
+//Unwraps car2 and wraps result.
+console.log(`1:${car.weight} 2:${car2.weight}  3:${car3.weight}`);
+
+```

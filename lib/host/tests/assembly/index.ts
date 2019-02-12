@@ -4,10 +4,7 @@ import "allocator/arena";
 export { memory };
 
 export class Car {
-  length: i32 = 200002;
   constructor(public weight: i32){};
-
-  private static _i: i32 = 10;
 
   createAnother(weight: i32): Car {
     return new Car(weight);
@@ -17,7 +14,6 @@ export class Car {
     return new Car(this.weight + c.weight);
   }
 
-  static i(): i32 { return Car._i;}
 }
 
 export function runTest(): void{

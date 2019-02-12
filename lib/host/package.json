@@ -7,20 +7,18 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "tsc",
-    "test:build": "../../bin/asc tests/assembly/index.ts --importMemory -b tests/build/untouched.wasm -t tests/build/untouched.wat -d tests/build/index.d.ts --debug",
+    "asbuild:test": "../../bin/asc tests/assembly/index.ts --importMemory -b tests/build/untouched.wasm -t tests/build/untouched.wat -d tests/build/index.d.ts --debug",
     "test": "ts-node tests",
     "debug": "node -r ts-node/register --inspect-brk=5858 tests/index.ts"
   },
   "files": [
-    "lib/*"
+    "lib/*",
+    "assembly/*"
   ],
   "devDependencies": {
     "@types/node": "^10.12.24",
     "@types/webassembly-js-api": "0.0.1",
     "typescript": "^3.2.2"
   },
-  "dependencies": {
-    "ts-transformer-keys": "^0.3.4",
-    "ttypescript": "^1.5.6"
-  }
+  "dependencies": {}
 }

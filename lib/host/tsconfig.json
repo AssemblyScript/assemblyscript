@@ -6,10 +6,7 @@
     "moduleResolution": "node",
     "outDir": "lib",
     "target": "es6",
-    "strict": true,
-    "plugins": [
-      { "transform": "ts-transformer-keys/transformer" }
-    ]
+    "strict": true
   },
   "include": [
     "src/**/*.ts"
