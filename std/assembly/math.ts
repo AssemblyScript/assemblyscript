@@ -2349,11 +2349,11 @@ export namespace SafeMath {
   @inline
   export function sign<T>(x: T): i32 {
     if (isInteger<T>()) {
-      if (!x) return 0;
       if (isSigned<T>()) {
+        if (!x) return 0;
         return 1 - <i32>(x >>> (sizeof<T>() * 8 - 1) << 1);
       } else {
-        return 1;
+        return <i32>(x != 0);
       }
     }
     throw new Error("Unexpected generic type");
@@ -2365,7 +2365,7 @@ export namespace SafeMath {
       if (isSigned<T>()) {
         return <bool>(x >>> (sizeof<T>() * 8 - 1));
       } else {
-        return true;
+        return false;
       }
     }
     throw new Error("Unexpected generic type");
@@ -2374,9 +2374,7 @@ export namespace SafeMath {
   @inline
   export function sqrt<T>(x: T): T {
     if (isInteger<T>()) {
-      if (x <= 1) return x;
-      if (x <= 3) return <T>1;
-
+      if (x <= 0) return <T>0;
       let res = <T>0;
       let add = <T>1 << (sizeof<T>() * 8 / 2 - 1);
       let tmp: T;
@@ -2386,7 +2384,7 @@ export namespace SafeMath {
         if (x >= sqr) {
           res = tmp;
         }
-        add >>= 1;
+        add >>>= 1;
       }
       return <T>res;
     }
