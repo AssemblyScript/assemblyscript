@@ -2299,8 +2299,8 @@ export namespace SafeMath {
 
   @inline
   export function clz32<T>(x: T): T {
-    if (isInteger<T>() && sizeof<T>() <= 4) {
-      return builtin_clz<T>(x);
+    if (isInteger<T>()) {
+      return builtin_clz(<u32>x);
     }
     throw new TypeError("Unexpected generic type");
   }
@@ -2330,9 +2330,29 @@ export namespace SafeMath {
   }
 
   @inline
+  export function ceil<T>(x: T): T {
+    return x;
+  }
+
+  @inline
+  export function floor<T>(x: T): T {
+    return x;
+  }
+
+  @inline
+  export function round<T>(x: T): T {
+    return x;
+  }
+
+  @inline
+  export function trunc<T>(x: T): T {
+    return x;
+  }
+
+  @inline
   export function imul<T>(x: T, y: T): T {
     if (isInteger<T>()) {
-      return x * y;
+      return <T>(<i32>x * <i32>y);
     }
     throw new TypeError("Unexpected generic type");
   }
@@ -2346,12 +2366,25 @@ export namespace SafeMath {
     throw new TypeError("Unexpected generic type");
   }
 
+  // floor(log2(x))
+  @inline
+  export function log2<T>(x: T): T {
+    if (isInteger<T>()) {
+      if (isSigned<T>()) {
+        if (x <= 0) throw new RangeError("Math.log2 received negative or zero argument");
+      } else {
+        if (!x) throw new RangeError("Math.log2 received zero argument");
+      }
+      return <T>(sizeof<T>() * 8 - 1) - builtin_clz<T>(x);
+    }
+    throw new TypeError("Unexpected generic type");
+  }
+
   @inline
   export function sign<T>(x: T): i32 {
     if (isInteger<T>()) {
       if (isSigned<T>()) {
-        if (!x) return 0;
-        return 1 - <i32>(x >>> (sizeof<T>() * 8 - 1) << 1);
+        return select<i32>(0, 1 - <i32>(x >>> (sizeof<T>() * 8 - 1) << 1), !x);
       } else {
         return <i32>(x != 0);
       }
@@ -2390,20 +2423,6 @@ export namespace SafeMath {
         add >>>= 1;
       }
       return <T>res;
-    }
-    throw new TypeError("Unexpected generic type");
-  }
-
-  // floor(log2(x))
-  @inline
-  export function log2<T>(x: T): T {
-    if (isInteger<T>()) {
-      if (isSigned<T>()) {
-        if (x <= 0) throw new RangeError("Math.log2 received negative or zero argument");
-      } else {
-        if (!x) throw new RangeError("Math.log2 received zero argument");
-      }
-      return <T>(sizeof<T>() * 8 - 1) - builtin_clz<T>(x);
     }
     throw new TypeError("Unexpected generic type");
   }
