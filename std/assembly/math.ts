@@ -2294,7 +2294,7 @@ export namespace SafeMath {
     if (isInteger<T>()) {
       return builtin_clz<T>(x);
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 
   @inline
@@ -2302,7 +2302,7 @@ export namespace SafeMath {
     if (isInteger<T>() && sizeof<T>() <= 4) {
       return builtin_clz<T>(x);
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 
   @inline
@@ -2310,7 +2310,7 @@ export namespace SafeMath {
     if (isInteger<T>()) {
       return builtin_min<T>(x, y);
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 
   @inline
@@ -2318,7 +2318,7 @@ export namespace SafeMath {
     if (isInteger<T>()) {
       return builtin_max<T>(x, y);
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 
   @inline
@@ -2326,7 +2326,7 @@ export namespace SafeMath {
     if (isInteger<T>()) {
       return builtin_abs<T>(x);
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 
   @inline
@@ -2334,7 +2334,7 @@ export namespace SafeMath {
     if (isInteger<T>()) {
       return x * y;
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 
   @inline
@@ -2343,7 +2343,7 @@ export namespace SafeMath {
       if (sizeof<T>() == 8) return <T>ipow64(<i64>x, y);
       if (sizeof<T>() <= 4) return <T>ipow32(<i32>x, y);
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 
   @inline
@@ -2356,7 +2356,7 @@ export namespace SafeMath {
         return <i32>(x != 0);
       }
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 
   @inline
@@ -2368,13 +2368,16 @@ export namespace SafeMath {
         return false;
       }
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 
   @inline
   export function sqrt<T>(x: T): T {
     if (isInteger<T>()) {
-      if (x <= 0) return <T>0;
+      if (isSigned<T>()) {
+        if (x < 0) throw new RangeError("Math.sqrt received negative argument");
+      }
+      if (!x) return <T>0;
       let res = <T>0;
       let add = <T>1 << (sizeof<T>() * 8 / 2 - 1);
       let tmp: T;
@@ -2388,7 +2391,7 @@ export namespace SafeMath {
       }
       return <T>res;
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 
   // floor(log2(x))
@@ -2396,11 +2399,13 @@ export namespace SafeMath {
   export function log2<T>(x: T): T {
     if (isInteger<T>()) {
       if (isSigned<T>()) {
-        if (x <= 0) return <T>-1;
+        if (x <= 0) throw new RangeError("Math.log2 received negative or zero argument");
+      } else {
+        if (!x) throw new RangeError("Math.log2 received zero argument");
       }
       return <T>(sizeof<T>() * 8 - 1) - builtin_clz<T>(x);
     }
-    throw new Error("Unexpected generic type");
+    throw new TypeError("Unexpected generic type");
   }
 }
 
