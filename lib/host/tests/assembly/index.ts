@@ -4,14 +4,17 @@ import "allocator/arena";
 export { memory };
 
 export class Car {
-  weight: i32 = 10121;
   length: i32 = 200002;
-  constructor(){};
+  constructor(public weight: i32){};
 
   private static _i: i32 = 10;
 
-  createAnother(): Car {
-    return new Car();
+  createAnother(weight: i32): Car {
+    return new Car(weight);
+  }
+
+  combine(c: Car): Car {
+    return new Car(this.weight + c.weight);
   }
 
   static i(): i32 { return Car._i;}
@@ -20,5 +23,5 @@ export class Car {
 export function runTest(): void{
     log<String>("Does the string printing work??");
     log(42);
-    log(new Car());
+    log(new Car(42));
 }

@@ -494,7 +494,12 @@ export class Compiler extends DiagnosticEmitter {
           instance = this.ensureTrampoline(instance);
           this.ensureArgcSet();
         }
-        if (instance.is(CommonFlags.COMPILED)) this.module.addFunctionExport(instance.internalName, prefix + name);
+        let returnTypePostFix = (!name.endsWith("constructor") && signature.returnType.is(TypeFlags.REFERENCE))
+           ? "!" + signature.returnType.toString()
+           : "";
+        if (instance.is(CommonFlags.COMPILED)) {
+           this.module.addFunctionExport(instance.internalName, prefix + name + returnTypePostFix);
+        }
         break;
       }
 

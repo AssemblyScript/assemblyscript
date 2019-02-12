@@ -4,6 +4,7 @@
  (type $i_ (func (param i32)))
  (type $_ (func))
  (type $i (func (result i32)))
+ (type $iii (func (param i32 i32) (result i32)))
  (type $ii_ (func (param i32 i32)))
  (import "env" "memory" (memory $0 1))
  (data (i32.const 8) "\1f\00\00\00D\00o\00e\00s\00 \00t\00h\00e\00 \00s\00t\00r\00i\00n\00g\00 \00p\00r\00i\00n\00t\00i\00n\00g\00 \00w\00o\00r\00k\00?\00?\00")
@@ -24,11 +25,12 @@
  (export "table" (table $0))
  (export "Car.i" (func $tests/assembly/index/Car.i))
  (export "Car#constructor" (func $tests/assembly/index/Car#constructor))
- (export "Car#get:weight" (func $Car#get:weight))
- (export "Car#set:weight" (func $Car#set:weight))
  (export "Car#get:length" (func $Car#get:length))
  (export "Car#set:length" (func $Car#set:length))
- (export "Car#createAnother" (func $tests/assembly/index/Car#createAnother))
+ (export "Car#get:weight" (func $Car#get:weight))
+ (export "Car#set:weight" (func $Car#set:weight))
+ (export "Car#createAnother!Car" (func $tests/assembly/index/Car#createAnother))
+ (export "Car#combine!Car" (func $tests/assembly/index/Car#combine))
  (export "runTest" (func $tests/assembly/index/runTest))
  (export "memory.compare" (func $~lib/memory/memory.compare))
  (export "memory.allocate" (func $~lib/memory/memory.allocate))
@@ -198,7 +200,7 @@
  (func $tests/assembly/index/Car.i (; 11 ;) (type $i) (result i32)
   global.get $tests/assembly/index/Car._i
  )
- (func $tests/assembly/index/Car#constructor (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $tests/assembly/index/Car#constructor (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -207,40 +209,51 @@
    local.set $0
   end
   local.get $0
-  i32.const 10121
+  i32.const 200002
   i32.store
   local.get $0
-  i32.const 200002
+  local.get $1
   i32.store offset=4
   local.get $0
  )
- (func $tests/assembly/index/Car#createAnother (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $tests/assembly/index/Car#createAnother (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
+  local.get $1
   call $tests/assembly/index/Car#constructor
  )
- (func $assembly/index/log<String> (; 14 ;) (type $i_) (param $0 i32)
+ (func $tests/assembly/index/Car#combine (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  i32.const 0
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.load offset=4
+  i32.add
+  call $tests/assembly/index/Car#constructor
+ )
+ (func $assembly/index/log<String> (; 15 ;) (type $i_) (param $0 i32)
   local.get $0
   call $assembly/host/_log_str
  )
- (func $assembly/index/log<i32> (; 15 ;) (type $i_) (param $0 i32)
+ (func $assembly/index/log<i32> (; 16 ;) (type $i_) (param $0 i32)
   local.get $0
   call $assembly/host/_logi
  )
- (func $assembly/index/log<Car> (; 16 ;) (type $i_) (param $0 i32)
+ (func $assembly/index/log<Car> (; 17 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 8
   call $assembly/host/_log<i32>
  )
- (func $tests/assembly/index/runTest (; 17 ;) (type $_)
+ (func $tests/assembly/index/runTest (; 18 ;) (type $_)
   i32.const 8
   call $assembly/index/log<String>
   i32.const 42
   call $assembly/index/log<i32>
   i32.const 0
+  i32.const 42
   call $tests/assembly/index/Car#constructor
   call $assembly/index/log<Car>
  )
- (func $start (; 18 ;) (type $_)
+ (func $start (; 19 ;) (type $_)
   global.get $HEAP_BASE
   global.get $~lib/internal/allocator/AL_MASK
   i32.add
@@ -252,22 +265,22 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 19 ;) (type $_)
+ (func $null (; 20 ;) (type $_)
  )
- (func $Car#get:weight (; 20 ;) (type $ii) (param $0 i32) (result i32)
+ (func $Car#get:length (; 21 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $Car#set:weight (; 21 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $Car#set:length (; 22 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $Car#get:length (; 22 ;) (type $ii) (param $0 i32) (result i32)
+ (func $Car#get:weight (; 23 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
  )
- (func $Car#set:length (; 23 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $Car#set:weight (; 24 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store offset=4

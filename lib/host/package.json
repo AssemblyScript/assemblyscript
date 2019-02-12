@@ -8,7 +8,8 @@
     "build": "tsc",
     "prepublishOnly": "tsc",
     "test:build": "../../bin/asc tests/assembly/index.ts --importMemory -b tests/build/untouched.wasm -t tests/build/untouched.wat -d tests/build/index.d.ts --debug",
-    "test": "ts-node tests"
+    "test": "ts-node tests",
+    "debug": "node -r ts-node/register --inspect-brk=5858 tests/index.ts"
   },
   "files": [
     "lib/*"

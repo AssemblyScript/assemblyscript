@@ -1,4 +1,4 @@
-declare module ASModule {
+declare namespace ASModule {
   type i8 = number;
   type i16 = number;
   type i32 = number;
@@ -10,10 +10,11 @@ declare module ASModule {
   type bool = any;
   class Car {
     static i(): i32;
-    constructor();
-    weight: i32;
+    constructor(weight: i32);
     length: i32;
-    createAnother(): u32;
+    weight: i32;
+    createAnother(weight: i32): Car;
+    combine(c: Car): Car;
   }
   function runTest(): void;
   namespace memory {

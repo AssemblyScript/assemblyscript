@@ -1,9 +1,11 @@
 import { ASInstance, ASMemory, ASTable } from "../../loader";
 export declare abstract class ASImport {
     instance: ASInstance;
+    private _memory;
     readonly __imports__: object;
-    readonly __memory__: ASMemory;
-    readonly __table__: ASTable;
-    _bindInstance(instance: ASInstance): void;
-    static __createImportObject(...args: any[]): any;
+    readonly memory: ASMemory;
+    readonly table: ASTable;
+    __bindInstance(instance: ASInstance): void;
+    __bindMemory(memory: ASMemory): void;
+    static createImport(...args: any[]): any;
 }

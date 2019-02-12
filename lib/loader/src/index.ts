@@ -460,13 +460,20 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
         }
         const elem = instance.exports[internalName];
         const hash = name.indexOf('#');
+        let bang = name.indexOf('!');
+        let refType = bang > 0 ? name.substring(bang + 1): null;
+        if (refType){
+          name = name.substring(0, bang);
+        }
         if (hash >= 0) {
             // resolve classes
             const className = name.substring(0, hash);
             const classElem = curr[className];
             if (typeof classElem === 'undefined' || !classElem.prototype) {
                 const ctor: any = function(...args: any[]) {
-                    return ctor.wrap(ctor.prototype.constructor(0, ...args));
+                    let _args = args.map(e => e[SELF_REF] | e);
+                    debugger;
+                    return ctor.wrap(ctor.prototype.constructor(0, ..._args));
                 };
                 ctor.prototype = {};
                 ctor.wrap = function(thisValue: any) {
@@ -476,6 +483,7 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
                 };
                 if (classElem) {
                     Object.getOwnPropertyNames(classElem).forEach((propName) => {
+                      console.log(classElem.constructor.name + " " + propName)
                         Object.defineProperty(ctor, propName, Object.getOwnPropertyDescriptor(classElem, propName)!);
                     });
                 }
@@ -489,8 +497,11 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
                     const getter = instance.exports[internalName.replace('set:', 'get:')];
                     const setter = instance.exports[internalName.replace('get:', 'set:')];
                     Object.defineProperty(curr, name, {
-                        get() { return getter(this[SELF_REF]); },
-                        set(value) { setter(this[SELF_REF], value); },
+                        get() {
+                          let ptr = getter(this[SELF_REF]);
+                          return refType ? resolved[refType].wrap(ptr) : ptr;
+                        },
+                        set(value) { setter(this[SELF_REF], value[SELF_REF] | value); },
                         enumerable: true,
                     });
                 }
@@ -501,7 +512,9 @@ function resolveContext<T = ASExport>(instance: WebAssembly.Instance, ctx: Insta
                     Object.defineProperty(curr, name, {
                         value(...args: any[]) {
                             table.setargc(args.length);
-                            return elem(this[SELF_REF], ...args);
+                            let _args = args.map(e => e[SELF_REF] | e);
+                            let ptr = elem(this[SELF_REF], ..._args);
+                            return refType ? resolved[refType].wrap(ptr) : ptr;
                         },
                     });
                 }
