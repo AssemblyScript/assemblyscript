@@ -22,7 +22,8 @@ import {
   Namespace,
   ConstantValueKind,
   Interface,
-  Property
+  Property,
+  PropertyPrototype
 } from "./program";
 
 import {
@@ -52,11 +53,15 @@ abstract class ExportsWalker {
     this.includePrivate;
   }
 
-  /** Walks all exports and calls the respective handlers. */
+  /** Walks all elements and calls the respective handlers. */
   walk(): void {
-    for (let moduleExport of this.program.moduleLevelExports.values()) {
-      // FIXME: doesn't honor the actual externally visible name
-      this.visitElement(moduleExport.element);
+    for (let file of this.program.filesByName.values()) {
+      let members = file.members;
+      if (!members) continue;
+      for (let member of members.values()) {
+        // FIXME: doesn't honor the actual externally visible name
+        this.visitElement(member);
+      }
     }
     var todo = this.todo;
     for (let i = 0; i < todo.length; ) this.visitElement(todo[i]);
@@ -88,12 +93,16 @@ abstract class ExportsWalker {
         if ((<Field>element).is(CommonFlags.COMPILED)) this.visitField(<Field>element);
         break;
       }
+      case ElementKind.PROPERTY_PROTOTYPE: {
+        this.visitPropertyInstances(<PropertyPrototype>element);
+        break;
+      }
       case ElementKind.PROPERTY: {
         let prop = <Property>element;
-        let getter = prop.getterPrototype;
-        if (getter) this.visitFunctionInstances(getter);
-        let setter = prop.setterPrototype;
-        if (setter) this.visitFunctionInstances(setter);
+        let getter = prop.getterInstance;
+        if (getter) this.visitFunction(getter);
+        let setter = prop.setterInstance;
+        if (setter) this.visitFunction(setter);
         break;
       }
       case ElementKind.NAMESPACE: {
@@ -105,7 +114,8 @@ abstract class ExportsWalker {
   }
 
   private visitFunctionInstances(element: FunctionPrototype): void {
-    for (let instances of element.instances.values()) {
+    var instances = element.instances;
+    if (instances) {
       for (let instance of instances.values()) {
         if (instance.is(CommonFlags.COMPILED)) this.visitFunction(<Function>instance);
       }
@@ -113,9 +123,22 @@ abstract class ExportsWalker {
   }
 
   private visitClassInstances(element: ClassPrototype): void {
-    for (let instance of element.instances.values()) {
-      if (instance.is(CommonFlags.COMPILED)) this.visitClass(<Class>instance);
+    var instances = element.instances;
+    if (instances) {
+      for (let instance of instances.values()) {
+        if (instance.is(CommonFlags.COMPILED)) this.visitClass(<Class>instance);
+      }
     }
+  }
+
+  private visitPropertyInstances(element: PropertyPrototype): void {
+    // var instances = element.instances;
+    // if (instances) {
+    //   for (let instance of instances.values()) {
+    //     if (instance.is(CommonFlags.COMPILED)) this.visitProperty(<Property>instance);
+    //   }
+    // }
+    assert(false);
   }
 
   abstract visitGlobal(element: Global): void;
@@ -150,7 +173,7 @@ export class IDLBuilder extends ExportsWalker {
     if (isConst) sb.push("const ");
     sb.push(this.typeToString(element.type));
     sb.push(" ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     if (isConst) {
       switch (element.constantValueKind) {
         case ConstantValueKind.INTEGER: {
@@ -173,7 +196,7 @@ export class IDLBuilder extends ExportsWalker {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(" {\n");
     var members = element.members;
     if (members) {
@@ -206,7 +229,7 @@ export class IDLBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push(this.typeToString(signature.returnType));
     sb.push(" ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push("(");
     var parameters = signature.parameterTypes;
     var numParameters = parameters.length;
@@ -223,7 +246,7 @@ export class IDLBuilder extends ExportsWalker {
     if (members && members.size) {
       indent(sb, this.indentLevel);
       sb.push("interface ");
-      sb.push(element.simpleName);
+      sb.push(element.name);
       sb.push(" {\n");
       for (let member of members.values()) this.visitElement(member);
       indent(sb, --this.indentLevel);
@@ -235,7 +258,7 @@ export class IDLBuilder extends ExportsWalker {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(" {\n");
     // TODO
     indent(sb, --this.indentLevel);
@@ -254,7 +277,7 @@ export class IDLBuilder extends ExportsWalker {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(" {\n");
     var members = element.members;
     if (members) {
@@ -327,7 +350,7 @@ export class TSDBuilder extends ExportsWalker {
       if (isConst) sb.push("const ");
       else sb.push("var ");
     }
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(": ");
     sb.push(this.typeToString(element.type));
     sb.push(";\n");
@@ -338,7 +361,7 @@ export class TSDBuilder extends ExportsWalker {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("enum ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(" {\n");
     var members = element.members;
     if (members) {
@@ -376,7 +399,7 @@ export class TSDBuilder extends ExportsWalker {
       return;
     } else {
       if (!element.isAny(CommonFlags.STATIC | CommonFlags.INSTANCE)) sb.push("function ");
-      sb.push(element.simpleName);
+      sb.push(element.name);
     }
     sb.push("(");
     var parameters = signature.parameterTypes;
@@ -409,14 +432,14 @@ export class TSDBuilder extends ExportsWalker {
       if (element.is(CommonFlags.ABSTRACT)) sb.push("abstract ");
       sb.push("class ");
     }
-    sb.push(element.simpleName);
+    sb.push(element.name);
     var base = element.base;
     if (base && base.is(CommonFlags.COMPILED | CommonFlags.MODULE_EXPORT)) {
       sb.push(" extends ");
-      sb.push(base.simpleName); // TODO: fqn
+      sb.push(base.name); // TODO: fqn
     }
     sb.push(" {\n");
-    var members = element.prototype.members; // static
+    var members = element.parent.members; // static
     if (members) {
       for (let member of members.values()) {
         this.visitElement(member);
@@ -443,7 +466,7 @@ export class TSDBuilder extends ExportsWalker {
     if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
     if (element.is(CommonFlags.STATIC)) sb.push("static ");
     if (element.is(CommonFlags.READONLY)) sb.push("readonly ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(": ");
     sb.push(this.typeToString(element.type));
     sb.push(";\n");
@@ -455,7 +478,7 @@ export class TSDBuilder extends ExportsWalker {
       let sb = this.sb;
       indent(sb, this.indentLevel++);
       sb.push("namespace ");
-      sb.push(element.simpleName);
+      sb.push(element.name);
       sb.push(" {\n");
       for (let member of members.values()) this.visitElement(member);
       indent(sb, --this.indentLevel);
@@ -519,7 +542,8 @@ function hasCompiledMember(element: Element): bool {
     for (let member of members.values()) {
       switch (member.kind) {
         case ElementKind.FUNCTION_PROTOTYPE: {
-          for (let instances of (<FunctionPrototype>member).instances.values()) {
+          let instances = (<FunctionPrototype>member).instances;
+          if (instances) {
             for (let instance of instances.values()) {
               if (instance.is(CommonFlags.COMPILED)) return true;
             }
@@ -527,8 +551,11 @@ function hasCompiledMember(element: Element): bool {
           break;
         }
         case ElementKind.CLASS_PROTOTYPE: {
-          for (let instance of (<ClassPrototype>member).instances.values()) {
-            if (instance.is(CommonFlags.COMPILED)) return true;
+          let instances = (<ClassPrototype>member).instances;
+          if (instances) {
+            for (let instance of instances.values()) {
+              if (instance.is(CommonFlags.COMPILED)) return true;
+            }
           }
           break;
         }

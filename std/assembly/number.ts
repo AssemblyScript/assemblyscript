@@ -180,8 +180,7 @@ export abstract class Bool {
   }
 }
 
-@sealed
-export abstract class Boolean extends Bool {}
+export { Bool as Boolean };
 
 @sealed
 export abstract class F32 {
@@ -267,5 +266,4 @@ export abstract class F64 {
   }
 }
 
-@sealed
-export abstract class Number extends F64 {}
+export { F64 as Number };

@@ -1,4 +1,3 @@
-
 import {
   CharCode,
   allocateUnsafe as allocateUnsafeString,

@@ -708,13 +708,13 @@ export abstract class Node {
   ): ExportMember {
     var elem = new ExportMember();
     elem.range = range;
-    elem.name = name; name.parent = elem;
+    elem.localName = name; name.parent = elem;
     if (!externalName) {
       externalName = name;
     } else {
       externalName.parent = elem;
     }
-    elem.externalName = externalName;
+    elem.exportedName = externalName;
     return elem;
   }
 
@@ -786,18 +786,15 @@ export abstract class Node {
   }
 
   static createImportDeclaration(
-    externalName: IdentifierExpression,
+    foreignName: IdentifierExpression,
     name: IdentifierExpression | null,
     range: Range
   ): ImportDeclaration {
     var elem = new ImportDeclaration();
     elem.range = range;
-    elem.externalName = externalName; externalName.parent = elem;
-    if (!name) {
-      name = externalName;
-    } else {
-      name.parent = elem;
-    }
+    elem.foreignName = foreignName; foreignName.parent = elem;
+    if (!name) name = foreignName;
+    else name.parent = elem;
     elem.name = name;
     return elem;
   }
@@ -1577,69 +1574,10 @@ export class Source extends Node {
 
 /** Base class of all declaration statements. */
 export abstract class DeclarationStatement extends Statement {
-
   /** Simple name being declared. */
   name: IdentifierExpression;
   /** Array of decorators. */
   decorators: DecoratorNode[] | null = null;
-
-  protected cachedProgramLevelInternalName: string | null = null;
-  protected cachedFileLevelInternalName: string | null = null;
-
-  /** Gets the mangled program-level internal name of this declaration. */
-  get programLevelInternalName(): string {
-    if (!this.cachedProgramLevelInternalName) {
-      this.cachedProgramLevelInternalName = mangleInternalName(this, true);
-    }
-    return this.cachedProgramLevelInternalName;
-  }
-
-  /** Gets the mangled file-level internal name of this declaration. */
-  get fileLevelInternalName(): string {
-    if (!this.cachedFileLevelInternalName) {
-      this.cachedFileLevelInternalName = mangleInternalName(this, false);
-    }
-    return this.cachedFileLevelInternalName;
-  }
-
-  /** Tests if this is a top-level declaration within its source file. */
-  get isTopLevel(): bool {
-    var parent = this.parent;
-    if (!parent) {
-      return false;
-    }
-    if (parent.kind == NodeKind.VARIABLE && !(parent = parent.parent)) {
-      return false;
-    }
-    return parent.kind == NodeKind.SOURCE;
-  }
-
-  /** Tests if this declaration is a top-level export within its source file. */
-  get isTopLevelExport(): bool {
-    var parent = this.parent;
-    if (!parent || (parent.kind == NodeKind.VARIABLE && !(parent = parent.parent))) {
-      return false;
-    }
-    if (parent.kind == NodeKind.NAMESPACEDECLARATION) {
-      return this.is(CommonFlags.EXPORT) && (<NamespaceDeclaration>parent).isTopLevelExport;
-    }
-    if (parent.kind == NodeKind.CLASSDECLARATION) {
-      return this.is(CommonFlags.STATIC) && (<ClassDeclaration>parent).isTopLevelExport;
-    }
-    return parent.kind == NodeKind.SOURCE && this.is(CommonFlags.EXPORT);
-  }
-
-  /** Tests if this declaration needs an explicit export. */
-  needsExplicitExport(member: ExportMember): bool {
-    // This is necessary because module-level exports are automatically created
-    // for top level declarations of all sorts. This function essentially tests
-    // that there isn't a otherwise duplicate top-level export already.
-    return (
-      member.name.text != member.externalName.text || // if aliased
-      this.range.source != member.range.source ||     // if a re-export
-      !this.isTopLevelExport                          // if not top-level
-    );
-  }
 }
 
 /** Represents an index signature declaration. */
@@ -1750,17 +1688,17 @@ export class ExportImportStatement extends Node {
 export class ExportMember extends Node {
   kind = NodeKind.EXPORTMEMBER;
 
-  /** Identifier being exported. */
-  name: IdentifierExpression;
-  /** Identifier seen when imported again. */
-  externalName: IdentifierExpression;
+  /** Local identifier. */
+  localName: IdentifierExpression;
+  /** Exported identifier. */
+  exportedName: IdentifierExpression;
 }
 
 /** Represents an `export` statement. */
 export class ExportStatement extends Statement {
   kind = NodeKind.EXPORT;
 
-  /** Array of members if a set of named exports, or `null` if a filespace export. */
+  /** Array of members if a set of named exports, or `null` if a file export. */
   members: ExportMember[] | null;
   /** Path being exported from, if applicable. */
   path: StringLiteralExpression | null;
@@ -1818,6 +1756,13 @@ export class FunctionDeclaration extends DeclarationStatement {
     var typeParameters = this.typeParameters;
     return typeParameters != null && typeParameters.length > 0;
   }
+
+  /** Clones this function declaration. */
+  clone(): FunctionDeclaration {
+    return Node.createFunctionDeclaration(
+      this.name, this.typeParameters, this.signature, this.body, this.decorators, this.flags, this.range
+    );
+  }
 }
 
 /** Represents an `if` statement. */
@@ -1837,7 +1782,7 @@ export class ImportDeclaration extends DeclarationStatement {
   kind = NodeKind.IMPORTDECLARATION;
 
   /** Identifier being imported. */
-  externalName: IdentifierExpression;
+  foreignName: IdentifierExpression;
 }
 
 /** Represents an `import` statement. */
@@ -1976,36 +1921,6 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
     }
   }
   return null;
-}
-
-/** Mangles a declaration's name to an internal name. */
-export function mangleInternalName(declaration: DeclarationStatement, asGlobal: bool = false): string {
-  var name = declaration.name.text;
-  var parent = declaration.parent;
-  if (!parent) return name;
-  if (
-    declaration.kind == NodeKind.VARIABLEDECLARATION &&
-    parent.kind == NodeKind.VARIABLE
-  ) { // skip over
-    if (!(parent = parent.parent)) return name;
-  }
-  if (parent.kind == NodeKind.CLASSDECLARATION) {
-    return mangleInternalName(<ClassDeclaration>parent, asGlobal) + (
-      declaration.is(CommonFlags.STATIC)
-        ? STATIC_DELIMITER
-        : INSTANCE_DELIMITER
-    ) + name;
-  }
-  if (
-    parent.kind == NodeKind.NAMESPACEDECLARATION ||
-    parent.kind == NodeKind.ENUMDECLARATION
-  ) {
-    return mangleInternalName(<DeclarationStatement>parent, asGlobal) +
-           STATIC_DELIMITER + name;
-  }
-  return asGlobal
-    ? name
-    : declaration.range.source.internalPath + PATH_DELIMITER + name;
 }
 
 /** Mangles an external to an internal path. */

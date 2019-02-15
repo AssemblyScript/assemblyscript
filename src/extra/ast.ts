@@ -960,10 +960,10 @@ export class ASTBuilder {
   }
 
   visitExportMember(node: ExportMember): void {
-    this.visitIdentifierExpression(node.name);
-    if (node.externalName.text != node.name.text) {
+    this.visitIdentifierExpression(node.localName);
+    if (node.exportedName.text != node.localName.text) {
       this.sb.push(" as ");
-      this.visitIdentifierExpression(node.externalName);
+      this.visitIdentifierExpression(node.exportedName);
     }
   }
 
@@ -1158,7 +1158,7 @@ export class ASTBuilder {
   }
 
   visitImportDeclaration(node: ImportDeclaration): void {
-    var externalName = node.externalName;
+    var externalName = node.foreignName;
     var name = node.name;
     this.visitIdentifierExpression(externalName);
     if (externalName.text != name.text) {

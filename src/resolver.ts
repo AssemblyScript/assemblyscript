@@ -18,15 +18,15 @@ import {
   Class,
   ClassPrototype,
   Function,
-  FunctionTarget,
   FunctionPrototype,
   VariableLikeElement,
-  Property,
   DecoratorFlags,
   FieldPrototype,
   Field,
   Global,
-  Flow
+  Flow,
+  PropertyPrototype,
+  Property
 } from "./program";
 
 import {
@@ -123,7 +123,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // check file-global / program-global enum or class
     {
-      let elementsLookup = this.program.elementsLookup;
+      let elementsLookup = this.program.elementsByName;
       let element: Element | null;
       if (
         (element = elementsLookup.get(localName)) || // file-global
@@ -363,58 +363,25 @@ export class Resolver extends DiagnosticEmitter {
   ): Element | null {
     var name = identifier.text;
     var element: Element | null;
-
     if (flow) {
-      let local = flow.lookupLocal(name);
-      if (local) {
+      if (element = flow.lookup(name)) {
         this.currentThisExpression = null;
         this.currentElementExpression = null;
-        return local;
+        return element;
       }
     }
-
     if (context) {
-
-      switch (context.kind) {
-        case ElementKind.FUNCTION: { // use prototype
-          context = (<Function>context).prototype.parent;
-          break;
-        }
-        case ElementKind.CLASS: { // use prototype
-          context = (<Class>context).prototype.parent;
-          break;
-        }
-      }
-
-      // search context
-      while (context) {
-        let members = context.members;
-        if (members) {
-          if (element = members.get(name)) {
-            this.currentThisExpression = null;
-            this.currentElementExpression = null;
-            return element;
-          }
-        }
-        context = context.parent;
+      if (element = context.lookup(name)) {
+        this.currentThisExpression = null;
+        this.currentElementExpression = null;
+        return element;
       }
     }
-
-    // search current file
-    var elementsLookup = this.program.elementsLookup;
-    if (element = elementsLookup.get(identifier.range.source.internalPath + PATH_DELIMITER + name)) {
+    if (element = this.program.lookupGlobal(name)) {
       this.currentThisExpression = null;
       this.currentElementExpression = null;
-      return element; // GLOBAL, FUNCTION_PROTOTYPE, CLASS_PROTOTYPE
+      return element;
     }
-
-    // search global scope
-    if (element = elementsLookup.get(name)) {
-      this.currentThisExpression = null;
-      this.currentElementExpression = null;
-      return element; // GLOBAL, FUNCTION_PROTOTYPE, CLASS_PROTOTYPE
-    }
-
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Cannot_find_name_0,
@@ -427,7 +394,7 @@ export class Resolver extends DiagnosticEmitter {
   /** Resolves a lazily compiled global, i.e. a static class field. */
   ensureResolvedLazyGlobal(global: Global, reportMode: ReportMode = ReportMode.REPORT): bool {
     if (global.is(CommonFlags.RESOLVED)) return true;
-    var resolveType = assert(global.declaration).type;
+    var resolveType = global.declaration.type;
     if (!resolveType) return false;
     var resolvedType = this.resolveType(resolveType, null, reportMode);
     if (!resolvedType) return false;
@@ -460,7 +427,7 @@ export class Resolver extends DiagnosticEmitter {
         assert(type != Type.void);
         let classReference = type.classReference;
         if (!classReference) {
-          let basicClasses = this.program.basicClasses;
+          let basicClasses = this.program.typeClasses;
           if (!type.is(TypeFlags.REFERENCE) && basicClasses.has(type.kind)) {
             classReference = assert(basicClasses.get(type.kind));
           } else {
@@ -474,19 +441,32 @@ export class Resolver extends DiagnosticEmitter {
         target = classReference;
         break;
       }
-      case ElementKind.PROPERTY: {
-        let getter = this.resolveFunction(
-          assert((<Property>target).getterPrototype),
+      case ElementKind.PROPERTY_PROTOTYPE: { // static
+        let getterInstance = this.resolveFunction(
+          assert((<PropertyPrototype>target).getterPrototype),
           null,
           makeMap<string,Type>(),
           reportMode
         );
-        if (!getter) return null;
-        let classReference = getter.signature.returnType.classReference;
+        if (!getterInstance) return null;
+        let classReference = getterInstance.signature.returnType.classReference;
         if (!classReference) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
-            propertyAccess.property.range, propertyName, getter.signature.returnType.toString()
+            propertyAccess.property.range, propertyName, getterInstance.signature.returnType.toString()
+          );
+          return null;
+        }
+        target = classReference;
+        break;
+      }
+      case ElementKind.PROPERTY: { // instance
+        let getterInstance = assert((<Property>target).getterInstance);
+        let classReference = getterInstance.signature.returnType.classReference;
+        if (!classReference) {
+          this.error(
+            DiagnosticCode.Property_0_does_not_exist_on_type_1,
+            propertyAccess.property.range, propertyName, getterInstance.signature.returnType.toString()
           );
           return null;
         }
@@ -735,7 +715,7 @@ export class Resolver extends DiagnosticEmitter {
                 i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value),
                 contextualType
               );
-              return assert(this.program.basicClasses.get(type.kind));
+              return assert(this.program.typeClasses.get(type.kind));
             }
             return this.resolveExpression(
               operand,
@@ -755,7 +735,7 @@ export class Resolver extends DiagnosticEmitter {
             );
           }
           case Token.EXCLAMATION: {
-            return assert(this.program.basicClasses.get(TypeKind.BOOL));
+            return assert(this.program.typeClasses.get(TypeKind.BOOL));
           }
           case Token.TILDE: {
             let resolvedOperand = this.resolveExpression(
@@ -825,7 +805,7 @@ export class Resolver extends DiagnosticEmitter {
             return explicitLocal;
           }
         }
-        let parent = flow.actualFunction.parent;
+        let parent: Element | null = flow.actualFunction.parent;
         if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
           this.currentThisExpression = null;
           this.currentElementExpression = null;
@@ -846,7 +826,7 @@ export class Resolver extends DiagnosticEmitter {
         switch ((<LiteralExpression>expression).literalKind) {
           case LiteralKind.INTEGER: {
             return assert(
-              this.program.basicClasses.get(
+              this.program.typeClasses.get(
                 this.determineIntegerLiteralType(
                   (<IntegerLiteralExpression>expression).value,
                   contextualType
@@ -858,7 +838,7 @@ export class Resolver extends DiagnosticEmitter {
             this.currentThisExpression = expression;
             this.currentElementExpression = null;
             return assert(
-              this.program.basicClasses.get(
+              this.program.typeClasses.get(
                 contextualType == Type.f32
                   ? TypeKind.F32
                   : TypeKind.F64
@@ -945,23 +925,45 @@ export class Resolver extends DiagnosticEmitter {
     contextualTypeArguments: Map<string,Type> = makeMap<string,Type>(),
     reportMode: ReportMode = ReportMode.REPORT
   ): Function | null {
-    var classTypeArguments = prototype.classTypeArguments; // set only if partially resolved
-    var classInstanceKey = classTypeArguments ? typesToString(classTypeArguments) : "";
+    var actualParent = prototype.parent.kind == ElementKind.PROPERTY_PROTOTYPE
+      ? prototype.parent.parent
+      : prototype.parent;
+    var classInstance: Class | null = null; // if an instance method
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
-    var classInstances = prototype.instances.get(classInstanceKey);
-    if (classInstances) {
-      let instance = classInstances.get(instanceKey);
-      if (instance) return instance;
+
+    // Instance method prototypes are pre-bound to their concrete class as their parent
+    if (prototype.is(CommonFlags.INSTANCE)) {
+      assert(actualParent.kind == ElementKind.CLASS);
+      classInstance = <Class>actualParent;
+
+      // check if this exact concrete class and function combination is known already
+      let resolvedInstance = prototype.getResolvedInstance(instanceKey);
+      if (resolvedInstance) return resolvedInstance;
+
+      // inherit class specific type arguments
+      let classTypeArguments = classInstance.typeArguments;
+      if (classTypeArguments) {
+        let classTypeParameters = classInstance.prototype.declaration.typeParameters;
+        let numClassTypeArguments = classTypeParameters.length;
+        assert(numClassTypeArguments == classTypeParameters.length);
+        for (let i = 0; i < numClassTypeArguments; ++i) {
+          let classTypeParameterName = classTypeParameters[i].name.text;
+          if (!contextualTypeArguments.has(classTypeParameterName)) {
+            contextualTypeArguments.set(
+              classTypeParameterName,
+              classTypeArguments[i]
+            );
+          }
+        }
+      }
+    } else {
+      assert(actualParent.kind != ElementKind.CLASS); // cannot be pre-bound
+      let resolvedInstance = prototype.getResolvedInstance(instanceKey);
+      if (resolvedInstance) return resolvedInstance;
     }
-
     var declaration = prototype.declaration;
-    var isInstance = prototype.is(CommonFlags.INSTANCE);
-    var classPrototype = prototype.classPrototype;
 
-    // apply class type arguments if a partially resolved instance method
-    if (classTypeArguments) prototype.applyClassTypeArguments(contextualTypeArguments);
-
-    // override with function specific type arguments
+    // override whatever is contextual with actual function type arguments
     var signatureNode = declaration.signature;
     var functionTypeParameters = declaration.typeParameters;
     var numFunctionTypeArguments: i32;
@@ -977,32 +979,16 @@ export class Resolver extends DiagnosticEmitter {
       assert(!functionTypeParameters || functionTypeParameters.length == 0);
     }
 
-    // resolve class if an instance method
-    var classInstance: Class | null = null;
+    // resolve `this` type if applicable
     var thisType: Type | null = null;
-    if (isInstance) {
-      classInstance = this.resolveClass(
-        assert(classPrototype),
-        classTypeArguments,
-        contextualTypeArguments,
-        reportMode
-      );
-      if (!classInstance) return null;
-      let explicitThisType = signatureNode.explicitThisType;
-      if (explicitThisType) {
-        thisType = this.resolveType(explicitThisType, contextualTypeArguments, reportMode);
-        if (!thisType) return null;
-      } else {
-        thisType = classInstance.type;
-      }
+    var explicitThisType = signatureNode.explicitThisType;
+    if (explicitThisType) {
+      thisType = this.resolveType(explicitThisType, contextualTypeArguments, reportMode);
+      if (!thisType) return null;
       contextualTypeArguments.set("this", thisType);
-    } else {
-      if (signatureNode.explicitThisType) {
-        this.error(
-          DiagnosticCode._this_cannot_be_referenced_in_current_location,
-          signatureNode.explicitThisType.range
-        ); // recoverable
-      }
+    } else if (classInstance) {
+      thisType = classInstance.type;
+      contextualTypeArguments.set("this", thisType);
     }
 
     // resolve signature node
@@ -1039,49 +1025,16 @@ export class Resolver extends DiagnosticEmitter {
     signature.parameterNames = parameterNames;
     signature.requiredParameters = requiredParameters;
 
-    var internalName = prototype.internalName;
-    if (instanceKey.length) internalName += "<" + instanceKey + ">";
+    var nameInclTypeParameters = prototype.name;
+    if (instanceKey.length) nameInclTypeParameters += "<" + instanceKey + ">";
     var instance = new Function(
+      nameInclTypeParameters,
       prototype,
-      internalName,
       signature,
-      classInstance
-        ? classInstance
-        : classPrototype,
       contextualTypeArguments
     );
-    if (!classInstances) prototype.instances.set(classInstanceKey, classInstances = new Map());
-    classInstances.set(instanceKey, instance);
-    this.program.instancesLookup.set(internalName, instance);
+    prototype.setResolvedInstance(instanceKey, instance);
     return instance;
-  }
-
-  /** Resolves a function prototype partially by applying the specified type arguments. */
-  resolveFunctionPartially(
-    prototype: FunctionPrototype,
-    typeArguments: Type[] | null,
-    reportMode: ReportMode = ReportMode.REPORT
-  ): FunctionPrototype | null {
-    assert(prototype.is(CommonFlags.INSTANCE));
-    var classPrototype = assert(prototype.classPrototype);
-
-    if (!(typeArguments && typeArguments.length)) return prototype; // no need to clone
-
-    var simpleName = prototype.simpleName;
-    var partialKey = typesToString(typeArguments);
-    var partialPrototype = new FunctionPrototype(
-      this.program,
-      simpleName,
-      classPrototype.internalName + "<" + partialKey + ">" + INSTANCE_DELIMITER + simpleName,
-      prototype.declaration,
-      classPrototype,
-      prototype.decoratorFlags
-    );
-    partialPrototype.flags = prototype.flags;
-    partialPrototype.operatorKind = prototype.operatorKind;
-    partialPrototype.classTypeArguments = typeArguments;
-    partialPrototype.instances = prototype.instances;
-    return partialPrototype;
   }
 
   /** Resolves a function prototype to an instance by first resolving the specified type arguments. */
@@ -1092,16 +1045,30 @@ export class Resolver extends DiagnosticEmitter {
     reportNode: Node,
     reportMode: ReportMode = ReportMode.REPORT
   ): Function | null {
+    var actualParent = prototype.parent.kind == ElementKind.PROPERTY_PROTOTYPE
+      ? prototype.parent.parent
+      : prototype.parent;
     var resolvedTypeArguments: Type[] | null = null;
 
     // Resolve type arguments if generic
     if (prototype.is(CommonFlags.GENERIC)) {
 
-      // apply class type arguments if a partially resolved instance method
-      // FIXME: this is done once more in resolveFunction. required here for resolveTypeArguments,
-      // required there for just resolving a function no matter if a partial or not.
-      let classTypeArguments = prototype.classTypeArguments;
-      if (classTypeArguments) prototype.applyClassTypeArguments(contextualTypeArguments);
+      // If this is an instance method, first apply the class's type arguments
+      if (prototype.is(CommonFlags.INSTANCE)) {
+        assert(actualParent.kind == ElementKind.CLASS);
+        let classTypeArguments = (<Class>actualParent).typeArguments;
+        if (classTypeArguments) {
+          let classTypeParameters = (<Class>actualParent).prototype.declaration.typeParameters;
+          let numClassTypeArguments = classTypeArguments.length;
+          assert(numClassTypeArguments == classTypeParameters.length);
+          for (let i = 0; i < numClassTypeArguments; ++i) {
+            contextualTypeArguments.set(
+              classTypeParameters[i].name.text,
+              classTypeArguments[i]
+            );
+          }
+        }
+      }
 
       resolvedTypeArguments = this.resolveTypeArguments( // reports
         assert(prototype.declaration.typeParameters),
@@ -1144,7 +1111,7 @@ export class Resolver extends DiagnosticEmitter {
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
 
     // Check if this exact instance has already been resolved
-    var instance = prototype.instances.get(instanceKey);
+    var instance = prototype.getResolvedInstance(instanceKey);
     if (instance) return instance;
 
     // Insert contextual type arguments for this operation. Internally, this method is always
@@ -1163,54 +1130,31 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Resolve base class if applicable
+    var basePrototype = prototype.basePrototype;
     var baseClass: Class | null = null;
-    if (declaration.extendsType) {
-      let baseClassType = this.resolveType(
-        declaration.extendsType,
+    if (basePrototype) {
+      let extendsType = assert(declaration.extendsType);
+      baseClass = this.resolveClassInclTypeArguments(
+        basePrototype,
+        extendsType.typeArguments,
         contextualTypeArguments,
+        extendsType,
         reportMode
       );
-      if (!baseClassType) return null;
-      if (!(baseClass = baseClassType.classReference)) {
-        if (reportMode == ReportMode.REPORT) {
-          this.program.error(
-            DiagnosticCode.A_class_may_only_extend_another_class,
-            declaration.extendsType.range
-          );
-        }
-        return null;
-      }
-      if (baseClass.hasDecorator(DecoratorFlags.SEALED)) {
-        if (reportMode == ReportMode.REPORT) {
-          this.program.error(
-            DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
-            declaration.extendsType.range, baseClass.internalName
-          );
-        }
-        return null;
-      }
-      if (baseClass.hasDecorator(DecoratorFlags.UNMANAGED) != prototype.hasDecorator(DecoratorFlags.UNMANAGED)) {
-        if (reportMode == ReportMode.REPORT) {
-          this.program.error(
-            DiagnosticCode.Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa,
-            Range.join(declaration.name.range, declaration.extendsType.range)
-          );
-        }
-        return null;
-      }
+      if (!baseClass) return null;
     }
 
     // Construct the instance and remember that it has been resolved already
-    var simpleName = prototype.simpleName;
-    var internalName = prototype.internalName;
-    if (instanceKey.length) {
-      simpleName += "<" + instanceKey + ">";
-      internalName += "<" + instanceKey + ">";
-    }
-    instance = new Class(prototype, simpleName, internalName, typeArguments, baseClass);
+    var nameInclTypeParamters = prototype.name;
+    if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
+    instance = new Class(
+      nameInclTypeParamters,
+      prototype,
+      typeArguments,
+      baseClass
+    );
     instance.contextualTypeArguments = contextualTypeArguments;
-    prototype.instances.set(instanceKey, instance);
-    this.program.instancesLookup.set(internalName, instance);
+    prototype.setResolvedInstance(instanceKey, instance);
 
     // Inherit base class members and set up the initial memory offset for own fields
     var memoryOffset: u32 = 0;
@@ -1218,27 +1162,10 @@ export class Resolver extends DiagnosticEmitter {
       if (baseClass.members) {
         if (!instance.members) instance.members = new Map();
         for (let inheritedMember of baseClass.members.values()) {
-          instance.members.set(inheritedMember.simpleName, inheritedMember);
+          instance.members.set(inheritedMember.name, inheritedMember);
         }
       }
       memoryOffset = baseClass.currentMemoryOffset;
-    }
-
-    // Resolve constructor by first applying the class type arguments
-    var constructorPrototype = prototype.constructorPrototype;
-    if (constructorPrototype) {
-      let constructorPartial = this.resolveFunctionPartially(
-        constructorPrototype,
-        typeArguments,
-        reportMode
-      );
-      if (!constructorPartial) return null;
-      instance.constructorInstance = this.resolveFunction(
-        constructorPartial,
-        null,
-        makeMap<string,Type>(),
-        reportMode
-      );
     }
 
     // Resolve instance members
@@ -1250,11 +1177,11 @@ export class Resolver extends DiagnosticEmitter {
           case ElementKind.FIELD_PROTOTYPE: {
             let fieldDeclaration = (<FieldPrototype>member).declaration;
             if (!instance.members) instance.members = new Map();
-            else if (instance.members.has(member.simpleName)) {
+            else if (instance.members.has(member.name)) {
               this.error(
                 DiagnosticCode.Duplicate_identifier_0,
                 fieldDeclaration.name.range,
-                member.simpleName
+                member.name
               );
               break;
             }
@@ -1262,7 +1189,7 @@ export class Resolver extends DiagnosticEmitter {
             // TODO: handle duplicate non-private fields
             if (!fieldDeclaration.type) {
               if (baseClass !== null && baseClass.members !== null) {
-                let baseField = baseClass.members.get((<FieldPrototype>member).simpleName);
+                let baseField = baseClass.members.get((<FieldPrototype>member).name);
                 if (baseField && !baseField.is(CommonFlags.PRIVATE)) {
                   assert(baseField.kind == ElementKind.FIELD);
                   fieldType = (<Field>baseField).type;
@@ -1286,10 +1213,9 @@ export class Resolver extends DiagnosticEmitter {
             if (!fieldType) break;
             let fieldInstance = new Field(
               <FieldPrototype>member,
-              internalName + INSTANCE_DELIMITER + (<FieldPrototype>member).simpleName,
+              instance,
               fieldType,
-              fieldDeclaration,
-              instance
+              fieldDeclaration
             );
             switch (fieldType.byteSize) { // align
               case 1: break;
@@ -1300,56 +1226,38 @@ export class Resolver extends DiagnosticEmitter {
             }
             fieldInstance.memoryOffset = memoryOffset;
             memoryOffset += fieldType.byteSize;
-            instance.members.set(member.simpleName, fieldInstance);
+            let actual = instance.add(member.name, fieldInstance);
+            assert(actual === fieldInstance);
             break;
           }
-
-          // Partially resolve methods as these might have type arguments on their own
           case ElementKind.FUNCTION_PROTOTYPE: {
-            if (!instance.members) instance.members = new Map();
-            let partialPrototype = this.resolveFunctionPartially(
-              <FunctionPrototype>member,
-              typeArguments,
-              reportMode
-            );
-            if (!partialPrototype) return null;
-            partialPrototype.internalName = internalName + INSTANCE_DELIMITER + partialPrototype.simpleName;
-            instance.members.set(member.simpleName, partialPrototype);
+            let boundPrototype = (<FunctionPrototype>member).toBound(instance);
+            let actual = instance.add(boundPrototype.name, boundPrototype);
+            assert(actual === boundPrototype);
             break;
           }
-
-          // Clone properties and partially resolve the wrapped accessors for consistence with other methods
-          case ElementKind.PROPERTY: {
-            if (!instance.members) instance.members = new Map();
-            let getterPrototype = assert((<Property>member).getterPrototype); // must be present
-            let setterPrototype = (<Property>member).setterPrototype;         // might be present
-            let instanceProperty = new Property(
-              this.program,
-              member.simpleName,
-              internalName + INSTANCE_DELIMITER + member.simpleName,
-              prototype
-            );
-            let partialGetterPrototype = this.resolveFunctionPartially(
-              getterPrototype,
-              typeArguments,
-              reportMode
-            );
-            if (!partialGetterPrototype) return null;
-            partialGetterPrototype
-              .internalName = internalName + INSTANCE_DELIMITER + partialGetterPrototype.simpleName;
-            instanceProperty.getterPrototype = partialGetterPrototype;
-            if (setterPrototype) {
-              let partialSetterPrototype = this.resolveFunctionPartially(
-                setterPrototype,
-                typeArguments,
+          case ElementKind.PROPERTY_PROTOTYPE: {
+            let propertyInstance = new Property(<PropertyPrototype>member, instance);
+            let getterPrototype = (<PropertyPrototype>member).getterPrototype;
+            if (getterPrototype) {
+              propertyInstance.getterInstance = this.resolveFunction(
+                getterPrototype.toBound(instance),
+                null,
+                makeMap(instance.contextualTypeArguments),
                 reportMode
               );
-              if (!partialSetterPrototype) return null;
-              partialSetterPrototype
-                .internalName = internalName + INSTANCE_DELIMITER + partialSetterPrototype.simpleName;
-              instanceProperty.setterPrototype = partialSetterPrototype;
             }
-            instance.members.set(member.simpleName, instanceProperty);
+            let setterPrototype = (<PropertyPrototype>member).setterPrototype;
+            if (setterPrototype) {
+              propertyInstance.setterInstance = this.resolveFunction(
+                setterPrototype.toBound(instance),
+                null,
+                makeMap(instance.contextualTypeArguments),
+                reportMode
+              );
+            }
+            let actual = instance.add(propertyInstance.name, propertyInstance);
+            assert(actual === propertyInstance);
             break;
           }
           default: assert(false);
@@ -1360,17 +1268,27 @@ export class Resolver extends DiagnosticEmitter {
     // Finalize memory offset
     instance.currentMemoryOffset = memoryOffset;
 
+    // Link own constructor if present
+    {
+      let ctorPrototype = instance.lookupInSelf("constructor");
+      if (ctorPrototype && ctorPrototype.parent === instance) {
+        assert(ctorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+        let ctorInstance = this.resolveFunction(
+          <FunctionPrototype>ctorPrototype,
+          null,
+          instance.contextualTypeArguments,
+          reportMode
+        );
+        if (ctorInstance) instance.constructorInstance = <Function>ctorInstance;
+      }
+    }
+
     // Fully resolve operator overloads (don't have type parameters on their own)
     for (let [kind, overloadPrototype] of prototype.overloadPrototypes) {
       assert(kind != OperatorKind.INVALID);
       let operatorInstance: Function | null;
       if (overloadPrototype.is(CommonFlags.INSTANCE)) {
-        let operatorPartial = this.resolveFunctionPartially(
-          overloadPrototype,
-          typeArguments,
-          reportMode
-        );
-        if (!operatorPartial) continue;
+        let operatorPartial = overloadPrototype.toBound(instance);
         operatorInstance = this.resolveFunction(
           operatorPartial,
           null,
@@ -1406,7 +1324,7 @@ export class Resolver extends DiagnosticEmitter {
     // Resolve type arguments if generic
     if (prototype.is(CommonFlags.GENERIC)) {
       resolvedTypeArguments = this.resolveTypeArguments(
-        assert(prototype.declaration.typeParameters),
+        prototype.declaration.typeParameters,
         typeArgumentNodes,
         contextualTypeArguments,
         reportNode,

@@ -98,5 +98,3 @@ export const INNER_DELIMITER = "~";
 export const LIBRARY_SUBST = "~lib";
 /** Library directory prefix. */
 export const LIBRARY_PREFIX = LIBRARY_SUBST + PATH_DELIMITER;
-/** Prefix used to indicate a filespace element. */
-export const FILESPACE_PREFIX = "file:";

@@ -301,5 +301,3 @@ export namespace f64 {
 }
 
 @builtin export declare function start(): void;
-
-@builtin export function NATIVE_CODE(): void { unreachable(); }
