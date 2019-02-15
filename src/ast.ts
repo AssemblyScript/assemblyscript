@@ -8,7 +8,8 @@ import {
   PATH_DELIMITER,
   STATIC_DELIMITER,
   INSTANCE_DELIMITER,
-  LIBRARY_PREFIX
+  LIBRARY_PREFIX,
+  CommonSymbols
 } from "./common";
 
 import {
@@ -262,7 +263,8 @@ export abstract class Node {
   ): IdentifierExpression {
     var expr = new IdentifierExpression();
     expr.range = range;
-    expr.text = name;
+    expr.text = name; // TODO: extract from range
+    expr.symbol = name; // TODO: Symbol.for(name)
     return expr;
   }
 
@@ -1250,6 +1252,8 @@ export class IdentifierExpression extends Expression {
 
   /** Textual name. */
   text: string;
+  /** Symbol. */
+  symbol: string; // TODO: symbol
 }
 
 /** Indicates the kind of a literal. */
@@ -1341,6 +1345,7 @@ export class CommaExpression extends Expression {
 export class ConstructorExpression extends IdentifierExpression {
   kind = NodeKind.CONSTRUCTOR;
   text = "constructor";
+  symbol = CommonSymbols.constructor;
 }
 
 /** Represents an element access expression, e.g., array access. */
@@ -1396,6 +1401,7 @@ export class NewExpression extends CallExpression {
 export class NullExpression extends IdentifierExpression {
   kind = NodeKind.NULL;
   text = "null";
+  symbol = CommonSymbols.null_;
 }
 
 /** Represents an object literal expression. */
@@ -1460,24 +1466,28 @@ export class StringLiteralExpression extends LiteralExpression {
 export class SuperExpression extends IdentifierExpression {
   kind = NodeKind.SUPER;
   text = "super";
+  symbol = CommonSymbols.super_;
 }
 
 /** Represents a `this` expression. */
 export class ThisExpression extends IdentifierExpression {
   kind = NodeKind.THIS;
   text = "this";
+  symbol = CommonSymbols.this_;
 }
 
 /** Represents a `true` expression. */
 export class TrueExpression extends IdentifierExpression {
   kind = NodeKind.TRUE;
   text = "true";
+  symbol = CommonSymbols.true_;
 }
 
 /** Represents a `false` expression. */
 export class FalseExpression extends IdentifierExpression {
   kind = NodeKind.FALSE;
   text = "false";
+  symbol = CommonSymbols.false_;
 }
 
 /** Base class of all unary expressions. */

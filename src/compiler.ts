@@ -34,7 +34,6 @@ import {
   getConstValueI64High,
   getConstValueF32,
   getConstValueF64,
-  getGetLocalIndex,
   getBlockChildCount,
   getBlockChild,
   getBlockName,
@@ -43,13 +42,12 @@ import {
 
 import {
   CommonFlags,
-  PATH_DELIMITER,
-  INNER_DELIMITER,
   INSTANCE_DELIMITER,
   STATIC_DELIMITER,
   GETTER_PREFIX,
   SETTER_PREFIX,
-  LIBRARY_PREFIX
+  LibrarySymbols,
+  CommonSymbols
 } from "./common";
 
 import {
@@ -65,7 +63,6 @@ import {
   FunctionTarget,
   Global,
   Local,
-  Namespace,
   EnumValue,
   Property,
   VariableLikeElement,
@@ -1130,7 +1127,7 @@ export class Compiler extends DiagnosticEmitter {
 
       if (!flow.isAny(FlowFlags.ANY_TERMINATING)) {
         let thisLocalIndex = flow.is(FlowFlags.INLINE_CONTEXT)
-          ? assert(flow.lookupLocal("this")).index
+          ? assert(flow.lookupLocal(CommonSymbols.this_)).index
           : 0;
 
         // if `this` wasn't accessed before, allocate if necessary and initialize `this`
@@ -2461,7 +2458,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     // Standard library elements can be pulled by user code automatically, so make sure the respective
     // file's top-level statements have executed. Works as if there was an import statement right before
-    // assessing its code.
+    // accessing its code.
     var originSource = expression.range.source;
     if (!originSource.is(CommonFlags.COMPILED)) this.compileSource(originSource);
 
@@ -3739,7 +3736,7 @@ export class Compiler extends DiagnosticEmitter {
           rightExpr = this.compileExpression(right, Type.f32, ConversionKind.IMPLICIT, WrapMode.NONE);
           rightType = this.currentType;
           if (!(instance = this.f32PowInstance)) {
-            let namespace = this.program.lookupGlobal("Mathf");
+            let namespace = this.program.lookupGlobal(LibrarySymbols.Mathf);
             if (!namespace) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
@@ -3748,7 +3745,7 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.createUnreachable();
               break;
             }
-            let prototype = namespace.members ? namespace.members.get("pow") : null;
+            let prototype = namespace.members ? namespace.members.get(LibrarySymbols.pow) : null;
             if (!prototype) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
@@ -3781,7 +3778,7 @@ export class Compiler extends DiagnosticEmitter {
           );
           rightType = this.currentType;
           if (!(instance = this.f64PowInstance)) {
-            let namespace = this.program.lookupGlobal("Math");
+            let namespace = this.program.lookupGlobal(LibrarySymbols.Math);
             if (!namespace) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
@@ -3790,7 +3787,7 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.createUnreachable();
               break;
             }
-            let prototype = namespace.members ? namespace.members.get("pow") : null;
+            let prototype = namespace.members ? namespace.members.get(LibrarySymbols.pow) : null;
             if (!prototype) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
@@ -4031,7 +4028,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F32: {
             let instance = this.f32ModInstance;
             if (!instance) {
-              let namespace = this.program.lookupGlobal("Mathf");
+              let namespace = this.program.lookupGlobal(LibrarySymbols.Mathf);
               if (!namespace) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
@@ -4040,7 +4037,7 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.createUnreachable();
                 break;
               }
-              let prototype = namespace.members ? namespace.members.get("mod") : null;
+              let prototype = namespace.members ? namespace.members.get(LibrarySymbols.mod) : null;
               if (!prototype) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
@@ -4062,7 +4059,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             let instance = this.f64ModInstance;
             if (!instance) {
-              let namespace = this.program.lookupGlobal("Math");
+              let namespace = this.program.lookupGlobal(LibrarySymbols.Math);
               if (!namespace) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
@@ -4071,7 +4068,7 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.createUnreachable();
                 break;
               }
-              let prototype = namespace.members ? namespace.members.get("mod") : null;
+              let prototype = namespace.members ? namespace.members.get(LibrarySymbols.mod) : null;
               if (!prototype) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
@@ -5102,7 +5099,7 @@ export class Compiler extends DiagnosticEmitter {
 
       let classInstance = assert(actualFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
       let baseClassInstance = assert((<Class>classInstance).base);
-      let thisLocal = assert(flow.lookupLocal("this"));
+      let thisLocal = assert(flow.lookupLocal(CommonSymbols.this_));
       let nativeSizeType = this.options.nativeSizeType;
 
       // {
@@ -5573,12 +5570,12 @@ export class Compiler extends DiagnosticEmitter {
     if (thisArg) {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
       let thisType = assert(instance.signature.thisType);
-      let thisLocal = flow.addScopedLocal("this", thisType, false);
+      let thisLocal = flow.addScopedLocal(CommonSymbols.this_, thisType, false);
       body.push(
         module.createSetLocal(thisLocal.index, thisArg)
       );
       let baseInstance = (<Class>classInstance).base;
-      if (baseInstance) flow.addScopedAlias("super", baseInstance.type, thisLocal.index);
+      if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, thisLocal.index);
     }
 
     var numArguments = argumentExpressions.length;
@@ -6088,7 +6085,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.THIS: {
         if (actualFunction.is(CommonFlags.INSTANCE)) {
-          let thisLocal = assert(flow.lookupLocal("this"));
+          let thisLocal = assert(flow.lookupLocal(CommonSymbols.this_));
           let classInstance = assert(actualFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
           let nativeSizeType = this.options.nativeSizeType;
           if (actualFunction.is(CommonFlags.CONSTRUCTOR)) {
@@ -6143,7 +6140,7 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let scopedThis = flow.lookupLocal("this");
+          let scopedThis = flow.lookupLocal(CommonSymbols.this_);
           if (scopedThis) {
             let scopedThisClass = assert(scopedThis.type.classReference);
             let base = scopedThisClass.base;
@@ -6370,7 +6367,7 @@ export class Compiler extends DiagnosticEmitter {
         buf = new Uint8Array(totalSize);
         pos = 0;
       }
-      writeI32(length, buf, pos + stringInstance.offsetof("length"));
+      writeI32(length, buf, pos + stringInstance.offsetof(LibrarySymbols.length));
       pos += headerSize;
       for (let i = 0; i < length; ++i) {
         writeI16(stringValue.charCodeAt(i), buf, pos + (i << 1));
@@ -6420,7 +6417,7 @@ export class Compiler extends DiagnosticEmitter {
       buf = new Uint8Array(bufferTotalSize);
       pos = 0;
     }
-    writeI32(byteLength, buf, pos + bufferInstance.offsetof("byteLength"));
+    writeI32(byteLength, buf, pos + bufferInstance.offsetof(LibrarySymbols.byteLength));
     pos += bufferHeaderSize;
     var nativeType = elementType.toNativeType();
     switch (nativeType) {
@@ -6756,9 +6753,9 @@ export class Compiler extends DiagnosticEmitter {
       : new Signature(null, classInstance.type, classInstance.type);
 
     instance = new Function(
-      "constructor",
-      new FunctionPrototype("constructor", classInstance,
-        this.program.makeNativeFunctionDeclaration("constructor",
+      CommonSymbols.constructor,
+      new FunctionPrototype(CommonSymbols.constructor, classInstance,
+        this.program.makeNativeFunctionDeclaration(CommonSymbols.constructor,
           CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR
         )
       ),
@@ -7842,7 +7839,7 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var isInline = flow.is(FlowFlags.INLINE_CONTEXT);
     var thisLocalIndex = isInline
-      ? assert(flow.lookupLocal("this")).index
+      ? assert(flow.lookupLocal(CommonSymbols.this_)).index
       : 0;
     var nativeSizeType = this.options.nativeSizeType;
 

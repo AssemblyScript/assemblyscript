@@ -12,7 +12,10 @@ import {
   GETTER_PREFIX,
   SETTER_PREFIX,
   INNER_DELIMITER,
-  LIBRARY_SUBST
+  LIBRARY_SUBST,
+  INDEX_SUFFIX,
+  CommonSymbols,
+  LibrarySymbols
 } from "./common";
 
 import {
@@ -431,7 +434,7 @@ export class Program extends DiagnosticEmitter {
       null,
       this.nativeDummySignature || (this.nativeDummySignature = Node.createSignature([],
         Node.createType( // ^ AST signature doesn't really matter, is overridden anyway
-          Node.createIdentifierExpression("void", range),
+          Node.createIdentifierExpression(CommonSymbols.void_, range),
           null, false, range
         ),
         null, false, range)
@@ -475,45 +478,45 @@ export class Program extends DiagnosticEmitter {
 
     // add built-in types
     this.typesLookup = new Map([
-      ["i8", Type.i8],
-      ["i16", Type.i16],
-      ["i32", Type.i32],
-      ["i64", Type.i64],
-      ["isize", options.isizeType],
-      ["u8", Type.u8],
-      ["u16", Type.u16],
-      ["u32", Type.u32],
-      ["u64", Type.u64],
-      ["usize", options.usizeType],
-      ["bool", Type.bool],
-      ["f32", Type.f32],
-      ["f64", Type.f64],
-      ["void", Type.void],
-      ["number", Type.f64],
-      ["boolean", Type.bool]
+      [CommonSymbols.i8, Type.i8],
+      [CommonSymbols.i16, Type.i16],
+      [CommonSymbols.i32, Type.i32],
+      [CommonSymbols.i64, Type.i64],
+      [CommonSymbols.isize, options.isizeType],
+      [CommonSymbols.u8, Type.u8],
+      [CommonSymbols.u16, Type.u16],
+      [CommonSymbols.u32, Type.u32],
+      [CommonSymbols.u64, Type.u64],
+      [CommonSymbols.usize, options.usizeType],
+      [CommonSymbols.bool, Type.bool],
+      [CommonSymbols.f32, Type.f32],
+      [CommonSymbols.f64, Type.f64],
+      [CommonSymbols.void_, Type.void],
+      [CommonSymbols.number, Type.f64],
+      [CommonSymbols.boolean, Type.bool]
     ]);
-    if (options.hasFeature(Feature.SIMD)) this.typesLookup.set("v128", Type.v128);
+    if (options.hasFeature(Feature.SIMD)) this.typesLookup.set(CommonSymbols.v128, Type.v128);
 
     // add compiler hints
-    this.registerConstantInteger("ASC_TARGET", Type.i32,
+    this.registerConstantInteger(LibrarySymbols.ASC_TARGET, Type.i32,
       i64_new(options.isWasm64 ? 2 : 1));
-    this.registerConstantInteger("ASC_NO_TREESHAKING", Type.bool,
+    this.registerConstantInteger(LibrarySymbols.ASC_NO_TREESHAKING, Type.bool,
       i64_new(options.noTreeShaking ? 1 : 0, 0));
-    this.registerConstantInteger("ASC_NO_ASSERT", Type.bool,
+    this.registerConstantInteger(LibrarySymbols.ASC_NO_ASSERT, Type.bool,
       i64_new(options.noAssert ? 1 : 0, 0));
-    this.registerConstantInteger("ASC_MEMORY_BASE", Type.i32,
+    this.registerConstantInteger(LibrarySymbols.ASC_MEMORY_BASE, Type.i32,
       i64_new(options.memoryBase, 0));
-    this.registerConstantInteger("ASC_OPTIMIZE_LEVEL", Type.i32,
+    this.registerConstantInteger(LibrarySymbols.ASC_OPTIMIZE_LEVEL, Type.i32,
       i64_new(options.optimizeLevelHint, 0));
-    this.registerConstantInteger("ASC_SHRINK_LEVEL", Type.i32,
+    this.registerConstantInteger(LibrarySymbols.ASC_SHRINK_LEVEL, Type.i32,
       i64_new(options.shrinkLevelHint, 0));
-    this.registerConstantInteger("ASC_FEATURE_MUTABLE_GLOBAL", Type.bool,
+    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_MUTABLE_GLOBAL, Type.bool,
       i64_new(options.hasFeature(Feature.MUTABLE_GLOBAL) ? 1 : 0, 0));
-    this.registerConstantInteger("ASC_FEATURE_SIGN_EXTENSION", Type.bool,
+    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
       i64_new(options.hasFeature(Feature.SIGN_EXTENSION) ? 1 : 0, 0));
-    this.registerConstantInteger("ASC_FEATURE_BULK_MEMORY", Type.bool,
+    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_BULK_MEMORY, Type.bool,
       i64_new(options.hasFeature(Feature.BULK_MEMORY) ? 1 : 0, 0));
-    this.registerConstantInteger("ASC_FEATURE_SIMD", Type.bool,
+    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_SIMD, Type.bool,
       i64_new(options.hasFeature(Feature.SIMD) ? 1 : 0, 0));
 
     // remember deferred elements
@@ -722,26 +725,26 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register 'ArrayBuffer'
-    if (this.elementsByName.has("ArrayBuffer")) {
-      let element = assert(this.elementsByName.get("ArrayBuffer"));
+    if (this.elementsByName.has(LibrarySymbols.ArrayBuffer)) {
+      let element = this.elementsByName.get(LibrarySymbols.ArrayBuffer)!;
       assert(element.kind == ElementKind.CLASS_PROTOTYPE);
       this.arrayBufferInstance = resolver.resolveClass(<ClassPrototype>element, null);
     }
 
     // register 'Array'
-    if (this.elementsByName.has("Array")) {
-      let element = assert(this.elementsByName.get("Array"));
+    if (this.elementsByName.has(LibrarySymbols.Array)) {
+      let element = this.elementsByName.get(LibrarySymbols.Array)!;
       assert(element.kind == ElementKind.CLASS_PROTOTYPE);
       this.arrayPrototype = <ClassPrototype>element;
     }
 
     // register 'String'
-    if (this.elementsByName.has("String")) {
-      let element = <ClassPrototype>this.elementsByName.get("String");
+    if (this.elementsByName.has(LibrarySymbols.String)) {
+      let element = <ClassPrototype>this.elementsByName.get(LibrarySymbols.String);
       assert(element.kind == ElementKind.CLASS_PROTOTYPE);
       let instance = resolver.resolveClass(element, null);
       if (instance) {
-        if (this.typesLookup.has("string")) {
+        if (this.typesLookup.has(CommonSymbols.string)) {
           let declaration = element.declaration;
           this.error(
             DiagnosticCode.Duplicate_identifier_0,
@@ -749,31 +752,31 @@ export class Program extends DiagnosticEmitter {
           );
         } else {
           this.stringInstance = instance;
-          this.typesLookup.set("string", instance.type);
+          this.typesLookup.set(CommonSymbols.string, instance.type);
         }
       }
     }
 
     // register classes backing basic types
-    this.registerTypeClass(TypeKind.I8, "I8");
-    this.registerTypeClass(TypeKind.I16, "I16");
-    this.registerTypeClass(TypeKind.I32, "I32");
-    this.registerTypeClass(TypeKind.I64, "I64");
-    this.registerTypeClass(TypeKind.ISIZE, "Isize");
-    this.registerTypeClass(TypeKind.U8, "U8");
-    this.registerTypeClass(TypeKind.U16, "U16");
-    this.registerTypeClass(TypeKind.U32, "U32");
-    this.registerTypeClass(TypeKind.U64, "U64");
-    this.registerTypeClass(TypeKind.USIZE, "Usize");
-    this.registerTypeClass(TypeKind.BOOL, "Bool");
-    this.registerTypeClass(TypeKind.F32, "F32");
-    this.registerTypeClass(TypeKind.F64, "F64");
-    if (options.hasFeature(Feature.SIMD)) this.registerTypeClass(TypeKind.V128, "V128");
+    this.registerTypeClass(TypeKind.I8, LibrarySymbols.I8);
+    this.registerTypeClass(TypeKind.I16, LibrarySymbols.I16);
+    this.registerTypeClass(TypeKind.I32, LibrarySymbols.I32);
+    this.registerTypeClass(TypeKind.I64, LibrarySymbols.I64);
+    this.registerTypeClass(TypeKind.ISIZE, LibrarySymbols.Isize);
+    this.registerTypeClass(TypeKind.U8, LibrarySymbols.U8);
+    this.registerTypeClass(TypeKind.U16, LibrarySymbols.U16);
+    this.registerTypeClass(TypeKind.U32, LibrarySymbols.U32);
+    this.registerTypeClass(TypeKind.U64, LibrarySymbols.U64);
+    this.registerTypeClass(TypeKind.USIZE, LibrarySymbols.Usize);
+    this.registerTypeClass(TypeKind.BOOL, LibrarySymbols.Bool);
+    this.registerTypeClass(TypeKind.F32, LibrarySymbols.F32);
+    this.registerTypeClass(TypeKind.F64, LibrarySymbols.F64);
+    if (options.hasFeature(Feature.SIMD)) this.registerTypeClass(TypeKind.V128, LibrarySymbols.V128);
 
     var element: Element | null;
 
     // register 'main' if present
-    if (element = this.lookupGlobal("main")) {
+    if (element = this.lookupGlobal(LibrarySymbols.main)) {
       if (
         element.kind == ElementKind.FUNCTION_PROTOTYPE &&
         !(<FunctionPrototype>element).isAny(CommonFlags.GENERIC | CommonFlags.AMBIENT) &&
@@ -785,15 +788,15 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register 'abort' if present
-    if (element = this.lookupGlobal("abort")) {
+    if (element = this.lookupGlobal(LibrarySymbols.abort)) {
       assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
       let instance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
       if (instance) this.abortInstance = instance;
     }
 
     // register 'memory.allocate' if present
-    if (element = this.lookupGlobal("memory")) {
-      if (element = element.lookupInSelf("allocate")) {
+    if (element = this.lookupGlobal(LibrarySymbols.memory)) {
+      if (element = element.lookupInSelf(LibrarySymbols.allocate)) {
         assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
         let instance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
         if (instance) this.memoryAllocateInstance = instance;
@@ -1026,39 +1029,6 @@ export class Program extends DiagnosticEmitter {
     return flags;
   }
 
-  /** Sets up global options of an element, if applicable. */
-  private maybeRegisterGlobally(
-    element: Element,
-    declaration: DeclarationStatement
-  ): void {
-    // var parentNode = declaration.parent;
-    // var globalName: string | null = null;
-    // // alias globally if explicitly annotated @global or exported from a top-level library file
-    // if (
-    //   (element.hasDecorator(DecoratorFlags.GLOBAL)) ||
-    //   (
-    //     declaration.range.source.isLibrary &&
-    //     element.is(CommonFlags.EXPORT) &&
-    //     (
-    //       assert(parentNode).kind == NodeKind.SOURCE ||
-    //       (
-    //         <Node>parentNode).kind == NodeKind.VARIABLE &&
-    //         assert((<Node>parentNode).parent).kind == NodeKind.SOURCE
-    //       )
-    //     )
-    // ) {
-    //   globalName = mangleInternalName(element.name, element.parent, element.is(CommonFlags.INSTANCE), true);
-    //   if (this.elementsByName.has(globalName)) {
-    //     this.error(
-    //       DiagnosticCode.Duplicate_identifier_0,
-    //       declaration.name.range, globalName
-    //     );
-    //   } else {
-    //     this.elementsByName.set(globalName, element);
-    //   }
-    // }
-  }
-
   /** Initializes a class declaration. */
   private initializeClass(
     declaration: ClassDeclaration,
@@ -1135,7 +1105,6 @@ export class Program extends DiagnosticEmitter {
         default: assert(false); // class member expected
       }
     }
-    this.maybeRegisterGlobally(element, declaration);
   }
 
   /** Initializes a field of a class or interface. */
@@ -1398,7 +1367,6 @@ export class Program extends DiagnosticEmitter {
     for (let i = 0, k = values.length; i < k; ++i) {
       this.initializeEnumValue(values[i], element);
     }
-    this.maybeRegisterGlobally(element, declaration);
   }
 
   private initializeEnumValue(
@@ -1440,12 +1408,11 @@ export class Program extends DiagnosticEmitter {
       if (queuedExportsStar.has(parent)) queued = queuedExportsStar.get(parent)!;
       else queuedExportsStar.set(parent, queued = []);
       let foreignPath = assert(statement.internalPath);
-      const indexPart = PATH_DELIMITER + "index";
       queued.push(new QueuedExportStar(
         foreignPath,
-        foreignPath.endsWith(indexPart) // strip or add index depending on what's already present
-          ? foreignPath.substring(0, foreignPath.length - indexPart.length)
-          : foreignPath + indexPart,
+        foreignPath.endsWith(INDEX_SUFFIX) // strip or add index depending on what's already present
+          ? foreignPath.substring(0, foreignPath.length - INDEX_SUFFIX.length)
+          : foreignPath + INDEX_SUFFIX,
         assert(statement.path)
       ));
     }
@@ -1491,7 +1458,6 @@ export class Program extends DiagnosticEmitter {
 
     // foreign element, i.e. export { foo } from "./bar"
     } else {
-      const indexPart = PATH_DELIMITER + "index";
       let queued: Map<string,QueuedExport>;
       if (queuedExports.has(localFile)) queued = queuedExports.get(localFile)!;
       else queuedExports.set(localFile, queued = new Map());
@@ -1500,9 +1466,9 @@ export class Program extends DiagnosticEmitter {
         member.localName,
         member.exportedName,
         foreignPath,
-        foreignPath.endsWith(indexPart) // strip or add index depending on what's already present
-          ? foreignPath.substring(0, foreignPath.length - indexPart.length)
-          : foreignPath + indexPart
+        foreignPath.endsWith(INDEX_SUFFIX) // strip or add index depending on what's already present
+          ? foreignPath.substring(0, foreignPath.length - INDEX_SUFFIX.length)
+          : foreignPath + INDEX_SUFFIX
       ));
     }
   }
@@ -1554,7 +1520,7 @@ export class Program extends DiagnosticEmitter {
         statement.namespaceName,
         null, // entire file
         statement.internalPath,
-        statement.internalPath + PATH_DELIMITER + "index"
+        statement.internalPath + INDEX_SUFFIX
       );
       queuedImports.push(queuedImport);
     }
@@ -1567,10 +1533,9 @@ export class Program extends DiagnosticEmitter {
     queuedImports: QueuedImport[],
     queuedExports: Map<File,Map<string,QueuedExport>>
   ): void {
-    const indexPart = PATH_DELIMITER + "index";
-    var foreignPathAlt = foreignPath.endsWith(indexPart) // strip or add index depending on what's already present
-      ? foreignPath.substring(0, foreignPath.length - indexPart.length)
-      : foreignPath + indexPart;
+    var foreignPathAlt = foreignPath.endsWith(INDEX_SUFFIX) // strip or add index depending on what's already present
+      ? foreignPath.substring(0, foreignPath.length - INDEX_SUFFIX.length)
+      : foreignPath + INDEX_SUFFIX;
 
     // resolve right away if the element exists
     var element = this.lookupForeign(declaration.foreignName.text, foreignPath, foreignPathAlt, queuedExports);
@@ -1612,7 +1577,6 @@ export class Program extends DiagnosticEmitter {
       );
       return;
     }
-    this.maybeRegisterGlobally(element, declaration);
   }
 
   private initializeInterface(
@@ -1655,7 +1619,6 @@ export class Program extends DiagnosticEmitter {
         default: assert(false); // interface member expected
       }
     }
-    this.maybeRegisterGlobally(element, declaration);
   }
 
   private ensureNamespace(
@@ -1685,7 +1648,6 @@ export class Program extends DiagnosticEmitter {
       );
       let actual = parent.add(name, element);
       assert(actual === element);
-      this.maybeRegisterGlobally(element, declaration);
       return element;
     }
     this.error(
@@ -1794,7 +1756,6 @@ export class Program extends DiagnosticEmitter {
           assert(findDecorator(DecoratorKind.INLINE, decorators)).range, "inline"
         );
       }
-      this.maybeRegisterGlobally(element, declaration);
     }
   }
 }
@@ -1953,7 +1914,7 @@ export abstract class Element {
 
   /** Obtains a string representation of this element. */
   toString(): string {
-    return "[" + this.id + "] " + ElementKind[this.kind] + ":" + this.internalName;
+    return this.id.toString() + "/" + ElementKind[this.kind] + ":" + this.internalName;
   }
 }
 
@@ -2427,12 +2388,12 @@ export class Function extends Element {
       let localIndex = 0;
       if (this.is(CommonFlags.INSTANCE)) {
         let local = new Local(
-          "this",
+          CommonSymbols.this_,
           localIndex++,
           assert(signature.thisType),
           this
         );
-        this.localsByName.set("this", local);
+        this.localsByName.set(CommonSymbols.this_, local);
         this.localsByIndex[local.index] = local;
       }
       let parameterTypes = signature.parameterTypes;

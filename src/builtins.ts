@@ -62,7 +62,7 @@ import {
 } from "./resolver";
 
 import {
-  CommonFlags
+  CommonFlags, CommonSymbols
 } from "./common";
 
 /** Symbols of various compiler built-ins. */
@@ -162,6 +162,96 @@ export namespace BuiltinSymbols {
   export const f64_sqrt = "~lib/builtins/f64.sqrt";
   export const f32_trunc = "~lib/builtins/f32.trunc";
   export const f64_trunc = "~lib/builtins/f64.trunc";
+  export const i32_load8_s = "~lib/builtins/i32.load8_s";
+  export const i32_load8_u = "~lib/builtins/i32.load8_u";
+  export const i32_load16_s = "~lib/builtins/i32.load16_s";
+  export const i32_load16_u = "~lib/builtins/i32.load16_u";
+  export const i32_load = "~lib/builtins/i32.load";
+  export const i64_load8_s = "~lib/builtins/i64.load8_s";
+  export const i64_load8_u = "~lib/builtins/i64.load8_u";
+  export const i64_load16_s = "~lib/builtins/i64.load16_s";
+  export const i64_load16_u = "~lib/builtins/i64.load16_u";
+  export const i64_load32_s = "~lib/builtins/i64.load32_s";
+  export const i64_load32_u = "~lib/builtins/i64.load32_u";
+  export const i64_load = "~lib/builtins/i64.load";
+  export const f32_load = "~lib/builtins/f32.load";
+  export const f64_load = "~lib/builtins/f64.load";
+  export const i32_store8 = "~lib/builtins/i32.store8";
+  export const i32_store16 = "~lib/builtins/i32.store16";
+  export const i32_store = "~lib/builtins/i32.store";
+  export const i64_store8 = "~lib/builtins/i64.store8";
+  export const i64_store16 = "~lib/builtins/i64.store16";
+  export const i64_store32 = "~lib/builtins/i64.store32";
+  export const i64_store = "~lib/builtins/i64.store";
+  export const f32_store = "~lib/builtins/f32.store";
+  export const f64_store = "~lib/builtins/f64.store";
+  export const i32_atomic_load8_u = "~lib/builtins/i32.atomic.load8_u";
+  export const i32_atomic_load16_u = "~lib/builtins/i32.atomic.load16_u";
+  export const i32_atomic_load = "~lib/builtins/i32.atomic.load";
+  export const i64_atomic_load8_u = "~lib/builtins/i64.atomic.load8_u";
+  export const i64_atomic_load16_u = "~lib/builtins/i64.atomic.load16_u";
+  export const i64_atomic_load32_u = "~lib/builtins/i64.atomic.load32_u";
+  export const i64_atomic_load = "~lib/builtins/i64.atomic.load";
+  export const i32_atomic_store8 = "~lib/builtins/i32.atomic.store8";
+  export const i32_atomic_store16 = "~lib/builtins/i32.atomic.store16";
+  export const i32_atomic_store = "~lib/builtins/i32.atomic.store";
+  export const i64_atomic_store8 = "~lib/builtins/i64.atomic.store8";
+  export const i64_atomic_store16 = "~lib/builtins/i64.atomic.store16";
+  export const i64_atomic_store32 = "~lib/builtins/i64.atomic.store32";
+  export const i64_atomic_store = "~lib/builtins/i64.atomic.store";
+  export const i32_atomic_rmw8_u_add = "~lib/builtins/i32.atomic.rmw8_u.add";
+  export const i32_atomic_rmw16_u_add = "~lib/builtins/i32.atomic.rmw16_u.add";
+  export const i32_atomic_rmw_add = "~lib/builtins/i32.atomic.rmw.add";
+  export const i64_atomic_rmw8_u_add = "~lib/builtins/i64.atomic.rmw8_u.add";
+  export const i64_atomic_rmw16_u_add = "~lib/builtins/i64.atomic.rmw16_u.add";
+  export const i64_atomic_rmw32_u_add = "~lib/builtins/i64.atomic.rmw32_u.add";
+  export const i64_atomic_rmw_add = "~lib/builtins/i64.atomic.rmw.add";
+  export const i32_atomic_rmw8_u_sub = "~lib/builtins/i32.atomic.rmw8_u.sub";
+  export const i32_atomic_rmw16_u_sub = "~lib/builtins/i32.atomic.rmw16_u.sub";
+  export const i32_atomic_rmw_sub = "~lib/builtins/i32.atomic.rmw.sub";
+  export const i64_atomic_rmw8_u_sub = "~lib/builtins/i64.atomic.rmw8_u.sub";
+  export const i64_atomic_rmw16_u_sub = "~lib/builtins/i64.atomic.rmw16_u.sub";
+  export const i64_atomic_rmw32_u_sub = "~lib/builtins/i64.atomic.rmw32_u.sub";
+  export const i64_atomic_rmw_sub = "~lib/builtins/i64.atomic.rmw.sub";
+  export const i32_atomic_rmw8_u_and = "~lib/builtins/i32.atomic.rmw8_u.and";
+  export const i32_atomic_rmw16_u_and = "~lib/builtins/i32.atomic.rmw16_u.and";
+  export const i32_atomic_rmw_and = "~lib/builtins/i32.atomic.rmw.and";
+  export const i64_atomic_rmw8_u_and = "~lib/builtins/i64.atomic.rmw8_u.and";
+  export const i64_atomic_rmw16_u_and = "~lib/builtins/i64.atomic.rmw16_u.and";
+  export const i64_atomic_rmw32_u_and = "~lib/builtins/i64.atomic.rmw32_u.and";
+  export const i64_atomic_rmw_and = "~lib/builtins/i64.atomic.rmw.and";
+  export const i32_atomic_rmw8_u_or = "~lib/builtins/i32.atomic.rmw8_u.or";
+  export const i32_atomic_rmw16_u_or = "~lib/builtins/i32.atomic.rmw16_u.or";
+  export const i32_atomic_rmw_or = "~lib/builtins/i32.atomic.rmw.or";
+  export const i64_atomic_rmw8_u_or = "~lib/builtins/i64.atomic.rmw8_u.or";
+  export const i64_atomic_rmw16_u_or = "~lib/builtins/i64.atomic.rmw16_u.or";
+  export const i64_atomic_rmw32_u_or = "~lib/builtins/i64.atomic.rmw32_u.or";
+  export const i64_atomic_rmw_or = "~lib/builtins/i64.atomic.rmw.or";
+  export const i32_atomic_rmw8_u_xor = "~lib/builtins/i32.atomic.rmw8_u.xor";
+  export const i32_atomic_rmw16_u_xor = "~lib/builtins/i32.atomic.rmw16_u.xor";
+  export const i32_atomic_rmw_xor = "~lib/builtins/i32.atomic.rmw.xor";
+  export const i64_atomic_rmw8_u_xor = "~lib/builtins/i64.atomic.rmw8_u.xor";
+  export const i64_atomic_rmw16_u_xor = "~lib/builtins/i64.atomic.rmw16_u.xor";
+  export const i64_atomic_rmw32_u_xor = "~lib/builtins/i64.atomic.rmw32_u.xor";
+  export const i64_atomic_rmw_xor = "~lib/builtins/i64.atomic.rmw.xor";
+  export const i32_atomic_rmw8_u_xchg = "~lib/builtins/i32.atomic.rmw8_u.xchg";
+  export const i32_atomic_rmw16_u_xchg = "~lib/builtins/i32.atomic.rmw16_u.xchg";
+  export const i32_atomic_rmw_xchg = "~lib/builtins/i32.atomic.rmw.xchg";
+  export const i64_atomic_rmw8_u_xchg = "~lib/builtins/i64.atomic.rmw8_u.xchg";
+  export const i64_atomic_rmw16_u_xchg = "~lib/builtins/i64.atomic.rmw16_u.xchg";
+  export const i64_atomic_rmw32_u_xchg = "~lib/builtins/i64.atomic.rmw32_u.xchg";
+  export const i64_atomic_rmw_xchg = "~lib/builtins/i64.atomic.rmw.xchg";
+  export const i32_atomic_rmw8_u_cmpxchg = "~lib/builtins/i32.atomic.rmw8_u.cmpxchg";
+  export const i32_atomic_rmw16_u_cmpxchg = "~lib/builtins/i32.atomic.rmw16_u.cmpxchg";
+  export const i32_atomic_rmw_cmpxchg = "~lib/builtins/i32.atomic.rmw.cmpxchg";
+  export const i64_atomic_rmw8_u_cmpxchg = "~lib/builtins/i64.atomic.rmw8_u.cmpxchg";
+  export const i64_atomic_rmw16_u_cmpxchg = "~lib/builtins/i64.atomic.rmw16_u.cmpxchg";
+  export const i64_atomic_rmw32_u_cmpxchg = "~lib/builtins/i64.atomic.rmw32_u.cmpxchg";
+  export const i64_atomic_rmw_cmpxchg = "~lib/builtins/i64.atomic.rmw.cmpxchg";
+  export const i32_wait = "~lib/builtins/i32.wait";
+  export const i64_wait = "~lib/builtins/i64.wait";
+  export const i32_notify = "~lib/builtins/i32.notify";
+  export const i64_notify = "~lib/builtins/i64.notify";
   // std/diagnostics.ts
   export const ERROR = "~lib/diagnostics/ERROR";
   export const WARNING = "~lib/diagnostics/WARNING";
@@ -3348,110 +3438,99 @@ function deferASMCall(
     case BuiltinSymbols.f64_sqrt: return deferASM(BuiltinSymbols.sqrt, compiler, Type.f64, operands, Type.f64, reportNode);
     case BuiltinSymbols.f32_trunc: return deferASM(BuiltinSymbols.trunc, compiler, Type.f32, operands, Type.f32, reportNode);
     case BuiltinSymbols.f64_trunc: return deferASM(BuiltinSymbols.trunc, compiler, Type.f64, operands, Type.f64, reportNode);
-
-    case "~lib/builtins/i32.load8_s": return deferASM(BuiltinSymbols.load, compiler, Type.i8, operands, Type.i32, reportNode);
-    case "~lib/builtins/i32.load8_u": return deferASM(BuiltinSymbols.load, compiler, Type.u8, operands, Type.u32, reportNode);
-    case "~lib/builtins/i32.load16_s": return deferASM(BuiltinSymbols.load, compiler, Type.i16, operands, Type.i32, reportNode);
-    case "~lib/builtins/i32.load16_u": return deferASM(BuiltinSymbols.load, compiler, Type.u16, operands, Type.u32, reportNode);
-    case "~lib/builtins/i32.load": return deferASM(BuiltinSymbols.load, compiler, Type.i32, operands, Type.i32, reportNode);
-    case "~lib/builtins/i64.load8_s": return deferASM(BuiltinSymbols.load, compiler, Type.i8, operands, Type.i64, reportNode);
-    case "~lib/builtins/i64.load8_u": return deferASM(BuiltinSymbols.load, compiler, Type.u8, operands, Type.u64, reportNode);
-    case "~lib/builtins/i64.load16_s": return deferASM(BuiltinSymbols.load, compiler, Type.i16, operands, Type.i64, reportNode);
-    case "~lib/builtins/i64.load16_u": return deferASM(BuiltinSymbols.load, compiler, Type.u16, operands, Type.u64, reportNode);
-    case "~lib/builtins/i64.load32_s": return deferASM(BuiltinSymbols.load, compiler, Type.i32, operands, Type.i64, reportNode);
-    case "~lib/builtins/i64.load32_u": return deferASM(BuiltinSymbols.load, compiler, Type.u32, operands, Type.u64, reportNode);
-    case "~lib/builtins/i64.load": return deferASM(BuiltinSymbols.load, compiler, Type.i64, operands, Type.i64, reportNode);
-    case "~lib/builtins/f32.load": return deferASM(BuiltinSymbols.load, compiler, Type.f32, operands, Type.f32, reportNode);
-    case "~lib/builtins/f64.load": return deferASM(BuiltinSymbols.load, compiler, Type.f64, operands, Type.f64, reportNode);
-
-    case "~lib/builtins/i32.store8": return deferASM(BuiltinSymbols.store, compiler, Type.i8, operands, Type.i32, reportNode);
-    case "~lib/builtins/i32.store16": return deferASM(BuiltinSymbols.store, compiler, Type.i16, operands, Type.i32, reportNode);
-    case "~lib/builtins/i32.store": return deferASM(BuiltinSymbols.store, compiler, Type.i32, operands, Type.i32, reportNode);
-    case "~lib/builtins/i64.store8": return deferASM(BuiltinSymbols.store, compiler, Type.i8, operands, Type.i64, reportNode);
-    case "~lib/builtins/i64.store16": return deferASM(BuiltinSymbols.store, compiler, Type.i16, operands, Type.i64, reportNode);
-    case "~lib/builtins/i64.store32": return deferASM(BuiltinSymbols.store, compiler, Type.i32, operands, Type.i64, reportNode);
-    case "~lib/builtins/i64.store": return deferASM(BuiltinSymbols.store, compiler, Type.i64, operands, Type.i64, reportNode);
-    case "~lib/builtins/f32.store": return deferASM(BuiltinSymbols.store, compiler, Type.f32, operands, Type.f32, reportNode);
-    case "~lib/builtins/f64.store": return deferASM(BuiltinSymbols.store, compiler, Type.f64, operands, Type.f64, reportNode);
+    case BuiltinSymbols.i32_load8_s: return deferASM(BuiltinSymbols.load, compiler, Type.i8, operands, Type.i32, reportNode);
+    case BuiltinSymbols.i32_load8_u: return deferASM(BuiltinSymbols.load, compiler, Type.u8, operands, Type.u32, reportNode);
+    case BuiltinSymbols.i32_load16_s: return deferASM(BuiltinSymbols.load, compiler, Type.i16, operands, Type.i32, reportNode);
+    case BuiltinSymbols.i32_load16_u: return deferASM(BuiltinSymbols.load, compiler, Type.u16, operands, Type.u32, reportNode);
+    case BuiltinSymbols.i32_load: return deferASM(BuiltinSymbols.load, compiler, Type.i32, operands, Type.i32, reportNode);
+    case BuiltinSymbols.i64_load8_s: return deferASM(BuiltinSymbols.load, compiler, Type.i8, operands, Type.i64, reportNode);
+    case BuiltinSymbols.i64_load8_u: return deferASM(BuiltinSymbols.load, compiler, Type.u8, operands, Type.u64, reportNode);
+    case BuiltinSymbols.i64_load16_s: return deferASM(BuiltinSymbols.load, compiler, Type.i16, operands, Type.i64, reportNode);
+    case BuiltinSymbols.i64_load16_u: return deferASM(BuiltinSymbols.load, compiler, Type.u16, operands, Type.u64, reportNode);
+    case BuiltinSymbols.i64_load32_s: return deferASM(BuiltinSymbols.load, compiler, Type.i32, operands, Type.i64, reportNode);
+    case BuiltinSymbols.i64_load32_u: return deferASM(BuiltinSymbols.load, compiler, Type.u32, operands, Type.u64, reportNode);
+    case BuiltinSymbols.i64_load: return deferASM(BuiltinSymbols.load, compiler, Type.i64, operands, Type.i64, reportNode);
+    case BuiltinSymbols.f32_load: return deferASM(BuiltinSymbols.load, compiler, Type.f32, operands, Type.f32, reportNode);
+    case BuiltinSymbols.f64_load: return deferASM(BuiltinSymbols.load, compiler, Type.f64, operands, Type.f64, reportNode);
+    case BuiltinSymbols.i32_store8: return deferASM(BuiltinSymbols.store, compiler, Type.i8, operands, Type.i32, reportNode);
+    case BuiltinSymbols.i32_store16: return deferASM(BuiltinSymbols.store, compiler, Type.i16, operands, Type.i32, reportNode);
+    case BuiltinSymbols.i32_store: return deferASM(BuiltinSymbols.store, compiler, Type.i32, operands, Type.i32, reportNode);
+    case BuiltinSymbols.i64_store8: return deferASM(BuiltinSymbols.store, compiler, Type.i8, operands, Type.i64, reportNode);
+    case BuiltinSymbols.i64_store16: return deferASM(BuiltinSymbols.store, compiler, Type.i16, operands, Type.i64, reportNode);
+    case BuiltinSymbols.i64_store32: return deferASM(BuiltinSymbols.store, compiler, Type.i32, operands, Type.i64, reportNode);
+    case BuiltinSymbols.i64_store: return deferASM(BuiltinSymbols.store, compiler, Type.i64, operands, Type.i64, reportNode);
+    case BuiltinSymbols.f32_store: return deferASM(BuiltinSymbols.store, compiler, Type.f32, operands, Type.f32, reportNode);
+    case BuiltinSymbols.f64_store: return deferASM(BuiltinSymbols.store, compiler, Type.f64, operands, Type.f64, reportNode);
   }
   if (compiler.options.hasFeature(Feature.THREADS)) {
     switch (prototype.internalName) {
-      case "~lib/builtins/i32.atomic.load8_u": return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.load16_u": return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u16, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.load": return deferASM(BuiltinSymbols.atomic_load, compiler, Type.i32, operands, Type.i32, reportNode);
-      case "~lib/builtins/i64.atomic.load8_u": return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u8, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.load16_u": return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u16, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.load32_u": return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u32, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.load": return deferASM(BuiltinSymbols.atomic_load, compiler, Type.i64, operands, Type.i64, reportNode);
-
-      case "~lib/builtins/i32.atomic.store8": return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i8, operands, Type.i32, reportNode);
-      case "~lib/builtins/i32.atomic.store16": return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i16, operands, Type.i32, reportNode);
-      case "~lib/builtins/i32.atomic.store": return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i32, operands, Type.i32, reportNode);
-      case "~lib/builtins/i64.atomic.store8": return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i8, operands, Type.i64, reportNode);
-      case "~lib/builtins/i64.atomic.store16": return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i16, operands, Type.i64, reportNode);
-      case "~lib/builtins/i64.atomic.store32": return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i32, operands, Type.i64, reportNode);
-      case "~lib/builtins/i64.atomic.store": return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i64, operands, Type.i64, reportNode);
-
-      case "~lib/builtins/i32.atomic.rmw8_u.add": return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw16_u.add": return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u16, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw.add": return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u32, operands, Type.u32, reportNode);
-      case "~lib/builtins/i64.atomic.rmw8_u.add": return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u8, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw16_u.add": return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u16, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw32_u.add": return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u32, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw.add": return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u64, operands, Type.u64, reportNode);
-
-      case "~lib/builtins/i32.atomic.rmw8_u.sub": return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw16_u.sub": return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u16, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw.sub": return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u32, operands, Type.u32, reportNode);
-      case "~lib/builtins/i64.atomic.rmw8_u.sub": return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u8, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw16_u.sub": return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u16, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw32_u.sub": return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u32, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw.sub": return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u64, operands, Type.u64, reportNode);
-
-      case "~lib/builtins/i32.atomic.rmw8_u.and": return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw16_u.and": return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u16, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw.and": return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u32, operands, Type.u32, reportNode);
-      case "~lib/builtins/i64.atomic.rmw8_u.and": return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u8, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw16_u.and": return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u16, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw32_u.and": return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u32, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw.and": return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u64, operands, Type.u64, reportNode);
-
-      case "~lib/builtins/i32.atomic.rmw8_u.or": return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw16_u.or": return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u16, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw.or": return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u32, operands, Type.u32, reportNode);
-      case "~lib/builtins/i64.atomic.rmw8_u.or": return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u8, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw16_u.or": return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u16, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw32_u.or": return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u32, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw.or": return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u64, operands, Type.u64, reportNode);
-
-      case "~lib/builtins/i32.atomic.rmw8_u.xor": return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw16_u.xor": return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw.xor": return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i64.atomic.rmw8_u.xor": return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw16_u.xor": return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u16, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw32_u.xor": return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u32, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw.xor": return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u64, operands, Type.u64, reportNode);
-
-      case "~lib/builtins/i32.atomic.rmw8_u.xchg": return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw16_u.xchg": return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw.xchg": return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i64.atomic.rmw8_u.xchg": return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw16_u.xchg": return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u16, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw32_u.xchg": return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u32, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw.xchg": return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u64, operands, Type.u64, reportNode);
-
-      case "~lib/builtins/i32.atomic.rmw8_u.cmpxchg": return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw16_u.cmpxchg": return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i32.atomic.rmw.cmpxchg": return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case "~lib/builtins/i64.atomic.rmw8_u.cmpxchg": return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw16_u.cmpxchg": return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u16, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw32_u.cmpxchg": return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u32, operands, Type.u64, reportNode);
-      case "~lib/builtins/i64.atomic.rmw.cmpxchg": return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u64, operands, Type.u64, reportNode);
-
-      case "~lib/builtins/i32.wait": return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i32, operands, Type.u32, reportNode);
-      case "~lib/builtins/i64.wait": return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i64, operands, Type.i64, reportNode);
-      case "~lib/builtins/i32.notify": return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i32, operands, Type.u32, reportNode);
-      case "~lib/builtins/i64.notify": return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i64, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i32_atomic_load8_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_load16_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u16, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_load: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_atomic_load8_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u8, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_load16_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u16, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_load32_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u32, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_load: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.i64, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i32_atomic_store8: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_store16: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_store: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_atomic_store8: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i8, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_store16: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i16, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_store32: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i32, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_store: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i64, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_u_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_u_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u16, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u32, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_u_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u8, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_u_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u16, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_u_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u32, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_u_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_u_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u16, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u32, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_u_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u8, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_u_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u16, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_u_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u32, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_u_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_u_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u16, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u32, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_u_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u8, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_u_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u16, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_u_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u32, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_u_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_u_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u16, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u32, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_u_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u8, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_u_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u16, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_u_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u32, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u16, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u32, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_u_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_u_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_u_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_u_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u16, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_u_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u32, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_u_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_u_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_u_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_u_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u16, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_u_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u32, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i32, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i64_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i64, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i32_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i32, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i64_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i64, operands, Type.i64, reportNode);
     }
   }
   /* tslint:enable:max-line-length */
@@ -3467,19 +3546,8 @@ function deferASM(
   valueType: Type,
   reportNode: CallExpression
 ): ExpressionRef {
-  // Built-in wasm functions can be namespaced like atomic.{OPERATION}
-  // Split name by '.' to find member function prototype
-  // FIXME: This is slower than it needs to be due to the way resolving works atm
-  var names = name.split(".");
-  var prototype: Element = assert(compiler.program.elementsByName.get(names[0]));
-  if (names.length > 1) {
-    for (let i = 1; i < names.length; i++) {
-      const subName = names[i];
-      if (prototype && prototype.members) {
-        prototype = assert(prototype.members.get(subName));
-      }
-    }
-  }
+  assert(compiler.program.elementsByName.has(name));
+  var prototype = compiler.program.elementsByName.get(name)!;
   assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
   return compileCall(compiler, <FunctionPrototype>prototype, [ typeArgument ], operands, valueType, reportNode);
 }
@@ -3577,7 +3645,7 @@ export function compileAbort(
   var program = compiler.program;
   var module = compiler.module;
 
-  var stringType = program.typesLookup.get("string");
+  var stringType = program.typesLookup.get(CommonSymbols.string);
   if (!stringType) return module.createUnreachable();
 
   var abortInstance = program.abortInstance;

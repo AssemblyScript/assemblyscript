@@ -13,6 +13,7 @@ import {
   ElementKind,
   OperatorKind,
   FlowFlags,
+  Flow,
 
   Element,
   Class,
@@ -20,13 +21,11 @@ import {
   Function,
   FunctionPrototype,
   VariableLikeElement,
-  DecoratorFlags,
-  FieldPrototype,
-  Field,
-  Global,
-  Flow,
+  Property,
   PropertyPrototype,
-  Property
+  Field,
+  FieldPrototype,
+  Global
 } from "./program";
 
 import {
@@ -63,8 +62,8 @@ import {
 
 import {
   PATH_DELIMITER,
-  INSTANCE_DELIMITER,
-  CommonFlags
+  CommonFlags,
+  CommonSymbols
 } from "./common";
 
 import {
@@ -745,7 +744,14 @@ export class Resolver extends DiagnosticEmitter {
               reportMode
             );
             if (!resolvedOperand) return null;
-            throw new Error("not implemented"); // TODO: should all elements have a corresponding type right away?
+            // TODO: should all elements have a corresponding type right away?
+            if (reportMode == ReportMode.REPORT) {
+              this.error(
+                DiagnosticCode.Operation_not_supported,
+                expression.range
+              );
+            }
+            return null;
           }
           default: assert(false);
         }
@@ -775,7 +781,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       case NodeKind.THIS: { // -> Class / ClassPrototype
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let explicitLocal = flow.lookupLocal("this");
+          let explicitLocal = flow.lookupLocal(CommonSymbols.this_);
           if (explicitLocal) {
             this.currentThisExpression = null;
             this.currentElementExpression = null;
@@ -798,7 +804,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       case NodeKind.SUPER: { // -> Class
         if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let explicitLocal = flow.lookupLocal("super");
+          let explicitLocal = flow.lookupLocal(CommonSymbols.super_);
           if (explicitLocal) {
             this.currentThisExpression = null;
             this.currentElementExpression = null;
@@ -985,10 +991,10 @@ export class Resolver extends DiagnosticEmitter {
     if (explicitThisType) {
       thisType = this.resolveType(explicitThisType, contextualTypeArguments, reportMode);
       if (!thisType) return null;
-      contextualTypeArguments.set("this", thisType);
+      contextualTypeArguments.set(CommonSymbols.this_, thisType);
     } else if (classInstance) {
       thisType = classInstance.type;
-      contextualTypeArguments.set("this", thisType);
+      contextualTypeArguments.set(CommonSymbols.this_, thisType);
     }
 
     // resolve signature node
@@ -1270,7 +1276,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Link own constructor if present
     {
-      let ctorPrototype = instance.lookupInSelf("constructor");
+      let ctorPrototype = instance.lookupInSelf(CommonSymbols.constructor);
       if (ctorPrototype && ctorPrototype.parent === instance) {
         assert(ctorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
         let ctorInstance = this.resolveFunction(
