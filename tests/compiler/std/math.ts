@@ -1061,6 +1061,7 @@ assert(test_cos(7.5002613322736158, 0.346390176334581135, -0.499621003866195679,
 assert(test_cos(9.12173941873158789, -0.954434129754181071, 0.498281508684158325, INEXACT));
 assert(test_cos(6.78495402047631568, 0.876733223316664589, -0.498808383941650391, INEXACT));
 assert(test_cos(8.77084654266666419, -0.793698411740070497, 0.499968290328979492, INEXACT));
+*/
 
 // Mathf.cos ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -1085,7 +1086,10 @@ assert(test_cosf(0.0, 1.0, 0.0, 0));
 assert(test_cosf(-0.0, 1.0, 0.0, 0));
 assert(test_cosf(Infinity, NaN, 0.0, INVALID));
 assert(test_cosf(-Infinity, NaN, 0.0, INVALID));
-assert(test_cosf(NaN, NaN, 0.0, 0)); */
+assert(test_cosf(NaN, NaN, 0.0, 0));
+
+// large arguments
+// TODO
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.cosh
@@ -2872,6 +2876,7 @@ assert(test_sin(-0.0, -0.0, 0.0, 0));
 assert(test_sin(Infinity, NaN, 0.0, INVALID));
 assert(test_sin(-Infinity, NaN, 0.0, INVALID));
 assert(test_sin(NaN, NaN, 0.0, 0));
+*/
 
 // Mathf.sin ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -2896,7 +2901,10 @@ assert(test_sinf(0.0, 0.0, 0.0, 0));
 assert(test_sinf(-0.0, -0.0, 0.0, 0));
 assert(test_sinf(Infinity, NaN, 0.0, INVALID));
 assert(test_sinf(-Infinity, NaN, 0.0, INVALID));
-assert(test_sinf(NaN, NaN, 0.0, 0)); */
+assert(test_sinf(NaN, NaN, 0.0, 0));
+
+// large arguments
+// TODO
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.sinh
