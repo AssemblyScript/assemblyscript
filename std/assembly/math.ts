@@ -2287,7 +2287,7 @@ export namespace NativeMathf {
   }
 }
 
-export namespace SafeMath {
+export namespace IntegerMath {
 
   @inline
   export function abs<T>(x: T): T {
