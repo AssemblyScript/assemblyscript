@@ -2518,6 +2518,107 @@ export namespace NativeMathf {
   }
 }
 
+var sincosf_s: f32;
+var sincosf_c: f32;
+
+export function sincosf(x: f32): void { // see: musl/tree/src/math/sincosf.c
+  const s1pio2 = reinterpret<f64>(0x3FF921FB54442D18); /* 1 * M_PI_2 */
+  const s2pio2 = reinterpret<f64>(0x400921FB54442D18); /* 2 * M_PI_2 */
+  const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); /* 3 * M_PI_2 */
+  const s4pio2 = reinterpret<f64>(0x401921FB54442D18); /* 4 * M_PI_2 */
+
+  var ix = reinterpret<u32>(x);
+  var sign = ix >> 31;
+  ix &= 0x7fffffff;
+
+  /* |x| ~<= pi/4 */
+  if (ix <= 0x3f490fda) {
+    if (ix < 0x39800000) { /* |x| < 2**-12 */
+      /* raise inexact if x!=0 and underflow if subnormal */
+      // FORCE_EVAL(ix < 0x00100000 ? x / 0x1p120f : x + 0x1p120f);
+      sincosf_s = x;
+      sincosf_c = 1;
+      return;
+    }
+    sincosf_s = sin_kernf(x);
+    sincosf_c = cos_kernf(x);
+    return;
+  }
+
+  /* |x| ~<= 5*pi/4 */
+  if (ix <= 0x407b53d1) {
+    if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
+      if (sign) {
+        sincosf_s = -cos_kernf(x + s1pio2);
+        sincosf_c =  sin_kernf(x + s1pio2);
+      } else {
+        sincosf_s = cos_kernf(s1pio2 - x);
+        sincosf_c = sin_kernf(s1pio2 - x);
+      }
+      return;
+    }
+    /* -sin(x + c) is not correct if x+c could be 0: -0 vs +0 */
+    sincosf_s = -sin_kernf(sign ? x + s2pio2 : x - s2pio2);
+    sincosf_c = -cos_kernf(sign ? x + s2pio2 : x - s2pio2);
+    return;
+  }
+
+  /* |x| ~<= 9*pi/4 */
+  if (ix <= 0x40e231d5) {
+    if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
+      if (sign) {
+        sincosf_s =  cos_kernf(x + s3pio2);
+        sincosf_c = -sin_kernf(x + s3pio2);
+      } else {
+        sincosf_s = -cos_kernf(x - s3pio2);
+        sincosf_c =  sin_kernf(x - s3pio2);
+      }
+      return;
+    }
+    sincosf_s = sin_kernf(sign ? x + s4pio2 : x - s4pio2);
+    sincosf_c = cos_kernf(sign ? x + s4pio2 : x - s4pio2);
+    return;
+  }
+
+  /* sin(Inf or NaN) is NaN */
+  if (ix >= 0x7f800000) {
+    let xx = x - x;
+    sincosf_s = xx;
+    sincosf_c = xx;
+    return;
+  }
+
+  /* general argument reduction needed */
+  var n = rempio2f(x, ix, sign);
+  var y = rempio2f_y;
+  var s = sin_kernf(y);
+  var c = cos_kernf(y);
+
+  switch (n & 3) {
+    case 0: {
+      sincosf_s = s;
+      sincosf_c = c;
+      break;
+    }
+    case 1: {
+      sincosf_s =  c;
+      sincosf_c = -s;
+      break;
+    }
+    case 2: {
+      sincosf_s = -s;
+      sincosf_c = -c;
+      break;
+    }
+    case 3:
+    default: {
+      sincosf_s = -c;
+      sincosf_c =  s;
+      break;
+    }
+  }
+}
+
 export function ipow32(x: i32, e: i32): i32 {
   var out = 1;
   if (ASC_SHRINK_LEVEL < 1) {
