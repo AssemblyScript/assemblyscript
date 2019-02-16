@@ -1230,7 +1230,7 @@ export namespace NativeMath {
 
 /** @internal */
 var rempio2f_y: f64;
-var pio2_large_quot: i32;
+var pio2_large_quot: u64;
 
 /** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
@@ -1253,52 +1253,44 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   return NativeMathf.exp(x - kln2) * scale * scale;
 }
 
-/** @internal */
-function pio2f_reduce_large(u: u32): f64 { // see glibc: ieee754/flt-32/s_sincosf.h#L144
-  const ipio4: u32[] = [
-    0xa2,       0xa2f9,     0xa2f983,   0xa2f9836e,
-    0xf9836e4e, 0x836e4e44, 0x6e4e4415, 0x4e441529,
-    0x441529fc, 0x1529fc27, 0x29fc2757, 0xfc2757d1,
-    0x2757d1f5, 0x57d1f534, 0xd1f534dd, 0xf534ddc0,
-    0x34ddc0db, 0xddc0db62, 0xc0db6295, 0xdb629599,
-    0x6295993c, 0x95993c43, 0x993c4390, 0x3c439041
+@inline /** @internal */
+function pio2_large_quot_segment(offset: i32): u64 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c#L20
+  const bits: u64[] = [
+    0xA2F9836E4E441529,
+    0xFC2757D1F534DDC0,
+    0xDB6295993C439041,
+    0xFE5163ABDEBBC561
   ];
 
-  const pi63 = reinterpret<f64>(0x3C1921FB54442D18); // PI * 2^-64 = 0x1.921FB54442D18p-62;
-  var q: u64, r0: u64, r1: u64, r2: u64, ul: u64;
+  var index = offset >> 6;
+  var shift = offset & 63;
 
-  var offset = (u >> 26) & 15;
-  var shift  = (u >> 23) & 7;
+  var b0 = unchecked(bits[index + 0]);
+  var b1 = unchecked(bits[index + 1]);
+  var lo: u64;
 
-  u = (u & 0xffffff) | 0x800000;
-  u <<= shift;
-  ul = u as u64;
+  if (shift > 32) {
+    let b2 = unchecked(bits[index + 2]);
+    lo  = b2 >> (96 - shift);
+    lo |= b1 << (shift - 32);
+  } else {
+    lo = b1 >> (32 - shift);
+  }
 
-  r0 = u  * unchecked(ipio4[offset + 0]);
-  r1 = ul * unchecked(ipio4[offset + 4]);
-  r2 = ul * unchecked(ipio4[offset + 8]);
-  r0 = (r2 >> 32) | (r0 << 32);
-  r0 += r1;
+  pio2_large_quot =
+    (b1 >> (64 - shift)) |
+    (b0 << shift);
 
-  // round to nearest
-  q = (r0 + (<u64>1 << 61)) >> 62;
-  r0 -= q << 62;
-
-  var x = <f64><i64>r0;
-  pio2_large_quot = <i32>q;
-  return x * pi63;
+  return lo;
 }
 
 @inline /** @internal */
-function rempio2f(x: f32): i32 {
+function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c#L43
   const pi2hi = reinterpret<f64>(0x3FF921FB50000000); // 1.57079631090164184570
   const pi2lo = reinterpret<f64>(0x3E5110B4611A6263); // 1.58932547735281966916e-8
   const _2_pi = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
   const Ox1_8p52 = reinterpret<f64>(0x4338000000000000); // 0x1.8p52
-
-  var u = reinterpret<u32>(x);
-  var s = u >> 31;
-  u &= 0x7FFFFFFF;
+  const pi_2_65  = reinterpret<f64>(0x3BF921FB54442D18);
 
   if (u < 0x4DC90FDB) {
     // let q = rint(x * _2_pi);
@@ -1310,10 +1302,16 @@ function rempio2f(x: f32): i32 {
     rempio2f_y = x - x;
     return 0;
   }
-  var res  = pio2f_reduce_large(u);
-  var quot = pio2_large_quot;
-  rempio2f_y = copysign<f64>(res, -x);
-  return <i32>(s ? -quot : quot);
+  var slo = pio2_large_quot_segment((u >> 23) - 152);
+  var shi = pio2_large_quot;
+
+  var mantissa: u64 = (u & 0x7FFFFF) | 0x800000;
+  var product: u64 = mantissa * shi + ((mantissa * slo) >> 32);
+  var r: i64 = product << 2;
+  var q: i32 = <i32>(product >> 62) + <i32>(r < 0);
+
+  rempio2f_y = copysign<f64>(pi_2_65, x) * <f64>r;
+  return select(-q, q, sign);
 }
 
 /* |sin(x)/x - s(x)| < 2**-37.5 (~[-4.89e-12, 4.824e-12]). */
@@ -1661,7 +1659,7 @@ export namespace NativeMathf {
     if (ix >= 0x7f800000) return x - x;
 
     /* general argument reduction needed */
-    var n = rempio2f(x);
+    var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
 
     /*
@@ -2282,7 +2280,7 @@ export namespace NativeMathf {
     /* sin(Inf or NaN) is NaN */
     if (ix >= 0x7f800000) return x - x;
 
-    var n = rempio2f(x);
+    var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
 
     /*
@@ -2355,7 +2353,7 @@ export namespace NativeMathf {
     if (ix >= 0x7f800000) return x - x;
 
     /* argument reduction */
-    var n = rempio2f(x);
+    var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
     return tan_kernf(y, n & 1);
   }
