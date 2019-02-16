@@ -1620,7 +1620,7 @@ export namespace NativeMathf {
     return <f32>builtin_clz<i32>(<i32>x);
   }
 
-  export function cos(x: f32): f32 {
+  export function cos(x: f32): f32 { // see: musl/src/math/cosf.c
     const c1pio2 = reinterpret<f64>(0x3FF921FB54442D18); // M_PI_2 * 1
     const c2pio2 = reinterpret<f64>(0x400921FB54442D18); // M_PI_2 * 2
     const c3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // M_PI_2 * 3
@@ -2242,7 +2242,7 @@ export namespace NativeMathf {
     return <bool>((reinterpret<u32>(x) >>> 31) & (x == x));
   }
 
-  export function sin(x: f32): f32 {
+  export function sin(x: f32): f32 { // see: musl/src/math/sinf.c
     const s1pio2 = reinterpret<f64>(0x3FF921FB54442D18); // M_PI_2 * 1
     const s2pio2 = reinterpret<f64>(0x400921FB54442D18); // M_PI_2 * 2
     const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // M_PI_2 * 3
