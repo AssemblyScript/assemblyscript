@@ -4894,45 +4894,42 @@
   i32.const 1
   i32.and
   if (result f32)
-   block $~lib/math/sin_kernf|inlined.4 (result f32)
-    local.get $20
-    local.set $6
-    local.get $6
-    local.get $6
-    f64.mul
-    local.set $5
-    local.get $5
-    local.get $5
-    f64.mul
-    local.set $4
-    f64.const -1.9839334836096632e-04
-    local.get $5
-    f64.const 2.718311493989822e-06
-    f64.mul
-    f64.add
-    local.set $3
-    local.get $5
-    local.get $6
-    f64.mul
-    local.set $7
-    local.get $6
-    local.get $7
-    f64.const -0.16666666641626524
-    local.get $5
-    f64.const 0.008333329385889463
-    f64.mul
-    f64.add
-    f64.mul
-    f64.add
-    local.get $7
-    local.get $4
-    f64.mul
-    local.get $3
-    f64.mul
-    f64.add
-    f32.demote_f64
-   end
-   f32.neg
+   local.get $20
+   local.set $6
+   local.get $6
+   local.get $6
+   f64.mul
+   local.set $5
+   local.get $5
+   local.get $5
+   f64.mul
+   local.set $4
+   f64.const -1.9839334836096632e-04
+   local.get $5
+   f64.const 2.718311493989822e-06
+   f64.mul
+   f64.add
+   local.set $3
+   local.get $5
+   local.get $6
+   f64.mul
+   local.set $7
+   local.get $6
+   local.get $7
+   f64.const -0.16666666641626524
+   local.get $5
+   f64.const 0.008333329385889463
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.get $7
+   local.get $4
+   f64.mul
+   local.get $3
+   f64.mul
+   f64.add
+   f32.demote_f64
   else   
    local.get $20
    local.set $7
@@ -4970,6 +4967,8 @@
   end
   local.set $21
   local.get $19
+  i32.const 1
+  i32.add
   i32.const 2
   i32.and
   if (result f32)
@@ -10546,7 +10545,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2215
+   i32.const 2207
    i32.const 24
    call $~lib/env/abort
    unreachable

@@ -3963,7 +3963,6 @@
     f64.mul
     f64.add
     f32.demote_f64
-    f32.neg
    else    
     local.get $1
     local.get $1
@@ -3998,6 +3997,8 @@
    f32.neg
    local.get $0
    local.get $3
+   i32.const 1
+   i32.add
    i32.const 2
    i32.and
    select
@@ -8658,7 +8659,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2215
+   i32.const 2207
    i32.const 24
    call $~lib/env/abort
    unreachable

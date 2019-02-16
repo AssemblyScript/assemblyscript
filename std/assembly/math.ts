@@ -1662,16 +1662,8 @@ export namespace NativeMathf {
     var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
 
-    /*
-    switch (n & 3) {
-      case 0:  return  cos_kernf(y);
-      case 1:  return -sin_kernf(y);
-      case 2:  return -cos_kernf(y);
-      default: return  sin_kernf(y);
-    }
-    */
-    var t = n & 1 ? -sin_kernf(y) : cos_kernf(y);
-    return n & 2 ? -t : t;
+    var t = n & 1 ? sin_kernf(y) : cos_kernf(y);
+    return (n + 1) & 2 ? -t : t;
   }
 
   export function cosh(x: f32): f32 { // see: musl/src/math/coshf.c
@@ -2283,13 +2275,6 @@ export namespace NativeMathf {
     var n = rempio2f(x, ix, sign);
     var y = rempio2f_y;
 
-    /*
-    switch (n & 3) {
-      case 0:  return  sin_kernf(y);
-      case 1:  return  cos_kernf(y);
-      case 2:  return -sin_kernf(y);
-      default: return -cos_kernf(y);
-    }*/
     var t = n & 1 ? cos_kernf(y) : sin_kernf(y);
     return n & 2 ? -t : t;
   }
