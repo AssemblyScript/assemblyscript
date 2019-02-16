@@ -3125,6 +3125,7 @@ assert(test_tan(-0.0, -0.0, 0.0, 0));
 assert(test_tan(Infinity, NaN, 0.0, INVALID));
 assert(test_tan(-Infinity, NaN, 0.0, INVALID));
 assert(test_tan(NaN, NaN, 0.0, 0));
+*/
 
 // Mathf.tan ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -3149,7 +3150,7 @@ assert(test_tanf(0.0, 0.0, 0.0, 0));
 assert(test_tanf(-0.0, -0.0, 0.0, 0));
 assert(test_tanf(Infinity, NaN, 0.0, INVALID));
 assert(test_tanf(-Infinity, NaN, 0.0, INVALID));
-assert(test_tanf(NaN, NaN, 0.0, 0)); */
+assert(test_tanf(NaN, NaN, 0.0, 0));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.tanh

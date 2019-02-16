@@ -1256,7 +1256,7 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
 /** @internal */
 function pio2f_reduce_large(u: u32): f64 { // see glibc: ieee754/flt-32/s_sincosf.h#L144
   const ipio4: u32[] = [
-    0xa2,       0xa2f9,	    0xa2f983,   0xa2f9836e,
+    0xa2,       0xa2f9,     0xa2f983,   0xa2f9836e,
     0xf9836e4e, 0x836e4e44, 0x6e4e4415, 0x4e441529,
     0x441529fc, 0x1529fc27, 0x29fc2757, 0xfc2757d1,
     0x2757d1f5, 0x57d1f534, 0xd1f534dd, 0xf534ddc0,
@@ -1314,7 +1314,7 @@ function rempio2f(x: f32): i32 {
 
 /* |sin(x)/x - s(x)| < 2**-37.5 (~[-4.89e-12, 4.824e-12]). */
 @inline /** @internal */
-function sin_kernf(x: f64): f32 {
+function sin_kernf(x: f64): f32 { // see: musl/tree/src/math/__sindf.c
   const S1 = reinterpret<f64>(0xBFC5555554CBAC77); // -0x15555554cbac77.0p-55
   const S2 = reinterpret<f64>(0x3F811110896EFBB2); //  0x111110896efbb2.0p-59
   const S3 = reinterpret<f64>(0xBF2A00F9E2CAE774); // -0x1a00f9e2cae774.0p-65
@@ -1329,7 +1329,7 @@ function sin_kernf(x: f64): f32 {
 
 /* |cos(x) - c(x)| < 2**-34.1 (~[-5.37e-11, 5.295e-11]). */
 @inline /** @internal */
-function cos_kernf(x: f64): f32 {
+function cos_kernf(x: f64): f32 { // see: musl/tree/src/math/__cosdf.c
   const C0 = reinterpret<f64>(0xBFDFFFFFFD0C5E81); // -0x1ffffffd0c5e81.0p-54
   const C1 = reinterpret<f64>(0x3FA55553E1053A42); //  0x155553e1053a42.0p-57
   const C2 = reinterpret<f64>(0xBF56C087E80F1E27); // -0x16c087e80f1e27.0p-62
@@ -1339,6 +1339,28 @@ function cos_kernf(x: f64): f32 {
   var w = z * z;
   var r = C2 + z * C3;
   return <f32>(((1 + z * C0) + w * C1) + (w * z) * r);
+}
+
+/* |tan(x)/x - t(x)| < 2**-25.5 (~[-2e-08, 2e-08]). */
+@inline /** @internal */
+function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
+
+  const T0 = reinterpret<f64>(0x3FD5554D3418C99F); /* 0x15554d3418c99f.0p-54 */
+  const T1 = reinterpret<f64>(0x3FC112FD38999F72); /* 0x1112fd38999f72.0p-55 */
+  const T2 = reinterpret<f64>(0x3FAB54C91D865AFE); /* 0x1b54c91d865afe.0p-57 */
+  const T3 = reinterpret<f64>(0x3F991DF3908C33CE); /* 0x191df3908c33ce.0p-58 */
+  const T4 = reinterpret<f64>(0x3F685DADFCECF44E); /* 0x185dadfcecf44e.0p-61 */
+  const T5 = reinterpret<f64>(0x3F8362B9BF971BCD); /* 0x1362b9bf971bcd.0p-59 */
+
+  var z = x * x;
+  var r = T4 + z * T5;
+  var t = T2 + z * T3;
+  var w = z * z;
+  var s = z * x;
+  var u = T0 + z * T1;
+
+  r = (x + s * u) + (s * w) * (t + w * r);
+  return <f32>(odd ? -1 / r : r);
 }
 
 export namespace NativeMathf {
@@ -2292,9 +2314,46 @@ export namespace NativeMathf {
     return builtin_sqrt<f32>(x);
   }
 
-  export function tan(x: f32): f32 { // TODO
-    unreachable();
-    return 0;
+  export function tan(x: f32): f32 { // see: musl/src/math/tanf.c
+    const t1pio2 = reinterpret<f64>(0x3FF921FB54442D18); /* 1 * M_PI_2 */
+    const t2pio2 = reinterpret<f64>(0x400921FB54442D18); /* 2 * M_PI_2 */
+    const t3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); /* 3 * M_PI_2 */
+    const t4pio2 = reinterpret<f64>(0x401921FB54442D18); /* 4 * M_PI_2 */
+
+    var ix = reinterpret<u32>(x);
+    var sign = ix >> 31;
+    ix &= 0x7FFFFFFF;
+
+    if (ix <= 0x3f490fda) {  /* |x| ~<= pi/4 */
+      if (ix < 0x39800000) {  /* |x| < 2**-12 */
+        /* raise inexact if x!=0 and underflow if subnormal */
+        // FORCE_EVAL(ix < 0x00800000 ? x / 0x1p120f : x + 0x1p120f);
+        return x;
+      }
+      return tan_kernf(x, 0);
+    }
+    if (ix <= 0x407b53d1) {  /* |x| ~<= 5*pi/4 */
+      if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
+        return tan_kernf((sign ? x + t1pio2 : x - t1pio2), 1);
+      } else {
+        return tan_kernf((sign ? x + t2pio2 : x - t2pio2), 0);
+      }
+    }
+    if (ix <= 0x40e231d5) {  /* |x| ~<= 9*pi/4 */
+      if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
+        return tan_kernf((sign ? x + t3pio2 : x - t3pio2), 1);
+      } else {
+        return tan_kernf((sign ? x + t4pio2 : x - t4pio2), 0);
+      }
+    }
+
+    /* tan(Inf or NaN) is NaN */
+    if (ix >= 0x7f800000) return x - x;
+
+    /* argument reduction */
+    var n = rempio2f(x);
+    var y = rempio2f_y;
+    return tan_kernf(y, n & 1);
   }
 
   export function tanh(x: f32): f32 { // see: musl/src/math/tanhf.c
