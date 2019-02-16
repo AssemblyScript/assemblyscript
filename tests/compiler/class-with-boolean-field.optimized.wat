@@ -1,8 +1,8 @@
 (module
  (type $i (func (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -16,7 +16,7 @@
   i32.const 0
   i32.ne
  )
- (func $null (; 1 ;) (type $v)
+ (func $null (; 1 ;) (type $_)
   nop
  )
 )

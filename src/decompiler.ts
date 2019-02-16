@@ -880,6 +880,7 @@ function nativeTypeToType(type: NativeType): string {
     case NativeType.I64: return "i64";
     case NativeType.F32: return "f32";
     case NativeType.F64: return "f64";
+    case NativeType.V128: return "v128";
     case NativeType.Unreachable: throw new Error("unreachable type");
     case NativeType.Auto: throw new Error("auto type");
     default: throw new Error("unexpected type");
