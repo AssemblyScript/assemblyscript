@@ -1296,7 +1296,10 @@ function rempio2f(x: f32): i32 {
   const _2_pi = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
   const Ox1_8p52 = reinterpret<f64>(0x4338000000000000); // 0x1.8p52
 
-  var u = reinterpret<u32>(x) & 0x7FFFFFFF;
+  var u = reinterpret<u32>(x);
+  var s = u >> 31;
+  u &= 0x7FFFFFFF;
+
   if (u < 0x4DC90FDB) {
     // let q = rint(x * _2_pi);
     let q = x * _2_pi + Ox1_8p52 - Ox1_8p52;
@@ -1307,9 +1310,10 @@ function rempio2f(x: f32): i32 {
     rempio2f_y = x - x;
     return 0;
   }
-  var res = pio2f_reduce_large(u);
+  var res  = pio2f_reduce_large(u);
+  var quot = pio2_large_quot;
   rempio2f_y = copysign<f64>(res, -x);
-  return <i32>pio2_large_quot;
+  return <i32>(s ? -quot : quot);
 }
 
 /* |sin(x)/x - s(x)| < 2**-37.5 (~[-4.89e-12, 4.824e-12]). */
