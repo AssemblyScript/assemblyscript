@@ -1230,7 +1230,7 @@ export namespace NativeMath {
 
 /** @internal */
 var rempio2f_y: f64;
-var pio2_large_quad: i32;
+var pio2_large_quot: i32;
 
 /** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
@@ -1264,8 +1264,8 @@ function pio2f_reduce_large(u: u32): f64 {
     0x6295993c, 0x95993c43, 0x993c4390, 0x3c439041
   ];
 
-  const pi63 = reinterpret<f64>(0x3C1921FB54442D18); // 0x1.921FB54442D18p-62;
-  var n: u64, r0: u64, r1: u64, r2: u64, ul: u64;
+  const pi63 = reinterpret<f64>(0x3C1921FB54442D18); // PI * 2^-64 = 0x1.921FB54442D18p-62;
+  var q: u64, r0: u64, r1: u64, r2: u64, ul: u64;
 
   var offset = (u >> 26) & 15;
   var shift  = (u >> 23) & 7;
@@ -1280,10 +1280,12 @@ function pio2f_reduce_large(u: u32): f64 {
   r0 = (r2 >> 32) | (r0 << 32);
   r0 += r1;
 
-  n = (r0 + (<u64>1 << 61)) >> 62;
-  r0 -= n << 62;
+  // round to nearest
+  q = (r0 + (<u64>1 << 61)) >> 62;
+  r0 -= q << 62;
+
   var x = <f64><i64>r0;
-  pio2_large_quad = <i32>n;
+  pio2_large_quot = <i32>q;
   return x * pi63;
 }
 
@@ -1307,7 +1309,7 @@ function rempio2f(x: f32): i32 {
   }
   var res = pio2f_reduce_large(u);
   rempio2f_y = copysign<f64>(res, -x);
-  return <i32>pio2_large_quad;
+  return <i32>pio2_large_quot;
 }
 
 /* |sin(x)/x - s(x)| < 2**-37.5 (~[-4.89e-12, 4.824e-12]). */

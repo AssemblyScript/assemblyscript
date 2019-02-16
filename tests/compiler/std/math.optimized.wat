@@ -74,7 +74,7 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
- (global $~lib/math/pio2_large_quad (mut i32) (i32.const 0))
+ (global $~lib/math/pio2_large_quot (mut i32) (i32.const 0))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
@@ -3566,7 +3566,7 @@
   i64.shr_u
   local.tee $2
   i32.wrap_i64
-  global.set $~lib/math/pio2_large_quad
+  global.set $~lib/math/pio2_large_quot
   local.get $1
   local.get $2
   i64.const 62
@@ -3899,7 +3899,7 @@
     f64.promote_f32
     f64.copysign
     global.set $~lib/math/rempio2f_y
-    global.get $~lib/math/pio2_large_quad
+    global.get $~lib/math/pio2_large_quot
    end
    local.set $3
    global.get $~lib/math/rempio2f_y
@@ -8633,7 +8633,7 @@
   if
    i32.const 0
    i32.const 176
-   i32.const 2189
+   i32.const 2191
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -9661,7 +9661,7 @@
    f64.promote_f32
    f64.copysign
    global.set $~lib/math/rempio2f_y
-   global.get $~lib/math/pio2_large_quad
+   global.get $~lib/math/pio2_large_quot
   end
   local.set $4
   global.get $~lib/math/rempio2f_y

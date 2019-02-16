@@ -96,7 +96,7 @@
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/math/pio2_large_quad (mut i32) (i32.const 0))
+ (global $~lib/math/pio2_large_quot (mut i32) (i32.const 0))
  (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
@@ -4426,7 +4426,7 @@
   local.set $8
   local.get $1
   i32.wrap_i64
-  global.set $~lib/math/pio2_large_quad
+  global.set $~lib/math/pio2_large_quot
   local.get $8
   f64.const 3.4061215800865545e-19
   f64.mul
@@ -4858,7 +4858,7 @@
    f64.promote_f32
    f64.copysign
    global.set $~lib/math/rempio2f_y
-   global.get $~lib/math/pio2_large_quad
+   global.get $~lib/math/pio2_large_quot
   end
   local.set $10
   global.get $~lib/math/rempio2f_y
@@ -10519,7 +10519,7 @@
   if
    i32.const 0
    i32.const 176
-   i32.const 2189
+   i32.const 2191
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -11757,7 +11757,7 @@
    f64.promote_f32
    f64.copysign
    global.set $~lib/math/rempio2f_y
-   global.get $~lib/math/pio2_large_quad
+   global.get $~lib/math/pio2_large_quot
   end
   local.set $10
   global.get $~lib/math/rempio2f_y
