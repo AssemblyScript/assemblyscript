@@ -83,6 +83,10 @@ async function loadModule(path) {
         foobars: [{ arr: [["1", "2"], ["3"]]  }] }),
         [{ foobar: { foo: 0, bar: 1, flag: false, baz: '123', arr: [["1", "2"], ["3"]] }}]); 
     assert.equal(await module.getStringArrayLength({ arr: ["1", "2", "3"] }), 3);
+    assert.deepEqual(await module.rewrapFoobar({ container: { foobar: { foo: 123 } } }),
+        { foobars: [[{"foo":123,"bar":1,"flag":false,"baz":"123","arr":null}]] });
+    assert.deepEqual(await module.unwrapFoobar({ container: { foobars: [[{ foo: 123 }]] } }),
+        {"foo":123,"bar":1,"flag":false,"baz":"123","arr":null} );
 })().catch(e => {
     console.error('Error during test execution:', e);
     if (e.code == 'ERR_ASSERTION') {

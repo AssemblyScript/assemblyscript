@@ -12,5 +12,5 @@ export class ContainerClass {
 }
 
 export class AnotherContainerClass {
-    foobar: FooBar
+    foobars: Array<Array<FooBar>>
 }
