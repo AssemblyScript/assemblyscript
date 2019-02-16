@@ -3492,7 +3492,7 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/pio2_reduce_large (; 79 ;) (type $iF) (param $0 i32) (result f64)
+ (func $~lib/math/pio2f_reduce_large (; 79 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i32)
@@ -3893,7 +3893,7 @@
      br $~lib/math/rempio2f|inlined.0
     end
     local.get $3
-    call $~lib/math/pio2_reduce_large
+    call $~lib/math/pio2f_reduce_large
     local.get $0
     f32.neg
     f64.promote_f32
@@ -9655,7 +9655,7 @@
     br $~lib/math/rempio2f|inlined.1
    end
    local.get $4
-   call $~lib/math/pio2_reduce_large
+   call $~lib/math/pio2f_reduce_large
    local.get $0
    f32.neg
    f64.promote_f32

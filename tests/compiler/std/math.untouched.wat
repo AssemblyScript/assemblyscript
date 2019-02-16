@@ -4334,7 +4334,7 @@
   i32.add
   i32.load offset=8
  )
- (func $~lib/math/pio2_reduce_large (; 87 ;) (type $iF) (param $0 i32) (result f64)
+ (func $~lib/math/pio2f_reduce_large (; 87 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -4850,7 +4850,7 @@
     br $~lib/math/rempio2f|inlined.0
    end
    local.get $9
-   call $~lib/math/pio2_reduce_large
+   call $~lib/math/pio2f_reduce_large
    local.set $6
    local.get $6
    local.get $8
@@ -11749,7 +11749,7 @@
     br $~lib/math/rempio2f|inlined.1
    end
    local.get $9
-   call $~lib/math/pio2_reduce_large
+   call $~lib/math/pio2f_reduce_large
    local.set $7
    local.get $7
    local.get $8

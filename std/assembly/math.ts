@@ -1254,7 +1254,7 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
 }
 
 /** @internal */
-function pio2_reduce_large(u: u32): f64 {
+function pio2f_reduce_large(u: u32): f64 {
   const ipio4: u32[] = [
     0xa2,       0xa2f9,	    0xa2f983,   0xa2f9836e,
     0xf9836e4e, 0x836e4e44, 0x6e4e4415, 0x4e441529,
@@ -1305,7 +1305,7 @@ function rempio2f(x: f32): i32 {
     rempio2f_y = x - x;
     return 0;
   }
-  var res = pio2_reduce_large(u);
+  var res = pio2f_reduce_large(u);
   rempio2f_y = copysign<f64>(res, -x);
   return <i32>pio2_large_quad;
 }
