@@ -4731,10 +4731,7 @@
     f64.promote_f32
     f64.const 0.6366197723675814
     f64.mul
-    f64.const 6755399441055744
-    f64.add
-    f64.const 6755399441055744
-    f64.sub
+    f64.nearest
     local.set $6
     local.get $8
     f64.promote_f32
@@ -10533,7 +10530,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2203
+   i32.const 2201
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -11738,10 +11735,7 @@
     f64.promote_f32
     f64.const 0.6366197723675814
     f64.mul
-    f64.const 6755399441055744
-    f64.add
-    f64.const 6755399441055744
-    f64.sub
+    f64.nearest
     local.set $7
     local.get $8
     f64.promote_f32
@@ -12714,10 +12708,7 @@
     f64.promote_f32
     f64.const 0.6366197723675814
     f64.mul
-    f64.const 6755399441055744
-    f64.add
-    f64.const 6755399441055744
-    f64.sub
+    f64.nearest
     local.set $10
     local.get $11
     f64.promote_f32

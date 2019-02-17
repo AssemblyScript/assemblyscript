@@ -3781,10 +3781,7 @@
      local.tee $2
      f64.const 0.6366197723675814
      f64.mul
-     f64.const 6755399441055744
-     f64.add
-     f64.const 6755399441055744
-     f64.sub
+     f64.nearest
      local.set $1
      local.get $2
      local.get $1
@@ -8647,7 +8644,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2203
+   i32.const 2201
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -9592,10 +9589,7 @@
      local.tee $1
      f64.const 0.6366197723675814
      f64.mul
-     f64.const 6755399441055744
-     f64.add
-     f64.const 6755399441055744
-     f64.sub
+     f64.nearest
      local.set $2
      local.get $1
      local.get $2
@@ -10179,10 +10173,7 @@
       local.tee $2
       f64.const 0.6366197723675814
       f64.mul
-      f64.const 6755399441055744
-      f64.add
-      f64.const 6755399441055744
-      f64.sub
+      f64.nearest
       local.set $1
       local.get $2
       local.get $1

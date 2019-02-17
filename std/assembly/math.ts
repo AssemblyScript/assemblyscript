@@ -1289,12 +1289,10 @@ function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/m
   const pi2hi = reinterpret<f64>(0x3FF921FB50000000); // 1.57079631090164184570
   const pi2lo = reinterpret<f64>(0x3E5110B4611A6263); // 1.58932547735281966916e-8
   const _2_pi = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
-  const Ox1_8p52 = reinterpret<f64>(0x4338000000000000); // 0x1.8p52
   const pi_2_65  = reinterpret<f64>(0x3BF921FB54442D18);
 
   if (u < 0x4DC90FDB) {
-    // let q = rint(x * _2_pi);
-    let q = x * _2_pi + Ox1_8p52 - Ox1_8p52;
+    let q = nearest(x * _2_pi);
     rempio2f_y = x - q * pi2hi - q * pi2lo;
     return <i32>q;
   }
