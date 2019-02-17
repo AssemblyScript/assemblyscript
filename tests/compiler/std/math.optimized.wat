@@ -3800,18 +3800,6 @@
      i32.trunc_f64_s
      br $~lib/math/rempio2f|inlined.0
     end
-    local.get $3
-    i32.const 2139095040
-    i32.ge_u
-    if
-     local.get $0
-     local.get $0
-     f32.sub
-     f64.promote_f32
-     global.set $~lib/math/rempio2f_y
-     i32.const 0
-     br $~lib/math/rempio2f|inlined.0
-    end
     i32.const 104
     i32.load
     local.get $3
@@ -8659,7 +8647,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2207
+   i32.const 2203
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -9623,18 +9611,6 @@
      i32.trunc_f64_s
      br $~lib/math/rempio2f|inlined.1
     end
-    local.get $4
-    i32.const 2139095040
-    i32.ge_u
-    if
-     local.get $0
-     local.get $0
-     f32.sub
-     f64.promote_f32
-     global.set $~lib/math/rempio2f_y
-     i32.const 0
-     br $~lib/math/rempio2f|inlined.1
-    end
     i32.const 208
     i32.load
     local.get $4
@@ -10220,18 +10196,6 @@
       global.set $~lib/math/rempio2f_y
       local.get $1
       i32.trunc_f64_s
-      br $~lib/math/rempio2f|inlined.2
-     end
-     local.get $4
-     i32.const 2139095040
-     i32.ge_u
-     if
-      local.get $0
-      local.get $0
-      f32.sub
-      f64.promote_f32
-      global.set $~lib/math/rempio2f_y
-      i32.const 0
       br $~lib/math/rempio2f|inlined.2
      end
      i32.const 280

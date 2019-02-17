@@ -1298,10 +1298,6 @@ function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/m
     rempio2f_y = x - q * pi2hi - q * pi2lo;
     return <i32>q;
   }
-  if (u >= 0x7F800000) {
-    rempio2f_y = x - x;
-    return 0;
-  }
   var slo = pio2_large_quot_segment((u >> 23) - 152);
   var shi = pio2_large_quot;
 

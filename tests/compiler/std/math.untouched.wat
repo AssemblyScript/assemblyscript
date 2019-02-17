@@ -4751,18 +4751,6 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.0
    end
-   local.get $9
-   i32.const 2139095040
-   i32.ge_u
-   if
-    local.get $8
-    local.get $8
-    f32.sub
-    f64.promote_f32
-    global.set $~lib/math/rempio2f_y
-    i32.const 0
-    br $~lib/math/rempio2f|inlined.0
-   end
    block $~lib/math/pio2_large_quot_segment|inlined.0 (result i64)
     local.get $9
     i32.const 23
@@ -10545,7 +10533,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2207
+   i32.const 2203
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -11770,18 +11758,6 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.1
    end
-   local.get $9
-   i32.const 2139095040
-   i32.ge_u
-   if
-    local.get $8
-    local.get $8
-    f32.sub
-    f64.promote_f32
-    global.set $~lib/math/rempio2f_y
-    i32.const 0
-    br $~lib/math/rempio2f|inlined.1
-   end
    block $~lib/math/pio2_large_quot_segment|inlined.1 (result i64)
     local.get $9
     i32.const 23
@@ -12756,18 +12732,6 @@
     global.set $~lib/math/rempio2f_y
     local.get $10
     i32.trunc_f64_s
-    br $~lib/math/rempio2f|inlined.2
-   end
-   local.get $4
-   i32.const 2139095040
-   i32.ge_u
-   if
-    local.get $11
-    local.get $11
-    f32.sub
-    f64.promote_f32
-    global.set $~lib/math/rempio2f_y
-    i32.const 0
     br $~lib/math/rempio2f|inlined.2
    end
    block $~lib/math/pio2_large_quot_segment|inlined.2 (result i64)
