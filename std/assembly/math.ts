@@ -2412,6 +2412,7 @@ export namespace IntegerMath {
       }
       if (!x) return <T>0;
       let res = <T>0;
+      /* tslint:disable-next-line:as-types */
       let add = <T>1 << (sizeof<T>() * 8 / 2 - 1);
       let tmp: T;
       for (let i = 0; i < sizeof<T>() * 8; ++i) {
