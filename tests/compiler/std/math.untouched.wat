@@ -94,6 +94,7 @@
  (global $~lib/math/NativeMathf.SQRT1_2 f32 (f32.const 0.7071067690849304))
  (global $~lib/math/NativeMathf.SQRT2 f32 (f32.const 1.4142135381698608))
  (global $NaN f64 (f64.const nan:0x8000000000000))
+ (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
@@ -105,7 +106,6 @@
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
- (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
  (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
  (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const 1.401298464324817e-45))
@@ -10536,7 +10536,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2201
+   i32.const 2200
    i32.const 24
    call $~lib/env/abort
    unreachable

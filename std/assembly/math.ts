@@ -1630,18 +1630,21 @@ export namespace NativeMathf {
       }
       return cos_kernf(x);
     }
-    if (ix <= 0x407b53d1) {  /* |x| ~<= 5*pi/4 */
-      if (ix > 0x4016cbe3) { /* |x|  ~> 3*pi/4 */
-        return -cos_kernf(sign ? x + c2pio2 : x - c2pio2);
-      } else {
-        return sign ? sin_kernf(x + c1pio2) : sin_kernf(c1pio2 - x);
+
+    if (ASC_SHRINK_LEVEL < 1) {
+      if (ix <= 0x407b53d1) {  /* |x| ~<= 5*pi/4 */
+        if (ix > 0x4016cbe3) { /* |x|  ~> 3*pi/4 */
+          return -cos_kernf(sign ? x + c2pio2 : x - c2pio2);
+        } else {
+          return sign ? sin_kernf(x + c1pio2) : sin_kernf(c1pio2 - x);
+        }
       }
-    }
-    if (ix <= 0x40e231d5) {  /* |x| ~<= 9*pi/4 */
-      if (ix > 0x40afeddf)  {/* |x| ~> 7*pi/4 */
-        return cos_kernf(sign ? x + c4pio2 : x - c4pio2);
-      } else {
-        return sign ? sin_kernf(-x - c3pio2) : sin_kernf(x - c3pio2);
+      if (ix <= 0x40e231d5) {  /* |x| ~<= 9*pi/4 */
+        if (ix > 0x40afeddf)  {/* |x| ~> 7*pi/4 */
+          return cos_kernf(sign ? x + c4pio2 : x - c4pio2);
+        } else {
+          return sign ? sin_kernf(-x - c3pio2) : sin_kernf(x - c3pio2);
+        }
       }
     }
 
@@ -2245,18 +2248,20 @@ export namespace NativeMathf {
       return sin_kernf(x);
     }
 
-    if (ix <= 0x407b53d1) {  /* |x| ~<= 5*pi/4 */
-      if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
-        return sign ? -cos_kernf(x + s1pio2) : cos_kernf(x - s1pio2);
+    if (ASC_SHRINK_LEVEL < 1) {
+      if (ix <= 0x407b53d1) {  /* |x| ~<= 5*pi/4 */
+        if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
+          return sign ? -cos_kernf(x + s1pio2) : cos_kernf(x - s1pio2);
+        }
+        return sin_kernf(sign ? -(x + s2pio2) : -(x - s2pio2));
       }
-      return sin_kernf(sign ? -(x + s2pio2) : -(x - s2pio2));
-    }
 
-    if (ix <= 0x40e231d5) {  /* |x| ~<= 9*pi/4 */
-      if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
-        return sign ? cos_kernf(x + s3pio2) : -cos_kernf(x - s3pio2);
+      if (ix <= 0x40e231d5) {  /* |x| ~<= 9*pi/4 */
+        if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
+          return sign ? cos_kernf(x + s3pio2) : -cos_kernf(x - s3pio2);
+        }
+        return sin_kernf(sign ? x + s4pio2 : x - s4pio2);
       }
-      return sin_kernf(sign ? x + s4pio2 : x - s4pio2);
     }
 
     /* sin(Inf or NaN) is NaN */
@@ -2535,39 +2540,41 @@ export function sincosf(x: f32): void { // see: musl/tree/src/math/sincosf.c
     return;
   }
 
-  /* |x| ~<= 5*pi/4 */
-  if (ix <= 0x407b53d1) {
-    if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
-      if (sign) {
-        sincosf_s = -cos_kernf(x + s1pio2);
-        sincosf_c =  sin_kernf(x + s1pio2);
-      } else {
-        sincosf_s = cos_kernf(s1pio2 - x);
-        sincosf_c = sin_kernf(s1pio2 - x);
+  if (ASC_SHRINK_LEVEL < 1) {
+    /* |x| ~<= 5*pi/4 */
+    if (ix <= 0x407b53d1) {
+      if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
+        if (sign) {
+          sincosf_s = -cos_kernf(x + s1pio2);
+          sincosf_c =  sin_kernf(x + s1pio2);
+        } else {
+          sincosf_s = cos_kernf(s1pio2 - x);
+          sincosf_c = sin_kernf(s1pio2 - x);
+        }
+        return;
       }
+      /* -sin(x + c) is not correct if x+c could be 0: -0 vs +0 */
+      sincosf_s = -sin_kernf(sign ? x + s2pio2 : x - s2pio2);
+      sincosf_c = -cos_kernf(sign ? x + s2pio2 : x - s2pio2);
       return;
     }
-    /* -sin(x + c) is not correct if x+c could be 0: -0 vs +0 */
-    sincosf_s = -sin_kernf(sign ? x + s2pio2 : x - s2pio2);
-    sincosf_c = -cos_kernf(sign ? x + s2pio2 : x - s2pio2);
-    return;
-  }
 
-  /* |x| ~<= 9*pi/4 */
-  if (ix <= 0x40e231d5) {
-    if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
-      if (sign) {
-        sincosf_s =  cos_kernf(x + s3pio2);
-        sincosf_c = -sin_kernf(x + s3pio2);
-      } else {
-        sincosf_s = -cos_kernf(x - s3pio2);
-        sincosf_c =  sin_kernf(x - s3pio2);
+    /* |x| ~<= 9*pi/4 */
+    if (ix <= 0x40e231d5) {
+      if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
+        if (sign) {
+          sincosf_s =  cos_kernf(x + s3pio2);
+          sincosf_c = -sin_kernf(x + s3pio2);
+        } else {
+          sincosf_s = -cos_kernf(x - s3pio2);
+          sincosf_c =  sin_kernf(x - s3pio2);
+        }
+        return;
       }
+      sincosf_s = sin_kernf(sign ? x + s4pio2 : x - s4pio2);
+      sincosf_c = cos_kernf(sign ? x + s4pio2 : x - s4pio2);
       return;
     }
-    sincosf_s = sin_kernf(sign ? x + s4pio2 : x - s4pio2);
-    sincosf_c = cos_kernf(sign ? x + s4pio2 : x - s4pio2);
-    return;
   }
 
   /* sin(Inf or NaN) is NaN */
