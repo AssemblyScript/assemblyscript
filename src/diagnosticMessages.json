@@ -106,6 +106,7 @@
   "Multiple constructor implementations are not allowed.": 2392,
   "Duplicate function implementation.": 2393,
   "Individual declarations in merged declaration '{0}' must be all exported or all local.": 2395,
+  "A namespace declaration cannot be located prior to a class or function with which it is merged.": 2434,
   "Type '{0}' has no property '{1}'.": 2460,
   "The '{0}' operator cannot be applied to type '{1}'.": 2469,
   "In 'const' enum declarations member initializer must be constant expression.": 2474,

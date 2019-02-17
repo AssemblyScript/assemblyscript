@@ -486,9 +486,9 @@ export class Resolver extends DiagnosticEmitter {
         assert(type != Type.void);
         let classReference = type.classReference;
         if (!classReference) {
-          let basicClasses = this.program.typeClasses;
-          if (!type.is(TypeFlags.REFERENCE) && basicClasses.has(type.kind)) {
-            classReference = assert(basicClasses.get(type.kind));
+          let typeClasses = this.program.typeClasses;
+          if (!type.is(TypeFlags.REFERENCE) && typeClasses.has(type.kind)) {
+            classReference = assert(typeClasses.get(type.kind));
           } else {
             this.error(
               DiagnosticCode.Property_0_does_not_exist_on_type_1,

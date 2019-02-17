@@ -501,7 +501,7 @@ export class Program extends DiagnosticEmitter {
     ));
     if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonSymbols.v128, Type.v128);
 
-    // add compiler hints
+    // register compiler hints
     this.registerConstantInteger(LibrarySymbols.ASC_TARGET, Type.i32,
       i64_new(options.isWasm64 ? 2 : 1));
     this.registerConstantInteger(LibrarySymbols.ASC_NO_TREESHAKING, Type.bool,
@@ -530,19 +530,27 @@ export class Program extends DiagnosticEmitter {
     var queuedExtends = new Array<ClassPrototype>();
     var queuedImplements = new Array<ClassPrototype>();
 
-    // build initial lookup maps of internal names to declarations
+    // initialize relevant declaration-like statements of the entire program
     for (let i = 0, k = this.sources.length; i < k; ++i) {
       let source = this.sources[i];
-
-      // create one file per source
       let file = new File(this, source);
       this.filesByName.set(file.internalName, file);
-
-      // process this source's statements
       let statements = source.statements;
       for (let j = 0, l = statements.length; j < l; ++j) {
         let statement = statements[j];
         switch (statement.kind) {
+          case NodeKind.EXPORT: {
+            this.initializeExports(<ExportStatement>statement, file, queuedExports, queuedExportsStar);
+            break;
+          }
+          case NodeKind.IMPORT: {
+            this.initializeImports(<ImportStatement>statement, file, queuedImports, queuedExports);
+            break;
+          }
+          case NodeKind.VARIABLE: {
+            this.initializeVariables(<VariableStatement>statement, file);
+            break;
+          }
           case NodeKind.CLASSDECLARATION: {
             this.initializeClass(<ClassDeclaration>statement, file, queuedExtends, queuedImplements);
             break;
@@ -551,16 +559,8 @@ export class Program extends DiagnosticEmitter {
             this.initializeEnum(<EnumDeclaration>statement, file);
             break;
           }
-          case NodeKind.EXPORT: {
-            this.initializeExports(<ExportStatement>statement, file, queuedExports, queuedExportsStar);
-            break;
-          }
           case NodeKind.FUNCTIONDECLARATION: {
             this.initializeFunction(<FunctionDeclaration>statement, file);
-            break;
-          }
-          case NodeKind.IMPORT: {
-            this.initializeImports(<ImportStatement>statement, file, queuedImports, queuedExports);
             break;
           }
           case NodeKind.INTERFACEDECLARATION: {
@@ -575,10 +575,6 @@ export class Program extends DiagnosticEmitter {
             this.initializeTypeDefinition(<TypeDeclaration>statement, file);
             break;
           }
-          case NodeKind.VARIABLE: {
-            this.initializeVariables(<VariableStatement>statement, file);
-            break;
-          }
         }
       }
     }
@@ -587,11 +583,11 @@ export class Program extends DiagnosticEmitter {
     for (let [file, exportsStar] of queuedExportsStar) {
       let filesByName = this.filesByName;
       for (let exportStar of exportsStar) {
-        let otherFile: File;
+        let foreignFile: File;
         if (filesByName.has(exportStar.foreignPath)) {
-          otherFile = filesByName.get(exportStar.foreignPath)!;
+          foreignFile = filesByName.get(exportStar.foreignPath)!;
         } else if (filesByName.has(exportStar.foreignPathAlt)) {
-          otherFile = filesByName.get(exportStar.foreignPathAlt)!;
+          foreignFile = filesByName.get(exportStar.foreignPathAlt)!;
         } else {
           this.error(
             DiagnosticCode.File_0_not_found,
@@ -599,7 +595,7 @@ export class Program extends DiagnosticEmitter {
           );
           continue;
         }
-        file.addExportStar(otherFile);
+        file.addExportStar(foreignFile);
       }
     }
 
@@ -665,8 +661,7 @@ export class Program extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
               queuedExport.localIdentifier.range,
-              foreignPath,
-              queuedExport.localIdentifier.text
+              foreignPath, queuedExport.localIdentifier.text
             );
           }
         } else { // i.e. export { foo [as bar] }
@@ -677,8 +672,7 @@ export class Program extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
               queuedExport.foreignIdentifier.range,
-              file.internalName,
-              queuedExport.foreignIdentifier.text
+              file.internalName, queuedExport.foreignIdentifier.text
             );
           }
         }
@@ -689,7 +683,7 @@ export class Program extends DiagnosticEmitter {
     var resolver = this.resolver;
     for (let i = 0, k = queuedExtends.length; i < k; ++i) {
       let thisPrototype = queuedExtends[i];
-      let extendsNode = assert(thisPrototype.extendsNode);
+      let extendsNode = assert(thisPrototype.extendsNode); // must be present if in queuedExtends
       let baseElement = resolver.resolveIdentifier(extendsNode.name, null, thisPrototype.parent); // reports
       if (!baseElement) continue;
       if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
@@ -730,7 +724,7 @@ export class Program extends DiagnosticEmitter {
             if (elementsByName.has(alias)) throw new Error("duplicate global element: " + name);
             elementsByName.set(alias, element);
           }
-          else throw new Error("element not found: " + name);
+          else throw new Error("no such global element: " + name);
         }
       }
     }
@@ -751,7 +745,7 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeTypeClass(TypeKind.F64, LibrarySymbols.F64);
     if (options.hasFeature(Feature.SIMD)) this.registerNativeTypeClass(TypeKind.V128, LibrarySymbols.V128);
 
-    // register library elements
+    // register global library elements
     var element: Element | null;
     if (element = this.lookupGlobal(LibrarySymbols.String)) {
       assert(element.kind == ElementKind.CLASS_PROTOTYPE);
@@ -787,6 +781,9 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register GC hooks if present
+    // FIXME: think about a better way than globals to model this, maybe a GC namespace that can be
+    // dynamically extended by a concrete implementation but then has `@unsafe` methods that normal
+    // code cannot call without explicitly enabling it with a flag.
     if (
       this.elementsByName.has("__gc_allocate") &&
       this.elementsByName.has("__gc_link") &&
@@ -830,7 +827,7 @@ export class Program extends DiagnosticEmitter {
       this.hasGC = true;
     }
 
-    // mark module exports, i.e. to generate wrapping behavior on the boundaries
+    // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
     for (let file of this.filesByName.values()) {
       let exports = file.exports;
       if (!(file.source.isEntry && exports)) continue;
@@ -862,30 +859,6 @@ export class Program extends DiagnosticEmitter {
     {
       let members = element.members;
       if (members) for (let member of members.values()) this.markModuleExport(member);
-    }
-  }
-
-  /** Registers a prototype element with the program. */
-  registerElement(element: DeclaredElement): void {
-    var elementsByName = this.elementsByName;
-    if (elementsByName.has(element.internalName)) {
-      let joined = tryJoin(elementsByName.get(element.internalName)!, element);
-      if (!joined) {
-        this.error(
-          DiagnosticCode.Duplicate_identifier_0,
-          element.identifierNode.range, element.identifierNode.text
-        );
-        return;
-      }
-      element = joined;
-    }
-    elementsByName.set(element.internalName, element);
-    var declaration = element.declaration;
-    if (!declaration.isAny(CommonFlags.GET | CommonFlags.SET)) {
-      // ^ properties register individual functions instead
-      assert(element.kind != ElementKind.PROPERTY_PROTOTYPE);
-      assert(!this.elementsByDeclaration.has(declaration));
-      this.elementsByDeclaration.set(declaration, element);
     }
   }
 
@@ -939,19 +912,27 @@ export class Program extends DiagnosticEmitter {
     ).withConstantFloatValue(value, type));
   }
 
-  /** Adds an element to the global scope. */
-  addGlobal(name: string, element: DeclaredElement): void {
+  /** Ensures that the given global element exists. */
+  ensureGlobal(name: string, element: DeclaredElement): void {
     var elementsByName = this.elementsByName;
     if (elementsByName.has(name)) {
-      let joined = tryJoin(elementsByName.get(name)!, element);
-      if (!joined) {
-        this.error(
-          DiagnosticCode.Duplicate_identifier_0,
-          element.identifierNode.range, name
-        );
-        return;
+      let actual = elementsByName.get(name);
+      // NOTE: this is effectively only performed for joining the native types with
+      // their respective namespaces in std/builtins, but can also trigger when a
+      // user has multiple global elements of the same name in different files,
+      // which might result in unexpected shared symbols accross files. considering
+      // this a wonky feature for now that we might want to revisit later.
+      if (actual !== element) {
+        let merged = tryMerge(elementsByName.get(name)!, element);
+        if (!merged) {
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            element.identifierNode.range, name
+          );
+          return;
+        }
+        element = merged;
       }
-      element = joined;
     }
     elementsByName.set(name, element);
   }
@@ -1567,49 +1548,16 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private ensureNamespace(
-    declaration: NamespaceDeclaration,
-    parent: Element
-  ): Element | null {
-    var name = declaration.name.text;
-    var parentMembers = parent.members;
-    if (parentMembers && parentMembers.has(name)) {
-      let existing = <Element>parentMembers.get(name);
-      switch (existing.kind) {
-        // TODO: can merge with ... ?
-        case ElementKind.ENUM:
-        case ElementKind.FUNCTION_PROTOTYPE:
-        case ElementKind.CLASS_PROTOTYPE:
-        case ElementKind.NAMESPACE: {
-          // TODO: @global either on both or none
-          this.elementsByDeclaration.set(declaration, existing); // alias
-          return existing;
-        }
-      }
-    } else {
-      let element = new Namespace(
-        name,
-        parent,
-        declaration
-      );
-      assert(parent.add(name, element));
-      return element;
-    }
-    this.error(
-      DiagnosticCode.Duplicate_identifier_0,
-      declaration.range, name
-    );
-    return null;
-  }
-
   private initializeNamespace(
     declaration: NamespaceDeclaration,
     parent: Element,
     queuedExtends: ClassPrototype[],
     queuedImplements: ClassPrototype[]
   ): void {
-    var element = this.ensureNamespace(declaration, parent);
-    if (!element) return;
+    var name = declaration.name.text;
+    var element = new Namespace(name, parent, declaration);
+    if (!parent.add(name, element)) return;
+    element = assert(parent.lookupInSelf(name)); // use possibly merged
     var members = declaration.members;
     for (let i = 0, k = members.length; i < k; ++i) {
       switch (members[i].kind) {
@@ -1849,22 +1797,32 @@ export abstract class Element {
 
   /** Adds an element as a member of this one. Reports and returns `false` if a duplicate. */
   add(name: string, element: DeclaredElement): bool {
+    var originalDeclaration = element.declaration;
     var members = this.members;
     if (!members) this.members = members = new Map();
     else if (members.has(name)) {
       let actual = members.get(name)!;
-      if (actual.parent === this && !(element.shadowType === actual)) { // otherwise override
-        if (actual.shadowType === element) return true; // keep it this way
-        this.program.error(
-          DiagnosticCode.Duplicate_identifier_0,
-          element.identifierNode.range, element.identifierNode.text
-        );
-        return false;
+      if (actual.parent !== this) {
+        // override non-own element
+      } else {
+        let merged = tryMerge(actual, element);
+        if (merged) {
+          element = merged; // use merged element
+        } else {
+          this.program.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            element.identifierNode.range, element.identifierNode.text
+          );
+          return false;
+        }
       }
     }
     members.set(name, element);
-    if (element.is(CommonFlags.EXPORT) && this.is(CommonFlags.MODULE_EXPORT)) {
-      element.set(CommonFlags.MODULE_EXPORT); // propagate module export status
+    var program = this.program;
+    if (element.kind != ElementKind.FUNCTION_PROTOTYPE || !(<FunctionPrototype>element).isBound) {
+      // prefer unbound prototypes in global lookup maps
+      program.elementsByName.set(element.internalName, element);
+      program.elementsByDeclaration.set(originalDeclaration, element);
     }
     return true;
   }
@@ -1963,7 +1921,7 @@ export class File extends Element {
   add(name: string, element: DeclaredElement, isImport: bool = false): bool {
     if (!super.add(name, element)) return false;
     if (element.is(CommonFlags.EXPORT) && !isImport) this.addExport(element.name, element);
-    if (element.hasDecorator(DecoratorFlags.GLOBAL)) this.program.addGlobal(name, element);
+    if (element.hasDecorator(DecoratorFlags.GLOBAL)) this.program.ensureGlobal(name, element);
     return true;
   }
 
@@ -1993,7 +1951,7 @@ export class File extends Element {
     if (!exports) this.exports = exports = new Map();
     else if (exports.has(name)) return <Element>exports.get(name);
     exports.set(name, element);
-    if (this.source.isLibrary) this.program.addGlobal(name, element);
+    if (this.source.isLibrary) this.program.ensureGlobal(name, element);
     return element;
   }
 
@@ -2053,7 +2011,6 @@ export class TypeDefinition extends TypedElement {
       declaration
     );
     this.decoratorFlags = decoratorFlags;
-    parent.program.registerElement(this);
   }
 
   /** Gets the associated type parameter nodes. */
@@ -2089,7 +2046,6 @@ export class Namespace extends DeclaredElement {
       parent,
       declaration
     );
-    parent.program.registerElement(this);
   }
 
   /* @override */
@@ -2119,7 +2075,6 @@ export class Enum extends TypedElement {
     );
     this.decoratorFlags = decoratorFlags;
     this.setType(Type.i32);
-    this.program.registerElement(this);
   }
 
   /* @override */
@@ -2153,7 +2108,6 @@ export class EnumValue extends TypedElement {
     );
     this.decoratorFlags = decoratorFlags;
     this.setType(Type.i32);
-    this.program.registerElement(this);
   }
 
   /** Gets the associated value node. */
@@ -2250,7 +2204,6 @@ export class Global extends VariableLikeElement {
       declaration
     );
     this.decoratorFlags = decoratorFlags;
-    this.program.registerElement(this);
   }
 }
 
@@ -2331,7 +2284,6 @@ export class FunctionPrototype extends DeclaredElement {
     // Functions can be standalone, e.g. top level or static, or be bound to a
     // concrete class when an instance method, which is determined by their parent.
     // Bound functions are clones of the original prototype, so exclude them here:
-    if (!this.isBound) this.program.registerElement(this);
   }
 
   /** Gets the associated type parameter nodes. */
@@ -2594,7 +2546,6 @@ export class FieldPrototype extends DeclaredElement {
       declaration
     );
     this.decoratorFlags = decoratorFlags;
-    this.program.registerElement(this);
   }
 
   /** Gets the associated type node. */
@@ -2669,7 +2620,6 @@ export class PropertyPrototype extends DeclaredElement {
       firstDeclaration
     );
     this.flags &= ~(CommonFlags.GET | CommonFlags.SET);
-    this.program.registerElement(this);
   }
 
   /* @override */
@@ -2744,7 +2694,6 @@ export class ClassPrototype extends DeclaredElement {
       declaration
     );
     this.decoratorFlags = decoratorFlags;
-    this.program.registerElement(this);
   }
 
   /** Gets the associated type parameter nodes. */
@@ -2774,15 +2723,15 @@ export class ClassPrototype extends DeclaredElement {
     var instanceMembers = this.instanceMembers;
     if (!instanceMembers) this.instanceMembers = instanceMembers = new Map();
     else if (instanceMembers.has(name)) {
-      let joined = tryJoin(instanceMembers.get(name)!, element);
-      if (!joined) {
+      let merged = tryMerge(instanceMembers.get(name)!, element);
+      if (!merged) {
         this.program.error(
           DiagnosticCode.Duplicate_identifier_0,
           element.identifierNode.range, element.identifierNode.text
         );
         return false;
       }
-      element = joined;
+      element = merged;
     }
     instanceMembers.set(name, element);
     if (element.is(CommonFlags.EXPORT) && this.is(CommonFlags.MODULE_EXPORT)) {
@@ -3669,34 +3618,60 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
       || fromType.is(TypeFlags.SIGNED) != toType.is(TypeFlags.SIGNED);
 }
 
-/** Attempts to join two elements. Returns the joined element on success. */
-function tryJoin(older: Element, newer: Element): DeclaredElement | null {
+/** Attempts to merge two elements. Returns the merged element on success. */
+function tryMerge(older: Element, newer: Element): DeclaredElement | null {
+  // NOTE: some of the following cases are not supported by TS, not sure why exactly.
+  // suggesting to just merge what seens to be possible for now and revisit later.
   assert(older.program === newer.program);
   assert(!newer.members);
-  var joined: DeclaredElement | null = null;
+  var merged: DeclaredElement | null = null;
   switch (older.kind) {
-    case ElementKind.FUNCTION_PROTOTYPE:
-    case ElementKind.NAMESPACE: {
+    case ElementKind.FUNCTION_PROTOTYPE: {
       switch (newer.kind) {
-        case ElementKind.FUNCTION_PROTOTYPE: {
-          // can be joined with a namespace by inheriting it
-          if (older.kind == ElementKind.NAMESPACE) {
-            newer.members = older.members;
-            joined = <DeclaredElement>newer;
-          }
-          break;
-        }
         case ElementKind.NAMESPACE: {
-          // can be joined with a function or namespace by discarding newer
-          // as all elements automatically have namespace semantics
-          joined = <DeclaredElement>older;
+          copyMembers(newer, older);
+          merged = <DeclaredElement>older;
           break;
         }
         case ElementKind.TYPEDEFINITION: {
-          // can shadow any other element but a type
           if (!older.shadowType) {
             older.shadowType = <TypeDefinition>newer;
-            joined = <DeclaredElement>older;
+            copyMembers(newer, older);
+            merged = <DeclaredElement>older;
+          }
+          break;
+        }
+      }
+      break;
+    }
+    case ElementKind.CLASS_PROTOTYPE:
+    case ElementKind.ENUM: {
+      if (newer.kind == ElementKind.NAMESPACE) {
+        copyMembers(newer, older);
+        merged = <DeclaredElement>older;
+        break;
+      }
+      break;
+    }
+    case ElementKind.NAMESPACE: {
+      switch (newer.kind) {
+        case ElementKind.ENUM:
+        case ElementKind.CLASS_PROTOTYPE:      // TS2434
+        case ElementKind.FUNCTION_PROTOTYPE: { // TS2434
+          copyMembers(older, newer);
+          merged = <DeclaredElement>newer;
+          break;
+        }
+        case ElementKind.NAMESPACE: {
+          copyMembers(newer, older);
+          merged = <DeclaredElement>older;
+          break;
+        }
+        case ElementKind.TYPEDEFINITION: {
+          if (!older.shadowType) {
+            older.shadowType = <TypeDefinition>newer;
+            copyMembers(newer, older);
+            merged = <DeclaredElement>older;
           }
           break;
         }
@@ -3704,24 +3679,24 @@ function tryJoin(older: Element, newer: Element): DeclaredElement | null {
       break;
     }
     case ElementKind.GLOBAL: {
-      // can be shadowed by a type
       if (newer.kind == ElementKind.TYPEDEFINITION) {
         if (!older.shadowType) {
           older.shadowType = <TypeDefinition>newer;
-          joined = <DeclaredElement>older;
+          copyMembers(newer, older);
+          merged = <DeclaredElement>older;
         }
       }
       break;
     }
     case ElementKind.TYPEDEFINITION: {
-      // can shadow any other element but another type
       switch (newer.kind) {
         case ElementKind.GLOBAL:
         case ElementKind.FUNCTION_PROTOTYPE:
         case ElementKind.NAMESPACE: {
           if (!newer.shadowType) {
             newer.shadowType = <TypeDefinition>older;
-            joined = <DeclaredElement>newer;
+            copyMembers(older, newer);
+            merged = <DeclaredElement>newer;
           }
           break;
         }
@@ -3729,15 +3704,27 @@ function tryJoin(older: Element, newer: Element): DeclaredElement | null {
       break;
     }
   }
-  if (joined) {
+  if (merged) {
     if (older.is(CommonFlags.EXPORT) != newer.is(CommonFlags.EXPORT)) {
       older.program.error(
         DiagnosticCode.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local,
-        joined.identifierNode.range, joined.identifierNode.text
+        merged.identifierNode.range, merged.identifierNode.text
       );
     }
   }
-  return joined;
+  return merged;
+}
+
+/** Copies the members of `src` to `dest`. */
+function copyMembers(src: Element, dest: Element): void {
+  var srcMembers = src.members;
+  if (srcMembers) {
+    let destMembers = dest.members;
+    if (!destMembers) dest.members = destMembers = new Map();
+    for (let [memberName, member] of srcMembers) {
+      destMembers.set(memberName, member);
+    }
+  }
 }
 
 /** Mangles the internal name of an element with the specified name that is a child of the given parent. */
