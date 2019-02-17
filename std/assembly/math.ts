@@ -22,7 +22,19 @@ import {
 //
 // Applies to all functions marked with a comment referring here.
 
-// TODO: sin, cos, tan
+// TODO: sin, cos, tan for Math namespace
+
+var volatile32: f32;
+var volatile64: f64;
+
+@inline /** @internal */
+function FORCE_EVAL<T>(expr: T): void {
+  if (sizeof<T>() == 4) {
+    volatile32 = <f32>expr;
+  } else if (sizeof<T>() == 8) {
+    volatile64 = <f64>expr;
+  }
+}
 
 /** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
@@ -1617,6 +1629,7 @@ export namespace NativeMathf {
     const c2pio2 = reinterpret<f64>(0x400921FB54442D18); // M_PI_2 * 2
     const c3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // M_PI_2 * 3
     const c4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
+    const Ox1p120f = reinterpret<f32>(0x7b800000);       // 2 ** 120
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
@@ -1625,7 +1638,7 @@ export namespace NativeMathf {
     if (ix <= 0x3f490fda) {  /* |x| ~<= pi/4 */
       if (ix < 0x39800000) {  /* |x| < 2**-12 */
         /* raise inexact if x != 0 */
-        // FORCE_EVAL(x + 0x1p120f);
+        FORCE_EVAL(x + Ox1p120f);
         return 1;
       }
       return cos_kernf(x);
@@ -2234,6 +2247,7 @@ export namespace NativeMathf {
     const s2pio2 = reinterpret<f64>(0x400921FB54442D18); // M_PI_2 * 2
     const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // M_PI_2 * 3
     const s4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
+    const Ox1p120f = reinterpret<f32>(0x7b800000);       // 2 ** 120
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
@@ -2242,7 +2256,7 @@ export namespace NativeMathf {
     if (ix <= 0x3f490fda) { /* |x| ~<= pi/4 */
       if (ix < 0x39800000) {  /* |x| < 2**-12 */
         /* raise inexact if x!=0 and underflow if subnormal */
-        // FORCE_EVAL(ix < 0x00800000 ? x / 0x1p120f : x + 0x1p120f);
+        FORCE_EVAL(ix < 0x00800000 ? x / Ox1p120f : x + Ox1p120f);
         return x;
       }
       return sin_kernf(x);
@@ -2297,10 +2311,11 @@ export namespace NativeMathf {
   }
 
   export function tan(x: f32): f32 { // see: musl/src/math/tanf.c
-    const t1pio2 = reinterpret<f64>(0x3FF921FB54442D18); /* 1 * M_PI_2 */
-    const t2pio2 = reinterpret<f64>(0x400921FB54442D18); /* 2 * M_PI_2 */
-    const t3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); /* 3 * M_PI_2 */
-    const t4pio2 = reinterpret<f64>(0x401921FB54442D18); /* 4 * M_PI_2 */
+    const t1pio2 = reinterpret<f64>(0x3FF921FB54442D18); // 1 * M_PI_2
+    const t2pio2 = reinterpret<f64>(0x400921FB54442D18); // 2 * M_PI_2
+    const t3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // 3 * M_PI_2
+    const t4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
+    const Ox1p120f = reinterpret<f32>(0x7b800000); // 2 ** 120
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
@@ -2309,7 +2324,7 @@ export namespace NativeMathf {
     if (ix <= 0x3f490fda) {  /* |x| ~<= pi/4 */
       if (ix < 0x39800000) {  /* |x| < 2**-12 */
         /* raise inexact if x!=0 and underflow if subnormal */
-        // FORCE_EVAL(ix < 0x00800000 ? x / 0x1p120f : x + 0x1p120f);
+        FORCE_EVAL(ix < 0x00800000 ? x / Ox1p120f : x + Ox1p120f);
         return x;
       }
       return tan_kernf(x, 0);
@@ -2517,10 +2532,11 @@ var sincosf_s: f32;
 var sincosf_c: f32;
 
 export function sincosf(x: f32): void { // see: musl/tree/src/math/sincosf.c
-  const s1pio2 = reinterpret<f64>(0x3FF921FB54442D18); /* 1 * M_PI_2 */
-  const s2pio2 = reinterpret<f64>(0x400921FB54442D18); /* 2 * M_PI_2 */
-  const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); /* 3 * M_PI_2 */
-  const s4pio2 = reinterpret<f64>(0x401921FB54442D18); /* 4 * M_PI_2 */
+  const s1pio2 = reinterpret<f64>(0x3FF921FB54442D18); // 1 * M_PI_2
+  const s2pio2 = reinterpret<f64>(0x400921FB54442D18); // 2 * M_PI_2
+  const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // 3 * M_PI_2
+  const s4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
+  const Ox1p120f = reinterpret<f32>(0x7b800000);       // 2 ** 120
 
   var ix = reinterpret<u32>(x);
   var sign = ix >> 31;
@@ -2530,7 +2546,7 @@ export function sincosf(x: f32): void { // see: musl/tree/src/math/sincosf.c
   if (ix <= 0x3f490fda) {
     if (ix < 0x39800000) { /* |x| < 2**-12 */
       /* raise inexact if x!=0 and underflow if subnormal */
-      // FORCE_EVAL(ix < 0x00100000 ? x / 0x1p120f : x + 0x1p120f);
+      FORCE_EVAL(ix < 0x00100000 ? x / Ox1p120f : x + Ox1p120f);
       sincosf_s = x;
       sincosf_c = 1;
       return;
