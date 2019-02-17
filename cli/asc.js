@@ -422,6 +422,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setNoTreeShaking(compilerOptions, args.noTreeShaking);
   assemblyscript.setNoAssert(compilerOptions, args.noAssert);
   assemblyscript.setImportMemory(compilerOptions, args.importMemory);
+  assemblyscript.setSharedMemory(compilerOptions, args.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, args.importTable);
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
