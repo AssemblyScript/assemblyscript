@@ -29,8 +29,6 @@ var nextId: usize = 12; // Symbol.unscopables + 1
   }
 }
 
-type Symbol = symbol;
-
 export function Symbol(description: string | null = null): symbol {
   var id = nextId++;
   if (!id) unreachable(); // out of ids

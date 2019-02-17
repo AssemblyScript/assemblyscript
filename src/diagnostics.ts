@@ -78,6 +78,8 @@ export class DiagnosticMessage {
   message: string;
   /** Respective source range, if any. */
   range: Range | null = null;
+  /** Related range, if any. */
+  relatedRange: Range | null = null;
 
   /** Constructs a new diagnostic message. */
   private constructor(code: i32, category: DiagnosticCategory, message: string) {
@@ -134,6 +136,12 @@ export class DiagnosticMessage {
     return this;
   }
 
+  /** Adds a related source range to this message. */
+  withRelatedRange(range: Range): this {
+    this.relatedRange = range;
+    return this;
+  }
+
   /** Converts this message to a string. */
   toString(): string {
     if (this.range) {
@@ -185,9 +193,8 @@ export function formatDiagnosticMessage(
     let range = message.range;
     if (showContext) {
       sb.push("\n");
-      sb.push(formatDiagnosticContext(message.range, useColors));
+      sb.push(formatDiagnosticContext(range, useColors));
     }
-
     sb.push("\n");
     sb.push(" in ");
     sb.push(range.source.normalizedPath);
@@ -196,6 +203,22 @@ export function formatDiagnosticMessage(
     sb.push(",");
     sb.push(range.column.toString(10));
     sb.push(")");
+
+    let relatedRange = message.relatedRange;
+    if (relatedRange) {
+      if (showContext) {
+        sb.push("\n");
+        sb.push(formatDiagnosticContext(relatedRange, useColors));
+      }
+      sb.push("\n");
+      sb.push(" in ");
+      sb.push(range.source.normalizedPath);
+      sb.push("(");
+      sb.push(range.line.toString(10));
+      sb.push(",");
+      sb.push(range.column.toString(10));
+      sb.push(")");
+    }
   }
   return sb.join("");
 }
@@ -243,11 +266,13 @@ export abstract class DiagnosticEmitter {
     code: DiagnosticCode,
     category: DiagnosticCategory,
     range: Range,
+    relatedRange: Range | null,
     arg0: string | null = null,
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
     var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2).withRange(range);
+    if (relatedRange) message.relatedRange = relatedRange;
     this.diagnostics.push(message);
     console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
     console.log(<string>new Error("stack").stack);
@@ -261,7 +286,19 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, null, arg0, arg1, arg2);
+  }
+
+  /** Emits an informatory diagnostic message with a related range. */
+  infoRelated(
+    code: DiagnosticCode,
+    range: Range,
+    relatedRange: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits a warning diagnostic message. */
@@ -272,7 +309,19 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, null, arg0, arg1, arg2);
+  }
+
+  /** Emits a warning diagnostic message with a related range. */
+  warningRelated(
+    code: DiagnosticCode,
+    range: Range,
+    relatedRange: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits an error diagnostic message. */
@@ -283,6 +332,18 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, null, arg0, arg1, arg2);
+  }
+
+  /** Emits an error diagnostic message with a related range. */
+  errorRelated(
+    code: DiagnosticCode,
+    range: Range,
+    relatedRange: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, relatedRange, arg0, arg1, arg2);
   }
 }

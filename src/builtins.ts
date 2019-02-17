@@ -2102,7 +2102,7 @@ export function compileCall(
         return module.createUnreachable();
       }
     }
-    case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected:T, replacement: T, constantOffset?: usize): T;
+    case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected: T, replacement: T, cOff?: usize): T
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (operands.length < 3 || operands.length > 4) {
         if (!(typeArguments && typeArguments.length == 1)) {
@@ -3645,15 +3645,15 @@ export function compileAbort(
   var program = compiler.program;
   var module = compiler.module;
 
-  var stringType = program.typesLookup.get(CommonSymbols.string);
-  if (!stringType) return module.createUnreachable();
+  var stringInstance = compiler.program.stringInstance;
+  if (!stringInstance) return module.createUnreachable();
 
   var abortInstance = program.abortInstance;
   if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.createUnreachable();
 
   var messageArg = message != null
-    ? compiler.compileExpression(message, stringType, ConversionKind.IMPLICIT, WrapMode.NONE)
-    : stringType.toNativeZero(module);
+    ? compiler.compileExpression(message, stringInstance.type, ConversionKind.IMPLICIT, WrapMode.NONE)
+    : stringInstance.type.toNativeZero(module);
 
   var filenameArg = compiler.ensureStaticString(reportNode.range.source.normalizedPath);
 
@@ -3737,9 +3737,9 @@ export function ensureGCHook(
     if (existingIndex != <u32>-1) return existingIndex;
   }
 
-  // check if the class implements a custom GC function (only valid for internals)
+  // check if the class implements a custom GC function (only valid for library elements)
   var members = classInstance.members;
-  if (classInstance.prototype.declaration.range.source.isLibrary) {
+  if (classInstance.isDeclaredInLibrary) {
     if (members !== null && members.has("__gc")) {
       let gcPrototype = assert(members.get("__gc"));
       assert(gcPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);

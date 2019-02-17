@@ -392,7 +392,7 @@ export class TSDBuilder extends ExportsWalker {
     if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
     if (element.is(CommonFlags.STATIC)) sb.push("static ");
     if (element.is(CommonFlags.GET)) {
-      sb.push(element.prototype.declaration.name.text); // 'get:funcName' internally
+      sb.push(element.identifierNode.text); // 'get:funcName' internally
       sb.push(": ");
       sb.push(this.typeToString(signature.returnType));
       sb.push(";\n");

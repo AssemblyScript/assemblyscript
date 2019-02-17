@@ -354,7 +354,7 @@ declare namespace f64 {
   export function store(offset: usize, value: f64, constantOffset?: usize): void;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
-declare type NATIVE<T> = T;
+declare type native<T> = T;
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {

@@ -6,8 +6,6 @@
 import {
   CommonFlags,
   PATH_DELIMITER,
-  STATIC_DELIMITER,
-  INSTANCE_DELIMITER,
   LIBRARY_PREFIX,
   CommonSymbols
 } from "./common";
@@ -582,7 +580,7 @@ export abstract class Node {
 
   static createClassDeclaration(
     identifier: IdentifierExpression,
-    typeParameters: TypeParameterNode[],
+    typeParameters: TypeParameterNode[] | null,
     extendsType: TypeNode | null, // can't be a function
     implementsTypes: TypeNode[] | null, // can't be functions
     members: DeclarationStatement[],
@@ -594,7 +592,7 @@ export abstract class Node {
     stmt.range = range;
     stmt.flags = flags;
     stmt.name = identifier; identifier.parent = stmt;
-    stmt.typeParameters = typeParameters; setParent(typeParameters, stmt);
+    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
     stmt.extendsType = extendsType; if (extendsType) extendsType.parent = stmt;
     stmt.implementsTypes = implementsTypes; if (implementsTypes) setParent(implementsTypes, stmt);
     stmt.members = members; setParent(members, stmt);
@@ -803,7 +801,7 @@ export abstract class Node {
 
   static createInterfaceDeclaration(
     name: IdentifierExpression,
-    typeParameters: TypeParameterNode[],
+    typeParameters: TypeParameterNode[] | null,
     extendsType: TypeNode | null, // can't be a function
     members: DeclarationStatement[],
     decorators: DecoratorNode[] | null,
@@ -1630,7 +1628,7 @@ export class ClassDeclaration extends DeclarationStatement {
   kind = NodeKind.CLASSDECLARATION;
 
   /** Accepted type parameters. */
-  typeParameters: TypeParameterNode[];
+  typeParameters: TypeParameterNode[] | null;
   /** Base class type being extended, if any. */
   extendsType: TypeNode | null; // can't be a function
   /** Interface types being implemented, if any. */
@@ -1730,7 +1728,7 @@ export class ExpressionStatement extends Statement {
 export class FieldDeclaration extends VariableLikeDeclarationStatement {
   kind = NodeKind.FIELDDECLARATION;
 
-  /** Parameter index within the constructor, if applicable. */
+  /** Parameter index if declared as a constructor parameter, otherwise `-1`. */
   parameterIndex: i32 = -1;
 }
 

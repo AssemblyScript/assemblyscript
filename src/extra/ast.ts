@@ -853,13 +853,12 @@ export class ASTBuilder {
       sb.push("class");
     }
     var typeParameters = node.typeParameters;
-    var numTypeParameters = typeParameters.length;
-    if (numTypeParameters) {
+    if (typeParameters && typeParameters.length) {
       sb.push("<");
       this.visitTypeParameter(typeParameters[0]);
-      for (let i = 1; i < numTypeParameters; ++i) {
+      for (let i = 1, k = typeParameters.length; i < k; ++i) {
         sb.push(", ");
-        this.visitTypeParameter(node.typeParameters[i]);
+        this.visitTypeParameter(typeParameters[i]);
       }
       sb.push(">");
     }
@@ -1217,11 +1216,10 @@ export class ASTBuilder {
     sb.push("interface ");
     this.visitIdentifierExpression(node.name);
     var typeParameters = node.typeParameters;
-    var numTypeParameters = typeParameters.length;
-    if (numTypeParameters) {
+    if (typeParameters && typeParameters.length) {
       sb.push("<");
       this.visitTypeParameter(typeParameters[0]);
-      for (let i = 0; i < numTypeParameters; ++i) {
+      for (let i = 1, k = typeParameters.length; i < k; ++i) {
         sb.push(", ");
         this.visitTypeParameter(typeParameters[i]);
       }

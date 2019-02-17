@@ -1500,13 +1500,11 @@ export class Parser extends DiagnosticEmitter {
       tn.range()
     );
 
-    var typeParameters: TypeParameterNode[] | null;
+    var typeParameters: TypeParameterNode[] | null = null;
     if (tn.skip(Token.LESSTHAN)) {
       typeParameters = this.parseTypeParameters(tn);
       if (!typeParameters) return null;
       flags |= CommonFlags.GENERIC;
-    } else {
-      typeParameters = [];
     }
 
     var extendsType: TypeNode | null = null;
