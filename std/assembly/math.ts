@@ -1230,7 +1230,6 @@ export namespace NativeMath {
 
 /** @internal */
 var rempio2f_y: f64;
-var pio2_large_quot: u64;
 
 /** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
@@ -1254,57 +1253,54 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
 }
 
 @inline /** @internal */
-function pio2_large_quot_segment(offset: i32): u64 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c#L20
-  const bits: u64[] = [
-    0xA2F9836E4E441529,
-    0xFC2757D1F534DDC0,
-    0xDB6295993C439041,
-    0xFE5163ABDEBBC561
-  ];
+function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
+  const pi_2_65 = reinterpret<f64>(0x3BF921FB54442D18); // 8.51530395021638647334e-20
 
-  var index = offset >> 6;
-  var shift = offset & 63;
+ const bits: u64[] = [
+   0xA2F9836E4E441529,
+   0xFC2757D1F534DDC0,
+   0xDB6295993C439041,
+   0xFE5163ABDEBBC561
+ ];
 
-  var b0 = unchecked(bits[index + 0]);
-  var b1 = unchecked(bits[index + 1]);
-  var lo: u64;
+ var offset = (u >> 23) - 152;
+ var index  = offset >> 6;
+ var shift  = offset & 63;
 
-  if (shift > 32) {
-    let b2 = unchecked(bits[index + 2]);
-    lo  = b2 >> (96 - shift);
-    lo |= b1 << (shift - 32);
-  } else {
-    lo = b1 >> (32 - shift);
-  }
+ var b0 = unchecked(bits[index + 0]);
+ var b1 = unchecked(bits[index + 1]);
+ var lo: u64;
 
-  pio2_large_quot =
-    (b1 >> (64 - shift)) |
-    (b0 << shift);
+ if (shift > 32) {
+   let b2 = unchecked(bits[index + 2]);
+   lo  = b2 >> (96 - shift);
+   lo |= b1 << (shift - 32);
+ } else {
+   lo = b1 >> (32 - shift);
+ }
 
-  return lo;
+ var hi = (b1 >> (64 - shift)) | (b0 << shift);
+ var mantissa: u64 = (u & 0x007FFFFF) | 0x00800000;
+ var product: u64 = mantissa * hi + ((mantissa * lo) >> 32);
+ var r: i64 = product << 2;
+ var q: i32 = <i32>(product >> 62) + <i32>(r < 0);
+ rempio2f_y = copysign<f64>(pi_2_65, x) * <f64>r;
+ return q;
 }
 
 @inline /** @internal */
-function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c#L43
+function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const pi2hi = reinterpret<f64>(0x3FF921FB50000000); // 1.57079631090164184570
   const pi2lo = reinterpret<f64>(0x3E5110B4611A6263); // 1.58932547735281966916e-8
   const _2_pi = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
-  const pi_2_65  = reinterpret<f64>(0x3BF921FB54442D18);
 
   if (u < 0x4DC90FDB) {
     let q = nearest(x * _2_pi);
     rempio2f_y = x - q * pi2hi - q * pi2lo;
     return <i32>q;
   }
-  var slo = pio2_large_quot_segment((u >> 23) - 152);
-  var shi = pio2_large_quot;
 
-  var mantissa: u64 = (u & 0x7FFFFF) | 0x800000;
-  var product: u64 = mantissa * shi + ((mantissa * slo) >> 32);
-  var r: i64 = product << 2;
-  var q: i32 = <i32>(product >> 62) + <i32>(r < 0);
-
-  rempio2f_y = copysign<f64>(pi_2_65, x) * <f64>r;
+  var q = pio2_large_quot(x, u);
   return select(-q, q, sign);
 }
 

@@ -99,7 +99,6 @@
  (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
  (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
  (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/math/pio2_large_quot (mut i64) (i64.const 0))
  (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
@@ -4348,17 +4347,22 @@
   (local $8 f32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
+  (local $11 f32)
   (local $12 i32)
   (local $13 i32)
-  (local $14 i64)
-  (local $15 i64)
+  (local $14 i32)
+  (local $15 i32)
   (local $16 i64)
   (local $17 i64)
   (local $18 i64)
-  (local $19 i32)
-  (local $20 f64)
-  (local $21 f32)
+  (local $19 i64)
+  (local $20 i64)
+  (local $21 i64)
+  (local $22 i64)
+  (local $23 i32)
+  (local $24 i32)
+  (local $25 f64)
+  (local $26 f32)
   local.get $0
   i32.reinterpret_f32
   local.set $1
@@ -4748,138 +4752,140 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.0
    end
-   block $~lib/math/pio2_large_quot_segment|inlined.0 (result i64)
+   block $~lib/math/pio2_large_quot|inlined.0 (result i32)
+    local.get $8
+    local.set $11
     local.get $9
+    local.set $12
+    local.get $12
     i32.const 23
-    i32.shr_u
+    i32.shr_s
     i32.const 152
     i32.sub
-    local.set $11
-    local.get $11
+    local.set $13
+    local.get $13
     i32.const 6
     i32.shr_s
-    local.set $12
-    local.get $11
+    local.set $14
+    local.get $13
     i32.const 63
     i32.and
-    local.set $13
+    local.set $15
     i32.const 104
-    local.get $12
+    local.get $14
     i32.const 0
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
-    local.set $14
+    local.set $16
     i32.const 104
-    local.get $12
+    local.get $14
     i32.const 1
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
-    local.set $15
-    local.get $13
+    local.set $17
+    local.get $15
     i32.const 32
     i32.gt_s
     if
      i32.const 104
-     local.get $12
+     local.get $14
      i32.const 2
      i32.add
      call $~lib/array/Array<u64>#__unchecked_get
-     local.set $17
-     local.get $17
+     local.set $19
+     local.get $19
      i64.const 96
-     local.get $13
+     local.get $15
      i64.extend_i32_s
      i64.sub
      i64.shr_u
-     local.set $16
-     local.get $16
+     local.set $18
+     local.get $18
+     local.get $17
      local.get $15
-     local.get $13
      i32.const 32
      i32.sub
      i64.extend_i32_s
      i64.shl
      i64.or
-     local.set $16
+     local.set $18
     else     
-     local.get $15
+     local.get $17
      i64.const 32
-     local.get $13
+     local.get $15
      i64.extend_i32_s
      i64.sub
      i64.shr_u
-     local.set $16
+     local.set $18
     end
-    local.get $15
+    local.get $17
     i64.const 64
-    local.get $13
+    local.get $15
     i64.extend_i32_s
     i64.sub
     i64.shr_u
-    local.get $14
-    local.get $13
+    local.get $16
+    local.get $15
     i64.extend_i32_s
     i64.shl
     i64.or
-    global.set $~lib/math/pio2_large_quot
-    local.get $16
+    local.set $19
+    local.get $12
+    i32.const 8388607
+    i32.and
+    i32.const 8388608
+    i32.or
+    i64.extend_i32_s
+    local.set $20
+    local.get $20
+    local.get $19
+    i64.mul
+    local.get $20
+    local.get $18
+    i64.mul
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $21
+    local.get $21
+    i64.const 2
+    i64.shl
+    local.set $22
+    local.get $21
+    i64.const 62
+    i64.shr_u
+    i32.wrap_i64
+    local.get $22
+    i64.const 0
+    i64.lt_s
+    i32.add
+    local.set $23
+    f64.const 8.515303950216386e-20
+    local.get $11
+    f64.promote_f32
+    f64.copysign
+    local.get $22
+    f64.convert_i64_s
+    f64.mul
+    global.set $~lib/math/rempio2f_y
+    local.get $23
    end
-   local.set $16
-   global.get $~lib/math/pio2_large_quot
-   local.set $15
-   local.get $9
-   i32.const 8388607
-   i32.and
-   i32.const 8388608
-   i32.or
-   i64.extend_i32_u
-   local.set $14
-   local.get $14
-   local.get $15
-   i64.mul
-   local.get $14
-   local.get $16
-   i64.mul
-   i64.const 32
-   i64.shr_u
-   i64.add
-   local.set $17
-   local.get $17
-   i64.const 2
-   i64.shl
-   local.set $18
-   local.get $17
-   i64.const 62
-   i64.shr_u
-   i32.wrap_i64
-   local.get $18
-   i64.const 0
-   i64.lt_s
-   i32.add
-   local.set $13
-   f64.const 8.515303950216386e-20
-   local.get $8
-   f64.promote_f32
-   f64.copysign
-   local.get $18
-   f64.convert_i64_s
-   f64.mul
-   global.set $~lib/math/rempio2f_y
+   local.set $23
    i32.const 0
-   local.get $13
+   local.get $23
    i32.sub
-   local.get $13
+   local.get $23
    local.get $10
    select
   end
-  local.set $19
+  local.set $24
   global.get $~lib/math/rempio2f_y
-  local.set $20
-  local.get $19
+  local.set $25
+  local.get $24
   i32.const 1
   i32.and
   if (result f32)
-   local.get $20
+   local.get $25
    local.set $6
    local.get $6
    local.get $6
@@ -4916,7 +4922,7 @@
    f64.add
    f32.demote_f64
   else   
-   local.get $20
+   local.get $25
    local.set $7
    local.get $7
    local.get $7
@@ -4950,17 +4956,17 @@
    f64.add
    f32.demote_f64
   end
-  local.set $21
-  local.get $19
+  local.set $26
+  local.get $24
   i32.const 1
   i32.add
   i32.const 2
   i32.and
   if (result f32)
-   local.get $21
+   local.get $26
    f32.neg
   else   
-   local.get $21
+   local.get $26
   end
  )
  (func $std/math/test_cosf (; 88 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
@@ -11355,17 +11361,22 @@
   (local $8 f32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
+  (local $11 f32)
   (local $12 i32)
   (local $13 i32)
-  (local $14 i64)
-  (local $15 i64)
+  (local $14 i32)
+  (local $15 i32)
   (local $16 i64)
   (local $17 i64)
   (local $18 i64)
-  (local $19 i32)
-  (local $20 f64)
-  (local $21 f32)
+  (local $19 i64)
+  (local $20 i64)
+  (local $21 i64)
+  (local $22 i64)
+  (local $23 i32)
+  (local $24 i32)
+  (local $25 f64)
+  (local $26 f32)
   local.get $0
   i32.reinterpret_f32
   local.set $1
@@ -11752,138 +11763,140 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.1
    end
-   block $~lib/math/pio2_large_quot_segment|inlined.1 (result i64)
+   block $~lib/math/pio2_large_quot|inlined.1 (result i32)
+    local.get $8
+    local.set $11
     local.get $9
+    local.set $12
+    local.get $12
     i32.const 23
-    i32.shr_u
+    i32.shr_s
     i32.const 152
     i32.sub
-    local.set $11
-    local.get $11
+    local.set $13
+    local.get $13
     i32.const 6
     i32.shr_s
-    local.set $12
-    local.get $11
+    local.set $14
+    local.get $13
     i32.const 63
     i32.and
-    local.set $13
+    local.set $15
     i32.const 208
-    local.get $12
+    local.get $14
     i32.const 0
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
-    local.set $14
+    local.set $16
     i32.const 208
-    local.get $12
+    local.get $14
     i32.const 1
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
-    local.set $15
-    local.get $13
+    local.set $17
+    local.get $15
     i32.const 32
     i32.gt_s
     if
      i32.const 208
-     local.get $12
+     local.get $14
      i32.const 2
      i32.add
      call $~lib/array/Array<u64>#__unchecked_get
-     local.set $17
-     local.get $17
+     local.set $19
+     local.get $19
      i64.const 96
-     local.get $13
+     local.get $15
      i64.extend_i32_s
      i64.sub
      i64.shr_u
-     local.set $16
-     local.get $16
+     local.set $18
+     local.get $18
+     local.get $17
      local.get $15
-     local.get $13
      i32.const 32
      i32.sub
      i64.extend_i32_s
      i64.shl
      i64.or
-     local.set $16
+     local.set $18
     else     
-     local.get $15
+     local.get $17
      i64.const 32
-     local.get $13
+     local.get $15
      i64.extend_i32_s
      i64.sub
      i64.shr_u
-     local.set $16
+     local.set $18
     end
-    local.get $15
+    local.get $17
     i64.const 64
-    local.get $13
+    local.get $15
     i64.extend_i32_s
     i64.sub
     i64.shr_u
-    local.get $14
-    local.get $13
+    local.get $16
+    local.get $15
     i64.extend_i32_s
     i64.shl
     i64.or
-    global.set $~lib/math/pio2_large_quot
-    local.get $16
+    local.set $19
+    local.get $12
+    i32.const 8388607
+    i32.and
+    i32.const 8388608
+    i32.or
+    i64.extend_i32_s
+    local.set $20
+    local.get $20
+    local.get $19
+    i64.mul
+    local.get $20
+    local.get $18
+    i64.mul
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $21
+    local.get $21
+    i64.const 2
+    i64.shl
+    local.set $22
+    local.get $21
+    i64.const 62
+    i64.shr_u
+    i32.wrap_i64
+    local.get $22
+    i64.const 0
+    i64.lt_s
+    i32.add
+    local.set $23
+    f64.const 8.515303950216386e-20
+    local.get $11
+    f64.promote_f32
+    f64.copysign
+    local.get $22
+    f64.convert_i64_s
+    f64.mul
+    global.set $~lib/math/rempio2f_y
+    local.get $23
    end
-   local.set $16
-   global.get $~lib/math/pio2_large_quot
-   local.set $15
-   local.get $9
-   i32.const 8388607
-   i32.and
-   i32.const 8388608
-   i32.or
-   i64.extend_i32_u
-   local.set $14
-   local.get $14
-   local.get $15
-   i64.mul
-   local.get $14
-   local.get $16
-   i64.mul
-   i64.const 32
-   i64.shr_u
-   i64.add
-   local.set $17
-   local.get $17
-   i64.const 2
-   i64.shl
-   local.set $18
-   local.get $17
-   i64.const 62
-   i64.shr_u
-   i32.wrap_i64
-   local.get $18
-   i64.const 0
-   i64.lt_s
-   i32.add
-   local.set $13
-   f64.const 8.515303950216386e-20
-   local.get $8
-   f64.promote_f32
-   f64.copysign
-   local.get $18
-   f64.convert_i64_s
-   f64.mul
-   global.set $~lib/math/rempio2f_y
+   local.set $23
    i32.const 0
-   local.get $13
+   local.get $23
    i32.sub
-   local.get $13
+   local.get $23
    local.get $10
    select
   end
-  local.set $19
+  local.set $24
   global.get $~lib/math/rempio2f_y
-  local.set $20
-  local.get $19
+  local.set $25
+  local.get $24
   i32.const 1
   i32.and
   if (result f32)
-   local.get $20
+   local.get $25
    local.set $7
    local.get $7
    local.get $7
@@ -11917,7 +11930,7 @@
    f64.add
    f32.demote_f64
   else   
-   local.get $20
+   local.get $25
    local.set $4
    local.get $4
    local.get $4
@@ -11954,15 +11967,15 @@
    f64.add
    f32.demote_f64
   end
-  local.set $21
-  local.get $19
+  local.set $26
+  local.get $24
   i32.const 2
   i32.and
   if (result f32)
-   local.get $21
+   local.get $26
    f32.neg
   else   
-   local.get $21
+   local.get $26
   end
  )
  (func $std/math/test_sinf (; 145 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
@@ -12265,16 +12278,21 @@
   (local $10 f64)
   (local $11 f32)
   (local $12 i32)
-  (local $13 i32)
+  (local $13 f32)
   (local $14 i32)
   (local $15 i32)
-  (local $16 i64)
-  (local $17 i64)
+  (local $16 i32)
+  (local $17 i32)
   (local $18 i64)
   (local $19 i64)
   (local $20 i64)
-  (local $21 i32)
-  (local $22 f64)
+  (local $21 i64)
+  (local $22 i64)
+  (local $23 i64)
+  (local $24 i64)
+  (local $25 i32)
+  (local $26 i32)
+  (local $27 f64)
   local.get $0
   i32.reinterpret_f32
   local.set $1
@@ -12725,140 +12743,142 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.2
    end
-   block $~lib/math/pio2_large_quot_segment|inlined.2 (result i64)
+   block $~lib/math/pio2_large_quot|inlined.2 (result i32)
+    local.get $11
+    local.set $13
     local.get $4
+    local.set $14
+    local.get $14
     i32.const 23
-    i32.shr_u
+    i32.shr_s
     i32.const 152
     i32.sub
-    local.set $13
-    local.get $13
+    local.set $15
+    local.get $15
     i32.const 6
     i32.shr_s
-    local.set $14
-    local.get $13
+    local.set $16
+    local.get $15
     i32.const 63
     i32.and
-    local.set $15
+    local.set $17
     i32.const 280
-    local.get $14
+    local.get $16
     i32.const 0
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
-    local.set $16
+    local.set $18
     i32.const 280
-    local.get $14
+    local.get $16
     i32.const 1
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
-    local.set $17
-    local.get $15
+    local.set $19
+    local.get $17
     i32.const 32
     i32.gt_s
     if
      i32.const 280
-     local.get $14
+     local.get $16
      i32.const 2
      i32.add
      call $~lib/array/Array<u64>#__unchecked_get
-     local.set $19
-     local.get $19
+     local.set $21
+     local.get $21
      i64.const 96
-     local.get $15
+     local.get $17
      i64.extend_i32_s
      i64.sub
      i64.shr_u
-     local.set $18
-     local.get $18
+     local.set $20
+     local.get $20
+     local.get $19
      local.get $17
-     local.get $15
      i32.const 32
      i32.sub
      i64.extend_i32_s
      i64.shl
      i64.or
-     local.set $18
+     local.set $20
     else     
-     local.get $17
+     local.get $19
      i64.const 32
-     local.get $15
+     local.get $17
      i64.extend_i32_s
      i64.sub
      i64.shr_u
-     local.set $18
+     local.set $20
     end
-    local.get $17
+    local.get $19
     i64.const 64
-    local.get $15
+    local.get $17
     i64.extend_i32_s
     i64.sub
     i64.shr_u
-    local.get $16
-    local.get $15
+    local.get $18
+    local.get $17
     i64.extend_i32_s
     i64.shl
     i64.or
-    global.set $~lib/math/pio2_large_quot
-    local.get $18
+    local.set $21
+    local.get $14
+    i32.const 8388607
+    i32.and
+    i32.const 8388608
+    i32.or
+    i64.extend_i32_s
+    local.set $22
+    local.get $22
+    local.get $21
+    i64.mul
+    local.get $22
+    local.get $20
+    i64.mul
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $23
+    local.get $23
+    i64.const 2
+    i64.shl
+    local.set $24
+    local.get $23
+    i64.const 62
+    i64.shr_u
+    i32.wrap_i64
+    local.get $24
+    i64.const 0
+    i64.lt_s
+    i32.add
+    local.set $25
+    f64.const 8.515303950216386e-20
+    local.get $13
+    f64.promote_f32
+    f64.copysign
+    local.get $24
+    f64.convert_i64_s
+    f64.mul
+    global.set $~lib/math/rempio2f_y
+    local.get $25
    end
-   local.set $18
-   global.get $~lib/math/pio2_large_quot
-   local.set $17
-   local.get $4
-   i32.const 8388607
-   i32.and
-   i32.const 8388608
-   i32.or
-   i64.extend_i32_u
-   local.set $16
-   local.get $16
-   local.get $17
-   i64.mul
-   local.get $16
-   local.get $18
-   i64.mul
-   i64.const 32
-   i64.shr_u
-   i64.add
-   local.set $19
-   local.get $19
-   i64.const 2
-   i64.shl
-   local.set $20
-   local.get $19
-   i64.const 62
-   i64.shr_u
-   i32.wrap_i64
-   local.get $20
-   i64.const 0
-   i64.lt_s
-   i32.add
-   local.set $15
-   f64.const 8.515303950216386e-20
-   local.get $11
-   f64.promote_f32
-   f64.copysign
-   local.get $20
-   f64.convert_i64_s
-   f64.mul
-   global.set $~lib/math/rempio2f_y
+   local.set $25
    i32.const 0
-   local.get $15
+   local.get $25
    i32.sub
-   local.get $15
+   local.get $25
    local.get $12
    select
   end
-  local.set $21
+  local.set $26
   global.get $~lib/math/rempio2f_y
-  local.set $22
+  local.set $27
   block $~lib/math/tan_kernf|inlined.5 (result f32)
-   local.get $22
+   local.get $27
    local.set $10
-   local.get $21
+   local.get $26
    i32.const 1
    i32.and
-   local.set $15
+   local.set $25
    local.get $10
    local.get $10
    f64.mul
@@ -12905,7 +12925,7 @@
    f64.mul
    f64.add
    local.set $8
-   local.get $15
+   local.get $25
    if (result f64)
     f32.const -1
     f64.promote_f32
