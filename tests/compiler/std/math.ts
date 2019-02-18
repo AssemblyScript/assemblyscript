@@ -1129,7 +1129,13 @@ assert(test_cosf(-4.882812500e-04, 9.999998808e-01,-3.973643103e-08, INEXACT));
 assert(test_cosf(-9.765625000e-04, 9.999995232e-01,-6.357828397e-07, INEXACT));
 
 // large arguments
-// TODO
+assert(NativeMathf.cos(255.99993896484375) == <f32>-0.03985174745321274);
+assert(NativeMathf.cos(5033165.25) == <f32>0.8471871614456177);
+assert(NativeMathf.cos(421657440.0) == <f32>0.6728929281234741);
+assert(NativeMathf.cos(2147483392.0) == <f32>0.9610780477523804);
+assert(NativeMathf.cos(68719474688.0) == <f32>0.1694190502166748);
+assert(NativeMathf.cos(549755797504.0) == <f32>0.20735950767993927);
+assert(NativeMathf.cos(f32.MAX_VALUE) == <f32>0.8530210256576538);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.cosh
@@ -2984,7 +2990,13 @@ assert(test_sinf(-1.175494071e-38,-1.175494071e-38,               0, INEXACT | U
 assert(test_sinf(-1.175494211e-38,-1.175494211e-38,               0, INEXACT | UNDERFLOW));
 
 // large arguments
-// TODO
+assert(NativeMathf.sin(255.99993896484375) == <f32>-0.9992055892944336);
+assert(NativeMathf.sin(5033165.25) == <f32>0.5312945246696472);
+assert(NativeMathf.sin(421657440.0) == <f32>-0.7397398948669434);
+assert(NativeMathf.sin(2147483392.0) == <f32>0.27627703547);
+assert(NativeMathf.sin(68719474688.0) == <f32>0.9855440855026245);
+assert(NativeMathf.sin(549755797504.0) == <f32>-0.9782648086547852);
+assert(NativeMathf.sin(f32.MAX_VALUE) == <f32>-0.5218765139579773);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.sinh
