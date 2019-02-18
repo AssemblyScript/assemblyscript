@@ -1129,13 +1129,13 @@ assert(test_cosf(-4.882812500e-04, 9.999998808e-01,-3.973643103e-08, INEXACT));
 assert(test_cosf(-9.765625000e-04, 9.999995232e-01,-6.357828397e-07, INEXACT));
 
 // large arguments
-assert(NativeMathf.cos(255.99993896484375) == <f32>-0.03985174745321274);
-assert(NativeMathf.cos(5033165.25) == <f32>0.8471871614456177);
-assert(NativeMathf.cos(421657440.0) == <f32>0.6728929281234741);
-assert(NativeMathf.cos(2147483392.0) == <f32>0.9610780477523804);
-assert(NativeMathf.cos(68719474688.0) == <f32>0.1694190502166748);
-assert(NativeMathf.cos(549755797504.0) == <f32>0.20735950767993927);
-assert(NativeMathf.cos(f32.MAX_VALUE) == <f32>0.8530210256576538);
+assert(test_cosf(255.99993896484,-0.039851747453212740, 0.0, INEXACT));
+assert(test_cosf(5033165.25,      0.847187161445617700, 0.0, INEXACT));
+assert(test_cosf(421657440.0,     0.672892928123474100, 0.0, INEXACT));
+assert(test_cosf(2147483392.0,    0.961078047752380400, 0.0, INEXACT));
+assert(test_cosf(68719474688.0,   0.169419050216674800, 0.0, INEXACT));
+assert(test_cosf(549755797504.0,  0.207359507679939270, 0.0, INEXACT));
+assert(test_cosf(f32.MAX_VALUE,   0.853021025657653800, 0.0, INEXACT));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.cosh
@@ -2952,51 +2952,51 @@ assert(test_sinf(      NaN, NaN, 0.0, 0));
 // ubc
 assert(test_sinf( 1.862645149e-09, 1.862645149e-09, 4.850638554e-12, INEXACT));
 assert(test_sinf(-1.862645149e-09,-1.862645149e-09,-4.850638554e-12, INEXACT));
-assert(test_sinf( 1.175494351e-38, 1.175494351e-38,               0, INEXACT));
-assert(test_sinf(-1.175494351e-38,-1.175494351e-38,               0, INEXACT));
-assert(test_sinf( 1.401298464e-45, 1.401298464e-45,               0, INEXACT | UNDERFLOW));
-assert(test_sinf(-1.401298464e-45,-1.401298464e-45,               0, INEXACT | UNDERFLOW));
-assert(test_sinf( 1.175494491e-38, 1.175494491e-38,               0, INEXACT));
-assert(test_sinf( 1.175494631e-38, 1.175494631e-38,               0, INEXACT));
-assert(test_sinf( 2.350988001e-38, 2.350988001e-38,               0, INEXACT));
-assert(test_sinf( 2.350988702e-38, 2.350988702e-38,               0, INEXACT));
-assert(test_sinf( 2.350989542e-38, 2.350989542e-38,               0, INEXACT));
-assert(test_sinf( 4.701977403e-38, 4.701977403e-38,               0, INEXACT));
+assert(test_sinf( 1.175494351e-38, 1.175494351e-38,             0.0, INEXACT));
+assert(test_sinf(-1.175494351e-38,-1.175494351e-38,             0.0, INEXACT));
+assert(test_sinf( 1.401298464e-45, 1.401298464e-45,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf(-1.401298464e-45,-1.401298464e-45,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf( 1.175494491e-38, 1.175494491e-38,             0.0, INEXACT));
+assert(test_sinf( 1.175494631e-38, 1.175494631e-38,             0.0, INEXACT));
+assert(test_sinf( 2.350988001e-38, 2.350988001e-38,             0.0, INEXACT));
+assert(test_sinf( 2.350988702e-38, 2.350988702e-38,             0.0, INEXACT));
+assert(test_sinf( 2.350989542e-38, 2.350989542e-38,             0.0, INEXACT));
+assert(test_sinf( 4.701977403e-38, 4.701977403e-38,             0.0, INEXACT));
 assert(test_sinf( 1.117587090e-08, 1.117587090e-08, 2.619344741e-10, INEXACT));
 assert(test_sinf( 1.490116119e-08, 1.490116119e-08, 3.104408675e-10, INEXACT));
 assert(test_sinf( 2.441406250e-04, 2.441406250e-04, 8.333333582e-02, INEXACT));
 assert(test_sinf( 3.662109375e-04, 3.662109375e-04, 2.812500000e-01, INEXACT));
-assert(test_sinf(-1.175494491e-38,-1.175494491e-38,               0, INEXACT));
-assert(test_sinf(-1.175494631e-38,-1.175494631e-38,               0, INEXACT));
-assert(test_sinf(-2.350988001e-38,-2.350988001e-38,               0, INEXACT));
-assert(test_sinf(-2.350988702e-38,-2.350988702e-38,               0, INEXACT));
-assert(test_sinf(-2.350989542e-38,-2.350989542e-38,               0, INEXACT));
-assert(test_sinf(-4.701977403e-38,-4.701977403e-38,               0, INEXACT));
+assert(test_sinf(-1.175494491e-38,-1.175494491e-38,             0.0, INEXACT));
+assert(test_sinf(-1.175494631e-38,-1.175494631e-38,             0.0, INEXACT));
+assert(test_sinf(-2.350988001e-38,-2.350988001e-38,             0.0, INEXACT));
+assert(test_sinf(-2.350988702e-38,-2.350988702e-38,             0.0, INEXACT));
+assert(test_sinf(-2.350989542e-38,-2.350989542e-38,             0.0, INEXACT));
+assert(test_sinf(-4.701977403e-38,-4.701977403e-38,             0.0, INEXACT));
 assert(test_sinf(-1.117587090e-08,-1.117587090e-08,-2.619344741e-10, INEXACT));
 assert(test_sinf(-1.490116119e-08,-1.490116119e-08,-3.104408675e-10, INEXACT));
 assert(test_sinf(-2.441406250e-04,-2.441406250e-04,-8.333333582e-02, INEXACT));
 assert(test_sinf(-3.662109375e-04,-3.662109375e-04,-2.812500000e-01, INEXACT));
-assert(test_sinf( 2.802596929e-45, 2.802596929e-45,               0, INEXACT | UNDERFLOW));
-assert(test_sinf( 1.261168618e-44, 1.261168618e-44,               0, INEXACT | UNDERFLOW));
-assert(test_sinf( 2.938735877e-39, 2.938735877e-39,               0, INEXACT | UNDERFLOW));
-assert(test_sinf( 5.877471754e-39, 5.877471754e-39,               0, INEXACT | UNDERFLOW));
-assert(test_sinf( 1.175494071e-38, 1.175494071e-38,               0, INEXACT | UNDERFLOW));
-assert(test_sinf( 1.175494211e-38, 1.175494211e-38,               0, INEXACT | UNDERFLOW));
-assert(test_sinf(-2.802596929e-45,-2.802596929e-45,               0, INEXACT | UNDERFLOW));
-assert(test_sinf(-1.261168618e-44,-1.261168618e-44,               0, INEXACT | UNDERFLOW));
-assert(test_sinf(-2.938735877e-39,-2.938735877e-39,               0, INEXACT | UNDERFLOW));
-assert(test_sinf(-5.877471754e-39,-5.877471754e-39,               0, INEXACT | UNDERFLOW));
-assert(test_sinf(-1.175494071e-38,-1.175494071e-38,               0, INEXACT | UNDERFLOW));
-assert(test_sinf(-1.175494211e-38,-1.175494211e-38,               0, INEXACT | UNDERFLOW));
+assert(test_sinf( 2.802596929e-45, 2.802596929e-45,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf( 1.261168618e-44, 1.261168618e-44,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf( 2.938735877e-39, 2.938735877e-39,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf( 5.877471754e-39, 5.877471754e-39,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf( 1.175494071e-38, 1.175494071e-38,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf( 1.175494211e-38, 1.175494211e-38,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf(-2.802596929e-45,-2.802596929e-45,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf(-1.261168618e-44,-1.261168618e-44,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf(-2.938735877e-39,-2.938735877e-39,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf(-5.877471754e-39,-5.877471754e-39,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf(-1.175494071e-38,-1.175494071e-38,             0.0, INEXACT | UNDERFLOW));
+assert(test_sinf(-1.175494211e-38,-1.175494211e-38,             0.0, INEXACT | UNDERFLOW));
 
 // large arguments
-assert(NativeMathf.sin(255.99993896484375) == <f32>-0.9992055892944336);
-assert(NativeMathf.sin(5033165.25) == <f32>0.5312945246696472);
-assert(NativeMathf.sin(421657440.0) == <f32>-0.7397398948669434);
-assert(NativeMathf.sin(2147483392.0) == <f32>0.27627703547);
-assert(NativeMathf.sin(68719474688.0) == <f32>0.9855440855026245);
-assert(NativeMathf.sin(549755797504.0) == <f32>-0.9782648086547852);
-assert(NativeMathf.sin(f32.MAX_VALUE) == <f32>-0.5218765139579773);
+assert(test_sinf(255.9999389645,-0.9992055892944336,  0.0, INEXACT));
+assert(test_sinf(5033165.25,     0.5312945246696472,  0.0, INEXACT));
+assert(test_sinf(421657440.0,   -0.7397398948669434,  0.0, INEXACT));
+assert(test_sinf(2147483392.0,   0.2762770354700000,  0.0, INEXACT));
+assert(test_sinf(68719474688.0,  0.9855440855026245,  0.0, INEXACT));
+assert(test_sinf(549755797504.0,-0.9782648086547852,  0.0, INEXACT));
+assert(test_sinf(f32.MAX_VALUE, -0.5218765139579773,  0.0, INEXACT));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.sinh
