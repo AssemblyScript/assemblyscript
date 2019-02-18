@@ -126,10 +126,15 @@ import {
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
   constructor(
+    /** File being imported into. */
     public localFile: File,
+    /** Identifier within the local file. */
     public localIdentifier: IdentifierExpression,
+    /** Identifier within the other file. Is an `import *` if not set. */
     public foreignIdentifier: IdentifierExpression | null,
+    /** Path to the other file. */
     public foreignPath: string,
+    /** Alternative path to the other file. */
     public foreignPathAlt: string
   ) {}
 }
@@ -137,18 +142,26 @@ class QueuedImport {
 /** Represents a yet unresolved `export`. */
 class QueuedExport {
   constructor(
+    /** Identifier within the local file. */
     public localIdentifier: IdentifierExpression,
+    /** Identifier within the other file. */
     public foreignIdentifier: IdentifierExpression,
+    /** Path to the other file if a re-export. */
     public foreignPath: string | null,
+    /** Alternative path to the other file if a re-export. */
     public foreignPathAlt: string | null
   ) {}
 }
 
 /** Represents a yet unresolved `export *`. */
 class QueuedExportStar {
+  // stored in a map with localFile as the key
   constructor(
+    /** Path to the other file. */
     public foreignPath: string,
+    /** Alternative path to the other file. */
     public foreignPathAlt: string,
+    /** Reference to the path literal for reporting. */
     public pathLiteral: StringLiteralExpression
   ) {}
 }
@@ -652,7 +665,7 @@ export class Program extends DiagnosticEmitter {
           let element = this.lookupForeign(
             queuedExport.localIdentifier.text,
             foreignPath,
-            assert(queuedExport.foreignPathAlt),
+            assert(queuedExport.foreignPathAlt), // must be set if foreignPath is
             queuedExports
           );
           if (element) {
@@ -1446,24 +1459,13 @@ export class Program extends DiagnosticEmitter {
         );
         return;
       }
-
-      // resolve right away if the exact file exists
-      // let file = this.elementsByName.get(statement.internalPath);
-      // if (file) {
-      //   this.elementsByName.set(internalName, file);
-      //   parent.add(simpleName, file, true);
-      //   return;
-      // }
-
-      // otherwise queue it
-      let queuedImport = new QueuedImport(
+      queuedImports.push(new QueuedImport(
         parent,
         statement.namespaceName,
-        null, // entire file
+        null, // import *
         statement.internalPath,
         statement.internalPath + INDEX_SUFFIX
-      );
-      queuedImports.push(queuedImport);
+      ));
     }
   }
 
@@ -1582,12 +1584,7 @@ export class Program extends DiagnosticEmitter {
           break;
         }
         case NodeKind.TYPEDECLARATION: {
-          // this.initializeTypeAlias(<TypeDeclaration>members[i], namespace);
-          // TODO: what about namespaced types?
-          this.error(
-            DiagnosticCode.Operation_not_supported,
-            members[i].range
-          );
+          this.initializeTypeDefinition(<TypeDeclaration>members[i], element);
           break;
         }
         case NodeKind.VARIABLE: {
@@ -1611,23 +1608,6 @@ export class Program extends DiagnosticEmitter {
     );
     parent.add(name, element); // reports
   }
-
-  // private initializeTypeAlias(declaration: TypeDeclaration, namespace: Element | null = null): void {
-  //   // type aliases are program globals
-  //   // TODO: what about namespaced types?
-  //   var name = declaration.name.text;
-  //   if (this.typesLookup.has(name) || this.typeAliases.has(name)) {
-  //     this.error(
-  //       DiagnosticCode.Duplicate_identifier_0,
-  //       declaration.name.range, name
-  //     );
-  //     return;
-  //   }
-  //   var alias = new TypeAlias();
-  //   alias.typeParameters = declaration.typeParameters;
-  //   alias.type = declaration.type;
-  //   this.typeAliases.set(name, alias);
-  // }
 
   private initializeVariables(
     statement: VariableStatement,
@@ -1699,6 +1679,7 @@ export enum ElementKind {
   TYPEDEFINITION,
 }
 
+/** Indicates built-in decorators that are present. */
 export enum DecoratorFlags {
   /** No flags set. */
   NONE = 0,
@@ -1722,6 +1703,7 @@ export enum DecoratorFlags {
   BUILTIN = 1 << 8
 }
 
+/** Translates a decorator kind to the respective decorator flag. */
 export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
   switch (kind) {
     case DecoratorKind.GLOBAL: return DecoratorFlags.GLOBAL;
@@ -1771,8 +1753,8 @@ export abstract class Element {
     if (parent) {
       this.parent = parent;
     } else {
-      assert(this instanceof File);
-      this.parent = this;
+      assert(this.kind == ElementKind.FILE);
+      this.parent = this; // special case
     }
   }
 
@@ -1901,6 +1883,7 @@ export class File extends Element {
 
   /** Constructs a new file. */
   constructor(
+    /** Program this file belongs to. */
     program: Program,
     /** Source of this file. */
     public source: Source
@@ -2087,8 +2070,6 @@ export class Enum extends TypedElement {
 /** An enum value. */
 export class EnumValue extends TypedElement {
 
-  kind = ElementKind.ENUMVALUE;
-
   /** Constant value, if applicable. */
   constantValue: i32 = 0;
 
@@ -2209,35 +2190,31 @@ export class Global extends VariableLikeElement {
 
 /** A function parameter. */
 export class Parameter {
-
-  // not an Element on its own
-
-  /** Parameter name. */
-  name: string;
-  /** Parameter type. */
-  type: Type;
-  /** Parameter initializer. */
-  initializer: Expression | null;
-
   /** Constructs a new function parameter. */
-  constructor(name: string, type: Type, initializer: Expression | null = null) {
-    this.name = name;
-    this.type = type;
-    this.initializer = initializer;
-  }
+  constructor(
+    /** Parameter name. */
+    public name: string,
+    /** Parameter type. */
+    public type: Type,
+    /** Parameter initializer. */
+    public initializer: Expression | null = null
+  ) {}
 }
 
 /** A local variable. */
 export class Local extends VariableLikeElement {
 
-  /** Local index. */
-  index: i32;
-
+  /** Constructs a new local variable. */
   constructor(
+    /** Local name. */
     name: string,
-    index: i32,
+    /** Local index. */
+    public index: i32,
+    /** Local type. */
     type: Type,
+    /** Parent function. */
     parent: Function,
+    /** Declaration reference. */
     declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
   ) {
     super(
@@ -2248,9 +2225,7 @@ export class Local extends VariableLikeElement {
     );
     this.index = index;
     assert(type != Type.void);
-    this.type = type;
-    this.set(CommonFlags.RESOLVED);
-    // does not register
+    this.setType(type);
   }
 }
 
@@ -2329,12 +2304,14 @@ export class FunctionPrototype extends DeclaredElement {
     return bound;
   }
 
+  /** Gets the resolved instance for the specified instance key, if already resolved. */
   getResolvedInstance(instanceKey: string): Function | null {
     var instances = this.instances;
     if (instances && instances.has(instanceKey)) return <Function>instances.get(instanceKey);
     return null;
   }
 
+  /** Sets the resolved instance for the specified instance key. */
   setResolvedInstance(instanceKey: string, instance: Function): void {
     var instances = this.instances;
     if (!instances) this.instances = instances = new Map();
@@ -2494,8 +2471,6 @@ export class Function extends TypedElement {
 
 /** A resolved function target, that is a function called indirectly by an index and signature. */
 export class FunctionTarget extends Element {
-
-  kind = ElementKind.FUNCTION_TARGET;
 
   /** Underlying signature. */
   signature: Signature;
@@ -2740,12 +2715,14 @@ export class ClassPrototype extends DeclaredElement {
     return true;
   }
 
+  /** Gets the resolved instance for the specified instance key, if already resolved. */
   getResolvedInstance(instanceKey: string): Class | null {
     var instances = this.instances;
     if (instances && instances.has(instanceKey)) return <Class>instances.get(instanceKey);
     return null;
   }
 
+  /** Sets the resolved instance for the specified instance key. */
   setResolvedInstance(instanceKey: string, instance: Class): void {
     var instances = this.instances;
     if (!instances) this.instances = instances = new Map();
@@ -2884,6 +2861,7 @@ export class Class extends TypedElement {
     return this.parent.lookup(name);
   }
 
+  /** Calculates the memory offset of the specified field. */
   offsetof(fieldName: string): u32 {
     var members = assert(this.members);
     assert(members.has(fieldName));
@@ -3621,7 +3599,7 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
 /** Attempts to merge two elements. Returns the merged element on success. */
 function tryMerge(older: Element, newer: Element): DeclaredElement | null {
   // NOTE: some of the following cases are not supported by TS, not sure why exactly.
-  // suggesting to just merge what seens to be possible for now and revisit later.
+  // suggesting to just merge what seems to be possible for now and revisit later.
   assert(older.program === newer.program);
   assert(!newer.members);
   var merged: DeclaredElement | null = null;

@@ -47,7 +47,8 @@ import {
   GETTER_PREFIX,
   SETTER_PREFIX,
   LibrarySymbols,
-  CommonSymbols
+  CommonSymbols,
+  INDEX_SUFFIX
 } from "./common";
 
 import {
@@ -89,7 +90,6 @@ import {
   Node,
   NodeKind,
   TypeNode,
-  Source,
   Range,
   DecoratorKind,
   AssertionKind,
@@ -352,9 +352,13 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile entry file(s) while traversing reachable elements
-    var sources = program.sources;
-    for (let i = 0, k = sources.length; i < k; ++i) {
-      if (sources[i].isEntry) this.compileSource(sources[i]);
+    var files = program.filesByName;
+    for (let file of files.values()) {
+      if (file.source.isEntry) {
+        this.compileFile(file);
+        let exportsStar = file.exportsStar;
+        if (exportsStar) for (let exportStar of exportsStar) this.compileExports(exportStar);
+      }
     }
 
     // compile the start function if not empty or called by main
@@ -420,15 +424,23 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up module exports
     for (let file of this.program.filesByName.values()) {
-      if (!file.source.isEntry) continue;
-      let members = file.exports;
-      if (members) for (let [name, member] of members) this.makeModuleExport(name, member);
+      if (file.source.isEntry) this.makeModuleExports(file);
     }
 
     // set up gc
     if (this.needsIterateRoots) compileIterateRoots(this);
 
     return module;
+  }
+
+  /** Applies the respective module exports for the specified file. */
+  private makeModuleExports(file: File): void {
+    var members = file.exports;
+    if (members) for (let [name, member] of members) this.makeModuleExport(name, member);
+    var exportsStar = file.exportsStar;
+    if (exportsStar)  {
+      for (let i = 0, k = exportsStar.length; i < k; ++i) this.makeModuleExports(exportsStar[i]);
+    }
   }
 
   /** Applies the respective module export(s) for the specified element. */
@@ -592,32 +604,96 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  // sources
+  // general
 
-  /** Compiles a source by looking it up by path first. */
-  compileSourceByPath(normalizedPathWithoutExtension: string, reportNode: Node): void {
-    var source = this.program.lookupSource(normalizedPathWithoutExtension);
-    if (source) this.compileSource(source);
-    else {
+  /** Compiles any element. */
+  compileElement(element: Element, compileMembers: bool = true): void {
+    switch (element.kind) {
+      case ElementKind.GLOBAL: {
+        this.compileGlobal(<Global>element);
+        break;
+      }
+      case ElementKind.ENUM: {
+        this.compileEnum(<Enum>element);
+        break;
+      }
+      case ElementKind.FUNCTION_PROTOTYPE: {
+        if (!element.is(CommonFlags.GENERIC)) {
+          this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, []);
+        }
+        break;
+      }
+      case ElementKind.CLASS_PROTOTYPE: {
+        if (!element.is(CommonFlags.GENERIC)) {
+          this.compileClassUsingTypeArguments(<ClassPrototype>element, []);
+        }
+        break;
+      }
+      case ElementKind.PROPERTY_PROTOTYPE: {
+        let getterPrototype = (<PropertyPrototype>element).getterPrototype;
+        if (getterPrototype) {
+          this.compileFunctionUsingTypeArguments(getterPrototype, []);
+        }
+        let setterPrototype = (<PropertyPrototype>element).setterPrototype;
+        if (setterPrototype) {
+          this.compileFunctionUsingTypeArguments(setterPrototype, []);
+        }
+        break;
+      }
+      case ElementKind.NAMESPACE:
+      case ElementKind.TYPEDEFINITION:
+      case ElementKind.ENUMVALUE: break;
+      default: assert(false, ElementKind[element.kind]);
+    }
+    if (compileMembers) this.compileMembers(element);
+  }
+
+  /** Compiles an element's members. */
+  compileMembers(element: Element): void {
+    var members = element.members;
+    if (members) for (let element of members.values()) this.compileElement(element);
+  }
+
+  /** Compiles a file's exports. */
+  compileExports(file: File): void {
+    var exports = file.exports;
+    if (exports) for (let element of exports.values()) this.compileElement(element);
+    var exportsStar = file.exportsStar;
+    if (exportsStar) for (let exportStar of exportsStar) this.compileFile(exportStar);
+  }
+
+  // files
+
+  /** Compiles the file matching the specified path. */
+  compileFileByPath(normalizedPathWithoutExtension: string, reportNode: Node): void {
+    var file: File;
+    var filesByName = this.program.filesByName;
+    var pathWithIndex: string;
+    if (filesByName.has(normalizedPathWithoutExtension)) {
+      file = filesByName.get(normalizedPathWithoutExtension)!;
+    } else if (filesByName.has(pathWithIndex = normalizedPathWithoutExtension + INDEX_SUFFIX)) {
+      file = filesByName.get(pathWithIndex)!;
+    } else {
       this.error(
         DiagnosticCode.File_0_not_found,
         reportNode.range, normalizedPathWithoutExtension
       );
+      return;
     }
+    this.compileFile(file);
   }
 
-  /** Compiles a source. */
-  compileSource(source: Source): void {
-    if (source.is(CommonFlags.COMPILED)) return;
-    source.set(CommonFlags.COMPILED);
+  /** Compiles the specified file. */
+  compileFile(file: File): void {
+    if (file.source.is(CommonFlags.COMPILED)) return;
+    file.source.set(CommonFlags.COMPILED);
+    file.set(CommonFlags.COMPILED);
 
-    // make one start function per source holding its top-level logic
+    // make one start function per file holding its top-level logic
     var program = this.program;
-    assert(program.filesByName.has(source.internalPath));
-    var currentFile = program.filesByName.get(source.internalPath)!;
     var startFunction = program.makeNativeFunction(
-      "start:" + currentFile.internalName,
-      new Signature(null, Type.void), currentFile
+      "start:" + file.internalName,
+      new Signature(null, Type.void), file
     );
     startFunction.internalName = startFunction.name;
     var previousBody = this.currentBody;
@@ -626,8 +702,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile top-level statements
     var noTreeShaking = this.options.noTreeShaking;
-    var isEntry = source.isEntry;
-    var statements = source.statements;
+    var isEntry = file.source.isEntry;
+    var statements = file.source.statements;
     var previousFlow = this.currentFlow;
     this.currentFlow = startFunction.flow;
     for (let i = 0, k = statements.length; i < k; ++i) {
@@ -659,7 +735,7 @@ export class Compiler extends DiagnosticEmitter {
           break;
         }
         case NodeKind.IMPORT: {
-          this.compileSourceByPath(
+          this.compileFileByPath(
             (<ImportStatement>statement).normalizedPath,
             (<ImportStatement>statement).path
           );
@@ -678,7 +754,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         case NodeKind.EXPORT: {
           if ((<ExportStatement>statement).normalizedPath != null) {
-            this.compileSourceByPath(
+            this.compileFileByPath(
               <string>(<ExportStatement>statement).normalizedPath,
               <StringLiteralExpression>(<ExportStatement>statement).path
             );
@@ -699,7 +775,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = previousFlow;
     this.currentBody = previousBody;
 
-    // if top-level statements are present, wrap them in a function and call it in start
+    // if top-level statements are present, make the per-file start function and call it in start
     if (startFunctionBody.length) {
       let module = this.module;
       let locals = startFunction.localsByIndex;
@@ -891,10 +967,16 @@ export class Compiler extends DiagnosticEmitter {
     var internalName = global.internalName;
 
     if (initializeInStart) { // initialize to mutable zero and set the actual value in start
+      if (global.hasDecorator(DecoratorFlags.INLINE)) {
+        this.error(
+          DiagnosticCode.Decorator_0_is_not_valid_here,
+          global.identifierNode.range, "inline"
+        );
+      }
       module.addGlobal(internalName, nativeType, true, global.type.toNativeZero(module));
       this.currentBody.push(module.createSetGlobal(internalName, initExpr));
 
-    } else { // compile normally
+    } else if (!global.hasDecorator(DecoratorFlags.INLINE)) { // compile normally
       module.addGlobal(internalName, nativeType, !isDeclaredConstant, initExpr);
     }
     return true;
@@ -1011,15 +1093,15 @@ export class Compiler extends DiagnosticEmitter {
   compileFunctionUsingTypeArguments(
     prototype: FunctionPrototype,
     typeArguments: TypeNode[],
-    contextualTypeArguments: Map<string,Type>,
-    reportNode: Node
+    contextualTypeArguments: Map<string,Type> = makeMap(),
+    alternativeReportNode: Node | null = null
   ): Function | null {
     var instance = this.resolver.resolveFunctionInclTypeArguments(
       prototype,
       typeArguments,
       prototype.parent, // relative to itself
       contextualTypeArguments,
-      reportNode
+      alternativeReportNode || prototype.declaration
     );
     if (!instance) return null;
     if (!this.compileFunction(instance)) return null; // reports
@@ -1248,81 +1330,6 @@ export class Compiler extends DiagnosticEmitter {
     this.compileMembers(element);
   }
 
-  compileMembers(element: Element): void {
-    var members = element.members;
-    if (!members) return;
-    var noTreeShaking = this.options.noTreeShaking;
-    for (let element of members.values()) {
-      switch (element.kind) {
-        case ElementKind.CLASS_PROTOTYPE: {
-          if (
-            (
-              noTreeShaking ||
-              (<ClassPrototype>element).is(CommonFlags.EXPORT)
-            ) && !(<ClassPrototype>element).is(CommonFlags.GENERIC)
-          ) {
-            this.compileClassUsingTypeArguments(
-              <ClassPrototype>element,
-              [],
-              makeMap<string,Type>()
-            );
-          }
-          break;
-        }
-        case ElementKind.ENUM: {
-          this.compileEnum(<Enum>element);
-          break;
-        }
-        case ElementKind.FUNCTION_PROTOTYPE: {
-          if (
-            (
-              noTreeShaking || (<FunctionPrototype>element).is(CommonFlags.EXPORT)
-            ) && !(<FunctionPrototype>element).is(CommonFlags.GENERIC)
-          ) {
-            if (element.hasDecorator(DecoratorFlags.BUILTIN)) break;
-            this.compileFunctionUsingTypeArguments(
-              <FunctionPrototype>element,
-              [],
-              makeMap<string,Type>(),
-              (<FunctionPrototype>element).declaration.name
-            );
-          }
-          break;
-        }
-        case ElementKind.PROPERTY_PROTOTYPE: {
-          let getterPrototype = (<PropertyPrototype>element).getterPrototype;
-          if (getterPrototype) {
-            this.compileFunctionUsingTypeArguments(
-              getterPrototype,
-              [],
-              makeMap<string,Type>(),
-              (<FunctionPrototype>element).declaration.name
-            );
-          }
-          let setterPrototype = (<PropertyPrototype>element).setterPrototype;
-          if (setterPrototype) {
-            this.compileFunctionUsingTypeArguments(
-              setterPrototype,
-              [],
-              makeMap<string,Type>(),
-              (<FunctionPrototype>element).declaration.name
-            );
-          }
-          break;
-        }
-        case ElementKind.GLOBAL: {
-          this.compileGlobal(<Global>element);
-          break;
-        }
-        case ElementKind.NAMESPACE: {
-          this.compileMembers(element);
-          break;
-        }
-        default: assert(false);
-      }
-    }
-  }
-
   // exports
 
   compileExportStatement(statement: ExportStatement): void {
@@ -1391,7 +1398,7 @@ export class Compiler extends DiagnosticEmitter {
   compileClassUsingTypeArguments(
     prototype: ClassPrototype,
     typeArguments: TypeNode[],
-    contextualTypeArguments: Map<string,Type>,
+    contextualTypeArguments: Map<string,Type> = makeMap(),
     alternativeReportNode: Node | null = null
   ): void {
     var instance = this.resolver.resolveClassInclTypeArguments(
@@ -2111,20 +2118,25 @@ export class Compiler extends DiagnosticEmitter {
    * Compiles a variable statement. Returns `0` if an initializer is not
    * necessary.
    */
-  compileVariableStatement(statement: VariableStatement, isKnownGlobal: bool = false): ExpressionRef {
+  compileVariableStatement(statement: VariableStatement): ExpressionRef {
     var declarations = statement.declarations;
     var numDeclarations = declarations.length;
     var flow = this.currentFlow;
 
     // top-level variables and constants become globals
-    if (isKnownGlobal || (statement.parent && statement.parent.kind == NodeKind.SOURCE)) {
+    if (statement.parent && statement.parent.kind == NodeKind.SOURCE) {
       // NOTE that the above condition also covers top-level variables declared with 'let', even
       // though such variables could also become start function locals if, and only if, not used
       // within any function declared in the same source, which is unknown at this point. the only
       // efficient way to deal with this would be to keep track of all occasions it is used and
       // replace these instructions afterwards, dynamically. (TOOD: what about a Binaryen pass?)
       for (let i = 0; i < numDeclarations; ++i) {
-        this.compileGlobalDeclaration(declarations[i]);
+        let declaration = declarations[i];
+        if ( // delay library module imports until actually used
+          declaration.is(CommonFlags.AMBIENT) &&
+          !declaration.range.source.isEntry
+        ) continue;
+        this.compileGlobalDeclaration(declaration);
       }
       return 0;
     }
@@ -2446,7 +2458,9 @@ export class Compiler extends DiagnosticEmitter {
     // file's top-level statements have executed. Works as if there was an import statement right before
     // accessing its code.
     var originSource = expression.range.source;
-    if (!originSource.is(CommonFlags.COMPILED)) this.compileSource(originSource);
+    if (!originSource.is(CommonFlags.COMPILED)) {
+      this.compileFileByPath(originSource.internalPath, expression);
+    }
 
     this.currentType = contextualType;
     var expr: ExpressionRef;

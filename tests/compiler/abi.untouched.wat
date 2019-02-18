@@ -9,7 +9,7 @@
  (elem (i32.const 0) $null)
  (global $abi/condition (mut i32) (i32.const 0))
  (global $abi/y (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 24))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 24))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "exported" (func $abi/exported))
@@ -36,7 +36,7 @@
   i32.const 24
   i32.shr_s
  )
- (func $start (; 5 ;) (type $_)
+ (func $start:abi (; 5 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $abi/internal
@@ -211,6 +211,9 @@
    end
   end
  )
- (func $null (; 6 ;) (type $_)
+ (func $start (; 6 ;) (type $_)
+  call $start:abi
+ )
+ (func $null (; 7 ;) (type $_)
  )
 )
