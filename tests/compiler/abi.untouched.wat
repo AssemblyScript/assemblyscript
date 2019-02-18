@@ -16,27 +16,10 @@
  (export "exportedExported" (func $abi/exportedExported))
  (export "exportedInternal" (func $abi/exportedInternal))
  (start $start)
- (func $abi/exported (; 1 ;) (type $i) (result i32)
-  i32.const 128
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
- )
- (func $abi/exportedExported (; 2 ;) (type $i) (result i32)
-  call $abi/exported
- )
- (func $abi/internal (; 3 ;) (type $i) (result i32)
+ (func $abi/internal (; 1 ;) (type $i) (result i32)
   i32.const 128
  )
- (func $abi/exportedInternal (; 4 ;) (type $i) (result i32)
-  call $abi/internal
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
- )
- (func $start:abi (; 5 ;) (type $_)
+ (func $start:abi (; 2 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $abi/internal
@@ -210,6 +193,23 @@
     unreachable
    end
   end
+ )
+ (func $abi/exported (; 3 ;) (type $i) (result i32)
+  i32.const 128
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+ )
+ (func $abi/exportedExported (; 4 ;) (type $i) (result i32)
+  call $abi/exported
+ )
+ (func $abi/exportedInternal (; 5 ;) (type $i) (result i32)
+  call $abi/internal
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
  )
  (func $start (; 6 ;) (type $_)
   call $start:abi

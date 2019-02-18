@@ -108,7 +108,6 @@ import {
   EnumDeclaration,
   ExportStatement,
   ExpressionStatement,
-  FunctionDeclaration,
   ForStatement,
   IfStatement,
   ImportStatement,
@@ -119,7 +118,6 @@ import {
   SwitchStatement,
   ThrowStatement,
   TryStatement,
-  VariableDeclaration,
   VariableStatement,
   VoidStatement,
   WhileStatement,
@@ -148,7 +146,8 @@ import {
 
   nodeIsConstantValue,
   isLastStatement,
-  findDecorator
+  findDecorator,
+  FieldDeclaration
 } from "./ast";
 
 import {
@@ -183,8 +182,6 @@ export class Options {
 
   /** WebAssembly target. Defaults to {@link Target.WASM32}. */
   target: Target = Target.WASM32;
-  /** If true, compiles everything instead of just reachable code. */
-  noTreeShaking: bool = false;
   /** If true, replaces assertions with nops. */
   noAssert: bool = false;
   /** If true, imports the memory provided by the embedder. */
@@ -358,9 +355,8 @@ export class Compiler extends DiagnosticEmitter {
     var files = program.filesByName;
     for (let file of files.values()) {
       if (file.source.isEntry) {
-        this.compileFile(file);
-        let exportsStar = file.exportsStar;
-        if (exportsStar) for (let exportStar of exportsStar) this.compileExports(exportStar);
+        this.compileFile(file);    // tree-shake but
+        this.compileExports(file); // ensure exports
       }
     }
 
@@ -704,76 +700,10 @@ export class Compiler extends DiagnosticEmitter {
     this.currentBody = startFunctionBody;
 
     // compile top-level statements
-    var noTreeShaking = this.options.noTreeShaking;
-    var isEntry = file.source.isEntry;
-    var statements = file.source.statements;
     var previousFlow = this.currentFlow;
     this.currentFlow = startFunction.flow;
-    for (let i = 0, k = statements.length; i < k; ++i) {
-      let statement = statements[i];
-      switch (statement.kind) {
-        case NodeKind.CLASSDECLARATION: {
-          if (
-            (noTreeShaking || (isEntry && statement.is(CommonFlags.EXPORT))) &&
-            !(<ClassDeclaration>statement).isGeneric
-          ) {
-            this.compileClassDeclaration(<ClassDeclaration>statement, []);
-          }
-          break;
-        }
-        case NodeKind.INTERFACEDECLARATION: break;
-        case NodeKind.ENUMDECLARATION: {
-          if (noTreeShaking || (isEntry && statement.is(CommonFlags.EXPORT))) {
-            this.compileEnumDeclaration(<EnumDeclaration>statement);
-          }
-          break;
-        }
-        case NodeKind.FUNCTIONDECLARATION: {
-          if (
-            (noTreeShaking || (isEntry && statement.is(CommonFlags.EXPORT))) &&
-            !(<FunctionDeclaration>statement).isGeneric
-          ) {
-            this.compileFunctionDeclaration(<FunctionDeclaration>statement, []);
-          }
-          break;
-        }
-        case NodeKind.IMPORT: {
-          this.compileFileByPath(
-            (<ImportStatement>statement).normalizedPath,
-            (<ImportStatement>statement).path
-          );
-          break;
-        }
-        case NodeKind.NAMESPACEDECLARATION: {
-          if (noTreeShaking || (isEntry && statement.is(CommonFlags.EXPORT))) {
-            this.compileNamespaceDeclaration(<NamespaceDeclaration>statement);
-          }
-          break;
-        }
-        case NodeKind.VARIABLE: { // global, always compiled as initializers might have side effects
-          let variableInit = this.compileVariableStatement(<VariableStatement>statement);
-          if (variableInit) startFunctionBody.push(variableInit);
-          break;
-        }
-        case NodeKind.EXPORT: {
-          if ((<ExportStatement>statement).normalizedPath != null) {
-            this.compileFileByPath(
-              <string>(<ExportStatement>statement).normalizedPath,
-              <StringLiteralExpression>(<ExportStatement>statement).path
-            );
-          }
-          if (noTreeShaking || isEntry) {
-            this.compileExportStatement(<ExportStatement>statement);
-          }
-          break;
-        }
-        default: { // otherwise a top-level statement that is part of the start function's body
-          startFunctionBody.push(
-            this.compileStatement(statement)
-          );
-          break;
-        }
-      }
+    for (let statements = file.source.statements, i = 0, k = statements.length; i < k; ++i) {
+      this.compileTopLevelStatement(statements[i], startFunctionBody);
     }
     this.currentFlow = previousFlow;
     this.currentBody = previousBody;
@@ -800,15 +730,6 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   // globals
-
-  compileGlobalDeclaration(declaration: VariableDeclaration): Global | null {
-    var program = this.program;
-    assert(program.elementsByDeclaration.has(declaration));
-    var element = <Element>program.elementsByDeclaration.get(declaration);
-    assert(element.kind == ElementKind.GLOBAL);
-    if (!this.compileGlobal(<Global>element)) return null; // reports
-    return <Global>element;
-  }
 
   compileGlobal(global: Global): bool {
     if (global.is(CommonFlags.COMPILED)) return true;
@@ -987,14 +908,6 @@ export class Compiler extends DiagnosticEmitter {
 
   // enums
 
-  compileEnumDeclaration(declaration: EnumDeclaration): Enum | null {
-    assert(this.program.elementsByDeclaration.has(declaration));
-    var element = <Element>this.program.elementsByDeclaration.get(declaration);
-    assert(element.kind == ElementKind.ENUM);
-    if (!this.compileEnum(<Enum>element)) return null;
-    return <Enum>element;
-  }
-
   compileEnum(element: Enum): bool {
     if (element.is(CommonFlags.COMPILED)) return true;
     element.set(CommonFlags.COMPILED);
@@ -1076,22 +989,6 @@ export class Compiler extends DiagnosticEmitter {
 
   // functions
 
-  /** Compiles a top-level function given its declaration. */
-  compileFunctionDeclaration(
-    declaration: FunctionDeclaration,
-    typeArguments: TypeNode[]
-  ): Function | null {
-    assert(this.program.elementsByDeclaration.has(declaration));
-    var element = <Element>this.program.elementsByDeclaration.get(declaration);
-    assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
-    return this.compileFunctionUsingTypeArguments( // reports
-      <FunctionPrototype>element,
-      typeArguments,
-      makeMap<string,Type>(),
-      (<FunctionPrototype>element).declaration.name
-    );
-  }
-
   /** Resolves the specified type arguments prior to compiling the resulting function instance. */
   compileFunctionUsingTypeArguments(
     prototype: FunctionPrototype,
@@ -1099,6 +996,7 @@ export class Compiler extends DiagnosticEmitter {
     contextualTypeArguments: Map<string,Type> = makeMap(),
     alternativeReportNode: Node | null = null
   ): Function | null {
+    if (prototype.hasDecorator(DecoratorFlags.BUILTIN)) return null;
     var instance = this.resolver.resolveFunctionInclTypeArguments(
       prototype,
       typeArguments,
@@ -1324,79 +1222,7 @@ export class Compiler extends DiagnosticEmitter {
     return true;
   }
 
-  // namespaces
-
-  compileNamespaceDeclaration(declaration: NamespaceDeclaration): void {
-    assert(this.program.elementsByDeclaration.has(declaration));
-    var element = this.program.elementsByDeclaration.get(declaration)!;
-    // element can be something else than a namespace here if joined
-    this.compileMembers(element);
-  }
-
-  // exports
-
-  compileExportStatement(statement: ExportStatement): void {
-    var members = statement.members;
-    if (!members) return; // export *
-    for (let i = 0, k = members.length; i < k; ++i) {
-      let member = members[i];
-      let file = assert(this.program.filesByName.get(statement.range.source.internalPath));
-      let element = file.lookupInSelf(member.localName.text);
-      if (!element) continue; // reported in Program#initialize
-      switch (element.kind) {
-        case ElementKind.CLASS_PROTOTYPE: {
-          if (!(<ClassPrototype>element).is(CommonFlags.GENERIC)) {
-            this.compileClassUsingTypeArguments(
-              <ClassPrototype>element,
-              [],
-              makeMap<string,Type>()
-            );
-          }
-          break;
-        }
-        case ElementKind.ENUM: {
-          this.compileEnum(<Enum>element);
-          break;
-        }
-        case ElementKind.FUNCTION_PROTOTYPE: {
-          if (
-            !(<FunctionPrototype>element).is(CommonFlags.GENERIC) &&
-            statement.range.source.isEntry
-          ) {
-            this.compileFunctionUsingTypeArguments(
-              <FunctionPrototype>element,
-              [],
-              makeMap<string,Type>(),
-              (<FunctionPrototype>element).declaration.name
-            );
-          }
-          break;
-        }
-        case ElementKind.GLOBAL: {
-          this.compileGlobal(<Global>element);
-          break;
-        }
-      }
-      this.compileMembers(element);
-    }
-  }
-
   // classes
-
-  compileClassDeclaration(
-    declaration: ClassDeclaration,
-    typeArguments: TypeNode[]
-  ): void {
-    assert(this.program.elementsByDeclaration.has(declaration));
-    var element = <Element>this.program.elementsByDeclaration.get(declaration);
-    assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-    this.compileClassUsingTypeArguments(
-      <ClassPrototype>element,
-      typeArguments,
-      makeMap<string,Type>(),
-      declaration
-    );
-  }
 
   compileClassUsingTypeArguments(
     prototype: ClassPrototype,
@@ -1546,6 +1372,76 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   // statements
+
+  compileTopLevelStatement(statement: Statement, body: ExpressionRef[]): void {
+    switch (statement.kind) {
+      case NodeKind.CLASSDECLARATION: {
+        let memberStatements = (<ClassDeclaration>statement).members;
+        for (let i = 0, k = memberStatements.length; i < k; ++i) {
+          this.compileTopLevelStatement(memberStatements[i], body);
+        }
+        break;
+      }
+      case NodeKind.ENUMDECLARATION: {
+        let element = this.program.getElementByDeclaration(<EnumDeclaration>statement);
+        assert(element.kind == ElementKind.ENUM);
+        this.compileEnum(<Enum>element);
+        break;
+      }
+      case NodeKind.NAMESPACEDECLARATION: {
+        let memberStatements = (<NamespaceDeclaration>statement).members;
+        for (let i = 0, k = memberStatements.length; i < k; ++i) {
+          this.compileTopLevelStatement(memberStatements[i], body);
+        }
+        break;
+      }
+      case NodeKind.VARIABLE: {
+        let declarations = (<VariableStatement>statement).declarations;
+        for (let i = 0, k = declarations.length; i < k; ++i) {
+          let element = this.program.getElementByDeclaration(declarations[i]);
+          assert(element.kind == ElementKind.GLOBAL);
+          if (
+            !element.is(CommonFlags.AMBIENT) && // delay imports
+            !element.hasDecorator(DecoratorFlags.LAZY)
+          ) this.compileGlobal(<Global>element);
+        }
+        break;
+      }
+      case NodeKind.FIELDDECLARATION: {
+        let element = this.program.getElementByDeclaration(<FieldDeclaration>statement);
+        if (element.kind == ElementKind.GLOBAL) { // static
+          if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileGlobal(<Global>element);
+        }
+        break;
+      }
+      case NodeKind.EXPORT: {
+        if ((<ExportStatement>statement).normalizedPath != null) {
+          this.compileFileByPath(
+            <string>(<ExportStatement>statement).normalizedPath,
+            <StringLiteralExpression>(<ExportStatement>statement).path
+          );
+        }
+        break;
+      }
+      case NodeKind.IMPORT: {
+        this.compileFileByPath(
+          (<ImportStatement>statement).normalizedPath,
+          (<ImportStatement>statement).path
+        );
+        break;
+      }
+      case NodeKind.FUNCTIONDECLARATION:
+      case NodeKind.METHODDECLARATION:
+      case NodeKind.INTERFACEDECLARATION:
+      case NodeKind.INDEXSIGNATUREDECLARATION: break;
+      default: { // otherwise a top-level statement that is part of the start function's body
+        body.push(
+          this.compileStatement(statement)
+        );
+        break;
+      }
+    }
+  }
 
   compileStatement(statement: Statement): ExpressionRef {
     var module = this.module;
@@ -1887,29 +1783,24 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType
     );
 
+    // Try to eliminate unnecesssary branches if the condition is constant
+    var condExprPrecomp = module.precomputeExpression(condExpr);
     if (
-      !this.options.noTreeShaking ||
-      actualFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT)
+      getExpressionId(condExprPrecomp) == ExpressionId.Const &&
+      getExpressionType(condExprPrecomp) == NativeType.I32
     ) {
-      // Try to eliminate unnecesssary branches if the condition is constant
-      let condExprPrecomp = module.precomputeExpression(condExpr);
-      if (
-        getExpressionId(condExprPrecomp) == ExpressionId.Const &&
-        getExpressionType(condExprPrecomp) == NativeType.I32
-      ) {
-        return getConstValueI32(condExprPrecomp)
-          ? this.compileStatement(ifTrue)
-          : ifFalse
-            ? this.compileStatement(ifFalse)
-            : module.createNop();
+      return getConstValueI32(condExprPrecomp)
+        ? this.compileStatement(ifTrue)
+        : ifFalse
+          ? this.compileStatement(ifFalse)
+          : module.createNop();
 
-      // Otherwise recompile to the original and let the optimizer decide
-      } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
-        condExpr = this.makeIsTrueish(
-          this.compileExpressionRetainType(statement.condition, Type.bool, WrapMode.NONE),
-          this.currentType
-        );
-      }
+    // Otherwise recompile to the original and let the optimizer decide
+    } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
+      condExpr = this.makeIsTrueish(
+        this.compileExpressionRetainType(statement.condition, Type.bool, WrapMode.NONE),
+        this.currentType
+      );
     }
 
     // Each arm initiates a branch
@@ -2107,8 +1998,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileTryStatement(statement: TryStatement): ExpressionRef {
-    // TODO
-    // can't yet support something like: try { return ... } finally { ... }
+    // TODO: can't yet support something like: try { return ... } finally { ... }
     // worthwhile to investigate lowering returns to block results (here)?
     this.error(
       DiagnosticCode.Operation_not_supported,
@@ -2117,34 +2007,11 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.createUnreachable();
   }
 
-  /**
-   * Compiles a variable statement. Returns `0` if an initializer is not
-   * necessary.
-   */
+  /** Compiles a variable statement. Returns `0` if an initializer is not necessary. */
   compileVariableStatement(statement: VariableStatement): ExpressionRef {
     var declarations = statement.declarations;
     var numDeclarations = declarations.length;
     var flow = this.currentFlow;
-
-    // top-level variables and constants become globals
-    if (statement.parent && statement.parent.kind == NodeKind.SOURCE) {
-      // NOTE that the above condition also covers top-level variables declared with 'let', even
-      // though such variables could also become start function locals if, and only if, not used
-      // within any function declared in the same source, which is unknown at this point. the only
-      // efficient way to deal with this would be to keep track of all occasions it is used and
-      // replace these instructions afterwards, dynamically. (TOOD: what about a Binaryen pass?)
-      for (let i = 0; i < numDeclarations; ++i) {
-        let declaration = declarations[i];
-        if ( // delay library module imports until actually used
-          declaration.is(CommonFlags.AMBIENT) &&
-          !declaration.range.source.isEntry
-        ) continue;
-        this.compileGlobalDeclaration(declaration);
-      }
-      return 0;
-    }
-
-    // other variables become locals
     var initializers = new Array<ExpressionRef>();
     var resolver = this.resolver;
     for (let i = 0; i < numDeclarations; ++i) {
@@ -2303,25 +2170,20 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType
     );
 
+    // Try to eliminate unnecesssary loops if the condition is constant
+    var condExprPrecomp = module.precomputeExpression(condExpr);
     if (
-      !this.options.noTreeShaking ||
-      outerFlow.actualFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT)
+      getExpressionId(condExprPrecomp) == ExpressionId.Const &&
+      getExpressionType(condExprPrecomp) == NativeType.I32
     ) {
-      // Try to eliminate unnecesssary loops if the condition is constant
-      let condExprPrecomp = module.precomputeExpression(condExpr);
-      if (
-        getExpressionId(condExprPrecomp) == ExpressionId.Const &&
-        getExpressionType(condExprPrecomp) == NativeType.I32
-      ) {
-        if (!getConstValueI32(condExprPrecomp)) return module.createNop();
+      if (!getConstValueI32(condExprPrecomp)) return module.createNop();
 
-      // Otherwise recompile to the original and let the optimizer decide
-      } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
-        condExpr = this.makeIsTrueish(
-          this.compileExpressionRetainType(statement.condition, Type.bool, WrapMode.NONE),
-          this.currentType
-        );
-      }
+    // Otherwise recompile to the original and let the optimizer decide
+    } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
+      condExpr = this.makeIsTrueish(
+        this.compileExpressionRetainType(statement.condition, Type.bool, WrapMode.NONE),
+        this.currentType
+      );
     }
 
     // Statements initiate a new branch with its own break context
@@ -6035,13 +5897,14 @@ export class Compiler extends DiagnosticEmitter {
       ? name.text
       : "anonymous") + "|" + this.functionTable.length.toString(10);
     var flow = this.currentFlow;
+    var prototype = new FunctionPrototype(
+      simpleName,
+      flow.actualFunction,
+      declaration.clone(), // same function can be compiled multiple times if generic
+      DecoratorFlags.NONE
+    );
     var instance = this.compileFunctionUsingTypeArguments(
-      new FunctionPrototype(
-        simpleName,
-        flow.actualFunction,
-        declaration.clone(), // same function can be compiled multiple times if generic
-        DecoratorFlags.NONE
-      ),
+      prototype,
       [],
       makeMap<string,Type>(flow.contextualTypeArguments),
       declaration
@@ -7002,27 +6865,22 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType
     );
 
+    // Try to eliminate unnecesssary branches if the condition is constant
+    var condExprPrecomp = this.module.precomputeExpression(condExpr);
     if (
-      !this.options.noTreeShaking ||
-      outerFlow.actualFunction.isAny(CommonFlags.GENERIC | CommonFlags.GENERIC_CONTEXT)
+      getExpressionId(condExprPrecomp) == ExpressionId.Const &&
+      getExpressionType(condExprPrecomp) == NativeType.I32
     ) {
-      // Try to eliminate unnecesssary branches if the condition is constant
-      let condExprPrecomp = this.module.precomputeExpression(condExpr);
-      if (
-        getExpressionId(condExprPrecomp) == ExpressionId.Const &&
-        getExpressionType(condExprPrecomp) == NativeType.I32
-      ) {
-        return getConstValueI32(condExprPrecomp)
-          ? this.compileExpressionRetainType(ifThen, contextualType, WrapMode.NONE)
-          : this.compileExpressionRetainType(ifElse, contextualType, WrapMode.NONE);
+      return getConstValueI32(condExprPrecomp)
+        ? this.compileExpressionRetainType(ifThen, contextualType, WrapMode.NONE)
+        : this.compileExpressionRetainType(ifElse, contextualType, WrapMode.NONE);
 
-      // Otherwise recompile to the original and let the optimizer decide
-      } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
-        condExpr = this.makeIsTrueish(
-          this.compileExpressionRetainType(expression.condition, Type.bool, WrapMode.NONE),
-          this.currentType
-        );
-      }
+    // Otherwise recompile to the original and let the optimizer decide
+    } else /* if (condExpr != condExprPrecomp) <- not guaranteed */ {
+      condExpr = this.makeIsTrueish(
+        this.compileExpressionRetainType(expression.condition, Type.bool, WrapMode.NONE),
+        this.currentType
+      );
     }
 
     var ifThenFlow = outerFlow.fork();

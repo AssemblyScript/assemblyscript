@@ -5,9 +5,9 @@
 
 import {
   CommonFlags,
+  CommonSymbols,
   PATH_DELIMITER,
-  LIBRARY_PREFIX,
-  CommonSymbols
+  LIBRARY_PREFIX
 } from "./common";
 
 import {
@@ -1140,7 +1140,8 @@ export enum DecoratorKind {
   SEALED,
   INLINE,
   EXTERNAL,
-  BUILTIN
+  BUILTIN,
+  LAZY
 }
 
 /** Returns the kind of the specified decorator. Defaults to {@link DecoratorKind.CUSTOM}. */
@@ -1164,6 +1165,10 @@ export function decoratorNameToKind(name: Expression): DecoratorKind {
       }
       case CharCode.i: {
         if (nameStr == "inline") return DecoratorKind.INLINE;
+        break;
+      }
+      case CharCode.l: {
+        if (nameStr == "lazy") return DecoratorKind.LAZY;
         break;
       }
       case CharCode.o: {

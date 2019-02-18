@@ -434,6 +434,12 @@ export class Program extends DiagnosticEmitter {
     );
   }
 
+  getElementByDeclaration(declaration: DeclarationStatement): Element {
+    var elementsByDeclaration = this.elementsByDeclaration;
+    assert(elementsByDeclaration.has(declaration));
+    return elementsByDeclaration.get(declaration)!;
+  }
+
   /** Initializes the program and its elements prior to compilation. */
   initialize(options: Options): void {
     this.options = options;
@@ -466,8 +472,6 @@ export class Program extends DiagnosticEmitter {
     // register compiler hints
     this.registerConstantInteger(LibrarySymbols.ASC_TARGET, Type.i32,
       i64_new(options.isWasm64 ? 2 : 1));
-    this.registerConstantInteger(LibrarySymbols.ASC_NO_TREESHAKING, Type.bool,
-      i64_new(options.noTreeShaking ? 1 : 0, 0));
     this.registerConstantInteger(LibrarySymbols.ASC_NO_ASSERT, Type.bool,
       i64_new(options.noAssert ? 1 : 0, 0));
     this.registerConstantInteger(LibrarySymbols.ASC_MEMORY_BASE, Type.i32,
@@ -1069,7 +1073,10 @@ export class Program extends DiagnosticEmitter {
       element = new Global(
         name,
         parent,
-        this.checkDecorators(decorators, DecoratorFlags.INLINE),
+        this.checkDecorators(decorators,
+          DecoratorFlags.INLINE |
+          DecoratorFlags.LAZY
+        ),
         declaration
       );
       if (element.hasDecorator(DecoratorFlags.INLINE) && !element.is(CommonFlags.READONLY)) {
@@ -1571,9 +1578,10 @@ export class Program extends DiagnosticEmitter {
         name,
         parent,
         this.checkDecorators(decorators,
-          DecoratorFlags.GLOBAL |
-          DecoratorFlags.INLINE |
-          DecoratorFlags.EXTERNAL
+          DecoratorFlags.GLOBAL   |
+          DecoratorFlags.INLINE   |
+          DecoratorFlags.EXTERNAL |
+          DecoratorFlags.LAZY
         ),
         declaration
       );
@@ -1649,7 +1657,9 @@ export enum DecoratorFlags {
   /** Is using a different external name. */
   EXTERNAL = 1 << 7,
   /** Is a builtin. */
-  BUILTIN = 1 << 8
+  BUILTIN = 1 << 8,
+  /** Is compiled lazily. */
+  LAZY = 1 << 9
 }
 
 /** Translates a decorator kind to the respective decorator flag. */
@@ -1665,6 +1675,7 @@ export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
     case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
     case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
     case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
+    case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
     default: return DecoratorFlags.NONE;
   }
 }
@@ -2644,6 +2655,7 @@ export class ClassPrototype extends DeclaredElement {
 
   /** Adds an element as an instance member of this one. Returns the previous element if a duplicate. */
   addInstance(name: string, element: DeclaredElement): bool {
+    var originalDeclaration = element.declaration;
     var instanceMembers = this.instanceMembers;
     if (!instanceMembers) this.instanceMembers = instanceMembers = new Map();
     else if (instanceMembers.has(name)) {
@@ -2661,6 +2673,7 @@ export class ClassPrototype extends DeclaredElement {
     if (element.is(CommonFlags.EXPORT) && this.is(CommonFlags.MODULE_EXPORT)) {
       element.set(CommonFlags.MODULE_EXPORT); // propagate
     }
+    this.program.elementsByDeclaration.set(originalDeclaration, element);
     return true;
   }
 
@@ -2977,9 +2990,9 @@ export function mangleInternalName(name: string, parent: Element, isInstance: bo
       return parent.internalName + PATH_DELIMITER + name;
     }
     case ElementKind.FUNCTION: {
+      if (asGlobal) return name;
       assert(!isInstance);
-      return mangleInternalName(parent.name, parent.parent, parent.is(CommonFlags.INSTANCE), asGlobal)
-           + INNER_DELIMITER + name;
+      return parent.internalName + INNER_DELIMITER + name;
     }
     default: {
       return mangleInternalName(parent.name, parent.parent, parent.is(CommonFlags.INSTANCE), asGlobal)
