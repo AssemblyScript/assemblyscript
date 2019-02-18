@@ -185,6 +185,7 @@ export * from "./decompiler";
 export * from "./definitions";
 export * from "./diagnosticMessages.generated";
 export * from "./diagnostics";
+export * from "./flow";
 export * from "./module";
 export * from "./parser";
 export * from "./program";

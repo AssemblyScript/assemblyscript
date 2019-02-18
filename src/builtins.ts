@@ -50,12 +50,14 @@ import {
   FunctionPrototype,
   Class,
   Field,
-  FlowFlags,
   Global,
   DecoratorFlags,
-  Element,
   ClassPrototype
 } from "./program";
+
+import {
+  FlowFlags
+} from "./flow";
 
 import {
   ReportMode

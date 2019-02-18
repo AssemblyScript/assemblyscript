@@ -12,9 +12,6 @@ import {
   Program,
   ElementKind,
   OperatorKind,
-  FlowFlags,
-  Flow,
-
   Element,
   Class,
   ClassPrototype,
@@ -28,6 +25,11 @@ import {
   Global,
   TypeDefinition
 } from "./program";
+
+import {
+  FlowFlags,
+  Flow
+} from "./flow";
 
 import {
   SignatureNode,
@@ -50,9 +52,7 @@ import {
   IntegerLiteralExpression,
   UnaryPrefixExpression,
   UnaryPostfixExpression,
-  AssertionKind,
-  TypeDeclaration,
-  FieldDeclaration
+  AssertionKind
 } from "./ast";
 
 import {
@@ -64,7 +64,6 @@ import {
 } from "./types";
 
 import {
-  PATH_DELIMITER,
   CommonFlags,
   CommonSymbols
 } from "./common";

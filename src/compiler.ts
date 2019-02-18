@@ -67,15 +67,18 @@ import {
   EnumValue,
   Property,
   VariableLikeElement,
-  FlowFlags,
   ConstantValueKind,
-  Flow,
   OperatorKind,
   DecoratorFlags,
   PropertyPrototype,
   File,
   mangleInternalName
 } from "./program";
+
+import {
+  FlowFlags,
+  Flow
+} from "./flow";
 
 import {
   Resolver, ReportMode
