@@ -1129,13 +1129,20 @@ assert(test_cosf(-4.882812500e-04, 9.999998808e-01,-3.973643103e-08, INEXACT));
 assert(test_cosf(-9.765625000e-04, 9.999995232e-01,-6.357828397e-07, INEXACT));
 
 // large arguments
-assert(test_cosf(255.99993896484,-0.039851747453212740, 0.0, INEXACT));
-assert(test_cosf(5033165.25,      0.847187161445617700, 0.0, INEXACT));
-assert(test_cosf(421657440.0,     0.672892928123474100, 0.0, INEXACT));
-assert(test_cosf(2147483392.0,    0.961078047752380400, 0.0, INEXACT));
-assert(test_cosf(68719474688.0,   0.169419050216674800, 0.0, INEXACT));
-assert(test_cosf(549755797504.0,  0.207359507679939270, 0.0, INEXACT));
-assert(test_cosf(f32.MAX_VALUE,   0.853021025657653800, 0.0, INEXACT));
+assert(test_cosf( 255.99993896484,-0.039851747453212740, 0.0, INEXACT));
+assert(test_cosf( 5033165.25,      0.847187161445617700, 0.0, INEXACT));
+assert(test_cosf( 421657440.0,     0.672892928123474100, 0.0, INEXACT));
+assert(test_cosf( 2147483392.0,    0.961078047752380400, 0.0, INEXACT));
+assert(test_cosf( 68719474688.0,   0.169419050216674800, 0.0, INEXACT));
+assert(test_cosf( 549755797504.0,  0.207359507679939270, 0.0, INEXACT));
+assert(test_cosf( f32.MAX_VALUE,   0.853021025657653800, 0.0, INEXACT));
+assert(test_cosf(-255.99993896484,-0.039851747453212740, 0.0, INEXACT));
+assert(test_cosf(-5033165.25,      0.847187161445617700, 0.0, INEXACT));
+assert(test_cosf(-421657440.0,     0.672892928123474100, 0.0, INEXACT));
+assert(test_cosf(-2147483392.0,    0.961078047752380400, 0.0, INEXACT));
+assert(test_cosf(-68719474688.0,   0.169419050216674800, 0.0, INEXACT));
+assert(test_cosf(-549755797504.0,  0.207359507679939270, 0.0, INEXACT));
+assert(test_cosf(-f32.MAX_VALUE,   0.853021025657653800, 0.0, INEXACT));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.cosh
@@ -2990,13 +2997,20 @@ assert(test_sinf(-1.175494071e-38,-1.175494071e-38,             0.0, INEXACT | U
 assert(test_sinf(-1.175494211e-38,-1.175494211e-38,             0.0, INEXACT | UNDERFLOW));
 
 // large arguments
-assert(test_sinf(255.9999389645,-0.9992055892944336,  0.0, INEXACT));
-assert(test_sinf(5033165.25,     0.5312945246696472,  0.0, INEXACT));
-assert(test_sinf(421657440.0,   -0.7397398948669434,  0.0, INEXACT));
-assert(test_sinf(2147483392.0,   0.2762770354700000,  0.0, INEXACT));
-assert(test_sinf(68719474688.0,  0.9855440855026245,  0.0, INEXACT));
-assert(test_sinf(549755797504.0,-0.9782648086547852,  0.0, INEXACT));
-assert(test_sinf(f32.MAX_VALUE, -0.5218765139579773,  0.0, INEXACT));
+assert(test_sinf( 255.9999389645,-0.9992055892944336,  0.0, INEXACT));
+assert(test_sinf( 5033165.25,     0.5312945246696472,  0.0, INEXACT));
+assert(test_sinf( 421657440.0,   -0.7397398948669434,  0.0, INEXACT));
+assert(test_sinf( 2147483392.0,   0.2762770354700000,  0.0, INEXACT));
+assert(test_sinf( 68719474688.0,  0.9855440855026245,  0.0, INEXACT));
+assert(test_sinf( 549755797504.0,-0.9782648086547852,  0.0, INEXACT));
+assert(test_sinf( f32.MAX_VALUE, -0.5218765139579773,  0.0, INEXACT));
+assert(test_sinf(-255.9999389645, 0.9992055892944336,  0.0, INEXACT));
+assert(test_sinf(-5033165.25,    -0.5312945246696472,  0.0, INEXACT));
+assert(test_sinf(-421657440.0,    0.7397398948669434,  0.0, INEXACT));
+assert(test_sinf(-2147483392.0,  -0.2762770354700000,  0.0, INEXACT));
+assert(test_sinf(-68719474688.0, -0.9855440855026245,  0.0, INEXACT));
+assert(test_sinf(-549755797504.0, 0.9782648086547852,  0.0, INEXACT));
+assert(test_sinf(-f32.MAX_VALUE,  0.5218765139579773,  0.0, INEXACT));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.sinh
