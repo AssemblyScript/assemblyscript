@@ -1089,12 +1089,44 @@ assert(test_cosf(-Infinity, NaN, 0.0, INVALID));
 assert(test_cosf(      NaN, NaN, 0.0, 0));
 
 // ubc
-assert(test_cosf( 1.862645149e-09, 1.0, 1.455191523e-11, INEXACT));
-assert(test_cosf(-1.862645149e-09, 1.0, 1.455191523e-11, INEXACT));
-assert(test_cosf( 1.175494351e-38, 1.0,             0.0, INEXACT));
-assert(test_cosf(-1.175494351e-38, 1.0,             0.0, INEXACT));
-assert(test_cosf( 1.401298464e-45, 1.0,             0.0, INEXACT));
-assert(test_cosf(-1.401298464e-45, 1.0,             0.0, INEXACT));
+assert(test_cosf( 1.862645149e-09,             1.0, 1.455191523e-11, INEXACT));
+assert(test_cosf(-1.862645149e-09,             1.0, 1.455191523e-11, INEXACT));
+assert(test_cosf( 1.175494351e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf(-1.175494351e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf( 1.401298464e-45,             1.0,             0.0, INEXACT));
+assert(test_cosf(-1.401298464e-45,             1.0,             0.0, INEXACT));
+assert(test_cosf( 2.802596929e-45,             1.0,             0.0, INEXACT));
+assert(test_cosf( 1.261168618e-44,             1.0,             0.0, INEXACT));
+assert(test_cosf( 2.938735877e-39,             1.0,             0.0, INEXACT));
+assert(test_cosf( 5.877471754e-39,             1.0,             0.0, INEXACT));
+assert(test_cosf( 1.175494071e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf( 1.175494211e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf( 1.175494491e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf( 1.175494631e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf( 2.350988001e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf( 2.350988702e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf( 2.350989542e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf( 4.701977403e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf( 7.450580597e-09,             1.0, 2.328306437e-10, INEXACT));
+assert(test_cosf( 2.441406250e-04,             1.0, 2.500000000e-01, INEXACT));
+assert(test_cosf( 4.882812500e-04, 9.999998808e-01,-3.973643103e-08, INEXACT));
+assert(test_cosf( 9.765625000e-04, 9.999995232e-01,-6.357828397e-07, INEXACT));
+assert(test_cosf(-2.802596929e-45,             1.0,             0.0, INEXACT));
+assert(test_cosf(-1.261168618e-44,             1.0,             0.0, INEXACT));
+assert(test_cosf(-2.938735877e-39,             1.0,             0.0, INEXACT));
+assert(test_cosf(-5.877471754e-39,             1.0,             0.0, INEXACT));
+assert(test_cosf(-1.175494071e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf(-1.175494211e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf(-1.175494491e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf(-1.175494631e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf(-2.350988001e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf(-2.350988702e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf(-2.350989542e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf(-4.701977403e-38,             1.0,             0.0, INEXACT));
+assert(test_cosf(-7.450580597e-09,             1.0, 2.328306437e-10, INEXACT));
+assert(test_cosf(-2.441406250e-04,             1.0, 2.500000000e-01, INEXACT));
+assert(test_cosf(-4.882812500e-04, 9.999998808e-01,-3.973643103e-08, INEXACT));
+assert(test_cosf(-9.765625000e-04, 9.999995232e-01,-6.357828397e-07, INEXACT));
 
 // large arguments
 // TODO
@@ -3178,27 +3210,65 @@ assert(test_tan(NaN, NaN, 0.0, 0));
 // Mathf.tan ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_tanf(value: f32, expected: f32, error: f32, flags: i32): bool {
-  return  check<f32>(NativeMathf.tan(value), expected, error, flags);
+  return check<f32>(NativeMathf.tan(value), expected, error, flags);
 }
 
 // sanity
-assert(test_tanf(-8.066848755, 4.626595497, 0.2455666959, INEXACT));
-assert(test_tanf(4.345239639, 2.600190163, 0.3652407229, INEXACT));
-assert(test_tanf(-8.381433487, 1.716740608, 0.08169349283, INEXACT));
-assert(test_tanf(-6.531673431, -0.2537320852, 0.2318651378, INEXACT));
-assert(test_tanf(9.267057419, -0.1590414941, -0.009332014248, INEXACT));
-assert(test_tanf(0.6619858742, 0.7792918682, -0.06759700924, INEXACT));
-assert(test_tanf(-0.4066039324, -0.4305995405, 0.005771996453, INEXACT));
-assert(test_tanf(0.5617597699, 0.6294037104, -0.1683816314, INEXACT));
-assert(test_tanf(0.7741522789, 0.9777574539, 0.389693886, INEXACT));
-assert(test_tanf(-0.6787636876, -0.8066186309, 0.1229405999, INEXACT));
+assert(test_tanf(-8.0668487550, 4.6265954970, 0.245566695900, INEXACT));
+assert(test_tanf( 4.3452396390, 2.6001901630, 0.365240722900, INEXACT));
+assert(test_tanf(-8.3814334870, 1.7167406080, 0.081693492830, INEXACT));
+assert(test_tanf(-6.5316734310,-0.2537320852, 0.231865137800, INEXACT));
+assert(test_tanf( 9.2670574190,-0.1590414941,-0.009332014248, INEXACT));
+assert(test_tanf( 0.6619858742, 0.7792918682,-0.067597009240, INEXACT));
+assert(test_tanf(-0.4066039324,-0.4305995405, 0.005771996453, INEXACT));
+assert(test_tanf( 0.5617597699, 0.6294037104,-0.168381631400, INEXACT));
+assert(test_tanf( 0.7741522789, 0.9777574539, 0.389693886000, INEXACT));
+assert(test_tanf(-0.6787636876,-0.8066186309, 0.122940599900, INEXACT));
 
 // special
-assert(test_tanf(0.0, 0.0, 0.0, 0));
-assert(test_tanf(-0.0, -0.0, 0.0, 0));
-assert(test_tanf(Infinity, NaN, 0.0, INVALID));
+assert(test_tanf(      0.0, 0.0, 0.0, 0));
+assert(test_tanf(     -0.0,-0.0, 0.0, 0));
+assert(test_tanf( Infinity, NaN, 0.0, INVALID));
 assert(test_tanf(-Infinity, NaN, 0.0, INVALID));
-assert(test_tanf(NaN, NaN, 0.0, 0));
+assert(test_tanf(      NaN, NaN, 0.0, 0));
+
+// ubc
+assert(test_tanf( 1.862645149e-09, 1.862645149e-09,-9.701277108e-12, INEXACT));
+assert(test_tanf(-1.862645149e-09,-1.862645149e-09, 9.701277108e-12, INEXACT));
+assert(test_tanf( 1.175494351e-38, 1.175494351e-38,             0.0, INEXACT));
+assert(test_tanf(-1.175494351e-38,-1.175494351e-38,             0.0, INEXACT));
+assert(test_tanf( 1.401298464e-45, 1.401298464e-45,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf(-1.401298464e-45,-1.401298464e-45,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf( 1.175494491e-38, 1.175494491e-38,             0.0, INEXACT));
+assert(test_tanf( 1.175494631e-38, 1.175494631e-38,             0.0, INEXACT));
+assert(test_tanf( 2.350988001e-38, 2.350988001e-38,             0.0, INEXACT));
+assert(test_tanf( 2.350988702e-38, 2.350988702e-38,             0.0, INEXACT));
+assert(test_tanf( 2.350989542e-38, 2.350989542e-38,             0.0, INEXACT));
+assert(test_tanf( 4.701977403e-38, 4.701977403e-38,             0.0, INEXACT));
+assert(test_tanf( 1.117587090e-08, 1.117587090e-08,-5.238689482e-10, INEXACT));
+assert(test_tanf( 1.490116119e-08, 1.490116119e-08,-6.208817349e-10, INEXACT));
+assert(test_tanf( 2.441406250e-04, 2.441406250e-04,-1.666666716e-01, INEXACT));
+assert(test_tanf(-1.175494491e-38,-1.175494491e-38,             0.0, INEXACT));
+assert(test_tanf(-1.175494631e-38,-1.175494631e-38,             0.0, INEXACT));
+assert(test_tanf(-2.350988001e-38,-2.350988001e-38,             0.0, INEXACT));
+assert(test_tanf( 2.350988702e-38, 2.350988702e-38,             0.0, INEXACT));
+assert(test_tanf(-2.350989542e-38,-2.350989542e-38,             0.0, INEXACT));
+assert(test_tanf(-4.701977403e-38,-4.701977403e-38,             0.0, INEXACT));
+assert(test_tanf(-1.117587090e-08,-1.117587090e-08, 5.238689482e-10, INEXACT));
+assert(test_tanf(-1.490116119e-08,-1.490116119e-08, 6.208817349e-10, INEXACT));
+assert(test_tanf(-2.441406250e-04,-2.441406250e-04, 1.666666716e-01, INEXACT));
+assert(test_tanf( 2.802596929e-45, 2.802596929e-45,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf( 1.261168618e-44, 1.261168618e-44,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf( 2.938735877e-39, 2.938735877e-39,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf( 5.877471754e-39, 5.877471754e-39,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf( 1.175494071e-38, 1.175494071e-38,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf( 1.175494211e-38, 1.175494211e-38,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf(-2.802596929e-45,-2.802596929e-45,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf(-1.261168618e-44,-1.261168618e-44,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf(-2.938735877e-39,-2.938735877e-39,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf(-5.877471754e-39,-5.877471754e-39,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf(-1.175494071e-38,-1.175494071e-38,             0.0, INEXACT | UNDERFLOW));
+assert(test_tanf(-1.175494211e-38,-1.175494211e-38,             0.0, INEXACT | UNDERFLOW));
 
 // large arguments
 // TODO
@@ -3208,8 +3278,8 @@ assert(test_tanf(NaN, NaN, 0.0, 0));
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function test_tanh(value: f64, expected: f64, error: f64, flags: i32): bool {
-  return  check<f64>(NativeMath.tanh(value), expected, error, flags) &&
-  (!js || check<f64>(    JSMath.tanh(value), expected, error, flags));
+  return check<f64>(NativeMath.tanh(value), expected, error, flags) &&
+  (!js || check<f64>(   JSMath.tanh(value), expected, error, flags));
 }
 
 // sanity
