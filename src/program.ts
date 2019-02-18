@@ -333,8 +333,8 @@ export class Program extends DiagnosticEmitter {
 
   /** Resolver instance. */
   resolver: Resolver;
-  /** Array of source files. */
-  sources: Source[];
+  /** Array of sources. */
+  sources: Source[] = [];
   /** Diagnostic offset used where successively obtaining the next diagnostic. */
   diagnosticsOffset: i32 = 0;
   /** Compiler options. */
@@ -388,32 +388,10 @@ export class Program extends DiagnosticEmitter {
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
-    this.sources = [];
     var nativeFile = new File(this, new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY));
     this.filesByName.set(nativeFile.internalName, nativeFile);
     this.nativeFile = nativeFile;
     this.resolver = new Resolver(this);
-  }
-
-  /** Gets a source by its exact path. */
-  getSource(normalizedPath: string): Source | null {
-    var sources = this.sources;
-    for (let i = 0, k = sources.length; i < k; ++i) {
-      let source = sources[i];
-      if (source.normalizedPath == normalizedPath) return source;
-    }
-    return null;
-  }
-
-  /** Looks up the source matching the specified possibly ambiguous path. */
-  lookupSource(normalizedPathWithoutExtension: string): Source | null {
-    var tmp: string;
-    return (
-      this.getSource(normalizedPathWithoutExtension + ".ts") ||
-      this.getSource(normalizedPathWithoutExtension + "/index.ts") ||
-      this.getSource((tmp = LIBRARY_PREFIX + normalizedPathWithoutExtension) + ".ts") ||
-      this.getSource( tmp                                                    + "/index.ts")
-    );
   }
 
   /** Creates a native variable declaration. */
