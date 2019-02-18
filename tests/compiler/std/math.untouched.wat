@@ -11559,14 +11559,13 @@
      f64.promote_f32
      f64.const 3.141592653589793
      f64.add
-     f64.neg
     else     
      local.get $0
      f64.promote_f32
      f64.const 3.141592653589793
      f64.sub
-     f64.neg
     end
+    f64.neg
     local.set $7
     local.get $7
     local.get $7

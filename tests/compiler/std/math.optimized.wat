@@ -9363,7 +9363,6 @@
     end
     local.get $0
     f64.promote_f32
-    local.tee $3
     local.tee $2
     local.get $2
     f64.mul
@@ -9447,49 +9446,22 @@
      end
      return
     end
-    local.get $7
-    if (result f64)
-     local.get $0
-     f64.promote_f32
-     f64.const 3.141592653589793
-     f64.add
-     f64.neg
-    else     
-     local.get $0
-     f64.promote_f32
-     f64.const 3.141592653589793
-     f64.sub
-     f64.neg
-    end
-    local.tee $2
-    local.get $2
-    local.get $2
-    f64.mul
+    local.get $0
+    f64.promote_f32
     local.tee $1
-    local.get $2
-    f64.mul
+    f64.const 3.141592653589793
+    f64.add
+    local.get $1
+    f64.const 3.141592653589793
+    f64.sub
+    local.get $7
+    select
+    f64.neg
     local.tee $2
-    f64.const -0.16666666641626524
-    local.get $1
-    f64.const 0.008333329385889463
-    f64.mul
-    f64.add
-    f64.mul
-    f64.add
     local.get $2
-    local.get $1
-    local.get $1
     f64.mul
-    f64.mul
-    f64.const -1.9839334836096632e-04
-    local.get $1
-    f64.const 2.718311493989822e-06
-    f64.mul
-    f64.add
-    f64.mul
-    f64.add
-    f32.demote_f64
-    return
+    local.set $1
+    br $folding-inner0
    end
    local.get $4
    i32.const 1088565717
@@ -9570,10 +9542,10 @@
     end
     local.get $0
     f64.promote_f32
-    local.tee $2
+    local.tee $1
     f64.const 6.283185307179586
     f64.add
-    local.get $2
+    local.get $1
     f64.const 6.283185307179586
     f64.sub
     local.get $7
@@ -9583,7 +9555,32 @@
     local.get $2
     f64.mul
     local.set $1
-    br $folding-inner0
+    local.get $3
+    local.get $1
+    local.get $2
+    f64.mul
+    local.tee $2
+    f64.const -0.16666666641626524
+    local.get $1
+    f64.const 0.008333329385889463
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    local.get $2
+    local.get $1
+    local.get $1
+    f64.mul
+    f64.mul
+    f64.const -1.9839334836096632e-04
+    local.get $1
+    f64.const 2.718311493989822e-06
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    f32.demote_f64
+    return
    end
    local.get $4
    i32.const 2139095040
@@ -9812,7 +9809,7 @@
    select
    return
   end
-  local.get $3
+  local.get $2
   local.get $1
   local.get $2
   f64.mul

@@ -2267,7 +2267,7 @@ export namespace NativeMathf {
         if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
           return sign ? -cos_kernf(x + s1pio2) : cos_kernf(x - s1pio2);
         }
-        return sin_kernf(sign ? -(x + s2pio2) : -(x - s2pio2));
+        return sin_kernf(-(sign ? x + s2pio2 : x - s2pio2));
       }
 
       if (ix <= 0x40e231d5) {  /* |x| ~<= 9*pi/4 */
