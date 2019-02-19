@@ -6,6 +6,7 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $resolve-nested/a i32 (i32.const 0))
+ (global $resolve-nested/Wrapped.f (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))

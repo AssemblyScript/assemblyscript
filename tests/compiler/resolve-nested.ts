@@ -11,4 +11,8 @@ export function c(arg: Outer.Inner): void { }
 export namespace Wrapped {
   class D {}
   export function e(c: D): void {}
+  export namespace Inner {
+    export class F {}
+  }
+  var f: Inner.F;
 }
