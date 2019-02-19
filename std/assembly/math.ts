@@ -2437,7 +2437,7 @@ export function isqrt32(x: u32): u32 {
   var xs = x >> 2;
   while (xs && xs != x) {
     s += 2;
-    xs = x >> <u32>s;
+    xs = x >> s;
   }
   s -= 2;
   var ux = x;
@@ -2445,7 +2445,7 @@ export function isqrt32(x: u32): u32 {
   while (s >= 0) {
     res <<= 1;
     let m = res + 1;
-    if (m * m <= (ux >> <u32>s)) {
+    if (m * m <= ux >> s) {
       res = m;
     }
     s -= 2;
@@ -2459,7 +2459,7 @@ export function isqrt64(x: u64): u64 {
   var xs = x >> 2;
   while (xs && xs != x) {
     s += 2;
-    xs = x >> <u64>s;
+    xs = x >> s;
   }
   s -= 2;
   var ux = x;
@@ -2467,7 +2467,7 @@ export function isqrt64(x: u64): u64 {
   while (s >= 0) {
     res <<= 1;
     let m = res + 1;
-    if (m * m <= (ux >> <u64>s)) {
+    if (m * m <= ux >> s) {
       res = m;
     }
     s -= 2;
