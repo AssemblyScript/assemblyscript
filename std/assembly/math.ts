@@ -2375,11 +2375,8 @@ export namespace IntegerMath {
       } else {
         if (!x) throw new RangeError("Math.log2 received zero argument");
       }
-      if (sizeof<T>() <= 4) {
-        return <T>(31 - builtin_clz<T>(x));
-      } else {
-        return <T>(63 - builtin_clz<T>(x));
-      }
+      if (sizeof<T>() <= 4) return <T>ilog2_32(<u32>x);
+      if (sizeof<T>() == 8) return <T>ilog2_64(<u64>x);
     }
     throw new TypeError("Unexpected generic type");
   }
@@ -2419,6 +2416,16 @@ export namespace IntegerMath {
     }
     throw new TypeError("Unexpected generic type");
   }
+}
+
+@inline
+export function ilog2_32(x: u32): u32 {
+  return 31 - builtin_clz(x);
+}
+
+@inline
+export function ilog2_64(x: u64): u64 {
+  return 63 - builtin_clz(x);
 }
 
 // Complexity: O(log n)
