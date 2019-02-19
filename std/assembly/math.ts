@@ -1272,36 +1272,36 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
 function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const pi_2_65 = reinterpret<f64>(0x3BF921FB54442D18); // 8.51530395021638647334e-20
 
- const bits: u64[] = [
-   0xA2F9836E4E441529,
-   0xFC2757D1F534DDC0,
-   0xDB6295993C439041,
-   0xFE5163ABDEBBC561
- ];
+  const bits: u64[] = [
+    0xA2F9836E4E441529,
+    0xFC2757D1F534DDC0,
+    0xDB6295993C439041,
+    0xFE5163ABDEBBC561
+  ];
 
- var offset = (u >> 23) - 152;
- var index  = offset >> 6;
- var shift  = offset & 63;
+  var offset = (u >> 23) - 152;
+  var index  = offset >> 6;
+  var shift  = offset & 63;
 
- var b0 = unchecked(bits[index + 0]);
- var b1 = unchecked(bits[index + 1]);
- var lo: u64;
+  var b0 = unchecked(bits[index + 0]);
+  var b1 = unchecked(bits[index + 1]);
+  var lo: u64;
 
- if (shift > 32) {
-   let b2 = unchecked(bits[index + 2]);
-   lo  = b2 >> (96 - shift);
-   lo |= b1 << (shift - 32);
- } else {
-   lo = b1 >> (32 - shift);
- }
+  if (shift > 32) {
+    let b2 = unchecked(bits[index + 2]);
+    lo  = b2 >> (96 - shift);
+    lo |= b1 << (shift - 32);
+  } else {
+    lo = b1 >> (32 - shift);
+  }
 
- var hi = (b1 >> (64 - shift)) | (b0 << shift);
- var mantissa: u64 = (u & 0x007FFFFF) | 0x00800000;
- var product: u64 = mantissa * hi + ((mantissa * lo) >> 32);
- var r: i64 = product << 2;
- var q: i32 = <i32>(product >> 62) + <i32>(r < 0);
- rempio2f_y = copysign<f64>(pi_2_65, x) * <f64>r;
- return q;
+  var hi = (b1 >> (64 - shift)) | (b0 << shift);
+  var mantissa: u64 = (u & 0x007FFFFF) | 0x00800000;
+  var product: u64 = mantissa * hi + ((mantissa * lo) >> 32);
+  var r: i64 = product << 2;
+  var q: i32 = <i32>(product >> 62) + <i32>(r < 0);
+  rempio2f_y = copysign<f64>(pi_2_65, x) * <f64>r;
+  return q;
 }
 
 @inline /** @internal */
