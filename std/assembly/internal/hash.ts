@@ -25,8 +25,8 @@ export function HASH<T>(key: T): u32 {
 
 // FNV-1a 32-bit as a starting point, see: http://isthe.com/chongo/tech/comp/fnv/
 
-const FNV_OFFSET: u32 = 2166136261;
-const FNV_PRIME: u32 = 16777619;
+@lazy const FNV_OFFSET: u32 = 2166136261;
+@lazy const FNV_PRIME: u32 = 16777619;
 
 function hash8(key: u32): u32 {
   return (FNV_OFFSET ^ key) * FNV_PRIME;

@@ -9,7 +9,7 @@
  (elem (i32.const 0) $null $call-optional/opt|trampoline)
  (global $~argc (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 1))
- (global $HEAP_BASE i32 (i32.const 44))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 44))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -43,7 +43,7 @@
   local.get $2
   call $call-optional/opt
  )
- (func $start (; 3 ;) (type $_)
+ (func $start:call-optional (; 3 ;) (type $_)
   block (result i32)
    i32.const 1
    global.set $~argc
@@ -158,6 +158,9 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (type $_)
+ (func $start (; 4 ;) (type $_)
+  call $start:call-optional
+ )
+ (func $null (; 5 ;) (type $_)
  )
 )

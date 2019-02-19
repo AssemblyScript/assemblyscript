@@ -14,7 +14,7 @@
  (global $function-types/i32Adder (mut i32) (i32.const 0))
  (global $~argc (mut i32) (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 48))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 48))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -90,7 +90,7 @@
   local.get $2
   call $function-types/makeAndAdd<i32>
  )
- (func $start (; 12 ;) (type $_)
+ (func $start:function-types (; 12 ;) (type $_)
   nop
   call $function-types/makeAdder<i32>
   global.set $function-types/i32Adder
@@ -232,6 +232,9 @@
    unreachable
   end
  )
- (func $null (; 13 ;) (type $_)
+ (func $start (; 13 ;) (type $_)
+  call $start:function-types
+ )
+ (func $null (; 14 ;) (type $_)
  )
 )

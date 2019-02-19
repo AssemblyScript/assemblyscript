@@ -80,6 +80,7 @@ import {
 import {
   Module,
   FunctionRef,
+  ExpressionRef,
 } from "./module";
 
 import {
@@ -310,6 +311,8 @@ export class Program extends DiagnosticEmitter {
   diagnosticsOffset: i32 = 0;
   /** Compiler options. */
   options: Options;
+  /** Special native code source. */
+  nativeSource: Source;
   /** Special native code file. */
   nativeFile: File;
 
@@ -359,15 +362,17 @@ export class Program extends DiagnosticEmitter {
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
-    var nativeFile = new File(this, new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY));
-    this.filesByName.set(nativeFile.internalName, nativeFile);
+    var nativeSource = new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY);
+    this.nativeSource = nativeSource;
+    var nativeFile = new File(this, nativeSource);
     this.nativeFile = nativeFile;
+    this.filesByName.set(nativeFile.internalName, nativeFile);
     this.resolver = new Resolver(this);
   }
 
   /** Creates a native variable declaration. */
   makeNativeVariableDeclaration(name: string, flags: CommonFlags = CommonFlags.NONE): VariableDeclaration {
-    var range = this.nativeFile.source.range;
+    var range = this.nativeSource.range;
     return Node.createVariableDeclaration(
       Node.createIdentifierExpression(name, range),
       null, null, null, flags, range
@@ -376,7 +381,7 @@ export class Program extends DiagnosticEmitter {
 
   /** Creates a native type declaration. */
   makeNativeTypeDeclaration(name: string, flags: CommonFlags = CommonFlags.NONE): TypeDeclaration {
-    var range = this.nativeFile.source.range;
+    var range = this.nativeSource.range;
     var identifier = Node.createIdentifierExpression(name, range);
     return Node.createTypeDeclaration(
       identifier,
@@ -390,7 +395,7 @@ export class Program extends DiagnosticEmitter {
 
   /** Creates a native function declaration. */
   makeNativeFunctionDeclaration(name: string, flags: CommonFlags = CommonFlags.NONE): FunctionDeclaration {
-    var range = this.nativeFile.source.range;
+    var range = this.nativeSource.range;
     return Node.createFunctionDeclaration(
       Node.createIdentifierExpression(name, range),
       null,
@@ -407,7 +412,7 @@ export class Program extends DiagnosticEmitter {
 
   /** Creates a native namespace declaration. */
   makeNativeNamespaceDeclaration(name: string, flags: CommonFlags = CommonFlags.NONE): NamespaceDeclaration {
-    var range = this.nativeFile.source.range;
+    var range = this.nativeSource.range;
     return Node.createNamespaceDeclaration(
       Node.createIdentifierExpression(name, range),
       [], null, flags, range
@@ -1718,6 +1723,13 @@ export abstract class Element {
     }
   }
 
+  /** Gets the enclosing file. */
+  get file(): File {
+    var current: Element = this;
+    do if ((current = current.parent).kind == ElementKind.FILE) return <File>current;
+    while (true);
+  }
+
   /** Tests if this element has a specific flag or flags. */
   is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
   /** Tests if this element has any of the specified flags. */
@@ -1840,6 +1852,8 @@ export class File extends Element {
   exports: Map<string,DeclaredElement> | null = null;
   /** File re-exports. */
   exportsStar: File[] | null = null;
+  /** Top-level start function of this file. */
+  startFunction: Function;
 
   /** Constructs a new file. */
   constructor(
@@ -1858,6 +1872,13 @@ export class File extends Element {
     this.source = source;
     assert(!program.filesByName.has(this.internalName));
     program.filesByName.set(this.internalName, this);
+    var startFunction = this.program.makeNativeFunction(
+      "start:" + this.internalName,
+      new Signature(null, Type.void),
+      this
+    );
+    startFunction.internalName = startFunction.name;
+    this.startFunction = startFunction;
   }
 
   /* @override */

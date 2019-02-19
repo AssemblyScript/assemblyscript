@@ -355,8 +355,8 @@ export class Compiler extends DiagnosticEmitter {
     var files = program.filesByName;
     for (let file of files.values()) {
       if (file.source.isEntry) {
-        this.compileFile(file);    // tree-shake but
-        this.compileExports(file); // ensure exports
+        this.compileFile(file);
+        this.compileExports(file);
       }
     }
 
@@ -688,13 +688,8 @@ export class Compiler extends DiagnosticEmitter {
     file.source.set(CommonFlags.COMPILED);
     file.set(CommonFlags.COMPILED);
 
-    // make one start function per file holding its top-level logic
-    var program = this.program;
-    var startFunction = program.makeNativeFunction(
-      "start:" + file.internalName,
-      new Signature(null, Type.void), file
-    );
-    startFunction.internalName = startFunction.name;
+    // compile top-level statements within the file's start function
+    var startFunction = file.startFunction;
     var previousBody = this.currentBody;
     var startFunctionBody = new Array<ExpressionRef>();
     this.currentBody = startFunctionBody;
@@ -753,16 +748,20 @@ export class Compiler extends DiagnosticEmitter {
           );
           return false;
         }
-        global.type = resolvedType;
-        global.set(CommonFlags.RESOLVED);
+        global.setType(resolvedType);
 
       // infer from initializer if not annotated
       } else if (initializerNode) { // infer type using void/NONE for literal inference
+        let previousFlow = this.currentFlow;
+        if (global.hasDecorator(DecoratorFlags.LAZY)) {
+          this.currentFlow = global.file.startFunction.flow;
+        }
         initExpr = this.compileExpressionRetainType( // reports
           initializerNode,
           Type.void,
           WrapMode.WRAP
         );
+        this.currentFlow = previousFlow;
         if (this.currentType == Type.void) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
@@ -770,8 +769,7 @@ export class Compiler extends DiagnosticEmitter {
           );
           return false;
         }
-        global.type = this.currentType;
-        global.set(CommonFlags.RESOLVED);
+        global.setType(this.currentType);
 
       // must either be annotated or have an initializer
       } else {
@@ -822,12 +820,17 @@ export class Compiler extends DiagnosticEmitter {
     // evaluate initializer if present
     if (initializerNode) {
       if (!initExpr) {
+        let previousFlow = this.currentFlow;
+        if (global.hasDecorator(DecoratorFlags.LAZY)) {
+          this.currentFlow = global.file.startFunction.flow;
+        }
         initExpr = this.compileExpression(
           initializerNode,
           global.type,
           ConversionKind.IMPLICIT,
           WrapMode.WRAP
         );
+        this.currentFlow = previousFlow;
       }
 
       if (getExpressionId(initExpr) != ExpressionId.Const) {

@@ -1,7 +1,7 @@
 (module
+ (type $_ (func))
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $_ (func))
  (memory $0 0)
  (table $0 2 funcref)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)

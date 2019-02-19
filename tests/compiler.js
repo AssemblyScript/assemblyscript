@@ -137,7 +137,7 @@ tests.forEach(filename => {
       if (args.noDiff) {
         if (expected != actual) {
           console.log("- " + colorsUtil.red("compare ERROR"));
-          // failed = true;
+          failed = true;
         } else {
           console.log("- " + colorsUtil.green("compare OK"));
         }

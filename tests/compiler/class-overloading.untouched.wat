@@ -4,7 +4,7 @@
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $class-overloading/test))
@@ -16,10 +16,13 @@
   local.get $0
   call $class-overloading/Foo#baz
  )
- (func $start (; 2 ;) (type $_)
+ (func $start:class-overloading (; 2 ;) (type $_)
   i32.const 0
   call $class-overloading/test
  )
- (func $null (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $_)
+  call $start:class-overloading
+ )
+ (func $null (; 4 ;) (type $_)
  )
 )

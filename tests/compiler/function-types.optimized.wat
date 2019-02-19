@@ -30,7 +30,7 @@
   local.get $1
   f64.add
  )
- (func $start (; 4 ;) (type $_)
+ (func $start:function-types (; 4 ;) (type $_)
   (local $0 i32)
   i32.const 1
   global.set $function-types/i32Adder
@@ -180,7 +180,10 @@
    unreachable
   end
  )
- (func $null (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $_)
+  call $start:function-types
+ )
+ (func $null (; 6 ;) (type $_)
   nop
  )
 )

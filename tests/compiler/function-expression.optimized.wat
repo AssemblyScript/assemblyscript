@@ -7,7 +7,7 @@
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
  (table $0 5 funcref)
- (elem (i32.const 0) $start~someName|3 $start~anonymous|1 $start~anonymous|1 $start~someName|3 $start~anonymous|4)
+ (elem (i32.const 0) $start:function-expression~someName|3 $start:function-expression~anonymous|1 $start:function-expression~anonymous|1 $start:function-expression~someName|3 $start:function-expression~anonymous|4)
  (global $function-expression/f1 (mut i32) (i32.const 1))
  (global $~argc (mut i32) (i32.const 0))
  (global $function-expression/f2 (mut i32) (i32.const 2))
@@ -16,16 +16,16 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start~anonymous|1 (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:function-expression~anonymous|1 (; 1 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $start~someName|3 (; 2 ;) (type $_)
+ (func $start:function-expression~someName|3 (; 2 ;) (type $_)
   nop
  )
- (func $start~anonymous|4 (; 3 ;) (type $i) (result i32)
+ (func $start:function-expression~anonymous|4 (; 3 ;) (type $i) (result i32)
   i32.const 1
  )
- (func $start (; 4 ;) (type $_)
+ (func $start:function-expression (; 4 ;) (type $_)
   i32.const 1
   global.set $~argc
   i32.const 1
@@ -74,5 +74,8 @@
    call $~lib/env/abort
    unreachable
   end
+ )
+ (func $start (; 5 ;) (type $_)
+  call $start:function-expression
  )
 )

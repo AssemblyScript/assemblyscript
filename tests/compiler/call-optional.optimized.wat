@@ -36,7 +36,7 @@
   local.get $2
   i32.add
  )
- (func $start (; 2 ;) (type $_)
+ (func $start:call-optional (; 2 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   i32.const 1
@@ -159,7 +159,10 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $_)
+  call $start:call-optional
+ )
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )
