@@ -1,7 +1,6 @@
 import { ASImport } from "./ASImport";
 export declare class Host extends ASImport {
-    stdout: (out: string) => void;
-    constructor(stdout?: (out: string) => void);
+    static stdout: (out: string) => void;
     debug(): void;
     _log(start: number, sizeof: number): void;
     _log_str(x: number): void;
