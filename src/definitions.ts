@@ -210,7 +210,8 @@ export class IDLBuilder extends ExportsWalker {
           sb.push(name);
           if (isConst) {
             sb.push(" = ");
-            sb.push((<EnumValue>member).constantValue.toString(10));
+            assert((<EnumValue>member).constantValueKind == ConstantValueKind.INTEGER);
+            sb.push(i64_low((<EnumValue>member).constantIntegerValue).toString(10));
           }
           sb.push(";\n");
         }
@@ -372,7 +373,8 @@ export class TSDBuilder extends ExportsWalker {
           sb.push(name);
           if (member.is(CommonFlags.INLINED)) {
             sb.push(" = ");
-            sb.push((<EnumValue>member).constantValue.toString(10));
+            assert((<EnumValue>member).constantValueKind == ConstantValueKind.INTEGER);
+            sb.push(i64_low((<EnumValue>member).constantIntegerValue).toString(10));
           }
           sb.push(",\n");
           --numMembers;
