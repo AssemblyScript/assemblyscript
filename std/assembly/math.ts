@@ -2414,45 +2414,58 @@ export namespace IntegerMath {
       if (isSigned<T>()) {
         if (x < 0) throw new RangeError("Math.sqrt received negative argument");
       }
-      // Complexity: O(log n)
-      // Iterative version of approach described in this article:
-      // https://www.cs.uni-potsdam.de/ti/kreitz/PDF/03cucs-intsqrt.pdf
-      if (x < 2) return x;
-      let s = 2;
-      let xs = x >> 2;
-      while (xs && xs != x) {
-        s += 2;
-        xs = x >> <T>s;
-      }
-      s -= 2;
-      if (sizeof<T>() <= 4) {
-        let ux = <u32>x;
-        let res: u32 = 0;
-        while (s >= 0) {
-          res <<= 1;
-          let m = res + 1;
-          if (m * m <= (ux >> <u32>s)) {
-            res = m;
-          }
-          s -= 2;
-        }
-        return <T>res;
-      } else {
-        let ux = <u64>x;
-        let res: u64 = 0;
-        while (s >= 0) {
-          res <<= 1;
-          let m = res + 1;
-          if (m * m <= (ux >> <u64>s)) {
-            res = m;
-          }
-          s -= 2;
-        }
-        return <T>res;
-      }
+      if (sizeof<T>() <= 4) return <T>isqrt32(<u32>x);
+      if (sizeof<T>() == 8) return <T>isqrt64(<u64>x);
     }
     throw new TypeError("Unexpected generic type");
   }
+}
+
+// Complexity: O(log n)
+// Iterative version of approach described in this article:
+// https://www.cs.uni-potsdam.de/ti/kreitz/PDF/03cucs-intsqrt.pdf
+export function isqrt32(x: u32): u32 {
+  if (x < 2) return x;
+  var s = 2;
+  var xs = x >> 2;
+  while (xs && xs != x) {
+    s += 2;
+    xs = x >> <u32>s;
+  }
+  s -= 2;
+  var ux = x;
+  var res: u32 = 0;
+  while (s >= 0) {
+    res <<= 1;
+    let m = res + 1;
+    if (m * m <= (ux >> <u32>s)) {
+      res = m;
+    }
+    s -= 2;
+  }
+  return res;
+}
+
+export function isqrt64(x: u64): u64 {
+  if (x < 2) return x;
+  var s = 2;
+  var xs = x >> 2;
+  while (xs && xs != x) {
+    s += 2;
+    xs = x >> <u64>s;
+  }
+  s -= 2;
+  var ux = x;
+  var res: u64 = 0;
+  while (s >= 0) {
+    res <<= 1;
+    let m = res + 1;
+    if (m * m <= (ux >> <u64>s)) {
+      res = m;
+    }
+    s -= 2;
+  }
+  return res;
 }
 
 export function ipow32(x: i32, e: i32): i32 {

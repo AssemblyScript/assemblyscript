@@ -11389,7 +11389,96 @@
   i64.sub
   return
  )
- (func $~lib/math/IntegerMath.sqrt<u64> (; 163 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/math/isqrt32 (; 163 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.const 2
+  i32.lt_u
+  if
+   local.get $0
+   return
+  end
+  i32.const 2
+  local.set $1
+  local.get $0
+  i32.const 2
+  i32.shr_u
+  local.set $2
+  block $break|0
+   loop $continue|0
+    local.get $2
+    if (result i32)
+     local.get $2
+     local.get $0
+     i32.ne
+    else     
+     local.get $2
+    end
+    if
+     block
+      local.get $1
+      i32.const 2
+      i32.add
+      local.set $1
+      local.get $0
+      local.get $1
+      i32.shr_u
+      local.set $2
+     end
+     br $continue|0
+    end
+   end
+  end
+  local.get $1
+  i32.const 2
+  i32.sub
+  local.set $1
+  local.get $0
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|1
+   loop $continue|1
+    local.get $1
+    i32.const 0
+    i32.ge_s
+    if
+     block
+      local.get $4
+      i32.const 1
+      i32.shl
+      local.set $4
+      local.get $4
+      i32.const 1
+      i32.add
+      local.set $5
+      local.get $5
+      local.get $5
+      i32.mul
+      local.get $3
+      local.get $1
+      i32.shr_u
+      i32.le_u
+      if
+       local.get $5
+       local.set $4
+      end
+      local.get $1
+      i32.const 2
+      i32.sub
+      local.set $1
+     end
+     br $continue|1
+    end
+   end
+  end
+  local.get $4
+ )
+ (func $~lib/math/isqrt64 (; 164 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
@@ -11484,9 +11573,13 @@
    end
   end
   local.get $4
+ )
+ (func $~lib/math/IntegerMath.sqrt<u64> (; 165 ;) (type $II) (param $0 i64) (result i64)
+  local.get $0
+  call $~lib/math/isqrt64
   return
  )
- (func $~lib/math/ipow64 (; 164 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 166 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -11718,7 +11811,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 165 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/ipow32f (; 167 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 i32)
   (local $3 f32)
   local.get $1
@@ -11769,7 +11862,7 @@
    local.get $3
   end
  )
- (func $~lib/math/ipow64f (; 166 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/ipow64f (; 168 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 f64)
   local.get $1
@@ -11820,20 +11913,12 @@
    local.get $3
   end
  )
- (func $start (; 167 ;) (type $_)
+ (func $start (; 169 ;) (type $_)
   (local $0 i32)
   (local $1 f64)
   (local $2 i32)
   (local $3 i64)
   (local $4 f32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i64)
-  (local $10 i64)
-  (local $11 i64)
-  (local $12 i64)
   global.get $~lib/math/NativeMath.E
   global.get $~lib/math/NativeMath.E
   f64.eq
@@ -43548,91 +43633,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i16>|inlined.0
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $5
-   block $break|2
-    loop $continue|2
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.const 16
-       i32.shl
-       i32.const 16
-       i32.shr_s
-       i32.shr_s
-       local.set $5
-      end
-      br $continue|2
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|3
-    loop $continue|3
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|3
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i16>|inlined.0
   end
   i32.const 16
@@ -43665,87 +43666,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i32>|inlined.0
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $2
-   block $break|4
-    loop $continue|4
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.shr_s
-       local.set $2
-      end
-      br $continue|4
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|5
-    loop $continue|5
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|5
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i32>|inlined.0
   end
   i32.const 0
@@ -43763,87 +43684,7 @@
    i32.const 0
    local.set $0
    local.get $0
-   i32.const 2
-   i32.lt_u
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<u32>|inlined.0
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_u
-   local.set $5
-   block $break|6
-    loop $continue|6
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.shr_u
-       local.set $5
-      end
-      br $continue|6
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|7
-    loop $continue|7
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|7
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<u32>|inlined.0
   end
   i32.const 0
@@ -43872,94 +43713,7 @@
     unreachable
    end
    local.get $3
-   i64.const 2
-   i64.lt_s
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<i64>|inlined.0
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_s
-   local.set $9
-   block $break|8
-    loop $continue|8
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_s
-       local.set $9
-      end
-      br $continue|8
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $10
-   i64.const 0
-   local.set $11
-   block $break|9
-    loop $continue|9
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $11
-       i64.const 1
-       i64.shl
-       local.set $11
-       local.get $11
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $10
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $11
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|9
-     end
-    end
-   end
-   local.get $11
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<i64>|inlined.0
   end
   i64.const 0
@@ -43977,94 +43731,7 @@
    i64.const 0
    local.set $3
    local.get $3
-   i64.const 2
-   i64.lt_u
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<u64>|inlined.0
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_u
-   local.set $9
-   block $break|10
-    loop $continue|10
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       local.set $9
-      end
-      br $continue|10
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $11
-   i64.const 0
-   local.set $10
-   block $break|11
-    loop $continue|11
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $10
-       i64.const 1
-       i64.shl
-       local.set $10
-       local.get $10
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $11
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $10
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|11
-     end
-    end
-   end
-   local.get $10
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<u64>|inlined.0
   end
   i64.const 0
@@ -44093,91 +43760,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i16>|inlined.1
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $2
-   block $break|12
-    loop $continue|12
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.const 16
-       i32.shl
-       i32.const 16
-       i32.shr_s
-       i32.shr_s
-       local.set $2
-      end
-      br $continue|12
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|13
-    loop $continue|13
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|13
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i16>|inlined.1
   end
   i32.const 16
@@ -44210,87 +43793,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i32>|inlined.1
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $5
-   block $break|14
-    loop $continue|14
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.shr_s
-       local.set $5
-      end
-      br $continue|14
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|15
-    loop $continue|15
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|15
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i32>|inlined.1
   end
   i32.const 1
@@ -44308,87 +43811,7 @@
    i32.const 1
    local.set $0
    local.get $0
-   i32.const 2
-   i32.lt_u
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<u32>|inlined.1
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_u
-   local.set $2
-   block $break|16
-    loop $continue|16
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.shr_u
-       local.set $2
-      end
-      br $continue|16
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|17
-    loop $continue|17
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|17
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<u32>|inlined.1
   end
   i32.const 1
@@ -44417,94 +43840,7 @@
     unreachable
    end
    local.get $3
-   i64.const 2
-   i64.lt_s
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<i64>|inlined.1
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_s
-   local.set $9
-   block $break|18
-    loop $continue|18
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_s
-       local.set $9
-      end
-      br $continue|18
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $10
-   i64.const 0
-   local.set $11
-   block $break|19
-    loop $continue|19
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $11
-       i64.const 1
-       i64.shl
-       local.set $11
-       local.get $11
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $10
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $11
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|19
-     end
-    end
-   end
-   local.get $11
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<i64>|inlined.1
   end
   i64.const 1
@@ -44522,94 +43858,7 @@
    i64.const 1
    local.set $3
    local.get $3
-   i64.const 2
-   i64.lt_u
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<u64>|inlined.1
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_u
-   local.set $9
-   block $break|20
-    loop $continue|20
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       local.set $9
-      end
-      br $continue|20
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $11
-   i64.const 0
-   local.set $10
-   block $break|21
-    loop $continue|21
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $10
-       i64.const 1
-       i64.shl
-       local.set $10
-       local.get $10
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $11
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $10
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|21
-     end
-    end
-   end
-   local.get $10
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<u64>|inlined.1
   end
   i64.const 1
@@ -44638,91 +43887,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i16>|inlined.2
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $5
-   block $break|22
-    loop $continue|22
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.const 16
-       i32.shl
-       i32.const 16
-       i32.shr_s
-       i32.shr_s
-       local.set $5
-      end
-      br $continue|22
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|23
-    loop $continue|23
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|23
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i16>|inlined.2
   end
   i32.const 16
@@ -44755,87 +43920,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i32>|inlined.2
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $2
-   block $break|24
-    loop $continue|24
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.shr_s
-       local.set $2
-      end
-      br $continue|24
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|25
-    loop $continue|25
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|25
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i32>|inlined.2
   end
   i32.const 1
@@ -44853,87 +43938,7 @@
    i32.const 2
    local.set $0
    local.get $0
-   i32.const 2
-   i32.lt_u
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<u32>|inlined.2
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_u
-   local.set $5
-   block $break|26
-    loop $continue|26
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.shr_u
-       local.set $5
-      end
-      br $continue|26
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|27
-    loop $continue|27
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|27
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<u32>|inlined.2
   end
   i32.const 1
@@ -44962,94 +43967,7 @@
     unreachable
    end
    local.get $3
-   i64.const 2
-   i64.lt_s
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<i64>|inlined.2
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_s
-   local.set $9
-   block $break|28
-    loop $continue|28
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_s
-       local.set $9
-      end
-      br $continue|28
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $10
-   i64.const 0
-   local.set $11
-   block $break|29
-    loop $continue|29
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $11
-       i64.const 1
-       i64.shl
-       local.set $11
-       local.get $11
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $10
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $11
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|29
-     end
-    end
-   end
-   local.get $11
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<i64>|inlined.2
   end
   i64.const 1
@@ -45067,94 +43985,7 @@
    i64.const 2
    local.set $3
    local.get $3
-   i64.const 2
-   i64.lt_u
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<u64>|inlined.2
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_u
-   local.set $9
-   block $break|30
-    loop $continue|30
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       local.set $9
-      end
-      br $continue|30
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $11
-   i64.const 0
-   local.set $10
-   block $break|31
-    loop $continue|31
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $10
-       i64.const 1
-       i64.shl
-       local.set $10
-       local.get $10
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $11
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $10
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|31
-     end
-    end
-   end
-   local.get $10
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<u64>|inlined.2
   end
   i64.const 1
@@ -45183,91 +44014,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i16>|inlined.3
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $2
-   block $break|32
-    loop $continue|32
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.const 16
-       i32.shl
-       i32.const 16
-       i32.shr_s
-       i32.shr_s
-       local.set $2
-      end
-      br $continue|32
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|33
-    loop $continue|33
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|33
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i16>|inlined.3
   end
   i32.const 16
@@ -45300,87 +44047,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i32>|inlined.3
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $5
-   block $break|34
-    loop $continue|34
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.shr_s
-       local.set $5
-      end
-      br $continue|34
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|35
-    loop $continue|35
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|35
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i32>|inlined.3
   end
   i32.const 1
@@ -45398,87 +44065,7 @@
    i32.const 3
    local.set $0
    local.get $0
-   i32.const 2
-   i32.lt_u
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<u32>|inlined.3
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_u
-   local.set $2
-   block $break|36
-    loop $continue|36
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.shr_u
-       local.set $2
-      end
-      br $continue|36
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|37
-    loop $continue|37
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|37
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<u32>|inlined.3
   end
   i32.const 1
@@ -45507,94 +44094,7 @@
     unreachable
    end
    local.get $3
-   i64.const 2
-   i64.lt_s
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<i64>|inlined.3
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_s
-   local.set $9
-   block $break|38
-    loop $continue|38
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_s
-       local.set $9
-      end
-      br $continue|38
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $10
-   i64.const 0
-   local.set $11
-   block $break|39
-    loop $continue|39
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $11
-       i64.const 1
-       i64.shl
-       local.set $11
-       local.get $11
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $10
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $11
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|39
-     end
-    end
-   end
-   local.get $11
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<i64>|inlined.3
   end
   i64.const 1
@@ -45612,94 +44112,7 @@
    i64.const 3
    local.set $3
    local.get $3
-   i64.const 2
-   i64.lt_u
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<u64>|inlined.3
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_u
-   local.set $9
-   block $break|40
-    loop $continue|40
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       local.set $9
-      end
-      br $continue|40
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $11
-   i64.const 0
-   local.set $10
-   block $break|41
-    loop $continue|41
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $10
-       i64.const 1
-       i64.shl
-       local.set $10
-       local.get $10
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $11
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $10
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|41
-     end
-    end
-   end
-   local.get $10
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<u64>|inlined.3
   end
   i64.const 1
@@ -45728,91 +44141,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i16>|inlined.4
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $5
-   block $break|42
-    loop $continue|42
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.const 16
-       i32.shl
-       i32.const 16
-       i32.shr_s
-       i32.shr_s
-       local.set $5
-      end
-      br $continue|42
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|43
-    loop $continue|43
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|43
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i16>|inlined.4
   end
   i32.const 16
@@ -45845,87 +44174,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i32>|inlined.4
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $2
-   block $break|44
-    loop $continue|44
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.shr_s
-       local.set $2
-      end
-      br $continue|44
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|45
-    loop $continue|45
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|45
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i32>|inlined.4
   end
   i32.const 2
@@ -45943,87 +44192,7 @@
    i32.const 4
    local.set $0
    local.get $0
-   i32.const 2
-   i32.lt_u
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<u32>|inlined.4
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_u
-   local.set $5
-   block $break|46
-    loop $continue|46
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.shr_u
-       local.set $5
-      end
-      br $continue|46
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|47
-    loop $continue|47
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|47
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<u32>|inlined.4
   end
   i32.const 2
@@ -46052,94 +44221,7 @@
     unreachable
    end
    local.get $3
-   i64.const 2
-   i64.lt_s
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<i64>|inlined.4
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_s
-   local.set $9
-   block $break|48
-    loop $continue|48
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_s
-       local.set $9
-      end
-      br $continue|48
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $10
-   i64.const 0
-   local.set $11
-   block $break|49
-    loop $continue|49
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $11
-       i64.const 1
-       i64.shl
-       local.set $11
-       local.get $11
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $10
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $11
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|49
-     end
-    end
-   end
-   local.get $11
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<i64>|inlined.4
   end
   i64.const 2
@@ -46157,94 +44239,7 @@
    i64.const 4
    local.set $3
    local.get $3
-   i64.const 2
-   i64.lt_u
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<u64>|inlined.4
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_u
-   local.set $9
-   block $break|50
-    loop $continue|50
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       local.set $9
-      end
-      br $continue|50
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $11
-   i64.const 0
-   local.set $10
-   block $break|51
-    loop $continue|51
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $10
-       i64.const 1
-       i64.shl
-       local.set $10
-       local.get $10
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $11
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $10
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|51
-     end
-    end
-   end
-   local.get $10
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<u64>|inlined.4
   end
   i64.const 2
@@ -46273,91 +44268,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i16>|inlined.5
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $2
-   block $break|52
-    loop $continue|52
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.const 16
-       i32.shl
-       i32.const 16
-       i32.shr_s
-       i32.shr_s
-       local.set $2
-      end
-      br $continue|52
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|53
-    loop $continue|53
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|53
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i16>|inlined.5
   end
   i32.const 16
@@ -46381,97 +44292,7 @@
    local.get $0
    i32.const 65535
    i32.and
-   i32.const 2
-   i32.lt_u
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<u16>|inlined.0
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 65535
-   i32.and
-   i32.const 2
-   i32.shr_u
-   local.set $5
-   block $break|54
-    loop $continue|54
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.const 65535
-      i32.and
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       i32.const 65535
-       i32.and
-       local.get $2
-       i32.const 65535
-       i32.and
-       i32.shr_u
-       local.set $5
-      end
-      br $continue|54
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   i32.const 65535
-   i32.and
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|55
-    loop $continue|55
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|55
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<u16>|inlined.0
   end
   i32.const 65535
@@ -46502,87 +44323,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i32>|inlined.5
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $2
-   block $break|56
-    loop $continue|56
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.shr_s
-       local.set $2
-      end
-      br $continue|56
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|57
-    loop $continue|57
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|57
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i32>|inlined.5
   end
   i32.const 181
@@ -46600,87 +44341,7 @@
    global.get $~lib/builtins/i16.MAX_VALUE
    local.set $0
    local.get $0
-   i32.const 2
-   i32.lt_u
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<u32>|inlined.5
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_u
-   local.set $5
-   block $break|58
-    loop $continue|58
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.shr_u
-       local.set $5
-      end
-      br $continue|58
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|59
-    loop $continue|59
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|59
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<u32>|inlined.5
   end
   i32.const 181
@@ -46698,89 +44359,7 @@
    global.get $~lib/builtins/u16.MAX_VALUE
    local.set $0
    local.get $0
-   i32.const 2
-   i32.lt_u
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<u16>|inlined.1
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_u
-   local.set $2
-   block $break|60
-    loop $continue|60
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.const 65535
-       i32.and
-       i32.shr_u
-       local.set $2
-      end
-      br $continue|60
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|61
-    loop $continue|61
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|61
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<u16>|inlined.1
   end
   i32.const 65535
@@ -46811,87 +44390,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
-   i32.lt_s
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<i32>|inlined.6
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_s
-   local.set $5
-   block $break|62
-    loop $continue|62
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.shr_s
-       local.set $5
-      end
-      br $continue|62
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|63
-    loop $continue|63
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|63
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<i32>|inlined.6
   end
   i32.const 46340
@@ -46909,87 +44408,7 @@
    global.get $~lib/builtins/i32.MAX_VALUE
    local.set $0
    local.get $0
-   i32.const 2
-   i32.lt_u
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<u32>|inlined.6
-   end
-   i32.const 2
-   local.set $5
-   local.get $0
-   i32.const 2
-   i32.shr_u
-   local.set $2
-   block $break|64
-    loop $continue|64
-     local.get $2
-     if (result i32)
-      local.get $2
-      local.get $0
-      i32.ne
-     else      
-      local.get $2
-     end
-     if
-      block
-       local.get $5
-       i32.const 2
-       i32.add
-       local.set $5
-       local.get $0
-       local.get $5
-       i32.shr_u
-       local.set $2
-      end
-      br $continue|64
-     end
-    end
-   end
-   local.get $5
-   i32.const 2
-   i32.sub
-   local.set $5
-   local.get $0
-   local.set $7
-   i32.const 0
-   local.set $6
-   block $break|65
-    loop $continue|65
-     local.get $5
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $6
-       i32.const 1
-       i32.shl
-       local.set $6
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $7
-       local.get $5
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $6
-       end
-       local.get $5
-       i32.const 2
-       i32.sub
-       local.set $5
-      end
-      br $continue|65
-     end
-    end
-   end
-   local.get $6
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<u32>|inlined.6
   end
   i32.const 46340
@@ -47007,87 +44426,7 @@
    global.get $~lib/builtins/u32.MAX_VALUE
    local.set $0
    local.get $0
-   i32.const 2
-   i32.lt_u
-   if
-    local.get $0
-    br $~lib/math/IntegerMath.sqrt<u32>|inlined.7
-   end
-   i32.const 2
-   local.set $2
-   local.get $0
-   i32.const 2
-   i32.shr_u
-   local.set $5
-   block $break|66
-    loop $continue|66
-     local.get $5
-     if (result i32)
-      local.get $5
-      local.get $0
-      i32.ne
-     else      
-      local.get $5
-     end
-     if
-      block
-       local.get $2
-       i32.const 2
-       i32.add
-       local.set $2
-       local.get $0
-       local.get $2
-       i32.shr_u
-       local.set $5
-      end
-      br $continue|66
-     end
-    end
-   end
-   local.get $2
-   i32.const 2
-   i32.sub
-   local.set $2
-   local.get $0
-   local.set $6
-   i32.const 0
-   local.set $7
-   block $break|67
-    loop $continue|67
-     local.get $2
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $7
-       i32.const 1
-       i32.shl
-       local.set $7
-       local.get $7
-       i32.const 1
-       i32.add
-       local.set $8
-       local.get $8
-       local.get $8
-       i32.mul
-       local.get $6
-       local.get $2
-       i32.shr_u
-       i32.le_u
-       if
-        local.get $8
-        local.set $7
-       end
-       local.get $2
-       i32.const 2
-       i32.sub
-       local.set $2
-      end
-      br $continue|67
-     end
-    end
-   end
-   local.get $7
+   call $~lib/math/isqrt32
    br $~lib/math/IntegerMath.sqrt<u32>|inlined.7
   end
   i32.const 65535
@@ -47116,94 +44455,7 @@
     unreachable
    end
    local.get $3
-   i64.const 2
-   i64.lt_s
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<i64>|inlined.5
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_s
-   local.set $9
-   block $break|68
-    loop $continue|68
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_s
-       local.set $9
-      end
-      br $continue|68
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $10
-   i64.const 0
-   local.set $11
-   block $break|69
-    loop $continue|69
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $11
-       i64.const 1
-       i64.shl
-       local.set $11
-       local.get $11
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $10
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $11
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|69
-     end
-    end
-   end
-   local.get $11
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<i64>|inlined.5
   end
   i64.const 3037000499
@@ -47221,94 +44473,7 @@
    global.get $~lib/builtins/i64.MAX_VALUE
    local.set $3
    local.get $3
-   i64.const 2
-   i64.lt_u
-   if
-    local.get $3
-    br $~lib/math/IntegerMath.sqrt<u64>|inlined.5
-   end
-   i32.const 2
-   local.set $0
-   local.get $3
-   i64.const 2
-   i64.shr_u
-   local.set $9
-   block $break|70
-    loop $continue|70
-     local.get $9
-     i64.const 0
-     i64.ne
-     if (result i64)
-      local.get $9
-      local.get $3
-      i64.ne
-      i64.extend_i32_u
-     else      
-      local.get $9
-     end
-     i64.const 0
-     i64.ne
-     if
-      block
-       local.get $0
-       i32.const 2
-       i32.add
-       local.set $0
-       local.get $3
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       local.set $9
-      end
-      br $continue|70
-     end
-    end
-   end
-   local.get $0
-   i32.const 2
-   i32.sub
-   local.set $0
-   local.get $3
-   local.set $11
-   i64.const 0
-   local.set $10
-   block $break|71
-    loop $continue|71
-     local.get $0
-     i32.const 0
-     i32.ge_s
-     if
-      block
-       local.get $10
-       i64.const 1
-       i64.shl
-       local.set $10
-       local.get $10
-       i64.const 1
-       i64.add
-       local.set $12
-       local.get $12
-       local.get $12
-       i64.mul
-       local.get $11
-       local.get $0
-       i64.extend_i32_s
-       i64.shr_u
-       i64.le_u
-       if
-        local.get $12
-        local.set $10
-       end
-       local.get $0
-       i32.const 2
-       i32.sub
-       local.set $0
-      end
-      br $continue|71
-     end
-    end
-   end
-   local.get $10
+   call $~lib/math/isqrt64
    br $~lib/math/IntegerMath.sqrt<u64>|inlined.5
   end
   i64.const 3037000499
@@ -48203,6 +45368,6 @@
    unreachable
   end
  )
- (func $null (; 168 ;) (type $_)
+ (func $null (; 170 ;) (type $_)
  )
 )

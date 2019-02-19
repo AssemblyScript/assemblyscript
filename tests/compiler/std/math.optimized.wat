@@ -14,6 +14,7 @@
  (type $fff (func (param f32 f32) (result f32)))
  (type $F (func (result f64)))
  (type $I_ (func (param i64)))
+ (type $II (func (param i64) (result i64)))
  (type $ii (func (param i32) (result i32)))
  (type $f (func (result f32)))
  (type $IiI (func (param i64 i32) (result i64)))
@@ -28,7 +29,6 @@
  (type $FUNCSIG$iffi (func (param f32 f32 i32) (result i32)))
  (type $FUNCSIG$idddi (func (param f64 f64 f64 i32) (result i32)))
  (type $FUNCSIG$ifffi (func (param f32 f32 f32 i32) (result i32)))
- (type $FUNCSIG$j (func (result i64)))
  (import "Math" "E" (global $~lib/bindings/Math/E f64))
  (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
  (import "Math" "LN10" (global $~lib/bindings/Math/LN10 f64))
@@ -9223,75 +9223,158 @@
   i32.mul
   f64.convert_i32_s
  )
- (func $~lib/math/IntegerMath.sqrt<u64> (; 146 ;) (type $FUNCSIG$j) (result i64)
-  (local $0 i32)
-  (local $1 i64)
-  (local $2 i64)
+ (func $~lib/math/isqrt32 (; 146 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
   i32.const 2
-  local.set $0
-  i64.const 4611686018427387903
+  i32.lt_u
+  if
+   local.get $0
+   return
+  end
+  i32.const 2
   local.set $1
+  local.get $0
+  i32.const 2
+  i32.shr_u
+  local.set $2
   loop $continue|0
-   local.get $1
-   i64.const -1
-   i64.ne
-   i64.extend_i32_u
-   local.get $1
-   local.get $1
-   i64.const 0
-   i64.ne
-   select
-   i64.const 0
-   i64.ne
+   local.get $2
    if
-    i64.const -1
     local.get $0
+    local.get $2
+    i32.ne
+    local.set $2
+   end
+   local.get $2
+   if
+    local.get $0
+    local.get $1
     i32.const 2
     i32.add
-    local.tee $0
-    i64.extend_i32_s
-    i64.shr_u
-    local.set $1
+    local.tee $1
+    i32.shr_u
+    local.set $2
     br $continue|0
    end
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.sub
-  local.set $0
+  local.set $1
   loop $continue|1
-   local.get $0
+   local.get $1
    i32.const 0
    i32.ge_s
    if
+    local.get $3
+    i32.const 1
+    i32.shl
+    local.tee $3
+    i32.const 1
+    i32.add
+    local.tee $2
     local.get $2
+    i32.mul
+    local.get $0
+    local.get $1
+    i32.shr_u
+    i32.le_u
+    if
+     local.get $2
+     local.set $3
+    end
+    local.get $1
+    i32.const 2
+    i32.sub
+    local.set $1
+    br $continue|1
+   end
+  end
+  local.get $3
+ )
+ (func $~lib/math/isqrt64 (; 147 ;) (type $II) (param $0 i64) (result i64)
+  (local $1 i32)
+  (local $2 i64)
+  (local $3 i64)
+  local.get $0
+  i64.const 2
+  i64.lt_u
+  if
+   local.get $0
+   return
+  end
+  i32.const 2
+  local.set $1
+  local.get $0
+  i64.const 2
+  i64.shr_u
+  local.set $2
+  loop $continue|0
+   local.get $2
+   i64.const 0
+   i64.ne
+   if
+    local.get $0
+    local.get $2
+    i64.ne
+    i64.extend_i32_u
+    local.set $2
+   end
+   local.get $2
+   i64.const 0
+   i64.ne
+   if
+    local.get $0
+    local.get $1
+    i32.const 2
+    i32.add
+    local.tee $1
+    i64.extend_i32_s
+    i64.shr_u
+    local.set $2
+    br $continue|0
+   end
+  end
+  local.get $1
+  i32.const 2
+  i32.sub
+  local.set $1
+  loop $continue|1
+   local.get $1
+   i32.const 0
+   i32.ge_s
+   if
+    local.get $3
     i64.const 1
     i64.shl
-    local.tee $2
+    local.tee $3
     i64.const 1
     i64.add
-    local.tee $1
-    local.get $1
+    local.tee $2
+    local.get $2
     i64.mul
-    i64.const -1
     local.get $0
+    local.get $1
     i64.extend_i32_s
     i64.shr_u
     i64.le_u
     if
-     local.get $1
-     local.set $2
+     local.get $2
+     local.set $3
     end
-    local.get $0
+    local.get $1
     i32.const 2
     i32.sub
-    local.set $0
+    local.set $1
     br $continue|1
    end
   end
-  local.get $2
+  local.get $3
  )
- (func $~lib/math/ipow64 (; 147 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 148 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   i64.const 1
@@ -9487,7 +9570,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 148 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/ipow32f (; 149 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
   local.get $1
@@ -9533,7 +9616,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow64f (; 149 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/ipow64f (; 150 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   local.get $1
@@ -9579,14 +9662,11 @@
   end
   local.get $2
  )
- (func $start (; 150 ;) (type $_)
-  (local $0 i32)
-  (local $1 i32)
+ (func $start (; 151 ;) (type $_)
+  (local $0 f64)
+  (local $1 f32)
   (local $2 i32)
-  (local $3 i64)
-  (local $4 i64)
-  (local $5 f64)
-  (local $6 f32)
+  (local $3 i32)
   f64.const 2.718281828459045
   global.get $~lib/bindings/Math/E
   f64.const 0
@@ -31506,16 +31586,16 @@
    f64.lt
    if
     call $~lib/math/NativeMath.random
-    local.tee $5
+    local.tee $0
     f64.const 0
     f64.ge
-    local.tee $0
+    local.tee $3
     if (result i32)
-     local.get $5
+     local.get $0
      f64.const 1
      f64.lt
     else     
-     local.get $0
+     local.get $3
     end
     if
      local.get $2
@@ -31546,16 +31626,16 @@
    f64.lt
    if
     call $~lib/math/NativeMathf.random
-    local.tee $6
+    local.tee $1
     f32.const 0
     f32.ge
-    local.tee $0
+    local.tee $3
     if (result i32)
-     local.get $6
+     local.get $1
      f32.const 1
      f32.lt
     else     
-     local.get $0
+     local.get $3
     end
     if
      local.get $2
@@ -37918,66 +37998,126 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $0
-  loop $continue|22
-   local.get $1
-   i32.const 2
-   i32.ne
-   local.get $1
-   local.get $1
-   select
-   if
-    i32.const 2
-    local.get $0
-    i32.const 2
-    i32.add
-    local.tee $0
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
-    i32.shr_s
-    local.set $1
-    br $continue|22
-   end
-  end
-  local.get $0
-  i32.const 2
-  i32.sub
-  local.set $0
   i32.const 0
-  local.set $1
-  loop $continue|23
-   local.get $0
+  call $~lib/math/isqrt32
+  i32.const 65535
+  i32.and
+  if
    i32.const 0
-   i32.ge_s
-   if
-    local.get $1
-    i32.const 1
-    i32.shl
-    local.tee $1
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 2
-    local.get $0
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $1
-    end
-    local.get $0
-    i32.const 2
-    i32.sub
-    local.set $0
-    br $continue|23
-   end
+   i32.const 8
+   i32.const 3350
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
   end
-  local.get $1
+  i32.const 0
+  call $~lib/math/isqrt32
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3351
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 0
+  call $~lib/math/isqrt32
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3352
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i64.const 0
+  call $~lib/math/isqrt64
+  i64.const 0
+  i64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3353
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i64.const 0
+  call $~lib/math/isqrt64
+  i64.const 0
+  i64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3354
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  call $~lib/math/isqrt32
+  i32.const 65535
+  i32.and
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3355
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  call $~lib/math/isqrt32
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3356
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 1
+  call $~lib/math/isqrt32
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3357
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i64.const 1
+  call $~lib/math/isqrt64
+  i64.const 1
+  i64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3358
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i64.const 1
+  call $~lib/math/isqrt64
+  i64.const 1
+  i64.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3359
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 2
+  call $~lib/math/isqrt32
   i32.const 65535
   i32.and
   i32.const 1
@@ -37991,63 +38131,7 @@
    unreachable
   end
   i32.const 2
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|24
-   local.get $0
-   i32.const 2
-   i32.ne
-   local.get $0
-   local.get $0
-   select
-   if
-    i32.const 2
-    local.get $1
-    i32.const 2
-    i32.add
-    local.tee $1
-    i32.shr_s
-    local.set $0
-    br $continue|24
-   end
-  end
-  local.get $1
-  i32.const 2
-  i32.sub
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|25
-   local.get $1
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $0
-    i32.const 1
-    i32.shl
-    local.tee $0
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 2
-    local.get $1
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $0
-    end
-    local.get $1
-    i32.const 2
-    i32.sub
-    local.set $1
-    br $continue|25
-   end
-  end
-  local.get $0
+  call $~lib/math/isqrt32
   i32.const 1
   i32.ne
   if
@@ -38059,63 +38143,7 @@
    unreachable
   end
   i32.const 2
-  local.set $0
-  i32.const 0
-  local.set $1
-  loop $continue|26
-   local.get $1
-   i32.const 2
-   i32.ne
-   local.get $1
-   local.get $1
-   select
-   if
-    i32.const 2
-    local.get $0
-    i32.const 2
-    i32.add
-    local.tee $0
-    i32.shr_u
-    local.set $1
-    br $continue|26
-   end
-  end
-  local.get $0
-  i32.const 2
-  i32.sub
-  local.set $0
-  i32.const 0
-  local.set $1
-  loop $continue|27
-   local.get $0
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $1
-    i32.const 1
-    i32.shl
-    local.tee $1
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 2
-    local.get $0
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $1
-    end
-    local.get $0
-    i32.const 2
-    i32.sub
-    local.set $0
-    br $continue|27
-   end
-  end
-  local.get $1
+  call $~lib/math/isqrt32
   i32.const 1
   i32.ne
   if
@@ -38126,67 +38154,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $2
-  loop $continue|28
-   local.get $3
-   i64.const 2
-   i64.ne
-   i64.extend_i32_u
-   local.get $3
-   local.get $3
-   i64.const 0
-   i64.ne
-   select
-   i64.const 0
-   i64.ne
-   if
-    i64.const 2
-    local.get $2
-    i32.const 2
-    i32.add
-    local.tee $2
-    i64.extend_i32_s
-    i64.shr_s
-    local.set $3
-    br $continue|28
-   end
-  end
-  local.get $2
-  i32.const 2
-  i32.sub
-  local.set $2
-  loop $continue|29
-   local.get $2
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $4
-    i64.const 1
-    i64.shl
-    local.tee $4
-    i64.const 1
-    i64.add
-    local.tee $3
-    local.get $3
-    i64.mul
-    i64.const 2
-    local.get $2
-    i64.extend_i32_s
-    i64.shr_u
-    i64.le_u
-    if
-     local.get $3
-     local.set $4
-    end
-    local.get $2
-    i32.const 2
-    i32.sub
-    local.set $2
-    br $continue|29
-   end
-  end
-  local.get $4
+  i64.const 2
+  call $~lib/math/isqrt64
   i64.const 1
   i64.ne
   if
@@ -38197,71 +38166,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $2
-  i64.const 0
-  local.set $3
-  loop $continue|30
-   local.get $3
-   i64.const 2
-   i64.ne
-   i64.extend_i32_u
-   local.get $3
-   local.get $3
-   i64.const 0
-   i64.ne
-   select
-   i64.const 0
-   i64.ne
-   if
-    i64.const 2
-    local.get $2
-    i32.const 2
-    i32.add
-    local.tee $2
-    i64.extend_i32_s
-    i64.shr_u
-    local.set $3
-    br $continue|30
-   end
-  end
-  local.get $2
-  i32.const 2
-  i32.sub
-  local.set $2
-  i64.const 0
-  local.set $4
-  loop $continue|31
-   local.get $2
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $4
-    i64.const 1
-    i64.shl
-    local.tee $4
-    i64.const 1
-    i64.add
-    local.tee $3
-    local.get $3
-    i64.mul
-    i64.const 2
-    local.get $2
-    i64.extend_i32_s
-    i64.shr_u
-    i64.le_u
-    if
-     local.get $3
-     local.set $4
-    end
-    local.get $2
-    i32.const 2
-    i32.sub
-    local.set $2
-    br $continue|31
-   end
-  end
-  local.get $4
+  i64.const 2
+  call $~lib/math/isqrt64
   i64.const 1
   i64.ne
   if
@@ -38272,68 +38178,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|32
-   local.get $0
-   i32.const 3
-   i32.ne
-   local.get $0
-   local.get $0
-   select
-   if
-    i32.const 3
-    local.get $1
-    i32.const 2
-    i32.add
-    local.tee $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
-    i32.shr_s
-    local.set $0
-    br $continue|32
-   end
-  end
-  local.get $1
-  i32.const 2
-  i32.sub
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|33
-   local.get $1
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $0
-    i32.const 1
-    i32.shl
-    local.tee $0
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 3
-    local.get $1
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $0
-    end
-    local.get $1
-    i32.const 2
-    i32.sub
-    local.set $1
-    br $continue|33
-   end
-  end
-  local.get $0
+  i32.const 3
+  call $~lib/math/isqrt32
   i32.const 65535
   i32.and
   i32.const 1
@@ -38346,64 +38192,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $0
-  i32.const 0
-  local.set $1
-  loop $continue|34
-   local.get $1
-   i32.const 3
-   i32.ne
-   local.get $1
-   local.get $1
-   select
-   if
-    i32.const 3
-    local.get $0
-    i32.const 2
-    i32.add
-    local.tee $0
-    i32.shr_s
-    local.set $1
-    br $continue|34
-   end
-  end
-  local.get $0
-  i32.const 2
-  i32.sub
-  local.set $0
-  i32.const 0
-  local.set $1
-  loop $continue|35
-   local.get $0
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $1
-    i32.const 1
-    i32.shl
-    local.tee $1
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 3
-    local.get $0
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $1
-    end
-    local.get $0
-    i32.const 2
-    i32.sub
-    local.set $0
-    br $continue|35
-   end
-  end
-  local.get $1
+  i32.const 3
+  call $~lib/math/isqrt32
   i32.const 1
   i32.ne
   if
@@ -38414,64 +38204,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|36
-   local.get $0
-   i32.const 3
-   i32.ne
-   local.get $0
-   local.get $0
-   select
-   if
-    i32.const 3
-    local.get $1
-    i32.const 2
-    i32.add
-    local.tee $1
-    i32.shr_u
-    local.set $0
-    br $continue|36
-   end
-  end
-  local.get $1
-  i32.const 2
-  i32.sub
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|37
-   local.get $1
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $0
-    i32.const 1
-    i32.shl
-    local.tee $0
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 3
-    local.get $1
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $0
-    end
-    local.get $1
-    i32.const 2
-    i32.sub
-    local.set $1
-    br $continue|37
-   end
-  end
-  local.get $0
+  i32.const 3
+  call $~lib/math/isqrt32
   i32.const 1
   i32.ne
   if
@@ -38482,71 +38216,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $2
-  i64.const 0
-  local.set $3
-  loop $continue|38
-   local.get $3
-   i64.const 3
-   i64.ne
-   i64.extend_i32_u
-   local.get $3
-   local.get $3
-   i64.const 0
-   i64.ne
-   select
-   i64.const 0
-   i64.ne
-   if
-    i64.const 3
-    local.get $2
-    i32.const 2
-    i32.add
-    local.tee $2
-    i64.extend_i32_s
-    i64.shr_s
-    local.set $3
-    br $continue|38
-   end
-  end
-  local.get $2
-  i32.const 2
-  i32.sub
-  local.set $2
-  i64.const 0
-  local.set $4
-  loop $continue|39
-   local.get $2
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $4
-    i64.const 1
-    i64.shl
-    local.tee $4
-    i64.const 1
-    i64.add
-    local.tee $3
-    local.get $3
-    i64.mul
-    i64.const 3
-    local.get $2
-    i64.extend_i32_s
-    i64.shr_u
-    i64.le_u
-    if
-     local.get $3
-     local.set $4
-    end
-    local.get $2
-    i32.const 2
-    i32.sub
-    local.set $2
-    br $continue|39
-   end
-  end
-  local.get $4
+  i64.const 3
+  call $~lib/math/isqrt64
   i64.const 1
   i64.ne
   if
@@ -38557,71 +38228,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $2
-  i64.const 0
-  local.set $3
-  loop $continue|40
-   local.get $3
-   i64.const 3
-   i64.ne
-   i64.extend_i32_u
-   local.get $3
-   local.get $3
-   i64.const 0
-   i64.ne
-   select
-   i64.const 0
-   i64.ne
-   if
-    i64.const 3
-    local.get $2
-    i32.const 2
-    i32.add
-    local.tee $2
-    i64.extend_i32_s
-    i64.shr_u
-    local.set $3
-    br $continue|40
-   end
-  end
-  local.get $2
-  i32.const 2
-  i32.sub
-  local.set $2
-  i64.const 0
-  local.set $4
-  loop $continue|41
-   local.get $2
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $4
-    i64.const 1
-    i64.shl
-    local.tee $4
-    i64.const 1
-    i64.add
-    local.tee $3
-    local.get $3
-    i64.mul
-    i64.const 3
-    local.get $2
-    i64.extend_i32_s
-    i64.shr_u
-    i64.le_u
-    if
-     local.get $3
-     local.set $4
-    end
-    local.get $2
-    i32.const 2
-    i32.sub
-    local.set $2
-    br $continue|41
-   end
-  end
-  local.get $4
+  i64.const 3
+  call $~lib/math/isqrt64
   i64.const 1
   i64.ne
   if
@@ -38632,68 +38240,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $0
-  i32.const 1
-  local.set $1
-  loop $continue|42
-   local.get $1
-   i32.const 4
-   i32.ne
-   local.get $1
-   local.get $1
-   select
-   if
-    i32.const 4
-    local.get $0
-    i32.const 2
-    i32.add
-    local.tee $0
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
-    i32.shr_s
-    local.set $1
-    br $continue|42
-   end
-  end
-  local.get $0
-  i32.const 2
-  i32.sub
-  local.set $0
-  i32.const 0
-  local.set $1
-  loop $continue|43
-   local.get $0
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $1
-    i32.const 1
-    i32.shl
-    local.tee $1
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 4
-    local.get $0
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $1
-    end
-    local.get $0
-    i32.const 2
-    i32.sub
-    local.set $0
-    br $continue|43
-   end
-  end
-  local.get $1
+  i32.const 4
+  call $~lib/math/isqrt32
   i32.const 65535
   i32.and
   i32.const 2
@@ -38706,64 +38254,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $1
-  i32.const 1
-  local.set $0
-  loop $continue|44
-   local.get $0
-   i32.const 4
-   i32.ne
-   local.get $0
-   local.get $0
-   select
-   if
-    i32.const 4
-    local.get $1
-    i32.const 2
-    i32.add
-    local.tee $1
-    i32.shr_s
-    local.set $0
-    br $continue|44
-   end
-  end
-  local.get $1
-  i32.const 2
-  i32.sub
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|45
-   local.get $1
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $0
-    i32.const 1
-    i32.shl
-    local.tee $0
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 4
-    local.get $1
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $0
-    end
-    local.get $1
-    i32.const 2
-    i32.sub
-    local.set $1
-    br $continue|45
-   end
-  end
-  local.get $0
+  i32.const 4
+  call $~lib/math/isqrt32
   i32.const 2
   i32.ne
   if
@@ -38774,64 +38266,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $0
-  i32.const 1
-  local.set $1
-  loop $continue|46
-   local.get $1
-   i32.const 4
-   i32.ne
-   local.get $1
-   local.get $1
-   select
-   if
-    i32.const 4
-    local.get $0
-    i32.const 2
-    i32.add
-    local.tee $0
-    i32.shr_u
-    local.set $1
-    br $continue|46
-   end
-  end
-  local.get $0
-  i32.const 2
-  i32.sub
-  local.set $0
-  i32.const 0
-  local.set $1
-  loop $continue|47
-   local.get $0
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $1
-    i32.const 1
-    i32.shl
-    local.tee $1
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 4
-    local.get $0
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $1
-    end
-    local.get $0
-    i32.const 2
-    i32.sub
-    local.set $0
-    br $continue|47
-   end
-  end
-  local.get $1
+  i32.const 4
+  call $~lib/math/isqrt32
   i32.const 2
   i32.ne
   if
@@ -38842,71 +38278,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $2
-  i64.const 1
-  local.set $3
-  loop $continue|48
-   local.get $3
-   i64.const 4
-   i64.ne
-   i64.extend_i32_u
-   local.get $3
-   local.get $3
-   i64.const 0
-   i64.ne
-   select
-   i64.const 0
-   i64.ne
-   if
-    i64.const 4
-    local.get $2
-    i32.const 2
-    i32.add
-    local.tee $2
-    i64.extend_i32_s
-    i64.shr_s
-    local.set $3
-    br $continue|48
-   end
-  end
-  local.get $2
-  i32.const 2
-  i32.sub
-  local.set $2
-  i64.const 0
-  local.set $4
-  loop $continue|49
-   local.get $2
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $4
-    i64.const 1
-    i64.shl
-    local.tee $4
-    i64.const 1
-    i64.add
-    local.tee $3
-    local.get $3
-    i64.mul
-    i64.const 4
-    local.get $2
-    i64.extend_i32_s
-    i64.shr_u
-    i64.le_u
-    if
-     local.get $3
-     local.set $4
-    end
-    local.get $2
-    i32.const 2
-    i32.sub
-    local.set $2
-    br $continue|49
-   end
-  end
-  local.get $4
+  i64.const 4
+  call $~lib/math/isqrt64
   i64.const 2
   i64.ne
   if
@@ -38917,71 +38290,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $2
-  i64.const 1
-  local.set $3
-  loop $continue|50
-   local.get $3
-   i64.const 4
-   i64.ne
-   i64.extend_i32_u
-   local.get $3
-   local.get $3
-   i64.const 0
-   i64.ne
-   select
-   i64.const 0
-   i64.ne
-   if
-    i64.const 4
-    local.get $2
-    i32.const 2
-    i32.add
-    local.tee $2
-    i64.extend_i32_s
-    i64.shr_u
-    local.set $3
-    br $continue|50
-   end
-  end
-  local.get $2
-  i32.const 2
-  i32.sub
-  local.set $2
-  i64.const 0
-  local.set $4
-  loop $continue|51
-   local.get $2
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $4
-    i64.const 1
-    i64.shl
-    local.tee $4
-    i64.const 1
-    i64.add
-    local.tee $3
-    local.get $3
-    i64.mul
-    i64.const 4
-    local.get $2
-    i64.extend_i32_s
-    i64.shr_u
-    i64.le_u
-    if
-     local.get $3
-     local.set $4
-    end
-    local.get $2
-    i32.const 2
-    i32.sub
-    local.set $2
-    br $continue|51
-   end
-  end
-  local.get $4
+  i64.const 4
+  call $~lib/math/isqrt64
   i64.const 2
   i64.ne
   if
@@ -38992,68 +38302,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $1
-  i32.const 8191
-  local.set $0
-  loop $continue|52
-   local.get $0
-   i32.const 32767
-   i32.ne
-   local.get $0
-   local.get $0
-   select
-   if
-    i32.const 32767
-    local.get $1
-    i32.const 2
-    i32.add
-    local.tee $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
-    i32.shr_s
-    local.set $0
-    br $continue|52
-   end
-  end
-  local.get $1
-  i32.const 2
-  i32.sub
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|53
-   local.get $1
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $0
-    i32.const 1
-    i32.shl
-    local.tee $0
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 32767
-    local.get $1
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $0
-    end
-    local.get $1
-    i32.const 2
-    i32.sub
-    local.set $1
-    br $continue|53
-   end
-  end
-  local.get $0
+  i32.const 32767
+  call $~lib/math/isqrt32
   i32.const 65535
   i32.and
   i32.const 181
@@ -39066,66 +38316,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $0
-  i32.const 8191
-  local.set $1
-  loop $continue|54
-   local.get $1
-   i32.const 32767
-   i32.ne
-   local.get $1
-   local.get $1
-   select
-   if
-    i32.const 32767
-    local.get $0
-    i32.const 2
-    i32.add
-    local.tee $0
-    i32.const 65535
-    i32.and
-    i32.shr_u
-    local.set $1
-    br $continue|54
-   end
-  end
-  local.get $0
-  i32.const 2
-  i32.sub
-  local.set $0
-  i32.const 0
-  local.set $1
-  loop $continue|55
-   local.get $0
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $1
-    i32.const 1
-    i32.shl
-    local.tee $1
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 32767
-    local.get $0
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $1
-    end
-    local.get $0
-    i32.const 2
-    i32.sub
-    local.set $0
-    br $continue|55
-   end
-  end
-  local.get $1
+  i32.const 32767
+  call $~lib/math/isqrt32
   i32.const 65535
   i32.and
   i32.const 181
@@ -39138,64 +38330,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $1
-  i32.const 8191
-  local.set $0
-  loop $continue|56
-   local.get $0
-   i32.const 32767
-   i32.ne
-   local.get $0
-   local.get $0
-   select
-   if
-    i32.const 32767
-    local.get $1
-    i32.const 2
-    i32.add
-    local.tee $1
-    i32.shr_s
-    local.set $0
-    br $continue|56
-   end
-  end
-  local.get $1
-  i32.const 2
-  i32.sub
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|57
-   local.get $1
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $0
-    i32.const 1
-    i32.shl
-    local.tee $0
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 32767
-    local.get $1
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $0
-    end
-    local.get $1
-    i32.const 2
-    i32.sub
-    local.set $1
-    br $continue|57
-   end
-  end
-  local.get $0
+  i32.const 32767
+  call $~lib/math/isqrt32
   i32.const 181
   i32.ne
   if
@@ -39206,64 +38342,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $0
-  i32.const 8191
-  local.set $1
-  loop $continue|58
-   local.get $1
-   i32.const 32767
-   i32.ne
-   local.get $1
-   local.get $1
-   select
-   if
-    i32.const 32767
-    local.get $0
-    i32.const 2
-    i32.add
-    local.tee $0
-    i32.shr_u
-    local.set $1
-    br $continue|58
-   end
-  end
-  local.get $0
-  i32.const 2
-  i32.sub
-  local.set $0
-  i32.const 0
-  local.set $1
-  loop $continue|59
-   local.get $0
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $1
-    i32.const 1
-    i32.shl
-    local.tee $1
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 32767
-    local.get $0
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $1
-    end
-    local.get $0
-    i32.const 2
-    i32.sub
-    local.set $0
-    br $continue|59
-   end
-  end
-  local.get $1
+  i32.const 32767
+  call $~lib/math/isqrt32
   i32.const 181
   i32.ne
   if
@@ -39274,66 +38354,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $1
-  i32.const 16383
-  local.set $0
-  loop $continue|60
-   local.get $0
-   i32.const 65535
-   i32.ne
-   local.get $0
-   local.get $0
-   select
-   if
-    i32.const 65535
-    local.get $1
-    i32.const 2
-    i32.add
-    local.tee $1
-    i32.const 65535
-    i32.and
-    i32.shr_u
-    local.set $0
-    br $continue|60
-   end
-  end
-  local.get $1
-  i32.const 2
-  i32.sub
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|61
-   local.get $1
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $0
-    i32.const 1
-    i32.shl
-    local.tee $0
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 65535
-    local.get $1
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $0
-    end
-    local.get $1
-    i32.const 2
-    i32.sub
-    local.set $1
-    br $continue|61
-   end
-  end
-  local.get $0
+  i32.const 65535
+  call $~lib/math/isqrt32
   i32.const 65535
   i32.and
   i32.const 255
@@ -39346,64 +38368,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $0
-  i32.const 536870911
-  local.set $1
-  loop $continue|62
-   local.get $1
-   i32.const 2147483647
-   i32.ne
-   local.get $1
-   local.get $1
-   select
-   if
-    i32.const 2147483647
-    local.get $0
-    i32.const 2
-    i32.add
-    local.tee $0
-    i32.shr_s
-    local.set $1
-    br $continue|62
-   end
-  end
-  local.get $0
-  i32.const 2
-  i32.sub
-  local.set $0
-  i32.const 0
-  local.set $1
-  loop $continue|63
-   local.get $0
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $1
-    i32.const 1
-    i32.shl
-    local.tee $1
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 2147483647
-    local.get $0
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $1
-    end
-    local.get $0
-    i32.const 2
-    i32.sub
-    local.set $0
-    br $continue|63
-   end
-  end
-  local.get $1
+  i32.const 2147483647
+  call $~lib/math/isqrt32
   i32.const 46340
   i32.ne
   if
@@ -39414,64 +38380,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $1
-  i32.const 536870911
-  local.set $0
-  loop $continue|64
-   local.get $0
-   i32.const 2147483647
-   i32.ne
-   local.get $0
-   local.get $0
-   select
-   if
-    i32.const 2147483647
-    local.get $1
-    i32.const 2
-    i32.add
-    local.tee $1
-    i32.shr_u
-    local.set $0
-    br $continue|64
-   end
-  end
-  local.get $1
-  i32.const 2
-  i32.sub
-  local.set $1
-  i32.const 0
-  local.set $0
-  loop $continue|65
-   local.get $1
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $0
-    i32.const 1
-    i32.shl
-    local.tee $0
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const 2147483647
-    local.get $1
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $0
-    end
-    local.get $1
-    i32.const 2
-    i32.sub
-    local.set $1
-    br $continue|65
-   end
-  end
-  local.get $0
+  i32.const 2147483647
+  call $~lib/math/isqrt32
   i32.const 46340
   i32.ne
   if
@@ -39482,64 +38392,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $0
-  i32.const 1073741823
-  local.set $1
-  loop $continue|66
-   local.get $1
-   i32.const -1
-   i32.ne
-   local.get $1
-   local.get $1
-   select
-   if
-    i32.const -1
-    local.get $0
-    i32.const 2
-    i32.add
-    local.tee $0
-    i32.shr_u
-    local.set $1
-    br $continue|66
-   end
-  end
-  local.get $0
-  i32.const 2
-  i32.sub
-  local.set $0
-  i32.const 0
-  local.set $1
-  loop $continue|67
-   local.get $0
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $1
-    i32.const 1
-    i32.shl
-    local.tee $1
-    i32.const 1
-    i32.add
-    local.tee $2
-    local.get $2
-    i32.mul
-    i32.const -1
-    local.get $0
-    i32.shr_u
-    i32.le_u
-    if
-     local.get $2
-     local.set $1
-    end
-    local.get $0
-    i32.const 2
-    i32.sub
-    local.set $0
-    br $continue|67
-   end
-  end
-  local.get $1
+  i32.const -1
+  call $~lib/math/isqrt32
   i32.const 65535
   i32.ne
   if
@@ -39550,71 +38404,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $2
-  i64.const 2305843009213693951
-  local.set $3
-  loop $continue|68
-   local.get $3
-   i64.const 9223372036854775807
-   i64.ne
-   i64.extend_i32_u
-   local.get $3
-   local.get $3
-   i64.const 0
-   i64.ne
-   select
-   i64.const 0
-   i64.ne
-   if
-    i64.const 9223372036854775807
-    local.get $2
-    i32.const 2
-    i32.add
-    local.tee $2
-    i64.extend_i32_s
-    i64.shr_s
-    local.set $3
-    br $continue|68
-   end
-  end
-  local.get $2
-  i32.const 2
-  i32.sub
-  local.set $2
-  i64.const 0
-  local.set $4
-  loop $continue|69
-   local.get $2
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $4
-    i64.const 1
-    i64.shl
-    local.tee $4
-    i64.const 1
-    i64.add
-    local.tee $3
-    local.get $3
-    i64.mul
-    i64.const 9223372036854775807
-    local.get $2
-    i64.extend_i32_s
-    i64.shr_u
-    i64.le_u
-    if
-     local.get $3
-     local.set $4
-    end
-    local.get $2
-    i32.const 2
-    i32.sub
-    local.set $2
-    br $continue|69
-   end
-  end
-  local.get $4
+  i64.const 9223372036854775807
+  call $~lib/math/isqrt64
   i64.const 3037000499
   i64.ne
   if
@@ -39625,71 +38416,8 @@
    call $~lib/env/abort
    unreachable
   end
-  i32.const 2
-  local.set $2
-  i64.const 2305843009213693951
-  local.set $3
-  loop $continue|70
-   local.get $3
-   i64.const 9223372036854775807
-   i64.ne
-   i64.extend_i32_u
-   local.get $3
-   local.get $3
-   i64.const 0
-   i64.ne
-   select
-   i64.const 0
-   i64.ne
-   if
-    i64.const 9223372036854775807
-    local.get $2
-    i32.const 2
-    i32.add
-    local.tee $2
-    i64.extend_i32_s
-    i64.shr_u
-    local.set $3
-    br $continue|70
-   end
-  end
-  local.get $2
-  i32.const 2
-  i32.sub
-  local.set $2
-  i64.const 0
-  local.set $4
-  loop $continue|71
-   local.get $2
-   i32.const 0
-   i32.ge_s
-   if
-    local.get $4
-    i64.const 1
-    i64.shl
-    local.tee $4
-    i64.const 1
-    i64.add
-    local.tee $3
-    local.get $3
-    i64.mul
-    i64.const 9223372036854775807
-    local.get $2
-    i64.extend_i32_s
-    i64.shr_u
-    i64.le_u
-    if
-     local.get $3
-     local.set $4
-    end
-    local.get $2
-    i32.const 2
-    i32.sub
-    local.set $2
-    br $continue|71
-   end
-  end
-  local.get $4
+  i64.const 9223372036854775807
+  call $~lib/math/isqrt64
   i64.const 3037000499
   i64.ne
   if
@@ -39700,7 +38428,8 @@
    call $~lib/env/abort
    unreachable
   end
-  call $~lib/math/IntegerMath.sqrt<u64>
+  i64.const -1
+  call $~lib/math/isqrt64
   i64.const 4294967295
   i64.ne
   if
@@ -40108,8 +38837,8 @@
   f32.const nan:0x400000
   i32.const 1
   call $~lib/math/ipow32f
-  local.tee $6
-  local.get $6
+  local.tee $1
+  local.get $1
   f32.eq
   if
    i32.const 0
@@ -40122,8 +38851,8 @@
   f32.const nan:0x400000
   i32.const -1
   call $~lib/math/ipow32f
-  local.tee $6
-  local.get $6
+  local.tee $1
+  local.get $1
   f32.eq
   if
    i32.const 0
@@ -40136,8 +38865,8 @@
   f32.const nan:0x400000
   i32.const 2
   call $~lib/math/ipow32f
-  local.tee $6
-  local.get $6
+  local.tee $1
+  local.get $1
   f32.eq
   if
    i32.const 0
@@ -40319,8 +39048,8 @@
   f64.const nan:0x8000000000000
   i32.const 1
   call $~lib/math/ipow64f
-  local.tee $5
-  local.get $5
+  local.tee $0
+  local.get $0
   f64.eq
   if
    i32.const 0
@@ -40333,8 +39062,8 @@
   f64.const nan:0x8000000000000
   i32.const -1
   call $~lib/math/ipow64f
-  local.tee $5
-  local.get $5
+  local.tee $0
+  local.get $0
   f64.eq
   if
    i32.const 0
@@ -40347,8 +39076,8 @@
   f64.const nan:0x8000000000000
   i32.const 2
   call $~lib/math/ipow64f
-  local.tee $5
-  local.get $5
+  local.tee $0
+  local.get $0
   f64.eq
   if
    i32.const 0
@@ -40502,7 +39231,7 @@
    unreachable
   end
  )
- (func $null (; 151 ;) (type $_)
+ (func $null (; 152 ;) (type $_)
   nop
  )
 )
