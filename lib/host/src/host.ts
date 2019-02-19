@@ -1,7 +1,7 @@
 import {ASImport} from "./ASImport";
 
 export class Host extends ASImport {
-  static stdout : (out:string) => void = console.log;
+  static stdout : (out:string|number) => void = console.log;
 
   debug (): void {
     // tslint:disable-next-line
@@ -26,8 +26,7 @@ export class Host extends ASImport {
   }
 
   _log_str(x: number): void {
-      let memory = this.memory;
-      return Host.stdout(memory.getString(x))
+      return Host.stdout(x)
   }
 
   _logi(x: number): void { Host.stdout(x.toString()) }
