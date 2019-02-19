@@ -2414,20 +2414,42 @@ export namespace IntegerMath {
       if (isSigned<T>()) {
         if (x < 0) throw new RangeError("Math.sqrt received negative argument");
       }
-      if (!x) return <T>0;
-      let res = <T>0;
-      /* tslint:disable-next-line:as-types */
-      let add = <T>1 << (sizeof<T>() * 8 / 2 - 1);
-      let tmp: T;
-      for (let i = 0; i < sizeof<T>() * 8; ++i) {
-        tmp = res | add;
-        let sqr = tmp * tmp;
-        if (x >= sqr) {
-          res = tmp;
-        }
-        add >>>= 1;
+      // Complexity: O(log n)
+      // Iterative version of approach described in this article:
+      // https://www.cs.uni-potsdam.de/ti/kreitz/PDF/03cucs-intsqrt.pdf
+      if (x < 2) return x;
+      let s = 2;
+      let xs = x >> 2;
+      while (xs && xs != x) {
+        s += 2;
+        xs = x >> <T>s;
       }
-      return <T>res;
+      s -= 2;
+      if (sizeof<T>() <= 4) {
+        let ux = <u32>x;
+        let res: u32 = 0;
+        while (s >= 0) {
+          res <<= 1;
+          let m = res + 1;
+          if (m * m <= (ux >> <u32>s)) {
+            res = m;
+          }
+          s -= 2;
+        }
+        return <T>res;
+      } else {
+        let ux = <u64>x;
+        let res: u64 = 0;
+        while (s >= 0) {
+          res <<= 1;
+          let m = res + 1;
+          if (m * m <= (ux >> <u64>s)) {
+            res = m;
+          }
+          s -= 2;
+        }
+        return <T>res;
+      }
     }
     throw new TypeError("Unexpected generic type");
   }

@@ -3345,6 +3345,45 @@ assert(IntegerMath.log2(u32.MAX_VALUE) == 31);
 assert(IntegerMath.log2(i64.MAX_VALUE) == 62);
 assert(IntegerMath.log2(u64.MAX_VALUE) == 63);
 
+// IntegerMath.sqrt ///////////////////////////////////////////////////////////////////////////
+
+assert(IntegerMath.sqrt<i16>(0) == 0);
+assert(IntegerMath.sqrt<i32>(0) == 0);
+assert(IntegerMath.sqrt<u32>(0) == 0);
+assert(IntegerMath.sqrt<i64>(0) == 0);
+assert(IntegerMath.sqrt<u64>(0) == 0);
+assert(IntegerMath.sqrt<i16>(1) == 1);
+assert(IntegerMath.sqrt<i32>(1) == 1);
+assert(IntegerMath.sqrt<u32>(1) == 1);
+assert(IntegerMath.sqrt<i64>(1) == 1);
+assert(IntegerMath.sqrt<u64>(1) == 1);
+assert(IntegerMath.sqrt<i16>(2) == 1);
+assert(IntegerMath.sqrt<i32>(2) == 1);
+assert(IntegerMath.sqrt<u32>(2) == 1);
+assert(IntegerMath.sqrt<i64>(2) == 1);
+assert(IntegerMath.sqrt<u64>(2) == 1);
+assert(IntegerMath.sqrt<i16>(3) == 1);
+assert(IntegerMath.sqrt<i32>(3) == 1);
+assert(IntegerMath.sqrt<u32>(3) == 1);
+assert(IntegerMath.sqrt<i64>(3) == 1);
+assert(IntegerMath.sqrt<u64>(3) == 1);
+assert(IntegerMath.sqrt<i16>(4) == 2);
+assert(IntegerMath.sqrt<i32>(4) == 2);
+assert(IntegerMath.sqrt<u32>(4) == 2);
+assert(IntegerMath.sqrt<i64>(4) == 2);
+assert(IntegerMath.sqrt<u64>(4) == 2);
+assert(IntegerMath.sqrt<i16>(i16.MAX_VALUE) == 181);
+assert(IntegerMath.sqrt<u16>(i16.MAX_VALUE) == 181);
+assert(IntegerMath.sqrt<i32>(i16.MAX_VALUE) == 181);
+assert(IntegerMath.sqrt<u32>(i16.MAX_VALUE) == 181);
+assert(IntegerMath.sqrt<u16>(u16.MAX_VALUE) == 255);
+assert(IntegerMath.sqrt<i32>(i32.MAX_VALUE) == 46340);
+assert(IntegerMath.sqrt<u32>(i32.MAX_VALUE) == 46340);
+assert(IntegerMath.sqrt<u32>(u32.MAX_VALUE) == 65535);
+assert(IntegerMath.sqrt<i64>(i64.MAX_VALUE) == 3037000499);
+assert(IntegerMath.sqrt<u64>(i64.MAX_VALUE) == 3037000499);
+assert(IntegerMath.sqrt(u64.MAX_VALUE) == 4294967295);
+
 // ipow64 /////////////////////////////////////////////////////////////////////////////////////
 
 assert(ipow64(0, 0) == 1);
