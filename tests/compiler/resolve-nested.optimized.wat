@@ -1,24 +1,26 @@
 (module
- (type $i (func (result i32)))
- (type $i_ (func (param i32)))
+ (type $iiiiii_ (func (param i32 i32 i32 i32 i32 i32)))
+ (type $iiiii_ (func (param i32 i32 i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $resolve-nested/a i32 (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
- (export "a" (global $resolve-nested/a))
- (export "b" (func $resolve-nested/b))
- (export "c" (func $resolve-nested/c))
- (export "Wrapped.e" (func $resolve-nested/c))
- (func $resolve-nested/b (; 0 ;) (type $i) (result i32)
-  i32.const 0
- )
- (func $resolve-nested/c (; 1 ;) (type $i_) (param $0 i32)
+ (export "Outer.Inner.evenInner" (func $resolve-nested/Outer.Inner.evenInner))
+ (export "Outer.inner" (func $resolve-nested/Outer.inner))
+ (export "outer" (func $resolve-nested/outer))
+ (func $resolve-nested/Outer.Inner.evenInner (; 0 ;) (type $iiiiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   nop
  )
- (func $null (; 2 ;) (type $_)
+ (func $resolve-nested/Outer.inner (; 1 ;) (type $iiiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+  nop
+ )
+ (func $resolve-nested/outer (; 2 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+  nop
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )
