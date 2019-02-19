@@ -1,10 +1,7 @@
 import {ASImport} from "./ASImport";
 
 export class Host extends ASImport {
-
-  constructor(public stdout: (out:string) => void = console.log){
-    super()
-  }
+  static stdout : (out:string) => void = console.log;
 
   debug (): void {
     // tslint:disable-next-line
@@ -25,14 +22,15 @@ export class Host extends ASImport {
     let output = str.map((v: any, i:number, a: any[]): string => v + (space as any).repeat(len - v.length + 1) + "|");
     let dash = "-";
     let line = (dash as any).repeat(len+2);
-    this.stdout([line,output.join('\n'+line+'\n'),line].join("\n"));
+    Host.stdout([line,output.join('\n'+line+'\n'),line].join("\n"));
   }
 
   _log_str(x: number): void {
-      return this.stdout(this.memory.getString(x))
+      let memory = this.memory;
+      return Host.stdout(memory.getString(x))
   }
 
-  _logi(x: number): void { this.stdout(x.toString()) }
+  _logi(x: number): void { Host.stdout(x.toString()) }
 
-  _logf(x:number): void {  this.stdout(x.toString()) }
+  _logf(x:number): void {  Host.stdout(x.toString()) }
 }
