@@ -2375,7 +2375,11 @@ export namespace IntegerMath {
       } else {
         if (!x) throw new RangeError("Math.log2 received zero argument");
       }
-      return <T>(sizeof<T>() * 8 - 1) - builtin_clz<T>(x);
+      if (sizeof<T>() <= 4) {
+        return <T>(31 - builtin_clz<T>(x));
+      } else {
+        return <T>(63 - builtin_clz<T>(x));
+      }
     }
     throw new TypeError("Unexpected generic type");
   }

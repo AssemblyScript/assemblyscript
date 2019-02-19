@@ -3284,6 +3284,67 @@ assert(NativeMath.imul(NaN, 1) == 0);
 assert(NativeMath.imul(1, Infinity) == 0);
 assert(NativeMath.imul(f64.MAX_VALUE, f64.MAX_VALUE) == 0);
 
+// IntegerMath.sign ///////////////////////////////////////////////////////////////////////////
+
+assert(IntegerMath.sign<i16>(0) == 0);
+assert(IntegerMath.sign<u16>(0) == 0);
+assert(IntegerMath.sign<i32>(0) == 0);
+assert(IntegerMath.sign<u32>(0) == 0);
+assert(IntegerMath.sign<i64>(0) == 0);
+assert(IntegerMath.sign<u64>(0) == 0);
+assert(IntegerMath.sign<i32>(2) == 1);
+assert(IntegerMath.sign<u32>(2) == 1);
+assert(IntegerMath.sign<i64>(2) == 1);
+assert(IntegerMath.sign<u64>(2) == 1);
+assert(IntegerMath.sign<i32>(-2) == -1);
+assert(IntegerMath.sign<i64>(-2) == -1);
+assert(IntegerMath.sign<u32>(-2) ==  1);
+assert(IntegerMath.sign<u64>(-2) ==  1);
+assert(IntegerMath.sign(-2 as i16) == -1);
+assert(IntegerMath.sign(-2 as u16) ==  1);
+
+// IntegerMath.signbit ///////////////////////////////////////////////////////////////////////////
+
+assert(IntegerMath.signbit<i16>(0) == false);
+assert(IntegerMath.signbit<u16>(0) == false);
+assert(IntegerMath.signbit<i32>(0) == false);
+assert(IntegerMath.signbit<u32>(0) == false);
+assert(IntegerMath.signbit<i64>(0) == false);
+assert(IntegerMath.signbit<u64>(0) == false);
+assert(IntegerMath.signbit<i32>(2) == false);
+assert(IntegerMath.signbit<u32>(2) == false);
+assert(IntegerMath.signbit<i64>(2) == false);
+assert(IntegerMath.signbit<u64>(2) == false);
+assert(IntegerMath.signbit<i32>(-2) == true);
+assert(IntegerMath.signbit<i64>(-2) == true);
+assert(IntegerMath.signbit<u32>(-2) == false);
+assert(IntegerMath.signbit<u64>(-2) == false);
+assert(IntegerMath.signbit(-2 as i16) == true);
+assert(IntegerMath.signbit(-2 as u16) == false);
+
+// IntegerMath.log2 ///////////////////////////////////////////////////////////////////////////
+
+assert(IntegerMath.log2<i16>(1) == 0);
+assert(IntegerMath.log2<i32>(1) == 0);
+assert(IntegerMath.log2<u32>(1) == 0);
+assert(IntegerMath.log2<i64>(1) == 0);
+assert(IntegerMath.log2<u64>(1) == 0);
+assert(IntegerMath.log2<i16>(2) == 1);
+assert(IntegerMath.log2<i32>(2) == 1);
+assert(IntegerMath.log2<u32>(2) == 1);
+assert(IntegerMath.log2<i64>(2) == 1);
+assert(IntegerMath.log2<u64>(2) == 1);
+assert(IntegerMath.log2<i16>(3) == 1);
+assert(IntegerMath.log2<i32>(3) == 1);
+assert(IntegerMath.log2<u32>(3) == 1);
+assert(IntegerMath.log2<i64>(3) == 1);
+assert(IntegerMath.log2<u64>(3) == 1);
+assert(IntegerMath.log2(i16.MAX_VALUE) == 14);
+assert(IntegerMath.log2(i32.MAX_VALUE) == 30);
+assert(IntegerMath.log2(u32.MAX_VALUE) == 31);
+assert(IntegerMath.log2(i64.MAX_VALUE) == 62);
+assert(IntegerMath.log2(u64.MAX_VALUE) == 63);
+
 // ipow64 /////////////////////////////////////////////////////////////////////////////////////
 
 assert(ipow64(0, 0) == 1);

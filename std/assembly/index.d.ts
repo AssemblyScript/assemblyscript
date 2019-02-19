@@ -870,6 +870,39 @@ interface IMath<T> {
   trunc(x: T): T;
 }
 
+interface IIntegerMath {
+  /** Returns the absolute value of `x`. */
+  abs<T>(x: T): T;
+  /** Returns the number of leading zero bits in the 32-bit or 64-bit binary representation of `x`. */
+  clz<T>(x: T): T;
+  /** Returns the number of leading zero bits in the 32-bit binary representation of `x`. */
+  clz32<T>(x: T): T;
+  /** Returns the lowest-valued number of its arguments. */
+  min<T>(x: T, y: T): T;
+  /** Returns the largest-valued number of its arguments. */
+  max<T>(x: T, y: T): T;
+  /** Returns same value as input without changes. */
+  ceil<T>(x: T): T;
+  /** Returns same value as input without changes. */
+  floor<T>(x: T): T;
+  /** Returns same value as input without changes. */
+  round<T>(x: T): T;
+  /** Returns same value as input without changes. */
+  trunc<T>(x: T): T;
+  /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. */
+  imul<T>(x: T, y: T): T;
+  /** Returns `base` to the power of `exponent`. */
+  pow<T>(base: T, exponent: T): T;
+  /** Returns the base 2 logarithm of `x` as `floor(log2(x))` */
+  log2<T>(x: T): T;
+  /** Returns the sign of `x`, indicating whether the number is positive, negative or zero. */
+  sign<T>(x: T): i32;
+  /** Returns whether the sign bit of `x` is set */
+  signbit<T>(x: T): bool;
+  /** Returns the square root of `x` as `floor(sqrt(x))`. */
+  sqrt<T>(x: T): T;
+}
+
 interface INativeMath<T> extends IMath<T> {
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
@@ -889,6 +922,8 @@ declare const NativeMathf: INativeMath<f32>;
 declare const Math: IMath<f64>;
 /** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
 declare const Mathf: IMath<f32>;
+/** Integer math implemented natively. */
+declare const IntegerMath: IIntegerMath;
 
 declare class Date {
   /** Returns the UTC timestamp in milliseconds of the specified date. */
