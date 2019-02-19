@@ -15,4 +15,5 @@ export namespace Wrapped {
     export class F {}
   }
   var f: Inner.F;
+  var g: Outer.Inner;
 }
