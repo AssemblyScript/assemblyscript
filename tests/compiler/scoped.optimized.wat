@@ -6,7 +6,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 0 ;) (type $_)
+ (func $start:scoped (; 0 ;) (type $_)
   (local $0 i32)
   loop $repeat|0
    local.get $0
@@ -35,7 +35,10 @@
    end
   end
  )
- (func $null (; 1 ;) (type $_)
+ (func $start (; 1 ;) (type $_)
+  call $start:scoped
+ )
+ (func $null (; 2 ;) (type $_)
   nop
  )
 )

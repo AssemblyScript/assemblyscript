@@ -1,7 +1,7 @@
 (module
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
  (type $i (func (result i32)))
- (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)

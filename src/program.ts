@@ -2059,41 +2059,6 @@ export class Enum extends TypedElement {
   }
 }
 
-/** An enum value. */
-export class EnumValue extends TypedElement {
-
-  /** Constant value, if applicable. */
-  constantValue: i32 = 0;
-
-  constructor(
-    name: string,
-    parent: Enum,
-    declaration: EnumValueDeclaration,
-    decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
-  ) {
-    super(
-      ElementKind.ENUMVALUE,
-      name,
-      mangleInternalName(name, parent, false),
-      parent.program,
-      parent,
-      declaration
-    );
-    this.decoratorFlags = decoratorFlags;
-    this.setType(Type.i32);
-  }
-
-  /** Gets the associated value node. */
-  get valueNode(): Expression | null {
-    return (<EnumValueDeclaration>this.declaration).value;
-  }
-
-  /* @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
-  }
-}
-
 export const enum ConstantValueKind {
   NONE,
   INTEGER,
@@ -2156,6 +2121,36 @@ export abstract class VariableLikeElement extends TypedElement {
   }
 
   /** @override */
+  lookup(name: string): Element | null {
+    return this.parent.lookup(name);
+  }
+}
+
+/** An enum value. */
+export class EnumValue extends VariableLikeElement {
+
+  constructor(
+    name: string,
+    parent: Enum,
+    declaration: EnumValueDeclaration,
+    decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
+  ) {
+    super(
+      ElementKind.ENUMVALUE,
+      name,
+      parent,
+      declaration
+    );
+    this.decoratorFlags = decoratorFlags;
+    this.setType(Type.i32);
+  }
+
+  /** Gets the associated value node. */
+  get valueNode(): Expression | null {
+    return (<EnumValueDeclaration>this.declaration).value;
+  }
+
+  /* @override */
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
   }

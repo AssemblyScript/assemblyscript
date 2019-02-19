@@ -1681,7 +1681,7 @@ export class EnumDeclaration extends DeclarationStatement {
 }
 
 /** Represents a value of an `enum` declaration. */
-export class EnumValueDeclaration extends DeclarationStatement {
+export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
   kind = NodeKind.ENUMVALUEDECLARATION;
   // name is inherited
 

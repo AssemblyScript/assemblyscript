@@ -982,7 +982,14 @@ export class Compiler extends DiagnosticEmitter {
           );
           previousValueIsMut = true;
         } else {
-          module.addGlobal(val.internalName, NativeType.I32, !element.is(CommonFlags.CONST), initExpr);
+          if (element.is(CommonFlags.CONST)) {
+            val.withConstantIntegerValue(i64_new(getConstValueI32(initExpr)), Type.i32);
+            if (val.is(CommonFlags.MODULE_EXPORT)) {
+              module.addGlobal(val.internalName, NativeType.I32, false, initExpr);
+            }
+          } else {
+            module.addGlobal(val.internalName, NativeType.I32, true, initExpr);
+          }
           previousValueIsMut = false;
         }
         previousValue = <EnumValue>val;
@@ -6086,7 +6093,8 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.currentType = Type.i32;
         if ((<EnumValue>target).is(CommonFlags.INLINED)) {
-          return this.module.createI32((<EnumValue>target).constantValue);
+          assert((<EnumValue>target).constantValueKind == ConstantValueKind.INTEGER);
+          return this.module.createI32(i64_low((<EnumValue>target).constantIntegerValue));
         }
         return this.module.createGetGlobal((<EnumValue>target).internalName, NativeType.I32);
       }
@@ -6771,7 +6779,8 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.currentType = Type.i32;
         if ((<EnumValue>target).is(CommonFlags.INLINED)) {
-          return module.createI32((<EnumValue>target).constantValue);
+          assert((<EnumValue>target).constantValueKind == ConstantValueKind.INTEGER);
+          return module.createI32(i64_low((<EnumValue>target).constantIntegerValue));
         }
         return module.createGetGlobal((<EnumValue>target).internalName, NativeType.I32);
       }
