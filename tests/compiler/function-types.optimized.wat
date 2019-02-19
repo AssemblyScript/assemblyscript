@@ -10,7 +10,7 @@
  (table $0 5 funcref)
  (elem (i32.const 0) $null $function-types/makeAdder<i32>~anonymous|1 $function-types/makeAdder<i64>~anonymous|2 $function-types/makeAdder<f64>~anonymous|3 $function-types/makeAdder<i32>~anonymous|1)
  (global $function-types/i32Adder (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -35,7 +35,7 @@
   i32.const 1
   global.set $function-types/i32Adder
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 1
   i32.const 2
   global.get $function-types/i32Adder
@@ -53,7 +53,7 @@
   i32.const 2
   global.set $function-types/i64Adder
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   i64.const 10
   i64.const 20
   global.get $function-types/i64Adder
@@ -69,7 +69,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   f64.const 1.5
   f64.const 2.5
   i32.const 3
@@ -85,7 +85,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 2
   i32.const 3
   global.get $function-types/i32Adder
@@ -101,7 +101,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 3
   i32.const 4
   i32.const 1
@@ -117,7 +117,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 4
   i32.const 5
   i32.const 4
@@ -133,11 +133,11 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 2
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -148,7 +148,7 @@
    local.set $0
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 1
   i32.const 2
   local.get $0
@@ -164,7 +164,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 1
   i32.const 2
   i32.const 1

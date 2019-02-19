@@ -17,11 +17,11 @@
  (global $exports/Car.TIRES i32 (i32.const 4))
  (global $exports/vehicles.Car.TIRES i32 (i32.const 4))
  (global $exports/outer.inner.a i32 (i32.const 42))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "add" (func $exports/add))
- (export "_setargc" (func $~setargc))
+ (export "_setargc" (func $~lib/setargc))
  (export "subOpt" (func $exports/subOpt|trampoline))
  (export "math.sub" (func $exports/subOpt))
  (export "Animal.CAT" (global $exports/Animal.CAT))
@@ -146,7 +146,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -160,15 +160,15 @@
   local.get $1
   i32.sub
  )
- (func $~setargc (; 10 ;) (type $i_) (param $0 i32)
+ (func $~lib/setargc (; 10 ;) (type $i_) (param $0 i32)
   local.get $0
-  global.set $~argc
+  global.set $~lib/argc
  )
  (func $exports/Car#constructor|trampoline (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable

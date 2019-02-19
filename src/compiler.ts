@@ -1086,17 +1086,16 @@ export class Compiler extends DiagnosticEmitter {
 
     // make the main function call `start` implicitly, but only once
     if (instance.prototype == this.program.explicitStartFunction) {
-      let startedVarName = LIBRARY_PREFIX + "started";
-      module.addGlobal(startedVarName, NativeType.I32, true, module.createI32(0));
+      module.addGlobal(CompilerSymbols.started, NativeType.I32, true, module.createI32(0));
       stmts.unshift(
         module.createIf(
           module.createUnary(
             UnaryOp.EqzI32,
-            module.createGetGlobal(startedVarName, NativeType.I32)
+            module.createGetGlobal(CompilerSymbols.started, NativeType.I32)
           ),
           module.createBlock(null, [
             module.createCall("start", null, NativeType.None),
-            module.createSetGlobal(startedVarName, module.createI32(1))
+            module.createSetGlobal(CompilerSymbols.started, module.createI32(1))
           ])
         )
       );
@@ -5594,10 +5593,10 @@ export class Compiler extends DiagnosticEmitter {
           minArguments
             ? module.createBinary(
                 BinaryOp.SubI32,
-                module.createGetGlobal("~argc", NativeType.I32),
+                module.createGetGlobal(CompilerSymbols.argc, NativeType.I32),
                 module.createI32(minArguments)
               )
-            : module.createGetGlobal("~argc", NativeType.I32)
+            : module.createGetGlobal(CompilerSymbols.argc, NativeType.I32)
         )
       ]),
       module.createUnreachable()
@@ -5655,22 +5654,21 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes sure that the argument count helper global is present and returns its name. */
   private ensureArgcVar(): string {
-    var internalName = "~argc";
     if (!this.argcVar) {
       let module = this.module;
       this.argcVar = module.addGlobal(
-        internalName,
+        CompilerSymbols.argc,
         NativeType.I32,
         true,
         module.createI32(0)
       );
     }
-    return internalName;
+    return CompilerSymbols.argc;
   }
 
   /** Makes sure that the argument count helper setter is present and returns its name. */
   private ensureArgcSet(): string {
-    var internalName = "~setargc";
+    var internalName = CompilerSymbols.setargc;
     if (!this.argcSet) {
       let module = this.module;
       this.argcSet = module.addFunction(internalName,
@@ -7838,3 +7836,13 @@ function mangleImportName(
 
 var mangleImportName_moduleName: string;
 var mangleImportName_elementName: string;
+
+/** Special compiler symbols. */
+namespace CompilerSymbols {
+  /** Module started global. Used if an explicit start function is present. */
+  export const started = "~lib/started";
+  /** Argument count global. Used to call trampolines for varargs functions. */
+  export const argc = "~lib/argc";
+  /** Argument count setter. Exported for use by host calls. */
+  export const setargc = "~lib/setargc";
+}

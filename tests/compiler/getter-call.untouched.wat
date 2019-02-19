@@ -7,7 +7,7 @@
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -134,7 +134,7 @@
   call $getter-call/C#constructor
   local.set $0
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   local.get $0
   call $getter-call/C#get:x
   call_indirect (type $i)

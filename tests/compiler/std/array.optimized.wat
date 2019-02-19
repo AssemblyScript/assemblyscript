@@ -345,7 +345,7 @@
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $std/array/Null (mut i32) (i32.const 0))
  (global $std/array/arr8 (mut i32) (i32.const 232))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/array/arr32 (mut i32) (i32.const 392))
  (global $std/array/i (mut i32) (i32.const 0))
  (global $std/array/other (mut i32) (i32.const 0))
@@ -962,7 +962,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -1144,7 +1144,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -2653,7 +2653,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 2
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -3009,7 +3009,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -3095,7 +3095,7 @@
     i32.ge_s
     br_if $break|0
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $0
     i32.load
     local.get $3
@@ -3176,7 +3176,7 @@
     i32.ge_s
     br_if $break|0
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $0
     i32.load
     local.get $3
@@ -3257,7 +3257,7 @@
     i32.ge_s
     br_if $break|0
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $0
     i32.load
     local.get $3
@@ -3339,7 +3339,7 @@
     i32.ge_s
     br_if $break|0
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $0
     i32.load
     local.get $3
@@ -3510,7 +3510,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $1
     local.tee $2
     i32.const 2
@@ -3575,7 +3575,7 @@
     i32.ge_s
     br_if $break|0
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $6
     local.get $3
     local.tee $2
@@ -3659,7 +3659,7 @@
     i32.load offset=8
     local.set $2
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $3
     local.get $0
@@ -3744,7 +3744,7 @@
     i32.ge_s
     br_if $break|0
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $3
     local.get $0
     i32.load
@@ -3814,7 +3814,7 @@
     i32.lt_s
     br_if $break|0
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $0
     i32.load
@@ -3971,7 +3971,7 @@
        f32.load offset=8
        local.set $6
        i32.const 2
-       global.set $~argc
+       global.set $~lib/argc
        local.get $5
        local.get $6
        local.get $2
@@ -4092,7 +4092,7 @@
     f32.load offset=8
     local.set $5
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $6
     local.get $5
     local.get $2
@@ -4209,7 +4209,7 @@
       f32.load offset=8
       local.set $6
       i32.const 2
-      global.set $~argc
+      global.set $~lib/argc
       local.get $5
       local.get $6
       local.get $2
@@ -4314,7 +4314,7 @@
    f32.load offset=8
    local.set $5
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    local.get $4
    local.get $5
    local.get $1
@@ -4544,7 +4544,7 @@
        f64.load offset=8
        local.set $6
        i32.const 2
-       global.set $~argc
+       global.set $~lib/argc
        local.get $5
        local.get $6
        local.get $2
@@ -4665,7 +4665,7 @@
     f64.load offset=8
     local.set $5
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $6
     local.get $5
     local.get $2
@@ -4782,7 +4782,7 @@
       f64.load offset=8
       local.set $6
       i32.const 2
-      global.set $~argc
+      global.set $~lib/argc
       local.get $5
       local.get $6
       local.get $2
@@ -4887,7 +4887,7 @@
    f64.load offset=8
    local.set $5
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    local.get $4
    local.get $5
    local.get $1
@@ -5117,7 +5117,7 @@
        i32.load offset=8
        local.set $6
        i32.const 2
-       global.set $~argc
+       global.set $~lib/argc
        local.get $5
        local.get $6
        local.get $2
@@ -5238,7 +5238,7 @@
     i32.load offset=8
     local.set $3
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $5
     local.get $3
     local.get $2
@@ -5355,7 +5355,7 @@
       i32.load offset=8
       local.set $3
       i32.const 2
-      global.set $~argc
+      global.set $~lib/argc
       local.get $6
       local.get $3
       local.get $2
@@ -5458,7 +5458,7 @@
    i32.load offset=8
    local.set $4
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    local.get $3
    local.get $4
    local.get $1
@@ -5637,7 +5637,7 @@
    i32.lt_s
    if
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     i32.const 1
     i32.sub
@@ -5845,7 +5845,7 @@
    i32.load offset=8
    local.set $4
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    local.get $2
    local.get $4
    local.get $1
@@ -6038,7 +6038,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -10102,7 +10102,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/arr8
   i32.const 0
   i32.const 0
@@ -10139,7 +10139,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/arr8
   i32.const 2
   i32.const -2
@@ -10195,7 +10195,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/arr32
   i32.const 0
   i32.const 0
@@ -10234,7 +10234,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/arr32
   i32.const 2
   i32.const -2
@@ -11048,7 +11048,7 @@
   i32.const 664
   global.set $std/array/cwArr
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/cwArr
   i32.const 0
   i32.const 3
@@ -11068,7 +11068,7 @@
   i32.const 744
   global.set $std/array/cwArr
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/cwArr
   i32.const 1
   i32.const 3
@@ -11088,7 +11088,7 @@
   i32.const 824
   global.set $std/array/cwArr
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/cwArr
   i32.const 1
   i32.const 2
@@ -11108,7 +11108,7 @@
   i32.const 904
   global.set $std/array/cwArr
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/cwArr
   i32.const 2
   i32.const 2
@@ -11185,7 +11185,7 @@
   i32.const 1224
   global.set $std/array/cwArr
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/cwArr
   i32.const 0
   i32.const -2
@@ -11262,7 +11262,7 @@
   i32.const 1544
   global.set $std/array/cwArr
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/cwArr
   i32.const -4
   i32.const -3
@@ -12382,7 +12382,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/sarr
   i32.const 0
   call $~lib/array/Array<i32>#splice|trampoline
@@ -12414,7 +12414,7 @@
   i32.const 1720
   global.set $std/array/sarr
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/sarr
   i32.const 2
   call $~lib/array/Array<i32>#splice|trampoline
@@ -12508,7 +12508,7 @@
   i32.const 2032
   global.set $std/array/sarr
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/sarr
   i32.const -1
   call $~lib/array/Array<i32>#splice|trampoline
@@ -12540,7 +12540,7 @@
   i32.const 2136
   global.set $std/array/sarr
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/sarr
   i32.const -2
   call $~lib/array/Array<i32>#splice|trampoline
@@ -13901,7 +13901,7 @@
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/f32ArrayTyped
   local.set $0
   i32.const 0
@@ -13909,7 +13909,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable
@@ -13933,7 +13933,7 @@
    unreachable
   end
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/f64ArrayTyped
   local.set $0
   i32.const 0
@@ -13941,7 +13941,7 @@
   block $1of155
    block $0of156
     block $outOfRange57
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of156 $1of155 $outOfRange57
     end
     unreachable
@@ -13965,7 +13965,7 @@
    unreachable
   end
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/i32ArrayTyped
   local.set $0
   i32.const 0
@@ -13973,7 +13973,7 @@
   block $1of158
    block $0of159
     block $outOfRange60
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of159 $1of158 $outOfRange60
     end
     unreachable
@@ -13999,7 +13999,7 @@
    unreachable
   end
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/u32ArrayTyped
   local.set $0
   i32.const 0
@@ -14007,7 +14007,7 @@
   block $1of161
    block $0of162
     block $outOfRange63
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of162 $1of161 $outOfRange63
     end
     unreachable
@@ -14185,7 +14185,7 @@
   i32.const 54
   call $std/array/assertSorted<Array<i32>>
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/randomStringsActual
   call $std/array/assertSorted<String>|trampoline
   global.get $std/array/randomStringsActual
@@ -14203,7 +14203,7 @@
   call $std/array/createRandomStringArray
   global.set $std/array/randomStrings400
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/array/randomStrings400
   call $std/array/assertSorted<String>|trampoline
   call $~lib/array/Array<bool>#join

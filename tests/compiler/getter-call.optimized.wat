@@ -7,7 +7,7 @@
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $getter-call/test))
@@ -82,7 +82,7 @@
   call $~lib/allocator/arena/__memory_allocate
   drop
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 1
   call_indirect (type $i)
  )

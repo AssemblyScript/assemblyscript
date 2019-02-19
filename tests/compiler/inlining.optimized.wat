@@ -8,7 +8,7 @@
  (data (i32.const 8) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|1)
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -23,7 +23,7 @@
  )
  (func $inlining/test_funcs (; 3 ;) (type $_)
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 2
   i32.const 1
   call_indirect (type $ii)

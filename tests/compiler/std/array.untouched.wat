@@ -343,7 +343,7 @@
  (global $std/array/str (mut i32) (i32.const 104))
  (global $std/array/arr8 (mut i32) (i32.const 232))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/array/arr32 (mut i32) (i32.const 392))
  (global $std/array/i (mut i32) (i32.const 0))
  (global $std/array/other (mut i32) (i32.const 0))
@@ -1196,7 +1196,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -1416,7 +1416,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -3439,7 +3439,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 2
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -4037,7 +4037,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -4154,7 +4154,7 @@
     br_if $break|0
     block (result i32)
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.9 (result i32)
       local.get $0
       i32.load
@@ -4261,7 +4261,7 @@
     br_if $break|0
     block (result i32)
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.11 (result i32)
       local.get $0
       i32.load
@@ -4364,7 +4364,7 @@
     br_if $break|0
     block (result i32)
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.13 (result i32)
       local.get $0
       i32.load
@@ -4467,7 +4467,7 @@
     br_if $break|0
     block
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.14 (result i32)
       local.get $0
       i32.load
@@ -4750,7 +4750,7 @@
      local.set $7
      block (result f32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.15 (result i32)
        local.get $0
        i32.load
@@ -4885,7 +4885,7 @@
      local.set $7
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.16 (result i32)
        local.get $0
        i32.load
@@ -5008,7 +5008,7 @@
      local.set $7
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       local.get $7
       local.get $3
       local.get $0
@@ -5107,7 +5107,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $3
      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.18 (result i32)
       local.get $0
@@ -5193,7 +5193,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $3
      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.19 (result i32)
       local.get $0
@@ -5290,7 +5290,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $3
      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.20 (result i32)
       local.get $0
@@ -5365,7 +5365,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $3
      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.21 (result i32)
       local.get $0
@@ -5594,7 +5594,7 @@
          local.set $10
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $8
           local.get $10
           local.get $3
@@ -5795,7 +5795,7 @@
      local.set $13
      block (result i32)
       i32.const 2
-      global.set $~argc
+      global.set $~lib/argc
       local.get $12
       local.get $13
       local.get $3
@@ -6032,7 +6032,7 @@
          local.set $12
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $13
           local.get $12
           local.get $3
@@ -6272,7 +6272,7 @@
    local.set $8
    block (result i32)
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $7
     local.get $8
     local.get $1
@@ -6388,7 +6388,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable
@@ -6553,7 +6553,7 @@
          local.set $10
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $8
           local.get $10
           local.get $3
@@ -6754,7 +6754,7 @@
      local.set $13
      block (result i32)
       i32.const 2
-      global.set $~argc
+      global.set $~lib/argc
       local.get $12
       local.get $13
       local.get $3
@@ -6991,7 +6991,7 @@
          local.set $12
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $13
           local.get $12
           local.get $3
@@ -7231,7 +7231,7 @@
    local.set $8
    block (result i32)
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $7
     local.get $8
     local.get $1
@@ -7347,7 +7347,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable
@@ -7545,7 +7545,7 @@
          local.set $9
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $7
           local.get $9
           local.get $3
@@ -7746,7 +7746,7 @@
      local.set $12
      block (result i32)
       i32.const 2
-      global.set $~argc
+      global.set $~lib/argc
       local.get $11
       local.get $12
       local.get $3
@@ -7983,7 +7983,7 @@
          local.set $10
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $5
           local.get $10
           local.get $3
@@ -8222,7 +8222,7 @@
    local.set $7
    block (result i32)
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $6
     local.get $7
     local.get $1
@@ -8310,7 +8310,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable
@@ -8391,7 +8391,7 @@
          local.set $9
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $7
           local.get $9
           local.get $3
@@ -8592,7 +8592,7 @@
      local.set $12
      block (result i32)
       i32.const 2
-      global.set $~argc
+      global.set $~lib/argc
       local.get $11
       local.get $12
       local.get $3
@@ -8829,7 +8829,7 @@
          local.set $10
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $5
           local.get $10
           local.get $3
@@ -9068,7 +9068,7 @@
    local.set $7
    block (result i32)
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $6
     local.get $7
     local.get $1
@@ -9160,7 +9160,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable
@@ -9352,7 +9352,7 @@
     br_if $break|0
     block (result i32)
      i32.const 2
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      local.get $2
      i32.const 1
@@ -9717,7 +9717,7 @@
          local.set $9
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $7
           local.get $9
           local.get $3
@@ -9864,7 +9864,7 @@
    local.set $7
    block (result i32)
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $6
     local.get $7
     local.get $1
@@ -9955,7 +9955,7 @@
     br_if $break|0
     block (result i32)
      i32.const 2
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      local.get $2
      i32.const 1
@@ -10262,7 +10262,7 @@
          local.set $9
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $7
           local.get $9
           local.get $3
@@ -10409,7 +10409,7 @@
    local.set $7
    block (result i32)
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $6
     local.get $7
     local.get $1
@@ -10533,7 +10533,7 @@
     br_if $break|0
     block (result i32)
      i32.const 2
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      local.get $2
      i32.const 1
@@ -10644,7 +10644,7 @@
          local.set $9
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $7
           local.get $9
           local.get $3
@@ -10791,7 +10791,7 @@
    local.set $7
    block (result i32)
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $6
     local.get $7
     local.get $1
@@ -10915,7 +10915,7 @@
     br_if $break|0
     block (result i32)
      i32.const 2
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      local.get $2
      i32.const 1
@@ -11090,7 +11090,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -17442,7 +17442,7 @@
   end
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/arr8
    i32.const 0
    i32.const 0
@@ -17484,7 +17484,7 @@
   end
   block (result i32)
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/arr8
    i32.const 2
    i32.const -2
@@ -17545,7 +17545,7 @@
   end
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/arr32
    i32.const 0
    i32.const 0
@@ -17587,7 +17587,7 @@
   end
   block (result i32)
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/arr32
    i32.const 2
    i32.const -2
@@ -18293,7 +18293,7 @@
   global.set $std/array/cwArr
   block (result i32)
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/cwArr
    i32.const 0
    i32.const 3
@@ -18316,7 +18316,7 @@
   global.set $std/array/cwArr
   block (result i32)
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/cwArr
    i32.const 1
    i32.const 3
@@ -18339,7 +18339,7 @@
   global.set $std/array/cwArr
   block (result i32)
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/cwArr
    i32.const 1
    i32.const 2
@@ -18362,7 +18362,7 @@
   global.set $std/array/cwArr
   block (result i32)
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/cwArr
    i32.const 2
    i32.const 2
@@ -18442,7 +18442,7 @@
   global.set $std/array/cwArr
   block (result i32)
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/cwArr
    i32.const 0
    i32.const -2
@@ -18522,7 +18522,7 @@
   global.set $std/array/cwArr
   block (result i32)
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/cwArr
    i32.const -4
    i32.const -3
@@ -19531,7 +19531,7 @@
   end
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/sarr
    i32.const 0
    i32.const 0
@@ -19566,7 +19566,7 @@
   global.set $std/array/sarr
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/sarr
    i32.const 2
    i32.const 0
@@ -19663,7 +19663,7 @@
   global.set $std/array/sarr
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/sarr
    i32.const -1
    i32.const 0
@@ -19698,7 +19698,7 @@
   global.set $std/array/sarr
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/sarr
    i32.const -2
    i32.const 0
@@ -21201,7 +21201,7 @@
   call $~lib/math/NativeMath.seedRandom
   block (result i32)
    i32.const 0
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/f32ArrayTyped
    i32.const 0
    call $~lib/array/Array<f32>#sort|trampoline
@@ -21222,7 +21222,7 @@
   end
   block (result i32)
    i32.const 0
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/f64ArrayTyped
    i32.const 0
    call $~lib/array/Array<f64>#sort|trampoline
@@ -21243,7 +21243,7 @@
   end
   block (result i32)
    i32.const 0
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/i32ArrayTyped
    i32.const 0
    call $~lib/array/Array<i32>#sort|trampoline
@@ -21264,7 +21264,7 @@
   end
   block (result i32)
    i32.const 0
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/u32ArrayTyped
    i32.const 0
    call $~lib/array/Array<u32>#sort|trampoline
@@ -21439,7 +21439,7 @@
   call $std/array/assertSorted<Proxy<i32>>
   block
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/randomStringsActual
    i32.const 0
    call $std/array/assertSorted<String>|trampoline
@@ -21462,7 +21462,7 @@
   global.set $std/array/randomStrings400
   block
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/array/randomStrings400
    i32.const 0
    call $std/array/assertSorted<String>|trampoline

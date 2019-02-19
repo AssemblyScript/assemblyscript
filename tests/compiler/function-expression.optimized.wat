@@ -9,7 +9,7 @@
  (table $0 5 funcref)
  (elem (i32.const 0) $start:function-expression~someName|3 $start:function-expression~anonymous|1 $start:function-expression~anonymous|1 $start:function-expression~someName|3 $start:function-expression~anonymous|4)
  (global $function-expression/f1 (mut i32) (i32.const 1))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $function-expression/f2 (mut i32) (i32.const 2))
  (global $function-expression/f3 (mut i32) (i32.const 3))
  (global $function-expression/f4 (mut i32) (i32.const 4))
@@ -27,7 +27,7 @@
  )
  (func $start:function-expression (; 4 ;) (type $_)
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 1
   global.get $function-expression/f1
   call_indirect (type $ii)
@@ -42,7 +42,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 2
   global.get $function-expression/f2
   call_indirect (type $ii)
@@ -57,11 +57,11 @@
    unreachable
   end
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   global.get $function-expression/f3
   call_indirect (type $_)
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   global.get $function-expression/f4
   call_indirect (type $i)
   i32.const 1

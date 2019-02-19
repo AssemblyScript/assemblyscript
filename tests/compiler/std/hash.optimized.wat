@@ -143,7 +143,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $start (; 3 ;) (type $_)
+ (func $start:std/hash (; 3 ;) (type $_)
   i32.const 0
   call $~lib/internal/hash/hashStr
   drop
@@ -196,7 +196,10 @@
   call $~lib/internal/hash/hash64
   drop
  )
- (func $null (; 4 ;) (type $_)
+ (func $start (; 4 ;) (type $_)
+  call $start:std/hash
+ )
+ (func $null (; 5 ;) (type $_)
   nop
  )
 )

@@ -8,7 +8,7 @@
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -141,7 +141,7 @@
  )
  (func $nonNullAssertion/testFn (; 11 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   local.get $0
   call_indirect (type $i)
  )
@@ -150,26 +150,26 @@
   local.get $0
   local.set $1
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   local.get $1
   call_indirect (type $i)
  )
  (func $nonNullAssertion/testRet (; 13 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   local.get $0
   call_indirect (type $i)
  )
  (func $nonNullAssertion/testObjFn (; 14 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   local.get $0
   i32.load offset=4
   call_indirect (type $i)
  )
  (func $nonNullAssertion/testObjRet (; 15 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   local.get $0
   i32.load offset=4
   call_indirect (type $i)

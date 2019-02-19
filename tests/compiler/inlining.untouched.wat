@@ -9,7 +9,7 @@
  (table $0 2 funcref)
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|1)
  (global $inlining/constantGlobal i32 (i32.const 1))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 36))
@@ -218,7 +218,7 @@
   end
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    i32.const 2
    block $inlining/func_fe|inlined.0 (result i32)
     i32.const 1

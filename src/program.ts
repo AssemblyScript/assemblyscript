@@ -566,7 +566,7 @@ export class Program extends DiagnosticEmitter {
           );
           continue;
         }
-        file.addExportStar(foreignFile);
+        file.ensureExportStar(foreignFile);
       }
     }
 
@@ -627,7 +627,7 @@ export class Program extends DiagnosticEmitter {
             queuedExports
           );
           if (element) {
-            file.addExport(exportName, element);
+            file.ensureExport(exportName, element);
           } else {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
@@ -638,7 +638,7 @@ export class Program extends DiagnosticEmitter {
         } else { // i.e. export { foo [as bar] }
           let element = file.lookupInSelf(queuedExport.localIdentifier.text);
           if (element) {
-            file.addExport(exportName, element);
+            file.ensureExport(exportName, element);
           } else {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
@@ -1348,7 +1348,7 @@ export class Program extends DiagnosticEmitter {
 
       // resolve right away if the local element already exists
       if (element = localFile.lookupInSelf(localName)) {
-        localFile.addExport(foreignName, element);
+        localFile.ensureExport(foreignName, element);
 
       // otherwise queue it
       } else {
@@ -1895,7 +1895,12 @@ export class File extends Element {
   /* @override */
   add(name: string, element: DeclaredElement, isImport: bool = false): bool {
     if (!super.add(name, element)) return false;
-    if (element.is(CommonFlags.EXPORT) && !isImport) this.addExport(element.name, element);
+    if (element.is(CommonFlags.EXPORT) && !isImport) {
+      this.ensureExport(
+        element.name,
+        assert(assert(this.members).get(element.name)) // possibly joined
+      );
+    }
     if (element.hasDecorator(DecoratorFlags.GLOBAL)) this.program.ensureGlobal(name, element);
     return true;
   }
@@ -1920,18 +1925,16 @@ export class File extends Element {
     return this.program.lookupGlobal(name);
   }
 
-  /** Adds an element as an export of this file. Returns the previous element if a duplicate. */
-  addExport(name: string, element: DeclaredElement): Element {
+  /** Ensures that an element is an export of this file. */
+  ensureExport(name: string, element: DeclaredElement): void {
     var exports = this.exports;
     if (!exports) this.exports = exports = new Map();
-    else if (exports.has(name)) return <Element>exports.get(name);
     exports.set(name, element);
     if (this.source.isLibrary) this.program.ensureGlobal(name, element);
-    return element;
   }
 
-  /** Adds a re-export of another file to this file. */
-  addExportStar(file: File): void {
+  /** Ensures that another file is a re-export of this file. */
+  ensureExportStar(file: File): void {
     var exportsStar = this.exportsStar;
     if (!exportsStar) this.exportsStar = exportsStar = [];
     else if (exportsStar.includes(file)) return;
