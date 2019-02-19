@@ -431,42 +431,41 @@ export class Parser extends DiagnosticEmitter {
     // 'void'
     } else if (token == Token.VOID) {
       type = Node.createType(
-        Node.createIdentifierExpression("void", tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createSimpleTypeName("void", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // 'this'
     } else if (token == Token.THIS) {
       type = Node.createType(
-        Node.createThisExpression(tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createSimpleTypeName("this", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // 'true'
     } else if (token == Token.TRUE || token == Token.FALSE) {
       type = Node.createType(
-        Node.createIdentifierExpression("bool", tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createSimpleTypeName("bool", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // StringLiteral
     } else if (token == Token.STRINGLITERAL) {
       tn.readString();
       type = Node.createType(
-        Node.createIdentifierExpression("string", tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createSimpleTypeName("string", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // Identifier
     } else if (token == Token.IDENTIFIER) {
-      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let first = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
+      let current = first;
       let parameters = new Array<TypeNode>();
       let nullable = false;
 
       // Identifier ('.' Identifier)+
       while (tn.skip(Token.DOT)) {
         if (tn.skip(Token.IDENTIFIER)) {
-          // TODO: this works for now, but the representation isn't great
-          identifier = Node.createIdentifierExpression(
-            identifier.text + "." + tn.readIdentifier(),
-            tn.range(identifier.range.start, tn.pos)
-          );
+          let next = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
+          current.next = next;
+          current = next;
         } else {
           this.error(
             DiagnosticCode.Identifier_expected,
@@ -507,7 +506,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      type = Node.createType(identifier, parameters, nullable, tn.range(startPos, tn.pos));
+      type = Node.createType(first, parameters, nullable, tn.range(startPos, tn.pos));
 
     } else {
       if (!suppressErrors) {
@@ -548,7 +547,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
       type = Node.createType(
-        Node.createIdentifierExpression("Array", bracketRange),
+        Node.createSimpleTypeName("Array", bracketRange),
         [ type ],
         nullable,
         tn.range(startPos, tn.pos)

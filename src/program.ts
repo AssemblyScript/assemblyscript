@@ -401,7 +401,7 @@ export class Program extends DiagnosticEmitter {
       null,
       this.nativeDummySignature || (this.nativeDummySignature = Node.createSignature([],
         Node.createType( // ^ AST signature doesn't really matter, is overridden anyway
-          Node.createIdentifierExpression(CommonSymbols.void_, range),
+          Node.createSimpleTypeName(CommonSymbols.void_, range),
           null, false, range
         ),
         null, false, range)
@@ -661,14 +661,14 @@ export class Program extends DiagnosticEmitter {
     for (let i = 0, k = queuedExtends.length; i < k; ++i) {
       let thisPrototype = queuedExtends[i];
       let extendsNode = assert(thisPrototype.extendsNode); // must be present if in queuedExtends
-      let baseElement = resolver.resolveIdentifier(extendsNode.name, null, thisPrototype.parent); // reports
+      let baseElement = resolver.resolveTypeName(extendsNode.name, thisPrototype.parent); // reports
       if (!baseElement) continue;
       if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
         let basePrototype = <ClassPrototype>baseElement;
         if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
           this.error(
             DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
-            extendsNode.range, extendsNode.name.text
+            extendsNode.range, (<ClassPrototype>baseElement).identifierNode.text
           );
         }
         if (

@@ -13,6 +13,7 @@ import {
 
   CommonTypeNode,
   TypeNode,
+  TypeName,
   TypeParameterNode,
   SignatureNode,
 
@@ -358,8 +359,7 @@ export class ASTBuilder {
       return;
     }
     var typeNode = <TypeNode>node;
-    assert(typeNode.name.text.length);
-    this.visitIdentifierExpression(typeNode.name);
+    this.visitTypeName((<TypeNode>node).name);
     var typeArguments = typeNode.typeArguments;
     if (typeArguments) {
       let numTypeArguments = typeArguments.length;
@@ -374,6 +374,17 @@ export class ASTBuilder {
         sb.push(">");
       }
       if (node.isNullable) sb.push(" | null");
+    }
+  }
+
+  visitTypeName(node: TypeName): void {
+    this.visitIdentifierExpression(node.identifier);
+    var sb = this.sb;
+    var current = node.next;
+    while (current) {
+      sb.push(".");
+      this.visitIdentifierExpression(current.identifier);
+      current = current.next;
     }
   }
 
@@ -1540,5 +1551,9 @@ export class ASTBuilder {
 }
 
 function isTypeOmitted(type: CommonTypeNode): bool {
-  return type.kind == NodeKind.TYPE && !changetype<TypeNode>(type).name.text.length;
+  if (type.kind == NodeKind.TYPE) {
+    let name = (<TypeNode>type).name;
+    return !(name.next || name.identifier.text.length);
+  }
+  return false;
 }

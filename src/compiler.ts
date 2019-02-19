@@ -5068,7 +5068,9 @@ export class Compiler extends DiagnosticEmitter {
           let argumentExprs = new Array<ExpressionRef>(numArguments);
           for (let i = 0; i < numParameters; ++i) {
             let typeNode = parameterNodes[i].type;
-            let name = typeNode.kind == NodeKind.TYPE ? (<TypeNode>typeNode).name.text : null;
+            let templateName = typeNode.kind == NodeKind.TYPE && !(<TypeNode>typeNode).name.next
+              ? (<TypeNode>typeNode).name.identifier.text
+              : null;
             let argumentExpression = i < numArguments
               ? argumentNodes[i]
               : parameterNodes[i].initializer;
@@ -5079,8 +5081,8 @@ export class Compiler extends DiagnosticEmitter {
               );
               return module.createUnreachable();
             }
-            if (name !== null && inferredTypes.has(name)) {
-              let inferredType = inferredTypes.get(name);
+            if (templateName !== null && inferredTypes.has(templateName)) {
+              let inferredType = inferredTypes.get(templateName);
               if (inferredType) {
                 argumentExprs[i] = this.compileExpressionRetainType(argumentExpression, inferredType, WrapMode.NONE);
                 let commonType: Type | null;
@@ -5099,7 +5101,7 @@ export class Compiler extends DiagnosticEmitter {
                 inferredType = this.currentType;
                 // ++numInferred;
               }
-              inferredTypes.set(name, inferredType);
+              inferredTypes.set(templateName, inferredType);
             } else {
               let concreteType = this.resolver.resolveType(
                 parameterNodes[i].type,

@@ -37,6 +37,7 @@ import {
   CommonTypeNode,
   NodeKind,
   TypeNode,
+  TypeName,
   TypeParameterNode,
   Node,
   Range,
@@ -174,45 +175,39 @@ export class Resolver extends DiagnosticEmitter {
     // now dealing with TypeNode
     assert(node.kind == NodeKind.TYPE);
     var typeNode = <TypeNode>node;
-    var typeName = typeNode.name.text;
+    var typeName = typeNode.name;
     var typeArgumentNodes = typeNode.typeArguments;
 
-    // look up in contextual type arguments, i.e. `T`
-    if (contextualTypeArguments && contextualTypeArguments.has(typeName)) {
-      let type = contextualTypeArguments.get(typeName)!;
-      if (typeArgumentNodes !== null && typeArgumentNodes.length) {
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode.Type_0_is_not_generic,
-            node.range, type.toString()
-          );
-        }
-      }
-      if (node.isNullable) {
-        if (!type.is(TypeFlags.REFERENCE)) {
+    // look up in contextual type arguments if a simple type name
+    if (!typeName.next) {
+      if (contextualTypeArguments && contextualTypeArguments.has(typeName.identifier.text)) {
+        let type = contextualTypeArguments.get(typeName.identifier.text)!;
+        if (typeArgumentNodes !== null && typeArgumentNodes.length) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
-              DiagnosticCode.Basic_type_0_cannot_be_nullable,
+              DiagnosticCode.Type_0_is_not_generic,
               node.range, type.toString()
             );
           }
         }
-        return type.asNullable();
+        if (node.isNullable) {
+          if (!type.is(TypeFlags.REFERENCE)) {
+            if (reportMode == ReportMode.REPORT) {
+              this.error(
+                DiagnosticCode.Basic_type_0_cannot_be_nullable,
+                node.range, type.toString()
+              );
+            }
+          }
+          return type.asNullable();
+        }
+        return type;
       }
-      return type;
     }
 
     // look up in context
-    var element = context.lookup(typeName);
-    if (!element) {
-      if (reportMode == ReportMode.REPORT) {
-        this.error(
-          DiagnosticCode.Cannot_find_name_0,
-          typeNode.name.range, typeName
-        );
-      }
-      return null;
-    }
+    var element = this.resolveTypeName(typeName, context, reportMode);
+    if (!element) return null;
 
     // use shadow type if present (i.e. namespace sharing a type)
     if (element.shadowType) element = element.shadowType;
@@ -270,7 +265,7 @@ export class Resolver extends DiagnosticEmitter {
             if (reportMode == ReportMode.REPORT) {
               this.error(
                 DiagnosticCode.Basic_type_0_cannot_be_nullable,
-                typeNode.name.range, typeNode.name.text
+                typeNode.name.range, typeName.identifier.text
               );
             }
           } else {
@@ -281,7 +276,7 @@ export class Resolver extends DiagnosticEmitter {
       }
 
       // handle special native type
-      if (typeNode.name.text == CommonSymbols.native) {
+      if (!typeName.next && typeName.identifier.text == CommonSymbols.native) {
         if (!(typeArgumentNodes && typeArgumentNodes.length == 1)) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
@@ -334,7 +329,7 @@ export class Resolver extends DiagnosticEmitter {
       } else if (typeArgumentNodes && typeArgumentNodes.length) {
         this.error(
           DiagnosticCode.Type_0_is_not_generic,
-          typeNode.range, typeNode.name.text
+          typeNode.range, typeName.identifier.text
         );
         // recoverable
       }
@@ -349,10 +344,40 @@ export class Resolver extends DiagnosticEmitter {
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Cannot_find_name_0,
-        typeNode.name.range, typeName
+        typeNode.name.range, typeName.identifier.text
       );
     }
     return null;
+  }
+
+  /** Resolves the specified type name relative to the given context. */
+  resolveTypeName(typeName: TypeName, context: Element, reportMode = ReportMode.REPORT): Element | null {
+    var element = context.lookup(typeName.identifier.text);
+    if (!element) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Cannot_find_name_0,
+          typeName.range, typeName.identifier.text
+        );
+      }
+      return null;
+    }
+    var prev = typeName;
+    var next = typeName.next;
+    while (next) {
+      if (!(element = element.lookupInSelf(next.identifier.text))) {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Property_0_does_not_exist_on_type_1,
+            next.range, next.identifier.text, prev.identifier.text
+          );
+        }
+        return null;
+      }
+      prev = next;
+      next = next.next;
+    }
+    return element;
   }
 
   /** Resolves an array of type arguments to concrete types. */

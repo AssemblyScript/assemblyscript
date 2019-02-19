@@ -31,6 +31,7 @@ export enum NodeKind {
 
   // types
   TYPE,
+  TYPENAME,
   TYPEPARAMETER,
   PARAMETER,
   SIGNATURE,
@@ -155,8 +156,26 @@ export abstract class Node {
 
   // types
 
-  static createType(
+  static createTypeName(
     name: IdentifierExpression,
+    range: Range
+  ): TypeName {
+    var typeName = new TypeName();
+    typeName.range = range;
+    typeName.identifier = name; name.parent = typeName;
+    typeName.next = null;
+    return typeName;
+  }
+
+  static createSimpleTypeName(
+    name: string,
+    range: Range
+  ): TypeName {
+    return Node.createTypeName(Node.createIdentifierExpression(name, range), range);
+  }
+
+  static createType(
+    name: TypeName,
     typeArguments: CommonTypeNode[] | null,
     isNullable: bool,
     range: Range
@@ -173,7 +192,7 @@ export abstract class Node {
     range: Range
   ): TypeNode {
     return Node.createType(
-      Node.createIdentifierExpression("", range),
+      Node.createSimpleTypeName("", range),
       null,
       false,
       range
@@ -1066,12 +1085,22 @@ export abstract class CommonTypeNode extends Node {
   isNullable: bool;
 }
 
+/** Represents a type name. */
+export class TypeName extends Node {
+  kind = NodeKind.TYPENAME;
+
+  /** Identifier of this part. */
+  identifier: IdentifierExpression;
+  /** Next part of the type name or `null` if this is the last part. */
+  next: TypeName | null;
+}
+
 /** Represents a type annotation. */
 export class TypeNode extends CommonTypeNode {
   kind = NodeKind.TYPE;
 
-  /** Identifier reference. */
-  name: IdentifierExpression;
+  /** Type name. */
+  name: TypeName;
   /** Type argument references. */
   typeArguments: CommonTypeNode[] | null;
 }
