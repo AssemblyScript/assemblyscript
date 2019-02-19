@@ -2,9 +2,9 @@ import { MAX_SIZE_32 } from "./allocator";
 import { String } from "../string";
 
 /** Size of a String header. */
-@lazy export const HEADER_SIZE = (offsetof<String>() + 1) & ~1; // 2 byte aligned
+@inline export const HEADER_SIZE = (offsetof<String>() + 1) & ~1; // 2 byte aligned
 /** Maximum length of a String. */
-@lazy export const MAX_LENGTH = (<i32>MAX_SIZE_32 - HEADER_SIZE) >>> 1;
+@inline export const MAX_LENGTH = (<i32>MAX_SIZE_32 - HEADER_SIZE) >>> 1;
 
 // Low-level utility
 

@@ -66,19 +66,13 @@
   nop
  )
  (func $start:merge (; 16 ;) (type $_)
-  nop
   global.get $merge/globalType
   drop
-  nop
   global.get $merge/typeGlobal
   drop
-  nop
   call $merge/namespaceType.test
-  nop
   call $merge/typeNamespace.test
-  nop
   call $merge/functionType
-  nop
   call $merge/typeFunction
   call $merge/classNamespace.test1
   call $merge/classNamespace.test2

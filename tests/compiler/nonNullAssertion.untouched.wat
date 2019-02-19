@@ -51,16 +51,7 @@
   local.get $0
   i32.load
  )
- (func $start:~lib/string (; 5 ;) (type $_)
-  nop
- )
- (func $start:~lib/internal/string (; 6 ;) (type $_)
-  call $start:~lib/string
- )
- (func $start:~lib/array (; 7 ;) (type $_)
-  call $start:~lib/internal/string
- )
- (func $~lib/array/Array<Foo>#__get (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Foo>#__get (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -93,12 +84,12 @@
    unreachable
   end
  )
- (func $nonNullAssertion/testArr (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testArr (; 6 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<Foo>#__get
  )
- (func $~lib/array/Array<Foo | null>#__get (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Foo | null>#__get (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -131,30 +122,30 @@
    unreachable
   end
  )
- (func $nonNullAssertion/testElem (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testElem (; 8 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<Foo | null>#__get
  )
- (func $nonNullAssertion/testAll (; 12 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 0
-  call $~lib/array/Array<Foo | null>#__get
-  i32.load
- )
- (func $nonNullAssertion/testAll2 (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testAll (; 9 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<Foo | null>#__get
   i32.load
  )
- (func $nonNullAssertion/testFn (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testAll2 (; 10 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 0
+  call $~lib/array/Array<Foo | null>#__get
+  i32.load
+ )
+ (func $nonNullAssertion/testFn (; 11 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~argc
   local.get $0
   call_indirect (type $i)
  )
- (func $nonNullAssertion/testFn2 (; 15 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testFn2 (; 12 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   local.set $1
@@ -163,30 +154,29 @@
   local.get $1
   call_indirect (type $i)
  )
- (func $nonNullAssertion/testRet (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testRet (; 13 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~argc
   local.get $0
   call_indirect (type $i)
  )
- (func $nonNullAssertion/testObjFn (; 17 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 0
-  global.set $~argc
-  local.get $0
-  i32.load offset=4
-  call_indirect (type $i)
- )
- (func $nonNullAssertion/testObjRet (; 18 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testObjFn (; 14 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~argc
   local.get $0
   i32.load offset=4
   call_indirect (type $i)
  )
- (func $start (; 19 ;) (type $_)
+ (func $nonNullAssertion/testObjRet (; 15 ;) (type $ii) (param $0 i32) (result i32)
+  i32.const 0
+  global.set $~argc
+  local.get $0
+  i32.load offset=4
+  call_indirect (type $i)
+ )
+ (func $start (; 16 ;) (type $_)
   call $start:nonNullAssertion
-  call $start:~lib/array
  )
- (func $null (; 20 ;) (type $_)
+ (func $null (; 17 ;) (type $_)
  )
 )

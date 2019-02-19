@@ -1448,9 +1448,8 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.INTERFACEDECLARATION:
       case NodeKind.INDEXSIGNATUREDECLARATION: break;
       default: { // otherwise a top-level statement that is part of the start function's body
-        body.push(
-          this.compileStatement(statement)
-        );
+        let stmt = this.compileStatement(statement);
+        if (getExpressionId(stmt) != ExpressionId.Nop) body.push(stmt);
         break;
       }
     }

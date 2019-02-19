@@ -13,7 +13,6 @@
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 80))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -114,10 +113,7 @@
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $start:~lib/string (; 4 ;) (type $_)
-  nop
- )
- (func $~lib/internal/string/compareUnsafe (; 5 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 4 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -170,7 +166,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -214,7 +210,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $object-literal/bar (; 7 ;) (type $i_) (param $0 i32)
+ (func $object-literal/bar (; 6 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -242,7 +238,7 @@
    unreachable
   end
  )
- (func $object-literal/bar2 (; 8 ;) (type $i_) (param $0 i32)
+ (func $object-literal/bar2 (; 7 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.load
   i32.const 2
@@ -257,7 +253,7 @@
    unreachable
   end
  )
- (func $object-literal/Foo2#test (; 9 ;) (type $i_) (param $0 i32)
+ (func $object-literal/Foo2#test (; 8 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.load
   i32.const 3
@@ -272,12 +268,11 @@
    unreachable
   end
  )
- (func $start:object-literal (; 10 ;) (type $_)
+ (func $start:object-literal (; 9 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   call $start:~lib/allocator/arena
-  call $start:~lib/string
   block (result i32)
    i32.const 8
    call $~lib/memory/memory.allocate
@@ -312,9 +307,9 @@
   end
   call $object-literal/Foo2#test
  )
- (func $start (; 11 ;) (type $_)
+ (func $start (; 10 ;) (type $_)
   call $start:object-literal
  )
- (func $null (; 12 ;) (type $_)
+ (func $null (; 11 ;) (type $_)
  )
 )

@@ -91,7 +91,6 @@
   call $function-types/makeAndAdd<i32>
  )
  (func $start:function-types (; 12 ;) (type $_)
-  nop
   call $function-types/makeAdder<i32>
   global.set $function-types/i32Adder
   block (result i32)
