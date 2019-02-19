@@ -315,6 +315,8 @@ export class Program extends DiagnosticEmitter {
   nativeSource: Source;
   /** Special native code file. */
   nativeFile: File;
+  /** Explicitly annotated start function. */
+  explicitStartFunction: FunctionPrototype | null = null;
 
   // lookup maps
 
@@ -337,8 +339,6 @@ export class Program extends DiagnosticEmitter {
   arrayPrototype: ClassPrototype | null = null;
   /** String instance reference. */
   stringInstance: Class | null = null;
-  /** Main function reference, if present. */
-  mainFunction: FunctionPrototype | null = null;
   /** Abort function reference, if present. */
   abortInstance: Function | null = null;
   /** Memory allocation function. */
@@ -729,16 +729,6 @@ export class Program extends DiagnosticEmitter {
     if (element = this.lookupGlobal(LibrarySymbols.Array)) {
       assert(element.kind == ElementKind.CLASS_PROTOTYPE);
       this.arrayPrototype = <ClassPrototype>element;
-    }
-    if (element = this.lookupGlobal(LibrarySymbols.main)) {
-      if (
-        element.kind == ElementKind.FUNCTION_PROTOTYPE &&
-        !(<FunctionPrototype>element).isAny(CommonFlags.GENERIC | CommonFlags.AMBIENT) &&
-        element.is(CommonFlags.EXPORT)
-      ) {
-        (<FunctionPrototype>element).set(CommonFlags.MAIN);
-        this.mainFunction = <FunctionPrototype>element;
-      }
     }
     if (element = this.lookupGlobal(LibrarySymbols.abort)) {
       assert(element.kind == ElementKind.FUNCTION_PROTOTYPE);
@@ -1463,17 +1453,35 @@ export class Program extends DiagnosticEmitter {
     parent: Element
   ): void {
     var name = declaration.name.text;
+    var validDecorators = DecoratorFlags.NONE;
+    if (!declaration.is(CommonFlags.AMBIENT)) {
+      validDecorators |= DecoratorFlags.INLINE;
+    }
+    if (parent.kind != ElementKind.CLASS_PROTOTYPE && !declaration.is(CommonFlags.INSTANCE)) {
+      validDecorators |= DecoratorFlags.GLOBAL;
+    }
+    if (!declaration.is(CommonFlags.GENERIC)) {
+      if (declaration.is(CommonFlags.AMBIENT)) {
+        validDecorators |= DecoratorFlags.EXTERNAL;
+      } else if (parent.kind == ElementKind.FILE && (<File>parent).source.isEntry) {
+        validDecorators |= DecoratorFlags.START;
+      }
+    }
     var element = new FunctionPrototype(
       name,
       parent,
       declaration,
-      this.checkDecorators(declaration.decorators,
-        DecoratorFlags.GLOBAL |
-        DecoratorFlags.INLINE |
-        DecoratorFlags.EXTERNAL
-      )
+      this.checkDecorators(declaration.decorators, validDecorators)
     );
     if (!parent.add(name, element)) return;
+    if (element.hasDecorator(DecoratorFlags.START)) {
+      if (this.explicitStartFunction) {
+        this.error(
+          DiagnosticCode.Module_cannot_have_multiple_start_functions,
+          assert(findDecorator(DecoratorKind.START, declaration.decorators)).range
+        );
+      } else this.explicitStartFunction = element;
+    }
   }
 
   private initializeInterface(
@@ -1664,7 +1672,9 @@ export enum DecoratorFlags {
   /** Is a builtin. */
   BUILTIN = 1 << 8,
   /** Is compiled lazily. */
-  LAZY = 1 << 9
+  LAZY = 1 << 9,
+  /** Is the explicit start function. */
+  START = 1 << 10
 }
 
 /** Translates a decorator kind to the respective decorator flag. */
@@ -1681,6 +1691,7 @@ export function decoratorKindToFlag(kind: DecoratorKind): DecoratorFlags {
     case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
     case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
     case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
+    case DecoratorKind.START: return DecoratorFlags.START;
     default: return DecoratorFlags.NONE;
   }
 }

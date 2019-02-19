@@ -48,7 +48,8 @@ import {
   SETTER_PREFIX,
   LibrarySymbols,
   CommonSymbols,
-  INDEX_SUFFIX
+  INDEX_SUFFIX,
+  LIBRARY_PREFIX
 } from "./common";
 
 import {
@@ -361,7 +362,8 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile the start function if not empty or called by main
-    if (startFunctionBody.length || program.mainFunction !== null) {
+    var explicitStartFunction = program.explicitStartFunction;
+    if (startFunctionBody.length || explicitStartFunction) {
       let signature = startFunctionInstance.signature;
       let funcRef = module.addFunction(
         startFunctionInstance.internalName,
@@ -374,7 +376,7 @@ export class Compiler extends DiagnosticEmitter {
         module.createBlock(null, startFunctionBody)
       );
       startFunctionInstance.finalize(module, funcRef);
-      if (!program.mainFunction) module.setStart(funcRef);
+      if (!explicitStartFunction) module.setStart(funcRef);
     }
 
     // update the heap base pointer
@@ -1076,17 +1078,18 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // make the main function call `start` implicitly, but only once
-    if (instance.is(CommonFlags.MAIN)) {
-      module.addGlobal("~started", NativeType.I32, true, module.createI32(0));
+    if (instance.prototype == this.program.explicitStartFunction) {
+      let startedVarName = LIBRARY_PREFIX + "started";
+      module.addGlobal(startedVarName, NativeType.I32, true, module.createI32(0));
       stmts.unshift(
         module.createIf(
           module.createUnary(
             UnaryOp.EqzI32,
-            module.createGetGlobal("~started", NativeType.I32)
+            module.createGetGlobal(startedVarName, NativeType.I32)
           ),
           module.createBlock(null, [
             module.createCall("start", null, NativeType.None),
-            module.createSetGlobal("~started", module.createI32(1))
+            module.createSetGlobal(startedVarName, module.createI32(1))
           ])
         )
       );

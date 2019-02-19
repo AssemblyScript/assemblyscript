@@ -964,7 +964,7 @@ declare function unmanaged(constructor: Function): void;
 /** Annotates a class as being sealed / non-derivable. */
 declare function sealed(constructor: Function): void;
 
-/** Annotates a method or function as always inlined. */
+/** Annotates a method, function or constant global as always inlined. */
 declare function inline(
   target: any,
   propertyKey: string,
@@ -977,3 +977,17 @@ declare function external(namespace: string, name: string): (
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<any>
 ) => TypedPropertyDescriptor<any> | void;
+
+/** Annotates a global for lazy compilation. */
+declare function lazy(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
+
+/** Annotates a function as the explicit start function. */
+declare function start(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;

@@ -23,6 +23,7 @@
   "Cannot access method '{0}' without calling it as it requires 'this' to be set.": 218,
   "Optional properties are not supported.": 219,
   "Expression must be a compile-time constant.": 220,
+  "Module cannot have multiple start functions.": 221,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

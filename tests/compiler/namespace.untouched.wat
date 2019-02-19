@@ -8,7 +8,7 @@
  (global $namespace/Outer.Inner.anEnum.ONE i32 (i32.const 1))
  (global $namespace/Outer.Inner.anEnum.TWO i32 (i32.const 2))
  (global $namespace/Joined.THREE i32 (i32.const 3))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -18,7 +18,7 @@
  (func $namespace/Joined.anotherFunc (; 1 ;) (type $i) (result i32)
   global.get $namespace/Joined.THREE
  )
- (func $start (; 2 ;) (type $_)
+ (func $start:namespace (; 2 ;) (type $_)
   global.get $namespace/Outer.Inner.aVar
   drop
   call $namespace/Outer.Inner.aFunc
@@ -28,6 +28,9 @@
   call $namespace/Joined.anotherFunc
   drop
  )
- (func $null (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $_)
+  call $start:namespace
+ )
+ (func $null (; 4 ;) (type $_)
  )
 )
