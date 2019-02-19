@@ -882,7 +882,7 @@ interface INativeMath<T> extends IMath<T> {
   mod(x: T, y: T): T;
   /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
   rem(x: T, y: T): T;
-  /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32` and `sincos_c32` globals */
+  /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32/64` and `sincos_c32/64` globals */
   sincos(x: T): void;
 }
 
