@@ -1243,6 +1243,10 @@ export namespace NativeMath {
 /** @internal */
 var rempio2f_y: f64;
 
+/** @public Used as return values from Mathf.sincos */
+var sincos_s32: f32;
+var sincos_c32: f32;
+
 /** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   const                    // see: musl/src/math/asinf.c and SUN COPYRIGHT NOTICE above
@@ -2526,108 +2530,105 @@ export namespace NativeMathf {
     }
     return sx ? -x : x;
   }
-}
 
-var sincosf_s: f32;
-var sincosf_c: f32;
+  export function sincos(x: f32): void { // see: musl/tree/src/math/sincosf.c
+    const s1pio2 = reinterpret<f64>(0x3FF921FB54442D18); // 1 * M_PI_2
+    const s2pio2 = reinterpret<f64>(0x400921FB54442D18); // 2 * M_PI_2
+    const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // 3 * M_PI_2
+    const s4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
+    const Ox1p120f = reinterpret<f32>(0x7b800000);       // 2 ** 120
 
-export function sincosf(x: f32): void { // see: musl/tree/src/math/sincosf.c
-  const s1pio2 = reinterpret<f64>(0x3FF921FB54442D18); // 1 * M_PI_2
-  const s2pio2 = reinterpret<f64>(0x400921FB54442D18); // 2 * M_PI_2
-  const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // 3 * M_PI_2
-  const s4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
-  const Ox1p120f = reinterpret<f32>(0x7b800000);       // 2 ** 120
+    var ix = reinterpret<u32>(x);
+    var sign = ix >> 31;
+    ix &= 0x7fffffff;
 
-  var ix = reinterpret<u32>(x);
-  var sign = ix >> 31;
-  ix &= 0x7fffffff;
-
-  /* |x| ~<= pi/4 */
-  if (ix <= 0x3f490fda) {
-    if (ix < 0x39800000) { /* |x| < 2**-12 */
-      /* raise inexact if x!=0 and underflow if subnormal */
-      FORCE_EVAL(ix < 0x00100000 ? x / Ox1p120f : x + Ox1p120f);
-      sincosf_s = x;
-      sincosf_c = 1;
-      return;
-    }
-    sincosf_s = sin_kernf(x);
-    sincosf_c = cos_kernf(x);
-    return;
-  }
-
-  if (ASC_SHRINK_LEVEL < 1) {
-    /* |x| ~<= 5*pi/4 */
-    if (ix <= 0x407b53d1) {
-      if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
-        if (sign) {
-          sincosf_s = -cos_kernf(x + s1pio2);
-          sincosf_c =  sin_kernf(x + s1pio2);
-        } else {
-          sincosf_s = cos_kernf(s1pio2 - x);
-          sincosf_c = sin_kernf(s1pio2 - x);
-        }
+    /* |x| ~<= pi/4 */
+    if (ix <= 0x3f490fda) {
+      if (ix < 0x39800000) { /* |x| < 2**-12 */
+        /* raise inexact if x!=0 and underflow if subnormal */
+        FORCE_EVAL(ix < 0x00100000 ? x / Ox1p120f : x + Ox1p120f);
+        sincos_s32 = x;
+        sincos_c32 = 1;
         return;
       }
-      /* -sin(x + c) is not correct if x+c could be 0: -0 vs +0 */
-      sincosf_s = -sin_kernf(sign ? x + s2pio2 : x - s2pio2);
-      sincosf_c = -cos_kernf(sign ? x + s2pio2 : x - s2pio2);
+      sincos_s32 = sin_kernf(x);
+      sincos_c32 = cos_kernf(x);
       return;
     }
 
-    /* |x| ~<= 9*pi/4 */
-    if (ix <= 0x40e231d5) {
-      if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
-        if (sign) {
-          sincosf_s =  cos_kernf(x + s3pio2);
-          sincosf_c = -sin_kernf(x + s3pio2);
-        } else {
-          sincosf_s = -cos_kernf(x - s3pio2);
-          sincosf_c =  sin_kernf(x - s3pio2);
+    if (ASC_SHRINK_LEVEL < 1) {
+      /* |x| ~<= 5*pi/4 */
+      if (ix <= 0x407b53d1) {
+        if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
+          if (sign) {
+            sincos_s32 = -cos_kernf(x + s1pio2);
+            sincos_c32 =  sin_kernf(x + s1pio2);
+          } else {
+            sincos_s32 = cos_kernf(s1pio2 - x);
+            sincos_c32 = sin_kernf(s1pio2 - x);
+          }
+          return;
         }
+        /* -sin(x + c) is not correct if x+c could be 0: -0 vs +0 */
+        sincos_s32 = -sin_kernf(sign ? x + s2pio2 : x - s2pio2);
+        sincos_c32 = -cos_kernf(sign ? x + s2pio2 : x - s2pio2);
         return;
       }
-      sincosf_s = sin_kernf(sign ? x + s4pio2 : x - s4pio2);
-      sincosf_c = cos_kernf(sign ? x + s4pio2 : x - s4pio2);
+
+      /* |x| ~<= 9*pi/4 */
+      if (ix <= 0x40e231d5) {
+        if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
+          if (sign) {
+            sincos_s32 =  cos_kernf(x + s3pio2);
+            sincos_c32 = -sin_kernf(x + s3pio2);
+          } else {
+            sincos_s32 = -cos_kernf(x - s3pio2);
+            sincos_c32 =  sin_kernf(x - s3pio2);
+          }
+          return;
+        }
+        sincos_s32 = sin_kernf(sign ? x + s4pio2 : x - s4pio2);
+        sincos_c32 = cos_kernf(sign ? x + s4pio2 : x - s4pio2);
+        return;
+      }
+    }
+
+    /* sin(Inf or NaN) is NaN */
+    if (ix >= 0x7f800000) {
+      let xx = x - x;
+      sincos_s32 = xx;
+      sincos_c32 = xx;
       return;
     }
-  }
 
-  /* sin(Inf or NaN) is NaN */
-  if (ix >= 0x7f800000) {
-    let xx = x - x;
-    sincosf_s = xx;
-    sincosf_c = xx;
-    return;
-  }
+    /* general argument reduction needed */
+    var n = rempio2f(x, ix, sign);
+    var y = rempio2f_y;
+    var s = sin_kernf(y);
+    var c = cos_kernf(y);
 
-  /* general argument reduction needed */
-  var n = rempio2f(x, ix, sign);
-  var y = rempio2f_y;
-  var s = sin_kernf(y);
-  var c = cos_kernf(y);
-
-  switch (n & 3) {
-    case 0: {
-      sincosf_s = s;
-      sincosf_c = c;
-      break;
-    }
-    case 1: {
-      sincosf_s =  c;
-      sincosf_c = -s;
-      break;
-    }
-    case 2: {
-      sincosf_s = -s;
-      sincosf_c = -c;
-      break;
-    }
-    case 3:
-    default: {
-      sincosf_s = -c;
-      sincosf_c =  s;
-      break;
+    switch (n & 3) {
+      case 0: {
+        sincos_s32 = s;
+        sincos_c32 = c;
+        break;
+      }
+      case 1: {
+        sincos_s32 =  c;
+        sincos_c32 = -s;
+        break;
+      }
+      case 2: {
+        sincos_s32 = -s;
+        sincos_c32 = -c;
+        break;
+      }
+      case 3:
+      default: {
+        sincos_s32 = -c;
+        sincos_c32 =  s;
+        break;
+      }
     }
   }
 }

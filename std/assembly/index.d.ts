@@ -870,6 +870,11 @@ interface IMath<T> {
   trunc(x: T): T;
 }
 
+/** Contains 32-bit sin value produced by Mathf.sincos */
+declare var sincos_s32: f32;
+/** Contains 32-bit cos value produced by Mathf.sincos */
+declare var sincos_c32: f32;
+
 interface INativeMath<T> extends IMath<T> {
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
@@ -877,6 +882,8 @@ interface INativeMath<T> extends IMath<T> {
   mod(x: T, y: T): T;
   /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
   rem(x: T, y: T): T;
+  /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32` and `sincos_c32` globals */
+  sincos(x: T): void;
 }
 
 /** Double precision math imported from JavaScript. */
