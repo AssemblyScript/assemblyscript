@@ -619,9 +619,10 @@ export class Program extends DiagnosticEmitter {
     for (let [file, exports] of queuedExports) {
       for (let [exportName, queuedExport] of exports) {
         let foreignPath = queuedExport.foreignPath;
+        let localName = queuedExport.localIdentifier.text;
         if (foreignPath) { // i.e. export { foo [as bar] } from "./baz"
           let element = this.lookupForeign(
-            queuedExport.localIdentifier.text,
+            localName,
             foreignPath,
             assert(queuedExport.foreignPathAlt), // must be set if foreignPath is
             queuedExports
@@ -632,19 +633,24 @@ export class Program extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
               queuedExport.localIdentifier.range,
-              foreignPath, queuedExport.localIdentifier.text
+              foreignPath, localName
             );
           }
         } else { // i.e. export { foo [as bar] }
-          let element = file.lookupInSelf(queuedExport.localIdentifier.text);
+          let element = file.lookupInSelf(localName);
           if (element) {
             file.ensureExport(exportName, element);
           } else {
-            this.error(
-              DiagnosticCode.Module_0_has_no_exported_member_1,
-              queuedExport.foreignIdentifier.range,
-              file.internalName, queuedExport.foreignIdentifier.text
-            );
+            let globalElement = this.lookupGlobal(localName);
+            if (globalElement && globalElement instanceof DeclaredElement) { // export { memory }
+              file.ensureExport(exportName, <DeclaredElement>globalElement);
+            } else {
+              this.error(
+                DiagnosticCode.Module_0_has_no_exported_member_1,
+                queuedExport.foreignIdentifier.range,
+                file.internalName, queuedExport.foreignIdentifier.text
+              );
+            }
           }
         }
       }
