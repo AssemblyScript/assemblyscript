@@ -359,7 +359,10 @@ export class Program extends DiagnosticEmitter {
   gcHookOffset: u32 = 0;
 
   /** Constructs a new program, optionally inheriting parser diagnostics. */
-  constructor(diagnostics: DiagnosticMessage[] | null = null) {
+  constructor(
+    /** Shared array of diagnostic messages (emitted so far). */
+    diagnostics: DiagnosticMessage[] | null = null
+  ) {
     super(diagnostics);
     var nativeSource = new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY);
     this.nativeSource = nativeSource;
@@ -400,6 +403,7 @@ export class Program extends DiagnosticEmitter {
     );
   }
 
+  // a dummy signature for programmatically generated native functions
   private nativeDummySignature: SignatureNode | null = null;
 
   /** Creates a native function declaration. */
@@ -900,7 +904,7 @@ export class Program extends DiagnosticEmitter {
     this.nativeFile.add(name, global);
   }
 
-  /** Ensures that the given global element exists. */
+  /** Ensures that the given global element exists. Attempts to merge duplicates. */
   ensureGlobal(name: string, element: DeclaredElement): void {
     var elementsByName = this.elementsByName;
     if (elementsByName.has(name)) {
@@ -934,7 +938,9 @@ export class Program extends DiagnosticEmitter {
 
   /** Tries to locate a foreign file given its normalized path. */
   private lookupForeignFile(
+    /** Normalized path to the other file. */
     foreignPath: string,
+    /** Alternative normalized path to the other file. */
     foreignPathAlt: string
   ): File | null {
     var filesByName = this.filesByName;
@@ -953,7 +959,7 @@ export class Program extends DiagnosticEmitter {
     foreignPath: string,
     /** Alternative normalized path to the other file. */
     foreignPathAlt: string,
-    /** Map of so far queued exports. */
+    /** So far queued exports. */
     queuedExports: Map<File,Map<string,QueuedExport>>
   ): DeclaredElement | null {
     do {
@@ -1029,9 +1035,13 @@ export class Program extends DiagnosticEmitter {
 
   /** Initializes a class declaration. */
   private initializeClass(
+    /** The declaration to initialize. */
     declaration: ClassDeclaration,
+    /** Parent element, usually a file or namespace. */
     parent: Element,
+    /** So far queued `extends` clauses. */
     queuedExtends: ClassPrototype[],
+    /** So far queued `implements` clauses. */
     queuedImplements: ClassPrototype[]
   ): void {
     var name = declaration.name.text;
@@ -1086,7 +1096,7 @@ export class Program extends DiagnosticEmitter {
         }
         case NodeKind.METHODDECLARATION: {
           if (memberDeclaration.isAny(CommonFlags.GET | CommonFlags.SET)) {
-            this.initializeAccessor(<MethodDeclaration>memberDeclaration, element);
+            this.initializeProperty(<MethodDeclaration>memberDeclaration, element);
           } else {
             this.initializeMethod(<MethodDeclaration>memberDeclaration, element);
           }
@@ -1100,7 +1110,9 @@ export class Program extends DiagnosticEmitter {
 
   /** Initializes a field of a class or interface. */
   private initializeField(
+    /** The declaration to initialize. */
     declaration: FieldDeclaration,
+    /** Parent class. */
     parent: ClassPrototype
   ): void {
     var name = declaration.name.text;
@@ -1124,7 +1136,6 @@ export class Program extends DiagnosticEmitter {
       assert(!declaration.isAny(CommonFlags.ABSTRACT | CommonFlags.GET | CommonFlags.SET));
       element = new FieldPrototype(
         name,
-        mangleInternalName(name, parent, true),
         parent,
         declaration,
         this.checkDecorators(decorators, DecoratorFlags.NONE)
@@ -1135,7 +1146,9 @@ export class Program extends DiagnosticEmitter {
 
   /** Initializes a method of a class or interface. */
   private initializeMethod(
+    /** The declaration to initialize. */
     declaration: MethodDeclaration,
+    /** Parent class. */
     parent: ClassPrototype
   ): void {
     var name = declaration.name.text;
@@ -1161,9 +1174,13 @@ export class Program extends DiagnosticEmitter {
     this.checkOperatorOverloads(declaration.decorators, element, parent);
   }
 
+  /** Checks that operator overloads are generally valid, if present. */
   private checkOperatorOverloads(
+    /** Decorators to check. */
     decorators: DecoratorNode[] | null,
+    /** Decorated method. */
     prototype: FunctionPrototype,
+    /** Parent class. */
     classPrototype: ClassPrototype
   ): void {
     if (decorators) {
@@ -1220,8 +1237,11 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Ensures that the property introduced by the specified getter or setter exists.*/
   private ensureProperty(
+    /** The declaration of the getter or setter introducing the property. */
     declaration: MethodDeclaration,
+    /** Parent class. */
     parent: ClassPrototype
   ): PropertyPrototype | null {
     var name = declaration.name.text;
@@ -1253,8 +1273,11 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
-  private initializeAccessor(
+  /** Initializes a property of a class. */
+  private initializeProperty(
+    /** The declaration of the getter or setter. */
     declaration: MethodDeclaration,
+    /** Parent class. */
     parent: ClassPrototype
   ): void {
     var property = this.ensureProperty(declaration, parent);
@@ -1293,8 +1316,11 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Initializes an enum. */
   private initializeEnum(
+    /** The declaration to initialize. */
     declaration: EnumDeclaration,
+    /** Parent element, usually a file or namespace. */
     parent: Element
   ): void {
     var name = declaration.name.text;
@@ -1315,8 +1341,11 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Initializes an enum value. */
   private initializeEnumValue(
+    /** The declaration to initialize. */
     declaration: EnumValueDeclaration,
+    /** Parent enum. */
     parent: Enum
   ): void {
     var name = declaration.name.text;
@@ -1331,10 +1360,15 @@ export class Program extends DiagnosticEmitter {
     if (!parent.add(name, element)) return;
   }
 
+  /** Initializes an `export` statement. */
   private initializeExports(
+    /** The statement to initialize. */
     statement: ExportStatement,
+    /** Parent file. */
     parent: File,
+    /** So far queued `export`s. */
     queuedExports: Map<File,Map<string,QueuedExport>>,
+    /** So far queued `export *`s. */
     queuedExportsStar: Map<File,QueuedExportStar[]>
   ): void {
     var members = statement.members;
@@ -1357,10 +1391,15 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Initializes a single `export` member. Does not handle `export *`. */
   private initializeExport(
+    /** The member to initialize. */
     member: ExportMember,
+    /** Local file. */
     localFile: File,
+    /** Path to the other file, if present. */
     foreignPath: string | null,
+    /** So far queued `export`s. */
     queuedExports: Map<File,Map<string,QueuedExport>>
   ): void {
     var localName = member.localName.text;
@@ -1410,10 +1449,15 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Initializes an `import` statement. */
   private initializeImports(
+    /** The statement to initialize. */
     statement: ImportStatement,
+    /** Parent file. */
     parent: File,
+    /** So far queued `import`s. */
     queuedImports: QueuedImport[],
+    /** SO far queued `export`s. */
     queuedExports: Map<File,Map<string,QueuedExport>>
   ): void {
     var declarations = statement.declarations;
@@ -1440,11 +1484,17 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Initializes a single `import` declaration. Does not handle `import *`. */
   private initializeImport( // { foo [as bar] }
+    /** The declaration to initialize. */
     declaration: ImportDeclaration,
+    /** Parent file. */
     parent: File,
+    /** Path to the other file. */
     foreignPath: string,
+    /** So far queued `import`s. */
     queuedImports: QueuedImport[],
+    /** So far queued `export`s. */
     queuedExports: Map<File,Map<string,QueuedExport>>
   ): void {
     var foreignPathAlt = foreignPath.endsWith(INDEX_SUFFIX) // strip or add index depending on what's already present
@@ -1468,8 +1518,11 @@ export class Program extends DiagnosticEmitter {
     ));
   }
 
+  /** Initializes a function. Does not handle methods. */
   private initializeFunction(
+    /** The declaration to initialize. */
     declaration: FunctionDeclaration,
+    /** Parent element, usually a file or namespace. */
     parent: Element
   ): void {
     var name = declaration.name.text;
@@ -1504,8 +1557,11 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Initializes an interface. */
   private initializeInterface(
+    /** The declaration to initialize. */
     declaration: InterfaceDeclaration,
+    /** Parent element, usually a file or namespace. */
     parent: Element
   ): void {
     var name = declaration.name.text;
@@ -1528,7 +1584,7 @@ export class Program extends DiagnosticEmitter {
         }
         case NodeKind.METHODDECLARATION: {
           if (memberDeclaration.isAny(CommonFlags.GET | CommonFlags.SET)) {
-            this.initializeAccessor(<MethodDeclaration>memberDeclaration, element);
+            this.initializeProperty(<MethodDeclaration>memberDeclaration, element);
           } else {
             this.initializeMethod(<MethodDeclaration>memberDeclaration, element);
           }
@@ -1539,10 +1595,15 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Initializes a namespace. */
   private initializeNamespace(
+    /** The declaration to initialize. */
     declaration: NamespaceDeclaration,
+    /** Parent element, usually a file or another namespace. */
     parent: Element,
+    /** So far queued `extends` clauses. */
     queuedExtends: ClassPrototype[],
+    /** So far queued `implements` clauses. */
     queuedImplements: ClassPrototype[]
   ): void {
     var name = declaration.name.text;
@@ -1585,7 +1646,13 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  private initializeTypeDefinition(declaration: TypeDeclaration, parent: Element): void {
+  /** Initializes a `type` definition. */
+  private initializeTypeDefinition(
+    /** The declaration to initialize. */
+    declaration: TypeDeclaration,
+    /** Parent element, usually a file or namespace. */
+    parent: Element
+  ): void {
     var name = declaration.name.text;
     var element = new TypeDefinition(
       name,
@@ -1596,8 +1663,11 @@ export class Program extends DiagnosticEmitter {
     parent.add(name, element); // reports
   }
 
+  /** Initializes a variable statement. */
   private initializeVariables(
+    /** The statement to initialize. */
     statement: VariableStatement,
+    /** Parent element, usually a file or namespace. */
     parent: Element
   ): void {
     var declarations = statement.declarations;
@@ -1723,7 +1793,7 @@ export abstract class Element {
   /** Shadowing type in type space, if any. */
   shadowType: TypeDefinition | null = null;
 
-  /** Constructs a new element, linking it to its containing {@link Program}. */
+  /** Constructs a new program element. */
   protected constructor(
     /** Specific element kind. */
     public kind: ElementKind,
@@ -1811,9 +1881,10 @@ export abstract class Element {
   }
 }
 
-/** An element with an associated declaration statement. */
+/** Base class of elements with an associated declaration statement. */
 export abstract class DeclaredElement extends Element {
 
+  /** Constructs a new declared program element. */
   protected constructor(
     /** Specific element kind. */
     kind: ElementKind,
@@ -1855,7 +1926,7 @@ export abstract class DeclaredElement extends Element {
   }
 }
 
-/** An element that can be resolved to a concrete type. */
+/** Base class of elements that can be resolved to a concrete type. */
 export abstract class TypedElement extends DeclaredElement {
 
   /** Resolved type. Set once `is(RESOLVED)`, otherwise void. */
@@ -1988,10 +2059,16 @@ export class File extends Element {
 
 /** A type definition. */
 export class TypeDefinition extends TypedElement {
+
+  /** Constructs a new type definition. */
   constructor(
+    /** Simple name. */
     name: string,
+    /** Parent element, usually a file or namespace. */
     parent: Element,
+    /** Declaration reference. */
     declaration: TypeDeclaration,
+    /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
   ) {
     super(
@@ -2026,8 +2103,11 @@ export class Namespace extends DeclaredElement {
 
   /** Constructs a new namespace. */
   constructor(
+    /** Simple name. */
     name: string,
+    /** Parent element, usually a file or another namespace. */
     parent: Element,
+    /** Declaration reference. */
     declaration: NamespaceDeclaration
   ) {
     super(
@@ -2052,9 +2132,13 @@ export class Enum extends TypedElement {
 
   /** Constructs a new enum. */
   constructor(
+    /** Simple name. */
     name: string,
+    /** Parent element, usually a file or namespace. */
     parent: Element,
+    /** Declaration reference. */
     declaration: EnumDeclaration,
+    /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
   ) {
     super(
@@ -2086,7 +2170,7 @@ export const enum ConstantValueKind {
   FLOAT
 }
 
-/** Base class of all variable-like elements. */
+/** Base class of all variable-like program elements. */
 export abstract class VariableLikeElement extends TypedElement {
 
   /** Constant value kind. */
@@ -2096,10 +2180,15 @@ export abstract class VariableLikeElement extends TypedElement {
   /** Constant float value, if applicable. */
   constantFloatValue: f64;
 
+  /** Constructs a new variable-like element. */
   protected constructor(
+    /** Specific element kind. */
     kind: ElementKind,
+    /** Simple name. */
     name: string,
+    /** Parent element, usually a file, namespace or class. */
     parent: Element,
+    /** Declaration reference. Creates a native declaration if omitted. */
     declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
   ) {
     super(
@@ -2150,10 +2239,15 @@ export abstract class VariableLikeElement extends TypedElement {
 /** An enum value. */
 export class EnumValue extends VariableLikeElement {
 
+  /** Constructs a new enum value. */
   constructor(
+    /** Simple name. */
     name: string,
+    /** Parent enum. */
     parent: Enum,
+    /** Declaration reference. */
     declaration: EnumValueDeclaration,
+    /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
   ) {
     super(
@@ -2180,10 +2274,15 @@ export class EnumValue extends VariableLikeElement {
 /** A global variable. */
 export class Global extends VariableLikeElement {
 
+  /** Constructs a new global variable. */
   constructor(
+    /** Simple name. */
     name: string,
+    /** Parent element, usually a file, namespace or static class. */
     parent: Element,
+    /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags,
+    /** Declaration reference. Creates a native declaration if omitted. */
     declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
   ) {
     super(
@@ -2204,7 +2303,7 @@ export class Parameter {
     public name: string,
     /** Parameter type. */
     public type: Type,
-    /** Parameter initializer. */
+    /** Parameter initializer, if present. */
     public initializer: Expression | null = null
   ) {}
 }
@@ -2214,11 +2313,11 @@ export class Local extends VariableLikeElement {
 
   /** Constructs a new local variable. */
   constructor(
-    /** Local name. */
+    /** Simple name. */
     name: string,
-    /** Local index. */
+    /** Zero-based index within the enclosing function. `-1` indicates a virtual local. */
     public index: i32,
-    /** Local type. */
+    /** Resolved type. */
     type: Type,
     /** Parent function. */
     parent: Function,
@@ -2250,9 +2349,13 @@ export class FunctionPrototype extends DeclaredElement {
 
   /** Constructs a new function prototype. */
   constructor(
+    /** Simple na,e */
     name: string,
+    /** Parent element, usually a file, namespace or class (if a method). */
     parent: Element,
+    /** Declaration reference. */
     declaration: FunctionDeclaration,
+    /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
   ) {
     super(
@@ -2356,13 +2459,18 @@ export class Function extends TypedElement {
   /** Trampoline function for calling with omitted arguments. */
   trampoline: Function | null = null;
 
+  /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(
+    /** Name incl. type parameters, i.e. `foo<i32>`. */
     nameInclTypeParameters: string,
+    /** Respective function prototype. */
     prototype: FunctionPrototype,
+    /** Concrete signature. */
     signature: Signature, // pre-resolved
+    /** Contextual type arguments inherited from its parent class, if any. */
     contextualTypeArguments: Map<string,Type> | null = null
   ) {
     super(
@@ -2484,7 +2592,9 @@ export class FunctionTarget extends Element {
 
   /** Constructs a new function target. */
   constructor(
+    /** Concrete signature. */
     signature: Signature,
+    /** Program reference. */
     program: Program,
     __s: string = "" // FIXME: current TS limitation workaround, but a fix seems underway
   ) {
@@ -2511,16 +2621,19 @@ export class FieldPrototype extends DeclaredElement {
 
   /** Constructs a new field prototype. */
   constructor(
+    /** Simple name. */
     name: string,
-    internalName: string,
+    /** Parent class. */
     parent: ClassPrototype,
+    /** Declaration reference. */
     declaration: FieldDeclaration,
+    /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
   ) {
     super(
       ElementKind.FIELD_PROTOTYPE,
       name,
-      internalName,
+      mangleInternalName(name, parent, assert(declaration.is(CommonFlags.INSTANCE))),
       parent.program,
       parent,
       declaration
@@ -2559,8 +2672,11 @@ export class Field extends VariableLikeElement {
 
   /** Constructs a new field. */
   constructor(
+    /** Respective field prototype. */
     prototype: FieldPrototype,
+    /** Parent class. */
     parent: Class,
+    /** Concrete type. */
     type: Type
   ) {
     super(
@@ -2570,9 +2686,9 @@ export class Field extends VariableLikeElement {
       <VariableLikeDeclarationStatement>prototype.declaration
     );
     this.prototype = prototype;
+    this.flags = prototype.flags;
     assert(type != Type.void);
-    this.flags = prototype.flags | CommonFlags.RESOLVED;
-    this.type = type;
+    this.setType(type);
     registerConcreteElement(this.program, this);
   }
 }
@@ -2587,8 +2703,11 @@ export class PropertyPrototype extends DeclaredElement {
 
   /** Constructs a new property prototype. */
   constructor(
+    /** Simple name. */
     name: string,
-    parent: Element,
+    /** Parent class. */
+    parent: ClassPrototype,
+    /** Declaration of the getter or setter introducing the property. */
     firstDeclaration: FunctionDeclaration
   ) {
     super(
@@ -2620,7 +2739,9 @@ export class Property extends VariableLikeElement {
 
   /** Constructs a new property prototype. */
   constructor(
+    /** Respective property prototype. */
     prototype: PropertyPrototype,
+    /** Parent element, usually a static class prototype or class instance. */
     parent: Element
   ) {
     super(
@@ -2659,9 +2780,13 @@ export class ClassPrototype extends DeclaredElement {
   instances: Map<string,Class> | null = null;
 
   constructor(
+    /** Simple name. */
     name: string,
+    /** Parent element, usually a file or namespace. */
     parent: Element,
+    /** Declaration reference. */
     declaration: ClassDeclaration,
+    /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags = DecoratorFlags.NONE,
     _isInterface: bool = false // FIXME
   ) {
@@ -2765,14 +2890,18 @@ export class Class extends TypedElement {
 
   /** Constructs a new class. */
   constructor(
+    /** Name incl. type parameters, i.e. `Foo<i32>`. */
     nameInclTypeParameters: string,
+    /** The respective class prototype. */
     prototype: ClassPrototype,
+    /** Concrete type arguments, if any. */
     typeArguments: Type[] | null = null,
+    /** Base class, if derived. */
     base: Class | null = null,
-    _isInstance: bool = false // FIXME
+    _isInterface: bool = false // FIXME
   ) {
     super(
-      _isInstance ? ElementKind.INTERFACE : ElementKind.CLASS,
+      _isInterface ? ElementKind.INTERFACE : ElementKind.CLASS,
       nameInclTypeParameters,
       mangleInternalName(nameInclTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
       prototype.program,

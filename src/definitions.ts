@@ -109,6 +109,7 @@ abstract class ExportsWalker {
         if (hasCompiledMember(element)) this.visitNamespace(element);
         break;
       }
+      case ElementKind.TYPEDEFINITION: break;
       default: assert(false);
     }
   }
