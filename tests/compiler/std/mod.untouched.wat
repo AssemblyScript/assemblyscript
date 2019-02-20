@@ -1,6 +1,6 @@
 (module
- (type $FFF (func (param f64 f64) (result f64)))
  (type $FFFi (func (param f64 f64 f64) (result i32)))
+ (type $FFF (func (param f64 f64) (result f64)))
  (type $FFi (func (param f64 f64) (result i32)))
  (type $Fi (func (param f64) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
@@ -16,9 +16,7 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/mod/js i32 (i32.const 1))
- (global $NaN f64 (f64.const nan:0x8000000000000))
- (global $Infinity f64 (f64.const inf))
- (global $HEAP_BASE i32 (i32.const 32))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 32))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "mod" (func $std/mod/mod))
@@ -631,7 +629,7 @@
   local.get $2
   call $std/mod/check<f32>
  )
- (func $start (; 10 ;) (type $_)
+ (func $start:std/mod (; 10 ;) (type $_)
   f64.const 3
   f64.const 2
   f64.const 1
@@ -2416,6 +2414,9 @@
    unreachable
   end
  )
- (func $null (; 11 ;) (type $_)
+ (func $start (; 11 ;) (type $_)
+  call $start:std/mod
+ )
+ (func $null (; 12 ;) (type $_)
  )
 )

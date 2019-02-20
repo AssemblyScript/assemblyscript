@@ -6,11 +6,11 @@
  (data (i32.const 8) "\0b\00\00\00o\00v\00e\00r\00f\00l\00o\00w\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 36))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 36))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:overflow (; 1 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -755,6 +755,9 @@
    end
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:overflow
+ )
+ (func $null (; 3 ;) (type $_)
  )
 )

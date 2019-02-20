@@ -7,7 +7,7 @@
  (global $scoped/aGlobal (mut i32) (i32.const 1))
  (global $scoped/aConstant i32 (i32.const 3))
  (global $scoped/aStartFunctionLocal (mut i32) (i32.const 2))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -18,7 +18,7 @@
   local.get $0
   local.set $1
  )
- (func $start (; 1 ;) (type $_)
+ (func $start:scoped (; 1 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -71,6 +71,9 @@
   i32.const 42
   call $scoped/fn
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:scoped
+ )
+ (func $null (; 3 ;) (type $_)
  )
 )

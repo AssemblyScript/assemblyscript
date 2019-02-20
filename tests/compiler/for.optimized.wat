@@ -10,7 +10,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:for (; 1 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -158,7 +158,10 @@
    end
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:for
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

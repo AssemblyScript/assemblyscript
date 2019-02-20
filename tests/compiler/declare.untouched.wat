@@ -10,11 +10,11 @@
  (data (i32.const 8) "\n\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 32))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 32))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 3 ;) (type $_)
+ (func $start:declare (; 3 ;) (type $_)
   call $declare/externalFunction
   global.get $declare/externalConstant
   i32.const 1
@@ -42,6 +42,9 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (type $_)
+ (func $start (; 4 ;) (type $_)
+  call $start:declare
+ )
+ (func $null (; 5 ;) (type $_)
  )
 )
