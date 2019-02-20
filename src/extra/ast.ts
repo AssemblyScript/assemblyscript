@@ -80,7 +80,8 @@ import {
   ParameterNode,
   ParameterKind,
   ExportMember,
-  SwitchCase
+  SwitchCase,
+  DeclarationStatement
 } from "../ast";
 
 import {
@@ -434,7 +435,7 @@ export class ASTBuilder {
   // expressions
 
   visitIdentifierExpression(node: IdentifierExpression): void {
-    if (node.is(CommonFlags.QUOTED)) this.visitStringLiteral(node.text);
+    if (node.isQuoted) this.visitStringLiteral(node.text);
     else this.sb.push(node.text);
   }
 
@@ -576,7 +577,7 @@ export class ASTBuilder {
 
   visitFunctionExpression(node: FunctionExpression): void {
     var declaration = node.declaration;
-    if (!node.is(CommonFlags.ARROW)) {
+    if (!declaration.is(CommonFlags.ARROW)) {
       if (declaration.name.text.length) {
         this.sb.push("function ");
       } else {
@@ -979,7 +980,7 @@ export class ASTBuilder {
 
   visitExportStatement(node: ExportStatement): void {
     var sb = this.sb;
-    if (node.is(CommonFlags.DECLARE)) {
+    if (node.isDeclare) {
       sb.push("declare ");
     }
     var members = node.members;
@@ -1438,11 +1439,12 @@ export class ASTBuilder {
         this.serializeDecorator(decorators[i]);
       }
     }
-    this.serializeExternalModifiers(node);
     var sb = this.sb;
-    sb.push(node.is(CommonFlags.CONST) ? "const " : node.is(CommonFlags.LET) ? "let " : "var ");
     var declarations = node.declarations;
     var numDeclarations = assert(declarations.length);
+    var firstDeclaration = declarations[0];
+    this.serializeExternalModifiers(firstDeclaration);
+    sb.push(firstDeclaration.is(CommonFlags.CONST) ? "const " : firstDeclaration.is(CommonFlags.LET) ? "let " : "var ");
     this.visitVariableDeclaration(node.declarations[0]);
     for (let i = 1; i < numDeclarations; ++i) {
       sb.push(", ");
@@ -1513,7 +1515,7 @@ export class ASTBuilder {
     }
   }
 
-  serializeExternalModifiers(node: Node): void {
+  serializeExternalModifiers(node: DeclarationStatement): void {
     var sb = this.sb;
     if (node.is(CommonFlags.EXPORT)) {
       sb.push("export ");
@@ -1524,7 +1526,7 @@ export class ASTBuilder {
     }
   }
 
-  serializeAccessModifiers(node: Node): void {
+  serializeAccessModifiers(node: DeclarationStatement): void {
     var sb = this.sb;
     if (node.is(CommonFlags.PUBLIC)) {
       sb.push("public ");

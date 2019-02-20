@@ -146,7 +146,6 @@ import {
   UnaryPrefixExpression,
 
   nodeIsConstantValue,
-  isLastStatement,
   findDecorator,
   FieldDeclaration
 } from "./ast";
@@ -686,8 +685,7 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Compiles the specified file. */
   compileFile(file: File): void {
-    if (file.source.is(CommonFlags.COMPILED)) return;
-    file.source.set(CommonFlags.COMPILED);
+    if (file.is(CommonFlags.COMPILED)) return;
     file.set(CommonFlags.COMPILED);
 
     // compile top-level statements within the file's start function
@@ -1068,7 +1066,7 @@ export class Compiler extends DiagnosticEmitter {
     // compile statements
     var stmts: BinaryenExportRef[];
     if (bodyNode.kind == NodeKind.BLOCK) {
-      stmts = this.compileStatements((<BlockStatement>bodyNode).statements);
+      stmts = this.compileStatements((<BlockStatement>bodyNode).statements, true);
     } else {
       // must be an expression statement if not a block
       assert(bodyNode.kind == NodeKind.EXPRESSION);
@@ -1451,7 +1449,8 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.FUNCTIONDECLARATION:
       case NodeKind.METHODDECLARATION:
       case NodeKind.INTERFACEDECLARATION:
-      case NodeKind.INDEXSIGNATUREDECLARATION: break;
+      case NodeKind.INDEXSIGNATUREDECLARATION:
+      case NodeKind.TYPEDECLARATION: break;
       default: { // otherwise a top-level statement that is part of the start function's body
         let stmt = this.compileStatement(statement);
         if (getExpressionId(stmt) != ExpressionId.Nop) body.push(stmt);
@@ -1460,7 +1459,7 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  compileStatement(statement: Statement): ExpressionRef {
+  compileStatement(statement: Statement, isLastStatementInBody: bool = false): ExpressionRef {
     var module = this.module;
     var stmt: ExpressionRef;
     switch (statement.kind) {
@@ -1497,7 +1496,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.RETURN: {
-        stmt = this.compileReturnStatement(<ReturnStatement>statement);
+        stmt = this.compileReturnStatement(<ReturnStatement>statement, isLastStatementInBody);
         break;
       }
       case NodeKind.SWITCH: {
@@ -1526,13 +1525,13 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.TYPEDECLARATION: {
-        // type declarations must be top-level because function bodies are evaluated when
-        // reachaable only.
-        let parent = statement.parent;
-        if (parent && parent.kind == NodeKind.SOURCE) {
-          return module.createNop();
-        }
-        // otherwise fall-through
+        // TODO: integrate inner type declaration into flow
+        this.error(
+          DiagnosticCode.Operation_not_supported,
+          statement.range
+        );
+        stmt = module.createUnreachable();
+        break;
       }
       default: {
         assert(false);
@@ -1543,13 +1542,13 @@ export class Compiler extends DiagnosticEmitter {
     return stmt;
   }
 
-  compileStatements(statements: Statement[]): ExpressionRef[] {
+  compileStatements(statements: Statement[], isBody: bool = false): ExpressionRef[] {
     var numStatements = statements.length;
     var stmts = new Array<ExpressionRef>(numStatements);
     stmts.length = 0;
     var flow = this.currentFlow;
     for (let i = 0; i < numStatements; ++i) {
-      let stmt = this.compileStatement(statements[i]);
+      let stmt = this.compileStatement(statements[i], isBody && i == numStatements - 1);
       switch (getExpressionId(stmt)) {
         case ExpressionId.Block: {
           if (!getBlockName(stmt)) {
@@ -1841,7 +1840,7 @@ export class Compiler extends DiagnosticEmitter {
     return module.createIf(condExpr, ifTrueExpr, ifFalseExpr);
   }
 
-  compileReturnStatement(statement: ReturnStatement): ExpressionRef {
+  compileReturnStatement(statement: ReturnStatement, isLastStatementInBody: bool): ExpressionRef {
     var module = this.module;
     var expr: ExpressionRef = 0;
     var flow = this.currentFlow;
@@ -1881,7 +1880,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // If the last statement anyway, make it the block's return value
-    if (isLastStatement(statement)) return expr ? expr : module.createNop();
+    if (isLastStatementInBody) return expr ? expr : module.createNop();
 
     // When inlining, break to the end of the inlined function's block (no need to wrap)
     if (flow.is(FlowFlags.INLINE_CONTEXT)) return module.createBreak(assert(flow.inlineReturnLabel), 0, expr);
@@ -5931,9 +5930,12 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes sure the enclosing source file of the specified expression has been compiled. */
   private maybeCompileEnclosingSource(expression: Expression): void {
-    var enclosingSource = expression.range.source;
-    if (!enclosingSource.is(CommonFlags.COMPILED)) {
-      this.compileFileByPath(enclosingSource.internalPath, expression);
+    var internalPath = expression.range.source.internalPath;
+    var filesByName = this.program.filesByName;
+    assert(filesByName.has(internalPath));
+    var enclosingFile = filesByName.get(internalPath)!;
+    if (!enclosingFile.is(CommonFlags.COMPILED)) {
+      this.compileFileByPath(internalPath, expression);
     }
   }
 

@@ -324,7 +324,7 @@ export class Program extends DiagnosticEmitter {
   /** Elements by unique internal name in element space. */
   elementsByName: Map<string,Element> = new Map();
   /** Elements by declaration. */
-  elementsByDeclaration: Map<DeclarationStatement,Element> = new Map();
+  elementsByDeclaration: Map<DeclarationStatement,DeclaredElement> = new Map();
   /** Element instances by unique internal name. */
   instancesByName: Map<string,Element> = new Map();
   /** Classes backing basic types like `i32`. */
@@ -370,7 +370,12 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Creates a native variable declaration. */
-  makeNativeVariableDeclaration(name: string, flags: CommonFlags = CommonFlags.NONE): VariableDeclaration {
+  makeNativeVariableDeclaration(
+    /** The simple name of the variable */
+    name: string,
+    /** Flags indicating specific traits, e.g. `CONST`. */
+    flags: CommonFlags = CommonFlags.NONE
+  ): VariableDeclaration {
     var range = this.nativeSource.range;
     return Node.createVariableDeclaration(
       Node.createIdentifierExpression(name, range),
@@ -379,7 +384,12 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Creates a native type declaration. */
-  makeNativeTypeDeclaration(name: string, flags: CommonFlags = CommonFlags.NONE): TypeDeclaration {
+  makeNativeTypeDeclaration(
+    /** The simple name of the type. */
+    name: string,
+    /** Flags indicating specific traits, e.g. `GENERIC`. */
+    flags: CommonFlags = CommonFlags.NONE
+  ): TypeDeclaration {
     var range = this.nativeSource.range;
     var identifier = Node.createIdentifierExpression(name, range);
     return Node.createTypeDeclaration(
@@ -393,7 +403,12 @@ export class Program extends DiagnosticEmitter {
   private nativeDummySignature: SignatureNode | null = null;
 
   /** Creates a native function declaration. */
-  makeNativeFunctionDeclaration(name: string, flags: CommonFlags = CommonFlags.NONE): FunctionDeclaration {
+  makeNativeFunctionDeclaration(
+    /** The simple name of the function. */
+    name: string,
+    /** Flags indicating specific traits, e.g. `DECLARE`. */
+    flags: CommonFlags = CommonFlags.NONE
+  ): FunctionDeclaration {
     var range = this.nativeSource.range;
     return Node.createFunctionDeclaration(
       Node.createIdentifierExpression(name, range),
@@ -410,7 +425,12 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Creates a native namespace declaration. */
-  makeNativeNamespaceDeclaration(name: string, flags: CommonFlags = CommonFlags.NONE): NamespaceDeclaration {
+  makeNativeNamespaceDeclaration(
+    /** The simple name of the namespace. */
+    name: string,
+    /** Flags indicating specific traits, e.g. `EXPORT`. */
+    flags: CommonFlags = CommonFlags.NONE
+  ): NamespaceDeclaration {
     var range = this.nativeSource.range;
     return Node.createNamespaceDeclaration(
       Node.createIdentifierExpression(name, range),
@@ -420,10 +440,15 @@ export class Program extends DiagnosticEmitter {
 
   /** Creates a native function. */
   makeNativeFunction(
+    /** The simple name of the function. */
     name: string,
+    /** Concrete function signature. */
     signature: Signature,
+    /** Parent element, usually a file, class or namespace. */
     parent: Element = this.nativeFile,
+    /** Flags indicating specific traits, e.g. `GENERIC`. */
     flags: CommonFlags = CommonFlags.NONE,
+    /** Decorator flags representing built-in decorators. */
     decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
   ): Function {
     return new Function(
@@ -438,7 +463,8 @@ export class Program extends DiagnosticEmitter {
     );
   }
 
-  getElementByDeclaration(declaration: DeclarationStatement): Element {
+  /** Gets the (possibly merged) program element linked to the specified declaration. */
+  getElementByDeclaration(declaration: DeclarationStatement): DeclaredElement {
     var elementsByDeclaration = this.elementsByDeclaration;
     assert(elementsByDeclaration.has(declaration));
     return elementsByDeclaration.get(declaration)!;
@@ -837,6 +863,7 @@ export class Program extends DiagnosticEmitter {
     this.nativeFile.add(name, element);
   }
 
+  /** Registers the backing class of a native type. */
   private registerNativeTypeClass(typeKind: TypeKind, className: string): void {
     assert(!this.typeClasses.has(typeKind));
     var element = this.lookupGlobal(className);
@@ -878,7 +905,7 @@ export class Program extends DiagnosticEmitter {
     var elementsByName = this.elementsByName;
     if (elementsByName.has(name)) {
       let actual = elementsByName.get(name);
-      // NOTE: this is effectively only performed for joining the native types with
+      // NOTE: this is effectively only performed when merging native types with
       // their respective namespaces in std/builtins, but can also trigger when a
       // user has multiple global elements of the same name in different files,
       // which might result in unexpected shared symbols accross files. considering
@@ -898,7 +925,7 @@ export class Program extends DiagnosticEmitter {
     elementsByName.set(name, element);
   }
 
-  /** Looks up the global element of the specified name. */
+  /** Looks up the element of the specified name in the global scope. */
   lookupGlobal(name: string): Element | null {
     var elements = this.elementsByName;
     if (elements.has(name)) return elements.get(name);
@@ -920,9 +947,13 @@ export class Program extends DiagnosticEmitter {
 
   /** Tries to locate a foreign element by traversing exports and queued exports. */
   private lookupForeign(
+    /** Identifier within the other file. */
     foreignName: string,
+    /** Normalized path to the other file. */
     foreignPath: string,
+    /** Alternative normalized path to the other file. */
     foreignPathAlt: string,
+    /** Map of so far queued exports. */
     queuedExports: Map<File,Map<string,QueuedExport>>
   ): DeclaredElement | null {
     do {
@@ -956,7 +987,9 @@ export class Program extends DiagnosticEmitter {
 
   /** Validates that only supported decorators are present. */
   private checkDecorators(
+    /** Decorators present on an element. */
     decorators: DecoratorNode[] | null,
+    /** Accepted decorator flags. Emits diagnostics if any other decorators are present. */
     acceptedFlags: DecoratorFlags
   ): DecoratorFlags {
     var flags = DecoratorFlags.NONE;
@@ -1568,16 +1601,16 @@ export class Program extends DiagnosticEmitter {
     parent: Element
   ): void {
     var declarations = statement.declarations;
-    var acceptedFlags = DecoratorFlags.GLOBAL | DecoratorFlags.LAZY;
-    if (statement.is(CommonFlags.DECLARE)) {
-      acceptedFlags |= DecoratorFlags.EXTERNAL;
-    }
-    if (statement.is(CommonFlags.CONST)) {
-      acceptedFlags |= DecoratorFlags.INLINE;
-    }
     for (let i = 0, k = declarations.length; i < k; ++i) {
       let declaration = declarations[i];
       let name = declaration.name.text;
+      let acceptedFlags = DecoratorFlags.GLOBAL | DecoratorFlags.LAZY;
+      if (declaration.is(CommonFlags.DECLARE)) {
+        acceptedFlags |= DecoratorFlags.EXTERNAL;
+      }
+      if (declaration.is(CommonFlags.CONST)) {
+        acceptedFlags |= DecoratorFlags.INLINE;
+      }
       let element = new Global(
         name,
         parent,

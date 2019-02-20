@@ -142,17 +142,6 @@ export abstract class Node {
   kind: NodeKind;
   /** Source range. */
   range: Range;
-  /** Parent node. */
-  parent: Node | null = null;
-  /** Common flags indicating specific traits. */
-  flags: CommonFlags = CommonFlags.NONE;
-
-  /** Tests if this node has the specified flag or flags. */
-  is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
-  /** Tests if this node has one of the specified flags. */
-  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
-  /** Sets a specific flag or flags. */
-  set(flag: CommonFlags): void { this.flags |= flag; }
 
   // types
 
@@ -162,7 +151,7 @@ export abstract class Node {
   ): TypeName {
     var typeName = new TypeName();
     typeName.range = range;
-    typeName.identifier = name; name.parent = typeName;
+    typeName.identifier = name;
     typeName.next = null;
     return typeName;
   }
@@ -182,8 +171,8 @@ export abstract class Node {
   ): TypeNode {
     var type = new TypeNode();
     type.range = range;
-    type.name = name; name.parent = type;
-    type.typeArguments = typeArguments; if (typeArguments) setParent(typeArguments, type);
+    type.name = name;
+    type.typeArguments = typeArguments;
     type.isNullable = isNullable;
     return type;
   }
@@ -207,9 +196,9 @@ export abstract class Node {
   ): TypeParameterNode {
     var elem = new TypeParameterNode();
     elem.range = range;
-    elem.name = name; name.parent = elem;
-    elem.extendsType = extendsType; if (extendsType) extendsType.parent = elem;
-    elem.defaultType = defaultType; if (defaultType) defaultType.parent = elem;
+    elem.name = name;
+    elem.extendsType = extendsType;
+    elem.defaultType = defaultType;
     return elem;
   }
 
@@ -222,9 +211,9 @@ export abstract class Node {
   ): ParameterNode {
     var elem = new ParameterNode();
     elem.range = range;
-    elem.name = name; name.parent = elem;
-    elem.type = type; if (type) type.parent = elem;
-    elem.initializer = initializer; if (initializer) initializer.parent = elem;
+    elem.name = name;
+    elem.type = type;
+    elem.initializer = initializer;
     elem.parameterKind = kind;
     return elem;
   }
@@ -238,9 +227,9 @@ export abstract class Node {
   ): SignatureNode {
     var sig = new SignatureNode();
     sig.range = range;
-    sig.parameters = parameters; setParent(parameters, sig);
-    sig.returnType = returnType; returnType.parent = sig;
-    sig.explicitThisType = explicitThisType; if (explicitThisType) explicitThisType.parent = sig;
+    sig.parameters = parameters;
+    sig.returnType = returnType;
+    sig.explicitThisType = explicitThisType;
     sig.isNullable = isNullable;
     return sig;
   }
@@ -254,8 +243,8 @@ export abstract class Node {
   ): DecoratorNode {
     var stmt = new DecoratorNode();
     stmt.range = range;
-    stmt.name = name; name.parent = stmt;
-    stmt.arguments = args; if (args) setParent(args, stmt);
+    stmt.name = name;
+    stmt.arguments = args;
     stmt.decoratorKind = decoratorNameToKind(name);
     return stmt;
   }
@@ -276,12 +265,14 @@ export abstract class Node {
 
   static createIdentifierExpression(
     name: string,
-    range: Range
+    range: Range,
+    isQuoted: bool = false
   ): IdentifierExpression {
     var expr = new IdentifierExpression();
     expr.range = range;
     expr.text = name; // TODO: extract from range
     expr.symbol = name; // TODO: Symbol.for(name)
+    expr.isQuoted = isQuoted;
     return expr;
   }
 
@@ -300,7 +291,7 @@ export abstract class Node {
   ): ArrayLiteralExpression {
     var expr = new ArrayLiteralExpression();
     expr.range = range;
-    expr.elementExpressions = elements; setParentIfNotNull(elements, expr);
+    expr.elementExpressions = elements;
     return expr;
   }
 
@@ -313,8 +304,8 @@ export abstract class Node {
     var expr = new AssertionExpression();
     expr.range = range;
     expr.assertionKind = assertionKind;
-    expr.expression = expression; expression.parent = expr;
-    expr.toType = toType; if (toType) toType.parent = expr;
+    expr.expression = expression;
+    expr.toType = toType;
     return expr;
   }
 
@@ -327,8 +318,8 @@ export abstract class Node {
     var expr = new BinaryExpression();
     expr.range = range;
     expr.operator = operator;
-    expr.left = left; left.parent = expr;
-    expr.right = right; right.parent = expr;
+    expr.left = left;
+    expr.right = right;
     return expr;
   }
 
@@ -340,9 +331,9 @@ export abstract class Node {
   ): CallExpression {
     var expr = new CallExpression();
     expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    expr.typeArguments = typeArgs; if (typeArgs) setParent(typeArgs, expr);
-    expr.arguments = args; setParent(args, expr);
+    expr.expression = expression;
+    expr.typeArguments = typeArgs;
+    expr.arguments = args;
     return expr;
   }
 
@@ -361,7 +352,7 @@ export abstract class Node {
   ): CommaExpression {
     var expr = new CommaExpression();
     expr.range = range;
-    expr.expressions = expressions; setParent(expressions, expr);
+    expr.expressions = expressions;
     return expr;
   }
 
@@ -380,8 +371,8 @@ export abstract class Node {
   ): ElementAccessExpression {
     var expr = new ElementAccessExpression();
     expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    expr.elementExpression = element; element.parent = expr;
+    expr.expression = expression;
+    expr.elementExpression = element;
     return expr;
   }
 
@@ -407,7 +398,6 @@ export abstract class Node {
     declaration: FunctionDeclaration
   ): FunctionExpression {
     var expr = new FunctionExpression();
-    expr.flags = declaration.flags & CommonFlags.ARROW;
     expr.range = declaration.range;
     expr.declaration = declaration;
     return expr;
@@ -420,8 +410,8 @@ export abstract class Node {
   ): InstanceOfExpression {
     var expr = new InstanceOfExpression();
     expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    expr.isType = isType; isType.parent = expr;
+    expr.expression = expression;
+    expr.isType = isType;
     return expr;
   }
 
@@ -443,9 +433,9 @@ export abstract class Node {
   ): NewExpression {
     var expr = new NewExpression();
     expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    expr.typeArguments = typeArgs; if (typeArgs) setParent(typeArgs, expr);
-    expr.arguments = args; setParent(args, expr);
+    expr.expression = expression;
+    expr.typeArguments = typeArgs;
+    expr.arguments = args;
     return expr;
   }
 
@@ -475,7 +465,7 @@ export abstract class Node {
   ): ParenthesizedExpression {
     var expr = new ParenthesizedExpression();
     expr.range = range;
-    expr.expression = expression; expression.parent = expr;
+    expr.expression = expression;
     return expr;
   }
 
@@ -486,8 +476,8 @@ export abstract class Node {
   ): PropertyAccessExpression {
     var expr = new PropertyAccessExpression();
     expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    expr.property = property; property.parent = expr;
+    expr.expression = expression;
+    expr.property = property;
     return expr;
   }
 
@@ -511,9 +501,9 @@ export abstract class Node {
   ): TernaryExpression {
     var expr = new TernaryExpression();
     expr.range = range;
-    expr.condition = condition; condition.parent = expr;
-    expr.ifThen = ifThen; ifThen.parent = expr;
-    expr.ifElse = ifElse; ifElse.parent = expr;
+    expr.condition = condition;
+    expr.ifThen = ifThen;
+    expr.ifElse = ifElse;
     return expr;
   }
 
@@ -559,7 +549,7 @@ export abstract class Node {
     var expr = new UnaryPostfixExpression();
     expr.range = range;
     expr.operator = operator;
-    expr.operand = operand; operand.parent = expr;
+    expr.operand = operand;
     return expr;
   }
 
@@ -571,7 +561,7 @@ export abstract class Node {
     var expr = new UnaryPrefixExpression();
     expr.range = range;
     expr.operator = operator;
-    expr.operand = operand; operand.parent = expr;
+    expr.operand = operand;
     return expr;
   }
 
@@ -583,7 +573,7 @@ export abstract class Node {
   ): BlockStatement {
     var stmt = new BlockStatement();
     stmt.range = range;
-    stmt.statements = statements; setParent(statements, stmt);
+    stmt.statements = statements;
     return stmt;
   }
 
@@ -593,7 +583,7 @@ export abstract class Node {
   ): BreakStatement {
     var stmt = new BreakStatement();
     stmt.range = range;
-    stmt.label = label; if (label) label.parent = stmt;
+    stmt.label = label;
     return stmt;
   }
 
@@ -610,12 +600,12 @@ export abstract class Node {
     var stmt = new ClassDeclaration();
     stmt.range = range;
     stmt.flags = flags;
-    stmt.name = identifier; identifier.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.extendsType = extendsType; if (extendsType) extendsType.parent = stmt;
-    stmt.implementsTypes = implementsTypes; if (implementsTypes) setParent(implementsTypes, stmt);
-    stmt.members = members; setParent(members, stmt);
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
+    stmt.name = identifier;
+    stmt.typeParameters = typeParameters;
+    stmt.extendsType = extendsType;
+    stmt.implementsTypes = implementsTypes;
+    stmt.members = members;
+    stmt.decorators = decorators;
     return stmt;
   }
 
@@ -625,7 +615,7 @@ export abstract class Node {
   ): ContinueStatement {
     var stmt = new ContinueStatement();
     stmt.range = range;
-    stmt.label = label; if (label) label.parent = stmt;
+    stmt.label = label;
     return stmt;
   }
 
@@ -636,8 +626,8 @@ export abstract class Node {
   ): DoStatement {
     var stmt = new DoStatement();
     stmt.range = range;
-    stmt.statement = statement; statement.parent = stmt;
-    stmt.condition = condition; condition.parent = stmt;
+    stmt.statement = statement;
+    stmt.condition = condition;
     return stmt;
   }
 
@@ -659,9 +649,9 @@ export abstract class Node {
     var stmt = new EnumDeclaration();
     stmt.range = range;
     stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.values = members; setParent(members, stmt);
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
+    stmt.name = name;
+    stmt.values = members;
+    stmt.decorators = decorators;
     return stmt;
   }
 
@@ -674,21 +664,20 @@ export abstract class Node {
     var stmt = new EnumValueDeclaration();
     stmt.range = range;
     stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.value = value; if (value) value.parent = stmt;
+    stmt.name = name;
+    stmt.value = value;
     return stmt;
   }
 
   static createExportStatement(
     members: ExportMember[] | null,
     path: StringLiteralExpression | null,
-    flags: CommonFlags,
+    isDeclare: bool,
     range: Range
   ): ExportStatement {
     var stmt = new ExportStatement();
     stmt.range = range;
-    stmt.flags = flags;
-    stmt.members = members; if (members) setParent(members, stmt);
+    stmt.members = members;
     stmt.path = path;
     if (path) {
       let normalizedPath = normalizePath(path.value);
@@ -705,6 +694,7 @@ export abstract class Node {
       stmt.normalizedPath = null;
       stmt.internalPath = null;
     }
+    stmt.isDeclare = isDeclare;
     return stmt;
   }
 
@@ -715,8 +705,8 @@ export abstract class Node {
   ): ExportImportStatement {
     var stmt = new ExportImportStatement();
     stmt.range = range;
-    stmt.name = name; name.parent = stmt;
-    stmt.externalName = externalName; externalName.parent = stmt;
+    stmt.name = name;
+    stmt.externalName = externalName;
     return stmt;
   }
 
@@ -727,12 +717,8 @@ export abstract class Node {
   ): ExportMember {
     var elem = new ExportMember();
     elem.range = range;
-    elem.localName = name; name.parent = elem;
-    if (!externalName) {
-      externalName = name;
-    } else {
-      externalName.parent = elem;
-    }
+    elem.localName = name;
+    if (!externalName) externalName = name;
     elem.exportedName = externalName;
     return elem;
   }
@@ -742,7 +728,7 @@ export abstract class Node {
   ): ExpressionStatement {
     var stmt = new ExpressionStatement();
     stmt.range = expression.range;
-    stmt.expression = expression; expression.parent = stmt;
+    stmt.expression = expression;
     return stmt;
   }
 
@@ -754,9 +740,9 @@ export abstract class Node {
   ): IfStatement {
     var stmt = new IfStatement();
     stmt.range = range;
-    stmt.condition = condition; condition.parent = stmt;
-    stmt.ifTrue = ifTrue; ifTrue.parent = stmt;
-    stmt.ifFalse = ifFalse; if (ifFalse) ifFalse.parent = stmt;
+    stmt.condition = condition;
+    stmt.ifTrue = ifTrue;
+    stmt.ifFalse = ifFalse;
     return stmt;
   }
 
@@ -767,7 +753,7 @@ export abstract class Node {
   ): ImportStatement {
     var stmt = new ImportStatement();
     stmt.range = range;
-    stmt.declarations = decls; if (decls) setParent(decls, stmt);
+    stmt.declarations = decls;
     stmt.namespaceName = null;
     stmt.path = path;
     var normalizedPath = normalizePath(path.value);
@@ -811,9 +797,8 @@ export abstract class Node {
   ): ImportDeclaration {
     var elem = new ImportDeclaration();
     elem.range = range;
-    elem.foreignName = foreignName; foreignName.parent = elem;
+    elem.foreignName = foreignName;
     if (!name) name = foreignName;
-    else name.parent = elem;
     elem.name = name;
     return elem;
   }
@@ -830,11 +815,11 @@ export abstract class Node {
     var stmt = new InterfaceDeclaration();
     stmt.range = range;
     stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.extendsType = extendsType; if (extendsType) extendsType.parent = stmt;
-    stmt.members = members; setParent(members, stmt);
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
+    stmt.name = name;
+    stmt.typeParameters = typeParameters;
+    stmt.extendsType = extendsType;
+    stmt.members = members;
+    stmt.decorators = decorators;
     return stmt;
   }
 
@@ -849,10 +834,10 @@ export abstract class Node {
     var stmt = new FieldDeclaration();
     stmt.range = range;
     stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.type = type; if (type) type.parent = stmt;
-    stmt.initializer = initializer; if (initializer) initializer.parent = stmt;
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
+    stmt.name = name;
+    stmt.type = type;
+    stmt.initializer = initializer;
+    stmt.decorators = decorators;
     return stmt;
   }
 
@@ -865,10 +850,10 @@ export abstract class Node {
   ): ForStatement {
     var stmt = new ForStatement();
     stmt.range = range;
-    stmt.initializer = initializer; if (initializer) initializer.parent = stmt;
-    stmt.condition = condition; if (condition) condition.parent = stmt;
-    stmt.incrementor = incrementor; if (incrementor) incrementor.parent = stmt;
-    stmt.statement = statement; statement.parent = stmt;
+    stmt.initializer = initializer;
+    stmt.condition = condition;
+    stmt.incrementor = incrementor;
+    stmt.statement = statement;
     return stmt;
   }
 
@@ -884,11 +869,11 @@ export abstract class Node {
     var stmt = new FunctionDeclaration();
     stmt.range = range;
     stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.signature = signature; signature.parent = stmt;
-    stmt.body = body; if (body) body.parent = stmt;
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
+    stmt.name = name;
+    stmt.typeParameters = typeParameters;
+    stmt.signature = signature;
+    stmt.body = body;
+    stmt.decorators = decorators;
     return stmt;
   }
 
@@ -899,8 +884,8 @@ export abstract class Node {
   ): IndexSignatureDeclaration {
     var elem = new IndexSignatureDeclaration();
     elem.range = range;
-    elem.keyType = keyType; keyType.parent = elem;
-    elem.valueType = valueType; valueType.parent = elem;
+    elem.keyType = keyType;
+    elem.valueType = valueType;
     return elem;
   }
 
@@ -916,11 +901,11 @@ export abstract class Node {
     var stmt = new MethodDeclaration();
     stmt.range = range;
     stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.signature = signature; signature.parent = stmt;
-    stmt.body = body; if (body) body.parent = stmt;
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
+    stmt.name = name;
+    stmt.typeParameters = typeParameters;
+    stmt.signature = signature;
+    stmt.body = body;
+    stmt.decorators = decorators;
     return stmt;
   }
 
@@ -934,9 +919,9 @@ export abstract class Node {
     var stmt = new NamespaceDeclaration();
     stmt.range = range;
     stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.members = members; setParent(members, stmt);
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
+    stmt.name = name;
+    stmt.members = members;
+    stmt.decorators = decorators;
     return stmt;
   }
 
@@ -946,7 +931,7 @@ export abstract class Node {
   ): ReturnStatement {
     var stmt = new ReturnStatement();
     stmt.range = range;
-    stmt.value = value; if (value) value.parent = stmt;
+    stmt.value = value;
     return stmt;
   }
 
@@ -957,8 +942,8 @@ export abstract class Node {
   ): SwitchStatement {
     var stmt = new SwitchStatement();
     stmt.range = range;
-    stmt.condition = condition; condition.parent = stmt;
-    stmt.cases = cases; setParent(cases, stmt);
+    stmt.condition = condition;
+    stmt.cases = cases;
     return stmt;
   }
 
@@ -969,8 +954,8 @@ export abstract class Node {
   ): SwitchCase {
     var elem = new SwitchCase();
     elem.range = range;
-    elem.label = label; if (label) label.parent = elem;
-    elem.statements = statements; setParent(statements, elem);
+    elem.label = label;
+    elem.statements = statements;
     return elem;
   }
 
@@ -980,7 +965,7 @@ export abstract class Node {
   ): ThrowStatement {
     var stmt = new ThrowStatement();
     stmt.range = range;
-    stmt.value = value; value.parent = stmt;
+    stmt.value = value;
     return stmt;
   }
 
@@ -993,13 +978,10 @@ export abstract class Node {
   ): TryStatement {
     var stmt = new TryStatement();
     stmt.range = range;
-    stmt.statements = statements; setParent(statements, stmt);
+    stmt.statements = statements;
     stmt.catchVariable = catchVariable;
-    if (catchVariable) catchVariable.parent = stmt;
     stmt.catchStatements = catchStatements;
-    if (catchStatements) setParent(catchStatements, stmt);
     stmt.finallyStatements = finallyStatements;
-    if (finallyStatements) setParent(finallyStatements, stmt);
     return stmt;
   }
 
@@ -1014,24 +996,22 @@ export abstract class Node {
     var stmt = new TypeDeclaration();
     stmt.range = range;
     stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.type = alias; alias.parent = stmt;
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
+    stmt.name = name;
+    stmt.typeParameters = typeParameters;
+    stmt.type = alias;
+    stmt.decorators = decorators;
     return stmt;
   }
 
   static createVariableStatement(
     declarations: VariableDeclaration[],
     decorators: DecoratorNode[] | null,
-    flags: CommonFlags,
     range: Range
   ): VariableStatement {
     var stmt = new VariableStatement();
     stmt.range = range;
-    stmt.flags = flags;
-    stmt.declarations = declarations; setParent(declarations, stmt);
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
+    stmt.declarations = declarations;
+    stmt.decorators = decorators;
     return stmt;
   }
 
@@ -1046,9 +1026,9 @@ export abstract class Node {
     var elem = new VariableDeclaration();
     elem.range = range;
     elem.flags = flags;
-    elem.name = name; name.parent = elem;
-    elem.type = type; if (type) type.parent = elem;
-    elem.initializer = initializer; if (initializer) initializer.parent = elem;
+    elem.name = name;
+    elem.type = type;
+    elem.initializer = initializer;
     elem.decorators = decorators; // inherited
     return elem;
   }
@@ -1070,8 +1050,8 @@ export abstract class Node {
   ): WhileStatement {
     var stmt = new WhileStatement();
     stmt.range = range;
-    stmt.condition = condition; condition.parent = stmt;
-    stmt.statement = statement; statement.parent = stmt;
+    stmt.condition = condition;
+    stmt.statement = statement;
     return stmt;
   }
 }
@@ -1141,6 +1121,15 @@ export class ParameterNode extends Node {
   initializer: Expression | null;
   /** Implicit field declaration, if applicable. */
   implicitFieldDeclaration: FieldDeclaration | null = null;
+  /** Common flags indicating specific traits. */
+  flags: CommonFlags = CommonFlags.NONE;
+
+  /** Tests if this node has the specified flag or flags. */
+  is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
+  /** Tests if this node has one of the specified flags. */
+  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
+  /** Sets a specific flag or flags. */
+  set(flag: CommonFlags): void { this.flags |= flag; }
 }
 
 /** Represents a function signature. */
@@ -1288,6 +1277,8 @@ export class IdentifierExpression extends Expression {
   text: string;
   /** Symbol. */
   symbol: string; // TODO: symbol
+  /** Whether quoted or not. */
+  isQuoted: bool;
 }
 
 /** Indicates the kind of a literal. */
@@ -1545,20 +1536,6 @@ export class UnaryPrefixExpression extends UnaryExpression {
 
 // statements
 
-export function isLastStatement(statement: Statement): bool {
-  var parent = assert(statement.parent);
-  if (parent.kind == NodeKind.BLOCK) {
-    let statements = (<BlockStatement>parent).statements;
-    if (statements[statements.length - 1] === statement) {
-      switch (assert(parent.parent).kind) {
-        case NodeKind.FUNCTIONDECLARATION:
-        case NodeKind.METHODDECLARATION: return true;
-      }
-    }
-  }
-  return false;
-}
-
 /** Base class of all statement nodes. */
 export abstract class Statement extends Node { }
 
@@ -1622,6 +1599,15 @@ export abstract class DeclarationStatement extends Statement {
   name: IdentifierExpression;
   /** Array of decorators. */
   decorators: DecoratorNode[] | null = null;
+  /** Common flags indicating specific traits. */
+  flags: CommonFlags = CommonFlags.NONE;
+
+  /** Tests if this node has the specified flag or flags. */
+  is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
+  /** Tests if this node has one of the specified flags. */
+  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
+  /** Sets a specific flag or flags. */
+  set(flag: CommonFlags): void { this.flags |= flag; }
 }
 
 /** Represents an index signature declaration. */
@@ -1750,6 +1736,8 @@ export class ExportStatement extends Statement {
   normalizedPath: string | null;
   /** Mangled internal path being referenced, if `path` is set. */
   internalPath: string | null;
+  /** Whether this is a declared export. */
+  isDeclare: bool;
 }
 
 /** Represents an expression that is used as a statement. */
@@ -1971,21 +1959,4 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
 export function mangleInternalPath(path: string): string {
   if (path.endsWith(".ts")) path = path.substring(0, path.length - 3);
   return path;
-}
-
-// Helpers
-
-/** Sets the parent node on an array of nodes. */
-function setParent(nodes: Node[], parent: Node): void {
-  for (let i = 0, k = nodes.length; i < k; ++i) {
-    nodes[i].parent = parent;
-  }
-}
-
-/** Sets the parent node on an array of nullable nodes. */
-function setParentIfNotNull(nodes: (Node | null)[], parent: Node): void {
-  for (let i = 0, k = nodes.length; i < k; ++i) {
-    let node = nodes[i];
-    if (node) node.parent = parent;
-  }
 }
