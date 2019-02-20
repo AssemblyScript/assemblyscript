@@ -1299,7 +1299,7 @@ function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/maste
   var mantissa: u64 = (u & 0x007FFFFF) | 0x00800000;
   var product: u64 = mantissa * hi + ((mantissa * lo) >> 32);
   var r: i64 = product << 2;
-  var q: i32 = <i32>(product >> 62) + <i32>(r < 0);
+  var q: i32 = <i32>((product >> 62) + (r >>> 63));
   rempio2f_y = copysign<f64>(pi_2_65, x) * <f64>r;
   return q;
 }

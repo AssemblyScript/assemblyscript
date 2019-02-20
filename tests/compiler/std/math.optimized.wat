@@ -3906,11 +3906,11 @@
     local.get $5
     i64.const 62
     i64.shr_u
-    i32.wrap_i64
     local.get $9
-    i64.const 0
-    i64.lt_s
-    i32.add
+    i64.const 63
+    i64.shr_u
+    i64.add
+    i32.wrap_i64
     local.tee $3
     i32.sub
     local.get $3
@@ -9722,11 +9722,11 @@
     local.get $8
     i64.const 62
     i64.shr_u
-    i32.wrap_i64
     local.get $5
-    i64.const 0
-    i64.lt_s
-    i32.add
+    i64.const 63
+    i64.shr_u
+    i64.add
+    i32.wrap_i64
     local.tee $4
     i32.sub
     local.get $4
@@ -10317,11 +10317,11 @@
      local.get $5
      i64.const 62
      i64.shr_u
-     i32.wrap_i64
      local.get $9
-     i64.const 0
-     i64.lt_s
-     i32.add
+     i64.const 63
+     i64.shr_u
+     i64.add
+     i32.wrap_i64
      local.tee $4
      i32.sub
      local.get $4

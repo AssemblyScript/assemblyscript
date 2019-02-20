@@ -4864,11 +4864,11 @@
     local.get $21
     i64.const 62
     i64.shr_u
-    i32.wrap_i64
     local.get $22
-    i64.const 0
-    i64.lt_s
-    i32.add
+    i64.const 63
+    i64.shr_u
+    i64.add
+    i32.wrap_i64
     local.set $23
     f64.const 8.515303950216386e-20
     local.get $11
@@ -11887,11 +11887,11 @@
     local.get $21
     i64.const 62
     i64.shr_u
-    i32.wrap_i64
     local.get $22
-    i64.const 0
-    i64.lt_s
-    i32.add
+    i64.const 63
+    i64.shr_u
+    i64.add
+    i32.wrap_i64
     local.set $23
     f64.const 8.515303950216386e-20
     local.get $11
@@ -12880,11 +12880,11 @@
     local.get $23
     i64.const 62
     i64.shr_u
-    i32.wrap_i64
     local.get $24
-    i64.const 0
-    i64.lt_s
-    i32.add
+    i64.const 63
+    i64.shr_u
+    i64.add
+    i32.wrap_i64
     local.set $25
     f64.const 8.515303950216386e-20
     local.get $13
