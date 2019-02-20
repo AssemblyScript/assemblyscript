@@ -1923,24 +1923,49 @@
   local.get $1
   f64.ceil
  )
- (func $std/libm/clz32 (; 22 ;) (type $FF) (param $0 f64) (result f64)
-  (local $1 f64)
+ (func $~lib/builtins/isFinite<f64> (; 22 ;) (type $Fi) (param $0 f64) (result i32)
   local.get $0
-  local.set $1
-  local.get $1
-  i32.trunc_f64_s
+  local.get $0
+  f64.sub
+  f64.const 0
+  f64.eq
+ )
+ (func $~lib/math/NativeMath.clz32 (; 23 ;) (type $FF) (param $0 f64) (result f64)
+  local.get $0
+  call $~lib/builtins/isFinite<f64>
+  i32.eqz
+  if
+   f64.const 32
+   return
+  end
+  local.get $0
+  f64.const 4294967296
+  local.get $0
+  f64.const 1
+  f64.const 4294967296
+  f64.div
+  f64.mul
+  f64.floor
+  f64.mul
+  f64.sub
+  i64.trunc_f64_s
+  i32.wrap_i64
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/NativeMath.cos (; 23 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/clz32 (; 24 ;) (type $FF) (param $0 f64) (result f64)
+  local.get $0
+  call $~lib/math/NativeMath.clz32
+ )
+ (func $~lib/math/NativeMath.cos (; 25 ;) (type $FF) (param $0 f64) (result f64)
   unreachable
   f64.const 0
  )
- (func $std/libm/cos (; 24 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/cos (; 26 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.cos
  )
- (func $~lib/math/NativeMath.expm1 (; 25 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.expm1 (; 27 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -2254,7 +2279,7 @@
   local.get $14
   f64.mul
  )
- (func $~lib/math/NativeMath.scalbn (; 26 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 28 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -2345,7 +2370,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/math/NativeMath.exp (; 27 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.exp (; 29 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -2510,7 +2535,7 @@
   local.get $5
   call $~lib/math/NativeMath.scalbn
  )
- (func $~lib/math/NativeMath.cosh (; 28 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cosh (; 30 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 f64)
@@ -2605,33 +2630,33 @@
   local.set $3
   local.get $3
  )
- (func $std/libm/cosh (; 29 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/cosh (; 31 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.cosh
  )
- (func $std/libm/exp (; 30 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/exp (; 32 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.exp
  )
- (func $std/libm/expm1 (; 31 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/expm1 (; 33 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.expm1
  )
- (func $std/libm/floor (; 32 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/floor (; 34 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   local.get $0
   local.set $1
   local.get $1
   f64.floor
  )
- (func $std/libm/fround (; 33 ;) (type $Ff) (param $0 f64) (result f32)
+ (func $std/libm/fround (; 35 ;) (type $Ff) (param $0 f64) (result f32)
   (local $1 f64)
   local.get $0
   local.set $1
   local.get $1
   f32.demote_f64
  )
- (func $~lib/math/NativeMath.hypot (; 34 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.hypot (; 36 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -2832,19 +2857,12 @@
   f64.sqrt
   f64.mul
  )
- (func $std/libm/hypot (; 35 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/hypot (; 37 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.hypot
  )
- (func $~lib/builtins/isFinite<f64> (; 36 ;) (type $Fi) (param $0 f64) (result i32)
-  local.get $0
-  local.get $0
-  f64.sub
-  f64.const 0
-  f64.eq
- )
- (func $~lib/math/NativeMath.imul (; 37 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.imul (; 38 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.add
@@ -2877,16 +2895,16 @@
   i32.mul
   f64.convert_i32_s
  )
- (func $std/libm/imul (; 38 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/imul (; 39 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.imul
  )
- (func $std/libm/log (; 39 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log (; 40 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.log
  )
- (func $~lib/math/NativeMath.log10 (; 40 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log10 (; 41 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -3149,15 +3167,15 @@
   local.get $9
   f64.add
  )
- (func $std/libm/log10 (; 41 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log10 (; 42 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.log10
  )
- (func $std/libm/log1p (; 42 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log1p (; 43 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.log1p
  )
- (func $~lib/math/NativeMath.log2 (; 43 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log2 (; 44 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -3413,11 +3431,11 @@
   local.get $15
   f64.add
  )
- (func $std/libm/log2 (; 44 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/log2 (; 45 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.log2
  )
- (func $std/libm/max (; 45 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/max (; 46 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   local.get $0
@@ -3428,7 +3446,7 @@
   local.get $3
   f64.max
  )
- (func $std/libm/min (; 46 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/min (; 47 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   local.get $0
@@ -3439,7 +3457,7 @@
   local.get $3
   f64.min
  )
- (func $~lib/math/NativeMath.pow (; 47 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 48 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -4527,12 +4545,12 @@
   local.get $16
   f64.mul
  )
- (func $std/libm/pow (; 48 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $std/libm/pow (; 49 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.pow
  )
- (func $std/libm/round (; 49 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/round (; 50 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   local.get $0
   local.set $1
@@ -4543,7 +4561,7 @@
   local.get $1
   f64.copysign
  )
- (func $std/libm/sign (; 50 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sign (; 51 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   block $~lib/math/NativeMath.sign|inlined.0 (result f64)
    local.get $0
@@ -4566,15 +4584,15 @@
    br $~lib/math/NativeMath.sign|inlined.0
   end
  )
- (func $~lib/math/NativeMath.sin (; 51 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sin (; 52 ;) (type $FF) (param $0 f64) (result f64)
   unreachable
   f64.const 0
  )
- (func $std/libm/sin (; 52 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sin (; 53 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.sin
  )
- (func $~lib/math/NativeMath.sinh (; 53 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sinh (; 54 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
   (local $3 i32)
@@ -4678,26 +4696,26 @@
   local.set $4
   local.get $4
  )
- (func $std/libm/sinh (; 54 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sinh (; 55 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.sinh
  )
- (func $std/libm/sqrt (; 55 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/sqrt (; 56 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   local.get $0
   local.set $1
   local.get $1
   f64.sqrt
  )
- (func $~lib/math/NativeMath.tan (; 56 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tan (; 57 ;) (type $FF) (param $0 f64) (result f64)
   unreachable
   f64.const 0
  )
- (func $std/libm/tan (; 57 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/tan (; 58 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.tan
  )
- (func $~lib/math/NativeMath.tanh (; 58 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tanh (; 59 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
   (local $3 i32)
@@ -4789,17 +4807,17 @@
   local.get $0
   f64.copysign
  )
- (func $std/libm/tanh (; 59 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/tanh (; 60 ;) (type $FF) (param $0 f64) (result f64)
   local.get $0
   call $~lib/math/NativeMath.tanh
  )
- (func $std/libm/trunc (; 60 ;) (type $FF) (param $0 f64) (result f64)
+ (func $std/libm/trunc (; 61 ;) (type $FF) (param $0 f64) (result f64)
   (local $1 f64)
   local.get $0
   local.set $1
   local.get $1
   f64.trunc
  )
- (func $null (; 61 ;) (type $_)
+ (func $null (; 62 ;) (type $_)
  )
 )

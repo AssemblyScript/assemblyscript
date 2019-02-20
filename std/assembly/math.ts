@@ -349,9 +349,17 @@ export namespace NativeMath {
     return builtin_ceil<f64>(x);
   }
 
-  @inline
   export function clz32(x: f64): f64 {
-    return <f64>builtin_clz<i32>(<i32>x);
+    if (!isFinite(x)) return 32;
+    /*
+     * Wasm (MVP) and JS have different approaches for double->int conversions.
+     *
+     * For emulate JS conversion behavior and avoid trapping from wasm we should modulate by MAX_INT
+     * our float-point arguments before actual convertion to integers.
+     */
+    return builtin_clz(
+      <i32><i64>(x - 4294967296 * builtin_floor(x * (1.0 / 4294967296)))
+    );
   }
 
   export function cos(x: f64): f64 { // TODO
@@ -543,7 +551,7 @@ export namespace NativeMath {
 
   export function imul(x: f64, y: f64): f64 {
     /*
-     * Wasm (MVP) and JS have different approachas for double->int conversions.
+     * Wasm (MVP) and JS have different approaches for double->int conversions.
      *
      * For emulate JS conversion behavior and avoid trapping from wasm we should modulate by MAX_INT
      * our float-point arguments before actual convertion to integers.
@@ -1493,9 +1501,11 @@ export namespace NativeMathf {
     return builtin_ceil<f32>(x);
   }
 
-  @inline
   export function clz32(x: f32): f32 {
-    return <f32>builtin_clz<i32>(<i32>x);
+    if (!isFinite(x)) return 32;
+    return builtin_clz(
+      <i32><i64>(x - 4294967296 * builtin_floor(x * (1.0 / 4294967296)))
+    );
   }
 
   export function cos(x: f32): f32 { // TODO
@@ -1669,7 +1679,18 @@ export namespace NativeMathf {
 
   @inline
   export function imul(x: f32, y: f32): f32 {
-    return <f32>(<i32>x * <i32>y);
+    /*
+     * Wasm (MVP) and JS have different approaches for double->int conversions.
+     *
+     * For emulate JS conversion behavior and avoid trapping from wasm we should modulate by MAX_INT
+     * our float-point arguments before actual convertion to integers.
+     */
+    if (!isFinite(x + y)) return 0;
+    const inv32 = 1.0 / 4294967296;
+    return (
+      <i32><i64>(x - 4294967296 * builtin_floor(x * inv32)) *
+      <i32><i64>(y - 4294967296 * builtin_floor(y * inv32))
+    );
   }
 
   export function log(x: f32): f32 { // see: musl/src/math/logf.c and SUN COPYRIGHT NOTICE above
