@@ -186,6 +186,8 @@ export class Options {
   noAssert: bool = false;
   /** If true, imports the memory provided by the embedder. */
   importMemory: bool = false;
+  /** If greater than zero, declare memory as shared by setting max memory to sharedMemory. */
+  sharedMemory: i32 = 0;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, generates information necessary for source maps. */
@@ -400,18 +402,19 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // set up memory
+    var isSharedMemory = options.hasFeature(Feature.THREADS) && options.sharedMemory > 0;
     module.setMemory(
       this.options.memoryBase /* is specified */ || this.memorySegments.length
         ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
         : 0,
-      Module.UNLIMITED_MEMORY,
+      isSharedMemory ? options.sharedMemory : Module.UNLIMITED_MEMORY,
       this.memorySegments,
       options.target,
       "memory"
     );
 
     // import memory if requested (default memory is named '0' by Binaryen)
-    if (options.importMemory) module.addMemoryImport("0", "env", "memory");
+    if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
 
     // set up function table
     var functionTable = this.functionTable;
