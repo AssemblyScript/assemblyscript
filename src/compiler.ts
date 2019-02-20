@@ -921,6 +921,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentEnum = element;
     var previousValue: EnumValue | null = null;
     var previousValueIsMut = false;
+    var isInline = element.is(CommonFlags.CONST) || element.hasDecorator(DecoratorFlags.INLINE);
 
     if (element.members) {
       for (let member of element.members.values()) {
@@ -929,6 +930,10 @@ export class Compiler extends DiagnosticEmitter {
         let val = <EnumValue>member;
         let valueNode = val.valueNode;
         val.set(CommonFlags.COMPILED);
+        let previousFlow = this.currentFlow;
+        if (element.hasDecorator(DecoratorFlags.LAZY)) {
+          this.currentFlow = element.file.startFunction.flow;
+        }
         let initExpr: ExpressionRef;
         if (valueNode) {
           initExpr = this.compileExpression(
@@ -975,6 +980,7 @@ export class Compiler extends DiagnosticEmitter {
             initInStart = true;
           }
         }
+        this.currentFlow = previousFlow;
         if (initInStart) {
           module.addGlobal(val.internalName, NativeType.I32, true, module.createI32(0));
           this.currentBody.push(
@@ -982,8 +988,8 @@ export class Compiler extends DiagnosticEmitter {
           );
           previousValueIsMut = true;
         } else {
-          if (element.is(CommonFlags.CONST)) {
-            val.withConstantIntegerValue(i64_new(getConstValueI32(initExpr)), Type.i32);
+          if (isInline) {
+            val.setConstantIntegerValue(i64_new(getConstValueI32(initExpr)), Type.i32);
             if (val.is(CommonFlags.MODULE_EXPORT)) {
               module.addGlobal(val.internalName, NativeType.I32, false, initExpr);
             }
@@ -1397,7 +1403,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.ENUMDECLARATION: {
         let element = this.program.getElementByDeclaration(<EnumDeclaration>statement);
         assert(element.kind == ElementKind.ENUM);
-        this.compileEnum(<Enum>element);
+        if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileEnum(<Enum>element);
         break;
       }
       case NodeKind.NAMESPACEDECLARATION: {
@@ -2074,7 +2080,7 @@ export class Compiler extends DiagnosticEmitter {
             let local = new Local(name, -1, type, flow.parentFunction);
             switch (getExpressionType(initExpr)) {
               case NativeType.I32: {
-                local = local.withConstantIntegerValue(
+                local.setConstantIntegerValue(
                   i64_new(
                     getConstValueI32(initExpr),
                     0
@@ -2084,7 +2090,7 @@ export class Compiler extends DiagnosticEmitter {
                 break;
               }
               case NativeType.I64: {
-                local = local.withConstantIntegerValue(
+                local.setConstantIntegerValue(
                   i64_new(
                     getConstValueI64Low(initExpr),
                     getConstValueI64High(initExpr)
@@ -2094,11 +2100,11 @@ export class Compiler extends DiagnosticEmitter {
                 break;
               }
               case NativeType.F32: {
-                local = local.withConstantFloatValue(<f64>getConstValueF32(initExpr), type);
+                local.setConstantFloatValue(<f64>getConstValueF32(initExpr), type);
                 break;
               }
               case NativeType.F64: {
-                local = local.withConstantFloatValue(getConstValueF64(initExpr), type);
+                local.setConstantFloatValue(getConstValueF64(initExpr), type);
                 break;
               }
               default: {
@@ -2330,14 +2336,6 @@ export class Compiler extends DiagnosticEmitter {
     conversionKind: ConversionKind,
     wrapMode: WrapMode
   ): ExpressionRef {
-    // Standard library elements can be pulled by user code automatically, so make sure the respective
-    // file's top-level statements have executed. Works as if there was an import statement right before
-    // accessing its code.
-    var originSource = expression.range.source;
-    if (!originSource.is(CommonFlags.COMPILED)) {
-      this.compileFileByPath(originSource.internalPath, expression);
-    }
-
     this.currentType = contextualType;
     var expr: ExpressionRef;
     switch (expression.kind) {
@@ -5931,6 +5929,14 @@ export class Compiler extends DiagnosticEmitter {
       : this.module.createI32(index);
   }
 
+  /** Makes sure the enclosing source file of the specified expression has been compiled. */
+  private maybeCompileEnclosingSource(expression: Expression): void {
+    var enclosingSource = expression.range.source;
+    if (!enclosingSource.is(CommonFlags.COMPILED)) {
+      this.compileFileByPath(enclosingSource.internalPath, expression);
+    }
+  }
+
   /**
    * Compiles an identifier in the specified context.
    * @param retainConstantType Retains the type of inlined constants if `true`, otherwise
@@ -6048,6 +6054,8 @@ export class Compiler extends DiagnosticEmitter {
         return module.createUnreachable();
       }
     }
+
+    this.maybeCompileEnclosingSource(expression);
 
     // otherwise resolve
     var target = this.resolver.resolveIdentifier( // reports

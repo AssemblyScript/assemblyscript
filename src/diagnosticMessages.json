@@ -123,6 +123,7 @@
   "Constructor of class '{0}' is protected and only accessible within the class declaration.": 2674,
   "Namespace '{0}' has no exported member '{1}'.": 2694,
   "Required type parameters may not follow optional type parameters.": 2706,
+  "Duplicate property '{0}'.": 2718,
 
   "File '{0}' not found.": 6054,
   "Numeric separators are not allowed here.": 6188,
