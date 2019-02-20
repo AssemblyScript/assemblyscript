@@ -63,9 +63,10 @@ async function loadModule(path) {
     Object.keys(module).forEach(methodName => {
         wrapped[methodName] = async function(inputJson) {
             setInputJson(inputJson);
+            outputJson = null;
             await module[methodName].call(module);
-            const outputJson = getOutputJson();
-            return outputJson && outputJson.result;
+            const resultJson = getOutputJson();
+            return resultJson && resultJson.result;
         }
     });
     return wrapped;
@@ -81,6 +82,7 @@ async function loadModule(path) {
     assert.deepEqual(await module.convertFoobars({
         foobars: [{ arr: [["1", "2"], ["3"]]  }] }),
         [{ foobar: { foo: 0, bar: 1, flag: false, baz: '123', arr: [["1", "2"], ["3"]] }}]); 
+    assert.equal(await module.getStringArrayLength({ arr: ["1", "2", "3"] }), 3);
 })().catch(e => {
     console.error('Error during test execution:', e);
     if (e.code == 'ERR_ASSERTION') {
