@@ -12,12 +12,7 @@
  (data (i32.const 48) "\04\00\00\00n\00u\00l\00l\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
- (global $HEAP_BASE i32 (i32.const 60))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 60))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "i32ArrayArrayElementAccess" (func $std/array-access/i32ArrayArrayElementAccess))
@@ -204,7 +199,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 244
+   i32.const 224
    i32.const 4
    call $~lib/env/abort
    unreachable

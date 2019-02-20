@@ -81,7 +81,6 @@
  (global $std/math/OVERFLOW i32 (i32.const 16))
  (global $~lib/math/NativeMath.E f64 (f64.const 2.718281828459045))
  (global $~lib/math/NativeMathf.E f32 (f32.const 2.7182817459106445))
- (global $Infinity f64 (f64.const inf))
  (global $~lib/math/NativeMath.LN2 f64 (f64.const 0.6931471805599453))
  (global $~lib/math/NativeMath.LN10 f64 (f64.const 2.302585092994046))
  (global $~lib/math/NativeMath.LOG2E f64 (f64.const 1.4426950408889634))
@@ -46795,6 +46794,216 @@
    call $~lib/env/abort
    unreachable
   end
+  f64.const 0
+  call $~lib/math/NativeMath.clz32
+  f64.const 32
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3289
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 1
+  call $~lib/math/NativeMath.clz32
+  f64.const 31
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3290
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const -1
+  call $~lib/math/NativeMath.clz32
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3291
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const -128
+  call $~lib/math/NativeMath.clz32
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3292
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 4294967295
+  call $~lib/math/NativeMath.clz32
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3293
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 4294967295.5
+  call $~lib/math/NativeMath.clz32
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3294
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 4294967296
+  call $~lib/math/NativeMath.clz32
+  f64.const 32
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3295
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 4294967297
+  call $~lib/math/NativeMath.clz32
+  f64.const 31
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3296
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const nan:0x8000000000000
+  call $~lib/math/NativeMath.clz32
+  f64.const 32
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3297
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const inf
+  call $~lib/math/NativeMath.clz32
+  f64.const 32
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3298
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
+  call $~lib/math/NativeMath.clz32
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3299
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
+  f64.neg
+  call $~lib/math/NativeMath.clz32
+  f64.const 31
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3300
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $~lib/builtins/f64.MAX_VALUE
+  call $~lib/math/NativeMath.clz32
+  f64.const 32
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3301
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $~lib/builtins/f64.MIN_VALUE
+  call $~lib/math/NativeMath.clz32
+  f64.const 32
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3302
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $~lib/builtins/f64.MAX_VALUE
+  f64.neg
+  call $~lib/math/NativeMath.clz32
+  f64.const 32
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3303
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $~lib/builtins/f64.EPSILON
+  call $~lib/math/NativeMath.clz32
+  f64.const 32
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 3304
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
   i64.const 0
   i32.const 0
   call $~lib/math/ipow64
@@ -47664,5 +47873,7 @@
   end
  )
  (func $null (; 166 ;) (type $_)
+ )
+ (func $null (; 160 ;) (type $_)
  )
 )

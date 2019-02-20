@@ -38,8 +38,6 @@ declare type f64 = number;
 
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
 declare const ASC_TARGET: i32;
-/** Provided noTreeshaking option. */
-declare const ASC_NO_TREESHAKING: bool;
 /** Provided noAssert option. */
 declare const ASC_NO_ASSERT: bool;
 /** Provided memoryBase option. */
@@ -354,7 +352,7 @@ declare namespace f64 {
   export function store(offset: usize, value: f64, constantOffset?: usize): void;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
-declare type NATIVE<T> = T;
+declare type native<T> = T;
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {
@@ -940,7 +938,10 @@ declare function global(
 ): TypedPropertyDescriptor<any> | void;
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
-declare function operator(token: string): (
+declare function operator(token:
+  "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
+  ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+): (
   target: any,
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<any>
@@ -948,19 +949,22 @@ declare function operator(token: string): (
 
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
-  export function binary(token: string): (
+  export function binary(token:
+    "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
+    ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+  ): (
     target: any,
     propertyKey: string,
     descriptor: TypedPropertyDescriptor<any>
   ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
-  export function prefix(token: string): (
+  export function prefix(token: "!" | "~" | "+" | "-" | "++" | "--"): (
     target: any,
     propertyKey: string,
     descriptor: TypedPropertyDescriptor<any>
   ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary postfix operator overload for the specified `token`. */
-  export function postfix(token: string): (
+  export function postfix(token: "++" | "--"): (
     target: any,
     propertyKey: string,
     descriptor: TypedPropertyDescriptor<any>
@@ -973,7 +977,7 @@ declare function unmanaged(constructor: Function): void;
 /** Annotates a class as being sealed / non-derivable. */
 declare function sealed(constructor: Function): void;
 
-/** Annotates a method or function as always inlined. */
+/** Annotates a method, function or constant global as always inlined. */
 declare function inline(
   target: any,
   propertyKey: string,
@@ -986,3 +990,17 @@ declare function external(namespace: string, name: string): (
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<any>
 ) => TypedPropertyDescriptor<any> | void;
+
+/** Annotates a global for lazy compilation. */
+declare function lazy(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
+
+/** Annotates a function as the explicit start function. */
+declare function start(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;

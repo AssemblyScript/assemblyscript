@@ -1,30 +1,38 @@
 (module
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii_ (func (param i32 i32 i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $i_ (func (param i32)))
- (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00s\00t\00d\00/\00a\00l\00l\00o\00c\00a\00t\00o\00r\00_\00a\00r\00e\00n\00a\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/allocator_arena/size i32 (i32.const 42))
  (global $std/allocator_arena/ptr1 (mut i32) (i32.const 0))
  (global $std/allocator_arena/ptr2 (mut i32) (i32.const 0))
  (global $std/allocator_arena/i (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 56))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 56))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+ )
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -32,7 +40,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/internal/allocator/MAX_SIZE_32
+  i32.const 1073741824
   i32.gt_u
   if
    unreachable
@@ -49,9 +57,9 @@
   i32.gt_u
   select
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.const -1
   i32.xor
   i32.and
@@ -103,7 +111,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 2 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 3 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -357,7 +365,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 3 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1558,7 +1566,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1785,7 +1793,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcmp (; 5 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/memory/memcmp (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1839,27 +1847,18 @@
    i32.const 0
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 6 ;) (type $i_) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 7 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $~lib/allocator/arena/__memory_reset (; 7 ;) (type $_)
+ (func $~lib/allocator/arena/__memory_reset (; 8 ;) (type $_)
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $start (; 8 ;) (type $_)
+ (func $start:std/allocator_arena (; 9 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  global.get $HEAP_BASE
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.add
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
+  call $start:~lib/allocator/arena
   block $~lib/memory/memory.allocate|inlined.0 (result i32)
    global.get $std/allocator_arena/size
    local.set $0
@@ -1888,7 +1887,7 @@
    call $~lib/env/abort
    unreachable
   end
-  block $memory.fill|inlined.0
+  block $~lib/memory/memory.fill|inlined.0
    global.get $std/allocator_arena/ptr1
    local.set $0
    i32.const 18
@@ -1933,7 +1932,7 @@
    end
    unreachable
   end
-  block $memory.copy|inlined.0
+  block $~lib/memory/memory.copy|inlined.0
    global.get $std/allocator_arena/ptr2
    local.set $2
    global.get $std/allocator_arena/ptr1
@@ -2028,7 +2027,7 @@
   end
   global.set $std/allocator_arena/ptr1
   global.get $std/allocator_arena/ptr1
-  global.get $HEAP_BASE
+  global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
   i32.const 7
@@ -2046,6 +2045,9 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (type $_)
+ (func $start (; 10 ;) (type $_)
+  call $start:std/allocator_arena
+ )
+ (func $null (; 11 ;) (type $_)
  )
 )

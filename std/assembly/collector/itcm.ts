@@ -6,10 +6,10 @@
 
 // Largely based on Bach Le's μgc, see: https://github.com/bullno1/ugc
 
-const TRACE = false;
+@inline const TRACE = false;
 
 /** Size of a managed object header. */
-export const HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
+@inline export const HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
 
 import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
 import { iterateRoots } from "../gc";

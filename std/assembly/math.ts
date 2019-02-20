@@ -54,8 +54,7 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
   return p / q;
 }
 
-@inline /** @internal */
-function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
+@inline function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
   const                       // see: musl/src/math/__expo2.c
     k    = <u32>2043,
     kln2 = reinterpret<f64>(0x40962066151ADD8B); // 0x1.62066151add8bp+10
@@ -70,7 +69,6 @@ var random_state1_64: u64;
 var random_state0_32: u32;
 var random_state1_32: u32;
 
-/** @internal */
 function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanche
   h ^= h >> 33;                     // see: https://github.com/aappleby/smhasher
   h *= 0xFF51AFD7ED558CCD;
@@ -80,7 +78,6 @@ function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanc
   return h;
 }
 
-/** @internal */
 function splitMix32(h: u32): u32 {
   h += 0x6D2B79F5;
   h  = (h ^ (h >> 15)) * (h | 1);
@@ -90,14 +87,14 @@ function splitMix32(h: u32): u32 {
 
 export namespace NativeMath {
 
-  export const E       = reinterpret<f64>(0x4005BF0A8B145769); // 2.7182818284590452354
-  export const LN2     = reinterpret<f64>(0x3FE62E42FEFA39EF); // 0.69314718055994530942
-  export const LN10    = reinterpret<f64>(0x40026BB1BBB55516); // 2.30258509299404568402
-  export const LOG2E   = reinterpret<f64>(0x3FF71547652B82FE); // 1.4426950408889634074
-  export const LOG10E  = reinterpret<f64>(0x3FDBCB7B1526E50E); // 0.43429448190325182765
-  export const PI      = reinterpret<f64>(0x400921FB54442D18); // 3.14159265358979323846
-  export const SQRT1_2 = reinterpret<f64>(0x3FE6A09E667F3BCD); // 0.70710678118654752440
-  export const SQRT2   = reinterpret<f64>(0x3FF6A09E667F3BCD); // 1.41421356237309504880
+  @lazy export const E       = reinterpret<f64>(0x4005BF0A8B145769); // 2.7182818284590452354
+  @lazy export const LN2     = reinterpret<f64>(0x3FE62E42FEFA39EF); // 0.69314718055994530942
+  @lazy export const LN10    = reinterpret<f64>(0x40026BB1BBB55516); // 2.30258509299404568402
+  @lazy export const LOG2E   = reinterpret<f64>(0x3FF71547652B82FE); // 1.4426950408889634074
+  @lazy export const LOG10E  = reinterpret<f64>(0x3FDBCB7B1526E50E); // 0.43429448190325182765
+  @lazy export const PI      = reinterpret<f64>(0x400921FB54442D18); // 3.14159265358979323846
+  @lazy export const SQRT1_2 = reinterpret<f64>(0x3FE6A09E667F3BCD); // 0.70710678118654752440
+  @lazy export const SQRT2   = reinterpret<f64>(0x3FF6A09E667F3BCD); // 1.41421356237309504880
 
   @inline
   export function abs(x: f64): f64 {
@@ -366,9 +363,17 @@ export namespace NativeMath {
     return builtin_ceil<f64>(x);
   }
 
-  @inline
   export function clz32(x: f64): f64 {
-    return <f64>builtin_clz<i32>(<i32>x);
+    if (!isFinite(x)) return 32;
+    /*
+     * Wasm (MVP) and JS have different approaches for double->int conversions.
+     *
+     * For emulate JS conversion behavior and avoid trapping from wasm we should modulate by MAX_INT
+     * our float-point arguments before actual convertion to integers.
+     */
+    return builtin_clz(
+      <i32><i64>(x - 4294967296 * builtin_floor(x * (1.0 / 4294967296)))
+    );
   }
 
   export function cos(x: f64): f64 { // TODO
@@ -560,7 +565,7 @@ export namespace NativeMath {
 
   export function imul(x: f64, y: f64): f64 {
     /*
-     * Wasm (MVP) and JS have different approachas for double->int conversions.
+     * Wasm (MVP) and JS have different approaches for double->int conversions.
      *
      * For emulate JS conversion behavior and avoid trapping from wasm we should modulate by MAX_INT
      * our float-point arguments before actual convertion to integers.
@@ -1086,7 +1091,6 @@ export namespace NativeMath {
     return builtin_trunc<f64>(x);
   }
 
-  /** @internal */
   export function scalbn(x: f64, n: i32): f64 { // see: https://git.musl-libc.org/cgit/musl/tree/src/math/scalbn.c
     const
       Ox1p53    = reinterpret<f64>(0x4340000000000000),
@@ -1259,8 +1263,7 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   return p / q;
 }
 
-@inline /** @internal */
-function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
+@inline function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   const                        // see: musl/src/math/__expo2f.c
     k    = <u32>235,
     kln2 = reinterpret<f32>(0x4322E3BC); // 0x1.45c778p+7f
@@ -1373,14 +1376,14 @@ function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
 
 export namespace NativeMathf {
 
-  export const E       = <f32>NativeMath.E;
-  export const LN2     = <f32>NativeMath.LN2;
-  export const LN10    = <f32>NativeMath.LN10;
-  export const LOG2E   = <f32>NativeMath.LOG2E;
-  export const LOG10E  = <f32>NativeMath.LOG10E;
-  export const PI      = <f32>NativeMath.PI;
-  export const SQRT1_2 = <f32>NativeMath.SQRT1_2;
-  export const SQRT2   = <f32>NativeMath.SQRT2;
+  @lazy export const E       = <f32>NativeMath.E;
+  @lazy export const LN2     = <f32>NativeMath.LN2;
+  @lazy export const LN10    = <f32>NativeMath.LN10;
+  @lazy export const LOG2E   = <f32>NativeMath.LOG2E;
+  @lazy export const LOG10E  = <f32>NativeMath.LOG10E;
+  @lazy export const PI      = <f32>NativeMath.PI;
+  @lazy export const SQRT1_2 = <f32>NativeMath.SQRT1_2;
+  @lazy export const SQRT2   = <f32>NativeMath.SQRT2;
 
   @inline
   export function abs(x: f32): f32 {
@@ -1623,9 +1626,11 @@ export namespace NativeMathf {
     return builtin_ceil<f32>(x);
   }
 
-  @inline
   export function clz32(x: f32): f32 {
-    return <f32>builtin_clz<i32>(<i32>x);
+    if (!isFinite(x)) return 32;
+    return builtin_clz(
+      <i32><i64>(x - 4294967296 * builtin_floor(x * (1.0 / 4294967296)))
+    );
   }
 
   export function cos(x: f32): f32 { // see: musl/src/math/cosf.c
@@ -1842,7 +1847,18 @@ export namespace NativeMathf {
 
   @inline
   export function imul(x: f32, y: f32): f32 {
-    return <f32>(<i32>x * <i32>y);
+    /*
+     * Wasm (MVP) and JS have different approaches for double->int conversions.
+     *
+     * For emulate JS conversion behavior and avoid trapping from wasm we should modulate by MAX_INT
+     * our float-point arguments before actual convertion to integers.
+     */
+    if (!isFinite(x + y)) return 0;
+    const inv32 = 1.0 / 4294967296;
+    return (
+      <i32><i64>(x - 4294967296 * builtin_floor(x * inv32)) *
+      <i32><i64>(y - 4294967296 * builtin_floor(y * inv32))
+    );
   }
 
   export function log(x: f32): f32 { // see: musl/src/math/logf.c and SUN COPYRIGHT NOTICE above
@@ -2383,7 +2399,6 @@ export namespace NativeMathf {
     return builtin_trunc<f32>(x);
   }
 
-  /** @internal */
   export function scalbn(x: f32, n: i32): f32 { // see: https://git.musl-libc.org/cgit/musl/tree/src/math/scalbnf.c
     const
       Ox1p24f   = reinterpret<f32>(0x4B800000),
