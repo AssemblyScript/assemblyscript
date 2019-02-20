@@ -86,11 +86,6 @@
     "type": "b",
     "default": false
   },
-  "noTreeShaking": {
-    "description": "Disables compiler-level tree-shaking, compiling everything.",
-    "type": "b",
-    "default": false
-  },
   "noAssert": {
     "description": "Replaces assertions with just their value without trapping.",
     "type": "b",

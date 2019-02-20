@@ -87,11 +87,6 @@ export function setTarget(options: Options, target: Target): void {
   options.target = target;
 }
 
-/** Sets the `noTreeShaking` option. */
-export function setNoTreeShaking(options: Options, noTreeShaking: bool): void {
-  options.noTreeShaking = noTreeShaking;
-}
-
 /** Sets the `noAssert` option. */
 export function setNoAssert(options: Options, noAssert: bool): void {
   options.noAssert = noAssert;
@@ -185,6 +180,7 @@ export * from "./decompiler";
 export * from "./definitions";
 export * from "./diagnosticMessages.generated";
 export * from "./diagnostics";
+export * from "./flow";
 export * from "./module";
 export * from "./parser";
 export * from "./program";

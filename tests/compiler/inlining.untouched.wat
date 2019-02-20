@@ -9,14 +9,10 @@
  (table $0 2 funcref)
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|1)
  (global $inlining/constantGlobal i32 (i32.const 1))
- (global $~argc (mut i32) (i32.const 0))
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 36))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 36))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $inlining/test))
@@ -222,7 +218,7 @@
   end
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    i32.const 2
    block $inlining/func_fe|inlined.0 (result i32)
     i32.const 1
@@ -283,7 +279,19 @@
    unreachable
   end
  )
- (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:~lib/allocator/arena (; 4 ;) (type $_)
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+ )
+ (func $~lib/allocator/arena/__memory_allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -291,7 +299,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/internal/allocator/MAX_SIZE_32
+  i32.const 1073741824
   i32.gt_u
   if
    unreachable
@@ -308,9 +316,9 @@
   i32.gt_u
   select
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.const -1
   i32.xor
   i32.and
@@ -362,12 +370,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $inlining/test_ctor (; 6 ;) (type $_)
+ (func $inlining/test_ctor (; 7 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -475,7 +483,7 @@
    unreachable
   end
  )
- (func $start (; 7 ;) (type $_)
+ (func $start:inlining (; 8 ;) (type $_)
   call $inlining/test
   i32.const 3
   i32.eq
@@ -489,18 +497,12 @@
    unreachable
   end
   call $inlining/test_funcs
-  global.get $HEAP_BASE
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.add
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
+  call $start:~lib/allocator/arena
   call $inlining/test_ctor
  )
- (func $null (; 8 ;) (type $_)
+ (func $start (; 9 ;) (type $_)
+  call $start:inlining
+ )
+ (func $null (; 10 ;) (type $_)
  )
 )

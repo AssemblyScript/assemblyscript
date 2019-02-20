@@ -13,7 +13,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 3 ;) (type $_)
+ (func $start:declare (; 3 ;) (type $_)
   call $declare/externalFunction
   global.get $declare/externalConstant
   i32.const 1
@@ -39,7 +39,10 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (type $_)
+ (func $start (; 4 ;) (type $_)
+  call $start:declare
+ )
+ (func $null (; 5 ;) (type $_)
   nop
  )
 )

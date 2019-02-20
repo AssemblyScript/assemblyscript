@@ -29,11 +29,11 @@
  (global $~lib/builtins/f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 0 ;) (type $_)
+ (func $start:limits (; 0 ;) (type $_)
   global.get $~lib/builtins/i8.MIN_VALUE
   drop
   global.get $~lib/builtins/i8.MAX_VALUE
@@ -87,6 +87,9 @@
   global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   drop
  )
- (func $null (; 1 ;) (type $_)
+ (func $start (; 1 ;) (type $_)
+  call $start:limits
+ )
+ (func $null (; 2 ;) (type $_)
  )
 )

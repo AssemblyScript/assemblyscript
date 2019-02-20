@@ -20,4 +20,5 @@ arr[0] = {};
 
 gc.collect(); // should collect the old one
 
+@start
 export function main(): i32 { return 0; }

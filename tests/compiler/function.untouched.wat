@@ -17,7 +17,7 @@
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -75,7 +75,7 @@
   local.get $1
   f64.add
  )
- (func $start (; 15 ;) (type $_)
+ (func $start:function (; 15 ;) (type $_)
   call $function/v
   call $function/i
   drop
@@ -119,6 +119,9 @@
   call $function/FFF
   drop
  )
- (func $null (; 16 ;) (type $_)
+ (func $start (; 16 ;) (type $_)
+  call $start:function
+ )
+ (func $null (; 17 ;) (type $_)
  )
 )

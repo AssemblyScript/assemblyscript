@@ -16,11 +16,13 @@ export function makeSet<V>(original: Set<V> | null = null): Set<V> {
   return new Set<V>();
 }
 
-export function makeMap<K,V>(original: Map<K,V> | null = null): Map<K,V> {
+export function makeMap<K,V>(original: Map<K,V> | null = null, overrides: Map<K,V> | null = null): Map<K,V> {
+  var cloned = new Map<K,V>();
   if (original) {
-    let cloned = new Map<K,V>();
     for (let [k, v] of original) cloned.set(k, v);
-    return cloned;
+    if (overrides) for (let [k, v] of overrides) cloned.set(k, v);
+  } else if (overrides) {
+    for (let [k, v] of overrides) cloned.set(k, v);
   }
-  return new Map<K,V>();
+  return cloned;
 }

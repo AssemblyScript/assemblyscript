@@ -12,7 +12,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:do (; 1 ;) (type $_)
   (local $0 i32)
   loop $continue|0
    global.get $do/n
@@ -148,7 +148,10 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:do
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

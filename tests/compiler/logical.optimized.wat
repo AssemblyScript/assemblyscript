@@ -13,7 +13,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:logical (; 1 ;) (type $_)
   i32.const 2
   global.set $logical/i
   global.get $logical/i
@@ -119,7 +119,10 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:logical
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

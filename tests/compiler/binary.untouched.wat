@@ -9,11 +9,10 @@
  (elem (i32.const 0) $null)
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
- (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $binary/I (mut i64) (i64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -2738,7 +2737,7 @@
   local.get $2
   f64.reinterpret_i64
  )
- (func $start (; 6 ;) (type $_)
+ (func $start:binary (; 6 ;) (type $_)
   global.get $binary/i
   i32.const 1
   i32.lt_s
@@ -3346,6 +3345,9 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $null (; 7 ;) (type $_)
+ (func $start (; 7 ;) (type $_)
+  call $start:binary
+ )
+ (func $null (; 8 ;) (type $_)
  )
 )

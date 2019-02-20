@@ -419,7 +419,6 @@ exports.main = function main(argv, options, callback) {
   // Begin compilation
   const compilerOptions = assemblyscript.createOptions();
   assemblyscript.setTarget(compilerOptions, 0);
-  assemblyscript.setNoTreeShaking(compilerOptions, args.noTreeShaking);
   assemblyscript.setNoAssert(compilerOptions, args.noAssert);
   assemblyscript.setImportMemory(compilerOptions, args.importMemory);
   assemblyscript.setImportTable(compilerOptions, args.importTable);

@@ -1,8 +1,8 @@
 import { Map } from "./map";
 
-var stringToId: Map<string, usize>;
-var idToString: Map<usize, string>;
-var nextId: usize = 12; // Symbol.unscopables + 1
+@lazy var stringToId: Map<string, usize>;
+@lazy var idToString: Map<usize, string>;
+@lazy var nextId: usize = 12; // Symbol.unscopables + 1
 
 @unmanaged export class symbol {
   toString(): string {
@@ -29,8 +29,6 @@ var nextId: usize = 12; // Symbol.unscopables + 1
   }
 }
 
-type Symbol = symbol;
-
 export function Symbol(description: string | null = null): symbol {
   var id = nextId++;
   if (!id) unreachable(); // out of ids
@@ -40,18 +38,18 @@ export function Symbol(description: string | null = null): symbol {
 export namespace Symbol {
 
   // well-known symbols
-  export const hasInstance        = changetype<symbol>(1);
-  export const isConcatSpreadable = changetype<symbol>(2);
-  export const isRegExp           = changetype<symbol>(3);
-  export const iterator           = changetype<symbol>(3);
-  export const match              = changetype<symbol>(4);
-  export const replace            = changetype<symbol>(5);
-  export const search             = changetype<symbol>(6);
-  export const species            = changetype<symbol>(7);
-  export const split              = changetype<symbol>(8);
-  export const toPrimitive        = changetype<symbol>(9);
-  export const toStringTag        = changetype<symbol>(10);
-  export const unscopables        = changetype<symbol>(11);
+  @lazy export const hasInstance        = changetype<symbol>(1);
+  @lazy export const isConcatSpreadable = changetype<symbol>(2);
+  @lazy export const isRegExp           = changetype<symbol>(3);
+  @lazy export const iterator           = changetype<symbol>(3);
+  @lazy export const match              = changetype<symbol>(4);
+  @lazy export const replace            = changetype<symbol>(5);
+  @lazy export const search             = changetype<symbol>(6);
+  @lazy export const species            = changetype<symbol>(7);
+  @lazy export const split              = changetype<symbol>(8);
+  @lazy export const toPrimitive        = changetype<symbol>(9);
+  @lazy export const toStringTag        = changetype<symbol>(10);
+  @lazy export const unscopables        = changetype<symbol>(11);
 
   /* tslint:disable */// not valid TS
   export function for(key: string): symbol {

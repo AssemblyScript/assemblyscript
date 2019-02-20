@@ -13,20 +13,11 @@
  (data (i32.const 192) "\08\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~started (mut i32) (i32.const 0))
+ (global $~lib/started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/trace/main))
- (func $std/trace/main (; 1 ;) (type $_)
-  global.get $~started
-  i32.eqz
-  if
-   call $start
-   i32.const 1
-   global.set $~started
-  end
- )
- (func $start (; 2 ;) (type $_)
+ (func $start:std/trace (; 1 ;) (type $_)
   i32.const 8
   i32.const 0
   f64.const 0
@@ -91,6 +82,15 @@
   f64.const 4.4
   f64.const 5.5
   call $~lib/env/trace
+ )
+ (func $std/trace/main (; 2 ;) (type $_)
+  global.get $~lib/started
+  i32.eqz
+  if
+   call $start:std/trace
+   i32.const 1
+   global.set $~lib/started
+  end
  )
  (func $null (; 3 ;) (type $_)
   nop

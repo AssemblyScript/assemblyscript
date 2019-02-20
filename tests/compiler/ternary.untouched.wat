@@ -4,11 +4,11 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $ternary/a (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 0 ;) (type $_)
+ (func $start:ternary (; 0 ;) (type $_)
   i32.const 1
   drop
   i32.const 1
@@ -22,6 +22,9 @@
   i32.const 1
   global.set $ternary/a
  )
- (func $null (; 1 ;) (type $_)
+ (func $start (; 1 ;) (type $_)
+  call $start:ternary
+ )
+ (func $null (; 2 ;) (type $_)
  )
 )

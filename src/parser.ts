@@ -140,11 +140,8 @@ export class Parser extends DiagnosticEmitter {
     source.tokenizer = tn;
     var statements = source.statements;
     while (!tn.skip(Token.ENDOFFILE)) {
-      let statement = this.parseTopLevelStatement(tn);
-      if (statement) {
-        statement.parent = source;
-        statements.push(statement);
-      }
+      let statement = this.parseTopLevelStatement(tn, null);
+      if (statement) statements.push(statement);
     }
     tn.finish();
   }
@@ -152,7 +149,7 @@ export class Parser extends DiagnosticEmitter {
   /** Parses a top-level statement. */
   parseTopLevelStatement(
     tn: Tokenizer,
-    namespace: Node | null = null
+    namespace: NamespaceDeclaration | null = null
   ): Statement | null {
     var flags = CommonFlags.NONE;
     var startPos: i32 = -1;
@@ -300,7 +297,7 @@ export class Parser extends DiagnosticEmitter {
 
         // handle plain exports
         if (flags & CommonFlags.EXPORT) {
-          statement = this.parseExport(tn, flags, startPos);
+          statement = this.parseExport(tn, startPos, (flags & CommonFlags.DECLARE) != 0);
 
         // handle non-declaration statements
         } else {
@@ -431,42 +428,41 @@ export class Parser extends DiagnosticEmitter {
     // 'void'
     } else if (token == Token.VOID) {
       type = Node.createType(
-        Node.createIdentifierExpression("void", tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createSimpleTypeName("void", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // 'this'
     } else if (token == Token.THIS) {
       type = Node.createType(
-        Node.createThisExpression(tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createSimpleTypeName("this", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // 'true'
     } else if (token == Token.TRUE || token == Token.FALSE) {
       type = Node.createType(
-        Node.createIdentifierExpression("bool", tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createSimpleTypeName("bool", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // StringLiteral
     } else if (token == Token.STRINGLITERAL) {
       tn.readString();
       type = Node.createType(
-        Node.createIdentifierExpression("string", tn.range()), [], false, tn.range(startPos, tn.pos)
+        Node.createSimpleTypeName("string", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
     // Identifier
     } else if (token == Token.IDENTIFIER) {
-      let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      let first = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
+      let current = first;
       let parameters = new Array<TypeNode>();
       let nullable = false;
 
       // Identifier ('.' Identifier)+
       while (tn.skip(Token.DOT)) {
         if (tn.skip(Token.IDENTIFIER)) {
-          // TODO: this works for now, but the representation isn't great
-          identifier = Node.createIdentifierExpression(
-            identifier.text + "." + tn.readIdentifier(),
-            tn.range(identifier.range.start, tn.pos)
-          );
+          let next = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
+          current.next = next;
+          current = next;
         } else {
           this.error(
             DiagnosticCode.Identifier_expected,
@@ -507,7 +503,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      type = Node.createType(identifier, parameters, nullable, tn.range(startPos, tn.pos));
+      type = Node.createType(first, parameters, nullable, tn.range(startPos, tn.pos));
 
     } else {
       if (!suppressErrors) {
@@ -548,7 +544,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
       type = Node.createType(
-        Node.createIdentifierExpression("Array", bracketRange),
+        Node.createSimpleTypeName("Array", bracketRange),
         [ type ],
         nullable,
         tn.range(startPos, tn.pos)
@@ -765,7 +761,7 @@ export class Parser extends DiagnosticEmitter {
       members.push(<VariableDeclaration>member);
     } while (tn.skip(Token.COMMA));
 
-    var ret = Node.createVariableStatement(members, decorators, flags, tn.range(startPos, tn.pos));
+    var ret = Node.createVariableStatement(members, decorators, tn.range(startPos, tn.pos));
     tn.skip(Token.SEMICOLON);
     return ret;
   }
@@ -1500,13 +1496,11 @@ export class Parser extends DiagnosticEmitter {
       tn.range()
     );
 
-    var typeParameters: TypeParameterNode[] | null;
+    var typeParameters: TypeParameterNode[] | null = null;
     if (tn.skip(Token.LESSTHAN)) {
       typeParameters = this.parseTypeParameters(tn);
       if (!typeParameters) return null;
       flags |= CommonFlags.GENERIC;
-    } else {
-      typeParameters = [];
     }
 
     var extendsType: TypeNode | null = null;
@@ -1577,9 +1571,7 @@ export class Parser extends DiagnosticEmitter {
     if (!tn.skip(Token.CLOSEBRACE)) {
       do {
         let member = this.parseClassMember(tn, declaration);
-        if (!member) return null;
-        member.parent = declaration;
-        members.push(<DeclarationStatement>member);
+        if (member) members.push(<DeclarationStatement>member);
       } while (!tn.skip(Token.CLOSEBRACE));
     }
     return declaration;
@@ -1620,9 +1612,7 @@ export class Parser extends DiagnosticEmitter {
     if (!tn.skip(Token.CLOSEBRACE)) {
       do {
         let member = this.parseClassMember(tn, declaration);
-        if (!member) return null;
-        member.parent = declaration;
-        members.push(<DeclarationStatement>member);
+        if (member) members.push(<DeclarationStatement>member);
       } while (!tn.skip(Token.CLOSEBRACE));
     }
     return Node.createClassExpression(declaration);
@@ -1898,7 +1888,6 @@ export class Parser extends DiagnosticEmitter {
               parameter.range
             );
             implicitFieldDeclaration.parameterIndex = i;
-            implicitFieldDeclaration.parent = parent;
             parameter.implicitFieldDeclaration = implicitFieldDeclaration;
             parent.members.push(implicitFieldDeclaration);
           }
@@ -2157,9 +2146,7 @@ export class Parser extends DiagnosticEmitter {
         );
         while (!tn.skip(Token.CLOSEBRACE)) {
           let member = this.parseTopLevelStatement(tn, ns);
-          if (!member) return null;
-          member.parent = ns;
-          members.push(member);
+          if (member) members.push(member);
         }
         tn.skip(Token.SEMICOLON);
         return ns;
@@ -2180,8 +2167,8 @@ export class Parser extends DiagnosticEmitter {
 
   parseExport(
     tn: Tokenizer,
-    flags: CommonFlags,
-    startPos: i32
+    startPos: i32,
+    isDeclare: bool
   ): ExportStatement | null {
 
     // at 'export': '{' ExportMember (',' ExportMember)* }' ('from' StringLiteral)? ';'?
@@ -2216,7 +2203,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      let ret = Node.createExportStatement(members, path, flags, tn.range(startPos, tn.pos));
+      let ret = Node.createExportStatement(members, path, isDeclare, tn.range(startPos, tn.pos));
       let internalPath = ret.internalPath;
       if (internalPath !== null && !this.seenlog.has(internalPath)) {
         this.backlog.push(internalPath);
@@ -2228,7 +2215,7 @@ export class Parser extends DiagnosticEmitter {
       if (tn.skip(Token.FROM)) {
         if (tn.skip(Token.STRINGLITERAL)) {
           path = Node.createStringLiteralExpression(tn.readString(), tn.range());
-          let ret = Node.createExportStatement(null, path, flags, tn.range(startPos, tn.pos));
+          let ret = Node.createExportStatement(null, path, isDeclare, tn.range(startPos, tn.pos));
           let internalPath = assert(ret.internalPath);
           let source = tn.source;
           if (!source.exportPaths) source.exportPaths = new Set();
@@ -3275,7 +3262,7 @@ export class Parser extends DiagnosticEmitter {
               return null;
             }
             name = Node.createIdentifierExpression(tn.readString(), tn.range());
-            name.set(CommonFlags.QUOTED);
+            name.isQuoted = true;
           } else {
             name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
           }
@@ -3284,7 +3271,7 @@ export class Parser extends DiagnosticEmitter {
             let value = this.parseExpression(tn, Precedence.COMMA + 1);
             if (!value) return null;
             values.push(value);
-          } else if (!name.is(CommonFlags.QUOTED)) {
+          } else if (!name.isQuoted) {
             values.push(name);
           } else {
             this.error(
