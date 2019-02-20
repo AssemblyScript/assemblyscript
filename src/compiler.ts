@@ -6762,6 +6762,8 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var flow = this.currentFlow;
 
+    this.maybeCompileEnclosingSource(propertyAccess);
+
     var target = this.resolver.resolvePropertyAccess(propertyAccess, flow, contextualType); // reports
     if (!target) return module.createUnreachable();
 

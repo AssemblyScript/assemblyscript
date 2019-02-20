@@ -1107,16 +1107,17 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var name = declaration.name.text;
     var isStatic = declaration.is(CommonFlags.STATIC);
+    var acceptedFlags = DecoratorFlags.INLINE;
+    if (!declaration.is(CommonFlags.GENERIC)) {
+      acceptedFlags |= DecoratorFlags.OPERATOR_BINARY
+                    |  DecoratorFlags.OPERATOR_PREFIX
+                    |  DecoratorFlags.OPERATOR_POSTFIX;
+    }
     var element = new FunctionPrototype(
       name,
       parent,
       declaration,
-      this.checkDecorators(declaration.decorators,
-        DecoratorFlags.OPERATOR_BINARY  |
-        DecoratorFlags.OPERATOR_PREFIX  |
-        DecoratorFlags.OPERATOR_POSTFIX |
-        DecoratorFlags.INLINE
-      )
+      this.checkDecorators(declaration.decorators, acceptedFlags)
     );
     if (isStatic) { // global function
       assert(declaration.name.kind != NodeKind.CONSTRUCTOR);
