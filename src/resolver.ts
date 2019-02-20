@@ -53,7 +53,10 @@ import {
   IntegerLiteralExpression,
   UnaryPrefixExpression,
   UnaryPostfixExpression,
-  AssertionKind
+  AssertionKind,
+  BinaryExpression,
+  ThisExpression,
+  SuperExpression
 } from "./ast";
 
 import {
@@ -514,7 +517,7 @@ export class Resolver extends DiagnosticEmitter {
   }
 
   /** Resolves a property access expression to the program element it refers to. */
-  resolvePropertyAccess(
+  resolvePropertyAccessExpression(
     /** The expression to resolve. */
     propertyAccess: PropertyAccessExpression,
     /** Current flow. */
@@ -656,7 +659,7 @@ export class Resolver extends DiagnosticEmitter {
   }
 
   /** Resolves an element access expression to the program element it refers to. */
-  resolveElementAccess(
+  resolveElementAccessExpression(
     /** The expression to resolve. */
     elementAccess: ElementAccessExpression,
     /** Current flow. */
@@ -792,246 +795,410 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventualy diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    // skip over parenthesis
-    while (expression.kind == NodeKind.PARENTHESIZED) {
+    while (expression.kind == NodeKind.PARENTHESIZED) { // simply skip
       expression = (<ParenthesizedExpression>expression).expression;
     }
-    // TODO: implement more types of expressions
     switch (expression.kind) {
       case NodeKind.ASSERTION: {
-        if ((<AssertionExpression>expression).assertionKind == AssertionKind.NONNULL) {
-          return this.resolveExpression(
-            (<AssertionExpression>expression).expression,
-            flow,
-            contextualType,
-            reportMode
-          );
-        }
-        let type = this.resolveType(
-          assert((<AssertionExpression>expression).toType),
-          flow.actualFunction,
-          flow.contextualTypeArguments,
-          reportMode
+        return this.resolveAssertionExpression(
+          <AssertionExpression>expression,
+          flow, contextualType, reportMode
         );
-        if (!type) return null;
-        let element: Element | null = type.classReference;
-        if (!element) {
-          let signature = type.signatureReference;
-          if (!signature) return null;
-          element = signature.asFunctionTarget(this.program);
-        }
-        this.currentThisExpression = null;
-        this.currentElementExpression = null;
-        return element;
       }
       case NodeKind.UNARYPREFIX: {
-        // TODO: operator overloads
-        switch ((<UnaryPrefixExpression>expression).operator) {
-          case Token.MINUS: {
-            let operand = (<UnaryPrefixExpression>expression).operand;
-            // implicitly negate if an integer literal to distinguish between i32/u32/i64
-            if (operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.INTEGER) {
-              let type = this.determineIntegerLiteralType(
-                i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value),
-                contextualType
-              );
-              let typeClasses = this.program.typeClasses;
-              return typeClasses.has(type.kind) ? typeClasses.get(type.kind)! : null;
-            }
-            return this.resolveExpression(
-              operand,
-              flow,
-              contextualType,
-              reportMode
-            );
-          }
-          case Token.PLUS:
-          case Token.PLUS_PLUS:
-          case Token.MINUS_MINUS: {
-            return this.resolveExpression(
-              (<UnaryPrefixExpression>expression).operand,
-              flow,
-              contextualType,
-              reportMode
-            );
-          }
-          case Token.EXCLAMATION: {
-            let typeClasses = this.program.typeClasses;
-            return typeClasses.has(TypeKind.BOOL) ? typeClasses.get(TypeKind.BOOL)! : null;
-          }
-          case Token.TILDE: {
-            let resolvedOperand = this.resolveExpression(
-              (<UnaryPrefixExpression>expression).operand,
-              flow,
-              contextualType,
-              reportMode
-            );
-            if (!resolvedOperand) return null;
-            // TODO
-            break;
-          }
-          default: assert(false);
-        }
-        break;
+        return this.resolveUnaryPrefixExpression(
+          <UnaryPrefixExpression>expression,
+          flow, contextualType, reportMode
+        );
       }
       case NodeKind.UNARYPOSTFIX: {
-        // TODO: operator overloads
-        switch ((<UnaryPostfixExpression>expression).operator) {
-          case Token.PLUS_PLUS:
-          case Token.MINUS_MINUS: {
-            return this.resolveExpression(
-              (<UnaryPostfixExpression>expression).operand,
-              flow,
-              contextualType,
-              reportMode
-            );
-          }
-          default: assert(false);
-        }
-        break;
+        return this.resolveUnaryPostfixExpression(
+          <UnaryPostfixExpression>expression,
+          flow, contextualType, reportMode
+        );
       }
       case NodeKind.BINARY: {
-        // TODO
-        break;
+        return this.resolveBinaryExpression(
+          <BinaryExpression>expression,
+          flow, contextualType, reportMode
+        );
       }
-      case NodeKind.THIS: { // -> Class / ClassPrototype
-        if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let thisLocal = flow.lookupLocal(CommonSymbols.this_);
-          if (thisLocal) {
-            this.currentThisExpression = null;
-            this.currentElementExpression = null;
-            return thisLocal;
-          }
-        }
-        let parent = flow.actualFunction.parent;
-        if (parent) {
-          this.currentThisExpression = null;
-          this.currentElementExpression = null;
-          return parent;
-        }
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode._this_cannot_be_referenced_in_current_location,
-            expression.range
-          );
-        }
-        return null;
+      case NodeKind.THIS: {
+        return this.resolveThisExpression(
+          <ThisExpression>expression,
+          flow, contextualType, reportMode
+        );
       }
-      case NodeKind.SUPER: { // -> Class
-        if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-          let superLocal = flow.lookupLocal(CommonSymbols.super_);
-          if (superLocal) {
-            this.currentThisExpression = null;
-            this.currentElementExpression = null;
-            return superLocal;
-          }
-        }
-        let parent: Element | null = flow.actualFunction.parent;
-        if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
-          this.currentThisExpression = null;
-          this.currentElementExpression = null;
-          return parent;
-        }
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode._super_can_only_be_referenced_in_a_derived_class,
-            expression.range
-          );
-        }
-        return null;
+      case NodeKind.SUPER: {
+        return this.resolveSuperExpression(
+          <SuperExpression>expression,
+          flow, contextualType, reportMode
+        );
       }
       case NodeKind.IDENTIFIER: {
-        return this.resolveIdentifier(<IdentifierExpression>expression, flow, flow.actualFunction, reportMode);
+        return this.resolveIdentifier(
+          <IdentifierExpression>expression,
+          flow, flow.actualFunction, reportMode
+        );
       }
       case NodeKind.LITERAL: {
-        switch ((<LiteralExpression>expression).literalKind) {
-          case LiteralKind.INTEGER: {
-            this.currentThisExpression = expression;
-            this.currentElementExpression = null;
-            let literalType = this.determineIntegerLiteralType(
-              (<IntegerLiteralExpression>expression).value,
-              contextualType
-            );
-            let typeClasses = this.program.typeClasses;
-            return typeClasses.has(literalType.kind) ? typeClasses.get(literalType.kind)! : null;
-          }
-          case LiteralKind.FLOAT: {
-            this.currentThisExpression = expression;
-            this.currentElementExpression = null;
-            let literalType = contextualType == Type.f32 ? Type.f32 : Type.f64;
-            let typeClasses = this.program.typeClasses;
-            return typeClasses.has(literalType.kind) ? typeClasses.get(literalType.kind)! : null;
-          }
-          case LiteralKind.STRING: {
-            this.currentThisExpression = expression;
-            this.currentElementExpression = null;
-            return this.program.stringInstance;
-          }
-          // TODO
-          // case LiteralKind.ARRAY:
-        }
-        break;
+        return this.resolveLiteralExpression(
+          <LiteralExpression>expression,
+          flow, contextualType, reportMode
+        );
       }
       case NodeKind.PROPERTYACCESS: {
-        return this.resolvePropertyAccess(
+        return this.resolvePropertyAccessExpression(
           <PropertyAccessExpression>expression,
-          flow,
-          contextualType,
-          reportMode
+          flow, contextualType, reportMode
         );
       }
       case NodeKind.ELEMENTACCESS: {
-        return this.resolveElementAccess(
+        return this.resolveElementAccessExpression(
           <ElementAccessExpression>expression,
-          flow,
-          contextualType,
-          reportMode
+          flow, contextualType, reportMode
         );
       }
       case NodeKind.CALL: {
-        let targetExpression = (<CallExpression>expression).expression;
-        let target = this.resolveExpression( // reports
-          targetExpression,
+        return this.resolveCallExpression(
+          <CallExpression>expression,
+          flow, contextualType, reportMode
+        );
+      }
+      // TODO: everything else
+    }
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        expression.range
+      );
+    }
+    return null;
+  }
+
+  /** Resolves an assertion expression to the program element it refers to. */
+  resolveAssertionExpression(
+    /** The expression to resolve. */
+    expression: AssertionExpression,
+    /** Current flow. */
+    flow: Flow,
+    /** Current contextual type. */
+    contextualType: Type = Type.void,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    if (expression.assertionKind == AssertionKind.NONNULL) {
+      return this.resolveExpression(
+        expression.expression,
+        flow,
+        contextualType,
+        reportMode
+      );
+    }
+    var type = this.resolveType(
+      assert(expression.toType), // must be set if not NONNULL
+      flow.actualFunction,
+      flow.contextualTypeArguments,
+      reportMode
+    );
+    if (!type) return null;
+    var element: Element | null = type.classReference;
+    if (!element) {
+      let signature = type.signatureReference;
+      if (!signature) return null;
+      element = signature.asFunctionTarget(this.program);
+    }
+    this.currentThisExpression = null;
+    this.currentElementExpression = null;
+    return element;
+  }
+
+  /** Resolves an unary prefix expression to the program element it refers to. */
+  resolveUnaryPrefixExpression(
+    /** The expression to resolve. */
+    expression: UnaryPrefixExpression,
+    /** Current flow. */
+    flow: Flow,
+    /** Current contextual type. */
+    contextualType: Type = Type.void,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    var operand = expression.operand;
+    // TODO: operator overloads
+    switch (expression.operator) {
+      case Token.MINUS: {
+        // implicitly negate if an integer literal to distinguish between i32/u32/i64
+        if (operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.INTEGER) {
+          let type = this.determineIntegerLiteralType(
+            i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value),
+            contextualType
+          );
+          let typeClasses = this.program.typeClasses;
+          return typeClasses.has(type.kind) ? typeClasses.get(type.kind)! : null;
+        }
+        return this.resolveExpression(
+          operand,
           flow,
           contextualType,
           reportMode
         );
-        if (!target) return null;
-        if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
-          let instance = this.resolveFunctionInclTypeArguments(
-            <FunctionPrototype>target,
-            (<CallExpression>expression).typeArguments,
-            flow.actualFunction,
-            makeMap<string,Type>(flow.contextualTypeArguments), // don't inherit
-            expression,
-            reportMode
-          );
-          if (!instance) return null;
-          let returnType = instance.signature.returnType;
-          let classType = returnType.classReference;
-          if (classType) {
-            // reuse resolvedThisExpression (might be property access)
-            // reuse resolvedElementExpression (might be element access)
-            return classType;
-          } else {
-            let signature = returnType.signatureReference;
-            if (signature) {
-              let functionTarget = signature.asFunctionTarget(this.program);
-              // reuse resolvedThisExpression (might be property access)
-              // reuse resolvedElementExpression (might be element access)
-              return functionTarget;
-            }
-          }
-          if (reportMode == ReportMode.REPORT) {
-            this.error(
-              DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-              targetExpression.range, target.internalName
-            );
-          }
-          return null;
-        }
+      }
+      case Token.PLUS:
+      case Token.PLUS_PLUS:
+      case Token.MINUS_MINUS: {
+        return this.resolveExpression(
+          expression.operand,
+          flow,
+          contextualType,
+          reportMode
+        );
+      }
+      case Token.EXCLAMATION: {
+        let typeClasses = this.program.typeClasses;
+        return typeClasses.has(TypeKind.BOOL) ? typeClasses.get(TypeKind.BOOL)! : null;
+      }
+      case Token.TILDE: {
+        let resolvedOperand = this.resolveExpression(
+          expression.operand,
+          flow,
+          contextualType,
+          reportMode
+        );
+        if (!resolvedOperand) return null;
+        // TODO
         break;
       }
+      default: assert(false);
+    }
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        expression.range
+      );
+    }
+    return null;
+  }
+
+  /** Resolves an unary postfix expression to the program element it refers to. */
+  resolveUnaryPostfixExpression(
+    /** The expression to resolve. */
+    expression: UnaryPostfixExpression,
+    /** Current flow. */
+    flow: Flow,
+    /** Current contextual type. */
+    contextualType: Type = Type.void,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    // TODO: operator overloads
+    switch (expression.operator) {
+      case Token.PLUS_PLUS:
+      case Token.MINUS_MINUS: {
+        return this.resolveExpression(
+          expression.operand,
+          flow,
+          contextualType,
+          reportMode
+        );
+      }
+      default: assert(false);
+    }
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        expression.range
+      );
+    }
+    return null;
+  }
+
+  /** Resolves a binary expression to the program element it refers to. */
+  resolveBinaryExpression(
+    /** The expression to resolve. */
+    expression: BinaryExpression,
+    /** Current flow. */
+    flow: Flow,
+    /** Current contextual type. */
+    contextualType: Type = Type.void,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    // TODO
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        expression.range
+      );
+    }
+    return null;
+  }
+
+  /** Resolves a this expression to the program element it refers to. */
+  resolveThisExpression(
+    /** The expression to resolve. */
+    expression: ThisExpression,
+    /** Current flow. */
+    flow: Flow,
+    /** Current contextual type. */
+    contextualType: Type = Type.void,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    if (flow.is(FlowFlags.INLINE_CONTEXT)) {
+      let thisLocal = flow.lookupLocal(CommonSymbols.this_);
+      if (thisLocal) {
+        this.currentThisExpression = null;
+        this.currentElementExpression = null;
+        return thisLocal;
+      }
+    }
+    var parent = flow.actualFunction.parent;
+    if (parent) {
+      this.currentThisExpression = null;
+      this.currentElementExpression = null;
+      return parent;
+    }
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode._this_cannot_be_referenced_in_current_location,
+        expression.range
+      );
+    }
+    return null;
+  }
+
+  /** Resolves a super expression to the program element it refers to. */
+  resolveSuperExpression(
+    /** The expression to resolve. */
+    expression: SuperExpression,
+    /** Current flow. */
+    flow: Flow,
+    /** Current contextual type. */
+    contextualType: Type = Type.void,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    if (flow.is(FlowFlags.INLINE_CONTEXT)) {
+      let superLocal = flow.lookupLocal(CommonSymbols.super_);
+      if (superLocal) {
+        this.currentThisExpression = null;
+        this.currentElementExpression = null;
+        return superLocal;
+      }
+    }
+    var parent: Element | null = flow.actualFunction.parent;
+    if (parent && parent.kind == ElementKind.CLASS && (parent = (<Class>parent).base)) {
+      this.currentThisExpression = null;
+      this.currentElementExpression = null;
+      return parent;
+    }
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode._super_can_only_be_referenced_in_a_derived_class,
+        expression.range
+      );
+    }
+    return null;
+  }
+
+  /** Resolves a literal expression to the program element it refers to. */
+  resolveLiteralExpression(
+    /** The expression to resolve. */
+    expression: LiteralExpression,
+    /** Current flow. */
+    flow: Flow,
+    /** Current contextual type. */
+    contextualType: Type = Type.void,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    switch (expression.literalKind) {
+      case LiteralKind.INTEGER: {
+        this.currentThisExpression = expression;
+        this.currentElementExpression = null;
+        let literalType = this.determineIntegerLiteralType(
+          (<IntegerLiteralExpression>expression).value,
+          contextualType
+        );
+        let typeClasses = this.program.typeClasses;
+        return typeClasses.has(literalType.kind) ? typeClasses.get(literalType.kind)! : null;
+      }
+      case LiteralKind.FLOAT: {
+        this.currentThisExpression = expression;
+        this.currentElementExpression = null;
+        let literalType = contextualType == Type.f32 ? Type.f32 : Type.f64;
+        let typeClasses = this.program.typeClasses;
+        return typeClasses.has(literalType.kind) ? typeClasses.get(literalType.kind)! : null;
+      }
+      case LiteralKind.STRING: {
+        this.currentThisExpression = expression;
+        this.currentElementExpression = null;
+        return this.program.stringInstance;
+      }
+      // TODO
+      // case LiteralKind.ARRAY:
+    }
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Operation_not_supported,
+        expression.range
+      );
+    }
+    return null;
+  }
+
+  /** Resolves a call expression to the program element it refers to. */
+  resolveCallExpression(
+    /** The expression to resolve. */
+    expression: CallExpression,
+    /** Current flow. */
+    flow: Flow,
+    /** Current contextual type. */
+    contextualType: Type = Type.void,
+    /** How to proceed with eventualy diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Element | null {
+    var targetExpression = expression.expression;
+    var target = this.resolveExpression( // reports
+      targetExpression,
+      flow,
+      contextualType,
+      reportMode
+    );
+    if (!target) return null;
+    if (target.kind == ElementKind.FUNCTION_PROTOTYPE) {
+      let instance = this.resolveFunctionInclTypeArguments(
+        <FunctionPrototype>target,
+        expression.typeArguments,
+        flow.actualFunction,
+        makeMap(flow.contextualTypeArguments), // don't inherit
+        expression,
+        reportMode
+      );
+      if (!instance) return null;
+      let returnType = instance.signature.returnType;
+      let classType = returnType.classReference;
+      if (classType) {
+        // reuse resolvedThisExpression (might be property access)
+        // reuse resolvedElementExpression (might be element access)
+        return classType;
+      } else {
+        let signature = returnType.signatureReference;
+        if (signature) {
+          let functionTarget = signature.asFunctionTarget(this.program);
+          // reuse resolvedThisExpression (might be property access)
+          // reuse resolvedElementExpression (might be element access)
+          return functionTarget;
+        }
+      }
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+          targetExpression.range, target.internalName
+        );
+      }
+      return null;
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(

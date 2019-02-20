@@ -5861,7 +5861,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type): ExpressionRef {
-    var target = this.resolver.resolveElementAccess(
+    var target = this.resolver.resolveElementAccessExpression(
       expression,
       this.currentFlow,
       contextualType
@@ -6766,7 +6766,7 @@ export class Compiler extends DiagnosticEmitter {
 
     this.maybeCompileEnclosingSource(propertyAccess);
 
-    var target = this.resolver.resolvePropertyAccess(propertyAccess, flow, contextualType); // reports
+    var target = this.resolver.resolvePropertyAccessExpression(propertyAccess, flow, contextualType); // reports
     if (!target) return module.createUnreachable();
 
     switch (target.kind) {
