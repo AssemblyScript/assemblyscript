@@ -9,11 +9,11 @@
  (global $do/n (mut i32) (i32.const 10))
  (global $do/m (mut i32) (i32.const 0))
  (global $do/o (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 24))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 24))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:do (; 1 ;) (type $_)
   (local $0 i32)
   block $break|0
    loop $continue|0
@@ -180,6 +180,9 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:do
+ )
+ (func $null (; 3 ;) (type $_)
  )
 )

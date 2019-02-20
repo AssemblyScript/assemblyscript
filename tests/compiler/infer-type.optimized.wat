@@ -11,7 +11,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 0 ;) (type $_)
+ (func $start:infer-type (; 0 ;) (type $_)
   (local $0 i32)
   i32.const 0
   global.set $infer-type/ri
@@ -34,7 +34,10 @@
    end
   end
  )
- (func $null (; 1 ;) (type $_)
+ (func $start (; 1 ;) (type $_)
+  call $start:infer-type
+ )
+ (func $null (; 2 ;) (type $_)
   nop
  )
 )

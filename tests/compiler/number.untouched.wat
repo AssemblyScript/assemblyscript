@@ -1,4 +1,5 @@
 (module
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii_ (func (param i32 i32 i32)))
@@ -11,7 +12,6 @@
  (type $iiiii_ (func (param i32 i32 i32 i32 i32)))
  (type $i_ (func (param i32)))
  (type $fi (func (param f32) (result i32)))
- (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\01\00\00\000\00")
@@ -41,44 +41,10 @@
  (data (i32.const 2176) "\05\00\00\00f\00a\00l\00s\00e\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $number/a (mut i32) (i32.const 1))
- (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
- (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
- (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/internal/string/CharCode.PLUS i32 (i32.const 43))
- (global $~lib/internal/string/CharCode.MINUS i32 (i32.const 45))
- (global $~lib/internal/string/CharCode.DOT i32 (i32.const 46))
- (global $~lib/internal/string/CharCode._0 i32 (i32.const 48))
- (global $~lib/internal/string/CharCode._1 i32 (i32.const 49))
- (global $~lib/internal/string/CharCode._2 i32 (i32.const 50))
- (global $~lib/internal/string/CharCode._3 i32 (i32.const 51))
- (global $~lib/internal/string/CharCode._4 i32 (i32.const 52))
- (global $~lib/internal/string/CharCode._5 i32 (i32.const 53))
- (global $~lib/internal/string/CharCode._6 i32 (i32.const 54))
- (global $~lib/internal/string/CharCode._7 i32 (i32.const 55))
- (global $~lib/internal/string/CharCode._8 i32 (i32.const 56))
- (global $~lib/internal/string/CharCode._9 i32 (i32.const 57))
- (global $~lib/internal/string/CharCode.A i32 (i32.const 65))
- (global $~lib/internal/string/CharCode.B i32 (i32.const 66))
- (global $~lib/internal/string/CharCode.E i32 (i32.const 69))
- (global $~lib/internal/string/CharCode.N i32 (i32.const 78))
- (global $~lib/internal/string/CharCode.O i32 (i32.const 79))
- (global $~lib/internal/string/CharCode.X i32 (i32.const 88))
- (global $~lib/internal/string/CharCode.Z i32 (i32.const 90))
- (global $~lib/internal/string/CharCode.a i32 (i32.const 97))
- (global $~lib/internal/string/CharCode.b i32 (i32.const 98))
- (global $~lib/internal/string/CharCode.e i32 (i32.const 101))
- (global $~lib/internal/string/CharCode.n i32 (i32.const 110))
- (global $~lib/internal/string/CharCode.o i32 (i32.const 111))
- (global $~lib/internal/string/CharCode.x i32 (i32.const 120))
- (global $~lib/internal/string/CharCode.z i32 (i32.const 122))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/internal/number/MAX_DOUBLE_LENGTH i32 (i32.const 28))
  (global $~lib/internal/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/internal/number/_frc_minus (mut i64) (i64.const 0))
@@ -86,21 +52,31 @@
  (global $~lib/internal/number/_K (mut i32) (i32.const 0))
  (global $~lib/internal/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
- (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $~lib/number/F32.NaN f32 (f32.const nan:0x400000))
  (global $~lib/builtins/f32.MIN_SAFE_INTEGER f32 (f32.const -16777215))
  (global $~lib/builtins/f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
- (global $Infinity f64 (f64.const inf))
  (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
  (global $~lib/number/F64.NaN f64 (f64.const nan:0x8000000000000))
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
- (global $HEAP_BASE i32 (i32.const 2192))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 2192))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/internal/number/decimalCount32 (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+ )
+ (func $~lib/internal/number/decimalCount32 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 100000
@@ -169,7 +145,7 @@
   unreachable
   unreachable
  )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -177,7 +153,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/internal/allocator/MAX_SIZE_32
+  i32.const 1073741824
   i32.gt_u
   if
    unreachable
@@ -194,9 +170,9 @@
   i32.gt_u
   select
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.const -1
   i32.xor
   i32.and
@@ -248,7 +224,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/string/allocateUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -257,7 +233,7 @@
   local.tee $1
   if (result i32)
    local.get $0
-   global.get $~lib/internal/string/MAX_LENGTH
+   i32.const 536870910
    i32.le_s
   else   
    local.get $1
@@ -272,7 +248,7 @@
    unreachable
   end
   block $~lib/memory/memory.allocate|inlined.0 (result i32)
-   global.get $~lib/internal/string/HEADER_SIZE
+   i32.const 4
    local.get $0
    i32.const 1
    i32.shl
@@ -288,7 +264,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/number/utoa32_lut (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -463,7 +439,7 @@
    i32.const 1
    i32.sub
    local.set $2
-   global.get $~lib/internal/string/CharCode._0
+   i32.const 48
    local.get $1
    i32.add
    local.set $7
@@ -476,7 +452,7 @@
    i32.store16 offset=4
   end
  )
- (func $~lib/internal/number/itoa32 (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa32 (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -523,21 +499,21 @@
   local.get $1
   if
    local.get $3
-   global.get $~lib/internal/string/CharCode.MINUS
+   i32.const 45
    i32.store16 offset=4
   end
   local.get $3
  )
- (func $~lib/internal/number/itoa<i32> (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i32> (; 7 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/internal/number/itoa32
   return
  )
- (func $~lib/number/I32#toString (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (; 8 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/internal/number/itoa<i32>
  )
- (func $~lib/internal/string/compareUnsafe (; 8 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 9 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -590,7 +566,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -634,19 +610,19 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $~lib/builtins/isFinite<f64> (; 10 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isFinite<f64> (; 11 ;) (type $Fi) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
   f64.const 0
   f64.eq
  )
- (func $~lib/builtins/isNaN<f64> (; 11 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/builtins/isNaN<f64> (; 12 ;) (type $Fi) (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.ne
  )
- (func $~lib/internal/number/genDigits (; 12 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/internal/number/genDigits (; 13 ;) (type $iIiIiIii) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -930,7 +906,7 @@
        i32.const 1
        i32.shl
        i32.add
-       global.get $~lib/internal/string/CharCode._0
+       i32.const 48
        local.get $17
        i32.const 65535
        i32.and
@@ -1102,7 +1078,7 @@
        i32.const 1
        i32.shl
        i32.add
-       global.get $~lib/internal/string/CharCode._0
+       i32.const 48
        local.get $19
        i32.wrap_i64
        i32.const 65535
@@ -1239,7 +1215,7 @@
   end
   local.get $15
  )
- (func $~lib/internal/memory/memcpy (; 13 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 14 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2440,7 +2416,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 14 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 15 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -2667,7 +2643,7 @@
    end
   end
  )
- (func $~lib/internal/number/prettify (; 15 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/prettify (; 16 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2685,8 +2661,8 @@
    i32.const 1
    i32.shl
    i32.add
-   global.get $~lib/internal/string/CharCode.DOT
-   global.get $~lib/internal/string/CharCode._0
+   i32.const 46
+   i32.const 48
    i32.const 16
    i32.shl
    i32.or
@@ -2726,7 +2702,7 @@
      i32.const 1
      i32.shl
      i32.add
-     global.get $~lib/internal/string/CharCode._0
+     i32.const 48
      i32.store16 offset=4
      local.get $4
      i32.const 1
@@ -2742,8 +2718,8 @@
    i32.const 1
    i32.shl
    i32.add
-   global.get $~lib/internal/string/CharCode.DOT
-   global.get $~lib/internal/string/CharCode._0
+   i32.const 46
+   i32.const 48
    i32.const 16
    i32.shl
    i32.or
@@ -2771,15 +2747,15 @@
     i32.shl
     i32.add
     local.set $4
-    block $memory.copy|inlined.0
+    block $~lib/memory/memory.copy|inlined.0
      local.get $4
-     global.get $~lib/internal/string/HEADER_SIZE
+     i32.const 4
      i32.add
      i32.const 2
      i32.add
      local.set $5
      local.get $4
-     global.get $~lib/internal/string/HEADER_SIZE
+     i32.const 4
      i32.add
      local.set $6
      i32.const 0
@@ -2798,7 +2774,7 @@
     i32.const 1
     i32.shl
     i32.add
-    global.get $~lib/internal/string/CharCode.DOT
+    i32.const 46
     i32.store16 offset=4
     local.get $1
     i32.const 1
@@ -2821,9 +2797,9 @@
      local.get $3
      i32.sub
      local.set $4
-     block $memory.copy|inlined.1
+     block $~lib/memory/memory.copy|inlined.1
       local.get $0
-      global.get $~lib/internal/string/HEADER_SIZE
+      i32.const 4
       i32.add
       local.get $4
       i32.const 1
@@ -2831,7 +2807,7 @@
       i32.add
       local.set $7
       local.get $0
-      global.get $~lib/internal/string/HEADER_SIZE
+      i32.const 4
       i32.add
       local.set $6
       local.get $1
@@ -2844,8 +2820,8 @@
       call $~lib/internal/memory/memmove
      end
      local.get $0
-     global.get $~lib/internal/string/CharCode._0
-     global.get $~lib/internal/string/CharCode.DOT
+     i32.const 48
+     i32.const 46
      i32.const 16
      i32.shl
      i32.or
@@ -2864,7 +2840,7 @@
        i32.const 1
        i32.shl
        i32.add
-       global.get $~lib/internal/string/CharCode._0
+       i32.const 48
        i32.store16 offset=4
        local.get $5
        i32.const 1
@@ -2885,7 +2861,7 @@
      i32.eq
      if
       local.get $0
-      global.get $~lib/internal/string/CharCode.e
+      i32.const 101
       i32.store16 offset=6
       block $~lib/internal/number/genExponent|inlined.0 (result i32)
        local.get $0
@@ -2925,8 +2901,8 @@
         call $~lib/internal/number/utoa32_lut
        end
        local.get $4
-       global.get $~lib/internal/string/CharCode.MINUS
-       global.get $~lib/internal/string/CharCode.PLUS
+       i32.const 45
+       i32.const 43
        local.get $6
        select
        i32.store16 offset=4
@@ -2942,15 +2918,15 @@
       i32.const 1
       i32.shl
       local.set $7
-      block $memory.copy|inlined.2
+      block $~lib/memory/memory.copy|inlined.2
        local.get $0
-       global.get $~lib/internal/string/HEADER_SIZE
+       i32.const 4
        i32.add
        i32.const 4
        i32.add
        local.set $6
        local.get $0
-       global.get $~lib/internal/string/HEADER_SIZE
+       i32.const 4
        i32.add
        i32.const 2
        i32.add
@@ -2965,12 +2941,12 @@
        call $~lib/internal/memory/memmove
       end
       local.get $0
-      global.get $~lib/internal/string/CharCode.DOT
+      i32.const 46
       i32.store16 offset=6
       local.get $0
       local.get $7
       i32.add
-      global.get $~lib/internal/string/CharCode.e
+      i32.const 101
       i32.store16 offset=6
       local.get $1
       block $~lib/internal/number/genExponent|inlined.1 (result i32)
@@ -3013,8 +2989,8 @@
         call $~lib/internal/number/utoa32_lut
        end
        local.get $4
-       global.get $~lib/internal/string/CharCode.MINUS
-       global.get $~lib/internal/string/CharCode.PLUS
+       i32.const 45
+       i32.const 43
        local.get $6
        select
        i32.store16 offset=4
@@ -3036,7 +3012,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/dtoa_core (; 16 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/internal/number/dtoa_core (; 17 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 f64)
   (local $4 i32)
@@ -3077,7 +3053,7 @@
    f64.neg
    local.set $1
    local.get $0
-   global.get $~lib/internal/string/CharCode.MINUS
+   i32.const 45
    i32.store16 offset=4
   end
   block $~lib/internal/number/grisu2|inlined.0 (result i32)
@@ -3513,7 +3489,7 @@
   local.get $2
   i32.add
  )
- (func $~lib/internal/string/copyUnsafe (; 17 ;) (type $iiiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 18 ;) (type $iiiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -3522,7 +3498,7 @@
   i32.const 1
   i32.shl
   i32.add
-  global.get $~lib/internal/string/HEADER_SIZE
+  i32.const 4
   i32.add
   local.set $5
   local.get $2
@@ -3530,7 +3506,7 @@
   i32.const 1
   i32.shl
   i32.add
-  global.get $~lib/internal/string/HEADER_SIZE
+  i32.const 4
   i32.add
   local.set $6
   local.get $4
@@ -3542,7 +3518,7 @@
   local.get $7
   call $~lib/internal/memory/memmove
  )
- (func $~lib/string/String#substring (; 18 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (; 19 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3652,10 +3628,10 @@
   call $~lib/internal/string/copyUnsafe
   local.get $10
  )
- (func $~lib/allocator/arena/__memory_free (; 19 ;) (type $i_) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 20 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $~lib/internal/number/dtoa (; 20 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/number/dtoa (; 21 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3721,11 +3697,11 @@
   end
   local.get $3
  )
- (func $~lib/number/F64#toString (; 21 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/number/F64#toString (; 22 ;) (type $Fi) (param $0 f64) (result i32)
   local.get $0
   call $~lib/internal/number/dtoa
  )
- (func $~lib/number/Bool#toString (; 22 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/number/Bool#toString (; 23 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -3735,7 +3711,7 @@
    i32.const 2176
   end
  )
- (func $~lib/number/F32.isSafeInteger (; 23 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/number/F32.isSafeInteger (; 24 ;) (type $fi) (param $0 f32) (result i32)
   (local $1 i32)
   local.get $0
   f32.abs
@@ -3751,7 +3727,7 @@
    local.get $1
   end
  )
- (func $~lib/number/F32.isInteger (; 24 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/number/F32.isInteger (; 25 ;) (type $fi) (param $0 f32) (result i32)
   (local $1 f32)
   (local $2 i32)
   block $~lib/builtins/isFinite<f32>|inlined.0 (result i32)
@@ -3775,7 +3751,7 @@
    local.get $2
   end
  )
- (func $~lib/number/F64.isSafeInteger (; 25 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isSafeInteger (; 26 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 i32)
   local.get $0
   f64.abs
@@ -3791,7 +3767,7 @@
    local.get $1
   end
  )
- (func $~lib/number/F64.isInteger (; 26 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isInteger (; 27 ;) (type $Fi) (param $0 f64) (result i32)
   (local $1 f64)
   (local $2 i32)
   block $~lib/builtins/isFinite<f64>|inlined.0 (result i32)
@@ -3815,20 +3791,11 @@
    local.get $2
   end
  )
- (func $start (; 27 ;) (type $_)
+ (func $start:number (; 28 ;) (type $_)
   (local $0 i32)
   (local $1 f32)
   (local $2 f64)
-  global.get $HEAP_BASE
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.add
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
+  call $start:~lib/allocator/arena
   global.get $number/a
   call $~lib/number/I32#toString
   i32.const 592
@@ -4609,6 +4576,9 @@
    unreachable
   end
  )
- (func $null (; 28 ;) (type $_)
+ (func $start (; 29 ;) (type $_)
+  call $start:number
+ )
+ (func $null (; 30 ;) (type $_)
  )
 )

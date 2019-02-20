@@ -8,6 +8,10 @@ declare module ASModule {
   type f32 = number;
   type f64 = number;
   type bool = any;
+  const NaN: f64;
+  const Infinity: f64;
+  var lo: u32;
+  var hi: u32;
   function getLo(): u32;
   function getHi(): u32;
   function clz(loLeft: u32, hiLeft: u32): void;

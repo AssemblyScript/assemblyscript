@@ -8001,7 +8001,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 972
+   i32.const 968
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8067,7 +8067,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 981
+   i32.const 977
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -8114,7 +8114,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 2051
+   i32.const 2044
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -9510,7 +9510,7 @@
   end
   local.get $2
  )
- (func $start (; 149 ;) (type $_)
+ (func $start:std/math (; 149 ;) (type $_)
   (local $0 f64)
   (local $1 f32)
   (local $2 i32)
@@ -38637,7 +38637,10 @@
    unreachable
   end
  )
- (func $null (; 150 ;) (type $_)
+ (func $start (; 150 ;) (type $_)
+  call $start:std/math
+ )
+ (func $null (; 151 ;) (type $_)
   nop
  )
 )

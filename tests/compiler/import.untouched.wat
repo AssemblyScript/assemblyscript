@@ -7,7 +7,7 @@
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -29,7 +29,7 @@
  (func $export/ns.two (; 3 ;) (type $_)
   nop
  )
- (func $start (; 4 ;) (type $_)
+ (func $start:import (; 4 ;) (type $_)
   global.get $export/a
   global.get $export/b
   call $export/add
@@ -57,6 +57,9 @@
   drop
   call $export/ns.two
  )
- (func $null (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $_)
+  call $start:import
+ )
+ (func $null (; 6 ;) (type $_)
  )
 )

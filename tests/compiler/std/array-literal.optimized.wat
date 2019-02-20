@@ -1,7 +1,7 @@
 (module
+ (type $_ (func))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $_ (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -391,7 +391,7 @@
   call $~lib/internal/memory/memset
   local.get $0
  )
- (func $start (; 6 ;) (type $_)
+ (func $start:std/array-literal (; 6 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   i32.const 232
@@ -895,7 +895,10 @@
    unreachable
   end
  )
- (func $null (; 7 ;) (type $_)
+ (func $start (; 7 ;) (type $_)
+  call $start:std/array-literal
+ )
+ (func $null (; 8 ;) (type $_)
   nop
  )
 )
