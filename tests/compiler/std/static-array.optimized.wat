@@ -1,9 +1,9 @@
 (module
+ (type $_ (func))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iii_ (func (param i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $_ (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -1613,7 +1613,7 @@
   f64.const 2.25
   f64.store offset=8
  )
- (func $start (; 11 ;) (type $_)
+ (func $start:std/static-array (; 11 ;) (type $_)
   (local $0 i32)
   i32.const 280
   global.set $~lib/allocator/arena/startOffset
@@ -1968,7 +1968,10 @@
    unreachable
   end
  )
- (func $null (; 12 ;) (type $_)
+ (func $start (; 12 ;) (type $_)
+  call $start:std/static-array
+ )
+ (func $null (; 13 ;) (type $_)
   nop
  )
 )

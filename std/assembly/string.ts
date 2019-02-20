@@ -162,17 +162,7 @@ export class String {
 
   @operator(">=")
   private static __gte(left: String, right: String): bool {
-    if (left === right) return true;
-    if (left === null || right === null) return false;
-
-    var leftLength  = left.length;
-    var rightLength = right.length;
-
-    if (!leftLength)  return !rightLength;
-    if (!rightLength) return true;
-
-    var length = <usize>min<i32>(leftLength, rightLength);
-    return compareUnsafe(left, 0, right, 0, length) >= 0;
+    return !this.__lt(left, right);
   }
 
   @operator("<")
@@ -191,17 +181,7 @@ export class String {
 
   @operator("<=")
   private static __lte(left: String, right: String): bool {
-    if (left === right) return true;
-    if (left === null || right === null) return false;
-
-    var leftLength  = left.length;
-    var rightLength = right.length;
-
-    if (!rightLength) return !leftLength;
-    if (!leftLength)  return true;
-
-    var length = <usize>min<i32>(leftLength, rightLength);
-    return compareUnsafe(left, 0, right, 0, length) <= 0;
+    return !this.__gt(left, right);
   }
 
   @inline
@@ -599,6 +579,8 @@ export class String {
     return buf;
   }
 }
+
+export type string = String;
 
 export function parseInt(str: String, radix: i32 = 0): f64 {
   return parse<f64>(str, radix);

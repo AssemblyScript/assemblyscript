@@ -1,4 +1,5 @@
 (module
+ (type $_ (func))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
@@ -6,7 +7,6 @@
  (type $iiif (func (param i32 i32 i32) (result f32)))
  (type $II (func (param i64) (result i64)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $_ (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$dii (func (param i32 i32) (result f64)))
@@ -1096,7 +1096,7 @@
   local.get $1
   i32.store16 offset=8
  )
- (func $start (; 23 ;) (type $_)
+ (func $start:std/dataview (; 23 ;) (type $_)
   (local $0 i32)
   i32.const 216
   global.set $~lib/allocator/arena/startOffset
@@ -2625,7 +2625,10 @@
    unreachable
   end
  )
- (func $null (; 24 ;) (type $_)
+ (func $start (; 24 ;) (type $_)
+  call $start:std/dataview
+ )
+ (func $null (; 25 ;) (type $_)
   nop
  )
 )
