@@ -1244,8 +1244,8 @@ export namespace NativeMath {
 var rempio2f_y: f64;
 
 /** @public Used as return values from Mathf.sincos */
-var sincos_s32: f32;
-var sincos_c32: f32;
+@global var sincos_s32: f32;
+@global var sincos_c32: f32;
 
 /** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
