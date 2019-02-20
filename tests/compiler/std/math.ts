@@ -3384,6 +3384,14 @@ assert(IntegerMath.sqrt<i64>(i64.MAX_VALUE) == 3037000499);
 assert(IntegerMath.sqrt<u64>(i64.MAX_VALUE) == 3037000499);
 assert(IntegerMath.sqrt(u64.MAX_VALUE) == 4294967295);
 
+// IntegerMath.imul ///////////////////////////////////////////////////////////////////////////
+
+assert(IntegerMath.imul<i32>(2, 4) == 8);
+assert(IntegerMath.imul<i32>(-1, 8) == -8);
+assert(IntegerMath.imul<i32>(-2, -2) == 4);
+assert(IntegerMath.imul<u32>(0xffffffff, 5) == -5);
+assert(IntegerMath.imul<u32>(0xfffffffe, 5) == -10);
+
 // ipow64 /////////////////////////////////////////////////////////////////////////////////////
 
 assert(ipow64(0, 0) == 1);
