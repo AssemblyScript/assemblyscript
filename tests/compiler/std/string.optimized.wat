@@ -2626,7 +2626,7 @@
          if
           i32.const 0
           i32.const 80
-          i32.const 623
+          i32.const 625
           i32.const 10
           call $~lib/env/abort
           unreachable
@@ -2801,7 +2801,7 @@
   i32.const 0
   i32.gt_s
  )
- (func $~lib/string/String.__lt (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lt (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -2856,13 +2856,13 @@
   i32.const 0
   i32.lt_s
  )
- (func $~lib/string/String.__gte (; 30 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gte (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/string/String.__lt
   i32.eqz
  )
- (func $~lib/string/String.__lte (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.__lte (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 256
   local.get $0
   call $~lib/string/String.__gt
