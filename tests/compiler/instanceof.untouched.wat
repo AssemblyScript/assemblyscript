@@ -13,7 +13,7 @@
  (global $instanceof/i (mut i32) (i32.const 0))
  (global $instanceof/f (mut f32) (f32.const 0))
  (global $instanceof/an (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 40))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 40))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -29,7 +29,7 @@
   i32.const 0
   return
  )
- (func $start (; 4 ;) (type $_)
+ (func $start:instanceof (; 4 ;) (type $_)
   i32.const 1
   i32.eqz
   if
@@ -284,6 +284,9 @@
    unreachable
   end
  )
- (func $null (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $_)
+  call $start:instanceof
+ )
+ (func $null (; 6 ;) (type $_)
  )
 )

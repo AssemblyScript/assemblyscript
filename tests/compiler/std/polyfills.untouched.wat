@@ -8,7 +8,7 @@
  (data (i32.const 8) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 44))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 44))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -184,7 +184,7 @@
   i32.or
   return
  )
- (func $start (; 11 ;) (type $_)
+ (func $start:std/polyfills (; 11 ;) (type $_)
   (local $0 i32)
   i32.const 170
   call $~lib/polyfills/bswap<u8>
@@ -507,6 +507,9 @@
    unreachable
   end
  )
- (func $null (; 12 ;) (type $_)
+ (func $start (; 12 ;) (type $_)
+  call $start:std/polyfills
+ )
+ (func $null (; 13 ;) (type $_)
  )
 )

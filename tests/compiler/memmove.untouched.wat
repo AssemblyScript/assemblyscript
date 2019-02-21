@@ -9,7 +9,7 @@
  (elem (i32.const 0) $null)
  (global $memmove/base i32 (i32.const 8))
  (global $memmove/dest (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 32))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 32))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -225,7 +225,7 @@
   end
   local.get $3
  )
- (func $start (; 2 ;) (type $_)
+ (func $start:memmove (; 2 ;) (type $_)
   global.get $memmove/base
   i64.const 1229782938247303441
   i64.store
@@ -445,6 +445,9 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $_)
+  call $start:memmove
+ )
+ (func $null (; 4 ;) (type $_)
  )
 )
