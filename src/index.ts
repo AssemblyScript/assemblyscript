@@ -87,11 +87,6 @@ export function setTarget(options: Options, target: Target): void {
   options.target = target;
 }
 
-/** Sets the `noTreeShaking` option. */
-export function setNoTreeShaking(options: Options, noTreeShaking: bool): void {
-  options.noTreeShaking = noTreeShaking;
-}
-
 /** Sets the `noAssert` option. */
 export function setNoAssert(options: Options, noAssert: bool): void {
   options.noAssert = noAssert;
@@ -100,6 +95,11 @@ export function setNoAssert(options: Options, noAssert: bool): void {
 /** Sets the `importMemory` option. */
 export function setImportMemory(options: Options, importMemory: bool): void {
   options.importMemory = importMemory;
+}
+
+/** Sets the `sharedMemory` option. */
+export function setSharedMemory(options: Options, sharedMemory: i32): void {
+  options.sharedMemory = sharedMemory;
 }
 
 /** Sets the `importTable` option. */
@@ -132,6 +132,8 @@ export const FEATURE_MUTABLE_GLOBAL = Feature.MUTABLE_GLOBAL;
 export const FEATURE_BULK_MEMORY = Feature.BULK_MEMORY;
 /** SIMD types and operations. */
 export const FEATURE_SIMD = Feature.SIMD;
+/** Threading and atomic operations. */
+export const FEATURE_THREADS = Feature.THREADS;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {
@@ -183,6 +185,7 @@ export * from "./decompiler";
 export * from "./definitions";
 export * from "./diagnosticMessages.generated";
 export * from "./diagnostics";
+export * from "./flow";
 export * from "./module";
 export * from "./parser";
 export * from "./program";

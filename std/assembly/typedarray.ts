@@ -24,7 +24,7 @@ function clampToByte(value: i32): i32 {
 }
 
 export class Int8Array extends TypedArray<i8> {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
     return FILL<Int8Array, i8>(this, value, start, end);
@@ -70,7 +70,7 @@ export class Int8Array extends TypedArray<i8> {
 }
 
 export class Uint8Array extends TypedArray<u8> {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
     return FILL<Uint8Array, u8>(this, value, start, end);
@@ -116,7 +116,7 @@ export class Uint8Array extends TypedArray<u8> {
 }
 
 export class Uint8ClampedArray extends Uint8Array {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   @inline @operator("[]=")
   protected __set(index: i32, value: i32): void {
@@ -158,7 +158,7 @@ export class Uint8ClampedArray extends Uint8Array {
 }
 
 export class Int16Array extends TypedArray<i16> {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
     return FILL<Int16Array, i16>(this, value, start, end);
@@ -204,7 +204,7 @@ export class Int16Array extends TypedArray<i16> {
 }
 
 export class Uint16Array extends TypedArray<u16> {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
     return FILL<Uint16Array, u16>(this, value, start, end);
@@ -250,7 +250,7 @@ export class Uint16Array extends TypedArray<u16> {
 }
 
 export class Int32Array extends TypedArray<i32> {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<i32>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i32>();
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
     return FILL<Int32Array, i32>(this, value, start, end);
@@ -296,7 +296,7 @@ export class Int32Array extends TypedArray<i32> {
 }
 
 export class Uint32Array extends TypedArray<u32> {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<u32>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u32>();
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
     return FILL<Uint32Array, u32>(this, value, start, end);
@@ -342,7 +342,7 @@ export class Uint32Array extends TypedArray<u32> {
 }
 
 export class Int64Array extends TypedArray<i64> {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
 
   fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
     return FILL<Int64Array, i64>(this, value, start, end);
@@ -388,7 +388,7 @@ export class Int64Array extends TypedArray<i64> {
 }
 
 export class Uint64Array extends TypedArray<u64> {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
 
   fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
     return FILL<Uint64Array, u64>(this, value, start, end);
@@ -434,7 +434,7 @@ export class Uint64Array extends TypedArray<u64> {
 }
 
 export class Float32Array extends TypedArray<f32> {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<f32>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f32>();
 
   fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
     return FILL<Float32Array, f32>(this, value, start, end);
@@ -480,7 +480,7 @@ export class Float32Array extends TypedArray<f32> {
 }
 
 export class Float64Array extends TypedArray<f64> {
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<f64>();
+  @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f64>();
 
   fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
     return FILL<Float64Array, f64>(this, value, start, end);

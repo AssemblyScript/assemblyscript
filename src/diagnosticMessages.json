@@ -22,6 +22,8 @@
   "Function '{0}' cannot be inlined into itself.": 217,
   "Cannot access method '{0}' without calling it as it requires 'this' to be set.": 218,
   "Optional properties are not supported.": 219,
+  "Expression must be a compile-time constant.": 220,
+  "Module cannot have multiple start functions.": 221,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,
@@ -105,6 +107,7 @@
   "Multiple constructor implementations are not allowed.": 2392,
   "Duplicate function implementation.": 2393,
   "Individual declarations in merged declaration '{0}' must be all exported or all local.": 2395,
+  "A namespace declaration cannot be located prior to a class or function with which it is merged.": 2434,
   "Type '{0}' has no property '{1}'.": 2460,
   "The '{0}' operator cannot be applied to type '{1}'.": 2469,
   "In 'const' enum declarations member initializer must be constant expression.": 2474,
@@ -120,6 +123,7 @@
   "Constructor of class '{0}' is protected and only accessible within the class declaration.": 2674,
   "Namespace '{0}' has no exported member '{1}'.": 2694,
   "Required type parameters may not follow optional type parameters.": 2706,
+  "Duplicate property '{0}'.": 2718,
 
   "File '{0}' not found.": 6054,
   "Numeric separators are not allowed here.": 6188,

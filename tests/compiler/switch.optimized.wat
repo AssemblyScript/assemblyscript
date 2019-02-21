@@ -67,7 +67,7 @@
   end
   i32.const 0
  )
- (func $start (; 3 ;) (type $_)
+ (func $start:switch (; 3 ;) (type $_)
   i32.const 0
   call $switch/doSwitch
   if
@@ -237,7 +237,10 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (type $_)
+ (func $start (; 4 ;) (type $_)
+  call $start:switch
+ )
+ (func $null (; 5 ;) (type $_)
   nop
  )
 )

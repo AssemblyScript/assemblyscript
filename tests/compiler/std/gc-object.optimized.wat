@@ -1,6 +1,6 @@
 (module
- (type $iii (func (param i32 i32) (result i32)))
  (type $_ (func))
+ (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $i_ (func (param i32)))
  (type $ii_ (func (param i32 i32)))
@@ -15,9 +15,9 @@
  (global $~lib/collector/itcm/fromSpace (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/toSpace (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/gc-object/obj (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
+ (global $~lib/started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-object/main))
@@ -242,7 +242,7 @@
      i32.or
      i32.store
      i32.const 1
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      i32.const 16
      i32.add
@@ -406,23 +406,12 @@
    end
   end
  )
- (func $std/gc-object/main (; 10 ;) (type $_)
-  global.get $~started
-  i32.eqz
-  if
-   call $start
-   i32.const 1
-   global.set $~started
-  end
- )
- (func $start (; 11 ;) (type $_)
+ (func $start:std/gc-object (; 10 ;) (type $_)
   (local $0 i32)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  i32.const 0
-  global.set $~lib/collector/itcm/state
   call $std/gc-object/Custom#constructor
   global.set $std/gc-object/obj
   call $~lib/collector/itcm/__gc_collect
@@ -434,6 +423,15 @@
   i32.const 0
   global.set $std/gc-object/obj
   call $~lib/collector/itcm/__gc_collect
+ )
+ (func $std/gc-object/main (; 11 ;) (type $_)
+  global.get $~lib/started
+  i32.eqz
+  if
+   call $start:std/gc-object
+   i32.const 1
+   global.set $~lib/started
+  end
  )
  (func $null (; 12 ;) (type $_)
   nop

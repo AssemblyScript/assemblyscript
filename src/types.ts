@@ -258,8 +258,8 @@ export class Type {
       let classReference = this.classReference;
       if (classReference) {
         return this.is(TypeFlags.NULLABLE)
-          ? classReference.toString() + " | null"
-          : classReference.toString();
+          ? classReference.name + " | null"
+          : classReference.name;
       }
       let signatureReference = this.signatureReference;
       if (signatureReference) {
@@ -551,7 +551,7 @@ export class Signature {
 
   asFunctionTarget(program: Program): FunctionTarget {
     var target = this.cachedFunctionTarget;
-    if (!target) this.cachedFunctionTarget = target = new FunctionTarget(program, this);
+    if (!target) this.cachedFunctionTarget = target = new FunctionTarget(this, program);
     else assert(target.program == program);
     return target;
   }

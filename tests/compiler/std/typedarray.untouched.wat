@@ -1,5 +1,6 @@
 (module
  (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (type $i_ (func (param i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
@@ -9,7 +10,6 @@
  (type $FFi (func (param f64 f64) (result i32)))
  (type $iiF (func (param i32 i32) (result f64)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $_ (func))
  (type $iiI_ (func (param i32 i32 i64)))
  (type $IIiiI (func (param i64 i64 i32 i32) (result i64)))
  (type $iiII (func (param i32 i32 i64) (result i64)))
@@ -74,17 +74,11 @@
  (global $~lib/typedarray/Uint64Array.BYTES_PER_ELEMENT i32 (i32.const 8))
  (global $~lib/typedarray/Float32Array.BYTES_PER_ELEMENT i32 (i32.const 4))
  (global $~lib/typedarray/Float64Array.BYTES_PER_ELEMENT i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
  (global $std/typedarray/arr (mut i32) (i32.const 0))
  (global $std/typedarray/af64 (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
  (global $ASC_OPTIMIZE_LEVEL i32 (i32.const 0))
  (global $std/typedarray/arr8 (mut i32) (i32.const 0))
@@ -97,15 +91,27 @@
  (global $std/typedarray/multisubarr1 (mut i32) (i32.const 0))
  (global $std/typedarray/multisubarr2 (mut i32) (i32.const 0))
  (global $std/typedarray/multisubarr3 (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 624))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 624))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/internal/arraybuffer/computeSize (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+ )
+ (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.const 8
   i32.add
   i32.const 1
   i32.sub
@@ -113,7 +119,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -121,7 +127,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/internal/allocator/MAX_SIZE_32
+  i32.const 1073741824
   i32.gt_u
   if
    unreachable
@@ -138,9 +144,9 @@
   i32.gt_u
   select
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.const -1
   i32.xor
   i32.and
@@ -192,11 +198,11 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+  i32.const 1073741816
   i32.le_u
   i32.eqz
   if
@@ -221,7 +227,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -475,12 +481,12 @@
    end
   end
  )
- (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/typedarray/TypedArray<i8>#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i8>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -504,9 +510,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.0
+  block $~lib/memory/memory.fill|inlined.0
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -547,7 +553,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Int8Array#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int8Array#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -561,7 +567,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -585,9 +591,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.1
+  block $~lib/memory/memory.fill|inlined.1
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -628,7 +634,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -642,7 +648,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/typedarray/Uint8ClampedArray#constructor (; 10 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8ClampedArray#constructor (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -656,7 +662,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<i16>#constructor (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i16>#constructor (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -680,9 +686,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.2
+  block $~lib/memory/memory.fill|inlined.2
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -723,7 +729,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Int16Array#constructor (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int16Array#constructor (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -737,7 +743,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u16>#constructor (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u16>#constructor (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -761,9 +767,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.3
+  block $~lib/memory/memory.fill|inlined.3
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -804,7 +810,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint16Array#constructor (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint16Array#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -818,7 +824,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -842,9 +848,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.4
+  block $~lib/memory/memory.fill|inlined.4
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -885,7 +891,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Int32Array#constructor (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#constructor (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -899,7 +905,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u32>#constructor (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u32>#constructor (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -923,9 +929,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.5
+  block $~lib/memory/memory.fill|inlined.5
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -966,7 +972,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint32Array#constructor (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint32Array#constructor (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -980,7 +986,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<i64>#constructor (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i64>#constructor (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1004,9 +1010,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.6
+  block $~lib/memory/memory.fill|inlined.6
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -1047,7 +1053,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Int64Array#constructor (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int64Array#constructor (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1061,7 +1067,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u64>#constructor (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u64>#constructor (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1085,9 +1091,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.7
+  block $~lib/memory/memory.fill|inlined.7
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -1128,7 +1134,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint64Array#constructor (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint64Array#constructor (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1142,7 +1148,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<f32>#constructor (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f32>#constructor (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1166,9 +1172,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.8
+  block $~lib/memory/memory.fill|inlined.8
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -1209,7 +1215,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Float32Array#constructor (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Float32Array#constructor (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1223,7 +1229,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<f64>#constructor (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<f64>#constructor (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1247,9 +1253,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.9
+  block $~lib/memory/memory.fill|inlined.9
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -1290,7 +1296,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Float64Array#constructor (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Float64Array#constructor (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1304,7 +1310,7 @@
   local.set $0
   local.get $0
  )
- (func $std/typedarray/testInstantiate (; 27 ;) (type $i_) (param $0 i32)
+ (func $std/typedarray/testInstantiate (; 28 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1879,7 +1885,7 @@
    unreachable
   end
  )
- (func $~lib/internal/typedarray/TypedArray<i32>#__set (; 28 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#__set (; 29 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1920,7 +1926,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/internal/typedarray/TypedArray<i32>#__get (; 29 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#__get (; 30 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1957,7 +1963,7 @@
    i32.load offset=8
   end
  )
- (func $~lib/typedarray/Int32Array#subarray (; 30 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#subarray (; 31 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2067,7 +2073,7 @@
   i32.store offset=8
   local.get $7
  )
- (func $~lib/internal/typedarray/TypedArray<f64>#__set (; 31 ;) (type $iiF_) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $~lib/internal/typedarray/TypedArray<f64>#__set (; 32 ;) (type $iiF_) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   (local $4 i32)
   (local $5 f64)
@@ -2108,7 +2114,7 @@
    f64.store offset=8
   end
  )
- (func $~lib/typedarray/Float64Array#subarray (; 32 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Float64Array#subarray (; 33 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2218,7 +2224,7 @@
   i32.store offset=8
   local.get $7
  )
- (func $~lib/internal/sort/insertionSort<f64> (; 33 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/insertionSort<f64> (; 34 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2284,7 +2290,7 @@
          local.set $10
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $8
           local.get $10
           local.get $3
@@ -2359,10 +2365,10 @@
    unreachable
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 34 ;) (type $i_) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 35 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $~lib/internal/sort/weakHeapSort<f64> (; 35 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/internal/sort/weakHeapSort<f64> (; 36 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -2391,7 +2397,7 @@
    br $~lib/memory/memory.allocate|inlined.3
   end
   local.set $6
-  block $memory.fill|inlined.10
+  block $~lib/memory/memory.fill|inlined.10
    local.get $6
    local.set $5
    i32.const 0
@@ -2488,7 +2494,7 @@
      local.set $13
      block (result i32)
       i32.const 2
-      global.set $~argc
+      global.set $~lib/argc
       local.get $12
       local.get $13
       local.get $3
@@ -2725,7 +2731,7 @@
          local.set $12
          block (result i32)
           i32.const 2
-          global.set $~argc
+          global.set $~lib/argc
           local.get $13
           local.get $12
           local.get $3
@@ -2892,7 +2898,7 @@
    f64.store offset=8
   end
  )
- (func $~lib/typedarray/Float64Array#sort (; 36 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Float64Array#sort (; 37 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2972,7 +2978,7 @@
     local.set $11
     block (result i32)
      i32.const 2
-     global.set $~argc
+     global.set $~lib/argc
      local.get $10
      local.get $11
      local.get $3
@@ -3052,7 +3058,7 @@
    local.get $2
   end
  )
- (func $~lib/internal/sort/COMPARATOR<f64>~anonymous|1 (; 37 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/internal/sort/COMPARATOR<f64>~anonymous|1 (; 38 ;) (type $FFi) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   local.get $0
@@ -3085,11 +3091,11 @@
   i64.lt_s
   i32.sub
  )
- (func $~lib/typedarray/Float64Array#sort|trampoline (; 38 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Float64Array#sort|trampoline (; 39 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable
@@ -3104,7 +3110,7 @@
   local.get $1
   call $~lib/typedarray/Float64Array#sort
  )
- (func $~lib/internal/typedarray/TypedArray<f64>#__get (; 39 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/internal/typedarray/TypedArray<f64>#__get (; 40 ;) (type $iiF) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3380,7 +3386,7 @@
    i32.add
    local.get $9
    i32.add
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $11
    local.get $5
@@ -3543,7 +3549,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -3896,7 +3902,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -3963,7 +3969,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<i8,i8>|inlined.2 (result i32)
       local.get $7
@@ -4087,7 +4093,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.1 (result i32)
       local.get $7
@@ -4294,7 +4300,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<i16,i16>|inlined.0 (result i32)
       local.get $7
@@ -4459,7 +4465,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<u16,u16>|inlined.0 (result i32)
       local.get $7
@@ -4581,7 +4587,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.2 (result i32)
       local.get $7
@@ -4742,7 +4748,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.0 (result i32)
       local.get $7
@@ -4903,7 +4909,7 @@
     br_if $break|0
     block (result i64)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<i64,i64>|inlined.0 (result i64)
       local.get $7
@@ -5064,7 +5070,7 @@
     br_if $break|0
     block (result i64)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.0 (result i64)
       local.get $7
@@ -5225,7 +5231,7 @@
     br_if $break|0
     block (result f32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<f32,f32>|inlined.0 (result f32)
       local.get $7
@@ -5345,7 +5351,7 @@
     br_if $break|0
     block (result f64)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.13 (result f64)
       local.get $7
@@ -5464,7 +5470,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<i8,i8>|inlined.3 (result i32)
       local.get $6
@@ -5587,7 +5593,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.2 (result i32)
       local.get $6
@@ -5752,7 +5758,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<i16,i16>|inlined.1 (result i32)
       local.get $6
@@ -5875,7 +5881,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<u16,u16>|inlined.1 (result i32)
       local.get $6
@@ -5996,7 +6002,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.3 (result i32)
       local.get $6
@@ -6115,7 +6121,7 @@
     br_if $break|0
     block (result i32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.1 (result i32)
       local.get $6
@@ -6234,7 +6240,7 @@
     br_if $break|0
     block (result i64)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<i64,i64>|inlined.1 (result i64)
       local.get $6
@@ -6353,7 +6359,7 @@
     br_if $break|0
     block (result i64)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.1 (result i64)
       local.get $6
@@ -6472,7 +6478,7 @@
     br_if $break|0
     block (result f32)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<f32,f32>|inlined.1 (result f32)
       local.get $6
@@ -6591,7 +6597,7 @@
     br_if $break|0
     block (result f64)
      i32.const 4
-     global.set $~argc
+     global.set $~lib/argc
      local.get $5
      block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.14 (result f64)
       local.get $6
@@ -6724,7 +6730,7 @@
      local.set $11
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i8,i8>|inlined.4 (result i32)
        local.get $5
        local.set $12
@@ -6913,7 +6919,7 @@
      local.set $11
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.3 (result i32)
        local.get $5
        local.set $12
@@ -7094,7 +7100,7 @@
      local.set $11
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.4 (result i32)
        local.get $5
        local.set $12
@@ -7275,7 +7281,7 @@
      local.set $11
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i16,i16>|inlined.2 (result i32)
        local.get $5
        local.set $12
@@ -7501,7 +7507,7 @@
      local.set $11
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u16,u16>|inlined.2 (result i32)
        local.get $5
        local.set $12
@@ -7719,7 +7725,7 @@
      local.set $11
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.4 (result i32)
        local.get $5
        local.set $12
@@ -7892,7 +7898,7 @@
      local.set $11
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.2 (result i32)
        local.get $5
        local.set $12
@@ -8103,7 +8109,7 @@
      local.set $11
      block (result i64)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i64,i64>|inlined.2 (result i64)
        local.get $5
        local.set $12
@@ -8314,7 +8320,7 @@
      local.set $11
      block (result i64)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.2 (result i64)
        local.get $5
        local.set $12
@@ -8525,7 +8531,7 @@
      local.set $11
      block (result f32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<f32,f32>|inlined.2 (result f32)
        local.get $5
        local.set $12
@@ -8736,7 +8742,7 @@
      local.set $11
      block (result f64)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.15 (result f64)
        local.get $5
        local.set $12
@@ -8898,7 +8904,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i8,i8>|inlined.6 (result i32)
        local.get $5
        local.set $10
@@ -9049,7 +9055,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.6 (result i32)
        local.get $5
        local.set $10
@@ -9198,7 +9204,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.8 (result i32)
        local.get $5
        local.set $10
@@ -9349,7 +9355,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i16,i16>|inlined.5 (result i32)
        local.get $5
        local.set $10
@@ -9500,7 +9506,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u16,u16>|inlined.5 (result i32)
        local.get $5
        local.set $10
@@ -9647,7 +9653,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.6 (result i32)
        local.get $5
        local.set $10
@@ -9792,7 +9798,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.5 (result i32)
        local.get $5
        local.set $10
@@ -9937,7 +9943,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i64,i64>|inlined.5 (result i64)
        local.get $5
        local.set $10
@@ -10082,7 +10088,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.5 (result i64)
        local.get $5
        local.set $10
@@ -10227,7 +10233,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<f32,f32>|inlined.5 (result f32)
        local.get $5
        local.set $10
@@ -10372,7 +10378,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.17 (result f64)
        local.get $5
        local.set $10
@@ -10521,7 +10527,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i8,i8>|inlined.8 (result i32)
        local.get $5
        local.set $10
@@ -10671,7 +10677,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.10 (result i32)
        local.get $5
        local.set $10
@@ -10819,7 +10825,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.12 (result i32)
        local.get $5
        local.set $10
@@ -10969,7 +10975,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i16,i16>|inlined.7 (result i32)
        local.get $5
        local.set $10
@@ -11119,7 +11125,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u16,u16>|inlined.7 (result i32)
        local.get $5
        local.set $10
@@ -11265,7 +11271,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.8 (result i32)
        local.get $5
        local.set $10
@@ -11409,7 +11415,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.7 (result i32)
        local.get $5
        local.set $10
@@ -11553,7 +11559,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<i64,i64>|inlined.7 (result i64)
        local.get $5
        local.set $10
@@ -11697,7 +11703,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.7 (result i64)
        local.get $5
        local.set $10
@@ -11841,7 +11847,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<f32,f32>|inlined.7 (result f32)
        local.get $5
        local.set $10
@@ -11985,7 +11991,7 @@
      br_if $break|0
      block (result i32)
       i32.const 3
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.19 (result f64)
        local.get $5
        local.set $10
@@ -12137,7 +12143,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<i8,i8>|inlined.10 (result i32)
          local.get $5
          local.set $10
@@ -12297,7 +12303,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.14 (result i32)
          local.get $5
          local.set $10
@@ -12455,7 +12461,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<u8,u8>|inlined.16 (result i32)
          local.get $5
          local.set $10
@@ -12615,7 +12621,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<i16,i16>|inlined.9 (result i32)
          local.get $5
          local.set $10
@@ -12775,7 +12781,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<u16,u16>|inlined.9 (result i32)
          local.get $5
          local.set $10
@@ -12931,7 +12937,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.10 (result i32)
          local.get $5
          local.set $10
@@ -13085,7 +13091,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<u32,u32>|inlined.9 (result i32)
          local.get $5
          local.set $10
@@ -13239,7 +13245,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<i64,i64>|inlined.9 (result i64)
          local.get $5
          local.set $10
@@ -13393,7 +13399,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.9 (result i64)
          local.get $5
          local.set $10
@@ -13803,7 +13809,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<f32,f32>|inlined.9 (result f32)
          local.get $5
          local.set $10
@@ -14215,7 +14221,7 @@
       block
        block (result i32)
         i32.const 3
-        global.set $~argc
+        global.set $~lib/argc
         block $~lib/internal/arraybuffer/LOAD<f64,f64>|inlined.21 (result f64)
          local.get $5
          local.set $10
@@ -14453,16 +14459,7 @@
    call $~lib/env/abort
    unreachable
   end
-  global.get $HEAP_BASE
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.add
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
+  call $start:~lib/allocator/arena
   i32.const 0
   call $std/typedarray/testInstantiate
   i32.const 5
@@ -14732,7 +14729,7 @@
   end
   block (result i32)
    i32.const 0
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/typedarray/af64
    i32.const 0
    call $~lib/typedarray/Float64Array#sort|trampoline
@@ -14890,7 +14887,7 @@
   end
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/typedarray/arr8
    i32.const 0
    i32.const 0
@@ -14930,7 +14927,7 @@
   end
   block (result i32)
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/typedarray/arr8
    i32.const 2
    i32.const -2
@@ -14975,7 +14972,7 @@
   global.set $std/typedarray/sub8
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/typedarray/sub8
    i32.const 0
    i32.const 0
@@ -15096,7 +15093,7 @@
   end
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/typedarray/arr32
    i32.const 0
    i32.const 0
@@ -15136,7 +15133,7 @@
   end
   block (result i32)
    i32.const 2
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/typedarray/arr32
    i32.const 2
    i32.const -2
@@ -15181,7 +15178,7 @@
   global.set $std/typedarray/sub32
   block (result i32)
    i32.const 1
-   global.set $~argc
+   global.set $~lib/argc
    global.get $std/typedarray/sub32
    i32.const 0
    i32.const 0
@@ -15566,5 +15563,7 @@
   call $std/typedarray/testArrayEvery<Float64Array,f64>
  )
  (func $null (; 299 ;) (type $_)
+ )
+ (func $null (; 300 ;) (type $_)
  )
 )

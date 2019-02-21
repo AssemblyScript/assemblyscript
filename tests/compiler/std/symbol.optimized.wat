@@ -1,4 +1,5 @@
 (module
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $i_ (func (param i32)))
@@ -6,7 +7,6 @@
  (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii_ (func (param i32 i32)))
- (type $_ (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
@@ -2440,7 +2440,7 @@
   i32.const 592
   call $~lib/string/String.__concat
  )
- (func $start (; 28 ;) (type $_)
+ (func $start:std/symbol (; 28 ;) (type $_)
   (local $0 i32)
   i32.const 760
   global.set $~lib/allocator/arena/startOffset
@@ -2617,7 +2617,10 @@
    unreachable
   end
  )
- (func $null (; 29 ;) (type $_)
+ (func $start (; 29 ;) (type $_)
+  call $start:std/symbol
+ )
+ (func $null (; 30 ;) (type $_)
   nop
  )
 )

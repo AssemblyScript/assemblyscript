@@ -1,4 +1,3 @@
-
 import {
   CharCode,
   allocateUnsafe as allocateUnsafeString,
@@ -10,7 +9,7 @@ import {
   LOAD
 } from "./arraybuffer";
 
-export const MAX_DOUBLE_LENGTH = 28;
+@lazy export const MAX_DOUBLE_LENGTH = 28;
 
 @inline
 export function POWERS10(): u32[] {
@@ -359,16 +358,13 @@ export function itoa<T>(value: T): String {
   }
 }
 
-var _K: i32 = 0;
-
-var _frc: u64 = 0;
-var _exp: i32 = 0;
-
-var _frc_minus: u64 = 0;
-var _frc_plus:  u64 = 0;
-
-var _frc_pow: u64 = 0;
-var _exp_pow: i32 = 0;
+@lazy var _K: i32 = 0;
+// @lazy var _frc: u64 = 0;
+@lazy var _exp: i32 = 0;
+@lazy var _frc_minus: u64 = 0;
+@lazy var _frc_plus:  u64 = 0;
+@lazy var _frc_pow: u64 = 0;
+@lazy var _exp_pow: i32 = 0;
 
 @inline
 function umul64f(u: u64, v: u64): u64 {

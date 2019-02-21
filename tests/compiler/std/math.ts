@@ -3284,6 +3284,25 @@ assert(NativeMath.imul(NaN, 1) == 0);
 assert(NativeMath.imul(1, Infinity) == 0);
 assert(NativeMath.imul(f64.MAX_VALUE, f64.MAX_VALUE) == 0);
 
+// Math.clz32 /////////////////////////////////////////////////////////////////////////////////
+
+assert(NativeMath.clz32(0) == 32);
+assert(NativeMath.clz32(1) == 31);
+assert(NativeMath.clz32(-1) == 0);
+assert(NativeMath.clz32(-128) == 0);
+assert(NativeMath.clz32(4294967295.) == 0);
+assert(NativeMath.clz32(4294967295.5) == 0);
+assert(NativeMath.clz32(4294967296) == 32);
+assert(NativeMath.clz32(4294967297) == 31);
+assert(NativeMath.clz32(NaN) == 32);
+assert(NativeMath.clz32(Infinity) == 32);
+assert(NativeMath.clz32(f64.MAX_SAFE_INTEGER) == 0);
+assert(NativeMath.clz32(-f64.MAX_SAFE_INTEGER) == 31);
+assert(NativeMath.clz32(f64.MAX_VALUE) == 32);
+assert(NativeMath.clz32(f64.MIN_VALUE) == 32);
+assert(NativeMath.clz32(-f64.MAX_VALUE) == 32);
+assert(NativeMath.clz32(f64.EPSILON) == 32);
+
 // ipow64 /////////////////////////////////////////////////////////////////////////////////////
 
 assert(ipow64(0, 0) == 1);

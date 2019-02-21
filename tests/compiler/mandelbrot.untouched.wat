@@ -7,7 +7,7 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $../../examples/mandelbrot/assembly/index/NUM_COLORS i32 (i32.const 2048))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
