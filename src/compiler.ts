@@ -48,8 +48,7 @@ import {
   SETTER_PREFIX,
   LibrarySymbols,
   CommonSymbols,
-  INDEX_SUFFIX,
-  LIBRARY_PREFIX
+  INDEX_SUFFIX
 } from "./common";
 
 import {
@@ -147,7 +146,8 @@ import {
 
   nodeIsConstantValue,
   findDecorator,
-  FieldDeclaration
+  FieldDeclaration,
+  FunctionDeclaration
 } from "./ast";
 
 import {
@@ -5716,10 +5716,11 @@ export class Compiler extends DiagnosticEmitter {
       }
       let parameterTypes = instance.signature.parameterTypes;
       let parameterNodes = instance.prototype.signatureNode.parameters;
+      assert(parameterNodes.length == parameterTypes.length);
       let allOptionalsAreConstant = true;
       for (let i = numArguments; i < maxArguments; ++i) {
         let initializer = parameterNodes[i].initializer;
-        if (!(initializer !== null && nodeIsConstantValue(initializer.kind))) {
+        if (!(initializer && nodeIsConstantValue(initializer.kind))) {
           allOptionalsAreConstant = false;
           break;
         }
@@ -6653,22 +6654,38 @@ export class Compiler extends DiagnosticEmitter {
       return instance;
     }
 
-    // use the signature of the parent constructor if a derived class
+    // clone base constructor if a derived class
     var baseClass = classInstance.base;
-    var signature = baseClass
-      ? this.ensureConstructor(baseClass, reportNode).signature
-      : new Signature(null, classInstance.type, classInstance.type);
+    if (baseClass) {
+      let baseCtor = this.ensureConstructor(baseClass, reportNode);
+      instance = new Function(
+        CommonSymbols.constructor,
+        new FunctionPrototype(
+          CommonSymbols.constructor,
+          classInstance,
+          // declaration is important, i.e. to access optional parameter initializers
+          (<FunctionDeclaration>baseCtor.declaration).clone()
+        ),
+        baseCtor.signature,
+        null
+      );
 
-    instance = new Function(
-      CommonSymbols.constructor,
-      new FunctionPrototype(CommonSymbols.constructor, classInstance,
-        this.program.makeNativeFunctionDeclaration(CommonSymbols.constructor,
-          CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR
-        )
-      ),
-      signature,
-      null
-    );
+    // otherwise make a default constructor
+    } else {
+      instance = new Function(
+        CommonSymbols.constructor,
+        new FunctionPrototype(
+          CommonSymbols.constructor,
+          classInstance,
+          this.program.makeNativeFunctionDeclaration(CommonSymbols.constructor,
+            CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR
+          )
+        ),
+        new Signature(null, classInstance.type, classInstance.type),
+        null
+      );
+    }
+
     instance.internalName = classInstance.internalName + INSTANCE_DELIMITER + "constructor";
     instance.set(CommonFlags.COMPILED);
     instance.prototype.setResolvedInstance("", instance);
@@ -6677,6 +6694,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = instance.flow;
 
     // generate body
+    var signature = instance.signature;
     var module = this.module;
     var nativeSizeType = this.options.nativeSizeType;
     var stmts = new Array<ExpressionRef>();
