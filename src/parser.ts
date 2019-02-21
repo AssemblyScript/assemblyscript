@@ -211,11 +211,10 @@ export class Parser extends DiagnosticEmitter {
         flags |= CommonFlags.CONST;
         if (tn.skip(Token.ENUM)) {
           statement = this.parseEnum(tn, flags, decorators, startPos);
-          break;
         } else {
           statement = this.parseVariable(tn, flags, decorators, startPos);
-          decorators = null;
         }
+        decorators = null;
         break;
       }
       case Token.LET: flags |= CommonFlags.LET;

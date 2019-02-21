@@ -109,7 +109,7 @@ export function repeatUnsafe(dest: String, destOffset: usize, src: String, count
 
 // Helpers
 
-export const enum CharCode {
+@inline export const enum CharCode {
   PLUS = 0x2B,
   MINUS = 0x2D,
   DOT = 0x2E,
