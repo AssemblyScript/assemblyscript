@@ -7,7 +7,7 @@
  (data (i32.const 8) "\10\00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $call-optional/opt|trampoline)
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 1))
  (export "memory" (memory $0))
  (export "table" (table $0))
@@ -17,7 +17,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -36,16 +36,16 @@
   local.get $2
   i32.add
  )
- (func $start (; 2 ;) (type $_)
+ (func $start:call-optional (; 2 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   block $2of2
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -72,7 +72,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 4
   local.set $0
   i32.const 0
@@ -81,7 +81,7 @@
    block $1of22
     block $0of23
      block $outOfRange4
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of23 $1of22 $2of21 $outOfRange4
@@ -110,7 +110,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 3
   i32.const 0
   i32.const 0
@@ -125,7 +125,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 3
   i32.const 4
   i32.const 0
@@ -142,7 +142,7 @@
    unreachable
   end
   i32.const 3
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 3
   i32.const 4
   i32.const 5
@@ -159,7 +159,10 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $_)
+  call $start:call-optional
+ )
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )

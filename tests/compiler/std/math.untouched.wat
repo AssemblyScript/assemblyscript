@@ -73,7 +73,6 @@
  (global $std/math/OVERFLOW i32 (i32.const 16))
  (global $~lib/math/NativeMath.E f64 (f64.const 2.718281828459045))
  (global $~lib/math/NativeMathf.E f32 (f32.const 2.7182817459106445))
- (global $Infinity f64 (f64.const inf))
  (global $~lib/math/NativeMath.LN2 f64 (f64.const 0.6931471805599453))
  (global $~lib/math/NativeMath.LN10 f64 (f64.const 2.302585092994046))
  (global $~lib/math/NativeMath.LOG2E f64 (f64.const 1.4426950408889634))
@@ -86,14 +85,13 @@
  (global $~lib/math/NativeMathf.PI f32 (f32.const 3.1415927410125732))
  (global $~lib/math/NativeMathf.SQRT1_2 f32 (f32.const 0.7071067690849304))
  (global $~lib/math/NativeMathf.SQRT2 f32 (f32.const 1.4142135381698608))
- (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
- (global $ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
  (global $~lib/builtins/i16.MAX_VALUE i32 (i32.const 32767))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
@@ -103,7 +101,7 @@
  (global $~lib/builtins/u16.MAX_VALUE i32 (i32.const 65535))
  (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
  (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const 1.401298464324817e-45))
- (global $HEAP_BASE i32 (i32.const 68))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 68))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -9780,7 +9778,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 972
+   i32.const 976
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9812,7 +9810,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 981
+   i32.const 985
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -9869,7 +9867,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 2051
+   i32.const 2065
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -45560,5 +45558,7 @@
   end
  )
  (func $null (; 170 ;) (type $_)
+ )
+ (func $null (; 160 ;) (type $_)
  )
 )

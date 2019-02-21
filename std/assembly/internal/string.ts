@@ -2,9 +2,9 @@ import { MAX_SIZE_32 } from "./allocator";
 import { String } from "../string";
 
 /** Size of a String header. */
-export const HEADER_SIZE = (offsetof<String>() + 1) & ~1; // 2 byte aligned
+@inline export const HEADER_SIZE = (offsetof<String>() + 1) & ~1; // 2 byte aligned
 /** Maximum length of a String. */
-export const MAX_LENGTH = (<i32>MAX_SIZE_32 - HEADER_SIZE) >>> 1;
+@inline export const MAX_LENGTH = (<i32>MAX_SIZE_32 - HEADER_SIZE) >>> 1;
 
 // Low-level utility
 
@@ -109,7 +109,7 @@ export function repeatUnsafe(dest: String, destOffset: usize, src: String, count
 
 // Helpers
 
-export const enum CharCode {
+@inline export const enum CharCode {
   PLUS = 0x2B,
   MINUS = 0x2D,
   DOT = 0x2E,

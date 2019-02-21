@@ -1,6 +1,6 @@
 (module
- (type $ii (func (param i32) (result i32)))
  (type $_ (func))
+ (type $ii (func (param i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 1 funcref)

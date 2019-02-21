@@ -10,11 +10,11 @@
  (global $portable-conversions/I (mut i64) (i64.const 1))
  (global $portable-conversions/f (mut f32) (f32.const 1))
  (global $portable-conversions/F (mut f64) (f64.const 1))
- (global $HEAP_BASE i32 (i32.const 60))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 60))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:portable-conversions (; 1 ;) (type $_)
   global.get $portable-conversions/i
   i32.const 24
   i32.shl
@@ -636,6 +636,9 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:portable-conversions
+ )
+ (func $null (; 3 ;) (type $_)
  )
 )

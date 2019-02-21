@@ -8002,7 +8002,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 972
+   i32.const 976
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8068,7 +8068,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 981
+   i32.const 985
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -8115,7 +8115,7 @@
   if
    i32.const 0
    i32.const 40
-   i32.const 2051
+   i32.const 2065
    i32.const 24
    call $~lib/env/abort
    unreachable

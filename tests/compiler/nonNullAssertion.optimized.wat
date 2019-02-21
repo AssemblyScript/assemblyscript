@@ -1,13 +1,13 @@
 (module
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
  (type $i (func (result i32)))
- (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "testVar" (func $nonNullAssertion/testVar))
@@ -65,13 +65,13 @@
  )
  (func $nonNullAssertion/testFn (; 4 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   local.get $0
   call_indirect (type $i)
  )
  (func $nonNullAssertion/testObjFn (; 5 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   local.get $0
   i32.load offset=4
   call_indirect (type $i)

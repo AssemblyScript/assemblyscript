@@ -31,6 +31,7 @@ export enum DiagnosticCode {
   Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set = 218,
   Optional_properties_are_not_supported = 219,
   Expression_must_be_a_compile_time_constant = 220,
+  Module_cannot_have_multiple_start_functions = 221,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -112,6 +113,7 @@ export enum DiagnosticCode {
   Multiple_constructor_implementations_are_not_allowed = 2392,
   Duplicate_function_implementation = 2393,
   Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
+  A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
   Type_0_has_no_property_1 = 2460,
   The_0_operator_cannot_be_applied_to_type_1 = 2469,
   In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
@@ -127,6 +129,7 @@ export enum DiagnosticCode {
   Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration = 2674,
   Namespace_0_has_no_exported_member_1 = 2694,
   Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
+  Duplicate_property_0 = 2718,
   File_0_not_found = 6054,
   Numeric_separators_are_not_allowed_here = 6188,
   Multiple_consecutive_numeric_separators_are_not_permitted = 6189,
@@ -161,6 +164,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 218: return "Cannot access method '{0}' without calling it as it requires 'this' to be set.";
     case 219: return "Optional properties are not supported.";
     case 220: return "Expression must be a compile-time constant.";
+    case 221: return "Module cannot have multiple start functions.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
@@ -242,6 +246,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2392: return "Multiple constructor implementations are not allowed.";
     case 2393: return "Duplicate function implementation.";
     case 2395: return "Individual declarations in merged declaration '{0}' must be all exported or all local.";
+    case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
     case 2460: return "Type '{0}' has no property '{1}'.";
     case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";
     case 2474: return "In 'const' enum declarations member initializer must be constant expression.";
@@ -257,6 +262,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2674: return "Constructor of class '{0}' is protected and only accessible within the class declaration.";
     case 2694: return "Namespace '{0}' has no exported member '{1}'.";
     case 2706: return "Required type parameters may not follow optional type parameters.";
+    case 2718: return "Duplicate property '{0}'.";
     case 6054: return "File '{0}' not found.";
     case 6188: return "Numeric separators are not allowed here.";
     case 6189: return "Multiple consecutive numeric separators are not permitted.";

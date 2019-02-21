@@ -3,7 +3,6 @@
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
 
 globalScope.ASC_TARGET = 0; // JS
-globalScope.ASC_NO_TREESHAKING = false;
 globalScope.ASC_NO_ASSERT = false;
 globalScope.ASC_MEMORY_BASE = 0;
 globalScope.ASC_OPTIMIZE_LEVEL = 3;

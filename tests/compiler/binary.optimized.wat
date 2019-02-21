@@ -406,7 +406,7 @@
   local.get $0
   f64.mul
  )
- (func $start (; 4 ;) (type $_)
+ (func $start:binary (; 4 ;) (type $_)
   (local $0 i32)
   (local $1 i64)
   (local $2 f32)
@@ -749,7 +749,10 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $null (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $_)
+  call $start:binary
+ )
+ (func $null (; 6 ;) (type $_)
   nop
  )
 )
