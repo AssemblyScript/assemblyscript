@@ -606,7 +606,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       .filter(statement =>
         statement.kind == NodeKind.FUNCTIONDECLARATION ||
         statement.kind == NodeKind.CLASSDECLARATION);
-    return declarations.filter(d => d.is(CommonFlags.MODULE_EXPORT));
+    return declarations.filter(d => d.is(CommonFlags.EXPORT));
   }
 }
 
