@@ -6138,24 +6138,32 @@ export class Compiler extends DiagnosticEmitter {
     // time of implementation, this seemed more useful because dynamic rhs expressions are not
     // possible in AS anyway.
     var expr = this.compileExpressionRetainType(expression.expression, this.options.usizeType, WrapMode.NONE);
-    var type = this.currentType;
-    var isType = this.resolver.resolveType(
+    var actualType = this.currentType;
+    var expectedType = this.resolver.resolveType(
       expression.isType,
       this.currentFlow.actualFunction
     );
     this.currentType = Type.bool;
-    if (!isType) return module.createUnreachable();
-    return type.is(TypeFlags.NULLABLE) && !isType.is(TypeFlags.NULLABLE)
-      ? type.nonNullableType.isAssignableTo(isType)
-        ? module.createBinary( // not precomputeable
-            type.is(TypeFlags.LONG)
-              ? BinaryOp.NeI64
-              : BinaryOp.NeI32,
-            expr,
-            type.toNativeZero(module)
-          )
-        : module.createI32(0)
-      : module.createI32(type.isAssignableTo(isType, true) ? 1 : 0);
+    if (!expectedType) return module.createUnreachable();
+
+    // instanceof <basicType> must be exact
+    if (!expectedType.is(TypeFlags.REFERENCE)) {
+      return module.createI32(actualType == expectedType ? 1 : 0);
+    }
+    // <nullable> instanceof <nonNullable> must be != 0
+    if (
+      actualType.is(TypeFlags.NULLABLE) && !expectedType.is(TypeFlags.NULLABLE) &&
+      actualType.nonNullableType.isAssignableTo(expectedType)
+    ) {
+      return module.createBinary(
+        actualType.is(TypeFlags.LONG)
+          ? BinaryOp.NeI64
+          : BinaryOp.NeI32,
+        expr,
+        actualType.toNativeZero(module)
+      );
+    }
+    return module.createI32(actualType.isAssignableTo(expectedType) ? 1 : 0);
   }
 
   compileLiteralExpression(
