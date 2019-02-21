@@ -1,11 +1,11 @@
 (module
+ (type $_ (func))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $_ (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
@@ -23,7 +23,7 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $std/arraybuffer/arr8 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -1511,7 +1511,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       br_table $0of2 $1of2 $2of2 $outOfRange
      end
      unreachable
@@ -1694,7 +1694,7 @@
   block $2of2
    block $1of2
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 1
      i32.sub
      br_table $1of2 $1of2 $2of2 $outOfRange
@@ -1710,7 +1710,7 @@
   local.get $1
   call $~lib/dataview/DataView#constructor
  )
- (func $start (; 12 ;) (type $_)
+ (func $start:std/arraybuffer (; 12 ;) (type $_)
   (local $0 i32)
   i32.const 288
   global.set $~lib/allocator/arena/startOffset
@@ -1738,7 +1738,7 @@
    unreachable
   end
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/arraybuffer/buffer
   i32.const 0
   call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -1778,7 +1778,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/arraybuffer/buffer
   i32.const 1
   call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -1796,7 +1796,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/arraybuffer/buffer
   i32.const -1
   call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -1882,7 +1882,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/arraybuffer/buffer
   i32.const 42
   call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -1946,7 +1946,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>6 (result i32)
    i32.const 0
    global.get $std/arraybuffer/arr8
@@ -1967,7 +1967,10 @@
    unreachable
   end
  )
- (func $null (; 13 ;) (type $_)
+ (func $start (; 13 ;) (type $_)
+  call $start:std/arraybuffer
+ )
+ (func $null (; 14 ;) (type $_)
   nop
  )
 )

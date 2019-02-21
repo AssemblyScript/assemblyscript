@@ -22,7 +22,8 @@ import {
   Namespace,
   ConstantValueKind,
   Interface,
-  Property
+  Property,
+  PropertyPrototype
 } from "./program";
 
 import {
@@ -53,11 +54,15 @@ abstract class ExportsWalker {
     this.includePrivate;
   }
 
-  /** Walks all exports and calls the respective handlers. */
+  /** Walks all elements and calls the respective handlers. */
   walk(): void {
-    for (let moduleExport of this.program.moduleLevelExports.values()) {
-      // FIXME: doesn't honor the actual externally visible name
-      this.visitElement(moduleExport.element);
+    for (let file of this.program.filesByName.values()) {
+      let members = file.members;
+      if (!members) continue;
+      for (let member of members.values()) {
+        // FIXME: doesn't honor the actual externally visible name
+        this.visitElement(member);
+      }
     }
     var todo = this.todo;
     for (let i = 0; i < todo.length; ) this.visitElement(todo[i]);
@@ -89,24 +94,30 @@ abstract class ExportsWalker {
         if ((<Field>element).is(CommonFlags.COMPILED)) this.visitField(<Field>element);
         break;
       }
+      case ElementKind.PROPERTY_PROTOTYPE: {
+        this.visitPropertyInstances(<PropertyPrototype>element);
+        break;
+      }
       case ElementKind.PROPERTY: {
         let prop = <Property>element;
-        let getter = prop.getterPrototype;
-        if (getter) this.visitFunctionInstances(getter);
-        let setter = prop.setterPrototype;
-        if (setter) this.visitFunctionInstances(setter);
+        let getter = prop.getterInstance;
+        if (getter) this.visitFunction(getter);
+        let setter = prop.setterInstance;
+        if (setter) this.visitFunction(setter);
         break;
       }
       case ElementKind.NAMESPACE: {
         if (hasCompiledMember(element)) this.visitNamespace(element);
         break;
       }
+      case ElementKind.TYPEDEFINITION: break;
       default: assert(false);
     }
   }
 
   private visitFunctionInstances(element: FunctionPrototype): void {
-    for (let instances of element.instances.values()) {
+    var instances = element.instances;
+    if (instances) {
       for (let instance of instances.values()) {
         if (instance.is(CommonFlags.COMPILED)) this.visitFunction(<Function>instance);
       }
@@ -114,9 +125,22 @@ abstract class ExportsWalker {
   }
 
   private visitClassInstances(element: ClassPrototype): void {
-    for (let instance of element.instances.values()) {
-      if (instance.is(CommonFlags.COMPILED)) this.visitClass(<Class>instance);
+    var instances = element.instances;
+    if (instances) {
+      for (let instance of instances.values()) {
+        if (instance.is(CommonFlags.COMPILED)) this.visitClass(<Class>instance);
+      }
     }
+  }
+
+  private visitPropertyInstances(element: PropertyPrototype): void {
+    // var instances = element.instances;
+    // if (instances) {
+    //   for (let instance of instances.values()) {
+    //     if (instance.is(CommonFlags.COMPILED)) this.visitProperty(<Property>instance);
+    //   }
+    // }
+    assert(false);
   }
 
   abstract visitGlobal(element: Global): void;
@@ -158,14 +182,14 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   visitClass(element: Class): void {
-    if (!element.is(CommonFlags.EXPORT)) {
+    if (!element.is(CommonFlags.MODULE_EXPORT)) {
       return;
     }
     this.exportedClasses.push(element);
   }
 
   visitFunction(element: Function): void {
-    if (!element.is(CommonFlags.EXPORT)) {
+    if (!element.is(CommonFlags.MODULE_EXPORT)) {
       return;
     }
     this.exportedFunctions.push(element);
@@ -188,17 +212,17 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private generateArgsParser(element: Function) {
     let signature = element.signature;
     let fields = signature.parameterNames ? signature.parameterNames.map((paramName, i) => {
-      return { simpleName: paramName, type: signature.parameterTypes[i] };
+      return { name: paramName, type: signature.parameterTypes[i] };
     }) : [];
     fields.forEach(field => this.generateDecodeFunction(field.type));
-    this.sb.push(`export class __near_ArgsParser_${element.simpleName} extends ThrowingJSONHandler {
+    this.sb.push(`export class __near_ArgsParser_${element.name} extends ThrowingJSONHandler {
         buffer: Uint8Array;
-        decoder: JSONDecoder<__near_ArgsParser_${element.simpleName}>;
+        decoder: JSONDecoder<__near_ArgsParser_${element.name}>;
         handledRoot: boolean = false;
       `);
     if (signature.parameterNames) {
       fields.forEach((field) => {
-        this.sb.push(`__near_param_${field.simpleName}: ${this.wrappedTypeName(field.type)};`);
+        this.sb.push(`__near_param_${field.name}: ${this.wrappedTypeName(field.type)};`);
       });
       this.generateHandlerMethods("this.__near_param_", fields);
     } else {
@@ -211,17 +235,17 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let signature = element.signature;
     let returnType = signature.returnType;
     this.generateEncodeFunction(returnType);
-    this.sb.push(`export function near_func_${element.simpleName}(): void {
+    this.sb.push(`export function near_func_${element.name}(): void {
       let json = new Uint8Array(input_read_len());
       input_read_into(json.buffer.data);
-      let handler = new __near_ArgsParser_${element.simpleName}();
+      let handler = new __near_ArgsParser_${element.name}();
       handler.buffer = json;
-      handler.decoder = new JSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
+      handler.decoder = new JSONDecoder<__near_ArgsParser_${element.name}>(handler);
       handler.decoder.deserialize(json);`);
     if (returnType.toString() != "void") {
-      this.sb.push(`let result = wrapped_${element.simpleName}(`);
+      this.sb.push(`let result = wrapped_${element.name}(`);
     } else {
-      this.sb.push(`wrapped_${element.simpleName}(`);
+      this.sb.push(`wrapped_${element.name}(`);
     }
     if (signature.parameterNames) {
       this.sb.push(signature.parameterNames.map(paramName => `handler.__near_param_${paramName}`).join(","));
@@ -248,8 +272,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
       if (matchingFields.length > 0) {
         this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {`);
         matchingFields.forEach(field => {
-          this.sb.push(`if (name == "${field.simpleName}") {
-            ${valuePrefix}${field.simpleName} = value;
+          this.sb.push(`if (name == "${field.name}") {
+            ${valuePrefix}${field.name} = value;
             return;
           }`);
         });
@@ -260,8 +284,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
     this.sb.push("setNull(name: string): void {");
     fields.forEach((field) => {
-      this.sb.push(`if (name == "${field.simpleName}") {
-        ${valuePrefix}${field.simpleName} = <${this.wrappedTypeName(field.type)}>null;
+      this.sb.push(`if (name == "${field.name}") {
+        ${valuePrefix}${field.name} = <${this.wrappedTypeName(field.type)}>null;
         return;
       }`);
     });
@@ -294,8 +318,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private generatePushHandler(valuePrefix: string, fields: any[]) {
     fields.forEach((field) => {
       if (!(field.type.toString() in this.typeMapping)) {
-        this.sb.push(`if (name == "${field.simpleName}") {
-          ${valuePrefix}${field.simpleName} = <${field.type}>__near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
+        this.sb.push(`if (name == "${field.name}") {
+          ${valuePrefix}${field.name} = <${field.type}>__near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
           return false;
         }`);
       }
@@ -372,7 +396,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
           encoder: JSONEncoder): void {`);
       this.getFields(type.classReference).forEach((field) => {
         let fieldType = field.type;
-        let fieldName = field.simpleName;
+        let fieldName = field.name;
         let sourceExpr = `value.${fieldName}`;
         this.generateFieldEncoder(fieldType, `"${fieldName}"`, sourceExpr);
       });
@@ -382,7 +406,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private tryUsingImport(type: Type, methodName: string): bool {
-    let importedFile = this.filesByImport.get(type.classReference!.simpleName);
+    let importedFile = this.filesByImport.get(type.classReference!.name);
     if (importedFile) {
       if (this.hasExport(importedFile, methodName)) {
         this.sb.push(`import { ${methodName} } from "${importedFile}";`);
@@ -420,14 +444,14 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
     let cls = type.classReference;
     if (this.exportedClasses.indexOf(cls) != -1) {
-      return "wrapped_" + cls.simpleName;
+      return "wrapped_" + cls.name;
     }
     if (cls.typeArguments && cls.typeArguments.length > 0) {
-      return cls.prototype.simpleName + "<" +
+      return cls.prototype.name + "<" +
         cls.typeArguments.map(argType => this.wrappedTypeName(argType)).join(", ") +
       ">"
     }
-    return cls.simpleName;
+    return cls.name;
   }
 
   private generateDecodeFunction(type: Type) {
@@ -501,7 +525,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private isArrayType(type: Type): bool {
-    return !!(type.classReference && type.classReference.prototype.simpleName == "Array" && type.classReference.typeArguments);
+    return !!(type.classReference && type.classReference.prototype.name == "Array" && type.classReference.typeArguments);
   }
 
   private getFields(element: Class): Field[] {
@@ -524,8 +548,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.generateDecodeFunction(c.type);
     });
 
-    let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions);
-    let allImportsStr = allExported.map(c => `${c.simpleName} as wrapped_${c.simpleName}`).join(", ");
+    let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions).filter(e => e.is(CommonFlags.MODULE_EXPORT));
+    let allImportsStr = allExported.map(c => `${c.name} as wrapped_${c.name}`).join(", ");
     this.sb = [`
       import { near } from "./near";
       import { JSONEncoder} from "./json/encoder"
@@ -541,15 +565,15 @@ export class NEARBindingsBuilder extends ExportsWalker {
       declare function input_read_into(ptr: usize): void;
     `].concat(this.sb);
     this.exportedClasses.forEach(c => {
-      this.sb.push(`export class ${c.simpleName} extends ${this.wrappedTypeName(c.type)} {
-        static decode(json: Uint8Array): ${c.simpleName} {
-          return <${c.simpleName}>__near_decode_${this.encodeType(c.type)}(json, null);
+      this.sb.push(`export class ${c.name} extends ${this.wrappedTypeName(c.type)} {
+        static decode(json: Uint8Array): ${c.name} {
+          return <${c.name}>__near_decode_${this.encodeType(c.type)}(json, null);
         }
 
         encode(): Uint8Array {
           let encoder: JSONEncoder = new JSONEncoder();
           encoder.pushObject(null);
-          __near_encode_${this.encodeType(c.type)}(<${c.simpleName}>this, encoder);
+          __near_encode_${this.encodeType(c.type)}(<${c.name}>this, encoder);
           encoder.popObject();
           return encoder.serialize();
         }
@@ -562,7 +586,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.getImports(mainSource).forEach(statement => {
       if (statement.declarations) {
         let declarationsStr = statement.declarations!
-          .map(declaration => `${declaration.externalName.text} as ${declaration.name.text}`)
+          .map(declaration => `${declaration.foreignName.text} as ${declaration.name.text}`)
           .join(",");
         this.sb.push(`import {${declarationsStr}} from "${statement.path.value}";`);
         statement.declarations.forEach(d => {
@@ -582,7 +606,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       .filter(statement =>
         statement.kind == NodeKind.FUNCTIONDECLARATION ||
         statement.kind == NodeKind.CLASSDECLARATION);
-    return declarations.filter(d => d.isTopLevelExport);
+    return declarations.filter(d => d.is(CommonFlags.EXPORT));
   }
 }
 
@@ -609,7 +633,7 @@ export class IDLBuilder extends ExportsWalker {
     if (isConst) sb.push("const ");
     sb.push(this.typeToString(element.type));
     sb.push(" ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     if (isConst) {
       switch (element.constantValueKind) {
         case ConstantValueKind.INTEGER: {
@@ -632,7 +656,7 @@ export class IDLBuilder extends ExportsWalker {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(" {\n");
     var members = element.members;
     if (members) {
@@ -646,7 +670,8 @@ export class IDLBuilder extends ExportsWalker {
           sb.push(name);
           if (isConst) {
             sb.push(" = ");
-            sb.push((<EnumValue>member).constantValue.toString(10));
+            assert((<EnumValue>member).constantValueKind == ConstantValueKind.INTEGER);
+            sb.push(i64_low((<EnumValue>member).constantIntegerValue).toString(10));
           }
           sb.push(";\n");
         }
@@ -665,7 +690,7 @@ export class IDLBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push(this.typeToString(signature.returnType));
     sb.push(" ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push("(");
     var parameters = signature.parameterTypes;
     var numParameters = parameters.length;
@@ -682,7 +707,7 @@ export class IDLBuilder extends ExportsWalker {
     if (members && members.size) {
       indent(sb, this.indentLevel);
       sb.push("interface ");
-      sb.push(element.simpleName);
+      sb.push(element.name);
       sb.push(" {\n");
       for (let member of members.values()) this.visitElement(member);
       indent(sb, --this.indentLevel);
@@ -694,7 +719,7 @@ export class IDLBuilder extends ExportsWalker {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(" {\n");
     // TODO
     indent(sb, --this.indentLevel);
@@ -713,7 +738,7 @@ export class IDLBuilder extends ExportsWalker {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("interface ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(" {\n");
     var members = element.members;
     if (members) {
@@ -786,7 +811,7 @@ export class TSDBuilder extends ExportsWalker {
       if (isConst) sb.push("const ");
       else sb.push("var ");
     }
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(": ");
     sb.push(this.typeToString(element.type));
     sb.push(";\n");
@@ -797,7 +822,7 @@ export class TSDBuilder extends ExportsWalker {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
     sb.push("enum ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(" {\n");
     var members = element.members;
     if (members) {
@@ -808,7 +833,8 @@ export class TSDBuilder extends ExportsWalker {
           sb.push(name);
           if (member.is(CommonFlags.INLINED)) {
             sb.push(" = ");
-            sb.push((<EnumValue>member).constantValue.toString(10));
+            assert((<EnumValue>member).constantValueKind == ConstantValueKind.INTEGER);
+            sb.push(i64_low((<EnumValue>member).constantIntegerValue).toString(10));
           }
           sb.push(",\n");
           --numMembers;
@@ -828,14 +854,14 @@ export class TSDBuilder extends ExportsWalker {
     if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
     if (element.is(CommonFlags.STATIC)) sb.push("static ");
     if (element.is(CommonFlags.GET)) {
-      sb.push(element.prototype.declaration.name.text); // 'get:funcName' internally
+      sb.push(element.identifierNode.text); // 'get:funcName' internally
       sb.push(": ");
       sb.push(this.typeToString(signature.returnType));
       sb.push(";\n");
       return;
     } else {
       if (!element.isAny(CommonFlags.STATIC | CommonFlags.INSTANCE)) sb.push("function ");
-      sb.push(element.simpleName);
+      sb.push(element.name);
     }
     sb.push("(");
     var parameters = signature.parameterTypes;
@@ -868,14 +894,14 @@ export class TSDBuilder extends ExportsWalker {
       if (element.is(CommonFlags.ABSTRACT)) sb.push("abstract ");
       sb.push("class ");
     }
-    sb.push(element.simpleName);
+    sb.push(element.name);
     var base = element.base;
     if (base && base.is(CommonFlags.COMPILED | CommonFlags.MODULE_EXPORT)) {
       sb.push(" extends ");
-      sb.push(base.simpleName); // TODO: fqn
+      sb.push(base.name); // TODO: fqn
     }
     sb.push(" {\n");
-    var members = element.prototype.members; // static
+    var members = element.parent.members; // static
     if (members) {
       for (let member of members.values()) {
         this.visitElement(member);
@@ -902,7 +928,7 @@ export class TSDBuilder extends ExportsWalker {
     if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
     if (element.is(CommonFlags.STATIC)) sb.push("static ");
     if (element.is(CommonFlags.READONLY)) sb.push("readonly ");
-    sb.push(element.simpleName);
+    sb.push(element.name);
     sb.push(": ");
     sb.push(this.typeToString(element.type));
     sb.push(";\n");
@@ -914,7 +940,7 @@ export class TSDBuilder extends ExportsWalker {
       let sb = this.sb;
       indent(sb, this.indentLevel++);
       sb.push("namespace ");
-      sb.push(element.simpleName);
+      sb.push(element.name);
       sb.push(" {\n");
       for (let member of members.values()) this.visitElement(member);
       indent(sb, --this.indentLevel);
@@ -978,7 +1004,8 @@ function hasCompiledMember(element: Element): bool {
     for (let member of members.values()) {
       switch (member.kind) {
         case ElementKind.FUNCTION_PROTOTYPE: {
-          for (let instances of (<FunctionPrototype>member).instances.values()) {
+          let instances = (<FunctionPrototype>member).instances;
+          if (instances) {
             for (let instance of instances.values()) {
               if (instance.is(CommonFlags.COMPILED)) return true;
             }
@@ -986,8 +1013,11 @@ function hasCompiledMember(element: Element): bool {
           break;
         }
         case ElementKind.CLASS_PROTOTYPE: {
-          for (let instance of (<ClassPrototype>member).instances.values()) {
-            if (instance.is(CommonFlags.COMPILED)) return true;
+          let instances = (<ClassPrototype>member).instances;
+          if (instances) {
+            for (let instance of instances.values()) {
+              if (instance.is(CommonFlags.COMPILED)) return true;
+            }
           }
           break;
         }

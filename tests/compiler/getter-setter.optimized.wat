@@ -10,7 +10,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:getter-setter (; 1 ;) (type $_)
   global.get $getter-setter/Foo._bar
   if
    i32.const 0
@@ -47,7 +47,10 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:getter-setter
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

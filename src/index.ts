@@ -88,11 +88,6 @@ export function setTarget(options: Options, target: Target): void {
   options.target = target;
 }
 
-/** Sets the `noTreeShaking` option. */
-export function setNoTreeShaking(options: Options, noTreeShaking: bool): void {
-  options.noTreeShaking = noTreeShaking;
-}
-
 /** Sets the `noAssert` option. */
 export function setNoAssert(options: Options, noAssert: bool): void {
   options.noAssert = noAssert;
@@ -101,6 +96,11 @@ export function setNoAssert(options: Options, noAssert: bool): void {
 /** Sets the `importMemory` option. */
 export function setImportMemory(options: Options, importMemory: bool): void {
   options.importMemory = importMemory;
+}
+
+/** Sets the `sharedMemory` option. */
+export function setSharedMemory(options: Options, sharedMemory: i32): void {
+  options.sharedMemory = sharedMemory;
 }
 
 /** Sets the `importTable` option. */
@@ -191,6 +191,7 @@ export * from "./decompiler";
 export * from "./definitions";
 export * from "./diagnosticMessages.generated";
 export * from "./diagnostics";
+export * from "./flow";
 export * from "./module";
 export * from "./parser";
 export * from "./program";

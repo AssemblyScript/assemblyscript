@@ -18,7 +18,7 @@
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $retain-i32/si (mut i32) (i32.const 0))
  (global $retain-i32/ui (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 40))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 40))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -332,7 +332,7 @@
    unreachable
   end
  )
- (func $start (; 2 ;) (type $_)
+ (func $start:retain-i32 (; 2 ;) (type $_)
   (local $0 i32)
   i32.const 0
   global.get $~lib/builtins/i8.MAX_VALUE
@@ -792,6 +792,9 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $_)
+  call $start:retain-i32
+ )
+ (func $null (; 4 ;) (type $_)
  )
 )

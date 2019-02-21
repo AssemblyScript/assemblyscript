@@ -21,6 +21,12 @@ const config = {
     ],
     "type": "b"
   },
+  "noDiff": {
+    "description": [
+      "Disables output of detailed fixture differences."
+    ],
+    "type": "b"
+  },
   "help": {
     "description": "Prints this message and exits.",
     "type": "b",
@@ -128,13 +134,23 @@ tests.forEach(filename => {
       console.log("- " + colorsUtil.yellow("Created fixture"));
     } else {
       let expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
-      let diffs = diff(basename + ".untouched.wat", expected, actual);
-      if (diffs !== null) {
-        console.log(diffs);
-        console.log("- " + colorsUtil.red("diff ERROR"));
-        failed = true;
-      } else
-        console.log("- " + colorsUtil.green("diff OK"));
+      if (args.noDiff) {
+        if (expected != actual) {
+          console.log("- " + colorsUtil.red("compare ERROR"));
+          failed = true;
+        } else {
+          console.log("- " + colorsUtil.green("compare OK"));
+        }
+      } else {
+        let diffs = diff(basename + ".untouched.wat", expected, actual);
+        if (diffs !== null) {
+          console.log(diffs);
+          console.log("- " + colorsUtil.red("diff ERROR"));
+          failed = true;
+        } else {
+          console.log("- " + colorsUtil.green("diff OK"));
+        }
+      }
     }
     console.log();
 
