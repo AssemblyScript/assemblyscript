@@ -31,7 +31,22 @@
  (export "bench" (func $assembly/index/bench))
  (export "getBody" (func $assembly/index/getBody))
  (start $start)
- (func $~lib/array/Array<Body>#__unchecked_get (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+ )
+ (func $start:assembly/index (; 2 ;) (type $_)
+  call $start:~lib/allocator/arena
+ )
+ (func $~lib/array/Array<Body>#__unchecked_get (; 3 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -51,7 +66,7 @@
   i32.add
   i32.load offset=8
  )
- (func $~lib/array/Array<Body>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Body>#__get (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -84,7 +99,7 @@
    unreachable
   end
  )
- (func $assembly/index/Body#offsetMomentum (; 3 ;) (type $iFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
+ (func $assembly/index/Body#offsetMomentum (; 5 ;) (type $iFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
   local.get $0
   local.get $1
   f64.neg
@@ -105,7 +120,7 @@
   f64.store offset=40
   local.get $0
  )
- (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -113,7 +128,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/internal/allocator/MAX_SIZE_32
+  i32.const 1073741824
   i32.gt_u
   if
    unreachable
@@ -130,9 +145,9 @@
   i32.gt_u
   select
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.const -1
   i32.xor
   i32.and
@@ -184,12 +199,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 7 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $assembly/index/NBodySystem#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/index/NBodySystem#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 f64)
   (local $3 f64)
   (local $4 f64)
@@ -278,7 +293,7 @@
   i32.store
   local.get $0
  )
- (func $assembly/index/Body#constructor (; 7 ;) (type $iFFFFFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
+ (func $assembly/index/Body#constructor (; 9 ;) (type $iFFFFFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
   local.get $0
   i32.eqz
   if
@@ -309,7 +324,7 @@
   f64.store offset=48
   local.get $0
  )
- (func $assembly/index/Sun (; 8 ;) (type $i) (result i32)
+ (func $assembly/index/Sun (; 10 ;) (type $i) (result i32)
   i32.const 0
   f64.const 0
   f64.const 0
@@ -320,7 +335,7 @@
   global.get $assembly/index/SOLAR_MASS
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Jupiter (; 9 ;) (type $i) (result i32)
+ (func $assembly/index/Jupiter (; 11 ;) (type $i) (result i32)
   i32.const 0
   f64.const 4.841431442464721
   f64.const -1.1603200440274284
@@ -339,7 +354,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Saturn (; 10 ;) (type $i) (result i32)
+ (func $assembly/index/Saturn (; 12 ;) (type $i) (result i32)
   i32.const 0
   f64.const 8.34336671824458
   f64.const 4.124798564124305
@@ -358,7 +373,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Uranus (; 11 ;) (type $i) (result i32)
+ (func $assembly/index/Uranus (; 13 ;) (type $i) (result i32)
   i32.const 0
   f64.const 12.894369562139131
   f64.const -15.111151401698631
@@ -377,7 +392,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Neptune (; 12 ;) (type $i) (result i32)
+ (func $assembly/index/Neptune (; 14 ;) (type $i) (result i32)
   i32.const 0
   f64.const 15.379697114850917
   f64.const -25.919314609987964
@@ -396,11 +411,11 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $~lib/internal/arraybuffer/computeSize (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 15 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.const 8
   i32.add
   i32.const 1
   i32.sub
@@ -408,11 +423,11 @@
   i32.sub
   i32.shl
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 16 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+  i32.const 1073741816
   i32.le_u
   i32.eqz
   if
@@ -437,7 +452,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 15 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 17 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -691,7 +706,7 @@
    end
   end
  )
- (func $~lib/array/Array<Body>#constructor (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Body>#constructor (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -736,9 +751,9 @@
   local.get $0
   local.get $1
   i32.store offset=4
-  block $memory.fill|inlined.0
+  block $~lib/memory/memory.fill|inlined.0
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -752,7 +767,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Body>#__unchecked_set (; 17 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Body>#__unchecked_set (; 19 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -776,7 +791,7 @@
   local.get $5
   i32.store offset=8
  )
- (func $assembly/index/init (; 18 ;) (type $_)
+ (func $assembly/index/init (; 20 ;) (type $_)
   (local $0 i32)
   i32.const 0
   block (result i32)
@@ -809,7 +824,7 @@
   call $assembly/index/NBodySystem#constructor
   global.set $assembly/index/system
  )
- (func $assembly/index/NBodySystem#advance (; 19 ;) (type $iF_) (param $0 i32) (param $1 f64)
+ (func $assembly/index/NBodySystem#advance (; 21 ;) (type $iF_) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1202,14 +1217,14 @@
   end
   local.get $1
  )
- (func $assembly/index/step (; 21 ;) (type $F) (result f64)
+ (func $assembly/index/step (; 23 ;) (type $F) (result f64)
   global.get $assembly/index/system
   f64.const 0.01
   call $assembly/index/NBodySystem#advance
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 22 ;) (type $i_) (param $0 i32)
+ (func $assembly/index/bench (; 24 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   block $break|0
    i32.const 0
@@ -1255,19 +1270,9 @@
    i32.const 0
   end
  )
- (func $start (; 24 ;) (type $_)
-  global.get $HEAP_BASE
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.add
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
-  nop
+ (func $start (; 26 ;) (type $_)
+  call $start:assembly/index
  )
- (func $null (; 25 ;) (type $_)
+ (func $null (; 27 ;) (type $_)
  )
 )
