@@ -8643,7 +8643,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2235
+   i32.const 2234
    i32.const 24
    call $~lib/env/abort
    unreachable

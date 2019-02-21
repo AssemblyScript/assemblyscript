@@ -1640,7 +1640,6 @@ export namespace NativeMathf {
     const c2pio2 = reinterpret<f64>(0x400921FB54442D18); // M_PI_2 * 2
     const c3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // M_PI_2 * 3
     const c4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
-    const Ox1p120f = reinterpret<f32>(0x7b800000);       // 2 ** 120
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
@@ -2269,7 +2268,6 @@ export namespace NativeMathf {
     const s2pio2 = reinterpret<f64>(0x400921FB54442D18); // M_PI_2 * 2
     const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // M_PI_2 * 3
     const s4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
-    const Ox1p120f = reinterpret<f32>(0x7b800000);       // 2 ** 120
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
@@ -2337,7 +2335,6 @@ export namespace NativeMathf {
     const t2pio2 = reinterpret<f64>(0x400921FB54442D18); // 2 * M_PI_2
     const t3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // 3 * M_PI_2
     const t4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
-    const Ox1p120f = reinterpret<f32>(0x7b800000); // 2 ** 120
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
@@ -2553,7 +2550,6 @@ export namespace NativeMathf {
     const s2pio2 = reinterpret<f64>(0x400921FB54442D18); // 2 * M_PI_2
     const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // 3 * M_PI_2
     const s4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
-    const Ox1p120f = reinterpret<f32>(0x7b800000);       // 2 ** 120
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
