@@ -182,14 +182,14 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   visitClass(element: Class): void {
-    if (!element.is(CommonFlags.EXPORT)) {
+    if (!element.is(CommonFlags.MODULE_EXPORT)) {
       return;
     }
     this.exportedClasses.push(element);
   }
 
   visitFunction(element: Function): void {
-    if (!element.is(CommonFlags.EXPORT)) {
+    if (!element.is(CommonFlags.MODULE_EXPORT)) {
       return;
     }
     this.exportedFunctions.push(element);
@@ -548,7 +548,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       this.generateDecodeFunction(c.type);
     });
 
-    let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions);
+    let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions).filter(e => e.is(CommonFlags.MODULE_EXPORT));
     let allImportsStr = allExported.map(c => `${c.name} as wrapped_${c.name}`).join(", ");
     this.sb = [`
       import { near } from "./near";
@@ -586,7 +586,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.getImports(mainSource).forEach(statement => {
       if (statement.declarations) {
         let declarationsStr = statement.declarations!
-          .map(declaration => `${declaration.externalName.text} as ${declaration.name.text}`)
+          .map(declaration => `${declaration.foreignName.text} as ${declaration.name.text}`)
           .join(",");
         this.sb.push(`import {${declarationsStr}} from "${statement.path.value}";`);
         statement.declarations.forEach(d => {
@@ -606,7 +606,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
       .filter(statement =>
         statement.kind == NodeKind.FUNCTIONDECLARATION ||
         statement.kind == NodeKind.CLASSDECLARATION);
-    return declarations.filter(d => d.isTopLevelExport);
+    return declarations.filter(d => d.is(CommonFlags.MODULE_EXPORT));
   }
 }
 
