@@ -212,17 +212,17 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private generateArgsParser(element: Function) {
     let signature = element.signature;
     let fields = signature.parameterNames ? signature.parameterNames.map((paramName, i) => {
-      return { simpleName: paramName, type: signature.parameterTypes[i] };
+      return { name: paramName, type: signature.parameterTypes[i] };
     }) : [];
     fields.forEach(field => this.generateDecodeFunction(field.type));
-    this.sb.push(`export class __near_ArgsParser_${element.simpleName} extends ThrowingJSONHandler {
+    this.sb.push(`export class __near_ArgsParser_${element.name} extends ThrowingJSONHandler {
         buffer: Uint8Array;
-        decoder: JSONDecoder<__near_ArgsParser_${element.simpleName}>;
+        decoder: JSONDecoder<__near_ArgsParser_${element.name}>;
         handledRoot: boolean = false;
       `);
     if (signature.parameterNames) {
       fields.forEach((field) => {
-        this.sb.push(`__near_param_${field.simpleName}: ${this.wrappedTypeName(field.type)};`);
+        this.sb.push(`__near_param_${field.name}: ${this.wrappedTypeName(field.type)};`);
       });
       this.generateHandlerMethods("this.__near_param_", fields);
     } else {
@@ -235,17 +235,17 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let signature = element.signature;
     let returnType = signature.returnType;
     this.generateEncodeFunction(returnType);
-    this.sb.push(`export function near_func_${element.simpleName}(): void {
+    this.sb.push(`export function near_func_${element.name}(): void {
       let json = new Uint8Array(input_read_len());
       input_read_into(json.buffer.data);
-      let handler = new __near_ArgsParser_${element.simpleName}();
+      let handler = new __near_ArgsParser_${element.name}();
       handler.buffer = json;
-      handler.decoder = new JSONDecoder<__near_ArgsParser_${element.simpleName}>(handler);
+      handler.decoder = new JSONDecoder<__near_ArgsParser_${element.name}>(handler);
       handler.decoder.deserialize(json);`);
     if (returnType.toString() != "void") {
-      this.sb.push(`let result = wrapped_${element.simpleName}(`);
+      this.sb.push(`let result = wrapped_${element.name}(`);
     } else {
-      this.sb.push(`wrapped_${element.simpleName}(`);
+      this.sb.push(`wrapped_${element.name}(`);
     }
     if (signature.parameterNames) {
       this.sb.push(signature.parameterNames.map(paramName => `handler.__near_param_${paramName}`).join(","));
@@ -272,8 +272,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
       if (matchingFields.length > 0) {
         this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {`);
         matchingFields.forEach(field => {
-          this.sb.push(`if (name == "${field.simpleName}") {
-            ${valuePrefix}${field.simpleName} = value;
+          this.sb.push(`if (name == "${field.name}") {
+            ${valuePrefix}${field.name} = value;
             return;
           }`);
         });
@@ -284,8 +284,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
     this.sb.push("setNull(name: string): void {");
     fields.forEach((field) => {
-      this.sb.push(`if (name == "${field.simpleName}") {
-        ${valuePrefix}${field.simpleName} = <${this.wrappedTypeName(field.type)}>null;
+      this.sb.push(`if (name == "${field.name}") {
+        ${valuePrefix}${field.name} = <${this.wrappedTypeName(field.type)}>null;
         return;
       }`);
     });
@@ -318,8 +318,8 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private generatePushHandler(valuePrefix: string, fields: any[]) {
     fields.forEach((field) => {
       if (!(field.type.toString() in this.typeMapping)) {
-        this.sb.push(`if (name == "${field.simpleName}") {
-          ${valuePrefix}${field.simpleName} = <${field.type}>__near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
+        this.sb.push(`if (name == "${field.name}") {
+          ${valuePrefix}${field.name} = <${field.type}>__near_decode_${this.encodeType(field.type)}(this.buffer, this.decoder.state);
           return false;
         }`);
       }
@@ -396,7 +396,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
           encoder: JSONEncoder): void {`);
       this.getFields(type.classReference).forEach((field) => {
         let fieldType = field.type;
-        let fieldName = field.simpleName;
+        let fieldName = field.name;
         let sourceExpr = `value.${fieldName}`;
         this.generateFieldEncoder(fieldType, `"${fieldName}"`, sourceExpr);
       });
@@ -406,7 +406,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private tryUsingImport(type: Type, methodName: string): bool {
-    let importedFile = this.filesByImport.get(type.classReference!.simpleName);
+    let importedFile = this.filesByImport.get(type.classReference!.name);
     if (importedFile) {
       if (this.hasExport(importedFile, methodName)) {
         this.sb.push(`import { ${methodName} } from "${importedFile}";`);
@@ -444,14 +444,14 @@ export class NEARBindingsBuilder extends ExportsWalker {
     }
     let cls = type.classReference;
     if (this.exportedClasses.indexOf(cls) != -1) {
-      return "wrapped_" + cls.simpleName;
+      return "wrapped_" + cls.name;
     }
     if (cls.typeArguments && cls.typeArguments.length > 0) {
-      return cls.prototype.simpleName + "<" +
+      return cls.prototype.name + "<" +
         cls.typeArguments.map(argType => this.wrappedTypeName(argType)).join(", ") +
       ">"
     }
-    return cls.simpleName;
+    return cls.name;
   }
 
   private generateDecodeFunction(type: Type) {
@@ -525,7 +525,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private isArrayType(type: Type): bool {
-    return !!(type.classReference && type.classReference.prototype.simpleName == "Array" && type.classReference.typeArguments);
+    return !!(type.classReference && type.classReference.prototype.name == "Array" && type.classReference.typeArguments);
   }
 
   private getFields(element: Class): Field[] {
@@ -549,7 +549,7 @@ export class NEARBindingsBuilder extends ExportsWalker {
     });
 
     let allExported = (<Element[]>this.exportedClasses).concat(<Element[]>this.exportedFunctions);
-    let allImportsStr = allExported.map(c => `${c.simpleName} as wrapped_${c.simpleName}`).join(", ");
+    let allImportsStr = allExported.map(c => `${c.name} as wrapped_${c.name}`).join(", ");
     this.sb = [`
       import { near } from "./near";
       import { JSONEncoder} from "./json/encoder"
@@ -565,15 +565,15 @@ export class NEARBindingsBuilder extends ExportsWalker {
       declare function input_read_into(ptr: usize): void;
     `].concat(this.sb);
     this.exportedClasses.forEach(c => {
-      this.sb.push(`export class ${c.simpleName} extends ${this.wrappedTypeName(c.type)} {
-        static decode(json: Uint8Array): ${c.simpleName} {
-          return <${c.simpleName}>__near_decode_${this.encodeType(c.type)}(json, null);
+      this.sb.push(`export class ${c.name} extends ${this.wrappedTypeName(c.type)} {
+        static decode(json: Uint8Array): ${c.name} {
+          return <${c.name}>__near_decode_${this.encodeType(c.type)}(json, null);
         }
 
         encode(): Uint8Array {
           let encoder: JSONEncoder = new JSONEncoder();
           encoder.pushObject(null);
-          __near_encode_${this.encodeType(c.type)}(<${c.simpleName}>this, encoder);
+          __near_encode_${this.encodeType(c.type)}(<${c.name}>this, encoder);
           encoder.popObject();
           return encoder.serialize();
         }
