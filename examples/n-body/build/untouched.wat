@@ -17,19 +17,13 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/math/NativeMath.PI f64 (f64.const 3.141592653589793))
  (global $assembly/index/SOLAR_MASS f64 (f64.const 39.47841760435743))
  (global $assembly/index/DAYS_PER_YEAR f64 (f64.const 365.24))
  (global $assembly/index/system (mut i32) (i32.const 0))
- (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
- (global $HEAP_BASE i32 (i32.const 100))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 100))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "init" (func $assembly/index/init))
@@ -1043,7 +1037,7 @@
    unreachable
   end
  )
- (func $assembly/index/NBodySystem#energy (; 20 ;) (type $iF) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 22 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -1239,7 +1233,7 @@
    unreachable
   end
  )
- (func $assembly/index/getBody (; 23 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 25 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   global.get $assembly/index/system

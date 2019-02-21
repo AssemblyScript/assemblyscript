@@ -1,37 +1,39 @@
 (module
- (type $iii (func (param i32 i32) (result i32)))
  (type $_ (func))
+ (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $i_ (func (param i32)))
  (type $ii_ (func (param i32 i32)))
  (memory $0 0)
  (table $0 4 funcref)
  (elem (i32.const 0) $null $~lib/collector/itcm/__gc_mark $std/gc-object/Base~gc $std/gc-object/Custom~gc)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/collector/itcm/TRACE i32 (i32.const 0))
- (global $~lib/collector/itcm/HEADER_SIZE i32 (i32.const 16))
- (global $~lib/collector/itcm/State.INIT i32 (i32.const 0))
- (global $~lib/collector/itcm/State.IDLE i32 (i32.const 1))
- (global $~lib/collector/itcm/State.MARK i32 (i32.const 2))
- (global $~lib/collector/itcm/State.SWEEP i32 (i32.const 3))
  (global $~lib/collector/itcm/state (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/white (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/fromSpace (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/toSpace (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/gc-object/obj (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/started (mut i32) (i32.const 0))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-object/main))
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:~lib/allocator/arena (; 0 ;) (type $_)
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+ )
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -39,7 +41,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/internal/allocator/MAX_SIZE_32
+  i32.const 1073741824
   i32.gt_u
   if
    unreachable
@@ -56,9 +58,9 @@
   i32.gt_u
   select
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.const -1
   i32.xor
   i32.and
@@ -110,7 +112,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/collector/itcm/ManagedObjectList#clear (; 1 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#clear (; 2 ;) (type $i_) (param $0 i32)
   local.get $0
   local.get $0
   i32.store
@@ -118,13 +120,13 @@
   local.get $0
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#get:color (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:color (; 3 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const 3
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#get:next (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:next (; 4 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const 3
@@ -132,7 +134,7 @@
   i32.xor
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#set:next (; 4 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:next (; 5 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   local.get $0
@@ -142,7 +144,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/ManagedObject#unlink (; 5 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#unlink (; 6 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -158,7 +160,7 @@
   local.get $1
   call $~lib/collector/itcm/ManagedObject#set:next
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 6 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 7 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load offset=4
@@ -176,7 +178,7 @@
   local.get $1
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 7 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 8 ;) (type $i_) (param $0 i32)
   local.get $0
   global.get $~lib/collector/itcm/iter
   i32.eq
@@ -201,7 +203,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/__gc_mark (; 8 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/__gc_mark (; 9 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   local.get $0
   if
@@ -209,7 +211,7 @@
     local.get $0
     local.set $1
     local.get $1
-    global.get $~lib/collector/itcm/HEADER_SIZE
+    i32.const 16
     i32.sub
    end
    local.set $1
@@ -223,7 +225,7 @@
    end
   end
  )
- (func $~lib/collector/itcm/ManagedObject#set:color (; 9 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:color (; 10 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $0
   i32.load
@@ -235,10 +237,10 @@
   i32.or
   i32.store
  )
- (func $~lib/allocator/arena/__memory_free (; 10 ;) (type $i_) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 11 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $~lib/collector/itcm/step (; 11 ;) (type $_)
+ (func $~lib/collector/itcm/step (; 12 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   block $break|0
@@ -249,26 +251,26 @@
        global.get $~lib/collector/itcm/state
        local.set $1
        local.get $1
-       global.get $~lib/collector/itcm/State.INIT
+       i32.const 0
        i32.eq
        br_if $case0|0
        local.get $1
-       global.get $~lib/collector/itcm/State.IDLE
+       i32.const 1
        i32.eq
        br_if $case1|0
        local.get $1
-       global.get $~lib/collector/itcm/State.MARK
+       i32.const 2
        i32.eq
        br_if $case2|0
        local.get $1
-       global.get $~lib/collector/itcm/State.SWEEP
+       i32.const 3
        i32.eq
        br_if $case3|0
        br $break|0
       end
       block
        block $~lib/memory/memory.allocate|inlined.0 (result i32)
-        global.get $~lib/collector/itcm/HEADER_SIZE
+        i32.const 16
         local.set $1
         local.get $1
         call $~lib/allocator/arena/__memory_allocate
@@ -281,7 +283,7 @@
        global.get $~lib/collector/itcm/fromSpace
        call $~lib/collector/itcm/ManagedObjectList#clear
        block $~lib/memory/memory.allocate|inlined.1 (result i32)
-        global.get $~lib/collector/itcm/HEADER_SIZE
+        i32.const 16
         local.set $1
         local.get $1
         call $~lib/allocator/arena/__memory_allocate
@@ -295,14 +297,14 @@
        call $~lib/collector/itcm/ManagedObjectList#clear
        global.get $~lib/collector/itcm/toSpace
        global.set $~lib/collector/itcm/iter
-       global.get $~lib/collector/itcm/State.IDLE
+       i32.const 1
        global.set $~lib/collector/itcm/state
       end
      end
      block
       i32.const 1
       call $~iterateRoots
-      global.get $~lib/collector/itcm/State.MARK
+      i32.const 2
       global.set $~lib/collector/itcm/state
       br $break|0
       unreachable
@@ -324,12 +326,12 @@
       i32.eqz
       call $~lib/collector/itcm/ManagedObject#set:color
       i32.const 1
-      global.set $~argc
+      global.set $~lib/argc
       block $~lib/collector/itcm/objToRef|inlined.0 (result i32)
        local.get $0
        local.set $1
        local.get $1
-       global.get $~lib/collector/itcm/HEADER_SIZE
+       i32.const 16
        i32.add
       end
       local.get $0
@@ -357,7 +359,7 @@
        local.get $1
        call $~lib/collector/itcm/ManagedObject#get:next
        global.set $~lib/collector/itcm/iter
-       global.get $~lib/collector/itcm/State.SWEEP
+       i32.const 3
        global.set $~lib/collector/itcm/state
       end
      end
@@ -377,7 +379,7 @@
      call $~lib/collector/itcm/ManagedObject#get:next
      global.set $~lib/collector/itcm/iter
      local.get $0
-     global.get $HEAP_BASE
+     global.get $~lib/memory/HEAP_BASE
      i32.ge_u
      if
       block $~lib/memory/memory.free|inlined.0
@@ -391,7 +393,7 @@
     else     
      global.get $~lib/collector/itcm/toSpace
      call $~lib/collector/itcm/ManagedObjectList#clear
-     global.get $~lib/collector/itcm/State.IDLE
+     i32.const 1
      global.set $~lib/collector/itcm/state
     end
     br $break|0
@@ -400,12 +402,12 @@
    unreachable
   end
  )
- (func $~lib/collector/itcm/__gc_allocate (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/collector/itcm/__gc_allocate (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  global.get $~lib/internal/allocator/MAX_SIZE_32
-  global.get $~lib/collector/itcm/HEADER_SIZE
+  i32.const 1073741824
+  i32.const 16
   i32.sub
   i32.gt_u
   if
@@ -413,7 +415,7 @@
   end
   call $~lib/collector/itcm/step
   block $~lib/memory/memory.allocate|inlined.2 (result i32)
-   global.get $~lib/collector/itcm/HEADER_SIZE
+   i32.const 16
    local.get $0
    i32.add
    local.set $2
@@ -435,11 +437,11 @@
    local.get $3
    local.set $2
    local.get $2
-   global.get $~lib/collector/itcm/HEADER_SIZE
+   i32.const 16
    i32.add
   end
  )
- (func $std/gc-object/Base~gc (; 13 ;) (type $i_) (param $0 i32)
+ (func $std/gc-object/Base~gc (; 14 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -448,7 +450,7 @@
   local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $std/gc-object/Base#constructor (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/gc-object/Base#constructor (; 15 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -459,7 +461,7 @@
   end
   local.get $0
  )
- (func $std/gc-object/Custom~gc (; 15 ;) (type $i_) (param $0 i32)
+ (func $std/gc-object/Custom~gc (; 16 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -475,7 +477,7 @@
   i32.load offset=4
   call $~lib/collector/itcm/__gc_mark
  )
- (func $std/gc-object/Custom#constructor (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/gc-object/Custom#constructor (; 17 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -495,7 +497,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/collector/itcm/__gc_collect (; 17 ;) (type $_)
+ (func $~lib/collector/itcm/__gc_collect (; 18 ;) (type $_)
   (local $0 i32)
   block $break|0
    block $case1|0
@@ -503,11 +505,11 @@
      global.get $~lib/collector/itcm/state
      local.set $0
      local.get $0
-     global.get $~lib/collector/itcm/State.INIT
+     i32.const 0
      i32.eq
      br_if $case0|0
      local.get $0
-     global.get $~lib/collector/itcm/State.IDLE
+     i32.const 1
      i32.eq
      br_if $case1|0
      br $break|0
@@ -518,7 +520,7 @@
   block $break|1
    loop $continue|1
     global.get $~lib/collector/itcm/state
-    global.get $~lib/collector/itcm/State.IDLE
+    i32.const 1
     i32.ne
     if
      call $~lib/collector/itcm/step
@@ -527,32 +529,12 @@
    end
   end
  )
- (func $~lib/gc/gc.collect (; 18 ;) (type $_)
+ (func $~lib/gc/gc.collect (; 19 ;) (type $_)
   call $~lib/collector/itcm/__gc_collect
   return
  )
- (func $std/gc-object/main (; 19 ;) (type $_)
-  global.get $~started
-  i32.eqz
-  if
-   call $start
-   i32.const 1
-   global.set $~started
-  end
- )
- (func $start (; 20 ;) (type $_)
-  global.get $HEAP_BASE
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.add
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
-  global.get $~lib/collector/itcm/State.INIT
-  global.set $~lib/collector/itcm/state
+ (func $start:std/gc-object (; 20 ;) (type $_)
+  call $start:~lib/allocator/arena
   i32.const 0
   call $std/gc-object/Custom#constructor
   global.set $std/gc-object/obj
@@ -565,9 +547,21 @@
   global.set $std/gc-object/obj
   call $~lib/gc/gc.collect
  )
- (func $null (; 21 ;) (type $_)
+ (func $std/gc-object/main (; 21 ;) (type $_)
+  global.get $~lib/started
+  i32.eqz
+  if
+   call $start
+   i32.const 1
+   global.set $~lib/started
+  end
  )
- (func $~iterateRoots (; 22 ;) (type $i_) (param $0 i32)
+ (func $start (; 22 ;) (type $_)
+  call $start:std/gc-object
+ )
+ (func $null (; 23 ;) (type $_)
+ )
+ (func $~iterateRoots (; 24 ;) (type $i_) (param $0 i32)
   global.get $std/gc-object/obj
   local.get $0
   call_indirect (type $i_)

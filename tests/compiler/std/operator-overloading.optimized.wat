@@ -1,10 +1,10 @@
 (module
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
- (type $_ (func))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -1202,7 +1202,7 @@
   i32.trunc_f64_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $start (; 6 ;) (type $_)
+ (func $start:std/operator-overloading (; 6 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2457,7 +2457,10 @@
    unreachable
   end
  )
- (func $null (; 7 ;) (type $_)
+ (func $start (; 7 ;) (type $_)
+  call $start:std/operator-overloading
+ )
+ (func $null (; 8 ;) (type $_)
   nop
  )
 )

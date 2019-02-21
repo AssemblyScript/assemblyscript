@@ -1,6 +1,6 @@
 (module
- (type $ii (func (param i32) (result i32)))
  (type $_ (func))
+ (type $ii (func (param i32) (result i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s")
  (table $0 1 funcref)

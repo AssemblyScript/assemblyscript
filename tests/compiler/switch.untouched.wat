@@ -7,7 +7,7 @@
  (data (i32.const 8) "\t\00\00\00s\00w\00i\00t\00c\00h\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 32))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 32))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -168,7 +168,7 @@
   drop
   i32.const 2
  )
- (func $start (; 8 ;) (type $_)
+ (func $start:switch (; 8 ;) (type $_)
   i32.const 0
   call $switch/doSwitch
   i32.const 0
@@ -560,6 +560,9 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (type $_)
+ (func $start (; 9 ;) (type $_)
+  call $start:switch
+ )
+ (func $null (; 10 ;) (type $_)
  )
 )

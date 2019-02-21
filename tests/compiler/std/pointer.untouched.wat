@@ -16,7 +16,7 @@
  (global $std/pointer/sub (mut i32) (i32.const 0))
  (global $std/pointer/nextOne (mut i32) (i32.const 0))
  (global $std/pointer/buf (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 40))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 40))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -1747,7 +1747,7 @@
   local.get $1
   f32.store
  )
- (func $start (; 7 ;) (type $_)
+ (func $start:std/pointer (; 7 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 f32)
@@ -2350,6 +2350,9 @@
    unreachable
   end
  )
- (func $null (; 8 ;) (type $_)
+ (func $start (; 8 ;) (type $_)
+  call $start:std/pointer
+ )
+ (func $null (; 9 ;) (type $_)
  )
 )

@@ -4,9 +4,9 @@ import {
  } from "./allocator";
 
 /** Size of an ArrayBuffer header. */
-export const HEADER_SIZE: usize = (offsetof<ArrayBuffer>() + AL_MASK) & ~AL_MASK;
+@inline export const HEADER_SIZE: usize = (offsetof<ArrayBuffer>() + AL_MASK) & ~AL_MASK;
 /** Maximum byte length of an ArrayBuffer. */
-export const MAX_BLENGTH: i32 = <i32>MAX_SIZE_32 - HEADER_SIZE;
+@inline export const MAX_BLENGTH: i32 = <i32>MAX_SIZE_32 - HEADER_SIZE;
 
 function computeSize(byteLength: i32): usize {
   // round up to power of 2, with HEADER_SIZE=8:

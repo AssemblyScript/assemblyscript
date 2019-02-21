@@ -21,4 +21,5 @@ obj = null;
 
 gc.collect();
 
+@start
 export function main(): void {}

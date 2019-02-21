@@ -1159,7 +1159,7 @@
    end
   end
  )
- (func $start (; 4 ;) (type $_)
+ (func $start:std/pointer (; 4 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   i32.const 8
@@ -1548,7 +1548,10 @@
    unreachable
   end
  )
- (func $null (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $_)
+  call $start:std/pointer
+ )
+ (func $null (; 6 ;) (type $_)
   nop
  )
 )

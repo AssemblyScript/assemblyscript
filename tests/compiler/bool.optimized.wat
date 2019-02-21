@@ -16,7 +16,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:bool (; 1 ;) (type $_)
   global.get $bool/i
   i32.const 0
   i32.ne
@@ -109,7 +109,10 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:bool
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

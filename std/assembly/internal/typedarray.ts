@@ -46,14 +46,14 @@ export abstract class TypedArray<T> {
   }
 
   @operator("[]=")
-  protected __set(index: i32, value: NATIVE<T>): void {
+  protected __set(index: i32, value: native<T>): void {
     if (<u32>index >= <u32>(this.byteLength >>> alignof<T>())) throw new Error("Index out of bounds");
-    STORE<T,NATIVE<T>>(this.buffer, index, value, this.byteOffset);
+    STORE<T,native<T>>(this.buffer, index, value, this.byteOffset);
   }
 
   @inline @operator("{}=")
-  protected __unchecked_set(index: i32, value: NATIVE<T>): void {
-    STORE<T,NATIVE<T>>(this.buffer, index, value, this.byteOffset);
+  protected __unchecked_set(index: i32, value: native<T>): void {
+    STORE<T,native<T>>(this.buffer, index, value, this.byteOffset);
   }
 
   // copyWithin(target: i32, start: i32, end: i32 = this.length): this
@@ -62,7 +62,7 @@ export abstract class TypedArray<T> {
 @inline
 export function FILL<TArray extends TypedArray<T>, T extends number>(
   array: TArray,
-  value: NATIVE<T>,
+  value: native<T>,
   start: i32,
   end: i32
 ): TArray {
@@ -81,7 +81,7 @@ export function FILL<TArray extends TypedArray<T>, T extends number>(
     }
   } else {
     for (; start < end; ++start) {
-      STORE<T,NATIVE<T>>(buffer, start, value, byteOffset);
+      STORE<T,native<T>>(buffer, start, value, byteOffset);
     }
   }
   return array;
@@ -177,7 +177,7 @@ export function MAP<TArray extends TypedArray<T>, T>(
   var result = instantiate<TArray>(length);
   var resultBuffer = result.buffer;
   for (let i = 0; i < length; i++) {
-    STORE<T, NATIVE<T>>(resultBuffer, i, <NATIVE<T>>callbackfn(LOAD<T>(buffer, i, byteOffset), i, array));
+    STORE<T, native<T>>(resultBuffer, i, <native<T>>callbackfn(LOAD<T>(buffer, i, byteOffset), i, array));
   }
 
   return result;
