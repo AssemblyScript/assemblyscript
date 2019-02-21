@@ -24,10 +24,11 @@ import {
 
 // TODO: sin, cos, tan for Math namespace
 
+/*
 var volatile32: f32;
 var volatile64: f64;
 
-@inline /** @internal */
+@inline // @internal
 function FORCE_EVAL<T>(expr: T): void {
   if (sizeof<T>() == 4) {
     volatile32 = <f32>expr;
@@ -35,6 +36,7 @@ function FORCE_EVAL<T>(expr: T): void {
     volatile64 = <f64>expr;
   }
 }
+*/
 
 /** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
@@ -63,11 +65,11 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
 }
 
 /** @internal */
-var random_seeded = false;
-var random_state0_64: u64;
-var random_state1_64: u64;
-var random_state0_32: u32;
-var random_state1_32: u32;
+@lazy var random_seeded = false;
+@lazy var random_state0_64: u64;
+@lazy var random_state1_64: u64;
+@lazy var random_state0_32: u32;
+@lazy var random_state1_32: u32;
 
 function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanche
   h ^= h >> 33;                     // see: https://github.com/aappleby/smhasher
@@ -1245,11 +1247,11 @@ export namespace NativeMath {
 }
 
 /** @internal */
-var rempio2f_y: f64;
+@lazy var rempio2f_y: f64;
 
 /** @public Used as return values from Mathf.sincos */
-@global var sincos_s32: f32;
-@global var sincos_c32: f32;
+@global @lazy var sincos_s32: f32;
+@global @lazy var sincos_c32: f32;
 
 /** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
@@ -1647,7 +1649,7 @@ export namespace NativeMathf {
     if (ix <= 0x3f490fda) {  /* |x| ~<= pi/4 */
       if (ix < 0x39800000) {  /* |x| < 2**-12 */
         /* raise inexact if x != 0 */
-        FORCE_EVAL(x + Ox1p120f);
+        // FORCE_EVAL(x + Ox1p120f);
         return 1;
       }
       return cos_kernf(x);
@@ -2276,7 +2278,7 @@ export namespace NativeMathf {
     if (ix <= 0x3f490fda) { /* |x| ~<= pi/4 */
       if (ix < 0x39800000) {  /* |x| < 2**-12 */
         /* raise inexact if x!=0 and underflow if subnormal */
-        FORCE_EVAL(ix < 0x00800000 ? x / Ox1p120f : x + Ox1p120f);
+        // FORCE_EVAL(ix < 0x00800000 ? x / Ox1p120f : x + Ox1p120f);
         return x;
       }
       return sin_kernf(x);
@@ -2344,7 +2346,7 @@ export namespace NativeMathf {
     if (ix <= 0x3f490fda) {  /* |x| ~<= pi/4 */
       if (ix < 0x39800000) {  /* |x| < 2**-12 */
         /* raise inexact if x!=0 and underflow if subnormal */
-        FORCE_EVAL(ix < 0x00800000 ? x / Ox1p120f : x + Ox1p120f);
+        // FORCE_EVAL(ix < 0x00800000 ? x / Ox1p120f : x + Ox1p120f);
         return x;
       }
       return tan_kernf(x, 0);
@@ -2561,7 +2563,7 @@ export namespace NativeMathf {
     if (ix <= 0x3f490fda) {
       if (ix < 0x39800000) { /* |x| < 2**-12 */
         /* raise inexact if x!=0 and underflow if subnormal */
-        FORCE_EVAL(ix < 0x00100000 ? x / Ox1p120f : x + Ox1p120f);
+        // FORCE_EVAL(ix < 0x00100000 ? x / Ox1p120f : x + Ox1p120f);
         sincos_s32 = x;
         sincos_c32 = 1;
         return;

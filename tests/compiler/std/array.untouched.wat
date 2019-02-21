@@ -357,16 +357,11 @@
  (global $std/array/newArr (mut i32) (i32.const 0))
  (global $std/array/filteredArr (mut i32) (i32.const 0))
  (global $std/array/boolVal (mut i32) (i32.const 0))
- (global $~lib/math/volatile32 (mut f32) (f32.const 0))
- (global $~lib/math/volatile64 (mut f64) (f64.const 0))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
- (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
- (global $~lib/math/sincos_s32 (mut f32) (f32.const 0))
- (global $~lib/math/sincos_c32 (mut f32) (f32.const 0))
  (global $std/array/charset i32 (i32.const 2928))
  (global $std/array/f32ArrayTyped (mut i32) (i32.const 3168))
  (global $std/array/f64ArrayTyped (mut i32) (i32.const 3376))
@@ -5510,7 +5505,7 @@
   if
    i32.const 0
    i32.const 2896
-   i32.const 990
+   i32.const 992
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9235,7 +9230,7 @@
   if
    i32.const 0
    i32.const 2896
-   i32.const 999
+   i32.const 1001
    i32.const 24
    call $~lib/env/abort
    unreachable

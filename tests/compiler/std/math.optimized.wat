@@ -76,13 +76,12 @@
  (data (i32.const 280) "\d8\00\00\00\04")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/math/volatile32 (mut f32) (f32.const 0))
+ (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
- (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -3524,10 +3523,6 @@
     i32.const 964689920
     i32.lt_u
     if
-     local.get $0
-     f32.const 1329227995784915872903807e12
-     f32.add
-     global.set $~lib/math/volatile32
      f32.const 1
      return
     end
@@ -8535,7 +8530,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 990
+   i32.const 992
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8601,7 +8596,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 999
+   i32.const 1001
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -8648,7 +8643,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2233
+   i32.const 2235
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -9347,17 +9342,6 @@
     i32.const 964689920
     i32.lt_u
     if
-     local.get $0
-     f32.const 1329227995784915872903807e12
-     f32.div
-     local.get $0
-     f32.const 1329227995784915872903807e12
-     f32.add
-     local.get $4
-     i32.const 8388608
-     i32.lt_u
-     select
-     global.set $~lib/math/volatile32
      local.get $0
      return
     end
@@ -10071,17 +10055,6 @@
      i32.const 964689920
      i32.lt_u
      if
-      local.get $0
-      f32.const 1329227995784915872903807e12
-      f32.div
-      local.get $0
-      f32.const 1329227995784915872903807e12
-      f32.add
-      local.get $4
-      i32.const 8388608
-      i32.lt_u
-      select
-      global.set $~lib/math/volatile32
       local.get $0
       return
      end
