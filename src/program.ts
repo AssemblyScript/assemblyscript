@@ -1527,16 +1527,18 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var name = declaration.name.text;
     var validDecorators = DecoratorFlags.NONE;
-    if (!declaration.is(CommonFlags.AMBIENT)) {
+    if (declaration.is(CommonFlags.AMBIENT)) {
+      validDecorators |= DecoratorFlags.EXTERNAL;
+    } else {
       validDecorators |= DecoratorFlags.INLINE;
     }
-    if (parent.kind != ElementKind.CLASS_PROTOTYPE && !declaration.is(CommonFlags.INSTANCE)) {
-      validDecorators |= DecoratorFlags.GLOBAL;
+    if (!declaration.is(CommonFlags.INSTANCE)) {
+      if (parent.kind != ElementKind.CLASS_PROTOTYPE) {
+        validDecorators |= DecoratorFlags.GLOBAL;
+      }
     }
     if (!declaration.is(CommonFlags.GENERIC)) {
-      if (declaration.is(CommonFlags.AMBIENT)) {
-        validDecorators |= DecoratorFlags.EXTERNAL;
-      } else if (parent.kind == ElementKind.FILE && (<File>parent).source.isEntry) {
+      if (parent.kind == ElementKind.FILE && (<File>parent).source.isEntry) {
         validDecorators |= DecoratorFlags.START;
       }
     }
