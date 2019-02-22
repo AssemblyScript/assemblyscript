@@ -1,39 +1,39 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00w\00h\00i\00l\00e\00.\00t\00s\00")
- (table $0 1 anyfunc)
+ (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $while/n (mut i32) (i32.const 10))
  (global $while/m (mut i32) (i32.const 0))
  (global $while/o (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 28))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 28))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $v)
+ (func $start:while (; 1 ;) (type $_)
   (local $0 i32)
   block $break|0
    loop $continue|0
-    get_global $while/n
+    global.get $while/n
     if
      block
-      get_global $while/n
+      global.get $while/n
       i32.const 1
       i32.sub
-      set_global $while/n
-      get_global $while/m
+      global.set $while/n
+      global.get $while/m
       i32.const 1
       i32.add
-      set_global $while/m
+      global.set $while/m
      end
      br $continue|0
     end
    end
   end
-  get_global $while/n
+  global.get $while/n
   i32.const 0
   i32.eq
   i32.eqz
@@ -45,7 +45,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $while/m
+  global.get $while/m
   i32.const 10
   i32.eq
   i32.eqz
@@ -58,41 +58,41 @@
    unreachable
   end
   i32.const 10
-  set_global $while/n
+  global.set $while/n
   i32.const 0
-  set_global $while/m
+  global.set $while/m
   block $break|1
    loop $continue|1
-    get_global $while/n
+    global.get $while/n
     if
      block
-      get_global $while/n
+      global.get $while/n
       i32.const 1
       i32.sub
-      set_global $while/n
-      get_global $while/m
+      global.set $while/n
+      global.get $while/m
       i32.const 1
       i32.add
-      set_global $while/m
+      global.set $while/m
       block $break|2
        loop $continue|2
-        get_global $while/n
+        global.get $while/n
         if
          block
-          get_global $while/n
+          global.get $while/n
           i32.const 1
           i32.sub
-          set_global $while/n
-          get_global $while/o
+          global.set $while/n
+          global.get $while/o
           i32.const 1
           i32.add
-          set_global $while/o
+          global.set $while/o
          end
          br $continue|2
         end
        end
       end
-      get_global $while/n
+      global.get $while/n
       i32.const 0
       i32.eq
       i32.eqz
@@ -104,7 +104,7 @@
        call $~lib/env/abort
        unreachable
       end
-      get_global $while/o
+      global.get $while/o
       i32.const 9
       i32.eq
       i32.eqz
@@ -121,7 +121,7 @@
     end
    end
   end
-  get_global $while/n
+  global.get $while/n
   i32.const 0
   i32.eq
   i32.eqz
@@ -133,7 +133,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $while/m
+  global.get $while/m
   i32.const 1
   i32.eq
   i32.eqz
@@ -145,7 +145,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $while/o
+  global.get $while/o
   i32.const 9
   i32.eq
   i32.eqz
@@ -158,28 +158,28 @@
    unreachable
   end
   i32.const 1
-  set_global $while/n
+  global.set $while/n
   i32.const 0
-  set_global $while/m
+  global.set $while/m
   block $break|3
    loop $continue|3
     block (result i32)
-     get_global $while/n
-     tee_local $0
+     global.get $while/n
+     local.tee $0
      i32.const 1
      i32.sub
-     set_global $while/n
-     get_local $0
+     global.set $while/n
+     local.get $0
     end
-    tee_local $0
+    local.tee $0
     if (result i32)
-     get_global $while/m
+     global.get $while/m
      i32.const 1
      i32.add
-     set_global $while/m
-     get_global $while/m
+     global.set $while/m
+     global.get $while/m
     else     
-     get_local $0
+     local.get $0
     end
     if
      nop
@@ -187,7 +187,7 @@
     end
    end
   end
-  get_global $while/n
+  global.get $while/n
   i32.const -1
   i32.eq
   i32.eqz
@@ -199,7 +199,7 @@
    call $~lib/env/abort
    unreachable
   end
-  get_global $while/m
+  global.get $while/m
   i32.const 1
   i32.eq
   i32.eqz
@@ -212,6 +212,9 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $_)
+  call $start:while
+ )
+ (func $null (; 3 ;) (type $_)
  )
 )

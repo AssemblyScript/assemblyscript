@@ -1,13 +1,13 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiv (func (param i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $ii_ (func (param i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
  (data (i32.const 40) "\01\00\00\001")
- (table $0 2 anyfunc)
- (elem (i32.const 0) $builtins/test $start~anonymous|1)
+ (table $0 2 funcref)
+ (elem (i32.const 0) $builtins/test $start:builtins~anonymous|1)
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
@@ -21,168 +21,165 @@
  (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $start~anonymous|1 (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $start:builtins~anonymous|1 (; 1 ;) (type $ii_) (param $0 i32) (param $1 i32)
   nop
  )
- (func $builtins/test (; 2 ;) (type $v)
-  nop
- )
- (func $start (; 3 ;) (type $v)
+ (func $start:builtins (; 2 ;) (type $_)
   i32.const 31
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 0
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 1
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 2
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const -2147483648
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 42
-  set_global $builtins/i
-  get_global $builtins/i
+  global.set $builtins/i
+  global.get $builtins/i
   i32.const 42
   i32.ne
   if
    i32.const 0
    i32.const 8
-   i32.const 50
+   i32.const 59
    i32.const 19
    call $~lib/env/abort
    unreachable
   end
   i32.const 2
-  set_global $builtins/i
-  get_global $builtins/i
+  global.set $builtins/i
+  global.get $builtins/i
   i32.const 2
   i32.ne
   if
    i32.const 0
    i32.const 8
-   i32.const 51
+   i32.const 60
    i32.const 20
    call $~lib/env/abort
    unreachable
   end
   i32.const 1
-  set_global $builtins/i
-  get_global $builtins/i
+  global.set $builtins/i
+  global.get $builtins/i
   i32.const 1
   i32.ne
   if
    i32.const 0
    i32.const 8
-   i32.const 52
+   i32.const 61
    i32.const 20
    call $~lib/env/abort
    unreachable
   end
   i64.const 63
-  set_global $builtins/I
+  global.set $builtins/I
   i64.const 0
-  set_global $builtins/I
+  global.set $builtins/I
   i64.const 1
-  set_global $builtins/I
+  global.set $builtins/I
   i64.const 2
-  set_global $builtins/I
+  global.set $builtins/I
   i64.const -9223372036854775808
-  set_global $builtins/I
+  global.set $builtins/I
   i64.const 42
-  set_global $builtins/I
-  get_global $builtins/I
+  global.set $builtins/I
+  global.get $builtins/I
   i64.const 42
   i64.ne
   if
    i32.const 0
    i32.const 8
-   i32.const 68
+   i32.const 77
    i32.const 19
    call $~lib/env/abort
    unreachable
   end
   i64.const 2
-  set_global $builtins/I
-  get_global $builtins/I
+  global.set $builtins/I
+  global.get $builtins/I
   i64.const 2
   i64.ne
   if
    i32.const 0
    i32.const 8
-   i32.const 69
+   i32.const 78
    i32.const 20
    call $~lib/env/abort
    unreachable
   end
   i64.const 1
-  set_global $builtins/I
-  get_global $builtins/i
+  global.set $builtins/I
+  global.get $builtins/i
   i32.const 1
   i32.ne
   if
    i32.const 0
    i32.const 8
-   i32.const 70
+   i32.const 79
    i32.const 20
    call $~lib/env/abort
    unreachable
   end
   f32.const nan:0x400000
-  set_global $builtins/f
+  global.set $builtins/f
   f32.const inf
-  set_global $builtins/f
+  global.set $builtins/f
   f32.const 1.25
-  set_global $builtins/f
+  global.set $builtins/f
   f32.const 2
-  set_global $builtins/f
+  global.set $builtins/f
   f32.const 1.25
-  set_global $builtins/f
+  global.set $builtins/f
   f32.const 1
-  set_global $builtins/f
+  global.set $builtins/f
   f32.const 2.5
-  set_global $builtins/f
+  global.set $builtins/f
   f32.const 1.25
-  set_global $builtins/f
+  global.set $builtins/f
   f32.const 1
-  set_global $builtins/f
+  global.set $builtins/f
   f32.const 1.1180340051651
-  set_global $builtins/f
+  global.set $builtins/f
   f32.const 1
-  set_global $builtins/f
+  global.set $builtins/f
   i32.const 0
-  set_global $builtins/b
+  global.set $builtins/b
   i32.const 1
-  set_global $builtins/b
+  global.set $builtins/b
   f64.const nan:0x8000000000000
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const inf
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 2
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 2.5
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.118033988749895
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1
-  set_global $builtins/F
+  global.set $builtins/F
   i32.const 0
-  set_global $builtins/b
+  global.set $builtins/b
   i32.const 1
-  set_global $builtins/b
+  global.set $builtins/b
   i32.const 8
   i32.load
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
-  get_global $builtins/i
+  global.get $builtins/i
   i32.store
   i32.const 8
   i32.const 8
@@ -190,9 +187,9 @@
   i32.store
   i32.const 8
   i64.load
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
-  get_global $builtins/I
+  global.get $builtins/I
   i64.store
   i32.const 8
   i32.const 8
@@ -200,9 +197,9 @@
   i64.store
   i32.const 8
   f32.load
-  set_global $builtins/f
+  global.set $builtins/f
   i32.const 8
-  get_global $builtins/f
+  global.get $builtins/f
   f32.store
   i32.const 8
   i32.const 8
@@ -210,9 +207,9 @@
   f32.store
   i32.const 8
   f64.load
-  set_global $builtins/F
+  global.set $builtins/F
   i32.const 8
-  get_global $builtins/F
+  global.get $builtins/F
   f64.store
   i32.const 8
   i32.const 8
@@ -220,9 +217,9 @@
   f64.store
   i32.const 8
   i32.load
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
-  get_global $builtins/i
+  global.get $builtins/i
   i32.store
   i32.const 8
   i32.const 8
@@ -230,9 +227,9 @@
   i32.store
   i32.const 8
   i64.load
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
-  get_global $builtins/I
+  global.get $builtins/I
   i64.store
   i32.const 8
   i32.const 8
@@ -240,9 +237,9 @@
   i64.store
   i32.const 8
   f32.load
-  set_global $builtins/f
+  global.set $builtins/f
   i32.const 8
-  get_global $builtins/f
+  global.get $builtins/f
   f32.store
   i32.const 8
   i32.const 8
@@ -250,9 +247,9 @@
   f32.store
   i32.const 8
   f64.load
-  set_global $builtins/F
+  global.set $builtins/F
   i32.const 8
-  get_global $builtins/F
+  global.get $builtins/F
   f64.store
   i32.const 8
   i32.const 8
@@ -260,64 +257,64 @@
   f64.store
   i32.const 8
   i32.load8_s
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load16_s
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load8_u
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load16_u
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load8_u
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i32.load16_u
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i32.load
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i32.load8_s
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i32.load16_s
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i32.load
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i64.load8_s
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
   i64.load16_s
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
   i64.load32_s
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
   i64.load
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
   i64.load8_u
-  set_global $builtins/U
+  global.set $builtins/U
   i32.const 8
   i64.load16_u
-  set_global $builtins/U
+  global.set $builtins/U
   i32.const 8
   i64.load32_u
-  set_global $builtins/U
+  global.set $builtins/U
   i32.const 8
   i64.load
-  set_global $builtins/U
+  global.set $builtins/U
   i32.const 8
   i32.const 1
   i32.store8
@@ -343,40 +340,40 @@
   i64.const 1
   i64.store
   i32.const 1067450368
-  set_global $builtins/i
+  global.set $builtins/i
   f32.const 3.5032461608120427e-44
-  set_global $builtins/f
+  global.set $builtins/f
   i64.const 4608308318706860032
-  set_global $builtins/I
+  global.set $builtins/I
   f64.const 1.24e-322
-  set_global $builtins/F
+  global.set $builtins/F
   current_memory
   drop
   i32.const 1
   grow_memory
   drop
   current_memory
-  set_global $builtins/s
+  global.set $builtins/s
   i32.const 1
   grow_memory
-  set_global $builtins/s
+  global.set $builtins/s
   i32.const 10
-  set_global $builtins/i
+  global.set $builtins/i
   i64.const 200
-  set_global $builtins/I
+  global.set $builtins/I
   f32.const 1.25
-  set_global $builtins/f
+  global.set $builtins/f
   f64.const 25
-  set_global $builtins/F
-  get_global $builtins/i
+  global.set $builtins/F
+  global.get $builtins/i
   i32.eqz
   if
    unreachable
   end
   i32.const 1
   i32.const 2
-  get_global $builtins/fn
-  call_indirect (type $iiv)
+  global.get $builtins/fn
+  call_indirect (type $ii_)
   i32.const 8
   i32.load8_s
   drop
@@ -446,5 +443,11 @@
   i32.const 8
   f64.const 1
   f64.store
+ )
+ (func $builtins/test (; 3 ;) (type $_)
+  nop
+ )
+ (func $start (; 4 ;) (type $_)
+  call $start:builtins
  )
 )

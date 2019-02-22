@@ -33,11 +33,13 @@ var arr = new Array<i32>();
 class P {}
 var num = 1;
 var Null: i32[] | null = null;
+var str = "abc";
 assert(Array.isArray(Null) == false);
 assert(Array.isArray(arr) == true);
 assert(Array.isArray(new P()) == false);
-// assert(Array.isArray(new Uint8Array(1)) == false); fail
+assert(Array.isArray(new Uint8Array(1)) == false);
 assert(Array.isArray(num) == false);
+assert(Array.isArray(str) == false);
 
 // Array#fill //////////////////////////////////////////////////////////////////////////////////////
 
@@ -804,7 +806,7 @@ function createRandomStringArray(size: i32): string[] {
   return arr;
 }
 
-function assertSorted<T>(arr: Array<T>, comparator: (a: T, b: T) => i32): void {
+function assertSorted<T>(arr: Array<T>, comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): void {
   assert(isSorted<T>(arr.sort(comparator), comparator));
 }
 
@@ -894,11 +896,12 @@ assertSorted<Proxy<i32>>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i3
 
 var randomStringsActual:   string[] = ["a", "b", "a", "ab", "ba", "", null];
 var randomStringsExpected: string[] = ["", "a", "a", "ab", "b", "ba", null];
-assertSorted<string>(randomStringsActual, (a: string, b: string): i32 => <i32>(a > b) - <i32>(a < b));
+
+assertSorted<string>(randomStringsActual);
 assert(isArraysEqual<string>(randomStringsActual, randomStringsExpected));
 
 var randomStrings400 = createRandomStringArray(400);
-assertSorted<string>(randomStrings400, (a: string, b: string): i32 => <i32>(a > b) - <i32>(a < b));
+assertSorted<string>(randomStrings400);
 
 // Array#join //////////////////////////////////////////////////////////////////////////////////////
 

@@ -34,11 +34,25 @@ const nbodyJS = new Function(
   ...Object.keys(scopeJS).concat(src + "\nreturn exports"))(...Object.values(scopeJS)
 );
 
+function gcCollect() {
+  if (global.gc) {
+    global.gc();
+    global.gc();
+  }
+}
+
+function sleep(delay) {
+  var start = Date.now();
+  while (Date.now() < start + delay);
+}
+
 function test(nbody, steps) {
   nbody.init();
   var start = process.hrtime();
   nbody.bench(steps);
-  return process.hrtime(start);
+  let t = process.hrtime(start);
+  gcCollect();
+  return t;
 }
 
 var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 20000000;
@@ -66,6 +80,7 @@ prologue("Rust WASM", steps);
 epilogue(test(nbodyRS, steps));
 
 console.log("\nWARMED UP SERIES:\n");
+sleep(1000);
 
 prologue("AssemblyScript WASM", steps);
 epilogue(test(nbodyAS, steps));

@@ -38,8 +38,6 @@ declare type f64 = number;
 
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
 declare const ASC_TARGET: i32;
-/** Provided noTreeshaking option. */
-declare const ASC_NO_TREESHAKING: bool;
 /** Provided noAssert option. */
 declare const ASC_NO_ASSERT: bool;
 /** Provided memoryBase option. */
@@ -130,6 +128,10 @@ declare function isReference<T>(value?: any): value is object | string;
 declare function isString<T>(value?: any): value is string | String;
 /** Tests if the specified type *or* expression can be used as an array. Compiles to a constant. */
 declare function isArray<T>(value?: any): value is Array<any>;
+/** Tests if the specified type *or* expression is of a function type. Compiles to a constant. */
+declare function isFunction<T>(value?: any): value is (...args: any) => any;
+/** Tests if the specified type *or* expression is of a nullable reference type. Compiles to a constant. */
+declare function isNullable<T>(value?: any): bool;
 /** Tests if the specified expression resolves to a defined element. Compiles to a constant. */
 declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. Compiles to a constant. */
@@ -354,7 +356,7 @@ declare namespace f64 {
   export function store(offset: usize, value: f64, constantOffset?: usize): void;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
-declare type NATIVE<T> = T;
+declare type native<T> = T;
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {
@@ -493,10 +495,14 @@ declare class ArrayBuffer {
   readonly byteLength: i32;
   /** Unsafe pointer to the start of the data in memory. */
   readonly data: usize;
+  /** Returns true if value is one of the ArrayBuffer views, such as typed array or a DataView **/
+  static isView<T>(value: T): bool;
   /** Constructs a new array buffer of the given length in bytes. */
   constructor(length: i32, unsafe?: bool);
   /** Returns a copy of this array buffer's bytes from begin, inclusive, up to end, exclusive. */
   slice(begin?: i32, end?: i32): ArrayBuffer;
+  /** Returns a string representation of ArrayBuffer. */
+  toString(): string;
 }
 
 /** The `DataView` view provides a low-level interface for reading and writing multiple number types in a binary `ArrayBuffer`, without having to care about the platform's endianness. */
@@ -591,6 +597,18 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
     callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
     initialValue: W,
   ): W;
+  /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some().*/
+  some(callbackfn: (value: T, index: i32, self: this) => bool): bool;
+  /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. This method has the same algorithm as Array.prototype.map().*/
+  map(callbackfn: (value: T, index: i32, self: this) => T): this;
+  /** The sort() method sorts the elements of a typed array numerically in place and returns the typed array. This method has the same algorithm as Array.prototype.sort(), except that sorts the values numerically instead of as strings. TypedArray is one of the typed array types here. */
+  sort(callback?: (a: T, b: T) => i32): this;
+  /** The fill() method fills all the elements of a typed array from a start index to an end index with a static value. This method has the same algorithm as Array.prototype.fill(). */
+  fill(value: T, start?: i32, end?: i32): this;
+  /** The findIndex() method returns an index in the typed array, if an element in the typed array satisfies the provided testing function. Otherwise -1 is returned. See also the find() [not implemented] method, which returns the value of a found element in the typed array instead of its index. */
+  findIndex(callbackfn: (value: T, index: i32, self: this) => bool): i32;
+  /** The every() method tests whether all elements in the typed array pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.every(). */
+  every(callbackfn: (value: T, index: i32, self: this) => bool): i32;
 }
 
 /** An array of twos-complement 8-bit signed integers. */
@@ -900,28 +918,86 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 
 // Decorators
 
+interface TypedPropertyDescriptor<T> {
+  configurable?: boolean;
+  enumerable?: boolean;
+  writable?: boolean;
+  value?: T;
+  get?(): T;
+  set?(value: T): void;
+}
+
 /** Annotates an element as a program global. */
-declare function global(target: Function, propertyKey: string, descriptor: any): void;
+declare function global(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
-declare function operator(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+declare function operator(token:
+  "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
+  ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+): (
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+) => TypedPropertyDescriptor<any> | void;
+
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
-  export function binary(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function binary(token:
+    "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
+    ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+  ): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<any>
+  ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
-  export function prefix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function prefix(token: "!" | "~" | "+" | "-" | "++" | "--"): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<any>
+  ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary postfix operator overload for the specified `token`. */
-  export function postfix(token: string): (target: any, propertyKey: string, descriptor: any) => void;
+  export function postfix(token: "++" | "--"): (
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<any>
+  ) => TypedPropertyDescriptor<any> | void;
 }
 
 /** Annotates a class as being unmanaged with limited capabilities. */
-declare function unmanaged(target: Function): any;
+declare function unmanaged(constructor: Function): void;
 
 /** Annotates a class as being sealed / non-derivable. */
-declare function sealed(target: Function): any;
+declare function sealed(constructor: Function): void;
 
-/** Annotates a method or function as always inlined. */
-declare function inline(target: any, propertyKey: any, descriptor: any): any;
+/** Annotates a method, function or constant global as always inlined. */
+declare function inline(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
 
 /** Annotates an explicit external name of a function or global. */
-declare function external(target: any, propertyKey: any, descriptor: any): any;
+declare function external(namespace: string, name: string): (
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+) => TypedPropertyDescriptor<any> | void;
+
+/** Annotates a global for lazy compilation. */
+declare function lazy(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
+
+/** Annotates a function as the explicit start function. */
+declare function start(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
