@@ -80,7 +80,6 @@
  (global $std/typedarray/af64 (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
- (global $~lib/ASC_OPTIMIZE_LEVEL i32 (i32.const 0))
  (global $std/typedarray/arr8 (mut i32) (i32.const 0))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $std/typedarray/sub8 (mut i32) (i32.const 0))
@@ -3148,24 +3147,19 @@
   end
  )
  (func $~lib/typedarray/clampToByte (; 41 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
   local.get $0
-  local.tee $1
-  i32.const 0
-  local.tee $2
-  local.get $1
-  local.get $2
-  i32.gt_s
-  select
-  local.tee $1
+  i32.const 31
+  i32.shr_s
+  i32.const -1
+  i32.xor
   i32.const 255
-  local.tee $2
-  local.get $1
-  local.get $2
-  i32.lt_s
-  select
-  return
+  local.get $0
+  i32.sub
+  i32.const 31
+  i32.shr_s
+  local.get $0
+  i32.or
+  i32.and
  )
  (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 42 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)

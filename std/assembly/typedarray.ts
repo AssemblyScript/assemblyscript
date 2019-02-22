@@ -15,7 +15,7 @@ import {
   COMPARATOR
 } from "./internal/sort";
 
-@inline function clampToByte(value: i32): i32 {
+function clampToByte(value: i32): i32 {
   return ~(value >> 31) & (((255 - value) >> 31) | value); // & 255
 }
 
