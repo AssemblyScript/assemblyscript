@@ -302,4 +302,28 @@ export namespace f64 {
   @builtin export declare function trunc(value: f64): f64;
 }
 
+@builtin export declare function i64x2(a: i64, b: i64): v128;
+export namespace i64x2 {
+  @builtin export declare function splat(x: i64): v128;
+  @builtin export declare function add(a: v128, b: v128): v128;
+}
+
+@builtin export declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
+export namespace i32x4 {
+  @builtin export declare function splat(x: i32): v128;
+  @builtin export declare function add(a: v128, b: v128): v128;
+}
+
+@builtin export declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
+export namespace i16x8 {
+  @builtin export declare function splat(x: i16): v128;
+  @builtin export declare function add(a: v128, b: v128): v128;
+}
+
+@builtin export declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
+export namespace i8x16 {
+  @builtin export declare function splat(x: i8): v128;
+  @builtin export declare function add(a: v128, b: v128): v128;
+}
+
 @builtin export declare function start(): void;

@@ -2556,6 +2556,7 @@ export class Function extends TypedElement {
   tempI64s: Local[] | null = null;
   tempF32s: Local[] | null = null;
   tempF64s: Local[] | null = null;
+  tempV128s: Local[] | null = null;
 
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;

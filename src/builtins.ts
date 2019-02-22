@@ -256,6 +256,18 @@ export namespace BuiltinSymbols {
   export const i64_wait = "~lib/builtins/i64.wait";
   export const i32_notify = "~lib/builtins/i32.notify";
   export const i64_notify = "~lib/builtins/i64.notify";
+  export const i64x2 = "~lib/builtins/i64x2";
+  export const i64x2_splat = "~lib/builtins/i64x2.splat";
+  export const i64x2_add = "~lib/builtins/i64x2.add";
+  export const i32x4 = "~lib/builtins/i32x4";
+  export const i32x4_splat = "~lib/builtins/i32x4.splat";
+  export const i32x4_add = "~lib/builtins/i32x4.add";
+  export const i16x8 = "~lib/builtins/i16x8";
+  export const i16x8_splat = "~lib/builtins/i16x8.splat";
+  export const i16x8_add = "~lib/builtins/i16x8.add";
+  export const i8x16 = "~lib/builtins/i8x16";
+  export const i8x16_splat = "~lib/builtins/i8x16.splat";
+  export const i8x16_add = "~lib/builtins/i8x16.add";
   // std/diagnostics.ts
   export const ERROR = "~lib/diagnostics/ERROR";
   export const WARNING = "~lib/diagnostics/WARNING";
@@ -3336,7 +3348,326 @@ export function compileCall(
         WrapMode.NONE
       );
     }
-    // TODO: v128
+    // TODO
+    // case BuiltinSymbols.v128:
+    case BuiltinSymbols.i64x2: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let bytes = new Uint8Array(16);
+      for (let i = 0; i < 2; ++i) {
+        let value = operands[i];
+        if (value) {
+          let expr = module.precomputeExpression(
+            compiler.compileExpression(value, Type.i64, ConversionKind.IMPLICIT, WrapMode.NONE)
+          );
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            compiler.error(
+              DiagnosticCode.Expression_must_be_a_compile_time_constant,
+              value.range
+            );
+            compiler.currentType = Type.v128;
+            return module.createUnreachable();
+          }
+          let lo = getConstValueI64Low(expr);
+          let hi = getConstValueI64High(expr);
+          let off = i << 3;
+          bytes[off    ] = lo;
+          bytes[off + 1] = lo >>>  8;
+          bytes[off + 2] = lo >>> 16;
+          bytes[off + 3] = lo >>> 24;
+          bytes[off + 4] = hi;
+          bytes[off + 5] = hi >>>  8;
+          bytes[off + 6] = hi >>> 16;
+          bytes[off + 7] = hi >>> 24;
+        }
+      }
+      compiler.currentType = Type.v128;
+      return module.createV128(bytes);
+    }
+    case BuiltinSymbols.i64x2_splat: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let expr = compiler.compileExpression(operands[0], Type.i64, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createUnary(UnaryOp.SplatVecI64x2, expr);
+    }
+    case BuiltinSymbols.i64x2_add: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(BinaryOp.AddVecI64x2, arg0, arg1);
+    }
+    case BuiltinSymbols.i32x4: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 4) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "4", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let bytes = new Uint8Array(16);
+      for (let i = 0; i < 4; ++i) {
+        let value = operands[i];
+        if (value) {
+          let expr = module.precomputeExpression(
+            compiler.compileExpression(value, Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE)
+          );
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            compiler.error(
+              DiagnosticCode.Expression_must_be_a_compile_time_constant,
+              value.range
+            );
+            compiler.currentType = Type.v128;
+            return module.createUnreachable();
+          }
+          let val = getConstValueI32(expr);
+          let off = i << 2;
+          bytes[off    ] = val;
+          bytes[off + 1] = val >>>  8;
+          bytes[off + 2] = val >>> 16;
+          bytes[off + 3] = val >>> 24;
+        }
+      }
+      compiler.currentType = Type.v128;
+      return module.createV128(bytes);
+    }
+    case BuiltinSymbols.i32x4_splat: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let expr = compiler.compileExpression(operands[0], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createUnary(UnaryOp.SplatVecI32x4, expr);
+    }
+    case BuiltinSymbols.i32x4_add: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(BinaryOp.AddVecI32x4, arg0, arg1);
+    }
+    case BuiltinSymbols.i16x8: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 8) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "8", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let bytes = new Uint8Array(16);
+      for (let i = 0; i < 8; ++i) {
+        let value = operands[i];
+        if (value) {
+          let expr = module.precomputeExpression(
+            compiler.compileExpression(value, Type.i16, ConversionKind.IMPLICIT, WrapMode.NONE)
+          );
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            compiler.error(
+              DiagnosticCode.Expression_must_be_a_compile_time_constant,
+              value.range
+            );
+            compiler.currentType = Type.v128;
+            return module.createUnreachable();
+          }
+          let val = getConstValueI32(expr);
+          let off = i << 1;
+          bytes[off    ] = val;
+          bytes[off + 1] = val >>> 8;
+        }
+      }
+      compiler.currentType = Type.v128;
+      return module.createV128(bytes);
+    }
+    case BuiltinSymbols.i16x8_splat: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let expr = compiler.compileExpression(operands[0], Type.i16, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createUnary(UnaryOp.SplatVecI16x8, expr);
+    }
+    case BuiltinSymbols.i16x8_add: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(BinaryOp.AddVecI16x8, arg0, arg1);
+    }
+    case BuiltinSymbols.i8x16: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 16) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "16", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let bytes = new Uint8Array(16);
+      for (let i = 0; i < 16; ++i) {
+        let value = operands[i];
+        if (value) {
+          let expr = module.precomputeExpression(
+            compiler.compileExpression(value, Type.i8, ConversionKind.IMPLICIT, WrapMode.NONE)
+          );
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            compiler.error(
+              DiagnosticCode.Expression_must_be_a_compile_time_constant,
+              value.range
+            );
+            compiler.currentType = Type.v128;
+            return module.createUnreachable();
+          }
+          bytes[i] = getConstValueI32(expr);
+        }
+      }
+      compiler.currentType = Type.v128;
+      return module.createV128(bytes);
+    }
+    case BuiltinSymbols.i8x16_splat: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let expr = compiler.compileExpression(operands[0], Type.i8, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createUnary(UnaryOp.SplatVecI8x16, expr);
+    }
+    case BuiltinSymbols.i8x16_add: {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(BinaryOp.AddVecI8x16, arg0, arg1);
+    }
 
     // gc
 
