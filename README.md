@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.org/AssemblyScript/assemblyscript.svg?branch=master)](https://travis-ci.org/AssemblyScript/assemblyscript)
 [![Backers on Open Collective](https://opencollective.com/assemblyscript/tiers/backer/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/assemblyscript/tiers/sponsor/badge.svg)](#sponsors)
+[![Twitter Follow](https://img.shields.io/twitter/follow/AssemblyScript.svg?label=Follow&style=social)](https://twitter.com/AssemblyScript)
 
 **AssemblyScript** compiles strictly typed [TypeScript](http://www.typescriptlang.org) (basically JavaScript with types) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
 
