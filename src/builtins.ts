@@ -451,14 +451,11 @@ export function compileCall(
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
-        case TypeKind.I8:
-        case TypeKind.I16:
-        case TypeKind.U8:
-        case TypeKind.U16: {
-          ret = module.createUnary(UnaryOp.ClzI32, arg0);
-          break;
-        }
         case TypeKind.BOOL: // usually overflows
+        case TypeKind.I8:
+        case TypeKind.U8:
+        case TypeKind.I16:
+        case TypeKind.U16:
         case TypeKind.I32:
         case TypeKind.U32: {
           ret = module.createUnary(UnaryOp.ClzI32, arg0);
@@ -531,14 +528,11 @@ export function compileCall(
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
-        case TypeKind.I8:
-        case TypeKind.I16:
-        case TypeKind.U8:
-        case TypeKind.U16: {
-          ret = module.createUnary(UnaryOp.CtzI32, arg0);
-          break;
-        }
         case TypeKind.BOOL: // usually overflows
+        case TypeKind.I8:
+        case TypeKind.U8:
+        case TypeKind.I16:
+        case TypeKind.U16:
         case TypeKind.I32:
         case TypeKind.U32: {
           ret = module.createUnary(UnaryOp.CtzI32, arg0);
@@ -611,14 +605,11 @@ export function compileCall(
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
-        case TypeKind.I8:
-        case TypeKind.I16:
-        case TypeKind.U8:
-        case TypeKind.U16: {
-          ret = module.createUnary(UnaryOp.PopcntI32, arg0);
-          break;
-        }
         case TypeKind.BOOL: // usually overflows
+        case TypeKind.I8:
+        case TypeKind.U8:
+        case TypeKind.I16:
+        case TypeKind.U16:
         case TypeKind.I32:
         case TypeKind.U32: {
           ret = module.createUnary(UnaryOp.PopcntI32, arg0);
@@ -2525,11 +2516,8 @@ export function compileCall(
         case TypeKind.I16:
         case TypeKind.U8:
         case TypeKind.U16:
-        case TypeKind.BOOL: {
-          ret = module.createSelect(arg0, arg1, arg2);
-          break;
-        }
-        default: { // any other value type
+        case TypeKind.BOOL:
+        default: {
           ret = module.createSelect(arg0, arg1, arg2);
           break;
         }
