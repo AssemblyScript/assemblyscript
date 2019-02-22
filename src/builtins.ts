@@ -76,6 +76,8 @@ export namespace BuiltinSymbols {
   export const isReference = "~lib/builtins/isReference";
   export const isString = "~lib/builtins/isString";
   export const isArray = "~lib/builtins/isArray";
+  export const isFunction = "~lib/builtins/isFunction";
+  export const isNullable = "~lib/builtins/isNullable";
   export const isDefined = "~lib/builtins/isDefined";
   export const isConstant = "~lib/builtins/isConstant";
   export const isManaged = "~lib/builtins/isManaged";
@@ -347,6 +349,18 @@ export function compileCall(
           ? 1
           : 0
       );
+    }
+    case BuiltinSymbols.isFunction: { // isFunction<T!> / isFunction<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
+      return module.createI32(type.signatureReference ? 1 : 0);
+    }
+    case BuiltinSymbols.isNullable: { // isNullable<T!> / isNullable<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
+      return module.createI32(type.is(TypeFlags.NULLABLE) ? 1 : 0);
     }
     case BuiltinSymbols.isDefined: { // isDefined(expression) -> bool
       compiler.currentType = Type.bool;
