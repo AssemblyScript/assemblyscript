@@ -76,6 +76,8 @@ export namespace BuiltinSymbols {
   export const isReference = "~lib/builtins/isReference";
   export const isString = "~lib/builtins/isString";
   export const isArray = "~lib/builtins/isArray";
+  export const isFunction = "~lib/builtins/isFunction";
+  export const isNullable = "~lib/builtins/isNullable";
   export const isDefined = "~lib/builtins/isDefined";
   export const isConstant = "~lib/builtins/isConstant";
   export const isManaged = "~lib/builtins/isManaged";
@@ -348,6 +350,18 @@ export function compileCall(
           : 0
       );
     }
+    case BuiltinSymbols.isFunction: { // isFunction<T!> / isFunction<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
+      return module.createI32(type.signatureReference ? 1 : 0);
+    }
+    case BuiltinSymbols.isNullable: { // isNullable<T!> / isNullable<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
+      return module.createI32(type.is(TypeFlags.NULLABLE) ? 1 : 0);
+    }
     case BuiltinSymbols.isDefined: { // isDefined(expression) -> bool
       compiler.currentType = Type.bool;
       if (typeArguments) {
@@ -437,14 +451,11 @@ export function compileCall(
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
-        case TypeKind.I8:
-        case TypeKind.I16:
-        case TypeKind.U8:
-        case TypeKind.U16: {
-          ret = module.createUnary(UnaryOp.ClzI32, arg0);
-          break;
-        }
         case TypeKind.BOOL: // usually overflows
+        case TypeKind.I8:
+        case TypeKind.U8:
+        case TypeKind.I16:
+        case TypeKind.U16:
         case TypeKind.I32:
         case TypeKind.U32: {
           ret = module.createUnary(UnaryOp.ClzI32, arg0);
@@ -517,14 +528,11 @@ export function compileCall(
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
-        case TypeKind.I8:
-        case TypeKind.I16:
-        case TypeKind.U8:
-        case TypeKind.U16: {
-          ret = module.createUnary(UnaryOp.CtzI32, arg0);
-          break;
-        }
         case TypeKind.BOOL: // usually overflows
+        case TypeKind.I8:
+        case TypeKind.U8:
+        case TypeKind.I16:
+        case TypeKind.U16:
         case TypeKind.I32:
         case TypeKind.U32: {
           ret = module.createUnary(UnaryOp.CtzI32, arg0);
@@ -597,14 +605,11 @@ export function compileCall(
         arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
       }
       switch (compiler.currentType.kind) {
-        case TypeKind.I8:
-        case TypeKind.I16:
-        case TypeKind.U8:
-        case TypeKind.U16: {
-          ret = module.createUnary(UnaryOp.PopcntI32, arg0);
-          break;
-        }
         case TypeKind.BOOL: // usually overflows
+        case TypeKind.I8:
+        case TypeKind.U8:
+        case TypeKind.I16:
+        case TypeKind.U16:
         case TypeKind.I32:
         case TypeKind.U32: {
           ret = module.createUnary(UnaryOp.PopcntI32, arg0);
@@ -2511,11 +2516,8 @@ export function compileCall(
         case TypeKind.I16:
         case TypeKind.U8:
         case TypeKind.U16:
-        case TypeKind.BOOL: {
-          ret = module.createSelect(arg0, arg1, arg2);
-          break;
-        }
-        default: { // any other value type
+        case TypeKind.BOOL:
+        default: {
           ret = module.createSelect(arg0, arg1, arg2);
           break;
         }

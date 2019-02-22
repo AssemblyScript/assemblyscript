@@ -1527,16 +1527,18 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var name = declaration.name.text;
     var validDecorators = DecoratorFlags.NONE;
-    if (!declaration.is(CommonFlags.AMBIENT)) {
+    if (declaration.is(CommonFlags.AMBIENT)) {
+      validDecorators |= DecoratorFlags.EXTERNAL;
+    } else {
       validDecorators |= DecoratorFlags.INLINE;
     }
-    if (parent.kind != ElementKind.CLASS_PROTOTYPE && !declaration.is(CommonFlags.INSTANCE)) {
-      validDecorators |= DecoratorFlags.GLOBAL;
+    if (!declaration.is(CommonFlags.INSTANCE)) {
+      if (parent.kind != ElementKind.CLASS_PROTOTYPE) {
+        validDecorators |= DecoratorFlags.GLOBAL;
+      }
     }
     if (!declaration.is(CommonFlags.GENERIC)) {
-      if (declaration.is(CommonFlags.AMBIENT)) {
-        validDecorators |= DecoratorFlags.EXTERNAL;
-      } else if (parent.kind == ElementKind.FILE && (<File>parent).source.isEntry) {
+      if (parent.kind == ElementKind.FILE && (<File>parent).source.isEntry) {
         validDecorators |= DecoratorFlags.START;
       }
     }
@@ -1612,33 +1614,34 @@ export class Program extends DiagnosticEmitter {
     element = assert(parent.lookupInSelf(name)); // possibly merged
     var members = declaration.members;
     for (let i = 0, k = members.length; i < k; ++i) {
-      switch (members[i].kind) {
+      let member = members[i];
+      switch (member.kind) {
         case NodeKind.CLASSDECLARATION: {
-          this.initializeClass(<ClassDeclaration>members[i], element, queuedExtends, queuedImplements);
+          this.initializeClass(<ClassDeclaration>member, element, queuedExtends, queuedImplements);
           break;
         }
         case NodeKind.ENUMDECLARATION: {
-          this.initializeEnum(<EnumDeclaration>members[i], element);
+          this.initializeEnum(<EnumDeclaration>member, element);
           break;
         }
         case NodeKind.FUNCTIONDECLARATION: {
-          this.initializeFunction(<FunctionDeclaration>members[i], element);
+          this.initializeFunction(<FunctionDeclaration>member, element);
           break;
         }
         case NodeKind.INTERFACEDECLARATION: {
-          this.initializeInterface(<InterfaceDeclaration>members[i], element);
+          this.initializeInterface(<InterfaceDeclaration>member, element);
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
-          this.initializeNamespace(<NamespaceDeclaration>members[i], element, queuedExtends, queuedImplements);
+          this.initializeNamespace(<NamespaceDeclaration>member, element, queuedExtends, queuedImplements);
           break;
         }
         case NodeKind.TYPEDECLARATION: {
-          this.initializeTypeDefinition(<TypeDeclaration>members[i], element);
+          this.initializeTypeDefinition(<TypeDeclaration>member, element);
           break;
         }
         case NodeKind.VARIABLE: {
-          this.initializeVariables(<VariableStatement>members[i], element);
+          this.initializeVariables(<VariableStatement>member, element);
           break;
         }
         default: assert(false); // namespace member expected

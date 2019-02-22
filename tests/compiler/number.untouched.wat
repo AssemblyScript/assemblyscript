@@ -45,7 +45,6 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $number/a (mut i32) (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/internal/number/MAX_DOUBLE_LENGTH i32 (i32.const 28))
  (global $~lib/internal/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/internal/number/_frc_minus (mut i64) (i64.const 0))
  (global $~lib/internal/number/_exp (mut i32) (i32.const 0))
@@ -275,9 +274,7 @@
   (local $10 i32)
   (local $11 i64)
   (local $12 i64)
-  block $~lib/internal/number/DIGITS|inlined.0 (result i32)
-   i32.const 584
-  end
+  i32.const 584
   i32.load
   local.set $3
   block $break|0
@@ -678,9 +675,7 @@
   local.set $14
   local.get $6
   local.set $15
-  block $~lib/internal/number/POWERS10|inlined.0 (result i32)
-   i32.const 2064
-  end
+  i32.const 2064
   i32.load
   local.set $16
   block $break|0
@@ -3184,14 +3179,10 @@
     i32.shl
     i32.sub
     global.set $~lib/internal/number/_K
-    block $~lib/internal/number/FRC_POWERS|inlined.0 (result i32)
-     i32.const 1728
-    end
+    i32.const 1728
     i32.load
     local.set $11
-    block $~lib/internal/number/EXP_POWERS|inlined.0 (result i32)
-     i32.const 1992
-    end
+    i32.const 1992
     i32.load
     local.set $17
     block $~lib/internal/arraybuffer/LOAD<u64,u64>|inlined.0 (result i64)
@@ -3662,7 +3653,7 @@
    select
    return
   end
-  global.get $~lib/internal/number/MAX_DOUBLE_LENGTH
+  i32.const 28
   call $~lib/internal/string/allocateUnsafe
   local.set $1
   local.get $1
