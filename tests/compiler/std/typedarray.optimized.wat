@@ -1814,21 +1814,21 @@
   i32.store8 offset=8
  )
  (func $~lib/typedarray/Uint8ClampedArray#__set (; 25 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
-  local.get $2
   i32.const 255
   local.get $2
-  i32.const 255
-  i32.lt_s
-  select
-  local.tee $3
-  i32.const 0
-  local.get $3
-  i32.const 0
-  i32.gt_s
-  select
+  i32.sub
+  i32.const 31
+  i32.shr_s
+  local.get $2
+  i32.or
+  local.get $2
+  i32.const 31
+  i32.shr_s
+  i32.const -1
+  i32.xor
+  i32.and
   call $~lib/internal/typedarray/TypedArray<u8>#__set
  )
  (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
