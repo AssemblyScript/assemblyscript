@@ -86,11 +86,6 @@
     "type": "b",
     "default": false
   },
-  "noTreeShaking": {
-    "description": "Disables compiler-level tree-shaking, compiling everything.",
-    "type": "b",
-    "default": false
-  },
   "noAssert": {
     "description": "Replaces assertions with just their value without trapping.",
     "type": "b",
@@ -105,6 +100,11 @@
     "description": "Imports the memory instance provided by the embedder.",
     "type": "b",
     "default": false
+  },
+  "sharedMemory": {
+    "description": "Declare memory as shared by settings the max shared memory.",
+    "type": "i",
+    "default": 0
   },
   "memoryBase": {
     "description": "Sets the start offset of compiler-generated static memory.",

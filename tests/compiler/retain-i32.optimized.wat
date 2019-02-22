@@ -11,7 +11,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:retain-i32 (; 1 ;) (type $_)
   (local $0 i32)
   i32.const -128
   local.set $0
@@ -258,7 +258,10 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:retain-i32
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

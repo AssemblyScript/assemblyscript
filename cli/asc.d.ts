@@ -42,6 +42,12 @@ export const definitionFiles: { assembly: string, portable: string };
 export interface OutputStream {
   /** Writes another chunk of data to the stream. */
   write(chunk: Uint8Array | string): void;
+}
+
+/** An in-memory output stream. */
+export interface MemoryStream extends OutputStream {
+  /** Resets the stream to offset zero. */
+  reset(): void;
   /** Converts the output to a buffer. */
   toBuffer(): Uint8Array;
   /** Converts the output to a string. */
@@ -112,7 +118,7 @@ export function formatTime(time: number): string;
 export function printStats(stats: Stats, output: OutputStream): void;
 
 /** Creates a memory stream that can be used in place of stdout/stderr. */
-export function createMemoryStream(fn?: (chunk: Uint8Array | string) => void): OutputStream;
+export function createMemoryStream(fn?: (chunk: Uint8Array | string) => void): MemoryStream;
 
 /** Compatible TypeScript compiler options for syntax highlighting etc. */
 export const tscOptions: { [key: string]: any };

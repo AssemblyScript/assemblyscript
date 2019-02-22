@@ -19,7 +19,7 @@
  (global $infer-type/rF (mut f64) (f64.const 0))
  (global $infer-type/inferi (mut i32) (i32.const -2147483648))
  (global $infer-type/inferu (mut i32) (i32.const 2147483647))
- (global $HEAP_BASE i32 (i32.const 40))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 40))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -55,7 +55,7 @@
  (func $infer-type/refF (; 5 ;) (type $F) (result f64)
   f64.const 0
  )
- (func $start (; 6 ;) (type $_)
+ (func $start:infer-type (; 6 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   global.get $infer-type/i
@@ -126,6 +126,9 @@
    unreachable
   end
  )
- (func $null (; 7 ;) (type $_)
+ (func $start (; 7 ;) (type $_)
+  call $start:infer-type
+ )
+ (func $null (; 8 ;) (type $_)
  )
 )

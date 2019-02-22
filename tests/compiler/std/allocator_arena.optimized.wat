@@ -1,7 +1,7 @@
 (module
+ (type $_ (func))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii_ (func (param i32 i32 i32)))
- (type $_ (func))
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
@@ -1412,7 +1412,7 @@
    i32.const 0
   end
  )
- (func $start (; 6 ;) (type $_)
+ (func $start:std/allocator_arena (; 6 ;) (type $_)
   i32.const 56
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -1524,7 +1524,10 @@
    unreachable
   end
  )
- (func $null (; 7 ;) (type $_)
+ (func $start (; 7 ;) (type $_)
+  call $start:std/allocator_arena
+ )
+ (func $null (; 8 ;) (type $_)
   nop
  )
 )

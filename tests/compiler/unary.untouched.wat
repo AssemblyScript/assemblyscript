@@ -7,11 +7,11 @@
  (global $unary/I (mut i64) (i64.const 0))
  (global $unary/f (mut f32) (f32.const 0))
  (global $unary/F (mut f64) (f64.const 0))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 0 ;) (type $_)
+ (func $start:unary (; 0 ;) (type $_)
   (local $0 i32)
   (local $1 i64)
   (local $2 f32)
@@ -366,6 +366,9 @@
   end
   global.set $unary/F
  )
- (func $null (; 1 ;) (type $_)
+ (func $start (; 1 ;) (type $_)
+  call $start:unary
+ )
+ (func $null (; 2 ;) (type $_)
  )
 )

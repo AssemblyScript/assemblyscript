@@ -17,7 +17,7 @@ jobs:
         cd $TRAVIS_BUILD_DIR/tests/allocators/buddy && npm run build && cd .. && npm test buddy &&
         cd $TRAVIS_BUILD_DIR/tests/allocators/tlsf  && npm run build && cd .. && npm test tlsf;
       fi
-    env: Runs the tests on node.js LTS
+    env: Runs the tests on node.js LTS, also tests allocators
   - node_js: node
     script:
     - npm run all

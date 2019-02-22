@@ -1,8 +1,8 @@
 (module
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
  (type $i_ (func (param i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -174,7 +174,7 @@
    unreachable
   end
  )
- (func $start (; 5 ;) (type $_)
+ (func $start:object-literal (; 5 ;) (type $_)
   (local $0 i32)
   i32.const 80
   global.set $~lib/allocator/arena/startOffset
@@ -225,7 +225,10 @@
    unreachable
   end
  )
- (func $null (; 6 ;) (type $_)
+ (func $start (; 6 ;) (type $_)
+  call $start:object-literal
+ )
+ (func $null (; 7 ;) (type $_)
   nop
  )
 )
