@@ -17,4 +17,11 @@ export namespace near {
     let arr: Array<T> = [value];
     return arr.toString();
   }
+
+  export function log(msg: string): void {
+    _near_log(<usize>msg);
+  }
 }
+
+@external("env", "log")
+declare function _near_log(msg_ptr: usize): void;

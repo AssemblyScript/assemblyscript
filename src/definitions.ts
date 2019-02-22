@@ -167,7 +167,6 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private generatedDecodeFunctions = new Set<string>();
   private exportedClasses: Class[] = [];
   private exportedFunctions: Function[] = [];
-  private filesByImport = new Map<string, string>();
 
   static build(program: Program): string {
     return new NEARBindingsBuilder(program).build();
@@ -406,21 +405,20 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private tryUsingImport(type: Type, methodName: string): bool {
-    let importedFile = this.filesByImport.get(type.classReference!.name);
-    if (importedFile) {
-      if (this.hasExport(importedFile, methodName)) {
-        this.sb.push(`import { ${methodName} } from "${importedFile}";`);
-        return true;
-      }
+    let sourcesWithExport = this.program.sources.filter(source =>
+      this.getExports(source).filter(d => d.name.text == methodName).length > 0);
+
+    if (sourcesWithExport.length == 0) {
+      return false;
     }
-    return false;
-  }
 
-  private hasExport(importedFile: string, name: string): bool {
-    let importedSource = this.program.sources.filter(
-      s => "./" + s.normalizedPath == importedFile + ".ts")[0];
+    if (sourcesWithExport.length > 1) {
+      console.log(`WARN: more than one file exporting ${methodName}: ${sourcesWithExport.map(s => s.normalizedPath)}`);
+    }
 
-    return this.getExports(importedSource).filter(d => d.name.text == name).length > 0;
+    let importPath = sourcesWithExport[0].normalizedPath.replace('.ts', '');
+    this.sb.push(`import { ${methodName} } from "./${importPath}";`);
+    return true;
   }
 
   private generateHandler(type: Type) {
@@ -589,9 +587,6 @@ export class NEARBindingsBuilder extends ExportsWalker {
           .map(declaration => `${declaration.foreignName.text} as ${declaration.name.text}`)
           .join(",");
         this.sb.push(`import {${declarationsStr}} from "${statement.path.value}";`);
-        statement.declarations.forEach(d => {
-          this.filesByImport.set(d.name.text, statement.path.value);
-        });
       }
     });
   }

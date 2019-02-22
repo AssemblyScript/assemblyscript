@@ -14,6 +14,7 @@
  (import "env" "input_read_len" (func $main_near/input_read_len (result i32)))
  (import "env" "input_read_into" (func $main_near/input_read_into (param i32)))
  (import "env" "return_value" (func $main_near/return_value (param i32)))
+ (import "env" "log" (func $near/_near_log (param i32)))
  (memory $0 1)
  (data (i32.const 8) "\04\00\00\00t\00r\00u\00e\00")
  (data (i32.const 24) "\05\00\00\00f\00a\00l\00s\00e\00")
@@ -90,6 +91,7 @@
  (data (i32.const 2280) "\07\00\00\00f\00o\00o\00b\00a\00r\00s\00")
  (data (i32.const 2304) "\06\00\00\00r\00e\00s\00u\00l\00t\00")
  (data (i32.const 2320) "\06\00\00\00f\00o\00o\00b\00a\00r\00")
+ (data (i32.const 2336) "\16\00\00\00g\00e\00t\00S\00t\00r\00i\00n\00g\00A\00r\00r\00a\00y\00L\00e\00n\00g\00t\00h\00:\00 \00")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $main/convertFoobars~anonymous|1)
  (global $json/decoder/TRUE_STR i32 (i32.const 8))
@@ -103,13 +105,14 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 2336))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 2384))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "runTest" (func $test/runTest))
  (export "convertFoobars" (func $test/convertFoobars))
+ (export "getStringArrayLength" (func $test/getStringArrayLength))
  (start $start)
- (func $~lib/string/String#charCodeAt (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#charCodeAt (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -137,7 +140,7 @@
   i32.add
   i32.load16_u offset=4
  )
- (func $start:json/decoder (; 5 ;) (type $_)
+ (func $start:json/decoder (; 6 ;) (type $_)
   i32.const 56
   i32.const 0
   call $~lib/string/String#charCodeAt
@@ -155,7 +158,7 @@
   call $~lib/string/String#charCodeAt
   global.set $json/decoder/CHAR_A_LOWER
  )
- (func $start:~lib/allocator/arena (; 6 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 7 ;) (type $_)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -167,17 +170,17 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $start:main (; 7 ;) (type $_)
+ (func $start:main (; 8 ;) (type $_)
   call $start:~lib/allocator/arena
  )
- (func $start:main_near (; 8 ;) (type $_)
+ (func $start:main_near (; 9 ;) (type $_)
   call $start:json/decoder
   call $start:main
  )
- (func $start:test (; 9 ;) (type $_)
+ (func $start:test (; 10 ;) (type $_)
   call $start:main_near
  )
- (func $~lib/allocator/arena/__memory_allocate (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 11 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -256,12 +259,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 12 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $model/FooBar#constructor (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model/FooBar#constructor (; 13 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -286,7 +289,7 @@
   i32.store offset=16
   local.get $0
  )
- (func $model_near/FooBar#constructor (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model_near/FooBar#constructor (; 14 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -299,7 +302,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/arraybuffer/computeSize (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 15 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -311,7 +314,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 15 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 16 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -340,7 +343,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 16 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 17 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -594,7 +597,7 @@
    end
   end
  )
- (func $~lib/array/Array<String>#constructor (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#constructor (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -655,7 +658,7 @@
   end
   local.get $0
  )
- (func $json/encoder/JSONEncoder#constructor (; 18 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/encoder/JSONEncoder#constructor (; 19 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -673,7 +676,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/internal/memory/memcpy (; 19 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 20 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1874,7 +1877,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 20 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 21 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -2101,10 +2104,10 @@
    end
   end
  )
- (func $~lib/allocator/arena/__memory_free (; 21 ;) (type $i_) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 22 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2211,7 +2214,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<String>#push (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#push (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2284,14 +2287,14 @@
   end
   local.get $5
  )
- (func $json/encoder/JSONEncoder#write (; 24 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#write (; 25 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/array/Array<String>#push
   drop
  )
- (func $~lib/internal/string/compareUnsafe (; 25 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 26 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -2344,7 +2347,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -2388,13 +2391,13 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $~lib/string/String.__ne (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__ne (; 28 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
   i32.eqz
  )
- (func $~lib/internal/string/allocateUnsafe (; 28 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 29 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -2434,7 +2437,7 @@
   i32.store
   local.get $2
  )
- (func $~lib/internal/string/copyUnsafe (; 29 ;) (type $iiiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $~lib/internal/string/copyUnsafe (; 30 ;) (type $iiiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -2463,7 +2466,7 @@
   local.get $7
   call $~lib/internal/memory/memmove
  )
- (func $~lib/string/String#substring (; 30 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (; 31 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2573,7 +2576,7 @@
   call $~lib/internal/string/copyUnsafe
   local.get $10
  )
- (func $json/encoder/JSONEncoder#writeString (; 31 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#writeString (; 32 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2734,7 +2737,7 @@
   i32.const 256
   call $json/encoder/JSONEncoder#write
  )
- (func $json/encoder/JSONEncoder#writeKey (; 32 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#writeKey (; 33 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load8_u
   i32.const 0
@@ -2761,7 +2764,7 @@
    call $json/encoder/JSONEncoder#write
   end
  )
- (func $json/encoder/JSONEncoder#pushObject (; 33 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/encoder/JSONEncoder#pushObject (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
@@ -2773,7 +2776,7 @@
   i32.store8
   i32.const 1
  )
- (func $~lib/internal/number/decimalCount32 (; 34 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/decimalCount32 (; 35 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 100000
@@ -2842,7 +2845,7 @@
   unreachable
   unreachable
  )
- (func $~lib/internal/number/utoa32_lut (; 35 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 36 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3030,7 +3033,7 @@
    i32.store16 offset=4
   end
  )
- (func $~lib/internal/number/itoa32 (; 36 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa32 (; 37 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3082,22 +3085,22 @@
   end
   local.get $3
  )
- (func $~lib/internal/number/itoa<i32> (; 37 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa<i32> (; 38 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/internal/number/itoa32
   return
  )
- (func $~lib/number/I32#toString (; 38 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (; 39 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/internal/number/itoa<i32>
  )
- (func $json/encoder/JSONEncoder#writeInteger (; 39 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#writeInteger (; 40 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/number/I32#toString
   call $json/encoder/JSONEncoder#write
  )
- (func $json/encoder/JSONEncoder#setInteger (; 40 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/encoder/JSONEncoder#setInteger (; 41 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
@@ -3105,7 +3108,7 @@
   local.get $2
   call $json/encoder/JSONEncoder#writeInteger
  )
- (func $json/encoder/JSONEncoder#writeBoolean (; 41 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#writeBoolean (; 42 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.const 0
@@ -3117,7 +3120,7 @@
   end
   call $json/encoder/JSONEncoder#write
  )
- (func $json/encoder/JSONEncoder#setBoolean (; 42 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/encoder/JSONEncoder#setBoolean (; 43 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
@@ -3125,7 +3128,7 @@
   local.get $2
   call $json/encoder/JSONEncoder#writeBoolean
  )
- (func $json/encoder/JSONEncoder#setString (; 43 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/encoder/JSONEncoder#setString (; 44 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
@@ -3133,7 +3136,7 @@
   local.get $2
   call $json/encoder/JSONEncoder#writeString
  )
- (func $json/encoder/JSONEncoder#setNull (; 44 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/encoder/JSONEncoder#setNull (; 45 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
@@ -3141,7 +3144,7 @@
   i32.const 40
   call $json/encoder/JSONEncoder#write
  )
- (func $json/encoder/JSONEncoder#pushArray (; 45 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/encoder/JSONEncoder#pushArray (; 46 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $json/encoder/JSONEncoder#writeKey
@@ -3153,7 +3156,7 @@
   i32.store8
   i32.const 1
  )
- (func $~lib/array/Array<Array<String>>#__get (; 46 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<String>>#__get (; 47 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3186,7 +3189,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<String>#__get (; 47 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#__get (; 48 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3219,7 +3222,7 @@
    unreachable
   end
  )
- (func $model_near/__near_encode_Array_String (; 48 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_Array_String (; 49 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -3263,12 +3266,12 @@
    unreachable
   end
  )
- (func $json/encoder/JSONEncoder#popArray (; 49 ;) (type $i_) (param $0 i32)
+ (func $json/encoder/JSONEncoder#popArray (; 50 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 1128
   call $json/encoder/JSONEncoder#write
  )
- (func $model_near/__near_encode_Array_Array_String (; 50 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_Array_Array_String (; 51 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -3317,7 +3320,7 @@
    unreachable
   end
  )
- (func $model_near/__near_encode_FooBar (; 51 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_FooBar (; 52 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $1
   i32.const 136
   local.get $0
@@ -3369,12 +3372,12 @@
    call $json/encoder/JSONEncoder#setNull
   end
  )
- (func $json/encoder/JSONEncoder#popObject (; 52 ;) (type $i_) (param $0 i32)
+ (func $json/encoder/JSONEncoder#popObject (; 53 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.const 1136
   call $json/encoder/JSONEncoder#write
  )
- (func $~lib/array/Array<String>#join (; 53 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<String>#join (; 54 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3586,13 +3589,13 @@
   local.get $9
   return
  )
- (func $json/encoder/JSONEncoder#toString (; 54 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/encoder/JSONEncoder#toString (; 55 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   i32.const 272
   call $~lib/array/Array<String>#join
  )
- (func $~lib/string/String#get:lengthUTF8 (; 55 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:lengthUTF8 (; 56 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3705,7 +3708,7 @@
   end
   local.get $1
  )
- (func $~lib/string/String#toUTF8 (; 56 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#toUTF8 (; 57 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3927,7 +3930,7 @@
   i32.store8
   local.get $2
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 57 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 58 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3994,7 +3997,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#constructor (; 58 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -4008,7 +4011,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 59 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 60 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4049,7 +4052,7 @@
    i32.store8 offset=8
   end
  )
- (func $~lib/typedarray/Uint8Array#subarray (; 60 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#subarray (; 61 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4159,7 +4162,7 @@
   i32.store offset=8
   local.get $7
  )
- (func $json/encoder/JSONEncoder#serialize (; 61 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/encoder/JSONEncoder#serialize (; 62 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4222,7 +4225,7 @@
   i32.sub
   call $~lib/typedarray/Uint8Array#subarray
  )
- (func $model_near/FooBar#encode (; 62 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model_near/FooBar#encode (; 63 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 0
   call $json/encoder/JSONEncoder#constructor
@@ -4239,7 +4242,7 @@
   local.get $1
   call $json/encoder/JSONEncoder#serialize
  )
- (func $json/decoder/JSONHandler#constructor (; 63 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONHandler#constructor (; 64 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -4249,7 +4252,7 @@
   end
   local.get $0
  )
- (func $json/decoder/ThrowingJSONHandler#constructor (; 64 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/ThrowingJSONHandler#constructor (; 65 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -4262,7 +4265,7 @@
   local.set $0
   local.get $0
  )
- (func $model_near/__near_JSONHandler_FooBar#constructor (; 65 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model_near/__near_JSONHandler_FooBar#constructor (; 66 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -4288,7 +4291,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#constructor (; 66 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#constructor (; 67 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -4309,7 +4312,7 @@
   i32.store
   local.get $0
  )
- (func $json/decoder/DecoderState#constructor (; 67 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/DecoderState#constructor (; 68 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -4328,7 +4331,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 68 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 69 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4365,7 +4368,7 @@
    i32.load8_u offset=8
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#peekChar (; 69 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#peekChar (; 70 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -4395,7 +4398,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#isWhitespace (; 70 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#isWhitespace (; 71 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 9
@@ -4425,7 +4428,7 @@
    i32.eq
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar (; 71 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readChar (; 72 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -4469,7 +4472,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#skipWhitespace (; 72 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#skipWhitespace (; 73 ;) (type $i_) (param $0 i32)
   loop $continue|0
    local.get $0
    local.get $0
@@ -4483,7 +4486,7 @@
    end
   end
  )
- (func $~lib/string/String#concat (; 73 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 74 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4541,7 +4544,7 @@
   call $~lib/internal/string/copyUnsafe
   local.get $5
  )
- (func $~lib/string/String.__concat (; 74 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 75 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -4552,7 +4555,7 @@
   local.get $1
   call $~lib/string/String#concat
  )
- (func $json/decoder/ThrowingJSONHandler#pushObject (; 75 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/ThrowingJSONHandler#pushObject (; 76 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   i32.eqz
   if
@@ -4567,7 +4570,7 @@
   end
   i32.const 1
  )
- (func $model_near/__near_JSONHandler_FooBar#pushObject (; 76 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_FooBar#pushObject (; 77 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load8_u offset=8
   i32.const 0
@@ -4609,7 +4612,7 @@
   local.get $1
   call $json/decoder/ThrowingJSONHandler#pushObject
  )
- (func $~lib/string/String.fromUTF8 (; 77 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.fromUTF8 (; 78 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4937,7 +4940,7 @@
   end
   local.get $7
  )
- (func $~lib/array/Array<i32>#constructor (; 78 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (; 79 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4998,7 +5001,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<i32>#__unchecked_set (; 79 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__unchecked_set (; 80 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5022,7 +5025,7 @@
   local.get $5
   i32.store offset=8
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readHexDigit (; 80 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readHexDigit (; 81 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5102,7 +5105,7 @@
   end
   local.get $2
  )
- (func $~lib/string/String.fromCodePoint (; 81 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.fromCodePoint (; 82 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5161,7 +5164,7 @@
   end
   local.get $2
  )
- (func $~lib/string/String.fromCharCode (; 82 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.fromCharCode (; 83 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 1
   call $~lib/internal/string/allocateUnsafe
@@ -5171,7 +5174,7 @@
   i32.store16 offset=4
   local.get $1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readEscapedChar (; 83 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readEscapedChar (; 84 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5295,7 +5298,7 @@
   end
   i32.const 272
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readString (; 84 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readString (; 85 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5434,7 +5437,7 @@
   end
   i32.const 272
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseKey (; 85 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseKey (; 86 ;) (type $i_) (param $0 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#skipWhitespace
   local.get $0
@@ -5460,10 +5463,10 @@
    unreachable
   end
  )
- (func $json/decoder/JSONHandler#popObject (; 86 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONHandler#popObject (; 87 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseObject (; 87 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseObject (; 88 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -5559,7 +5562,7 @@
   call $json/decoder/JSONHandler#popObject
   i32.const 1
  )
- (func $~lib/array/Array<Array<String>>#constructor (; 88 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<String>>#constructor (; 89 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5620,7 +5623,7 @@
   end
   local.get $0
  )
- (func $model_near/__near_JSONHandler_Array_Array_String#constructor (; 89 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_Array_String#constructor (; 90 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -5647,7 +5650,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#constructor (; 90 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#constructor (; 91 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -5668,7 +5671,7 @@
   i32.store
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#peekChar (; 91 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#peekChar (; 92 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -5698,7 +5701,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#isWhitespace (; 92 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#isWhitespace (; 93 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 9
@@ -5728,7 +5731,7 @@
    i32.eq
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar (; 93 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readChar (; 94 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -5772,7 +5775,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#skipWhitespace (; 94 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#skipWhitespace (; 95 ;) (type $i_) (param $0 i32)
   loop $continue|0
    local.get $0
    local.get $0
@@ -5786,7 +5789,7 @@
    end
   end
  )
- (func $model_near/__near_JSONHandler_Array_String#constructor (; 95 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_String#constructor (; 96 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -5813,7 +5816,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#constructor (; 96 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#constructor (; 97 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -5834,7 +5837,7 @@
   i32.store
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#peekChar (; 97 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#peekChar (; 98 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -5864,7 +5867,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#isWhitespace (; 98 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#isWhitespace (; 99 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 9
@@ -5894,7 +5897,7 @@
    i32.eq
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readChar (; 99 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readChar (; 100 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -5938,7 +5941,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#skipWhitespace (; 100 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#skipWhitespace (; 101 ;) (type $i_) (param $0 i32)
   loop $continue|0
    local.get $0
    local.get $0
@@ -5952,7 +5955,7 @@
    end
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readHexDigit (; 101 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readHexDigit (; 102 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6032,7 +6035,7 @@
   end
   local.get $2
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readEscapedChar (; 102 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readEscapedChar (; 103 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6156,7 +6159,7 @@
   end
   i32.const 272
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readString (; 103 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readString (; 104 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6295,7 +6298,7 @@
   end
   i32.const 272
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseKey (; 104 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseKey (; 105 ;) (type $i_) (param $0 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#skipWhitespace
   local.get $0
@@ -6321,7 +6324,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseObject (; 105 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseObject (; 106 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -6417,7 +6420,7 @@
   call $json/decoder/JSONHandler#popObject
   i32.const 1
  )
- (func $model_near/__near_JSONHandler_Array_String#pushArray (; 106 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_String#pushArray (; 107 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 0
@@ -6446,10 +6449,10 @@
   i32.store8 offset=8
   i32.const 1
  )
- (func $json/decoder/JSONHandler#popArray (; 107 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONHandler#popArray (; 108 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseArray (; 108 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseArray (; 109 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -6544,14 +6547,14 @@
   i32.const 1
   return
  )
- (func $model_near/__near_JSONHandler_Array_String#setString (; 109 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $model_near/__near_JSONHandler_Array_String#setString (; 110 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=12
   local.get $2
   call $~lib/array/Array<String>#push
   drop
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseString (; 110 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseString (; 111 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#peekChar
   i32.const 256
@@ -6572,7 +6575,7 @@
   call $model_near/__near_JSONHandler_Array_String#setString
   i32.const 1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readAndAssert (; 111 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#readAndAssert (; 112 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $break|0
    i32.const 0
@@ -6613,7 +6616,7 @@
    unreachable
   end
  )
- (func $json/decoder/ThrowingJSONHandler#setBoolean (; 112 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/decoder/ThrowingJSONHandler#setBoolean (; 113 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 0
   i32.eqz
   if
@@ -6638,7 +6641,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseBoolean (; 113 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseBoolean (; 114 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#peekChar
   global.get $json/decoder/FALSE_STR
@@ -6681,7 +6684,7 @@
   end
   i32.const 0
  )
- (func $~lib/internal/number/itoa_stream<i32> (; 114 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/itoa_stream<i32> (; 115 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6740,7 +6743,7 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<i32>#join (; 115 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#join (; 116 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6930,7 +6933,7 @@
   local.get $13
   return
  )
- (func $json/decoder/ThrowingJSONHandler#setInteger (; 116 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/decoder/ThrowingJSONHandler#setInteger (; 117 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block (result i32)
@@ -6968,7 +6971,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseNumber (; 117 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseNumber (; 118 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7049,14 +7052,14 @@
   end
   i32.const 0
  )
- (func $model_near/__near_JSONHandler_Array_String#setNull (; 118 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_JSONHandler_Array_String#setNull (; 119 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=12
   i32.const 0
   call $~lib/array/Array<String>#push
   drop
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseNull (; 119 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseNull (; 120 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#peekChar
   global.get $json/decoder/NULL_STR
@@ -7078,7 +7081,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseValue (; 120 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#parseValue (; 121 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#skipWhitespace
@@ -7124,7 +7127,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#skipWhitespace
   local.get $1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#deserialize (; 121 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_String>#deserialize (; 122 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   if
    local.get $0
@@ -7162,7 +7165,7 @@
    unreachable
   end
  )
- (func $model_near/__near_decode_Array_String (; 122 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_decode_Array_String (; 123 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 0
   call $model_near/__near_JSONHandler_Array_String#constructor
@@ -7183,7 +7186,7 @@
   local.get $2
   i32.load offset=12
  )
- (func $~lib/array/Array<Array<String>>#push (; 123 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<String>>#push (; 124 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7256,7 +7259,7 @@
   end
   local.get $5
  )
- (func $model_near/__near_JSONHandler_Array_Array_String#pushObject (; 124 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_Array_String#pushObject (; 125 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=12
   local.get $0
@@ -7269,7 +7272,7 @@
   drop
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readHexDigit (; 125 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readHexDigit (; 126 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7349,7 +7352,7 @@
   end
   local.get $2
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readEscapedChar (; 126 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readEscapedChar (; 127 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7473,7 +7476,7 @@
   end
   i32.const 272
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readString (; 127 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readString (; 128 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7612,7 +7615,7 @@
   end
   i32.const 272
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseKey (; 128 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseKey (; 129 ;) (type $i_) (param $0 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#skipWhitespace
   local.get $0
@@ -7638,7 +7641,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseObject (; 129 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseObject (; 130 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -7734,7 +7737,7 @@
   call $json/decoder/JSONHandler#popObject
   i32.const 1
  )
- (func $model_near/__near_JSONHandler_Array_Array_String#pushArray (; 130 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_Array_Array_String#pushArray (; 131 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   i32.const 0
   call $~lib/string/String.__eq
@@ -7771,7 +7774,7 @@
   drop
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseArray (; 131 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseArray (; 132 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -7866,7 +7869,7 @@
   i32.const 1
   return
  )
- (func $json/decoder/ThrowingJSONHandler#setString (; 132 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/decoder/ThrowingJSONHandler#setString (; 133 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 0
   i32.eqz
   if
@@ -7886,7 +7889,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseString (; 133 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseString (; 134 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#peekChar
   i32.const 256
@@ -7907,7 +7910,7 @@
   call $json/decoder/ThrowingJSONHandler#setString
   i32.const 1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readAndAssert (; 134 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#readAndAssert (; 135 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $break|0
    i32.const 0
@@ -7948,7 +7951,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseBoolean (; 135 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseBoolean (; 136 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#peekChar
   global.get $json/decoder/FALSE_STR
@@ -7991,7 +7994,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseNumber (; 136 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseNumber (; 137 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8072,7 +8075,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/ThrowingJSONHandler#setNull (; 137 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/decoder/ThrowingJSONHandler#setNull (; 138 ;) (type $ii_) (param $0 i32) (param $1 i32)
   i32.const 0
   i32.eqz
   if
@@ -8086,7 +8089,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseNull (; 138 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseNull (; 139 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#peekChar
   global.get $json/decoder/NULL_STR
@@ -8108,7 +8111,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseValue (; 139 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#parseValue (; 140 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#skipWhitespace
@@ -8154,7 +8157,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#skipWhitespace
   local.get $1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#deserialize (; 140 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_Array_String>#deserialize (; 141 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   if
    local.get $0
@@ -8192,7 +8195,7 @@
    unreachable
   end
  )
- (func $model_near/__near_decode_Array_Array_String (; 141 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_decode_Array_Array_String (; 142 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 0
   call $model_near/__near_JSONHandler_Array_Array_String#constructor
@@ -8213,7 +8216,7 @@
   local.get $2
   i32.load offset=12
  )
- (func $json/decoder/ThrowingJSONHandler#pushArray (; 142 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/ThrowingJSONHandler#pushArray (; 143 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   i32.eqz
   if
@@ -8228,7 +8231,7 @@
   end
   i32.const 1
  )
- (func $model_near/__near_JSONHandler_FooBar#pushArray (; 143 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_JSONHandler_FooBar#pushArray (; 144 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   i32.const 1104
   call $~lib/string/String.__eq
@@ -8249,7 +8252,7 @@
   local.get $1
   call $json/decoder/ThrowingJSONHandler#pushArray
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseArray (; 144 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseArray (; 145 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -8344,7 +8347,7 @@
   i32.const 1
   return
  )
- (func $model_near/__near_JSONHandler_FooBar#setString (; 145 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $model_near/__near_JSONHandler_FooBar#setString (; 146 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   i32.const 1088
   call $~lib/string/String.__eq
@@ -8360,7 +8363,7 @@
   local.get $2
   call $json/decoder/ThrowingJSONHandler#setString
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseString (; 146 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseString (; 147 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#peekChar
   i32.const 256
@@ -8381,7 +8384,7 @@
   call $model_near/__near_JSONHandler_FooBar#setString
   i32.const 1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readAndAssert (; 147 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#readAndAssert (; 148 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $break|0
    i32.const 0
@@ -8422,7 +8425,7 @@
    unreachable
   end
  )
- (func $model_near/__near_JSONHandler_FooBar#setBoolean (; 148 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $model_near/__near_JSONHandler_FooBar#setBoolean (; 149 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   i32.const 1072
   call $~lib/string/String.__eq
@@ -8440,7 +8443,7 @@
   local.get $2
   call $json/decoder/ThrowingJSONHandler#setBoolean
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseBoolean (; 149 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseBoolean (; 150 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#peekChar
   global.get $json/decoder/FALSE_STR
@@ -8483,7 +8486,7 @@
   end
   i32.const 0
  )
- (func $model_near/__near_JSONHandler_FooBar#setInteger (; 150 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $model_near/__near_JSONHandler_FooBar#setInteger (; 151 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   i32.const 136
   call $~lib/string/String.__eq
@@ -8509,7 +8512,7 @@
   local.get $2
   call $json/decoder/ThrowingJSONHandler#setInteger
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseNumber (; 151 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseNumber (; 152 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8590,7 +8593,7 @@
   end
   i32.const 0
  )
- (func $model_near/__near_JSONHandler_FooBar#setNull (; 152 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_JSONHandler_FooBar#setNull (; 153 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $1
   i32.const 136
   call $~lib/string/String.__eq
@@ -8645,7 +8648,7 @@
   local.get $1
   call $json/decoder/ThrowingJSONHandler#setNull
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseNull (; 153 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseNull (; 154 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#peekChar
   global.get $json/decoder/NULL_STR
@@ -8667,7 +8670,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseValue (; 154 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#parseValue (; 155 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#skipWhitespace
@@ -8713,7 +8716,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#skipWhitespace
   local.get $1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#deserialize (; 155 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_FooBar>#deserialize (; 156 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   if
    local.get $0
@@ -8751,7 +8754,7 @@
    unreachable
   end
  )
- (func $model_near/__near_decode_FooBar (; 156 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $model_near/__near_decode_FooBar (; 157 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 0
   call $model_near/__near_JSONHandler_FooBar#constructor
@@ -8772,12 +8775,12 @@
   local.get $2
   i32.load offset=12
  )
- (func $model_near/FooBar.decode (; 157 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model_near/FooBar.decode (; 158 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   call $model_near/__near_decode_FooBar
  )
- (func $test/runTest (; 158 ;) (type $_)
+ (func $test/runTest (; 159 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -8811,7 +8814,7 @@
   if
    i32.const 0
    i32.const 2224
-   i32.const 17
+   i32.const 18
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8825,13 +8828,13 @@
   if
    i32.const 0
    i32.const 2224
-   i32.const 18
+   i32.const 19
    i32.const 4
    call $~lib/env/abort
    unreachable
   end
  )
- (func $main_near/__near_ArgsParser_convertFoobars#constructor (; 159 ;) (type $ii) (param $0 i32) (result i32)
+ (func $main_near/__near_ArgsParser_convertFoobars#constructor (; 160 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -8856,7 +8859,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#constructor (; 160 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#constructor (; 161 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -8877,7 +8880,7 @@
   i32.store
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar (; 161 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar (; 162 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -8907,7 +8910,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#isWhitespace (; 162 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#isWhitespace (; 163 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 9
@@ -8937,7 +8940,7 @@
    i32.eq
   end
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar (; 163 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readChar (; 164 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -8981,7 +8984,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace (; 164 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace (; 165 ;) (type $i_) (param $0 i32)
   loop $continue|0
    local.get $0
    local.get $0
@@ -8995,7 +8998,7 @@
    end
   end
  )
- (func $main_near/__near_ArgsParser_convertFoobars#pushObject (; 165 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $main_near/__near_ArgsParser_convertFoobars#pushObject (; 166 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load8_u offset=8
   i32.const 0
@@ -9037,7 +9040,7 @@
   local.get $1
   call $json/decoder/ThrowingJSONHandler#pushObject
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readHexDigit (; 166 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readHexDigit (; 167 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9117,7 +9120,7 @@
   end
   local.get $2
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readEscapedChar (; 167 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readEscapedChar (; 168 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9241,7 +9244,7 @@
   end
   i32.const 272
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readString (; 168 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readString (; 169 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9380,7 +9383,7 @@
   end
   i32.const 272
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseKey (; 169 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseKey (; 170 ;) (type $i_) (param $0 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace
   local.get $0
@@ -9406,7 +9409,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseObject (; 170 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseObject (; 171 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -9502,7 +9505,7 @@
   call $json/decoder/JSONHandler#popObject
   i32.const 1
  )
- (func $~lib/array/Array<FooBar>#constructor (; 171 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<FooBar>#constructor (; 172 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9563,7 +9566,7 @@
   end
   local.get $0
  )
- (func $main_near/__near_JSONHandler_Array_FooBar#constructor (; 172 ;) (type $ii) (param $0 i32) (result i32)
+ (func $main_near/__near_JSONHandler_Array_FooBar#constructor (; 173 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -9590,7 +9593,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#constructor (; 173 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#constructor (; 174 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -9611,7 +9614,7 @@
   i32.store
   local.get $0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar (; 174 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar (; 175 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -9641,7 +9644,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#isWhitespace (; 175 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#isWhitespace (; 176 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 9
@@ -9671,7 +9674,7 @@
    i32.eq
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar (; 176 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readChar (; 177 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -9715,7 +9718,7 @@
   i32.const 255
   i32.and
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace (; 177 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace (; 178 ;) (type $i_) (param $0 i32)
   loop $continue|0
    local.get $0
    local.get $0
@@ -9729,7 +9732,7 @@
    end
   end
  )
- (func $~lib/array/Array<FooBar>#push (; 178 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<FooBar>#push (; 179 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9802,7 +9805,7 @@
   end
   local.get $5
  )
- (func $main_near/__near_JSONHandler_Array_FooBar#pushObject (; 179 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $main_near/__near_JSONHandler_Array_FooBar#pushObject (; 180 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=12
   local.get $0
@@ -9815,7 +9818,7 @@
   drop
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readHexDigit (; 180 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readHexDigit (; 181 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9895,7 +9898,7 @@
   end
   local.get $2
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readEscapedChar (; 181 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readEscapedChar (; 182 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -10019,7 +10022,7 @@
   end
   i32.const 272
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readString (; 182 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readString (; 183 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -10158,7 +10161,7 @@
   end
   i32.const 272
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseKey (; 183 ;) (type $i_) (param $0 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseKey (; 184 ;) (type $i_) (param $0 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace
   local.get $0
@@ -10184,7 +10187,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseObject (; 184 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseObject (; 185 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -10280,7 +10283,7 @@
   call $json/decoder/JSONHandler#popObject
   i32.const 1
  )
- (func $main_near/__near_JSONHandler_Array_FooBar#pushArray (; 185 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $main_near/__near_JSONHandler_Array_FooBar#pushArray (; 186 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   i32.const 0
   call $~lib/string/String.__eq
@@ -10317,7 +10320,7 @@
   drop
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseArray (; 186 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseArray (; 187 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -10412,7 +10415,7 @@
   i32.const 1
   return
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseString (; 187 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseString (; 188 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar
   i32.const 256
@@ -10433,7 +10436,7 @@
   call $json/decoder/ThrowingJSONHandler#setString
   i32.const 1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readAndAssert (; 188 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#readAndAssert (; 189 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $break|0
    i32.const 0
@@ -10474,7 +10477,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseBoolean (; 189 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseBoolean (; 190 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar
   global.get $json/decoder/FALSE_STR
@@ -10517,7 +10520,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseNumber (; 190 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseNumber (; 191 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -10598,7 +10601,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseNull (; 191 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseNull (; 192 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#peekChar
   global.get $json/decoder/NULL_STR
@@ -10620,7 +10623,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseValue (; 192 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#parseValue (; 193 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace
@@ -10666,7 +10669,7 @@
   call $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#skipWhitespace
   local.get $1
  )
- (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#deserialize (; 193 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/decoder/JSONDecoder<__near_JSONHandler_Array_FooBar>#deserialize (; 194 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   if
    local.get $0
@@ -10704,7 +10707,7 @@
    unreachable
   end
  )
- (func $main_near/__near_decode_Array_FooBar (; 194 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $main_near/__near_decode_Array_FooBar (; 195 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 0
   call $main_near/__near_JSONHandler_Array_FooBar#constructor
@@ -10725,7 +10728,7 @@
   local.get $2
   i32.load offset=12
  )
- (func $main_near/__near_ArgsParser_convertFoobars#pushArray (; 195 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $main_near/__near_ArgsParser_convertFoobars#pushArray (; 196 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   i32.const 2280
   call $~lib/string/String.__eq
@@ -10745,7 +10748,7 @@
   local.get $1
   call $json/decoder/ThrowingJSONHandler#pushArray
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseArray (; 196 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseArray (; 197 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -10840,7 +10843,7 @@
   i32.const 1
   return
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseString (; 197 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseString (; 198 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar
   i32.const 256
@@ -10861,7 +10864,7 @@
   call $json/decoder/ThrowingJSONHandler#setString
   i32.const 1
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readAndAssert (; 198 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#readAndAssert (; 199 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $break|0
    i32.const 0
@@ -10902,7 +10905,7 @@
    unreachable
   end
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseBoolean (; 199 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseBoolean (; 200 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar
   global.get $json/decoder/FALSE_STR
@@ -10945,7 +10948,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseNumber (; 200 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseNumber (; 201 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11026,7 +11029,7 @@
   end
   i32.const 0
  )
- (func $main_near/__near_ArgsParser_convertFoobars#setNull (; 201 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $main_near/__near_ArgsParser_convertFoobars#setNull (; 202 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $1
   i32.const 2280
   call $~lib/string/String.__eq
@@ -11040,7 +11043,7 @@
   local.get $1
   call $json/decoder/ThrowingJSONHandler#setNull
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseNull (; 202 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseNull (; 203 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#peekChar
   global.get $json/decoder/NULL_STR
@@ -11062,7 +11065,7 @@
   end
   i32.const 0
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseValue (; 203 ;) (type $ii) (param $0 i32) (result i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#parseValue (; 204 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace
@@ -11108,7 +11111,7 @@
   call $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#skipWhitespace
   local.get $1
  )
- (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#deserialize (; 204 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_convertFoobars>#deserialize (; 205 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   if
    local.get $0
@@ -11146,7 +11149,7 @@
    unreachable
   end
  )
- (func $model/ContainerClass#constructor (; 205 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model/ContainerClass#constructor (; 206 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -11159,7 +11162,7 @@
   i32.store
   local.get $0
  )
- (func $model_near/ContainerClass#constructor (; 206 ;) (type $ii) (param $0 i32) (result i32)
+ (func $model_near/ContainerClass#constructor (; 207 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -11172,7 +11175,7 @@
   local.set $0
   local.get $0
  )
- (func $main/convertFoobars~anonymous|1 (; 207 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $main/convertFoobars~anonymous|1 (; 208 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   i32.const 0
   call $model_near/ContainerClass#constructor
@@ -11182,7 +11185,7 @@
   i32.store
   local.get $3
  )
- (func $~lib/array/Array<ContainerClass>#constructor (; 208 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<ContainerClass>#constructor (; 209 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11243,7 +11246,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<FooBar>#map<ContainerClass> (; 209 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<FooBar>#map<ContainerClass> (; 210 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11334,12 +11337,12 @@
   end
   local.get $3
  )
- (func $main/convertFoobars (; 210 ;) (type $ii) (param $0 i32) (result i32)
+ (func $main/convertFoobars (; 211 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   call $~lib/array/Array<FooBar>#map<ContainerClass>
  )
- (func $~lib/array/Array<ContainerClass>#__get (; 211 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<ContainerClass>#__get (; 212 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11372,7 +11375,7 @@
    unreachable
   end
  )
- (func $model_near/__near_encode_ContainerClass (; 212 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $model_near/__near_encode_ContainerClass (; 213 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   i32.const 0
@@ -11394,7 +11397,7 @@
    call $json/encoder/JSONEncoder#setNull
   end
  )
- (func $main_near/__near_encode_Array_ContainerClass (; 213 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $main_near/__near_encode_Array_ContainerClass (; 214 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   block $break|0
@@ -11443,7 +11446,7 @@
    unreachable
   end
  )
- (func $near/near.bufferWithSizeFromPtr (; 214 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $near/near.bufferWithSizeFromPtr (; 215 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 0
@@ -11491,7 +11494,7 @@
   end
   local.get $2
  )
- (func $near/near.bufferWithSize (; 215 ;) (type $ii) (param $0 i32) (result i32)
+ (func $near/near.bufferWithSize (; 216 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.11 (result i32)
    local.get $0
@@ -11505,7 +11508,7 @@
   i32.load offset=8
   call $near/near.bufferWithSizeFromPtr
  )
- (func $main_near/near_func_convertFoobars (; 216 ;) (type $_)
+ (func $main_near/near_func_convertFoobars (; 217 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -11583,12 +11586,1217 @@
   end
   call $main_near/return_value
  )
- (func $test/convertFoobars (; 217 ;) (type $_)
+ (func $test/convertFoobars (; 218 ;) (type $_)
   call $main_near/near_func_convertFoobars
  )
- (func $start (; 218 ;) (type $_)
+ (func $main_near/__near_ArgsParser_getStringArrayLength#constructor (; 219 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 16
+   call $~lib/memory/memory.allocate
+   local.set $0
+  end
+  local.get $0
+  call $json/decoder/ThrowingJSONHandler#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store8 offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#constructor (; 220 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  block (result i32)
+   local.get $0
+   i32.eqz
+   if
+    i32.const 8
+    call $~lib/memory/memory.allocate
+    local.set $0
+   end
+   local.get $0
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 0
+   i32.store offset=4
+   local.get $0
+  end
+  local.get $1
+  i32.store
+  local.get $0
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar (; 221 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.load offset=4
+  i32.load
+  block $~lib/internal/typedarray/TypedArray<u8>#get:length|inlined.20 (result i32)
+   local.get $0
+   i32.load offset=4
+   i32.load offset=4
+   local.set $1
+   local.get $1
+   i32.load offset=8
+   i32.const 0
+   i32.shr_u
+  end
+  i32.ge_s
+  if
+   i32.const -1
+   return
+  end
+  local.get $0
+  i32.load offset=4
+  i32.load offset=4
+  local.get $0
+  i32.load offset=4
+  i32.load
+  call $~lib/internal/typedarray/TypedArray<u8>#__get
+  i32.const 255
+  i32.and
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#isWhitespace (; 222 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  i32.const 9
+  i32.eq
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else   
+   local.get $1
+   i32.const 10
+   i32.eq
+  end
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else   
+   local.get $1
+   i32.const 13
+   i32.eq
+  end
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else   
+   local.get $1
+   i32.const 32
+   i32.eq
+  end
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar (; 223 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.load offset=4
+  i32.load
+  block $~lib/internal/typedarray/TypedArray<u8>#get:length|inlined.21 (result i32)
+   local.get $0
+   i32.load offset=4
+   i32.load offset=4
+   local.set $1
+   local.get $1
+   i32.load offset=8
+   i32.const 0
+   i32.shr_u
+  end
+  i32.lt_s
+  i32.eqz
+  if
+   i32.const 1208
+   i32.const 1256
+   i32.const 115
+   i32.const 8
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  i32.load offset=4
+  i32.load offset=4
+  block (result i32)
+   local.get $0
+   i32.load offset=4
+   local.get $0
+   i32.load offset=4
+   i32.load
+   local.tee $1
+   i32.const 1
+   i32.add
+   i32.store
+   local.get $1
+  end
+  call $~lib/internal/typedarray/TypedArray<u8>#__get
+  i32.const 255
+  i32.and
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#skipWhitespace (; 224 ;) (type $i_) (param $0 i32)
+  loop $continue|0
+   local.get $0
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#isWhitespace
+   if
+    local.get $0
+    call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+    drop
+    br $continue|0
+   end
+  end
+ )
+ (func $main_near/__near_ArgsParser_getStringArrayLength#pushObject (; 225 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load8_u offset=8
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   local.get $1
+   i32.const 0
+   call $~lib/string/String.__eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 2248
+    i32.const 313
+    i32.const 6
+    call $~lib/env/abort
+    unreachable
+   end
+   local.get $0
+   i32.const 1
+   i32.store8 offset=8
+   i32.const 1
+   return
+  else   
+   local.get $1
+   i32.const 0
+   call $~lib/string/String.__ne
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 2248
+    i32.const 317
+    i32.const 6
+    call $~lib/env/abort
+    unreachable
+   end
+  end
+  local.get $0
+  local.get $1
+  call $json/decoder/ThrowingJSONHandler#pushObject
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readHexDigit (; 226 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+  local.set $1
+  local.get $1
+  global.get $json/decoder/CHAR_0
+  i32.sub
+  local.set $2
+  local.get $2
+  i32.const 9
+  i32.gt_s
+  if
+   local.get $1
+   global.get $json/decoder/CHAR_A
+   i32.sub
+   i32.const 10
+   i32.add
+   local.set $2
+   local.get $2
+   i32.const 10
+   i32.lt_s
+   local.tee $3
+   if (result i32)
+    local.get $3
+   else    
+    local.get $2
+    i32.const 15
+    i32.gt_s
+   end
+   if
+    local.get $1
+    global.get $json/decoder/CHAR_A_LOWER
+    i32.sub
+    i32.const 10
+    i32.add
+    local.set $2
+   end
+  end
+  block (result i32)
+   i32.const 0
+   i32.const 2
+   call $~lib/array/Array<i32>#constructor
+   local.set $4
+   local.get $4
+   i32.const 0
+   local.get $1
+   call $~lib/array/Array<i32>#__unchecked_set
+   local.get $4
+   i32.const 1
+   local.get $2
+   call $~lib/array/Array<i32>#__unchecked_set
+   local.get $4
+  end
+  local.set $4
+  local.get $2
+  i32.const 0
+  i32.ge_s
+  local.tee $3
+  if (result i32)
+   local.get $2
+   i32.const 16
+   i32.lt_s
+  else   
+   local.get $3
+  end
+  i32.eqz
+  if
+   i32.const 1592
+   i32.const 1256
+   i32.const 268
+   i32.const 8
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $2
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readEscapedChar (; 227 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+  local.set $1
+  local.get $1
+  i32.const 256
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   i32.const 256
+   return
+  end
+  local.get $1
+  i32.const 264
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   i32.const 264
+   return
+  end
+  local.get $1
+  i32.const 1544
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   i32.const 1544
+   return
+  end
+  local.get $1
+  i32.const 1552
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   i32.const 352
+   return
+  end
+  local.get $1
+  i32.const 1560
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   i32.const 368
+   return
+  end
+  local.get $1
+  i32.const 1568
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   i32.const 384
+   return
+  end
+  local.get $1
+  i32.const 1576
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   i32.const 400
+   return
+  end
+  local.get $1
+  i32.const 1584
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readHexDigit
+   local.set $2
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readHexDigit
+   local.set $3
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readHexDigit
+   local.set $4
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readHexDigit
+   local.set $5
+   local.get $2
+   i32.const 4096
+   i32.mul
+   local.get $3
+   i32.const 256
+   i32.mul
+   i32.add
+   local.get $4
+   i32.const 16
+   i32.mul
+   i32.add
+   local.get $5
+   i32.add
+   local.set $6
+   local.get $6
+   call $~lib/string/String.fromCodePoint
+   return
+  end
+  i32.const 0
+  i32.eqz
+  if
+   i32.const 1640
+   local.get $1
+   call $~lib/string/String.fromCharCode
+   call $~lib/string/String.__concat
+   i32.const 1256
+   i32.const 254
+   i32.const 8
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 272
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readString (; 228 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+  i32.const 256
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  i32.eqz
+  if
+   i32.const 1416
+   i32.const 1256
+   i32.const 198
+   i32.const 8
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  i32.load offset=4
+  i32.load
+  local.set $1
+  i32.const 0
+  i32.const 0
+  call $~lib/array/Array<String>#constructor
+  local.set $2
+  block $break|0
+   loop $repeat|0
+    i32.const 1
+    i32.eqz
+    br_if $break|0
+    block
+     local.get $0
+     call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+     local.set $3
+     local.get $3
+     i32.const 32
+     i32.ge_s
+     i32.eqz
+     if
+      i32.const 1480
+      i32.const 1256
+      i32.const 203
+      i32.const 12
+      call $~lib/env/abort
+      unreachable
+     end
+     local.get $3
+     i32.const 256
+     i32.const 0
+     call $~lib/string/String#charCodeAt
+     i32.eq
+     if
+      local.get $2
+      block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.15 (result i32)
+       local.get $0
+       i32.load offset=4
+       i32.load offset=4
+       i32.load
+       local.set $4
+       local.get $4
+       i32.const 8
+       i32.add
+      end
+      local.get $1
+      i32.add
+      local.get $0
+      i32.load offset=4
+      i32.load
+      local.get $1
+      i32.sub
+      i32.const 1
+      i32.sub
+      call $~lib/string/String.fromUTF8
+      call $~lib/array/Array<String>#push
+      drop
+      local.get $2
+      i32.const 272
+      call $~lib/array/Array<String>#join
+      return
+     end
+     local.get $3
+     i32.const 264
+     i32.const 0
+     call $~lib/string/String#charCodeAt
+     i32.eq
+     if
+      local.get $0
+      i32.load offset=4
+      i32.load
+      local.get $1
+      i32.const 1
+      i32.add
+      i32.gt_s
+      if
+       local.get $2
+       block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.16 (result i32)
+        local.get $0
+        i32.load offset=4
+        i32.load offset=4
+        i32.load
+        local.set $4
+        local.get $4
+        i32.const 8
+        i32.add
+       end
+       local.get $1
+       i32.add
+       local.get $0
+       i32.load offset=4
+       i32.load
+       local.get $1
+       i32.sub
+       i32.const 1
+       i32.sub
+       call $~lib/string/String.fromUTF8
+       call $~lib/array/Array<String>#push
+       drop
+      end
+      local.get $2
+      local.get $0
+      call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readEscapedChar
+      call $~lib/array/Array<String>#push
+      drop
+      local.get $0
+      i32.load offset=4
+      i32.load
+      local.set $1
+     end
+    end
+    br $repeat|0
+    unreachable
+   end
+   unreachable
+  end
+  i32.const 272
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseKey (; 229 ;) (type $i_) (param $0 i32)
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#skipWhitespace
+  local.get $0
+  i32.load offset=4
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readString
+  i32.store offset=8
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#skipWhitespace
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+  i32.const 520
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  i32.eqz
+  if
+   i32.const 1704
+   i32.const 1256
+   i32.const 161
+   i32.const 8
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseObject (; 230 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+  i32.const 528
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  i32.load offset=4
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=4
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.load
+  local.get $1
+  call $main_near/__near_ArgsParser_getStringArrayLength#pushObject
+  if
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+   drop
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#skipWhitespace
+   i32.const 1
+   local.set $2
+   block $break|0
+    loop $continue|0
+     local.get $0
+     call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+     i32.const 1136
+     i32.const 0
+     call $~lib/string/String#charCodeAt
+     i32.ne
+     if
+      block
+       local.get $2
+       i32.eqz
+       if
+        local.get $0
+        call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+        i32.const 248
+        i32.const 0
+        call $~lib/string/String#charCodeAt
+        i32.eq
+        i32.eqz
+        if
+         i32.const 1384
+         i32.const 1256
+         i32.const 144
+         i32.const 20
+         call $~lib/env/abort
+         unreachable
+        end
+       else        
+        i32.const 0
+        local.set $2
+       end
+       local.get $0
+       call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseKey
+       local.get $0
+       call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseValue
+       drop
+      end
+      br $continue|0
+     end
+    end
+   end
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+   i32.const 1136
+   i32.const 0
+   call $~lib/string/String#charCodeAt
+   i32.eq
+   i32.eqz
+   if
+    i32.const 1736
+    i32.const 1256
+    i32.const 151
+    i32.const 12
+    call $~lib/env/abort
+    unreachable
+   end
+  end
+  local.get $0
+  i32.load
+  call $json/decoder/JSONHandler#popObject
+  i32.const 1
+ )
+ (func $main_near/__near_ArgsParser_getStringArrayLength#pushArray (; 231 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  i32.const 1104
+  call $~lib/string/String.__eq
+  if
+   local.get $0
+   local.get $0
+   i32.load
+   local.get $0
+   i32.load offset=4
+   i32.load offset=4
+   call $model_near/__near_decode_Array_String
+   i32.store offset=12
+   i32.const 0
+   return
+  end
+  local.get $0
+  local.get $1
+  call $json/decoder/ThrowingJSONHandler#pushArray
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseArray (; 232 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+  i32.const 1120
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  i32.load offset=4
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=4
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.load
+  local.get $1
+  call $main_near/__near_ArgsParser_getStringArrayLength#pushArray
+  if
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+   drop
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#skipWhitespace
+   i32.const 1
+   local.set $2
+   block $break|0
+    loop $continue|0
+     local.get $0
+     call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+     i32.const 1128
+     i32.const 0
+     call $~lib/string/String#charCodeAt
+     i32.ne
+     if
+      block
+       local.get $2
+       i32.eqz
+       if
+        local.get $0
+        call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+        i32.const 248
+        i32.const 0
+        call $~lib/string/String#charCodeAt
+        i32.eq
+        i32.eqz
+        if
+         i32.const 1384
+         i32.const 1256
+         i32.const 177
+         i32.const 20
+         call $~lib/env/abort
+         unreachable
+        end
+       else        
+        i32.const 0
+        local.set $2
+       end
+       local.get $0
+       call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseValue
+       drop
+      end
+      br $continue|0
+     end
+    end
+   end
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+   i32.const 1128
+   i32.const 0
+   call $~lib/string/String#charCodeAt
+   i32.eq
+   i32.eqz
+   if
+    i32.const 1792
+    i32.const 1256
+    i32.const 183
+    i32.const 12
+    call $~lib/env/abort
+    unreachable
+   end
+  end
+  local.get $0
+  i32.load
+  call $json/decoder/JSONHandler#popArray
+  i32.const 1
+  return
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseString (; 233 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+  i32.const 256
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  i32.load
+  local.get $0
+  i32.load offset=4
+  i32.load offset=8
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readString
+  call $json/decoder/ThrowingJSONHandler#setString
+  i32.const 1
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readAndAssert (; 234 ;) (type $ii_) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  block $break|0
+   i32.const 0
+   local.set $2
+   loop $repeat|0
+    local.get $2
+    local.get $1
+    i32.load
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $2
+    call $~lib/string/String#charCodeAt
+    local.get $0
+    call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+    i32.eq
+    i32.eqz
+    if
+     i32.const 1848
+     local.get $1
+     call $~lib/string/String.__concat
+     i32.const 1872
+     call $~lib/string/String.__concat
+     i32.const 1256
+     i32.const 320
+     i32.const 12
+     call $~lib/env/abort
+     unreachable
+    end
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    br $repeat|0
+    unreachable
+   end
+   unreachable
+  end
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseBoolean (; 235 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+  global.get $json/decoder/FALSE_STR
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   local.get $0
+   global.get $json/decoder/FALSE_STR
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readAndAssert
+   local.get $0
+   i32.load
+   local.get $0
+   i32.load offset=4
+   i32.load offset=8
+   i32.const 0
+   call $json/decoder/ThrowingJSONHandler#setBoolean
+   i32.const 1
+   return
+  end
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+  global.get $json/decoder/TRUE_STR
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   local.get $0
+   global.get $json/decoder/TRUE_STR
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readAndAssert
+   local.get $0
+   i32.load
+   local.get $0
+   i32.load offset=4
+   i32.load offset=8
+   i32.const 1
+   call $json/decoder/ThrowingJSONHandler#setBoolean
+   i32.const 1
+   return
+  end
+  i32.const 0
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseNumber (; 236 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 0
+  local.set $1
+  i32.const 1
+  local.set $2
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+  i32.const 1944
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   i32.const -1
+   local.set $2
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+   drop
+  end
+  i32.const 0
+  local.set $3
+  block $break|0
+   loop $continue|0
+    global.get $json/decoder/CHAR_0
+    local.get $0
+    call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+    i32.le_s
+    local.tee $4
+    if (result i32)
+     local.get $0
+     call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+     global.get $json/decoder/CHAR_9
+     i32.le_s
+    else     
+     local.get $4
+    end
+    if
+     block
+      local.get $0
+      call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readChar
+      local.set $4
+      local.get $1
+      i32.const 10
+      i32.mul
+      local.set $1
+      local.get $1
+      local.get $4
+      global.get $json/decoder/CHAR_0
+      i32.sub
+      i32.add
+      local.set $1
+      local.get $3
+      i32.const 1
+      i32.add
+      local.set $3
+     end
+     br $continue|0
+    end
+   end
+  end
+  local.get $3
+  i32.const 0
+  i32.gt_s
+  if
+   local.get $0
+   i32.load
+   local.get $0
+   i32.load offset=4
+   i32.load offset=8
+   local.get $1
+   local.get $2
+   i32.mul
+   call $json/decoder/ThrowingJSONHandler#setInteger
+   i32.const 1
+   return
+  end
+  i32.const 0
+ )
+ (func $main_near/__near_ArgsParser_getStringArrayLength#setNull (; 237 ;) (type $ii_) (param $0 i32) (param $1 i32)
+  local.get $1
+  i32.const 1104
+  call $~lib/string/String.__eq
+  if
+   local.get $0
+   i32.const 0
+   i32.store offset=12
+   return
+  end
+  local.get $0
+  local.get $1
+  call $json/decoder/ThrowingJSONHandler#setNull
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseNull (; 238 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#peekChar
+  global.get $json/decoder/NULL_STR
+  i32.const 0
+  call $~lib/string/String#charCodeAt
+  i32.eq
+  if
+   local.get $0
+   global.get $json/decoder/NULL_STR
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#readAndAssert
+   local.get $0
+   i32.load
+   local.get $0
+   i32.load offset=4
+   i32.load offset=8
+   call $main_near/__near_ArgsParser_getStringArrayLength#setNull
+   i32.const 1
+   return
+  end
+  i32.const 0
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseValue (; 239 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#skipWhitespace
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseObject
+  local.tee $1
+  if (result i32)
+   local.get $1
+  else   
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseArray
+  end
+  local.tee $1
+  if (result i32)
+   local.get $1
+  else   
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseString
+  end
+  local.tee $1
+  if (result i32)
+   local.get $1
+  else   
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseBoolean
+  end
+  local.tee $1
+  if (result i32)
+   local.get $1
+  else   
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseNumber
+  end
+  local.tee $1
+  if (result i32)
+   local.get $1
+  else   
+   local.get $0
+   call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseNull
+  end
+  local.set $1
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#skipWhitespace
+  local.get $1
+ )
+ (func $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#deserialize (; 240 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $2
+  if
+   local.get $0
+   local.get $2
+   i32.store offset=4
+  else   
+   local.get $0
+   i32.const 0
+   call $json/decoder/DecoderState#constructor
+   i32.store offset=4
+   local.get $0
+   i32.load offset=4
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.load offset=4
+   local.get $1
+   i32.store offset=4
+   local.get $0
+   i32.load offset=4
+   i32.const 0
+   i32.store offset=8
+  end
+  local.get $0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#parseValue
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 2008
+   i32.const 1256
+   i32.const 103
+   i32.const 8
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $near/near.str<i32> (; 241 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  block (result i32)
+   i32.const 0
+   i32.const 1
+   call $~lib/array/Array<i32>#constructor
+   local.set $1
+   local.get $1
+   i32.const 0
+   local.get $0
+   call $~lib/array/Array<i32>#__unchecked_set
+   local.get $1
+  end
+  local.set $1
+  block $~lib/array/Array<i32>#toString|inlined.1 (result i32)
+   local.get $1
+   local.set $2
+   local.get $2
+   i32.const 248
+   call $~lib/array/Array<i32>#join
+  end
+ )
+ (func $near/near.log (; 242 ;) (type $i_) (param $0 i32)
+  local.get $0
+  call $near/_near_log
+ )
+ (func $main/getStringArrayLength (; 243 ;) (type $ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const 2336
+  block $~lib/array/Array<String>#get:length|inlined.2 (result i32)
+   local.get $0
+   local.set $1
+   local.get $1
+   i32.load offset=4
+  end
+  call $near/near.str<i32>
+  call $~lib/string/String.__concat
+  call $near/near.log
+  block $~lib/array/Array<String>#get:length|inlined.3 (result i32)
+   local.get $0
+   local.set $1
+   local.get $1
+   i32.load offset=4
+  end
+ )
+ (func $main_near/near_func_getStringArrayLength (; 244 ;) (type $_)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 0
+  call $main_near/input_read_len
+  call $~lib/typedarray/Uint8Array#constructor
+  local.set $0
+  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.14 (result i32)
+   local.get $0
+   i32.load
+   local.set $1
+   local.get $1
+   i32.const 8
+   i32.add
+  end
+  call $main_near/input_read_into
+  i32.const 0
+  call $main_near/__near_ArgsParser_getStringArrayLength#constructor
+  local.set $1
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $1
+  i32.const 0
+  local.get $1
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#constructor
+  i32.store offset=4
+  local.get $1
+  i32.load offset=4
+  local.get $0
+  i32.const 0
+  call $json/decoder/JSONDecoder<__near_ArgsParser_getStringArrayLength>#deserialize
+  local.get $1
+  i32.load offset=12
+  call $main/getStringArrayLength
+  local.set $2
+  i32.const 0
+  call $json/encoder/JSONEncoder#constructor
+  local.set $3
+  local.get $3
+  i32.const 0
+  call $json/encoder/JSONEncoder#pushObject
+  drop
+  local.get $3
+  i32.const 2304
+  local.get $2
+  call $json/encoder/JSONEncoder#setInteger
+  local.get $3
+  call $json/encoder/JSONEncoder#popObject
+  block $~lib/arraybuffer/ArrayBuffer#get:data|inlined.17 (result i32)
+   local.get $3
+   call $json/encoder/JSONEncoder#serialize
+   call $near/near.bufferWithSize
+   i32.load
+   local.set $4
+   local.get $4
+   i32.const 8
+   i32.add
+  end
+  call $main_near/return_value
+ )
+ (func $test/getStringArrayLength (; 245 ;) (type $_)
+  call $main_near/near_func_getStringArrayLength
+ )
+ (func $start (; 246 ;) (type $_)
   call $start:test
  )
- (func $null (; 219 ;) (type $_)
+ (func $null (; 247 ;) (type $_)
  )
 )

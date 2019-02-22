@@ -5,7 +5,8 @@ import {
   doNothing as wrapped_doNothing,
   add as wrapped_add,
   getFoobar as wrapped_getFoobar,
-  convertFoobars as wrapped_convertFoobars
+  convertFoobars as wrapped_convertFoobars,
+  getStringArrayLength as wrapped_getStringArrayLength
 } from "./main";
 
 // Runtime functions
@@ -285,6 +286,64 @@ export function near_func_convertFoobars(): void {
   } else {
     encoder.setNull("result");
   }
+
+  encoder.popObject();
+  return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
+}
+import { __near_decode_Array_String } from "./model_near";
+export class __near_ArgsParser_getStringArrayLength extends ThrowingJSONHandler {
+  buffer: Uint8Array;
+  decoder: JSONDecoder<__near_ArgsParser_getStringArrayLength>;
+  handledRoot: boolean = false;
+
+  __near_param_arr: Array<String>;
+  setNull(name: string): void {
+    if (name == "arr") {
+      this.__near_param_arr = <Array<String>>null;
+      return;
+    }
+
+    super.setNull(name);
+  }
+
+  pushObject(name: string): bool {
+    if (!this.handledRoot) {
+      assert(name == null);
+      this.handledRoot = true;
+      return true;
+    } else {
+      assert(name != null);
+    }
+
+    return super.pushObject(name);
+  }
+
+  pushArray(name: string): bool {
+    if (name == "arr") {
+      this.__near_param_arr = <Array<String>>(
+        __near_decode_Array_String(this.buffer, this.decoder.state)
+      );
+      return false;
+    }
+
+    return super.pushArray(name);
+  }
+}
+export function near_func_getStringArrayLength(): void {
+  let json = new Uint8Array(input_read_len());
+  input_read_into(json.buffer.data);
+  let handler = new __near_ArgsParser_getStringArrayLength();
+  handler.buffer = json;
+  handler.decoder = new JSONDecoder<__near_ArgsParser_getStringArrayLength>(
+    handler
+  );
+  handler.decoder.deserialize(json);
+  let result = wrapped_getStringArrayLength(handler.__near_param_arr);
+
+  let encoder = new JSONEncoder();
+  encoder.pushObject(null);
+
+  encoder.setInteger("result", result);
 
   encoder.popObject();
   return_value(near.bufferWithSize(encoder.serialize()).buffer.data);
