@@ -1617,31 +1617,31 @@ export class Program extends DiagnosticEmitter {
       let member = members[i];
       switch (member.kind) {
         case NodeKind.CLASSDECLARATION: {
-          this.initializeClass(<ClassDeclaration>members[i], element, queuedExtends, queuedImplements);
+          this.initializeClass(<ClassDeclaration>member, element, queuedExtends, queuedImplements);
           break;
         }
         case NodeKind.ENUMDECLARATION: {
-          this.initializeEnum(<EnumDeclaration>members[i], element);
+          this.initializeEnum(<EnumDeclaration>member, element);
           break;
         }
         case NodeKind.FUNCTIONDECLARATION: {
-          this.initializeFunction(<FunctionDeclaration>members[i], element);
+          this.initializeFunction(<FunctionDeclaration>member, element);
           break;
         }
         case NodeKind.INTERFACEDECLARATION: {
-          this.initializeInterface(<InterfaceDeclaration>members[i], element);
+          this.initializeInterface(<InterfaceDeclaration>member, element);
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
-          this.initializeNamespace(<NamespaceDeclaration>members[i], element, queuedExtends, queuedImplements);
+          this.initializeNamespace(<NamespaceDeclaration>member, element, queuedExtends, queuedImplements);
           break;
         }
         case NodeKind.TYPEDECLARATION: {
-          this.initializeTypeDefinition(<TypeDeclaration>members[i], element);
+          this.initializeTypeDefinition(<TypeDeclaration>member, element);
           break;
         }
         case NodeKind.VARIABLE: {
-          this.initializeVariables(<VariableStatement>members[i], element);
+          this.initializeVariables(<VariableStatement>member, element);
           break;
         }
         default: assert(false); // namespace member expected
