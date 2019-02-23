@@ -3873,7 +3873,6 @@ export function compileCall(
       }
       arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
       arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
       let mask = new Uint8Array(16);
       for (let i = 0; i < 16; ++i) {
         let operand = operands[2 + i];
@@ -3885,6 +3884,7 @@ export function compileCall(
             DiagnosticCode.Expression_must_be_a_compile_time_constant,
             operand.range
           );
+          compiler.currentType = Type.v128;
           return module.createUnreachable();
         }
         assert(getExpressionType(arg2) == NativeType.I32);
