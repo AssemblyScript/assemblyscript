@@ -265,6 +265,7 @@ export namespace BuiltinSymbols {
   export const v128_extract_lane = "~lib/builtins/v128.extract_lane";
   export const v128_replace_lane = "~lib/builtins/v128.replace_lane";
   export const v128_add = "~lib/builtins/v128.add";
+  export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
   export const i64x2 = "~lib/builtins/i64x2";
   export const i32x4 = "~lib/builtins/i32x4";
   export const i16x8 = "~lib/builtins/i16x8";
@@ -3854,6 +3855,53 @@ export function compileCall(
       compiler.currentType = Type.v128;
       return module.createBinary(op, arg0, arg1);
     }
+    case BuiltinSymbols.v8x16_shuffle: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 18) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "18", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      let mask = new Uint8Array(16);
+      for (let i = 0; i < 16; ++i) {
+        let operand = operands[2 + i];
+        arg2 = module.precomputeExpression(
+          compiler.compileExpression(operand, Type.u8, ConversionKind.IMPLICIT, WrapMode.NONE)
+        );
+        if (getExpressionId(arg2) != ExpressionId.Const) {
+          compiler.error(
+            DiagnosticCode.Expression_must_be_a_compile_time_constant,
+            operand.range
+          );
+          return module.createUnreachable();
+        }
+        assert(getExpressionType(arg2) == NativeType.I32);
+        let idx = getConstValueI32(arg2);
+        if (idx < 0 || idx > 31) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+            operand.range, "Lane index", "0", "31"
+          );
+          compiler.currentType = Type.v128;
+          return module.createUnreachable();
+        }
+        writeI8(idx, mask, i);
+      }
+      compiler.currentType = Type.v128;
+      return module.createSIMDShuffle(arg0, arg1, mask);
+    }
 
     // === GC integration =========================================================================
 
@@ -3898,7 +3946,7 @@ export function compileCall(
   // try to defer inline asm to a concrete built-in
   var expr = deferASMCall(compiler, prototype, operands, contextualType, reportNode);
   if (expr) {
-    if (typeArguments && typeArguments.length) {
+    if (typeArguments) {
       compiler.error(
         DiagnosticCode.Type_0_is_not_generic,
         reportNode.range, prototype.internalName
