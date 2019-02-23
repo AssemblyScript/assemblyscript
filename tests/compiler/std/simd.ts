@@ -1,7 +1,7 @@
 // hint: asc tests/compiler/std/simd --enable simd --validate
 
 @sealed
-export class I8x16 {
+class I8x16 {
 
   @inline static from(vec: v128): I8x16 {
     return changetype<I8x16>(vec);
