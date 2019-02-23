@@ -24,6 +24,7 @@
   "Optional properties are not supported.": 219,
   "Expression must be a compile-time constant.": 220,
   "Module cannot have multiple start functions.": 221,
+  "'{0}' must be a value between '{1}' and '{2}' inclusive.": 222,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

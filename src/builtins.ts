@@ -70,6 +70,7 @@ import {
 import {
   CommonFlags, CommonSymbols
 } from "./common";
+import { writeI16, writeI8, writeI32, writeF32, writeF64 } from "./util";
 
 /** Symbols of various compiler built-ins. */
 export namespace BuiltinSymbols {
@@ -3412,7 +3413,7 @@ export function compileCall(
             return module.createUnreachable();
           }
           assert(getExpressionType(expr) == NativeType.I32);
-          bytes[i] = getConstValueI32(expr);
+          writeI8(getConstValueI32(expr), bytes, i);
         }
       }
       compiler.currentType = Type.v128;
@@ -3450,10 +3451,7 @@ export function compileCall(
             return module.createUnreachable();
           }
           assert(getExpressionType(expr) == NativeType.I32);
-          let val = getConstValueI32(expr);
-          let off = i << 1;
-          bytes[off    ] = val;
-          bytes[off + 1] = val >>> 8;
+          writeI16(getConstValueI32(expr), bytes, i << 1);
         }
       }
       compiler.currentType = Type.v128;
@@ -3491,12 +3489,7 @@ export function compileCall(
             return module.createUnreachable();
           }
           assert(getExpressionType(expr) == NativeType.I32);
-          let val = getConstValueI32(expr);
-          let off = i << 2;
-          bytes[off    ] = val;
-          bytes[off + 1] = val >>>  8;
-          bytes[off + 2] = val >>> 16;
-          bytes[off + 3] = val >>> 24;
+          writeI32(getConstValueI32(expr), bytes, i << 2);
         }
       }
       compiler.currentType = Type.v128;
@@ -3534,17 +3527,9 @@ export function compileCall(
             return module.createUnreachable();
           }
           assert(getExpressionType(expr) == NativeType.I64);
-          let lo = getConstValueI64Low(expr);
-          let hi = getConstValueI64High(expr);
           let off = i << 3;
-          bytes[off    ] = lo;
-          bytes[off + 1] = lo >>>  8;
-          bytes[off + 2] = lo >>> 16;
-          bytes[off + 3] = lo >>> 24;
-          bytes[off + 4] = hi;
-          bytes[off + 5] = hi >>>  8;
-          bytes[off + 6] = hi >>> 16;
-          bytes[off + 7] = hi >>> 24;
+          writeI32(getConstValueI64Low(expr), bytes, off);
+          writeI32(getConstValueI64High(expr), bytes, off + 4);
         }
       }
       compiler.currentType = Type.v128;
@@ -3582,12 +3567,7 @@ export function compileCall(
             return module.createUnreachable();
           }
           assert(getExpressionType(expr) == NativeType.F32);
-          let val = f32_as_i32(getConstValueF32(expr));
-          let off = i << 2;
-          bytes[off    ] = val;
-          bytes[off + 1] = val >>>  8;
-          bytes[off + 2] = val >>> 16;
-          bytes[off + 3] = val >>> 24;
+          writeF32(getConstValueF32(expr), bytes, i << 2);
         }
       }
       compiler.currentType = Type.v128;
@@ -3625,18 +3605,7 @@ export function compileCall(
             return module.createUnreachable();
           }
           assert(getExpressionType(expr) == NativeType.F64);
-          let val = f64_as_i64(getConstValueF64(expr));
-          let lo = i64_low(val);
-          let hi = i64_high(val);
-          let off = i << 3;
-          bytes[off    ] = lo;
-          bytes[off + 1] = lo >>>  8;
-          bytes[off + 2] = lo >>> 16;
-          bytes[off + 3] = lo >>> 24;
-          bytes[off + 4] = hi;
-          bytes[off + 5] = hi >>>  8;
-          bytes[off + 6] = hi >>> 16;
-          bytes[off + 7] = hi >>> 24;
+          writeF64(getConstValueF64(expr), bytes, i << 3);
         }
       }
       compiler.currentType = Type.v128;
@@ -3752,7 +3721,17 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      return module.createSIMDExtract(op, arg0, getConstValueI32(arg1));
+      assert(getExpressionType(arg1) == NativeType.I32);
+      let maxIdx = (16 / type.byteSize) - 1;
+      let idx = getConstValueI32(arg1);
+      if (idx < 0 || idx > maxIdx) {
+        compiler.error(
+          DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+          operands[1].range, "Lane index", "0", maxIdx.toString()
+        );
+        return module.createUnreachable();
+      }
+      return module.createSIMDExtract(op, arg0, idx);
     }
     case BuiltinSymbols.v128_replace_lane: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -3811,9 +3790,19 @@ export function compileCall(
         compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
+      assert(getExpressionType(arg1) == NativeType.I32);
+      let maxIdx = (16 / type.byteSize) - 1;
+      let idx = getConstValueI32(arg1);
+      if (idx < 0 || idx > maxIdx) {
+        compiler.error(
+          DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+          operands[1].range, "Lane index", "0", maxIdx.toString()
+        );
+        return module.createUnreachable();
+      }
       arg2 = compiler.compileExpression(operands[2], type, ConversionKind.IMPLICIT, WrapMode.NONE);
       compiler.currentType = Type.v128;
-      return module.createSIMDReplace(op, arg0, getConstValueI32(arg1), arg2);
+      return module.createSIMDReplace(op, arg0, idx, arg2);
     }
     case BuiltinSymbols.v128_add: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
