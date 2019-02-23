@@ -1,7 +1,7 @@
 (module
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\n\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s\00")
@@ -9,7 +9,7 @@
  (elem (i32.const 0) $null)
  (global $memmove/base i32 (i32.const 8))
  (global $memmove/dest (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 32))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 32))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -225,7 +225,7 @@
   end
   local.get $3
  )
- (func $start (; 2 ;) (type $v)
+ (func $start:memmove (; 2 ;) (type $_)
   global.get $memmove/base
   i64.const 1229782938247303441
   i64.store
@@ -445,6 +445,9 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
+  call $start:memmove
+ )
+ (func $null (; 4 ;) (type $_)
  )
 )

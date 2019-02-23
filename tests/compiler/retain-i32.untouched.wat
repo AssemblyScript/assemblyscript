@@ -1,7 +1,7 @@
 (module
- (type $iiv (func (param i32 i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $ii_ (func (param i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
@@ -18,11 +18,11 @@
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $retain-i32/si (mut i32) (i32.const 0))
  (global $retain-i32/ui (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 40))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 40))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $retain-i32/test (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $retain-i32/test (; 1 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.add
@@ -332,7 +332,7 @@
    unreachable
   end
  )
- (func $start (; 2 ;) (type $v)
+ (func $start:retain-i32 (; 2 ;) (type $_)
   (local $0 i32)
   i32.const 0
   global.get $~lib/builtins/i8.MAX_VALUE
@@ -792,6 +792,9 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
+  call $start:retain-i32
+ )
+ (func $null (; 4 ;) (type $_)
  )
 )

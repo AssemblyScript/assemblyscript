@@ -8,28 +8,22 @@
  (type $iiiiv (func (param i32 i32 i32 i32)))
  (type $iiiv (func (param i32 i32 i32)))
  (type $F (func (result f64)))
- (type $iFv (func (param i32 f64)))
+ (type $iF_ (func (param i32 f64)))
  (type $iF (func (param i32) (result f64)))
- (type $iv (func (param i32)))
+ (type $i_ (func (param i32)))
  (import "env" "memory" (memory $0 1))
  (data (i32.const 8) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 40) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/math/NativeMath.PI f64 (f64.const 3.141592653589793))
  (global $assembly/index/SOLAR_MASS f64 (f64.const 39.47841760435743))
  (global $assembly/index/DAYS_PER_YEAR f64 (f64.const 365.24))
  (global $assembly/index/system (mut i32) (i32.const 0))
- (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
- (global $HEAP_BASE i32 (i32.const 100))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 100))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "init" (func $assembly/index/init))
@@ -793,7 +787,7 @@
   call $assembly/index/NBodySystem#constructor
   global.set $assembly/index/system
  )
- (func $assembly/index/NBodySystem#advance (; 19 ;) (type $iFv) (param $0 i32) (param $1 f64)
+ (func $assembly/index/NBodySystem#advance (; 21 ;) (type $iF_) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1024,7 +1018,7 @@
    unreachable
   end
  )
- (func $assembly/index/NBodySystem#energy (; 20 ;) (type $iF) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 22 ;) (type $iF) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -1194,7 +1188,7 @@
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 22 ;) (type $iv) (param $0 i32)
+ (func $assembly/index/bench (; 24 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $assembly/index/system
@@ -1223,7 +1217,7 @@
    unreachable
   end
  )
- (func $assembly/index/getBody (; 23 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 25 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $assembly/index/system
   i32.load
@@ -1255,6 +1249,6 @@
   global.set $~lib/allocator/arena/offset
   nop
  )
- (func $null (; 25 ;) (type $v)
+ (func $null (; 27 ;) (type $_)
  )
 )

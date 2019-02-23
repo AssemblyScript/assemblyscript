@@ -1,8 +1,8 @@
 (module
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
- (type $iv (func (param i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $i_ (func (param i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -148,7 +148,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $object-literal/bar (; 4 ;) (type $iv) (param $0 i32)
+ (func $object-literal/bar (; 4 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -174,7 +174,7 @@
    unreachable
   end
  )
- (func $start (; 5 ;) (type $v)
+ (func $start:object-literal (; 5 ;) (type $_)
   (local $0 i32)
   i32.const 80
   global.set $~lib/allocator/arena/startOffset
@@ -225,7 +225,10 @@
    unreachable
   end
  )
- (func $null (; 6 ;) (type $v)
+ (func $start (; 6 ;) (type $_)
+  call $start:object-literal
+ )
+ (func $null (; 7 ;) (type $_)
   nop
  )
 )

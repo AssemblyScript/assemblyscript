@@ -1,13 +1,13 @@
 (module
+ (type $_ (func))
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
  (memory $0 0)
  (table $0 2 funcref)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $getter-call/test))
@@ -82,17 +82,17 @@
   call $~lib/allocator/arena/__memory_allocate
   drop
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   i32.const 1
   call_indirect (type $i)
  )
- (func $start (; 3 ;) (type $v)
+ (func $start (; 3 ;) (type $_)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )

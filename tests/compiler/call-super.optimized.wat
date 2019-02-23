@@ -1,7 +1,7 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -134,7 +134,7 @@
   end
   local.get $0
  )
- (func $call-super/test1 (; 4 ;) (type $v)
+ (func $call-super/test1 (; 4 ;) (type $_)
   (local $0 i32)
   call $call-super/B#constructor
   local.tee $0
@@ -209,7 +209,7 @@
   end
   local.get $0
  )
- (func $call-super/test2 (; 7 ;) (type $v)
+ (func $call-super/test2 (; 7 ;) (type $_)
   (local $0 i32)
   call $call-super/D#constructor
   local.tee $0
@@ -262,7 +262,7 @@
   end
   local.get $0
  )
- (func $call-super/test3 (; 9 ;) (type $v)
+ (func $call-super/test3 (; 9 ;) (type $_)
   (local $0 i32)
   i32.const 8
   call $~lib/allocator/arena/__memory_allocate
@@ -305,7 +305,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test4 (; 11 ;) (type $v)
+ (func $call-super/test4 (; 11 ;) (type $_)
   (local $0 i32)
   call $call-super/H#constructor
   local.tee $0
@@ -333,7 +333,7 @@
    unreachable
   end
  )
- (func $call-super/test5 (; 12 ;) (type $v)
+ (func $call-super/test5 (; 12 ;) (type $_)
   (local $0 i32)
   call $call-super/H#constructor
   local.tee $0
@@ -361,7 +361,7 @@
    unreachable
   end
  )
- (func $start (; 13 ;) (type $v)
+ (func $start (; 13 ;) (type $_)
   i32.const 40
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -372,7 +372,7 @@
   call $call-super/test4
   call $call-super/test5
  )
- (func $null (; 14 ;) (type $v)
+ (func $null (; 14 ;) (type $_)
   nop
  )
 )

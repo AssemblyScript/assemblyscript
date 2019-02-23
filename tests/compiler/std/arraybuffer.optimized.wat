@@ -1,11 +1,11 @@
 (module
+ (type $_ (func))
  (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $v (func))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
@@ -23,7 +23,7 @@
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/arraybuffer/buffer (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/arraybuffer/sliced (mut i32) (i32.const 0))
  (global $std/arraybuffer/arr8 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -337,7 +337,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 4 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1234,7 +1234,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 5 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1437,25 +1437,26 @@
   (local $4 i32)
   local.get $0
   i32.load
-  local.set $3
+  local.set $4
   local.get $1
   i32.const 0
   i32.lt_s
   if (result i32)
    local.get $1
-   local.get $3
-   i32.add
-   local.tee $4
-   i32.const 0
    local.get $4
+   i32.add
+   local.tee $3
+   i32.const 0
+   local.get $3
    i32.const 0
    i32.gt_s
    select
   else   
    local.get $1
+   local.tee $3
+   local.get $4
    local.get $3
-   local.get $1
-   local.get $3
+   local.get $4
    i32.lt_s
    select
   end
@@ -1465,33 +1466,34 @@
   i32.lt_s
   if (result i32)
    local.get $2
-   local.get $3
-   i32.add
-   local.tee $4
-   i32.const 0
    local.get $4
+   i32.add
+   local.tee $3
+   i32.const 0
+   local.get $3
    i32.const 0
    i32.gt_s
    select
   else   
    local.get $2
+   local.tee $3
+   local.get $4
    local.get $3
-   local.get $2
-   local.get $3
+   local.get $4
    i32.lt_s
    select
   end
   local.get $1
   i32.sub
-  local.tee $4
+  local.tee $3
   i32.const 0
-  local.get $4
+  local.get $3
   i32.const 0
   i32.gt_s
   select
-  local.tee $2
-  call $~lib/internal/arraybuffer/allocateUnsafe
   local.tee $3
+  call $~lib/internal/arraybuffer/allocateUnsafe
+  local.tee $2
   i32.const 8
   i32.add
   local.get $0
@@ -1499,9 +1501,9 @@
   i32.add
   local.get $1
   i32.add
-  local.get $2
-  call $~lib/internal/memory/memmove
   local.get $3
+  call $~lib/internal/memory/memmove
+  local.get $2
  )
  (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -1509,7 +1511,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       br_table $0of2 $1of2 $2of2 $outOfRange
      end
      unreachable
@@ -1692,7 +1694,7 @@
   block $2of2
    block $1of2
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 1
      i32.sub
      br_table $1of2 $1of2 $2of2 $outOfRange
@@ -1708,7 +1710,7 @@
   local.get $1
   call $~lib/dataview/DataView#constructor
  )
- (func $start (; 12 ;) (type $v)
+ (func $start:std/arraybuffer (; 12 ;) (type $_)
   (local $0 i32)
   i32.const 288
   global.set $~lib/allocator/arena/startOffset
@@ -1736,7 +1738,7 @@
    unreachable
   end
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/arraybuffer/buffer
   i32.const 0
   call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -1776,7 +1778,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/arraybuffer/buffer
   i32.const 1
   call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -1794,7 +1796,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/arraybuffer/buffer
   i32.const -1
   call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -1880,7 +1882,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/arraybuffer/buffer
   i32.const 42
   call $~lib/arraybuffer/ArrayBuffer#slice|trampoline
@@ -1944,7 +1946,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<Uint8Array>6 (result i32)
    i32.const 0
    global.get $std/arraybuffer/arr8
@@ -1965,7 +1967,10 @@
    unreachable
   end
  )
- (func $null (; 13 ;) (type $v)
+ (func $start (; 13 ;) (type $_)
+  call $start:std/arraybuffer
+ )
+ (func $null (; 14 ;) (type $_)
   nop
  )
 )

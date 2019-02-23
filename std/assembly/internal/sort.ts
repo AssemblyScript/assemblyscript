@@ -36,8 +36,13 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
     }
   } else if (isString<T>()) {
     return (a: T, b: T): i32 => {
-      var sa = <string>a, sb = <string>b;
-      return compareUnsafe(sa, 0, sb, 0, min(sa.length, sb.length));
+      if (a === b || a === null || b === null) return 0;
+      var alen = (<string>a).length;
+      var blen = (<string>b).length;
+      if (!alen && !blen) return 0;
+      if (!alen) return -1;
+      if (!blen) return  1;
+      return compareUnsafe(<string>a, 0, <string>b, 0, <usize>min(alen, blen));
     };
   } else {
     return (a: T, b: T): i32 => (<i32>(a > b) - <i32>(a < b));

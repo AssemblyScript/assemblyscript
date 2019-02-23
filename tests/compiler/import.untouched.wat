@@ -1,13 +1,13 @@
 (module
  (type $iii (func (param i32 i32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -26,10 +26,10 @@
   local.get $1
   i32.mul
  )
- (func $export/ns.two (; 3 ;) (type $v)
+ (func $export/ns.two (; 3 ;) (type $_)
   nop
  )
- (func $start (; 4 ;) (type $v)
+ (func $start:import (; 4 ;) (type $_)
   global.get $export/a
   global.get $export/b
   call $export/add
@@ -57,6 +57,9 @@
   drop
   call $export/ns.two
  )
- (func $null (; 5 ;) (type $v)
+ (func $start (; 5 ;) (type $_)
+  call $start:import
+ )
+ (func $null (; 6 ;) (type $_)
  )
 )

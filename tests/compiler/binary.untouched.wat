@@ -3,17 +3,16 @@
  (type $FiF (func (param f64 i32) (result f64)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $fif (func (param f32 i32) (result f32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
- (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $binary/I (mut i64) (i64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -1249,7 +1248,9 @@
    local.get $8
   else   
    local.get $1
-   local.get $1
+   local.set $9
+   local.get $9
+   local.get $9
    f32.ne
   end
   i32.const 0
@@ -2531,7 +2532,9 @@
    local.get $8
   else   
    local.get $1
-   local.get $1
+   local.set $9
+   local.get $9
+   local.get $9
    f64.ne
   end
   i32.const 0
@@ -2734,7 +2737,7 @@
   local.get $2
   f64.reinterpret_i64
  )
- (func $start (; 6 ;) (type $v)
+ (func $start:binary (; 6 ;) (type $_)
   global.get $binary/i
   i32.const 1
   i32.lt_s
@@ -3342,6 +3345,9 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $null (; 7 ;) (type $v)
+ (func $start (; 7 ;) (type $_)
+  call $start:binary
+ )
+ (func $null (; 8 ;) (type $_)
  )
 )

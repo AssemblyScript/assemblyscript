@@ -1,5 +1,5 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (import "foo" "var" (global $external/var_ i32))
  (import "external" "foo" (func $external/foo))
  (import "external" "foo.bar" (func $external/foo.bar))
@@ -10,12 +10,12 @@
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "table" (table $0))
- (export "foo.bar" (func $external/foo.bar))
  (export "foo" (func $external/foo))
+ (export "foo.bar" (func $external/foo.bar))
  (export "two" (func $external/two))
  (export "three" (func $external/three))
  (export "var_" (global $external/var_))
- (func $null (; 4 ;) (type $v)
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )

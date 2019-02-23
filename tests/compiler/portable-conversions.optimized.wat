@@ -1,6 +1,6 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\17\00\00\00p\00o\00r\00t\00a\00b\00l\00e\00-\00c\00o\00n\00v\00e\00r\00s\00i\00o\00n\00s\00.\00t\00s")
@@ -13,7 +13,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $v)
+ (func $start:portable-conversions (; 1 ;) (type $_)
   global.get $portable-conversions/i
   i32.const 255
   i32.and
@@ -614,7 +614,10 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $_)
+  call $start:portable-conversions
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

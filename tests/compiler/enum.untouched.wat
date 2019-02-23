@@ -1,6 +1,6 @@
 (module
  (type $i (func (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -21,7 +21,7 @@
  (global $enum/SelfReference.ZERO i32 (i32.const 0))
  (global $enum/SelfReference.ONE i32 (i32.const 1))
  (global $enum/enumType (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "Implicit.ZERO" (global $enum/Implicit.ZERO))
@@ -42,7 +42,7 @@
  (func $enum/getZero (; 0 ;) (type $i) (result i32)
   i32.const 0
  )
- (func $start (; 1 ;) (type $v)
+ (func $start:enum (; 1 ;) (type $_)
   call $enum/getZero
   global.set $enum/NonConstant.ZERO
   call $enum/getZero
@@ -54,6 +54,9 @@
   global.get $enum/NonConstant.ONE
   drop
  )
- (func $null (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $_)
+  call $start:enum
+ )
+ (func $null (; 3 ;) (type $_)
  )
 )

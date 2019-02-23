@@ -1,12 +1,12 @@
 (module
- (type $FFF (func (param f64 f64) (result f64)))
  (type $FFFi (func (param f64 f64 f64) (result i32)))
+ (type $FFF (func (param f64 f64) (result f64)))
  (type $FFi (func (param f64 f64) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $fffi (func (param f32 f32 f32) (result i32)))
  (type $fff (func (param f32 f32) (result f32)))
  (type $ffi (func (param f32 f32) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (import "math" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -73,8 +73,8 @@
    local.get $0
    local.get $1
    f64.mul
-   local.tee $0
-   local.get $0
+   local.tee $1
+   local.get $1
    f64.div
    return
   end
@@ -324,8 +324,8 @@
    local.get $0
    local.get $1
    f32.mul
-   local.tee $0
-   local.get $0
+   local.tee $1
+   local.get $1
    f32.div
    return
   end
@@ -500,7 +500,7 @@
   local.get $2
   call $std/mod/check<f32>
  )
- (func $start (; 8 ;) (type $v)
+ (func $start:std/mod (; 8 ;) (type $_)
   f64.const 3
   f64.const 2
   f64.const 1
@@ -2257,7 +2257,10 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (type $v)
+ (func $start (; 9 ;) (type $_)
+  call $start:std/mod
+ )
+ (func $null (; 10 ;) (type $_)
   nop
  )
 )

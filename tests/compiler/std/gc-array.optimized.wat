@@ -1,11 +1,11 @@
 (module
- (type $iv (func (param i32)))
+ (type $_ (func))
+ (type $i_ (func (param i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiv (func (param i32 i32)))
- (type $v (func))
+ (type $ii_ (func (param i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iii_ (func (param i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $i (func (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -24,12 +24,12 @@
  (global $~lib/collector/itcm/toSpace (mut i32) (i32.const 0))
  (global $~lib/collector/itcm/iter (mut i32) (i32.const 0))
  (global $std/gc-array/arr (mut i32) (i32.const 48))
- (global $~argc (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~lib/started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-array/main))
- (func $~lib/arraybuffer/ArrayBuffer~gc (; 1 ;) (type $iv) (param $0 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~gc (; 1 ;) (type $i_) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -38,7 +38,7 @@
   local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 2 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 2 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load offset=4
@@ -66,7 +66,7 @@
   local.get $1
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 3 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 3 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/collector/itcm/iter
@@ -106,7 +106,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/__gc_mark (; 4 ;) (type $iv) (param $0 i32)
+ (func $~lib/collector/itcm/__gc_mark (; 4 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   local.get $0
   if
@@ -125,7 +125,7 @@
    end
   end
  )
- (func $~lib/array/Array<Foo>~gc (; 5 ;) (type $iv) (param $0 i32)
+ (func $~lib/array/Array<Foo>~gc (; 5 ;) (type $i_) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -217,10 +217,10 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/allocator/arena/__memory_free (; 7 ;) (type $iv) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 7 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $~lib/collector/itcm/step (; 8 ;) (type $v)
+ (func $~lib/collector/itcm/step (; 8 ;) (type $_)
   (local $0 i32)
   block $break|0
    block $case3|0
@@ -267,7 +267,7 @@
      end
      global.get $std/gc-array/arr
      i32.const 3
-     call_indirect (type $iv)
+     call_indirect (type $i_)
      i32.const 2
      global.set $~lib/collector/itcm/state
      br $break|0
@@ -292,17 +292,17 @@
      i32.or
      i32.store
      i32.const 1
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      i32.const 16
      i32.add
      local.get $0
      i32.load offset=8
-     call_indirect (type $iv)
+     call_indirect (type $i_)
     else     
      global.get $std/gc-array/arr
      i32.const 3
-     call_indirect (type $iv)
+     call_indirect (type $i_)
      global.get $~lib/collector/itcm/toSpace
      global.get $~lib/collector/itcm/iter
      i32.load
@@ -353,7 +353,7 @@
    end
   end
  )
- (func $~lib/collector/itcm/__gc_collect (; 9 ;) (type $v)
+ (func $~lib/collector/itcm/__gc_collect (; 9 ;) (type $_)
   (local $0 i32)
   block $break|0
    block $case1|0
@@ -438,7 +438,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memcpy (; 12 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 12 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1335,7 +1335,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 13 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 13 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1834,7 +1834,7 @@
   end
   local.get $0
  )
- (func $~lib/collector/itcm/__gc_link (; 16 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/__gc_link (; 16 ;) (type $ii_) (param $0 i32) (param $1 i32)
   (local $2 i32)
   global.get $~lib/collector/itcm/white
   i32.eqz
@@ -1864,7 +1864,7 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/array/Array<Foo>#__set (; 17 ;) (type $iiiv) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Foo>#__set (; 17 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -1913,23 +1913,11 @@
   local.get $2
   call $~lib/collector/itcm/__gc_link
  )
- (func $std/gc-array/main (; 18 ;) (type $i) (result i32)
-  global.get $~started
-  i32.eqz
-  if
-   call $start
-   i32.const 1
-   global.set $~started
-  end
-  i32.const 0
- )
- (func $start (; 19 ;) (type $v)
+ (func $start:std/gc-array (; 18 ;) (type $_)
   i32.const 184
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
-  i32.const 0
-  global.set $~lib/collector/itcm/state
   call $~lib/collector/itcm/__gc_collect
   global.get $std/gc-array/arr
   i32.const 0
@@ -1953,7 +1941,17 @@
   call $~lib/array/Array<Foo>#__set
   call $~lib/collector/itcm/__gc_collect
  )
- (func $null (; 20 ;) (type $v)
+ (func $std/gc-array/main (; 19 ;) (type $i) (result i32)
+  global.get $~lib/started
+  i32.eqz
+  if
+   call $start:std/gc-array
+   i32.const 1
+   global.set $~lib/started
+  end
+  i32.const 0
+ )
+ (func $null (; 20 ;) (type $_)
   nop
  )
 )

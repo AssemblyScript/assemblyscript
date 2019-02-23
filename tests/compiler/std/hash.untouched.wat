@@ -1,7 +1,7 @@
 (module
  (type $ii (func (param i32) (result i32)))
  (type $Ii (func (param i64) (result i32)))
- (type $v (func))
+ (type $_ (func))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00")
  (data (i32.const 16) "\01\00\00\00a\00")
@@ -9,19 +9,7 @@
  (data (i32.const 32) "\03\00\00\00a\00b\00c\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
- (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
- (global $~lib/internal/string/HEADER_SIZE i32 (i32.const 4))
- (global $~lib/internal/string/MAX_LENGTH i32 (i32.const 536870910))
- (global $~lib/internal/hash/FNV_OFFSET i32 (i32.const -2128831035))
- (global $~lib/internal/hash/FNV_PRIME i32 (i32.const 16777619))
- (global $Infinity f64 (f64.const inf))
- (global $NaN f64 (f64.const nan:0x8000000000000))
- (global $HEAP_BASE i32 (i32.const 44))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 44))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -29,7 +17,7 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  global.get $~lib/internal/hash/FNV_OFFSET
+  i32.const -2128831035
   local.set $1
   block $break|0
    block
@@ -53,7 +41,7 @@
     i32.add
     i32.load8_u offset=4
     i32.xor
-    global.get $~lib/internal/hash/FNV_PRIME
+    i32.const 16777619
     i32.mul
     local.set $1
     local.get $2
@@ -72,14 +60,14 @@
  )
  (func $~lib/internal/hash/hash32 (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
-  global.get $~lib/internal/hash/FNV_OFFSET
+  i32.const -2128831035
   local.set $1
   local.get $1
   local.get $0
   i32.const 255
   i32.and
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $1
   local.get $1
@@ -89,7 +77,7 @@
   i32.const 255
   i32.and
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $1
   local.get $1
@@ -99,7 +87,7 @@
   i32.const 255
   i32.and
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $1
   local.get $1
@@ -107,7 +95,7 @@
   i32.const 24
   i32.shr_u
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $1
   local.get $1
@@ -124,14 +112,14 @@
   i64.shr_u
   i32.wrap_i64
   local.set $2
-  global.get $~lib/internal/hash/FNV_OFFSET
+  i32.const -2128831035
   local.set $3
   local.get $3
   local.get $1
   i32.const 255
   i32.and
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $3
   local.get $3
@@ -141,7 +129,7 @@
   i32.const 255
   i32.and
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $3
   local.get $3
@@ -151,7 +139,7 @@
   i32.const 255
   i32.and
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $3
   local.get $3
@@ -159,7 +147,7 @@
   i32.const 24
   i32.shr_u
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $3
   local.get $3
@@ -167,7 +155,7 @@
   i32.const 255
   i32.and
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $3
   local.get $3
@@ -177,7 +165,7 @@
   i32.const 255
   i32.and
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $3
   local.get $3
@@ -187,7 +175,7 @@
   i32.const 255
   i32.and
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $3
   local.get $3
@@ -195,12 +183,12 @@
   i32.const 24
   i32.shr_u
   i32.xor
-  global.get $~lib/internal/hash/FNV_PRIME
+  i32.const 16777619
   i32.mul
   local.set $3
   local.get $3
  )
- (func $start (; 4 ;) (type $v)
+ (func $start:std/hash (; 4 ;) (type $_)
   (local $0 i32)
   (local $1 f32)
   (local $2 f64)
@@ -370,6 +358,9 @@
   call $std/hash/check
   drop
  )
- (func $null (; 5 ;) (type $v)
+ (func $start (; 5 ;) (type $_)
+  call $start:std/hash
+ )
+ (func $null (; 6 ;) (type $_)
  )
 )

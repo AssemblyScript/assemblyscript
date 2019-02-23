@@ -1,18 +1,18 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $fff (func (param f32 f32) (result f32)))
+ (type $_ (func))
  (type $ii (func (param i32) (result i32)))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $ifff (func (param i32 f32 f32) (result f32)))
- (type $v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00l\00a\00s\00s\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $class/Animal.ONE (mut i32) (i32.const 1))
- (global $HEAP_BASE i32 (i32.const 28))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 28))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $class/test))
@@ -32,14 +32,38 @@
   f32.convert_i32_s
   f32.add
  )
- (func $class/Animal<f64>#instanceAdd (; 3 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $start:class (; 3 ;) (type $_)
+  i32.const 4
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 13
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  global.get $class/Animal.ONE
+  drop
+  i32.const 1
+  i32.const 2
+  call $class/Animal.add
+  drop
+  f32.const 1
+  f32.const 2
+  call $class/Animal.sub<f32>
+  drop
+ )
+ (func $class/Animal<f64>#instanceAdd (; 4 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   local.get $2
   i32.add
   global.get $class/Animal.ONE
   i32.add
  )
- (func $class/Animal<f64>#instanceSub<f32> (; 4 ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
+ (func $class/Animal<f64>#instanceSub<f32> (; 5 ;) (type $ifff) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
   local.get $1
   local.get $2
   f32.sub
@@ -47,7 +71,7 @@
   f32.convert_i32_s
   f32.add
  )
- (func $class/test (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $class/test (; 6 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -92,30 +116,9 @@
   local.set $2
   local.get $2
  )
- (func $start (; 6 ;) (type $v)
-  i32.const 4
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 13
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  global.get $class/Animal.ONE
-  drop
-  i32.const 1
-  i32.const 2
-  call $class/Animal.add
-  drop
-  f32.const 1
-  f32.const 2
-  call $class/Animal.sub<f32>
-  drop
+ (func $start (; 7 ;) (type $_)
+  call $start:class
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 8 ;) (type $_)
  )
 )

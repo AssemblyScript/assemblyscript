@@ -1,12 +1,12 @@
 (module
+ (type $_ (func))
  (type $iiiiiiFF (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $F (func (result f64)))
  (type $iIi (func (param i32 i64) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iI (func (param i32) (result i64)))
  (type $iII (func (param i32 i64) (result i64)))
- (type $v (func))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
@@ -14,19 +14,27 @@
  (data (i32.const 8) "\0b\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/date/creationTime (mut i64) (i64.const 0))
  (global $std/date/date (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 36))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 36))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:~lib/allocator/arena (; 3 ;) (type $_)
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+ )
+ (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -34,7 +42,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/internal/allocator/MAX_SIZE_32
+  i32.const 1073741824
   i32.gt_u
   if
    unreachable
@@ -51,9 +59,9 @@
   i32.gt_u
   select
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.const -1
   i32.xor
   i32.and
@@ -105,12 +113,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/date/Date#constructor (; 5 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/date/Date#constructor (; 6 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -128,17 +136,17 @@
   i64.store
   local.get $0
  )
- (func $~lib/date/Date#getTime (; 6 ;) (type $iI) (param $0 i32) (result i64)
+ (func $~lib/date/Date#getTime (; 7 ;) (type $iI) (param $0 i32) (result i64)
   local.get $0
   i64.load
  )
- (func $~lib/date/Date#setTime (; 7 ;) (type $iII) (param $0 i32) (param $1 i64) (result i64)
+ (func $~lib/date/Date#setTime (; 8 ;) (type $iII) (param $0 i32) (param $1 i64) (result i64)
   local.get $0
   local.get $1
   i64.store
   local.get $1
  )
- (func $start (; 8 ;) (type $v)
+ (func $start:std/date (; 9 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -146,16 +154,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i64)
-  global.get $HEAP_BASE
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.add
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
+  call $start:~lib/allocator/arena
   block $~lib/date/Date.UTC|inlined.0 (result i64)
    i32.const 1970
    local.set $0
@@ -323,6 +322,9 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (type $v)
+ (func $start (; 10 ;) (type $_)
+  call $start:std/date
+ )
+ (func $null (; 11 ;) (type $_)
  )
 )

@@ -1,10 +1,10 @@
 (module
+ (type $_ (func))
  (type $iii (func (param i32 i32) (result i32)))
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $iiv (func (param i32 i32)))
- (type $iv (func (param i32)))
- (type $v (func))
+ (type $ii_ (func (param i32 i32)))
+ (type $i_ (func (param i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -17,33 +17,33 @@
  (global $exports/Car.TIRES i32 (i32.const 4))
  (global $exports/vehicles.Car.TIRES i32 (i32.const 4))
  (global $exports/outer.inner.a i32 (i32.const 42))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "add" (func $exports/add))
- (export "_setargc" (func $~setargc))
+ (export "_setargc" (func $~lib/setargc))
  (export "subOpt" (func $exports/subOpt|trampoline))
  (export "math.sub" (func $exports/subOpt))
  (export "Animal.CAT" (global $exports/Animal.CAT))
  (export "Animal.DOG" (global $exports/Animal.DOG))
  (export "animals.Animal.CAT" (global $exports/animals.Animal.CAT))
  (export "animals.Animal.DOG" (global $exports/animals.Animal.DOG))
- (export "Car.TIRES" (global $exports/Car.TIRES))
- (export "Car.getNumTires" (func $exports/Car.getNumTires))
- (export "Car#constructor" (func $exports/Car#constructor|trampoline))
  (export "Car#get:doors" (func $exports/Car#get:numDoors))
  (export "Car#set:doors" (func $exports/Car#set:numDoors))
+ (export "Car#constructor" (func $exports/Car#constructor|trampoline))
  (export "Car#get:numDoors" (func $exports/Car#get:numDoors))
  (export "Car#set:numDoors" (func $exports/Car#set:numDoors))
  (export "Car#openDoors" (func $exports/Car#openDoors))
- (export "vehicles.Car.TIRES" (global $exports/vehicles.Car.TIRES))
- (export "vehicles.Car.getNumTires" (func $exports/Car.getNumTires))
- (export "vehicles.Car#constructor" (func $exports/Car#constructor|trampoline))
+ (export "Car.TIRES" (global $exports/Car.TIRES))
+ (export "Car.getNumTires" (func $exports/Car.getNumTires))
  (export "vehicles.Car#get:doors" (func $exports/Car#get:numDoors))
  (export "vehicles.Car#set:doors" (func $exports/Car#set:numDoors))
+ (export "vehicles.Car#constructor" (func $exports/Car#constructor|trampoline))
  (export "vehicles.Car#get:numDoors" (func $exports/Car#get:numDoors))
  (export "vehicles.Car#set:numDoors" (func $exports/Car#set:numDoors))
  (export "vehicles.Car#openDoors" (func $exports/Car#openDoors))
+ (export "vehicles.Car.TIRES" (global $exports/vehicles.Car.TIRES))
+ (export "vehicles.Car.getNumTires" (func $exports/Car.getNumTires))
  (export "outer.inner.a" (global $exports/outer.inner.a))
  (start $start)
  (func $exports/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -125,28 +125,28 @@
   local.get $0
   i32.load
  )
- (func $exports/Car#set:numDoors (; 5 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (; 5 ;) (type $ii_) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#openDoors (; 6 ;) (type $iv) (param $0 i32)
+ (func $exports/Car#openDoors (; 6 ;) (type $i_) (param $0 i32)
   nop
  )
- (func $start (; 7 ;) (type $v)
+ (func $start (; 7 ;) (type $_)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 8 ;) (type $v)
+ (func $null (; 8 ;) (type $_)
   nop
  )
  (func $exports/subOpt|trampoline (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -160,15 +160,15 @@
   local.get $1
   i32.sub
  )
- (func $~setargc (; 10 ;) (type $iv) (param $0 i32)
+ (func $~lib/setargc (; 10 ;) (type $i_) (param $0 i32)
   local.get $0
-  global.set $~argc
+  global.set $~lib/argc
  )
  (func $exports/Car#constructor|trampoline (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable

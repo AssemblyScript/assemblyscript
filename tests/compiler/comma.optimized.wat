@@ -1,6 +1,6 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00o\00m\00m\00a\00.\00t\00s")
@@ -11,7 +11,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $v)
+ (func $start:comma (; 1 ;) (type $_)
   (local $0 i32)
   global.get $comma/a
   local.tee $0
@@ -163,7 +163,10 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $_)
+  call $start:comma
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

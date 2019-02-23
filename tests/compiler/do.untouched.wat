@@ -1,6 +1,6 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
+ (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\05\00\00\00d\00o\00.\00t\00s\00")
@@ -9,11 +9,11 @@
  (global $do/n (mut i32) (i32.const 10))
  (global $do/m (mut i32) (i32.const 0))
  (global $do/o (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 24))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 24))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $v)
+ (func $start:do (; 1 ;) (type $_)
   (local $0 i32)
   block $break|0
    loop $continue|0
@@ -180,6 +180,9 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $v)
+ (func $start (; 2 ;) (type $_)
+  call $start:do
+ )
+ (func $null (; 3 ;) (type $_)
  )
 )

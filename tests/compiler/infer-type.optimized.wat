@@ -1,5 +1,5 @@
 (module
- (type $v (func))
+ (type $_ (func))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s")
  (table $0 1 funcref)
@@ -11,7 +11,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 0 ;) (type $v)
+ (func $start:infer-type (; 0 ;) (type $_)
   (local $0 i32)
   i32.const 0
   global.set $infer-type/ri
@@ -34,7 +34,10 @@
    end
   end
  )
- (func $null (; 1 ;) (type $v)
+ (func $start (; 1 ;) (type $_)
+  call $start:infer-type
+ )
+ (func $null (; 2 ;) (type $_)
   nop
  )
 )
