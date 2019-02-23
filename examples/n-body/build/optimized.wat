@@ -3,7 +3,7 @@
  (type $ii (func (param i32) (result i32)))
  (type $F (func (result f64)))
  (type $iF (func (param i32) (result f64)))
- (type $iv (func (param i32)))
+ (type $i_ (func (param i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$iddddddd (func (param f64 f64 f64 f64 f64 f64 f64) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
@@ -453,7 +453,7 @@
   call $~lib/internal/memory/memset
   local.get $0
  )
- (func $assembly/index/init (; 5 ;) (type $v)
+ (func $assembly/index/init (; 5 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   call $~lib/array/Array<Body>#constructor
