@@ -302,27 +302,61 @@ export namespace f64 {
   @builtin export declare function trunc(value: f64): f64;
 }
 
-@builtin export declare function i64x2(a: i64, b: i64): v128;
-export namespace i64x2 {
-  @builtin export declare function splat(x: i64): v128;
-  @builtin export declare function add(a: v128, b: v128): v128;
+@builtin export declare function v128(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
+export namespace v128 {
+  @builtin export declare function splat<T>(x: T): v128;
+  @builtin export declare function extract_lane<T>(x: v128, idx: u8): T;
+  @builtin export declare function replace_lane<T>(x: v128, idx: u8, value: T): v128;
+  @builtin export declare function add<T>(a: v128, b: v128): v128;
 }
 
-@builtin export declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
-export namespace i32x4 {
-  @builtin export declare function splat(x: i32): v128;
+@builtin export declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
+export namespace i8x16 {
+  @builtin export declare function splat(x: i8): v128;
+  @builtin export declare function extract_lane_s(x: v128, idx: u8): i8;
+  @builtin export declare function extract_lane_u(x: v128, idx: u8): u8;
+  @builtin export declare function replace_lane(x: v128, idx: u8, value: i8): v128;
   @builtin export declare function add(a: v128, b: v128): v128;
 }
 
 @builtin export declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
 export namespace i16x8 {
   @builtin export declare function splat(x: i16): v128;
+  @builtin export declare function extract_lane_s(x: v128, idx: u8): i16;
+  @builtin export declare function extract_lane_u(x: v128, idx: u8): u16;
+  @builtin export declare function replace_lane(x: v128, idx: u8, value: i16): v128;
   @builtin export declare function add(a: v128, b: v128): v128;
 }
 
-@builtin export declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
-export namespace i8x16 {
-  @builtin export declare function splat(x: i8): v128;
+@builtin export declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
+export namespace i32x4 {
+  @builtin export declare function splat(x: i32): v128;
+  @builtin export declare function extract_lane(x: v128, idx: u8): i32;
+  @builtin export declare function replace_lane(x: v128, idx: u8, value: i32): v128;
+  @builtin export declare function add(a: v128, b: v128): v128;
+}
+
+@builtin export declare function i64x2(a: i64, b: i64): v128;
+export namespace i64x2 {
+  @builtin export declare function splat(x: i64): v128;
+  @builtin export declare function extract_lane(x: v128, idx: u8): i64;
+  @builtin export declare function replace_lane(x: v128, idx: u8, value: i64): v128;
+  @builtin export declare function add(a: v128, b: v128): v128;
+}
+
+@builtin export declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
+export namespace f32x4 {
+  @builtin export declare function splat(x: f32): v128;
+  @builtin export declare function extract_lane(x: v128, idx: u8): f32;
+  @builtin export declare function replace_lane(x: v128, idx: u8, value: f32): v128;
+  @builtin export declare function add(a: v128, b: v128): v128;
+}
+
+@builtin export declare function f64x2(a: f64, b: f64): v128;
+export namespace f64x2 {
+  @builtin export declare function splat(x: f64): v128;
+  @builtin export declare function extract_lane(x: v128, idx: u8): f64;
+  @builtin export declare function replace_lane(x: v128, idx: u8, value: f64): v128;
   @builtin export declare function add(a: v128, b: v128): v128;
 }
 

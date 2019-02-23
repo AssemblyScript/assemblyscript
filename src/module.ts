@@ -345,6 +345,26 @@ export enum AtomicRMWOp {
   Xchg = _BinaryenAtomicRMWXchg()
 }
 
+export enum SIMDExtractOp {
+  ExtractLaneSVecI8x16 = _BinaryenExtractLaneSVecI8x16(),
+  ExtractLaneUVecI8x16 = _BinaryenExtractLaneUVecI8x16(),
+  ExtractLaneSVecI16x8 = _BinaryenExtractLaneSVecI16x8(),
+  ExtractLaneUVecI16x8 = _BinaryenExtractLaneUVecI16x8(),
+  ExtractLaneVecI32x4 = _BinaryenExtractLaneVecI32x4(),
+  ExtractLaneVecI64x2 = _BinaryenExtractLaneVecI64x2(),
+  ExtractLaneVecF32x4 = _BinaryenExtractLaneVecF32x4(),
+  ExtractLaneVecF64x2 = _BinaryenExtractLaneVecF64x2(),
+}
+
+export enum SIMDReplaceOp {
+  ReplaceLaneVecI8x16 = _BinaryenReplaceLaneVecI8x16(),
+  ReplaceLaneVecI16x8 = _BinaryenReplaceLaneVecI16x8(),
+  ReplaceLaneVecI32x4 = _BinaryenReplaceLaneVecI32x4(),
+  ReplaceLaneVecI64x2 = _BinaryenReplaceLaneVecI64x2(),
+  ReplaceLaneVecF32x4 = _BinaryenReplaceLaneVecF32x4(),
+  ReplaceLaneVecF64x2 = _BinaryenReplaceLaneVecF64x2()
+}
+
 export class MemorySegment {
 
   buffer: Uint8Array;
@@ -731,6 +751,25 @@ export class Module {
     size: ExpressionRef
   ): ExpressionRef {
     return _BinaryenMemoryFill(this.ref, dest, value, size);
+  }
+
+  // simd
+
+  createSIMDExtract(
+    op: SIMDExtractOp,
+    vec: ExpressionRef,
+    idx: u8
+  ): ExpressionRef {
+    return _BinaryenSIMDExtract(this.ref, op, vec, idx);
+  }
+
+  createSIMDReplace(
+    op: SIMDReplaceOp,
+    vec: ExpressionRef,
+    idx: u8,
+    value: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenSIMDReplace(this.ref, op, vec, idx, value);
   }
 
   // meta

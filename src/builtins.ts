@@ -34,6 +34,9 @@ import {
   BinaryOp,
   UnaryOp,
   HostOp,
+  AtomicRMWOp,
+  SIMDExtractOp,
+  SIMDReplaceOp,
   NativeType,
   ExpressionRef,
   ExpressionId,
@@ -42,7 +45,8 @@ import {
   getConstValueI64High,
   getConstValueI64Low,
   getConstValueI32,
-  AtomicRMWOp
+  getConstValueF32,
+  getConstValueF64
 } from "./module";
 
 import {
@@ -256,18 +260,42 @@ export namespace BuiltinSymbols {
   export const i64_wait = "~lib/builtins/i64.wait";
   export const i32_notify = "~lib/builtins/i32.notify";
   export const i64_notify = "~lib/builtins/i64.notify";
+  export const v128_splat = "~lib/builtins/v128.splat";
+  export const v128_extract_lane = "~lib/builtins/v128.extract_lane";
+  export const v128_replace_lane = "~lib/builtins/v128.replace_lane";
+  export const v128_add = "~lib/builtins/v128.add";
   export const i64x2 = "~lib/builtins/i64x2";
-  export const i64x2_splat = "~lib/builtins/i64x2.splat";
-  export const i64x2_add = "~lib/builtins/i64x2.add";
   export const i32x4 = "~lib/builtins/i32x4";
-  export const i32x4_splat = "~lib/builtins/i32x4.splat";
-  export const i32x4_add = "~lib/builtins/i32x4.add";
   export const i16x8 = "~lib/builtins/i16x8";
-  export const i16x8_splat = "~lib/builtins/i16x8.splat";
-  export const i16x8_add = "~lib/builtins/i16x8.add";
   export const i8x16 = "~lib/builtins/i8x16";
+  export const f32x4 = "~lib/builtins/f32x4";
+  export const f64x2 = "~lib/builtins/f64x2";
   export const i8x16_splat = "~lib/builtins/i8x16.splat";
+  export const i8x16_extract_lane_s = "~lib/builtins/i8x16.extract_lane_s";
+  export const i8x16_extract_lane_u = "~lib/builtins/i8x16.extract_lane_u";
+  export const i8x16_replace_lane = "~lib/builtins/i8x16.replace_lane";
   export const i8x16_add = "~lib/builtins/i8x16.add";
+  export const i16x8_splat = "~lib/builtins/i16x8.splat";
+  export const i16x8_extract_lane_s = "~lib/builtins/i16x8.extract_lane_s";
+  export const i16x8_extract_lane_u = "~lib/builtins/i16x8.extract_lane_u";
+  export const i16x8_replace_lane = "~lib/builtins/i16x8.replace_lane";
+  export const i16x8_add = "~lib/builtins/i16x8.add";
+  export const i32x4_splat = "~lib/builtins/i32x4.splat";
+  export const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
+  export const i32x4_replace_lane = "~lib/builtins/i32x4.replace_lane";
+  export const i32x4_add = "~lib/builtins/i32x4.add";
+  export const i64x2_splat = "~lib/builtins/i64x2.splat";
+  export const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
+  export const i64x2_replace_lane = "~lib/builtins/i64x2.replace_lane";
+  export const i64x2_add = "~lib/builtins/i64x2.add";
+  export const f32x4_splat = "~lib/builtins/f32x4.splat";
+  export const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
+  export const f32x4_replace_lane = "~lib/builtins/f32x4.replace_lane";
+  export const f32x4_add = "~lib/builtins/f32x4.add";
+  export const f64x2_splat = "~lib/builtins/f64x2.splat";
+  export const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
+  export const f64x2_replace_lane = "~lib/builtins/f64x2.replace_lane";
+  export const f64x2_add = "~lib/builtins/f64x2.add";
   // std/diagnostics.ts
   export const ERROR = "~lib/diagnostics/ERROR";
   export const WARNING = "~lib/diagnostics/WARNING";
@@ -3348,252 +3376,12 @@ export function compileCall(
         WrapMode.NONE
       );
     }
-    // TODO
-    // case BuiltinSymbols.v128:
-    case BuiltinSymbols.i64x2: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      let bytes = new Uint8Array(16);
-      for (let i = 0; i < 2; ++i) {
-        let value = operands[i];
-        if (value) {
-          let expr = module.precomputeExpression(
-            compiler.compileExpression(value, Type.i64, ConversionKind.IMPLICIT, WrapMode.NONE)
-          );
-          if (getExpressionId(expr) != ExpressionId.Const) {
-            compiler.error(
-              DiagnosticCode.Expression_must_be_a_compile_time_constant,
-              value.range
-            );
-            compiler.currentType = Type.v128;
-            return module.createUnreachable();
-          }
-          let lo = getConstValueI64Low(expr);
-          let hi = getConstValueI64High(expr);
-          let off = i << 3;
-          bytes[off    ] = lo;
-          bytes[off + 1] = lo >>>  8;
-          bytes[off + 2] = lo >>> 16;
-          bytes[off + 3] = lo >>> 24;
-          bytes[off + 4] = hi;
-          bytes[off + 5] = hi >>>  8;
-          bytes[off + 6] = hi >>> 16;
-          bytes[off + 7] = hi >>> 24;
-        }
-      }
-      compiler.currentType = Type.v128;
-      return module.createV128(bytes);
-    }
-    case BuiltinSymbols.i64x2_splat: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      let expr = compiler.compileExpression(operands[0], Type.i64, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createUnary(UnaryOp.SplatVecI64x2, expr);
-    }
-    case BuiltinSymbols.i64x2_add: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(BinaryOp.AddVecI64x2, arg0, arg1);
-    }
-    case BuiltinSymbols.i32x4: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 4) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "4", operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      let bytes = new Uint8Array(16);
-      for (let i = 0; i < 4; ++i) {
-        let value = operands[i];
-        if (value) {
-          let expr = module.precomputeExpression(
-            compiler.compileExpression(value, Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE)
-          );
-          if (getExpressionId(expr) != ExpressionId.Const) {
-            compiler.error(
-              DiagnosticCode.Expression_must_be_a_compile_time_constant,
-              value.range
-            );
-            compiler.currentType = Type.v128;
-            return module.createUnreachable();
-          }
-          let val = getConstValueI32(expr);
-          let off = i << 2;
-          bytes[off    ] = val;
-          bytes[off + 1] = val >>>  8;
-          bytes[off + 2] = val >>> 16;
-          bytes[off + 3] = val >>> 24;
-        }
-      }
-      compiler.currentType = Type.v128;
-      return module.createV128(bytes);
-    }
-    case BuiltinSymbols.i32x4_splat: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      let expr = compiler.compileExpression(operands[0], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createUnary(UnaryOp.SplatVecI32x4, expr);
-    }
-    case BuiltinSymbols.i32x4_add: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(BinaryOp.AddVecI32x4, arg0, arg1);
-    }
-    case BuiltinSymbols.i16x8: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 8) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "8", operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      let bytes = new Uint8Array(16);
-      for (let i = 0; i < 8; ++i) {
-        let value = operands[i];
-        if (value) {
-          let expr = module.precomputeExpression(
-            compiler.compileExpression(value, Type.i16, ConversionKind.IMPLICIT, WrapMode.NONE)
-          );
-          if (getExpressionId(expr) != ExpressionId.Const) {
-            compiler.error(
-              DiagnosticCode.Expression_must_be_a_compile_time_constant,
-              value.range
-            );
-            compiler.currentType = Type.v128;
-            return module.createUnreachable();
-          }
-          let val = getConstValueI32(expr);
-          let off = i << 1;
-          bytes[off    ] = val;
-          bytes[off + 1] = val >>> 8;
-        }
-      }
-      compiler.currentType = Type.v128;
-      return module.createV128(bytes);
-    }
-    case BuiltinSymbols.i16x8_splat: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      let expr = compiler.compileExpression(operands[0], Type.i16, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createUnary(UnaryOp.SplatVecI16x8, expr);
-    }
-    case BuiltinSymbols.i16x8_add: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(BinaryOp.AddVecI16x8, arg0, arg1);
-    }
+
+    // === SIMD ===================================================================================
+
+    case BuiltinSymbols.v128: // alias for now
     case BuiltinSymbols.i8x16: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -3623,32 +3411,99 @@ export function compileCall(
             compiler.currentType = Type.v128;
             return module.createUnreachable();
           }
+          assert(getExpressionType(expr) == NativeType.I32);
           bytes[i] = getConstValueI32(expr);
         }
       }
       compiler.currentType = Type.v128;
       return module.createV128(bytes);
     }
-    case BuiltinSymbols.i8x16_splat: {
+    case BuiltinSymbols.i16x8: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
           reportNode.range, prototype.internalName
         );
       }
-      if (operands.length != 1) {
+      if (operands.length != 8) {
         compiler.error(
           DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          reportNode.range, "8", operands.length.toString(10)
         );
         compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      let expr = compiler.compileExpression(operands[0], Type.i8, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let bytes = new Uint8Array(16);
+      for (let i = 0; i < 8; ++i) {
+        let value = operands[i];
+        if (value) {
+          let expr = module.precomputeExpression(
+            compiler.compileExpression(value, Type.i16, ConversionKind.IMPLICIT, WrapMode.NONE)
+          );
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            compiler.error(
+              DiagnosticCode.Expression_must_be_a_compile_time_constant,
+              value.range
+            );
+            compiler.currentType = Type.v128;
+            return module.createUnreachable();
+          }
+          assert(getExpressionType(expr) == NativeType.I32);
+          let val = getConstValueI32(expr);
+          let off = i << 1;
+          bytes[off    ] = val;
+          bytes[off + 1] = val >>> 8;
+        }
+      }
       compiler.currentType = Type.v128;
-      return module.createUnary(UnaryOp.SplatVecI8x16, expr);
+      return module.createV128(bytes);
     }
-    case BuiltinSymbols.i8x16_add: {
+    case BuiltinSymbols.i32x4: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 4) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "4", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let bytes = new Uint8Array(16);
+      for (let i = 0; i < 4; ++i) {
+        let value = operands[i];
+        if (value) {
+          let expr = module.precomputeExpression(
+            compiler.compileExpression(value, Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE)
+          );
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            compiler.error(
+              DiagnosticCode.Expression_must_be_a_compile_time_constant,
+              value.range
+            );
+            compiler.currentType = Type.v128;
+            return module.createUnreachable();
+          }
+          assert(getExpressionType(expr) == NativeType.I32);
+          let val = getConstValueI32(expr);
+          let off = i << 2;
+          bytes[off    ] = val;
+          bytes[off + 1] = val >>>  8;
+          bytes[off + 2] = val >>> 16;
+          bytes[off + 3] = val >>> 24;
+        }
+      }
+      compiler.currentType = Type.v128;
+      return module.createV128(bytes);
+    }
+    case BuiltinSymbols.i64x2: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
@@ -3663,13 +3518,355 @@ export function compileCall(
         compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
+      let bytes = new Uint8Array(16);
+      for (let i = 0; i < 2; ++i) {
+        let value = operands[i];
+        if (value) {
+          let expr = module.precomputeExpression(
+            compiler.compileExpression(value, Type.i64, ConversionKind.IMPLICIT, WrapMode.NONE)
+          );
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            compiler.error(
+              DiagnosticCode.Expression_must_be_a_compile_time_constant,
+              value.range
+            );
+            compiler.currentType = Type.v128;
+            return module.createUnreachable();
+          }
+          assert(getExpressionType(expr) == NativeType.I64);
+          let lo = getConstValueI64Low(expr);
+          let hi = getConstValueI64High(expr);
+          let off = i << 3;
+          bytes[off    ] = lo;
+          bytes[off + 1] = lo >>>  8;
+          bytes[off + 2] = lo >>> 16;
+          bytes[off + 3] = lo >>> 24;
+          bytes[off + 4] = hi;
+          bytes[off + 5] = hi >>>  8;
+          bytes[off + 6] = hi >>> 16;
+          bytes[off + 7] = hi >>> 24;
+        }
+      }
+      compiler.currentType = Type.v128;
+      return module.createV128(bytes);
+    }
+    case BuiltinSymbols.f32x4: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 4) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "4", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let bytes = new Uint8Array(16);
+      for (let i = 0; i < 4; ++i) {
+        let value = operands[i];
+        if (value) {
+          let expr = module.precomputeExpression(
+            compiler.compileExpression(value, Type.f32, ConversionKind.IMPLICIT, WrapMode.NONE)
+          );
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            compiler.error(
+              DiagnosticCode.Expression_must_be_a_compile_time_constant,
+              value.range
+            );
+            compiler.currentType = Type.v128;
+            return module.createUnreachable();
+          }
+          assert(getExpressionType(expr) == NativeType.F32);
+          let val = f32_as_i32(getConstValueF32(expr));
+          let off = i << 2;
+          bytes[off    ] = val;
+          bytes[off + 1] = val >>>  8;
+          bytes[off + 2] = val >>> 16;
+          bytes[off + 3] = val >>> 24;
+        }
+      }
+      compiler.currentType = Type.v128;
+      return module.createV128(bytes);
+    }
+    case BuiltinSymbols.f64x2: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let bytes = new Uint8Array(16);
+      for (let i = 0; i < 2; ++i) {
+        let value = operands[i];
+        if (value) {
+          let expr = module.precomputeExpression(
+            compiler.compileExpression(value, Type.f64, ConversionKind.IMPLICIT, WrapMode.NONE)
+          );
+          if (getExpressionId(expr) != ExpressionId.Const) {
+            compiler.error(
+              DiagnosticCode.Expression_must_be_a_compile_time_constant,
+              value.range
+            );
+            compiler.currentType = Type.v128;
+            return module.createUnreachable();
+          }
+          assert(getExpressionType(expr) == NativeType.F64);
+          let val = f64_as_i64(getConstValueF64(expr));
+          let lo = i64_low(val);
+          let hi = i64_high(val);
+          let off = i << 3;
+          bytes[off    ] = lo;
+          bytes[off + 1] = lo >>>  8;
+          bytes[off + 2] = lo >>> 16;
+          bytes[off + 3] = lo >>> 24;
+          bytes[off + 4] = hi;
+          bytes[off + 5] = hi >>>  8;
+          bytes[off + 6] = hi >>> 16;
+          bytes[off + 7] = hi >>> 24;
+        }
+      }
+      compiler.currentType = Type.v128;
+      return module.createV128(bytes);
+    }
+    case BuiltinSymbols.v128_splat: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let type =  typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let op: UnaryOp;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8:  { op = UnaryOp.SplatVecI8x16; break; }
+        case TypeKind.I16:
+        case TypeKind.U16: { op = UnaryOp.SplatVecI16x8; break; }
+        case TypeKind.I32:
+        case TypeKind.U32: { op = UnaryOp.SplatVecI32x4; break; }
+        case TypeKind.I64:
+        case TypeKind.U64: { op = UnaryOp.SplatVecI64x2; break; }
+        case TypeKind.F32: { op = UnaryOp.SplatVecF32x4; break; }
+        case TypeKind.F64: { op = UnaryOp.SplatVecF64x2; break; }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          compiler.currentType = Type.v128;
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], type, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createUnary(op, arg0);
+    }
+    case BuiltinSymbols.v128_extract_lane: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        compiler.currentType = type;
+        return module.createUnreachable();
+      }
+      let op: SIMDExtractOp;
+      switch (type.kind) {
+        case TypeKind.I8:  { op = SIMDExtractOp.ExtractLaneSVecI8x16; break; }
+        case TypeKind.U8:  { op = SIMDExtractOp.ExtractLaneUVecI8x16; break; }
+        case TypeKind.I16: { op = SIMDExtractOp.ExtractLaneSVecI16x8; break; }
+        case TypeKind.U16: { op = SIMDExtractOp.ExtractLaneUVecI16x8; break; }
+        case TypeKind.I32:
+        case TypeKind.U32: { op = SIMDExtractOp.ExtractLaneVecI32x4; break; }
+        case TypeKind.I64:
+        case TypeKind.U64: { op = SIMDExtractOp.ExtractLaneVecI64x2; break; }
+        case TypeKind.F32: { op = SIMDExtractOp.ExtractLaneVecF32x4; break; }
+        case TypeKind.F64: { op = SIMDExtractOp.ExtractLaneVecF64x2; break; }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          compiler.currentType = type;
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = module.precomputeExpression(
+        compiler.compileExpression(operands[1], Type.u8, ConversionKind.IMPLICIT, WrapMode.NONE)
+      );
+      compiler.currentType = type;
+      if (getExpressionId(arg1) != ExpressionId.Const) {
+        compiler.error(
+          DiagnosticCode.Expression_must_be_a_compile_time_constant,
+          operands[1].range
+        );
+        return module.createUnreachable();
+      }
+      return module.createSIMDExtract(op, arg0, getConstValueI32(arg1));
+    }
+    case BuiltinSymbols.v128_replace_lane: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 3) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "3", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: SIMDReplaceOp;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8:  { op = SIMDReplaceOp.ReplaceLaneVecI8x16; break; }
+        case TypeKind.I16:
+        case TypeKind.U16: { op = SIMDReplaceOp.ReplaceLaneVecI16x8; break; }
+        case TypeKind.I32:
+        case TypeKind.U32: { op = SIMDReplaceOp.ReplaceLaneVecI32x4; break; }
+        case TypeKind.I64:
+        case TypeKind.U64: { op = SIMDReplaceOp.ReplaceLaneVecI64x2; break; }
+        case TypeKind.F32: { op = SIMDReplaceOp.ReplaceLaneVecF32x4; break; }
+        case TypeKind.F64: { op = SIMDReplaceOp.ReplaceLaneVecF64x2; break; }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = module.precomputeExpression(
+        compiler.compileExpression(operands[1], Type.u8, ConversionKind.IMPLICIT, WrapMode.NONE)
+      );
+      if (getExpressionId(arg1) != ExpressionId.Const) {
+        compiler.error(
+          DiagnosticCode.Expression_must_be_a_compile_time_constant,
+          operands[1].range
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      arg2 = compiler.compileExpression(operands[2], type, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createSIMDReplace(op, arg0, getConstValueI32(arg1), arg2);
+    }
+    case BuiltinSymbols.v128_add: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type =  typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: BinaryOp;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8:  { op = BinaryOp.AddVecI8x16; break; }
+        case TypeKind.I16:
+        case TypeKind.U16: { op = BinaryOp.AddVecI16x8; break; }
+        case TypeKind.I32:
+        case TypeKind.U32: { op = BinaryOp.AddVecI32x4; break; }
+        case TypeKind.I64:
+        case TypeKind.U64: { op = BinaryOp.AddVecI16x8; break; }
+        case TypeKind.F32: { op = BinaryOp.AddVecF32x4; break; }
+        case TypeKind.F64: { op = BinaryOp.AddVecF64x2; break; }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
       arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
       arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
       compiler.currentType = Type.v128;
-      return module.createBinary(BinaryOp.AddVecI8x16, arg0, arg1);
+      return module.createBinary(op, arg0, arg1);
     }
 
-    // gc
+    // === GC integration =========================================================================
 
     case BuiltinSymbols.iterateRoots: {
       if (typeArguments) {
@@ -3708,6 +3905,8 @@ export function compileCall(
       return module.createCall("~iterateRoots", [ expr ], NativeType.None);
     }
   }
+
+  // try to defer inline asm to a concrete built-in
   var expr = deferASMCall(compiler, prototype, operands, contextualType, reportNode);
   if (expr) {
     if (typeArguments && typeArguments.length) {
@@ -3866,6 +4065,36 @@ function deferASMCall(
       case BuiltinSymbols.i64_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i64, operands, Type.i64, reportNode);
       case BuiltinSymbols.i32_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i32, operands, Type.u32, reportNode);
       case BuiltinSymbols.i64_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i64, operands, Type.i64, reportNode);
+    }
+  }
+  if (compiler.options.hasFeature(Feature.SIMD)) {
+    switch (prototype.internalName) {
+      case BuiltinSymbols.i8x16_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_extract_lane_s: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i8, operands, Type.i8, reportNode);
+      case BuiltinSymbols.i8x16_extract_lane_u: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.u8, operands, Type.u8, reportNode);
+      case BuiltinSymbols.i8x16_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_extract_lane_s: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i16, operands, Type.i16, reportNode);
+      case BuiltinSymbols.i16x8_extract_lane_u: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.u16, operands, Type.u16, reportNode);
+      case BuiltinSymbols.i16x8_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32x4_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i64, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64x2_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i64x2_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f32, operands, Type.f32, reportNode);
+      case BuiltinSymbols.f32x4_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f64, operands, Type.f64, reportNode);
+      case BuiltinSymbols.f64x2_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.f64, operands, Type.v128, reportNode);
     }
   }
   /* tslint:enable:max-line-length */
