@@ -365,6 +365,21 @@ export enum SIMDReplaceOp {
   ReplaceLaneVecF64x2 = _BinaryenReplaceLaneVecF64x2()
 }
 
+export enum SIMDShiftOp { // FIXME: seems to be missing in binaryen-c.h
+  ShlVecI8x16,
+  ShrSVecI8x16,
+  ShrUVecI8x16,
+  ShlVecI16x8,
+  ShrSVecI16x8,
+  ShrUVecI16x8,
+  ShlVecI32x4,
+  ShrSVecI32x4,
+  ShrUVecI32x4,
+  ShlVecI64x2,
+  ShrSVecI64x2,
+  ShrUVecI64x2
+}
+
 export class MemorySegment {
 
   buffer: Uint8Array;
@@ -770,6 +785,36 @@ export class Module {
     value: ExpressionRef
   ): ExpressionRef {
     return _BinaryenSIMDReplace(this.ref, op, vec, idx, value);
+  }
+
+  createSIMDShuffle(
+    vec1: ExpressionRef,
+    vec2: ExpressionRef,
+    mask: Uint8Array
+  ): ExpressionRef {
+    assert(mask.length == 16);
+    var cArr = allocU8Array(mask);
+    try {
+      return _BinaryenSIMDShuffle(this.ref, vec1, vec2, cArr);
+    } finally {
+      memory.free(cArr);
+    }
+  }
+
+  createSIMDBitselect(
+    vec1: ExpressionRef,
+    vec2: ExpressionRef,
+    cond: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenSIMDBitselect(this.ref, vec1, vec2, cond);
+  }
+
+  createSIMDShift(
+    op: SIMDShiftOp,
+    vec: ExpressionRef,
+    shift: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenSIMDShift(this.ref, op, vec, shift);
   }
 
   // meta
