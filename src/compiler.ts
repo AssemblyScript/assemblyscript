@@ -2712,7 +2712,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
         rightType = this.currentType;
-        if (commonType = Type.commonCompatible(leftType, rightType, true)) {
+        if (commonType = Type.commonDenominator(leftType, rightType, true)) {
           leftExpr = this.convertExpression(
             leftExpr,
             leftType,
@@ -2818,7 +2818,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
         rightType = this.currentType;
-        if (commonType = Type.commonCompatible(leftType, rightType, true)) {
+        if (commonType = Type.commonDenominator(leftType, rightType, true)) {
           leftExpr = this.convertExpression(
             leftExpr,
             leftType,
@@ -2924,7 +2924,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
         rightType = this.currentType;
-        if (commonType = Type.commonCompatible(leftType, rightType, true)) {
+        if (commonType = Type.commonDenominator(leftType, rightType, true)) {
           leftExpr = this.convertExpression(
             leftExpr,
             leftType,
@@ -3030,7 +3030,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
         rightType = this.currentType;
-        if (commonType = Type.commonCompatible(leftType, rightType, true)) {
+        if (commonType = Type.commonDenominator(leftType, rightType, true)) {
           leftExpr = this.convertExpression(
             leftExpr,
             leftType,
@@ -3139,7 +3139,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
         rightType = this.currentType;
-        if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+        if (commonType = Type.commonDenominator(leftType, rightType, false)) {
           leftExpr = this.convertExpression(
             leftExpr,
             leftType,
@@ -3227,7 +3227,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
         rightType = this.currentType;
-        if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+        if (commonType = Type.commonDenominator(leftType, rightType, false)) {
           leftExpr = this.convertExpression(
             leftExpr,
             leftType,
@@ -3325,7 +3325,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
           rightType = this.currentType;
-          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
             leftExpr = this.convertExpression(
               leftExpr,
               leftType,
@@ -3421,7 +3421,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
           rightType = this.currentType;
-          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
             leftExpr = this.convertExpression(
               leftExpr,
               leftType,
@@ -3517,7 +3517,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
           rightType = this.currentType;
-          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
             leftExpr = this.convertExpression(
               leftExpr,
               leftType,
@@ -3714,7 +3714,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
           rightType = this.currentType;
-          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
             leftExpr = this.convertExpression(
               leftExpr,
               leftType,
@@ -3829,7 +3829,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
           rightType = this.currentType;
-          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
             leftExpr = this.convertExpression(
               leftExpr,
               leftType,
@@ -4223,7 +4223,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
           rightType = this.currentType;
-          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
             leftExpr = this.convertExpression(
               leftExpr,
               leftType,
@@ -4319,7 +4319,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
           rightType = this.currentType;
-          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
             leftExpr = this.convertExpression(
               leftExpr,
               leftType,
@@ -4418,7 +4418,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpressionRetainType(right, leftType, WrapMode.NONE);
           rightType = this.currentType;
-          if (commonType = Type.commonCompatible(leftType, rightType, false)) {
+          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
             leftExpr = this.convertExpression(
               leftExpr,
               leftType,
@@ -5086,8 +5086,8 @@ export class Compiler extends DiagnosticEmitter {
               if (inferredType) {
                 argumentExprs[i] = this.compileExpressionRetainType(argumentExpression, inferredType, WrapMode.NONE);
                 let commonType: Type | null;
-                if (!(commonType = Type.commonCompatible(inferredType, this.currentType, true))) {
-                  if (!(commonType = Type.commonCompatible(inferredType, this.currentType, false))) {
+                if (!(commonType = Type.commonDenominator(inferredType, this.currentType, true))) {
+                  if (!(commonType = Type.commonDenominator(inferredType, this.currentType, false))) {
                     this.error(
                       DiagnosticCode.Type_0_is_not_assignable_to_type_1,
                       parameterNodes[i].type.range, this.currentType.toString(), inferredType.toString()
@@ -5951,7 +5951,7 @@ export class Compiler extends DiagnosticEmitter {
             contextualTypeArguments
           );
           if (!resolvedType) return this.module.createUnreachable();
-          if (!parameterTypes[i].isAssignableTo(resolvedType)) {
+          if (!parameterTypes[i].isCompatibleTo(resolvedType)) {
             this.error(
               DiagnosticCode.Type_0_is_not_assignable_to_type_1,
               parameterNode.range, parameterTypes[i].toString(), resolvedType.toString()
@@ -5973,7 +5973,7 @@ export class Compiler extends DiagnosticEmitter {
         if (
           returnType == Type.void
             ? resolvedType != Type.void
-            : !resolvedType.isAssignableTo(returnType)
+            : !resolvedType.isCompatibleTo(returnType)
         ) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
@@ -6000,7 +6000,7 @@ export class Compiler extends DiagnosticEmitter {
           contextualTypeArguments
         );
         if (!resolvedType) return this.module.createUnreachable();
-        if (!thisType.isAssignableTo(resolvedType)) {
+        if (!thisType.isCompatibleTo(resolvedType)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             thisTypeNode.range, thisType.toString(), resolvedType.toString()
@@ -7063,7 +7063,7 @@ export class Compiler extends DiagnosticEmitter {
 
     outerFlow.inheritMutual(ifThenFlow, ifElseFlow);
 
-    var commonType = Type.commonCompatible(ifThenType, ifElseType, false);
+    var commonType = Type.commonDenominator(ifThenType, ifElseType, false);
     if (!commonType) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
