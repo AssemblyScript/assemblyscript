@@ -7,8 +7,8 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
- (table $0 8 funcref)
- (elem (i32.const 0) $null $start:function-expression~anonymous|1 $start:function-expression~anonymous|2 $start:function-expression~someName|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|7)
+ (table $0 11 funcref)
+ (elem (i32.const 0) $null $start:function-expression~anonymous|1 $start:function-expression~anonymous|2 $start:function-expression~someName|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|7 $function-expression/testOmittedReturn1~anonymous|8 $function-expression/testOmittedReturn2~anonymous|9 $function-expression/testOmittedReturn3~anonymous|10)
  (global $function-expression/f1 (mut i32) (i32.const 1))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $function-expression/f2 (mut i32) (i32.const 2))
@@ -49,7 +49,27 @@
  (func $start:function-expression~anonymous|7 (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $start:function-expression (; 9 ;) (type $_)
+ (func $function-expression/testOmittedReturn1~anonymous|8 (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.add
+ )
+ (func $function-expression/testOmittedReturn1 (; 10 ;) (type $i) (result i32)
+  i32.const 8
+ )
+ (func $function-expression/testOmittedReturn2~anonymous|9 (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+ )
+ (func $function-expression/testOmittedReturn2 (; 12 ;) (type $i) (result i32)
+  i32.const 9
+ )
+ (func $function-expression/testOmittedReturn3~anonymous|10 (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  i32.const 42
+ )
+ (func $function-expression/testOmittedReturn3 (; 14 ;) (type $i) (result i32)
+  i32.const 10
+ )
+ (func $start:function-expression (; 15 ;) (type $_)
   block (result i32)
    i32.const 1
    global.set $~lib/argc
@@ -148,10 +168,67 @@
    call $~lib/env/abort
    unreachable
   end
+  block (result i32)
+   i32.const 2
+   global.set $~lib/argc
+   i32.const 1
+   i32.const 2
+   call $function-expression/testOmittedReturn1
+   call_indirect (type $iii)
+  end
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 28
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block (result i32)
+   i32.const 2
+   global.set $~lib/argc
+   i32.const 1
+   i32.const 2
+   call $function-expression/testOmittedReturn2
+   call_indirect (type $iii)
+  end
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 29
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  block (result i32)
+   i32.const 2
+   global.set $~lib/argc
+   i32.const 1
+   i32.const 2
+   call $function-expression/testOmittedReturn3
+   call_indirect (type $iii)
+  end
+  i32.const 42
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 30
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $start (; 10 ;) (type $_)
+ (func $start (; 16 ;) (type $_)
   call $start:function-expression
  )
- (func $null (; 11 ;) (type $_)
+ (func $null (; 17 ;) (type $_)
  )
 )

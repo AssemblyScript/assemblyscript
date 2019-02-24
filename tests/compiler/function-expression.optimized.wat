@@ -7,8 +7,8 @@
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
- (table $0 8 funcref)
- (elem (i32.const 0) $start:function-expression~someName|3 $start:function-expression~anonymous|1 $start:function-expression~anonymous|1 $start:function-expression~someName|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|7)
+ (table $0 11 funcref)
+ (elem (i32.const 0) $start:function-expression~someName|3 $start:function-expression~anonymous|1 $start:function-expression~anonymous|1 $start:function-expression~someName|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|7 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|7)
  (global $function-expression/f1 (mut i32) (i32.const 1))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $function-expression/f2 (mut i32) (i32.const 2))
@@ -130,6 +130,54 @@
    i32.const 0
    i32.const 8
    i32.const 23
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 1
+  i32.const 2
+  i32.const 8
+  call_indirect (type $iii)
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 28
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 1
+  i32.const 2
+  i32.const 9
+  call_indirect (type $iii)
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 29
+   i32.const 0
+   call $~lib/env/abort
+   unreachable
+  end
+  i32.const 2
+  global.set $~lib/argc
+  i32.const 1
+  i32.const 2
+  i32.const 10
+  call_indirect (type $iii)
+  i32.const 42
+  i32.ne
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 30
    i32.const 0
    call $~lib/env/abort
    unreachable
