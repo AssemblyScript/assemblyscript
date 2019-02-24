@@ -1960,3 +1960,12 @@ export function mangleInternalPath(path: string): string {
   if (path.endsWith(".ts")) path = path.substring(0, path.length - 3);
   return path;
 }
+
+/** Tests if the specified type node represents an omitted type. */
+export function isTypeOmitted(type: CommonTypeNode): bool {
+  if (type.kind == NodeKind.TYPE) {
+    let name = (<TypeNode>type).name;
+    return !(name.next || name.identifier.text.length);
+  }
+  return false;
+}

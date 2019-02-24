@@ -1415,10 +1415,6 @@ export class Parser extends DiagnosticEmitter {
       if (!returnType) return null;
     } else {
       returnType = Node.createOmittedType(tn.range(tn.pos));
-      this.error(
-        DiagnosticCode.Type_expected,
-        returnType.range
-      ); // recoverable
     }
 
     if (isArrow) {

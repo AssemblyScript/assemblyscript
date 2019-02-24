@@ -108,7 +108,9 @@ import {
   EnumDeclaration,
   ExportStatement,
   ExpressionStatement,
+  FieldDeclaration,
   ForStatement,
+  FunctionDeclaration,
   IfStatement,
   ImportStatement,
   InstanceOfExpression,
@@ -146,8 +148,7 @@ import {
 
   nodeIsConstantValue,
   findDecorator,
-  FieldDeclaration,
-  FunctionDeclaration
+  isTypeOmitted
 } from "./ast";
 
 import {
@@ -2362,7 +2363,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.FUNCTION: {
-        expr = this.compileFunctionExpression(<FunctionExpression>expression, contextualType);
+        expr = this.compileFunctionExpression(<FunctionExpression>expression, contextualType.signatureReference);
         break;
       }
       case NodeKind.IDENTIFIER:
@@ -5901,7 +5902,7 @@ export class Compiler extends DiagnosticEmitter {
 
   compileFunctionExpression(
     expression: FunctionExpression,
-    contextualType: Type
+    contextualSignature: Signature | null
   ): ExpressionRef {
     var declaration = expression.declaration;
     var name = declaration.name;
@@ -5909,22 +5910,129 @@ export class Compiler extends DiagnosticEmitter {
       ? name.text
       : "anonymous") + "|" + this.functionTable.length.toString(10);
     var flow = this.currentFlow;
+    assert(!declaration.typeParameters);
+
     var prototype = new FunctionPrototype(
       simpleName,
       flow.actualFunction,
-      declaration.clone(), // same function can be compiled multiple times if generic
+      declaration = declaration.clone(), // same function can become compiled multiple times in generic contexts
       DecoratorFlags.NONE
     );
-    var instance = this.compileFunctionUsingTypeArguments(
-      prototype,
-      [],
-      makeMap<string,Type>(flow.contextualTypeArguments),
-      declaration
-    );
-    if (!instance) return this.module.createUnreachable();
-    this.currentType = instance.signature.type; // TODO: get cached type?
-    // NOTE that, in order to make this work in every case, the function must be represented by a
-    // value, so we add it and rely on the optimizer to figure out where it can be called directly.
+    var instance: Function | null;
+
+    // compile according to context. this differs from a normal function in that omitted parameter
+    // and return types can be inferred and omitted arguments can be replaced with dummies.
+    if (contextualSignature) {
+      let signatureNode = declaration.signature;
+      let parameterNodes = signatureNode.parameters;
+      let numPresentParameters = parameterNodes.length;
+
+      // must not require more than the maximum number of parameters
+      let parameterTypes = contextualSignature.parameterTypes;
+      let numParameters = parameterTypes.length;
+      if (numPresentParameters > numParameters) {
+        this.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          expression.range, numParameters.toString(), numPresentParameters.toString()
+        );
+        return this.module.createUnreachable();
+      }
+
+      // check that non-omitted parameter types are compatible
+      let parameterNames = new Array<string>(numPresentParameters);
+      let contextualTypeArguments = makeMap(flow.contextualTypeArguments);
+      for (let i = 0; i < numPresentParameters; ++i) {
+        let parameterNode = parameterNodes[i];
+        parameterNames[i] = parameterNode.name.text; // use actual name
+        if (!isTypeOmitted(parameterNode.type)) {
+          let resolvedType = this.resolver.resolveType(
+            parameterNode.type,
+            flow.actualFunction.parent,
+            contextualTypeArguments
+          );
+          if (!resolvedType) return this.module.createUnreachable();
+          if (!parameterTypes[i].isAssignableTo(resolvedType)) {
+            this.error(
+              DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+              parameterNode.range, parameterTypes[i].toString(), resolvedType.toString()
+            );
+            return this.module.createUnreachable();
+          }
+        }
+      }
+
+      // check that non-omitted return type is compatible
+      let returnType = contextualSignature.returnType;
+      if (!isTypeOmitted(signatureNode.returnType)) {
+        let resolvedType = this.resolver.resolveType(
+          signatureNode.returnType,
+          flow.actualFunction.parent,
+          contextualTypeArguments
+        );
+        if (!resolvedType) return this.module.createUnreachable();
+        if (
+          returnType == Type.void
+            ? resolvedType != Type.void
+            : !resolvedType.isAssignableTo(returnType)
+        ) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            signatureNode.returnType.range, resolvedType.toString(), returnType.toString()
+          );
+          return this.module.createUnreachable();
+        }
+      }
+
+      // check that explicit this type is compatible
+      let thisType = contextualSignature.thisType;
+      let thisTypeNode = signatureNode.explicitThisType;
+      if (thisTypeNode) {
+        if (!thisType) {
+          this.error(
+            DiagnosticCode.Operation_not_supported, // TODO: better message?
+            thisTypeNode.range
+          );
+          return this.module.createUnreachable();
+        }
+        let resolvedType = this.resolver.resolveType(
+          thisTypeNode,
+          flow.actualFunction.parent,
+          contextualTypeArguments
+        );
+        if (!resolvedType) return this.module.createUnreachable();
+        if (!thisType.isAssignableTo(resolvedType)) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            thisTypeNode.range, thisType.toString(), resolvedType.toString()
+          );
+          return this.module.createUnreachable();
+        }
+      }
+
+      let signature = new Signature(parameterTypes, returnType, thisType);
+      signature.requiredParameters = numParameters; // !
+      signature.parameterNames = parameterNames;
+      instance = new Function(
+        simpleName,
+        prototype,
+        signature,
+        contextualTypeArguments
+      );
+      if (!this.compileFunction(instance)) return this.module.createUnreachable();
+      this.currentType = contextualSignature.type;
+
+    // otherwise compile like a normal function
+    } else {
+      instance = this.compileFunctionUsingTypeArguments(
+        prototype,
+        [],
+        makeMap<string,Type>(flow.contextualTypeArguments),
+        declaration
+      );
+      if (!instance) return this.module.createUnreachable();
+      this.currentType = instance.signature.type;
+    }
+
     var index = this.ensureFunctionTableEntry(instance); // reports
     return index < 0
       ? this.module.createUnreachable()

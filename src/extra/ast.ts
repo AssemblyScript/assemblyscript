@@ -81,7 +81,9 @@ import {
   ParameterKind,
   ExportMember,
   SwitchCase,
-  DeclarationStatement
+  DeclarationStatement,
+
+  isTypeOmitted
 } from "../ast";
 
 import {
@@ -1550,12 +1552,4 @@ export class ASTBuilder {
     this.sb = [];
     return ret;
   }
-}
-
-function isTypeOmitted(type: CommonTypeNode): bool {
-  if (type.kind == NodeKind.TYPE) {
-    let name = (<TypeNode>type).name;
-    return !(name.next || name.identifier.text.length);
-  }
-  return false;
 }
