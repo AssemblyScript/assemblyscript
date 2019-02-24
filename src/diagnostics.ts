@@ -274,8 +274,8 @@ export abstract class DiagnosticEmitter {
     var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2).withRange(range);
     if (relatedRange) message.relatedRange = relatedRange;
     this.diagnostics.push(message);
-    console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
-    console.log(<string>new Error("stack").stack);
+    // console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
+    // console.log(<string>new Error("stack").stack);
   }
 
   /** Emits an informatory diagnostic message. */
