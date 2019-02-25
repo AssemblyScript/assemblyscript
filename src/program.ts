@@ -3044,9 +3044,6 @@ export class Interface extends Class { // FIXME
 
 /** Registers a concrete element with a program. */
 function registerConcreteElement(program: Program, element: Element): void {
-  if (program.instancesByName.has(element.internalName)) {
-    console.log("dup: " + element.internalName);
-  }
   assert(!program.instancesByName.has(element.internalName));
   program.instancesByName.set(element.internalName, element);
 }
