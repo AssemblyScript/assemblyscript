@@ -9,6 +9,7 @@ import {
   FIND_INDEX,
   SOME,
   EVERY,
+  SET,
 } from "./internal/typedarray";
 
 import {
@@ -62,6 +63,10 @@ export class Int8Array extends TypedArray<i8> {
 
   every(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): bool {
     return EVERY<Int8Array, i8>(this, callbackfn);
+  }
+
+  set<SourceT>(source: SourceT, offset: i32): void {
+    SET<Int8Array, i8, SourceT>(this, source, offset);
   }
 }
 

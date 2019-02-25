@@ -251,7 +251,7 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT>(
   }
 
   // fast path: source has the same backing type as target
-  if (source instanceof T) {
+  if (source instanceof TypedArray<U>) {
     // validate the lengths are within range
     // @ts-ignore: Source is instanceof T and has a length property
     let sourceLength = source.length;

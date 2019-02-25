@@ -609,6 +609,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   findIndex(callbackfn: (value: T, index: i32, self: this) => bool): i32;
   /** The every() method tests whether all elements in the typed array pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.every(). */
   every(callbackfn: (value: T, index: i32, self: this) => bool): i32;
+  /** The set() method stores multiple values in the typed array, reading input values from a specified array. */
+  set<SourceT>(value: SourceT, offset: i32): void;
 }
 
 /** An array of twos-complement 8-bit signed integers. */

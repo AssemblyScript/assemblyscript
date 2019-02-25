@@ -409,3 +409,24 @@ testArrayEvery<Int64Array, i64>();
 testArrayEvery<Uint64Array, u64>();
 testArrayEvery<Float32Array, f32>();
 testArrayEvery<Float64Array, f64>();
+
+
+var setSource: i32[] = [1, 2, 3];
+
+function testArraySet<T extends TypedArray<U>, U extends number>(): void {
+  var target: T = instantiate<T>(10);
+  target.set<i32[]>(setSource, 4);
+
+  assert(target[0] == <U>0);
+  assert(target[1] == <U>0);
+  assert(target[2] == <U>0);
+  assert(target[3] == <U>0);
+  assert(target[4] == <U>1);
+  assert(target[5] == <U>2);
+  assert(target[6] == <U>3);
+  assert(target[7] == <U>0);
+  assert(target[8] == <U>0);
+  assert(target[9] == <U>0);
+}
+
+testArraySet<Int8Array, i8>();
