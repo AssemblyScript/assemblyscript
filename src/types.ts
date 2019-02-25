@@ -197,7 +197,7 @@ export class Type {
     return this.cachedNullableType;
   }
 
-  /** Tests if a value of this type is considered assignable to a target of the specified type. */
+  /** Tests if a value of this type is assignable to the target type incl. implicit conversion. */
   isAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
     var currentClass: Class | null;
     var targetClass: Class | null;
@@ -245,8 +245,8 @@ export class Type {
     return false;
   }
 
-  /** Tests if this type is compatible to the target type without any conversion. */
-  isCompatibleTo(target: Type, signednessIsRelevant: bool = false): bool {
+  /** Tests if a value of this type is assignable to the target type excl. implicit conversion. */
+  isStrictlyAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
     if (this.is(TypeFlags.REFERENCE)) return this.isAssignableTo(target);
     else if (target.is(TypeFlags.REFERENCE)) return false;
     if (this.is(TypeFlags.INTEGER)) {

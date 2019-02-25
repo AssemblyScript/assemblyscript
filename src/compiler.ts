@@ -5904,26 +5904,25 @@ export class Compiler extends DiagnosticEmitter {
     expression: FunctionExpression,
     contextualSignature: Signature | null
   ): ExpressionRef {
-    var declaration = expression.declaration;
-    var name = declaration.name;
-    var simpleName = (name.text.length
-      ? name.text
-      : "anonymous") + "|" + this.functionTable.length.toString(10);
+    var declaration = expression.declaration.clone(); // generic contexts can have multiple
+    assert(!declaration.typeParameters); // function expression cannot be generic
     var flow = this.currentFlow;
-    assert(!declaration.typeParameters);
-
+    var actualFunction = flow.actualFunction;
     var prototype = new FunctionPrototype(
-      simpleName,
-      flow.actualFunction,
-      declaration = declaration.clone(), // same function can become compiled multiple times in generic contexts
+      declaration.name.text.length
+        ? declaration.name.text
+        : "anonymous|" + (actualFunction.nextAnonymousId++).toString(10),
+      actualFunction,
+      declaration,
       DecoratorFlags.NONE
     );
     var instance: Function | null;
+    var contextualTypeArguments = makeMap(flow.contextualTypeArguments);
 
     // compile according to context. this differs from a normal function in that omitted parameter
     // and return types can be inferred and omitted arguments can be replaced with dummies.
     if (contextualSignature) {
-      let signatureNode = declaration.signature;
+      let signatureNode = prototype.signatureNode;
       let parameterNodes = signatureNode.parameters;
       let numPresentParameters = parameterNodes.length;
 
@@ -5938,20 +5937,19 @@ export class Compiler extends DiagnosticEmitter {
         return this.module.createUnreachable();
       }
 
-      // check that non-omitted parameter types are compatible
+      // check non-omitted parameter types
       let parameterNames = new Array<string>(numPresentParameters);
-      let contextualTypeArguments = makeMap(flow.contextualTypeArguments);
       for (let i = 0; i < numPresentParameters; ++i) {
         let parameterNode = parameterNodes[i];
         parameterNames[i] = parameterNode.name.text; // use actual name
         if (!isTypeOmitted(parameterNode.type)) {
           let resolvedType = this.resolver.resolveType(
             parameterNode.type,
-            flow.actualFunction.parent,
+            actualFunction.parent,
             contextualTypeArguments
           );
           if (!resolvedType) return this.module.createUnreachable();
-          if (!parameterTypes[i].isCompatibleTo(resolvedType)) {
+          if (!parameterTypes[i].isStrictlyAssignableTo(resolvedType)) {
             this.error(
               DiagnosticCode.Type_0_is_not_assignable_to_type_1,
               parameterNode.range, parameterTypes[i].toString(), resolvedType.toString()
@@ -5959,21 +5957,22 @@ export class Compiler extends DiagnosticEmitter {
             return this.module.createUnreachable();
           }
         }
+        // any unused parameters are inherited but ignored
       }
 
-      // check that non-omitted return type is compatible
+      // check non-omitted return type
       let returnType = contextualSignature.returnType;
       if (!isTypeOmitted(signatureNode.returnType)) {
         let resolvedType = this.resolver.resolveType(
           signatureNode.returnType,
-          flow.actualFunction.parent,
+          actualFunction.parent,
           contextualTypeArguments
         );
         if (!resolvedType) return this.module.createUnreachable();
         if (
           returnType == Type.void
             ? resolvedType != Type.void
-            : !resolvedType.isCompatibleTo(returnType)
+            : !resolvedType.isStrictlyAssignableTo(returnType)
         ) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
@@ -5983,24 +5982,24 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
-      // check that explicit this type is compatible
+      // check explicit this type
       let thisType = contextualSignature.thisType;
       let thisTypeNode = signatureNode.explicitThisType;
       if (thisTypeNode) {
         if (!thisType) {
           this.error(
-            DiagnosticCode.Operation_not_supported, // TODO: better message?
+            DiagnosticCode._this_cannot_be_referenced_in_current_location,
             thisTypeNode.range
           );
           return this.module.createUnreachable();
         }
         let resolvedType = this.resolver.resolveType(
           thisTypeNode,
-          flow.actualFunction.parent,
+          actualFunction.parent,
           contextualTypeArguments
         );
         if (!resolvedType) return this.module.createUnreachable();
-        if (!thisType.isCompatibleTo(resolvedType)) {
+        if (!thisType.isStrictlyAssignableTo(resolvedType)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             thisTypeNode.range, thisType.toString(), resolvedType.toString()
@@ -6013,7 +6012,7 @@ export class Compiler extends DiagnosticEmitter {
       signature.requiredParameters = numParameters; // !
       signature.parameterNames = parameterNames;
       instance = new Function(
-        simpleName,
+        prototype.name,
         prototype,
         signature,
         contextualTypeArguments
@@ -6026,8 +6025,7 @@ export class Compiler extends DiagnosticEmitter {
       instance = this.compileFunctionUsingTypeArguments(
         prototype,
         [],
-        makeMap<string,Type>(flow.contextualTypeArguments),
-        declaration
+        contextualTypeArguments
       );
       if (!instance) return this.module.createUnreachable();
       this.currentType = instance.signature.type;

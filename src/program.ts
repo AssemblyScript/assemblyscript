@@ -2464,6 +2464,8 @@ export class Function extends TypedElement {
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
+  /** Counting id of anonymous inner functions. */
+  nextAnonymousId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(
@@ -3042,6 +3044,9 @@ export class Interface extends Class { // FIXME
 
 /** Registers a concrete element with a program. */
 function registerConcreteElement(program: Program, element: Element): void {
+  if (program.instancesByName.has(element.internalName)) {
+    console.log("dup: " + element.internalName);
+  }
   assert(!program.instancesByName.has(element.internalName));
   program.instancesByName.set(element.internalName, element);
 }

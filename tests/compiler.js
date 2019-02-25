@@ -50,6 +50,7 @@ if (args.help) {
 
 var successes = 0;
 var failedTests = [];
+var failedInstantiates = new Map();
 
 const basedir = path.join(__dirname, "compiler");
 
@@ -252,6 +253,7 @@ tests.forEach(filename => {
       } catch (e) {
         console.log("- " + colorsUtil.red("instantiate ERROR: ") + e.stack);
         failed = true;
+        failedInstantiates.set(basename, e.message);
       }
 
       if (failed) failedTests.push(basename);
@@ -263,6 +265,10 @@ tests.forEach(filename => {
 
 if (failedTests.length) {
   process.exitCode = 1;
-  console.log(colorsUtil.red("ERROR: ") + failedTests.length + " compiler tests failed: " + failedTests.join(", "));
+  console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.length + " compiler tests failed:"));
+  failedTests.forEach(name => {
+    var message = failedInstantiates.has(name) ? colorsUtil.gray("[" + failedInstantiates.get(name) + "]") : "";
+    console.log("  " + name + " " + message);
+  });
 } else
   console.log("[ " + colorsUtil.white("SUCCESS") + " ]");
