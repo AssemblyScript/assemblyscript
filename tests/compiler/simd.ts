@@ -1,8 +1,11 @@
 // hint: asc tests/compiler/simd --enable simd --validate
 
-export function test_v128(): void {
+import "allocator/arena";
+
+function test_v128(): void {
   // generic operations are tested by the aliases below already
-  v128.store(16, v128.load(32, 48), 64);
+  var base = memory.allocate(256);
+  v128.store(base, v128.load(base + 16, 32), 64);
 }
 
 function test_i8x16(): void {
@@ -96,6 +99,7 @@ function test_v8x16(): void {
 }
 
 if (ASC_FEATURE_SIMD) {
+  test_v128();
   test_i8x16();
   test_i16x8();
   test_i32x4();
