@@ -265,7 +265,12 @@ export namespace BuiltinSymbols {
   export const v128_extract_lane = "~lib/builtins/v128.extract_lane";
   export const v128_replace_lane = "~lib/builtins/v128.replace_lane";
   export const v128_shuffle = "~lib/builtins/v128.shuffle";
+  export const v128_load = "~lib/builtins/v128.load";
+  export const v128_store = "~lib/builtins/v128.store";
   export const v128_add = "~lib/builtins/v128.add";
+  export const v128_sub = "~lib/builtins/v128.sub";
+  export const v128_mul = "~lib/builtins/v128.mul";
+  export const v128_div = "~lib/builtins/v128.div";
   export const i64x2 = "~lib/builtins/i64x2";
   export const i32x4 = "~lib/builtins/i32x4";
   export const i16x8 = "~lib/builtins/i16x8";
@@ -278,32 +283,45 @@ export namespace BuiltinSymbols {
   export const i8x16_replace_lane = "~lib/builtins/i8x16.replace_lane";
   export const i8x16_shuffle = "~lib/builtins/i8x16.shuffle";
   export const i8x16_add = "~lib/builtins/i8x16.add";
+  export const i8x16_sub = "~lib/builtins/i8x16.sub";
+  export const i8x16_mul = "~lib/builtins/i8x16.mul";
   export const i16x8_splat = "~lib/builtins/i16x8.splat";
   export const i16x8_extract_lane_s = "~lib/builtins/i16x8.extract_lane_s";
   export const i16x8_extract_lane_u = "~lib/builtins/i16x8.extract_lane_u";
   export const i16x8_replace_lane = "~lib/builtins/i16x8.replace_lane";
   export const i16x8_shuffle = "~lib/builtins/i16x8.shuffle";
   export const i16x8_add = "~lib/builtins/i16x8.add";
+  export const i16x8_sub = "~lib/builtins/i16x8.sub";
+  export const i16x8_mul = "~lib/builtins/i16x8.mul";
   export const i32x4_splat = "~lib/builtins/i32x4.splat";
   export const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
   export const i32x4_replace_lane = "~lib/builtins/i32x4.replace_lane";
   export const i32x4_shuffle = "~lib/builtins/i32x4.shuffle";
   export const i32x4_add = "~lib/builtins/i32x4.add";
+  export const i32x4_sub = "~lib/builtins/i32x4.sub";
+  export const i32x4_mul = "~lib/builtins/i32x4.mul";
   export const i64x2_splat = "~lib/builtins/i64x2.splat";
   export const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
   export const i64x2_replace_lane = "~lib/builtins/i64x2.replace_lane";
   export const i64x2_shuffle = "~lib/builtins/i64x2.shuffle";
   export const i64x2_add = "~lib/builtins/i64x2.add";
+  export const i64x2_sub = "~lib/builtins/i64x2.sub"; // i64x2 has no .mul
   export const f32x4_splat = "~lib/builtins/f32x4.splat";
   export const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
   export const f32x4_replace_lane = "~lib/builtins/f32x4.replace_lane";
   export const f32x4_shuffle = "~lib/builtins/f32x4.shuffle";
   export const f32x4_add = "~lib/builtins/f32x4.add";
+  export const f32x4_sub = "~lib/builtins/f32x4.sub";
+  export const f32x4_mul = "~lib/builtins/f32x4.mul";
+  export const f32x4_div = "~lib/builtins/f32x4.div";
   export const f64x2_splat = "~lib/builtins/f64x2.splat";
   export const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
   export const f64x2_replace_lane = "~lib/builtins/f64x2.replace_lane";
   export const f64x2_shuffle = "~lib/builtins/f64x2.shuffle";
   export const f64x2_add = "~lib/builtins/f64x2.add";
+  export const f64x2_sub = "~lib/builtins/f64x2.sub";
+  export const f64x2_mul = "~lib/builtins/f64x2.mul";
+  export const f64x2_div = "~lib/builtins/f64x2.div";
   export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
   // std/diagnostics.ts
   export const ERROR = "~lib/diagnostics/ERROR";
@@ -3626,12 +3644,12 @@ export function compileCall(
 
     case BuiltinSymbols.v128_splat: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
           reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
         );
-        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
       if (operands.length != 1) {
@@ -3639,16 +3657,14 @@ export function compileCall(
           DiagnosticCode.Expected_0_arguments_but_got_1,
           reportNode.range, "1", operands.length.toString(10)
         );
-        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      let type =  typeArguments[0];
+      let type = typeArguments[0];
       if (!type.is(TypeFlags.VALUE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.range
         );
-        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
       let op: UnaryOp;
@@ -3840,6 +3856,7 @@ export function compileCall(
     }
     case BuiltinSymbols.v128_shuffle: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
@@ -3972,7 +3989,7 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      let type =  typeArguments[0];
+      let type = typeArguments[0];
       if (!type.is(TypeFlags.VALUE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
@@ -3999,6 +4016,160 @@ export function compileCall(
         }
         case TypeKind.F32: { op = BinaryOp.AddVecF32x4; break; }
         case TypeKind.F64: { op = BinaryOp.AddVecF64x2; break; }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(op, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_sub: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: BinaryOp;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8:  { op = BinaryOp.SubVecI8x16; break; }
+        case TypeKind.I16:
+        case TypeKind.U16: { op = BinaryOp.SubVecI16x8; break; }
+        case TypeKind.I32:
+        case TypeKind.U32: { op = BinaryOp.SubVecI32x4; break; }
+        case TypeKind.I64:
+        case TypeKind.U64: { op = BinaryOp.SubVecI64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          op = compiler.options.isWasm64
+            ? BinaryOp.SubVecI64x2
+            : BinaryOp.SubVecI32x4;
+          break;
+        }
+        case TypeKind.F32: { op = BinaryOp.SubVecF32x4; break; }
+        case TypeKind.F64: { op = BinaryOp.SubVecF64x2; break; }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(op, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_mul: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: BinaryOp;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8:  { op = BinaryOp.MulVecI8x16; break; }
+        case TypeKind.I16:
+        case TypeKind.U16: { op = BinaryOp.MulVecI16x8; break; }
+        case TypeKind.I32:
+        case TypeKind.U32: { op = BinaryOp.MulVecI32x4; break; }
+        case TypeKind.F32: { op = BinaryOp.MulVecF32x4; break; }
+        case TypeKind.F64: { op = BinaryOp.MulVecF64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          if (!compiler.options.isWasm64) {
+            op = BinaryOp.MulVecI32x4;
+            break;
+          }
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(op, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_div: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: BinaryOp;
+      switch (type.kind) {
+        case TypeKind.F32: { op = BinaryOp.DivVecF32x4; break; }
+        case TypeKind.F64: { op = BinaryOp.DivVecF64x2; break; }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
@@ -4216,38 +4387,53 @@ function deferASMCall(
   }
   if (compiler.options.hasFeature(Feature.SIMD)) {
     switch (prototype.internalName) {
+      case BuiltinSymbols.v128_load: return deferASM(BuiltinSymbols.load, compiler, Type.v128, operands, Type.v128, reportNode);
+      case BuiltinSymbols.v128_store: return deferASM(BuiltinSymbols.store, compiler, Type.v128, operands, Type.void, reportNode);
       case BuiltinSymbols.i8x16_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i8x16_extract_lane_s: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i8, operands, Type.i8, reportNode);
       case BuiltinSymbols.i8x16_extract_lane_u: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.u8, operands, Type.u8, reportNode);
       case BuiltinSymbols.i8x16_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i8x16_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i8x16_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_sub: return deferASM(BuiltinSymbols.v128_sub, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_mul: return deferASM(BuiltinSymbols.v128_mul, compiler, Type.i8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_extract_lane_s: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i16, operands, Type.i16, reportNode);
       case BuiltinSymbols.i16x8_extract_lane_u: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.u16, operands, Type.u16, reportNode);
       case BuiltinSymbols.i16x8_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_sub: return deferASM(BuiltinSymbols.v128_sub, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_mul: return deferASM(BuiltinSymbols.v128_mul, compiler, Type.i16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i32, operands, Type.i32, reportNode);
       case BuiltinSymbols.i32x4_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_sub: return deferASM(BuiltinSymbols.v128_sub, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_mul: return deferASM(BuiltinSymbols.v128_mul, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.i64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i64, operands, Type.i64, reportNode);
       case BuiltinSymbols.i64x2_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.i64x2_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.i64x2_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i64x2_sub: return deferASM(BuiltinSymbols.v128_sub, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f32, operands, Type.f32, reportNode);
       case BuiltinSymbols.f32x4_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_sub: return deferASM(BuiltinSymbols.v128_sub, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_mul: return deferASM(BuiltinSymbols.v128_mul, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_div: return deferASM(BuiltinSymbols.v128_div, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f64, operands, Type.f64, reportNode);
       case BuiltinSymbols.f64x2_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_sub: return deferASM(BuiltinSymbols.v128_sub, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_mul: return deferASM(BuiltinSymbols.v128_mul, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_div: return deferASM(BuiltinSymbols.v128_div, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.v8x16_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i8, operands, Type.v128, reportNode);
     }
   }

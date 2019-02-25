@@ -1,5 +1,10 @@
 // hint: asc tests/compiler/simd --enable simd --validate
 
+export function test_v128(): void {
+  // generic operations are tested by the aliases below already
+  v128.store(16, v128.load(32, 48), 64);
+}
+
 function test_i8x16(): void {
   var i8_1 = i8x16(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 127);
   var i8_2 = i8x16.splat(1);

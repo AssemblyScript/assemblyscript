@@ -308,7 +308,12 @@ export namespace v128 {
   @builtin export declare function extract_lane<T>(x: v128, idx: u8): T;
   @builtin export declare function replace_lane<T>(x: v128, idx: u8, value: T): v128;
   @builtin export declare function shuffle<T>(a: v128, b: v128, ...lanes: u8[]): vec128;
+  @builtin export declare function load(offset: usize, constantOffset?: usize): v128;
+  @builtin export declare function store(offset: usize, value: v128, constantOffset?: usize): void;
   @builtin export declare function add<T>(a: v128, b: v128): v128;
+  @builtin export declare function sub<T>(a: v128, b: v128): v128;
+  @builtin export declare function mul<T>(a: v128, b: v128): v128; // except i64
+  @builtin export declare function div<T>(a: v128, b: v128): v128; // f32, f64 only
 }
 
 @builtin export declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -319,6 +324,8 @@ export namespace i8x16 {
   @builtin export declare function replace_lane(x: v128, idx: u8, value: i8): v128;
   @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
+  @builtin export declare function sub(a: v128, b: v128): v128;
+  @builtin export declare function mul(a: v128, b: v128): v128;
 }
 
 @builtin export declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
@@ -329,6 +336,8 @@ export namespace i16x8 {
   @builtin export declare function replace_lane(x: v128, idx: u8, value: i16): v128;
   @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
+  @builtin export declare function sub(a: v128, b: v128): v128;
+  @builtin export declare function mul(a: v128, b: v128): v128;
 }
 
 @builtin export declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -338,6 +347,8 @@ export namespace i32x4 {
   @builtin export declare function replace_lane(x: v128, idx: u8, value: i32): v128;
   @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
+  @builtin export declare function sub(a: v128, b: v128): v128;
+  @builtin export declare function mul(a: v128, b: v128): v128;
 }
 
 @builtin export declare function i64x2(a: i64, b: i64): v128;
@@ -347,6 +358,8 @@ export namespace i64x2 {
   @builtin export declare function replace_lane(x: v128, idx: u8, value: i64): v128;
   @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
+  @builtin export declare function sub(a: v128, b: v128): v128;
+  @builtin export declare function mul(a: v128, b: v128): v128;
 }
 
 @builtin export declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -356,6 +369,9 @@ export namespace f32x4 {
   @builtin export declare function replace_lane(x: v128, idx: u8, value: f32): v128;
   @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
+  @builtin export declare function sub(a: v128, b: v128): v128;
+  @builtin export declare function mul(a: v128, b: v128): v128;
+  @builtin export declare function div(a: v128, b: v128): v128;
 }
 
 @builtin export declare function f64x2(a: f64, b: f64): v128;
@@ -365,6 +381,9 @@ export namespace f64x2 {
   @builtin export declare function replace_lane(x: v128, idx: u8, value: f64): v128;
   @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
+  @builtin export declare function sub(a: v128, b: v128): v128;
+  @builtin export declare function mul(a: v128, b: v128): v128;
+  @builtin export declare function div(a: v128, b: v128): v128;
 }
 
 export namespace v8x16 {

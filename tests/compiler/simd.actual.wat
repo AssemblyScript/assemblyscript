@@ -10,6 +10,7 @@
  (global $~lib/memory/HEAP_BASE i32 (i32.const 56))
  (export "memory" (memory $0))
  (export "table" (table $0))
+ (export "test_v128" (func $tests/compiler/simd/test_v128))
  (start $start)
  (func $tests/compiler/simd/test_i8x16 (; 1 ;) (type $_)
   (local $0 v128)
@@ -37,7 +38,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 7
+   i32.const 12
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -54,7 +55,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 8
+   i32.const 13
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -69,7 +70,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 9
+   i32.const 14
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -88,7 +89,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 11
+   i32.const 16
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -124,7 +125,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 19
+   i32.const 24
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -141,7 +142,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 20
+   i32.const 25
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -156,7 +157,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 21
+   i32.const 26
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -175,7 +176,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 23
+   i32.const 28
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -207,7 +208,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 31
+   i32.const 36
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -220,7 +221,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 32
+   i32.const 37
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -237,7 +238,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 34
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -269,7 +270,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 42
+   i32.const 47
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -282,7 +283,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 43
+   i32.const 48
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -299,7 +300,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 45
+   i32.const 50
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -331,7 +332,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 53
+   i32.const 58
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -344,7 +345,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 54
+   i32.const 59
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -361,7 +362,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 56
+   i32.const 61
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -393,7 +394,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 64
+   i32.const 69
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -406,7 +407,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 65
+   i32.const 70
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -423,7 +424,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 67
+   i32.const 72
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -455,7 +456,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 75
+   i32.const 80
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -470,7 +471,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 76
+   i32.const 81
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -485,7 +486,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 77
+   i32.const 82
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -500,7 +501,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 78
+   i32.const 83
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -515,7 +516,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 79
+   i32.const 84
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -530,7 +531,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 80
+   i32.const 85
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -545,7 +546,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 81
+   i32.const 86
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -560,7 +561,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 82
+   i32.const 87
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -575,7 +576,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 83
+   i32.const 88
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -590,7 +591,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 84
+   i32.const 89
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -605,7 +606,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 85
+   i32.const 90
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -620,7 +621,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 86
+   i32.const 91
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -635,7 +636,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 87
+   i32.const 92
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -650,7 +651,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 88
+   i32.const 93
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -665,7 +666,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 89
+   i32.const 94
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -680,7 +681,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 90
+   i32.const 95
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -695,9 +696,15 @@
   call $tests/compiler/simd/test_f64x2
   call $tests/compiler/simd/test_v8x16
  )
- (func $start (; 9 ;) (type $_)
+ (func $tests/compiler/simd/test_v128 (; 9 ;) (type $_)
+  i32.const 16
+  i32.const 32
+  v128.load offset=48
+  v128.store offset=64
+ )
+ (func $start (; 10 ;) (type $_)
   call $start:tests/compiler/simd
  )
- (func $null (; 10 ;) (type $_)
+ (func $null (; 11 ;) (type $_)
  )
 )
