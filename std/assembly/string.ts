@@ -393,6 +393,22 @@ export class String {
     return result;
   }
 
+  /* TODO
+   * 1. regex for searchValue
+   * 2. callback function for replaceValue
+   */
+  replace(searchValue: String, replaceValue: String): String {
+
+  }
+
+  /* TODO
+   * 1. regex for searchValue
+   * 2. callback function for replaceValue
+   */
+  replaceAll(searchValue: String, replaceValue: String): String {
+
+  }
+
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
     var length = this.length;
     var begin = (beginIndex < 0) ? max(beginIndex + length, 0) : min(beginIndex, length);
