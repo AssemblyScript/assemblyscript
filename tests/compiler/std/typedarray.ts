@@ -411,6 +411,17 @@ testArrayEvery<Float32Array, f32>();
 testArrayEvery<Float64Array, f64>();
 
 
+class ArrayLike {
+  length: i32 = 3;
+
+  @operator("[]")
+  protected __get(index: i32): i32 {
+    return index;
+  }
+}
+
+var arrayLikeValue = new ArrayLike();
+
 var setSource: i32[] = [1, 2, 3];
 
 function testArraySet<T extends TypedArray<U>, U extends number>(): void {
@@ -481,6 +492,19 @@ function testArraySet<T extends TypedArray<U>, U extends number>(): void {
   assert(target[7] == <U>7, "Float32Array test fails.");
   assert(target[8] == <U>8, "Float32Array test fails.");
   assert(target[9] == <U>9, "Float32Array test fails.");
+
+  target.set<ArrayLike, i32>(arrayLikeValue, 2);
+
+  assert(target[0] == <U>4, "arraylike test fails.");
+  assert(target[1] == <U>5, "arraylike test fails.");
+  assert(target[2] == <U>0, "arraylike test fails.");
+  assert(target[3] == <U>1, "arraylike test fails.");
+  assert(target[4] == <U>2, "arraylike test fails.");
+  assert(target[5] == <U>12, "arraylike test fails.");
+  assert(target[6] == <U>3, "arraylike test fails.");
+  assert(target[7] == <U>7, "arraylike test fails.");
+  assert(target[8] == <U>8, "arraylike test fails.");
+  assert(target[9] == <U>9, "arraylike test fails.");
 }
 
 testArraySet<Int8Array, i8>();

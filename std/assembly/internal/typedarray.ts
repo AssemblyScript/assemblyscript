@@ -237,96 +237,243 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
   target: T,
   source: SourceT,
   offset: i32): void {
-  // assert target and source are not null
-  if (isReference<T>(target)) {
-    assert(target != null, "TypeError: target is null.");
+  if (isReference<T>()) {
+    if (isReference<SourceT>()) {
+      assert(target != null, "TypeError: target is null.");
+      assert(source != null, "TypeError: source is null.");
+      if (source instanceof Int8Array) {
+        if (target instanceof Int8Array) {
+          SET_SAME<Int8Array, i8>(target, source, offset);
+        } else if (target instanceof Uint8Array) {
+          SET_SAME<Int8Array, i8>(<Int8Array>target, source, offset);
+        } else if (target instanceof Uint8ClampedArray) {
+          SET_SAME<Int8Array, i8>(<Int8Array>target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (source instanceof Uint8Array) {
+        if (target instanceof Int8Array) {
+          SET_SAME<Uint8Array, u8>(<Uint8Array>target, source, offset);
+        } else if (target instanceof Uint8Array) {
+          SET_SAME<Uint8Array, u8>(target, source, offset);
+        } else if (target instanceof Uint8ClampedArray) {
+          SET_SAME<Uint8Array, u8>(<Uint8Array>target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (source instanceof Uint8ClampedArray) {
+        if (target instanceof Int8Array) {
+          SET_SAME<Uint8ClampedArray, u8>(<Uint8ClampedArray>target, source, offset);
+        } else if (target instanceof Uint8Array) {
+          SET_SAME<Uint8ClampedArray, u8>(<Uint8ClampedArray>target, source, offset);
+        } else if (target instanceof Uint8ClampedArray) {
+          SET_SAME<Uint8ClampedArray, u8>(target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (source instanceof Int16Array) {
+        if (target instanceof Int16Array) {
+          SET_SAME<Int16Array, i16>(target, source, offset);
+        } else if (target instanceof Uint16Array) {
+          SET_SAME<Int16Array, i16>(<Int16Array>target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (source instanceof Uint16Array) {
+        if (target instanceof Int16Array) {
+          SET_SAME<Uint16Array, u16>(<Uint16Array>target, source, offset);
+        } else if (target instanceof Uint16Array) {
+          SET_SAME<Uint16Array, u16>(target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (source instanceof Int32Array) {
+        if (target instanceof Int32Array) {
+          SET_SAME<Int32Array, i32>(target, source, offset);
+        } else if (target instanceof Uint32Array) {
+          SET_SAME<Int32Array, i32>(<Int32Array>target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (source instanceof Uint32Array) {
+        if (target instanceof Int32Array) {
+          SET_SAME<Uint32Array, u32>(<Uint32Array>target, source, offset);
+        } else if (target instanceof Uint32Array) {
+          SET_SAME<Uint32Array, u32>(target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (source instanceof Int64Array) {
+        if (target instanceof Int64Array) {
+          SET_SAME<Int64Array, u64>(target, source, offset);
+        } else if (target instanceof Uint64Array) {
+          SET_SAME<Int64Array, u64>(<Int64Array>target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (source instanceof Uint64Array) {
+        if (target instanceof Int64Array) {
+          SET_SAME<Uint64Array, u64>(<Uint64Array>target, source, offset);
+        } else if (target instanceof Uint64Array) {
+          SET_SAME<Uint64Array, u64>(target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (source instanceof Float32Array) {
+        if (target instanceof Float32Array) {
+          SET_SAME<Float32Array, f32>(target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (source instanceof Float64Array) {
+        if (target instanceof Float64Array) {
+          SET_SAME<Float64Array, f64>(target, source, offset);
+        } else {
+          SET_COPY<U, SourceU>(
+            target.buffer,
+            target.byteOffset,
+            source.buffer,
+            source.byteOffset,
+            offset,
+            source.length,
+          );
+        }
+      } else if (isArray<SourceT>()) {
+        SET_COPY<U, SourceU>(
+          target.buffer,
+          target.byteOffset,
+          load<ArrayBuffer>(changetype<usize>(source), offsetof<SourceT>("buffer_")),
+          0,
+          offset,
+          // @ts-ignore: this is an array, and has a length property, this is not unsafe
+          // tslint:disable-next-line
+          source.length,
+        );
+      } else {
+        // validate the lengths are within range
+        // @ts-ignore: source is assumed to have a length property
+        let sourceLength = source.length;
+        let targetLength = target.length;
+
+        // tslint:disable-next-line
+        assert((sourceLength + offset) <= targetLength, "RangeError: Offset is too large.");
+
+        // cache the buffer and the offset
+        let targetBuffer = target.buffer;
+        let targetByteOffset = target.byteOffset;
+
+        /**
+         * In order for the source to be ArrayLike, it has to have a length property, and a
+         * `@operator("[]=")` getter. This is very slow because it doesn't allow for unchecked gets,
+         * but it is as standard compliant as we can make it.
+         */
+        // @ts-ignore: Source is expected to have a length property
+        // tslint:disable-next-line
+        for (let i = source.length - 1; i >= 0; i--) {
+          STORE<U>(
+            targetBuffer,
+            i + offset,
+            // @ts-ignore: Source is expected to have a getter signature
+            <U>source[i], // if the object does not have a getter this throws a compiler error
+            targetByteOffset,
+          );
+        }
+      }
+    } else {
+      assert(false, "TypeError: source is not a reference.");
+    }
   } else {
     assert(false, "TypeError: target is not a reference.");
   }
-
-  if (isReference<SourceT>(source)) {
-    assert(source != null, "TypeError: source is null.");
-  } else {
-    assert(false, "TypeError: source is not a reference.");
-  }
-
-  if (isArray<SourceT>(source)) {
-      // check to see if the offsets are in range
-      let sourceLength = source.length;
-      let targetLength = target.length;
-      assert((sourceLength + offset) <= targetLength, "RangeError: Offset is too large.");
-
-      // cache the buffer and the byteOffset
-      let targetBuffer = target.buffer;
-      let targetByteOffset = target.byteOffset;
-
-      // for each source value, write it to the ArrayBuffer
-      for (let i = 0; i < sourceLength; i++) {
-        STORE<U>(
-          targetBuffer,
-          i + offset,
-          <U>unchecked(source[i]),
-          targetByteOffset,
-        );
-      }
-    // fast path: source has the same backing type as targe
-  } else if (ArrayBuffer.isView<SourceT>(source)) {
-    // validate the lengths are within range
-    let sourceLength: i32 = source.length;
-    let targetLength: i32 = target.length;
-    assert((sourceLength + offset) <= targetLength, "RangeError: Offset is too large.");
-
-    if (isFloat<U>()) {
-      if (isFloat<SourceU>()) {
-        if (sizeof<U>() == sizeof<SourceU>()) {
-          SET_SAME<T, U>(target, <T>source, offset);
-        } else {
-          SET_DIFFERENT<T, U, SourceT, SourceU>(target, source, sourceLength, offset);
-        }
-      } else {
-        SET_DIFFERENT<T, U, SourceT, SourceU>(target, source, sourceLength, offset);
-      }
-    } else if (isInteger<U>()) {
-      if (isInteger<SourceU>()) {
-        if (sizeof<U>() == sizeof<SourceU>()) {
-          SET_SAME<T, U>(target, <T>source, offset);
-        } else {
-          SET_DIFFERENT<T, U, SourceT, SourceU>(target, source, sourceLength, offset);
-        }
-      } else {
-        SET_DIFFERENT<T, U, SourceT, SourceU>(target, source, sourceLength, offset);
-      }
-    }
-
-  } else {
-    // validate the lengths are within range
-    // @ts-ignore: source is assumed to have a length property
-    let sourceLength = source.length;
-    let targetLength = target.length;
-    assert((sourceLength + offset) <= targetLength, "RangeError: Offset is too large.");
-
-    // cache the buffer and the offset
-    let targetBuffer = target.buffer;
-    let targetByteOffset = target.byteOffset;
-
-    /**
-     * In order for the source to be ArrayLike, it has to have a length property, and a
-     * `@operator("[]=")` getter. This is very slow because it doesn't allow for unchecked gets,
-     * but it is as standard compliant as we can make it.
-     */
-    // @ts-ignore: Source is expected to have a length property
-    for (let i = source.length - 1; i >= 0; i--) {
-      STORE<U>(
-        targetBuffer,
-        i + offset,
-        // @ts-ignore: Source is expected to have a getter signature
-        <U>source[i], // if the object does not have a getter this throws a compiler error
-        targetByteOffset,
-      );
-    }
-  }
 }
 
+@inline
+function SET_COPY<U, SourceU>(
+  targetBuffer: ArrayBuffer,
+  targetBufferOffset: i32,
+  sourceBuffer: ArrayBuffer,
+  sourceBufferOffset: i32,
+  offset: i32,
+  length: i32): void {
+  for (let i = length - 1; i >= 0; i--) {
+    STORE<U>(
+      targetBuffer,
+      i + offset,
+      <U>LOAD<SourceU>(sourceBuffer, i, sourceBufferOffset),
+      targetBufferOffset,
+    );
+  }
+}
 
 @inline
 function SET_SAME<T extends TypedArray<U>, U extends number>(target: T, source: T, offset: i32): void {
@@ -340,26 +487,4 @@ function SET_SAME<T extends TypedArray<U>, U extends number>(target: T, source: 
     // @ts-ignore: store source.buffer.byteLength number of bytes
     source.buffer.byteLength,
   );
-}
-
-@inline
-function SET_DIFFERENT<
-  T extends TypedArray<U>,
-  U extends number,
-  SourceT extends TypedArray<SourceU>,
-  SourceU extends number
->(target: T, source: SourceT, sourceLength: i32, offset: i32): void {
-  var sourceBuffer = source.buffer;
-  var targetBuffer = target.buffer;
-  var sourceOffset = source.byteOffset;
-  var targetOffset = target.byteOffset;
-  for (let i = 0; i < sourceLength; i++) {
-    STORE<U>(
-      targetBuffer,
-      i + offset,
-      // @ts-ignore: Number values can be cast to each other
-      <U>LOAD<SourceU>(sourceBuffer, i, sourceOffset),
-      targetOffset,
-    );
-  }
 }
