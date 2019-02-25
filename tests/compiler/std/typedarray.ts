@@ -415,18 +415,72 @@ var setSource: i32[] = [1, 2, 3];
 
 function testArraySet<T extends TypedArray<U>, U extends number>(): void {
   var target: T = instantiate<T>(10);
-  target.set<i32[]>(setSource, 4);
+  target.set<i32[], i32>(setSource, 4);
 
-  assert(target[0] == <U>0);
-  assert(target[1] == <U>0);
-  assert(target[2] == <U>0);
-  assert(target[3] == <U>0);
-  assert(target[4] == <U>1);
-  assert(target[5] == <U>2);
-  assert(target[6] == <U>3);
-  assert(target[7] == <U>0);
-  assert(target[8] == <U>0);
-  assert(target[9] == <U>0);
+  assert(target[0] == <U>0, "i32[] test fails");
+  assert(target[1] == <U>0, "i32[] test fails");
+  assert(target[2] == <U>0, "i32[] test fails");
+  assert(target[3] == <U>0, "i32[] test fails");
+  assert(target[4] == <U>1, "i32[] test fails");
+  assert(target[5] == <U>2, "i32[] test fails");
+  assert(target[6] == <U>3, "i32[] test fails");
+  assert(target[7] == <U>0, "i32[] test fails");
+  assert(target[8] == <U>0, "i32[] test fails");
+  assert(target[9] == <U>0, "i32[] test fails");
+
+  var similarSource = instantiate<T>(3);
+  similarSource[0] = <U>4;
+  similarSource[1] = <U>5;
+  similarSource[2] = <U>6;
+
+  target.set<T, U>(similarSource);
+
+  assert(target[0] == <U>4, "Similar TypedArray test fails.");
+  assert(target[1] == <U>5, "Similar TypedArray test fails.");
+  assert(target[2] == <U>6, "Similar TypedArray test fails.");
+  assert(target[3] == <U>0, "Similar TypedArray test fails.");
+  assert(target[4] == <U>1, "Similar TypedArray test fails.");
+  assert(target[5] == <U>2, "Similar TypedArray test fails.");
+  assert(target[6] == <U>3, "Similar TypedArray test fails.");
+  assert(target[7] == <U>0, "Similar TypedArray test fails.");
+  assert(target[8] == <U>0, "Similar TypedArray test fails.");
+  assert(target[9] == <U>0, "Similar TypedArray test fails.");
+
+  var floatData = new Float32Array(3);
+  floatData[0] = 7;
+  floatData[1] = 8;
+  floatData[2] = 9;
+
+  target.set<Float32Array, f32>(floatData, 7);
+
+  assert(target[0] == <U>4, "Float32Array test fails.");
+  assert(target[1] == <U>5, "Float32Array test fails.");
+  assert(target[2] == <U>6, "Float32Array test fails.");
+  assert(target[3] == <U>0, "Float32Array test fails.");
+  assert(target[4] == <U>1, "Float32Array test fails.");
+  assert(target[5] == <U>2, "Float32Array test fails.");
+  assert(target[6] == <U>3, "Float32Array test fails.");
+  assert(target[7] == <U>7, "Float32Array test fails.");
+  assert(target[8] == <U>8, "Float32Array test fails.");
+  assert(target[9] == <U>9, "Float32Array test fails.");
+
+  var integerData = new Int64Array(3);
+  integerData[0] = 10;
+  integerData[1] = 11;
+  integerData[2] = 12;
+
+  target.set<Int64Array, i64>(integerData, 3);
+
+  assert(target[0] == <U>4, "Float32Array test fails.");
+  assert(target[1] == <U>5, "Float32Array test fails.");
+  assert(target[2] == <U>6, "Float32Array test fails.");
+  assert(target[3] == <U>10, "Float32Array test fails.");
+  assert(target[4] == <U>11, "Float32Array test fails.");
+  assert(target[5] == <U>12, "Float32Array test fails.");
+  assert(target[6] == <U>3, "Float32Array test fails.");
+  assert(target[7] == <U>7, "Float32Array test fails.");
+  assert(target[8] == <U>8, "Float32Array test fails.");
+  assert(target[9] == <U>9, "Float32Array test fails.");
 }
 
 testArraySet<Int8Array, i8>();

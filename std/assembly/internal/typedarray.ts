@@ -233,7 +233,7 @@ export function EVERY<TArray extends TypedArray<T>, T>(
 }
 
 @inline
-export function SET<T extends TypedArray<U>, U extends number, SourceT>(
+export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU extends number>(
   target: T,
   source: SourceT,
   offset: i32): void {
@@ -250,46 +250,54 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT>(
     assert(false, "TypeError: SourceT is not a reference.");
   }
 
-  // fast path: source has the same backing type as target
-  if (source instanceof TypedArray<U>) {
+  if (isArray<SourceT>(source)) {
+      // check to see if the offsets are in range
+      let sourceLength = source.length;
+      let targetLength = target.length;
+      assert((sourceLength + offset) <= targetLength, "RangeError: Offset is too large.");
+
+      // cache the buffer and the byteOffset
+      let targetBuffer = target.buffer;
+      let targetByteOffset = target.byteOffset;
+
+      // for each source value, write it to the ArrayBuffer
+      for (let i = 0; i < sourceLength; i++) {
+        STORE<U>(
+          targetBuffer,
+          i + offset,
+          <U>unchecked(source[i]),
+          targetByteOffset,
+        );
+      }
+    // fast path: source has the same backing type as targe
+  } else if (ArrayBuffer.isView<SourceT>(source)) {
     // validate the lengths are within range
-    // @ts-ignore: Source is instanceof T and has a length property
     let sourceLength = source.length;
     let targetLength = target.length;
     assert((sourceLength + offset) <= targetLength, "RangeError: Offset is too large.");
 
-    // perform a memory.copy
-    memory.copy(
-      // store the data at the target pointer + byteOFfset + offset << alignOf<U>()
-      target.buffer.data + target.byteOffset + (offset << alignof<U>()),
-      // read the data from source pointer + byteOffset
-      // @ts-ignore: source has a buffer and a byteOffset property because it's instanceof T
-      source.buffer.data + source.byteOffset,
-      // @ts-ignore: store source.buffer.byteLength number of bytes
-      source.buffer.byteLength,
-    );
-
-    //TODO: When we can determine if Source is a TypedArray<SourceU>, we can use LOAD and STORE
-    // we can opt into a slightly faster version of the slow path
-  } else if (isArray<SourceT>(source)) {
-    // check to see if the offsets are in range
-    let sourceLength = source.length;
-    let targetLength = target.length;
-    assert((sourceLength + offset) <= targetLength, "RangeError: Offset is too large.");
-
-    // cache the buffer and the byteOffset
-    let targetBuffer = target.buffer;
-    let targetByteOffset = target.byteOffset;
-
-    // for each source value, write it to the ArrayBuffer
-    for (let i = 0; i < sourceLength; i++) {
-      STORE<U>(
-        targetBuffer,
-        i + offset,
-        <U>unchecked(source[i]),
-        targetByteOffset,
-      );
+    if (isFloat<U>()) {
+      if (isFloat<SourceU>()) {
+        if (sizeof<U>() == sizeof<SourceU>()) {
+          SET_SAME<T, U>(target, <T>source, offset);
+        } else {
+          SET_DIFFERENT<T, U, SourceT, SourceU>(target, source, sourceLength, offset);
+        }
+      } else {
+        SET_DIFFERENT<T, U, SourceT, SourceU>(target, source, sourceLength, offset);
+      }
+    } else if (isInteger<U>()) {
+      if (isInteger<SourceU>()) {
+        if (sizeof<U>() == sizeof<SourceU>()) {
+          SET_SAME<T, U>(target, <T>source, offset);
+        } else {
+          SET_DIFFERENT<T, U, SourceT, SourceU>(target, source, sourceLength, offset);
+        }
+      } else {
+        SET_DIFFERENT<T, U, SourceT, SourceU>(target, source, sourceLength, offset);
+      }
     }
+
   } else {
     // validate the lengths are within range
     // @ts-ignore: source is assumed to have a length property
@@ -316,5 +324,42 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT>(
         targetByteOffset,
       );
     }
+  }
+}
+
+
+@inline
+function SET_SAME<T extends TypedArray<U>, U extends number>(target: T, source: T, offset: i32): void {
+   // perform a memory.copy
+   memory.copy(
+    // store the data at the target pointer + byteOFfset + offset << alignOf<U>()
+    target.buffer.data + target.byteOffset + (offset << alignof<U>()),
+    // read the data from source pointer + byteOffset
+    // @ts-ignore: source has a buffer and a byteOffset property because it's instanceof T
+    source.buffer.data + source.byteOffset,
+    // @ts-ignore: store source.buffer.byteLength number of bytes
+    source.buffer.byteLength,
+  );
+}
+
+@inline
+function SET_DIFFERENT<
+  T extends TypedArray<U>,
+  U extends number,
+  SourceT extends TypedArray<SourceU>,
+  SourceU extends number
+>(target: T, source: SourceT, sourceLength: i32, offset: i32): void {
+  let sourceBuffer = source.buffer;
+  let targetBuffer = target.buffer;
+  let sourceOffset = source.byteOffset;
+  let targetOffset = target.byteOffset;
+  for (let i = 0; i < sourceLength; i++) {
+    STORE<U>(
+      targetBuffer,
+      i + offset,
+      // @ts-ignore: Number values can be cast to each other
+      <U>LOAD<SourceU>(sourceBuffer, i, sourceOffset),
+      targetOffset,
+    );
   }
 }

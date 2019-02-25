@@ -65,8 +65,8 @@ export class Int8Array extends TypedArray<i8> {
     return EVERY<Int8Array, i8>(this, callbackfn);
   }
 
-  set<SourceT>(source: SourceT, offset: i32): void {
-    SET<Int8Array, i8, SourceT>(this, source, offset);
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Int8Array, i8, SourceT, SourceU>(this, source, offset);
   }
 }
 
