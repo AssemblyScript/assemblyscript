@@ -1,64 +1,75 @@
 (module
+ (type $_ (func))
  (type $i (func (result i32)))
  (type $ii (func (param i32) (result i32)))
- (type $v (func))
  (memory $0 0)
- (table $0 2 anyfunc)
+ (table $0 2 funcref)
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 8))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $getter-call/test))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:~lib/allocator/arena (; 0 ;) (type $_)
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+ )
+ (func $start:getter-call (; 1 ;) (type $_)
+  call $start:~lib/allocator/arena
+ )
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  get_local $0
-  get_global $~lib/internal/allocator/MAX_SIZE_32
+  local.get $0
+  i32.const 1073741824
   i32.gt_u
   if
    unreachable
   end
-  get_global $~lib/allocator/arena/offset
-  set_local $1
-  get_local $1
-  get_local $0
-  tee_local $2
+  global.get $~lib/allocator/arena/offset
+  local.set $1
+  local.get $1
+  local.get $0
+  local.tee $2
   i32.const 1
-  tee_local $3
-  get_local $2
-  get_local $3
+  local.tee $3
+  local.get $2
+  local.get $3
   i32.gt_u
   select
   i32.add
-  get_global $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.add
-  get_global $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.const -1
   i32.xor
   i32.and
-  set_local $4
+  local.set $4
   current_memory
-  set_local $5
-  get_local $4
-  get_local $5
+  local.set $5
+  local.get $4
+  local.get $5
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   get_local $4
-   get_local $1
+   local.get $4
+   local.get $1
    i32.sub
    i32.const 65535
    i32.add
@@ -68,22 +79,22 @@
    i32.and
    i32.const 16
    i32.shr_u
-   set_local $2
-   get_local $5
-   tee_local $3
-   get_local $2
-   tee_local $6
-   get_local $3
-   get_local $6
+   local.set $2
+   local.get $5
+   local.tee $3
+   local.get $2
+   local.tee $6
+   local.get $3
+   local.get $6
    i32.gt_s
    select
-   set_local $3
-   get_local $3
+   local.set $3
+   local.get $3
    grow_memory
    i32.const 0
    i32.lt_s
    if
-    get_local $2
+    local.get $2
     grow_memory
     i32.const 0
     i32.lt_s
@@ -92,54 +103,45 @@
     end
    end
   end
-  get_local $4
-  set_global $~lib/allocator/arena/offset
-  get_local $1
+  local.get $4
+  global.set $~lib/allocator/arena/offset
+  local.get $1
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $getter-call/C#constructor (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
+ (func $getter-call/C#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
   i32.eqz
   if
    i32.const 0
    call $~lib/memory/memory.allocate
-   set_local $0
+   local.set $0
   end
-  get_local $0
+  local.get $0
  )
- (func $getter-call/C#get:x~anonymous|1 (; 3 ;) (type $i) (result i32)
+ (func $getter-call/C#get:x~anonymous|1 (; 5 ;) (type $i) (result i32)
   i32.const 42
  )
- (func $getter-call/C#get:x (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $getter-call/C#get:x (; 6 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
  )
- (func $getter-call/test (; 5 ;) (type $i) (result i32)
+ (func $getter-call/test (; 7 ;) (type $i) (result i32)
   (local $0 i32)
   i32.const 0
   call $getter-call/C#constructor
-  set_local $0
+  local.set $0
   i32.const 0
-  set_global $~argc
-  get_local $0
+  global.set $~lib/argc
+  local.get $0
   call $getter-call/C#get:x
   call_indirect (type $i)
  )
- (func $start (; 6 ;) (type $v)
-  get_global $HEAP_BASE
-  get_global $~lib/internal/allocator/AL_MASK
-  i32.add
-  get_global $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  set_global $~lib/allocator/arena/startOffset
-  get_global $~lib/allocator/arena/startOffset
-  set_global $~lib/allocator/arena/offset
+ (func $start (; 8 ;) (type $_)
+  call $start:getter-call
  )
- (func $null (; 7 ;) (type $v)
+ (func $null (; 9 ;) (type $_)
  )
 )
