@@ -1,7 +1,3 @@
-class ArrayLikeObject {
-  length: i32;
-}
-
 var b: bool;
 class C {}
 
@@ -18,7 +14,6 @@ assert(!isArray<usize>());
 assert(isArrayLike<i32[]>());
 assert(isArrayLike<string>());
 assert(isArrayLike<Uint8Array>());
-assert(isArrayLike<ArrayLikeObject>());
 assert(!isArrayLike<i32>());
 assert(isFunction<() => void>());
 assert(!isFunction<u32>());
@@ -37,13 +32,11 @@ assert(isArray(changetype<i32[]>(null)));
 assert(isArrayLike(changetype<i32[]>(null)));
 assert(isArrayLike(changetype<string>(null)));
 assert(isArrayLike(changetype<Uint8Array>(null)));
-assert(isArrayLike(changetype<ArrayLikeObject>(null)));
 assert(!isArray(changetype<usize>(null)));
 assert(isFunction(changetype<() => void>(null)));
 assert(!isFunction(changetype<u32>(null)));
 assert(isNullable(changetype<C | null>(null)));
 assert(!isNullable(changetype<C>(null)));
-
 
 // evaluation
 
