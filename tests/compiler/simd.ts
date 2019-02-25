@@ -9,6 +9,7 @@ function test_i8x16(): void {
   assert(i8x16.extract_lane_u(i8_3, 15) == 128);
   var i8_4 = i8x16.replace_lane(i8_3, 15, 16);
   assert(i8x16.extract_lane_u(i8_4, 15) == 16);
+  i8x16.shuffle(i8_1, i8_1, 0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 27, 28, 29, 30, 31); // fixture only (1)
 }
 
 function test_i16x8(): void {
@@ -20,6 +21,7 @@ function test_i16x8(): void {
   assert(i16x8.extract_lane_u(i16_3, 7) == 32768);
   var i16_4 = i16x8.replace_lane(i16_3, 7, 8);
   assert(i16x8.extract_lane_u(i16_4, 7) == 8);
+  i16x8.shuffle(i16_1, i16_1, 0, 1, 2, 3, 12, 13, 14, 15); // fixture only, same as (1)
 }
 
 function test_i32x4(): void {
@@ -30,6 +32,7 @@ function test_i32x4(): void {
   assert(i32x4.extract_lane(i32_3, 3) == 5);
   var i32_4 = i32x4.replace_lane(i32_3, 3, 4);
   assert(i32x4.extract_lane(i32_4, 3) == 4);
+  i32x4.shuffle(i32_1, i32_1, 0, 1, 6, 7); // fixture only, same as (1)
 }
 
 function test_i64x2(): void {
@@ -40,6 +43,7 @@ function test_i64x2(): void {
   assert(i64x2.extract_lane(i64_3, 1) == 3);
   var i64_4 = i64x2.replace_lane(i64_3, 1, 2);
   assert(i64x2.extract_lane(i64_4, 1) == 2);
+  i64x2.shuffle(i64_1, i64_1, 0, 3); // fixture only, same as (1)
 }
 
 function test_f32x4(): void {
@@ -50,6 +54,7 @@ function test_f32x4(): void {
   assert(f32x4.extract_lane(f32_3, 3) == 4.75);
   var f32_4 = f32x4.replace_lane(f32_3, 3, 4.5);
   assert(f32x4.extract_lane(f32_4, 3) == 4.5);
+  f32x4.shuffle(f32_1, f32_1, 0, 1, 6, 7); // fixture only, same as (1)
 }
 
 function test_f64x2(): void {
@@ -60,6 +65,7 @@ function test_f64x2(): void {
   assert(f64x2.extract_lane(f64_3, 1) == 2.75);
   var f64_4 = f64x2.replace_lane(f64_3, 1, 2.5);
   assert(f64x2.extract_lane(f64_4, 1) == 2.5);
+  f64x2.shuffle(f64_1, f64_1, 0, 3); // fixture only, same as (1)
 }
 
 function test_v8x16(): void {

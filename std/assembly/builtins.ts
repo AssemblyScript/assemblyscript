@@ -307,6 +307,7 @@ export namespace v128 {
   @builtin export declare function splat<T>(x: T): v128;
   @builtin export declare function extract_lane<T>(x: v128, idx: u8): T;
   @builtin export declare function replace_lane<T>(x: v128, idx: u8, value: T): v128;
+  @builtin export declare function shuffle<T>(a: v128, b: v128, ...lanes: u8[]): vec128;
   @builtin export declare function add<T>(a: v128, b: v128): v128;
 }
 
@@ -316,6 +317,7 @@ export namespace i8x16 {
   @builtin export declare function extract_lane_s(x: v128, idx: u8): i8;
   @builtin export declare function extract_lane_u(x: v128, idx: u8): u8;
   @builtin export declare function replace_lane(x: v128, idx: u8, value: i8): v128;
+  @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
 }
 
@@ -325,6 +327,7 @@ export namespace i16x8 {
   @builtin export declare function extract_lane_s(x: v128, idx: u8): i16;
   @builtin export declare function extract_lane_u(x: v128, idx: u8): u16;
   @builtin export declare function replace_lane(x: v128, idx: u8, value: i16): v128;
+  @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
 }
 
@@ -333,6 +336,7 @@ export namespace i32x4 {
   @builtin export declare function splat(x: i32): v128;
   @builtin export declare function extract_lane(x: v128, idx: u8): i32;
   @builtin export declare function replace_lane(x: v128, idx: u8, value: i32): v128;
+  @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
 }
 
@@ -341,6 +345,7 @@ export namespace i64x2 {
   @builtin export declare function splat(x: i64): v128;
   @builtin export declare function extract_lane(x: v128, idx: u8): i64;
   @builtin export declare function replace_lane(x: v128, idx: u8, value: i64): v128;
+  @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
 }
 
@@ -349,6 +354,7 @@ export namespace f32x4 {
   @builtin export declare function splat(x: f32): v128;
   @builtin export declare function extract_lane(x: v128, idx: u8): f32;
   @builtin export declare function replace_lane(x: v128, idx: u8, value: f32): v128;
+  @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
 }
 
@@ -357,6 +363,7 @@ export namespace f64x2 {
   @builtin export declare function splat(x: f64): v128;
   @builtin export declare function extract_lane(x: v128, idx: u8): f64;
   @builtin export declare function replace_lane(x: v128, idx: u8, value: f64): v128;
+  @builtin export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8): vec128;
   @builtin export declare function add(a: v128, b: v128): v128;
 }
 

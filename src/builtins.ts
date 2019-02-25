@@ -264,8 +264,8 @@ export namespace BuiltinSymbols {
   export const v128_splat = "~lib/builtins/v128.splat";
   export const v128_extract_lane = "~lib/builtins/v128.extract_lane";
   export const v128_replace_lane = "~lib/builtins/v128.replace_lane";
+  export const v128_shuffle = "~lib/builtins/v128.shuffle";
   export const v128_add = "~lib/builtins/v128.add";
-  export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
   export const i64x2 = "~lib/builtins/i64x2";
   export const i32x4 = "~lib/builtins/i32x4";
   export const i16x8 = "~lib/builtins/i16x8";
@@ -276,28 +276,35 @@ export namespace BuiltinSymbols {
   export const i8x16_extract_lane_s = "~lib/builtins/i8x16.extract_lane_s";
   export const i8x16_extract_lane_u = "~lib/builtins/i8x16.extract_lane_u";
   export const i8x16_replace_lane = "~lib/builtins/i8x16.replace_lane";
+  export const i8x16_shuffle = "~lib/builtins/i8x16.shuffle";
   export const i8x16_add = "~lib/builtins/i8x16.add";
   export const i16x8_splat = "~lib/builtins/i16x8.splat";
   export const i16x8_extract_lane_s = "~lib/builtins/i16x8.extract_lane_s";
   export const i16x8_extract_lane_u = "~lib/builtins/i16x8.extract_lane_u";
   export const i16x8_replace_lane = "~lib/builtins/i16x8.replace_lane";
+  export const i16x8_shuffle = "~lib/builtins/i16x8.shuffle";
   export const i16x8_add = "~lib/builtins/i16x8.add";
   export const i32x4_splat = "~lib/builtins/i32x4.splat";
   export const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
   export const i32x4_replace_lane = "~lib/builtins/i32x4.replace_lane";
+  export const i32x4_shuffle = "~lib/builtins/i32x4.shuffle";
   export const i32x4_add = "~lib/builtins/i32x4.add";
   export const i64x2_splat = "~lib/builtins/i64x2.splat";
   export const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
   export const i64x2_replace_lane = "~lib/builtins/i64x2.replace_lane";
+  export const i64x2_shuffle = "~lib/builtins/i64x2.shuffle";
   export const i64x2_add = "~lib/builtins/i64x2.add";
   export const f32x4_splat = "~lib/builtins/f32x4.splat";
   export const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
   export const f32x4_replace_lane = "~lib/builtins/f32x4.replace_lane";
+  export const f32x4_shuffle = "~lib/builtins/f32x4.shuffle";
   export const f32x4_add = "~lib/builtins/f32x4.add";
   export const f64x2_splat = "~lib/builtins/f64x2.splat";
   export const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
   export const f64x2_replace_lane = "~lib/builtins/f64x2.replace_lane";
+  export const f64x2_shuffle = "~lib/builtins/f64x2.shuffle";
   export const f64x2_add = "~lib/builtins/f64x2.add";
+  export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
   // std/diagnostics.ts
   export const ERROR = "~lib/diagnostics/ERROR";
   export const WARNING = "~lib/diagnostics/WARNING";
@@ -3381,6 +3388,8 @@ export function compileCall(
 
     // === SIMD ===================================================================================
 
+    // const
+
     case BuiltinSymbols.v128: // alias for now
     case BuiltinSymbols.i8x16: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -3612,6 +3621,9 @@ export function compileCall(
       compiler.currentType = Type.v128;
       return module.createV128(bytes);
     }
+
+    // v128.*
+
     case BuiltinSymbols.v128_splat: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
       if (!(typeArguments && typeArguments.length == 1)) {
@@ -3805,6 +3817,123 @@ export function compileCall(
       compiler.currentType = Type.v128;
       return module.createSIMDReplace(op, arg0, idx, arg2);
     }
+    case BuiltinSymbols.v128_shuffle: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        compiler.currentType = type;
+        return module.createUnreachable();
+      }
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8:
+        case TypeKind.I16:
+        case TypeKind.U16:
+        case TypeKind.I32:
+        case TypeKind.U32:
+        case TypeKind.I64:
+        case TypeKind.U64:
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE:
+        case TypeKind.F32:
+        case TypeKind.F64: break;
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          compiler.currentType = type;
+          return module.createUnreachable();
+        }
+      }
+      let laneWidth = type.byteSize;
+      let laneCount = 16 / laneWidth;
+      if (operands.length != 2 + laneCount) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, (2 + laneCount).toString(), operands.length.toString(10)
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let mask = new Uint8Array(16);
+      let maxIdx = (laneCount << 1) - 1;
+      for (let i = 0; i < laneCount; ++i) {
+        let operand = operands[2 + i];
+        arg2 = module.precomputeExpression(
+          compiler.compileExpression(operand, Type.u8, ConversionKind.IMPLICIT, WrapMode.NONE)
+        );
+        if (getExpressionId(arg2) != ExpressionId.Const) {
+          compiler.error(
+            DiagnosticCode.Expression_must_be_a_compile_time_constant,
+            operand.range
+          );
+          compiler.currentType = Type.v128;
+          return module.createUnreachable();
+        }
+        assert(getExpressionType(arg2) == NativeType.I32);
+        let idx = getConstValueI32(arg2);
+        if (idx < 0 || idx > maxIdx) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+            operand.range, "Lane index", "0", maxIdx.toString()
+          );
+          compiler.currentType = Type.v128;
+          return module.createUnreachable();
+        }
+        switch (laneWidth) {
+          case 1: {
+            writeI8(idx, mask, i);
+            break;
+          }
+          case 2: {
+            let off8 = i << 1;
+            let idx8 = idx << 1;
+            writeI8(idx8    , mask, off8);
+            writeI8(idx8 + 1, mask, off8 + 1);
+            break;
+          }
+          case 4: {
+            let off8 = i << 2;
+            let idx8 = idx << 2;
+            writeI8(idx8    , mask, off8);
+            writeI8(idx8 + 1, mask, off8 + 1);
+            writeI8(idx8 + 2, mask, off8 + 2);
+            writeI8(idx8 + 3, mask, off8 + 3);
+            break;
+          }
+          case 8: {
+            let off8 = i << 3;
+            let idx8 = idx << 3;
+            writeI8(idx8    , mask, off8);
+            writeI8(idx8 + 1, mask, off8 + 1);
+            writeI8(idx8 + 2, mask, off8 + 2);
+            writeI8(idx8 + 3, mask, off8 + 3);
+            writeI8(idx8 + 4, mask, off8 + 4);
+            writeI8(idx8 + 5, mask, off8 + 5);
+            writeI8(idx8 + 6, mask, off8 + 6);
+            writeI8(idx8 + 7, mask, off8 + 7);
+            break;
+          }
+          default: assert(false);
+        }
+      }
+      compiler.currentType = Type.v128;
+      return module.createSIMDShuffle(arg0, arg1, mask);
+    }
     case BuiltinSymbols.v128_add: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
       compiler.currentType = Type.v128;
@@ -3854,53 +3983,6 @@ export function compileCall(
       arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
       compiler.currentType = Type.v128;
       return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v8x16_shuffle: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 18) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "18", operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      let mask = new Uint8Array(16);
-      for (let i = 0; i < 16; ++i) {
-        let operand = operands[2 + i];
-        arg2 = module.precomputeExpression(
-          compiler.compileExpression(operand, Type.u8, ConversionKind.IMPLICIT, WrapMode.NONE)
-        );
-        if (getExpressionId(arg2) != ExpressionId.Const) {
-          compiler.error(
-            DiagnosticCode.Expression_must_be_a_compile_time_constant,
-            operand.range
-          );
-          compiler.currentType = Type.v128;
-          return module.createUnreachable();
-        }
-        assert(getExpressionType(arg2) == NativeType.I32);
-        let idx = getConstValueI32(arg2);
-        if (idx < 0 || idx > 31) {
-          compiler.error(
-            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
-            operand.range, "Lane index", "0", "31"
-          );
-          compiler.currentType = Type.v128;
-          return module.createUnreachable();
-        }
-        writeI8(idx, mask, i);
-      }
-      compiler.currentType = Type.v128;
-      return module.createSIMDShuffle(arg0, arg1, mask);
     }
 
     // === GC integration =========================================================================
@@ -4110,28 +4192,35 @@ function deferASMCall(
       case BuiltinSymbols.i8x16_extract_lane_s: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i8, operands, Type.i8, reportNode);
       case BuiltinSymbols.i8x16_extract_lane_u: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.u8, operands, Type.u8, reportNode);
       case BuiltinSymbols.i8x16_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i8x16_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_extract_lane_s: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i16, operands, Type.i16, reportNode);
       case BuiltinSymbols.i16x8_extract_lane_u: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.u16, operands, Type.u16, reportNode);
       case BuiltinSymbols.i16x8_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i32, operands, Type.i32, reportNode);
       case BuiltinSymbols.i32x4_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.i64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i64, operands, Type.i64, reportNode);
       case BuiltinSymbols.i64x2_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.i64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i64x2_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.i64x2_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f32, operands, Type.f32, reportNode);
       case BuiltinSymbols.f32x4_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f64, operands, Type.f64, reportNode);
       case BuiltinSymbols.f64x2_replace_lane: return deferASM(BuiltinSymbols.v128_replace_lane, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.v8x16_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i8, operands, Type.v128, reportNode);
     }
   }
   /* tslint:enable:max-line-length */
