@@ -1,4 +1,5 @@
 var b: bool;
+class C {}
 
 // type checks
 
@@ -10,6 +11,10 @@ assert(isReference<string>());
 assert(!isReference<usize>());
 assert(isArray<i32[]>());
 assert(!isArray<usize>());
+assert(isFunction<() => void>());
+assert(!isFunction<u32>());
+assert(isNullable<C | null>());
+assert(!isNullable<C>());
 
 assert(isInteger(<i32>1));
 assert(!isInteger(<f32>1));
@@ -21,6 +26,10 @@ assert(isString("1"));
 assert(!isString(1));
 assert(isArray(changetype<i32[]>(null)));
 assert(!isArray(changetype<usize>(null)));
+assert(isFunction(changetype<() => void>(null)));
+assert(!isFunction(changetype<u32>(null)));
+assert(isNullable(changetype<C | null>(null)));
+assert(!isNullable(changetype<C>(null)));
 
 // evaluation
 

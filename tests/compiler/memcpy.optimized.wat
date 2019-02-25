@@ -914,7 +914,7 @@
   end
   local.get $6
  )
- (func $start (; 2 ;) (type $_)
+ (func $start:memcpy (; 2 ;) (type $_)
   i32.const 8
   i64.const 1229782938247303441
   i64.store
@@ -1090,7 +1090,10 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $_)
+  call $start:memcpy
+ )
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )

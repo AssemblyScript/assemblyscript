@@ -1,6 +1,6 @@
 (module
- (type $FFF (func (param f64 f64) (result f64)))
  (type $FFFi (func (param f64 f64 f64) (result i32)))
+ (type $FFF (func (param f64 f64) (result f64)))
  (type $FFi (func (param f64 f64) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $fffi (func (param f32 f32 f32) (result i32)))
@@ -500,7 +500,7 @@
   local.get $2
   call $std/mod/check<f32>
  )
- (func $start (; 8 ;) (type $_)
+ (func $start:std/mod (; 8 ;) (type $_)
   f64.const 3
   f64.const 2
   f64.const 1
@@ -2257,7 +2257,10 @@
    unreachable
   end
  )
- (func $null (; 9 ;) (type $_)
+ (func $start (; 9 ;) (type $_)
+  call $start:std/mod
+ )
+ (func $null (; 10 ;) (type $_)
   nop
  )
 )

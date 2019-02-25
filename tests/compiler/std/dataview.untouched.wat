@@ -1,4 +1,5 @@
 (module
+ (type $_ (func))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $ii (func (param i32) (result i32)))
@@ -12,7 +13,6 @@
  (type $iifi_ (func (param i32 i32 f32 i32)))
  (type $iiFi_ (func (param i32 i32 f64 i32)))
  (type $iiIi_ (func (param i32 i32 i64 i32)))
- (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
@@ -21,26 +21,32 @@
  (data (i32.const 176) "\0f\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~lib/internal/arraybuffer/HEADER_SIZE i32 (i32.const 8))
- (global $~lib/internal/arraybuffer/MAX_BLENGTH i32 (i32.const 1073741816))
  (global $std/dataview/array (mut i32) (i32.const 0))
  (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
  (global $std/dataview/view (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 212))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 212))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/internal/arraybuffer/computeSize (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+ )
+ (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
-  global.get $~lib/internal/arraybuffer/HEADER_SIZE
+  i32.const 8
   i32.add
   i32.const 1
   i32.sub
@@ -48,7 +54,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -56,7 +62,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/internal/allocator/MAX_SIZE_32
+  i32.const 1073741824
   i32.gt_u
   if
    unreachable
@@ -73,9 +79,9 @@
   i32.gt_u
   select
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.const -1
   i32.xor
   i32.and
@@ -127,11 +133,11 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+  i32.const 1073741816
   i32.le_u
   i32.eqz
   if
@@ -156,7 +162,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -410,12 +416,12 @@
    end
   end
  )
- (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -439,9 +445,9 @@
   local.get $2
   call $~lib/internal/arraybuffer/allocateUnsafe
   local.set $3
-  block $memory.fill|inlined.0
+  block $~lib/memory/memory.fill|inlined.0
    local.get $3
-   global.get $~lib/internal/arraybuffer/HEADER_SIZE
+   i32.const 8
    i32.add
    local.set $4
    i32.const 0
@@ -482,7 +488,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -496,7 +502,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 8 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 9 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -537,7 +543,7 @@
    i32.store8 offset=8
   end
  )
- (func $~lib/dataview/DataView#constructor (; 9 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 10 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $3
   global.get $~lib/builtins/i32.MIN_VALUE
   i32.eq
@@ -549,7 +555,7 @@
    local.set $3
   end
   local.get $2
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+  i32.const 1073741816
   i32.gt_u
   if
    i32.const 0
@@ -560,7 +566,7 @@
    unreachable
   end
   local.get $3
-  global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+  i32.const 1073741816
   i32.gt_u
   if
    i32.const 0
@@ -602,7 +608,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/polyfills/bswap<u32> (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u32> (; 11 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -616,7 +622,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getFloat32 (; 11 ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $~lib/dataview/DataView#getFloat32 (; 12 ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -630,7 +636,7 @@
    i32.load offset=8
    local.set $5
    local.get $3
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $6
    if (result i32)
@@ -676,7 +682,7 @@
    f32.reinterpret_i32
   end
  )
- (func $~lib/polyfills/bswap<u64> (; 12 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 13 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -715,7 +721,7 @@
   i64.rotr
   return
  )
- (func $~lib/dataview/DataView#getFloat64 (; 13 ;) (type $iiiF) (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
+ (func $~lib/dataview/DataView#getFloat64 (; 14 ;) (type $iiiF) (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -729,7 +735,7 @@
    i32.load offset=8
    local.set $5
    local.get $3
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $6
    if (result i32)
@@ -775,7 +781,7 @@
    f64.reinterpret_i64
   end
  )
- (func $~lib/dataview/DataView#getInt8 (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt8 (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -789,7 +795,7 @@
    i32.load offset=8
    local.set $4
    local.get $2
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $5
    if (result i32)
@@ -819,7 +825,7 @@
   i32.add
   i32.load8_s offset=8
  )
- (func $~lib/polyfills/bswap<i16> (; 15 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 16 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -835,7 +841,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getInt16 (; 16 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt16 (; 17 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -850,7 +856,7 @@
    i32.load offset=8
    local.set $5
    local.get $3
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $6
    if (result i32)
@@ -890,7 +896,7 @@
    call $~lib/polyfills/bswap<i16>
   end
  )
- (func $~lib/polyfills/bswap<i32> (; 17 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i32> (; 18 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -904,7 +910,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getInt32 (; 18 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt32 (; 19 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -919,7 +925,7 @@
    i32.load offset=8
    local.set $5
    local.get $3
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $6
    if (result i32)
@@ -959,7 +965,7 @@
    call $~lib/polyfills/bswap<i32>
   end
  )
- (func $~lib/polyfills/bswap<i64> (; 19 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<i64> (; 20 ;) (type $II) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -998,7 +1004,7 @@
   i64.rotr
   return
  )
- (func $~lib/dataview/DataView#getInt64 (; 20 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
+ (func $~lib/dataview/DataView#getInt64 (; 21 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1013,7 +1019,7 @@
    i32.load offset=8
    local.set $5
    local.get $3
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $6
    if (result i32)
@@ -1053,7 +1059,7 @@
    call $~lib/polyfills/bswap<i64>
   end
  )
- (func $~lib/dataview/DataView#getUint8 (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint8 (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1067,7 +1073,7 @@
    i32.load offset=8
    local.set $4
    local.get $2
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $5
    if (result i32)
@@ -1097,7 +1103,7 @@
   i32.add
   i32.load8_u offset=8
  )
- (func $~lib/polyfills/bswap<u16> (; 22 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 23 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -1111,7 +1117,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getUint16 (; 23 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint16 (; 24 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1126,7 +1132,7 @@
    i32.load offset=8
    local.set $5
    local.get $3
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $6
    if (result i32)
@@ -1166,7 +1172,7 @@
    call $~lib/polyfills/bswap<u16>
   end
  )
- (func $~lib/dataview/DataView#getUint32 (; 24 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint32 (; 25 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1181,7 +1187,7 @@
    i32.load offset=8
    local.set $5
    local.get $3
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $6
    if (result i32)
@@ -1221,7 +1227,7 @@
    call $~lib/polyfills/bswap<u32>
   end
  )
- (func $~lib/dataview/DataView#getUint64 (; 25 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
+ (func $~lib/dataview/DataView#getUint64 (; 26 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1236,7 +1242,7 @@
    i32.load offset=8
    local.set $5
    local.get $3
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $6
    if (result i32)
@@ -1276,7 +1282,7 @@
    call $~lib/polyfills/bswap<u64>
   end
  )
- (func $~lib/dataview/DataView#setFloat32 (; 26 ;) (type $iifi_) (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
+ (func $~lib/dataview/DataView#setFloat32 (; 27 ;) (type $iifi_) (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1290,7 +1296,7 @@
    i32.load offset=8
    local.set $6
    local.get $4
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $7
    if (result i32)
@@ -1338,7 +1344,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/dataview/DataView#setFloat64 (; 27 ;) (type $iiFi_) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
+ (func $~lib/dataview/DataView#setFloat64 (; 28 ;) (type $iiFi_) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1352,7 +1358,7 @@
    i32.load offset=8
    local.set $6
    local.get $4
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $7
    if (result i32)
@@ -1400,7 +1406,7 @@
    i64.store offset=8
   end
  )
- (func $~lib/dataview/DataView#setInt8 (; 28 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt8 (; 29 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1414,7 +1420,7 @@
    i32.load offset=8
    local.set $5
    local.get $3
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $6
    if (result i32)
@@ -1445,7 +1451,7 @@
   local.get $2
   i32.store8 offset=8
  )
- (func $~lib/dataview/DataView#setInt16 (; 29 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt16 (; 30 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1459,7 +1465,7 @@
    i32.load offset=8
    local.set $6
    local.get $4
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $7
    if (result i32)
@@ -1498,7 +1504,7 @@
   end
   i32.store16 offset=8
  )
- (func $~lib/dataview/DataView#setInt32 (; 30 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt32 (; 31 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1512,7 +1518,7 @@
    i32.load offset=8
    local.set $6
    local.get $4
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $7
    if (result i32)
@@ -1551,7 +1557,7 @@
   end
   i32.store offset=8
  )
- (func $~lib/dataview/DataView#setInt64 (; 31 ;) (type $iiIi_) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt64 (; 32 ;) (type $iiIi_) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1565,7 +1571,7 @@
    i32.load offset=8
    local.set $6
    local.get $4
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $7
    if (result i32)
@@ -1604,7 +1610,7 @@
   end
   i64.store offset=8
  )
- (func $~lib/dataview/DataView#setUint8 (; 32 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint8 (; 33 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1618,7 +1624,7 @@
    i32.load offset=8
    local.set $5
    local.get $3
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $6
    if (result i32)
@@ -1649,7 +1655,7 @@
   local.get $2
   i32.store8 offset=8
  )
- (func $~lib/dataview/DataView#setUint16 (; 33 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint16 (; 34 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1663,7 +1669,7 @@
    i32.load offset=8
    local.set $6
    local.get $4
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $7
    if (result i32)
@@ -1702,7 +1708,7 @@
   end
   i32.store16 offset=8
  )
- (func $~lib/dataview/DataView#setUint32 (; 34 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint32 (; 35 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1716,7 +1722,7 @@
    i32.load offset=8
    local.set $6
    local.get $4
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $7
    if (result i32)
@@ -1755,7 +1761,7 @@
   end
   i32.store offset=8
  )
- (func $~lib/dataview/DataView#setUint64 (; 35 ;) (type $iiIi_) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint64 (; 36 ;) (type $iiIi_) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1769,7 +1775,7 @@
    i32.load offset=8
    local.set $6
    local.get $4
-   global.get $~lib/internal/arraybuffer/MAX_BLENGTH
+   i32.const 1073741816
    i32.gt_u
    local.tee $7
    if (result i32)
@@ -1808,17 +1814,8 @@
   end
   i64.store offset=8
  )
- (func $start (; 36 ;) (type $_)
-  global.get $HEAP_BASE
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.add
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
+ (func $start:std/dataview (; 37 ;) (type $_)
+  call $start:~lib/allocator/arena
   i32.const 0
   i32.const 8
   call $~lib/typedarray/Uint8Array#constructor
@@ -3501,6 +3498,9 @@
    unreachable
   end
  )
- (func $null (; 37 ;) (type $_)
+ (func $start (; 38 ;) (type $_)
+  call $start:std/dataview
+ )
+ (func $null (; 39 ;) (type $_)
  )
 )

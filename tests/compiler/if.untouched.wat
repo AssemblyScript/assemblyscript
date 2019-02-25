@@ -7,7 +7,7 @@
  (data (i32.const 8) "\05\00\00\00i\00f\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 24))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 24))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "ifThenElse" (func $if/ifThenElse))
@@ -47,23 +47,7 @@
   unreachable
   unreachable
  )
- (func $if/ifAlwaysReturns (; 4 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  if
-   i32.const 1
-   return
-  else   
-   i32.const 0
-   i32.const 8
-   i32.const 37
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
-  unreachable
-  unreachable
- )
- (func $start (; 5 ;) (type $_)
+ (func $start:if (; 4 ;) (type $_)
   i32.const 0
   call $if/ifThenElse
   i32.const 0
@@ -143,6 +127,25 @@
    unreachable
   end
  )
- (func $null (; 6 ;) (type $_)
+ (func $if/ifAlwaysReturns (; 5 ;) (type $ii) (param $0 i32) (result i32)
+  local.get $0
+  if
+   i32.const 1
+   return
+  else   
+   i32.const 0
+   i32.const 8
+   i32.const 37
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  unreachable
+  unreachable
+ )
+ (func $start (; 6 ;) (type $_)
+  call $start:if
+ )
+ (func $null (; 7 ;) (type $_)
  )
 )
