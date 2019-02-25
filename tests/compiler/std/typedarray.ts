@@ -426,7 +426,7 @@ var setSource: i32[] = [1, 2, 3];
 
 function testArraySet<T extends TypedArray<U>, U extends number>(): void {
   var target: T = instantiate<T>(10);
-  target.set<i32[], i32>(setSource, 4);
+  target.set<i32[]>(setSource, 4);
 
   assert(target[0] == <U>0, "i32[] test fails");
   assert(target[1] == <U>0, "i32[] test fails");
@@ -444,7 +444,7 @@ function testArraySet<T extends TypedArray<U>, U extends number>(): void {
   similarSource[1] = <U>5;
   similarSource[2] = <U>6;
 
-  target.set<T, U>(similarSource);
+  target.set<T>(similarSource);
 
   assert(target[0] == <U>4, "Similar TypedArray test fails.");
   assert(target[1] == <U>5, "Similar TypedArray test fails.");
@@ -462,7 +462,7 @@ function testArraySet<T extends TypedArray<U>, U extends number>(): void {
   floatData[1] = 8;
   floatData[2] = 9;
 
-  target.set<Float32Array, f32>(floatData, 7);
+  target.set<Float32Array>(floatData, 7);
 
   assert(target[0] == <U>4, "Float32Array test fails.");
   assert(target[1] == <U>5, "Float32Array test fails.");
@@ -480,7 +480,7 @@ function testArraySet<T extends TypedArray<U>, U extends number>(): void {
   integerData[1] = 11;
   integerData[2] = 12;
 
-  target.set<Int64Array, i64>(integerData, 3);
+  target.set<Int64Array>(integerData, 3);
 
   assert(target[0] == <U>4, "Float32Array test fails.");
   assert(target[1] == <U>5, "Float32Array test fails.");
@@ -493,7 +493,7 @@ function testArraySet<T extends TypedArray<U>, U extends number>(): void {
   assert(target[8] == <U>8, "Float32Array test fails.");
   assert(target[9] == <U>9, "Float32Array test fails.");
 
-  target.set<ArrayLike, i32>(arrayLikeValue, 2);
+  target.set<ArrayLike>(arrayLikeValue, 2);
 
   assert(target[0] == <U>4, "arraylike test fails.");
   assert(target[1] == <U>5, "arraylike test fails.");

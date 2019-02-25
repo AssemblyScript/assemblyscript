@@ -65,8 +65,8 @@ export class Int8Array extends TypedArray<i8> {
     return EVERY<Int8Array, i8>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Int8Array, i8, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Int8Array, i8, SourceT>(this, source, offset);
   }
 }
 
@@ -115,8 +115,8 @@ export class Uint8Array extends TypedArray<u8> {
     return EVERY<Uint8Array, u8>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Uint8Array, u8, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Uint8Array, u8, SourceT>(this, source, offset);
   }
 }
 
@@ -161,8 +161,8 @@ export class Uint8ClampedArray extends Uint8Array {
     return EVERY<Uint8ClampedArray, u8>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Uint8ClampedArray, u8, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Uint8ClampedArray, u8, SourceT>(this, source, offset);
   }
 }
 
@@ -211,8 +211,8 @@ export class Int16Array extends TypedArray<i16> {
     return EVERY<Int16Array, i16>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Int16Array, i16, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Int16Array, i16, SourceT>(this, source, offset);
   }
 }
 
@@ -261,8 +261,8 @@ export class Uint16Array extends TypedArray<u16> {
     return EVERY<Uint16Array, u16>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Uint16Array, u16, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Uint16Array, u16, SourceT>(this, source, offset);
   }
 }
 
@@ -311,8 +311,8 @@ export class Int32Array extends TypedArray<i32> {
     return EVERY<Int32Array, i32>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Int32Array, i32, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Int32Array, i32, SourceT>(this, source, offset);
   }
 }
 
@@ -361,8 +361,8 @@ export class Uint32Array extends TypedArray<u32> {
     return EVERY<Uint32Array, u32>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Uint32Array, u32, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Uint32Array, u32, SourceT>(this, source, offset);
   }
 }
 
@@ -411,8 +411,8 @@ export class Int64Array extends TypedArray<i64> {
     return EVERY<Int64Array, i64>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Int64Array, i64, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Int64Array, i64, SourceT>(this, source, offset);
   }
 }
 
@@ -461,8 +461,8 @@ export class Uint64Array extends TypedArray<u64> {
     return EVERY<Uint64Array, u64>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Uint64Array, u64, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Uint64Array, u64, SourceT>(this, source, offset);
   }
 }
 
@@ -511,8 +511,8 @@ export class Float32Array extends TypedArray<f32> {
     return EVERY<Float32Array, f32>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Float32Array, f32, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Float32Array, f32, SourceT>(this, source, offset);
   }
 }
 
@@ -561,7 +561,7 @@ export class Float64Array extends TypedArray<f64> {
     return EVERY<Float64Array, f64>(this, callbackfn);
   }
 
-  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
-    SET<Float64Array, f64, SourceT, SourceU>(this, source, offset);
+  set<SourceT>(source: SourceT, offset: i32 = 0): void {
+    SET<Float64Array, f64, SourceT>(this, source, offset);
   }
 }

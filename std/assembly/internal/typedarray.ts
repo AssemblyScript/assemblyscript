@@ -233,7 +233,7 @@ export function EVERY<TArray extends TypedArray<T>, T>(
 }
 
 @inline
-export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU extends number>(
+export function SET<T extends TypedArray<U>, U extends number, SourceT>(
   target: T,
   source: SourceT,
   offset: i32): void {
@@ -241,6 +241,8 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
     if (isReference<SourceT>()) {
       assert(target != null, "TypeError: target is null.");
       assert(source != null, "TypeError: source is null.");
+      // @ts-ignore it must have a length property
+      if (source.length == 0) return;
       if (source instanceof Int8Array) {
         if (target instanceof Int8Array) {
           SET_SAME<Int8Array, i8>(target, source, offset);
@@ -298,7 +300,7 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
         } else if (target instanceof Uint16Array) {
           SET_SAME<Int16Array, i16>(<Int16Array>target, source, offset);
         } else {
-          SET_COPY<U, SourceU>(
+          SET_COPY<U, i16>(
             target.buffer,
             target.byteOffset,
             source.buffer,
@@ -313,7 +315,7 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
         } else if (target instanceof Uint16Array) {
           SET_SAME<Uint16Array, u16>(target, source, offset);
         } else {
-          SET_COPY<U, SourceU>(
+          SET_COPY<U, u16>(
             target.buffer,
             target.byteOffset,
             source.buffer,
@@ -328,7 +330,7 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
         } else if (target instanceof Uint32Array) {
           SET_SAME<Int32Array, i32>(<Int32Array>target, source, offset);
         } else {
-          SET_COPY<U, SourceU>(
+          SET_COPY<U, fi32>(
             target.buffer,
             target.byteOffset,
             source.buffer,
@@ -343,7 +345,7 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
         } else if (target instanceof Uint32Array) {
           SET_SAME<Uint32Array, u32>(target, source, offset);
         } else {
-          SET_COPY<U, SourceU>(
+          SET_COPY<U, u32>(
             target.buffer,
             target.byteOffset,
             source.buffer,
@@ -354,11 +356,11 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
         }
       } else if (source instanceof Int64Array) {
         if (target instanceof Int64Array) {
-          SET_SAME<Int64Array, u64>(target, source, offset);
+          SET_SAME<Int64Array, i64>(target, source, offset);
         } else if (target instanceof Uint64Array) {
-          SET_SAME<Int64Array, u64>(<Int64Array>target, source, offset);
+          SET_SAME<Int64Array, i64>(<Int64Array>target, source, offset);
         } else {
-          SET_COPY<U, SourceU>(
+          SET_COPY<U, i64>(
             target.buffer,
             target.byteOffset,
             source.buffer,
@@ -373,7 +375,7 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
         } else if (target instanceof Uint64Array) {
           SET_SAME<Uint64Array, u64>(target, source, offset);
         } else {
-          SET_COPY<U, SourceU>(
+          SET_COPY<U, u64>(
             target.buffer,
             target.byteOffset,
             source.buffer,
@@ -386,7 +388,7 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
         if (target instanceof Float32Array) {
           SET_SAME<Float32Array, f32>(target, source, offset);
         } else {
-          SET_COPY<U, SourceU>(
+          SET_COPY<U, f32>(
             target.buffer,
             target.byteOffset,
             source.buffer,
@@ -399,7 +401,7 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
         if (target instanceof Float64Array) {
           SET_SAME<Float64Array, f64>(target, source, offset);
         } else {
-          SET_COPY<U, SourceU>(
+          SET_COPY<U, f64>(
             target.buffer,
             target.byteOffset,
             source.buffer,
@@ -409,16 +411,41 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
           );
         }
       } else if (isArray<SourceT>()) {
-        SET_COPY<U, SourceU>(
-          target.buffer,
-          target.byteOffset,
-          load<ArrayBuffer>(changetype<usize>(source), offsetof<SourceT>("buffer_")),
-          0,
-          offset,
-          // @ts-ignore: this is an array, and has a length property, this is not unsafe
-          // tslint:disable-next-line
-          source.length,
-        );
+        let targetBuffer = target.buffer;
+        let targetByteOffset = target.byteOffset;
+        let sourceBuffer = load<ArrayBuffer>(changetype<usize>(source), offsetof<SourceT>("buffer_"));
+        // @ts-ignore: this is an array, and has a length property, this is not unsafe
+        // tslint:disable-next-line
+        let length = source.length;
+        // @ts-ignore: this is an array, and has an indexed getter
+        // tslint:disable-next-line
+        var stub = source[0];
+
+        /**
+         * We must perform a get to satisfy the compiler and enable the use of instanceof to
+         * determine what type the stub is without ever getting a hard reference to the source type.
+         */
+        if (stub instanceof i8) {
+          SET_COPY<U, i8>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
+        } else if (stub instanceof u8) {
+          SET_COPY<U, u8>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
+        } else if (stub instanceof i16) {
+          SET_COPY<U, i16>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
+        } else if (stub instanceof u16) {
+          SET_COPY<U, u16>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
+        } else if (stub instanceof i32) {
+          SET_COPY<U, i32>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
+        } else if (stub instanceof u32) {
+          SET_COPY<U, u32>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
+        } else if (stub instanceof i64) {
+          SET_COPY<U, i64>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
+        } else if (stub instanceof u64) {
+          SET_COPY<U, u64>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
+        } else if (stub instanceof f32) {
+          SET_COPY<U, f32>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
+        } else if (stub instanceof f64) {
+          SET_COPY<U, f64>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
+        }
       } else {
         // validate the lengths are within range
         // @ts-ignore: source is assumed to have a length property

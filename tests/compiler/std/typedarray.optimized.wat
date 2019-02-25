@@ -8132,9 +8132,10 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Int8Array#set<Array<i32>,i32> (; 193 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int8Array#set<Array<i32>> (; 193 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   i32.eqz
   if
@@ -8160,12 +8161,29 @@
   local.set $2
   local.get $0
   i32.load offset=4
-  local.set $3
-  local.get $1
-  i32.load
   local.set $0
   local.get $1
+  i32.load
+  local.set $3
+  local.get $1
   i32.load offset=4
+  local.set $4
+  i32.const 0
+  local.get $1
+  i32.load
+  local.tee $1
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if
+   local.get $1
+   i32.load offset=8
+   drop
+  else   
+   unreachable
+  end
+  local.get $4
   i32.const 1
   i32.sub
   local.set $1
@@ -8179,12 +8197,12 @@
     i32.add
     local.get $2
     i32.add
-    local.get $3
+    local.get $0
     i32.add
     local.get $1
     i32.const 2
     i32.shl
-    local.get $0
+    local.get $3
     i32.add
     i32.load offset=8
     i32.store8 offset=8
@@ -9291,7 +9309,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int8Array#set<Int8Array,i8> (; 196 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int8Array#set<Int8Array> (; 196 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   i32.eqz
   if
@@ -9331,7 +9349,7 @@
   i32.load
   call $~lib/internal/memory/memmove
  )
- (func $~lib/typedarray/Int8Array#set<Float32Array,f32> (; 197 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int8Array#set<Float32Array> (; 197 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9404,7 +9422,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int8Array#set<Int64Array,i64> (; 198 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int8Array#set<Int64Array> (; 198 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9476,7 +9494,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int8Array#set<ArrayLike,i32> (; 199 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int8Array#set<ArrayLike> (; 199 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -9509,7 +9527,7 @@
   if
    i32.const 936
    i32.const 48
-   i32.const 429
+   i32.const 450
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -9555,7 +9573,7 @@
   call $~lib/typedarray/Int8Array#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Int8Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Int8Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i8>#__get
@@ -9709,7 +9727,7 @@
   call $~lib/internal/typedarray/TypedArray<u8>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int8Array#set<Int8Array,i8>
+  call $~lib/typedarray/Int8Array#set<Int8Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i8>#__get
@@ -9868,7 +9886,7 @@
   call $~lib/internal/typedarray/TypedArray<f32>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int8Array#set<Float32Array,f32>
+  call $~lib/typedarray/Int8Array#set<Float32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i8>#__get
@@ -10033,7 +10051,7 @@
   call $~lib/internal/typedarray/TypedArray<i64>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int8Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int8Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i8>#__get
@@ -10186,7 +10204,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Int8Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Int8Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i8>#__get
@@ -10336,7 +10354,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Uint8Array#set<Float32Array,f32> (; 201 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Uint8Array#set<Float32Array> (; 201 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10417,7 +10435,7 @@
   call $~lib/typedarray/Int8Array#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Int8Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Int8Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u8>#__get
@@ -10571,7 +10589,7 @@
   call $~lib/internal/typedarray/TypedArray<u8>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int8Array#set<Int8Array,i8>
+  call $~lib/typedarray/Int8Array#set<Int8Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u8>#__get
@@ -10730,7 +10748,7 @@
   call $~lib/internal/typedarray/TypedArray<f32>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Uint8Array#set<Float32Array,f32>
+  call $~lib/typedarray/Uint8Array#set<Float32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u8>#__get
@@ -10895,7 +10913,7 @@
   call $~lib/internal/typedarray/TypedArray<i64>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int8Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int8Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u8>#__get
@@ -11048,7 +11066,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Int8Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Int8Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u8>#__get
@@ -11205,7 +11223,7 @@
   call $~lib/typedarray/Uint8ClampedArray#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Int8Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Int8Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u8>#__get
@@ -11358,7 +11376,7 @@
   call $~lib/typedarray/Uint8ClampedArray#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int8Array#set<Int8Array,i8>
+  call $~lib/typedarray/Int8Array#set<Int8Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u8>#__get
@@ -11517,7 +11535,7 @@
   call $~lib/internal/typedarray/TypedArray<f32>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Uint8Array#set<Float32Array,f32>
+  call $~lib/typedarray/Uint8Array#set<Float32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u8>#__get
@@ -11682,7 +11700,7 @@
   call $~lib/internal/typedarray/TypedArray<i64>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int8Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int8Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u8>#__get
@@ -11835,7 +11853,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Int8Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Int8Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u8>#__get
@@ -11985,9 +12003,10 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Int16Array#set<Array<i32>,i32> (; 204 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int16Array#set<Array<i32>> (; 204 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   i32.eqz
   if
@@ -12013,12 +12032,29 @@
   local.set $2
   local.get $0
   i32.load offset=4
-  local.set $3
-  local.get $1
-  i32.load
   local.set $0
   local.get $1
+  i32.load
+  local.set $3
+  local.get $1
   i32.load offset=4
+  local.set $4
+  i32.const 0
+  local.get $1
+  i32.load
+  local.tee $1
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if
+   local.get $1
+   i32.load offset=8
+   drop
+  else   
+   unreachable
+  end
+  local.get $4
   i32.const 1
   i32.sub
   local.set $1
@@ -12034,12 +12070,12 @@
     i32.shl
     local.get $2
     i32.add
-    local.get $3
+    local.get $0
     i32.add
     local.get $1
     i32.const 2
     i32.shl
-    local.get $0
+    local.get $3
     i32.add
     i32.load offset=8
     i32.store16 offset=8
@@ -12051,7 +12087,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int16Array#set<Float32Array,f32> (; 205 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int16Array#set<Float32Array> (; 205 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12126,7 +12162,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int16Array#set<Int64Array,i64> (; 206 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int16Array#set<Int64Array> (; 206 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12200,7 +12236,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int16Array#set<ArrayLike,i32> (; 207 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int16Array#set<ArrayLike> (; 207 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -12235,7 +12271,7 @@
   if
    i32.const 936
    i32.const 48
-   i32.const 429
+   i32.const 450
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -12282,7 +12318,7 @@
   call $~lib/typedarray/Int16Array#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Int16Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Int16Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i16>#__get
@@ -12435,7 +12471,7 @@
   call $~lib/internal/typedarray/TypedArray<i16>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int8Array#set<Int8Array,i8>
+  call $~lib/typedarray/Int8Array#set<Int8Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i16>#__get
@@ -12594,7 +12630,7 @@
   call $~lib/internal/typedarray/TypedArray<f32>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int16Array#set<Float32Array,f32>
+  call $~lib/typedarray/Int16Array#set<Float32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i16>#__get
@@ -12759,7 +12795,7 @@
   call $~lib/internal/typedarray/TypedArray<i64>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int16Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int16Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i16>#__get
@@ -12912,7 +12948,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Int16Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Int16Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i16>#__get
@@ -13062,7 +13098,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Uint16Array#set<Float32Array,f32> (; 209 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Uint16Array#set<Float32Array> (; 209 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13144,7 +13180,7 @@
   call $~lib/typedarray/Int16Array#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Int16Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Int16Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u16>#__get
@@ -13297,7 +13333,7 @@
   call $~lib/internal/typedarray/TypedArray<i16>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int8Array#set<Int8Array,i8>
+  call $~lib/typedarray/Int8Array#set<Int8Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u16>#__get
@@ -13456,7 +13492,7 @@
   call $~lib/internal/typedarray/TypedArray<f32>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Uint16Array#set<Float32Array,f32>
+  call $~lib/typedarray/Uint16Array#set<Float32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u16>#__get
@@ -13621,7 +13657,7 @@
   call $~lib/internal/typedarray/TypedArray<i64>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int16Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int16Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u16>#__get
@@ -13774,7 +13810,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Int16Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Int16Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<u16>#__get
@@ -13924,9 +13960,10 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Int32Array#set<Array<i32>,i32> (; 211 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int32Array#set<Array<i32>> (; 211 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   i32.eqz
   if
@@ -13952,12 +13989,29 @@
   local.set $2
   local.get $0
   i32.load offset=4
-  local.set $3
-  local.get $1
-  i32.load
   local.set $0
   local.get $1
+  i32.load
+  local.set $3
+  local.get $1
   i32.load offset=4
+  local.set $4
+  i32.const 0
+  local.get $1
+  i32.load
+  local.tee $1
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if
+   local.get $1
+   i32.load offset=8
+   drop
+  else   
+   unreachable
+  end
+  local.get $4
   i32.const 1
   i32.sub
   local.set $1
@@ -13973,12 +14027,12 @@
     i32.shl
     local.get $2
     i32.add
-    local.get $3
+    local.get $0
     i32.add
     local.get $1
     i32.const 2
     i32.shl
-    local.get $0
+    local.get $3
     i32.add
     i32.load offset=8
     i32.store offset=8
@@ -13990,7 +14044,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int32Array#set<Int32Array,i32> (; 212 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int32Array#set<Int32Array> (; 212 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.eqz
   if
@@ -14034,7 +14088,7 @@
   i32.load
   call $~lib/internal/memory/memmove
  )
- (func $~lib/typedarray/Int32Array#set<Float32Array,f32> (; 213 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int32Array#set<Float32Array> (; 213 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14109,7 +14163,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int32Array#set<Int64Array,i64> (; 214 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int32Array#set<Int64Array> (; 214 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -14183,7 +14237,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int32Array#set<ArrayLike,i32> (; 215 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int32Array#set<ArrayLike> (; 215 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -14218,7 +14272,7 @@
   if
    i32.const 936
    i32.const 48
-   i32.const 429
+   i32.const 450
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -14265,7 +14319,7 @@
   call $~lib/typedarray/Int32Array#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Int32Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Int32Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i32>#__get
@@ -14399,7 +14453,7 @@
   local.get $0
   local.get $1
   i32.const 0
-  call $~lib/typedarray/Int32Array#set<Int32Array,i32>
+  call $~lib/typedarray/Int32Array#set<Int32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i32>#__get
@@ -14538,7 +14592,7 @@
   call $~lib/internal/typedarray/TypedArray<f32>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int32Array#set<Float32Array,f32>
+  call $~lib/typedarray/Int32Array#set<Float32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i32>#__get
@@ -14683,7 +14737,7 @@
   call $~lib/internal/typedarray/TypedArray<i64>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int32Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int32Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i32>#__get
@@ -14816,7 +14870,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Int32Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Int32Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i32>#__get
@@ -14946,7 +15000,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Uint32Array#set<Float32Array,f32> (; 217 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Uint32Array#set<Float32Array> (; 217 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -15028,7 +15082,7 @@
   call $~lib/typedarray/Int32Array#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Int32Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Int32Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i32>#__get
@@ -15162,7 +15216,7 @@
   local.get $0
   local.get $1
   i32.const 0
-  call $~lib/typedarray/Int32Array#set<Int32Array,i32>
+  call $~lib/typedarray/Int32Array#set<Int32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i32>#__get
@@ -15301,7 +15355,7 @@
   call $~lib/internal/typedarray/TypedArray<f32>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Uint32Array#set<Float32Array,f32>
+  call $~lib/typedarray/Uint32Array#set<Float32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i32>#__get
@@ -15446,7 +15500,7 @@
   call $~lib/internal/typedarray/TypedArray<i64>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int32Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int32Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i32>#__get
@@ -15579,7 +15633,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Int32Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Int32Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i32>#__get
@@ -15709,9 +15763,10 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Int64Array#set<Array<i32>,i32> (; 219 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int64Array#set<Array<i32>> (; 219 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   i32.eqz
   if
@@ -15737,12 +15792,29 @@
   local.set $2
   local.get $0
   i32.load offset=4
-  local.set $3
-  local.get $1
-  i32.load
   local.set $0
   local.get $1
+  i32.load
+  local.set $3
+  local.get $1
   i32.load offset=4
+  local.set $4
+  i32.const 0
+  local.get $1
+  i32.load
+  local.tee $1
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if
+   local.get $1
+   i32.load offset=8
+   drop
+  else   
+   unreachable
+  end
+  local.get $4
   i32.const 1
   i32.sub
   local.set $1
@@ -15758,12 +15830,12 @@
     i32.shl
     local.get $2
     i32.add
-    local.get $3
+    local.get $0
     i32.add
     local.get $1
     i32.const 2
     i32.shl
-    local.get $0
+    local.get $3
     i32.add
     i32.load offset=8
     i64.extend_i32_s
@@ -15776,7 +15848,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int64Array#set<Int64Array,i64> (; 220 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int64Array#set<Int64Array> (; 220 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.eqz
   if
@@ -15820,7 +15892,7 @@
   i32.load
   call $~lib/internal/memory/memmove
  )
- (func $~lib/typedarray/Int64Array#set<Float32Array,f32> (; 221 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int64Array#set<Float32Array> (; 221 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -15895,7 +15967,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int64Array#set<ArrayLike,i32> (; 222 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Int64Array#set<ArrayLike> (; 222 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -15930,7 +16002,7 @@
   if
    i32.const 936
    i32.const 48
-   i32.const 429
+   i32.const 450
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -15978,7 +16050,7 @@
   call $~lib/typedarray/Int64Array#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Int64Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Int64Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i64>#__get
@@ -16126,7 +16198,7 @@
   local.get $0
   local.get $1
   i32.const 0
-  call $~lib/typedarray/Int64Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int64Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i64>#__get
@@ -16273,7 +16345,7 @@
   call $~lib/internal/typedarray/TypedArray<f32>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Int64Array#set<Float32Array,f32>
+  call $~lib/typedarray/Int64Array#set<Float32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i64>#__get
@@ -16421,7 +16493,7 @@
   local.get $0
   local.get $1
   i32.const 3
-  call $~lib/typedarray/Int64Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int64Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i64>#__get
@@ -16554,7 +16626,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Int64Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Int64Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i64>#__get
@@ -16686,7 +16758,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Uint64Array#set<Float32Array,f32> (; 224 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Uint64Array#set<Float32Array> (; 224 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16768,7 +16840,7 @@
   call $~lib/typedarray/Int64Array#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Int64Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Int64Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i64>#__get
@@ -16916,7 +16988,7 @@
   local.get $0
   local.get $1
   i32.const 0
-  call $~lib/typedarray/Int64Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int64Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i64>#__get
@@ -17063,7 +17135,7 @@
   call $~lib/internal/typedarray/TypedArray<f32>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Uint64Array#set<Float32Array,f32>
+  call $~lib/typedarray/Uint64Array#set<Float32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i64>#__get
@@ -17211,7 +17283,7 @@
   local.get $0
   local.get $1
   i32.const 3
-  call $~lib/typedarray/Int64Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int64Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i64>#__get
@@ -17344,7 +17416,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Int64Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Int64Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<i64>#__get
@@ -17476,9 +17548,10 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Float32Array#set<Array<i32>,i32> (; 226 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Float32Array#set<Array<i32>> (; 226 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   i32.eqz
   if
@@ -17504,12 +17577,29 @@
   local.set $2
   local.get $0
   i32.load offset=4
-  local.set $3
-  local.get $1
-  i32.load
   local.set $0
   local.get $1
+  i32.load
+  local.set $3
+  local.get $1
   i32.load offset=4
+  local.set $4
+  i32.const 0
+  local.get $1
+  i32.load
+  local.tee $1
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if
+   local.get $1
+   i32.load offset=8
+   drop
+  else   
+   unreachable
+  end
+  local.get $4
   i32.const 1
   i32.sub
   local.set $1
@@ -17525,12 +17615,12 @@
     i32.shl
     local.get $2
     i32.add
-    local.get $3
+    local.get $0
     i32.add
     local.get $1
     i32.const 2
     i32.shl
-    local.get $0
+    local.get $3
     i32.add
     i32.load offset=8
     f32.convert_i32_s
@@ -17543,7 +17633,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float32Array#set<Int64Array,i64> (; 227 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Float32Array#set<Int64Array> (; 227 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -17618,7 +17708,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float32Array#set<ArrayLike,i32> (; 228 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Float32Array#set<ArrayLike> (; 228 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -17653,7 +17743,7 @@
   if
    i32.const 936
    i32.const 48
-   i32.const 429
+   i32.const 450
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -17701,7 +17791,7 @@
   call $~lib/typedarray/Int32Array#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Float32Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Float32Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<f32>#__get
@@ -17849,7 +17939,7 @@
   local.get $0
   local.get $1
   i32.const 0
-  call $~lib/typedarray/Int32Array#set<Int32Array,i32>
+  call $~lib/typedarray/Int32Array#set<Int32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<f32>#__get
@@ -17997,7 +18087,7 @@
   local.get $0
   local.get $1
   i32.const 7
-  call $~lib/typedarray/Int32Array#set<Int32Array,i32>
+  call $~lib/typedarray/Int32Array#set<Int32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<f32>#__get
@@ -18144,7 +18234,7 @@
   call $~lib/internal/typedarray/TypedArray<i64>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Float32Array#set<Int64Array,i64>
+  call $~lib/typedarray/Float32Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<f32>#__get
@@ -18277,7 +18367,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Float32Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Float32Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<f32>#__get
@@ -18409,9 +18499,10 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Float64Array#set<Array<i32>,i32> (; 230 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Float64Array#set<Array<i32>> (; 230 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   i32.eqz
   if
@@ -18437,12 +18528,29 @@
   local.set $2
   local.get $0
   i32.load offset=4
-  local.set $3
-  local.get $1
-  i32.load
   local.set $0
   local.get $1
+  i32.load
+  local.set $3
+  local.get $1
   i32.load offset=4
+  local.set $4
+  i32.const 0
+  local.get $1
+  i32.load
+  local.tee $1
+  i32.load
+  i32.const 2
+  i32.shr_u
+  i32.lt_u
+  if
+   local.get $1
+   i32.load offset=8
+   drop
+  else   
+   unreachable
+  end
+  local.get $4
   i32.const 1
   i32.sub
   local.set $1
@@ -18458,12 +18566,12 @@
     i32.shl
     local.get $2
     i32.add
-    local.get $3
+    local.get $0
     i32.add
     local.get $1
     i32.const 2
     i32.shl
-    local.get $0
+    local.get $3
     i32.add
     i32.load offset=8
     f64.convert_i32_s
@@ -18476,7 +18584,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float64Array#set<Float32Array,f32> (; 231 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Float64Array#set<Float32Array> (; 231 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -18551,7 +18659,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float64Array#set<Int64Array,i64> (; 232 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Float64Array#set<Int64Array> (; 232 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -18626,7 +18734,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float64Array#set<ArrayLike,i32> (; 233 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/typedarray/Float64Array#set<ArrayLike> (; 233 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -18661,7 +18769,7 @@
   if
    i32.const 936
    i32.const 48
-   i32.const 429
+   i32.const 450
    i32.const 8
    call $~lib/env/abort
    unreachable
@@ -18709,7 +18817,7 @@
   call $~lib/typedarray/Int64Array#constructor
   local.tee $0
   global.get $std/typedarray/setSource
-  call $~lib/typedarray/Float64Array#set<Array<i32>,i32>
+  call $~lib/typedarray/Float64Array#set<Array<i32>>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<f64>#__get
@@ -18857,7 +18965,7 @@
   local.get $0
   local.get $1
   i32.const 0
-  call $~lib/typedarray/Int64Array#set<Int64Array,i64>
+  call $~lib/typedarray/Int64Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<f64>#__get
@@ -19004,7 +19112,7 @@
   call $~lib/internal/typedarray/TypedArray<f32>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Float64Array#set<Float32Array,f32>
+  call $~lib/typedarray/Float64Array#set<Float32Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<f64>#__get
@@ -19151,7 +19259,7 @@
   call $~lib/internal/typedarray/TypedArray<i64>#__set
   local.get $0
   local.get $1
-  call $~lib/typedarray/Float64Array#set<Int64Array,i64>
+  call $~lib/typedarray/Float64Array#set<Int64Array>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<f64>#__get
@@ -19284,7 +19392,7 @@
   end
   local.get $0
   global.get $std/typedarray/arrayLikeValue
-  call $~lib/typedarray/Float64Array#set<ArrayLike,i32>
+  call $~lib/typedarray/Float64Array#set<ArrayLike>
   local.get $0
   i32.const 0
   call $~lib/internal/typedarray/TypedArray<f64>#__get
