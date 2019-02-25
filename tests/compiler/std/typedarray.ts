@@ -413,6 +413,15 @@ testArrayEvery<Float64Array, f64>();
 
 var setSource: i32[] = [1, 2, 3];
 
+class ArrayLikeSource {
+  length: i32 = 3;
+
+  @operator("[]=")
+  protected __get(index: i32): i32 {
+    return index;
+  }
+}
+
 function testArraySet<T extends TypedArray<U>, U extends number>(): void {
   var target: T = instantiate<T>(10);
   target.set<i32[], i32>(setSource, 4);
@@ -484,3 +493,13 @@ function testArraySet<T extends TypedArray<U>, U extends number>(): void {
 }
 
 testArraySet<Int8Array, i8>();
+testArraySet<Uint8Array, u8>();
+testArraySet<Uint8ClampedArray, u8>();
+testArraySet<Int16Array, i16>();
+testArraySet<Uint16Array, u16>();
+testArraySet<Int32Array, i32>();
+testArraySet<Uint32Array, u32>();
+testArraySet<Int64Array, i64>();
+testArraySet<Uint64Array, u64>();
+testArraySet<Float32Array, f32>();
+testArraySet<Float64Array, f64>();

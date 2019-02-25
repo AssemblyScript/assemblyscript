@@ -114,6 +114,10 @@ export class Uint8Array extends TypedArray<u8> {
   every(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): bool {
     return EVERY<Uint8Array, u8>(this, callbackfn);
   }
+
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Uint8Array, u8, SourceT, SourceU>(this, source, offset);
+  }
 }
 
 export class Uint8ClampedArray extends Uint8Array {
@@ -155,6 +159,10 @@ export class Uint8ClampedArray extends Uint8Array {
 
   every(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): bool {
     return EVERY<Uint8ClampedArray, u8>(this, callbackfn);
+  }
+
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Uint8ClampedArray, u8, SourceT, SourceU>(this, source, offset);
   }
 }
 
@@ -202,6 +210,10 @@ export class Int16Array extends TypedArray<i16> {
   every(callbackfn: (value: i16, index: i32, self: Int16Array) => bool): bool {
     return EVERY<Int16Array, i16>(this, callbackfn);
   }
+
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Int16Array, i16, SourceT, SourceU>(this, source, offset);
+  }
 }
 
 export class Uint16Array extends TypedArray<u16> {
@@ -247,6 +259,10 @@ export class Uint16Array extends TypedArray<u16> {
 
   every(callbackfn: (value: u16, index: i32, self: Uint16Array) => bool): bool {
     return EVERY<Uint16Array, u16>(this, callbackfn);
+  }
+
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Uint16Array, u16, SourceT, SourceU>(this, source, offset);
   }
 }
 
@@ -294,6 +310,10 @@ export class Int32Array extends TypedArray<i32> {
   every(callbackfn: (value: i32, index: i32, self: Int32Array) => bool): bool {
     return EVERY<Int32Array, i32>(this, callbackfn);
   }
+
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Int32Array, i32, SourceT, SourceU>(this, source, offset);
+  }
 }
 
 export class Uint32Array extends TypedArray<u32> {
@@ -339,6 +359,10 @@ export class Uint32Array extends TypedArray<u32> {
 
   every(callbackfn: (value: u32, index: i32, self: Uint32Array) => bool): bool {
     return EVERY<Uint32Array, u32>(this, callbackfn);
+  }
+
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Uint32Array, u32, SourceT, SourceU>(this, source, offset);
   }
 }
 
@@ -386,6 +410,10 @@ export class Int64Array extends TypedArray<i64> {
   every(callbackfn: (value: i64, index: i32, self: Int64Array) => bool): bool {
     return EVERY<Int64Array, i64>(this, callbackfn);
   }
+
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Int64Array, i64, SourceT, SourceU>(this, source, offset);
+  }
 }
 
 export class Uint64Array extends TypedArray<u64> {
@@ -431,6 +459,10 @@ export class Uint64Array extends TypedArray<u64> {
 
   every(callbackfn: (value: u64, index: i32, self: Uint64Array) => bool): bool {
     return EVERY<Uint64Array, u64>(this, callbackfn);
+  }
+
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Uint64Array, u64, SourceT, SourceU>(this, source, offset);
   }
 }
 
@@ -478,6 +510,10 @@ export class Float32Array extends TypedArray<f32> {
   every(callbackfn: (value: f32, index: i32, self: Float32Array) => bool): bool {
     return EVERY<Float32Array, f32>(this, callbackfn);
   }
+
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Float32Array, f32, SourceT, SourceU>(this, source, offset);
+  }
 }
 
 export class Float64Array extends TypedArray<f64> {
@@ -523,5 +559,9 @@ export class Float64Array extends TypedArray<f64> {
 
   every(callbackfn: (value: f64, index: i32, self: Float64Array) => bool): bool {
     return EVERY<Float64Array, f64>(this, callbackfn);
+  }
+
+  set<SourceT, SourceU>(source: SourceT, offset: i32 = 0): void {
+    SET<Float64Array, f64, SourceT, SourceU>(this, source, offset);
   }
 }
