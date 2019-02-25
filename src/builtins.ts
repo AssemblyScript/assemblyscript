@@ -3661,6 +3661,13 @@ export function compileCall(
         case TypeKind.U32: { op = UnaryOp.SplatVecI32x4; break; }
         case TypeKind.I64:
         case TypeKind.U64: { op = UnaryOp.SplatVecI64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          op = compiler.options.isWasm64
+            ? UnaryOp.SplatVecI64x2
+            : UnaryOp.SplatVecI32x4;
+          break;
+        }
         case TypeKind.F32: { op = UnaryOp.SplatVecF32x4; break; }
         case TypeKind.F64: { op = UnaryOp.SplatVecF64x2; break; }
         default: {
@@ -3711,6 +3718,13 @@ export function compileCall(
         case TypeKind.U32: { op = SIMDExtractOp.ExtractLaneVecI32x4; break; }
         case TypeKind.I64:
         case TypeKind.U64: { op = SIMDExtractOp.ExtractLaneVecI64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          op = compiler.options.isWasm64
+            ? SIMDExtractOp.ExtractLaneVecI64x2
+            : SIMDExtractOp.ExtractLaneVecI32x4;
+          break;
+        }
         case TypeKind.F32: { op = SIMDExtractOp.ExtractLaneVecF32x4; break; }
         case TypeKind.F64: { op = SIMDExtractOp.ExtractLaneVecF64x2; break; }
         default: {
@@ -3781,6 +3795,13 @@ export function compileCall(
         case TypeKind.U32: { op = SIMDReplaceOp.ReplaceLaneVecI32x4; break; }
         case TypeKind.I64:
         case TypeKind.U64: { op = SIMDReplaceOp.ReplaceLaneVecI64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          op = compiler.options.isWasm64
+            ? SIMDReplaceOp.ReplaceLaneVecI64x2
+            : SIMDReplaceOp.ReplaceLaneVecI32x4;
+          break;
+        }
         case TypeKind.F32: { op = SIMDReplaceOp.ReplaceLaneVecF32x4; break; }
         case TypeKind.F64: { op = SIMDReplaceOp.ReplaceLaneVecF64x2; break; }
         default: {
@@ -3968,7 +3989,14 @@ export function compileCall(
         case TypeKind.I32:
         case TypeKind.U32: { op = BinaryOp.AddVecI32x4; break; }
         case TypeKind.I64:
-        case TypeKind.U64: { op = BinaryOp.AddVecI16x8; break; }
+        case TypeKind.U64: { op = BinaryOp.AddVecI64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          op = compiler.options.isWasm64
+            ? BinaryOp.AddVecI64x2
+            : BinaryOp.AddVecI32x4;
+          break;
+        }
         case TypeKind.F32: { op = BinaryOp.AddVecF32x4; break; }
         case TypeKind.F64: { op = BinaryOp.AddVecF64x2; break; }
         default: {

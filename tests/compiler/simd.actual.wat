@@ -259,7 +259,7 @@
   local.set $1
   local.get $0
   local.get $1
-  i16x8.add
+  i64x2.add
   local.set $2
   local.get $2
   i64x2.extract_lane 0
