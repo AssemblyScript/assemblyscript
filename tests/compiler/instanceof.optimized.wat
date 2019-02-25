@@ -10,12 +10,12 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:instanceof (; 1 ;) (type $_)
   global.get $instanceof/an
   if
    i32.const 0
    i32.const 8
-   i32.const 43
+   i32.const 68
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -27,13 +27,16 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 46
+   i32.const 71
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:instanceof
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

@@ -7,7 +7,7 @@
  (data (i32.const 8) "\0e\00\00\00m\00a\00n\00y\00-\00l\00o\00c\00a\00l\00s\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 40))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 40))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "testI32" (func $many-locals/testI32))
@@ -791,7 +791,7 @@
   i32.const 24
   i32.shr_s
  )
- (func $start (; 3 ;) (type $_)
+ (func $start:many-locals (; 3 ;) (type $_)
   i32.const 42
   call $many-locals/testI32
   i32.const 42
@@ -819,6 +819,9 @@
    unreachable
   end
  )
- (func $null (; 4 ;) (type $_)
+ (func $start (; 4 ;) (type $_)
+  call $start:many-locals
+ )
+ (func $null (; 5 ;) (type $_)
  )
 )

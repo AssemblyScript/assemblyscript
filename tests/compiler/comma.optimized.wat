@@ -11,7 +11,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:comma (; 1 ;) (type $_)
   (local $0 i32)
   global.get $comma/a
   local.tee $0
@@ -163,7 +163,10 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:comma
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

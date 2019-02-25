@@ -1,5 +1,6 @@
 (module
  (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $_ (func))
  (type $i_ (func (param i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
@@ -9,7 +10,6 @@
  (type $FFi (func (param f64 f64) (result i32)))
  (type $iiF (func (param i32 i32) (result f64)))
  (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $_ (func))
  (type $iiI_ (func (param i32 i32 i64)))
  (type $IIiiI (func (param i64 i64 i32 i32) (result i64)))
  (type $iif_ (func (param i32 i32 f32)))
@@ -71,7 +71,7 @@
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/typedarray/arr (mut i32) (i32.const 0))
  (global $std/typedarray/af64 (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (global $~lib/argc (mut i32) (i32.const 0))
  (global $std/typedarray/clampedArr (mut i32) (i32.const 0))
  (global $std/typedarray/arr8 (mut i32) (i32.const 0))
  (global $std/typedarray/sub8 (mut i32) (i32.const 0))
@@ -1314,7 +1314,7 @@
        f64.load offset=8
        local.set $7
        i32.const 2
-       global.set $~argc
+       global.set $~lib/argc
        local.get $6
        local.get $7
        local.get $3
@@ -1445,7 +1445,7 @@
     f64.load offset=8
     local.set $6
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $7
     local.get $6
     local.get $3
@@ -1575,7 +1575,7 @@
       f64.load offset=8
       local.set $7
       i32.const 2
-      global.set $~argc
+      global.set $~lib/argc
       local.get $6
       local.get $7
       local.get $3
@@ -1690,7 +1690,7 @@
     f64.load offset=8
     local.set $7
     i32.const 2
-    global.set $~argc
+    global.set $~lib/argc
     local.get $6
     local.get $7
     local.get $4
@@ -1814,21 +1814,21 @@
   i32.store8 offset=8
  )
  (func $~lib/typedarray/Uint8ClampedArray#__set (; 25 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
-  local.get $2
   i32.const 255
   local.get $2
-  i32.const 255
-  i32.lt_s
-  select
-  local.tee $3
-  i32.const 0
-  local.get $3
-  i32.const 0
-  i32.gt_s
-  select
+  i32.sub
+  i32.const 31
+  i32.shr_s
+  local.get $2
+  i32.or
+  local.get $2
+  i32.const 31
+  i32.shr_s
+  i32.const -1
+  i32.xor
+  i32.and
   call $~lib/internal/typedarray/TypedArray<u8>#__set
  )
  (func $~lib/internal/typedarray/TypedArray<u8>#__get (; 26 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
@@ -2017,7 +2017,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -2252,7 +2252,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~argc
+      global.get $~lib/argc
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -2297,7 +2297,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $1
     local.get $4
@@ -2372,7 +2372,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $3
     local.get $2
     local.get $5
@@ -2509,7 +2509,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $1
     i32.const 1
@@ -2587,7 +2587,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $1
     i32.const 1
@@ -2665,7 +2665,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $3
     local.get $2
     i32.const 2
@@ -2804,7 +2804,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $3
     local.get $2
     i32.const 3
@@ -2943,7 +2943,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $1
     i32.const 2
@@ -3024,7 +3024,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $1
     i32.const 3
@@ -3099,7 +3099,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $1
     local.get $3
@@ -3175,7 +3175,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $3
     local.get $2
     local.get $4
@@ -3286,7 +3286,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $1
     i32.const 1
@@ -3365,7 +3365,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $1
     i32.const 1
@@ -3444,7 +3444,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $3
     local.get $2
     i32.const 2
@@ -3552,7 +3552,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $3
     local.get $2
     i32.const 3
@@ -3660,7 +3660,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $1
     i32.const 2
@@ -3737,7 +3737,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~argc
+    global.set $~lib/argc
     local.get $2
     local.get $1
     i32.const 3
@@ -3822,7 +3822,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $1
     local.get $6
     i32.add
@@ -3938,7 +3938,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $1
     local.get $6
     i32.add
@@ -4053,7 +4053,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $1
     local.get $6
     i32.add
@@ -4170,7 +4170,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $1
     i32.const 1
     i32.shl
@@ -4316,7 +4316,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $1
     i32.const 1
     i32.shl
@@ -4462,7 +4462,7 @@
     i32.ge_s
     br_if $break|0
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $7
     local.get $2
     i32.const 2
@@ -4642,7 +4642,7 @@
     i32.ge_s
     br_if $break|0
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $7
     local.get $2
     i32.const 3
@@ -4848,7 +4848,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $1
     i32.const 2
     i32.shl
@@ -4993,7 +4993,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~argc
+    global.set $~lib/argc
     local.get $1
     i32.const 3
     i32.shl
@@ -5107,7 +5107,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      i32.const 1
      local.get $2
      local.get $4
@@ -5200,7 +5200,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      i32.const 1
      local.get $2
      local.get $4
@@ -5336,7 +5336,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      i32.const 1
      local.get $2
      i32.const 1
@@ -5432,7 +5432,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      i32.const 1
      local.get $2
      i32.const 1
@@ -5527,7 +5527,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      i32.const 1
      local.get $2
      i32.const 2
@@ -5666,7 +5666,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      i32.const 1
      local.get $2
      i32.const 3
@@ -5806,7 +5806,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      i32.const 1
      local.get $2
      i32.const 2
@@ -5906,7 +5906,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      i32.const 1
      local.get $2
      i32.const 3
@@ -6002,7 +6002,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      local.get $4
      i32.add
@@ -6102,7 +6102,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      local.get $4
      i32.add
@@ -6240,7 +6240,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      i32.const 1
      i32.shl
@@ -6343,7 +6343,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      i32.const 1
      i32.shl
@@ -6439,7 +6439,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      i32.const 2
      i32.shl
@@ -6583,7 +6583,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      i32.const 3
      i32.shl
@@ -6727,7 +6727,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      i32.const 2
      i32.shl
@@ -6828,7 +6828,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $0
      i32.const 3
      i32.shl
@@ -6934,7 +6934,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $2
      local.get $4
      i32.add
@@ -7029,7 +7029,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $2
      local.get $4
      i32.add
@@ -7170,7 +7170,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $2
      i32.const 1
      i32.shl
@@ -7262,7 +7262,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $2
      i32.const 1
      i32.shl
@@ -7360,7 +7360,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $2
      i32.const 2
      i32.shl
@@ -7499,7 +7499,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $2
      i32.const 3
      i32.shl
@@ -7795,7 +7795,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $2
      i32.const 2
      i32.shl
@@ -8052,7 +8052,7 @@
      i32.ge_s
      br_if $break|0
      i32.const 3
-     global.set $~argc
+     global.set $~lib/argc
      local.get $2
      i32.const 3
      i32.shl
@@ -8120,7 +8120,7 @@
    unreachable
   end
  )
- (func $start (; 193 ;) (type $_)
+ (func $start:std/typedarray (; 193 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   i32.const 624
@@ -8353,13 +8353,13 @@
    unreachable
   end
   i32.const 0
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/typedarray/af64
   local.set $1
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~argc
+     global.get $~lib/argc
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable
@@ -8518,7 +8518,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/typedarray/arr8
   i32.const 0
   i32.const 0
@@ -8555,7 +8555,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/typedarray/arr8
   i32.const 2
   i32.const -2
@@ -8596,7 +8596,7 @@
   call $~lib/typedarray/Int8Array#subarray
   global.set $std/typedarray/sub8
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/typedarray/sub8
   i32.const 0
   i32.const 0
@@ -8704,7 +8704,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/typedarray/arr32
   i32.const 0
   i32.const 0
@@ -8741,7 +8741,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/typedarray/arr32
   i32.const 2
   i32.const -2
@@ -8782,7 +8782,7 @@
   call $~lib/typedarray/Int32Array#subarray
   global.set $std/typedarray/sub32
   i32.const 1
-  global.set $~argc
+  global.set $~lib/argc
   global.get $std/typedarray/sub32
   i32.const 0
   i32.const 0
@@ -9113,7 +9113,10 @@
   call $std/typedarray/testArrayEvery<Float32Array,f32>
   call $std/typedarray/testArrayEvery<Float64Array,f64>
  )
- (func $null (; 194 ;) (type $_)
+ (func $start (; 194 ;) (type $_)
+  call $start:std/typedarray
+ )
+ (func $null (; 195 ;) (type $_)
   nop
  )
 )

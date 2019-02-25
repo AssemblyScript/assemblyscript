@@ -1058,6 +1058,7 @@ export class Module {
 
   private allocStringCached(str: string | null): usize {
     if (str == null) return 0;
+    var cachedStrings = this.cachedStrings;
     if (cachedStrings.has(str)) return <usize>cachedStrings.get(str);
     var ptr = allocString(str);
     cachedStrings.set(str, ptr);
@@ -1542,11 +1543,8 @@ function stringLengthUTF8(str: string): usize {
   return len;
 }
 
-var cachedStrings = new Map<string | null,usize>();
-
 function allocString(str: string | null): usize {
   if (str == null) return 0;
-  if (cachedStrings.has(str)) return <usize>cachedStrings.get(str);
   var ptr = memory.allocate(stringLengthUTF8(str) + 1);
   // the following is based on Emscripten's stringToUTF8Array
   var idx = ptr;
@@ -1585,7 +1583,6 @@ function allocString(str: string | null): usize {
     }
   }
   store<u8>(idx, 0);
-  cachedStrings.set(str, ptr);
   return ptr;
 }
 

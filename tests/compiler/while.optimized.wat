@@ -12,7 +12,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start (; 1 ;) (type $_)
+ (func $start:while (; 1 ;) (type $_)
   (local $0 i32)
   loop $continue|0
    global.get $while/n
@@ -176,7 +176,10 @@
    unreachable
   end
  )
- (func $null (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $_)
+  call $start:while
+ )
+ (func $null (; 3 ;) (type $_)
   nop
  )
 )

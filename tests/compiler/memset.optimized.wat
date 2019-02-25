@@ -242,7 +242,7 @@
   end
   local.get $3
  )
- (func $start (; 2 ;) (type $_)
+ (func $start:memset (; 2 ;) (type $_)
   i32.const 32
   global.set $memset/dest
   global.get $memset/dest
@@ -338,7 +338,10 @@
    unreachable
   end
  )
- (func $null (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $_)
+  call $start:memset
+ )
+ (func $null (; 4 ;) (type $_)
   nop
  )
 )

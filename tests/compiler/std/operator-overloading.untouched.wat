@@ -1,20 +1,16 @@
 (module
+ (type $_ (func))
  (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $ii (func (param i32) (result i32)))
  (type $iii (func (param i32 i32) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $FFF (func (param f64 f64) (result f64)))
  (type $FiF (func (param f64 i32) (result f64)))
- (type $_ (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1b\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $std/operator-overloading/a1 (mut i32) (i32.const 0))
@@ -34,7 +30,6 @@
  (global $std/operator-overloading/f (mut i32) (i32.const 0))
  (global $std/operator-overloading/p1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/p2 (mut i32) (i32.const 0))
- (global $NaN f64 (f64.const nan:0x8000000000000))
  (global $std/operator-overloading/p (mut i32) (i32.const 0))
  (global $std/operator-overloading/n1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/n2 (mut i32) (i32.const 0))
@@ -85,11 +80,23 @@
  (global $std/operator-overloading/aii1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 68))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 68))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+  global.get $~lib/memory/HEAP_BASE
+  i32.const 7
+  i32.add
+  i32.const 7
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+ )
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -97,7 +104,7 @@
   (local $5 i32)
   (local $6 i32)
   local.get $0
-  global.get $~lib/internal/allocator/MAX_SIZE_32
+  i32.const 1073741824
   i32.gt_u
   if
    unreachable
@@ -114,9 +121,9 @@
   i32.gt_u
   select
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.add
-  global.get $~lib/internal/allocator/AL_MASK
+  i32.const 7
   i32.const -1
   i32.xor
   i32.and
@@ -168,12 +175,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $std/operator-overloading/Tester#constructor (; 3 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/Tester#constructor (; 4 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -189,7 +196,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/Tester.add (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.add (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -203,7 +210,7 @@
   i32.add
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.sub (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.sub (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -217,7 +224,7 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.mul (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.mul (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -231,7 +238,7 @@
   i32.mul
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.div (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.div (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -245,7 +252,7 @@
   i32.div_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.mod (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.mod (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -259,7 +266,7 @@
   i32.rem_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $~lib/math/NativeMath.scalbn (; 9 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 10 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -350,7 +357,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/math/NativeMath.pow (; 10 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 11 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -1438,7 +1445,7 @@
   local.get $16
   f64.mul
  )
- (func $std/operator-overloading/Tester.pow (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.pow (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1458,7 +1465,7 @@
   i32.trunc_f64_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.and (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.and (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1472,7 +1479,7 @@
   i32.and
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.or (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.or (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1486,7 +1493,7 @@
   i32.or
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.xor (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.xor (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1500,7 +1507,7 @@
   i32.xor
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.equals (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.equals (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1518,7 +1525,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.notEquals (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.notEquals (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1536,7 +1543,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.greater (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.greater (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1554,7 +1561,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.greaterEquals (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.greaterEquals (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1572,7 +1579,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.less (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.less (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1590,7 +1597,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.lessEquals (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.lessEquals (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1608,7 +1615,7 @@
    local.get $2
   end
  )
- (func $std/operator-overloading/Tester.shr (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shr (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1620,7 +1627,7 @@
   i32.shr_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.shu (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shu (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1632,7 +1639,7 @@
   i32.shr_u
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.shl (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shl (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1644,7 +1651,7 @@
   i32.shl
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.pos (; 24 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.pos (; 25 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1652,7 +1659,7 @@
   i32.load offset=4
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.neg (; 25 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.neg (; 26 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   i32.const 0
   local.get $0
@@ -1664,7 +1671,7 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.not (; 26 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.not (; 27 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1676,7 +1683,7 @@
   i32.xor
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester.excl (; 27 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.excl (; 28 ;) (type $ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -1690,7 +1697,7 @@
    local.get $1
   end
  )
- (func $std/operator-overloading/Tester#inc (; 28 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#inc (; 29 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   local.get $0
   i32.load
@@ -1705,7 +1712,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/Tester#dec (; 29 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#dec (; 30 ;) (type $ii) (param $0 i32) (result i32)
   local.get $0
   local.get $0
   i32.load
@@ -1720,7 +1727,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/Tester#postInc (; 30 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#postInc (; 31 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1732,7 +1739,7 @@
   i32.add
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester#postDec (; 31 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#postDec (; 32 ;) (type $ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1744,7 +1751,7 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 32 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (; 33 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1760,7 +1767,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 33 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 34 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1776,19 +1783,10 @@
   i32.store offset=4
   local.get $0
  )
- (func $start (; 34 ;) (type $_)
+ (func $start:std/operator-overloading (; 35 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
-  global.get $HEAP_BASE
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.add
-  global.get $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
+  call $start:~lib/allocator/arena
   i32.const 0
   i32.const 1
   i32.const 2
@@ -2837,6 +2835,9 @@
    unreachable
   end
  )
- (func $null (; 35 ;) (type $_)
+ (func $start (; 36 ;) (type $_)
+  call $start:std/operator-overloading
+ )
+ (func $null (; 37 ;) (type $_)
  )
 )

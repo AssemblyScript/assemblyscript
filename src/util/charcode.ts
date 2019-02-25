@@ -184,10 +184,10 @@ export function isOctalDigit(c: i32): bool {
 
 /** Tests if the specified character code is a valid start of an identifier. */
 export function isIdentifierStart(c: i32): bool {
-  return c >= CharCode.A && c <= CharCode.Z
-      || c >= CharCode.a && c <= CharCode.z
-      || c == CharCode.DOLLAR
+  return c >= CharCode.a && c <= CharCode.z
+      || c >= CharCode.A && c <= CharCode.Z
       || c == CharCode._
+      || c == CharCode.DOLLAR
       || c > 0x7f && isUnicodeIdentifierStart(c);
 }
 
@@ -198,11 +198,11 @@ export function isKeywordCharacter(c: i32): bool {
 
 /** Tests if the specified character code is a valid part of an identifier. */
 export function isIdentifierPart(c: i32): bool {
-  return c >= CharCode.A && c <= CharCode.Z
-      || c >= CharCode.a && c <= CharCode.z
+  return c >= CharCode.a && c <= CharCode.z
+      || c >= CharCode.A && c <= CharCode.Z
       || c >= CharCode._0 && c <= CharCode._9
-      || c == CharCode.DOLLAR
       || c == CharCode._
+      || c == CharCode.DOLLAR
       || c > 0x7f && isUnicodeIdentifierPart(c);
 }
 
@@ -349,14 +349,16 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
   var lo = 0;
   var hi = map.length;
   var mid: i32;
+  var midVal: u16;
 
   while (lo + 1 < hi) {
-    mid = lo + (hi - lo) / 2;
-    mid -= mid % 2;
-    if (map[mid] <= code && code <= map[mid + 1]) {
+    mid = lo + ((hi - lo) >> 1);
+    mid -= (mid & 1);
+    midVal = map[mid];
+    if (midVal <= code && code <= map[mid + 1]) {
       return true;
     }
-    if (code < map[mid]) {
+    if (code < midVal) {
       hi = mid;
     } else {
       lo = mid + 2;
