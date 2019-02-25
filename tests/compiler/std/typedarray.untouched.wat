@@ -14343,7 +14343,27 @@
   i32.store
   local.get $0
  )
- (func $~lib/typedarray/Int8Array#set<Array<i32>> (; 300 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__unchecked_get (; 300 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  i32.load
+  local.set $2
+  local.get $1
+  local.set $3
+  i32.const 0
+  local.set $4
+  local.get $2
+  local.get $3
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $4
+  i32.add
+  i32.load offset=8
+ )
+ (func $~lib/typedarray/Int8Array#set<Array<i32>> (; 301 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -14424,7 +14444,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<i8,i32>|inlined.0
     local.get $6
@@ -14457,7 +14477,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.11 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.12 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -14498,7 +14518,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memcpy (; 301 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 302 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -15699,7 +15719,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 302 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 303 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -15926,7 +15946,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int8Array#set<Int8Array> (; 303 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int8Array#set<Int8Array> (; 304 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -16028,7 +16048,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int8Array#set<Float32Array> (; 304 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int8Array#set<Float32Array> (; 305 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -16172,7 +16192,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int8Array#set<Int64Array> (; 305 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int8Array#set<Int64Array> (; 306 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -16316,10 +16336,10 @@
    end
   end
  )
- (func $std/typedarray/ArrayLike#__get (; 306 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/typedarray/ArrayLike#__get (; 307 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
  )
- (func $~lib/typedarray/Int8Array#set<ArrayLike> (; 307 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int8Array#set<ArrayLike> (; 308 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -16448,7 +16468,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Int8Array,i8> (; 308 ;) (type $_)
+ (func $std/typedarray/testArraySet<Int8Array,i8> (; 309 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -17426,7 +17446,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Uint8Array#set<Array<i32>> (; 309 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8Array#set<Array<i32>> (; 310 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -17507,7 +17527,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<u8,i32>|inlined.0
     local.get $6
@@ -17540,7 +17560,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.12 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.13 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -17581,7 +17601,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint8Array#set<Uint8Array> (; 310 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8Array#set<Uint8Array> (; 311 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -17683,7 +17703,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint8Array#set<Float32Array> (; 311 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8Array#set<Float32Array> (; 312 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -17827,7 +17847,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint8Array#set<Int64Array> (; 312 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8Array#set<Int64Array> (; 313 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -17971,7 +17991,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint8Array#set<ArrayLike> (; 313 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8Array#set<ArrayLike> (; 314 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -18100,7 +18120,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Uint8Array,u8> (; 314 ;) (type $_)
+ (func $std/typedarray/testArraySet<Uint8Array,u8> (; 315 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -18978,7 +18998,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Uint8ClampedArray#set<Array<i32>> (; 315 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8ClampedArray#set<Array<i32>> (; 316 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -19059,7 +19079,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<u8,i32>|inlined.1
     local.get $6
@@ -19092,7 +19112,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.13 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.14 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -19133,7 +19153,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint8ClampedArray#set<Uint8ClampedArray> (; 316 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8ClampedArray#set<Uint8ClampedArray> (; 317 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -19235,7 +19255,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint8ClampedArray#set<Float32Array> (; 317 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8ClampedArray#set<Float32Array> (; 318 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -19379,7 +19399,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint8ClampedArray#set<Int64Array> (; 318 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8ClampedArray#set<Int64Array> (; 319 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -19523,7 +19543,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint8ClampedArray#set<ArrayLike> (; 319 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8ClampedArray#set<ArrayLike> (; 320 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -19652,7 +19672,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Uint8ClampedArray,u8> (; 320 ;) (type $_)
+ (func $std/typedarray/testArraySet<Uint8ClampedArray,u8> (; 321 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -20530,7 +20550,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Int16Array#set<Array<i32>> (; 321 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int16Array#set<Array<i32>> (; 322 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -20611,7 +20631,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<i16,i32>|inlined.0
     local.get $6
@@ -20644,7 +20664,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.14 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.15 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -20685,7 +20705,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int16Array#set<Int16Array> (; 322 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int16Array#set<Int16Array> (; 323 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -20787,7 +20807,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int16Array#set<Float32Array> (; 323 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int16Array#set<Float32Array> (; 324 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -20931,7 +20951,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int16Array#set<Int64Array> (; 324 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int16Array#set<Int64Array> (; 325 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -21075,7 +21095,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int16Array#set<ArrayLike> (; 325 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int16Array#set<ArrayLike> (; 326 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -21204,7 +21224,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Int16Array,i16> (; 326 ;) (type $_)
+ (func $std/typedarray/testArraySet<Int16Array,i16> (; 327 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -22182,7 +22202,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Uint16Array#set<Array<i32>> (; 327 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint16Array#set<Array<i32>> (; 328 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -22263,7 +22283,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<u16,i32>|inlined.0
     local.get $6
@@ -22296,7 +22316,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.15 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.16 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -22337,7 +22357,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint16Array#set<Uint16Array> (; 328 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint16Array#set<Uint16Array> (; 329 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -22439,7 +22459,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint16Array#set<Float32Array> (; 329 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint16Array#set<Float32Array> (; 330 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -22583,7 +22603,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint16Array#set<Int64Array> (; 330 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint16Array#set<Int64Array> (; 331 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -22727,7 +22747,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint16Array#set<ArrayLike> (; 331 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint16Array#set<ArrayLike> (; 332 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -22856,7 +22876,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Uint16Array,u16> (; 332 ;) (type $_)
+ (func $std/typedarray/testArraySet<Uint16Array,u16> (; 333 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -23734,7 +23754,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Int32Array#set<Array<i32>> (; 333 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int32Array#set<Array<i32>> (; 334 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -23815,7 +23835,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<i32,i32>|inlined.0
     local.get $6
@@ -23848,7 +23868,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.16 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.17 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -23889,7 +23909,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int32Array#set<Int32Array> (; 334 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int32Array#set<Int32Array> (; 335 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -23991,7 +24011,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int32Array#set<Float32Array> (; 335 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int32Array#set<Float32Array> (; 336 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -24135,7 +24155,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int32Array#set<Int64Array> (; 336 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int32Array#set<Int64Array> (; 337 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -24279,7 +24299,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int32Array#set<ArrayLike> (; 337 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int32Array#set<ArrayLike> (; 338 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -24408,7 +24428,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Int32Array,i32> (; 338 ;) (type $_)
+ (func $std/typedarray/testArraySet<Int32Array,i32> (; 339 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -25186,7 +25206,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Uint32Array#set<Array<i32>> (; 339 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint32Array#set<Array<i32>> (; 340 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -25267,7 +25287,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<u32,i32>|inlined.0
     local.get $6
@@ -25300,7 +25320,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.17 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.18 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -25341,7 +25361,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint32Array#set<Uint32Array> (; 340 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint32Array#set<Uint32Array> (; 341 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -25443,7 +25463,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint32Array#set<Float32Array> (; 341 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint32Array#set<Float32Array> (; 342 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -25587,7 +25607,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint32Array#set<Int64Array> (; 342 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint32Array#set<Int64Array> (; 343 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -25731,7 +25751,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint32Array#set<ArrayLike> (; 343 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint32Array#set<ArrayLike> (; 344 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -25860,7 +25880,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Uint32Array,u32> (; 344 ;) (type $_)
+ (func $std/typedarray/testArraySet<Uint32Array,u32> (; 345 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -26638,7 +26658,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Int64Array#set<Array<i32>> (; 345 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int64Array#set<Array<i32>> (; 346 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -26720,7 +26740,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<i64,i32>|inlined.0
     local.get $6
@@ -26753,7 +26773,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.18 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.19 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -26795,7 +26815,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int64Array#set<Int64Array> (; 346 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int64Array#set<Int64Array> (; 347 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -26897,7 +26917,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int64Array#set<Float32Array> (; 347 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int64Array#set<Float32Array> (; 348 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -27042,7 +27062,7 @@
    end
   end
  )
- (func $~lib/typedarray/Int64Array#set<ArrayLike> (; 348 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Int64Array#set<ArrayLike> (; 349 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -27172,7 +27192,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Int64Array,i64> (; 349 ;) (type $_)
+ (func $std/typedarray/testArraySet<Int64Array,i64> (; 350 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -27950,7 +27970,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Uint64Array#set<Array<i32>> (; 350 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint64Array#set<Array<i32>> (; 351 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -28032,7 +28052,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<u64,i32>|inlined.0
     local.get $6
@@ -28065,7 +28085,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.19 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.20 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -28107,7 +28127,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint64Array#set<Uint64Array> (; 351 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint64Array#set<Uint64Array> (; 352 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -28209,7 +28229,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint64Array#set<Float32Array> (; 352 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint64Array#set<Float32Array> (; 353 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -28354,7 +28374,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint64Array#set<Int64Array> (; 353 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint64Array#set<Int64Array> (; 354 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -28456,7 +28476,7 @@
    end
   end
  )
- (func $~lib/typedarray/Uint64Array#set<ArrayLike> (; 354 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint64Array#set<ArrayLike> (; 355 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -28586,7 +28606,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Uint64Array,u64> (; 355 ;) (type $_)
+ (func $std/typedarray/testArraySet<Uint64Array,u64> (; 356 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -29364,7 +29384,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Float32Array#set<Array<i32>> (; 356 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Float32Array#set<Array<i32>> (; 357 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -29446,7 +29466,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<f32,i32>|inlined.0
     local.get $6
@@ -29479,7 +29499,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.20 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.21 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -29521,7 +29541,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float32Array#set<Float32Array> (; 357 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Float32Array#set<Float32Array> (; 358 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -29623,7 +29643,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float32Array#set<Int64Array> (; 358 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Float32Array#set<Int64Array> (; 359 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -29768,7 +29788,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float32Array#set<ArrayLike> (; 359 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Float32Array#set<ArrayLike> (; 360 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -29898,7 +29918,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Float32Array,f32> (; 360 ;) (type $_)
+ (func $std/typedarray/testArraySet<Float32Array,f32> (; 361 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -30676,7 +30696,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Float64Array#set<Array<i32>> (; 361 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Float64Array#set<Array<i32>> (; 362 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -30758,7 +30778,7 @@
    local.set $9
    local.get $4
    i32.const 0
-   call $~lib/array/Array<i32>#__get
+   call $~lib/array/Array<i32>#__unchecked_get
    local.set $10
    block $~lib/internal/typedarray/SET_COPY<f64,i32>|inlined.0
     local.get $6
@@ -30791,7 +30811,7 @@
        local.get $15
        i32.add
        local.set $19
-       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.21 (result i32)
+       block $~lib/internal/arraybuffer/LOAD<i32,i32>|inlined.22 (result i32)
         local.get $13
         local.set $20
         local.get $17
@@ -30833,7 +30853,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float64Array#set<Float64Array> (; 362 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Float64Array#set<Float64Array> (; 363 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -30935,7 +30955,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float64Array#set<Float32Array> (; 363 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Float64Array#set<Float32Array> (; 364 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -31080,7 +31100,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float64Array#set<Int64Array> (; 364 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Float64Array#set<Int64Array> (; 365 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -31225,7 +31245,7 @@
    end
   end
  )
- (func $~lib/typedarray/Float64Array#set<ArrayLike> (; 365 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Float64Array#set<ArrayLike> (; 366 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -31355,7 +31375,7 @@
    end
   end
  )
- (func $std/typedarray/testArraySet<Float64Array,f64> (; 366 ;) (type $_)
+ (func $std/typedarray/testArraySet<Float64Array,f64> (; 367 ;) (type $_)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -32133,7 +32153,7 @@
    unreachable
   end
  )
- (func $start:std/typedarray (; 367 ;) (type $_)
+ (func $start:std/typedarray (; 368 ;) (type $_)
   (local $0 i32)
   global.get $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT
   i32.const 1
@@ -33384,9 +33404,9 @@
   call $std/typedarray/testArraySet<Float32Array,f32>
   call $std/typedarray/testArraySet<Float64Array,f64>
  )
- (func $start (; 368 ;) (type $_)
+ (func $start (; 369 ;) (type $_)
   call $start:std/typedarray
  )
- (func $null (; 369 ;) (type $_)
+ (func $null (; 370 ;) (type $_)
  )
 )

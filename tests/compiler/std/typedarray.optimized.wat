@@ -8135,7 +8135,6 @@
  (func $~lib/typedarray/Int8Array#set<Array<i32>> (; 193 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   block $~lib/internal/typedarray/SET<Int8Array,i8,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -8172,24 +8171,11 @@
    i32.load
    local.set $3
    local.get $1
-   i32.load offset=4
-   local.set $4
-   i32.const 0
+   i32.load
+   i32.load offset=8
+   drop
    local.get $1
-   i32.load
-   local.tee $1
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if
-    local.get $1
-    i32.load offset=8
-    drop
-   else    
-    unreachable
-   end
-   local.get $4
+   i32.load offset=4
    i32.const 1
    i32.sub
    local.set $1
@@ -12052,7 +12038,6 @@
  (func $~lib/typedarray/Int16Array#set<Array<i32>> (; 204 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   block $~lib/internal/typedarray/SET<Int16Array,i16,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -12089,24 +12074,11 @@
    i32.load
    local.set $3
    local.get $1
-   i32.load offset=4
-   local.set $4
-   i32.const 0
+   i32.load
+   i32.load offset=8
+   drop
    local.get $1
-   i32.load
-   local.tee $1
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if
-    local.get $1
-    i32.load offset=8
-    drop
-   else    
-    unreachable
-   end
-   local.get $4
+   i32.load offset=4
    i32.const 1
    i32.sub
    local.set $1
@@ -14097,7 +14069,6 @@
  (func $~lib/typedarray/Int32Array#set<Array<i32>> (; 212 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   block $~lib/internal/typedarray/SET<Int32Array,i32,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -14134,24 +14105,11 @@
    i32.load
    local.set $3
    local.get $1
-   i32.load offset=4
-   local.set $4
-   i32.const 0
+   i32.load
+   i32.load offset=8
+   drop
    local.get $1
-   i32.load
-   local.tee $1
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if
-    local.get $1
-    i32.load offset=8
-    drop
-   else    
-    unreachable
-   end
-   local.get $4
+   i32.load offset=4
    i32.const 1
    i32.sub
    local.set $1
@@ -15948,7 +15906,6 @@
  (func $~lib/typedarray/Int64Array#set<Array<i32>> (; 220 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   block $~lib/internal/typedarray/SET<Int64Array,i64,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -15985,24 +15942,11 @@
    i32.load
    local.set $3
    local.get $1
-   i32.load offset=4
-   local.set $4
-   i32.const 0
+   i32.load
+   i32.load offset=8
+   drop
    local.get $1
-   i32.load
-   local.tee $1
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if
-    local.get $1
-    i32.load offset=8
-    drop
-   else    
-    unreachable
-   end
-   local.get $4
+   i32.load offset=4
    i32.const 1
    i32.sub
    local.set $1
@@ -17772,7 +17716,6 @@
  (func $~lib/typedarray/Float32Array#set<Array<i32>> (; 227 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   block $~lib/internal/typedarray/SET<Float32Array,f32,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -17809,24 +17752,11 @@
    i32.load
    local.set $3
    local.get $1
-   i32.load offset=4
-   local.set $4
-   i32.const 0
+   i32.load
+   i32.load offset=8
+   drop
    local.get $1
-   i32.load
-   local.tee $1
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if
-    local.get $1
-    i32.load offset=8
-    drop
-   else    
-    unreachable
-   end
-   local.get $4
+   i32.load offset=4
    i32.const 1
    i32.sub
    local.set $1
@@ -18745,7 +18675,6 @@
  (func $~lib/typedarray/Float64Array#set<Array<i32>> (; 231 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   block $~lib/internal/typedarray/SET<Float64Array,f64,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -18782,24 +18711,11 @@
    i32.load
    local.set $3
    local.get $1
-   i32.load offset=4
-   local.set $4
-   i32.const 0
+   i32.load
+   i32.load offset=8
+   drop
    local.get $1
-   i32.load
-   local.tee $1
-   i32.load
-   i32.const 2
-   i32.shr_u
-   i32.lt_u
-   if
-    local.get $1
-    i32.load offset=8
-    drop
-   else    
-    unreachable
-   end
-   local.get $4
+   i32.load offset=4
    i32.const 1
    i32.sub
    local.set $1
