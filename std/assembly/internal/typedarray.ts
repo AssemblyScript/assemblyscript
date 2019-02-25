@@ -414,12 +414,12 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT>(
         let targetBuffer = target.buffer;
         let targetByteOffset = target.byteOffset;
         let sourceBuffer = load<ArrayBuffer>(changetype<usize>(source), offsetof<SourceT>("buffer_"));
-        // @ts-ignore: this is an array, and has a length property, this is not unsafe
+        // @ts-ignore: this is an array, and has a length property, this is not unsafe.
         // tslint:disable-next-line
-        let length = source.length;
+        let length = <i32>source.length; // adding `i32` type here supresses tslint unsafe any
         // @ts-ignore: this is an array, and has an indexed getter
         // tslint:disable-next-line
-        var stub = source[0];
+        var stub = unchecked(source[0]);
 
         /**
          * We must perform a get to satisfy the compiler and enable the use of instanceof to
