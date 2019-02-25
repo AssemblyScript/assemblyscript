@@ -239,15 +239,15 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
   offset: i32): void {
   // assert target and source are not null
   if (isReference<T>(target)) {
-    assert(target != null, "TypeError: Target is null.");
+    assert(target != null, "TypeError: target is null.");
   } else {
-    assert(false, "TypeError: T is not a reference.");
+    assert(false, "TypeError: target is not a reference.");
   }
 
   if (isReference<SourceT>(source)) {
-    assert(source != null, "TypeError: Source is null.");
+    assert(source != null, "TypeError: source is null.");
   } else {
-    assert(false, "TypeError: SourceT is not a reference.");
+    assert(false, "TypeError: source is not a reference.");
   }
 
   if (isArray<SourceT>(source)) {
@@ -272,8 +272,8 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT, SourceU 
     // fast path: source has the same backing type as targe
   } else if (ArrayBuffer.isView<SourceT>(source)) {
     // validate the lengths are within range
-    let sourceLength = source.length;
-    let targetLength = target.length;
+    let sourceLength: i32 = source.length;
+    let targetLength: i32 = target.length;
     assert((sourceLength + offset) <= targetLength, "RangeError: Offset is too large.");
 
     if (isFloat<U>()) {
@@ -349,10 +349,10 @@ function SET_DIFFERENT<
   SourceT extends TypedArray<SourceU>,
   SourceU extends number
 >(target: T, source: SourceT, sourceLength: i32, offset: i32): void {
-  let sourceBuffer = source.buffer;
-  let targetBuffer = target.buffer;
-  let sourceOffset = source.byteOffset;
-  let targetOffset = target.byteOffset;
+  var sourceBuffer = source.buffer;
+  var targetBuffer = target.buffer;
+  var sourceOffset = source.byteOffset;
+  var targetOffset = target.byteOffset;
   for (let i = 0; i < sourceLength; i++) {
     STORE<U>(
       targetBuffer,
