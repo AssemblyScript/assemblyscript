@@ -47,6 +47,7 @@ import {
   TypeParameterNode,
   CommonTypeNode,
   TypeNode,
+  ArrowKind,
 
   Expression,
   IdentifierExpression,
@@ -424,7 +425,7 @@ export class Program extends DiagnosticEmitter {
         ),
         null, false, range)
       ),
-      null, null, flags, range
+      null, null, flags, ArrowKind.NONE, range
     );
   }
 
@@ -2385,6 +2386,11 @@ export class FunctionPrototype extends DeclaredElement {
   /** Gets the associated body node. */
   get bodyNode(): Statement | null {
     return (<FunctionDeclaration>this.declaration).body;
+  }
+
+  /** Gets the arrow function kind. */
+  get arrowKind(): ArrowKind {
+    return (<FunctionDeclaration>this.declaration).arrowKind;
   }
 
   /** Tests if this prototype is bound to a class. */

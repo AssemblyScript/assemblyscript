@@ -1076,7 +1076,7 @@ export class Compiler extends DiagnosticEmitter {
       assert(bodyNode.kind == NodeKind.EXPRESSION);
 
       // must be an arrow function
-      assert(instance.is(CommonFlags.ARROW));
+      assert(instance.prototype.arrowKind);
 
       // none of the following can be an arrow function
       assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET | CommonFlags.MAIN));

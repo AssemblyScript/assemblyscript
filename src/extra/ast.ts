@@ -10,6 +10,7 @@ import {
   Node,
   NodeKind,
   Source,
+  ArrowKind,
 
   CommonTypeNode,
   TypeNode,
@@ -579,7 +580,7 @@ export class ASTBuilder {
 
   visitFunctionExpression(node: FunctionExpression): void {
     var declaration = node.declaration;
-    if (!declaration.is(CommonFlags.ARROW)) {
+    if (!declaration.arrowKind) {
       if (declaration.name.text.length) {
         this.sb.push("function ");
       } else {
@@ -1099,31 +1100,42 @@ export class ASTBuilder {
         sb.push(">");
       }
     }
-    sb.push("(");
-    var parameters = signature.parameters;
-    var numParameters = parameters.length;
-    var explicitThisType = signature.explicitThisType;
-    if (explicitThisType) {
-      sb.push("this: ");
-      this.visitTypeNode(explicitThisType);
-    }
-    if (numParameters) {
-      if (explicitThisType) sb.push(", ");
+    if (node.arrowKind == ArrowKind.ARROW_SINGLE) {
+      let parameters = signature.parameters;
+      assert(parameters.length == 1);
+      assert(!signature.explicitThisType);
       this.serializeParameter(parameters[0]);
-      for (let i = 1; i < numParameters; ++i) {
-        sb.push(", ");
-        this.serializeParameter(parameters[i]);
+    } else {
+      sb.push("(");
+      let parameters = signature.parameters;
+      let numParameters = parameters.length;
+      let explicitThisType = signature.explicitThisType;
+      if (explicitThisType) {
+        sb.push("this: ");
+        this.visitTypeNode(explicitThisType);
+      }
+      if (numParameters) {
+        if (explicitThisType) sb.push(", ");
+        this.serializeParameter(parameters[0]);
+        for (let i = 1; i < numParameters; ++i) {
+          sb.push(", ");
+          this.serializeParameter(parameters[i]);
+        }
       }
     }
     var body = node.body;
     var returnType = signature.returnType;
-    if (node.is(CommonFlags.ARROW)) {
+    if (node.arrowKind) {
       if (body) {
-        if (isTypeOmitted(returnType)) {
-          sb.push(")");
+        if (node.arrowKind == ArrowKind.ARROW_SINGLE) {
+          assert(isTypeOmitted(returnType));
         } else {
-          sb.push("): ");
-          this.visitTypeNode(returnType);
+          if (isTypeOmitted(returnType)) {
+            sb.push(")");
+          } else {
+            sb.push("): ");
+            this.visitTypeNode(returnType);
+          }
         }
         sb.push(" => ");
         this.visitNode(body);
