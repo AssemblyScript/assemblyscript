@@ -22,3 +22,8 @@ jobs:
     script:
     - npm run all
     env: Runs the tests on node.js stable
+  - node_js: nightly
+    script:
+    - npm run all
+    env:
+    - ASC_FEATURE_SIMD="--experimental-wasm-simd"
