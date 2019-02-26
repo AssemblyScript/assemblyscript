@@ -22,8 +22,9 @@ jobs:
     script:
     - npm run all
     env: Runs the tests on node.js stable
-  - node_js: nightly
+  - node_js: node
     script:
     - npm run all
     env:
+    - NVM_NODEJS_ORG_MIRROR="https://nodejs.org/download/v8-canary/"
     - ASC_FEATURE_SIMD="--experimental-wasm-simd"
