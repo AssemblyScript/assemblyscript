@@ -398,7 +398,16 @@ export class String {
    * 2. callback function for replaceValue
    */
   replace(searchValue: String, replaceValue: String): String {
+    assert(this !== null);
+    var len  = this.length;
+    var slen = searchValue.length;
+    var rlen = replaceValue.length;
+    if (len < slen) return this;
+    if (slen == rlen) {
+      // fast path
+    } else {
 
+    }
   }
 
   /* TODO
