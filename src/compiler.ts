@@ -3293,7 +3293,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.V128: {
-            expr = module.createUnary(UnaryOp.AllTrueVecI8x16,
+            expr = module.createUnary(UnaryOp.AnyTrueVecI8x16,
               module.createBinary(BinaryOp.NeVecI8x16, leftExpr, rightExpr)
             );
             break;
