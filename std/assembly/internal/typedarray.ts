@@ -3,7 +3,8 @@ import {
   MAX_BLENGTH as AB_MAX_BLENGTH,
   allocateUnsafe,
   LOAD,
-  STORE
+  STORE,
+  HEADER_SIZE
 } from "./arraybuffer";
 
 import {
@@ -417,14 +418,12 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT>(
         // @ts-ignore: this is an array, and has a length property, this is not unsafe.
         // tslint:disable-next-line
         let length = <i32>source.length; // adding `i32` type here supresses tslint unsafe any
+
         // @ts-ignore: this is an array, and has an indexed getter
         // tslint:disable-next-line
         var stub = unchecked(source[0]);
 
-        /**
-         * We must perform a get to satisfy the compiler and enable the use of instanceof to
-         * determine what type the stub is without ever getting a hard reference to the source type.
-         */
+        // Detect stub type using instanceof. Not ergonomic but a valid workaround
         if (stub instanceof i8) {
           SET_COPY<U, i8>(targetBuffer, targetByteOffset, sourceBuffer, 0, offset, length);
         } else if (stub instanceof u8) {
@@ -484,6 +483,7 @@ export function SET<T extends TypedArray<U>, U extends number, SourceT>(
   }
 }
 
+// SLow set copy method
 @inline
 function SET_COPY<U, SourceU>(
   targetBuffer: ArrayBuffer,
@@ -492,19 +492,48 @@ function SET_COPY<U, SourceU>(
   sourceBufferOffset: i32,
   offset: i32,
   length: i32): void {
-  for (let i = length - 1; i >= 0; i--) {
-    STORE<U>(
-      targetBuffer,
-      i + offset,
-      <U>LOAD<SourceU>(sourceBuffer, i, sourceBufferOffset),
-      targetBufferOffset,
+
+  // slowest path, a buffer writing to itself, despite the types not lining up
+  if (targetBuffer == sourceBuffer) {
+    // copy source data to a new copy to prevent data thrashing
+    let bytes = length << alignof<SourceU>();
+    let sourceCopy = allocateUnsafe(bytes);
+    memory.copy(
+      sourceCopy.data,
+      sourceBuffer.data + sourceBufferOffset,
+      bytes,
     );
+
+    // copy the data to itself
+    for (let i = 0; i < length; i++) {
+      STORE<U>(
+        targetBuffer,
+        i + offset,
+        <U>LOAD<SourceU>(sourceCopy, i, 0),
+        targetBufferOffset,
+      );
+    }
+
+    // cleanup
+    if (isManaged<ArrayBuffer>(sourceCopy)) {
+      memory.free(changetype<usize>(sourceCopy));
+    }
+  } else {
+    // copy the data directly
+    for (let i = 0; i < length; i++) {
+      STORE<U>(
+        targetBuffer,
+        i + offset,
+        <U>LOAD<SourceU>(sourceBuffer, i, sourceBufferOffset),
+        targetBufferOffset,
+      );
+    }
   }
 }
 
 @inline
 function SET_SAME<T extends TypedArray<U>, U extends number>(target: T, source: T, offset: i32): void {
-   // perform a memory.copy
+   // perform a memcpy
    memory.copy(
     // store the data at the target pointer + byteOFfset + offset << alignOf<U>()
     target.buffer.data + target.byteOffset + (offset << alignof<U>()),

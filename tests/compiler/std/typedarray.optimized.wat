@@ -428,7 +428,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 23
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -493,7 +493,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 23
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -550,7 +550,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 23
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -607,7 +607,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 23
+   i32.const 24
    i32.const 34
    call $~lib/env/abort
    unreachable
@@ -1099,7 +1099,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 50
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1126,7 +1126,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 39
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1217,7 +1217,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 50
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1786,7 +1786,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 39
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1810,7 +1810,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 50
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1851,7 +1851,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 39
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -1951,7 +1951,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 39
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2481,7 +2481,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 50
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2771,7 +2771,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 50
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -2910,7 +2910,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 50
+   i32.const 51
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4219,7 +4219,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 39
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4365,7 +4365,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 39
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4692,7 +4692,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 39
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -4897,7 +4897,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 39
+   i32.const 40
    i32.const 63
    call $~lib/env/abort
    unreachable
@@ -8132,82 +8132,7 @@
    unreachable
   end
  )
- (func $~lib/typedarray/Int8Array#set<Array<i32>> (; 193 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  block $~lib/internal/typedarray/SET<Int8Array,i8,Array<i32>>|inlined.0
-   local.get $0
-   local.tee $2
-   i32.eqz
-   if
-    i32.const 664
-    i32.const 48
-    i32.const 242
-    i32.const 6
-    call $~lib/env/abort
-    unreachable
-   end
-   local.get $1
-   i32.eqz
-   if
-    i32.const 720
-    i32.const 48
-    i32.const 243
-    i32.const 6
-    call $~lib/env/abort
-    unreachable
-   end
-   local.get $1
-   i32.load offset=4
-   i32.eqz
-   br_if $~lib/internal/typedarray/SET<Int8Array,i8,Array<i32>>|inlined.0
-   local.get $2
-   i32.load
-   local.set $0
-   local.get $2
-   i32.load offset=4
-   local.set $2
-   local.get $1
-   i32.load
-   local.set $3
-   local.get $1
-   i32.load
-   i32.load offset=8
-   drop
-   local.get $1
-   i32.load offset=4
-   i32.const 1
-   i32.sub
-   local.set $1
-   loop $repeat|0
-    local.get $1
-    i32.const 0
-    i32.ge_s
-    if
-     local.get $1
-     i32.const 4
-     i32.add
-     local.get $0
-     i32.add
-     local.get $2
-     i32.add
-     local.get $1
-     i32.const 2
-     i32.shl
-     local.get $3
-     i32.add
-     i32.load offset=8
-     i32.store8 offset=8
-     local.get $1
-     i32.const 1
-     i32.sub
-     local.set $1
-     br $repeat|0
-    end
-   end
-  end
- )
- (func $~lib/internal/memory/memcpy (; 194 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 193 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9104,7 +9029,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 195 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 194 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -9302,14 +9227,19 @@
    end
   end
  )
- (func $~lib/typedarray/Int8Array#set<Int8Array> (; 196 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  block $~lib/internal/typedarray/SET<Int8Array,i8,Int8Array>|inlined.0
+ (func $~lib/typedarray/Int8Array#set<Array<i32>> (; 195 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  block $~lib/internal/typedarray/SET<Int8Array,i8,Array<i32>>|inlined.0
    local.get $0
+   local.tee $2
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -9319,7 +9249,123 @@
    if
     i32.const 720
     i32.const 48
+    i32.const 244
+    i32.const 6
+    call $~lib/env/abort
+    unreachable
+   end
+   local.get $1
+   i32.load offset=4
+   i32.eqz
+   br_if $~lib/internal/typedarray/SET<Int8Array,i8,Array<i32>>|inlined.0
+   local.get $2
+   i32.load
+   local.set $0
+   local.get $2
+   i32.load offset=4
+   local.set $4
+   local.get $1
+   i32.load offset=4
+   local.set $2
+   local.get $1
+   i32.load
+   i32.load offset=8
+   drop
+   local.get $1
+   i32.load
+   local.tee $5
+   local.get $0
+   i32.eq
+   if
+    local.get $2
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $3
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.const 8
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
+    i32.const 0
+    local.set $1
+    loop $repeat|0
+     local.get $1
+     local.get $2
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 4
+      i32.add
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $3
+      i32.add
+      i32.load offset=8
+      i32.store8 offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $3
+     local.get $2
+     i32.lt_s
+     if
+      local.get $3
+      i32.const 4
+      i32.add
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $3
+      i32.const 2
+      i32.shl
+      local.get $5
+      i32.add
+      i32.load offset=8
+      i32.store8 offset=8
+      local.get $3
+      i32.const 1
+      i32.add
+      local.set $3
+      br $repeat|1
+     end
+    end
+   end
+  end
+ )
+ (func $~lib/typedarray/Int8Array#set<Int8Array> (; 196 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  block $~lib/internal/typedarray/SET<Int8Array,i8,Int8Array>|inlined.0
+   local.get $0
+   i32.eqz
+   if
+    i32.const 664
+    i32.const 48
     i32.const 243
+    i32.const 6
+    call $~lib/env/abort
+    unreachable
+   end
+   local.get $1
+   i32.eqz
+   if
+    i32.const 720
+    i32.const 48
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -9353,13 +9399,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Int8Array,i8,Float32Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -9369,7 +9416,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -9381,13 +9428,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Int8Array,i8,Float32Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -9396,36 +9437,89 @@
    i32.load offset=8
    i32.const 2
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 7
-     i32.add
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 2
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     f32.load offset=8
-     i32.trunc_f32_s
-     i32.store8 offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 7
+      i32.add
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $2
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_s
+      i32.store8 offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 7
+      i32.add
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 2
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_s
+      i32.store8 offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -9435,13 +9529,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Int8Array,i8,Int64Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -9451,7 +9546,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -9463,13 +9558,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Int8Array,i8,Int64Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -9478,35 +9567,87 @@
    i32.load offset=8
    i32.const 3
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 3
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 3
-     i32.add
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 3
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     i64.load offset=8
-     i64.store8 offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 3
+      i32.add
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 3
+      i32.shl
+      local.get $2
+      i32.add
+      i64.load offset=8
+      i64.store8 offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 3
+      i32.add
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 3
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      i64.load offset=8
+      i64.store8 offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -9520,7 +9661,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -9530,7 +9671,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -9549,7 +9690,7 @@
    if
     i32.const 936
     i32.const 48
-    i32.const 456
+    i32.const 455
     i32.const 8
     call $~lib/env/abort
     unreachable
@@ -10382,13 +10523,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Uint8Array,u8,Float32Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -10398,7 +10540,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -10410,13 +10552,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Uint8Array,u8,Float32Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -10425,36 +10561,89 @@
    i32.load offset=8
    i32.const 2
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 7
-     i32.add
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 2
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     f32.load offset=8
-     i32.trunc_f32_u
-     i32.store8 offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 7
+      i32.add
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $2
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_u
+      i32.store8 offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 7
+      i32.add
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 2
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_u
+      i32.store8 offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -12038,6 +12227,8 @@
  (func $~lib/typedarray/Int16Array#set<Array<i32>> (; 204 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   block $~lib/internal/typedarray/SET<Int16Array,i16,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -12045,7 +12236,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -12055,7 +12246,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -12069,45 +12260,91 @@
    local.set $0
    local.get $2
    i32.load offset=4
-   local.set $2
+   local.set $4
    local.get $1
-   i32.load
-   local.set $3
+   i32.load offset=4
+   local.set $2
    local.get $1
    i32.load
    i32.load offset=8
    drop
    local.get $1
-   i32.load offset=4
-   i32.const 1
-   i32.sub
-   local.set $1
-   loop $repeat|0
+   i32.load
+   local.tee $5
+   local.get $0
+   i32.eq
+   if
+    local.get $2
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $3
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.const 8
+    i32.add
     local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
+    local.set $1
+    loop $repeat|0
      local.get $1
-     i32.const 4
-     i32.add
-     i32.const 1
-     i32.shl
-     local.get $0
-     i32.add
      local.get $2
-     i32.add
-     local.get $1
-     i32.const 2
-     i32.shl
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 4
+      i32.add
+      i32.const 1
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $3
+      i32.add
+      i32.load offset=8
+      i32.store16 offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
      local.get $3
-     i32.add
-     i32.load offset=8
-     i32.store16 offset=8
-     local.get $1
-     i32.const 1
-     i32.sub
-     local.set $1
-     br $repeat|0
+     local.get $2
+     i32.lt_s
+     if
+      local.get $3
+      i32.const 4
+      i32.add
+      i32.const 1
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $3
+      i32.const 2
+      i32.shl
+      local.get $5
+      i32.add
+      i32.load offset=8
+      i32.store16 offset=8
+      local.get $3
+      i32.const 1
+      i32.add
+      local.set $3
+      br $repeat|1
+     end
     end
    end
   end
@@ -12119,7 +12356,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -12129,7 +12366,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -12165,13 +12402,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Int16Array,i16,Float32Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -12181,7 +12419,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -12193,13 +12431,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Int16Array,i16,Float32Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -12208,38 +12440,93 @@
    i32.load offset=8
    i32.const 2
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 7
-     i32.add
-     i32.const 1
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 2
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     f32.load offset=8
-     i32.trunc_f32_s
-     i32.store16 offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 7
+      i32.add
+      i32.const 1
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $2
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_s
+      i32.store16 offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 7
+      i32.add
+      i32.const 1
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 2
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_s
+      i32.store16 offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -12249,13 +12536,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Int16Array,i16,Int64Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -12265,7 +12553,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -12277,13 +12565,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Int16Array,i16,Int64Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -12292,37 +12574,91 @@
    i32.load offset=8
    i32.const 3
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 3
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 3
-     i32.add
-     i32.const 1
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 3
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     i64.load offset=8
-     i64.store16 offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 3
+      i32.add
+      i32.const 1
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 3
+      i32.shl
+      local.get $2
+      i32.add
+      i64.load offset=8
+      i64.store16 offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 3
+      i32.add
+      i32.const 1
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 3
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      i64.load offset=8
+      i64.store16 offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -12336,7 +12672,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -12346,7 +12682,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -12367,7 +12703,7 @@
    if
     i32.const 936
     i32.const 48
-    i32.const 456
+    i32.const 455
     i32.const 8
     call $~lib/env/abort
     unreachable
@@ -13200,13 +13536,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Uint16Array,u16,Float32Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -13216,7 +13553,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -13228,13 +13565,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Uint16Array,u16,Float32Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -13243,38 +13574,93 @@
    i32.load offset=8
    i32.const 2
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 7
-     i32.add
-     i32.const 1
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 2
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     f32.load offset=8
-     i32.trunc_f32_u
-     i32.store16 offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 7
+      i32.add
+      i32.const 1
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $2
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_u
+      i32.store16 offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 7
+      i32.add
+      i32.const 1
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 2
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_u
+      i32.store16 offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -14069,6 +14455,8 @@
  (func $~lib/typedarray/Int32Array#set<Array<i32>> (; 212 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   block $~lib/internal/typedarray/SET<Int32Array,i32,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -14076,7 +14464,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -14086,7 +14474,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -14100,45 +14488,91 @@
    local.set $0
    local.get $2
    i32.load offset=4
-   local.set $2
+   local.set $4
    local.get $1
-   i32.load
-   local.set $3
+   i32.load offset=4
+   local.set $2
    local.get $1
    i32.load
    i32.load offset=8
    drop
    local.get $1
-   i32.load offset=4
-   i32.const 1
-   i32.sub
-   local.set $1
-   loop $repeat|0
+   i32.load
+   local.tee $5
+   local.get $0
+   i32.eq
+   if
+    local.get $2
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $3
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.const 8
+    i32.add
     local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
+    local.set $1
+    loop $repeat|0
      local.get $1
-     i32.const 4
-     i32.add
-     i32.const 2
-     i32.shl
-     local.get $0
-     i32.add
      local.get $2
-     i32.add
-     local.get $1
-     i32.const 2
-     i32.shl
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 4
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $3
+      i32.add
+      i32.load offset=8
+      i32.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
      local.get $3
-     i32.add
-     i32.load offset=8
-     i32.store offset=8
-     local.get $1
-     i32.const 1
-     i32.sub
-     local.set $1
-     br $repeat|0
+     local.get $2
+     i32.lt_s
+     if
+      local.get $3
+      i32.const 4
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $3
+      i32.const 2
+      i32.shl
+      local.get $5
+      i32.add
+      i32.load offset=8
+      i32.store offset=8
+      local.get $3
+      i32.const 1
+      i32.add
+      local.set $3
+      br $repeat|1
+     end
     end
    end
   end
@@ -14150,7 +14584,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -14160,7 +14594,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -14200,13 +14634,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Int32Array,i32,Float32Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -14216,7 +14651,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -14228,13 +14663,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Int32Array,i32,Float32Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -14243,38 +14672,93 @@
    i32.load offset=8
    i32.const 2
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 7
-     i32.add
-     i32.const 2
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 2
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     f32.load offset=8
-     i32.trunc_f32_s
-     i32.store offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 7
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $2
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_s
+      i32.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 7
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 2
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_s
+      i32.store offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -14284,13 +14768,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Int32Array,i32,Int64Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -14300,7 +14785,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -14312,13 +14797,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Int32Array,i32,Int64Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -14327,37 +14806,91 @@
    i32.load offset=8
    i32.const 3
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 3
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 3
-     i32.add
-     i32.const 2
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 3
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     i64.load offset=8
-     i64.store32 offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 3
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 3
+      i32.shl
+      local.get $2
+      i32.add
+      i64.load offset=8
+      i64.store32 offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 3
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 3
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      i64.load offset=8
+      i64.store32 offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -14371,7 +14904,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -14381,7 +14914,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -14402,7 +14935,7 @@
    if
     i32.const 936
     i32.const 48
-    i32.const 456
+    i32.const 455
     i32.const 8
     call $~lib/env/abort
     unreachable
@@ -15136,13 +15669,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Uint32Array,u32,Float32Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -15152,7 +15686,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -15164,13 +15698,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Uint32Array,u32,Float32Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -15179,38 +15707,93 @@
    i32.load offset=8
    i32.const 2
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 7
-     i32.add
-     i32.const 2
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 2
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     f32.load offset=8
-     i32.trunc_f32_u
-     i32.store offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 7
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $2
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_u
+      i32.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 7
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 2
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      f32.load offset=8
+      i32.trunc_f32_u
+      i32.store offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -15906,6 +16489,8 @@
  (func $~lib/typedarray/Int64Array#set<Array<i32>> (; 220 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   block $~lib/internal/typedarray/SET<Int64Array,i64,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -15913,7 +16498,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -15923,7 +16508,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -15937,46 +16522,93 @@
    local.set $0
    local.get $2
    i32.load offset=4
-   local.set $2
+   local.set $4
    local.get $1
-   i32.load
-   local.set $3
+   i32.load offset=4
+   local.set $2
    local.get $1
    i32.load
    i32.load offset=8
    drop
    local.get $1
-   i32.load offset=4
-   i32.const 1
-   i32.sub
-   local.set $1
-   loop $repeat|0
+   i32.load
+   local.tee $5
+   local.get $0
+   i32.eq
+   if
+    local.get $2
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $3
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.const 8
+    i32.add
     local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
+    local.set $1
+    loop $repeat|0
      local.get $1
-     i32.const 4
-     i32.add
-     i32.const 3
-     i32.shl
-     local.get $0
-     i32.add
      local.get $2
-     i32.add
-     local.get $1
-     i32.const 2
-     i32.shl
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 4
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $3
+      i32.add
+      i32.load offset=8
+      i64.extend_i32_s
+      i64.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
      local.get $3
-     i32.add
-     i32.load offset=8
-     i64.extend_i32_s
-     i64.store offset=8
-     local.get $1
-     i32.const 1
-     i32.sub
-     local.set $1
-     br $repeat|0
+     local.get $2
+     i32.lt_s
+     if
+      local.get $3
+      i32.const 4
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $3
+      i32.const 2
+      i32.shl
+      local.get $5
+      i32.add
+      i32.load offset=8
+      i64.extend_i32_s
+      i64.store offset=8
+      local.get $3
+      i32.const 1
+      i32.add
+      local.set $3
+      br $repeat|1
+     end
     end
    end
   end
@@ -15988,7 +16620,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -15998,7 +16630,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -16038,13 +16670,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Int64Array,i64,Float32Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -16054,7 +16687,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -16066,13 +16699,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Int64Array,i64,Float32Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -16081,38 +16708,93 @@
    i32.load offset=8
    i32.const 2
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 7
-     i32.add
-     i32.const 3
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 2
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     f32.load offset=8
-     i64.trunc_f32_s
-     i64.store offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 7
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $2
+      i32.add
+      f32.load offset=8
+      i64.trunc_f32_s
+      i64.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 7
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 2
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      f32.load offset=8
+      i64.trunc_f32_s
+      i64.store offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -16126,7 +16808,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -16136,7 +16818,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -16157,7 +16839,7 @@
    if
     i32.const 936
     i32.const 48
-    i32.const 456
+    i32.const 455
     i32.const 8
     call $~lib/env/abort
     unreachable
@@ -16919,13 +17601,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Uint64Array,u64,Float32Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -16935,7 +17618,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -16947,13 +17630,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Uint64Array,u64,Float32Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -16962,38 +17639,93 @@
    i32.load offset=8
    i32.const 2
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 7
-     i32.add
-     i32.const 3
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 2
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     f32.load offset=8
-     i64.trunc_f32_u
-     i64.store offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 7
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $2
+      i32.add
+      f32.load offset=8
+      i64.trunc_f32_u
+      i64.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 7
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 2
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      f32.load offset=8
+      i64.trunc_f32_u
+      i64.store offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -17716,6 +18448,8 @@
  (func $~lib/typedarray/Float32Array#set<Array<i32>> (; 227 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   block $~lib/internal/typedarray/SET<Float32Array,f32,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -17723,7 +18457,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -17733,7 +18467,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -17747,46 +18481,93 @@
    local.set $0
    local.get $2
    i32.load offset=4
-   local.set $2
+   local.set $4
    local.get $1
-   i32.load
-   local.set $3
+   i32.load offset=4
+   local.set $2
    local.get $1
    i32.load
    i32.load offset=8
    drop
    local.get $1
-   i32.load offset=4
-   i32.const 1
-   i32.sub
-   local.set $1
-   loop $repeat|0
+   i32.load
+   local.tee $5
+   local.get $0
+   i32.eq
+   if
+    local.get $2
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $3
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.const 8
+    i32.add
     local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
+    local.set $1
+    loop $repeat|0
      local.get $1
-     i32.const 4
-     i32.add
-     i32.const 2
-     i32.shl
-     local.get $0
-     i32.add
      local.get $2
-     i32.add
-     local.get $1
-     i32.const 2
-     i32.shl
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 4
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $3
+      i32.add
+      i32.load offset=8
+      f32.convert_i32_s
+      f32.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
      local.get $3
-     i32.add
-     i32.load offset=8
-     f32.convert_i32_s
-     f32.store offset=8
-     local.get $1
-     i32.const 1
-     i32.sub
-     local.set $1
-     br $repeat|0
+     local.get $2
+     i32.lt_s
+     if
+      local.get $3
+      i32.const 4
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $3
+      i32.const 2
+      i32.shl
+      local.get $5
+      i32.add
+      i32.load offset=8
+      f32.convert_i32_s
+      f32.store offset=8
+      local.get $3
+      i32.const 1
+      i32.add
+      local.set $3
+      br $repeat|1
+     end
     end
    end
   end
@@ -17796,13 +18577,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Float32Array,f32,Int64Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -17812,7 +18594,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -17824,13 +18606,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Float32Array,f32,Int64Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -17839,38 +18615,93 @@
    i32.load offset=8
    i32.const 3
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 3
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 3
-     i32.add
-     i32.const 2
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 3
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     i64.load offset=8
-     f32.convert_i64_s
-     f32.store offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 3
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 3
+      i32.shl
+      local.get $2
+      i32.add
+      i64.load offset=8
+      f32.convert_i64_s
+      f32.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 3
+      i32.add
+      i32.const 2
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 3
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      i64.load offset=8
+      f32.convert_i64_s
+      f32.store offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -17884,7 +18715,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -17894,7 +18725,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -17915,7 +18746,7 @@
    if
     i32.const 936
     i32.const 48
-    i32.const 456
+    i32.const 455
     i32.const 8
     call $~lib/env/abort
     unreachable
@@ -18675,6 +19506,8 @@
  (func $~lib/typedarray/Float64Array#set<Array<i32>> (; 231 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   block $~lib/internal/typedarray/SET<Float64Array,f64,Array<i32>>|inlined.0
    local.get $0
    local.tee $2
@@ -18682,7 +19515,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -18692,7 +19525,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -18706,46 +19539,93 @@
    local.set $0
    local.get $2
    i32.load offset=4
-   local.set $2
+   local.set $4
    local.get $1
-   i32.load
-   local.set $3
+   i32.load offset=4
+   local.set $2
    local.get $1
    i32.load
    i32.load offset=8
    drop
    local.get $1
-   i32.load offset=4
-   i32.const 1
-   i32.sub
-   local.set $1
-   loop $repeat|0
+   i32.load
+   local.tee $5
+   local.get $0
+   i32.eq
+   if
+    local.get $2
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $3
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.const 8
+    i32.add
     local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
+    local.set $1
+    loop $repeat|0
      local.get $1
-     i32.const 4
-     i32.add
-     i32.const 3
-     i32.shl
-     local.get $0
-     i32.add
      local.get $2
-     i32.add
-     local.get $1
-     i32.const 2
-     i32.shl
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 4
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $3
+      i32.add
+      i32.load offset=8
+      f64.convert_i32_s
+      f64.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
      local.get $3
-     i32.add
-     i32.load offset=8
-     f64.convert_i32_s
-     f64.store offset=8
-     local.get $1
-     i32.const 1
-     i32.sub
-     local.set $1
-     br $repeat|0
+     local.get $2
+     i32.lt_s
+     if
+      local.get $3
+      i32.const 4
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $3
+      i32.const 2
+      i32.shl
+      local.get $5
+      i32.add
+      i32.load offset=8
+      f64.convert_i32_s
+      f64.store offset=8
+      local.get $3
+      i32.const 1
+      i32.add
+      local.set $3
+      br $repeat|1
+     end
     end
    end
   end
@@ -18755,13 +19635,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Float64Array,f64,Float32Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -18771,7 +19652,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -18783,13 +19664,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Float64Array,f64,Float32Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -18798,38 +19673,93 @@
    i32.load offset=8
    i32.const 2
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 2
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 7
-     i32.add
-     i32.const 3
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 2
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     f32.load offset=8
-     f64.promote_f32
-     f64.store offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 7
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 2
+      i32.shl
+      local.get $2
+      i32.add
+      f32.load offset=8
+      f64.promote_f32
+      f64.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 7
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 2
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      f32.load offset=8
+      f64.promote_f32
+      f64.store offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -18839,13 +19769,14 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   block $~lib/internal/typedarray/SET<Float64Array,f64,Int64Array>|inlined.0
    local.get $0
    i32.eqz
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -18855,7 +19786,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -18867,13 +19798,7 @@
    i32.eqz
    br_if $~lib/internal/typedarray/SET<Float64Array,f64,Int64Array>|inlined.0
    local.get $0
-   i32.load
-   local.set $2
-   local.get $0
    i32.load offset=4
-   local.set $3
-   local.get $1
-   i32.load
    local.set $4
    local.get $1
    i32.load offset=4
@@ -18882,38 +19807,93 @@
    i32.load offset=8
    i32.const 3
    i32.shr_u
-   i32.const 1
-   i32.sub
-   local.set $0
-   loop $repeat|0
-    local.get $0
+   local.set $3
+   local.get $0
+   i32.load
+   local.tee $0
+   local.get $1
+   i32.load
+   local.tee $6
+   i32.eq
+   if
+    local.get $3
+    i32.const 3
+    i32.shl
+    local.tee $1
+    call $~lib/internal/arraybuffer/allocateUnsafe
+    local.tee $2
+    i32.const 8
+    i32.add
+    local.get $6
+    i32.const 8
+    i32.add
+    local.get $5
+    i32.add
+    local.get $1
+    call $~lib/internal/memory/memmove
     i32.const 0
-    i32.ge_s
-    if
-     local.get $0
-     i32.const 3
-     i32.add
-     i32.const 3
-     i32.shl
-     local.get $2
-     i32.add
+    local.set $1
+    loop $repeat|0
+     local.get $1
      local.get $3
-     i32.add
-     local.get $0
-     i32.const 3
-     i32.shl
-     local.get $4
-     i32.add
-     local.get $5
-     i32.add
-     i64.load offset=8
-     f64.convert_i64_s
-     f64.store offset=8
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.set $0
-     br $repeat|0
+     i32.lt_s
+     if
+      local.get $1
+      i32.const 3
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $1
+      i32.const 3
+      i32.shl
+      local.get $2
+      i32.add
+      i64.load offset=8
+      f64.convert_i64_s
+      f64.store offset=8
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $repeat|0
+     end
+    end
+   else    
+    loop $repeat|1
+     local.get $2
+     local.get $3
+     i32.ge_s
+     i32.eqz
+     if
+      local.get $2
+      i32.const 3
+      i32.add
+      i32.const 3
+      i32.shl
+      local.get $0
+      i32.add
+      local.get $4
+      i32.add
+      local.get $2
+      i32.const 3
+      i32.shl
+      local.get $6
+      i32.add
+      local.get $5
+      i32.add
+      i64.load offset=8
+      f64.convert_i64_s
+      f64.store offset=8
+      local.get $2
+      i32.const 1
+      i32.add
+      local.set $2
+      br $repeat|1
+     end
     end
    end
   end
@@ -18927,7 +19907,7 @@
    if
     i32.const 664
     i32.const 48
-    i32.const 242
+    i32.const 243
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -18937,7 +19917,7 @@
    if
     i32.const 720
     i32.const 48
-    i32.const 243
+    i32.const 244
     i32.const 6
     call $~lib/env/abort
     unreachable
@@ -18958,7 +19938,7 @@
    if
     i32.const 936
     i32.const 48
-    i32.const 456
+    i32.const 455
     i32.const 8
     call $~lib/env/abort
     unreachable
