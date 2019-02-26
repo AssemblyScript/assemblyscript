@@ -1,6 +1,5 @@
 (module
  (type $_ (func))
- (type $ii (func (param i32) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -26,104 +25,124 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  local.get $0
-  i32.const 1073741824
-  i32.gt_u
+ (func $simd/test_v128 (; 2 ;) (type $_)
+  v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
+  v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
   if
+   i32.const 0
+   i32.const 8
+   i32.const 13
+   i32.const 2
+   call $~lib/env/abort
    unreachable
   end
-  global.get $~lib/allocator/arena/offset
-  local.set $1
-  local.get $1
-  local.get $0
-  local.tee $2
-  i32.const 1
-  local.tee $3
-  local.get $2
-  local.get $3
-  i32.gt_u
-  select
-  i32.add
-  i32.const 7
-  i32.add
-  i32.const 7
-  i32.const -1
-  i32.xor
-  i32.and
-  local.set $4
-  current_memory
-  local.set $5
-  local.get $4
-  local.get $5
-  i32.const 16
-  i32.shl
-  i32.gt_u
+  v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
+  v128.const i32 0x2 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
+  i8x16.ne
+  i8x16.any_true
+  i32.const 0
+  i32.ne
+  i32.eqz
   if
-   local.get $4
-   local.get $1
-   i32.sub
-   i32.const 65535
-   i32.add
-   i32.const 65535
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.const 16
-   i32.shr_u
-   local.set $2
-   local.get $5
-   local.tee $3
-   local.get $2
-   local.tee $6
-   local.get $3
-   local.get $6
-   i32.gt_s
-   select
-   local.set $3
-   local.get $3
-   grow_memory
    i32.const 0
-   i32.lt_s
-   if
-    local.get $2
-    grow_memory
-    i32.const 0
-    i32.lt_s
-    if
-     unreachable
-    end
-   end
+   i32.const 8
+   i32.const 18
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
   end
-  local.get $4
-  global.set $~lib/allocator/arena/offset
-  local.get $1
- )
- (func $simd/test_v128 (; 3 ;) (type $_)
-  (local $0 i32)
-  (local $1 i32)
-  block $~lib/memory/memory.allocate|inlined.0 (result i32)
-   i32.const 256
-   local.set $0
-   local.get $0
-   call $~lib/allocator/arena/__memory_allocate
-   br $~lib/memory/memory.allocate|inlined.0
+  v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
+  v128.const i32 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1
+  v128.and
+  v128.const i32 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 25
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
   end
-  local.set $1
-  local.get $1
-  local.get $1
-  i32.const 16
-  i32.add
-  v128.load offset=32
-  v128.store offset=64
+  v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
+  v128.const i32 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1
+  v128.or
+  v128.const i32 0x1 0x3 0x3 0x5 0x5 0x7 0x7 0x9 0x9 0xb 0xb 0xd 0xd 0xf 0xf 0x11
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 32
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
+  v128.const i32 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1
+  v128.xor
+  v128.const i32 0x0 0x3 0x2 0x5 0x4 0x7 0x6 0x9 0x8 0xb 0xa 0xd 0xc 0xf 0xe 0x11
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 39
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
+  v128.not
+  v128.const i32 0xfe 0xfd 0xfc 0xfb 0xfa 0xf9 0xf8 0xf7 0xf6 0xf5 0xf4 0xf3 0xf2 0xf1 0xf0 0xef
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 46
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
+  v128.const i32 0x10 0xf 0xe 0xd 0xc 0xb 0xa 0x9 0x8 0x7 0x6 0x5 0x4 0x3 0x2 0x1
+  v128.const i32 0x0 0xff 0x0 0xff 0x0 0xff 0x0 0xff 0x0 0xff 0x0 0xff 0x0 0xff 0x0 0xff
+  v128.bitselect
+  v128.const i32 0x10 0x2 0xe 0x4 0xc 0x6 0xa 0x8 0x8 0xa 0x6 0xc 0x4 0xe 0x2 0x10
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 52
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
  )
- (func $simd/test_i8x16 (; 4 ;) (type $_)
+ (func $simd/test_i8x16 (; 3 ;) (type $_)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -149,7 +168,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 15
+   i32.const 66
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -166,7 +185,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 16
+   i32.const 67
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -181,7 +200,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 17
+   i32.const 68
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -200,7 +219,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 19
+   i32.const 70
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -210,7 +229,7 @@
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
   drop
  )
- (func $simd/test_i16x8 (; 5 ;) (type $_)
+ (func $simd/test_i16x8 (; 4 ;) (type $_)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -236,7 +255,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 27
+   i32.const 78
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -253,7 +272,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 28
+   i32.const 79
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -268,7 +287,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 29
+   i32.const 80
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -287,7 +306,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 31
+   i32.const 82
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -297,7 +316,7 @@
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
   drop
  )
- (func $simd/test_i32x4 (; 6 ;) (type $_)
+ (func $simd/test_i32x4 (; 5 ;) (type $_)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -319,7 +338,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 39
+   i32.const 90
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -332,7 +351,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 40
+   i32.const 91
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -349,7 +368,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 42
+   i32.const 93
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -359,7 +378,7 @@
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
   drop
  )
- (func $simd/test_i64x2 (; 7 ;) (type $_)
+ (func $simd/test_i64x2 (; 6 ;) (type $_)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -381,7 +400,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 50
+   i32.const 101
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -394,7 +413,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 51
+   i32.const 102
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -411,7 +430,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 53
+   i32.const 104
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -421,7 +440,7 @@
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
   drop
  )
- (func $simd/test_f32x4 (; 8 ;) (type $_)
+ (func $simd/test_f32x4 (; 7 ;) (type $_)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -443,7 +462,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 61
+   i32.const 112
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -456,7 +475,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 62
+   i32.const 113
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -473,7 +492,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 64
+   i32.const 115
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -483,7 +502,7 @@
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
   drop
  )
- (func $simd/test_f64x2 (; 9 ;) (type $_)
+ (func $simd/test_f64x2 (; 8 ;) (type $_)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -505,7 +524,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 72
+   i32.const 123
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -518,7 +537,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 73
+   i32.const 124
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -535,7 +554,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 75
+   i32.const 126
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -545,7 +564,7 @@
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
   drop
  )
- (func $simd/test_v8x16 (; 10 ;) (type $_)
+ (func $simd/test_v8x16 (; 9 ;) (type $_)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -567,7 +586,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 83
+   i32.const 134
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -582,7 +601,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 84
+   i32.const 135
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -597,7 +616,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 85
+   i32.const 136
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -612,7 +631,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 86
+   i32.const 137
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -627,7 +646,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 87
+   i32.const 138
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -642,7 +661,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 88
+   i32.const 139
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -657,7 +676,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 89
+   i32.const 140
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -672,7 +691,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 90
+   i32.const 141
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -687,7 +706,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 91
+   i32.const 142
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -702,7 +721,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 92
+   i32.const 143
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -717,7 +736,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 93
+   i32.const 144
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -732,7 +751,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 94
+   i32.const 145
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -747,7 +766,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 95
+   i32.const 146
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -762,7 +781,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 96
+   i32.const 147
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -777,7 +796,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 97
+   i32.const 148
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -792,13 +811,13 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 98
+   i32.const 149
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
  )
- (func $start:simd (; 11 ;) (type $_)
+ (func $start:simd (; 10 ;) (type $_)
   call $start:~lib/allocator/arena
   block
    call $simd/test_v128
@@ -811,9 +830,9 @@
    call $simd/test_v8x16
   end
  )
- (func $start (; 12 ;) (type $_)
+ (func $start (; 11 ;) (type $_)
   call $start:simd
  )
- (func $null (; 13 ;) (type $_)
+ (func $null (; 12 ;) (type $_)
  )
 )
