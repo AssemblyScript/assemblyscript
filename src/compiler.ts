@@ -3198,6 +3198,12 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.createBinary(BinaryOp.EqF64, leftExpr, rightExpr);
             break;
           }
+          case TypeKind.V128: {
+            expr = module.createUnary(UnaryOp.AllTrueVecI8x16,
+              module.createBinary(BinaryOp.EqVecI8x16, leftExpr, rightExpr)
+            );
+            break;
+          }
           default: {
             assert(false);
             expr = module.createUnreachable();
@@ -3284,6 +3290,12 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.F64: {
             expr = module.createBinary(BinaryOp.NeF64, leftExpr, rightExpr);
+            break;
+          }
+          case TypeKind.V128: {
+            expr = module.createUnary(UnaryOp.AllTrueVecI8x16,
+              module.createBinary(BinaryOp.NeVecI8x16, leftExpr, rightExpr)
+            );
             break;
           }
           default: {
