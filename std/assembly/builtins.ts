@@ -314,6 +314,20 @@ export namespace v128 {
   @builtin export declare function sub<T>(a: v128, b: v128): v128;
   @builtin export declare function mul<T>(a: v128, b: v128): v128; // except i64
   @builtin export declare function div<T>(a: v128, b: v128): v128; // f32, f64 only
+  @builtin export declare function neg<T>(a: v128): v128;
+  @builtin export declare function add_saturate<T>(a: v128, b: v128): v128;
+  @builtin export declare function sub_saturate<T>(a: v128, b: v128): v128;
+  @builtin export declare function shl<T>(a: v128, b: i32): v128;
+  @builtin export declare function shr<T>(a: v128, b: i32): v128;
+  @builtin export declare function and(a: v128, b: v128): v128;
+  @builtin export declare function or(a: v128, b: v128): v128;
+  @builtin export declare function xor(a: v128, b: v128): v128;
+  @builtin export declare function not(a: v128): v128;
+  @builtin export declare function bitselect(v1: v128, v2: v128, c: v128): v128;
+  @builtin export declare function any_true<T>(a: v128): bool;
+  @builtin export declare function all_true<T>(a: v128): bool;
+  @builtin export declare function min<T>(a: v128, b: v128): v128; // f32, f64 only
+  @builtin export declare function max<T>(a: v128, b: v128): v128; // f32, f64 only
 }
 
 @builtin export declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -326,6 +340,16 @@ export namespace i8x16 {
   @builtin export declare function add(a: v128, b: v128): v128;
   @builtin export declare function sub(a: v128, b: v128): v128;
   @builtin export declare function mul(a: v128, b: v128): v128;
+  @builtin export declare function neg(a: v128): v128;
+  @builtin export declare function add_saturate_s(a: v128, b: v128): v128;
+  @builtin export declare function add_saturate_u(a: v128, b: v128): v128;
+  @builtin export declare function sub_saturate_s(a: v128, b: v128): v128;
+  @builtin export declare function sub_saturate_u(a: v128, b: v128): v128;
+  @builtin export declare function shl(a: v128, b: i32): v128;
+  @builtin export declare function shr_s(a: v128, b: i32): v128;
+  @builtin export declare function shr_u(a: v128, b: i32): v128;
+  @builtin export declare function any_true(a: v128): bool;
+  @builtin export declare function all_true(a: v128): bool;
 }
 
 @builtin export declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
@@ -338,6 +362,16 @@ export namespace i16x8 {
   @builtin export declare function add(a: v128, b: v128): v128;
   @builtin export declare function sub(a: v128, b: v128): v128;
   @builtin export declare function mul(a: v128, b: v128): v128;
+  @builtin export declare function neg(a: v128): v128;
+  @builtin export declare function add_saturate_s(a: v128, b: v128): v128;
+  @builtin export declare function add_saturate_u(a: v128, b: v128): v128;
+  @builtin export declare function sub_saturate_s(a: v128, b: v128): v128;
+  @builtin export declare function sub_saturate_u(a: v128, b: v128): v128;
+  @builtin export declare function shl(a: v128, b: i32): v128;
+  @builtin export declare function shr_s(a: v128, b: i32): v128;
+  @builtin export declare function shr_u(a: v128, b: i32): v128;
+  @builtin export declare function any_true(a: v128): bool;
+  @builtin export declare function all_true(a: v128): bool;
 }
 
 @builtin export declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -349,6 +383,12 @@ export namespace i32x4 {
   @builtin export declare function add(a: v128, b: v128): v128;
   @builtin export declare function sub(a: v128, b: v128): v128;
   @builtin export declare function mul(a: v128, b: v128): v128;
+  @builtin export declare function neg(a: v128): v128;
+  @builtin export declare function shl(a: v128, b: i32): v128;
+  @builtin export declare function shr_s(a: v128, b: i32): v128;
+  @builtin export declare function shr_u(a: v128, b: i32): v128;
+  @builtin export declare function any_true(a: v128): bool;
+  @builtin export declare function all_true(a: v128): bool;
 }
 
 @builtin export declare function i64x2(a: i64, b: i64): v128;
@@ -360,6 +400,12 @@ export namespace i64x2 {
   @builtin export declare function add(a: v128, b: v128): v128;
   @builtin export declare function sub(a: v128, b: v128): v128;
   @builtin export declare function mul(a: v128, b: v128): v128;
+  @builtin export declare function neg(a: v128): v128;
+  @builtin export declare function shl(a: v128, b: i32): v128;
+  @builtin export declare function shr_s(a: v128, b: i32): v128;
+  @builtin export declare function shr_u(a: v128, b: i32): v128;
+  @builtin export declare function any_true(a: v128): bool;
+  @builtin export declare function all_true(a: v128): bool;
 }
 
 @builtin export declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -372,6 +418,9 @@ export namespace f32x4 {
   @builtin export declare function sub(a: v128, b: v128): v128;
   @builtin export declare function mul(a: v128, b: v128): v128;
   @builtin export declare function div(a: v128, b: v128): v128;
+  @builtin export declare function neg(a: v128): v128;
+  @builtin export declare function min(a: v128, b: v128): v128;
+  @builtin export declare function max(a: v128, b: v128): v128;
 }
 
 @builtin export declare function f64x2(a: f64, b: f64): v128;
@@ -384,6 +433,9 @@ export namespace f64x2 {
   @builtin export declare function sub(a: v128, b: v128): v128;
   @builtin export declare function mul(a: v128, b: v128): v128;
   @builtin export declare function div(a: v128, b: v128): v128;
+  @builtin export declare function neg(a: v128): v128;
+  @builtin export declare function min(a: v128, b: v128): v128;
+  @builtin export declare function max(a: v128, b: v128): v128;
 }
 
 export namespace v8x16 {

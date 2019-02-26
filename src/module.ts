@@ -546,9 +546,10 @@ export class Module {
     signed: bool,
     ptr: ExpressionRef,
     type: NativeType,
-    offset: Index = 0
+    offset: Index = 0,
+    align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
-    return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, /* always aligned */ bytes, type, ptr);
+    return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, align, type, ptr);
   }
 
   createStore(
@@ -556,9 +557,10 @@ export class Module {
     ptr: ExpressionRef,
     value: ExpressionRef,
     type: NativeType,
-    offset: Index = 0
+    offset: Index = 0,
+    align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
-    return _BinaryenStore(this.ref, bytes, offset, /* always aligned */ bytes, ptr, value, type);
+    return _BinaryenStore(this.ref, bytes, offset, align, ptr, value, type);
   }
 
   createAtomicLoad(
