@@ -71,7 +71,15 @@ import {
 import {
   CommonFlags
 } from "./common";
-import { writeI16, writeI8, writeI32, writeF32, writeF64 } from "./util";
+
+import {
+  writeI8,
+  writeI16,
+  writeI32,
+  writeF32,
+  writeF64,
+  isPowerOf2
+} from "./util";
 
 /** Symbols of various compiler built-ins. */
 export namespace BuiltinSymbols {
@@ -1944,8 +1952,28 @@ export function compileCall(
       );
       let offset = operands.length >= 2 ? evaluateConstantOffset(compiler, operands[1]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
-      let align = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : typeArguments[0].byteSize;
-      if (align < 0) return module.createUnreachable();
+      let align: i32;
+      let naturalAlign = typeArguments[0].byteSize;
+      if (operands.length == 3) {
+        align = evaluateConstantOffset(compiler, operands[2]);
+        if (align < 0) return module.createUnreachable();
+        if (align > naturalAlign) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+            operands[2].range, "Alignment", "0", naturalAlign.toString()
+          );
+          return module.createUnreachable();
+        }
+        if (!isPowerOf2(align)) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_power_of_two,
+            operands[2].range, "Alignment"
+          );
+          return module.createUnreachable();
+        }
+      } else {
+        align = naturalAlign;
+      }
       compiler.currentType = typeArguments[0];
       return module.createLoad(
         typeArguments[0].byteSize,
@@ -2024,8 +2052,28 @@ export function compileCall(
       }
       let offset = operands.length >= 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
-      let align = operands.length == 4 ? evaluateConstantOffset(compiler, operands[3]) : typeArguments[0].byteSize;
-      if (align < 0) return module.createUnreachable();
+      let align: i32;
+      let naturalAlign = typeArguments[0].byteSize;
+      if (operands.length == 4) {
+        align = evaluateConstantOffset(compiler, operands[3]);
+        if (align < 0) return module.createUnreachable();
+        if (align > naturalAlign) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+            operands[3].range, "Alignment", "0", naturalAlign.toString()
+          );
+          return module.createUnreachable();
+        }
+        if (!isPowerOf2(align)) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_power_of_two,
+            operands[3].range, "Alignment"
+          );
+          return module.createUnreachable();
+        }
+      } else {
+        align = naturalAlign;
+      }
       compiler.currentType = Type.void;
       return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset, align);
     }
