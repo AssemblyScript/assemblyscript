@@ -1,0 +1,10 @@
+{
+  "simd": {
+    "asc_flags": [
+      "--enable simd"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-simd"
+    ]
+  }
+}

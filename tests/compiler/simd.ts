@@ -100,11 +100,11 @@ function test_v8x16(): void {
 
 if (ASC_FEATURE_SIMD) {
   test_v128();
-  test_i8x16();
-  test_i16x8();
-  test_i32x4();
-  test_i64x2();
-  test_f32x4();
-  test_f64x2();
-  test_v8x16();
+  // test_i8x16();
+  // test_i16x8();
+  // test_i32x4();
+  // test_i64x2();
+  // test_f32x4();
+  // test_f64x2();
+  // test_v8x16();
 }
