@@ -55,6 +55,8 @@ export const enum TypeKind {
   F64,
 
   // vectors
+
+  /** A 128-bit vector. */
   V128,
 
   // other
@@ -97,6 +99,8 @@ export class Type {
 
   /** Type kind. */
   kind: TypeKind;
+  /** Subtype, if a vector. */
+  subType: Type = Type.void;
   /** Type flags. */
   flags: TypeFlags;
   /** Size in bits. */
@@ -195,6 +199,14 @@ export class Type {
       this.cachedNullableType.signatureReference = this.signatureReference; // or a function reference
     }
     return this.cachedNullableType;
+  }
+
+  /** Composes a sub-type of the specified sub-kind of this type. */
+  private asSubType(subType: Type): Type {
+    assert(this.is(TypeFlags.VECTOR));
+    var ret = new Type(this.kind, this.flags, this.size);
+    ret.subType = subType;
+    return ret;
   }
 
   /** Tests if a value of this type is assignable to a target of the specified type. */
@@ -492,6 +504,36 @@ export class Type {
     TypeFlags.VECTOR   |
     TypeFlags.VALUE, 128
   );
+
+  /** A 128-bit vector interpreted as sixteen signed 8-bit integer lanes. */
+  static readonly i8x16: Type = Type.v128.asSubType(Type.i8);
+
+  /** A 128-bit vector interpreted as sixteen unsigned 8-bit integer lanes. */
+  static readonly u8x16: Type = Type.v128.asSubType(Type.u8);
+
+  /** A 128-bit vector interpreted as eight signed 16-bit integer lanes. */
+  static readonly i16x8: Type = Type.v128.asSubType(Type.i16);
+
+  /** A 128-bit vector interpreted as eight unsigned 16-bit integer lanes. */
+  static readonly u16x8: Type = Type.v128.asSubType(Type.u16);
+
+  /** A 128-bit vector interpreted as four signed 32-bit integer lanes. */
+  static readonly i32x4: Type = Type.v128.asSubType(Type.i32);
+
+  /** A 128-bit vector interpreted as four unsigned 32-bit integer lanes. */
+  static readonly u32x4: Type = Type.v128.asSubType(Type.u32);
+
+  /** A 128-bit vector interpreted as two signed 64-bit integer lanes. */
+  static readonly i64x2: Type = Type.v128.asSubType(Type.i64);
+
+  /** A 128-bit vector interpreted as two unsigned 64-bit integer lanes. */
+  static readonly u64x2: Type = Type.v128.asSubType(Type.u64);
+
+  /** A 128-bit vector interpreted as four 32-bit float lanes. */
+  static readonly f32x4: Type = Type.v128.asSubType(Type.f32);
+
+  /** A 128-bit vector interpreted as two 64-bit float lanes. */
+  static readonly f64x2: Type = Type.v128.asSubType(Type.f64);
 
   /** No return type. */
   static readonly void: Type = new Type(TypeKind.VOID, TypeFlags.NONE, 0);

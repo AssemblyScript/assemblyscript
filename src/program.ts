@@ -501,7 +501,19 @@ export class Program extends DiagnosticEmitter {
       this.makeNativeTypeDeclaration(CommonSymbols.native, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
-    if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonSymbols.v128, Type.v128);
+    if (options.hasFeature(Feature.SIMD)) {
+      this.registerNativeType(CommonSymbols.v128, Type.v128);
+      this.registerNativeType(CommonSymbols.i8x16, Type.i8x16);
+      this.registerNativeType(CommonSymbols.u8x16, Type.u8x16);
+      this.registerNativeType(CommonSymbols.i16x8, Type.i16x8);
+      this.registerNativeType(CommonSymbols.u16x8, Type.u16x8);
+      this.registerNativeType(CommonSymbols.i32x4, Type.i32x4);
+      this.registerNativeType(CommonSymbols.u32x4, Type.u32x4);
+      this.registerNativeType(CommonSymbols.i64x2, Type.i64x2);
+      this.registerNativeType(CommonSymbols.u64x2, Type.u64x2);
+      this.registerNativeType(CommonSymbols.f32x4, Type.f32x4);
+      this.registerNativeType(CommonSymbols.f64x2, Type.f64x2);
+    }
 
     // register compiler hints
     this.registerConstantInteger(LibrarySymbols.ASC_TARGET, Type.i32,

@@ -120,6 +120,16 @@ export namespace CommonSymbols {
   export const f32 = "f32";
   export const f64 = "f64";
   export const v128 = "v128";
+  export const i8x16 = "i8x16";
+  export const u8x16 = "u8x16";
+  export const i16x8 = "i16x8";
+  export const u16x8 = "u16x8";
+  export const i32x4 = "i32x4";
+  export const u32x4 = "u32x4";
+  export const i64x2 = "i64x2";
+  export const u64x2 = "u64x2";
+  export const f32x4 = "f32x4";
+  export const f64x2 = "f64x2";
   export const void_ = "void";
   export const number = "number";
   export const boolean = "boolean";
