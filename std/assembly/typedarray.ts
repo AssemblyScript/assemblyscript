@@ -136,6 +136,20 @@ export class Uint8ClampedArray extends Uint8Array {
     return SUBARRAY<Uint8ClampedArray, u8>(this, begin, end);
   }
 
+  reduce<T>(
+    callbackfn: (accumulator: T, value: u8, index: i32, array: Uint8ClampedArray) => T,
+    initialValue: T,
+  ): T {
+    return REDUCE<Uint8ClampedArray, u8, T>(this, callbackfn, initialValue);
+  }
+
+  reduceRight<T>(
+    callbackfn: (accumulator: T, value: u8, index: i32, array: Uint8ClampedArray) => T,
+    initialValue: T,
+  ): T {
+    return REDUCE_RIGHT<Uint8ClampedArray, u8, T>(this, callbackfn, initialValue);
+  }
+
   map(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => u8): Uint8ClampedArray {
     return MAP<Uint8ClampedArray, u8>(this, callbackfn);
   }

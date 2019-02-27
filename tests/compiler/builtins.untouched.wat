@@ -7,7 +7,7 @@
  (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s\00")
  (data (i32.const 40) "\01\00\00\001\00")
  (table $0 2 funcref)
- (elem (i32.const 0) $null $start:builtins~anonymous|1)
+ (elem (i32.const 0) $null $start:builtins~anonymous|0)
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
@@ -53,7 +53,7 @@
  (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $start:builtins~anonymous|1 (; 1 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $start:builtins~anonymous|0 (; 1 ;) (type $ii_) (param $0 i32) (param $1 i32)
   nop
  )
  (func $start:builtins (; 2 ;) (type $_)
