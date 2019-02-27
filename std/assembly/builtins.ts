@@ -328,6 +328,14 @@ export namespace v128 {
   @builtin export declare function all_true<T>(a: v128): bool;
   @builtin export declare function min<T>(a: v128, b: v128): v128; // f32, f64 only
   @builtin export declare function max<T>(a: v128, b: v128): v128; // f32, f64 only
+  @builtin export declare function abs<T>(a: v128): v128; // f32, f64 only
+  @builtin export declare function sqrt<T>(a: v128): v128; // f32, f64 only
+  @builtin export declare function eq<T>(a: v128, b: v128): v128;
+  @builtin export declare function ne<T>(a: v128, b: v128): v128;
+  @builtin export declare function lt<T>(a: v128, b: v128): v128;
+  @builtin export declare function le<T>(a: v128, b: v128): v128;
+  @builtin export declare function gt<T>(a: v128, b: v128): v128;
+  @builtin export declare function ge<T>(a: v128, b: v128): v128;
 }
 
 @builtin export declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -350,6 +358,16 @@ export namespace i8x16 {
   @builtin export declare function shr_u(a: v128, b: i32): v128;
   @builtin export declare function any_true(a: v128): bool;
   @builtin export declare function all_true(a: v128): bool;
+  @builtin export declare function eq(a: v128, b: v128): v128;
+  @builtin export declare function ne(a: v128, b: v128): v128;
+  @builtin export declare function lt_s(a: v128, b: v128): v128;
+  @builtin export declare function lt_u(a: v128, b: v128): v128;
+  @builtin export declare function le_s(a: v128, b: v128): v128;
+  @builtin export declare function le_u(a: v128, b: v128): v128;
+  @builtin export declare function gt_s(a: v128, b: v128): v128;
+  @builtin export declare function gt_u(a: v128, b: v128): v128;
+  @builtin export declare function ge_s(a: v128, b: v128): v128;
+  @builtin export declare function ge_u(a: v128, b: v128): v128;
 }
 
 @builtin export declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
@@ -372,6 +390,16 @@ export namespace i16x8 {
   @builtin export declare function shr_u(a: v128, b: i32): v128;
   @builtin export declare function any_true(a: v128): bool;
   @builtin export declare function all_true(a: v128): bool;
+  @builtin export declare function eq(a: v128, b: v128): v128;
+  @builtin export declare function ne(a: v128, b: v128): v128;
+  @builtin export declare function lt_s(a: v128, b: v128): v128;
+  @builtin export declare function lt_u(a: v128, b: v128): v128;
+  @builtin export declare function le_s(a: v128, b: v128): v128;
+  @builtin export declare function le_u(a: v128, b: v128): v128;
+  @builtin export declare function gt_s(a: v128, b: v128): v128;
+  @builtin export declare function gt_u(a: v128, b: v128): v128;
+  @builtin export declare function ge_s(a: v128, b: v128): v128;
+  @builtin export declare function ge_u(a: v128, b: v128): v128;
 }
 
 @builtin export declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -389,6 +417,16 @@ export namespace i32x4 {
   @builtin export declare function shr_u(a: v128, b: i32): v128;
   @builtin export declare function any_true(a: v128): bool;
   @builtin export declare function all_true(a: v128): bool;
+  @builtin export declare function eq(a: v128, b: v128): v128;
+  @builtin export declare function ne(a: v128, b: v128): v128;
+  @builtin export declare function lt_s(a: v128, b: v128): v128;
+  @builtin export declare function lt_u(a: v128, b: v128): v128;
+  @builtin export declare function le_s(a: v128, b: v128): v128;
+  @builtin export declare function le_u(a: v128, b: v128): v128;
+  @builtin export declare function gt_s(a: v128, b: v128): v128;
+  @builtin export declare function gt_u(a: v128, b: v128): v128;
+  @builtin export declare function ge_s(a: v128, b: v128): v128;
+  @builtin export declare function ge_u(a: v128, b: v128): v128;
 }
 
 @builtin export declare function i64x2(a: i64, b: i64): v128;
@@ -421,6 +459,14 @@ export namespace f32x4 {
   @builtin export declare function neg(a: v128): v128;
   @builtin export declare function min(a: v128, b: v128): v128;
   @builtin export declare function max(a: v128, b: v128): v128;
+  @builtin export declare function abs(a: v128): v128;
+  @builtin export declare function sqrt(a: v128): v128;
+  @builtin export declare function eq(a: v128, b: v128): v128;
+  @builtin export declare function ne(a: v128, b: v128): v128;
+  @builtin export declare function lt(a: v128, b: v128): v128;
+  @builtin export declare function le(a: v128, b: v128): v128;
+  @builtin export declare function gt(a: v128, b: v128): v128;
+  @builtin export declare function ge(a: v128, b: v128): v128;
 }
 
 @builtin export declare function f64x2(a: f64, b: f64): v128;
@@ -436,6 +482,14 @@ export namespace f64x2 {
   @builtin export declare function neg(a: v128): v128;
   @builtin export declare function min(a: v128, b: v128): v128;
   @builtin export declare function max(a: v128, b: v128): v128;
+  @builtin export declare function abs(a: v128): v128;
+  @builtin export declare function sqrt(a: v128): v128;
+  @builtin export declare function eq(a: v128, b: v128): v128;
+  @builtin export declare function ne(a: v128, b: v128): v128;
+  @builtin export declare function lt(a: v128, b: v128): v128;
+  @builtin export declare function le(a: v128, b: v128): v128;
+  @builtin export declare function gt(a: v128, b: v128): v128;
+  @builtin export declare function ge(a: v128, b: v128): v128;
 }
 
 export namespace v8x16 {

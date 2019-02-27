@@ -302,6 +302,14 @@ export namespace BuiltinSymbols {
   export const v128_all_true = "~lib/builtins/v128.all_true";
   export const v128_min = "~lib/builtins/v128.min";
   export const v128_max = "~lib/builtins/v128.max";
+  export const v128_abs = "~lib/builtins/v128.abs";
+  export const v128_sqrt = "~lib/builtins/v128.sqrt";
+  export const v128_eq = "~lib/builtins/v128.eq";
+  export const v128_ne = "~lib/builtins/v128.ne";
+  export const v128_lt = "~lib/builtins/v128.lt";
+  export const v128_le = "~lib/builtins/v128.le";
+  export const v128_gt = "~lib/builtins/v128.gt";
+  export const v128_ge = "~lib/builtins/v128.ge";
 
   export const i8x16 = "~lib/builtins/i8x16";
   export const i16x8 = "~lib/builtins/i16x8";
@@ -328,6 +336,16 @@ export namespace BuiltinSymbols {
   export const i8x16_shr_u = "~lib/builtins/i8x16.shr_u";
   export const i8x16_any_true = "~lib/builtins/i8x16.any_true";
   export const i8x16_all_true = "~lib/builtins/i8x16.all_true";
+  export const i8x16_eq = "~lib/builtins/i8x16.eq";
+  export const i8x16_ne = "~lib/builtins/i8x16.ne";
+  export const i8x16_lt_s = "~lib/builtins/i8x16.lt_s";
+  export const i8x16_lt_u = "~lib/builtins/i8x16.lt_u";
+  export const i8x16_le_s = "~lib/builtins/i8x16.le_s";
+  export const i8x16_le_u = "~lib/builtins/i8x16.le_u";
+  export const i8x16_gt_s = "~lib/builtins/i8x16.gt_s";
+  export const i8x16_gt_u = "~lib/builtins/i8x16.gt_u";
+  export const i8x16_ge_s = "~lib/builtins/i8x16.ge_s";
+  export const i8x16_ge_u = "~lib/builtins/i8x16.ge_u";
 
   export const i16x8_splat = "~lib/builtins/i16x8.splat";
   export const i16x8_extract_lane_s = "~lib/builtins/i16x8.extract_lane_s";
@@ -347,6 +365,16 @@ export namespace BuiltinSymbols {
   export const i16x8_shr_u = "~lib/builtins/i16x8.shr_u";
   export const i16x8_any_true = "~lib/builtins/i16x8.any_true";
   export const i16x8_all_true = "~lib/builtins/i16x8.all_true";
+  export const i16x8_eq = "~lib/builtins/i16x8.eq";
+  export const i16x8_ne = "~lib/builtins/i16x8.ne";
+  export const i16x8_lt_s = "~lib/builtins/i16x8.lt_s";
+  export const i16x8_lt_u = "~lib/builtins/i16x8.lt_u";
+  export const i16x8_le_s = "~lib/builtins/i16x8.le_s";
+  export const i16x8_le_u = "~lib/builtins/i16x8.le_u";
+  export const i16x8_gt_s = "~lib/builtins/i16x8.gt_s";
+  export const i16x8_gt_u = "~lib/builtins/i16x8.gt_u";
+  export const i16x8_ge_s = "~lib/builtins/i16x8.ge_s";
+  export const i16x8_ge_u = "~lib/builtins/i16x8.ge_u";
 
   export const i32x4_splat = "~lib/builtins/i32x4.splat";
   export const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
@@ -361,6 +389,16 @@ export namespace BuiltinSymbols {
   export const i32x4_shr_u = "~lib/builtins/i32x4.shr_u";
   export const i32x4_any_true = "~lib/builtins/i32x4.any_true";
   export const i32x4_all_true = "~lib/builtins/i32x4.all_true";
+  export const i32x4_eq = "~lib/builtins/i32x4.eq";
+  export const i32x4_ne = "~lib/builtins/i32x4.ne";
+  export const i32x4_lt_s = "~lib/builtins/i32x4.lt_s";
+  export const i32x4_lt_u = "~lib/builtins/i32x4.lt_u";
+  export const i32x4_le_s = "~lib/builtins/i32x4.le_s";
+  export const i32x4_le_u = "~lib/builtins/i32x4.le_u";
+  export const i32x4_gt_s = "~lib/builtins/i32x4.gt_s";
+  export const i32x4_gt_u = "~lib/builtins/i32x4.gt_u";
+  export const i32x4_ge_s = "~lib/builtins/i32x4.ge_s";
+  export const i32x4_ge_u = "~lib/builtins/i32x4.ge_u";
 
   export const i64x2_splat = "~lib/builtins/i64x2.splat";
   export const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
@@ -373,7 +411,7 @@ export namespace BuiltinSymbols {
   export const i64x2_shr_s = "~lib/builtins/i64x2.shr_s";
   export const i64x2_shr_u = "~lib/builtins/i64x2.shr_u";
   export const i64x2_any_true = "~lib/builtins/i64x2.any_true";
-  export const i64x2_all_true = "~lib/builtins/i64x2.all_true";
+  export const i64x2_all_true = "~lib/builtins/i64x2.all_true"; // i64x2 has no .eq etc.
 
   export const f32x4_splat = "~lib/builtins/f32x4.splat";
   export const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
@@ -386,6 +424,14 @@ export namespace BuiltinSymbols {
   export const f32x4_neg = "~lib/builtins/f32x4.neg";
   export const f32x4_min = "~lib/builtins/f32x4.min";
   export const f32x4_max = "~lib/builtins/f32x4.max";
+  export const f32x4_abs = "~lib/builtins/f32x4.abs";
+  export const f32x4_sqrt = "~lib/builtins/f32x4.sqrt";
+  export const f32x4_eq = "~lib/builtins/f32x4.eq";
+  export const f32x4_ne = "~lib/builtins/f32x4.ne";
+  export const f32x4_lt = "~lib/builtins/f32x4.lt";
+  export const f32x4_le = "~lib/builtins/f32x4.le";
+  export const f32x4_gt = "~lib/builtins/f32x4.gt";
+  export const f32x4_ge = "~lib/builtins/f32x4.ge";
 
   export const f64x2_splat = "~lib/builtins/f64x2.splat";
   export const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
@@ -398,6 +444,14 @@ export namespace BuiltinSymbols {
   export const f64x2_neg = "~lib/builtins/f64x2.neg";
   export const f64x2_min = "~lib/builtins/f64x2.min";
   export const f64x2_max = "~lib/builtins/f64x2.max";
+  export const f64x2_abs = "~lib/builtins/f64x2.abs";
+  export const f64x2_sqrt = "~lib/builtins/f64x2.sqrt";
+  export const f64x2_eq = "~lib/builtins/f64x2.eq";
+  export const f64x2_ne = "~lib/builtins/f64x2.ne";
+  export const f64x2_lt = "~lib/builtins/f64x2.lt";
+  export const f64x2_le = "~lib/builtins/f64x2.le";
+  export const f64x2_gt = "~lib/builtins/f64x2.gt";
+  export const f64x2_ge = "~lib/builtins/f64x2.ge";
 
   export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
 
@@ -4858,6 +4912,426 @@ export function compileCall(
       compiler.currentType = Type.v128;
       return module.createBinary(op, arg0, arg1);
     }
+    case BuiltinSymbols.v128_abs: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: UnaryOp;
+      switch (type.kind) {
+        case TypeKind.F32: { op = UnaryOp.AbsVecF32x4; break; }
+        case TypeKind.F64: { op = UnaryOp.AbsVecF64x2; break; }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createUnary(op, arg0);
+    }
+    case BuiltinSymbols.v128_sqrt: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: UnaryOp;
+      switch (type.kind) {
+        case TypeKind.F32: { op = UnaryOp.SqrtVecF32x4; break; }
+        case TypeKind.F64: { op = UnaryOp.SqrtVecF64x2; break; }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createUnary(op, arg0);
+    }
+    case BuiltinSymbols.v128_eq: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: BinaryOp;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8:  { op = BinaryOp.EqVecI8x16; break; }
+        case TypeKind.I16:
+        case TypeKind.U16: { op = BinaryOp.EqVecI16x8; break; }
+        case TypeKind.I32:
+        case TypeKind.U32: { op = BinaryOp.EqVecI32x4; break; }
+        case TypeKind.F32: { op = BinaryOp.EqVecF32x4; break; }
+        case TypeKind.F64: { op = BinaryOp.EqVecF64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          if (!compiler.options.isWasm64) {
+            op = BinaryOp.EqVecI32x4;
+            break;
+          }
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(op, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_ne: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: BinaryOp;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8:  { op = BinaryOp.NeVecI8x16; break; }
+        case TypeKind.I16:
+        case TypeKind.U16: { op = BinaryOp.NeVecI16x8; break; }
+        case TypeKind.I32:
+        case TypeKind.U32: { op = BinaryOp.NeVecI32x4; break; }
+        case TypeKind.F32: { op = BinaryOp.NeVecF32x4; break; }
+        case TypeKind.F64: { op = BinaryOp.NeVecF64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          if (!compiler.options.isWasm64) {
+            op = BinaryOp.NeVecI32x4;
+            break;
+          }
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(op, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_lt: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: BinaryOp;
+      switch (type.kind) {
+        case TypeKind.I8:  { op = BinaryOp.LtSVecI8x16; break; }
+        case TypeKind.U8:  { op = BinaryOp.LtUVecI8x16; break; }
+        case TypeKind.I16: { op = BinaryOp.LtSVecI16x8; break; }
+        case TypeKind.U16: { op = BinaryOp.LtUVecI16x8; break; }
+        case TypeKind.I32: { op = BinaryOp.LtSVecI32x4; break; }
+        case TypeKind.U32: { op = BinaryOp.LtUVecI32x4; break; }
+        case TypeKind.F32: { op = BinaryOp.LtVecF32x4; break; }
+        case TypeKind.F64: { op = BinaryOp.LtVecF64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          if (!compiler.options.isWasm64) {
+            op = type.kind == TypeKind.ISIZE
+              ? BinaryOp.LtSVecI32x4
+              : BinaryOp.LtUVecI32x4;
+            break;
+          }
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(op, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_le: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: BinaryOp;
+      switch (type.kind) {
+        case TypeKind.I8:  { op = BinaryOp.LeSVecI8x16; break; }
+        case TypeKind.U8:  { op = BinaryOp.LeUVecI8x16; break; }
+        case TypeKind.I16: { op = BinaryOp.LeSVecI16x8; break; }
+        case TypeKind.U16: { op = BinaryOp.LeUVecI16x8; break; }
+        case TypeKind.I32: { op = BinaryOp.LeSVecI32x4; break; }
+        case TypeKind.U32: { op = BinaryOp.LeUVecI32x4; break; }
+        case TypeKind.F32: { op = BinaryOp.LeVecF32x4; break; }
+        case TypeKind.F64: { op = BinaryOp.LeVecF64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          if (!compiler.options.isWasm64) {
+            op = type.kind == TypeKind.ISIZE
+              ? BinaryOp.LeSVecI32x4
+              : BinaryOp.LeUVecI32x4;
+            break;
+          }
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(op, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_gt: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: BinaryOp;
+      switch (type.kind) {
+        case TypeKind.I8:  { op = BinaryOp.GtSVecI8x16; break; }
+        case TypeKind.U8:  { op = BinaryOp.GtUVecI8x16; break; }
+        case TypeKind.I16: { op = BinaryOp.GtSVecI16x8; break; }
+        case TypeKind.U16: { op = BinaryOp.GtUVecI16x8; break; }
+        case TypeKind.I32: { op = BinaryOp.GtSVecI32x4; break; }
+        case TypeKind.U32: { op = BinaryOp.GtUVecI32x4; break; }
+        case TypeKind.F32: { op = BinaryOp.GtVecF32x4; break; }
+        case TypeKind.F64: { op = BinaryOp.GtVecF64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          if (!compiler.options.isWasm64) {
+            op = type.kind == TypeKind.ISIZE
+              ? BinaryOp.GtSVecI32x4
+              : BinaryOp.GtUVecI32x4;
+            break;
+          }
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(op, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_ge: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      compiler.currentType = Type.v128;
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        return module.createUnreachable();
+      }
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "2", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      let type = typeArguments[0];
+      if (!type.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let op: BinaryOp;
+      switch (type.kind) {
+        case TypeKind.I8:  { op = BinaryOp.GeSVecI8x16; break; }
+        case TypeKind.U8:  { op = BinaryOp.GeUVecI8x16; break; }
+        case TypeKind.I16: { op = BinaryOp.GeSVecI16x8; break; }
+        case TypeKind.U16: { op = BinaryOp.GeUVecI16x8; break; }
+        case TypeKind.I32: { op = BinaryOp.GeSVecI32x4; break; }
+        case TypeKind.U32: { op = BinaryOp.GeUVecI32x4; break; }
+        case TypeKind.F32: { op = BinaryOp.GeVecF32x4; break; }
+        case TypeKind.F64: { op = BinaryOp.GeVecF64x2; break; }
+        case TypeKind.ISIZE:
+        case TypeKind.USIZE: {
+          if (!compiler.options.isWasm64) {
+            op = type.kind == TypeKind.ISIZE
+              ? BinaryOp.GeSVecI32x4
+              : BinaryOp.GeUVecI32x4;
+            break;
+          }
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.range
+          );
+          return module.createUnreachable();
+        }
+      }
+      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createBinary(op, arg0, arg1);
+    }
 
     // === GC integration =========================================================================
 
@@ -5094,6 +5568,16 @@ function deferASMCall(
       case BuiltinSymbols.i8x16_shr_u: return deferASM(BuiltinSymbols.v128_shr, compiler, Type.u8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i8x16_any_true: return deferASM(BuiltinSymbols.v128_any_true, compiler, Type.i8, operands, Type.i32, reportNode);
       case BuiltinSymbols.i8x16_all_true: return deferASM(BuiltinSymbols.v128_all_true, compiler, Type.i8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i8x16_eq: return deferASM(BuiltinSymbols.v128_eq, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_ne: return deferASM(BuiltinSymbols.v128_ne, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_lt_s: return deferASM(BuiltinSymbols.v128_lt, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_lt_u: return deferASM(BuiltinSymbols.v128_lt, compiler, Type.u8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_le_s: return deferASM(BuiltinSymbols.v128_le, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_le_u: return deferASM(BuiltinSymbols.v128_le, compiler, Type.u8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_gt_s: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_gt_u: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.u8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_ge_s: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_ge_u: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.u8, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.i16x8_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_extract_lane_s: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i16, operands, Type.i16, reportNode);
@@ -5113,6 +5597,16 @@ function deferASMCall(
       case BuiltinSymbols.i16x8_shr_u: return deferASM(BuiltinSymbols.v128_shr, compiler, Type.u16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_any_true: return deferASM(BuiltinSymbols.v128_any_true, compiler, Type.i16, operands, Type.i32, reportNode);
       case BuiltinSymbols.i16x8_all_true: return deferASM(BuiltinSymbols.v128_all_true, compiler, Type.i16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i16x8_eq: return deferASM(BuiltinSymbols.v128_eq, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_ne: return deferASM(BuiltinSymbols.v128_ne, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_lt_s: return deferASM(BuiltinSymbols.v128_lt, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_lt_u: return deferASM(BuiltinSymbols.v128_lt, compiler, Type.u16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_le_s: return deferASM(BuiltinSymbols.v128_le, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_le_u: return deferASM(BuiltinSymbols.v128_le, compiler, Type.u16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_gt_s: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_gt_u: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.u16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_ge_s: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_ge_u: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.u16, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.i32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i32, operands, Type.i32, reportNode);
@@ -5127,6 +5621,16 @@ function deferASMCall(
       case BuiltinSymbols.i32x4_shr_u: return deferASM(BuiltinSymbols.v128_shr, compiler, Type.u32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_any_true: return deferASM(BuiltinSymbols.v128_any_true, compiler, Type.i32, operands, Type.i32, reportNode);
       case BuiltinSymbols.i32x4_all_true: return deferASM(BuiltinSymbols.v128_all_true, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32x4_eq: return deferASM(BuiltinSymbols.v128_eq, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_ne: return deferASM(BuiltinSymbols.v128_ne, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_lt_s: return deferASM(BuiltinSymbols.v128_lt, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_lt_u: return deferASM(BuiltinSymbols.v128_lt, compiler, Type.u32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_le_s: return deferASM(BuiltinSymbols.v128_le, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_le_u: return deferASM(BuiltinSymbols.v128_le, compiler, Type.u32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_gt_s: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_gt_u: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.u32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_ge_s: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_ge_u: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.u32, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.i64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.i64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i64, operands, Type.i64, reportNode);
@@ -5152,6 +5656,14 @@ function deferASMCall(
       case BuiltinSymbols.f32x4_neg: return deferASM(BuiltinSymbols.v128_neg, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_min: return deferASM(BuiltinSymbols.v128_min, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_max: return deferASM(BuiltinSymbols.v128_max, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_abs: return deferASM(BuiltinSymbols.v128_abs, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_sqrt: return deferASM(BuiltinSymbols.v128_sqrt, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_eq: return deferASM(BuiltinSymbols.v128_eq, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_ne: return deferASM(BuiltinSymbols.v128_ne, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_lt: return deferASM(BuiltinSymbols.v128_lt, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_le: return deferASM(BuiltinSymbols.v128_le, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_gt: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.f32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_ge: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.f32, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.f64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f64, operands, Type.f64, reportNode);
@@ -5164,6 +5676,14 @@ function deferASMCall(
       case BuiltinSymbols.f64x2_neg: return deferASM(BuiltinSymbols.v128_neg, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_min: return deferASM(BuiltinSymbols.v128_min, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_max: return deferASM(BuiltinSymbols.v128_max, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_abs: return deferASM(BuiltinSymbols.v128_abs, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_sqrt: return deferASM(BuiltinSymbols.v128_sqrt, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_eq: return deferASM(BuiltinSymbols.v128_eq, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_ne: return deferASM(BuiltinSymbols.v128_ne, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_lt: return deferASM(BuiltinSymbols.v128_lt, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_le: return deferASM(BuiltinSymbols.v128_le, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_gt: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.f64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_ge: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.f64, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.v8x16_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i8, operands, Type.v128, reportNode);
     }
