@@ -336,6 +336,8 @@ export namespace v128 {
   @builtin export declare function le<T>(a: v128, b: v128): v128;
   @builtin export declare function gt<T>(a: v128, b: v128): v128;
   @builtin export declare function ge<T>(a: v128, b: v128): v128;
+  @builtin export declare function convert<T>(a: v128): v128;
+  @builtin export declare function trunc<T>(a: v128): v128;
 }
 
 @builtin export declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -427,6 +429,8 @@ export namespace i32x4 {
   @builtin export declare function gt_u(a: v128, b: v128): v128;
   @builtin export declare function ge_s(a: v128, b: v128): v128;
   @builtin export declare function ge_u(a: v128, b: v128): v128;
+  @builtin export declare function trunc_s_f32x4_sat(a: v128): v128;
+  @builtin export declare function trunc_u_f32x4_sat(a: v128): v128;
 }
 
 @builtin export declare function i64x2(a: i64, b: i64): v128;
@@ -444,6 +448,8 @@ export namespace i64x2 {
   @builtin export declare function shr_u(a: v128, b: i32): v128;
   @builtin export declare function any_true(a: v128): bool;
   @builtin export declare function all_true(a: v128): bool;
+  @builtin export declare function trunc_s_f64x2_sat(a: v128): v128;
+  @builtin export declare function trunc_u_f64x2_sat(a: v128): v128;
 }
 
 @builtin export declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -467,6 +473,8 @@ export namespace f32x4 {
   @builtin export declare function le(a: v128, b: v128): v128;
   @builtin export declare function gt(a: v128, b: v128): v128;
   @builtin export declare function ge(a: v128, b: v128): v128;
+  @builtin export declare function convert_s_i32x4(a: v128): v128;
+  @builtin export declare function convert_u_i32x4(a: v128): v128;
 }
 
 @builtin export declare function f64x2(a: f64, b: f64): v128;
@@ -490,6 +498,8 @@ export namespace f64x2 {
   @builtin export declare function le(a: v128, b: v128): v128;
   @builtin export declare function gt(a: v128, b: v128): v128;
   @builtin export declare function ge(a: v128, b: v128): v128;
+  @builtin export declare function convert_s_i64x2(a: v128): v128;
+  @builtin export declare function convert_u_i64x2(a: v128): v128;
 }
 
 export namespace v8x16 {
