@@ -330,37 +330,37 @@ declare namespace v128 {
   export function load(offset: usize, constantOffset?: usize, constantAlign?: usize): v128;
   /** Stores a 128-bit vector to memory. */
   export function store(offset: usize, value: v128, constantOffset?: usize, constantAlign?: usize): void;
-  /** Adds all lanes of two 128-bit vectors. */
+  /** Adds each lane of two 128-bit vectors. */
   export function add<T>(a: v128, b: v128): v128;
-  /** Subtracts all lanes of two 128-bit vectors. */
+  /** Subtracts each lane of two 128-bit vectors. */
   export function sub<T>(a: v128, b: v128): v128;
-  /** Multiplies all lanes of two 128-bit vectors. */
+  /** Multiplies each lane of two 128-bit vectors. */
   export function mul<T>(a: v128, b: v128): v128; // except i64
-  /** Divides all lanes of two 128-bit vectors. */
+  /** Divides each lane of two 128-bit vectors. */
   export function div<T = f32 | f64>(a: v128, b: v128): v128;
-  /** Negates all lanes of a 128-bit vector */
+  /** Negates each lane of a 128-bit vector */
   export function neg<T>(a: v128): v128;
-  /** Adds all lanes of two 128-bit vectors using saturation. */
+  /** Adds each lane of two 128-bit vectors using saturation. */
   export function add_saturate<T>(a: v128, b: v128): v128;
-  /** Subtracts all lanes of two 128-bit vectors using saturation. */
+  /** Subtracts each lane of two 128-bit vectors using saturation. */
   export function sub_saturate<T>(a: v128, b: v128): v128;
-  /** Performs a bitwise left shift on all lanes of a 128-bit vector by a scalar. */
+  /** Performs a bitwise left shift on each lane of a 128-bit vector by a scalar. */
   export function shl<T>(a: v128, b: i32): v128;
-  /** Performs a bitwise right shift on all lanes of a 128-bit vector by a scalar. */
+  /** Performs a bitwise right shift on each lane of a 128-bit vector by a scalar. */
   export function shr<T>(a: v128, b: i32): v128;
-  /** Performs the bitwise AND operation on all lanes of two 128-bit vectors. */
+  /** Performs the bitwise AND operation on each lane of two 128-bit vectors. */
   export function and(a: v128, b: v128): v128;
-  /** Performs the bitwise OR operation on all lanes of two 128-bit vectors. */
+  /** Performs the bitwise OR operation on each lane of two 128-bit vectors. */
   export function or(a: v128, b: v128): v128;
-  /** Performs the bitwise XOR operation on all lanes of two 128-bit vectors. */
+  /** Performs the bitwise XOR operation on each lane of two 128-bit vectors. */
   export function xor(a: v128, b: v128): v128;
-  /** Performs the bitwise NOT operation on all lanes of a 128-bit vector. */
+  /** Performs the bitwise NOT operation on each lane of a 128-bit vector. */
   export function not(a: v128): v128;
   /** Selects bits of either 128-bit vector according to the specified mask. */
   export function bitselect(v1: v128, v2: v128, mask: v128): v128;
-  /** Reduces a 128-bit vector to a scalar `1` if any lane is considered `true`. */
+  /** Reduces a 128-bit vector to a scalar indicating whether any lane is considered `true`. */
   export function any_true<T>(a: v128): bool;
-  /** Reduces a 128-bit vector to a scalar `1` if all lanes are considered `true`. */
+  /** Reduces a 128-bit vector to a scalar indicating whether all lanes are considered `true`. */
   export function all_true<T>(a: v128): bool;
   /** Computes the minimum of each lane of two 128-bit vectors. */
   export function min<T = f32 | f64>(a: v128, b: v128): v128;
@@ -374,103 +374,133 @@ declare namespace v128 {
   export function eq<T>(a: v128, b: v128): v128;
   /** Computes which lanes of two 128-bit vectors are not equal. */
   export function ne<T>(a: v128, b: v128): v128;
-  /** Computes which lanes of the first 128-bit vector are less than the second. */
+  /** Computes which lanes of the first 128-bit vector are less than those of the second. */
   export function lt<T>(a: v128, b: v128): v128;
-  /** Computes which lanes of the first 128-bit vector are less than or equal to the second. */
+  /** Computes which lanes of the first 128-bit vector are less than or equal those of the second. */
   export function le<T>(a: v128, b: v128): v128;
-  /** Computes which lanes of the first 128-bit vector are greater than the second. */
+  /** Computes which lanes of the first 128-bit vector are greater than those of the second. */
   export function gt<T>(a: v128, b: v128): v128;
-  /** Computes which lanes of the first 128-bit vector are greater than or equal to the second. */
+  /** Computes which lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge<T>(a: v128, b: v128): v128;
-  /** Converts all lanes of a 128-bit vector from integer to floating point. */
+  /** Converts each lane of a 128-bit vector from integer to floating point. */
   export function convert<TFrom = i32 | u32 | i64 | u64>(a: v128): v128;
-  /** Truncates all lanes of a 128-bit vector from floating point to integer with saturation. */
+  /** Truncates each lane of a 128-bit vector from floating point to integer with saturation. */
   export function trunc<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
 declare namespace i8x16 {
-  /** Creates a 128-bit vector with sixteen identical 8-bit integer lanes. */
+  /** Creates a vector with sixteen identical 8-bit integer lanes. */
   export function splat(x: i8): v128;
-  /** Extracts one of sixteen 8-bit integer lanes from a 128-bit vector as a signed scalar. */
+  /** Extracts one 8-bit integer lane from a 128-bit vector as a signed scalar. */
   export function extract_lane_s(x: v128, idx: u8): i8;
-  /** Extracts one of sixteen 8-bit integer lanes from a 128-bit vector as an unsigned scalar. */
+  /** Extracts one 8-bit integer lane from a 128-bit vector as an unsigned scalar. */
   export function extract_lane_u(x: v128, idx: u8): u8;
-  /** Replaces one of sixteen 8-bit integer lanes in a 128-bit vector. */
+  /** Replaces one 8-bit integer lane in a 128-bit vector. */
   export function replace_lane(x: v128, idx: u8, value: i8): v128;
-  /** Adds all sixteen 8-bit integer lanes of two 128-bit vectors. */
+  /** Adds each 8-bit integer lane of two 128-bit vectors. */
   export function add(a: v128, b: v128): v128;
-  /** Subtracts all sixteen 8-bit integer lanes of two 128-bit vectors. */
+  /** Subtracts each 8-bit integer lane of two 128-bit vectors. */
   export function sub(a: v128, b: v128): v128;
-  /** Multiplies all sixteen 8-bit integer lanes of two 128-bit vectors. */
+  /** Multiplies each 8-bit integer lane of two 128-bit vectors. */
   export function mul(a: v128, b: v128): v128;
-  /** Negates all sixteen 8-bit integer lanes of a 128-bit vector. */
+  /** Negates each 8-bit integer lane of a 128-bit vector. */
   export function neg(a: v128): v128;
-  /** Adds all sixteen 8-bit integer lanes of two 128-bit vectors using signed saturation. */
+  /** Adds each 8-bit integer lane of two 128-bit vectors using signed saturation. */
   export function add_saturate_s(a: v128, b: v128): v128;
-  /** Adds all sixteen 8-bit integer lanes of two 128-bit vectors using unsigned saturation. */
+  /** Adds each 8-bit integer lane of two 128-bit vectors using unsigned saturation. */
   export function add_saturate_u(a: v128, b: v128): v128;
-  /** Subtracts all sixteen 8-bit integer lanes of two 128-bit vectors using signed saturation. */
+  /** Subtracts each 8-bit integer lane of two 128-bit vectors using signed saturation. */
   export function sub_saturate_s(a: v128, b: v128): v128;
-  /** Subtracts all sixteen 8-bit integer lanes of two 128-bit vectors using unsigned saturation. */
+  /** Subtracts each 8-bit integer lane of two 128-bit vectors using unsigned saturation. */
   export function sub_saturate_u(a: v128, b: v128): v128;
+  /** Performs a bitwise left shift on each 8-bit integer lane of a 128-bit vector by a scalar. */
   export function shl(a: v128, b: i32): v128;
+  /** Performs a bitwise arithmetic right shift on each 8-bit integer lane of a 128-bit vector by a scalar. */
   export function shr_s(a: v128, b: i32): v128;
+  /** Performs a bitwise logical right shift on each 8-bit integer lane of a 128-bit vector by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
+  /** Reduces a 128-bit vector to a scalar indicating whether any 8-bit integer lane is considered `true`. */
   export function any_true(a: v128): bool;
+  /** Reduces a 128-bit vector to a scalar indicating whether all 8-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
+  /** Computes which 8-bit integer lanes of two 128-bit vectors are equal. */
   export function eq(a: v128, b: v128): v128;
+  /** Computes which 8-bit integer lanes of two 128-bit vectors are not equal. */
   export function ne(a: v128, b: v128): v128;
+  /** Computes which 8-bit signed integer lanes of the first 128-bit vector are less than those of the second. */
   export function lt_s(a: v128, b: v128): v128;
+  /** Computes which 8-bit unsigned integer lanes of the first 128-bit vector are less than those of the second. */
   export function lt_u(a: v128, b: v128): v128;
+  /** Computes which 8-bit signed integer lanes of the first 128-bit vector are less than or equal those of the second. */
   export function le_s(a: v128, b: v128): v128;
+  /** Computes which 8-bit unsigned integer lanes of the first 128-bit vector are less than or equal those of the second. */
   export function le_u(a: v128, b: v128): v128;
+  /** Computes which 8-bit signed integer lanes of the first 128-bit vector are greater than those of the second. */
   export function gt_s(a: v128, b: v128): v128;
+  /** Computes which 8-bit unsigned integer lanes of the first 128-bit vector are greater than those of the second. */
   export function gt_u(a: v128, b: v128): v128;
+  /** Computes which 8-bit signed integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_s(a: v128, b: v128): v128;
+  /** Computes which 8-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_u(a: v128, b: v128): v128;
 }
 /** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
 declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
 declare namespace i16x8 {
-  /** Creates a 128-bit vector with eight identical 16-bit integer lanes. */
+  /** Creates a vector with eight identical 16-bit integer lanes. */
   export function splat(x: i16): v128;
-  /** Extracts one of eight 16-bit integer lanes from a 128-bit vector as a signed scalar. */
+  /** Extracts one 16-bit integer lane from a 128-bit vector as a signed scalar. */
   export function extract_lane_s(x: v128, idx: u8): i16;
-  /** Extracts one of eight 16-bit integer lanes from a 128-bit vector as an unsigned scalar. */
+  /** Extracts one 16-bit integer lane from a 128-bit vector as an unsigned scalar. */
   export function extract_lane_u(x: v128, idx: u8): u16;
-  /** Replaces one of eight 16-bit integer lanes in a 128-bit vector. */
+  /** Replaces one 16-bit integer lane in a 128-bit vector. */
   export function replace_lane(x: v128, idx: u8, value: i16): v128;
-  /** Adds all eight 16-bit integer lanes of two 128-bit vectors. */
+  /** Adds each 16-bit integer lane of two 128-bit vectors. */
   export function add(a: v128, b: v128): v128;
-  /** Subtracts all eight 16-bit integer lanes of two 128-bit vectors. */
+  /** Subtracts each 16-bit integer lane of two 128-bit vectors. */
   export function sub(a: v128, b: v128): v128;
-  /** Multiplies all eight 16-bit integer lanes of two 128-bit vectors. */
+  /** Multiplies each 16-bit integer lane of two 128-bit vectors. */
   export function mul(a: v128, b: v128): v128;
-  /** Negates all eight 16-bit integer lanes of a 128-bit vector. */
+  /** Negates each 16-bit integer lane of a 128-bit vector. */
   export function neg(a: v128): v128;
-  /** Adds all eight 16-bit integer lanes of two 128-bit vectors using signed saturation. */
+  /** Adds each 16-bit integer lane of two 128-bit vectors using signed saturation. */
   export function add_saturate_s(a: v128, b: v128): v128;
-  /** Adds all eight 16-bit integer lanes of two 128-bit vectors using unsigned saturation. */
+  /** Adds each 16-bit integer lane of two 128-bit vectors using unsigned saturation. */
   export function add_saturate_u(a: v128, b: v128): v128;
-  /** Subtracts all eight 16-bit integer lanes of two 128-bit vectors using signed saturation. */
+  /** Subtracts each 16-bit integer lane of two 128-bit vectors using signed saturation. */
   export function sub_saturate_s(a: v128, b: v128): v128;
-  /** Subtracts all eight 16-bit integer lanes of two 128-bit vectors using unsigned saturation. */
+  /** Subtracts each 16-bit integer lane of two 128-bit vectors using unsigned saturation. */
   export function sub_saturate_u(a: v128, b: v128): v128;
+  /** Performs a bitwise left shift on each 16-bit integer lane of a 128-bit vector by a scalar. */
   export function shl(a: v128, b: i32): v128;
+  /** Performs a bitwise arithmetic right shift each 16-bit integer lane of a 128-bit vector by a scalar. */
   export function shr_s(a: v128, b: i32): v128;
+  /** Performs a bitwise logical right shift on each 16-bit integer lane of a 128-bit vector by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
+  /** Reduces a 128-bit vector to a scalar indicating whether any 16-bit integer lane is considered `true`. */
   export function any_true(a: v128): bool;
+  /** Reduces a 128-bit vector to a scalar indicating whether all 16-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
+  /** Computes which 16-bit integer lanes of two 128-bit vectors are equal. */
   export function eq(a: v128, b: v128): v128;
+  /** Computes which 16-bit integer lanes of two 128-bit vectors are not equal. */
   export function ne(a: v128, b: v128): v128;
+  /** Computes which 16-bit signed integer lanes of the first 128-bit vector are less than those of the second. */
   export function lt_s(a: v128, b: v128): v128;
+  /** Computes which 16-bit unsigned integer lanes of the first 128-bit vector are less than those of the second. */
   export function lt_u(a: v128, b: v128): v128;
+  /** Computes which 16-bit signed integer lanes of the first 128-bit vector are less than or equal those of the second. */
   export function le_s(a: v128, b: v128): v128;
+  /** Computes which 16-bit unsigned integer lanes of the first 128-bit vector are less than or equal those of the second. */
   export function le_u(a: v128, b: v128): v128;
+  /** Computes which 16-bit signed integer lanes of the first 128-bit vector are greater than those of the second. */
   export function gt_s(a: v128, b: v128): v128;
+  /** Computes which 16-bit unsigned integer lanes of the first 128-bit vector are greater than those of the second. */
   export function gt_u(a: v128, b: v128): v128;
+  /** Computes which 16-bit signed integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_s(a: v128, b: v128): v128;
+  /** Computes which 16-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_u(a: v128, b: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
@@ -478,34 +508,51 @@ declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
 declare namespace i32x4 {
   /** Creates a 128-bit vector with four identical 32-bit integer lanes. */
   export function splat(x: i32): v128;
-  /** Extracts one of four 32-bit integer lanes from a 128-bit vector as a scalar. */
+  /** Extracts one 32-bit integer lane from a 128-bit vector as a scalar. */
   export function extract_lane(x: v128, idx: u8): i32;
-  /** Replaces one of four 32-bit integer lanes in a 128-bit vector. */
+  /** Replaces one 32-bit integer lane in a 128-bit vector. */
   export function replace_lane(x: v128, idx: u8, value: i32): v128;
-  /** Adds all four 32-bit integer lanes of two 128-bit vectors. */
+  /** Adds each 32-bit integer lane of two 128-bit vectors. */
   export function add(a: v128, b: v128): v128;
-  /** Subtracts all four 32-bit integer lanes of two 128-bit vectors. */
+  /** Subtracts each 32-bit integer lane of two 128-bit vectors. */
   export function sub(a: v128, b: v128): v128;
-  /** Multiplies all four 32-bit integer lanes of two 128-bit vectors. */
+  /** Multiplies each 32-bit integer lane of two 128-bit vectors. */
   export function mul(a: v128, b: v128): v128;
-  /** Negates all four 32-bit integer lanes of a 128-bit vector. */
+  /** Negates each 32-bit integer lane of a 128-bit vector. */
   export function neg(a: v128): v128;
+  /** Performs a bitwise left shift on each 32-bit integer lane of a 128-bit vector by a scalar. */
   export function shl(a: v128, b: i32): v128;
+  /** Performs a bitwise arithmetic right shift on each 32-bit integer lane of a 128-bit vector by a scalar. */
   export function shr_s(a: v128, b: i32): v128;
+  /** Performs a bitwise logical right shift on each 32-bit integer lane of a 128-bit vector by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
+  /** Reduces a 128-bit vector to a scalar indicating whether any 32-bit integer lane is considered `true`. */
   export function any_true(a: v128): bool;
+  /** Reduces a 128-bit vector to a scalar indicating whether all 32-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
+  /** Computes which 32-bit integer lanes of two 128-bit vectors are equal. */
   export function eq(a: v128, b: v128): v128;
+  /** Computes which 32-bit integer lanes of two 128-bit vectors are not equal. */
   export function ne(a: v128, b: v128): v128;
+  /** Computes which 32-bit signed integer lanes of the first 128-bit vector are less than those of the second. */
   export function lt_s(a: v128, b: v128): v128;
+  /** Computes which 32-bit unsigned integer lanes of the first 128-bit vector are less than those of the second. */
   export function lt_u(a: v128, b: v128): v128;
+  /** Computes which 32-bit signed integer lanes of the first 128-bit vector are less than or equal those of the second. */
   export function le_s(a: v128, b: v128): v128;
+  /** Computes which 32-bit unsigned integer lanes of the first 128-bit vector are less than or equal those of the second. */
   export function le_u(a: v128, b: v128): v128;
+  /** Computes which 32-bit signed integer lanes of the first 128-bit vector are greater than those of the second. */
   export function gt_s(a: v128, b: v128): v128;
+  /** Computes which 32-bit unsigned integer lanes of the first 128-bit vector are greater than those of the second. */
   export function gt_u(a: v128, b: v128): v128;
+  /** Computes which 32-bit signed integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_s(a: v128, b: v128): v128;
+  /** Computes which 32-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_u(a: v128, b: v128): v128;
+  /** Truncates each 32-bit float lane of a 128-bit vector to a signed integer with saturation. */
   export function trunc_s_f32x4_sat(a: v128): v128;
+  /** Truncates each 32-bit float lane of a 128-bit vector to an unsigned integer with saturation. */
   export function trunc_u_f32x4_sat(a: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
@@ -513,24 +560,31 @@ declare function i64x2(a: i64, b: i64): v128;
 declare namespace i64x2 {
   /** Creates a 128-bit vector with two identical 64-bit integer lanes. */
   export function splat(x: i64): v128;
-  /** Extracts one of two 64-bit integer lanes from a 128-bit vector as a scalar. */
+  /** Extracts one 64-bit integer lane from a 128-bit vector as a scalar. */
   export function extract_lane(x: v128, idx: u8): i64;
-  /** Replaces one of two 64-bit integer lanes in a 128-bit vector. */
+  /** Replaces one 64-bit integer lane in a 128-bit vector. */
   export function replace_lane(x: v128, idx: u8, value: i64): v128;
-  /** Adds the two 64-bit integer lanes of two 128-bit vectors. */
+  /** Adds each 64-bit integer lane of two 128-bit vectors. */
   export function add(a: v128, b: v128): v128;
-  /** Subtracts the two 64-bit integer lanes of two 128-bit vectors. */
+  /** Subtracts each 64-bit integer lane of two 128-bit vectors. */
   export function sub(a: v128, b: v128): v128;
-  /** Multiplies the two 64-bit integer lanes of two 128-bit vectors. */
+  /** Multiplies each 64-bit integer lane of two 128-bit vectors. */
   export function mul(a: v128, b: v128): v128;
-  /** Negates the two 64-bit integer lanes of a 128-bit vector. */
+  /** Negates each 64-bit integer lane of a 128-bit vector. */
   export function neg(a: v128): v128;
+  /** Performs a bitwise left shift on each 64-bit integer lane of a 128-bit vector by a scalar. */
   export function shl(a: v128, b: i32): v128;
+  /** Performs a bitwise arithmetic right shift on each 64-bit integer lane of a 128-bit vector by a scalar. */
   export function shr_s(a: v128, b: i32): v128;
+  /** Performs a bitwise logical right shift on each 64-bit integer lane of a 128-bit vector by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
+  /** Reduces a 128-bit vector to a scalar indicating whether any 64-bit integer lane is considered `true`. */
   export function any_true(a: v128): bool;
+  /** Reduces a 128-bit vector to a scalar indicating whether all 64-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
+  /** Truncates each 64-bit float lane of a 128-bit vector to a signed integer with saturation. */
   export function trunc_s_f64x2_sat(a: v128): v128;
+  /** Truncates each 64-bit float lane of a 128-bit vector to an unsigned integer with saturation. */
   export function trunc_u_f64x2_sat(a: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
@@ -538,31 +592,43 @@ declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
 declare namespace f32x4 {
   /** Creates a 128-bit vector with four identical 32-bit float lanes. */
   export function splat(x: f32): v128;
-  /** Extracts one of four 32-bit float lanes from a 128-bit vector as a scalar. */
+  /** Extracts one 32-bit float lane from a 128-bit vector as a scalar. */
   export function extract_lane(x: v128, idx: u8): f32;
-  /** Replaces one of four 32-bit float lanes in a 128-bit vector. */
+  /** Replaces one 32-bit float lane in a 128-bit vector. */
   export function replace_lane(x: v128, idx: u8, value: f32): v128;
-  /** Adds all four 32-bit float lanes of two 128-bit vectors. */
+  /** Adds each 32-bit float lane of two 128-bit vectors. */
   export function add(a: v128, b: v128): v128;
-  /** Subtracts all four 32-bit float lanes of two 128-bit vectors. */
+  /** Subtracts each 32-bit float lane of two 128-bit vectors. */
   export function sub(a: v128, b: v128): v128;
-  /** Multiplies all four 32-bit float lanes of two 128-bit vectors. */
+  /** Multiplies each 32-bit float lane of two 128-bit vectors. */
   export function mul(a: v128, b: v128): v128;
-  /** Divides all four 32-bit float lanes of two 128-bit vectors. */
+  /** Divides each 32-bit float lane of two 128-bit vectors. */
   export function div(a: v128, b: v128): v128;
-  /** Negates all four 32-bit float lanes of a 128-bit vector. */
+  /** Negates each 32-bit float lane of a 128-bit vector. */
   export function neg(a: v128): v128;
+  /** Computes the minimum of each 32-bit float lane of two 128-bit vectors. */
   export function min(a: v128, b: v128): v128;
+  /** Computes the maximum of each 32-bit float lane of two 128-bit vectors. */
   export function max(a: v128, b: v128): v128;
+  /** Computes the absolute value of each 32-bit float lane of a 128-bit vector. */
   export function abs(a: v128): v128;
+  /** Computes the square root of each 32-bit float lane of a 128-bit vector. */
   export function sqrt(a: v128): v128;
+  /** Computes which 32-bit float lanes of two 128-bit vectors are equal. */
   export function eq(a: v128, b: v128): v128;
+  /** Computes which 32-bit float lanes of two 128-bit vectors are not equal. */
   export function ne(a: v128, b: v128): v128;
+  /** Computes which 32-bit float lanes of the first 128-bit vector are less than those of the second. */
   export function lt(a: v128, b: v128): v128;
+  /** Computes which 32-bit float lanes of the first 128-bit vector are less than or equal those of the second. */
   export function le(a: v128, b: v128): v128;
+  /** Computes which 32-bit float lanes of the first 128-bit vector are greater than those of the second. */
   export function gt(a: v128, b: v128): v128;
+  /** Computes which 32-bit float lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge(a: v128, b: v128): v128;
+  /** Converts each 32-bit signed integer lane of a 128-bit vector to floating point. */
   export function convert_s_i32x4(a: v128): v128;
+  /** Converts each 32-bit unsigned integer lane of a 128-bit vectorto floating point. */
   export function convert_u_i32x4(a: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
@@ -570,35 +636,47 @@ declare function f64x2(a: f64, b: f64): v128;
 declare namespace f64x2 {
   /** Creates a 128-bit vector with two identical 64-bit float lanes. */
   export function splat(x: f64): v128;
-  /** Extracts one of two 64-bit float lanes from a 128-bit vector as a scalar. */
+  /** Extracts one 64-bit float lane from a 128-bit vector as a scalar. */
   export function extract_lane(x: v128, idx: u8): f64;
-  /** Replaces one of two 64-bit float lanes in a 128-bit vector. */
+  /** Replaces one 64-bit float lane in a 128-bit vector. */
   export function replace_lane(x: v128, idx: u8, value: f64): v128;
-  /** Adds the two 64-bit float lanes of two 128-bit vectors. */
+  /** Adds each 64-bit float lane of two 128-bit vectors. */
   export function add(a: v128, b: v128): v128;
-  /** Subtracts the two 64-bit float lanes of two 128-bit vectors. */
+  /** Subtracts each 64-bit float lane of two 128-bit vectors. */
   export function sub(a: v128, b: v128): v128;
-  /** Multiplies the two 64-bit float lanes of two 128-bit vectors. */
+  /** Multiplies each 64-bit float lane of two 128-bit vectors. */
   export function mul(a: v128, b: v128): v128;
-  /** Divides the two 64-bit float lanes of two 128-bit vectors. */
+  /** Divides each 64-bit float lane of two 128-bit vectors. */
   export function div(a: v128, b: v128): v128;
-  /** Negates the two 64-bit float lanes of a 128-bit vector. */
+  /** Negates each 64-bit float lane of a 128-bit vector. */
   export function neg(a: v128): v128;
+  /** Computes the minimum of each 64-bit float lane of two 128-bit vectors. */
   export function min(a: v128, b: v128): v128;
+  /** Computes the maximum of each 64-bit float lane of two 128-bit vectors. */
   export function max(a: v128, b: v128): v128;
+  /** Computes the absolute value of each 64-bit float lane of a 128-bit vector. */
   export function abs(a: v128): v128;
+  /** Computes the square root of each 64-bit float lane of a 128-bit vector. */
   export function sqrt(a: v128): v128;
+  /** Computes which 64-bit float lanes of two 128-bit vectors are equal. */
   export function eq(a: v128, b: v128): v128;
+  /** Computes which 64-bit float lanes of two 128-bit vectors are not equal. */
   export function ne(a: v128, b: v128): v128;
+  /** Computes which 64-bit float lanes of the first 128-bit vector are less than those of the second. */
   export function lt(a: v128, b: v128): v128;
+  /** Computes which 64-bit float lanes of the first 128-bit vector are less than or equal those of the second. */
   export function le(a: v128, b: v128): v128;
+  /** Computes which 64-bit float lanes of the first 128-bit vector are greater than those of the second. */
   export function gt(a: v128, b: v128): v128;
+  /** Computes which 64-bit float lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge(a: v128, b: v128): v128;
+  /** Converts each 64-bit signed integer lane of a 128-bit vector to floating point. */
   export function convert_s_i64x2(a: v128): v128;
+  /** Converts each 64-bit unsigned integer lane of a 128-bit vector to floating point. */
   export function convert_u_i64x2(a: v128): v128;
 }
 declare namespace v8x16 {
-  /** Selects 8-bit integer lanes from either 128-bit vector according to the specified lane indexes. */
+  /** Selects 8-bit lanes from either 128-bit vector according to the specified lane indexes. */
   export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
@@ -642,7 +720,7 @@ declare class _Float {
   static isSafeInteger(value: f32 | f64): bool;
   /** Returns true if the value passed is an integer, false otherwise. */
   static isInteger(value: f32 | f64): bool;
-  /** Converts A string to an integer. */
+  /** Converts a string to an integer. */
   static parseInt(value: string, radix?: i32): f32 | f64;
   /** Converts a string to a floating-point number. */
   static parseFloat(value: string): f32 | f64;
