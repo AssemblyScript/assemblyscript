@@ -73,7 +73,8 @@ import {
 } from "./common";
 
 import {
-  makeMap, makeSet, isPowerOf2
+  makeMap,
+  isPowerOf2
 } from "./util";
 
 import {
