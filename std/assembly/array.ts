@@ -344,7 +344,7 @@ export class Array<T> {
     var len = this.length_;
     begin = begin < 0 ? max(begin + len, 0) : min(begin, len);
     end = end < 0 ? max(end + len, 0) : min(end, len);
-    len = end - begin;
+    len = max(end - begin, 0);
     var sliced = new Array<T>(len);
     if (len) {
       memory.copy(
