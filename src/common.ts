@@ -158,6 +158,7 @@ export namespace LibrarySymbols {
   export const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
   export const ASC_FEATURE_BULK_MEMORY = "ASC_FEATURE_BULK_MEMORY";
   export const ASC_FEATURE_SIMD = "ASC_FEATURE_SIMD";
+  export const ASC_FEATURE_THREADS = "ASC_FEATURE_THREADS";
   // classes
   export const I8 = "I8";
   export const I16 = "I16";

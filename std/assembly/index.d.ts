@@ -33,6 +33,8 @@ declare type bool = boolean | number;
 declare type f32 = number;
 /** A 64-bit float. */
 declare type f64 = number;
+/** A 128-bit vector. */
+declare type v128 = object;
 
 // Compiler hints
 
@@ -50,6 +52,12 @@ declare const ASC_SHRINK_LEVEL: i32;
 declare const ASC_FEATURE_MUTABLE_GLOBAL: bool;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
+/** Whether the bulk memory feature is enabled. */
+declare const ASC_FEATURE_BULK_MEMORY: bool;
+/** Whether the SIMD feature is enabled. */
+declare const ASC_FEATURE_SIMD: bool;
+/** Whether the threads feature is enabled. */
+declare const ASC_FEATURE_THREADS: bool;
 
 // Builtins
 
@@ -160,10 +168,6 @@ declare namespace i8 {
   export const MIN_VALUE: i8;
   /** Largest representable value. */
   export const MAX_VALUE: i8;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): i8;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): i8;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
 declare function i16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
@@ -172,10 +176,6 @@ declare namespace i16 {
   export const MIN_VALUE: i16;
   /** Largest representable value. */
   export const MAX_VALUE: i16;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): i16;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): i16;
 }
 /** Converts any other numeric value to a 32-bit signed integer. */
 declare function i32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
@@ -200,10 +200,6 @@ declare namespace i32 {
   export function store16(offset: usize, value: i32, constantOffset?: usize): void;
   /** Stores a 32-bit integer to memory. */
   export function store(offset: usize, value: i32, constantOffset?: usize): void;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): i32;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): i32;
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
 declare function i64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -234,10 +230,6 @@ declare namespace i64 {
   export function store32(offset: usize, value: i64, constantOffset?: usize): void;
   /** Stores a 64-bit integer to memory. */
   export function store(offset: usize, value: i64, constantOffset?: usize): void;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): i64;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): i64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
 declare var isize: typeof i32 | typeof i64;
@@ -248,10 +240,6 @@ declare namespace u8 {
   export const MIN_VALUE: u8;
   /** Largest representable value. */
   export const MAX_VALUE: u8;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): u8;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
 declare function u16(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
@@ -260,10 +248,6 @@ declare namespace u16 {
   export const MIN_VALUE: u16;
   /** Largest representable value. */
   export const MAX_VALUE: u16;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): u16;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
 declare function u32(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i32;
@@ -272,10 +256,6 @@ declare namespace u32 {
   export const MIN_VALUE: u32;
   /** Largest representable value. */
   export const MAX_VALUE: u32;
-  /** Converts a string to a floating-point number and cast to target integer after. */
-  export function parseFloat(string: string): u64;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
 declare function u64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -284,10 +264,6 @@ declare namespace u64 {
   export const MIN_VALUE: u64;
   /** Largest representable value. */
   export const MAX_VALUE: u64;
-  /** Converts a string to a floating-point number. */
-  export function parseFloat(string: string): u64;
-  /** Converts A string to an integer. */
-  export function parseInt(string: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
 declare var usize: typeof u32 | typeof u64;
@@ -314,26 +290,10 @@ declare namespace f32 {
   export const MAX_SAFE_INTEGER: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
-  /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
-  export function mod(x: f32, y: f32): f32;
-  /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
-  export function rem(x: f32, y: f32): f32;
   /** Loads a 32-bit float from memory. */
   export function load(offset: usize, constantOffset?: usize): f32;
   /** Stores a 32-bit float to memory. */
   export function store(offset: usize, value: f32, constantOffset?: usize): void;
-  /** Returns a boolean value that indicates whether a value is the reserved value NaN (not a number). */
-  export function isNaN(value: f32): bool;
-  /** Returns true if passed value is finite. */
-  export function isFinite(value: f32): bool;
-  /** Returns true if the value passed is a safe integer. */
-  export function isSafeInteger(value: f32): bool;
-  /** Returns true if the value passed is an integer, false otherwise. */
-  export function isInteger(value: f32): bool;
-  /** Converts a string to a floating-point number. */
-  export function parseFloat(string: string): f32;
-  /** Converts a string to an integer. */
-  export function parseInt(string: string, radix?: i32): f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f64;
@@ -354,6 +314,203 @@ declare namespace f64 {
   export function load(offset: usize, constantOffset?: usize): f64;
   /** Stores a 64-bit float to memory. */
   export function store(offset: usize, value: f64, constantOffset?: usize): void;
+}
+/** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
+declare function v128(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
+declare namespace v128 {
+  export function splat<T>(x: T): v128;
+  export function extract_lane<T>(x: v128, idx: u8): T;
+  export function replace_lane<T>(x: v128, idx: u8, value: T): v128;
+  export function shuffle<T>(a: v128, b: v128, ...lanes: u8[]): v128;
+  export function load(offset: usize, constantOffset?: usize): v128;
+  export function store(offset: usize, value: v128, constantOffset?: usize): void;
+  export function add<T>(a: v128, b: v128): v128;
+  export function sub<T>(a: v128, b: v128): v128;
+  export function mul<T>(a: v128, b: v128): v128; // except i64
+  export function div<T = f32 | f64>(a: v128, b: v128): v128;
+  export function neg<T>(a: v128): v128;
+  export function add_saturate<T>(a: v128, b: v128): v128;
+  export function sub_saturate<T>(a: v128, b: v128): v128;
+  export function shl<T>(a: v128, b: i32): v128;
+  export function shr<T>(a: v128, b: i32): v128;
+  export function and(a: v128, b: v128): v128;
+  export function or(a: v128, b: v128): v128;
+  export function xor(a: v128, b: v128): v128;
+  export function not(a: v128): v128;
+  export function bitselect(v1: v128, v2: v128, c: v128): v128;
+  export function any_true<T>(a: v128): bool;
+  export function all_true<T>(a: v128): bool;
+  export function min<T = f32 | f64>(a: v128, b: v128): v128;
+  export function max<T = f32 | f64>(a: v128, b: v128): v128;
+  export function abs<T = f32 | f64>(a: v128): v128;
+  export function sqrt<T = f32 | f64>(a: v128): v128;
+  export function eq<T>(a: v128, b: v128): v128;
+  export function ne<T>(a: v128, b: v128): v128;
+  export function lt<T>(a: v128, b: v128): v128;
+  export function le<T>(a: v128, b: v128): v128;
+  export function gt<T>(a: v128, b: v128): v128;
+  export function ge<T>(a: v128, b: v128): v128;
+  export function convert<TFrom = i32 | u32 | i64 | u64>(a: v128): v128;
+  export function trunc<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
+}
+/** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
+declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
+declare namespace i8x16 {
+  export function splat(x: i8): v128;
+  export function extract_lane_s(x: v128, idx: u8): i8;
+  export function extract_lane_u(x: v128, idx: u8): u8;
+  export function replace_lane(x: v128, idx: u8, value: i8): v128;
+  export function add(a: v128, b: v128): v128;
+  export function sub(a: v128, b: v128): v128;
+  export function mul(a: v128, b: v128): v128;
+  export function neg(a: v128): v128;
+  export function add_saturate_s(a: v128, b: v128): v128;
+  export function add_saturate_u(a: v128, b: v128): v128;
+  export function sub_saturate_s(a: v128, b: v128): v128;
+  export function sub_saturate_u(a: v128, b: v128): v128;
+  export function shl(a: v128, b: i32): v128;
+  export function shr_s(a: v128, b: i32): v128;
+  export function shr_u(a: v128, b: i32): v128;
+  export function any_true(a: v128): bool;
+  export function all_true(a: v128): bool;
+  export function eq(a: v128, b: v128): v128;
+  export function ne(a: v128, b: v128): v128;
+  export function lt_s(a: v128, b: v128): v128;
+  export function lt_u(a: v128, b: v128): v128;
+  export function le_s(a: v128, b: v128): v128;
+  export function le_u(a: v128, b: v128): v128;
+  export function gt_s(a: v128, b: v128): v128;
+  export function gt_u(a: v128, b: v128): v128;
+  export function ge_s(a: v128, b: v128): v128;
+  export function ge_u(a: v128, b: v128): v128;
+}
+/** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
+declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
+declare namespace i16x8 {
+  export function splat(x: i16): v128;
+  export function extract_lane_s(x: v128, idx: u8): i16;
+  export function extract_lane_u(x: v128, idx: u8): u16;
+  export function replace_lane(x: v128, idx: u8, value: i16): v128;
+  export function add(a: v128, b: v128): v128;
+  export function sub(a: v128, b: v128): v128;
+  export function mul(a: v128, b: v128): v128;
+  export function neg(a: v128): v128;
+  export function add_saturate_s(a: v128, b: v128): v128;
+  export function add_saturate_u(a: v128, b: v128): v128;
+  export function sub_saturate_s(a: v128, b: v128): v128;
+  export function sub_saturate_u(a: v128, b: v128): v128;
+  export function shl(a: v128, b: i32): v128;
+  export function shr_s(a: v128, b: i32): v128;
+  export function shr_u(a: v128, b: i32): v128;
+  export function any_true(a: v128): bool;
+  export function all_true(a: v128): bool;
+  export function eq(a: v128, b: v128): v128;
+  export function ne(a: v128, b: v128): v128;
+  export function lt_s(a: v128, b: v128): v128;
+  export function lt_u(a: v128, b: v128): v128;
+  export function le_s(a: v128, b: v128): v128;
+  export function le_u(a: v128, b: v128): v128;
+  export function gt_s(a: v128, b: v128): v128;
+  export function gt_u(a: v128, b: v128): v128;
+  export function ge_s(a: v128, b: v128): v128;
+  export function ge_u(a: v128, b: v128): v128;
+}
+/** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
+declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
+declare namespace i32x4 {
+  export function splat(x: i32): v128;
+  export function extract_lane(x: v128, idx: u8): i32;
+  export function replace_lane(x: v128, idx: u8, value: i32): v128;
+  export function add(a: v128, b: v128): v128;
+  export function sub(a: v128, b: v128): v128;
+  export function mul(a: v128, b: v128): v128;
+  export function neg(a: v128): v128;
+  export function shl(a: v128, b: i32): v128;
+  export function shr_s(a: v128, b: i32): v128;
+  export function shr_u(a: v128, b: i32): v128;
+  export function any_true(a: v128): bool;
+  export function all_true(a: v128): bool;
+  export function eq(a: v128, b: v128): v128;
+  export function ne(a: v128, b: v128): v128;
+  export function lt_s(a: v128, b: v128): v128;
+  export function lt_u(a: v128, b: v128): v128;
+  export function le_s(a: v128, b: v128): v128;
+  export function le_u(a: v128, b: v128): v128;
+  export function gt_s(a: v128, b: v128): v128;
+  export function gt_u(a: v128, b: v128): v128;
+  export function ge_s(a: v128, b: v128): v128;
+  export function ge_u(a: v128, b: v128): v128;
+  export function trunc_s_f32x4_sat(a: v128): v128;
+  export function trunc_u_f32x4_sat(a: v128): v128;
+}
+/** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
+declare function i64x2(a: i64, b: i64): v128;
+declare namespace i64x2 {
+  export function splat(x: i64): v128;
+  export function extract_lane(x: v128, idx: u8): i64;
+  export function replace_lane(x: v128, idx: u8, value: i64): v128;
+  export function add(a: v128, b: v128): v128;
+  export function sub(a: v128, b: v128): v128;
+  export function mul(a: v128, b: v128): v128;
+  export function neg(a: v128): v128;
+  export function shl(a: v128, b: i32): v128;
+  export function shr_s(a: v128, b: i32): v128;
+  export function shr_u(a: v128, b: i32): v128;
+  export function any_true(a: v128): bool;
+  export function all_true(a: v128): bool;
+  export function trunc_s_f64x2_sat(a: v128): v128;
+  export function trunc_u_f64x2_sat(a: v128): v128;
+}
+/** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
+declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
+declare namespace f32x4 {
+  export function splat(x: f32): v128;
+  export function extract_lane(x: v128, idx: u8): f32;
+  export function replace_lane(x: v128, idx: u8, value: f32): v128;
+  export function add(a: v128, b: v128): v128;
+  export function sub(a: v128, b: v128): v128;
+  export function mul(a: v128, b: v128): v128;
+  export function div(a: v128, b: v128): v128;
+  export function neg(a: v128): v128;
+  export function min(a: v128, b: v128): v128;
+  export function max(a: v128, b: v128): v128;
+  export function abs(a: v128): v128;
+  export function sqrt(a: v128): v128;
+  export function eq(a: v128, b: v128): v128;
+  export function ne(a: v128, b: v128): v128;
+  export function lt(a: v128, b: v128): v128;
+  export function le(a: v128, b: v128): v128;
+  export function gt(a: v128, b: v128): v128;
+  export function ge(a: v128, b: v128): v128;
+  export function convert_s_i32x4(a: v128): v128;
+  export function convert_u_i32x4(a: v128): v128;
+}
+/** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
+declare function f64x2(a: f64, b: f64): v128;
+declare namespace f64x2 {
+  export function splat(x: f64): v128;
+  export function extract_lane(x: v128, idx: u8): f64;
+  export function replace_lane(x: v128, idx: u8, value: f64): v128;
+  export function add(a: v128, b: v128): v128;
+  export function sub(a: v128, b: v128): v128;
+  export function mul(a: v128, b: v128): v128;
+  export function div(a: v128, b: v128): v128;
+  export function neg(a: v128): v128;
+  export function min(a: v128, b: v128): v128;
+  export function max(a: v128, b: v128): v128;
+  export function abs(a: v128): v128;
+  export function sqrt(a: v128): v128;
+  export function eq(a: v128, b: v128): v128;
+  export function ne(a: v128, b: v128): v128;
+  export function lt(a: v128, b: v128): v128;
+  export function le(a: v128, b: v128): v128;
+  export function gt(a: v128, b: v128): v128;
+  export function ge(a: v128, b: v128): v128;
+  export function convert_s_i64x2(a: v128): v128;
+  export function convert_u_i64x2(a: v128): v128;
+}
+declare namespace v8x16 {
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
