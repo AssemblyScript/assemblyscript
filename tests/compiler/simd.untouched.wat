@@ -36,7 +36,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 13
+   i32.const 7
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -51,7 +51,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 18
+   i32.const 12
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -68,7 +68,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 25
+   i32.const 18
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -85,7 +85,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 32
+   i32.const 25
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -102,7 +102,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 39
+   i32.const 32
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -118,7 +118,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 46
+   i32.const 39
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -136,7 +136,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 52
+   i32.const 45
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -146,16 +146,60 @@
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
-  (local $3 v128)
   v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x7f
   local.set $0
+  local.get $0
+  v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x7f
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 62
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
   i32.const 1
   i8x16.splat
   local.set $1
+  local.get $1
+  v128.const i32 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 64
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
   local.get $0
   local.get $1
   i8x16.add
   local.set $2
+  local.get $2
+  v128.const i32 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x80
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 66
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
   local.get $2
   i8x16.extract_lane_s 0
   i32.const 24
@@ -168,7 +212,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 66
+   i32.const 67
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -185,7 +229,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 67
+   i32.const 68
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -200,21 +244,19 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 68
+   i32.const 69
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
   local.get $2
-  i32.const 16
+  i32.const 17
   i8x16.replace_lane 15
-  local.set $3
-  local.get $3
-  i8x16.extract_lane_u 15
-  i32.const 255
-  i32.and
-  i32.const 16
-  i32.eq
+  v128.const i32 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10 0x11
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -225,24 +267,81 @@
    unreachable
   end
   local.get $0
-  local.get $0
+  local.get $1
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  drop
+  v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x1 0x1 0x1 0x1 0x1 0x1 0x1 0x1
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 75
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
  )
  (func $simd/test_i16x8 (; 4 ;) (type $_)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
-  (local $3 v128)
   v128.const i32 0x1 0x0 0x2 0x0 0x3 0x0 0x4 0x0 0x5 0x0 0x6 0x0 0x7 0x0 0xff 0x7f
   local.set $0
+  local.get $0
+  v128.const i32 0x1 0x0 0x2 0x0 0x3 0x0 0x4 0x0 0x5 0x0 0x6 0x0 0x7 0x0 0xff 0x7f
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 84
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
   i32.const 1
   i16x8.splat
   local.set $1
+  local.get $1
+  v128.const i32 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 86
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
   local.get $0
   local.get $1
   i16x8.add
   local.set $2
+  local.get $2
+  v128.const i32 0x2 0x0 0x3 0x0 0x4 0x0 0x5 0x0 0x6 0x0 0x7 0x0 0x8 0x0 0x0 0x80
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 88
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
   local.get $2
   i16x8.extract_lane_s 0
   i32.const 16
@@ -255,7 +354,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 78
+   i32.const 89
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -272,7 +371,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 79
+   i32.const 90
    i32.const 2
    call $~lib/env/abort
    unreachable
@@ -287,49 +386,104 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 80
+   i32.const 91
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
   local.get $2
-  i32.const 8
+  i32.const 9
   i16x8.replace_lane 7
-  local.set $3
-  local.get $3
-  i16x8.extract_lane_u 7
-  i32.const 65535
-  i32.and
-  i32.const 8
-  i32.eq
+  v128.const i32 0x2 0x0 0x3 0x0 0x4 0x0 0x5 0x0 0x6 0x0 0x7 0x0 0x8 0x0 0x9 0x0
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
    i32.const 8
-   i32.const 82
+   i32.const 92
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
   local.get $0
-  local.get $0
+  local.get $1
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  drop
+  v128.const i32 0x1 0x0 0x2 0x0 0x3 0x0 0x4 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 97
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
  )
  (func $simd/test_i32x4 (; 5 ;) (type $_)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
-  (local $3 v128)
-  v128.const i32 0x1 0x0 0x0 0x0 0x2 0x0 0x0 0x0 0x3 0x0 0x0 0x0 0x4 0x0 0x0 0x0
+  v128.const i32 0x1 0x0 0x0 0x0 0x2 0x0 0x0 0x0 0x3 0x0 0x0 0x0 0xff 0xff 0xff 0x7f
   local.set $0
+  local.get $0
+  v128.const i32 0x1 0x0 0x0 0x0 0x2 0x0 0x0 0x0 0x3 0x0 0x0 0x0 0xff 0xff 0xff 0x7f
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 106
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
   i32.const 1
   i32x4.splat
   local.set $1
+  local.get $1
+  v128.const i32 0x1 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x1 0x0 0x0 0x0
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 108
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
   local.get $0
   local.get $1
   i32x4.add
   local.set $2
+  local.get $2
+  v128.const i32 0x2 0x0 0x0 0x0 0x3 0x0 0x0 0x0 0x4 0x0 0x0 0x0 0x0 0x0 0x0 0x80
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 110
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
   local.get $2
   i32x4.extract_lane 0
   i32.const 2
@@ -338,126 +492,15 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 90
+   i32.const 111
    i32.const 2
    call $~lib/env/abort
    unreachable
   end
   local.get $2
   i32x4.extract_lane 3
-  i32.const 5
+  i32.const -2147483648
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 91
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i32.const 4
-  i32x4.replace_lane 3
-  local.set $3
-  local.get $3
-  i32x4.extract_lane 3
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 93
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $0
-  local.get $0
-  v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  drop
- )
- (func $simd/test_i64x2 (; 6 ;) (type $_)
-  (local $0 v128)
-  (local $1 v128)
-  (local $2 v128)
-  (local $3 v128)
-  v128.const i32 0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x2 0x0 0x0 0x0 0x0 0x0 0x0 0x0
-  local.set $0
-  i64.const 1
-  i64x2.splat
-  local.set $1
-  local.get $0
-  local.get $1
-  i64x2.add
-  local.set $2
-  local.get $2
-  i64x2.extract_lane 0
-  i64.const 2
-  i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 101
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i64x2.extract_lane 1
-  i64.const 3
-  i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 102
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i64.const 2
-  i64x2.replace_lane 1
-  local.set $3
-  local.get $3
-  i64x2.extract_lane 1
-  i64.const 2
-  i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 104
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $0
-  local.get $0
-  v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  drop
- )
- (func $simd/test_f32x4 (; 7 ;) (type $_)
-  (local $0 v128)
-  (local $1 v128)
-  (local $2 v128)
-  (local $3 v128)
-  v128.const i32 0x0 0x0 0xc0 0x3f 0x0 0x0 0x20 0x40 0x0 0x0 0x60 0x40 0x0 0x0 0x90 0x40
-  local.set $0
-  f32.const 0.25
-  f32x4.splat
-  local.set $1
-  local.get $0
-  local.get $1
-  f32x4.add
-  local.set $2
-  local.get $2
-  f32x4.extract_lane 0
-  f32.const 1.75
-  f32.eq
   i32.eqz
   if
    i32.const 0
@@ -468,9 +511,13 @@
    unreachable
   end
   local.get $2
-  f32x4.extract_lane 3
-  f32.const 4.75
-  f32.eq
+  i32.const 5
+  i32x4.replace_lane 3
+  v128.const i32 0x2 0x0 0x0 0x0 0x3 0x0 0x0 0x0 0x4 0x0 0x0 0x0 0x5 0x0 0x0 0x0
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -480,108 +527,116 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $2
-  f32.const 4.5
-  f32x4.replace_lane 3
-  local.set $3
-  local.get $3
-  f32x4.extract_lane 3
-  f32.const 4.5
-  f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 115
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $0
-  local.get $0
-  v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  drop
- )
- (func $simd/test_f64x2 (; 8 ;) (type $_)
-  (local $0 v128)
-  (local $1 v128)
-  (local $2 v128)
-  (local $3 v128)
-  v128.const i32 0x0 0x0 0x0 0x0 0x0 0x0 0xf8 0x3f 0x0 0x0 0x0 0x0 0x0 0x0 0x4 0x40
-  local.set $0
-  f64.const 0.25
-  f64x2.splat
-  local.set $1
   local.get $0
   local.get $1
-  f64x2.add
-  local.set $2
-  local.get $2
-  f64x2.extract_lane 0
-  f64.const 1.75
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 123
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  f64x2.extract_lane 1
-  f64.const 2.75
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 124
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  f64.const 2.5
-  f64x2.replace_lane 1
-  local.set $3
-  local.get $3
-  f64x2.extract_lane 1
-  f64.const 2.5
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 126
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $0
-  local.get $0
   v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
-  drop
- )
- (func $simd/test_v8x16 (; 9 ;) (type $_)
-  (local $0 v128)
-  (local $1 v128)
-  (local $2 v128)
-  v128.const i32 0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf
-  local.set $0
-  v128.const i32 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
-  local.set $1
-  local.get $0
-  local.get $1
-  v8x16.shuffle 0 17 2 19 4 21 6 23 8 25 10 27 12 29 14 31
-  local.set $2
-  local.get $2
-  i8x16.extract_lane_u 0
-  i32.const 255
-  i32.and
+  v128.const i32 0x1 0x0 0x0 0x0 0x2 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x1 0x0 0x0 0x0
+  i8x16.eq
+  i8x16.all_true
   i32.const 0
-  i32.eq
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 118
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $simd/test_i64x2 (; 6 ;) (type $_)
+  (local $0 v128)
+  (local $1 v128)
+  (local $2 v128)
+  v128.const i32 0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0x7f
+  local.set $0
+  local.get $0
+  v128.const i32 0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0x7f
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 127
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  i64.const 1
+  i64x2.splat
+  local.set $1
+  local.get $1
+  v128.const i32 0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 129
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  i64x2.add
+  local.set $2
+  local.get $2
+  v128.const i32 0x2 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x80
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 131
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $2
+  i64x2.extract_lane 0
+  i64.const 2
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 132
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $2
+  i64x2.extract_lane 1
+  i64.const -9223372036854775808
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 133
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $2
+  i64.const 3
+  i64x2.replace_lane 1
+  v128.const i32 0x2 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x3 0x0 0x0 0x0 0x0 0x0 0x0 0x0
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -591,72 +646,14 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $2
-  i8x16.extract_lane_u 1
-  i32.const 255
-  i32.and
-  i32.const 17
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 135
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 2
-  i32.const 255
-  i32.and
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 136
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 3
-  i32.const 255
-  i32.and
-  i32.const 19
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 137
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 4
-  i32.const 255
-  i32.and
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 138
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 5
-  i32.const 255
-  i32.and
-  i32.const 21
-  i32.eq
+  local.get $0
+  local.get $1
+  v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
+  v128.const i32 0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x1 0x0 0x0 0x0 0x0 0x0 0x0 0x0
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -666,132 +663,19 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $2
-  i8x16.extract_lane_u 6
-  i32.const 255
-  i32.and
-  i32.const 6
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 140
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 7
-  i32.const 255
-  i32.and
-  i32.const 23
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 141
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 8
-  i32.const 255
-  i32.and
-  i32.const 8
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 142
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 9
-  i32.const 255
-  i32.and
-  i32.const 25
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 143
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 10
-  i32.const 255
-  i32.and
-  i32.const 10
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 144
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 11
-  i32.const 255
-  i32.and
-  i32.const 27
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 145
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 12
-  i32.const 255
-  i32.and
-  i32.const 12
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 146
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 13
-  i32.const 255
-  i32.and
-  i32.const 29
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 147
-   i32.const 2
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $2
-  i8x16.extract_lane_u 14
-  i32.const 255
-  i32.and
-  i32.const 14
-  i32.eq
+ )
+ (func $simd/test_f32x4 (; 7 ;) (type $_)
+  (local $0 v128)
+  (local $1 v128)
+  (local $2 v128)
+  v128.const i32 0x0 0x0 0xc0 0x3f 0x0 0x0 0x20 0x40 0x0 0x0 0x60 0x40 0x0 0x0 0x90 0x40
+  local.set $0
+  local.get $0
+  v128.const i32 0x0 0x0 0xc0 0x3f 0x0 0x0 0x20 0x40 0x0 0x0 0x60 0x40 0x0 0x0 0x90 0x40
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -801,17 +685,243 @@
    call $~lib/env/abort
    unreachable
   end
-  local.get $2
-  i8x16.extract_lane_u 15
-  i32.const 255
-  i32.and
-  i32.const 31
-  i32.eq
+  f32.const 1
+  f32x4.splat
+  local.set $1
+  local.get $1
+  v128.const i32 0x0 0x0 0x80 0x3f 0x0 0x0 0x80 0x3f 0x0 0x0 0x80 0x3f 0x0 0x0 0x80 0x3f
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
    i32.const 8
-   i32.const 149
+   i32.const 150
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  f32x4.add
+  local.set $2
+  local.get $2
+  v128.const i32 0x0 0x0 0x20 0x40 0x0 0x0 0x60 0x40 0x0 0x0 0x90 0x40 0x0 0x0 0xb0 0x40
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 152
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $2
+  f32x4.extract_lane 0
+  f32.const 2.5
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 153
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $2
+  f32x4.extract_lane 3
+  f32.const 5.5
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 154
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $2
+  f32.const 6.5
+  f32x4.replace_lane 3
+  v128.const i32 0x0 0x0 0x20 0x40 0x0 0x0 0x60 0x40 0x0 0x0 0x90 0x40 0x0 0x0 0xd0 0x40
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 155
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
+  v128.const i32 0x0 0x0 0xc0 0x3f 0x0 0x0 0x20 0x40 0x0 0x0 0x80 0x3f 0x0 0x0 0x80 0x3f
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 160
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $simd/test_f64x2 (; 8 ;) (type $_)
+  (local $0 v128)
+  (local $1 v128)
+  (local $2 v128)
+  v128.const i32 0x0 0x0 0x0 0x0 0x0 0x0 0xf8 0x3f 0x0 0x0 0x0 0x0 0x0 0x0 0x4 0x40
+  local.set $0
+  local.get $0
+  v128.const i32 0x0 0x0 0x0 0x0 0x0 0x0 0xf8 0x3f 0x0 0x0 0x0 0x0 0x0 0x0 0x4 0x40
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 169
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  f64.const 1
+  f64x2.splat
+  local.set $1
+  local.get $1
+  v128.const i32 0x0 0x0 0x0 0x0 0x0 0x0 0xf0 0x3f 0x0 0x0 0x0 0x0 0x0 0x0 0xf0 0x3f
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 171
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  f64x2.add
+  local.set $2
+  local.get $2
+  v128.const i32 0x0 0x0 0x0 0x0 0x0 0x0 0x4 0x40 0x0 0x0 0x0 0x0 0x0 0x0 0xc 0x40
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 173
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $2
+  f64x2.extract_lane 0
+  f64.const 2.5
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 174
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $2
+  f64x2.extract_lane 1
+  f64.const 3.5
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 175
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $2
+  f64.const 4.5
+  f64x2.replace_lane 1
+  v128.const i32 0x0 0x0 0x0 0x0 0x0 0x0 0x4 0x40 0x0 0x0 0x0 0x0 0x0 0x0 0x12 0x40
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 176
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  v8x16.shuffle 0 1 2 3 4 5 6 7 24 25 26 27 28 29 30 31
+  v128.const i32 0x0 0x0 0x0 0x0 0x0 0x0 0xf8 0x3f 0x0 0x0 0x0 0x0 0x0 0x0 0xf0 0x3f
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 181
+   i32.const 2
+   call $~lib/env/abort
+   unreachable
+  end
+ )
+ (func $simd/test_v8x16 (; 9 ;) (type $_)
+  (local $0 v128)
+  (local $1 v128)
+  v128.const i32 0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf
+  local.set $0
+  v128.const i32 0x10 0x11 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b 0x1c 0x1d 0x1e 0x1f
+  local.set $1
+  local.get $0
+  local.get $1
+  v8x16.shuffle 0 17 2 19 4 21 6 23 8 25 10 27 12 29 14 31
+  v128.const i32 0x0 0x11 0x2 0x13 0x4 0x15 0x6 0x17 0x8 0x19 0xa 0x1b 0xc 0x1d 0xe 0x1f
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 8
+   i32.const 191
    i32.const 2
    call $~lib/env/abort
    unreachable
