@@ -136,6 +136,8 @@ declare function isReference<T>(value?: any): value is object | string;
 declare function isString<T>(value?: any): value is string | String;
 /** Tests if the specified type *or* expression can be used as an array. Compiles to a constant. */
 declare function isArray<T>(value?: any): value is Array<any>;
+/** Tests if the specified type *or* expression can be used as an array like object. Compiles to a constant. */
+declare function isArrayLike<T>(value?: any): value is ArrayLike<any>;
 /** Tests if the specified type *or* expression is of a function type. Compiles to a constant. */
 declare function isFunction<T>(value?: any): value is (...args: any) => any;
 /** Tests if the specified type *or* expression is of a nullable reference type. Compiles to a constant. */
@@ -881,6 +883,11 @@ declare class DataView {
   setUint64(byteOffset: i32, value: u64, littleEndian?: boolean): void;
   /** Returns a string representation of DataView. */
   toString(): string;
+}
+
+interface ArrayLike<T> {
+  length: i32;
+  // [key: number]: T;
 }
 
 /** Interface for a typed view on an array buffer. */

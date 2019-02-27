@@ -52,13 +52,15 @@ export class ArrayBuffer {
 
   slice(begin: i32 = 0, end: i32 = MAX_BLENGTH): ArrayBuffer {
     var len = this.byteLength;
-    if (begin < 0) begin = max(len + begin, 0);
-    else begin = min(begin, len);
-    if (end < 0) end = max(len + end, 0);
-    else end = min(end, len);
-    var newLen = max(end - begin, 0);
-    var buffer = allocateUnsafe(newLen);
-    memory.copy(changetype<usize>(buffer) + HEADER_SIZE, changetype<usize>(this) + HEADER_SIZE + begin, newLen);
+    begin = begin < 0 ? max(len + begin, 0) : min(begin, len);
+    end = end < 0 ? max(len + end, 0) : min(end, len);
+    len = max(end - begin, 0);
+    var buffer = allocateUnsafe(len);
+    memory.copy(
+      changetype<usize>(buffer) + HEADER_SIZE,
+      changetype<usize>(this) + HEADER_SIZE + begin,
+      len
+    );
     return buffer;
   }
 

@@ -47,6 +47,7 @@ import {
   TypeParameterNode,
   CommonTypeNode,
   TypeNode,
+  ArrowKind,
 
   Expression,
   IdentifierExpression,
@@ -424,7 +425,7 @@ export class Program extends DiagnosticEmitter {
         ),
         null, false, range)
       ),
-      null, null, flags, range
+      null, null, flags, ArrowKind.NONE, range
     );
   }
 
@@ -2401,6 +2402,11 @@ export class FunctionPrototype extends DeclaredElement {
     return (<FunctionDeclaration>this.declaration).body;
   }
 
+  /** Gets the arrow function kind. */
+  get arrowKind(): ArrowKind {
+    return (<FunctionDeclaration>this.declaration).arrowKind;
+  }
+
   /** Tests if this prototype is bound to a class. */
   get isBound(): bool {
     var parent = this.parent;
@@ -2478,6 +2484,8 @@ export class Function extends TypedElement {
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
+  /** Counting id of anonymous inner functions. */
+  nextAnonymousId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(

@@ -209,7 +209,7 @@ export class Type {
     return ret;
   }
 
-  /** Tests if a value of this type is assignable to a target of the specified type. */
+  /** Tests if a value of this type is assignable to the target type incl. implicit conversion. */
   isAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
     var currentClass: Class | null;
     var targetClass: Class | null;
@@ -257,8 +257,20 @@ export class Type {
     return false;
   }
 
-  /** Determines the common compatible type of two types, if any. */
-  static commonCompatible(left: Type, right: Type, signednessIsImportant: bool): Type | null {
+  /** Tests if a value of this type is assignable to the target type excl. implicit conversion. */
+  isStrictlyAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
+    if (this.is(TypeFlags.REFERENCE)) return this.isAssignableTo(target);
+    else if (target.is(TypeFlags.REFERENCE)) return false;
+    if (this.is(TypeFlags.INTEGER)) {
+      return target.is(TypeFlags.INTEGER) && target.size == this.size && (
+        !signednessIsRelevant || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)
+      );
+    }
+    return this.kind == target.kind;
+  }
+
+  /** Determines the common denominator type of two types, if there is any. */
+  static commonDenominator(left: Type, right: Type, signednessIsImportant: bool): Type | null {
     if (right.isAssignableTo(left, signednessIsImportant)) return left;
     else if (left.isAssignableTo(right, signednessIsImportant)) return right;
     return null;
