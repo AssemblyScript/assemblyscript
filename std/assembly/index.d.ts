@@ -356,8 +356,11 @@ declare namespace v128 {
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
 declare namespace i8x16 {
+  /** Creates a 128-bit vector with sixteen identical 8-bit integer lanes. */
   export function splat(x: i8): v128;
+  /** Extracts one of sixteen 8-bit integer lanes from a 128-bit vector as a signed scalar. */
   export function extract_lane_s(x: v128, idx: u8): i8;
+  /** Extracts one of sixteen 8-bit integer lanes from a 128-bit vector as an unsigned scalar. */
   export function extract_lane_u(x: v128, idx: u8): u8;
   export function replace_lane(x: v128, idx: u8, value: i8): v128;
   export function add(a: v128, b: v128): v128;
@@ -387,8 +390,11 @@ declare namespace i8x16 {
 /** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
 declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
 declare namespace i16x8 {
+  /** Creates a 128-bit vector with eight identical 16-bit integer lanes. */
   export function splat(x: i16): v128;
+  /** Extracts one of eight 16-bit integer lanes from a 128-bit vector as a signed scalar. */
   export function extract_lane_s(x: v128, idx: u8): i16;
+  /** Extracts one of eight 16-bit integer lanes from a 128-bit vector as an unsigned scalar. */
   export function extract_lane_u(x: v128, idx: u8): u16;
   export function replace_lane(x: v128, idx: u8, value: i16): v128;
   export function add(a: v128, b: v128): v128;
@@ -418,7 +424,9 @@ declare namespace i16x8 {
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
 declare namespace i32x4 {
+  /** Creates a 128-bit vector with four identical 32-bit integer lanes. */
   export function splat(x: i32): v128;
+  /** Extracts one of four 32-bit integer lanes from a 128-bit vector as a scalar. */
   export function extract_lane(x: v128, idx: u8): i32;
   export function replace_lane(x: v128, idx: u8, value: i32): v128;
   export function add(a: v128, b: v128): v128;
@@ -446,7 +454,9 @@ declare namespace i32x4 {
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
 declare namespace i64x2 {
+  /** Creates a 128-bit vector with two identical 64-bit integer lanes. */
   export function splat(x: i64): v128;
+  /** Extracts one of two 64-bit integer lanes from a 128-bit vector as a scalar. */
   export function extract_lane(x: v128, idx: u8): i64;
   export function replace_lane(x: v128, idx: u8, value: i64): v128;
   export function add(a: v128, b: v128): v128;
@@ -464,7 +474,9 @@ declare namespace i64x2 {
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
 declare namespace f32x4 {
+  /** Creates a 128-bit vector with four identical 32-bit float lanes. */
   export function splat(x: f32): v128;
+  /** Extracts one of four 32-bit float lanes from a 128-bit vector as a scalar. */
   export function extract_lane(x: v128, idx: u8): f32;
   export function replace_lane(x: v128, idx: u8, value: f32): v128;
   export function add(a: v128, b: v128): v128;
@@ -488,7 +500,9 @@ declare namespace f32x4 {
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
 declare function f64x2(a: f64, b: f64): v128;
 declare namespace f64x2 {
+  /** Creates a 128-bit vector with two identical 64-bit float lanes. */
   export function splat(x: f64): v128;
+  /** Extracts one of two 64-bit float lanes from a 128-bit vector as a scalar. */
   export function extract_lane(x: v128, idx: u8): f64;
   export function replace_lane(x: v128, idx: u8, value: f64): v128;
   export function add(a: v128, b: v128): v128;
