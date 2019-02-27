@@ -2936,9 +2936,10 @@ export function compileCall(
         return module.createUnreachable();
       }
       let flow = compiler.currentFlow;
+      let alreadyUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
       flow.set(FlowFlags.UNCHECKED_CONTEXT);
       ret = compiler.compileExpressionRetainType(operands[0], contextualType, WrapMode.NONE);
-      flow.unset(FlowFlags.UNCHECKED_CONTEXT);
+      if (!alreadyUnchecked) flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return ret;
     }
     case BuiltinSymbols.call_indirect: { // call_indirect<T?>(target: Function | u32, ...args: *[]) -> T
