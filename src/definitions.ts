@@ -265,22 +265,16 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private generateHandlerMethods(valuePrefix: string, fields: any[]) : void {
+    function fieldsWithType(type: string) {
+      return fields.filter(field => field.type.toString() == type);
+    }
+
     for (let fieldType in this.typeMapping) {
       let setterType = this.typeMapping[fieldType];
-      let matchingFields = fields.filter(field => field.type.toString() == fieldType);
-      if (matchingFields.length > 0) {
-        this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {`);
-        matchingFields.forEach(field => {
-          this.sb.push(`if (name == "${field.name}") {
-            ${valuePrefix}${field.name} = value;
-            return;
-          }`);
-        });
-        this.sb.push(`
-          super.set${setterType}(name, value);
-        }`);
-      }
+      let matchingFields = fieldsWithType(fieldType);
+      this.generateBasicSetterHandlers(valuePrefix, setterType, fieldType, matchingFields);
     }
+
     this.sb.push("setNull(name: string): void {");
     fields.forEach((field) => {
       this.sb.push(`if (name == "${field.name}") {
@@ -312,6 +306,21 @@ export class NEARBindingsBuilder extends ExportsWalker {
     this.sb.push(`
         return super.pushArray(name);
       }`);
+  }
+
+  private generateBasicSetterHandlers(valuePrefix: string, setterType: string, setterValueType: string, matchingFields: any[]) {
+      if (matchingFields.length > 0) {
+        this.sb.push(`set${setterType}(name: string, value: ${setterValueType}): void {`);
+        matchingFields.forEach(field => {
+          this.sb.push(`if (name == "${field.name}") {
+            ${valuePrefix}${field.name} = <${field.type}>value;
+            return;
+          }`);
+        });
+        this.sb.push(`
+          super.set${setterType}(name, value);
+        }`);
+      }
   }
 
   private generatePushHandler(valuePrefix: string, fields: any[]) {
