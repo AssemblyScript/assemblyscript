@@ -404,11 +404,9 @@ export class String {
     if (len < slen) return this;
     var end = this.indexOf(search);
     if (end !== -1) {
-      return (
-        this.substring(0, end)
+      return this.substring(0, end)
         .concat(replacement)
-        .concat(this.substring(end + slen, len))
-      );
+        .concat(this.substring(end + slen, len));
     }
     return this;
   }
@@ -422,9 +420,7 @@ export class String {
     var len = this.length;
     var slen = search.length;
     if (len < slen) return this;
-    if (len == slen) {
-      return this.replace(search, replacement);
-    }
+    if (len == slen) return this.replace(search, replacement);
     var start = 0, end = 0;
     var result = changetype<String>("");
     while ((end = this.indexOf(search, start)) != -1) {
