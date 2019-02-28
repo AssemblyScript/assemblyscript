@@ -402,11 +402,11 @@ export class String {
     var len = this.length;
     var slen = search.length;
     if (len < slen) return this;
-    var end = this.indexOf(search);
-    if (~end) {
-      return this.substring(0, end)
+    var index = this.indexOf(search);
+    if (~index) {
+      return this.substring(0, index)
         .concat(replacement)
-        .concat(this.substring(end + slen, len));
+        .concat(this.substring(index + slen, len));
     }
     return this;
   }
@@ -424,13 +424,13 @@ export class String {
       if (search == replacement) return this;
       return this.replace(search, replacement);
     }
-    var start = 0, end = 0;
+    var prev = 0, next = 0;
     var result = changetype<String>("");
-    while (~(end = this.indexOf(search, start))) {
-      result = result.concat(this.substring(start, end).concat(replacement));
-      start = end + slen;
+    while (~(next = this.indexOf(search, prev))) {
+      result = result.concat(this.substring(prev, next).concat(replacement));
+      prev = next + slen;
     }
-    if (start) return result.concat(this.substring(start, len));
+    if (prev) return result.concat(this.substring(prev, len));
     return this;
   }
 

@@ -7064,7 +7064,7 @@
   i32.const 392
   i32.const 656
   i32.const 656
-  call $~lib/string/String#replace
+  call $~lib/string/String#replaceAll
   i32.const 392
   call $~lib/string/String.__eq
   i32.eqz
