@@ -630,7 +630,7 @@ declare namespace f32x4 {
   export function ge(a: v128, b: v128): v128;
   /** Converts each 32-bit signed integer lane of a 128-bit vector to floating point. */
   export function convert_s_i32x4(a: v128): v128;
-  /** Converts each 32-bit unsigned integer lane of a 128-bit vectorto floating point. */
+  /** Converts each 32-bit unsigned integer lane of a 128-bit vector to floating point. */
   export function convert_u_i32x4(a: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
