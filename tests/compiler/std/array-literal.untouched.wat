@@ -1,9 +1,9 @@
 (module
- (type $_ (func))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $ii (func (param i32) (result i32)))
- (type $iii_ (func (param i32 i32 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\03\00\00\00\00\00\00\00\00\01\02\00\00\00\00\00")
@@ -31,7 +31,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -43,7 +43,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/array/Array<i8>#__get (; 2 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#__get (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -76,7 +76,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<i32>#__get (; 3 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -109,7 +109,7 @@
    unreachable
   end
  )
- (func $~lib/internal/arraybuffer/computeSize (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -121,7 +121,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/allocator/arena/__memory_allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -200,7 +200,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -229,12 +229,12 @@
   i32.store
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/memory/memset (; 8 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 8 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -488,7 +488,7 @@
    end
   end
  )
- (func $~lib/array/Array<i8>#constructor (; 9 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -549,7 +549,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<i8>#__unchecked_set (; 10 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i8>#__unchecked_set (; 10 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -573,7 +573,7 @@
   local.get $5
   i32.store8 offset=8
  )
- (func $~lib/array/Array<i32>#constructor (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -634,7 +634,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<i32>#__unchecked_set (; 12 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__unchecked_set (; 12 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -658,7 +658,7 @@
   local.get $5
   i32.store offset=8
  )
- (func $std/array-literal/Ref#constructor (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-literal/Ref#constructor (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -668,7 +668,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#constructor (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Ref>#constructor (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -729,7 +729,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Ref>#__unchecked_set (; 15 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref>#__unchecked_set (; 15 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -753,7 +753,7 @@
   local.get $5
   i32.store offset=8
  )
- (func $std/array-literal/RefWithCtor#constructor (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/array-literal/RefWithCtor#constructor (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -763,7 +763,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#constructor (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<RefWithCtor>#constructor (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -824,7 +824,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 18 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<RefWithCtor>#__unchecked_set (; 18 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -848,7 +848,7 @@
   local.get $5
   i32.store offset=8
  )
- (func $start:std/array-literal (; 19 ;) (type $_)
+ (func $start:std/array-literal (; 19 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1279,9 +1279,9 @@
    unreachable
   end
  )
- (func $start (; 20 ;) (type $_)
+ (func $start (; 20 ;) (type $FUNCSIG$v)
   call $start:std/array-literal
  )
- (func $null (; 21 ;) (type $_)
+ (func $null (; 21 ;) (type $FUNCSIG$v)
  )
 )

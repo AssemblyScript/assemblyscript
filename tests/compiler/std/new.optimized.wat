@@ -1,5 +1,5 @@
 (module
- (type $_ (func))
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
@@ -80,7 +80,7 @@
   f32.store offset=4
   local.get $0
  )
- (func $start (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -88,7 +88,7 @@
   call $std/new/AClass#constructor
   global.set $std/new/aClass
  )
- (func $null (; 3 ;) (type $_)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
   nop
  )
 )

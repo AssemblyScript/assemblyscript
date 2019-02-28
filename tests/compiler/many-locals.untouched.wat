@@ -1,7 +1,7 @@
 (module
- (type $ii (func (param i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0e\00\00\00m\00a\00n\00y\00-\00l\00o\00c\00a\00l\00s\00.\00t\00s\00")
@@ -13,7 +13,7 @@
  (export "testI32" (func $many-locals/testI32))
  (export "testI8" (func $many-locals/testI8))
  (start $start)
- (func $many-locals/testI32 (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $many-locals/testI32 (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -400,7 +400,7 @@
   local.set $128
   local.get $128
  )
- (func $many-locals/testI8 (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $many-locals/testI8 (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -791,7 +791,7 @@
   i32.const 24
   i32.shr_s
  )
- (func $start:many-locals (; 3 ;) (type $_)
+ (func $start:many-locals (; 3 ;) (type $FUNCSIG$v)
   i32.const 42
   call $many-locals/testI32
   i32.const 42
@@ -819,9 +819,9 @@
    unreachable
   end
  )
- (func $start (; 4 ;) (type $_)
+ (func $start (; 4 ;) (type $FUNCSIG$v)
   call $start:many-locals
  )
- (func $null (; 5 ;) (type $_)
+ (func $null (; 5 ;) (type $FUNCSIG$v)
  )
 )

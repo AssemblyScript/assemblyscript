@@ -1,11 +1,11 @@
 (module
- (type $_ (func))
- (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $ii (func (param i32) (result i32)))
- (type $iii_ (func (param i32 i32 i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
@@ -28,7 +28,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -40,7 +40,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -52,7 +52,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -131,7 +131,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -160,7 +160,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 5 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -414,7 +414,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 6 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -453,7 +453,7 @@
   end
   local.get $3
  )
- (func $~lib/internal/memory/memcpy (; 7 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 7 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1654,7 +1654,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 8 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 8 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1881,7 +1881,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice (; 9 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice (; 9 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1974,7 +1974,7 @@
   end
   local.get $6
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice|trampoline (; 10 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -1995,7 +1995,7 @@
   local.get $2
   call $~lib/arraybuffer/ArrayBuffer#slice
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>> (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<Array<i32>> (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2005,7 +2005,7 @@
   end
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<usize> (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<usize> (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2015,18 +2015,7 @@
   end
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array> (; 13 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 0
-  i32.eq
-  if
-   i32.const 0
-   return
-  end
-  i32.const 1
-  return
- )
- (func $~lib/arraybuffer/ArrayBuffer.isView<Int32Array> (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<Uint8Array> (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2037,7 +2026,7 @@
   i32.const 1
   return
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<DataView> (; 15 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<Int32Array> (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.eq
@@ -2048,12 +2037,23 @@
   i32.const 1
   return
  )
- (func $~lib/memory/memory.allocate (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<DataView> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 0
+  i32.eq
+  if
+   i32.const 0
+   return
+  end
+  i32.const 1
+  return
+ )
+ (func $~lib/memory/memory.allocate (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2120,7 +2120,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#constructor (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -2134,7 +2134,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 19 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<i32>#constructor (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2201,7 +2201,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Int32Array#constructor (; 20 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#constructor (; 20 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -2215,7 +2215,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor (; 21 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 21 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $3
   global.get $~lib/builtins/i32.MIN_VALUE
   i32.eq
@@ -2280,7 +2280,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor|trampoline (; 22 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor|trampoline (; 22 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -2304,7 +2304,7 @@
   local.get $3
   call $~lib/dataview/DataView#constructor
  )
- (func $start:std/arraybuffer (; 23 ;) (type $_)
+ (func $start:std/arraybuffer (; 23 ;) (type $FUNCSIG$v)
   (local $0 i32)
   call $start:~lib/allocator/arena
   i32.const 0
@@ -2654,9 +2654,9 @@
    unreachable
   end
  )
- (func $start (; 24 ;) (type $_)
+ (func $start (; 24 ;) (type $FUNCSIG$v)
   call $start:std/arraybuffer
  )
- (func $null (; 25 ;) (type $_)
+ (func $null (; 25 ;) (type $FUNCSIG$v)
  )
 )

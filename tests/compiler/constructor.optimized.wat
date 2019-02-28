@@ -1,6 +1,6 @@
 (module
- (type $_ (func))
- (type $ii (func (param i32) (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
@@ -21,7 +21,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -101,7 +101,7 @@
   i32.store
   local.get $0
  )
- (func $start:constructor (; 3 ;) (type $_)
+ (func $start:constructor (; 3 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
@@ -156,10 +156,10 @@
   local.get $0
   global.set $constructor/ctorConditionallyAllocates
  )
- (func $start (; 4 ;) (type $_)
+ (func $start (; 4 ;) (type $FUNCSIG$v)
   call $start:constructor
  )
- (func $null (; 5 ;) (type $_)
+ (func $null (; 5 ;) (type $FUNCSIG$v)
   nop
  )
 )

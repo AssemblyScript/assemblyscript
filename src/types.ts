@@ -368,16 +368,25 @@ export class Type {
   /** Converts this type to its signature string. */
   toSignatureString(): string {
     switch (this.kind) {
-      default: return "i";
+      // same naming scheme as Binaryen
+      case TypeKind.I8:
+      case TypeKind.U8:
+      case TypeKind.I16:
+      case TypeKind.U16:
+      case TypeKind.I32:
+      case TypeKind.U32:
+      case TypeKind.BOOL: return "i";
       case TypeKind.I64:
-      case TypeKind.U64: return "I";
+      case TypeKind.U64: return "j";
       case TypeKind.ISIZE:
-      case TypeKind.USIZE: return this.size == 64 ? "I" : "i";
+      case TypeKind.USIZE: return this.size == 64 ? "j" : "i";
       case TypeKind.F32: return "f";
-      case TypeKind.F64: return "F";
-      case TypeKind.V128: return "v";
-      case TypeKind.VOID: return "_";
+      case TypeKind.F64: return "d";
+      case TypeKind.V128: return "V";
+      case TypeKind.VOID: return "v";
+      default: assert(false);
     }
+    return "i";
   }
 
   // Types
@@ -614,12 +623,12 @@ export class Signature {
   /** Converts a signature to a function type string. */
   static makeSignatureString(parameterTypes: Type[] | null, returnType: Type, thisType: Type | null = null): string {
     var sb = [];
+    sb.push(returnType.toSignatureString());
     if (thisType) sb.push(thisType.toSignatureString());
     if (parameterTypes) {
       for (let i = 0, k = parameterTypes.length; i < k; ++i) sb.push(parameterTypes[i].toSignatureString());
     }
-    sb.push(returnType.toSignatureString());
-    return sb.join("");
+    return "FUNCSIG$" + sb.join("");
   }
 
   /** Converts this signature to a function type string. */

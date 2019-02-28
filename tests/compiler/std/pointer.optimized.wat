@@ -1,6 +1,6 @@
 (module
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -1110,7 +1110,7 @@
    end
   end
  )
- (func $start:std/pointer (; 4 ;) (type $_)
+ (func $start:std/pointer (; 4 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 8
@@ -1499,10 +1499,10 @@
    unreachable
   end
  )
- (func $start (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $FUNCSIG$v)
   call $start:std/pointer
  )
- (func $null (; 6 ;) (type $_)
+ (func $null (; 6 ;) (type $FUNCSIG$v)
   nop
  )
 )

@@ -1,9 +1,9 @@
 (module
- (type $ii (func (param i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
- (type $i (func (result i32)))
- (type $iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
@@ -17,32 +17,32 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:function-expression~anonymous|0 (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $start:function-expression~anonymous|0 (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~someName (; 2 ;) (type $_)
+ (func $start:function-expression~someName (; 2 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start:function-expression~anonymous|2 (; 3 ;) (type $i) (result i32)
+ (func $start:function-expression~anonymous|2 (; 3 ;) (type $FUNCSIG$i) (result i32)
   i32.const 1
  )
- (func $start:function-expression~anonymous|3 (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|3 (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $start:function-expression~anonymous|4 (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|4 (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~anonymous|5 (; 6 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|5 (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $start:function-expression (; 7 ;) (type $_)
+ (func $start:function-expression (; 7 ;) (type $FUNCSIG$v)
   i32.const 1
   global.set $~lib/argc
   i32.const 1
   global.get $function-expression/f1
-  call_indirect (type $ii)
+  call_indirect (type $FUNCSIG$ii)
   i32.const 1
   i32.ne
   if
@@ -57,7 +57,7 @@
   global.set $~lib/argc
   i32.const 2
   global.get $function-expression/f2
-  call_indirect (type $ii)
+  call_indirect (type $FUNCSIG$ii)
   i32.const 2
   i32.ne
   if
@@ -71,11 +71,11 @@
   i32.const 0
   global.set $~lib/argc
   global.get $function-expression/f3
-  call_indirect (type $_)
+  call_indirect (type $FUNCSIG$v)
   i32.const 0
   global.set $~lib/argc
   global.get $function-expression/f4
-  call_indirect (type $i)
+  call_indirect (type $FUNCSIG$i)
   i32.const 1
   i32.ne
   if
@@ -91,7 +91,7 @@
   i32.const 1
   i32.const 2
   i32.const 5
-  call_indirect (type $iii)
+  call_indirect (type $FUNCSIG$iii)
   i32.const 3
   i32.ne
   if
@@ -107,7 +107,7 @@
   i32.const 1
   i32.const 2
   i32.const 6
-  call_indirect (type $iii)
+  call_indirect (type $FUNCSIG$iii)
   i32.const 1
   i32.ne
   if
@@ -123,7 +123,7 @@
   i32.const 1
   i32.const 2
   i32.const 7
-  call_indirect (type $iii)
+  call_indirect (type $FUNCSIG$iii)
   i32.const 42
   i32.ne
   if
@@ -139,7 +139,7 @@
   i32.const 1
   i32.const 2
   i32.const 8
-  call_indirect (type $iii)
+  call_indirect (type $FUNCSIG$iii)
   i32.const 3
   i32.ne
   if
@@ -155,7 +155,7 @@
   i32.const 1
   i32.const 2
   i32.const 9
-  call_indirect (type $iii)
+  call_indirect (type $FUNCSIG$iii)
   i32.const 1
   i32.ne
   if
@@ -171,7 +171,7 @@
   i32.const 1
   i32.const 2
   i32.const 10
-  call_indirect (type $iii)
+  call_indirect (type $FUNCSIG$iii)
   i32.const 42
   i32.ne
   if
@@ -183,7 +183,7 @@
    unreachable
   end
  )
- (func $start (; 8 ;) (type $_)
+ (func $start (; 8 ;) (type $FUNCSIG$v)
   call $start:function-expression
  )
 )

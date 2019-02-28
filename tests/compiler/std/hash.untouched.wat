@@ -1,7 +1,7 @@
 (module
- (type $ii (func (param i32) (result i32)))
- (type $Ii (func (param i64) (result i32)))
- (type $_ (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$ij (func (param i64) (result i32)))
+ (type $FUNCSIG$v (func))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00")
  (data (i32.const 16) "\01\00\00\00a\00")
@@ -13,7 +13,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/internal/hash/hashStr (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hashStr (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -55,10 +55,10 @@
   end
   local.get $1
  )
- (func $std/hash/check (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $std/hash/check (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
  )
- (func $~lib/internal/hash/hash32 (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -100,7 +100,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/internal/hash/hash64 (; 3 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash64 (; 3 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -188,7 +188,7 @@
   local.set $3
   local.get $3
  )
- (func $start:std/hash (; 4 ;) (type $_)
+ (func $start:std/hash (; 4 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f32)
   (local $2 f64)
@@ -358,9 +358,9 @@
   call $std/hash/check
   drop
  )
- (func $start (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $FUNCSIG$v)
   call $start:std/hash
  )
- (func $null (; 6 ;) (type $_)
+ (func $null (; 6 ;) (type $FUNCSIG$v)
  )
 )

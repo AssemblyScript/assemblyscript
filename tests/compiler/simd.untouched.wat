@@ -1,6 +1,6 @@
 (module
- (type $_ (func))
- (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\07\00\00\00s\00i\00m\00d\00.\00t\00s\00")
@@ -13,7 +13,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -25,7 +25,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $simd/test_v128 (; 2 ;) (type $_)
+ (func $simd/test_v128 (; 2 ;) (type $FUNCSIG$v)
   v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
   v128.const i32 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf 0x10
   i8x16.eq
@@ -142,7 +142,7 @@
    unreachable
   end
  )
- (func $simd/test_i8x16 (; 3 ;) (type $_)
+ (func $simd/test_i8x16 (; 3 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -687,7 +687,7 @@
    unreachable
   end
  )
- (func $simd/test_i16x8 (; 4 ;) (type $_)
+ (func $simd/test_i16x8 (; 4 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1232,7 +1232,7 @@
    unreachable
   end
  )
- (func $simd/test_i32x4 (; 5 ;) (type $_)
+ (func $simd/test_i32x4 (; 5 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1714,7 +1714,7 @@
    unreachable
   end
  )
- (func $simd/test_i64x2 (; 6 ;) (type $_)
+ (func $simd/test_i64x2 (; 6 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1990,7 +1990,7 @@
    unreachable
   end
  )
- (func $simd/test_f32x4 (; 7 ;) (type $_)
+ (func $simd/test_f32x4 (; 7 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -2420,7 +2420,7 @@
    unreachable
   end
  )
- (func $simd/test_f64x2 (; 8 ;) (type $_)
+ (func $simd/test_f64x2 (; 8 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -2850,7 +2850,7 @@
    unreachable
   end
  )
- (func $simd/test_v8x16 (; 9 ;) (type $_)
+ (func $simd/test_v8x16 (; 9 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   v128.const i32 0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf
@@ -2875,7 +2875,7 @@
    unreachable
   end
  )
- (func $start:simd (; 10 ;) (type $_)
+ (func $start:simd (; 10 ;) (type $FUNCSIG$v)
   call $start:~lib/allocator/arena
   block
    call $simd/test_v128
@@ -2888,9 +2888,9 @@
    call $simd/test_v8x16
   end
  )
- (func $start (; 11 ;) (type $_)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   call $start:simd
  )
- (func $null (; 12 ;) (type $_)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
  )
 )
