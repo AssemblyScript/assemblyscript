@@ -146,6 +146,7 @@ assert("".replace("", "abc") == "abc");
 assert("abc".replace("-", "+") == "abc");
 assert("abc".replace("abc", "+") == "+");
 assert("abc".replace("abcd", "+") == "abc");
+assert("abc".replace("ab", "ab") == "abc");
 assert("a-b-c".replace("-", "+") == "a+b-c");
 assert("abc".replace("", "+") == "+abc");
 assert("\nabc".replace("\n", "+") == "+abc");
@@ -154,6 +155,7 @@ assert("".replaceAll("", "abc") == "abc");
 assert("abc".replaceAll("-", "+") == "abc");
 assert("abcabc".replaceAll("abc", "+") == "++");
 assert("abcabcabc".replaceAll("abc", "+") == "+++");
+assert("abcabc".replace("ab", "ab") == "abcabc");
 assert("abc".replaceAll("abcd", "+") == "abc");
 assert("a-b-c".replaceAll("-", "+") == "a+b+c");
 

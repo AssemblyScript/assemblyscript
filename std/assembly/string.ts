@@ -420,7 +420,10 @@ export class String {
     var len = this.length;
     var slen = search.length;
     if (len < slen) return this;
-    if (len == slen) return this.replace(search, replacement);
+    if (len == slen) {
+      if (search == replacement) return this;
+      return this.replace(search, replacement);
+    }
     var start = 0, end = 0;
     var result = changetype<String>("");
     while (~(end = this.indexOf(search, start))) {
