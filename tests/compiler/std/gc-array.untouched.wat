@@ -1,12 +1,12 @@
 (module
- (type $_ (func))
- (type $i_ (func (param i32)))
- (type $ii (func (param i32) (result i32)))
- (type $ii_ (func (param i32 i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $iii_ (func (param i32 i32 i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $i (func (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -29,7 +29,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-array/main))
- (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -41,7 +41,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/arraybuffer/ArrayBuffer~gc (; 2 ;) (type $i_) (param $0 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~gc (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -50,13 +50,13 @@
   local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/collector/itcm/ManagedObject#get:color (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:color (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const 3
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#get:next (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:next (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const 3
@@ -64,7 +64,7 @@
   i32.xor
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#set:next (; 5 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:next (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   local.get $0
@@ -74,7 +74,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/ManagedObject#unlink (; 6 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#unlink (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -90,7 +90,7 @@
   local.get $1
   call $~lib/collector/itcm/ManagedObject#set:next
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 7 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load offset=4
@@ -108,7 +108,7 @@
   local.get $1
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 8 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/collector/itcm/iter
   i32.eq
@@ -133,7 +133,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/__gc_mark (; 9 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/__gc_mark (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   if
@@ -155,7 +155,7 @@
    end
   end
  )
- (func $~lib/array/Array<Foo>~gc (; 10 ;) (type $i_) (param $0 i32)
+ (func $~lib/array/Array<Foo>~gc (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -193,7 +193,7 @@
    end
   end
  )
- (func $~lib/allocator/arena/__memory_allocate (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -272,7 +272,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/collector/itcm/ManagedObjectList#clear (; 12 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#clear (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.store
@@ -280,7 +280,7 @@
   local.get $0
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#set:color (; 13 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:color (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $0
   i32.load
@@ -292,10 +292,10 @@
   i32.or
   i32.store
  )
- (func $~lib/allocator/arena/__memory_free (; 14 ;) (type $i_) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 14 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/collector/itcm/step (; 15 ;) (type $_)
+ (func $~lib/collector/itcm/step (; 15 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   block $break|0
@@ -391,7 +391,7 @@
       end
       local.get $0
       i32.load offset=8
-      call_indirect (type $i_)
+      call_indirect (type $FUNCSIG$vi)
      else      
       i32.const 3
       call $~iterateRoots
@@ -457,7 +457,7 @@
    unreachable
   end
  )
- (func $~lib/collector/itcm/__gc_collect (; 16 ;) (type $_)
+ (func $~lib/collector/itcm/__gc_collect (; 16 ;) (type $FUNCSIG$v)
   (local $0 i32)
   block $break|0
    block $case1|0
@@ -489,11 +489,11 @@
    end
   end
  )
- (func $~lib/gc/gc.collect (; 17 ;) (type $_)
+ (func $~lib/gc/gc.collect (; 17 ;) (type $FUNCSIG$v)
   call $~lib/collector/itcm/__gc_collect
   return
  )
- (func $~lib/collector/itcm/__gc_allocate (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/collector/itcm/__gc_allocate (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -532,7 +532,7 @@
    i32.add
   end
  )
- (func $std/gc-array/Foo~gc (; 19 ;) (type $i_) (param $0 i32)
+ (func $std/gc-array/Foo~gc (; 19 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -541,7 +541,7 @@
   local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/string/String~gc (; 20 ;) (type $i_) (param $0 i32)
+ (func $~lib/string/String~gc (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -550,7 +550,7 @@
   local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/internal/arraybuffer/computeSize (; 21 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -562,10 +562,10 @@
   i32.sub
   i32.shl
  )
- (func $~lib/internal/arraybuffer/__gc (; 22 ;) (type $i_) (param $0 i32)
+ (func $~lib/internal/arraybuffer/__gc (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 23 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741816
@@ -589,7 +589,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memcpy (; 24 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1790,7 +1790,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 25 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 25 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -2017,7 +2017,7 @@
    end
   end
  )
- (func $~lib/internal/memory/memset (; 26 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 26 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -2271,7 +2271,7 @@
    end
   end
  )
- (func $~lib/internal/arraybuffer/reallocateUnsafe (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/arraybuffer/reallocateUnsafe (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2371,7 +2371,7 @@
   end
   local.get $0
  )
- (func $~lib/collector/itcm/__gc_link (; 28 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/__gc_link (; 28 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   block $~lib/collector/itcm/refToObj|inlined.1 (result i32)
@@ -2407,7 +2407,7 @@
    call $~lib/collector/itcm/ManagedObject#makeGray
   end
  )
- (func $~lib/array/Array<Foo>#__set (; 29 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Foo>#__set (; 29 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2477,7 +2477,7 @@
   local.get $2
   call $~lib/collector/itcm/__gc_link
  )
- (func $start:std/gc-array (; 30 ;) (type $_)
+ (func $start:std/gc-array (; 30 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2517,7 +2517,7 @@
   call $~lib/array/Array<Foo>#__set
   call $~lib/gc/gc.collect
  )
- (func $std/gc-array/main (; 31 ;) (type $i) (result i32)
+ (func $std/gc-array/main (; 31 ;) (type $FUNCSIG$i) (result i32)
   global.get $~lib/started
   i32.eqz
   if
@@ -2527,14 +2527,14 @@
   end
   i32.const 0
  )
- (func $start (; 32 ;) (type $_)
+ (func $start (; 32 ;) (type $FUNCSIG$v)
   call $start:std/gc-array
  )
- (func $null (; 33 ;) (type $_)
+ (func $null (; 33 ;) (type $FUNCSIG$v)
  )
- (func $~iterateRoots (; 34 ;) (type $i_) (param $0 i32)
+ (func $~iterateRoots (; 34 ;) (type $FUNCSIG$vi) (param $0 i32)
   global.get $std/gc-array/arr
   local.get $0
-  call_indirect (type $i_)
+  call_indirect (type $FUNCSIG$vi)
  )
 )

@@ -1,10 +1,10 @@
 (module
- (type $_ (func))
- (type $i (func (result i32)))
- (type $I (func (result i64)))
- (type $f (func (result f32)))
- (type $F (func (result f64)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$j (func (result i64)))
+ (type $FUNCSIG$f (func (result f32)))
+ (type $FUNCSIG$d (func (result f64)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s\00")
@@ -23,7 +23,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $infer-type/locals (; 1 ;) (type $_)
+ (func $infer-type/locals (; 1 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
   (local $2 f64)
@@ -43,19 +43,19 @@
   global.get $infer-type/F
   local.set $5
  )
- (func $infer-type/reti (; 2 ;) (type $i) (result i32)
+ (func $infer-type/reti (; 2 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
  )
- (func $infer-type/retI (; 3 ;) (type $I) (result i64)
+ (func $infer-type/retI (; 3 ;) (type $FUNCSIG$j) (result i64)
   i64.const 0
  )
- (func $infer-type/retf (; 4 ;) (type $f) (result f32)
+ (func $infer-type/retf (; 4 ;) (type $FUNCSIG$f) (result f32)
   f32.const 0
  )
- (func $infer-type/refF (; 5 ;) (type $F) (result f64)
+ (func $infer-type/refF (; 5 ;) (type $FUNCSIG$d) (result f64)
   f64.const 0
  )
- (func $start:infer-type (; 6 ;) (type $_)
+ (func $start:infer-type (; 6 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   global.get $infer-type/i
@@ -126,9 +126,9 @@
    unreachable
   end
  )
- (func $start (; 7 ;) (type $_)
+ (func $start (; 7 ;) (type $FUNCSIG$v)
   call $start:infer-type
  )
- (func $null (; 8 ;) (type $_)
+ (func $null (; 8 ;) (type $FUNCSIG$v)
  )
 )

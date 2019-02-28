@@ -1,6 +1,6 @@
 (module
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00w\00h\00i\00l\00e\00.\00t\00s")
@@ -12,7 +12,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:while (; 1 ;) (type $_)
+ (func $start:while (; 1 ;) (type $FUNCSIG$v)
   (local $0 i32)
   loop $continue|0
    global.get $while/n
@@ -176,10 +176,10 @@
    unreachable
   end
  )
- (func $start (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:while
  )
- (func $null (; 3 ;) (type $_)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
   nop
  )
 )

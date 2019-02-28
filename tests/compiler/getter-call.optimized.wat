@@ -1,6 +1,5 @@
 (module
- (type $_ (func))
- (type $i (func (result i32)))
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 2 funcref)
@@ -62,24 +61,24 @@
   global.set $~lib/allocator/arena/offset
   local.get $0
  )
- (func $getter-call/C#get:x~anonymous|0 (; 1 ;) (type $i) (result i32)
+ (func $getter-call/C#get:x~anonymous|0 (; 1 ;) (type $FUNCSIG$i) (result i32)
   i32.const 42
  )
- (func $getter-call/test (; 2 ;) (type $i) (result i32)
+ (func $getter-call/test (; 2 ;) (type $FUNCSIG$i) (result i32)
   call $~lib/allocator/arena/__memory_allocate
   drop
   i32.const 0
   global.set $~lib/argc
   i32.const 1
-  call_indirect (type $i)
+  call_indirect (type $FUNCSIG$i)
  )
- (func $start (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $FUNCSIG$v)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 4 ;) (type $_)
+ (func $null (; 4 ;) (type $FUNCSIG$v)
   nop
  )
 )

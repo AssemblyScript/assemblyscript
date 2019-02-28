@@ -1,8 +1,8 @@
 (module
- (type $_ (func))
- (type $ii (func (param i32) (result i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $i (func (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -25,7 +25,7 @@
  (export "testObjFn" (func $nonNullAssertion/testObjFn))
  (export "testObjRet" (func $nonNullAssertion/testObjRet))
  (start $start)
- (func $start:~lib/allocator/arena (; 0 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 0 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -37,21 +37,21 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $start:nonNullAssertion (; 1 ;) (type $_)
+ (func $start:nonNullAssertion (; 1 ;) (type $FUNCSIG$v)
   call $start:~lib/allocator/arena
  )
- (func $nonNullAssertion/testVar (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testVar (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $nonNullAssertion/testObj (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load
- )
- (func $nonNullAssertion/testProp (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testObj (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $~lib/array/Array<Foo>#__get (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $nonNullAssertion/testProp (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+ )
+ (func $~lib/array/Array<Foo>#__get (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -84,12 +84,12 @@
    unreachable
   end
  )
- (func $nonNullAssertion/testArr (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testArr (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<Foo>#__get
  )
- (func $~lib/array/Array<Foo | null>#__get (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Foo | null>#__get (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -122,61 +122,61 @@
    unreachable
   end
  )
- (func $nonNullAssertion/testElem (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testElem (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<Foo | null>#__get
  )
- (func $nonNullAssertion/testAll (; 9 ;) (type $ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 0
-  call $~lib/array/Array<Foo | null>#__get
-  i32.load
- )
- (func $nonNullAssertion/testAll2 (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testAll (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<Foo | null>#__get
   i32.load
  )
- (func $nonNullAssertion/testFn (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testAll2 (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 0
+  call $~lib/array/Array<Foo | null>#__get
+  i32.load
+ )
+ (func $nonNullAssertion/testFn (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
-  call_indirect (type $i)
+  call_indirect (type $FUNCSIG$i)
  )
- (func $nonNullAssertion/testFn2 (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testFn2 (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   local.set $1
   i32.const 0
   global.set $~lib/argc
   local.get $1
-  call_indirect (type $i)
+  call_indirect (type $FUNCSIG$i)
  )
- (func $nonNullAssertion/testRet (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testRet (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
-  call_indirect (type $i)
+  call_indirect (type $FUNCSIG$i)
  )
- (func $nonNullAssertion/testObjFn (; 14 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 0
-  global.set $~lib/argc
-  local.get $0
-  i32.load offset=4
-  call_indirect (type $i)
- )
- (func $nonNullAssertion/testObjRet (; 15 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testObjFn (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
   i32.load offset=4
-  call_indirect (type $i)
+  call_indirect (type $FUNCSIG$i)
  )
- (func $start (; 16 ;) (type $_)
+ (func $nonNullAssertion/testObjRet (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 0
+  global.set $~lib/argc
+  local.get $0
+  i32.load offset=4
+  call_indirect (type $FUNCSIG$i)
+ )
+ (func $start (; 16 ;) (type $FUNCSIG$v)
   call $start:nonNullAssertion
  )
- (func $null (; 17 ;) (type $_)
+ (func $null (; 17 ;) (type $FUNCSIG$v)
  )
 )

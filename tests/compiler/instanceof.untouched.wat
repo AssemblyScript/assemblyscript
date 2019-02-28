@@ -1,8 +1,8 @@
 (module
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $ii (func (param i32) (result i32)))
- (type $Fi (func (param f64) (result i32)))
- (type $_ (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$id (func (param f64) (result i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s\00")
@@ -19,23 +19,23 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $instanceof/isI32<i32> (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $instanceof/isI32<i32> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   return
  )
- (func $instanceof/isI32<f64> (; 2 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $instanceof/isI32<f64> (; 2 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   i32.const 0
   return
  )
- (func $instanceof/isI32<u32> (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $instanceof/isI32<u32> (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   return
  )
- (func $instanceof/isI32<u16> (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $instanceof/isI32<u16> (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   return
  )
- (func $start:instanceof (; 5 ;) (type $_)
+ (func $start:instanceof (; 5 ;) (type $FUNCSIG$v)
   i32.const 1
   i32.eqz
   if
@@ -520,9 +520,9 @@
    unreachable
   end
  )
- (func $start (; 6 ;) (type $_)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $start:instanceof
  )
- (func $null (; 7 ;) (type $_)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
  )
 )

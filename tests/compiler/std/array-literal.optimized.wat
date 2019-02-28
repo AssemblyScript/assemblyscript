@@ -1,7 +1,7 @@
 (module
- (type $_ (func))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $ii (func (param i32) (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -29,7 +29,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -91,7 +91,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741816
@@ -391,7 +391,7 @@
   call $~lib/internal/memory/memset
   local.get $0
  )
- (func $start:std/array-literal (; 6 ;) (type $_)
+ (func $start:std/array-literal (; 6 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 232
@@ -895,10 +895,10 @@
    unreachable
   end
  )
- (func $start (; 7 ;) (type $_)
+ (func $start (; 7 ;) (type $FUNCSIG$v)
   call $start:std/array-literal
  )
- (func $null (; 8 ;) (type $_)
+ (func $null (; 8 ;) (type $FUNCSIG$v)
   nop
  )
 )

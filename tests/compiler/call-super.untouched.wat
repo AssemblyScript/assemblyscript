@@ -1,7 +1,7 @@
 (module
- (type $_ (func))
- (type $ii (func (param i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0d\00\00\00c\00a\00l\00l\00-\00s\00u\00p\00e\00r\00.\00t\00s\00")
@@ -13,7 +13,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -25,7 +25,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -104,12 +104,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $call-super/A#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-super/A#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -137,7 +137,7 @@
   end
   local.get $0
  )
- (func $call-super/B#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-super/B#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -178,7 +178,7 @@
   end
   local.get $0
  )
- (func $call-super/test1 (; 6 ;) (type $_)
+ (func $call-super/test1 (; 6 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/B#constructor
@@ -210,7 +210,7 @@
    unreachable
   end
  )
- (func $call-super/C#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-super/C#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -223,7 +223,7 @@
   i32.store
   local.get $0
  )
- (func $call-super/D#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-super/D#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -264,7 +264,7 @@
   end
   local.get $0
  )
- (func $call-super/test2 (; 9 ;) (type $_)
+ (func $call-super/test2 (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/D#constructor
@@ -296,7 +296,7 @@
    unreachable
   end
  )
- (func $call-super/E#constructor (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-super/E#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -324,7 +324,7 @@
   end
   local.get $0
  )
- (func $call-super/F#constructor (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-super/F#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -340,7 +340,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test3 (; 12 ;) (type $_)
+ (func $call-super/test3 (; 12 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/F#constructor
@@ -372,7 +372,7 @@
    unreachable
   end
  )
- (func $call-super/G#constructor (; 13 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-super/G#constructor (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -385,7 +385,7 @@
   i32.store
   local.get $0
  )
- (func $call-super/H#constructor (; 14 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-super/H#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -401,7 +401,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test4 (; 15 ;) (type $_)
+ (func $call-super/test4 (; 15 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/H#constructor
@@ -433,7 +433,7 @@
    unreachable
   end
  )
- (func $call-super/I#constructor (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-super/I#constructor (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -446,7 +446,7 @@
   i32.store
   local.get $0
  )
- (func $call-super/J#constructor (; 17 ;) (type $ii) (param $0 i32) (result i32)
+ (func $call-super/J#constructor (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -462,7 +462,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test5 (; 18 ;) (type $_)
+ (func $call-super/test5 (; 18 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   call $call-super/J#constructor
@@ -494,7 +494,7 @@
    unreachable
   end
  )
- (func $start:call-super (; 19 ;) (type $_)
+ (func $start:call-super (; 19 ;) (type $FUNCSIG$v)
   call $start:~lib/allocator/arena
   call $call-super/test1
   call $call-super/test2
@@ -502,9 +502,9 @@
   call $call-super/test4
   call $call-super/test5
  )
- (func $start (; 20 ;) (type $_)
+ (func $start (; 20 ;) (type $FUNCSIG$v)
   call $start:call-super
  )
- (func $null (; 21 ;) (type $_)
+ (func $null (; 21 ;) (type $FUNCSIG$v)
  )
 )

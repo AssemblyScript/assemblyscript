@@ -1,8 +1,8 @@
 (module
- (type $ii (func (param i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $II (func (param i64) (result i64)))
- (type $_ (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$jj (func (param i64) (result i64)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
@@ -12,15 +12,15 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/polyfills/bswap<u8> (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u8> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   return
  )
- (func $~lib/polyfills/bswap<i8> (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i8> (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   return
  )
- (func $~lib/polyfills/bswap<u16> (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -34,7 +34,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<i16> (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -50,7 +50,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<u32> (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u32> (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -64,7 +64,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<i32> (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i32> (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -78,7 +78,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<u64> (; 7 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 7 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -117,7 +117,7 @@
   i64.rotr
   return
  )
- (func $~lib/polyfills/bswap<i64> (; 8 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<i64> (; 8 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -156,7 +156,7 @@
   i64.rotr
   return
  )
- (func $~lib/polyfills/bswap<usize> (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<usize> (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -170,7 +170,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<isize> (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<isize> (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -184,7 +184,7 @@
   i32.or
   return
  )
- (func $start:std/polyfills (; 11 ;) (type $_)
+ (func $start:std/polyfills (; 11 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 170
   call $~lib/polyfills/bswap<u8>
@@ -507,9 +507,9 @@
    unreachable
   end
  )
- (func $start (; 12 ;) (type $_)
+ (func $start (; 12 ;) (type $FUNCSIG$v)
   call $start:std/polyfills
  )
- (func $null (; 13 ;) (type $_)
+ (func $null (; 13 ;) (type $FUNCSIG$v)
  )
 )
