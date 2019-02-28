@@ -74,7 +74,8 @@ import {
 } from "./common";
 
 import {
-  makeMap
+  makeMap,
+  isPowerOf2
 } from "./util";
 
 import {
@@ -1572,13 +1573,9 @@ export class Resolver extends DiagnosticEmitter {
             }
             if (!fieldType) break; // did report above
             let fieldInstance = new Field(<FieldPrototype>member, instance, fieldType);
-            switch (fieldType.byteSize) { // align
-              case 1: break;
-              case 2: { if (memoryOffset & 1) ++memoryOffset; break; }
-              case 4: { if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1; break; }
-              case 8: { if (memoryOffset & 7) memoryOffset = (memoryOffset | 7) + 1; break; }
-              default: assert(false);
-            }
+            assert(isPowerOf2(fieldType.byteSize));
+            let mask = fieldType.byteSize - 1;
+            if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
             fieldInstance.memoryOffset = memoryOffset;
             memoryOffset += fieldType.byteSize;
             instance.add(member.name, fieldInstance); // reports

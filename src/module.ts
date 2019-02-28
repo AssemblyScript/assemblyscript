@@ -122,7 +122,7 @@ export enum UnaryOp {
   ExtendI16ToI32 = _BinaryenExtendS16Int32(),
   ExtendI8ToI64 = _BinaryenExtendS8Int64(),
   ExtendI16ToI64 = _BinaryenExtendS16Int64(),
-  ExtendI32ToI64 = _BinaryenExtendS32Int64()
+  ExtendI32ToI64 = _BinaryenExtendS32Int64(),
 
   // see: https://github.com/WebAssembly/nontrapping-float-to-int-conversions
   // TruncF32ToI32Sat
@@ -133,6 +133,41 @@ export enum UnaryOp {
   // TruncF32ToU64Sat
   // TruncF64ToI64Sat
   // TruncF64ToU64Sat
+
+  // see: https://github.com/WebAssembly/simd
+  SplatVecI8x16 = _BinaryenSplatVecI8x16(),
+  SplatVecI16x8 = _BinaryenSplatVecI16x8(),
+  SplatVecI32x4 = _BinaryenSplatVecI32x4(),
+  SplatVecI64x2 = _BinaryenSplatVecI64x2(),
+  SplatVecF32x4 = _BinaryenSplatVecF32x4(),
+  SplatVecF64x2 = _BinaryenSplatVecF64x2(),
+  NotVec128 = _BinaryenNotVec128(),
+  NegVecI8x16 = _BinaryenNegVecI8x16(),
+  AnyTrueVecI8x16 = _BinaryenAnyTrueVecI8x16(),
+  AllTrueVecI8x16 = _BinaryenAllTrueVecI8x16(),
+  NegVecI16x8 = _BinaryenNegVecI16x8(),
+  AnyTrueVecI16x8 = _BinaryenAnyTrueVecI16x8(),
+  AllTrueVecI16x8 = _BinaryenAllTrueVecI16x8(),
+  NegVecI32x4 = _BinaryenNegVecI32x4(),
+  AnyTrueVecI32x4 = _BinaryenAnyTrueVecI32x4(),
+  AllTrueVecI32x4 = _BinaryenAllTrueVecI32x4(),
+  NegVecI64x2 = _BinaryenNegVecI64x2(),
+  AnyTrueVecI64x2 = _BinaryenAnyTrueVecI64x2(),
+  AllTrueVecI64x2 = _BinaryenAllTrueVecI64x2(),
+  AbsVecF32x4 = _BinaryenAbsVecF32x4(),
+  NegVecF32x4 = _BinaryenNegVecF32x4(),
+  SqrtVecF32x4 = _BinaryenSqrtVecF32x4(),
+  AbsVecF64x2 = _BinaryenAbsVecF64x2(),
+  NegVecF64x2 = _BinaryenNegVecF64x2(),
+  SqrtVecF64x2 = _BinaryenSqrtVecF64x2(),
+  TruncSatSVecF32x4ToVecI32x4 = _BinaryenTruncSatSVecF32x4ToVecI32x4(),
+  TruncSatUVecF32x4ToVecI32x4 = _BinaryenTruncSatUVecF32x4ToVecI32x4(),
+  TruncSatSVecF64x2ToVecI64x2 = _BinaryenTruncSatSVecF64x2ToVecI64x2(),
+  TruncSatUVecF64x2ToVecI64x2 = _BinaryenTruncSatUVecF64x2ToVecI64x2(),
+  ConvertSVecI32x4ToVecF32x4 = _BinaryenConvertSVecI32x4ToVecF32x4(),
+  ConvertUVecI32x4ToVecF32x4 = _BinaryenConvertUVecI32x4ToVecF32x4(),
+  ConvertSVecI64x2ToVecF64x2 = _BinaryenConvertSVecI64x2ToVecF64x2(),
+  ConvertUVecI64x2ToVecF64x2 = _BinaryenConvertUVecI64x2ToVecF64x2()
 }
 
 export enum BinaryOp {
@@ -211,61 +246,9 @@ export enum BinaryOp {
   LtF64 = _BinaryenLtFloat64(),
   LeF64 = _BinaryenLeFloat64(),
   GtF64 = _BinaryenGtFloat64(),
-  GeF64 = _BinaryenGeFloat64()
-}
+  GeF64 = _BinaryenGeFloat64(),
 
-export enum HostOp {
-  CurrentMemory = _BinaryenCurrentMemory(),
-  GrowMemory = _BinaryenGrowMemory(),
-
-  // see: https://github.com/WebAssembly/bulk-memory-operations
-  // MoveMemory
-  // SetMemory
-}
-
-export enum AtomicRMWOp {
-  Add = _BinaryenAtomicRMWAdd(),
-  Sub = _BinaryenAtomicRMWSub(),
-  And = _BinaryenAtomicRMWAnd(),
-  Or = _BinaryenAtomicRMWOr(),
-  Xor = _BinaryenAtomicRMWXor(),
-  Xchg = _BinaryenAtomicRMWXchg()
-}
-
-export enum SIMDOp {
-  SplatVecI8x16 = _BinaryenSplatVecI8x16(),
-  SplatVecI16x8 = _BinaryenSplatVecI16x8(),
-  SplatVecI32x4 = _BinaryenSplatVecI32x4(),
-  SplatVecI64x2 = _BinaryenSplatVecI64x2(),
-  SplatVecF32x4 = _BinaryenSplatVecF32x4(),
-  SplatVecF64x2 = _BinaryenSplatVecF64x2(),
-  NotVec128 = _BinaryenNotVec128(),
-  NegVecI8x16 = _BinaryenNegVecI8x16(),
-  AnyTrueVecI8x16 = _BinaryenAnyTrueVecI8x16(),
-  AllTrueVecI8x16 = _BinaryenAllTrueVecI8x16(),
-  NegVecI16x8 = _BinaryenNegVecI16x8(),
-  AnyTrueVecI16x8 = _BinaryenAnyTrueVecI16x8(),
-  AllTrueVecI16x8 = _BinaryenAllTrueVecI16x8(),
-  NegVecI32x4 = _BinaryenNegVecI32x4(),
-  AnyTrueVecI32x4 = _BinaryenAnyTrueVecI32x4(),
-  AllTrueVecI32x4 = _BinaryenAllTrueVecI32x4(),
-  NegVecI64x2 = _BinaryenNegVecI64x2(),
-  AnyTrueVecI64x2 = _BinaryenAnyTrueVecI64x2(),
-  AllTrueVecI64x2 = _BinaryenAllTrueVecI64x2(),
-  AbsVecF32x4 = _BinaryenAbsVecF32x4(),
-  NegVecF32x4 = _BinaryenNegVecF32x4(),
-  SqrtVecF32x4 = _BinaryenSqrtVecF32x4(),
-  AbsVecF64x2 = _BinaryenAbsVecF64x2(),
-  NegVecF64x2 = _BinaryenNegVecF64x2(),
-  SqrtVecF64x2 = _BinaryenSqrtVecF64x2(),
-  TruncSatSVecF32x4ToVecI32x4 = _BinaryenTruncSatSVecF32x4ToVecI32x4(),
-  TruncSatUVecF32x4ToVecI32x4 = _BinaryenTruncSatUVecF32x4ToVecI32x4(),
-  TruncSatSVecF64x2ToVecI64x2 = _BinaryenTruncSatSVecF64x2ToVecI64x2(),
-  TruncSatUVecF64x2ToVecI64x2 = _BinaryenTruncSatUVecF64x2ToVecI64x2(),
-  ConvertSVecI32x4ToVecF32x4 = _BinaryenConvertSVecI32x4ToVecF32x4(),
-  ConvertUVecI32x4ToVecF32x4 = _BinaryenConvertUVecI32x4ToVecF32x4(),
-  ConvertSVecI64x2ToVecF64x2 = _BinaryenConvertSVecI64x2ToVecF64x2(),
-  ConvertUVecI64x2ToVecF64x2 = _BinaryenConvertUVecI64x2ToVecF64x2(),
+  // see: https://github.com/WebAssembly/simd
   EqVecI8x16 = _BinaryenEqVecI8x16(),
   NeVecI8x16 = _BinaryenNeVecI8x16(),
   LtSVecI8x16 = _BinaryenLtSVecI8x16(),
@@ -342,6 +325,59 @@ export enum SIMDOp {
   DivVecF64x2 = _BinaryenDivVecF64x2(),
   MinVecF64x2 = _BinaryenMinVecF64x2(),
   MaxVecF64x2 = _BinaryenMaxVecF64x2()
+}
+
+export enum HostOp {
+  CurrentMemory = _BinaryenCurrentMemory(),
+  GrowMemory = _BinaryenGrowMemory(),
+
+  // see: https://github.com/WebAssembly/bulk-memory-operations
+  // MoveMemory
+  // SetMemory
+}
+
+export enum AtomicRMWOp {
+  Add = _BinaryenAtomicRMWAdd(),
+  Sub = _BinaryenAtomicRMWSub(),
+  And = _BinaryenAtomicRMWAnd(),
+  Or = _BinaryenAtomicRMWOr(),
+  Xor = _BinaryenAtomicRMWXor(),
+  Xchg = _BinaryenAtomicRMWXchg()
+}
+
+export enum SIMDExtractOp {
+  ExtractLaneSVecI8x16 = _BinaryenExtractLaneSVecI8x16(),
+  ExtractLaneUVecI8x16 = _BinaryenExtractLaneUVecI8x16(),
+  ExtractLaneSVecI16x8 = _BinaryenExtractLaneSVecI16x8(),
+  ExtractLaneUVecI16x8 = _BinaryenExtractLaneUVecI16x8(),
+  ExtractLaneVecI32x4 = _BinaryenExtractLaneVecI32x4(),
+  ExtractLaneVecI64x2 = _BinaryenExtractLaneVecI64x2(),
+  ExtractLaneVecF32x4 = _BinaryenExtractLaneVecF32x4(),
+  ExtractLaneVecF64x2 = _BinaryenExtractLaneVecF64x2(),
+}
+
+export enum SIMDReplaceOp {
+  ReplaceLaneVecI8x16 = _BinaryenReplaceLaneVecI8x16(),
+  ReplaceLaneVecI16x8 = _BinaryenReplaceLaneVecI16x8(),
+  ReplaceLaneVecI32x4 = _BinaryenReplaceLaneVecI32x4(),
+  ReplaceLaneVecI64x2 = _BinaryenReplaceLaneVecI64x2(),
+  ReplaceLaneVecF32x4 = _BinaryenReplaceLaneVecF32x4(),
+  ReplaceLaneVecF64x2 = _BinaryenReplaceLaneVecF64x2()
+}
+
+export enum SIMDShiftOp { // FIXME: seems to be missing in binaryen-c.h
+  ShlVecI8x16,
+  ShrSVecI8x16,
+  ShrUVecI8x16,
+  ShlVecI16x8,
+  ShrSVecI16x8,
+  ShrUVecI16x8,
+  ShlVecI32x4,
+  ShrSVecI32x4,
+  ShrUVecI32x4,
+  ShlVecI64x2,
+  ShrSVecI64x2,
+  ShrUVecI64x2
 }
 
 export class MemorySegment {
@@ -510,9 +546,10 @@ export class Module {
     signed: bool,
     ptr: ExpressionRef,
     type: NativeType,
-    offset: Index = 0
+    offset: Index = 0,
+    align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
-    return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, /* always aligned */ bytes, type, ptr);
+    return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, align, type, ptr);
   }
 
   createStore(
@@ -520,9 +557,10 @@ export class Module {
     ptr: ExpressionRef,
     value: ExpressionRef,
     type: NativeType,
-    offset: Index = 0
+    offset: Index = 0,
+    align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
-    return _BinaryenStore(this.ref, bytes, offset, /* always aligned */ bytes, ptr, value, type);
+    return _BinaryenStore(this.ref, bytes, offset, align, ptr, value, type);
   }
 
   createAtomicLoad(
@@ -730,6 +768,55 @@ export class Module {
     size: ExpressionRef
   ): ExpressionRef {
     return _BinaryenMemoryFill(this.ref, dest, value, size);
+  }
+
+  // simd
+
+  createSIMDExtract(
+    op: SIMDExtractOp,
+    vec: ExpressionRef,
+    idx: u8
+  ): ExpressionRef {
+    return _BinaryenSIMDExtract(this.ref, op, vec, idx);
+  }
+
+  createSIMDReplace(
+    op: SIMDReplaceOp,
+    vec: ExpressionRef,
+    idx: u8,
+    value: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenSIMDReplace(this.ref, op, vec, idx, value);
+  }
+
+  createSIMDShuffle(
+    vec1: ExpressionRef,
+    vec2: ExpressionRef,
+    mask: Uint8Array
+  ): ExpressionRef {
+    assert(mask.length == 16);
+    var cArr = allocU8Array(mask);
+    try {
+      return _BinaryenSIMDShuffle(this.ref, vec1, vec2, cArr);
+    } finally {
+      memory.free(cArr);
+    }
+  }
+
+  createSIMDBitselect(
+    vec1: ExpressionRef,
+    vec2: ExpressionRef,
+    cond: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenSIMDBitselect(this.ref, vec1, vec2, cond);
+  }
+
+  createSIMDShift(
+    op: SIMDShiftOp,
+    vec: ExpressionRef,
+    shift: ExpressionRef
+  ): ExpressionRef {
+    return _BinaryenSIMDShift(this.ref, op, vec, shift);
   }
 
   // meta
