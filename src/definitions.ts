@@ -336,8 +336,12 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private generateArrayHandlerMethods(valuePrefix: string, fieldType: Type) : void {
     let setterType = this.typeMapping[fieldType.toString()];
     if (setterType) {
-      this.sb.push(`set${setterType}(name: string, value: ${fieldType}): void {
-        ${valuePrefix}.push(value);
+      let valueType = fieldType.toString();
+      if (valueType == "u32" || valueType == "i32") {
+        valueType = "i64"
+      }
+      this.sb.push(`set${setterType}(name: string, value: ${valueType}): void {
+        ${valuePrefix}.push(<${fieldType}>value);
       }
       setNull(name: string): void {
         ${valuePrefix}.push(<${fieldType}>null);
