@@ -143,6 +143,7 @@ assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
 assert("".replace("", "") == "");
+assert("+".replace("", "") == "+");
 assert("".replace("", "abc") == "abc");
 assert("abc".replace("-", "+") == "abc");
 assert("abc".replace("abc", "+") == "+");
@@ -162,6 +163,7 @@ assert("a-b-c".replaceAll("-", "+") == "a+b+c");
 // cpecial cases
 assert("abc".replaceAll("", "+") == "+a+b+c+");
 assert("".replaceAll("", "+") == "+");
+assert("+".replaceAll("", "") == "+");
 assert("".replaceAll("", "") == "");
 
 // test cases for slice method

@@ -426,11 +426,18 @@ export class String {
     }
     if (!slen) {
       // handle special case when we should insert replacement between each char
-      let result = replacement;
-      for (let i = 0; i < len; i++) {
-        result = result
-          .concat(this.charAt(i))
-          .concat(replacement);
+      let rlen = replacement.length;
+      let result = allocateUnsafe(len + (len + 1) * rlen);
+      copyUnsafe(result, 0, replacement, 0, rlen);
+      let offset = rlen;
+      for (let i = 0; i < len; ++i) {
+        store<u16>(
+          changetype<usize>(result) + (offset++ << 1),
+          load<u16>(changetype<usize>(this) + (i << 1), HEADER_SIZE),
+          HEADER_SIZE
+        );
+        copyUnsafe(result, offset, replacement, 0, rlen);
+        offset += rlen;
       }
       return result;
     }
