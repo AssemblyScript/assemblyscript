@@ -523,6 +523,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.BULK_MEMORY) ? 1 : 0, 0));
     this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_SIMD, Type.bool,
       i64_new(options.hasFeature(Feature.SIMD) ? 1 : 0, 0));
+    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_THREADS, Type.bool,
+      i64_new(options.hasFeature(Feature.THREADS) ? 1 : 0, 0));
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
@@ -2564,6 +2566,7 @@ export class Function extends TypedElement {
   tempI64s: Local[] | null = null;
   tempF32s: Local[] | null = null;
   tempF64s: Local[] | null = null;
+  tempV128s: Local[] | null = null;
 
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;

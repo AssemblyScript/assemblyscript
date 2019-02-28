@@ -12,21 +12,22 @@
   },
   "dependencies": {
     "@protobufjs/utf8": "^1.1.0",
-    "binaryen": "68.0.0-nightly.20190220",
+    "binaryen": "69.0.0-nightly.20190228",
     "glob": "^7.1.3",
-    "long": "^4.0.0"
+    "long": "^4.0.0",
+    "source-map-support": "^0.5.10"
   },
   "devDependencies": {
-    "@types/node": "^11.9.4",
+    "@types/node": "^11.9.5",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
     "ts-loader": "^5.3.3",
     "ts-node": "^6.2.0",
-    "tslint": "^5.12.1",
+    "tslint": "^5.13.0",
     "typedoc": "^0.14.0",
     "typedoc-plugin-external-module-name": "^2.0.0",
-    "typescript": "^3.3.3",
-    "webpack": "^4.29.5",
+    "typescript": "^3.3.3333",
+    "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3"
   },
   "main": "index.js",

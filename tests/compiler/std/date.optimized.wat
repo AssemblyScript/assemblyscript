@@ -3,7 +3,7 @@
  (type $iiiiiiFF (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $F (func (result f64)))
- (type $ii (func (param i32) (result i32)))
+ (type $FUNCSIG$i (func (result i32)))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
@@ -18,39 +18,27 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $FUNCSIG$i) (result i32)
+  (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $0
-  i32.const 1073741824
-  i32.gt_u
-  if
-   unreachable
-  end
   global.get $~lib/allocator/arena/offset
-  local.tee $1
-  local.get $0
-  i32.const 1
-  local.get $0
-  i32.const 1
-  i32.gt_u
-  select
-  i32.add
-  i32.const 7
+  local.tee $0
+  i32.const 15
   i32.add
   i32.const -8
   i32.and
-  local.tee $2
+  local.tee $1
   current_memory
-  local.tee $3
+  local.tee $2
   i32.const 16
   i32.shl
   i32.gt_u
   if
-   local.get $3
    local.get $2
    local.get $1
+   local.get $0
    i32.sub
    i32.const 65535
    i32.add
@@ -58,16 +46,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $0
+   local.tee $3
+   local.get $2
    local.get $3
-   local.get $0
    i32.gt_s
    select
    grow_memory
    i32.const 0
    i32.lt_s
    if
-    local.get $0
+    local.get $3
     grow_memory
     i32.const 0
     i32.lt_s
@@ -76,9 +64,9 @@
     end
    end
   end
-  local.get $2
-  global.set $~lib/allocator/arena/offset
   local.get $1
+  global.set $~lib/allocator/arena/offset
+  local.get $0
  )
  (func $start:std/date (; 4 ;) (type $_)
   (local $0 i32)
@@ -160,7 +148,6 @@
   end
   global.get $std/date/creationTime
   local.set $1
-  i32.const 8
   call $~lib/allocator/arena/__memory_allocate
   local.tee $0
   i64.const 0

@@ -55,6 +55,8 @@ export const enum TypeKind {
   F64,
 
   // vectors
+
+  /** A 128-bit vector. */
   V128,
 
   // other
