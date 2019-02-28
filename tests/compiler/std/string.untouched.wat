@@ -3827,7 +3827,7 @@
   local.set $6
   local.get $6
   i32.const -1
-  i32.ne
+  i32.xor
   if
    local.get $0
    i32.const 0
@@ -3918,7 +3918,7 @@
     call $~lib/string/String#indexOf
     local.tee $7
     i32.const -1
-    i32.ne
+    i32.xor
     if
      block
       local.get $8

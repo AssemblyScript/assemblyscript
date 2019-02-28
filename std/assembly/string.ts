@@ -403,7 +403,7 @@ export class String {
     var slen = search.length;
     if (len < slen) return this;
     var end = this.indexOf(search);
-    if (end !== -1) {
+    if (~end) {
       return this.substring(0, end)
         .concat(replacement)
         .concat(this.substring(end + slen, len));
@@ -423,7 +423,7 @@ export class String {
     if (len == slen) return this.replace(search, replacement);
     var start = 0, end = 0;
     var result = changetype<String>("");
-    while ((end = this.indexOf(search, start)) != -1) {
+    while (~(end = this.indexOf(search, start))) {
       result = result.concat(this.substring(start, end).concat(replacement));
       start = end + slen;
     }
