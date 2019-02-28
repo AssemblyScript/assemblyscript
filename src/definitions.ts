@@ -156,11 +156,12 @@ abstract class ExportsWalker {
 export class NEARBindingsBuilder extends ExportsWalker {
   private typeMapping: { [key: string]: string } = {
     "i32": "Integer",
+    "u32": "Integer",
     "String": "String",
     "bool": "Boolean"
   };
 
-  private nonNullableTypes = ["i32", "bool"];
+  private nonNullableTypes = ["i32", "u32", "bool"];
 
   private sb: string[] = [];
   private generatedEncodeFunctions = new Set<string>();
@@ -269,11 +270,9 @@ export class NEARBindingsBuilder extends ExportsWalker {
       return fields.filter(field => field.type.toString() == type);
     }
 
-    for (let fieldType in this.typeMapping) {
-      let setterType = this.typeMapping[fieldType];
-      let matchingFields = fieldsWithType(fieldType);
-      this.generateBasicSetterHandlers(valuePrefix, setterType, fieldType, matchingFields);
-    }
+    this.generateBasicSetterHandlers(valuePrefix, "Integer", "i64", fieldsWithType("i32").concat(fieldsWithType("u32")));
+    this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithType("String"));
+    this.generateBasicSetterHandlers(valuePrefix, "Boolean", "bool", fieldsWithType("bool"));
 
     this.sb.push("setNull(name: string): void {");
     fields.forEach((field) => {
