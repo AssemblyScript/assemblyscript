@@ -6,11 +6,11 @@ var TOP = (HEAP_BASE + 8 + AL_MASK) & ~AL_MASK;
 store<usize>(OFFSET_PTR, TOP);
 
 @global export function __allocator_get_offset(): usize {
-  return Atomic.load<usize>(OFFSET_PTR);
+  return atomic.load<usize>(OFFSET_PTR);
 }
 
 @global export function __allocator_set_offset(oldOffset: usize, newOffset: usize): usize {
-  return Atomic.cmpxchg<usize>(OFFSET_PTR, oldOffset, newOffset);
+  return atomic.cmpxchg<usize>(OFFSET_PTR, oldOffset, newOffset);
 }
 
 @global export function __memory_allocate(size: usize): usize {
@@ -32,7 +32,7 @@ store<usize>(OFFSET_PTR, TOP);
         }
       }
     } while (
-      Atomic.cmpxchg<usize>(OFFSET_PTR, currentOffset, top) != currentOffset
+      atomic.cmpxchg<usize>(OFFSET_PTR, currentOffset, top) != currentOffset
     );
 
     return currentOffset;
@@ -45,5 +45,5 @@ store<usize>(OFFSET_PTR, TOP);
 }
 
 @global export function __memory_reset(): void {
-  Atomic.store<usize>(OFFSET_PTR, SATRT_OFFSET);
+  atomic.store<usize>(OFFSET_PTR, SATRT_OFFSET);
 }
