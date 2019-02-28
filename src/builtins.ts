@@ -2023,12 +2023,12 @@ export function compileCall(
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      let offset = operands.length >= 2 ? evaluateConstantOffset(compiler, operands[1]) : 0; // reports
+      let offset = operands.length >= 2 ? evaluateImmediateOffset(compiler, operands[1]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
       let align: i32;
       let naturalAlign = typeArguments[0].byteSize;
       if (operands.length == 3) {
-        align = evaluateConstantOffset(compiler, operands[2]);
+        align = evaluateImmediateOffset(compiler, operands[2]);
         if (align < 0) return module.createUnreachable();
         if (align > naturalAlign) {
           compiler.error(
@@ -2123,12 +2123,12 @@ export function compileCall(
       } else {
         type = compiler.currentType;
       }
-      let offset = operands.length >= 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
+      let offset = operands.length >= 3 ? evaluateImmediateOffset(compiler, operands[2]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
       let align: i32;
       let naturalAlign = typeArguments[0].byteSize;
       if (operands.length == 4) {
-        align = evaluateConstantOffset(compiler, operands[3]);
+        align = evaluateImmediateOffset(compiler, operands[3]);
         if (align < 0) return module.createUnreachable();
         if (align > naturalAlign) {
           compiler.error(
@@ -2150,7 +2150,7 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset, align);
     }
-    case BuiltinSymbols.atomic_load: { // load<T!>(offset: usize, constantOffset?: usize) -> *
+    case BuiltinSymbols.atomic_load: {
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (operands.length < 1 || operands.length > 2) {
         if (!(typeArguments && typeArguments.length == 1)) {
@@ -2186,8 +2186,8 @@ export function compileCall(
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      let offset = operands.length == 2 ? evaluateConstantOffset(compiler, operands[1]) : 0; // reports
-      if (offset < 0) { // reported in evaluateConstantOffset
+      let offset = operands.length == 2 ? evaluateImmediateOffset(compiler, operands[1]) : 0; // reports
+      if (offset < 0) { // reported in evaluateImmediateOffset
         return module.createUnreachable();
       }
       compiler.currentType = typeArguments[0];
@@ -2202,7 +2202,7 @@ export function compileCall(
         offset
       );
     }
-    case BuiltinSymbols.atomic_store: { // store<T!>(offset: usize, value: *, constantOffset?: usize) -> void
+    case BuiltinSymbols.atomic_store: { // store<T!>(offset: usize, value: *, immOffset?, immAlign?) -> void
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.void;
       if (operands.length < 2 || operands.length > 3) {
@@ -2265,19 +2265,17 @@ export function compileCall(
       } else {
         type = compiler.currentType;
       }
-      let offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
-      if (offset < 0) { // reported in evaluateConstantOffset
-        return module.createUnreachable();
-      }
+      let offset = operands.length == 3 ? evaluateImmediateOffset(compiler, operands[2]) : 0; // reports
+      if (offset < 0) return module.createUnreachable();
       compiler.currentType = Type.void;
       return module.createAtomicStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
     }
-    case BuiltinSymbols.atomic_add:  // add<T!>(ptr: usize, value: T, constantOffset?: usize): T;
-    case BuiltinSymbols.atomic_sub:  // sub<T!>(ptr: usize, value: T, constantOffset?: usize): T;
-    case BuiltinSymbols.atomic_and:  // and<T!>(ptr: usize, value: T, constantOffset?: usize): T;
-    case BuiltinSymbols.atomic_or:   // or<T!>(ptr: usize, value: T, constantOffset?: usize): T;
-    case BuiltinSymbols.atomic_xor:  // xor<T!>(ptr: usize, value: T, constantOffset?: usize): T;
-    case BuiltinSymbols.atomic_xchg: // xchg<T!>(ptr: usize, value: T, constantOffset?: usize): T;
+    case BuiltinSymbols.atomic_add:  // add<T!>(ptr, value: T, immOffset?: usize): T;
+    case BuiltinSymbols.atomic_sub:  // sub<T!>(ptr, value: T, immOffset?: usize): T;
+    case BuiltinSymbols.atomic_and:  // and<T!>(ptr, value: T, immOffset?: usize): T;
+    case BuiltinSymbols.atomic_or:   // or<T!>(ptr, value: T, immOffset?: usize): T;
+    case BuiltinSymbols.atomic_xor:  // xor<T!>(ptr, value: T, immOffset?: usize): T;
+    case BuiltinSymbols.atomic_xchg: // xchg<T!>(ptr, value, immOffset?: usize): T;
     {
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (operands.length < 2 || operands.length > 3) {
@@ -2342,10 +2340,8 @@ export function compileCall(
         type = compiler.currentType;
       }
 
-      let offset = operands.length == 3 ? evaluateConstantOffset(compiler, operands[2]) : 0; // reports
-      if (offset < 0) { // reported in evaluateConstantOffset
-        return module.createUnreachable();
-      }
+      let offset = operands.length == 3 ? evaluateImmediateOffset(compiler, operands[2]) : 0; // reports
+      if (offset < 0) return module.createUnreachable();
       let RMWOp: AtomicRMWOp | null = null;
       switch (prototype.internalName) {
         case BuiltinSymbols.atomic_add: { RMWOp = AtomicRMWOp.Add; break; }
@@ -2447,10 +2443,8 @@ export function compileCall(
         type = compiler.currentType;
       }
 
-      let offset = operands.length == 4 ? evaluateConstantOffset(compiler, operands[3]) : 0; // reports
-      if (offset < 0) { // reported in evaluateConstantOffset
-        return module.createUnreachable();
-      }
+      let offset = operands.length == 4 ? evaluateImmediateOffset(compiler, operands[3]) : 0; // reports
+      if (offset < 0) return module.createUnreachable();
       compiler.currentType = typeArguments[0];
       return module.createAtomicCmpxchg(
         typeArguments[0].byteSize, offset, arg0, arg1, arg2, type.toNativeType()
@@ -5863,8 +5857,8 @@ function evaluateConstantType(
   return null;
 }
 
-/** Evaluates a `constantOffset` argument.*/
-function evaluateConstantOffset(compiler: Compiler, expression: Expression): i32 {
+/** Evaluates a compile-time constant immediate offset argument.*/
+function evaluateImmediateOffset(compiler: Compiler, expression: Expression): i32 {
   var expr: ExpressionRef;
   var value: i32;
   if (compiler.options.isWasm64) {

@@ -94,9 +94,9 @@ declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
-declare function load<T>(ptr: usize, constantOffset?: usize): T;
+declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
-declare function store<T>(ptr: usize, value: any, constantOffset?: usize): void;
+declare function store<T>(ptr: usize, value: any, immOffset?: usize, immAlign?: usize): void;
 /** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression of any type. */
 declare function unreachable(): any; // sic
 
@@ -187,21 +187,21 @@ declare namespace i32 {
   /** Largest representable value. */
   export const MAX_VALUE: i32;
   /** Loads an 8-bit signed integer from memory and returns it as a 32-bit integer. */
-  export function load8_s(offset: usize, constantOffset?: usize): i32;
+  export function load8_s(offset: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads an 8-bit unsigned integer from memory and returns it as a 32-bit integer. */
-  export function load8_u(offset: usize, constantOffset?: usize): i32;
+  export function load8_u(offset: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads a 16-bit signed integer from memory and returns it as a 32-bit integer. */
-  export function load16_s(offset: usize, constantOffset?: usize): i32;
+  export function load16_s(offset: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads a 16-bit unsigned integer from memory and returns it as a 32-bit integer. */
-  export function load16_u(offset: usize, constantOffset?: usize): i32;
+  export function load16_u(offset: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads a 32-bit integer from memory. */
-  export function load(offset: usize, constantOffset?: usize): i32;
+  export function load(offset: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Stores a 32-bit integer to memory as an 8-bit integer. */
-  export function store8(offset: usize, value: i32, constantOffset?: usize): void;
+  export function store8(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 32-bit integer to memory as a 16-bit integer. */
-  export function store16(offset: usize, value: i32, constantOffset?: usize): void;
+  export function store16(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 32-bit integer to memory. */
-  export function store(offset: usize, value: i32, constantOffset?: usize): void;
+  export function store(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
 }
 /** Converts any other numeric value to a 64-bit signed integer. */
 declare function i64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i64;
@@ -211,27 +211,27 @@ declare namespace i64 {
   /** Largest representable value. */
   export const MAX_VALUE: i64;
   /** Loads an 8-bit signed integer from memory and returns it as a 64-bit signed integer. */
-  export function load8_s(offset: usize, constantOffset?: usize): i64;
+  export function load8_s(offset: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads an 8-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
-  export function load8_u(offset: usize, constantOffset?: usize): u64;
+  export function load8_u(offset: usize, immOffset?: usize, immAlign?: usize): u64;
   /** Loads a 16-bit signed integer from memory and returns it as a 64-bit signed integer. */
-  export function load16_s(offset: usize, constantOffset?: usize): i64;
+  export function load16_s(offset: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads a 16-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
-  export function load16_u(offset: usize, constantOffset?: usize): u64;
+  export function load16_u(offset: usize, immOffset?: usize, immAlign?: usize): u64;
   /** Loads a 32-bit signed integer from memory and returns it as a 64-bit signed integer. */
-  export function load32_s(offset: usize, constantOffset?: usize): i64;
+  export function load32_s(offset: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads a 32-bit unsigned integer from memory and returns it as a 64-bit unsigned integer. */
-  export function load32_u(offset: usize, constantOffset?: usize): u64;
+  export function load32_u(offset: usize, immOffset?: usize, immAlign?: usize): u64;
   /** Loads a 64-bit unsigned integer from memory. */
-  export function load(offset: usize, constantOffset?: usize): i64;
+  export function load(offset: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Stores a 64-bit integer to memory as an 8-bit integer. */
-  export function store8(offset: usize, value: i64, constantOffset?: usize): void;
+  export function store8(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 64-bit integer to memory as a 16-bit integer. */
-  export function store16(offset: usize, value: i64, constantOffset?: usize): void;
+  export function store16(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 64-bit integer to memory as a 32-bit integer. */
-  export function store32(offset: usize, value: i64, constantOffset?: usize): void;
+  export function store32(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 64-bit integer to memory. */
-  export function store(offset: usize, value: i64, constantOffset?: usize): void;
+  export function store(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
 declare var isize: typeof i32 | typeof i64;
@@ -293,9 +293,9 @@ declare namespace f32 {
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
   /** Loads a 32-bit float from memory. */
-  export function load(offset: usize, constantOffset?: usize): f32;
+  export function load(offset: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
-  export function store(offset: usize, value: f32, constantOffset?: usize): void;
+  export function store(offset: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): f64;
@@ -313,9 +313,9 @@ declare namespace f64 {
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
   /** Loads a 64-bit float from memory. */
-  export function load(offset: usize, constantOffset?: usize): f64;
+  export function load(offset: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
-  export function store(offset: usize, value: f64, constantOffset?: usize): void;
+  export function store(offset: usize, value: f64, immOffset?: usize, immAlign?: usize): void;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function v128(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -329,9 +329,9 @@ declare namespace v128 {
   /** Selects lanes from either 128-bit vector according to the specified lane indexes. */
   export function shuffle<T>(a: v128, b: v128, ...lanes: u8[]): v128;
   /** Loads a 128-bit vector from memory. */
-  export function load(offset: usize, constantOffset?: usize, constantAlign?: usize): v128;
+  export function load(offset: usize, immOffset?: usize, immAlign?: usize): v128;
   /** Stores a 128-bit vector to memory. */
-  export function store(offset: usize, value: v128, constantOffset?: usize, constantAlign?: usize): void;
+  export function store(offset: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
   /** Adds each lane of two 128-bit vectors. */
   export function add<T>(a: v128, b: v128): v128;
   /** Subtracts each lane of two 128-bit vectors. */
