@@ -3304,7 +3304,7 @@
             if
              i32.const 0
              i32.const 80
-             i32.const 664
+             i32.const 668
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -3778,9 +3778,26 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   i32.const 0
   i32.ne
+  local.tee $3
+  if (result i32)
+   local.get $1
+   i32.const 0
+   i32.ne
+  else   
+   local.get $3
+  end
+  local.tee $3
+  if (result i32)
+   local.get $2
+   i32.const 0
+   i32.ne
+  else   
+   local.get $3
+  end
   i32.eqz
   if
    i32.const 0
@@ -3792,12 +3809,12 @@
   end
   local.get $0
   i32.load
-  local.set $3
+  local.set $4
   local.get $1
   i32.load
-  local.set $4
-  local.get $3
+  local.set $5
   local.get $4
+  local.get $5
   i32.lt_s
   if
    local.get $0
@@ -3807,24 +3824,24 @@
   local.get $1
   i32.const 0
   call $~lib/string/String#indexOf
-  local.set $5
-  local.get $5
+  local.set $6
+  local.get $6
   i32.const -1
   i32.ne
   if
    local.get $0
    i32.const 0
-   local.get $5
+   local.get $6
    call $~lib/string/String#substring
    local.get $2
-   call $~lib/string/String.__concat
+   call $~lib/string/String#concat
    local.get $0
+   local.get $6
    local.get $5
-   local.get $4
    i32.add
-   local.get $3
+   local.get $4
    call $~lib/string/String#substring
-   call $~lib/string/String.__concat
+   call $~lib/string/String#concat
    return
   end
   local.get $0
@@ -3835,33 +3852,50 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   local.get $0
   i32.const 0
   i32.ne
+  local.tee $3
+  if (result i32)
+   local.get $1
+   i32.const 0
+   i32.ne
+  else   
+   local.get $3
+  end
+  local.tee $3
+  if (result i32)
+   local.get $2
+   i32.const 0
+   i32.ne
+  else   
+   local.get $3
+  end
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 417
+   i32.const 421
    i32.const 4
    call $~lib/env/abort
    unreachable
   end
   local.get $0
   i32.load
-  local.set $3
+  local.set $4
   local.get $1
   i32.load
-  local.set $4
-  local.get $3
+  local.set $5
   local.get $4
+  local.get $5
   i32.lt_s
   if
    local.get $0
    return
   end
-  local.get $3
   local.get $4
+  local.get $5
   i32.eq
   if
    local.get $0
@@ -3871,48 +3905,48 @@
    return
   end
   i32.const 0
-  local.set $5
-  i32.const 0
   local.set $6
-  i32.const 256
+  i32.const 0
   local.set $7
+  i32.const 256
+  local.set $8
   block $break|0
    loop $continue|0
     local.get $0
     local.get $1
-    local.get $5
+    local.get $6
     call $~lib/string/String#indexOf
-    local.tee $6
+    local.tee $7
     i32.const -1
     i32.ne
     if
      block
-      local.get $7
+      local.get $8
       local.get $0
-      local.get $5
       local.get $6
+      local.get $7
       call $~lib/string/String#substring
       local.get $2
-      call $~lib/string/String.__concat
-      call $~lib/string/String.__concat
-      local.set $7
-      local.get $6
-      local.get $4
+      call $~lib/string/String#concat
+      call $~lib/string/String#concat
+      local.set $8
+      local.get $7
+      local.get $5
       i32.add
-      local.set $5
+      local.set $6
      end
      br $continue|0
     end
    end
   end
-  local.get $5
+  local.get $6
   if
-   local.get $7
+   local.get $8
    local.get $0
-   local.get $5
-   local.get $3
+   local.get $6
+   local.get $4
    call $~lib/string/String#substring
-   call $~lib/string/String.__concat
+   call $~lib/string/String#concat
    return
   end
   local.get $0
@@ -3931,7 +3965,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 435
+   i32.const 439
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4641,7 +4675,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 447
+   i32.const 451
    i32.const 4
    call $~lib/env/abort
    unreachable

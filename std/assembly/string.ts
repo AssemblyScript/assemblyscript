@@ -398,13 +398,17 @@ export class String {
    * 2. callback function for replacement
    */
   replace(search: String, replacement: String): String {
-    assert(this !== null);
+    assert(this !== null && search !== null && replacement !== null);
     var len = this.length;
     var slen = search.length;
     if (len < slen) return this;
     var end = this.indexOf(search);
     if (end !== -1) {
-      return this.substring(0, end) + replacement + this.substring(end + slen, len);
+      return (
+        this.substring(0, end)
+        .concat(replacement)
+        .concat(this.substring(end + slen, len))
+      );
     }
     return this;
   }
@@ -414,7 +418,7 @@ export class String {
    * 2. callback function for replacement
    */
   replaceAll(search: String, replacement: String): String {
-    assert(this !== null);
+    assert(this !== null && search !== null && replacement !== null);
     var len = this.length;
     var slen = search.length;
     if (len < slen) return this;
@@ -424,10 +428,10 @@ export class String {
     var start = 0, end = 0;
     var result = changetype<String>("");
     while ((end = this.indexOf(search, start)) != -1) {
-      result += this.substring(start, end) + replacement;
+      result = result.concat(this.substring(start, end).concat(replacement));
       start = end + slen;
     }
-    if (start) return result + this.substring(start, len);
+    if (start) return result.concat(this.substring(start, len));
     return this;
   }
 
