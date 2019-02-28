@@ -1,7 +1,7 @@
 (module
- (type $iiii (func (param i32 i32 i32) (result i32)))
  (type $iiii_ (func (param i32 i32 i32 i32)))
  (type $_ (func))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\t\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
@@ -11,7 +11,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $memset/memset (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $memset/memset (; 1 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -237,10 +237,7 @@
      br $continue|0
     end
    end
-   local.get $3
-   return
   end
-  local.get $3
  )
  (func $start:memset (; 2 ;) (type $_)
   i32.const 32
@@ -249,7 +246,6 @@
   i32.const 1
   i32.const 16
   call $memset/memset
-  drop
   global.get $memset/dest
   i32.load8_u
   i32.const 1
@@ -282,7 +278,6 @@
   i32.const 2
   i32.const 14
   call $memset/memset
-  drop
   global.get $memset/dest
   i32.load8_u
   i32.const 1

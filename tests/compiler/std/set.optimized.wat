@@ -21,6 +21,9 @@
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$vij (func (param i32 i64)))
+ (type $FUNCSIG$vif (func (param i32 f32)))
+ (type $FUNCSIG$vid (func (param i32 f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
@@ -679,7 +682,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i8>#delete (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i8>#delete (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -696,7 +699,6 @@
   local.tee $1
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $1
@@ -728,7 +730,7 @@
   select
   i32.ge_u
   local.tee $1
-  if (result i32)
+  if
    local.get $0
    i32.load offset=20
    local.get $0
@@ -738,15 +740,14 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
-   local.get $1
+   local.set $1
   end
+  local.get $1
   if
    local.get $0
    local.get $2
    call $~lib/set/Set<i8>#rehash
   end
-  i32.const 1
  )
  (func $std/set/test<i8> (; 12 ;) (type $_)
   (local $0 i32)
@@ -880,7 +881,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i8>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i8>#has
@@ -949,7 +949,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i8>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i8>#has
@@ -1207,7 +1206,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<u8>#delete (; 16 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u8>#delete (; 16 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -1222,7 +1221,6 @@
   local.tee $1
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $1
@@ -1254,7 +1252,7 @@
   select
   i32.ge_u
   local.tee $1
-  if (result i32)
+  if
    local.get $0
    i32.load offset=20
    local.get $0
@@ -1264,15 +1262,14 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
-   local.get $1
+   local.set $1
   end
+  local.get $1
   if
    local.get $0
    local.get $2
    call $~lib/set/Set<u8>#rehash
   end
-  i32.const 1
  )
  (func $std/set/test<u8> (; 17 ;) (type $_)
   (local $0 i32)
@@ -1406,7 +1403,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<u8>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<u8>#has
@@ -1475,7 +1471,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<u8>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<u8>#has
@@ -1810,7 +1805,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i16>#delete (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i16>#delete (; 22 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -1836,7 +1831,6 @@
   local.tee $1
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $1
@@ -1868,7 +1862,7 @@
   select
   i32.ge_u
   local.tee $1
-  if (result i32)
+  if
    local.get $0
    i32.load offset=20
    local.get $0
@@ -1878,15 +1872,14 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
-   local.get $1
+   local.set $1
   end
+  local.get $1
   if
    local.get $0
    local.get $2
    call $~lib/set/Set<i16>#rehash
   end
-  i32.const 1
  )
  (func $std/set/test<i16> (; 23 ;) (type $_)
   (local $0 i32)
@@ -2020,7 +2013,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i16>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i16>#has
@@ -2089,7 +2081,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i16>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i16>#has
@@ -2375,7 +2366,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<u16>#delete (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u16>#delete (; 27 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -2399,7 +2390,6 @@
   local.tee $1
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $1
@@ -2431,7 +2421,7 @@
   select
   i32.ge_u
   local.tee $1
-  if (result i32)
+  if
    local.get $0
    i32.load offset=20
    local.get $0
@@ -2441,15 +2431,14 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
-   local.get $1
+   local.set $1
   end
+  local.get $1
   if
    local.get $0
    local.get $2
    call $~lib/set/Set<u16>#rehash
   end
-  i32.const 1
  )
  (func $std/set/test<u16> (; 28 ;) (type $_)
   (local $0 i32)
@@ -2583,7 +2572,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<u16>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<u16>#has
@@ -2652,7 +2640,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<u16>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<u16>#has
@@ -2971,7 +2958,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i32>#delete (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#delete (; 34 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -2981,7 +2968,6 @@
   local.tee $1
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $1
@@ -3013,7 +2999,7 @@
   select
   i32.ge_u
   local.tee $1
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -3023,15 +3009,14 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $1
+  else   
+   local.get $1
   end
-  local.get $1
   if
    local.get $0
    local.get $2
    call $~lib/set/Set<i32>#rehash
   end
-  i32.const 1
  )
  (func $std/set/test<i32> (; 35 ;) (type $_)
   (local $0 i32)
@@ -3165,7 +3150,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#has
@@ -3234,7 +3218,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#has
@@ -3412,7 +3395,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#has
@@ -3481,7 +3463,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#has
@@ -3885,7 +3866,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i64>#delete (; 44 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<i64>#delete (; 44 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3896,7 +3877,6 @@
   local.tee $2
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $2
@@ -3928,7 +3908,7 @@
   select
   i32.ge_u
   local.tee $2
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -3938,15 +3918,14 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $2
+  else   
+   local.get $2
   end
-  local.get $2
   if
    local.get $0
    local.get $3
    call $~lib/set/Set<i64>#rehash
   end
-  i32.const 1
  )
  (func $std/set/test<i64> (; 45 ;) (type $_)
   (local $0 i64)
@@ -4080,7 +4059,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#has
@@ -4149,7 +4127,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#has
@@ -4327,7 +4304,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#has
@@ -4396,7 +4372,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#has
@@ -4688,7 +4663,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<f32>#delete (; 52 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#delete (; 52 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -4700,7 +4675,6 @@
   local.tee $2
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $2
@@ -4732,7 +4706,7 @@
   select
   i32.ge_u
   local.tee $2
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -4742,15 +4716,14 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $2
+  else   
+   local.get $2
   end
-  local.get $2
   if
    local.get $0
    local.get $3
    call $~lib/set/Set<f32>#rehash
   end
-  i32.const 1
  )
  (func $std/set/test<f32> (; 53 ;) (type $_)
   (local $0 f32)
@@ -4884,7 +4857,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<f32>#has
@@ -4953,7 +4925,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<f32>#has
@@ -5245,7 +5216,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<f64>#delete (; 59 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#delete (; 59 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -5257,7 +5228,6 @@
   local.tee $2
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $2
@@ -5289,7 +5259,7 @@
   select
   i32.ge_u
   local.tee $2
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -5299,15 +5269,14 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $2
+  else   
+   local.get $2
   end
-  local.get $2
   if
    local.get $0
    local.get $3
    call $~lib/set/Set<f64>#rehash
   end
-  i32.const 1
  )
  (func $std/set/test<f64> (; 60 ;) (type $_)
   (local $0 f64)
@@ -5441,7 +5410,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f64>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<f64>#has
@@ -5510,7 +5478,6 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f64>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/set/Set<f64>#has

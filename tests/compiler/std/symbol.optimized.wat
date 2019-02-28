@@ -550,44 +550,44 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $~lib/map/Map<String,usize>#find (; 10 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<String,usize>#find (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
   i32.load offset=4
-  local.get $2
+  local.get $1
   i32.and
   i32.const 2
   i32.shl
   i32.add
   i32.load offset=8
-  local.set $2
+  local.set $1
   loop $continue|0
-   local.get $2
+   local.get $1
    if
-    local.get $2
+    local.get $1
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     local.tee $0
-    if
-     local.get $2
-     i32.load
+    if (result i32)
      local.get $1
+     i32.load
+     i32.const 8
      call $~lib/string/String.__eq
-     local.set $0
+    else     
+     local.get $0
     end
-    local.get $0
     if
-     local.get $2
+     local.get $1
      return
     end
-    local.get $2
+    local.get $1
     i32.load offset=8
     i32.const -2
     i32.and
-    local.set $2
+    local.set $1
     br $continue|0
    end
   end
@@ -700,20 +700,19 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<String,usize>#set (; 12 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<String,usize>#set (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   local.get $0
-  local.get $1
-  local.get $1
+  i32.const 8
   call $~lib/internal/hash/hashStr
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<String,usize>#find
-  local.tee $3
+  local.tee $2
   if
-   local.get $3
    local.get $2
+   local.get $1
    i32.store offset=4
   else   
    local.get $0
@@ -747,26 +746,26 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $3
+   local.set $2
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $4
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $3
+   local.get $2
    i32.const 8
    i32.add
-   local.get $4
+   local.get $3
    i32.const 12
    i32.mul
    i32.add
-   local.tee $3
-   local.get $1
+   local.tee $2
+   i32.const 8
    i32.store
-   local.get $3
    local.get $2
+   local.get $1
    i32.store offset=4
    local.get $0
    local.get $0
@@ -774,21 +773,21 @@
    i32.const 1
    i32.add
    i32.store offset=20
-   local.get $3
+   local.get $2
    local.get $0
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $5
+   local.get $4
    i32.and
    i32.const 2
    i32.shl
    i32.add
-   local.tee $4
+   local.tee $3
    i32.load offset=8
    i32.store offset=8
-   local.get $4
    local.get $3
+   local.get $2
    i32.store offset=8
   end
  )
@@ -973,20 +972,20 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<usize,String>#set (; 16 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<usize,String>#set (; 16 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/internal/hash/hash32
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<usize,String>#find
-  local.tee $3
+  local.tee $2
   if
-   local.get $3
    local.get $2
+   i32.const 8
    i32.store offset=4
   else   
    local.get $0
@@ -1020,26 +1019,26 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $3
+   local.set $2
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $4
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $3
+   local.get $2
    i32.const 8
    i32.add
-   local.get $4
+   local.get $3
    i32.const 12
    i32.mul
    i32.add
-   local.tee $3
+   local.tee $2
    local.get $1
    i32.store
-   local.get $3
    local.get $2
+   i32.const 8
    i32.store offset=4
    local.get $0
    local.get $0
@@ -1047,21 +1046,21 @@
    i32.const 1
    i32.add
    i32.store offset=20
-   local.get $3
+   local.get $2
    local.get $0
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $5
+   local.get $4
    i32.and
    i32.const 2
    i32.shl
    i32.add
-   local.tee $4
+   local.tee $3
    i32.load offset=8
    i32.store offset=8
-   local.get $4
    local.get $3
+   local.get $2
    i32.store offset=8
   end
  )
@@ -1071,12 +1070,10 @@
   if
    global.get $~lib/symbol/stringToId
    i32.const 8
-   i32.const 8
    call $~lib/internal/hash/hashStr
    call $~lib/map/Map<String,usize>#find
    if
     global.get $~lib/symbol/stringToId
-    i32.const 8
     i32.const 8
     call $~lib/internal/hash/hashStr
     call $~lib/map/Map<String,usize>#find
@@ -1106,12 +1103,10 @@
    unreachable
   end
   global.get $~lib/symbol/stringToId
-  i32.const 8
   local.get $0
   call $~lib/map/Map<String,usize>#set
   global.get $~lib/symbol/idToString
   local.get $0
-  i32.const 8
   call $~lib/map/Map<usize,String>#set
   local.get $0
  )
