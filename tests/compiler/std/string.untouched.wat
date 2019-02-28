@@ -3671,6 +3671,8 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -3922,7 +3924,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   local.get $0
   i32.const 0
   i32.ne
