@@ -424,6 +424,16 @@ export class String {
       if (search == replacement) return this;
       return this.replace(search, replacement);
     }
+    if (!slen) {
+      // handle special case when we should insert replacement between each char
+      let result = replacement;
+      for (let i = 0; i < len; i++) {
+        result = result
+          .concat(this.charAt(i))
+          .concat(replacement);
+      }
+      return result;
+    }
     var prev = 0, next = 0;
     var result = changetype<String>("");
     while (~(next = this.indexOf(search, prev))) {
