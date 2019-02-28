@@ -394,31 +394,45 @@ export class String {
   }
 
   /* TODO
-   * 1. regex for searchValue
-   * 2. callback function for replaceValue
+   * 1. regex for search
+   * 2. callback function for replacement
    */
-  replace(searchValue: String, replaceValue: String): String {
+  replace(search: String, replacement: String): String {
     assert(this !== null);
-    var len  = this.length;
-    var slen = searchValue.length;
-    var rlen = replaceValue.length;
+    var len = this.length;
+    var slen = search.length;
     if (len < slen) return this;
-    if (slen == rlen) {
-      // fast path
-    } else {
-
+    var end = this.indexOf(search);
+    if (end !== -1) {
+      return this.substring(0, end) + replacement + this.substring(end + slen, len);
     }
+    return this;
   }
 
   /* TODO
-   * 1. regex for searchValue
-   * 2. callback function for replaceValue
+   * 1. regex for search
+   * 2. callback function for replacement
    */
-  replaceAll(searchValue: String, replaceValue: String): String {
-
+  replaceAll(search: String, replacement: String): String {
+    assert(this !== null);
+    var len = this.length;
+    var slen = search.length;
+    if (len < slen) return this;
+    if (len == slen) {
+      return this.replace(search, replacement);
+    }
+    var start = 0, end = 0;
+    var result = changetype<String>("");
+    while ((end = this.indexOf(search, start)) != -1) {
+      result += this.substring(start, end) + replacement;
+      start = end + slen;
+    }
+    if (start) return result + this.substring(start, len);
+    return this;
   }
 
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
+    assert(this !== null);
     var length = this.length;
     var begin = (beginIndex < 0) ? max(beginIndex + length, 0) : min(beginIndex, length);
     var end = (endIndex < 0) ? max(endIndex + length, 0) : min(endIndex, length);

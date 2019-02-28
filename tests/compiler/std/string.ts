@@ -142,6 +142,23 @@ assert("a".repeat(5) == "aaaaa");
 assert("a".repeat(6) == "aaaaaa");
 assert("a".repeat(7) == "aaaaaaa");
 
+assert("".replace("", "abc") == "abc");
+assert("abc".replace("-", "+") == "abc");
+assert("abc".replace("abc", "+") == "+");
+assert("abc".replace("abcd", "+") == "abc");
+assert("a-b-c".replace("-", "+") == "a+b-c");
+assert("abc".replace("", "+") == "+abc");
+assert("\nabc".replace("\n", "+") == "+abc");
+
+assert("".replaceAll("", "abc") == "abc");
+assert("abc".replaceAll("-", "+") == "abc");
+assert("abcabc".replaceAll("abc", "+") == "++");
+assert("abcabcabc".replaceAll("abc", "+") == "+++");
+assert("abc".replaceAll("abcd", "+") == "abc");
+assert("a-b-c".replaceAll("-", "+") == "a+b+c");
+
+// assert("abc".replaceAll("", "+") == "+a+b+c+");
+
 // test cases for slice method
 str = "abcdefghijklmn";
 assert(str.slice(0) == "abcdefghijklmn");

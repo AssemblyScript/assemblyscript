@@ -451,6 +451,7 @@ declare class String {
   padStart(targetLength: i32, padString?: string): string;
   padEnd(targetLength: i32, padString?: string): string;
   replace(search: string, replacement: string): string;
+  replaceAll(search: string, replacement: string): string;
   repeat(count?: i32): string;
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
