@@ -47,6 +47,7 @@ import {
 
 import {
   ElementKind,
+  OperatorKind,
   FunctionPrototype,
   Class,
   Field,
@@ -64,7 +65,7 @@ import {
 } from "./resolver";
 
 import {
-  CommonFlags, CommonSymbols
+  CommonFlags
 } from "./common";
 
 /** Symbols of various compiler built-ins. */
@@ -76,6 +77,7 @@ export namespace BuiltinSymbols {
   export const isReference = "~lib/builtins/isReference";
   export const isString = "~lib/builtins/isString";
   export const isArray = "~lib/builtins/isArray";
+  export const isArrayLike = "~lib/builtins/isArrayLike";
   export const isFunction = "~lib/builtins/isFunction";
   export const isNullable = "~lib/builtins/isNullable";
   export const isDefined = "~lib/builtins/isDefined";
@@ -348,6 +350,19 @@ export function compileCall(
         (<ClassPrototype>classPrototype).extends(compiler.program.arrayPrototype)
           ? 1
           : 0
+      );
+    }
+    case BuiltinSymbols.isArrayLike: { // isArrayLike<T!>() / isArrayLike<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.createUnreachable();
+      let classReference = type.classReference;
+      if (!classReference) return module.createI32(0);
+      return module.createI32(
+        classReference.lookupInSelf("length") && (
+          classReference.lookupOverload(OperatorKind.INDEXED_GET) ||
+          classReference.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET)
+        ) ? 1 : 0
       );
     }
     case BuiltinSymbols.isFunction: { // isFunction<T!> / isFunction<T?>(value: T) -> bool
@@ -2936,9 +2951,10 @@ export function compileCall(
         return module.createUnreachable();
       }
       let flow = compiler.currentFlow;
+      let alreadyUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
       flow.set(FlowFlags.UNCHECKED_CONTEXT);
       ret = compiler.compileExpressionRetainType(operands[0], contextualType, WrapMode.NONE);
-      flow.unset(FlowFlags.UNCHECKED_CONTEXT);
+      if (!alreadyUnchecked) flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return ret;
     }
     case BuiltinSymbols.call_indirect: { // call_indirect<T?>(target: Function | u32, ...args: *[]) -> T

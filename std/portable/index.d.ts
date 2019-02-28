@@ -106,6 +106,8 @@ declare function isReference(value: any): value is object | string;
 declare function isString(value: any): value is string | String;
 /** Tests if the specified value can be used as an array. */
 declare function isArray(value: any): value is Array<any>;
+/** Tests if the specified type *or* expression can be used as an array like object. Compiles to a constant. */
+declare function isArrayLike(value: any): value is ArrayLike<any>;
 /** Tests if the specified expression resolves to a defined element. */
 declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. */
@@ -410,6 +412,11 @@ declare class Int16Array extends Array<i16> {}
 declare class Int32Array extends Array<i32> {}
 declare class Float32Array extends Array<f32> {}
 declare class Float64Array extends Array<f64> {}
+
+interface ArrayLike<T> {
+  length: i32;
+  [key: number]: T;
+}
 
 /** Interface for a typed view on an array buffer. */
 interface ArrayBufferView<T> {

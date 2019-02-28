@@ -7,7 +7,7 @@
  (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
  (data (i32.const 40) "\01\00\00\001")
  (table $0 2 funcref)
- (elem (i32.const 0) $builtins/test $start:builtins~anonymous|1)
+ (elem (i32.const 0) $builtins/test $start:builtins~anonymous|0)
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
@@ -21,7 +21,7 @@
  (export "table" (table $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $start:builtins~anonymous|1 (; 1 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $start:builtins~anonymous|0 (; 1 ;) (type $ii_) (param $0 i32) (param $1 i32)
   nop
  )
  (func $start:builtins (; 2 ;) (type $_)
@@ -43,7 +43,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 59
+   i32.const 66
    i32.const 19
    call $~lib/env/abort
    unreachable
@@ -56,7 +56,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 60
+   i32.const 67
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -69,7 +69,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 61
+   i32.const 68
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -92,7 +92,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 77
+   i32.const 84
    i32.const 19
    call $~lib/env/abort
    unreachable
@@ -105,7 +105,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 78
+   i32.const 85
    i32.const 20
    call $~lib/env/abort
    unreachable
@@ -118,7 +118,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 79
+   i32.const 86
    i32.const 20
    call $~lib/env/abort
    unreachable

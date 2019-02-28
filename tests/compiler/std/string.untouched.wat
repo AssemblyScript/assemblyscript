@@ -3671,8 +3671,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -3993,24 +3991,24 @@
   local.get $7
   local.get $6
   i32.sub
-  local.set $8
-  local.get $8
+  local.set $3
+  local.get $3
   i32.const 0
   i32.le_s
   if
    i32.const 256
    return
   end
-  local.get $8
+  local.get $3
   call $~lib/internal/string/allocateUnsafe
-  local.set $9
-  local.get $9
+  local.set $8
+  local.get $8
   i32.const 0
   local.get $0
   local.get $6
-  local.get $8
+  local.get $3
   call $~lib/internal/string/copyUnsafe
-  local.get $9
+  local.get $8
  )
  (func $~lib/string/String#slice|trampoline (; 38 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $1of1

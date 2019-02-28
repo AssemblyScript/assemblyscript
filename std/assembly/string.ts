@@ -433,10 +433,10 @@ export class String {
 
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
     assert(this !== null);
-    var length = this.length;
-    var begin = (beginIndex < 0) ? max(beginIndex + length, 0) : min(beginIndex, length);
-    var end = (endIndex < 0) ? max(endIndex + length, 0) : min(endIndex, length);
-    var len = end - begin;
+    var len = this.length;
+    var begin = beginIndex < 0 ? max(beginIndex + len, 0) : min(beginIndex, len);
+    var end = endIndex < 0 ? max(endIndex + len, 0) : min(endIndex, len);
+    len = end - begin;
     if (len <= 0) return changetype<String>("");
     var out = allocateUnsafe(len);
     copyUnsafe(out, 0, this, begin, len);

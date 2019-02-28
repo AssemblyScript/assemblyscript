@@ -864,6 +864,7 @@ export abstract class Node {
     body: Statement | null,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
+    arrowKind: ArrowKind,
     range: Range
   ): FunctionDeclaration {
     var stmt = new FunctionDeclaration();
@@ -874,6 +875,7 @@ export abstract class Node {
     stmt.signature = signature;
     stmt.body = body;
     stmt.decorators = decorators;
+    stmt.arrowKind = arrowKind;
     return stmt;
   }
 
@@ -1773,6 +1775,16 @@ export class ForStatement extends Statement {
   statement: Statement;
 }
 
+/** Indicates the kind of an array function. */
+export const enum ArrowKind {
+  /** Not an arrow function. */
+  NONE,
+  /** Parenthesized parameter list. */
+  ARROW_PARENTHESIZED,
+  /** Single parameter without parenthesis. */
+  ARROW_SINGLE
+}
+
 /** Represents a `function` declaration. */
 export class FunctionDeclaration extends DeclarationStatement {
   kind = NodeKind.FUNCTIONDECLARATION;
@@ -1783,6 +1795,8 @@ export class FunctionDeclaration extends DeclarationStatement {
   signature: SignatureNode;
   /** Body statement. Usually a block. */
   body: Statement | null;
+  /** Arrow function kind, if applicable. */
+  arrowKind: ArrowKind;
 
   get isGeneric(): bool {
     var typeParameters = this.typeParameters;
@@ -1792,7 +1806,14 @@ export class FunctionDeclaration extends DeclarationStatement {
   /** Clones this function declaration. */
   clone(): FunctionDeclaration {
     return Node.createFunctionDeclaration(
-      this.name, this.typeParameters, this.signature, this.body, this.decorators, this.flags, this.range
+      this.name,
+      this.typeParameters,
+      this.signature,
+      this.body,
+      this.decorators,
+      this.flags,
+      this.arrowKind,
+      this.range
     );
   }
 }
@@ -1959,4 +1980,13 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
 export function mangleInternalPath(path: string): string {
   if (path.endsWith(".ts")) path = path.substring(0, path.length - 3);
   return path;
+}
+
+/** Tests if the specified type node represents an omitted type. */
+export function isTypeOmitted(type: CommonTypeNode): bool {
+  if (type.kind == NodeKind.TYPE) {
+    let name = (<TypeNode>type).name;
+    return !(name.next || name.identifier.text.length);
+  }
+  return false;
 }

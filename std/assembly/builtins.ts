@@ -9,6 +9,7 @@
 @builtin export declare function isReference<T>(value?: T): bool;
 @builtin export declare function isString<T>(value?: T): bool;
 @builtin export declare function isArray<T>(value?: T): bool;
+@builtin export declare function isArrayLike<T>(value?: T): bool;
 @builtin export declare function isFunction<T>(value?: T): bool;
 @builtin export declare function isNullable<T>(value?: T): bool;
 @builtin export declare function isDefined(expression: void): bool;

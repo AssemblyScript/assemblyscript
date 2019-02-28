@@ -51,33 +51,31 @@ export enum CommonFlags {
   INSTANCE = 1 << 17,
   /** Is a constructor. */
   CONSTRUCTOR = 1 << 18,
-  /** Is an arrow function. */
-  ARROW = 1 << 19,
   /** Is a module export. */
-  MODULE_EXPORT = 1 << 20,
+  MODULE_EXPORT = 1 << 19,
   /** Is a module import. */
-  MODULE_IMPORT = 1 << 21,
+  MODULE_IMPORT = 1 << 20,
 
   // Compilation states
 
   /** Is resolved. */
-  RESOLVED = 1 << 22,
+  RESOLVED = 1 << 21,
   /** Is compiled. */
-  COMPILED = 1 << 23,
+  COMPILED = 1 << 22,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 24,
+  INLINED = 1 << 23,
   /** Is scoped. */
-  SCOPED = 1 << 25,
+  SCOPED = 1 << 24,
   /** Is a trampoline. */
-  TRAMPOLINE = 1 << 26,
+  TRAMPOLINE = 1 << 25,
   /** Is a virtual method. */
-  VIRTUAL = 1 << 27,
+  VIRTUAL = 1 << 26,
   /** Is the main function. */
-  MAIN = 1 << 28,
+  MAIN = 1 << 27,
 
   // Other
 
-  QUOTED = 1 << 29
+  QUOTED = 1 << 28
 }
 
 /** Path delimiter inserted between file system levels. */

@@ -4,7 +4,7 @@
  (type $ii (func (param i32) (result i32)))
  (memory $0 0)
  (table $0 2 funcref)
- (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
+ (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|0)
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
@@ -122,7 +122,7 @@
   end
   local.get $0
  )
- (func $getter-call/C#get:x~anonymous|1 (; 5 ;) (type $i) (result i32)
+ (func $getter-call/C#get:x~anonymous|0 (; 5 ;) (type $i) (result i32)
   i32.const 42
  )
  (func $getter-call/C#get:x (; 6 ;) (type $ii) (param $0 i32) (result i32)

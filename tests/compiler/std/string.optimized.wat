@@ -3224,20 +3224,20 @@
   end
   local.get $4
   i32.sub
-  local.tee $2
+  local.tee $3
   i32.const 0
   i32.le_s
   if
    i32.const 256
    return
   end
-  local.get $2
+  local.get $3
   call $~lib/internal/string/allocateUnsafe
   local.tee $1
   i32.const 0
   local.get $0
   local.get $4
-  local.get $2
+  local.get $3
   call $~lib/internal/string/copyUnsafe
   local.get $1
  )
