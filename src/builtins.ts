@@ -2151,33 +2151,35 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset, align);
     }
-    case BuiltinSymbols.atomic_load: {
+    case BuiltinSymbols.atomic_load: { // load<T!>(offset: usize, immOffset?) -> T
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      if (operands.length < 1 || operands.length > 2) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        if (operands.length < 1) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "1", operands.length.toString(10)
-          );
-        } else {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "2", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
-        if (typeArguments && typeArguments.length) compiler.currentType = typeArguments[0];
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        hasError = true;
+      }
+      if (operands.length < 1) {
+        compiler.error(
+          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+          reportNode.argumentsRange, "1", operands.length.toString(10)
+        );
+        hasError = true;
+      } else if (operands.length > 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "2", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let loadType = typeArguments![0];
+      if (!loadType.is(TypeFlags.INTEGER)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
@@ -2189,45 +2191,48 @@ export function compileCall(
       );
       let offset = operands.length == 2 ? evaluateImmediateOffset(compiler, operands[1]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
-      compiler.currentType = typeArguments[0];
+      compiler.currentType = loadType;
       return module.createAtomicLoad(
-        typeArguments[0].byteSize,
+        loadType.byteSize,
         arg0,
-        typeArguments[0].is(TypeFlags.INTEGER) &&
+        loadType.is(TypeFlags.INTEGER) &&
         contextualType.is(TypeFlags.INTEGER) &&
-        contextualType.size > typeArguments[0].size
+        contextualType.size > loadType.size
           ? (compiler.currentType = contextualType).toNativeType()
-          : (compiler.currentType = typeArguments[0]).toNativeType(),
+          : (compiler.currentType = loadType).toNativeType(),
         offset
       );
     }
-    case BuiltinSymbols.atomic_store: { // store<T!>(offset: usize, value: *, immOffset?, immAlign?) -> void
+    case BuiltinSymbols.atomic_store: { // store<T!>(offset: usize, value: *, immOffset?) -> void
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.void;
-      if (operands.length < 2 || operands.length > 3) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        if (operands.length < 2) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "2", operands.length.toString(10)
-          );
-        } else {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "3", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        hasError = true;
+      }
+      if (operands.length < 2) {
+        compiler.error(
+          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+          reportNode.argumentsRange, "2", operands.length.toString(10)
+        );
+        hasError = true;
+      } else if (operands.length > 3) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "3", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let storeType = typeArguments![0];
+      if (!storeType.is(TypeFlags.INTEGER) || storeType.size < 8) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
@@ -2239,68 +2244,69 @@ export function compileCall(
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
+        storeType,
+        storeType.is(TypeFlags.INTEGER)
           ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      let type: Type;
+      let valueType = storeType;
       if (
-        typeArguments[0].is(TypeFlags.INTEGER) &&
+        storeType.is(TypeFlags.INTEGER) &&
         (
-          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
-          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+          !compiler.currentType.is(TypeFlags.INTEGER) || // float to int
+          compiler.currentType.size < storeType.size // int to larger int (clear garbage bits)
         )
       ) {
         arg1 = compiler.convertExpression(
           arg1,
-          compiler.currentType, typeArguments[0],
+          compiler.currentType, storeType,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
-        type = typeArguments[0];
       } else {
-        type = compiler.currentType;
+        valueType = compiler.currentType;
       }
       let offset = operands.length == 3 ? evaluateImmediateOffset(compiler, operands[2]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
       compiler.currentType = Type.void;
-      return module.createAtomicStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
+      return module.createAtomicStore(storeType.byteSize, arg0, arg1, valueType.toNativeType(), offset);
     }
     case BuiltinSymbols.atomic_add:  // add<T!>(ptr, value: T, immOffset?: usize): T;
     case BuiltinSymbols.atomic_sub:  // sub<T!>(ptr, value: T, immOffset?: usize): T;
     case BuiltinSymbols.atomic_and:  // and<T!>(ptr, value: T, immOffset?: usize): T;
     case BuiltinSymbols.atomic_or:   // or<T!>(ptr, value: T, immOffset?: usize): T;
     case BuiltinSymbols.atomic_xor:  // xor<T!>(ptr, value: T, immOffset?: usize): T;
-    case BuiltinSymbols.atomic_xchg: // xchg<T!>(ptr, value, immOffset?: usize): T;
-    {
+    case BuiltinSymbols.atomic_xchg: { // xchg<T!>(ptr, value, immOffset?: usize): T;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      if (operands.length < 2 || operands.length > 3) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        if (operands.length < 2) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "2", operands.length.toString(10)
-          );
-        } else {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "3", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        hasError = true;
+      }
+      if (operands.length < 2) {
+        compiler.error(
+          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+          reportNode.argumentsRange, "2", operands.length.toString(10)
+        );
+        hasError = true;
+      } else if (operands.length > 3) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "3", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let resultType = typeArguments![0];
+      if (!resultType.is(TypeFlags.INTEGER) || resultType.size < 8) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
@@ -2312,37 +2318,35 @@ export function compileCall(
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
+        resultType,
+        resultType.is(TypeFlags.INTEGER)
           ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-
-      let type: Type;
+      let valueType = resultType;
       if (
-        typeArguments[0].is(TypeFlags.INTEGER) &&
+        resultType.is(TypeFlags.INTEGER) &&
         (
-          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
-          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+          !compiler.currentType.is(TypeFlags.INTEGER) || // float to int
+          compiler.currentType.size < resultType.size // int to larger int (clear garbage bits)
         )
       ) {
         arg1 = compiler.convertExpression(
           arg1,
-          compiler.currentType, typeArguments[0],
+          compiler.currentType, resultType,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
-        type = typeArguments[0];
       } else {
-        type = compiler.currentType;
+        valueType = compiler.currentType;
       }
-
       let offset = operands.length == 3 ? evaluateImmediateOffset(compiler, operands[2]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
-      let RMWOp: AtomicRMWOp | null = null;
+      let RMWOp: AtomicRMWOp;
       switch (prototype.internalName) {
+        default: assert(false);
         case BuiltinSymbols.atomic_add: { RMWOp = AtomicRMWOp.Add; break; }
         case BuiltinSymbols.atomic_sub: { RMWOp = AtomicRMWOp.Sub; break; }
         case BuiltinSymbols.atomic_and: { RMWOp = AtomicRMWOp.And; break; }
@@ -2350,45 +2354,40 @@ export function compileCall(
         case BuiltinSymbols.atomic_xor: { RMWOp = AtomicRMWOp.Xor; break; }
         case BuiltinSymbols.atomic_xchg: { RMWOp = AtomicRMWOp.Xchg; break; }
       }
-      compiler.currentType = typeArguments[0];
-      if (RMWOp !== null) {
-        return module.createAtomicRMW(
-          RMWOp, typeArguments[0].byteSize, offset, arg0, arg1, type.toNativeType()
-        );
-      } else {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        return module.createUnreachable();
-      }
+      compiler.currentType = resultType;
+      return module.createAtomicRMW(
+        RMWOp, resultType.byteSize, offset, arg0, arg1, valueType.toNativeType()
+      );
     }
     case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected: T, replacement: T, cOff?: usize): T
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      if (operands.length < 3 || operands.length > 4) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        if (operands.length < 3) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "2", operands.length.toString(10)
-          );
-        } else {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "3", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        hasError = true;
+      }
+      if (operands.length < 3) {
+        compiler.error(
+          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+          reportNode.argumentsRange, "3", operands.length.toString()
+        );
+        hasError = true;
+      } else if (operands.length > 4) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "4", operands.length.toString()
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let resultType = typeArguments![0];
+      if (!resultType.is(TypeFlags.INTEGER) || resultType.size < 8) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
@@ -2400,77 +2399,76 @@ export function compileCall(
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
+        resultType,
+        resultType.is(TypeFlags.INTEGER)
           ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       arg2 = compiler.compileExpression(
         operands[2],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
-          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
-          : ConversionKind.IMPLICIT,
+        compiler.currentType,
+        ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-
-      let type: Type;
+      let valueType = resultType;
       if (
-        typeArguments[0].is(TypeFlags.INTEGER) &&
+        resultType.is(TypeFlags.INTEGER) &&
         (
-          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
-          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+          !compiler.currentType.is(TypeFlags.INTEGER) || // float to int
+          compiler.currentType.size < resultType.size // int to larger int (clear garbage bits)
         )
       ) {
         arg1 = compiler.convertExpression(
           arg1,
-          compiler.currentType, typeArguments[0],
+          compiler.currentType, resultType,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
         arg2 = compiler.convertExpression(
           arg2,
-          compiler.currentType, typeArguments[0],
+          compiler.currentType, resultType,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[2]
         );
-        type = typeArguments[0];
       } else {
-        type = compiler.currentType;
+        valueType = compiler.currentType;
       }
-
       let offset = operands.length == 4 ? evaluateImmediateOffset(compiler, operands[3]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
-      compiler.currentType = typeArguments[0];
+      compiler.currentType = resultType;
       return module.createAtomicCmpxchg(
-        typeArguments[0].byteSize, offset, arg0, arg1, arg2, type.toNativeType()
+        resultType.byteSize, offset, arg0, arg1, arg2, valueType.toNativeType()
       );
     }
     case BuiltinSymbols.atomic_wait: { // wait<T!>(ptr: usize, expected:T, timeout: i64): i32;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      let hasError = typeArguments == null;
-      if (operands.length != 3) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "3", operands.length.toString(10)
-        );
-        hasError = true;
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
         );
         hasError = true;
       }
-
-      if (!typeArguments || hasError) {
+      if (operands.length != 3) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "3", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let valueType = typeArguments![0];
+      if (!valueType.is(TypeFlags.INTEGER) || valueType.size < 32) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
         return module.createUnreachable();
       }
-
       arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
@@ -2479,10 +2477,8 @@ export function compileCall(
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
-          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
-          : ConversionKind.IMPLICIT,
+        valueType,
+        ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       arg2 = compiler.compileExpression(
@@ -2491,57 +2487,35 @@ export function compileCall(
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-
-      let type: Type = typeArguments[0];
-      if (
-        typeArguments[0].is(TypeFlags.INTEGER) &&
-        (
-          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
-          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
-        )
-      ) {
-        arg1 = compiler.convertExpression(
-          arg1,
-          compiler.currentType, typeArguments[0],
-          ConversionKind.IMPLICIT,
-          WrapMode.NONE, // still clears garbage bits
-          operands[1]
-        );
-        arg2 = compiler.convertExpression(
-          arg2,
-          compiler.currentType, typeArguments[0],
-          ConversionKind.IMPLICIT,
-          WrapMode.NONE, // still clears garbage bits
-          operands[2]
-        );
-      }
-
-      return module.createAtomicWait(
-        arg0, arg1, arg2, type.toNativeType()
-      );
+      compiler.currentType = Type.i32;
+      return module.createAtomicWait(arg0, arg1, arg2, valueType.toNativeType());
     }
     case BuiltinSymbols.atomic_notify: { // notify<T!>(ptr: usize, count: u32): u32;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      let hasError = typeArguments == null;
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        hasError = true;
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
         );
         hasError = true;
       }
-
-      if (!typeArguments || hasError) {
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "2", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let valueType = typeArguments![0];
+      if (!valueType.is(TypeFlags.INTEGER) || valueType.size < 32) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
         return module.createUnreachable();
       }
-
       arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
@@ -2550,14 +2524,12 @@ export function compileCall(
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        Type.i32,
+        valueType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-
-      return module.createAtomicWake(
-        arg0, arg1
-      );
+      compiler.currentType = Type.i32;
+      return module.createAtomicWake(arg0, arg1);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;

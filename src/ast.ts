@@ -1350,6 +1350,24 @@ export class CallExpression extends Expression {
   typeArguments: CommonTypeNode[] | null;
   /** Provided arguments. */
   arguments: Expression[];
+
+  /** Gets the type arguments range for reporting. */
+  get typeArgumentsRange(): Range {
+    var typeArguments = this.typeArguments;
+    if (typeArguments && typeArguments.length) {
+      return Range.join(typeArguments[0].range, typeArguments[typeArguments.length - 1].range);
+    }
+    return this.expression.range;
+  }
+
+  /** Gets the arguments range for reporting. */
+  get argumentsRange(): Range {
+    var args = this.arguments;
+    if (args.length) {
+      return Range.join(args[0].range, args[args.length - 1].range);
+    }
+    return this.expression.range;
+  }
 }
 
 /** Represents a class expression using the 'class' keyword. */
