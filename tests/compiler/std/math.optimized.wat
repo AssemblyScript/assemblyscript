@@ -64,10 +64,6 @@
  (data (i32.const 40) " \00\00\00\00\00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
  (data (i32.const 104) "(\00\00\00\04")
  (data (i32.const 112) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
- (data (i32.const 144) " \00\00\00\00\00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
- (data (i32.const 208) "\90\00\00\00\04")
- (data (i32.const 216) " \00\00\00\00\00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
- (data (i32.const 280) "\d8\00\00\00\04")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
@@ -8527,7 +8523,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 992
+   i32.const 978
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -8593,7 +8589,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 1001
+   i32.const 987
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -8640,7 +8636,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2234
+   i32.const 2219
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -9598,7 +9594,7 @@
      i32.trunc_f64_s
      br $~lib/math/rempio2f|inlined.1
     end
-    i32.const 208
+    i32.const 104
     i32.load
     local.get $4
     i32.const 23
@@ -9614,7 +9610,7 @@
     i32.add
     i64.load offset=8
     local.set $8
-    i32.const 208
+    i32.const 104
     i32.load
     local.get $9
     i32.const 1
@@ -9637,7 +9633,7 @@
      i32.sub
      i64.extend_i32_s
      i64.shl
-     i32.const 208
+     i32.const 104
      i32.load
      local.get $9
      i32.const 2
@@ -10182,7 +10178,7 @@
       i32.trunc_f64_s
       br $~lib/math/rempio2f|inlined.2
      end
-     i32.const 280
+     i32.const 104
      i32.load
      local.get $4
      i32.const 23
@@ -10198,7 +10194,7 @@
      i32.add
      i64.load offset=8
      local.set $8
-     i32.const 280
+     i32.const 104
      i32.load
      local.get $10
      i32.const 1
@@ -10221,7 +10217,7 @@
       i32.sub
       i64.extend_i32_s
       i64.shl
-      i32.const 280
+      i32.const 104
       i32.load
       local.get $10
       i32.const 2

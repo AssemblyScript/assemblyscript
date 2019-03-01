@@ -24,20 +24,6 @@ import {
 
 // TODO: sin, cos, tan for Math namespace
 
-/*
-var volatile32: f32;
-var volatile64: f64;
-
-@inline // @internal
-function FORCE_EVAL<T>(expr: T): void {
-  if (sizeof<T>() == 4) {
-    volatile32 = <f32>expr;
-  } else if (sizeof<T>() == 8) {
-    volatile64 = <f64>expr;
-  }
-}
-*/
-
 /** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
   const                   // see: musl/src/math/asin.c and SUN COPYRIGHT NOTICE above
@@ -1248,6 +1234,12 @@ export namespace NativeMath {
 
 /** @internal */
 @lazy var rempio2f_y: f64;
+@lazy const PIO2_TABLE: u64[] = [
+  0xA2F9836E4E441529,
+  0xFC2757D1F534DDC0,
+  0xDB6295993C439041,
+  0xFE5163ABDEBBC561
+];
 
 /** @public Used as return values from Mathf.sincos */
 @global @lazy var sincos_s32: f32;
@@ -1276,13 +1268,7 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 @inline /** @internal */
 function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const pi_2_65 = reinterpret<f64>(0x3BF921FB54442D18); // 8.51530395021638647334e-20
-
-  const bits: u64[] = [
-    0xA2F9836E4E441529,
-    0xFC2757D1F534DDC0,
-    0xDB6295993C439041,
-    0xFE5163ABDEBBC561
-  ];
+  const bits = PIO2_TABLE;
 
   var offset = (u >> 23) - 152;
   var index  = offset >> 6;
@@ -1648,7 +1634,6 @@ export namespace NativeMathf {
     if (ix <= 0x3f490fda) {  /* |x| ~<= pi/4 */
       if (ix < 0x39800000) {  /* |x| < 2**-12 */
         /* raise inexact if x != 0 */
-        // FORCE_EVAL(x + Ox1p120f);
         return 1;
       }
       return cos_kernf(x);
@@ -2275,8 +2260,6 @@ export namespace NativeMathf {
 
     if (ix <= 0x3f490fda) { /* |x| ~<= pi/4 */
       if (ix < 0x39800000) {  /* |x| < 2**-12 */
-        /* raise inexact if x!=0 and underflow if subnormal */
-        // FORCE_EVAL(ix < 0x00800000 ? x / Ox1p120f : x + Ox1p120f);
         return x;
       }
       return sin_kernf(x);
@@ -2342,8 +2325,6 @@ export namespace NativeMathf {
 
     if (ix <= 0x3f490fda) {  /* |x| ~<= pi/4 */
       if (ix < 0x39800000) {  /* |x| < 2**-12 */
-        /* raise inexact if x!=0 and underflow if subnormal */
-        // FORCE_EVAL(ix < 0x00800000 ? x / Ox1p120f : x + Ox1p120f);
         return x;
       }
       return tan_kernf(x, 0);
@@ -2558,8 +2539,6 @@ export namespace NativeMathf {
     /* |x| ~<= pi/4 */
     if (ix <= 0x3f490fda) {
       if (ix < 0x39800000) { /* |x| < 2**-12 */
-        /* raise inexact if x!=0 and underflow if subnormal */
-        // FORCE_EVAL(ix < 0x00100000 ? x / Ox1p120f : x + Ox1p120f);
         sincos_s32 = x;
         sincos_c32 = 1;
         return;

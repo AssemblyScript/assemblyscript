@@ -66,10 +66,6 @@
  (data (i32.const 40) " \00\00\00\00\00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 104) "(\00\00\00\04\00\00\00")
  (data (i32.const 112) "\0c\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
- (data (i32.const 144) " \00\00\00\00\00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 208) "\90\00\00\00\04\00\00\00")
- (data (i32.const 216) " \00\00\00\00\00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 280) "\d8\00\00\00\04\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/math/js i32 (i32.const 1))
@@ -94,6 +90,7 @@
  (global $~lib/math/NativeMathf.SQRT2 f32 (f32.const 1.4142135381698608))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
+ (global $~lib/math/PIO2_TABLE i32 (i32.const 104))
  (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
  (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
@@ -105,7 +102,7 @@
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const 1.401298464324817e-45))
- (global $~lib/memory/HEAP_BASE i32 (i32.const 288))
+ (global $~lib/memory/HEAP_BASE i32 (i32.const 140))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
@@ -10443,7 +10440,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 992
+   i32.const 978
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -10475,7 +10472,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 1001
+   i32.const 987
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -10532,7 +10529,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 2234
+   i32.const 2219
    i32.const 24
    call $~lib/env/abort
    unreachable
@@ -11777,13 +11774,13 @@
     i32.const 63
     i32.and
     local.set $15
-    i32.const 208
+    i32.const 104
     local.get $14
     i32.const 0
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
     local.set $16
-    i32.const 208
+    i32.const 104
     local.get $14
     i32.const 1
     i32.add
@@ -11793,7 +11790,7 @@
     i32.const 32
     i32.gt_s
     if
-     i32.const 208
+     i32.const 104
      local.get $14
      i32.const 2
      i32.add
@@ -12757,13 +12754,13 @@
     i32.const 63
     i32.and
     local.set $17
-    i32.const 280
+    i32.const 104
     local.get $16
     i32.const 0
     i32.add
     call $~lib/array/Array<u64>#__unchecked_get
     local.set $18
-    i32.const 280
+    i32.const 104
     local.get $16
     i32.const 1
     i32.add
@@ -12773,7 +12770,7 @@
     i32.const 32
     i32.gt_s
     if
-     i32.const 280
+     i32.const 104
      local.get $16
      i32.const 2
      i32.add
