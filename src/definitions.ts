@@ -157,11 +157,13 @@ export class NEARBindingsBuilder extends ExportsWalker {
   private typeMapping: { [key: string]: string } = {
     "i32": "Integer",
     "u32": "Integer",
+    "i64": "String",
+    "u64": "String",
     "String": "String",
     "bool": "Boolean"
   };
 
-  private nonNullableTypes = ["i32", "u32", "bool"];
+  private nonNullableTypes = ["i32", "u32", "i64", "u64", "bool"];
 
   private sb: string[] = [];
   private generatedEncodeFunctions = new Set<string>();
@@ -266,13 +268,13 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private generateHandlerMethods(valuePrefix: string, fields: any[]) : void {
-    function fieldsWithType(type: string) {
-      return fields.filter(field => field.type.toString() == type);
+    function fieldsWithTypes(types: string[]) {
+      return fields.filter(field => types.indexOf(field.type.toString()) != -1);
     }
 
-    this.generateBasicSetterHandlers(valuePrefix, "Integer", "i64", fieldsWithType("i32").concat(fieldsWithType("u32")));
-    this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithType("String"));
-    this.generateBasicSetterHandlers(valuePrefix, "Boolean", "bool", fieldsWithType("bool"));
+    this.generateBasicSetterHandlers(valuePrefix, "Integer", "i64", fieldsWithTypes(["i32", "u32"]));
+    this.generateBasicSetterHandlers(valuePrefix, "String", "String", fieldsWithTypes(["String", "i64", "u64"]));
+    this.generateBasicSetterHandlers(valuePrefix, "Boolean", "bool", fieldsWithTypes(["bool"]));
 
     this.sb.push("setNull(name: string): void {");
     fields.forEach((field) => {
@@ -308,18 +310,26 @@ export class NEARBindingsBuilder extends ExportsWalker {
   }
 
   private generateBasicSetterHandlers(valuePrefix: string, setterType: string, setterValueType: string, matchingFields: any[]) {
-      if (matchingFields.length > 0) {
-        this.sb.push(`set${setterType}(name: string, value: ${setterValueType}): void {`);
-        matchingFields.forEach(field => {
+    if (matchingFields.length > 0) {
+      this.sb.push(`set${setterType}(name: string, value: ${setterValueType}): void {`);
+      matchingFields.forEach(field => {
+        if (setterType == "String" && field.type != "String") {
+          let className = field.type == "u64" ? "U64" : "I64";
+          this.sb.push(`if (name == "${field.name}") {
+            ${valuePrefix}${field.name} = ${className}.parseInt(value);
+            return;
+          }`);
+        } else {
           this.sb.push(`if (name == "${field.name}") {
             ${valuePrefix}${field.name} = <${field.type}>value;
             return;
           }`);
-        });
-        this.sb.push(`
-          super.set${setterType}(name, value);
-        }`);
-      }
+        }
+      });
+      this.sb.push(`
+        super.set${setterType}(name, value);
+      }`);
+    }
   }
 
   private generatePushHandler(valuePrefix: string, fields: any[]) {
@@ -337,13 +347,20 @@ export class NEARBindingsBuilder extends ExportsWalker {
     let setterType = this.typeMapping[fieldType.toString()];
     if (setterType) {
       let valueType = fieldType.toString();
-      if (valueType == "u32" || valueType == "i32") {
-        valueType = "i64"
+      if (valueType == "u64" || valueType == "i64") {
+        let className = valueType == "u64" ? "U64" : "I64";
+        this.sb.push(`setString(name: string, value: string): void {
+          ${valuePrefix}.push(${className}.parseInt(value));
+        }`);
+      } else {
+        if (valueType == "u32" || valueType == "i32") {
+          valueType = "i64"
+        }
+        this.sb.push(`set${setterType}(name: string, value: ${valueType}): void {
+          ${valuePrefix}.push(<${fieldType}>value);
+        }`);
       }
-      this.sb.push(`set${setterType}(name: string, value: ${valueType}): void {
-        ${valuePrefix}.push(<${fieldType}>value);
-      }
-      setNull(name: string): void {
+      this.sb.push(`setNull(name: string): void {
         ${valuePrefix}.push(<${fieldType}>null);
       }
       pushArray(name: string): bool {
@@ -516,7 +533,11 @@ export class NEARBindingsBuilder extends ExportsWalker {
     } else {
       // Basic types
       if (this.nonNullableTypes.indexOf(fieldType.toString()) != -1) {
-        this.sb.push(`encoder.set${setterType}(${fieldExpr}, ${sourceExpr});`);
+        if (["i64", "u64"].indexOf(fieldType.toString()) != -1) {
+          this.sb.push(`encoder.set${setterType}(${fieldExpr}, ${sourceExpr}.toString());`);
+        } else {
+          this.sb.push(`encoder.set${setterType}(${fieldExpr}, ${sourceExpr});`);
+        }
       } else {
         this.sb.push(`if (${sourceExpr} != null) {
             encoder.set${setterType}(${fieldExpr}, ${sourceExpr});

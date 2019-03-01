@@ -78,10 +78,10 @@ async function loadModule(path) {
     assert.deepEqual(await module.convertFoobars({ foobars: [] }), []);
     assert.deepEqual(await module.convertFoobars({
         foobars: [{ foo: -12345, bar: 123, flag: true, baz: "bazinga" }] }),
-        [{ foobar: { foo: -12345, bar: 123, flag: true, baz: "bazinga", arr: null, u32Arr: null, i32Arr: null }}]);
+        [{ foobar: { foo: -12345, bar: 123, u64Val: "64", i64Val: "-64", flag: true, baz: "bazinga", arr: null, u32Arr: null, i32Arr: null }}]);
     assert.deepEqual(await module.convertFoobars({
         foobars: [{ arr: [["1", "2"], ["3"]]  }] }),
-        [{ foobar: { foo: 0, bar: 1, flag: false, baz: '123', arr: [["1", "2"], ["3"]], u32Arr: null, i32Arr: null }}]);
+        [{ foobar: { foo: 0, bar: 1, u64Val: "64", i64Val: "-64", flag: false, baz: '123', arr: [["1", "2"], ["3"]], u32Arr: null, i32Arr: null }}]);
     assert.equal(await module.getStringArrayLength({ arr: ["1", "2", "3"] }), 3);
     assert.deepEqual(await module.rewrapFoobar({ container: { foobar: { foo: 123 } } }),
         { foobars: [[{"foo":123,"bar":1,"flag":false,"baz":"123","arr":null}]] });
