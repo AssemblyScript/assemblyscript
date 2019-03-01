@@ -1,7 +1,6 @@
 (module
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $iii_ (func (param i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -62,10 +61,13 @@
   i32.const 0
   i32.store8
  )
- (func $~lib/internal/memory/memcpy (; 2 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  i32.const 8
+  local.set $2
   loop $continue|0
    local.get $1
    i32.const 3
@@ -247,16 +249,13 @@
       local.set $5
       local.get $0
       local.get $1
-      local.tee $3
       i32.load8_u
       i32.store8
       local.get $0
       i32.const 1
       i32.add
-      local.tee $1
-      local.set $0
+      local.tee $0
       local.get $1
-      local.get $3
       i32.const 1
       i32.add
       local.tee $1
@@ -580,27 +579,12 @@
   if
    local.get $0
    local.get $1
-   local.tee $3
    i32.load8_u
    i32.store8
    local.get $0
    i32.const 1
    i32.add
-   local.tee $1
-   local.set $0
-   local.get $1
-   local.get $3
-   i32.const 1
-   i32.add
-   local.tee $1
-   i32.load8_u
-   i32.store8
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -610,9 +594,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -622,9 +604,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -634,9 +614,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -646,9 +624,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -658,9 +634,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -670,9 +644,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -682,9 +654,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -694,9 +664,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -706,9 +674,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -718,9 +684,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -730,9 +694,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -742,9 +704,17 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -776,27 +746,12 @@
   if
    local.get $0
    local.get $1
-   local.tee $3
    i32.load8_u
    i32.store8
    local.get $0
    i32.const 1
    i32.add
-   local.tee $1
-   local.set $0
-   local.get $1
-   local.get $3
-   i32.const 1
-   i32.add
-   local.tee $1
-   i32.load8_u
-   i32.store8
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -806,9 +761,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -818,9 +771,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -830,9 +781,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -842,9 +791,17 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -876,16 +833,13 @@
   if
    local.get $0
    local.get $1
-   local.tee $3
    i32.load8_u
    i32.store8
    local.get $0
    i32.const 1
    i32.add
-   local.tee $1
-   local.set $0
+   local.tee $0
    local.get $1
-   local.get $3
    i32.const 1
    i32.add
    local.tee $1
@@ -894,9 +848,7 @@
    local.get $0
    i32.const 1
    i32.add
-   local.tee $3
-   local.set $0
-   local.get $3
+   local.tee $0
    local.get $1
    i32.const 1
    i32.add
@@ -989,7 +941,6 @@
   if
    local.get $0
    local.get $1
-   i32.const 8
    call $~lib/internal/memory/memcpy
    return
   end
@@ -1159,7 +1110,7 @@
    end
   end
  )
- (func $start:std/pointer (; 4 ;) (type $_)
+ (func $start:std/pointer (; 4 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 8
@@ -1548,10 +1499,10 @@
    unreachable
   end
  )
- (func $start (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $FUNCSIG$v)
   call $start:std/pointer
  )
- (func $null (; 6 ;) (type $_)
+ (func $null (; 6 ;) (type $FUNCSIG$v)
   nop
  )
 )

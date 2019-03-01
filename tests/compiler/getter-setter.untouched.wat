@@ -1,8 +1,8 @@
 (module
- (type $i (func (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $i_ (func (param i32)))
- (type $_ (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s\00")
@@ -13,14 +13,14 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $getter-setter/Foo.bar.get:bar (; 1 ;) (type $i) (result i32)
+ (func $getter-setter/Foo.bar.get:bar (; 1 ;) (type $FUNCSIG$i) (result i32)
   global.get $getter-setter/Foo._bar
  )
- (func $getter-setter/Foo.bar.set:bar (; 2 ;) (type $i_) (param $0 i32)
+ (func $getter-setter/Foo.bar.set:bar (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.set $getter-setter/Foo._bar
  )
- (func $start:getter-setter (; 3 ;) (type $_)
+ (func $start:getter-setter (; 3 ;) (type $FUNCSIG$v)
   call $getter-setter/Foo.bar.get:bar
   i32.const 0
   i32.eq
@@ -64,9 +64,9 @@
    unreachable
   end
  )
- (func $start (; 4 ;) (type $_)
+ (func $start (; 4 ;) (type $FUNCSIG$v)
   call $start:getter-setter
  )
- (func $null (; 5 ;) (type $_)
+ (func $null (; 5 ;) (type $FUNCSIG$v)
  )
 )

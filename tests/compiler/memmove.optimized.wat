@@ -1,7 +1,7 @@
 (module
- (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\n\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s")
@@ -11,7 +11,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $memmove/memmove (; 1 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $memmove/memmove (; 1 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -193,7 +193,7 @@
   end
   local.get $3
  )
- (func $start:memmove (; 2 ;) (type $_)
+ (func $start:memmove (; 2 ;) (type $FUNCSIG$v)
   i32.const 8
   i64.const 1229782938247303441
   i64.store
@@ -369,10 +369,10 @@
    unreachable
   end
  )
- (func $start (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $FUNCSIG$v)
   call $start:memmove
  )
- (func $null (; 4 ;) (type $_)
+ (func $null (; 4 ;) (type $FUNCSIG$v)
   nop
  )
 )

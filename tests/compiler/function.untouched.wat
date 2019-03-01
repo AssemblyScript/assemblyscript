@@ -1,19 +1,19 @@
 (module
- (type $_ (func))
- (type $i (func (result i32)))
- (type $I (func (result i64)))
- (type $f (func (result f32)))
- (type $F (func (result f64)))
- (type $i_ (func (param i32)))
- (type $ii (func (param i32) (result i32)))
- (type $II (func (param i64) (result i64)))
- (type $ff (func (param f32) (result f32)))
- (type $FF (func (param f64) (result f64)))
- (type $ii_ (func (param i32 i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $IiI (func (param i64 i32) (result i64)))
- (type $fff (func (param f32 f32) (result f32)))
- (type $FFF (func (param f64 f64) (result f64)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$j (func (result i64)))
+ (type $FUNCSIG$f (func (result f32)))
+ (type $FUNCSIG$d (func (result f64)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$jj (func (param i64) (result i64)))
+ (type $FUNCSIG$ff (func (param f32) (result f32)))
+ (type $FUNCSIG$dd (func (param f64) (result f64)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$jji (func (param i64 i32) (result i64)))
+ (type $FUNCSIG$fff (func (param f32 f32) (result f32)))
+ (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -21,61 +21,61 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $function/v (; 0 ;) (type $_)
+ (func $function/v (; 0 ;) (type $FUNCSIG$v)
   nop
  )
- (func $function/i (; 1 ;) (type $i) (result i32)
+ (func $function/i (; 1 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
  )
- (func $function/I (; 2 ;) (type $I) (result i64)
+ (func $function/I (; 2 ;) (type $FUNCSIG$j) (result i64)
   i64.const 0
  )
- (func $function/f (; 3 ;) (type $f) (result f32)
+ (func $function/f (; 3 ;) (type $FUNCSIG$f) (result f32)
   f32.const 0
  )
- (func $function/F (; 4 ;) (type $F) (result f64)
+ (func $function/F (; 4 ;) (type $FUNCSIG$d) (result f64)
   f64.const 0
  )
- (func $function/iv (; 5 ;) (type $i_) (param $0 i32)
+ (func $function/iv (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $function/ii (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $function/ii (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $function/II (; 7 ;) (type $II) (param $0 i64) (result i64)
+ (func $function/II (; 7 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   local.get $0
  )
- (func $function/ff (; 8 ;) (type $ff) (param $0 f32) (result f32)
+ (func $function/ff (; 8 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   local.get $0
  )
- (func $function/FF (; 9 ;) (type $FF) (param $0 f64) (result f64)
+ (func $function/FF (; 9 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
  )
- (func $function/iiv (; 10 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $function/iiv (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $function/iii (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $function/iii (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $function/III (; 12 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
+ (func $function/III (; 12 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
   local.get $0
   local.get $1
   i64.extend_i32_s
   i64.add
  )
- (func $function/fff (; 13 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $function/fff (; 13 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   local.get $0
   local.get $1
   f32.add
  )
- (func $function/FFF (; 14 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $function/FFF (; 14 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.add
  )
- (func $start:function (; 15 ;) (type $_)
+ (func $start:function (; 15 ;) (type $FUNCSIG$v)
   call $function/v
   call $function/i
   drop
@@ -119,9 +119,9 @@
   call $function/FFF
   drop
  )
- (func $start (; 16 ;) (type $_)
+ (func $start (; 16 ;) (type $FUNCSIG$v)
   call $start:function
  )
- (func $null (; 17 ;) (type $_)
+ (func $null (; 17 ;) (type $FUNCSIG$v)
  )
 )

@@ -1,33 +1,27 @@
 (module
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $FFFii (func (param f64 f64 f64 i32) (result i32)))
- (type $FFFF (func (param f64 f64 f64) (result f64)))
- (type $FiF (func (param f64 i32) (result f64)))
- (type $fffii (func (param f32 f32 f32 i32) (result i32)))
- (type $ffff (func (param f32 f32 f32) (result f32)))
- (type $fif (func (param f32 i32) (result f32)))
- (type $FF (func (param f64) (result f64)))
- (type $ff (func (param f32) (result f32)))
- (type $FFFFii (func (param f64 f64 f64 f64 i32) (result i32)))
- (type $FFF (func (param f64 f64) (result f64)))
- (type $ffffii (func (param f32 f32 f32 f32 i32) (result i32)))
- (type $fff (func (param f32 f32) (result f32)))
- (type $F (func (result f64)))
- (type $I_ (func (param i64)))
- (type $ii (func (param i32) (result i32)))
- (type $f (func (result f32)))
- (type $IiI (func (param i64 i32) (result i64)))
- (type $_ (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$dddd (func (param f64 f64 f64) (result f64)))
+ (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
+ (type $FUNCSIG$ffff (func (param f32 f32 f32) (result f32)))
+ (type $FUNCSIG$ffi (func (param f32 i32) (result f32)))
+ (type $FUNCSIG$dd (func (param f64) (result f64)))
+ (type $FUNCSIG$ff (func (param f32) (result f32)))
+ (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
+ (type $FUNCSIG$fff (func (param f32 f32) (result f32)))
+ (type $FUNCSIG$d (func (result f64)))
+ (type $FUNCSIG$vj (func (param i64)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$f (func (result f32)))
+ (type $FUNCSIG$jji (func (param i64 i32) (result i64)))
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$iddd (func (param f64 f64 f64) (result i32)))
  (type $FUNCSIG$ifff (func (param f32 f32 f32) (result i32)))
- (type $FUNCSIG$ididi (func (param f64 i32 f64 i32) (result i32)))
- (type $FUNCSIG$ififi (func (param f32 i32 f32 i32) (result i32)))
+ (type $FUNCSIG$idid (func (param f64 i32 f64) (result i32)))
+ (type $FUNCSIG$ifif (func (param f32 i32 f32) (result i32)))
  (type $FUNCSIG$idd (func (param f64 f64) (result i32)))
  (type $FUNCSIG$iff (func (param f32 f32) (result i32)))
- (type $FUNCSIG$iddi (func (param f64 f64 i32) (result i32)))
- (type $FUNCSIG$iffi (func (param f32 f32 i32) (result i32)))
- (type $FUNCSIG$idddi (func (param f64 f64 f64 i32) (result i32)))
- (type $FUNCSIG$ifffi (func (param f32 f32 f32 i32) (result i32)))
+ (type $FUNCSIG$idddd (func (param f64 f64 f64 f64) (result i32)))
+ (type $FUNCSIG$iffff (func (param f32 f32 f32 f32) (result i32)))
  (import "Math" "E" (global $~lib/bindings/Math/E f64))
  (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
  (import "Math" "LN10" (global $~lib/bindings/Math/LN10 f64))
@@ -85,7 +79,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/math/NativeMath.scalbn (; 30 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 30 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   local.get $1
   i32.const 1023
   i32.gt_s
@@ -162,7 +156,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $std/math/ulperr (; 31 ;) (type $FFFF) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
+ (func $std/math/ulperr (; 31 ;) (type $FUNCSIG$dddd) (param $0 f64) (param $1 f64) (param $2 f64) (result f64)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -288,7 +282,7 @@
   end
   i32.const 1
  )
- (func $~lib/math/NativeMathf.scalbn (; 33 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/NativeMathf.scalbn (; 33 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   local.get $1
   i32.const 127
   i32.gt_s
@@ -364,7 +358,7 @@
   f32.reinterpret_i32
   f32.mul
  )
- (func $std/math/ulperrf (; 34 ;) (type $ffff) (param $0 f32) (param $1 f32) (param $2 f32) (result f32)
+ (func $std/math/ulperrf (; 34 ;) (type $FUNCSIG$ffff) (param $0 f32) (param $1 f32) (param $2 f32) (result f32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -487,7 +481,7 @@
   end
   i32.const 1
  )
- (func $std/math/test_scalbn (; 36 ;) (type $FUNCSIG$ididi) (param $0 f64) (param $1 i32) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_scalbn (; 36 ;) (type $FUNCSIG$idid) (param $0 f64) (param $1 i32) (param $2 f64) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.scalbn
@@ -495,7 +489,7 @@
   f64.const 0
   call $std/math/check<f64>
  )
- (func $std/math/test_scalbnf (; 37 ;) (type $FUNCSIG$ififi) (param $0 f32) (param $1 i32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_scalbnf (; 37 ;) (type $FUNCSIG$ifif) (param $0 f32) (param $1 i32) (param $2 f32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.scalbn
@@ -528,7 +522,7 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/R (; 40 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/R (; 40 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   f64.const 0.16666666666666666
   local.get $0
@@ -571,7 +565,7 @@
   f64.add
   f64.div
  )
- (func $~lib/math/NativeMath.acos (; 41 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.acos (; 41 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -699,25 +693,25 @@
   f64.add
   f64.mul
  )
- (func $std/math/test_acos (; 42 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_acos (; 42 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.acos
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/acos
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.acos (; 43 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.acos (; 43 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 f32)
   (local $3 i32)
@@ -885,14 +879,14 @@
   f32.add
   f32.mul
  )
- (func $std/math/test_acosf (; 44 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_acosf (; 44 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.acos
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.log1p (; 45 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log1p (; 45 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -1094,7 +1088,7 @@
   f64.mul
   f64.add
  )
- (func $~lib/math/NativeMath.log (; 46 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log (; 46 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1272,7 +1266,7 @@
   f64.mul
   f64.add
  )
- (func $~lib/math/NativeMath.acosh (; 47 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.acosh (; 47 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   local.get $0
   i64.reinterpret_f64
@@ -1326,25 +1320,25 @@
   f64.const 0.6931471805599453
   f64.add
  )
- (func $std/math/test_acosh (; 48 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_acosh (; 48 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.acosh
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/acosh
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.log1p (; 49 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log1p (; 49 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 i32)
@@ -1517,7 +1511,7 @@
   f32.mul
   f32.add
  )
- (func $~lib/math/NativeMathf.log (; 50 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log (; 50 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 i32)
@@ -1656,7 +1650,7 @@
   f32.mul
   f32.add
  )
- (func $~lib/math/NativeMathf.acosh (; 51 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.acosh (; 51 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   local.get $0
   i32.reinterpret_f32
@@ -1706,14 +1700,14 @@
   f32.const 0.6931471824645996
   f32.add
  )
- (func $std/math/test_acoshf (; 52 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_acoshf (; 52 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.acosh
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.asin (; 53 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.asin (; 53 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -1854,25 +1848,25 @@
   end
   local.get $0
  )
- (func $std/math/test_asin (; 54 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_asin (; 54 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.asin
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/asin
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.asin (; 55 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.asin (; 55 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 i32)
@@ -1990,14 +1984,14 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_asinf (; 56 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_asinf (; 56 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.asin
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.asinh (; 57 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.asinh (; 57 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i64)
   local.get $0
@@ -2067,25 +2061,25 @@
   local.get $0
   f64.copysign
  )
- (func $std/math/test_asinh (; 58 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_asinh (; 58 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.asinh
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/asinh
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.asinh (; 59 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.asinh (; 59 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   local.get $0
@@ -2150,14 +2144,14 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_asinhf (; 60 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_asinhf (; 60 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.asinh
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.atan (; 61 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.atan (; 61 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 f64)
@@ -2380,25 +2374,25 @@
   local.get $4
   f64.copysign
  )
- (func $std/math/test_atan (; 62 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_atan (; 62 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.atan
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/atan
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.atan (; 63 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.atan (; 63 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -2594,14 +2588,14 @@
   local.get $4
   f32.copysign
  )
- (func $std/math/test_atanf (; 64 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_atanf (; 64 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.atan
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.atanh (; 65 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.atanh (; 65 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i64)
   (local $3 i64)
@@ -2660,25 +2654,25 @@
   local.get $0
   f64.copysign
  )
- (func $std/math/test_atanh (; 66 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_atanh (; 66 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.atanh
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/atanh
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.atanh (; 67 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.atanh (; 67 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   local.get $0
@@ -2728,14 +2722,14 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_atanhf (; 68 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_atanhf (; 68 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.atanh
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.atan2 (; 69 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.atan2 (; 69 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2979,27 +2973,27 @@
   i32.and
   select
  )
- (func $std/math/test_atan2 (; 70 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
-  (local $5 i32)
+ (func $std/math/test_atan2 (; 70 ;) (type $FUNCSIG$idddd) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
+  (local $4 i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.atan2
   local.get $2
   local.get $3
   call $std/math/check<f64>
-  local.tee $5
-  if (result i32)
+  local.tee $4
+  if
    local.get $0
    local.get $1
    call $~lib/bindings/Math/atan2
    local.get $2
    local.get $3
    call $std/math/check<f64>
-  else   
-   local.get $5
+   local.set $4
   end
+  local.get $4
  )
- (func $~lib/math/NativeMathf.atan2 (; 71 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.atan2 (; 71 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3219,7 +3213,7 @@
   i32.and
   select
  )
- (func $std/math/test_atan2f (; 72 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_atan2f (; 72 ;) (type $FUNCSIG$iffff) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.atan2
@@ -3227,7 +3221,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.cbrt (; 73 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cbrt (; 73 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (local $3 i32)
@@ -3348,25 +3342,25 @@
   f64.mul
   f64.add
  )
- (func $std/math/test_cbrt (; 74 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_cbrt (; 74 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.cbrt
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/cbrt
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.cbrt (; 75 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cbrt (; 75 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f64)
   (local $2 f64)
   (local $3 i32)
@@ -3463,38 +3457,39 @@
   f64.div
   f32.demote_f64
  )
- (func $std/math/test_cbrtf (; 76 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_cbrtf (; 76 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.cbrt
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_ceil (; 77 ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
+ (func $std/math/test_ceil (; 77 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+  (local $2 i32)
   local.get $0
   f64.ceil
   local.get $1
   f64.const 0
   call $std/math/check<f64>
   local.tee $2
-  if
+  if (result i32)
    local.get $0
    call $~lib/bindings/Math/ceil
    local.get $1
    f64.const 0
    call $std/math/check<f64>
-   local.set $2
+  else   
+   local.get $2
   end
-  local.get $2
  )
- (func $std/math/test_ceilf (; 78 ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
+ (func $std/math/test_ceilf (; 78 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   f32.ceil
   local.get $1
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMathf.cos (; 79 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMath.expm1 (; 79 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (local $3 i32)
@@ -4295,7 +4290,7 @@
   local.get $5
   f64.mul
  )
- (func $~lib/math/NativeMath.exp (; 82 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.exp (; 80 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 i32)
@@ -4445,7 +4440,7 @@
   local.get $3
   call $~lib/math/NativeMath.scalbn
  )
- (func $~lib/math/NativeMath.cosh (; 83 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cosh (; 81 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i64)
   local.get $0
@@ -4509,25 +4504,25 @@
   f64.const 2247116418577894884661631e283
   f64.mul
  )
- (func $std/math/test_cosh (; 84 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_cosh (; 82 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.cosh
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/cosh
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.expm1 (; 85 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.expm1 (; 83 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 f32)
@@ -4786,7 +4781,7 @@
   local.get $5
   f32.mul
  )
- (func $~lib/math/NativeMathf.exp (; 86 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.exp (; 84 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -4914,7 +4909,7 @@
   local.get $1
   call $~lib/math/NativeMathf.scalbn
  )
- (func $~lib/math/NativeMathf.cosh (; 87 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cosh (; 85 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   local.get $0
   i32.reinterpret_f32
@@ -4973,88 +4968,89 @@
   f32.const 1661534994731144841129758e11
   f32.mul
  )
- (func $std/math/test_coshf (; 88 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_coshf (; 86 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.cosh
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_exp (; 89 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_exp (; 87 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.exp
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/exp
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $std/math/test_expf (; 90 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_expf (; 88 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.exp
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_expm1 (; 91 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_expm1 (; 89 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.expm1
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/expm1
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $std/math/test_expm1f (; 92 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_expm1f (; 90 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.expm1
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_floor (; 93 ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
+ (func $std/math/test_floor (; 91 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+  (local $2 i32)
   local.get $0
   f64.floor
   local.get $1
   f64.const 0
   call $std/math/check<f64>
   local.tee $2
-  if
+  if (result i32)
    local.get $0
    call $~lib/bindings/Math/floor
    local.get $1
    f64.const 0
    call $std/math/check<f64>
-   local.set $2
+  else   
+   local.get $2
   end
-  local.get $2
  )
- (func $std/math/test_floorf (; 94 ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
+ (func $std/math/test_floorf (; 92 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   f32.floor
   local.get $1
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.hypot (; 95 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.hypot (; 93 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 i64)
   (local $4 f64)
@@ -5233,27 +5229,27 @@
   f64.sqrt
   f64.mul
  )
- (func $std/math/test_hypot (; 96 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
-  (local $5 i32)
+ (func $std/math/test_hypot (; 94 ;) (type $FUNCSIG$idddd) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
+  (local $4 i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.hypot
   local.get $2
   local.get $3
   call $std/math/check<f64>
-  local.tee $5
-  if (result i32)
+  local.tee $4
+  if
    local.get $0
    local.get $1
    call $~lib/bindings/Math/hypot
    local.get $2
    local.get $3
    call $std/math/check<f64>
-  else   
-   local.get $5
+   local.set $4
   end
+  local.get $4
  )
- (func $~lib/math/NativeMathf.hypot (; 97 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.hypot (; 95 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5368,7 +5364,7 @@
   f32.sqrt
   f32.mul
  )
- (func $std/math/test_hypotf (; 98 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_hypotf (; 96 ;) (type $FUNCSIG$iffff) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.hypot
@@ -5376,32 +5372,32 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_log (; 99 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_log (; 97 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.log
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/log
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $std/math/test_logf (; 100 ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
+ (func $std/math/test_logf (; 98 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log
   local.get $1
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.log10 (; 101 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log10 (; 99 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -5613,25 +5609,25 @@
   local.get $0
   f64.add
  )
- (func $std/math/test_log10 (; 102 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_log10 (; 100 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.log10
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/log10
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.log10 (; 103 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log10 (; 101 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -5794,39 +5790,39 @@
   f32.mul
   f32.add
  )
- (func $std/math/test_log10f (; 104 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log10f (; 102 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log10
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_log1p (; 105 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_log1p (; 103 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.log1p
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/log1p
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $std/math/test_log1pf (; 106 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log1pf (; 104 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log1p
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.log2 (; 107 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log2 (; 105 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -6032,25 +6028,25 @@
   local.get $0
   f64.add
  )
- (func $std/math/test_log2 (; 108 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_log2 (; 106 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.log2
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/log2
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.log2 (; 109 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log2 (; 107 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -6205,7 +6201,7 @@
   f32.convert_i32_s
   f32.add
  )
- (func $std/math/test_log2f (; 110 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log2f (; 108 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log2
   local.get $1
@@ -6268,7 +6264,7 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.mod (; 115 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 113 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -6476,7 +6472,8 @@
   local.get $0
   f64.mul
  )
- (func $std/math/test_mod (; 116 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_mod (; 114 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.mod
@@ -6484,18 +6481,18 @@
   f64.const 0
   call $std/math/check<f64>
   local.tee $3
-  if
+  if (result i32)
    local.get $0
    local.get $1
    call $std/math/mod
    local.get $2
    f64.const 0
    call $std/math/check<f64>
-   local.set $3
+  else   
+   local.get $3
   end
-  local.get $3
  )
- (func $~lib/math/NativeMathf.mod (; 117 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 115 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6691,7 +6688,7 @@
   local.get $0
   f32.mul
  )
- (func $std/math/test_modf (; 118 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_modf (; 116 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.mod
@@ -6699,7 +6696,7 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.pow (; 119 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 117 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -7649,27 +7646,27 @@
   f64.const 1e-300
   f64.mul
  )
- (func $std/math/test_pow (; 120 ;) (type $FFFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
-  (local $5 i32)
+ (func $std/math/test_pow (; 118 ;) (type $FUNCSIG$idddd) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
+  (local $4 i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.pow
   local.get $2
   local.get $3
   call $std/math/check<f64>
-  local.tee $5
-  if (result i32)
+  local.tee $4
+  if
    local.get $0
    local.get $1
    call $~lib/bindings/Math/pow
    local.get $2
    local.get $3
    call $std/math/check<f64>
-  else   
-   local.get $5
+   local.set $4
   end
+  local.get $4
  )
- (func $~lib/math/NativeMathf.pow (; 121 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 119 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 f32)
   (local $3 f32)
   (local $4 i32)
@@ -8483,7 +8480,7 @@
   f32.const 1.0000000031710769e-30
   f32.mul
  )
- (func $std/math/test_powf (; 122 ;) (type $ffffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_powf (; 120 ;) (type $FUNCSIG$iffff) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.pow
@@ -8491,7 +8488,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/splitMix32 (; 123 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/math/splitMix32 (; 121 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 1831565813
   i32.add
@@ -8523,7 +8520,7 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/math/NativeMath.seedRandom (; 124 ;) (type $I_) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 122 ;) (type $FUNCSIG$vj) (param $0 i64)
   (local $1 i64)
   local.get $0
   i64.eqz
@@ -8588,7 +8585,7 @@
   call $~lib/math/splitMix32
   global.set $~lib/math/random_state1_32
  )
- (func $~lib/math/NativeMath.random (; 125 ;) (type $F) (result f64)
+ (func $~lib/math/NativeMath.random (; 123 ;) (type $FUNCSIG$d) (result f64)
   (local $0 i64)
   (local $1 i64)
   global.get $~lib/math/random_seeded
@@ -8635,7 +8632,7 @@
   f64.const 1
   f64.sub
  )
- (func $~lib/math/NativeMathf.random (; 126 ;) (type $f) (result f32)
+ (func $~lib/math/NativeMathf.random (; 124 ;) (type $FUNCSIG$f) (result f32)
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/math/random_seeded
@@ -8681,7 +8678,7 @@
   f32.const 1
   f32.sub
  )
- (func $std/math/test_round (; 127 ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
+ (func $std/math/test_round (; 125 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   f64.const 0.5
   f64.add
@@ -8692,7 +8689,7 @@
   f64.const 0
   call $std/math/check<f64>
  )
- (func $std/math/test_roundf (; 128 ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
+ (func $std/math/test_roundf (; 126 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   f32.const 0.5
   f32.add
@@ -8749,7 +8746,7 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.rem (; 131 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.rem (; 129 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -9029,7 +9026,7 @@
   local.get $9
   select
  )
- (func $std/math/test_rem (; 132 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_rem (; 130 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.rem
@@ -9037,7 +9034,7 @@
   f64.const 0
   call $std/math/check<f64>
  )
- (func $~lib/math/NativeMathf.rem (; 133 ;) (type $fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.rem (; 131 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9305,7 +9302,7 @@
   local.get $9
   select
  )
- (func $std/math/test_remf (; 134 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_remf (; 132 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.rem
@@ -9313,7 +9310,7 @@
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMathf.sin (; 135 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMath.sinh (; 133 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (local $3 f64)
@@ -9903,25 +9900,25 @@
   f64.mul
   f64.mul
  )
- (func $std/math/test_sinh (; 138 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_sinh (; 134 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.sinh
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/sinh
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.sinh (; 139 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sinh (; 135 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 f32)
@@ -9993,39 +9990,39 @@
   f32.mul
   f32.mul
  )
- (func $std/math/test_sinhf (; 140 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sinhf (; 136 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.sinh
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_sqrt (; 141 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_sqrt (; 137 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   f64.sqrt
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/sqrt
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $std/math/test_sqrtf (; 142 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sqrtf (; 138 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   f32.sqrt
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMathf.tan (; 143 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMath.tanh (; 139 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 f64)
   (local $3 f64)
@@ -10511,25 +10508,25 @@
   local.get $0
   f64.copysign
  )
- (func $std/math/test_tanh (; 146 ;) (type $FFFii) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $std/math/test_tanh (; 140 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   call $~lib/math/NativeMath.tanh
   local.get $1
   local.get $2
   call $std/math/check<f64>
-  local.tee $4
-  if (result i32)
+  local.tee $3
+  if
    local.get $0
    call $~lib/bindings/Math/tanh
    local.get $1
    local.get $2
    call $std/math/check<f64>
-  else   
-   local.get $4
+   local.set $3
   end
+  local.get $3
  )
- (func $~lib/math/NativeMathf.tanh (; 147 ;) (type $ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tanh (; 141 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   local.get $0
@@ -10603,38 +10600,39 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_tanhf (; 148 ;) (type $fffii) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_tanhf (; 142 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.tanh
   local.get $1
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_trunc (; 149 ;) (type $FUNCSIG$iddi) (param $0 f64) (param $1 f64) (param $2 i32) (result i32)
+ (func $std/math/test_trunc (; 143 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+  (local $2 i32)
   local.get $0
   f64.trunc
   local.get $1
   f64.const 0
   call $std/math/check<f64>
   local.tee $2
-  if
+  if (result i32)
    local.get $0
    call $~lib/bindings/Math/trunc
    local.get $1
    f64.const 0
    call $std/math/check<f64>
-   local.set $2
+  else   
+   local.get $2
   end
-  local.get $2
  )
- (func $std/math/test_truncf (; 150 ;) (type $FUNCSIG$iffi) (param $0 f32) (param $1 f32) (param $2 i32) (result i32)
+ (func $std/math/test_truncf (; 144 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   f32.trunc
   local.get $1
   f32.const 0
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.imul (; 151 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.imul (; 145 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   local.get $0
   local.get $1
@@ -10671,7 +10669,7 @@
   i32.mul
   f64.convert_i32_s
  )
- (func $~lib/math/NativeMath.clz32 (; 152 ;) (type $FF) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.clz32 (; 146 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   local.get $0
   f64.sub
@@ -10694,7 +10692,7 @@
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/ipow64 (; 153 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 147 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   i64.const 1
@@ -10890,7 +10888,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 154 ;) (type $fif) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/ipow32f (; 148 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
   local.get $1
@@ -10936,7 +10934,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow64f (; 155 ;) (type $FiF) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/ipow64f (; 149 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   local.get $1
@@ -10982,7 +10980,7 @@
   end
   local.get $2
  )
- (func $start:std/math (; 156 ;) (type $_)
+ (func $start:std/math (; 150 ;) (type $FUNCSIG$v)
   (local $0 f64)
   (local $1 f32)
   (local $2 i32)
@@ -11179,7 +11177,6 @@
   f64.const -8.06684839057968
   i32.const -2
   f64.const -2.01671209764492
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11193,7 +11190,6 @@
   f64.const 4.345239849338305
   i32.const -1
   f64.const 2.1726199246691524
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11207,7 +11203,6 @@
   f64.const -8.38143342755525
   i32.const 0
   f64.const -8.38143342755525
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11221,7 +11216,6 @@
   f64.const -6.531673581913484
   i32.const 1
   f64.const -13.063347163826968
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11235,7 +11229,6 @@
   f64.const 9.267056966972586
   i32.const 2
   f64.const 37.06822786789034
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11249,7 +11242,6 @@
   f64.const 0.6619858980995045
   i32.const 3
   f64.const 5.295887184796036
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11263,7 +11255,6 @@
   f64.const -0.4066039223853553
   i32.const 4
   f64.const -6.505662758165685
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11277,7 +11268,6 @@
   f64.const 0.5617597462207241
   i32.const 5
   f64.const 17.97631187906317
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11291,7 +11281,6 @@
   f64.const 0.7741522965913037
   i32.const 6
   f64.const 49.545746981843436
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11305,7 +11294,6 @@
   f64.const -0.6787637026394024
   i32.const 7
   f64.const -86.88175393784351
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11319,7 +11307,6 @@
   f64.const 0
   i32.const 2147483647
   f64.const 0
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11333,7 +11320,6 @@
   f64.const 0
   i32.const -2147483647
   f64.const 0
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11347,7 +11333,6 @@
   f64.const -0
   i32.const 2147483647
   f64.const -0
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11361,7 +11346,6 @@
   f64.const nan:0x8000000000000
   i32.const 0
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11375,7 +11359,6 @@
   f64.const inf
   i32.const 0
   f64.const inf
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11389,7 +11372,6 @@
   f64.const -inf
   i32.const 0
   f64.const -inf
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11403,7 +11385,6 @@
   f64.const 1
   i32.const 0
   f64.const 1
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11417,7 +11398,6 @@
   f64.const 1
   i32.const 1
   f64.const 2
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11431,7 +11411,6 @@
   f64.const 1
   i32.const -1
   f64.const 0.5
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11445,7 +11424,6 @@
   f64.const 1
   i32.const 2147483647
   f64.const inf
-  i32.const 17
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11459,7 +11437,6 @@
   f64.const nan:0x8000000000000
   i32.const 1
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11473,7 +11450,6 @@
   f64.const inf
   i32.const 2147483647
   f64.const inf
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11487,7 +11463,6 @@
   f64.const inf
   i32.const -2147483647
   f64.const inf
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11501,7 +11476,6 @@
   f64.const -inf
   i32.const 2147483647
   f64.const -inf
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11515,7 +11489,6 @@
   f64.const 8988465674311579538646525e283
   i32.const -2097
   f64.const 5e-324
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11529,7 +11502,6 @@
   f64.const 5e-324
   i32.const 2097
   f64.const 8988465674311579538646525e283
-  i32.const 0
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11543,7 +11515,6 @@
   f64.const 1.000244140625
   i32.const -1074
   f64.const 5e-324
-  i32.const 9
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11557,7 +11528,6 @@
   f64.const 0.7499999999999999
   i32.const -1073
   f64.const 5e-324
-  i32.const 9
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11571,7 +11541,6 @@
   f64.const 0.5000000000000012
   i32.const -1024
   f64.const 2.781342323134007e-309
-  i32.const 9
   call $std/math/test_scalbn
   i32.eqz
   if
@@ -11585,7 +11554,6 @@
   f32.const -8.066848754882812
   i32.const -2
   f32.const -2.016712188720703
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11599,7 +11567,6 @@
   f32.const 4.345239639282227
   i32.const -1
   f32.const 2.1726198196411133
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11613,7 +11580,6 @@
   f32.const -8.381433486938477
   i32.const 0
   f32.const -8.381433486938477
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11627,7 +11593,6 @@
   f32.const -6.531673431396484
   i32.const 1
   f32.const -13.063346862792969
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11641,7 +11606,6 @@
   f32.const 9.267057418823242
   i32.const 2
   f32.const 37.06822967529297
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11655,7 +11619,6 @@
   f32.const 0.6619858741760254
   i32.const 3
   f32.const 5.295886993408203
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11669,7 +11632,6 @@
   f32.const -0.40660393238067627
   i32.const 4
   f32.const -6.50566291809082
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11683,7 +11645,6 @@
   f32.const 0.5617597699165344
   i32.const 5
   f32.const 17.9763126373291
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11697,7 +11658,6 @@
   f32.const 0.7741522789001465
   i32.const 6
   f32.const 49.545745849609375
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11711,7 +11671,6 @@
   f32.const -0.6787636876106262
   i32.const 7
   f32.const -86.88175201416016
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11725,7 +11684,6 @@
   f32.const 0
   i32.const 2147483647
   f32.const 0
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11739,7 +11697,6 @@
   f32.const 0
   i32.const -2147483647
   f32.const 0
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11753,7 +11710,6 @@
   f32.const -0
   i32.const 2147483647
   f32.const -0
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11767,7 +11723,6 @@
   f32.const nan:0x400000
   i32.const 0
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11781,7 +11736,6 @@
   f32.const inf
   i32.const 0
   f32.const inf
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11795,7 +11749,6 @@
   f32.const -inf
   i32.const 0
   f32.const -inf
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11809,7 +11762,6 @@
   f32.const 1
   i32.const 0
   f32.const 1
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11823,7 +11775,6 @@
   f32.const 1
   i32.const 1
   f32.const 2
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11837,7 +11788,6 @@
   f32.const 1
   i32.const -1
   f32.const 0.5
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11851,7 +11801,6 @@
   f32.const 1
   i32.const 2147483647
   f32.const inf
-  i32.const 17
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11865,7 +11814,6 @@
   f32.const nan:0x400000
   i32.const 1
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11879,7 +11827,6 @@
   f32.const inf
   i32.const 2147483647
   f32.const inf
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11893,7 +11840,6 @@
   f32.const inf
   i32.const -2147483647
   f32.const inf
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11907,7 +11853,6 @@
   f32.const -inf
   i32.const 2147483647
   f32.const -inf
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11921,7 +11866,6 @@
   f32.const 1701411834604692317316873e14
   i32.const -276
   f32.const 1.401298464324817e-45
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11935,7 +11879,6 @@
   f32.const 1.401298464324817e-45
   i32.const 276
   f32.const 1701411834604692317316873e14
-  i32.const 0
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11949,7 +11892,6 @@
   f32.const 1.000244140625
   i32.const -149
   f32.const 1.401298464324817e-45
-  i32.const 9
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11963,7 +11905,6 @@
   f32.const 0.7499999403953552
   i32.const -148
   f32.const 1.401298464324817e-45
-  i32.const 9
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -11977,7 +11918,6 @@
   f32.const 0.5000006556510925
   i32.const -128
   f32.const 1.4693693398263237e-39
-  i32.const 9
   call $std/math/test_scalbnf
   i32.eqz
   if
@@ -12399,7 +12339,6 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -12413,7 +12352,6 @@
   f64.const 4.345239849338305
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -12427,7 +12365,6 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -12441,7 +12378,6 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -12455,7 +12391,6 @@
   f64.const 9.267056966972586
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -12469,7 +12404,6 @@
   f64.const 0.6619858980995045
   f64.const 0.8473310828433507
   f64.const -0.41553276777267456
-  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -12483,7 +12417,6 @@
   f64.const -0.4066039223853553
   f64.const 1.989530071088669
   f64.const 0.4973946213722229
-  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -12497,7 +12430,6 @@
   f64.const 0.5617597462207241
   f64.const 0.9742849645674904
   f64.const -0.4428897500038147
-  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -12511,7 +12443,6 @@
   f64.const 0.7741522965913037
   f64.const 0.6854215158636222
   f64.const -0.12589527666568756
-  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -12525,7 +12456,6 @@
   f64.const -0.6787637026394024
   f64.const 2.316874138205964
   f64.const -0.17284949123859406
-  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -12539,7 +12469,6 @@
   f64.const 0
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -12553,7 +12482,6 @@
   f64.const -1
   f64.const 3.141592653589793
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -12567,7 +12495,6 @@
   f64.const 1
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_acos
   i32.eqz
   if
@@ -12581,7 +12508,6 @@
   f64.const 1.0000000000000002
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -12595,7 +12521,6 @@
   f64.const -1.0000000000000002
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -12609,7 +12534,6 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -12623,7 +12547,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acos
   i32.eqz
   if
@@ -12637,7 +12560,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_acos
   i32.eqz
   if
@@ -12651,7 +12573,6 @@
   f64.const -0.5309227209592985
   f64.const 2.1304853799705463
   f64.const 0.1391008496284485
-  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -12665,7 +12586,6 @@
   f64.const 0.4939556746399746
   f64.const 1.0541629875851946
   f64.const 0.22054767608642578
-  i32.const 1
   call $std/math/test_acos
   i32.eqz
   if
@@ -12679,7 +12599,6 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12693,7 +12612,6 @@
   f32.const 4.345239639282227
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12707,7 +12625,6 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12721,7 +12638,6 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12735,7 +12651,6 @@
   f32.const 9.267057418823242
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12749,7 +12664,6 @@
   f32.const 0.6619858741760254
   f32.const 0.8473311066627502
   f32.const -0.13588131964206696
-  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12763,7 +12677,6 @@
   f32.const -0.40660393238067627
   f32.const 1.989530086517334
   f32.const 0.03764917701482773
-  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12777,7 +12690,6 @@
   f32.const 0.5617597699165344
   f32.const 0.9742849469184875
   f32.const 0.18443739414215088
-  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12791,7 +12703,6 @@
   f32.const 0.7741522789001465
   f32.const 0.6854215264320374
   f32.const -0.29158344864845276
-  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12805,7 +12716,6 @@
   f32.const -0.6787636876106262
   f32.const 2.3168740272521973
   f32.const -0.3795364499092102
-  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12819,7 +12729,6 @@
   f32.const 0
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12833,7 +12742,6 @@
   f32.const -1
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12847,7 +12755,6 @@
   f32.const 1
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12861,7 +12768,6 @@
   f32.const 1.0000001192092896
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12875,7 +12781,6 @@
   f32.const -1.0000001192092896
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12889,7 +12794,6 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12903,7 +12807,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12917,7 +12820,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12931,7 +12833,6 @@
   f32.const 0.49965065717697144
   f32.const 1.0476008653640747
   f32.const -0.21161814033985138
-  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12945,7 +12846,6 @@
   f32.const -0.5051405429840088
   f32.const 2.1003410816192627
   f32.const -0.20852705836296082
-  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12959,7 +12859,6 @@
   f32.const -0.5189794898033142
   f32.const 2.116452932357788
   f32.const -0.14600826799869537
-  i32.const 1
   call $std/math/test_acosf
   i32.eqz
   if
@@ -12973,7 +12872,6 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -12987,7 +12885,6 @@
   f64.const 4.345239849338305
   f64.const 2.1487163980597503
   f64.const -0.291634738445282
-  i32.const 1
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13001,7 +12898,6 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13015,7 +12911,6 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13029,7 +12924,6 @@
   f64.const 9.267056966972586
   f64.const 2.91668914109908
   f64.const -0.24191908538341522
-  i32.const 1
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13043,7 +12937,6 @@
   f64.const 0.6619858980995045
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13057,7 +12950,6 @@
   f64.const -0.4066039223853553
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13071,7 +12963,6 @@
   f64.const 0.5617597462207241
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13085,7 +12976,6 @@
   f64.const 0.7741522965913037
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13099,7 +12989,6 @@
   f64.const -0.6787637026394024
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13113,7 +13002,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13127,7 +13015,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13141,7 +13028,6 @@
   f64.const 1
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13155,7 +13041,6 @@
   f64.const 0.9999923706054688
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13169,7 +13054,6 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13183,7 +13067,6 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13197,7 +13080,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13211,7 +13093,6 @@
   f64.const 1.1060831199926429
   f64.const 0.4566373404384803
   f64.const -0.29381608963012695
-  i32.const 1
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13225,7 +13106,6 @@
   f64.const 1.1089809557628658
   f64.const 0.4627246859959428
   f64.const -0.3990095555782318
-  i32.const 1
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13239,7 +13119,6 @@
   f64.const 1.1169429159875521
   f64.const 0.47902433134075284
   f64.const -0.321674108505249
-  i32.const 1
   call $std/math/test_acosh
   i32.eqz
   if
@@ -13253,7 +13132,6 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13267,7 +13145,6 @@
   f32.const 4.345239639282227
   f32.const 2.148716449737549
   f32.const 0.4251045286655426
-  i32.const 1
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13281,7 +13158,6 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13295,7 +13171,6 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13309,7 +13184,6 @@
   f32.const 9.267057418823242
   f32.const 2.916689157485962
   f32.const -0.1369788944721222
-  i32.const 1
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13323,7 +13197,6 @@
   f32.const 0.6619858741760254
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13337,7 +13210,6 @@
   f32.const -0.40660393238067627
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13351,7 +13223,6 @@
   f32.const 0.5617597699165344
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13365,7 +13236,6 @@
   f32.const 0.7741522789001465
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13379,7 +13249,6 @@
   f32.const -0.6787636876106262
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13393,7 +13262,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13407,7 +13275,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13421,7 +13288,6 @@
   f32.const 1
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13435,7 +13301,6 @@
   f32.const 0.9999923706054688
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13449,7 +13314,6 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13463,7 +13327,6 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13477,7 +13340,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13491,7 +13353,6 @@
   f32.const -1125899906842624
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_acoshf
   i32.eqz
   if
@@ -13505,7 +13366,6 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -13519,7 +13379,6 @@
   f64.const 4.345239849338305
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -13533,7 +13392,6 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -13547,7 +13405,6 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -13561,7 +13418,6 @@
   f64.const 9.267056966972586
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -13575,7 +13431,6 @@
   f64.const 0.6619858980995045
   f64.const 0.7234652439515459
   f64.const -0.13599912822246552
-  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -13589,7 +13444,6 @@
   f64.const -0.4066039223853553
   f64.const -0.41873374429377225
   f64.const -0.09264230728149414
-  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -13603,7 +13457,6 @@
   f64.const 0.5617597462207241
   f64.const 0.5965113622274062
   f64.const -0.10864213854074478
-  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -13617,7 +13470,6 @@
   f64.const 0.7741522965913037
   f64.const 0.8853748109312743
   f64.const -0.4256366193294525
-  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -13631,7 +13483,6 @@
   f64.const -0.6787637026394024
   f64.const -0.7460778114110673
   f64.const 0.13986606895923615
-  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -13645,7 +13496,6 @@
   f64.const 1
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -13659,7 +13509,6 @@
   f64.const -1
   f64.const -1.5707963267948966
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -13673,7 +13522,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_asin
   i32.eqz
   if
@@ -13687,7 +13535,6 @@
   f64.const -0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_asin
   i32.eqz
   if
@@ -13701,7 +13548,6 @@
   f64.const 1.0000000000000002
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -13715,7 +13561,6 @@
   f64.const -1.0000000000000002
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -13729,7 +13574,6 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -13743,7 +13587,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_asin
   i32.eqz
   if
@@ -13757,7 +13600,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_asin
   i32.eqz
   if
@@ -13771,7 +13613,6 @@
   f64.const 0.5073043929119148
   f64.const 0.5320538997772349
   f64.const -0.16157317161560059
-  i32.const 1
   call $std/math/test_asin
   i32.eqz
   if
@@ -13785,7 +13626,6 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13799,7 +13639,6 @@
   f32.const 4.345239639282227
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13813,7 +13652,6 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13827,7 +13665,6 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13841,7 +13678,6 @@
   f32.const 9.267057418823242
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13855,7 +13691,6 @@
   f32.const 0.6619858741760254
   f32.const 0.7234652042388916
   f32.const -0.1307632476091385
-  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13869,7 +13704,6 @@
   f32.const -0.40660393238067627
   f32.const -0.41873374581336975
   f32.const 0.3161141574382782
-  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13883,7 +13717,6 @@
   f32.const 0.5617597699165344
   f32.const 0.5965113639831543
   f32.const -0.4510819613933563
-  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13897,7 +13730,6 @@
   f32.const 0.7741522789001465
   f32.const 0.8853747844696045
   f32.const 0.02493886835873127
-  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13911,7 +13743,6 @@
   f32.const -0.6787636876106262
   f32.const -0.7460777759552002
   f32.const 0.2515012323856354
-  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13925,7 +13756,6 @@
   f32.const 1
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13939,7 +13769,6 @@
   f32.const -1
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13953,7 +13782,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13967,7 +13795,6 @@
   f32.const -0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13981,7 +13808,6 @@
   f32.const 1.0000001192092896
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -13995,7 +13821,6 @@
   f32.const -1.0000001192092896
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -14009,7 +13834,6 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -14023,7 +13847,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_asinf
   i32.eqz
   if
@@ -14037,7 +13860,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_asinf
   i32.eqz
   if
@@ -14051,7 +13873,6 @@
   f32.const 0.5004770159721375
   f32.const 0.5241496562957764
   f32.const -0.29427099227905273
-  i32.const 1
   call $std/math/test_asinf
   i32.eqz
   if
@@ -14065,7 +13886,6 @@
   f64.const -8.06684839057968
   f64.const -2.784729878387861
   f64.const -0.4762189984321594
-  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14079,7 +13899,6 @@
   f64.const 4.345239849338305
   f64.const 2.175213389013164
   f64.const -0.02728751301765442
-  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14093,7 +13912,6 @@
   f64.const -8.38143342755525
   f64.const -2.822706083697696
   f64.const 0.20985257625579834
-  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14107,7 +13925,6 @@
   f64.const -6.531673581913484
   f64.const -2.575619446591922
   f64.const 0.3113134205341339
-  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14121,7 +13938,6 @@
   f64.const 9.267056966972586
   f64.const 2.9225114951048674
   f64.const 0.4991756081581116
-  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14135,7 +13951,6 @@
   f64.const 0.6619858980995045
   f64.const 0.6212462762707166
   f64.const -0.4697347581386566
-  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14149,7 +13964,6 @@
   f64.const -0.4066039223853553
   f64.const -0.39615990393192035
   f64.const -0.40814438462257385
-  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14163,7 +13977,6 @@
   f64.const 0.5617597462207241
   f64.const 0.5357588870255474
   f64.const 0.3520713150501251
-  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14177,7 +13990,6 @@
   f64.const 0.7741522965913037
   f64.const 0.7123571263197349
   f64.const 0.13371451199054718
-  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14191,7 +14003,6 @@
   f64.const -0.6787637026394024
   f64.const -0.635182348903198
   f64.const 0.04749670997262001
-  i32.const 1
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14205,7 +14016,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14219,7 +14029,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14233,7 +14042,6 @@
   f64.const -inf
   f64.const -inf
   f64.const 0
-  i32.const 0
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14247,7 +14055,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14261,7 +14068,6 @@
   f64.const -0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_asinh
   i32.eqz
   if
@@ -14275,7 +14081,6 @@
   f32.const -8.066848754882812
   f32.const -2.7847299575805664
   f32.const -0.14418013393878937
-  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14289,7 +14094,6 @@
   f32.const 4.345239639282227
   f32.const 2.17521333694458
   f32.const -0.020796965807676315
-  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14303,7 +14107,6 @@
   f32.const -8.381433486938477
   f32.const -2.8227059841156006
   f32.const 0.44718533754348755
-  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14317,7 +14120,6 @@
   f32.const -6.531673431396484
   f32.const -2.5756194591522217
   f32.const -0.14822272956371307
-  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14331,7 +14133,6 @@
   f32.const 9.267057418823242
   f32.const 2.922511577606201
   f32.const 0.14270681142807007
-  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14345,7 +14146,6 @@
   f32.const 0.6619858741760254
   f32.const 0.6212462782859802
   f32.const 0.3684912919998169
-  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14359,7 +14159,6 @@
   f32.const -0.40660393238067627
   f32.const -0.39615991711616516
   f32.const -0.13170306384563446
-  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14373,7 +14172,6 @@
   f32.const 0.5617597699165344
   f32.const 0.535758912563324
   f32.const 0.08184859901666641
-  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14387,7 +14185,6 @@
   f32.const 0.7741522789001465
   f32.const 0.7123571038246155
   f32.const -0.14270737767219543
-  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14401,7 +14198,6 @@
   f32.const -0.6787636876106262
   f32.const -0.6351823210716248
   f32.const 0.2583143711090088
-  i32.const 1
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14415,7 +14211,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14429,7 +14224,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14443,7 +14237,6 @@
   f32.const -inf
   f32.const -inf
   f32.const 0
-  i32.const 0
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14457,7 +14250,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14471,7 +14263,6 @@
   f32.const -0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_asinhf
   i32.eqz
   if
@@ -14485,7 +14276,6 @@
   f64.const -8.06684839057968
   f64.const -1.4474613762633468
   f64.const 0.14857111871242523
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14499,7 +14289,6 @@
   f64.const 4.345239849338305
   f64.const 1.344597927114538
   f64.const -0.08170335739850998
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14513,7 +14302,6 @@
   f64.const -8.38143342755525
   f64.const -1.4520463463295539
   f64.const -0.07505480200052261
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14527,7 +14315,6 @@
   f64.const -6.531673581913484
   f64.const -1.4188758658752532
   f64.const -0.057633496820926666
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14541,7 +14328,6 @@
   f64.const 9.267056966972586
   f64.const 1.463303145448706
   f64.const 0.1606956422328949
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14555,7 +14341,6 @@
   f64.const 0.6619858980995045
   f64.const 0.5847550670238325
   f64.const 0.4582556486129761
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14569,7 +14354,6 @@
   f64.const -0.4066039223853553
   f64.const -0.3861864177552131
   f64.const -0.2574281692504883
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14583,7 +14367,6 @@
   f64.const 0.5617597462207241
   f64.const 0.5118269531628881
   f64.const -0.11444277316331863
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14597,7 +14380,6 @@
   f64.const 0.7741522965913037
   f64.const 0.6587802431653822
   f64.const -0.11286488175392151
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14611,7 +14393,6 @@
   f64.const -0.6787637026394024
   f64.const -0.5963307826973472
   f64.const -0.2182842344045639
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14625,7 +14406,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_atan
   i32.eqz
   if
@@ -14639,7 +14419,6 @@
   f64.const -0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_atan
   i32.eqz
   if
@@ -14653,7 +14432,6 @@
   f64.const 1
   f64.const 0.7853981633974483
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14667,7 +14445,6 @@
   f64.const -1
   f64.const -0.7853981633974483
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14681,7 +14458,6 @@
   f64.const inf
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14695,7 +14471,6 @@
   f64.const -inf
   f64.const -1.5707963267948966
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14709,7 +14484,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_atan
   i32.eqz
   if
@@ -14723,7 +14497,6 @@
   f64.const 0.6929821535674624
   f64.const 0.6060004555152562
   f64.const -0.17075790464878082
-  i32.const 1
   call $std/math/test_atan
   i32.eqz
   if
@@ -14737,7 +14510,6 @@
   f32.const -8.066848754882812
   f32.const -1.4474613666534424
   f32.const 0.12686480581760406
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14751,7 +14523,6 @@
   f32.const 4.345239639282227
   f32.const 1.3445979356765747
   f32.const 0.16045434772968292
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14765,7 +14536,6 @@
   f32.const -8.381433486938477
   f32.const -1.4520463943481445
   f32.const -0.39581751823425293
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14779,7 +14549,6 @@
   f32.const -6.531673431396484
   f32.const -1.418875813484192
   f32.const 0.410570353269577
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14793,7 +14562,6 @@
   f32.const 9.267057418823242
   f32.const 1.4633032083511353
   f32.const 0.48403501510620117
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14807,7 +14575,6 @@
   f32.const 0.6619858741760254
   f32.const 0.5847550630569458
   f32.const 0.2125193476676941
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14821,7 +14588,6 @@
   f32.const -0.40660393238067627
   f32.const -0.386186420917511
   f32.const 0.18169628083705902
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14835,7 +14601,6 @@
   f32.const 0.5617597699165344
   f32.const 0.5118269920349121
   f32.const 0.3499770760536194
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14849,7 +14614,6 @@
   f32.const 0.7741522789001465
   f32.const 0.6587802171707153
   f32.const -0.2505330741405487
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14863,7 +14627,6 @@
   f32.const -0.6787636876106262
   f32.const -0.5963307619094849
   f32.const 0.17614826560020447
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14877,7 +14640,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14891,7 +14653,6 @@
   f32.const -0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14905,7 +14666,6 @@
   f32.const 1
   f32.const 0.7853981852531433
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14919,7 +14679,6 @@
   f32.const -1
   f32.const -0.7853981852531433
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14933,7 +14692,6 @@
   f32.const inf
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14947,7 +14705,6 @@
   f32.const -inf
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14961,7 +14718,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_atanf
   i32.eqz
   if
@@ -14975,7 +14731,6 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -14989,7 +14744,6 @@
   f64.const 4.345239849338305
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15003,7 +14757,6 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15017,7 +14770,6 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15031,7 +14783,6 @@
   f64.const 9.267056966972586
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15045,7 +14796,6 @@
   f64.const 0.6619858980995045
   f64.const 0.7963404371347943
   f64.const 0.21338365972042084
-  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15059,7 +14809,6 @@
   f64.const -0.4066039223853553
   f64.const -0.43153570730602897
   f64.const -0.4325666129589081
-  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15073,7 +14822,6 @@
   f64.const 0.5617597462207241
   f64.const 0.6354006111644578
   f64.const -0.06527865678071976
-  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15087,7 +14835,6 @@
   f64.const 0.7741522965913037
   f64.const 1.0306085575277995
   f64.const 0.14632052183151245
-  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15101,7 +14848,6 @@
   f64.const -0.6787637026394024
   f64.const -0.8268179645205255
   f64.const 0.1397128701210022
-  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15115,7 +14861,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15129,7 +14874,6 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15143,7 +14887,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15157,7 +14900,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15171,7 +14913,6 @@
   f64.const -0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15185,7 +14926,6 @@
   f64.const 1
   f64.const inf
   f64.const 0
-  i32.const 4
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15199,7 +14939,6 @@
   f64.const -1
   f64.const -inf
   f64.const 0
-  i32.const 4
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15213,7 +14952,6 @@
   f64.const 1.0000152587890625
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15227,7 +14965,6 @@
   f64.const -1.0000152587890625
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15241,7 +14978,6 @@
   f64.const 1.3552527156068805e-20
   f64.const 1.3552527156068805e-20
   f64.const 0
-  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15255,7 +14991,6 @@
   f64.const 9.332636185032189e-302
   f64.const 9.332636185032189e-302
   f64.const 0
-  i32.const 1
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15269,7 +15004,6 @@
   f64.const 5.562684646268003e-309
   f64.const 5.562684646268003e-309
   f64.const 0
-  i32.const 9
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15283,7 +15017,6 @@
   f64.const -5.562684646268003e-309
   f64.const -5.562684646268003e-309
   f64.const 0
-  i32.const 9
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15297,7 +15030,6 @@
   f64.const 8988465674311579538646525e283
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_atanh
   i32.eqz
   if
@@ -15311,7 +15043,6 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15325,7 +15056,6 @@
   f32.const 4.345239639282227
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15339,7 +15069,6 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15353,7 +15082,6 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15367,7 +15095,6 @@
   f32.const 9.267057418823242
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15381,7 +15108,6 @@
   f32.const 0.6619858741760254
   f32.const 0.7963404059410095
   f32.const 0.19112196564674377
-  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15395,7 +15121,6 @@
   f32.const -0.40660393238067627
   f32.const -0.4315357208251953
   f32.const -0.05180925130844116
-  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15409,7 +15134,6 @@
   f32.const 0.5617597699165344
   f32.const 0.635400652885437
   f32.const 0.11911056190729141
-  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15423,7 +15147,6 @@
   f32.const 0.7741522789001465
   f32.const 1.0306085348129272
   f32.const 0.1798270344734192
-  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15437,7 +15160,6 @@
   f32.const -0.6787636876106262
   f32.const -0.8268179297447205
   f32.const 0.11588983237743378
-  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15451,7 +15173,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15465,7 +15186,6 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15479,7 +15199,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15493,7 +15212,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15507,7 +15225,6 @@
   f32.const -0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15521,7 +15238,6 @@
   f32.const 1
   f32.const inf
   f32.const 0
-  i32.const 4
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15535,7 +15251,6 @@
   f32.const -1
   f32.const -inf
   f32.const 0
-  i32.const 4
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15549,7 +15264,6 @@
   f32.const 1.0000152587890625
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15563,7 +15277,6 @@
   f32.const -1.0000152587890625
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15577,7 +15290,6 @@
   f32.const 1.3552527156068805e-20
   f32.const 1.3552527156068805e-20
   f32.const 0
-  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15591,7 +15303,6 @@
   f32.const 7.888609052210118e-31
   f32.const 7.888609052210118e-31
   f32.const 0
-  i32.const 1
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15605,7 +15316,6 @@
   f32.const 2.938735877055719e-39
   f32.const 2.938735877055719e-39
   f32.const 0
-  i32.const 9
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15619,7 +15329,6 @@
   f32.const -2.938735877055719e-39
   f32.const -2.938735877055719e-39
   f32.const 0
-  i32.const 9
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15633,7 +15342,6 @@
   f32.const 1701411834604692317316873e14
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_atanhf
   i32.eqz
   if
@@ -15648,7 +15356,6 @@
   f64.const 4.535662560676869
   f64.const -1.0585895402489023
   f64.const 0.09766263514757156
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15663,7 +15370,6 @@
   f64.const -8.88799136300345
   f64.const 2.6868734126013067
   f64.const 0.35833948850631714
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15678,7 +15384,6 @@
   f64.const -2.763607337379588
   f64.const -1.889300091849528
   f64.const -0.46235957741737366
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15693,7 +15398,6 @@
   f64.const 4.567535276842744
   f64.const -0.9605469021111489
   f64.const -0.21524477005004883
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15708,7 +15412,6 @@
   f64.const 4.811392084359796
   f64.const 1.0919123946142109
   f64.const 0.3894443213939667
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15723,7 +15426,6 @@
   f64.const 0.6620717923376739
   f64.const -1.468508500616424
   f64.const -0.448591411113739
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15738,7 +15440,6 @@
   f64.const 0.05215452675006225
   f64.const 1.5641600512601268
   f64.const 0.3784842789173126
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15753,7 +15454,6 @@
   f64.const 7.67640268511754
   f64.const -0.10281658910678508
   f64.const -0.13993260264396667
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15768,7 +15468,6 @@
   f64.const 2.0119025790324803
   f64.const 0.29697974004493516
   f64.const 0.44753071665763855
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15783,7 +15482,6 @@
   f64.const 0.03223983060263804
   f64.const -1.5131612053303916
   f64.const 0.39708876609802246
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15798,7 +15496,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15813,7 +15510,6 @@
   f64.const -0
   f64.const 3.141592653589793
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15828,7 +15524,6 @@
   f64.const -1
   f64.const 3.141592653589793
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15843,7 +15538,6 @@
   f64.const -inf
   f64.const 3.141592653589793
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15858,7 +15552,6 @@
   f64.const 1
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15873,7 +15566,6 @@
   f64.const inf
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15888,7 +15580,6 @@
   f64.const 0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15903,7 +15594,6 @@
   f64.const -0
   f64.const -3.141592653589793
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15918,7 +15608,6 @@
   f64.const -1
   f64.const -3.141592653589793
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15933,7 +15622,6 @@
   f64.const -inf
   f64.const -3.141592653589793
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15948,7 +15636,6 @@
   f64.const 1
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15963,7 +15650,6 @@
   f64.const inf
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15978,7 +15664,6 @@
   f64.const 0
   f64.const -1.5707963267948966
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -15993,7 +15678,6 @@
   f64.const -0
   f64.const -1.5707963267948966
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16008,7 +15692,6 @@
   f64.const 0
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16023,7 +15706,6 @@
   f64.const -0
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16038,7 +15720,6 @@
   f64.const inf
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16053,7 +15734,6 @@
   f64.const inf
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16068,7 +15748,6 @@
   f64.const -inf
   f64.const -3.141592653589793
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16083,7 +15762,6 @@
   f64.const -inf
   f64.const 3.141592653589793
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16098,7 +15776,6 @@
   f64.const 0
   f64.const 1.5707963267948966
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16113,7 +15790,6 @@
   f64.const 0
   f64.const -1.5707963267948966
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16128,7 +15804,6 @@
   f64.const inf
   f64.const 0.7853981633974483
   f64.const -0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16143,7 +15818,6 @@
   f64.const -inf
   f64.const 2.356194490192345
   f64.const -0.20682445168495178
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16158,7 +15832,6 @@
   f64.const inf
   f64.const -0.7853981633974483
   f64.const 0.27576595544815063
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16173,7 +15846,6 @@
   f64.const -inf
   f64.const -2.356194490192345
   f64.const 0.20682445168495178
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16188,7 +15860,6 @@
   f64.const 1
   f64.const 1.1125369292536007e-308
   f64.const 0
-  i32.const 9
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16203,7 +15874,6 @@
   f64.const 8988465674311579538646525e283
   f64.const 1.1125369292536007e-308
   f64.const 0
-  i32.const 9
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16218,7 +15888,6 @@
   f64.const 8988465674311579538646525e283
   f64.const 1.668805393880401e-308
   f64.const 0
-  i32.const 9
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16233,7 +15902,6 @@
   f64.const -8988465674311579538646525e283
   f64.const 3.141592653589793
   f64.const 0
-  i32.const 1
   call $std/math/test_atan2
   i32.eqz
   if
@@ -16248,7 +15916,6 @@
   f32.const 4.535662651062012
   f32.const -1.0585895776748657
   f32.const -0.22352588176727295
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16263,7 +15930,6 @@
   f32.const -8.887990951538086
   f32.const 2.686873435974121
   f32.const 0.09464472532272339
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16278,7 +15944,6 @@
   f32.const -2.7636072635650635
   f32.const -1.8893001079559326
   f32.const -0.21941901743412018
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16293,7 +15958,6 @@
   f32.const 4.567535400390625
   f32.const -0.9605468511581421
   f32.const 0.46015575528144836
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16308,7 +15972,6 @@
   f32.const 4.811392307281494
   f32.const 1.0919123888015747
   f32.const -0.05708503723144531
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16323,7 +15986,6 @@
   f32.const 0.6620717644691467
   f32.const -1.4685084819793701
   f32.const 0.19611206650733948
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16338,7 +16000,6 @@
   f32.const 0.052154526114463806
   f32.const 1.5641601085662842
   f32.const 0.48143187165260315
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16353,7 +16014,6 @@
   f32.const 7.676402568817139
   f32.const -0.10281659662723541
   f32.const -0.4216274917125702
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16368,7 +16028,6 @@
   f32.const 2.0119025707244873
   f32.const 0.29697975516319275
   f32.const 0.2322007566690445
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16383,7 +16042,6 @@
   f32.const 0.03223983198404312
   f32.const -1.5131611824035645
   f32.const 0.16620726883411407
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16398,7 +16056,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16413,7 +16070,6 @@
   f32.const -0
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16428,7 +16084,6 @@
   f32.const -1
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16443,7 +16098,6 @@
   f32.const -inf
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16458,7 +16112,6 @@
   f32.const 1
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16473,7 +16126,6 @@
   f32.const inf
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16488,7 +16140,6 @@
   f32.const 0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16503,7 +16154,6 @@
   f32.const -0
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16518,7 +16168,6 @@
   f32.const -1
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16533,7 +16182,6 @@
   f32.const -inf
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16548,7 +16196,6 @@
   f32.const 1
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16563,7 +16210,6 @@
   f32.const inf
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16578,7 +16224,6 @@
   f32.const 0
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16593,7 +16238,6 @@
   f32.const -0
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16608,7 +16252,6 @@
   f32.const 0
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16623,7 +16266,6 @@
   f32.const -0
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16638,7 +16280,6 @@
   f32.const inf
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16653,7 +16294,6 @@
   f32.const inf
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16668,7 +16308,6 @@
   f32.const -inf
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16683,7 +16322,6 @@
   f32.const -inf
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16698,7 +16336,6 @@
   f32.const 0
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16713,7 +16350,6 @@
   f32.const 0
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16728,7 +16364,6 @@
   f32.const inf
   f32.const 0.7853981852531433
   f32.const 0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16743,7 +16378,6 @@
   f32.const -inf
   f32.const 2.356194496154785
   f32.const 0.02500828728079796
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16758,7 +16392,6 @@
   f32.const inf
   f32.const -0.7853981852531433
   f32.const -0.3666777014732361
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16773,7 +16406,6 @@
   f32.const -inf
   f32.const -2.356194496154785
   f32.const -0.02500828728079796
-  i32.const 1
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16788,7 +16420,6 @@
   f32.const 1
   f32.const 5.877471754111438e-39
   f32.const 0
-  i32.const 9
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16803,7 +16434,6 @@
   f32.const 1701411834604692317316873e14
   f32.const 5.877471754111438e-39
   f32.const 0
-  i32.const 9
   call $std/math/test_atan2f
   i32.eqz
   if
@@ -16817,7 +16447,6 @@
   f64.const -8.06684839057968
   f64.const -2.0055552545020245
   f64.const 0.46667951345443726
-  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16831,7 +16460,6 @@
   f64.const 4.345239849338305
   f64.const 1.6318162410515635
   f64.const -0.08160271495580673
-  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16845,7 +16473,6 @@
   f64.const -8.38143342755525
   f64.const -2.031293910673361
   f64.const -0.048101816326379776
-  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16859,7 +16486,6 @@
   f64.const -6.531673581913484
   f64.const -1.8692820012204925
   f64.const 0.08624018728733063
-  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16873,7 +16499,6 @@
   f64.const 9.267056966972586
   f64.const 2.100457720859702
   f64.const -0.2722989022731781
-  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16887,7 +16512,6 @@
   f64.const 0.6619858980995045
   f64.const 0.8715311470455973
   f64.const 0.4414918124675751
-  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16901,7 +16525,6 @@
   f64.const -0.4066039223853553
   f64.const -0.740839030300223
   f64.const 0.016453813761472702
-  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16915,7 +16538,6 @@
   f64.const 0.5617597462207241
   f64.const 0.8251195400559286
   f64.const 0.30680638551712036
-  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16929,7 +16551,6 @@
   f64.const 0.7741522965913037
   f64.const 0.9182102478959914
   f64.const 0.06543998420238495
-  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16943,7 +16564,6 @@
   f64.const -0.6787637026394024
   f64.const -0.8788326906580094
   f64.const -0.2016713172197342
-  i32.const 1
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16957,7 +16577,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16971,7 +16590,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16985,7 +16603,6 @@
   f64.const -inf
   f64.const -inf
   f64.const 0
-  i32.const 0
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -16999,7 +16616,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -17013,7 +16629,6 @@
   f64.const -0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -17027,7 +16642,6 @@
   f64.const 9.313225746154785e-10
   f64.const 0.0009765625
   f64.const 0
-  i32.const 0
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -17041,7 +16655,6 @@
   f64.const -9.313225746154785e-10
   f64.const -0.0009765625
   f64.const 0
-  i32.const 0
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -17055,7 +16668,6 @@
   f64.const 1
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -17069,7 +16681,6 @@
   f64.const -1
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -17083,7 +16694,6 @@
   f64.const 8
   f64.const 2
   f64.const 0
-  i32.const 0
   call $std/math/test_cbrt
   i32.eqz
   if
@@ -17097,7 +16707,6 @@
   f32.const -8.066848754882812
   f32.const -2.0055553913116455
   f32.const -0.44719240069389343
-  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17111,7 +16720,6 @@
   f32.const 4.345239639282227
   f32.const 1.6318162679672241
   f32.const 0.44636252522468567
-  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17125,7 +16733,6 @@
   f32.const -8.381433486938477
   f32.const -2.0312938690185547
   f32.const 0.19483426213264465
-  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17139,7 +16746,6 @@
   f32.const -6.531673431396484
   f32.const -1.8692820072174072
   f32.const -0.17075514793395996
-  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17153,7 +16759,6 @@
   f32.const 9.267057418823242
   f32.const 2.1004576683044434
   f32.const -0.36362043023109436
-  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17167,7 +16772,6 @@
   f32.const 0.6619858741760254
   f32.const 0.8715311288833618
   f32.const -0.12857209146022797
-  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17181,7 +16785,6 @@
   f32.const -0.40660393238067627
   f32.const -0.7408390641212463
   f32.const -0.4655757546424866
-  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17195,7 +16798,6 @@
   f32.const 0.5617597699165344
   f32.const 0.8251195549964905
   f32.const 0.05601907894015312
-  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17209,7 +16811,6 @@
   f32.const 0.7741522789001465
   f32.const 0.9182102680206299
   f32.const 0.45498204231262207
-  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17223,7 +16824,6 @@
   f32.const -0.6787636876106262
   f32.const -0.8788326978683472
   f32.const -0.22978967428207397
-  i32.const 1
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17237,7 +16837,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17251,7 +16850,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17265,7 +16863,6 @@
   f32.const -inf
   f32.const -inf
   f32.const 0
-  i32.const 0
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17279,7 +16876,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17293,7 +16889,6 @@
   f32.const -0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17307,7 +16902,6 @@
   f32.const 9.313225746154785e-10
   f32.const 0.0009765625
   f32.const 0
-  i32.const 0
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17321,7 +16915,6 @@
   f32.const -9.313225746154785e-10
   f32.const -0.0009765625
   f32.const 0
-  i32.const 0
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17335,7 +16928,6 @@
   f32.const 1
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17349,7 +16941,6 @@
   f32.const -1
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17363,7 +16954,6 @@
   f32.const 8
   f32.const 2
   f32.const 0
-  i32.const 0
   call $std/math/test_cbrtf
   i32.eqz
   if
@@ -17376,7 +16966,6 @@
   end
   f64.const -8.06684839057968
   f64.const -8
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17389,7 +16978,6 @@
   end
   f64.const 4.345239849338305
   f64.const 5
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17402,7 +16990,6 @@
   end
   f64.const -8.38143342755525
   f64.const -8
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17415,7 +17002,6 @@
   end
   f64.const -6.531673581913484
   f64.const -6
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17428,7 +17014,6 @@
   end
   f64.const 9.267056966972586
   f64.const 10
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17441,7 +17026,6 @@
   end
   f64.const 0.6619858980995045
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17454,7 +17038,6 @@
   end
   f64.const -0.4066039223853553
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17467,7 +17050,6 @@
   end
   f64.const 0.5617597462207241
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17480,7 +17062,6 @@
   end
   f64.const 0.7741522965913037
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17493,7 +17074,6 @@
   end
   f64.const -0.6787637026394024
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17506,7 +17086,6 @@
   end
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17519,7 +17098,6 @@
   end
   f64.const inf
   f64.const inf
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17532,7 +17110,6 @@
   end
   f64.const -inf
   f64.const -inf
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17545,7 +17122,6 @@
   end
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17558,7 +17134,6 @@
   end
   f64.const -0
   f64.const -0
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17571,7 +17146,6 @@
   end
   f64.const 1
   f64.const 1
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17584,7 +17158,6 @@
   end
   f64.const -1
   f64.const -1
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17597,7 +17170,6 @@
   end
   f64.const 0.5
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17610,7 +17182,6 @@
   end
   f64.const -0.5
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17623,7 +17194,6 @@
   end
   f64.const 1.0000152587890625
   f64.const 2
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17636,7 +17206,6 @@
   end
   f64.const -1.0000152587890625
   f64.const -1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17649,7 +17218,6 @@
   end
   f64.const 0.9999923706054688
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17662,7 +17230,6 @@
   end
   f64.const -0.9999923706054688
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17675,7 +17242,6 @@
   end
   f64.const 7.888609052210118e-31
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17688,7 +17254,6 @@
   end
   f64.const -7.888609052210118e-31
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17701,7 +17266,6 @@
   end
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17714,7 +17278,6 @@
   end
   f64.const inf
   f64.const inf
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17727,7 +17290,6 @@
   end
   f64.const -inf
   f64.const -inf
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17740,7 +17302,6 @@
   end
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17753,7 +17314,6 @@
   end
   f64.const -0
   f64.const -0
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17766,7 +17326,6 @@
   end
   f64.const 1
   f64.const 1
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17779,7 +17338,6 @@
   end
   f64.const -1
   f64.const -1
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17792,7 +17350,6 @@
   end
   f64.const 0.5
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17805,7 +17362,6 @@
   end
   f64.const -0.5
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17818,7 +17374,6 @@
   end
   f64.const 1.0000152587890625
   f64.const 2
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17831,7 +17386,6 @@
   end
   f64.const -1.0000152587890625
   f64.const -1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17844,7 +17398,6 @@
   end
   f64.const 0.9999923706054688
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17857,7 +17410,6 @@
   end
   f64.const -0.9999923706054688
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17870,7 +17422,6 @@
   end
   f64.const 7.888609052210118e-31
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17883,7 +17434,6 @@
   end
   f64.const -7.888609052210118e-31
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17896,7 +17446,6 @@
   end
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17909,7 +17458,6 @@
   end
   f64.const inf
   f64.const inf
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17922,7 +17470,6 @@
   end
   f64.const -inf
   f64.const -inf
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17935,7 +17482,6 @@
   end
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17948,7 +17494,6 @@
   end
   f64.const -0
   f64.const -0
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17961,7 +17506,6 @@
   end
   f64.const 1
   f64.const 1
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17974,7 +17518,6 @@
   end
   f64.const -1
   f64.const -1
-  i32.const 0
   call $std/math/test_ceil
   i32.eqz
   if
@@ -17987,7 +17530,6 @@
   end
   f64.const 0.5
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -18000,7 +17542,6 @@
   end
   f64.const -0.5
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -18013,7 +17554,6 @@
   end
   f64.const 1.0000152587890625
   f64.const 2
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -18026,7 +17566,6 @@
   end
   f64.const -1.0000152587890625
   f64.const -1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -18039,7 +17578,6 @@
   end
   f64.const 0.9999923706054688
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -18052,7 +17590,6 @@
   end
   f64.const -0.9999923706054688
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -18065,7 +17602,6 @@
   end
   f64.const 7.888609052210118e-31
   f64.const 1
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -18078,7 +17614,6 @@
   end
   f64.const -7.888609052210118e-31
   f64.const -0
-  i32.const 1
   call $std/math/test_ceil
   i32.eqz
   if
@@ -18091,7 +17626,6 @@
   end
   f32.const -8.066848754882812
   f32.const -8
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18104,7 +17638,6 @@
   end
   f32.const 4.345239639282227
   f32.const 5
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18117,7 +17650,6 @@
   end
   f32.const -8.381433486938477
   f32.const -8
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18130,7 +17662,6 @@
   end
   f32.const -6.531673431396484
   f32.const -6
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18143,7 +17674,6 @@
   end
   f32.const 9.267057418823242
   f32.const 10
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18156,7 +17686,6 @@
   end
   f32.const 0.6619858741760254
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18169,7 +17698,6 @@
   end
   f32.const -0.40660393238067627
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18182,7 +17710,6 @@
   end
   f32.const 0.5617597699165344
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18195,7 +17722,6 @@
   end
   f32.const 0.7741522789001465
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18208,7 +17734,6 @@
   end
   f32.const -0.6787636876106262
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18221,7 +17746,6 @@
   end
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18234,7 +17758,6 @@
   end
   f32.const inf
   f32.const inf
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18247,7 +17770,6 @@
   end
   f32.const -inf
   f32.const -inf
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18260,7 +17782,6 @@
   end
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18273,7 +17794,6 @@
   end
   f32.const -0
   f32.const -0
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18286,7 +17806,6 @@
   end
   f32.const 1
   f32.const 1
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18299,7 +17818,6 @@
   end
   f32.const -1
   f32.const -1
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18312,7 +17830,6 @@
   end
   f32.const 0.5
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18325,7 +17842,6 @@
   end
   f32.const -0.5
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18338,7 +17854,6 @@
   end
   f32.const 1.0000152587890625
   f32.const 2
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18351,7 +17866,6 @@
   end
   f32.const -1.0000152587890625
   f32.const -1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18364,7 +17878,6 @@
   end
   f32.const 0.9999923706054688
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18377,7 +17890,6 @@
   end
   f32.const -0.9999923706054688
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18390,7 +17902,6 @@
   end
   f32.const 7.888609052210118e-31
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18403,7 +17914,6 @@
   end
   f32.const -7.888609052210118e-31
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18416,7 +17926,6 @@
   end
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18429,7 +17938,6 @@
   end
   f32.const inf
   f32.const inf
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18442,7 +17950,6 @@
   end
   f32.const -inf
   f32.const -inf
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18455,7 +17962,6 @@
   end
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18468,7 +17974,6 @@
   end
   f32.const -0
   f32.const -0
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18481,7 +17986,6 @@
   end
   f32.const 1
   f32.const 1
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18494,7 +17998,6 @@
   end
   f32.const -1
   f32.const -1
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18507,7 +18010,6 @@
   end
   f32.const 0.5
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18520,7 +18022,6 @@
   end
   f32.const -0.5
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18533,7 +18034,6 @@
   end
   f32.const 1.0000152587890625
   f32.const 2
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18546,7 +18046,6 @@
   end
   f32.const -1.0000152587890625
   f32.const -1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18559,7 +18058,6 @@
   end
   f32.const 0.9999923706054688
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18572,7 +18070,6 @@
   end
   f32.const -0.9999923706054688
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18585,7 +18082,6 @@
   end
   f32.const 7.888609052210118e-31
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18598,7 +18094,6 @@
   end
   f32.const -7.888609052210118e-31
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18611,7 +18106,6 @@
   end
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18624,7 +18118,6 @@
   end
   f32.const inf
   f32.const inf
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18637,7 +18130,6 @@
   end
   f32.const -inf
   f32.const -inf
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18650,7 +18142,6 @@
   end
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18663,7 +18154,6 @@
   end
   f32.const -0
   f32.const -0
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18676,7 +18166,6 @@
   end
   f32.const 1
   f32.const 1
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18689,7 +18178,6 @@
   end
   f32.const -1
   f32.const -1
-  i32.const 0
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18702,7 +18190,6 @@
   end
   f32.const 0.5
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18715,7 +18202,6 @@
   end
   f32.const -0.5
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18728,7 +18214,6 @@
   end
   f32.const 1.0000152587890625
   f32.const 2
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18741,7 +18226,6 @@
   end
   f32.const -1.0000152587890625
   f32.const -1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18754,7 +18238,6 @@
   end
   f32.const 0.9999923706054688
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18767,7 +18250,6 @@
   end
   f32.const -0.9999923706054688
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18780,7 +18262,6 @@
   end
   f32.const 7.888609052210118e-31
   f32.const 1
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -18793,7 +18274,6 @@
   end
   f32.const -7.888609052210118e-31
   f32.const -0
-  i32.const 1
   call $std/math/test_ceilf
   i32.eqz
   if
@@ -19745,7 +19225,6 @@
   f64.const -8.06684839057968
   f64.const 1593.5209938862329
   f64.const -0.38098856806755066
-  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19759,7 +19238,6 @@
   f64.const 4.345239849338305
   f64.const 38.56174928426729
   f64.const -0.2712278366088867
-  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19773,7 +19251,6 @@
   f64.const -8.38143342755525
   f64.const 2182.630979595893
   f64.const 0.0817827582359314
-  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19787,7 +19264,6 @@
   f64.const -6.531673581913484
   f64.const 343.273849250879
   f64.const -0.429940402507782
-  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19801,7 +19277,6 @@
   f64.const 9.267056966972586
   f64.const 5291.779170005587
   f64.const -0.1592995822429657
-  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19815,7 +19290,6 @@
   f64.const 0.6619858980995045
   f64.const 1.2272321957342842
   f64.const 0.23280741274356842
-  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19829,7 +19303,6 @@
   f64.const -0.4066039223853553
   f64.const 1.083808541871197
   f64.const -0.3960916996002197
-  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19843,7 +19316,6 @@
   f64.const 0.5617597462207241
   f64.const 1.1619803583175077
   f64.const 0.37748390436172485
-  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19857,7 +19329,6 @@
   f64.const 0.7741522965913037
   f64.const 1.3149236876276706
   f64.const 0.43587008118629456
-  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19871,7 +19342,6 @@
   f64.const -0.6787637026394024
   f64.const 1.2393413245934533
   f64.const 0.10201606154441833
-  i32.const 1
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19885,7 +19355,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19899,7 +19368,6 @@
   f64.const -0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19913,7 +19381,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19927,7 +19394,6 @@
   f64.const -inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19941,7 +19407,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_cosh
   i32.eqz
   if
@@ -19955,7 +19420,6 @@
   f32.const -8.066848754882812
   f32.const 1593.5216064453125
   f32.const 0.26242581009864807
-  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -19969,7 +19433,6 @@
   f32.const 4.345239639282227
   f32.const 38.56174087524414
   f32.const -0.08168885856866837
-  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -19983,7 +19446,6 @@
   f32.const -8.381433486938477
   f32.const 2182.631103515625
   f32.const -0.02331414446234703
-  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -19997,7 +19459,6 @@
   f32.const -6.531673431396484
   f32.const 343.2738037109375
   f32.const 0.20081493258476257
-  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20011,7 +19472,6 @@
   f32.const 9.267057418823242
   f32.const 5291.78173828125
   f32.const 0.36286723613739014
-  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20025,7 +19485,6 @@
   f32.const 0.6619858741760254
   f32.const 1.2272322177886963
   f32.const 0.32777416706085205
-  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20039,7 +19498,6 @@
   f32.const -0.40660393238067627
   f32.const 1.0838085412979126
   f32.const -0.039848703891038895
-  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20053,7 +19511,6 @@
   f32.const 0.5617597699165344
   f32.const 1.161980390548706
   f32.const 0.15274477005004883
-  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20067,7 +19524,6 @@
   f32.const 0.7741522789001465
   f32.const 1.314923644065857
   f32.const -0.2387111485004425
-  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20081,7 +19537,6 @@
   f32.const -0.6787636876106262
   f32.const 1.2393412590026855
   f32.const -0.45791932940483093
-  i32.const 1
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20095,7 +19550,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20109,7 +19563,6 @@
   f32.const -0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20123,7 +19576,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20137,7 +19589,6 @@
   f32.const -inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20151,7 +19602,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_coshf
   i32.eqz
   if
@@ -20165,7 +19615,6 @@
   f64.const -8.06684839057968
   f64.const 3.137706068161745e-04
   f64.const -0.2599197328090668
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20179,7 +19628,6 @@
   f64.const 4.345239849338305
   f64.const 77.11053017112141
   f64.const -0.02792675793170929
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20193,7 +19641,6 @@
   f64.const -8.38143342755525
   f64.const 2.290813384916323e-04
   f64.const -0.24974334239959717
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20207,7 +19654,6 @@
   f64.const -6.531673581913484
   f64.const 1.4565661260931588e-03
   f64.const -0.4816822409629822
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20221,7 +19667,6 @@
   f64.const 9.267056966972586
   f64.const 10583.558245524993
   f64.const 0.17696762084960938
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20235,7 +19680,6 @@
   f64.const 0.6619858980995045
   f64.const 1.9386384525571998
   f64.const -0.4964246451854706
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20249,7 +19693,6 @@
   f64.const -0.4066039223853553
   f64.const 0.6659078892838025
   f64.const -0.10608318448066711
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20263,7 +19706,6 @@
   f64.const 0.5617597462207241
   f64.const 1.7537559518626311
   f64.const -0.39162111282348633
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20277,7 +19719,6 @@
   f64.const 0.7741522965913037
   f64.const 2.1687528885129246
   f64.const -0.2996125817298889
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20291,7 +19732,6 @@
   f64.const -0.6787637026394024
   f64.const 0.5072437089402843
   f64.const 0.47261738777160645
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20305,7 +19745,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_exp
   i32.eqz
   if
@@ -20319,7 +19758,6 @@
   f64.const -0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_exp
   i32.eqz
   if
@@ -20333,7 +19771,6 @@
   f64.const 1
   f64.const 2.718281828459045
   f64.const -0.3255307376384735
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20347,7 +19784,6 @@
   f64.const -1
   f64.const 0.36787944117144233
   f64.const 0.22389651834964752
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20361,7 +19797,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_exp
   i32.eqz
   if
@@ -20375,7 +19810,6 @@
   f64.const -inf
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_exp
   i32.eqz
   if
@@ -20389,7 +19823,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_exp
   i32.eqz
   if
@@ -20403,7 +19836,6 @@
   f64.const 1.0397214889526365
   f64.const 2.828429155876411
   f64.const 0.18803080916404724
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20417,7 +19849,6 @@
   f64.const -1.0397214889526365
   f64.const 0.35355313670217847
   f64.const 0.2527272403240204
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20431,7 +19862,6 @@
   f64.const 1.0397210121154785
   f64.const 2.8284278071766122
   f64.const -0.4184139370918274
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20445,7 +19875,6 @@
   f64.const 1.0397214889526367
   f64.const 2.8284291558764116
   f64.const -0.22618377208709717
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20459,7 +19888,6 @@
   f64.const 5e-324
   f64.const 1
   f64.const 0
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20473,7 +19901,6 @@
   f64.const -5e-324
   f64.const 1
   f64.const 0
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20487,7 +19914,6 @@
   f64.const 709.782712893384
   f64.const 1797693134862273196746681e284
   f64.const -0.10568465292453766
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20501,7 +19927,6 @@
   f64.const 709.7827128933841
   f64.const inf
   f64.const 0
-  i32.const 17
   call $std/math/test_exp
   i32.eqz
   if
@@ -20515,7 +19940,6 @@
   f64.const -745.1332191019411
   f64.const 5e-324
   f64.const 0.5
-  i32.const 9
   call $std/math/test_exp
   i32.eqz
   if
@@ -20529,7 +19953,6 @@
   f64.const -745.1332191019412
   f64.const 0
   f64.const -0.5
-  i32.const 9
   call $std/math/test_exp
   i32.eqz
   if
@@ -20543,7 +19966,6 @@
   f64.const -708.3964185322641
   f64.const 2.2250738585072626e-308
   f64.const 0.26172348856925964
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20557,7 +19979,6 @@
   f64.const -708.3964185322642
   f64.const 2.2250738585070097e-308
   f64.const 2.2250738585070097e-308
-  i32.const 9
   call $std/math/test_exp
   i32.eqz
   if
@@ -20571,7 +19992,6 @@
   f64.const 0.5006933289508785
   f64.const 1.6498647732549399
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20585,7 +20005,6 @@
   f64.const 0.628493326460252
   f64.const 1.8747837631658781
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20599,7 +20018,6 @@
   f64.const 0.837522455340574
   f64.const 2.3106351774748006
   f64.const -0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20613,7 +20031,6 @@
   f64.const 0.8504909932810999
   f64.const 2.3407958848710777
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20627,7 +20044,6 @@
   f64.const 1.6270060846924657
   f64.const 5.088617001442459
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20641,7 +20057,6 @@
   f64.const 1.6744336219614115
   f64.const 5.335772228886831
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20655,7 +20070,6 @@
   f64.const 6.657914718791208
   f64.const 778.924964819056
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20669,7 +20083,6 @@
   f64.const 11.022872793631722
   f64.const 61259.41271820104
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20683,7 +20096,6 @@
   f64.const 11.411195701885317
   f64.const 90327.36165653409
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20697,7 +20109,6 @@
   f64.const 11.794490387560606
   f64.const 132520.20290772576
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20711,7 +20122,6 @@
   f64.const 412.83872756953286
   f64.const 1965989977109266413433084e155
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20725,7 +20135,6 @@
   f64.const 510.87569028483415
   f64.const 7421526272656495968225491e197
   f64.const -0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20739,7 +20148,6 @@
   f64.const -2.6589841439772853e-14
   f64.const 0.9999999999999735
   f64.const 0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20753,7 +20161,6 @@
   f64.const -2.7144952952085447e-14
   f64.const 0.9999999999999728
   f64.const -0.5
-  i32.const 1
   call $std/math/test_exp
   i32.eqz
   if
@@ -20767,7 +20174,6 @@
   f32.const -8.066848754882812
   f32.const 3.1377049162983894e-04
   f32.const -0.030193336308002472
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20781,7 +20187,6 @@
   f32.const 4.345239639282227
   f32.const 77.11051177978516
   f32.const -0.2875460684299469
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20795,7 +20200,6 @@
   f32.const -8.381433486938477
   f32.const 2.2908132814336568e-04
   f32.const 0.2237040400505066
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20809,7 +20213,6 @@
   f32.const -6.531673431396484
   f32.const 1.4565663877874613e-03
   f32.const 0.36469703912734985
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20823,7 +20226,6 @@
   f32.const 9.267057418823242
   f32.const 10583.5634765625
   f32.const 0.45962104201316833
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20837,7 +20239,6 @@
   f32.const 0.6619858741760254
   f32.const 1.93863844871521
   f32.const 0.3568260967731476
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20851,7 +20252,6 @@
   f32.const -0.40660393238067627
   f32.const 0.6659078598022461
   f32.const -0.38294991850852966
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20865,7 +20265,6 @@
   f32.const 0.5617597699165344
   f32.const 1.753756046295166
   f32.const 0.44355490803718567
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20879,7 +20278,6 @@
   f32.const 0.7741522789001465
   f32.const 2.168752908706665
   f32.const 0.24562469124794006
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20893,7 +20291,6 @@
   f32.const -0.6787636876106262
   f32.const 0.5072436928749084
   f32.const -0.3974292278289795
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20907,7 +20304,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_expf
   i32.eqz
   if
@@ -20921,7 +20317,6 @@
   f32.const -0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_expf
   i32.eqz
   if
@@ -20935,7 +20330,6 @@
   f32.const 1
   f32.const 2.7182817459106445
   f32.const -0.3462330996990204
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20949,7 +20343,6 @@
   f32.const -1
   f32.const 0.3678794503211975
   f32.const 0.3070148527622223
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -20963,7 +20356,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_expf
   i32.eqz
   if
@@ -20977,7 +20369,6 @@
   f32.const -inf
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_expf
   i32.eqz
   if
@@ -20991,7 +20382,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_expf
   i32.eqz
   if
@@ -21005,7 +20395,6 @@
   f32.const 88.72283172607422
   f32.const 340279851902147610656242e15
   f32.const -0.09067153930664062
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -21019,7 +20408,6 @@
   f32.const 88.72283935546875
   f32.const inf
   f32.const 0
-  i32.const 17
   call $std/math/test_expf
   i32.eqz
   if
@@ -21033,7 +20421,6 @@
   f32.const -103.97207641601562
   f32.const 1.401298464324817e-45
   f32.const 0.49999967217445374
-  i32.const 9
   call $std/math/test_expf
   i32.eqz
   if
@@ -21047,7 +20434,6 @@
   f32.const -103.97208404541016
   f32.const 0
   f32.const -0.49999651312828064
-  i32.const 9
   call $std/math/test_expf
   i32.eqz
   if
@@ -21061,7 +20447,6 @@
   f32.const 0.3465735614299774
   f32.const 1.4142135381698608
   f32.const 0.13922421634197235
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -21075,7 +20460,6 @@
   f32.const 0.3465735912322998
   f32.const 1.4142135381698608
   f32.const -0.21432916820049286
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -21089,7 +20473,6 @@
   f32.const 0.3465736210346222
   f32.const 1.4142136573791504
   f32.const 0.43211743235588074
-  i32.const 1
   call $std/math/test_expf
   i32.eqz
   if
@@ -21103,7 +20486,6 @@
   f64.const -8.06684839057968
   f64.const -0.9996862293931839
   f64.const -0.2760058343410492
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21117,7 +20499,6 @@
   f64.const 4.345239849338305
   f64.const 76.11053017112141
   f64.const -0.02792675793170929
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21131,7 +20512,6 @@
   f64.const -8.38143342755525
   f64.const -0.9997709186615084
   f64.const 0.10052496194839478
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21145,7 +20525,6 @@
   f64.const -6.531673581913484
   f64.const -0.9985434338739069
   f64.const -0.27437829971313477
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21159,7 +20538,6 @@
   f64.const 9.267056966972586
   f64.const 10582.558245524993
   f64.const 0.17696762084960938
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21173,7 +20551,6 @@
   f64.const 0.6619858980995045
   f64.const 0.9386384525571999
   f64.const 0.007150684483349323
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21187,7 +20564,6 @@
   f64.const -0.4066039223853553
   f64.const -0.3340921107161975
   f64.const -0.21216636896133423
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21201,7 +20577,6 @@
   f64.const 0.5617597462207241
   f64.const 0.7537559518626312
   f64.const 0.21675777435302734
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21215,7 +20590,6 @@
   f64.const 0.7741522965913037
   f64.const 1.1687528885129248
   f64.const 0.4007748067378998
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21229,7 +20603,6 @@
   f64.const -0.6787637026394024
   f64.const -0.4927562910597158
   f64.const -0.05476519837975502
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21243,7 +20616,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21257,7 +20629,6 @@
   f64.const -0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21271,7 +20642,6 @@
   f64.const 1
   f64.const 1.7182818284590453
   f64.const 0.348938524723053
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21285,7 +20655,6 @@
   f64.const -1
   f64.const -0.6321205588285577
   f64.const 0.11194825917482376
-  i32.const 1
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21299,7 +20668,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21313,7 +20681,6 @@
   f64.const -inf
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21327,7 +20694,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21341,7 +20707,6 @@
   f64.const 2.225073858507201e-308
   f64.const 2.225073858507201e-308
   f64.const 0
-  i32.const 9
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21355,7 +20720,6 @@
   f64.const -2.225073858507201e-308
   f64.const -2.225073858507201e-308
   f64.const 0
-  i32.const 9
   call $std/math/test_expm1
   i32.eqz
   if
@@ -21369,7 +20733,6 @@
   f32.const -8.066848754882812
   f32.const -0.9996862411499023
   f32.const -0.19532723724842072
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21383,7 +20746,6 @@
   f32.const 4.345239639282227
   f32.const 76.11051177978516
   f32.const -0.2875460684299469
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21397,7 +20759,6 @@
   f32.const -8.381433486938477
   f32.const -0.9997709393501282
   f32.const -0.34686920046806335
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21411,7 +20772,6 @@
   f32.const -6.531673431396484
   f32.const -0.9985434412956238
   f32.const -0.1281939446926117
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21425,7 +20785,6 @@
   f32.const 9.267057418823242
   f32.const 10582.5634765625
   f32.const 0.45962104201316833
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21439,7 +20798,6 @@
   f32.const 0.6619858741760254
   f32.const 0.9386383891105652
   f32.const -0.28634780645370483
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21453,7 +20811,6 @@
   f32.const -0.40660393238067627
   f32.const -0.3340921103954315
   f32.const 0.23410017788410187
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21467,7 +20824,6 @@
   f32.const 0.5617597699165344
   f32.const 0.7537559866905212
   f32.const -0.11289017647504807
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21481,7 +20837,6 @@
   f32.const 0.7741522789001465
   f32.const 1.168752908706665
   f32.const 0.4912493824958801
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21495,7 +20850,6 @@
   f32.const -0.6787636876106262
   f32.const -0.49275627732276917
   f32.const 0.20514154434204102
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21509,7 +20863,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21523,7 +20876,6 @@
   f32.const -0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21537,7 +20889,6 @@
   f32.const 1
   f32.const 1.718281865119934
   f32.const 0.3075338304042816
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21551,7 +20902,6 @@
   f32.const -1
   f32.const -0.6321205496788025
   f32.const 0.15350742638111115
-  i32.const 1
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21565,7 +20915,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21579,7 +20928,6 @@
   f32.const -inf
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21593,7 +20941,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_expm1f
   i32.eqz
   if
@@ -21606,7 +20953,6 @@
   end
   f64.const -8.06684839057968
   f64.const -9
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21619,7 +20965,6 @@
   end
   f64.const 4.345239849338305
   f64.const 4
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21632,7 +20977,6 @@
   end
   f64.const -8.38143342755525
   f64.const -9
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21645,7 +20989,6 @@
   end
   f64.const -6.531673581913484
   f64.const -7
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21658,7 +21001,6 @@
   end
   f64.const 9.267056966972586
   f64.const 9
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21671,7 +21013,6 @@
   end
   f64.const 0.6619858980995045
   f64.const 0
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21684,7 +21025,6 @@
   end
   f64.const -0.4066039223853553
   f64.const -1
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21697,7 +21037,6 @@
   end
   f64.const 0.5617597462207241
   f64.const 0
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21710,7 +21049,6 @@
   end
   f64.const 0.7741522965913037
   f64.const 0
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21723,7 +21061,6 @@
   end
   f64.const -0.6787637026394024
   f64.const -1
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21736,7 +21073,6 @@
   end
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_floor
   i32.eqz
   if
@@ -21749,7 +21085,6 @@
   end
   f64.const inf
   f64.const inf
-  i32.const 0
   call $std/math/test_floor
   i32.eqz
   if
@@ -21762,7 +21097,6 @@
   end
   f64.const -inf
   f64.const -inf
-  i32.const 0
   call $std/math/test_floor
   i32.eqz
   if
@@ -21775,7 +21109,6 @@
   end
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_floor
   i32.eqz
   if
@@ -21788,7 +21121,6 @@
   end
   f64.const -0
   f64.const -0
-  i32.const 0
   call $std/math/test_floor
   i32.eqz
   if
@@ -21801,7 +21133,6 @@
   end
   f64.const 1
   f64.const 1
-  i32.const 0
   call $std/math/test_floor
   i32.eqz
   if
@@ -21814,7 +21145,6 @@
   end
   f64.const -1
   f64.const -1
-  i32.const 0
   call $std/math/test_floor
   i32.eqz
   if
@@ -21827,7 +21157,6 @@
   end
   f64.const 0.5
   f64.const 0
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21840,7 +21169,6 @@
   end
   f64.const -0.5
   f64.const -1
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21853,7 +21181,6 @@
   end
   f64.const 1.0000152587890625
   f64.const 1
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21866,7 +21193,6 @@
   end
   f64.const -1.0000152587890625
   f64.const -2
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21879,7 +21205,6 @@
   end
   f64.const 0.9999923706054688
   f64.const 0
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21892,7 +21217,6 @@
   end
   f64.const -0.9999923706054688
   f64.const -1
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21905,7 +21229,6 @@
   end
   f64.const 7.888609052210118e-31
   f64.const 0
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21918,7 +21241,6 @@
   end
   f64.const -7.888609052210118e-31
   f64.const -1
-  i32.const 1
   call $std/math/test_floor
   i32.eqz
   if
@@ -21931,7 +21253,6 @@
   end
   f32.const -8.066848754882812
   f32.const -9
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -21944,7 +21265,6 @@
   end
   f32.const 4.345239639282227
   f32.const 4
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -21957,7 +21277,6 @@
   end
   f32.const -8.381433486938477
   f32.const -9
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -21970,7 +21289,6 @@
   end
   f32.const -6.531673431396484
   f32.const -7
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -21983,7 +21301,6 @@
   end
   f32.const 9.267057418823242
   f32.const 9
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -21996,7 +21313,6 @@
   end
   f32.const 0.6619858741760254
   f32.const 0
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22009,7 +21325,6 @@
   end
   f32.const -0.40660393238067627
   f32.const -1
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22022,7 +21337,6 @@
   end
   f32.const 0.5617597699165344
   f32.const 0
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22035,7 +21349,6 @@
   end
   f32.const 0.7741522789001465
   f32.const 0
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22048,7 +21361,6 @@
   end
   f32.const -0.6787636876106262
   f32.const -1
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22061,7 +21373,6 @@
   end
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22074,7 +21385,6 @@
   end
   f32.const inf
   f32.const inf
-  i32.const 0
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22087,7 +21397,6 @@
   end
   f32.const -inf
   f32.const -inf
-  i32.const 0
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22100,7 +21409,6 @@
   end
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22113,7 +21421,6 @@
   end
   f32.const -0
   f32.const -0
-  i32.const 0
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22126,7 +21433,6 @@
   end
   f32.const 1
   f32.const 1
-  i32.const 0
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22139,7 +21445,6 @@
   end
   f32.const -1
   f32.const -1
-  i32.const 0
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22152,7 +21457,6 @@
   end
   f32.const 0.5
   f32.const 0
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22165,7 +21469,6 @@
   end
   f32.const -0.5
   f32.const -1
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22178,7 +21481,6 @@
   end
   f32.const 1.0000152587890625
   f32.const 1
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22191,7 +21493,6 @@
   end
   f32.const -1.0000152587890625
   f32.const -2
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22204,7 +21505,6 @@
   end
   f32.const 0.9999923706054688
   f32.const 0
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22217,7 +21517,6 @@
   end
   f32.const -0.9999923706054688
   f32.const -1
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22230,7 +21529,6 @@
   end
   f32.const 7.888609052210118e-31
   f32.const 0
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22243,7 +21541,6 @@
   end
   f32.const -7.888609052210118e-31
   f32.const -1
-  i32.const 1
   call $std/math/test_floorf
   i32.eqz
   if
@@ -22258,7 +21555,6 @@
   f64.const 4.535662560676869
   f64.const 9.25452742288464
   f64.const -0.31188681721687317
-  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22273,7 +21569,6 @@
   f64.const -8.88799136300345
   f64.const 9.893305808328252
   f64.const 0.4593673348426819
-  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22288,7 +21583,6 @@
   f64.const -2.763607337379588
   f64.const 8.825301797432132
   f64.const -0.1701754331588745
-  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22303,7 +21597,6 @@
   f64.const 4.567535276842744
   f64.const 7.970265885519092
   f64.const -0.3176782727241516
-  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22318,7 +21611,6 @@
   f64.const 4.811392084359796
   f64.const 10.441639651824575
   f64.const -0.2693633437156677
-  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22333,7 +21625,6 @@
   f64.const 0.6620717923376739
   f64.const 6.483936052542593
   f64.const 0.35618898272514343
-  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22348,7 +21639,6 @@
   f64.const 0.05215452675006225
   f64.const 7.859063309581766
   f64.const 0.08044655621051788
-  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22363,7 +21653,6 @@
   f64.const 7.67640268511754
   f64.const 7.717156764899584
   f64.const 0.05178084969520569
-  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22378,7 +21667,6 @@
   f64.const 2.0119025790324803
   f64.const 2.104006123874314
   f64.const -0.0918039008975029
-  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22393,7 +21681,6 @@
   f64.const 0.03223983060263804
   f64.const 0.5596880129062913
   f64.const 0.1383407711982727
-  i32.const 1
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22408,7 +21695,6 @@
   f64.const 4
   f64.const 5
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22423,7 +21709,6 @@
   f64.const 4
   f64.const 5
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22438,7 +21723,6 @@
   f64.const 3
   f64.const 5
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22453,7 +21737,6 @@
   f64.const -3
   f64.const 5
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22468,7 +21751,6 @@
   f64.const -4
   f64.const 5
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22483,7 +21765,6 @@
   f64.const 0
   f64.const 1797693134862315708145274e284
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22498,7 +21779,6 @@
   f64.const -0
   f64.const 1797693134862315708145274e284
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22513,7 +21793,6 @@
   f64.const 0
   f64.const 5e-324
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22528,7 +21807,6 @@
   f64.const -0
   f64.const 5e-324
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22543,7 +21821,6 @@
   f64.const 1
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22558,7 +21835,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22573,7 +21849,6 @@
   f64.const nan:0x8000000000000
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22588,7 +21863,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22603,7 +21877,6 @@
   f64.const 1
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22618,7 +21891,6 @@
   f64.const -inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22633,7 +21905,6 @@
   f64.const nan:0x8000000000000
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22648,7 +21919,6 @@
   f64.const -inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22663,7 +21933,6 @@
   f64.const 1
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22678,7 +21947,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_hypot
   i32.eqz
   if
@@ -22693,7 +21961,6 @@
   f32.const 4.535662651062012
   f32.const 9.254528045654297
   f32.const 0.2735958993434906
-  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22708,7 +21975,6 @@
   f32.const -8.887990951538086
   f32.const 9.893305778503418
   f32.const 0.4530770778656006
-  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22723,7 +21989,6 @@
   f32.const -2.7636072635650635
   f32.const 8.825302124023438
   f32.const 0.30755728483200073
-  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22738,7 +22003,6 @@
   f32.const 4.567535400390625
   f32.const 7.970265865325928
   f32.const 0.06785223633050919
-  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22753,7 +22017,6 @@
   f32.const 4.811392307281494
   f32.const 10.44163990020752
   f32.const -0.26776307821273804
-  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22768,7 +22031,6 @@
   f32.const 0.6620717644691467
   f32.const 6.483936309814453
   f32.const 0.48381292819976807
-  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22783,7 +22045,6 @@
   f32.const 0.052154526114463806
   f32.const 7.859063148498535
   f32.const 0.07413065433502197
-  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22798,7 +22059,6 @@
   f32.const 7.676402568817139
   f32.const 7.717156887054443
   f32.const 0.4940592646598816
-  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22813,7 +22073,6 @@
   f32.const 2.0119025707244873
   f32.const 2.104006052017212
   f32.const -0.287089467048645
-  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22828,7 +22087,6 @@
   f32.const 0.03223983198404312
   f32.const 0.5596880316734314
   f32.const 0.4191940724849701
-  i32.const 1
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22843,7 +22101,6 @@
   f32.const 4
   f32.const 5
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22858,7 +22115,6 @@
   f32.const 4
   f32.const 5
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22873,7 +22129,6 @@
   f32.const 3
   f32.const 5
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22888,7 +22143,6 @@
   f32.const -3
   f32.const 5
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22903,7 +22157,6 @@
   f32.const -4
   f32.const 5
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22918,7 +22171,6 @@
   f32.const 0
   f32.const 3402823466385288598117041e14
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22933,7 +22185,6 @@
   f32.const -0
   f32.const 3402823466385288598117041e14
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22948,7 +22199,6 @@
   f32.const 0
   f32.const 1.401298464324817e-45
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22963,7 +22213,6 @@
   f32.const -0
   f32.const 1.401298464324817e-45
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22978,7 +22227,6 @@
   f32.const 1
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -22993,7 +22241,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -23008,7 +22255,6 @@
   f32.const nan:0x400000
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -23023,7 +22269,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -23038,7 +22283,6 @@
   f32.const 1
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -23053,7 +22297,6 @@
   f32.const -inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -23068,7 +22311,6 @@
   f32.const nan:0x400000
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -23083,7 +22325,6 @@
   f32.const -inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -23098,7 +22339,6 @@
   f32.const 1
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -23113,7 +22353,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_hypotf
   i32.eqz
   if
@@ -23127,7 +22366,6 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -23141,7 +22379,6 @@
   f64.const 4.345239849338305
   f64.const 1.4690809584224322
   f64.const -0.3412533402442932
-  i32.const 1
   call $std/math/test_log
   i32.eqz
   if
@@ -23155,7 +22392,6 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -23169,7 +22405,6 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -23183,7 +22418,6 @@
   f64.const 9.267056966972586
   f64.const 2.2264658498795615
   f64.const 0.3638114035129547
-  i32.const 1
   call $std/math/test_log
   i32.eqz
   if
@@ -23197,7 +22431,6 @@
   f64.const 0.6619858980995045
   f64.const -0.4125110252365137
   f64.const -0.29108747839927673
-  i32.const 1
   call $std/math/test_log
   i32.eqz
   if
@@ -23211,7 +22444,6 @@
   f64.const -0.4066039223853553
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -23225,7 +22457,6 @@
   f64.const 0.5617597462207241
   f64.const -0.5766810183195862
   f64.const -0.10983199626207352
-  i32.const 1
   call $std/math/test_log
   i32.eqz
   if
@@ -23239,7 +22470,6 @@
   f64.const 0.7741522965913037
   f64.const -0.2559866591263865
   f64.const -0.057990044355392456
-  i32.const 1
   call $std/math/test_log
   i32.eqz
   if
@@ -23253,7 +22483,6 @@
   f64.const -0.6787637026394024
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -23267,7 +22496,6 @@
   f64.const 0
   f64.const -inf
   f64.const 0
-  i32.const 4
   call $std/math/test_log
   i32.eqz
   if
@@ -23281,7 +22509,6 @@
   f64.const -0
   f64.const -inf
   f64.const 0
-  i32.const 4
   call $std/math/test_log
   i32.eqz
   if
@@ -23295,7 +22522,6 @@
   f64.const -7.888609052210118e-31
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -23309,7 +22535,6 @@
   f64.const 1
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_log
   i32.eqz
   if
@@ -23323,7 +22548,6 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -23337,7 +22561,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_log
   i32.eqz
   if
@@ -23351,7 +22574,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log
   i32.eqz
   if
@@ -23365,7 +22587,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_log
   i32.eqz
   if
@@ -23378,7 +22599,6 @@
   end
   f32.const 0
   f32.const -inf
-  i32.const 4
   call $std/math/test_logf
   i32.eqz
   if
@@ -23391,7 +22611,6 @@
   end
   f32.const -0
   f32.const -inf
-  i32.const 4
   call $std/math/test_logf
   i32.eqz
   if
@@ -23404,7 +22623,6 @@
   end
   f32.const -7.888609052210118e-31
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -23417,7 +22635,6 @@
   end
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_logf
   i32.eqz
   if
@@ -23430,7 +22647,6 @@
   end
   f32.const -1
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -23443,7 +22659,6 @@
   end
   f32.const inf
   f32.const inf
-  i32.const 0
   call $std/math/test_logf
   i32.eqz
   if
@@ -23456,7 +22671,6 @@
   end
   f32.const -inf
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -23469,7 +22683,6 @@
   end
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_logf
   i32.eqz
   if
@@ -23482,7 +22695,6 @@
   end
   f32.const 0
   f32.const -inf
-  i32.const 4
   call $std/math/test_logf
   i32.eqz
   if
@@ -23495,7 +22707,6 @@
   end
   f32.const -0
   f32.const -inf
-  i32.const 4
   call $std/math/test_logf
   i32.eqz
   if
@@ -23508,7 +22719,6 @@
   end
   f32.const -7.888609052210118e-31
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -23521,7 +22731,6 @@
   end
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_logf
   i32.eqz
   if
@@ -23534,7 +22743,6 @@
   end
   f32.const -1
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -23547,7 +22755,6 @@
   end
   f32.const inf
   f32.const inf
-  i32.const 0
   call $std/math/test_logf
   i32.eqz
   if
@@ -23560,7 +22767,6 @@
   end
   f32.const -inf
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_logf
   i32.eqz
   if
@@ -23573,7 +22779,6 @@
   end
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_logf
   i32.eqz
   if
@@ -23587,7 +22792,6 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -23601,7 +22805,6 @@
   f64.const 4.345239849338305
   f64.const 0.6380137537120029
   f64.const -0.2088824063539505
-  i32.const 1
   call $std/math/test_log10
   i32.eqz
   if
@@ -23615,7 +22818,6 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -23629,7 +22831,6 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -23643,7 +22844,6 @@
   f64.const 9.267056966972586
   f64.const 0.9669418327487274
   f64.const -0.06120431795716286
-  i32.const 1
   call $std/math/test_log10
   i32.eqz
   if
@@ -23657,7 +22857,6 @@
   f64.const 0.6619858980995045
   f64.const -0.17915126198447093
   f64.const 0.39090874791145325
-  i32.const 1
   call $std/math/test_log10
   i32.eqz
   if
@@ -23671,7 +22870,6 @@
   f64.const -0.4066039223853553
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -23685,7 +22883,6 @@
   f64.const 0.5617597462207241
   f64.const -0.25044938407454437
   f64.const -0.3046841621398926
-  i32.const 1
   call $std/math/test_log10
   i32.eqz
   if
@@ -23699,7 +22896,6 @@
   f64.const 0.7741522965913037
   f64.const -0.11117359349943837
   f64.const -0.31503361463546753
-  i32.const 1
   call $std/math/test_log10
   i32.eqz
   if
@@ -23713,7 +22909,6 @@
   f64.const -0.6787637026394024
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -23727,7 +22922,6 @@
   f64.const 0
   f64.const -inf
   f64.const 0
-  i32.const 4
   call $std/math/test_log10
   i32.eqz
   if
@@ -23741,7 +22935,6 @@
   f64.const -0
   f64.const -inf
   f64.const 0
-  i32.const 4
   call $std/math/test_log10
   i32.eqz
   if
@@ -23755,7 +22948,6 @@
   f64.const -7.888609052210118e-31
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -23769,7 +22961,6 @@
   f64.const 1
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_log10
   i32.eqz
   if
@@ -23783,7 +22974,6 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -23797,7 +22987,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_log10
   i32.eqz
   if
@@ -23811,7 +23000,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log10
   i32.eqz
   if
@@ -23825,7 +23013,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_log10
   i32.eqz
   if
@@ -23839,7 +23026,6 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23853,7 +23039,6 @@
   f32.const 4.345239639282227
   f32.const 0.6380137205123901
   f32.const -0.20476758480072021
-  i32.const 1
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23867,7 +23052,6 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23881,7 +23065,6 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23895,7 +23078,6 @@
   f32.const 9.267057418823242
   f32.const 0.9669418334960938
   f32.const -0.34273025393486023
-  i32.const 1
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23909,7 +23091,6 @@
   f32.const 0.6619858741760254
   f32.const -0.1791512817144394
   f32.const -0.27078554034233093
-  i32.const 1
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23923,7 +23104,6 @@
   f32.const -0.40660393238067627
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23937,7 +23117,6 @@
   f32.const 0.5617597699165344
   f32.const -0.25044935941696167
   f32.const 0.2126826047897339
-  i32.const 1
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23951,7 +23130,6 @@
   f32.const 0.7741522789001465
   f32.const -0.1111735999584198
   f32.const 0.46515095233917236
-  i32.const 1
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23965,7 +23143,6 @@
   f32.const -0.6787636876106262
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23979,7 +23156,6 @@
   f32.const 0
   f32.const -inf
   f32.const 0
-  i32.const 4
   call $std/math/test_log10f
   i32.eqz
   if
@@ -23993,7 +23169,6 @@
   f32.const -0
   f32.const -inf
   f32.const 0
-  i32.const 4
   call $std/math/test_log10f
   i32.eqz
   if
@@ -24007,7 +23182,6 @@
   f32.const -7.888609052210118e-31
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -24021,7 +23195,6 @@
   f32.const 1
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_log10f
   i32.eqz
   if
@@ -24035,7 +23208,6 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -24049,7 +23221,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_log10f
   i32.eqz
   if
@@ -24063,7 +23234,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log10f
   i32.eqz
   if
@@ -24077,7 +23247,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_log10f
   i32.eqz
   if
@@ -24091,7 +23260,6 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24105,7 +23273,6 @@
   f64.const 4.345239849338305
   f64.const 1.6762064170601734
   f64.const 0.46188199520111084
-  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24119,7 +23286,6 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24133,7 +23299,6 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24147,7 +23312,6 @@
   f64.const 9.267056966972586
   f64.const 2.3289404168523826
   f64.const -0.411114901304245
-  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24161,7 +23325,6 @@
   f64.const 0.6619858980995045
   f64.const 0.5080132114992477
   f64.const -0.29306045174598694
-  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24175,7 +23338,6 @@
   f64.const -0.4066039223853553
   f64.const -0.5218931811663979
   f64.const -0.25825726985931396
-  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24189,7 +23351,6 @@
   f64.const 0.5617597462207241
   f64.const 0.4458132279488102
   f64.const -0.13274887204170227
-  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24203,7 +23364,6 @@
   f64.const 0.7741522965913037
   f64.const 0.5733227294648414
   f64.const 0.02716583013534546
-  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24217,7 +23377,6 @@
   f64.const -0.6787637026394024
   f64.const -1.1355782978128564
   f64.const 0.2713092863559723
-  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24231,7 +23390,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24245,7 +23403,6 @@
   f64.const -0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24259,7 +23416,6 @@
   f64.const -7.888609052210118e-31
   f64.const -7.888609052210118e-31
   f64.const 1.7763568394002505e-15
-  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24273,7 +23429,6 @@
   f64.const 1
   f64.const 0.6931471805599453
   f64.const -0.2088811695575714
-  i32.const 1
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24287,7 +23442,6 @@
   f64.const -1
   f64.const -inf
   f64.const 0
-  i32.const 4
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24301,7 +23455,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24315,7 +23468,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24329,7 +23481,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_log1p
   i32.eqz
   if
@@ -24343,7 +23494,6 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24357,7 +23507,6 @@
   f32.const 4.345239639282227
   f32.const 1.676206350326538
   f32.const -0.23014859855175018
-  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24371,7 +23520,6 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24385,7 +23533,6 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24399,7 +23546,6 @@
   f32.const 9.267057418823242
   f32.const 2.3289403915405273
   f32.const -0.29075589776039124
-  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24413,7 +23559,6 @@
   f32.const 0.6619858741760254
   f32.const 0.5080131888389587
   f32.const -0.1386766880750656
-  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24427,7 +23572,6 @@
   f32.const -0.40660393238067627
   f32.const -0.5218932032585144
   f32.const -0.08804433047771454
-  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24441,7 +23585,6 @@
   f32.const 0.5617597699165344
   f32.const 0.44581323862075806
   f32.const -0.15101368725299835
-  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24455,7 +23598,6 @@
   f32.const 0.7741522789001465
   f32.const 0.5733227133750916
   f32.const -0.10264533013105392
-  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24469,7 +23611,6 @@
   f32.const -0.6787636876106262
   f32.const -1.1355782747268677
   f32.const -0.19879481196403503
-  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24483,7 +23624,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24497,7 +23637,6 @@
   f32.const -0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24511,7 +23650,6 @@
   f32.const -7.888609052210118e-31
   f32.const -7.888609052210118e-31
   f32.const 3.308722450212111e-24
-  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24525,7 +23663,6 @@
   f32.const 1
   f32.const 0.6931471824645996
   f32.const 0.031954795122146606
-  i32.const 1
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24539,7 +23676,6 @@
   f32.const -1
   f32.const -inf
   f32.const 0
-  i32.const 4
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24553,7 +23689,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24567,7 +23702,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24581,7 +23715,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24595,7 +23728,6 @@
   f32.const -1.1754942106924411e-38
   f32.const -1.1754942106924411e-38
   f32.const 4.930380657631324e-32
-  i32.const 9
   call $std/math/test_log1pf
   i32.eqz
   if
@@ -24609,7 +23741,6 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -24623,7 +23754,6 @@
   f64.const 4.345239849338305
   f64.const 2.1194358133804485
   f64.const -0.10164877772331238
-  i32.const 1
   call $std/math/test_log2
   i32.eqz
   if
@@ -24637,7 +23767,6 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -24651,7 +23780,6 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -24665,7 +23793,6 @@
   f64.const 9.267056966972586
   f64.const 3.2121112403298744
   f64.const -0.15739446878433228
-  i32.const 1
   call $std/math/test_log2
   i32.eqz
   if
@@ -24679,7 +23806,6 @@
   f64.const 0.6619858980995045
   f64.const -0.5951276104207402
   f64.const 0.3321485221385956
-  i32.const 1
   call $std/math/test_log2
   i32.eqz
   if
@@ -24693,7 +23819,6 @@
   f64.const -0.4066039223853553
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -24707,7 +23832,6 @@
   f64.const 0.5617597462207241
   f64.const -0.8319748453044644
   f64.const 0.057555437088012695
-  i32.const 1
   call $std/math/test_log2
   i32.eqz
   if
@@ -24721,7 +23845,6 @@
   f64.const 0.7741522965913037
   f64.const -0.36931068365537134
   f64.const -0.19838279485702515
-  i32.const 1
   call $std/math/test_log2
   i32.eqz
   if
@@ -24735,7 +23858,6 @@
   f64.const -0.6787637026394024
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -24749,7 +23871,6 @@
   f64.const 0
   f64.const -inf
   f64.const 0
-  i32.const 4
   call $std/math/test_log2
   i32.eqz
   if
@@ -24763,7 +23884,6 @@
   f64.const -0
   f64.const -inf
   f64.const 0
-  i32.const 4
   call $std/math/test_log2
   i32.eqz
   if
@@ -24777,7 +23897,6 @@
   f64.const -7.888609052210118e-31
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -24791,7 +23910,6 @@
   f64.const 1
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_log2
   i32.eqz
   if
@@ -24805,7 +23923,6 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -24819,7 +23936,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_log2
   i32.eqz
   if
@@ -24833,7 +23949,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_log2
   i32.eqz
   if
@@ -24847,7 +23962,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_log2
   i32.eqz
   if
@@ -24861,7 +23975,6 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -24875,7 +23988,6 @@
   f32.const 4.345239639282227
   f32.const 2.1194357872009277
   f32.const 0.18271538615226746
-  i32.const 1
   call $std/math/test_log2f
   i32.eqz
   if
@@ -24889,7 +24001,6 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -24903,7 +24014,6 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -24917,7 +24027,6 @@
   f32.const 9.267057418823242
   f32.const 3.212111234664917
   f32.const -0.3188050389289856
-  i32.const 1
   call $std/math/test_log2f
   i32.eqz
   if
@@ -24931,7 +24040,6 @@
   f32.const 0.6619858741760254
   f32.const -0.5951276421546936
   f32.const 0.34231460094451904
-  i32.const 1
   call $std/math/test_log2f
   i32.eqz
   if
@@ -24945,7 +24053,6 @@
   f32.const -0.40660393238067627
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -24959,7 +24066,6 @@
   f32.const 0.5617597699165344
   f32.const -0.8319748044013977
   f32.const -0.33473604917526245
-  i32.const 1
   call $std/math/test_log2f
   i32.eqz
   if
@@ -24973,7 +24079,6 @@
   f32.const 0.7741522789001465
   f32.const -0.3693107068538666
   f32.const 0.3278401792049408
-  i32.const 1
   call $std/math/test_log2f
   i32.eqz
   if
@@ -24987,7 +24092,6 @@
   f32.const -0.6787636876106262
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -25001,7 +24105,6 @@
   f32.const 0
   f32.const -inf
   f32.const 0
-  i32.const 4
   call $std/math/test_log2f
   i32.eqz
   if
@@ -25015,7 +24118,6 @@
   f32.const -0
   f32.const -inf
   f32.const 0
-  i32.const 4
   call $std/math/test_log2f
   i32.eqz
   if
@@ -25029,7 +24131,6 @@
   f32.const -7.888609052210118e-31
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -25043,7 +24144,6 @@
   f32.const 1
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_log2f
   i32.eqz
   if
@@ -25057,7 +24157,6 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -25071,7 +24170,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_log2f
   i32.eqz
   if
@@ -25085,7 +24183,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_log2f
   i32.eqz
   if
@@ -25099,7 +24196,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_log2f
   i32.eqz
   if
@@ -28649,7 +27745,6 @@
   f64.const -8.06684839057968
   f64.const 4.535662560676869
   f64.const -3.531185829902812
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28663,7 +27758,6 @@
   f64.const 4.345239849338305
   f64.const -8.88799136300345
   f64.const 4.345239849338305
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28677,7 +27771,6 @@
   f64.const -8.38143342755525
   f64.const -2.763607337379588
   f64.const -0.09061141541648476
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28691,7 +27784,6 @@
   f64.const -6.531673581913484
   f64.const 4.567535276842744
   f64.const -1.9641383050707404
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28705,7 +27797,6 @@
   f64.const 9.267056966972586
   f64.const 4.811392084359796
   f64.const 4.45566488261279
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28719,7 +27810,6 @@
   f64.const -6.450045556060236
   f64.const 0.6620717923376739
   f64.const -0.4913994250211714
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28733,7 +27823,6 @@
   f64.const 7.858890253041697
   f64.const 0.05215452675006225
   f64.const 0.035711240532359426
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28747,7 +27836,6 @@
   f64.const -0.792054511984896
   f64.const 7.67640268511754
   f64.const -0.792054511984896
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28761,7 +27849,6 @@
   f64.const 0.615702673197924
   f64.const 2.0119025790324803
   f64.const 0.615702673197924
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28775,7 +27862,6 @@
   f64.const -0.5587586823609152
   f64.const 0.03223983060263804
   f64.const -0.0106815621160685
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28789,7 +27875,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28803,7 +27888,6 @@
   f64.const -0
   f64.const 1
   f64.const -0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28817,7 +27901,6 @@
   f64.const 0.5
   f64.const 1
   f64.const 0.5
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28831,7 +27914,6 @@
   f64.const -0.5
   f64.const 1
   f64.const -0.5
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28845,7 +27927,6 @@
   f64.const 1
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28859,7 +27940,6 @@
   f64.const -1
   f64.const 1
   f64.const -0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28873,7 +27953,6 @@
   f64.const 1.5
   f64.const 1
   f64.const 0.5
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28887,7 +27966,6 @@
   f64.const -1.5
   f64.const 1
   f64.const -0.5
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28901,7 +27979,6 @@
   f64.const 2
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28915,7 +27992,6 @@
   f64.const -2
   f64.const 1
   f64.const -0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28929,7 +28005,6 @@
   f64.const inf
   f64.const 1
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -28943,7 +28018,6 @@
   f64.const -inf
   f64.const 1
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -28957,7 +28031,6 @@
   f64.const nan:0x8000000000000
   f64.const 1
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28971,7 +28044,6 @@
   f64.const 0
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28985,7 +28057,6 @@
   f64.const -0
   f64.const -1
   f64.const -0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -28999,7 +28070,6 @@
   f64.const 0.5
   f64.const -1
   f64.const 0.5
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29013,7 +28083,6 @@
   f64.const -0.5
   f64.const -1
   f64.const -0.5
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29027,7 +28096,6 @@
   f64.const 1
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29041,7 +28109,6 @@
   f64.const -1
   f64.const -1
   f64.const -0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29055,7 +28122,6 @@
   f64.const 1.5
   f64.const -1
   f64.const 0.5
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29069,7 +28135,6 @@
   f64.const -1.5
   f64.const -1
   f64.const -0.5
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29083,7 +28148,6 @@
   f64.const 2
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29097,7 +28161,6 @@
   f64.const -2
   f64.const -1
   f64.const -0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29111,7 +28174,6 @@
   f64.const inf
   f64.const -1
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29125,7 +28187,6 @@
   f64.const -inf
   f64.const -1
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29139,7 +28200,6 @@
   f64.const nan:0x8000000000000
   f64.const -1
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29153,7 +28213,6 @@
   f64.const 0
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29167,7 +28226,6 @@
   f64.const 0
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29181,7 +28239,6 @@
   f64.const 0
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29195,7 +28252,6 @@
   f64.const 0
   f64.const -inf
   f64.const 0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29209,7 +28265,6 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29223,7 +28278,6 @@
   f64.const -0
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29237,7 +28291,6 @@
   f64.const -0
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29251,7 +28304,6 @@
   f64.const -0
   f64.const inf
   f64.const -0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29265,7 +28317,6 @@
   f64.const -0
   f64.const -inf
   f64.const -0
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29279,7 +28330,6 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29293,7 +28343,6 @@
   f64.const 1
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29307,7 +28356,6 @@
   f64.const -1
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29321,7 +28369,6 @@
   f64.const inf
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29335,7 +28382,6 @@
   f64.const -inf
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29349,7 +28395,6 @@
   f64.const nan:0x8000000000000
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29363,7 +28408,6 @@
   f64.const -1
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29377,7 +28421,6 @@
   f64.const inf
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29391,7 +28434,6 @@
   f64.const -inf
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29405,7 +28447,6 @@
   f64.const nan:0x8000000000000
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29419,7 +28460,6 @@
   f64.const inf
   f64.const 2
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29433,7 +28473,6 @@
   f64.const inf
   f64.const -0.5
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29447,7 +28486,6 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29461,7 +28499,6 @@
   f64.const -inf
   f64.const 2
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29475,7 +28512,6 @@
   f64.const -inf
   f64.const -0.5
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29489,7 +28525,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29503,7 +28538,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29517,7 +28551,6 @@
   f64.const 1
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29531,7 +28564,6 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29545,7 +28577,6 @@
   f64.const 1
   f64.const inf
   f64.const 1
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29559,7 +28590,6 @@
   f64.const -1
   f64.const inf
   f64.const -1
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29573,7 +28603,6 @@
   f64.const inf
   f64.const inf
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29587,7 +28616,6 @@
   f64.const -inf
   f64.const inf
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29601,7 +28629,6 @@
   f64.const 1
   f64.const -inf
   f64.const 1
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29615,7 +28642,6 @@
   f64.const -1
   f64.const -inf
   f64.const -1
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29629,7 +28655,6 @@
   f64.const inf
   f64.const -inf
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29643,7 +28668,6 @@
   f64.const -inf
   f64.const -inf
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_mod
   i32.eqz
   if
@@ -29657,7 +28681,6 @@
   f64.const 1.75
   f64.const 0.5
   f64.const 0.25
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29671,7 +28694,6 @@
   f64.const -1.75
   f64.const 0.5
   f64.const -0.25
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29685,7 +28707,6 @@
   f64.const 1.75
   f64.const -0.5
   f64.const 0.25
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29699,7 +28720,6 @@
   f64.const -1.75
   f64.const -0.5
   f64.const -0.25
-  i32.const 0
   call $std/math/test_mod
   i32.eqz
   if
@@ -29713,7 +28733,6 @@
   f32.const -8.066848754882812
   f32.const 4.535662651062012
   f32.const -3.531186103820801
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29727,7 +28746,6 @@
   f32.const 4.345239639282227
   f32.const -8.887990951538086
   f32.const 4.345239639282227
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29741,7 +28759,6 @@
   f32.const -8.381433486938477
   f32.const -2.7636072635650635
   f32.const -0.09061169624328613
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29755,7 +28772,6 @@
   f32.const -6.531673431396484
   f32.const 4.567535400390625
   f32.const -1.9641380310058594
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29769,7 +28785,6 @@
   f32.const 9.267057418823242
   f32.const 4.811392307281494
   f32.const 4.455665111541748
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29783,7 +28798,6 @@
   f32.const -6.450045585632324
   f32.const 0.6620717644691467
   f32.const -0.49139970541000366
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29797,7 +28811,6 @@
   f32.const 7.858890056610107
   f32.const 0.052154526114463806
   f32.const 0.0357111394405365
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29811,7 +28824,6 @@
   f32.const -0.7920545339584351
   f32.const 7.676402568817139
   f32.const -0.7920545339584351
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29825,7 +28837,6 @@
   f32.const 0.6157026886940002
   f32.const 2.0119025707244873
   f32.const 0.6157026886940002
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29839,7 +28850,6 @@
   f32.const -0.5587586760520935
   f32.const 0.03223983198404312
   f32.const -0.010681532323360443
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29853,7 +28863,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29867,7 +28876,6 @@
   f32.const -0
   f32.const 1
   f32.const -0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29881,7 +28889,6 @@
   f32.const 0.5
   f32.const 1
   f32.const 0.5
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29895,7 +28902,6 @@
   f32.const -0.5
   f32.const 1
   f32.const -0.5
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29909,7 +28915,6 @@
   f32.const 1
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29923,7 +28928,6 @@
   f32.const -1
   f32.const 1
   f32.const -0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29937,7 +28941,6 @@
   f32.const 1.5
   f32.const 1
   f32.const 0.5
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29951,7 +28954,6 @@
   f32.const -1.5
   f32.const 1
   f32.const -0.5
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29965,7 +28967,6 @@
   f32.const 2
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29979,7 +28980,6 @@
   f32.const -2
   f32.const 1
   f32.const -0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -29993,7 +28993,6 @@
   f32.const inf
   f32.const 1
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30007,7 +29006,6 @@
   f32.const -inf
   f32.const 1
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30021,7 +29019,6 @@
   f32.const nan:0x400000
   f32.const 1
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30035,7 +29032,6 @@
   f32.const 0
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30049,7 +29045,6 @@
   f32.const -0
   f32.const -1
   f32.const -0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30063,7 +29058,6 @@
   f32.const 0.5
   f32.const -1
   f32.const 0.5
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30077,7 +29071,6 @@
   f32.const -0.5
   f32.const -1
   f32.const -0.5
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30091,7 +29084,6 @@
   f32.const 1
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30105,7 +29097,6 @@
   f32.const -1
   f32.const -1
   f32.const -0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30119,7 +29110,6 @@
   f32.const 1.5
   f32.const -1
   f32.const 0.5
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30133,7 +29123,6 @@
   f32.const -1.5
   f32.const -1
   f32.const -0.5
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30147,7 +29136,6 @@
   f32.const 2
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30161,7 +29149,6 @@
   f32.const -2
   f32.const -1
   f32.const -0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30175,7 +29162,6 @@
   f32.const inf
   f32.const -1
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30189,7 +29175,6 @@
   f32.const -inf
   f32.const -1
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30203,7 +29188,6 @@
   f32.const nan:0x400000
   f32.const -1
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30217,7 +29201,6 @@
   f32.const 0
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30231,7 +29214,6 @@
   f32.const 0
   f32.const -0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30245,7 +29227,6 @@
   f32.const 0
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30259,7 +29240,6 @@
   f32.const 0
   f32.const -inf
   f32.const 0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30273,7 +29253,6 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30287,7 +29266,6 @@
   f32.const -0
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30301,7 +29279,6 @@
   f32.const -0
   f32.const -0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30315,7 +29292,6 @@
   f32.const -0
   f32.const inf
   f32.const -0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30329,7 +29305,6 @@
   f32.const -0
   f32.const -inf
   f32.const -0
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30343,7 +29318,6 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30357,7 +29331,6 @@
   f32.const 1
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30371,7 +29344,6 @@
   f32.const -1
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30385,7 +29357,6 @@
   f32.const inf
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30399,7 +29370,6 @@
   f32.const -inf
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30413,7 +29383,6 @@
   f32.const nan:0x400000
   f32.const 0
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30427,7 +29396,6 @@
   f32.const -1
   f32.const -0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30441,7 +29409,6 @@
   f32.const inf
   f32.const -0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30455,7 +29422,6 @@
   f32.const -inf
   f32.const -0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30469,7 +29435,6 @@
   f32.const nan:0x400000
   f32.const -0
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30483,7 +29448,6 @@
   f32.const inf
   f32.const 2
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30497,7 +29461,6 @@
   f32.const inf
   f32.const -0.5
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30511,7 +29474,6 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30525,7 +29487,6 @@
   f32.const -inf
   f32.const 2
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30539,7 +29500,6 @@
   f32.const -inf
   f32.const -0.5
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30553,7 +29513,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30567,7 +29526,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30581,7 +29539,6 @@
   f32.const 1
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30595,7 +29552,6 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30609,7 +29565,6 @@
   f32.const 1
   f32.const inf
   f32.const 1
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30623,7 +29578,6 @@
   f32.const -1
   f32.const inf
   f32.const -1
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30637,7 +29591,6 @@
   f32.const inf
   f32.const inf
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30651,7 +29604,6 @@
   f32.const -inf
   f32.const inf
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30665,7 +29617,6 @@
   f32.const 1
   f32.const -inf
   f32.const 1
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30679,7 +29630,6 @@
   f32.const -1
   f32.const -inf
   f32.const -1
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30693,7 +29643,6 @@
   f32.const inf
   f32.const -inf
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30707,7 +29656,6 @@
   f32.const -inf
   f32.const -inf
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_modf
   i32.eqz
   if
@@ -30721,7 +29669,6 @@
   f32.const 1.75
   f32.const 0.5
   f32.const 0.25
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30735,7 +29682,6 @@
   f32.const -1.75
   f32.const 0.5
   f32.const -0.25
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30749,7 +29695,6 @@
   f32.const 1.75
   f32.const -0.5
   f32.const 0.25
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30763,7 +29708,6 @@
   f32.const -1.75
   f32.const -0.5
   f32.const -0.25
-  i32.const 0
   call $std/math/test_modf
   i32.eqz
   if
@@ -30778,7 +29722,6 @@
   f64.const 4.535662560676869
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -30793,7 +29736,6 @@
   f64.const -8.88799136300345
   f64.const 2.1347118825587285e-06
   f64.const 0.3250160217285156
-  i32.const 1
   call $std/math/test_pow
   i32.eqz
   if
@@ -30808,7 +29750,6 @@
   f64.const -2.763607337379588
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -30823,7 +29764,6 @@
   f64.const 4.567535276842744
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -30838,7 +29778,6 @@
   f64.const 4.811392084359796
   f64.const 44909.29941512966
   f64.const -0.26659080386161804
-  i32.const 1
   call $std/math/test_pow
   i32.eqz
   if
@@ -30853,7 +29792,6 @@
   f64.const 0.6620717923376739
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -30868,7 +29806,6 @@
   f64.const 0.05215452675006225
   f64.const 1.1135177413458652
   f64.const -0.37168607115745544
-  i32.const 1
   call $std/math/test_pow
   i32.eqz
   if
@@ -30883,7 +29820,6 @@
   f64.const 7.67640268511754
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -30898,7 +29834,6 @@
   f64.const 2.0119025790324803
   f64.const 0.37690773521380183
   f64.const 0.32473301887512207
-  i32.const 1
   call $std/math/test_pow
   i32.eqz
   if
@@ -30913,7 +29848,6 @@
   f64.const 0.03223983060263804
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -30928,7 +29862,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -30943,7 +29876,6 @@
   f64.const inf
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -30958,7 +29890,6 @@
   f64.const 3
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -30973,7 +29904,6 @@
   f64.const 2
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -30988,7 +29918,6 @@
   f64.const 1
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31003,7 +29932,6 @@
   f64.const 0.5
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31018,7 +29946,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31033,7 +29960,6 @@
   f64.const -0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31048,7 +29974,6 @@
   f64.const -0.5
   f64.const inf
   f64.const 0
-  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -31063,7 +29988,6 @@
   f64.const -1
   f64.const inf
   f64.const 0
-  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -31078,7 +30002,6 @@
   f64.const -2
   f64.const inf
   f64.const 0
-  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -31093,7 +30016,6 @@
   f64.const -3
   f64.const inf
   f64.const 0
-  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -31108,7 +30030,6 @@
   f64.const -4
   f64.const inf
   f64.const 0
-  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -31123,7 +30044,6 @@
   f64.const -inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31138,7 +30058,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31153,7 +30072,6 @@
   f64.const inf
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31168,7 +30086,6 @@
   f64.const 3
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31183,7 +30100,6 @@
   f64.const 2
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31198,7 +30114,6 @@
   f64.const 1
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31213,7 +30128,6 @@
   f64.const 0.5
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31228,7 +30142,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31243,7 +30156,6 @@
   f64.const -0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31258,7 +30170,6 @@
   f64.const -0.5
   f64.const inf
   f64.const 0
-  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -31273,7 +30184,6 @@
   f64.const -1
   f64.const -inf
   f64.const 0
-  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -31288,7 +30198,6 @@
   f64.const -2
   f64.const inf
   f64.const 0
-  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -31303,7 +30212,6 @@
   f64.const -3
   f64.const -inf
   f64.const 0
-  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -31318,7 +30226,6 @@
   f64.const -4
   f64.const inf
   f64.const 0
-  i32.const 4
   call $std/math/test_pow
   i32.eqz
   if
@@ -31333,7 +30240,6 @@
   f64.const -inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31348,7 +30254,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31363,7 +30268,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31378,7 +30282,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31393,7 +30296,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31408,7 +30310,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31423,7 +30324,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31438,7 +30338,6 @@
   f64.const -0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31453,7 +30352,6 @@
   f64.const -0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31468,7 +30366,6 @@
   f64.const -0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31483,7 +30380,6 @@
   f64.const -0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31498,7 +30394,6 @@
   f64.const -0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31513,7 +30408,6 @@
   f64.const -0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31528,7 +30422,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31543,7 +30436,6 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31558,7 +30450,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31573,7 +30464,6 @@
   f64.const 2
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31588,7 +30478,6 @@
   f64.const -1
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31603,7 +30492,6 @@
   f64.const -2
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31618,7 +30506,6 @@
   f64.const -3
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31633,7 +30520,6 @@
   f64.const 0.5
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -31648,7 +30534,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31663,7 +30548,6 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31678,7 +30562,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31693,7 +30576,6 @@
   f64.const 3
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31708,7 +30590,6 @@
   f64.const 0.5
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31723,7 +30604,6 @@
   f64.const -0.5
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31738,7 +30618,6 @@
   f64.const -3
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31753,7 +30632,6 @@
   f64.const 0.5
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -31768,7 +30646,6 @@
   f64.const 1.5
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_pow
   i32.eqz
   if
@@ -31783,7 +30660,6 @@
   f64.const 2
   f64.const 0.25
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31798,7 +30674,6 @@
   f64.const 3
   f64.const -0.125
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31813,7 +30688,6 @@
   f64.const inf
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31828,7 +30702,6 @@
   f64.const -inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31843,7 +30716,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31858,7 +30730,6 @@
   f64.const inf
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31873,7 +30744,6 @@
   f64.const -inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31888,7 +30758,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31903,7 +30772,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31918,7 +30786,6 @@
   f64.const -inf
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31933,7 +30800,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31948,7 +30814,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31963,7 +30828,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31978,7 +30842,6 @@
   f64.const -inf
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -31993,7 +30856,6 @@
   f64.const 3
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32008,7 +30870,6 @@
   f64.const 2
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32023,7 +30884,6 @@
   f64.const 1
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32038,7 +30898,6 @@
   f64.const 0.5
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32053,7 +30912,6 @@
   f64.const -0.5
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32068,7 +30926,6 @@
   f64.const -1
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32083,7 +30940,6 @@
   f64.const -2
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32098,7 +30954,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32113,7 +30968,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32128,7 +30982,6 @@
   f64.const -inf
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32143,7 +30996,6 @@
   f64.const 3
   f64.const -inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32158,7 +31010,6 @@
   f64.const 2
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32173,7 +31024,6 @@
   f64.const 1
   f64.const -inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32188,7 +31038,6 @@
   f64.const 0.5
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32203,7 +31052,6 @@
   f64.const -0.5
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32218,7 +31066,6 @@
   f64.const -1
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32233,7 +31080,6 @@
   f64.const -2
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32248,7 +31094,6 @@
   f64.const 1
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32263,7 +31108,6 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32278,7 +31122,6 @@
   f64.const 1
   f64.const -2
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32293,7 +31136,6 @@
   f64.const -1
   f64.const -0.5
   f64.const 0
-  i32.const 0
   call $std/math/test_pow
   i32.eqz
   if
@@ -32308,7 +31150,6 @@
   f32.const 4.535662651062012
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -32323,7 +31164,6 @@
   f32.const -8.887990951538086
   f32.const 2.134714122803416e-06
   f32.const 0.1436440795660019
-  i32.const 1
   call $std/math/test_powf
   i32.eqz
   if
@@ -32338,7 +31178,6 @@
   f32.const -2.7636072635650635
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -32353,7 +31192,6 @@
   f32.const 4.567535400390625
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -32368,7 +31206,6 @@
   f32.const 4.811392307281494
   f32.const 44909.33203125
   f32.const -0.05356409028172493
-  i32.const 1
   call $std/math/test_powf
   i32.eqz
   if
@@ -32383,7 +31220,6 @@
   f32.const 0.6620717644691467
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -32398,7 +31234,6 @@
   f32.const 0.052154526114463806
   f32.const 1.1135177612304688
   f32.const 0.19122089445590973
-  i32.const 1
   call $std/math/test_powf
   i32.eqz
   if
@@ -32413,7 +31248,6 @@
   f32.const 7.676402568817139
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -32428,7 +31262,6 @@
   f32.const 2.0119025707244873
   f32.const 0.3769077658653259
   f32.const 0.337149053812027
-  i32.const 1
   call $std/math/test_powf
   i32.eqz
   if
@@ -32443,7 +31276,6 @@
   f32.const 0.03223983198404312
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -32458,7 +31290,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32473,7 +31304,6 @@
   f32.const inf
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32488,7 +31318,6 @@
   f32.const 3
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32503,7 +31332,6 @@
   f32.const 2
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32518,7 +31346,6 @@
   f32.const 1
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32533,7 +31360,6 @@
   f32.const 0.5
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32548,7 +31374,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32563,7 +31388,6 @@
   f32.const -0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32578,7 +31402,6 @@
   f32.const -0.5
   f32.const inf
   f32.const 0
-  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -32593,7 +31416,6 @@
   f32.const -1
   f32.const inf
   f32.const 0
-  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -32608,7 +31430,6 @@
   f32.const -2
   f32.const inf
   f32.const 0
-  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -32623,7 +31444,6 @@
   f32.const -3
   f32.const inf
   f32.const 0
-  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -32638,7 +31458,6 @@
   f32.const -4
   f32.const inf
   f32.const 0
-  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -32653,7 +31472,6 @@
   f32.const -inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32668,7 +31486,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32683,7 +31500,6 @@
   f32.const inf
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32698,7 +31514,6 @@
   f32.const 3
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32713,7 +31528,6 @@
   f32.const 2
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32728,7 +31542,6 @@
   f32.const 1
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32743,7 +31556,6 @@
   f32.const 0.5
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32758,7 +31570,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32773,7 +31584,6 @@
   f32.const -0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32788,7 +31598,6 @@
   f32.const -0.5
   f32.const inf
   f32.const 0
-  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -32803,7 +31612,6 @@
   f32.const -1
   f32.const -inf
   f32.const 0
-  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -32818,7 +31626,6 @@
   f32.const -2
   f32.const inf
   f32.const 0
-  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -32833,7 +31640,6 @@
   f32.const -3
   f32.const -inf
   f32.const 0
-  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -32848,7 +31654,6 @@
   f32.const -4
   f32.const inf
   f32.const 0
-  i32.const 4
   call $std/math/test_powf
   i32.eqz
   if
@@ -32863,7 +31668,6 @@
   f32.const -inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32878,7 +31682,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32893,7 +31696,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32908,7 +31710,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32923,7 +31724,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32938,7 +31738,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32953,7 +31752,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32968,7 +31766,6 @@
   f32.const -0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32983,7 +31780,6 @@
   f32.const -0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -32998,7 +31794,6 @@
   f32.const -0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33013,7 +31808,6 @@
   f32.const -0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33028,7 +31822,6 @@
   f32.const -0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33043,7 +31836,6 @@
   f32.const -0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33058,7 +31850,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33073,7 +31864,6 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33088,7 +31878,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33103,7 +31892,6 @@
   f32.const 2
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33118,7 +31906,6 @@
   f32.const -1
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33133,7 +31920,6 @@
   f32.const -2
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33148,7 +31934,6 @@
   f32.const -3
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33163,7 +31948,6 @@
   f32.const 0.5
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -33178,7 +31962,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33193,7 +31976,6 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33208,7 +31990,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33223,7 +32004,6 @@
   f32.const 3
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33238,7 +32018,6 @@
   f32.const 0.5
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33253,7 +32032,6 @@
   f32.const -0.5
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33268,7 +32046,6 @@
   f32.const -3
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33283,7 +32060,6 @@
   f32.const 0.5
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -33298,7 +32074,6 @@
   f32.const 1.5
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_powf
   i32.eqz
   if
@@ -33313,7 +32088,6 @@
   f32.const 2
   f32.const 0.25
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33328,7 +32102,6 @@
   f32.const 3
   f32.const -0.125
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33343,7 +32116,6 @@
   f32.const inf
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33358,7 +32130,6 @@
   f32.const -inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33373,7 +32144,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33388,7 +32158,6 @@
   f32.const inf
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33403,7 +32172,6 @@
   f32.const -inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33418,7 +32186,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33433,7 +32200,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33448,7 +32214,6 @@
   f32.const -inf
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33463,7 +32228,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33478,7 +32242,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33493,7 +32256,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33508,7 +32270,6 @@
   f32.const -inf
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33523,7 +32284,6 @@
   f32.const 3
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33538,7 +32298,6 @@
   f32.const 2
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33553,7 +32312,6 @@
   f32.const 1
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33568,7 +32326,6 @@
   f32.const 0.5
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33583,7 +32340,6 @@
   f32.const -0.5
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33598,7 +32354,6 @@
   f32.const -1
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33613,7 +32368,6 @@
   f32.const -2
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33628,7 +32382,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33643,7 +32396,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33658,7 +32410,6 @@
   f32.const -inf
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33673,7 +32424,6 @@
   f32.const 3
   f32.const -inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33688,7 +32438,6 @@
   f32.const 2
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33703,7 +32452,6 @@
   f32.const 1
   f32.const -inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33718,7 +32466,6 @@
   f32.const 0.5
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33733,7 +32480,6 @@
   f32.const -0.5
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33748,7 +32494,6 @@
   f32.const -1
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33763,7 +32508,6 @@
   f32.const -2
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33778,7 +32522,6 @@
   f32.const 1
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33793,7 +32536,6 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33808,7 +32550,6 @@
   f32.const 1
   f32.const -2
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33823,7 +32564,6 @@
   f32.const -1
   f32.const -0.5
   f32.const 0
-  i32.const 0
   call $std/math/test_powf
   i32.eqz
   if
@@ -33914,7 +32654,6 @@
   end
   f64.const -8.06684839057968
   f64.const -8
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -33927,7 +32666,6 @@
   end
   f64.const 4.345239849338305
   f64.const 4
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -33940,7 +32678,6 @@
   end
   f64.const -8.38143342755525
   f64.const -8
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -33953,7 +32690,6 @@
   end
   f64.const -6.531673581913484
   f64.const -7
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -33966,7 +32702,6 @@
   end
   f64.const 9.267056966972586
   f64.const 9
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -33979,7 +32714,6 @@
   end
   f64.const 0.6619858980995045
   f64.const 1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -33992,7 +32726,6 @@
   end
   f64.const -0.4066039223853553
   f64.const -0
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34005,7 +32738,6 @@
   end
   f64.const 0.5617597462207241
   f64.const 1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34018,7 +32750,6 @@
   end
   f64.const 0.7741522965913037
   f64.const 1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34031,7 +32762,6 @@
   end
   f64.const -0.6787637026394024
   f64.const -1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34044,7 +32774,6 @@
   end
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_round
   i32.eqz
   if
@@ -34057,7 +32786,6 @@
   end
   f64.const inf
   f64.const inf
-  i32.const 0
   call $std/math/test_round
   i32.eqz
   if
@@ -34070,7 +32798,6 @@
   end
   f64.const -inf
   f64.const -inf
-  i32.const 0
   call $std/math/test_round
   i32.eqz
   if
@@ -34083,7 +32810,6 @@
   end
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_round
   i32.eqz
   if
@@ -34096,7 +32822,6 @@
   end
   f64.const -0
   f64.const -0
-  i32.const 0
   call $std/math/test_round
   i32.eqz
   if
@@ -34109,7 +32834,6 @@
   end
   f64.const 1
   f64.const 1
-  i32.const 0
   call $std/math/test_round
   i32.eqz
   if
@@ -34122,7 +32846,6 @@
   end
   f64.const -1
   f64.const -1
-  i32.const 0
   call $std/math/test_round
   i32.eqz
   if
@@ -34135,7 +32858,6 @@
   end
   f64.const 0.5
   f64.const 1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34148,7 +32870,6 @@
   end
   f64.const -0.5
   f64.const -0
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34161,7 +32882,6 @@
   end
   f64.const 1.5
   f64.const 2
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34174,7 +32894,6 @@
   end
   f64.const -1.5
   f64.const -1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34187,7 +32906,6 @@
   end
   f64.const 1.0000152587890625
   f64.const 1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34200,7 +32918,6 @@
   end
   f64.const -1.0000152587890625
   f64.const -1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34213,7 +32930,6 @@
   end
   f64.const 0.9999923706054688
   f64.const 1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34226,7 +32942,6 @@
   end
   f64.const -0.9999923706054688
   f64.const -1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34239,7 +32954,6 @@
   end
   f64.const 7.888609052210118e-31
   f64.const 0
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34252,7 +32966,6 @@
   end
   f64.const -7.888609052210118e-31
   f64.const -0
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34265,7 +32978,6 @@
   end
   f32.const -8.066848754882812
   f32.const -8
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34278,7 +32990,6 @@
   end
   f32.const 4.345239639282227
   f32.const 4
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34291,7 +33002,6 @@
   end
   f32.const -8.381433486938477
   f32.const -8
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34304,7 +33014,6 @@
   end
   f32.const -6.531673431396484
   f32.const -7
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34317,7 +33026,6 @@
   end
   f32.const 9.267057418823242
   f32.const 9
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34330,7 +33038,6 @@
   end
   f32.const 0.6619858741760254
   f32.const 1
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34343,7 +33050,6 @@
   end
   f32.const -0.40660393238067627
   f32.const -0
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34356,7 +33062,6 @@
   end
   f32.const 0.5617597699165344
   f32.const 1
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34369,7 +33074,6 @@
   end
   f32.const 0.7741522789001465
   f32.const 1
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34382,7 +33086,6 @@
   end
   f32.const -0.6787636876106262
   f32.const -1
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34395,7 +33098,6 @@
   end
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34408,7 +33110,6 @@
   end
   f32.const inf
   f32.const inf
-  i32.const 0
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34421,7 +33122,6 @@
   end
   f32.const -inf
   f32.const -inf
-  i32.const 0
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34434,7 +33134,6 @@
   end
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34447,7 +33146,6 @@
   end
   f32.const -0
   f32.const -0
-  i32.const 0
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34460,7 +33158,6 @@
   end
   f32.const 1
   f32.const 1
-  i32.const 0
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34473,7 +33170,6 @@
   end
   f32.const -1
   f32.const -1
-  i32.const 0
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34486,7 +33182,6 @@
   end
   f32.const 0.5
   f32.const 1
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34499,7 +33194,6 @@
   end
   f32.const -0.5
   f32.const -0
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34512,7 +33206,6 @@
   end
   f64.const 1.5
   f64.const 2
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34525,7 +33218,6 @@
   end
   f64.const -1.5
   f64.const -1
-  i32.const 1
   call $std/math/test_round
   i32.eqz
   if
@@ -34538,7 +33230,6 @@
   end
   f32.const 1.0000152587890625
   f32.const 1
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34551,7 +33242,6 @@
   end
   f32.const -1.0000152587890625
   f32.const -1
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34564,7 +33254,6 @@
   end
   f32.const 0.9999923706054688
   f32.const 1
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34577,7 +33266,6 @@
   end
   f32.const -0.9999923706054688
   f32.const -1
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34590,7 +33278,6 @@
   end
   f32.const 7.888609052210118e-31
   f32.const 0
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34603,7 +33290,6 @@
   end
   f32.const -7.888609052210118e-31
   f32.const -0
-  i32.const 1
   call $std/math/test_roundf
   i32.eqz
   if
@@ -34833,7 +33519,6 @@
   f64.const -8.06684839057968
   f64.const 4.535662560676869
   f64.const 1.0044767307740567
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34847,7 +33532,6 @@
   f64.const 4.345239849338305
   f64.const -8.88799136300345
   f64.const 4.345239849338305
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34861,7 +33545,6 @@
   f64.const -8.38143342755525
   f64.const -2.763607337379588
   f64.const -0.09061141541648476
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34875,7 +33558,6 @@
   f64.const -6.531673581913484
   f64.const 4.567535276842744
   f64.const -1.9641383050707404
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34889,7 +33571,6 @@
   f64.const 9.267056966972586
   f64.const 4.811392084359796
   f64.const -0.35572720174700656
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34903,7 +33584,6 @@
   f64.const -6.450045556060236
   f64.const 0.6620717923376739
   f64.const 0.17067236731650248
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34917,7 +33597,6 @@
   f64.const 7.858890253041697
   f64.const 0.05215452675006225
   f64.const -0.016443286217702822
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34931,7 +33610,6 @@
   f64.const -0.792054511984896
   f64.const 7.67640268511754
   f64.const -0.792054511984896
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34945,7 +33623,6 @@
   f64.const 0.615702673197924
   f64.const 2.0119025790324803
   f64.const 0.615702673197924
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34959,7 +33636,6 @@
   f64.const -0.5587586823609152
   f64.const 0.03223983060263804
   f64.const -0.0106815621160685
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34973,7 +33649,6 @@
   f64.const 0
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -34987,7 +33662,6 @@
   f64.const -0
   f64.const 1
   f64.const -0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35001,7 +33675,6 @@
   f64.const 0.5
   f64.const 1
   f64.const 0.5
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35015,7 +33688,6 @@
   f64.const -0.5
   f64.const 1
   f64.const -0.5
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35029,7 +33701,6 @@
   f64.const 1
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35043,7 +33714,6 @@
   f64.const -1
   f64.const 1
   f64.const -0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35057,7 +33727,6 @@
   f64.const 1.5
   f64.const 1
   f64.const -0.5
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35071,7 +33740,6 @@
   f64.const -1.5
   f64.const 1
   f64.const 0.5
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35085,7 +33753,6 @@
   f64.const 2
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35099,7 +33766,6 @@
   f64.const -2
   f64.const 1
   f64.const -0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35113,7 +33779,6 @@
   f64.const inf
   f64.const 1
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35127,7 +33792,6 @@
   f64.const -inf
   f64.const 1
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35141,7 +33805,6 @@
   f64.const nan:0x8000000000000
   f64.const 1
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35155,7 +33818,6 @@
   f64.const 0
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35169,7 +33831,6 @@
   f64.const -0
   f64.const -1
   f64.const -0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35183,7 +33844,6 @@
   f64.const 0.5
   f64.const -1
   f64.const 0.5
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35197,7 +33857,6 @@
   f64.const -0.5
   f64.const -1
   f64.const -0.5
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35211,7 +33870,6 @@
   f64.const 1
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35225,7 +33883,6 @@
   f64.const -1
   f64.const -1
   f64.const -0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35239,7 +33896,6 @@
   f64.const 1.5
   f64.const -1
   f64.const -0.5
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35253,7 +33909,6 @@
   f64.const -1.5
   f64.const -1
   f64.const 0.5
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35267,7 +33922,6 @@
   f64.const 2
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35281,7 +33935,6 @@
   f64.const -2
   f64.const -1
   f64.const -0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35295,7 +33948,6 @@
   f64.const inf
   f64.const -1
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35309,7 +33961,6 @@
   f64.const -inf
   f64.const -1
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35323,7 +33974,6 @@
   f64.const nan:0x8000000000000
   f64.const -1
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35337,7 +33987,6 @@
   f64.const 0
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35351,7 +34000,6 @@
   f64.const 0
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35365,7 +34013,6 @@
   f64.const 0
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35379,7 +34026,6 @@
   f64.const 0
   f64.const -inf
   f64.const 0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35393,7 +34039,6 @@
   f64.const 0
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35407,7 +34052,6 @@
   f64.const -0
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35421,7 +34065,6 @@
   f64.const -0
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35435,7 +34078,6 @@
   f64.const -0
   f64.const inf
   f64.const -0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35449,7 +34091,6 @@
   f64.const -0
   f64.const -inf
   f64.const -0
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35463,7 +34104,6 @@
   f64.const -0
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35477,7 +34117,6 @@
   f64.const 1
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35491,7 +34130,6 @@
   f64.const -1
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35505,7 +34143,6 @@
   f64.const inf
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35519,7 +34156,6 @@
   f64.const -inf
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35533,7 +34169,6 @@
   f64.const nan:0x8000000000000
   f64.const 0
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35547,7 +34182,6 @@
   f64.const -1
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35561,7 +34195,6 @@
   f64.const inf
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35575,7 +34208,6 @@
   f64.const -inf
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35589,7 +34221,6 @@
   f64.const nan:0x8000000000000
   f64.const -0
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35603,7 +34234,6 @@
   f64.const inf
   f64.const 2
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35617,7 +34247,6 @@
   f64.const inf
   f64.const -0.5
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35631,7 +34260,6 @@
   f64.const inf
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35645,7 +34273,6 @@
   f64.const -inf
   f64.const 2
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35659,7 +34286,6 @@
   f64.const -inf
   f64.const -0.5
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35673,7 +34299,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35687,7 +34312,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35701,7 +34325,6 @@
   f64.const 1
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35715,7 +34338,6 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35729,7 +34351,6 @@
   f64.const 1
   f64.const inf
   f64.const 1
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35743,7 +34364,6 @@
   f64.const -1
   f64.const inf
   f64.const -1
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35757,7 +34377,6 @@
   f64.const inf
   f64.const inf
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35771,7 +34390,6 @@
   f64.const -inf
   f64.const inf
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35785,7 +34403,6 @@
   f64.const 1
   f64.const -inf
   f64.const 1
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35799,7 +34416,6 @@
   f64.const -1
   f64.const -inf
   f64.const -1
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35813,7 +34429,6 @@
   f64.const inf
   f64.const -inf
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35827,7 +34442,6 @@
   f64.const -inf
   f64.const -inf
   f64.const nan:0x8000000000000
-  i32.const 2
   call $std/math/test_rem
   i32.eqz
   if
@@ -35841,7 +34455,6 @@
   f64.const 1.75
   f64.const 0.5
   f64.const -0.25
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35855,7 +34468,6 @@
   f64.const -1.75
   f64.const 0.5
   f64.const 0.25
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35869,7 +34481,6 @@
   f64.const 1.75
   f64.const -0.5
   f64.const -0.25
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35883,7 +34494,6 @@
   f64.const -1.75
   f64.const -0.5
   f64.const 0.25
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35897,7 +34507,6 @@
   f64.const 8e-323
   f64.const inf
   f64.const 8e-323
-  i32.const 0
   call $std/math/test_rem
   i32.eqz
   if
@@ -35911,7 +34520,6 @@
   f32.const -8.066848754882812
   f32.const 4.535662651062012
   f32.const 1.004476547241211
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -35925,7 +34533,6 @@
   f32.const 4.345239639282227
   f32.const -8.887990951538086
   f32.const 4.345239639282227
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -35939,7 +34546,6 @@
   f32.const -8.381433486938477
   f32.const -2.7636072635650635
   f32.const -0.09061169624328613
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -35953,7 +34559,6 @@
   f32.const -6.531673431396484
   f32.const 4.567535400390625
   f32.const -1.9641380310058594
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -35967,7 +34572,6 @@
   f32.const 9.267057418823242
   f32.const 4.811392307281494
   f32.const -0.3557271957397461
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -35981,7 +34585,6 @@
   f32.const -6.450045585632324
   f32.const 0.6620717644691467
   f32.const 0.17067205905914307
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -35995,7 +34598,6 @@
   f32.const 7.858890056610107
   f32.const 0.052154526114463806
   f32.const -0.016443386673927307
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36009,7 +34611,6 @@
   f32.const -0.7920545339584351
   f32.const 7.676402568817139
   f32.const -0.7920545339584351
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36023,7 +34624,6 @@
   f32.const 0.6157026886940002
   f32.const 2.0119025707244873
   f32.const 0.6157026886940002
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36037,7 +34637,6 @@
   f32.const -0.5587586760520935
   f32.const 0.03223983198404312
   f32.const -0.010681532323360443
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36051,7 +34650,6 @@
   f32.const 0
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36065,7 +34663,6 @@
   f32.const -0
   f32.const 1
   f32.const -0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36079,7 +34676,6 @@
   f32.const 0.5
   f32.const 1
   f32.const 0.5
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36093,7 +34689,6 @@
   f32.const -0.5
   f32.const 1
   f32.const -0.5
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36107,7 +34702,6 @@
   f32.const 1
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36121,7 +34715,6 @@
   f32.const -1
   f32.const 1
   f32.const -0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36135,7 +34728,6 @@
   f32.const 1.5
   f32.const 1
   f32.const -0.5
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36149,7 +34741,6 @@
   f32.const -1.5
   f32.const 1
   f32.const 0.5
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36163,7 +34754,6 @@
   f32.const 2
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36177,7 +34767,6 @@
   f32.const -2
   f32.const 1
   f32.const -0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36191,7 +34780,6 @@
   f32.const inf
   f32.const 1
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36205,7 +34793,6 @@
   f32.const -inf
   f32.const 1
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36219,7 +34806,6 @@
   f32.const nan:0x400000
   f32.const 1
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36233,7 +34819,6 @@
   f32.const 0
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36247,7 +34832,6 @@
   f32.const -0
   f32.const -1
   f32.const -0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36261,7 +34845,6 @@
   f32.const 0.5
   f32.const -1
   f32.const 0.5
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36275,7 +34858,6 @@
   f32.const -0.5
   f32.const -1
   f32.const -0.5
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36289,7 +34871,6 @@
   f32.const 1
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36303,7 +34884,6 @@
   f32.const -1
   f32.const -1
   f32.const -0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36317,7 +34897,6 @@
   f32.const 1.5
   f32.const -1
   f32.const -0.5
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36331,7 +34910,6 @@
   f32.const -1.5
   f32.const -1
   f32.const 0.5
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36345,7 +34923,6 @@
   f32.const 2
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36359,7 +34936,6 @@
   f32.const -2
   f32.const -1
   f32.const -0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36373,7 +34949,6 @@
   f32.const inf
   f32.const -1
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36387,7 +34962,6 @@
   f32.const -inf
   f32.const -1
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36401,7 +34975,6 @@
   f32.const nan:0x400000
   f32.const -1
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36415,7 +34988,6 @@
   f32.const 0
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36429,7 +35001,6 @@
   f32.const 0
   f32.const -0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36443,7 +35014,6 @@
   f32.const 0
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36457,7 +35027,6 @@
   f32.const 0
   f32.const -inf
   f32.const 0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36471,7 +35040,6 @@
   f32.const 0
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36485,7 +35053,6 @@
   f32.const -0
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36499,7 +35066,6 @@
   f32.const -0
   f32.const -0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36513,7 +35079,6 @@
   f32.const -0
   f32.const inf
   f32.const -0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36527,7 +35092,6 @@
   f32.const -0
   f32.const -inf
   f32.const -0
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36541,7 +35105,6 @@
   f32.const -0
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36555,7 +35118,6 @@
   f32.const 1
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36569,7 +35131,6 @@
   f32.const -1
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36583,7 +35144,6 @@
   f32.const inf
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36597,7 +35157,6 @@
   f32.const -inf
   f32.const 0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36611,7 +35170,6 @@
   f32.const nan:0x400000
   f32.const 0
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36625,7 +35183,6 @@
   f32.const -1
   f32.const -0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36639,7 +35196,6 @@
   f32.const inf
   f32.const -0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36653,7 +35209,6 @@
   f32.const -inf
   f32.const -0
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36667,7 +35222,6 @@
   f32.const nan:0x400000
   f32.const -0
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36681,7 +35235,6 @@
   f32.const inf
   f32.const 2
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36695,7 +35248,6 @@
   f32.const inf
   f32.const -0.5
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36709,7 +35261,6 @@
   f32.const inf
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36723,7 +35274,6 @@
   f32.const -inf
   f32.const 2
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36737,7 +35287,6 @@
   f32.const -inf
   f32.const -0.5
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36751,7 +35300,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36765,7 +35313,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36779,7 +35326,6 @@
   f32.const 1
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36793,7 +35339,6 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36807,7 +35352,6 @@
   f32.const 1
   f32.const inf
   f32.const 1
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36821,7 +35365,6 @@
   f32.const -1
   f32.const inf
   f32.const -1
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36835,7 +35378,6 @@
   f32.const inf
   f32.const inf
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36849,7 +35391,6 @@
   f32.const -inf
   f32.const inf
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36863,7 +35404,6 @@
   f32.const 1
   f32.const -inf
   f32.const 1
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36877,7 +35417,6 @@
   f32.const -1
   f32.const -inf
   f32.const -1
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36891,7 +35430,6 @@
   f32.const inf
   f32.const -inf
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36905,7 +35443,6 @@
   f32.const -inf
   f32.const -inf
   f32.const nan:0x400000
-  i32.const 2
   call $std/math/test_remf
   i32.eqz
   if
@@ -36919,7 +35456,6 @@
   f32.const 1.75
   f32.const 0.5
   f32.const -0.25
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36933,7 +35469,6 @@
   f32.const -1.75
   f32.const 0.5
   f32.const 0.25
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36947,7 +35482,6 @@
   f32.const 1.75
   f32.const -0.5
   f32.const -0.25
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36961,7 +35495,6 @@
   f32.const -1.75
   f32.const -0.5
   f32.const 0.25
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -36975,7 +35508,6 @@
   f32.const 5.877471754111438e-39
   f32.const inf
   f32.const 5.877471754111438e-39
-  i32.const 0
   call $std/math/test_remf
   i32.eqz
   if
@@ -37927,7 +36459,6 @@
   f64.const -8.06684839057968
   f64.const -1593.5206801156262
   f64.const -0.2138727605342865
-  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -37941,7 +36472,6 @@
   f64.const 4.345239849338305
   f64.const 38.54878088685412
   f64.const 0.21537430584430695
-  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -37955,7 +36485,6 @@
   f64.const -8.38143342755525
   f64.const -2182.6307505145546
   f64.const 0.16213826835155487
-  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -37969,7 +36498,6 @@
   f64.const -6.531673581913484
   f64.const -343.2723926847529
   f64.const 0.20479513704776764
-  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -37983,7 +36511,6 @@
   f64.const 9.267056966972586
   f64.const 5291.7790755194055
   f64.const -0.48676517605781555
-  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -37997,7 +36524,6 @@
   f64.const 0.6619858980995045
   f64.const 0.7114062568229157
   f64.const -0.4584641456604004
-  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -38011,7 +36537,6 @@
   f64.const -0.4066039223853553
   f64.const -0.41790065258739445
   f64.const 0.37220045924186707
-  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -38025,7 +36550,6 @@
   f64.const 0.5617597462207241
   f64.const 0.5917755935451237
   f64.const 0.46178996562957764
-  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -38039,7 +36563,6 @@
   f64.const 0.7741522965913037
   f64.const 0.8538292008852542
   f64.const -0.07019051909446716
-  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -38053,7 +36576,6 @@
   f64.const -0.6787637026394024
   f64.const -0.732097615653169
   f64.const 0.26858529448509216
-  i32.const 1
   call $std/math/test_sinh
   i32.eqz
   if
@@ -38067,7 +36589,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_sinh
   i32.eqz
   if
@@ -38081,7 +36602,6 @@
   f64.const -0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_sinh
   i32.eqz
   if
@@ -38095,7 +36615,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_sinh
   i32.eqz
   if
@@ -38109,7 +36628,6 @@
   f64.const -inf
   f64.const -inf
   f64.const 0
-  i32.const 0
   call $std/math/test_sinh
   i32.eqz
   if
@@ -38123,7 +36641,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_sinh
   i32.eqz
   if
@@ -38137,7 +36654,6 @@
   f32.const -8.066848754882812
   f32.const -1593.521240234375
   f32.const 0.1671663224697113
-  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38151,7 +36667,6 @@
   f32.const 4.345239639282227
   f32.const 38.548770904541016
   f32.const -0.49340328574180603
-  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38165,7 +36680,6 @@
   f32.const -8.381433486938477
   f32.const -2182.630859375
   f32.const 0.0849970355629921
-  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38179,7 +36693,6 @@
   f32.const -6.531673431396484
   f32.const -343.2723388671875
   f32.const 0.0704190656542778
-  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38193,7 +36706,6 @@
   f32.const 9.267057418823242
   f32.const 5291.78125
   f32.const -0.44362515211105347
-  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38207,7 +36719,6 @@
   f32.const 0.6619858741760254
   f32.const 0.7114062309265137
   f32.const 0.058103885501623154
-  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38221,7 +36732,6 @@
   f32.const -0.40660393238067627
   f32.const -0.4179006516933441
   f32.const 0.39349499344825745
-  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38235,7 +36745,6 @@
   f32.const 0.5617597699165344
   f32.const 0.5917755961418152
   f32.const -0.4183797240257263
-  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38249,7 +36758,6 @@
   f32.const 0.7741522789001465
   f32.const 0.8538292050361633
   f32.const 0.45992106199264526
-  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38263,7 +36771,6 @@
   f32.const -0.6787636876106262
   f32.const -0.7320976257324219
   f32.const -0.48159059882164
-  i32.const 1
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38277,7 +36784,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38291,7 +36797,6 @@
   f32.const -0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38305,7 +36810,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38319,7 +36823,6 @@
   f32.const -inf
   f32.const -inf
   f32.const 0
-  i32.const 0
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38333,7 +36836,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_sinhf
   i32.eqz
   if
@@ -38347,7 +36849,6 @@
   f64.const -8.06684839057968
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38361,7 +36862,6 @@
   f64.const 4.345239849338305
   f64.const 2.0845238903256313
   f64.const -0.07180261611938477
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38375,7 +36875,6 @@
   f64.const -8.38143342755525
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38389,7 +36888,6 @@
   f64.const -6.531673581913484
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38403,7 +36901,6 @@
   f64.const 9.267056966972586
   f64.const 3.0441841217266385
   f64.const -0.01546262577176094
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38417,7 +36914,6 @@
   f64.const 0.6619858980995045
   f64.const 0.8136251582267503
   f64.const -0.08618157356977463
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38431,7 +36927,6 @@
   f64.const -0.4066039223853553
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38445,7 +36940,6 @@
   f64.const 0.5617597462207241
   f64.const 0.7495063350104014
   f64.const -0.0981396734714508
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38459,7 +36953,6 @@
   f64.const 0.7741522965913037
   f64.const 0.879859248170583
   f64.const -0.37124353647232056
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38473,7 +36966,6 @@
   f64.const -0.6787637026394024
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38487,7 +36979,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38501,7 +36992,6 @@
   f64.const inf
   f64.const inf
   f64.const 0
-  i32.const 0
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38515,7 +37005,6 @@
   f64.const -inf
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38529,7 +37018,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38543,7 +37031,6 @@
   f64.const -0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38557,7 +37044,6 @@
   f64.const 1
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38571,7 +37057,6 @@
   f64.const -1
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38585,7 +37070,6 @@
   f64.const 4
   f64.const 2
   f64.const 0
-  i32.const 0
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38599,7 +37083,6 @@
   f64.const 1e-323
   f64.const 3.1434555694052576e-162
   f64.const 0.43537619709968567
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38613,7 +37096,6 @@
   f64.const 1.5e-323
   f64.const 3.849931087076416e-162
   f64.const -0.45194002985954285
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38627,7 +37109,6 @@
   f64.const 5e-324
   f64.const 2.2227587494850775e-162
   f64.const 0
-  i32.const 0
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38641,7 +37122,6 @@
   f64.const -5e-324
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38655,7 +37135,6 @@
   f64.const 0.9999999999999999
   f64.const 0.9999999999999999
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38669,7 +37148,6 @@
   f64.const 1.9999999999999998
   f64.const 1.414213562373095
   f64.const -0.21107041835784912
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38683,7 +37161,6 @@
   f64.const 1.0000000000000002
   f64.const 1
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38697,7 +37174,6 @@
   f64.const 2.0000000000000004
   f64.const 1.4142135623730951
   f64.const -0.27173060178756714
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38711,7 +37187,6 @@
   f64.const 1.0000000000000002
   f64.const 1
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38725,7 +37200,6 @@
   f64.const 0.9999999999999999
   f64.const 0.9999999999999999
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38739,7 +37213,6 @@
   f64.const -1797693134862315708145274e284
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 2
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38753,7 +37226,6 @@
   f64.const 1797693134862315708145274e284
   f64.const 1340780792994259561100831e130
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38767,7 +37239,6 @@
   f64.const 179769313486231490980915e285
   f64.const 134078079299425926338769e131
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38781,7 +37252,6 @@
   f64.const 1797693134862314111473026e284
   f64.const 1340780792994258965674548e130
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38795,7 +37265,6 @@
   f64.const 1797693134862313313136902e284
   f64.const 1340780792994258667961407e130
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38809,7 +37278,6 @@
   f64.const 1797693134862312514800778e284
   f64.const 1340780792994258370248265e130
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38823,7 +37291,6 @@
   f64.const 1797693134862311716464655e284
   f64.const 1340780792994258072535124e130
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38837,7 +37304,6 @@
   f64.const 1797693134862310918128531e284
   f64.const 1340780792994257774821982e130
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38851,7 +37317,6 @@
   f64.const 1797693134862310119792407e284
   f64.const 1340780792994257477108841e130
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38865,7 +37330,6 @@
   f64.const 1797693134862309321456283e284
   f64.const 1340780792994257179395699e130
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38879,7 +37343,6 @@
   f64.const 1797693134862308523120159e284
   f64.const 1340780792994256881682558e130
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38893,7 +37356,6 @@
   f64.const 1797693134862307724784036e284
   f64.const 1340780792994256583969417e130
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38907,7 +37369,6 @@
   f64.const 2.225073858507203e-308
   f64.const 1.4916681462400417e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38921,7 +37382,6 @@
   f64.const 2.225073858507205e-308
   f64.const 1.4916681462400423e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38935,7 +37395,6 @@
   f64.const 2.225073858507207e-308
   f64.const 1.491668146240043e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38949,7 +37408,6 @@
   f64.const 2.225073858507209e-308
   f64.const 1.4916681462400437e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38963,7 +37421,6 @@
   f64.const 2.225073858507211e-308
   f64.const 1.4916681462400443e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38977,7 +37434,6 @@
   f64.const 2.2250738585072127e-308
   f64.const 1.491668146240045e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -38991,7 +37447,6 @@
   f64.const 2.2250738585072147e-308
   f64.const 1.4916681462400457e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39005,7 +37460,6 @@
   f64.const 2.2250738585072167e-308
   f64.const 1.4916681462400463e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39019,7 +37473,6 @@
   f64.const 2.2250738585072187e-308
   f64.const 1.491668146240047e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39033,7 +37486,6 @@
   f64.const 2.2250738585072207e-308
   f64.const 1.4916681462400476e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39047,7 +37499,6 @@
   f64.const 2.2250738585072226e-308
   f64.const 1.4916681462400483e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39061,7 +37512,6 @@
   f64.const 2.2250738585072246e-308
   f64.const 1.491668146240049e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39075,7 +37525,6 @@
   f64.const 2.2250738585072266e-308
   f64.const 1.4916681462400496e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39089,7 +37538,6 @@
   f64.const 2.2250738585072286e-308
   f64.const 1.4916681462400503e-154
   f64.const -0.5
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39103,7 +37551,6 @@
   f64.const 92.35130391890645
   f64.const 9.609958580499006
   f64.const 0.4998137056827545
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39117,7 +37564,6 @@
   f64.const 93.3599596388916
   f64.const 9.662295774757238
   f64.const -0.49979978799819946
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39131,7 +37577,6 @@
   f64.const 95.42049628886124
   f64.const 9.76834153215689
   f64.const -0.49997270107269287
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39145,7 +37590,6 @@
   f64.const 95.87916941885449
   f64.const 9.791790919890728
   f64.const 0.4998766779899597
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39159,7 +37603,6 @@
   f64.const 96.84804174884022
   f64.const 9.841140266698785
   f64.const 0.499801903963089
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39173,7 +37616,6 @@
   f64.const 97.43639050883155
   f64.const 9.87098731175517
   f64.const 0.4997696280479431
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39187,7 +37629,6 @@
   f64.const 97.50957979883047
   f64.const 9.874693909120955
   f64.const 0.49999818205833435
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39201,7 +37642,6 @@
   f64.const 97.80496893882612
   f64.const 9.88963947466368
   f64.const -0.4999580681324005
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39215,7 +37655,6 @@
   f64.const 98.2751822888192
   f64.const 9.913383997849534
   f64.const 0.49979931116104126
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39229,7 +37668,6 @@
   f64.const 99.47293564880155
   f64.const 9.973611966023219
   f64.const -0.4999540448188782
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39243,7 +37681,6 @@
   f64.const 100.57047130878539
   f64.const 10.028483001370914
   f64.const -0.49996453523635864
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39257,7 +37694,6 @@
   f64.const 100.60954608878481
   f64.const 10.030431002144665
   f64.const 0.49975672364234924
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39271,7 +37707,6 @@
   f64.const 100.67909109878379
   f64.const 10.033897104255344
   f64.const -0.4997771382331848
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39285,7 +37720,6 @@
   f64.const 101.12268095877725
   f64.const 10.055977374615422
   f64.const 0.49988678097724915
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39299,7 +37733,6 @@
   f64.const 101.3027691287746
   f64.const 10.064927676281366
   f64.const 0.4999105632305145
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39313,7 +37746,6 @@
   f64.const 2.45932313565507e-307
   f64.const 4.9591563149945874e-154
   f64.const -0.4998999834060669
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39327,7 +37759,6 @@
   f64.const 5.610957305180409e-307
   f64.const 7.490632353266584e-154
   f64.const -0.4999343752861023
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39341,7 +37772,6 @@
   f64.const 5.8073887977408524e-307
   f64.const 7.62062254526548e-154
   f64.const -0.49989569187164307
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39355,7 +37785,6 @@
   f64.const 7.026137080471427e-307
   f64.const 8.382205605013174e-154
   f64.const 0.49980640411376953
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39369,7 +37798,6 @@
   f64.const 8.438697769194972e-307
   f64.const 9.186238495268328e-154
   f64.const -0.4999065697193146
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39383,7 +37811,6 @@
   f64.const 1.1607792515836795e-306
   f64.const 1.0773946591586944e-153
   f64.const -0.49997684359550476
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39397,7 +37824,6 @@
   f64.const 1.2827413827423193e-306
   f64.const 1.1325817333606962e-153
   f64.const -0.4999513030052185
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39411,7 +37837,6 @@
   f64.const 1.7116604596087457e-306
   f64.const 1.3083044216117078e-153
   f64.const -0.49986395239830017
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39425,7 +37850,6 @@
   f64.const 2.038173251686994e-306
   f64.const 1.4276460526639628e-153
   f64.const 0.4998403787612915
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39439,7 +37863,6 @@
   f64.const 2.171572060856931e-306
   f64.const 1.4736254818836879e-153
   f64.const 0.4999290406703949
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39453,7 +37876,6 @@
   f64.const 2.4681399631804094e-306
   f64.const 1.5710314965589996e-153
   f64.const 0.49989044666290283
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39467,7 +37889,6 @@
   f64.const 2.5175533964200588e-306
   f64.const 1.5866799918131124e-153
   f64.const -0.4997701048851013
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39481,7 +37902,6 @@
   f64.const 2.6461505468829625e-306
   f64.const 1.6266992797941982e-153
   f64.const 0.4998672902584076
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39495,7 +37915,6 @@
   f64.const 3.8167076367720413e-306
   f64.const 1.9536395872248397e-153
   f64.const 0.49983471632003784
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39509,7 +37928,6 @@
   f64.const 4.5743220778562766e-306
   f64.const 2.1387664851161936e-153
   f64.const 0.49985939264297485
-  i32.const 1
   call $std/math/test_sqrt
   i32.eqz
   if
@@ -39523,7 +37941,6 @@
   f32.const -8.066848754882812
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39537,7 +37954,6 @@
   f32.const 4.345239639282227
   f32.const 2.084523916244507
   f32.const 0.3200402557849884
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39551,7 +37967,6 @@
   f32.const -8.381433486938477
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39565,7 +37980,6 @@
   f32.const -6.531673431396484
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39579,7 +37993,6 @@
   f32.const 9.267057418823242
   f32.const 3.0441842079162598
   f32.const 0.05022354796528816
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39593,7 +38006,6 @@
   f32.const 0.6619858741760254
   f32.const 0.813625156879425
   f32.const 0.2240506112575531
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39607,7 +38019,6 @@
   f32.const -0.40660393238067627
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39621,7 +38032,6 @@
   f32.const 0.5617597699165344
   f32.const 0.7495063543319702
   f32.const 0.05895441770553589
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39635,7 +38045,6 @@
   f32.const 0.7741522789001465
   f32.const 0.879859209060669
   f32.const -0.4874873757362366
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39649,7 +38058,6 @@
   f32.const -0.6787636876106262
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39663,7 +38071,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39677,7 +38084,6 @@
   f32.const inf
   f32.const inf
   f32.const 0
-  i32.const 0
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39691,7 +38097,6 @@
   f32.const -inf
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39705,7 +38110,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39719,7 +38123,6 @@
   f32.const -0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39733,7 +38136,6 @@
   f32.const 1
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39747,7 +38149,6 @@
   f32.const -1
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39761,7 +38162,6 @@
   f32.const 4
   f32.const 2
   f32.const 0
-  i32.const 0
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39775,7 +38175,6 @@
   f32.const 2.802596928649634e-45
   f32.const 5.293955920339377e-23
   f32.const 0
-  i32.const 0
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39789,7 +38188,6 @@
   f32.const 4.203895392974451e-45
   f32.const 6.483745598763743e-23
   f32.const 0.37388554215431213
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39803,7 +38201,6 @@
   f32.const 1.401298464324817e-45
   f32.const 3.743392066509216e-23
   f32.const -0.20303145051002502
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39817,7 +38214,6 @@
   f32.const -1.401298464324817e-45
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39831,7 +38227,6 @@
   f32.const 3402823466385288598117041e14
   f32.const 18446742974197923840
   f32.const -0.5
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39845,7 +38240,6 @@
   f32.const -3402823466385288598117041e14
   f32.const nan:0x400000
   f32.const 0
-  i32.const 2
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39859,7 +38253,6 @@
   f32.const 0.9999998807907104
   f32.const 0.9999999403953552
   f32.const 2.980232594040899e-08
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39873,7 +38266,6 @@
   f32.const 0.9999999403953552
   f32.const 0.9999999403953552
   f32.const -0.5
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39887,7 +38279,6 @@
   f32.const 1.999999761581421
   f32.const 1.4142134189605713
   f32.const -0.4959246516227722
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39901,7 +38292,6 @@
   f32.const 1.9999998807907104
   f32.const 1.4142135381698608
   f32.const 0.15052194893360138
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39915,7 +38305,6 @@
   f32.const 1.0000001192092896
   f32.const 1
   f32.const -0.5
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39929,7 +38318,6 @@
   f32.const 1.000000238418579
   f32.const 1.0000001192092896
   f32.const 5.960463766996327e-08
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39943,7 +38331,6 @@
   f32.const 2.000000238418579
   f32.const 1.4142136573791504
   f32.const 0.08986179530620575
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -39957,7 +38344,6 @@
   f32.const 2.000000476837158
   f32.const 1.41421377658844
   f32.const 0.3827550709247589
-  i32.const 1
   call $std/math/test_sqrtf
   i32.eqz
   if
@@ -40685,7 +39071,6 @@
   f64.const -8.06684839057968
   f64.const -0.999999803096032
   f64.const 0.012793331407010555
-  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40699,7 +39084,6 @@
   f64.const 4.345239849338305
   f64.const 0.9996636978961307
   f64.const 0.1573508232831955
-  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40713,7 +39097,6 @@
   f64.const -8.38143342755525
   f64.const -0.9999998950434862
   f64.const 0.27985066175460815
-  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40727,7 +39110,6 @@
   f64.const -6.531673581913484
   f64.const -0.9999957568392429
   f64.const -0.44285574555397034
-  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40741,7 +39123,6 @@
   f64.const 9.267056966972586
   f64.const 0.9999999821447234
   f64.const 0.4462755024433136
-  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40755,7 +39136,6 @@
   f64.const 0.6619858980995045
   f64.const 0.5796835018635275
   f64.const 0.4892043173313141
-  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40769,7 +39149,6 @@
   f64.const -0.4066039223853553
   f64.const -0.3855853099901652
   f64.const 0.35993871092796326
-  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40783,7 +39162,6 @@
   f64.const 0.5617597462207241
   f64.const 0.5092819248700439
   f64.const -0.39436522126197815
-  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40797,7 +39175,6 @@
   f64.const 0.7741522965913037
   f64.const 0.6493374550318555
   f64.const -0.4899396002292633
-  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40811,7 +39188,6 @@
   f64.const -0.6787637026394024
   f64.const -0.590715084799841
   f64.const -0.0145387789234519
-  i32.const 1
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40825,7 +39201,6 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40839,7 +39214,6 @@
   f64.const -0
   f64.const -0
   f64.const 0
-  i32.const 0
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40853,7 +39227,6 @@
   f64.const inf
   f64.const 1
   f64.const 0
-  i32.const 0
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40867,7 +39240,6 @@
   f64.const -inf
   f64.const -1
   f64.const 0
-  i32.const 0
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40881,7 +39253,6 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.const 0
-  i32.const 0
   call $std/math/test_tanh
   i32.eqz
   if
@@ -40895,7 +39266,6 @@
   f32.const -8.066848754882812
   f32.const -0.9999998211860657
   f32.const -0.3034979999065399
-  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -40909,7 +39279,6 @@
   f32.const 4.345239639282227
   f32.const 0.9996637105941772
   f32.const 0.2154078334569931
-  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -40923,7 +39292,6 @@
   f32.const -8.381433486938477
   f32.const -0.9999998807907104
   f32.const 0.23912210762500763
-  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -40937,7 +39305,6 @@
   f32.const -6.531673431396484
   f32.const -0.999995768070221
   f32.const -0.18844597041606903
-  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -40951,7 +39318,6 @@
   f32.const 9.267057418823242
   f32.const 1
   f32.const 0.1497807800769806
-  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -40965,7 +39331,6 @@
   f32.const 0.6619858741760254
   f32.const 0.5796834826469421
   f32.const -0.05590476095676422
-  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -40979,7 +39344,6 @@
   f32.const -0.40660393238067627
   f32.const -0.38558530807495117
   f32.const 0.349787175655365
-  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -40993,7 +39357,6 @@
   f32.const 0.5617597699165344
   f32.const 0.5092819333076477
   f32.const -0.1528785079717636
-  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -41007,7 +39370,6 @@
   f32.const 0.7741522789001465
   f32.const 0.6493374705314636
   f32.const 0.4317026138305664
-  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -41021,7 +39383,6 @@
   f32.const -0.6787636876106262
   f32.const -0.5907150506973267
   f32.const 0.4079873859882355
-  i32.const 1
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -41035,7 +39396,6 @@
   f32.const 0
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -41049,7 +39409,6 @@
   f32.const -0
   f32.const -0
   f32.const 0
-  i32.const 0
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -41063,7 +39422,6 @@
   f32.const inf
   f32.const 1
   f32.const 0
-  i32.const 0
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -41077,7 +39435,6 @@
   f32.const -inf
   f32.const -1
   f32.const 0
-  i32.const 0
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -41091,7 +39448,6 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   f32.const 0
-  i32.const 0
   call $std/math/test_tanhf
   i32.eqz
   if
@@ -41104,7 +39460,6 @@
   end
   f64.const -8.06684839057968
   f64.const -8
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41117,7 +39472,6 @@
   end
   f64.const 4.345239849338305
   f64.const 4
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41130,7 +39484,6 @@
   end
   f64.const -8.38143342755525
   f64.const -8
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41143,7 +39496,6 @@
   end
   f64.const -6.531673581913484
   f64.const -6
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41156,7 +39508,6 @@
   end
   f64.const 9.267056966972586
   f64.const 9
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41169,7 +39520,6 @@
   end
   f64.const 0.6619858980995045
   f64.const 0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41182,7 +39532,6 @@
   end
   f64.const -0.4066039223853553
   f64.const -0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41195,7 +39544,6 @@
   end
   f64.const 0.5617597462207241
   f64.const 0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41208,7 +39556,6 @@
   end
   f64.const 0.7741522965913037
   f64.const 0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41221,7 +39568,6 @@
   end
   f64.const -0.6787637026394024
   f64.const -0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41234,7 +39580,6 @@
   end
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  i32.const 0
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41247,7 +39592,6 @@
   end
   f64.const inf
   f64.const inf
-  i32.const 0
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41260,7 +39604,6 @@
   end
   f64.const -inf
   f64.const -inf
-  i32.const 0
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41273,7 +39616,6 @@
   end
   f64.const 0
   f64.const 0
-  i32.const 0
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41286,7 +39628,6 @@
   end
   f64.const -0
   f64.const -0
-  i32.const 0
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41299,7 +39640,6 @@
   end
   f64.const 1
   f64.const 1
-  i32.const 0
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41312,7 +39652,6 @@
   end
   f64.const -1
   f64.const -1
-  i32.const 0
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41325,7 +39664,6 @@
   end
   f64.const 0.5
   f64.const 0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41338,7 +39676,6 @@
   end
   f64.const -0.5
   f64.const -0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41351,7 +39688,6 @@
   end
   f64.const 1.0000152587890625
   f64.const 1
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41364,7 +39700,6 @@
   end
   f64.const -1.0000152587890625
   f64.const -1
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41377,7 +39712,6 @@
   end
   f64.const 0.9999923706054688
   f64.const 0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41390,7 +39724,6 @@
   end
   f64.const -0.9999923706054688
   f64.const -0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41403,7 +39736,6 @@
   end
   f64.const 7.888609052210118e-31
   f64.const 0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41416,7 +39748,6 @@
   end
   f64.const -7.888609052210118e-31
   f64.const -0
-  i32.const 1
   call $std/math/test_trunc
   i32.eqz
   if
@@ -41429,7 +39760,6 @@
   end
   f32.const -8.066848754882812
   f32.const -8
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41442,7 +39772,6 @@
   end
   f32.const 4.345239639282227
   f32.const 4
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41455,7 +39784,6 @@
   end
   f32.const -8.381433486938477
   f32.const -8
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41468,7 +39796,6 @@
   end
   f32.const -6.531673431396484
   f32.const -6
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41481,7 +39808,6 @@
   end
   f32.const 9.267057418823242
   f32.const 9
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41494,7 +39820,6 @@
   end
   f32.const 0.6619858741760254
   f32.const 0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41507,7 +39832,6 @@
   end
   f32.const -0.40660393238067627
   f32.const -0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41520,7 +39844,6 @@
   end
   f32.const 0.5617597699165344
   f32.const 0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41533,7 +39856,6 @@
   end
   f32.const 0.7741522789001465
   f32.const 0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41546,7 +39868,6 @@
   end
   f32.const -0.6787636876106262
   f32.const -0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41559,7 +39880,6 @@
   end
   f32.const nan:0x400000
   f32.const nan:0x400000
-  i32.const 0
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41572,7 +39892,6 @@
   end
   f32.const inf
   f32.const inf
-  i32.const 0
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41585,7 +39904,6 @@
   end
   f32.const -inf
   f32.const -inf
-  i32.const 0
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41598,7 +39916,6 @@
   end
   f32.const 0
   f32.const 0
-  i32.const 0
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41611,7 +39928,6 @@
   end
   f32.const -0
   f32.const -0
-  i32.const 0
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41624,7 +39940,6 @@
   end
   f32.const 1
   f32.const 1
-  i32.const 0
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41637,7 +39952,6 @@
   end
   f32.const -1
   f32.const -1
-  i32.const 0
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41650,7 +39964,6 @@
   end
   f32.const 0.5
   f32.const 0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41663,7 +39976,6 @@
   end
   f32.const -0.5
   f32.const -0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41676,7 +39988,6 @@
   end
   f32.const 1.0000152587890625
   f32.const 1
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41689,7 +40000,6 @@
   end
   f32.const -1.0000152587890625
   f32.const -1
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41702,7 +40012,6 @@
   end
   f32.const 0.9999923706054688
   f32.const 0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41715,7 +40024,6 @@
   end
   f32.const -0.9999923706054688
   f32.const -0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41728,7 +40036,6 @@
   end
   f32.const 7.888609052210118e-31
   f32.const 0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -41741,7 +40048,6 @@
   end
   f32.const -7.888609052210118e-31
   f32.const -0
-  i32.const 1
   call $std/math/test_truncf
   i32.eqz
   if
@@ -42891,10 +41197,10 @@
    unreachable
   end
  )
- (func $start (; 157 ;) (type $_)
+ (func $start (; 151 ;) (type $FUNCSIG$v)
   call $start:std/math
  )
- (func $null (; 158 ;) (type $_)
+ (func $null (; 152 ;) (type $FUNCSIG$v)
   nop
  )
 )

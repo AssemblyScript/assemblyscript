@@ -1,6 +1,6 @@
 (module
- (type $_ (func))
- (type $ii (func (param i32) (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -21,7 +21,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 0 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 0 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -33,7 +33,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -112,12 +112,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $constructor/EmptyCtor#constructor (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtor#constructor (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -127,7 +127,7 @@
   end
   local.get $0
  )
- (func $constructor/EmptyCtorWithFieldInit#constructor (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtorWithFieldInit#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -140,7 +140,7 @@
   i32.store
   local.get $0
  )
- (func $constructor/EmptyCtorWithFieldNoInit#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtorWithFieldNoInit#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -153,7 +153,7 @@
   i32.store
   local.get $0
  )
- (func $constructor/None#constructor (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $constructor/None#constructor (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -163,7 +163,7 @@
   end
   local.get $0
  )
- (func $constructor/JustFieldInit#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $constructor/JustFieldInit#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -176,7 +176,7 @@
   i32.store
   local.get $0
  )
- (func $constructor/JustFieldNoInit#constructor (; 8 ;) (type $ii) (param $0 i32) (result i32)
+ (func $constructor/JustFieldNoInit#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -189,7 +189,7 @@
   i32.store
   local.get $0
  )
- (func $constructor/CtorReturns#constructor (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $constructor/CtorReturns#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   block $~lib/memory/memory.allocate|inlined.0 (result i32)
    i32.const 0
@@ -199,7 +199,7 @@
    br $~lib/memory/memory.allocate|inlined.0
   end
  )
- (func $constructor/CtorConditionallyReturns#constructor (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $constructor/CtorConditionallyReturns#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $constructor/b
   if
@@ -221,7 +221,7 @@
   end
   local.get $0
  )
- (func $constructor/CtorAllocates#constructor (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $constructor/CtorAllocates#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -235,7 +235,7 @@
   drop
   local.get $0
  )
- (func $constructor/CtorConditionallyAllocates#constructor (; 12 ;) (type $ii) (param $0 i32) (result i32)
+ (func $constructor/CtorConditionallyAllocates#constructor (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   global.get $constructor/b
   if
    block (result i32)
@@ -259,7 +259,7 @@
   end
   local.get $0
  )
- (func $start:constructor (; 13 ;) (type $_)
+ (func $start:constructor (; 13 ;) (type $FUNCSIG$v)
   call $start:~lib/allocator/arena
   i32.const 0
   call $constructor/EmptyCtor#constructor
@@ -292,9 +292,9 @@
   call $constructor/CtorConditionallyAllocates#constructor
   global.set $constructor/ctorConditionallyAllocates
  )
- (func $start (; 14 ;) (type $_)
+ (func $start (; 14 ;) (type $FUNCSIG$v)
   call $start:constructor
  )
- (func $null (; 15 ;) (type $_)
+ (func $null (; 15 ;) (type $FUNCSIG$v)
  )
 )

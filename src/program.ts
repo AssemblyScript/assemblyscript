@@ -47,6 +47,7 @@ import {
   TypeParameterNode,
   CommonTypeNode,
   TypeNode,
+  ArrowKind,
 
   Expression,
   IdentifierExpression,
@@ -424,7 +425,7 @@ export class Program extends DiagnosticEmitter {
         ),
         null, false, range)
       ),
-      null, null, flags, range
+      null, null, flags, ArrowKind.NONE, range
     );
   }
 
@@ -522,6 +523,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.BULK_MEMORY) ? 1 : 0, 0));
     this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_SIMD, Type.bool,
       i64_new(options.hasFeature(Feature.SIMD) ? 1 : 0, 0));
+    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_THREADS, Type.bool,
+      i64_new(options.hasFeature(Feature.THREADS) ? 1 : 0, 0));
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
@@ -1527,16 +1530,18 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var name = declaration.name.text;
     var validDecorators = DecoratorFlags.NONE;
-    if (!declaration.is(CommonFlags.AMBIENT)) {
+    if (declaration.is(CommonFlags.AMBIENT)) {
+      validDecorators |= DecoratorFlags.EXTERNAL;
+    } else {
       validDecorators |= DecoratorFlags.INLINE;
     }
-    if (parent.kind != ElementKind.CLASS_PROTOTYPE && !declaration.is(CommonFlags.INSTANCE)) {
-      validDecorators |= DecoratorFlags.GLOBAL;
+    if (!declaration.is(CommonFlags.INSTANCE)) {
+      if (parent.kind != ElementKind.CLASS_PROTOTYPE) {
+        validDecorators |= DecoratorFlags.GLOBAL;
+      }
     }
     if (!declaration.is(CommonFlags.GENERIC)) {
-      if (declaration.is(CommonFlags.AMBIENT)) {
-        validDecorators |= DecoratorFlags.EXTERNAL;
-      } else if (parent.kind == ElementKind.FILE && (<File>parent).source.isEntry) {
+      if (parent.kind == ElementKind.FILE && (<File>parent).source.isEntry) {
         validDecorators |= DecoratorFlags.START;
       }
     }
@@ -1612,33 +1617,34 @@ export class Program extends DiagnosticEmitter {
     element = assert(parent.lookupInSelf(name)); // possibly merged
     var members = declaration.members;
     for (let i = 0, k = members.length; i < k; ++i) {
-      switch (members[i].kind) {
+      let member = members[i];
+      switch (member.kind) {
         case NodeKind.CLASSDECLARATION: {
-          this.initializeClass(<ClassDeclaration>members[i], element, queuedExtends, queuedImplements);
+          this.initializeClass(<ClassDeclaration>member, element, queuedExtends, queuedImplements);
           break;
         }
         case NodeKind.ENUMDECLARATION: {
-          this.initializeEnum(<EnumDeclaration>members[i], element);
+          this.initializeEnum(<EnumDeclaration>member, element);
           break;
         }
         case NodeKind.FUNCTIONDECLARATION: {
-          this.initializeFunction(<FunctionDeclaration>members[i], element);
+          this.initializeFunction(<FunctionDeclaration>member, element);
           break;
         }
         case NodeKind.INTERFACEDECLARATION: {
-          this.initializeInterface(<InterfaceDeclaration>members[i], element);
+          this.initializeInterface(<InterfaceDeclaration>member, element);
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
-          this.initializeNamespace(<NamespaceDeclaration>members[i], element, queuedExtends, queuedImplements);
+          this.initializeNamespace(<NamespaceDeclaration>member, element, queuedExtends, queuedImplements);
           break;
         }
         case NodeKind.TYPEDECLARATION: {
-          this.initializeTypeDefinition(<TypeDeclaration>members[i], element);
+          this.initializeTypeDefinition(<TypeDeclaration>member, element);
           break;
         }
         case NodeKind.VARIABLE: {
-          this.initializeVariables(<VariableStatement>members[i], element);
+          this.initializeVariables(<VariableStatement>member, element);
           break;
         }
         default: assert(false); // namespace member expected
@@ -2384,6 +2390,11 @@ export class FunctionPrototype extends DeclaredElement {
     return (<FunctionDeclaration>this.declaration).body;
   }
 
+  /** Gets the arrow function kind. */
+  get arrowKind(): ArrowKind {
+    return (<FunctionDeclaration>this.declaration).arrowKind;
+  }
+
   /** Tests if this prototype is bound to a class. */
   get isBound(): bool {
     var parent = this.parent;
@@ -2461,6 +2472,8 @@ export class Function extends TypedElement {
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
+  /** Counting id of anonymous inner functions. */
+  nextAnonymousId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(
@@ -2553,6 +2566,7 @@ export class Function extends TypedElement {
   tempI64s: Local[] | null = null;
   tempF32s: Local[] | null = null;
   tempF64s: Local[] | null = null;
+  tempV128s: Local[] | null = null;
 
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;

@@ -1,11 +1,11 @@
 (module
- (type $_ (func))
- (type $i_ (func (param i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $ii (func (param i32) (result i32)))
- (type $ii_ (func (param i32 i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $i (func (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\00\00\00\00\00\00\00\00\03\00\00\00\00\00\00\00\10\00\00\00s\00t\00d\00/\00g\00c\00-\00b\00a\00s\00i\00c\00s\00.\00t\00s\00")
@@ -26,7 +26,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-basics/main))
- (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -38,10 +38,10 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $std/gc-basics/MyObject_visit (; 2 ;) (type $i_) (param $0 i32)
+ (func $std/gc-basics/MyObject_visit (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -120,7 +120,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/collector/itcm/ManagedObjectList#clear (; 4 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#clear (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.store
@@ -128,13 +128,13 @@
   local.get $0
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#get:color (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:color (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const 3
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#get:next (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/collector/itcm/ManagedObject#get:next (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const 3
@@ -142,7 +142,7 @@
   i32.xor
   i32.and
  )
- (func $~lib/collector/itcm/ManagedObject#set:next (; 7 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:next (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   local.get $0
@@ -152,7 +152,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/ManagedObject#unlink (; 8 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#unlink (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -168,7 +168,7 @@
   local.get $1
   call $~lib/collector/itcm/ManagedObject#set:next
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 9 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load offset=4
@@ -186,7 +186,7 @@
   local.get $1
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 10 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/collector/itcm/iter
   i32.eq
@@ -211,7 +211,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/__gc_mark (; 11 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/__gc_mark (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   if
@@ -233,7 +233,7 @@
    end
   end
  )
- (func $~lib/collector/itcm/ManagedObject#set:color (; 12 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObject#set:color (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $0
   i32.load
@@ -245,10 +245,10 @@
   i32.or
   i32.store
  )
- (func $~lib/allocator/arena/__memory_free (; 13 ;) (type $i_) (param $0 i32)
+ (func $~lib/allocator/arena/__memory_free (; 13 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/collector/itcm/step (; 14 ;) (type $_)
+ (func $~lib/collector/itcm/step (; 14 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   block $break|0
@@ -344,7 +344,7 @@
       end
       local.get $0
       i32.load offset=8
-      call_indirect (type $i_)
+      call_indirect (type $FUNCSIG$vi)
      else      
       i32.const 2
       call $~iterateRoots
@@ -410,7 +410,7 @@
    unreachable
   end
  )
- (func $~lib/collector/itcm/__gc_allocate (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/collector/itcm/__gc_allocate (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -449,7 +449,7 @@
    i32.add
   end
  )
- (func $~lib/string/String~gc (; 16 ;) (type $i_) (param $0 i32)
+ (func $~lib/string/String~gc (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -458,7 +458,7 @@
   local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $~lib/collector/itcm/__gc_collect (; 17 ;) (type $_)
+ (func $~lib/collector/itcm/__gc_collect (; 17 ;) (type $FUNCSIG$v)
   (local $0 i32)
   block $break|0
    block $case1|0
@@ -490,11 +490,11 @@
    end
   end
  )
- (func $~lib/gc/gc.collect (; 18 ;) (type $_)
+ (func $~lib/gc/gc.collect (; 18 ;) (type $FUNCSIG$v)
   call $~lib/collector/itcm/__gc_collect
   return
  )
- (func $start:std/gc-basics (; 19 ;) (type $_)
+ (func $start:std/gc-basics (; 19 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -603,7 +603,7 @@
   global.set $std/gc-basics/obj
   call $~lib/gc/gc.collect
  )
- (func $std/gc-basics/main (; 20 ;) (type $i) (result i32)
+ (func $std/gc-basics/main (; 20 ;) (type $FUNCSIG$i) (result i32)
   global.get $~lib/started
   i32.eqz
   if
@@ -613,17 +613,17 @@
   end
   i32.const 0
  )
- (func $start (; 21 ;) (type $_)
+ (func $start (; 21 ;) (type $FUNCSIG$v)
   call $start:std/gc-basics
  )
- (func $null (; 22 ;) (type $_)
+ (func $null (; 22 ;) (type $FUNCSIG$v)
  )
- (func $~iterateRoots (; 23 ;) (type $i_) (param $0 i32)
+ (func $~iterateRoots (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
   global.get $std/gc-basics/obj
   local.get $0
-  call_indirect (type $i_)
+  call_indirect (type $FUNCSIG$vi)
   global.get $std/gc-basics/obj2
   local.get $0
-  call_indirect (type $i_)
+  call_indirect (type $FUNCSIG$vi)
  )
 )

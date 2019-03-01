@@ -1,6 +1,6 @@
 (module
- (type $i_ (func (param i32)))
- (type $_ (func))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$v (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -8,7 +8,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "test" (func $class-extends/test))
- (func $class-extends/test (; 0 ;) (type $i_) (param $0 i32)
+ (func $class-extends/test (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   drop
@@ -22,6 +22,6 @@
   i32.const 3
   i32.store16 offset=4
  )
- (func $null (; 1 ;) (type $_)
+ (func $null (; 1 ;) (type $FUNCSIG$v)
  )
 )

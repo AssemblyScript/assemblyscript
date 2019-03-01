@@ -1,6 +1,6 @@
 (module
- (type $_ (func))
- (type $iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -10,11 +10,11 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $main/main))
- (func $start:main (; 0 ;) (type $_)
+ (func $start:main (; 0 ;) (type $FUNCSIG$v)
   i32.const 1
   global.set $main/code
  )
- (func $main/main (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $main/main (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/started
   i32.eqz
   if
@@ -24,9 +24,9 @@
   end
   global.get $main/code
  )
- (func $start (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:main
  )
- (func $null (; 3 ;) (type $_)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
  )
 )

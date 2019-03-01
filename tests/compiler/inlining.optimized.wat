@@ -1,13 +1,13 @@
 (module
- (type $i (func (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
- (type $ii (func (param i32) (result i32)))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
  (table $0 2 funcref)
- (elem (i32.const 0) $null $inlining/func_fe~anonymous|1)
+ (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
  (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
@@ -15,18 +15,18 @@
  (export "table" (table $0))
  (export "test" (func $inlining/test))
  (start $start)
- (func $inlining/test (; 1 ;) (type $i) (result i32)
+ (func $inlining/test (; 1 ;) (type $FUNCSIG$i) (result i32)
   i32.const 3
  )
- (func $inlining/func_fe~anonymous|1 (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $inlining/func_fe~anonymous|0 (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $inlining/test_funcs (; 3 ;) (type $_)
+ (func $inlining/test_funcs (; 3 ;) (type $FUNCSIG$v)
   i32.const 1
   global.set $~lib/argc
   i32.const 2
   i32.const 1
-  call_indirect (type $ii)
+  call_indirect (type $FUNCSIG$ii)
   i32.const 2
   i32.ne
   if
@@ -38,7 +38,7 @@
    unreachable
   end
  )
- (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -100,7 +100,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $inlining/test_ctor (; 5 ;) (type $_)
+ (func $inlining/test_ctor (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 16
   call $~lib/allocator/arena/__memory_allocate
@@ -178,7 +178,7 @@
    unreachable
   end
  )
- (func $start (; 6 ;) (type $_)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $inlining/test_funcs
   i32.const 40
   global.set $~lib/allocator/arena/startOffset
@@ -186,7 +186,7 @@
   global.set $~lib/allocator/arena/offset
   call $inlining/test_ctor
  )
- (func $null (; 7 ;) (type $_)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
   nop
  )
 )

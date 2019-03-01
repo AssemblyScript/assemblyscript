@@ -1,24 +1,24 @@
 (module
- (type $_ (func))
- (type $ii (func (param i32) (result i32)))
- (type $i_ (func (param i32)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $iii_ (func (param i32 i32 i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $ii_ (func (param i32 i32)))
- (type $iIi (func (param i32 i64) (result i32)))
- (type $Ii (func (param i64) (result i32)))
- (type $iIii (func (param i32 i64 i32) (result i32)))
- (type $iI_ (func (param i32 i64)))
- (type $ifi (func (param i32 f32) (result i32)))
- (type $fi (func (param f32) (result i32)))
- (type $ifii (func (param i32 f32 i32) (result i32)))
- (type $if_ (func (param i32 f32)))
- (type $iFi (func (param i32 f64) (result i32)))
- (type $Fi (func (param f64) (result i32)))
- (type $iFii (func (param i32 f64 i32) (result i32)))
- (type $iF_ (func (param i32 f64)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$iij (func (param i32 i64) (result i32)))
+ (type $FUNCSIG$ij (func (param i64) (result i32)))
+ (type $FUNCSIG$iiji (func (param i32 i64 i32) (result i32)))
+ (type $FUNCSIG$vij (func (param i32 i64)))
+ (type $FUNCSIG$iif (func (param i32 f32) (result i32)))
+ (type $FUNCSIG$if (func (param f32) (result i32)))
+ (type $FUNCSIG$iifi (func (param i32 f32 i32) (result i32)))
+ (type $FUNCSIG$vif (func (param i32 f32)))
+ (type $FUNCSIG$iid (func (param i32 f64) (result i32)))
+ (type $FUNCSIG$id (func (param f64) (result i32)))
+ (type $FUNCSIG$iidi (func (param i32 f64 i32) (result i32)))
+ (type $FUNCSIG$vid (func (param i32 f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
@@ -32,7 +32,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -44,7 +44,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -123,12 +123,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/arraybuffer/computeSize (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -140,7 +140,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -169,7 +169,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 6 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 6 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -423,7 +423,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -462,7 +462,7 @@
   end
   local.get $3
  )
- (func $~lib/set/Set<i8>#clear (; 8 ;) (type $i_) (param $0 i32)
+ (func $~lib/set/Set<i8>#clear (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -490,7 +490,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i8>#constructor (; 9 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i8>#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -522,14 +522,14 @@
   call $~lib/set/Set<i8>#clear
   local.get $0
  )
- (func $~lib/internal/hash/hash8 (; 10 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash8 (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const -2128831035
   local.get $0
   i32.xor
   i32.const 16777619
   i32.mul
  )
- (func $~lib/internal/hash/HASH<i8> (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/HASH<i8> (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 24
   i32.shl
@@ -538,7 +538,7 @@
   call $~lib/internal/hash/hash8
   return
  )
- (func $~lib/set/Set<i8>#find (; 12 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i8>#find (; 12 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -593,7 +593,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i8>#has (; 13 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i8>#has (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -602,7 +602,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i8>#rehash (; 14 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>#rehash (; 14 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -738,7 +738,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i8>#add (; 15 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>#add (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -833,11 +833,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i8>#get:size (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i8>#get:size (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<i8>#delete (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i8>#delete (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -914,7 +914,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i8> (; 18 ;) (type $_)
+ (func $std/set/test<i8> (; 18 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -1197,7 +1197,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<u8>#clear (; 19 ;) (type $i_) (param $0 i32)
+ (func $~lib/set/Set<u8>#clear (; 19 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -1225,7 +1225,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u8>#constructor (; 20 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u8>#constructor (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -1257,14 +1257,14 @@
   call $~lib/set/Set<u8>#clear
   local.get $0
  )
- (func $~lib/internal/hash/HASH<u8> (; 21 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/HASH<u8> (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
   call $~lib/internal/hash/hash8
   return
  )
- (func $~lib/set/Set<u8>#find (; 22 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u8>#find (; 22 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1317,7 +1317,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u8>#has (; 23 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u8>#has (; 23 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -1326,7 +1326,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u8>#rehash (; 24 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#rehash (; 24 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1462,7 +1462,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u8>#add (; 25 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#add (; 25 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1557,11 +1557,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<u8>#get:size (; 26 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u8>#get:size (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<u8>#delete (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u8>#delete (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1636,7 +1636,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u8> (; 28 ;) (type $_)
+ (func $std/set/test<u8> (; 28 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -1919,7 +1919,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<i16>#clear (; 29 ;) (type $i_) (param $0 i32)
+ (func $~lib/set/Set<i16>#clear (; 29 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -1947,7 +1947,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i16>#constructor (; 30 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i16>#constructor (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -1979,7 +1979,7 @@
   call $~lib/set/Set<i16>#clear
   local.get $0
  )
- (func $~lib/internal/hash/hash16 (; 31 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash16 (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -2001,7 +2001,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/internal/hash/HASH<i16> (; 32 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/HASH<i16> (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.shl
@@ -2010,7 +2010,7 @@
   call $~lib/internal/hash/hash16
   return
  )
- (func $~lib/set/Set<i16>#find (; 33 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i16>#find (; 33 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -2065,7 +2065,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i16>#has (; 34 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i16>#has (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -2074,7 +2074,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i16>#rehash (; 35 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#rehash (; 35 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2210,7 +2210,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i16>#add (; 36 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#add (; 36 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2305,11 +2305,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i16>#get:size (; 37 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i16>#get:size (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<i16>#delete (; 38 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i16>#delete (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2386,7 +2386,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i16> (; 39 ;) (type $_)
+ (func $std/set/test<i16> (; 39 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -2669,7 +2669,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<u16>#clear (; 40 ;) (type $i_) (param $0 i32)
+ (func $~lib/set/Set<u16>#clear (; 40 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -2697,7 +2697,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u16>#constructor (; 41 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u16>#constructor (; 41 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -2729,14 +2729,14 @@
   call $~lib/set/Set<u16>#clear
   local.get $0
  )
- (func $~lib/internal/hash/HASH<u16> (; 42 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/HASH<u16> (; 42 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 65535
   i32.and
   call $~lib/internal/hash/hash16
   return
  )
- (func $~lib/set/Set<u16>#find (; 43 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u16>#find (; 43 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -2789,7 +2789,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u16>#has (; 44 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u16>#has (; 44 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -2798,7 +2798,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u16>#rehash (; 45 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#rehash (; 45 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2934,7 +2934,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u16>#add (; 46 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#add (; 46 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3029,11 +3029,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<u16>#get:size (; 47 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u16>#get:size (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<u16>#delete (; 48 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u16>#delete (; 48 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3108,7 +3108,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u16> (; 49 ;) (type $_)
+ (func $std/set/test<u16> (; 49 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -3391,7 +3391,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<i32>#clear (; 50 ;) (type $i_) (param $0 i32)
+ (func $~lib/set/Set<i32>#clear (; 50 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -3419,7 +3419,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i32>#constructor (; 51 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i32>#constructor (; 51 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -3451,7 +3451,7 @@
   call $~lib/set/Set<i32>#clear
   local.get $0
  )
- (func $~lib/internal/hash/hash32 (; 52 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 52 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -3493,12 +3493,12 @@
   local.set $1
   local.get $1
  )
- (func $~lib/internal/hash/HASH<i32> (; 53 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/HASH<i32> (; 53 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/internal/hash/hash32
   return
  )
- (func $~lib/set/Set<i32>#find (; 54 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i32>#find (; 54 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -3549,7 +3549,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i32>#has (; 55 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#has (; 55 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -3558,7 +3558,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i32>#rehash (; 56 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#rehash (; 56 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3694,7 +3694,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i32>#add (; 57 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#add (; 57 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3789,11 +3789,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i32>#get:size (; 58 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i32>#get:size (; 58 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<i32>#delete (; 59 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#delete (; 59 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3866,7 +3866,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i32> (; 60 ;) (type $_)
+ (func $std/set/test<i32> (; 60 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -4149,7 +4149,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<u32>#clear (; 61 ;) (type $i_) (param $0 i32)
+ (func $~lib/set/Set<u32>#clear (; 61 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -4177,7 +4177,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u32>#constructor (; 62 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u32>#constructor (; 62 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -4209,12 +4209,12 @@
   call $~lib/set/Set<u32>#clear
   local.get $0
  )
- (func $~lib/internal/hash/HASH<u32> (; 63 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/HASH<u32> (; 63 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/internal/hash/hash32
   return
  )
- (func $~lib/set/Set<u32>#find (; 64 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u32>#find (; 64 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -4265,7 +4265,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u32>#has (; 65 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u32>#has (; 65 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -4274,7 +4274,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u32>#rehash (; 66 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u32>#rehash (; 66 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4410,7 +4410,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u32>#add (; 67 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u32>#add (; 67 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4505,11 +4505,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<u32>#get:size (; 68 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u32>#get:size (; 68 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<u32>#delete (; 69 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u32>#delete (; 69 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4582,7 +4582,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u32> (; 70 ;) (type $_)
+ (func $std/set/test<u32> (; 70 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -4865,7 +4865,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<i64>#clear (; 71 ;) (type $i_) (param $0 i32)
+ (func $~lib/set/Set<i64>#clear (; 71 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -4893,7 +4893,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i64>#constructor (; 72 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i64>#constructor (; 72 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -4925,7 +4925,7 @@
   call $~lib/set/Set<i64>#clear
   local.get $0
  )
- (func $~lib/internal/hash/hash64 (; 73 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash64 (; 73 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5013,12 +5013,12 @@
   local.set $3
   local.get $3
  )
- (func $~lib/internal/hash/HASH<i64> (; 74 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/HASH<i64> (; 74 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   call $~lib/internal/hash/hash64
   return
  )
- (func $~lib/set/Set<i64>#find (; 75 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i64>#find (; 75 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -5069,7 +5069,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i64>#has (; 76 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<i64>#has (; 76 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -5078,7 +5078,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i64>#rehash (; 77 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i64>#rehash (; 77 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5215,7 +5215,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<i64>#add (; 78 ;) (type $iI_) (param $0 i32) (param $1 i64)
+ (func $~lib/set/Set<i64>#add (; 78 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5310,11 +5310,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<i64>#get:size (; 79 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i64>#get:size (; 79 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<i64>#delete (; 80 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<i64>#delete (; 80 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -5388,7 +5388,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<i64> (; 81 ;) (type $_)
+ (func $std/set/test<i64> (; 81 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
   i32.const 0
@@ -5671,7 +5671,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<u64>#clear (; 82 ;) (type $i_) (param $0 i32)
+ (func $~lib/set/Set<u64>#clear (; 82 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -5699,7 +5699,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u64>#constructor (; 83 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u64>#constructor (; 83 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -5731,12 +5731,12 @@
   call $~lib/set/Set<u64>#clear
   local.get $0
  )
- (func $~lib/internal/hash/HASH<u64> (; 84 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/HASH<u64> (; 84 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   local.get $0
   call $~lib/internal/hash/hash64
   return
  )
- (func $~lib/set/Set<u64>#find (; 85 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u64>#find (; 85 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -5787,7 +5787,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u64>#has (; 86 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<u64>#has (; 86 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -5796,7 +5796,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u64>#rehash (; 87 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u64>#rehash (; 87 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5933,7 +5933,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<u64>#add (; 88 ;) (type $iI_) (param $0 i32) (param $1 i64)
+ (func $~lib/set/Set<u64>#add (; 88 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6028,11 +6028,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<u64>#get:size (; 89 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u64>#get:size (; 89 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<u64>#delete (; 90 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<u64>#delete (; 90 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -6106,7 +6106,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<u64> (; 91 ;) (type $_)
+ (func $std/set/test<u64> (; 91 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
   i32.const 0
@@ -6389,7 +6389,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<f32>#clear (; 92 ;) (type $i_) (param $0 i32)
+ (func $~lib/set/Set<f32>#clear (; 92 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -6417,7 +6417,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<f32>#constructor (; 93 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f32>#constructor (; 93 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -6449,13 +6449,13 @@
   call $~lib/set/Set<f32>#clear
   local.get $0
  )
- (func $~lib/internal/hash/HASH<f32> (; 94 ;) (type $fi) (param $0 f32) (result i32)
+ (func $~lib/internal/hash/HASH<f32> (; 94 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   i32.reinterpret_f32
   call $~lib/internal/hash/hash32
   return
  )
- (func $~lib/set/Set<f32>#find (; 95 ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<f32>#find (; 95 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -6506,7 +6506,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f32>#has (; 96 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#has (; 96 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -6515,7 +6515,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f32>#rehash (; 97 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f32>#rehash (; 97 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6653,7 +6653,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f32>#add (; 98 ;) (type $if_) (param $0 i32) (param $1 f32)
+ (func $~lib/set/Set<f32>#add (; 98 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6748,11 +6748,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<f32>#get:size (; 99 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f32>#get:size (; 99 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<f32>#delete (; 100 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#delete (; 100 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -6827,7 +6827,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<f32> (; 101 ;) (type $_)
+ (func $std/set/test<f32> (; 101 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f32)
   i32.const 0
@@ -7110,7 +7110,7 @@
    unreachable
   end
  )
- (func $~lib/set/Set<f64>#clear (; 102 ;) (type $i_) (param $0 i32)
+ (func $~lib/set/Set<f64>#clear (; 102 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 0
   i32.const 16
@@ -7138,7 +7138,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<f64>#constructor (; 103 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f64>#constructor (; 103 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -7170,13 +7170,13 @@
   call $~lib/set/Set<f64>#clear
   local.get $0
  )
- (func $~lib/internal/hash/HASH<f64> (; 104 ;) (type $Fi) (param $0 f64) (result i32)
+ (func $~lib/internal/hash/HASH<f64> (; 104 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   i64.reinterpret_f64
   call $~lib/internal/hash/hash64
   return
  )
- (func $~lib/set/Set<f64>#find (; 105 ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<f64>#find (; 105 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -7227,7 +7227,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f64>#has (; 106 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#has (; 106 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -7236,7 +7236,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f64>#rehash (; 107 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f64>#rehash (; 107 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7374,7 +7374,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/set/Set<f64>#add (; 108 ;) (type $iF_) (param $0 i32) (param $1 f64)
+ (func $~lib/set/Set<f64>#add (; 108 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7469,11 +7469,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/set/Set<f64>#get:size (; 109 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f64>#get:size (; 109 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/set/Set<f64>#delete (; 110 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#delete (; 110 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -7548,7 +7548,7 @@
   end
   i32.const 1
  )
- (func $std/set/test<f64> (; 111 ;) (type $_)
+ (func $std/set/test<f64> (; 111 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f64)
   i32.const 0
@@ -7831,7 +7831,7 @@
    unreachable
   end
  )
- (func $start:std/set (; 112 ;) (type $_)
+ (func $start:std/set (; 112 ;) (type $FUNCSIG$v)
   call $start:~lib/allocator/arena
   call $std/set/test<i8>
   call $std/set/test<u8>
@@ -7844,9 +7844,9 @@
   call $std/set/test<f32>
   call $std/set/test<f64>
  )
- (func $start (; 113 ;) (type $_)
+ (func $start (; 113 ;) (type $FUNCSIG$v)
   call $start:std/set
  )
- (func $null (; 114 ;) (type $_)
+ (func $null (; 114 ;) (type $FUNCSIG$v)
  )
 )

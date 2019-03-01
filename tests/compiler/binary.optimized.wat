@@ -1,5 +1,5 @@
 (module
- (type $_ (func))
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$dd (func (param f64) (result f64)))
  (type $FUNCSIG$ff (func (param f32) (result f32)))
  (memory $0 0)
@@ -406,7 +406,7 @@
   local.get $0
   f64.mul
  )
- (func $start:binary (; 4 ;) (type $_)
+ (func $start:binary (; 4 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
   (local $2 f32)
@@ -749,10 +749,10 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $start (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $FUNCSIG$v)
   call $start:binary
  )
- (func $null (; 6 ;) (type $_)
+ (func $null (; 6 ;) (type $FUNCSIG$v)
   nop
  )
 )
