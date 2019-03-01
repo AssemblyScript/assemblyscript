@@ -2188,9 +2188,7 @@ export function compileCall(
         WrapMode.NONE
       );
       let offset = operands.length == 2 ? evaluateImmediateOffset(compiler, operands[1]) : 0; // reports
-      if (offset < 0) { // reported in evaluateImmediateOffset
-        return module.createUnreachable();
-      }
+      if (offset < 0) return module.createUnreachable();
       compiler.currentType = typeArguments[0];
       return module.createAtomicLoad(
         typeArguments[0].byteSize,

@@ -167,7 +167,7 @@ declare namespace atomic {
   /** Atomically loads a value from memory and returns it. */
   export function load<T>(offset: usize, immOffset?: usize): T;
   /** Atomically stores a value to memory. */
-  export function store<T>(offset: usize, value: void, immOffset?: usize): void;
+  export function store<T>(offset: usize, value: T, immOffset?: usize): void;
   /** Atomically adds a value in memory. */
   export function add<T>(ptr: usize, value: T, immOffset?: usize): T;
   /** Atomically subtracts a value in memory. */

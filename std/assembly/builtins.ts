@@ -48,7 +48,7 @@
 
 export namespace atomic {
   @builtin export declare function load<T>(offset: usize, immOffset?: usize): T;
-  @builtin export declare function store<T>(offset: usize, value: void, immOffset?: usize): void;
+  @builtin export declare function store<T>(offset: usize, value: T, immOffset?: usize): void;
   @builtin export declare function add<T>(ptr: usize, value: T, immOffset?: usize): T;
   @builtin export declare function sub<T>(ptr: usize, value: T, immOffset?: usize): T;
   @builtin export declare function and<T>(ptr: usize, value: T, immOffset?: usize): T;

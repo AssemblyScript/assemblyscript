@@ -126,6 +126,11 @@ tests.forEach(filename => {
       return;
     }
   }
+  if (config.asc_flags) {
+    config.asc_flags.forEach(flag => {
+      Array.prototype.push.apply(asc_flags, flag.split(" "));
+    });
+  }
 
   var failed = false;
 
