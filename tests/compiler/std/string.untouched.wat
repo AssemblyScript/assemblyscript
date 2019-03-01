@@ -239,7 +239,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 75
+   i32.const 76
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -497,7 +497,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 34
+   i32.const 35
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -558,7 +558,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 224
+   i32.const 225
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -624,7 +624,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 124
+   i32.const 125
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -707,7 +707,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 193
+   i32.const 194
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2540,7 +2540,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 340
+   i32.const 341
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2657,7 +2657,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 360
+   i32.const 361
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -2774,7 +2774,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 209
+   i32.const 210
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3307,7 +3307,7 @@
             if
              i32.const 0
              i32.const 80
-             i32.const 696
+             i32.const 705
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -3387,7 +3387,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 110
+   i32.const 111
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3603,7 +3603,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 380
+   i32.const 381
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3629,7 +3629,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 385
+   i32.const 386
    i32.const 6
    call $~lib/env/abort
    unreachable
@@ -3697,7 +3697,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 401
+   i32.const 402
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3786,7 +3786,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 249
+   i32.const 250
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3914,7 +3914,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 426
+   i32.const 427
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3949,28 +3949,28 @@
    call $~lib/string/String#replace
    return
   end
+  local.get $2
+  i32.load
+  local.set $6
   local.get $5
   i32.eqz
   if
-   local.get $2
-   i32.load
-   local.set $3
    local.get $4
    local.get $4
    i32.const 1
    i32.add
-   local.get $3
+   local.get $6
    i32.mul
    i32.add
    call $~lib/internal/string/allocateUnsafe
-   local.set $6
-   local.get $6
+   local.set $3
+   local.get $3
    i32.const 0
    local.get $2
    i32.const 0
-   local.get $3
+   local.get $6
    call $~lib/internal/string/copyUnsafe
-   local.get $3
+   local.get $6
    local.set $7
    block $break|0
     i32.const 0
@@ -3982,7 +3982,7 @@
      i32.eqz
      br_if $break|0
      block
-      local.get $6
+      local.get $3
       block (result i32)
        local.get $7
        local.tee $9
@@ -4001,14 +4001,14 @@
       i32.add
       i32.load16_u offset=4
       i32.store16 offset=4
-      local.get $6
+      local.get $3
       local.get $7
       local.get $2
       i32.const 0
-      local.get $3
+      local.get $6
       call $~lib/internal/string/copyUnsafe
       local.get $7
-      local.get $3
+      local.get $6
       i32.add
       local.set $7
      end
@@ -4021,7 +4021,7 @@
     end
     unreachable
    end
-   local.get $6
+   local.get $3
    return
   end
   i32.const 0
@@ -4030,8 +4030,50 @@
   local.set $11
   i32.const 256
   local.set $12
-  block $break|1
-   loop $continue|1
+  local.get $5
+  local.get $6
+  i32.eq
+  if
+   local.get $4
+   call $~lib/internal/string/allocateUnsafe
+   local.set $7
+   local.get $7
+   i32.const 0
+   local.get $0
+   i32.const 0
+   local.get $4
+   call $~lib/internal/string/copyUnsafe
+   block $break|1
+    loop $continue|1
+     local.get $0
+     local.get $1
+     local.get $10
+     call $~lib/string/String#indexOf
+     local.tee $11
+     i32.const -1
+     i32.xor
+     if
+      block
+       local.get $7
+       local.get $11
+       local.get $2
+       i32.const 0
+       local.get $6
+       call $~lib/internal/string/copyUnsafe
+       local.get $11
+       local.get $5
+       i32.add
+       local.set $10
+      end
+      br $continue|1
+     end
+    end
+   end
+   local.get $7
+   return
+  end
+  block $break|2
+   loop $continue|2
     local.get $0
     local.get $1
     local.get $10
@@ -4055,7 +4097,7 @@
       i32.add
       local.set $10
      end
-     br $continue|1
+     br $continue|2
     end
    end
   end
@@ -4085,7 +4127,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 467
+   i32.const 476
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4795,7 +4837,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 479
+   i32.const 488
    i32.const 4
    call $~lib/env/abort
    unreachable

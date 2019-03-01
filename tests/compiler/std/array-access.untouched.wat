@@ -199,7 +199,7 @@
   if
    i32.const 0
    i32.const 16
-   i32.const 224
+   i32.const 225
    i32.const 4
    call $~lib/env/abort
    unreachable

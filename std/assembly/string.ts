@@ -5,6 +5,7 @@ import {
   compareUnsafe,
   repeatUnsafe,
   copyUnsafe,
+  freeUnsafe,
   isWhiteSpaceOrLineTerminator,
   CharCode,
   parse
@@ -431,9 +432,10 @@ export class String {
       if (search == replacement) return this;
       return this.replace(search, replacement);
     }
+    var rlen = replacement.length;
     if (!slen) {
-      // handle special case when we should insert replacement between each char
-      let rlen = replacement.length;
+      // Handle special case when we should insert replacement between each char
+      // TODO handle surrogate pairs also
       let result = allocateUnsafe(len + (len + 1) * rlen);
       copyUnsafe(result, 0, replacement, 0, rlen);
       let offset = rlen;
@@ -450,13 +452,20 @@ export class String {
     }
     var prev = 0, next = 0;
     var result = changetype<String>("");
+    if (ASC_SHRINK_LEVEL < 1) {
+      if (slen === rlen) {
+        // Fast path when search and replacement have same length so we could use preallocation
+        let result = allocateUnsafe(len);
+        copyUnsafe(result, 0, this, 0, len);
+        while (~(next = this.indexOf(search, prev))) {
+          copyUnsafe(result, next, replacement, 0, rlen);
+          prev = next + slen;
+        }
+        return result;
+      }
+    }
     while (~(next = this.indexOf(search, prev))) {
       result = result.concat(this.substring(prev, next).concat(replacement));
-
-      // substring(prev, next)
-      // var len = next - prev;
-      // copyUnsafe(result, 0, this, prev, len);
-
       prev = next + slen;
     }
     if (prev) return result.concat(this.substring(prev, len));
@@ -475,12 +484,12 @@ export class String {
     return out;
   }
 
-  split(separator: String = null, limit: i32 = i32.MAX_VALUE): String[] {
+  split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
     assert(this !== null);
     if (!limit) return new Array<String>();
     if (separator === null) return <String[]>[this];
     var length: isize = this.length;
-    var sepLen: isize = separator.length;
+    var sepLen: isize = separator!.length;
     if (limit < 0) limit = i32.MAX_VALUE;
     if (!sepLen) {
       if (!length) return new Array<String>();
@@ -508,7 +517,7 @@ export class String {
     }
     var result = new Array<String>();
     var end = 0, start = 0, i = 0;
-    while ((end = this.indexOf(separator, start)) != -1) {
+    while ((end = this.indexOf(separator!, start)) != -1) {
       let len = end - start;
       if (len > 0) {
         let out = allocateUnsafe(len);
