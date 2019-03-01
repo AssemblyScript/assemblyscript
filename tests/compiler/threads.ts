@@ -162,8 +162,8 @@ function testAtomicAsm(): void {
 
   // i32.atomic.wait(0, 0, -1);
   // i64.atomic.wait(0, 0, -1);
-  // i32.notify(0, 1);
-  // i64.notify(0, 1);
+  // i32.atomic.notify(0, 1);
+  // i64.atomic.notify(0, 1);
 }
 
 if (ASC_FEATURE_THREADS) {
