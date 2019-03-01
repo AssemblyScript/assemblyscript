@@ -152,6 +152,7 @@ assert("abc".replace("ab", "ab") == "abc");
 assert("a-b-c".replace("-", "+") == "a+b-c");
 assert("abc".replace("", "+") == "+abc");
 assert("\nabc".replace("\n", "+") == "+abc");
+assert("abc".replace("c", "++") == "ab++");
 
 assert("".replaceAll("", "abc") == "abc");
 assert("abc".replaceAll("-", "+") == "abc");
