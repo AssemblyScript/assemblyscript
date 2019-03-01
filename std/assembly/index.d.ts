@@ -163,6 +163,40 @@ declare function fmod(x: f64, y: f64): f64;
 /** Returns the 32-bit floating-point remainder of `x/y`. */
 declare function fmodf(x: f32, y: f32): f32;
 
+declare namespace atomic {
+  /** Atomically loads a value from memory and returns it. */
+  export function load<T>(offset: usize, immOffset?: usize): T;
+  /** Atomically stores a value to memory. */
+  export function store<T>(offset: usize, value: void, immOffset?: usize): void;
+  /** Atomically adds a value in memory. */
+  export function add<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically subtracts a value in memory. */
+  export function sub<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically performs a bitwise AND operation on a value in memory. */
+  export function and<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically performs a bitwise OR operation on a value in memory. */
+  export function or<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically performs a bitwise XOR operation on a value in memory. */
+  export function xor<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically exchanges a value in memory. */
+  export function xchg<T>(ptr: usize, value: T, immOffset?: usize): T;
+  /** Atomically compares and exchanges a value in memory if the condition is met. */
+  export function cmpxchg<T>(ptr: usize, expected: T, replacement: T, immOffset?: usize): T;
+  /** Performs a wait operation suspending this agent if the condition is met. */
+  export function wait<T>(ptr: usize, expected: T, timeout: i64): AtomicWaitResult;
+  /** Performs a notify operation waking up suspended agents. */
+  export function notify<T>(ptr: usize, count: u32): u32;
+}
+/** Describes the result of an atomic wait operation. */
+declare enum AtomicWaitResult {
+  /** Woken by another agent. */
+  OK,
+  /** Loaded value did not match the expected value. */
+  NOT_EQUAL,
+  /** Not woken before the timeout expired. */
+  TIMED_OUT
+}
+
 /** Converts any other numeric value to an 8-bit signed integer. */
 declare function i8(value: i8 | i16 | i32 | i64 | isize | u8 | u16 | u32 | u64 | usize | bool | f32 | f64): i8;
 declare namespace i8 {

@@ -55,9 +55,15 @@ export namespace atomic {
   @builtin export declare function or<T>(ptr: usize, value: T, immOffset?: usize): T;
   @builtin export declare function xor<T>(ptr: usize, value: T, immOffset?: usize): T;
   @builtin export declare function xchg<T>(ptr: usize, value: T, immOffset?: usize): T;
-  @builtin export declare function cmpxchg<T>(ptr: usize, expected:T, replacement: T, immOffset?: usize): T;
-  @builtin export declare function wait<T>(ptr: usize, expected:T, timeout:i64): i32;
+  @builtin export declare function cmpxchg<T>(ptr: usize, expected: T, replacement: T, immOffset?: usize): T;
+  @builtin export declare function wait<T>(ptr: usize, expected: T, timeout: i64): AtomicWaitResult;
   @builtin export declare function notify<T>(ptr: usize, count: u32): u32;
+}
+
+@lazy export const enum AtomicWaitResult {
+  OK = 0,
+  NOT_EQUAL = 1,
+  TIMED_OUT = 2
 }
 
 @builtin export declare function i8(value: void): i8;
@@ -91,6 +97,7 @@ export namespace i32 {
   @builtin export declare function store16(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
   @builtin export declare function store(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
   
+  // FIXME: see https://github.com/AssemblyScript/assemblyscript/issues/523
   export namespace atomic {
     @builtin export declare function load8_s(offset: usize, immOffset?: usize): i32;
     @builtin export declare function load8_u(offset: usize, immOffset?: usize): i32;
@@ -100,8 +107,8 @@ export namespace i32 {
     @builtin export declare function store8(offset: usize, value: i32, immOffset?: usize): void;
     @builtin export declare function store16(offset: usize, value: i32, immOffset?: usize): void;
     @builtin export declare function store(offset: usize, value: i32, immOffset?: usize): void;
-    @builtin export declare function wait(ptr: usize, expected:i32, timeout:i64): i32;
-    @builtin export declare function notify(ptr: usize, count:u32): u32;
+    @builtin export declare function wait(ptr: usize, expected: i32, timeout:i64): AtomicWaitResult;
+    @builtin export declare function notify(ptr: usize, count: u32): u32;
 
     export namespace rmw8_u {
       @builtin export declare function add(offset: usize, value: i32, immOffset?: usize): i32;
@@ -110,9 +117,8 @@ export namespace i32 {
       @builtin export declare function or(offset: usize, value: i32, immOffset?: usize): i32;
       @builtin export declare function xor(offset: usize, value: i32, immOffset?: usize): i32;
       @builtin export declare function xchg(offset: usize, value: i32, immOffset?: usize): i32;
-      @builtin export declare function cmpxchg(offset: usize, expected:i32, replacement: i32, immOffset?: usize): i32;
+      @builtin export declare function cmpxchg(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
     }
-
     export namespace rmw16_u {
       @builtin export declare function add(offset: usize, value: i32, immOffset?: usize): i32;
       @builtin export declare function sub(offset: usize, value: i32, immOffset?: usize): i32;
@@ -120,9 +126,8 @@ export namespace i32 {
       @builtin export declare function or(offset: usize, value: i32, immOffset?: usize): i32;
       @builtin export declare function xor(offset: usize, value: i32, immOffset?: usize): i32;
       @builtin export declare function xchg(offset: usize, value: i32, immOffset?: usize): i32;
-      @builtin export declare function cmpxchg(offset: usize, expected:i32, replacement: i32, immOffset?: usize): i32;
+      @builtin export declare function cmpxchg(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
     }
-
     export namespace rmw {
       @builtin export declare function add(offset: usize, value: i32, immOffset?: usize): i32;
       @builtin export declare function sub(offset: usize, value: i32, immOffset?: usize): i32;
@@ -130,7 +135,7 @@ export namespace i32 {
       @builtin export declare function or(offset: usize, value: i32, immOffset?: usize): i32;
       @builtin export declare function xor(offset: usize, value: i32, immOffset?: usize): i32;
       @builtin export declare function xchg(offset: usize, value: i32, immOffset?: usize): i32;
-      @builtin export declare function cmpxchg(offset: usize, expected:i32, replacement: i32, immOffset?: usize): i32;
+      @builtin export declare function cmpxchg(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
     }
   }
 }
@@ -157,7 +162,8 @@ export namespace i64 {
   @builtin export declare function store32(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   @builtin export declare function store(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
 
-  namespace atomic {
+  // FIXME: see https://github.com/AssemblyScript/assemblyscript/issues/523
+  export namespace atomic {
     @builtin export declare function load8_s(offset: usize, immOffset?: usize): i64;
     @builtin export declare function load8_u(offset: usize, immOffset?: usize): i64;
     @builtin export declare function load16_s(offset: usize, immOffset?: usize): i64;
@@ -166,8 +172,8 @@ export namespace i64 {
     @builtin export declare function store8(offset: usize, value: i64, immOffset?: usize): void;
     @builtin export declare function store16(offset: usize, value: i64, immOffset?: usize): void;
     @builtin export declare function store(offset: usize, value: i64, immOffset?: usize): void;
-    @builtin export declare function wait(ptr: usize, expected:i64, timeout:i64): i32;
-    @builtin export declare function notify(ptr: usize, count:u32): u32;
+    @builtin export declare function wait(ptr: usize, expected: i64, timeout:i64): AtomicWaitResult;
+    @builtin export declare function notify(ptr: usize, count: u32): u32;
 
     export namespace rmw8_u {
       @builtin export declare function add(offset: usize, value: i64, immOffset?: usize): i64;
@@ -176,9 +182,8 @@ export namespace i64 {
       @builtin export declare function or(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function xor(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function xchg(offset: usize, value: i64, immOffset?: usize): i64;
-      @builtin export declare function cmpxchg(offset: usize, expected:i64, replacement: i64, immOffset?: usize): i64;
+      @builtin export declare function cmpxchg(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
-
     export namespace rmw16_u {
       @builtin export declare function add(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function sub(offset: usize, value: i64, immOffset?: usize): i64;
@@ -186,9 +191,8 @@ export namespace i64 {
       @builtin export declare function or(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function xor(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function xchg(offset: usize, value: i64, immOffset?: usize): i64;
-      @builtin export declare function cmpxchg(offset: usize, expected:i64, replacement: i64, immOffset?: usize): i64;
+      @builtin export declare function cmpxchg(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
-
     export namespace rmw32_u {
       @builtin export declare function add(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function sub(offset: usize, value: i64, immOffset?: usize): i64;
@@ -196,9 +200,8 @@ export namespace i64 {
       @builtin export declare function or(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function xor(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function xchg(offset: usize, value: i64, immOffset?: usize): i64;
-      @builtin export declare function cmpxchg(offset: usize, expected:i64, replacement: i64, immOffset?: usize): i64;
+      @builtin export declare function cmpxchg(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
-
     export namespace rmw {
       @builtin export declare function add(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function sub(offset: usize, value: i64, immOffset?: usize): i64;
@@ -206,7 +209,7 @@ export namespace i64 {
       @builtin export declare function or(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function xor(offset: usize, value: i64, immOffset?: usize): i64;
       @builtin export declare function xchg(offset: usize, value: i64, immOffset?: usize): i64;
-      @builtin export declare function cmpxchg(offset: usize, expected:i64, replacement: i64, immOffset?: usize): i64;
+      @builtin export declare function cmpxchg(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
   } 
 }

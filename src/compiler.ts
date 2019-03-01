@@ -411,7 +411,8 @@ export class Compiler extends DiagnosticEmitter {
       isSharedMemory ? options.sharedMemory : Module.UNLIMITED_MEMORY,
       this.memorySegments,
       options.target,
-      "memory"
+      "memory",
+      isSharedMemory
     );
 
     // import memory if requested (default memory is named '0' by Binaryen)
