@@ -404,9 +404,16 @@ export class String {
     if (len < slen) return this;
     var index = this.indexOf(search);
     if (~index) {
-      return this.substring(0, index)
-        .concat(replacement)
-        .concat(this.substring(index + slen, len));
+      let rlen = replacement.length;
+      len = len - slen;
+      let olen = len + rlen;
+      if (olen) {
+        let result = allocateUnsafe(olen);
+        copyUnsafe(result, 0, this, 0, index);
+        copyUnsafe(result, index, replacement, 0, rlen);
+        copyUnsafe(result, rlen + index, this, index + slen, len - index);
+        return result;
+      }
     }
     return this;
   }
@@ -445,6 +452,11 @@ export class String {
     var result = changetype<String>("");
     while (~(next = this.indexOf(search, prev))) {
       result = result.concat(this.substring(prev, next).concat(replacement));
+
+      // substring(prev, next)
+      // var len = next - prev;
+      // copyUnsafe(result, 0, this, prev, len);
+
       prev = next + slen;
     }
     if (prev) return result.concat(this.substring(prev, len));

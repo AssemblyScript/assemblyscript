@@ -205,10 +205,11 @@
  (global $~lib/internal/number/_K (mut i32) (i32.const 0))
  (global $~lib/internal/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
+ (global $~lib/started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "getString" (func $std/string/getString))
- (start $start)
+ (export "main" (func $std/string/main))
  (func $~lib/string/String#charCodeAt (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
@@ -2606,7 +2607,7 @@
          if
           i32.const 0
           i32.const 80
-          i32.const 685
+          i32.const 696
           i32.const 10
           call $~lib/env/abort
           unreachable
@@ -2918,7 +2919,100 @@
   call $~lib/internal/string/repeatUnsafe
   local.get $2
  )
- (func $~lib/string/String#substring (; 31 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#replace (; 31 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.tee $3
+  if
+   local.get $1
+   i32.const 0
+   i32.ne
+   local.set $3
+  end
+  local.get $3
+  if
+   local.get $2
+   i32.const 0
+   i32.ne
+   local.set $3
+  end
+  local.get $3
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 401
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  i32.load
+  local.tee $5
+  local.get $1
+  i32.load
+  local.tee $6
+  i32.lt_s
+  if
+   local.get $0
+   return
+  end
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/string/String#indexOf
+  local.tee $1
+  i32.const -1
+  i32.xor
+  if
+   local.get $2
+   i32.load
+   local.tee $3
+   local.get $5
+   local.get $6
+   i32.sub
+   local.tee $5
+   i32.add
+   local.tee $4
+   if
+    local.get $4
+    call $~lib/internal/string/allocateUnsafe
+    local.tee $4
+    i32.const 0
+    local.get $0
+    i32.const 0
+    local.get $1
+    call $~lib/internal/string/copyUnsafe
+    local.get $4
+    local.get $1
+    local.get $2
+    i32.const 0
+    local.get $3
+    call $~lib/internal/string/copyUnsafe
+    local.get $4
+    local.get $1
+    local.get $3
+    i32.add
+    local.get $0
+    local.get $1
+    local.get $6
+    i32.add
+    local.get $5
+    local.get $1
+    i32.sub
+    call $~lib/internal/string/copyUnsafe
+    local.get $4
+    return
+   end
+  end
+  local.get $0
+ )
+ (func $~lib/string/String#substring (; 32 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -3007,72 +3101,6 @@
   call $~lib/internal/string/copyUnsafe
   local.get $1
  )
- (func $~lib/string/String#replace (; 32 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  local.tee $3
-  if
-   local.get $1
-   i32.const 0
-   i32.ne
-   local.set $3
-  end
-  local.get $3
-  if
-   local.get $2
-   i32.const 0
-   i32.ne
-   local.set $3
-  end
-  local.get $3
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 80
-   i32.const 401
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.tee $3
-  local.get $1
-  i32.load
-  local.tee $4
-  i32.lt_s
-  if
-   local.get $0
-   return
-  end
-  local.get $0
-  local.get $1
-  i32.const 0
-  call $~lib/string/String#indexOf
-  local.tee $1
-  i32.const -1
-  i32.xor
-  if
-   local.get $0
-   i32.const 0
-   local.get $1
-   call $~lib/string/String#substring
-   local.get $2
-   call $~lib/string/String#concat
-   local.get $0
-   local.get $1
-   local.get $4
-   i32.add
-   local.get $3
-   call $~lib/string/String#substring
-   call $~lib/string/String#concat
-   return
-  end
-  local.get $0
- )
  (func $~lib/string/String#replaceAll (; 33 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -3101,7 +3129,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 419
+   i32.const 426
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3245,7 +3273,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 456
+   i32.const 467
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3770,7 +3798,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 468
+   i32.const 479
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -9609,8 +9637,14 @@
  (func $std/string/getString (; 56 ;) (type $i) (result i32)
   global.get $std/string/str
  )
- (func $start (; 57 ;) (type $_)
-  call $start:std/string
+ (func $std/string/main (; 57 ;) (type $_)
+  global.get $~lib/started
+  i32.eqz
+  if
+   call $start:std/string
+   i32.const 1
+   global.set $~lib/started
+  end
  )
  (func $null (; 58 ;) (type $_)
   nop

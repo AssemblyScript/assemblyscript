@@ -212,11 +212,12 @@
  (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
+ (global $~lib/started (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 5548))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "getString" (func $std/string/getString))
- (start $start)
+ (export "main" (func $std/string/main))
  (func $start:~lib/allocator/arena (; 1 ;) (type $_)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
@@ -3305,7 +3306,7 @@
             if
              i32.const 0
              i32.const 80
-             i32.const 685
+             i32.const 696
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -3665,7 +3666,110 @@
   call $~lib/internal/string/repeatUnsafe
   local.get $4
  )
- (func $~lib/string/String#substring (; 34 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#replace (; 34 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.tee $3
+  if (result i32)
+   local.get $1
+   i32.const 0
+   i32.ne
+  else   
+   local.get $3
+  end
+  local.tee $3
+  if (result i32)
+   local.get $2
+   i32.const 0
+   i32.ne
+  else   
+   local.get $3
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 401
+   i32.const 4
+   call $~lib/env/abort
+   unreachable
+  end
+  local.get $0
+  i32.load
+  local.set $4
+  local.get $1
+  i32.load
+  local.set $5
+  local.get $4
+  local.get $5
+  i32.lt_s
+  if
+   local.get $0
+   return
+  end
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/string/String#indexOf
+  local.set $6
+  local.get $6
+  i32.const -1
+  i32.xor
+  if
+   local.get $2
+   i32.load
+   local.set $3
+   local.get $4
+   local.get $5
+   i32.sub
+   local.set $4
+   local.get $4
+   local.get $3
+   i32.add
+   local.set $7
+   local.get $7
+   if
+    local.get $7
+    call $~lib/internal/string/allocateUnsafe
+    local.set $8
+    local.get $8
+    i32.const 0
+    local.get $0
+    i32.const 0
+    local.get $6
+    call $~lib/internal/string/copyUnsafe
+    local.get $8
+    local.get $6
+    local.get $2
+    i32.const 0
+    local.get $3
+    call $~lib/internal/string/copyUnsafe
+    local.get $8
+    local.get $3
+    local.get $6
+    i32.add
+    local.get $0
+    local.get $6
+    local.get $5
+    i32.add
+    local.get $4
+    local.get $6
+    i32.sub
+    call $~lib/internal/string/copyUnsafe
+    local.get $8
+    return
+   end
+  end
+  local.get $0
+ )
+ (func $~lib/string/String#substring (; 35 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3775,78 +3879,6 @@
   call $~lib/internal/string/copyUnsafe
   local.get $10
  )
- (func $~lib/string/String#replace (; 35 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  local.tee $3
-  if (result i32)
-   local.get $1
-   i32.const 0
-   i32.ne
-  else   
-   local.get $3
-  end
-  local.tee $3
-  if (result i32)
-   local.get $2
-   i32.const 0
-   i32.ne
-  else   
-   local.get $3
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 80
-   i32.const 401
-   i32.const 4
-   call $~lib/env/abort
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.set $4
-  local.get $1
-  i32.load
-  local.set $5
-  local.get $4
-  local.get $5
-  i32.lt_s
-  if
-   local.get $0
-   return
-  end
-  local.get $0
-  local.get $1
-  i32.const 0
-  call $~lib/string/String#indexOf
-  local.set $6
-  local.get $6
-  i32.const -1
-  i32.xor
-  if
-   local.get $0
-   i32.const 0
-   local.get $6
-   call $~lib/string/String#substring
-   local.get $2
-   call $~lib/string/String#concat
-   local.get $0
-   local.get $6
-   local.get $5
-   i32.add
-   local.get $4
-   call $~lib/string/String#substring
-   call $~lib/string/String#concat
-   return
-  end
-  local.get $0
- )
  (func $~lib/string/String#replaceAll (; 36 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -3881,7 +3913,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 419
+   i32.const 426
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4052,7 +4084,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 456
+   i32.const 467
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4762,7 +4794,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 468
+   i32.const 479
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -11193,9 +11225,18 @@
  (func $std/string/getString (; 67 ;) (type $i) (result i32)
   global.get $std/string/str
  )
- (func $start (; 68 ;) (type $_)
+ (func $std/string/main (; 68 ;) (type $_)
+  global.get $~lib/started
+  i32.eqz
+  if
+   call $start
+   i32.const 1
+   global.set $~lib/started
+  end
+ )
+ (func $start (; 69 ;) (type $_)
   call $start:std/string
  )
- (func $null (; 69 ;) (type $_)
+ (func $null (; 70 ;) (type $_)
  )
 )
