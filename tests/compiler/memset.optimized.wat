@@ -1,6 +1,6 @@
 (module
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -239,7 +239,7 @@
    end
   end
  )
- (func $start:memset (; 2 ;) (type $_)
+ (func $start:memset (; 2 ;) (type $FUNCSIG$v)
   i32.const 32
   global.set $memset/dest
   global.get $memset/dest
@@ -333,10 +333,10 @@
    unreachable
   end
  )
- (func $start (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $FUNCSIG$v)
   call $start:memset
  )
- (func $null (; 4 ;) (type $_)
+ (func $null (; 4 ;) (type $FUNCSIG$v)
   nop
  )
 )

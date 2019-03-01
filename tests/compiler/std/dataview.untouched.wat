@@ -1,18 +1,18 @@
 (module
- (type $_ (func))
- (type $iii (func (param i32 i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $ii (func (param i32) (result i32)))
- (type $iii_ (func (param i32 i32 i32)))
- (type $iiiii (func (param i32 i32 i32 i32) (result i32)))
- (type $iiif (func (param i32 i32 i32) (result f32)))
- (type $iiiF (func (param i32 i32 i32) (result f64)))
- (type $II (func (param i64) (result i64)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiiI (func (param i32 i32 i32) (result i64)))
- (type $iifi_ (func (param i32 i32 f32 i32)))
- (type $iiFi_ (func (param i32 i32 f64 i32)))
- (type $iiIi_ (func (param i32 i32 i64 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
+ (type $FUNCSIG$iiiii (func (param i32 i32 i32 i32) (result i32)))
+ (type $FUNCSIG$fiii (func (param i32 i32 i32) (result f32)))
+ (type $FUNCSIG$diii (func (param i32 i32 i32) (result f64)))
+ (type $FUNCSIG$jj (func (param i64) (result i64)))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$jiii (func (param i32 i32 i32) (result i64)))
+ (type $FUNCSIG$viifi (func (param i32 i32 f32 i32)))
+ (type $FUNCSIG$viidi (func (param i32 i32 f64 i32)))
+ (type $FUNCSIG$viiji (func (param i32 i32 i64 i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1b\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
@@ -30,7 +30,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -42,7 +42,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -54,7 +54,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -133,7 +133,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -162,7 +162,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 5 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 5 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -416,12 +416,12 @@
    end
   end
  )
- (func $~lib/memory/memory.allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#constructor (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -488,7 +488,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#constructor (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -502,7 +502,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 9 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/typedarray/TypedArray<u8>#__set (; 9 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -543,7 +543,7 @@
    i32.store8 offset=8
   end
  )
- (func $~lib/dataview/DataView#constructor (; 10 ;) (type $iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 10 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   local.get $3
   global.get $~lib/builtins/i32.MIN_VALUE
   i32.eq
@@ -608,7 +608,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/polyfills/bswap<u32> (; 11 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u32> (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -622,7 +622,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getFloat32 (; 12 ;) (type $iiif) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $~lib/dataview/DataView#getFloat32 (; 12 ;) (type $FUNCSIG$fiii) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -682,7 +682,7 @@
    f32.reinterpret_i32
   end
  )
- (func $~lib/polyfills/bswap<u64> (; 13 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 13 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -721,7 +721,7 @@
   i64.rotr
   return
  )
- (func $~lib/dataview/DataView#getFloat64 (; 14 ;) (type $iiiF) (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
+ (func $~lib/dataview/DataView#getFloat64 (; 14 ;) (type $FUNCSIG$diii) (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -781,7 +781,7 @@
    f64.reinterpret_i64
   end
  )
- (func $~lib/dataview/DataView#getInt8 (; 15 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt8 (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -825,7 +825,7 @@
   i32.add
   i32.load8_s offset=8
  )
- (func $~lib/polyfills/bswap<i16> (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -841,7 +841,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getInt16 (; 17 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt16 (; 17 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -896,7 +896,7 @@
    call $~lib/polyfills/bswap<i16>
   end
  )
- (func $~lib/polyfills/bswap<i32> (; 18 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i32> (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -910,7 +910,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getInt32 (; 19 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt32 (; 19 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -965,7 +965,7 @@
    call $~lib/polyfills/bswap<i32>
   end
  )
- (func $~lib/polyfills/bswap<i64> (; 20 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<i64> (; 20 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -1004,7 +1004,7 @@
   i64.rotr
   return
  )
- (func $~lib/dataview/DataView#getInt64 (; 21 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
+ (func $~lib/dataview/DataView#getInt64 (; 21 ;) (type $FUNCSIG$jiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1059,7 +1059,7 @@
    call $~lib/polyfills/bswap<i64>
   end
  )
- (func $~lib/dataview/DataView#getUint8 (; 22 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint8 (; 22 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1103,7 +1103,7 @@
   i32.add
   i32.load8_u offset=8
  )
- (func $~lib/polyfills/bswap<u16> (; 23 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -1117,7 +1117,7 @@
   i32.or
   return
  )
- (func $~lib/dataview/DataView#getUint16 (; 24 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint16 (; 24 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1172,7 +1172,7 @@
    call $~lib/polyfills/bswap<u16>
   end
  )
- (func $~lib/dataview/DataView#getUint32 (; 25 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint32 (; 25 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1227,7 +1227,7 @@
    call $~lib/polyfills/bswap<u32>
   end
  )
- (func $~lib/dataview/DataView#getUint64 (; 26 ;) (type $iiiI) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
+ (func $~lib/dataview/DataView#getUint64 (; 26 ;) (type $FUNCSIG$jiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1282,7 +1282,7 @@
    call $~lib/polyfills/bswap<u64>
   end
  )
- (func $~lib/dataview/DataView#setFloat32 (; 27 ;) (type $iifi_) (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
+ (func $~lib/dataview/DataView#setFloat32 (; 27 ;) (type $FUNCSIG$viifi) (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1344,7 +1344,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/dataview/DataView#setFloat64 (; 28 ;) (type $iiFi_) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
+ (func $~lib/dataview/DataView#setFloat64 (; 28 ;) (type $FUNCSIG$viidi) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1406,7 +1406,7 @@
    i64.store offset=8
   end
  )
- (func $~lib/dataview/DataView#setInt8 (; 29 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt8 (; 29 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1451,7 +1451,7 @@
   local.get $2
   i32.store8 offset=8
  )
- (func $~lib/dataview/DataView#setInt16 (; 30 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt16 (; 30 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1504,7 +1504,7 @@
   end
   i32.store16 offset=8
  )
- (func $~lib/dataview/DataView#setInt32 (; 31 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt32 (; 31 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1557,7 +1557,7 @@
   end
   i32.store offset=8
  )
- (func $~lib/dataview/DataView#setInt64 (; 32 ;) (type $iiIi_) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
+ (func $~lib/dataview/DataView#setInt64 (; 32 ;) (type $FUNCSIG$viiji) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1610,7 +1610,7 @@
   end
   i64.store offset=8
  )
- (func $~lib/dataview/DataView#setUint8 (; 33 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint8 (; 33 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1655,7 +1655,7 @@
   local.get $2
   i32.store8 offset=8
  )
- (func $~lib/dataview/DataView#setUint16 (; 34 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint16 (; 34 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1708,7 +1708,7 @@
   end
   i32.store16 offset=8
  )
- (func $~lib/dataview/DataView#setUint32 (; 35 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint32 (; 35 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1761,7 +1761,7 @@
   end
   i32.store offset=8
  )
- (func $~lib/dataview/DataView#setUint64 (; 36 ;) (type $iiIi_) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
+ (func $~lib/dataview/DataView#setUint64 (; 36 ;) (type $FUNCSIG$viiji) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1814,7 +1814,7 @@
   end
   i64.store offset=8
  )
- (func $start:std/dataview (; 37 ;) (type $_)
+ (func $start:std/dataview (; 37 ;) (type $FUNCSIG$v)
   call $start:~lib/allocator/arena
   i32.const 0
   i32.const 8
@@ -3498,9 +3498,9 @@
    unreachable
   end
  )
- (func $start (; 38 ;) (type $_)
+ (func $start (; 38 ;) (type $FUNCSIG$v)
   call $start:std/dataview
  )
- (func $null (; 39 ;) (type $_)
+ (func $null (; 39 ;) (type $FUNCSIG$v)
  )
 )

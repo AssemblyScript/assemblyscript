@@ -1,7 +1,7 @@
 (module
- (type $_ (func))
- (type $ifi (func (param i32 f32) (result i32)))
- (type $ii (func (param i32) (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$iif (func (param i32 f32) (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -13,7 +13,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 0 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 0 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -25,7 +25,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -104,12 +104,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $std/new/AClass#constructor (; 3 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $std/new/AClass#constructor (; 3 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   local.get $0
   block (result i32)
    local.get $0
@@ -136,16 +136,16 @@
   f32.store offset=4
   local.get $0
  )
- (func $start:std/new (; 4 ;) (type $_)
+ (func $start:std/new (; 4 ;) (type $FUNCSIG$v)
   call $start:~lib/allocator/arena
   i32.const 0
   f32.const 3
   call $std/new/AClass#constructor
   global.set $std/new/aClass
  )
- (func $start (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $FUNCSIG$v)
   call $start:std/new
  )
- (func $null (; 6 ;) (type $_)
+ (func $null (; 6 ;) (type $FUNCSIG$v)
  )
 )

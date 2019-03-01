@@ -1,8 +1,8 @@
 (module
- (type $i (func (result i32)))
- (type $ii_ (func (param i32 i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -42,13 +42,13 @@
  (export "gt_u" (func $../../examples/i64-polyfill/assembly/i64/gt_u))
  (export "ge_s" (func $../../examples/i64-polyfill/assembly/i64/ge_s))
  (export "ge_u" (func $../../examples/i64-polyfill/assembly/i64/ge_u))
- (func $../../examples/i64-polyfill/assembly/i64/getHi (; 0 ;) (type $i) (result i32)
+ (func $../../examples/i64-polyfill/assembly/i64/getHi (; 0 ;) (type $FUNCSIG$i) (result i32)
   global.get $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/getLo (; 1 ;) (type $i) (result i32)
+ (func $../../examples/i64-polyfill/assembly/i64/getLo (; 1 ;) (type $FUNCSIG$i) (result i32)
   global.get $../../examples/i64-polyfill/assembly/i64/lo
  )
- (func $../../examples/i64-polyfill/assembly/i64/clz (; 2 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/clz (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i64)
   local.get $0
   i64.extend_i32_u
@@ -65,7 +65,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/ctz (; 3 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/ctz (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i64)
   local.get $0
   i64.extend_i32_u
@@ -82,7 +82,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/popcnt (; 4 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/popcnt (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i64)
   local.get $0
   i64.extend_i32_u
@@ -99,7 +99,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/eqz (; 5 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/eqz (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i64.extend_i32_u
@@ -115,7 +115,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/add (; 6 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/add (; 6 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -142,7 +142,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/sub (; 7 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/sub (; 7 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -169,7 +169,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/mul (; 8 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/mul (; 8 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -196,7 +196,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/div_s (; 9 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/div_s (; 9 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -223,7 +223,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/div_u (; 10 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/div_u (; 10 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -250,7 +250,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/rem_s (; 11 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/rem_s (; 11 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -277,7 +277,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/rem_u (; 12 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/rem_u (; 12 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -304,7 +304,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/and (; 13 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/and (; 13 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -331,7 +331,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/or (; 14 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/or (; 14 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -358,7 +358,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/xor (; 15 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/xor (; 15 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -385,7 +385,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/shl (; 16 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/shl (; 16 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -412,7 +412,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/shr_s (; 17 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/shr_s (; 17 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -439,7 +439,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/shr_u (; 18 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/shr_u (; 18 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -466,7 +466,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/rotl (; 19 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/rotl (; 19 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -493,7 +493,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/rotr (; 20 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/rotr (; 20 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i64)
   local.get $0
   i64.extend_i32_u
@@ -520,7 +520,7 @@
   i32.wrap_i64
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/eq (; 21 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/eq (; 21 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $0
   i64.extend_i32_u
@@ -543,7 +543,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/ne (; 22 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/ne (; 22 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $0
   i64.extend_i32_u
@@ -566,7 +566,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/lt_s (; 23 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/lt_s (; 23 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $0
   i64.extend_i32_u
@@ -589,7 +589,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/lt_u (; 24 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/lt_u (; 24 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $0
   i64.extend_i32_u
@@ -612,7 +612,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/le_s (; 25 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/le_s (; 25 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $0
   i64.extend_i32_u
@@ -635,7 +635,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/le_u (; 26 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/le_u (; 26 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $0
   i64.extend_i32_u
@@ -658,7 +658,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/gt_s (; 27 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/gt_s (; 27 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $0
   i64.extend_i32_u
@@ -681,7 +681,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/gt_u (; 28 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/gt_u (; 28 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $0
   i64.extend_i32_u
@@ -704,7 +704,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/ge_s (; 29 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/ge_s (; 29 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $0
   i64.extend_i32_u
@@ -727,7 +727,7 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $../../examples/i64-polyfill/assembly/i64/ge_u (; 30 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/i64-polyfill/assembly/i64/ge_u (; 30 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   local.get $0
   i64.extend_i32_u
@@ -750,6 +750,6 @@
   i32.const 0
   global.set $../../examples/i64-polyfill/assembly/i64/hi
  )
- (func $null (; 31 ;) (type $_)
+ (func $null (; 31 ;) (type $FUNCSIG$v)
  )
 )

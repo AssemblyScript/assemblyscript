@@ -1,8 +1,8 @@
 (module
- (type $_ (func))
- (type $iiiiiiFF (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $F (func (result f64)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$diiiiiid (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$d (func (result f64)))
  (type $FUNCSIG$i (func (result i32)))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
@@ -68,7 +68,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $0
  )
- (func $start:std/date (; 4 ;) (type $_)
+ (func $start:std/date (; 4 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
   i32.const 40
@@ -189,10 +189,10 @@
    unreachable
   end
  )
- (func $start (; 5 ;) (type $_)
+ (func $start (; 5 ;) (type $FUNCSIG$v)
   call $start:std/date
  )
- (func $null (; 6 ;) (type $_)
+ (func $null (; 6 ;) (type $FUNCSIG$v)
   nop
  )
 )

@@ -1,7 +1,7 @@
 (module
- (type $i_ (func (param i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\15\00\00\00s\00t\00d\00/\00g\00c\00-\00i\00n\00t\00e\00g\00r\00a\00t\00i\00o\00n\00.\00t\00s\00")
@@ -17,7 +17,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:std/gc-integration~anonymous|0 (; 1 ;) (type $i_) (param $0 i32)
+ (func $start:std/gc-integration~anonymous|0 (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   block (result i32)
    global.get $std/gc-integration/i
@@ -39,7 +39,7 @@
    unreachable
   end
  )
- (func $start:std/gc-integration (; 2 ;) (type $_)
+ (func $start:std/gc-integration (; 2 ;) (type $FUNCSIG$v)
   global.get $std/gc-integration/B.c
   drop
   global.get $std/gc-integration/B.d
@@ -59,23 +59,23 @@
    unreachable
   end
  )
- (func $start (; 3 ;) (type $_)
+ (func $start (; 3 ;) (type $FUNCSIG$v)
   call $start:std/gc-integration
  )
- (func $null (; 4 ;) (type $_)
+ (func $null (; 4 ;) (type $FUNCSIG$v)
  )
- (func $~iterateRoots (; 5 ;) (type $i_) (param $0 i32)
+ (func $~iterateRoots (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   global.get $std/gc-integration/B.c
   local.get $0
-  call_indirect (type $i_)
+  call_indirect (type $FUNCSIG$vi)
   global.get $std/gc-integration/B.d
   local.get $0
-  call_indirect (type $i_)
+  call_indirect (type $FUNCSIG$vi)
   global.get $std/gc-integration/a_ref
   local.get $0
-  call_indirect (type $i_)
+  call_indirect (type $FUNCSIG$vi)
   global.get $std/gc-integration/b_ref
   local.get $0
-  call_indirect (type $i_)
+  call_indirect (type $FUNCSIG$vi)
  )
 )

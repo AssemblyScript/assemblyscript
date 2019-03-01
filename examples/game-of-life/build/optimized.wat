@@ -1,8 +1,8 @@
 (module
- (type $ii_ (func (param i32 i32)))
- (type $F (func (result f64)))
- (type $_ (func))
- (type $iiF_ (func (param i32 i32 f64)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$d (func (result f64)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$viid (func (param i32 i32 f64)))
  (import "env" "memory" (memory $0 0))
  (import "config" "BGR_DEAD" (global $assembly/config/BGR_DEAD i32))
  (import "config" "BGR_ALIVE" (global $assembly/config/BGR_ALIVE i32))
@@ -18,7 +18,7 @@
  (export "init" (func $assembly/index/init))
  (export "step" (func $assembly/index/step))
  (export "fill" (func $assembly/index/fill))
- (func $assembly/index/init (; 1 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $assembly/index/init (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   global.set $assembly/index/w
@@ -83,7 +83,7 @@
    end
   end
  )
- (func $assembly/index/step (; 2 ;) (type $_)
+ (func $assembly/index/step (; 2 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -355,7 +355,7 @@
    end
   end
  )
- (func $assembly/index/fill (; 3 ;) (type $iiF_) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $assembly/index/fill (; 3 ;) (type $FUNCSIG$viid) (param $0 i32) (param $1 i32) (param $2 f64)
   (local $3 i32)
   loop $repeat|0
    block $break|0
@@ -422,7 +422,7 @@
    end
   end
  )
- (func $null (; 4 ;) (type $_)
+ (func $null (; 4 ;) (type $FUNCSIG$v)
   nop
  )
 )

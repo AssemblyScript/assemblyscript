@@ -1,14 +1,11 @@
 (module
- (type $_ (func))
- (type $ii (func (param i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $iii_ (func (param i32 i32 i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$iijijij (func (param i32 i64 i32 i64 i32 i64) (result i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -50,7 +47,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/internal/number/decimalCount32 (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/decimalCount32 (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -104,7 +101,7 @@
    end
   end
  )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -166,7 +163,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/string/allocateUnsafe (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/string/allocateUnsafe (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 0
@@ -199,7 +196,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/number/utoa32_lut (; 4 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/number/utoa32_lut (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   i32.const 584
@@ -309,7 +306,7 @@
    i32.store16 offset=4
   end
  )
- (func $~lib/internal/number/itoa32 (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/number/itoa32 (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -380,7 +377,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String.__eq (; 7 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -841,7 +838,7 @@
   i32.store16 offset=4
   local.get $10
  )
- (func $~lib/internal/memory/memcpy (; 9 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memcpy (; 9 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1738,7 +1735,7 @@
    i32.store8
   end
  )
- (func $~lib/internal/memory/memmove (; 10 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memmove (; 10 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1936,7 +1933,7 @@
    end
   end
  )
- (func $~lib/internal/number/prettify (; 11 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/internal/number/prettify (; 11 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2520,7 +2517,7 @@
   end
   local.get $0
  )
- (func $start:number (; 15 ;) (type $_)
+ (func $start:number (; 15 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 2192
   global.set $~lib/allocator/arena/startOffset
@@ -2685,10 +2682,10 @@
    unreachable
   end
  )
- (func $start (; 16 ;) (type $_)
+ (func $start (; 16 ;) (type $FUNCSIG$v)
   call $start:number
  )
- (func $null (; 17 ;) (type $_)
+ (func $null (; 17 ;) (type $FUNCSIG$v)
   nop
  )
 )

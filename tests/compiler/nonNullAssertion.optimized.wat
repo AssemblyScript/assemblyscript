@@ -1,7 +1,7 @@
 (module
- (type $_ (func))
- (type $ii (func (param i32) (result i32)))
- (type $i (func (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -23,14 +23,14 @@
  (export "testObjFn" (func $nonNullAssertion/testObjFn))
  (export "testObjRet" (func $nonNullAssertion/testObjFn))
  (start $start)
- (func $nonNullAssertion/testVar (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testVar (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $nonNullAssertion/testObj (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testObj (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $nonNullAssertion/testArr (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testArr (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -46,7 +46,7 @@
    unreachable
   end
  )
- (func $nonNullAssertion/testAll (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testAll (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -63,26 +63,26 @@
   end
   i32.load
  )
- (func $nonNullAssertion/testFn (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testFn (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
-  call_indirect (type $i)
+  call_indirect (type $FUNCSIG$i)
  )
- (func $nonNullAssertion/testObjFn (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $nonNullAssertion/testObjFn (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
   i32.load offset=4
-  call_indirect (type $i)
+  call_indirect (type $FUNCSIG$i)
  )
- (func $start (; 6 ;) (type $_)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $null (; 7 ;) (type $_)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
   nop
  )
 )

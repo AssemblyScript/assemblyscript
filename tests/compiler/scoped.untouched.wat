@@ -1,6 +1,6 @@
 (module
- (type $i_ (func (param i32)))
- (type $_ (func))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$v (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -11,14 +11,14 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $scoped/fn (; 0 ;) (type $i_) (param $0 i32)
+ (func $scoped/fn (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   i32.const 0
   local.set $1
   local.get $0
   local.set $1
  )
- (func $start:scoped (; 1 ;) (type $_)
+ (func $start:scoped (; 1 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -71,9 +71,9 @@
   i32.const 42
   call $scoped/fn
  )
- (func $start (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:scoped
  )
- (func $null (; 3 ;) (type $_)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
  )
 )

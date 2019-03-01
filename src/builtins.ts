@@ -27,7 +27,8 @@ import {
 import {
   Type,
   TypeKind,
-  TypeFlags
+  TypeFlags,
+  Signature
 } from "./types";
 
 import {
@@ -3236,17 +3237,16 @@ export function compileCall(
       }
       let numOperands = operands.length - 1;
       let operandExprs = new Array<ExpressionRef>(numOperands);
-      let signatureParts = new Array<string>(numOperands + 1);
       let nativeReturnType = returnType.toNativeType();
+      let parameterTypes = new Array<Type>(numOperands);
       let nativeParamTypes = new Array<NativeType>(numOperands);
       for (let i = 0; i < numOperands; ++i) {
         operandExprs[i] = compiler.compileExpressionRetainType(operands[1 + i], Type.i32, WrapMode.NONE);
         let operandType = compiler.currentType;
-        signatureParts[i] = operandType.toSignatureString();
+        parameterTypes[i] = operandType;
         nativeParamTypes[i] = operandType.toNativeType();
       }
-      signatureParts[numOperands] = returnType.toSignatureString();
-      let typeName = signatureParts.join("");
+      let typeName = Signature.makeSignatureString(parameterTypes, returnType);
       let typeRef = module.getFunctionTypeBySignature(nativeReturnType, nativeParamTypes);
       if (!typeRef) typeRef = module.addFunctionType(typeName, nativeReturnType, nativeParamTypes);
       compiler.currentType = returnType;
@@ -5952,7 +5952,7 @@ export function compileIterateRoots(compiler: Compiler): void {
                 ? module.createI64(i64_low(value), i64_high(value))
                 : module.createI32(i64_low(value))
             ],
-            "i_"
+            "FUNCSIG$vi"
           )
         );
       } else {
@@ -5965,7 +5965,7 @@ export function compileIterateRoots(compiler: Compiler): void {
                 compiler.options.nativeSizeType
               )
             ],
-            "i_"
+            "FUNCSIG$vi"
           )
         );
       }
@@ -6049,7 +6049,7 @@ export function ensureGCHook(
         [
           module.createGetLocal(0, nativeSizeType)
         ],
-        nativeSizeType == NativeType.I64 ? "I_" : "i_"
+        "FUNCSIG$" + (nativeSizeType == NativeType.I64 ? "vj" : "vi")
       )
     );
 

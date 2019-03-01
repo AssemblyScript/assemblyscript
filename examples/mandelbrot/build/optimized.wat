@@ -1,7 +1,7 @@
 (module
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $FF (func (param f64) (result f64)))
- (type $_ (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$dd (func (param f64) (result f64)))
+ (type $FUNCSIG$v (func))
  (import "env" "memory" (memory $0 0))
  (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
  (import "Math" "log2" (func $~lib/bindings/Math/log2 (param f64) (result f64)))
@@ -10,7 +10,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "computeLine" (func $assembly/index/computeLine))
- (func $assembly/index/computeLine (; 2 ;) (type $iiii_) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $assembly/index/computeLine (; 2 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 f64)
@@ -205,7 +205,7 @@
    end
   end
  )
- (func $null (; 3 ;) (type $_)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
   nop
  )
 )
