@@ -499,7 +499,7 @@ export function compileCall(
 
   switch (prototype.internalName) {
 
-    // types
+    // === Static type evaluation =================================================================
 
     case BuiltinSymbols.isInteger: { // isInteger<T!>() / isInteger<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
@@ -637,8 +637,172 @@ export function compileCall(
         ? module.createI32(1)
         : module.createI32(0);
     }
+    case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
+      compiler.currentType = compiler.options.usizeType;
+      if (operands.length != 0) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "0", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+      }
+      let byteSize = (<Type[]>typeArguments)[0].byteSize;
+      if (compiler.options.isWasm64) {
+        // implicitly wrap if contextual type is a 32-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
+          compiler.currentType = Type.u32;
+          ret = module.createI32(byteSize);
+        } else {
+          ret = module.createI64(byteSize, 0);
+        }
+      } else {
+        // implicitly extend if contextual type is a 64-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
+          compiler.currentType = Type.u64;
+          ret = module.createI64(byteSize, 0);
+        } else {
+          ret = module.createI32(byteSize);
+        }
+      }
+      return ret;
+    }
+    case BuiltinSymbols.alignof: { // alignof<T!>() -> usize
+      compiler.currentType = compiler.options.usizeType;
+      if (operands.length != 0) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "0", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+      let byteSize = (<Type[]>typeArguments)[0].byteSize;
+      let alignLog2: i32;
+      switch (byteSize) {
+        case 1: { alignLog2 = 0; break; }
+        case 2: { alignLog2 = 1; break; }
+        case 4: { alignLog2 = 2; break; }
+        case 8: { alignLog2 = 3; break; }
+        default: { assert(false, "unexected byte size"); return module.createUnreachable(); }
+      }
+      if (compiler.options.isWasm64) {
+        // implicitly wrap if contextual type is a 32-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
+          compiler.currentType = Type.u32;
+          ret = module.createI32(alignLog2);
+        } else {
+          ret = module.createI64(alignLog2, 0);
+        }
+      } else {
+        // implicitly extend if contextual type is a 64-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
+          compiler.currentType = Type.u64;
+          ret = module.createI64(alignLog2, 0);
+        } else {
+          ret = module.createI32(alignLog2);
+        }
+      }
+      return ret;
+    }
+    case BuiltinSymbols.offsetof: { // offsetof<T!>(fieldName?: string) -> usize
+      compiler.currentType = compiler.options.usizeType;
+      if (operands.length > 1) {
+        if (!(typeArguments && typeArguments.length == 1)) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          );
+        }
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.range, "1", operands.length.toString(10)
+        );
+        return module.createUnreachable();
+      }
+      if (!(typeArguments && typeArguments.length == 1)) {
+        compiler.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        return module.createUnreachable();
+      }
+      let classType = typeArguments[0].classReference;
+      if (!classType) {
+        compiler.error( // TODO: better error
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let offset: i32;
+      if (operands.length) {
+        if (
+          operands[0].kind != NodeKind.LITERAL ||
+          (<LiteralExpression>operands[0]).literalKind != LiteralKind.STRING
+        ) {
+          compiler.error(
+            DiagnosticCode.String_literal_expected,
+            operands[0].range
+          );
+          return module.createUnreachable();
+        }
+        let fieldName = (<StringLiteralExpression>operands[0]).value;
+        let field = classType.members ? classType.members.get(fieldName) : null;
+        if (!(field && field.kind == ElementKind.FIELD)) {
+          compiler.error(
+            DiagnosticCode.Type_0_has_no_property_1,
+            operands[0].range, classType.internalName, fieldName
+          );
+          return module.createUnreachable();
+        }
+        offset = (<Field>field).memoryOffset;
+      } else {
+        offset = classType.currentMemoryOffset;
+      }
+      if (compiler.options.isWasm64) {
+        // implicitly wrap if contextual type is a 32-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
+          compiler.currentType = Type.u32;
+          return module.createI32(offset);
+        } else {
+          return module.createI64(offset);
+        }
+      } else {
+        // implicitly extend if contextual type is a 64-bit integer
+        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
+          compiler.currentType = Type.u64;
+          return module.createI64(offset);
+        } else {
+          return module.createI32(offset);
+        }
+      }
+    }
 
-    // math
+    // === Math ===================================================================================
 
     case BuiltinSymbols.clz: { // clz<T?>(value: T) -> T
       if (operands.length != 1) {
@@ -1988,7 +2152,7 @@ export function compileCall(
       return ret;
     }
 
-    // memory access
+    // === Memory access ==========================================================================
 
     case BuiltinSymbols.load: { // load<T!>(offset: usize, offset?: usize, align?: usize) -> *
       if (operands.length < 1 || operands.length > 3) {
@@ -2152,6 +2316,9 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset, align);
     }
+
+    // === Atomics ================================================================================
+
     case BuiltinSymbols.atomic_load: { // load<T!>(offset: usize, immOffset?) -> T
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       let hasError = false;
@@ -2532,172 +2699,8 @@ export function compileCall(
       compiler.currentType = Type.i32;
       return module.createAtomicWake(arg0, arg1);
     }
-    case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
-      compiler.currentType = compiler.options.usizeType;
-      if (operands.length != 0) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "0", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-      }
-      let byteSize = (<Type[]>typeArguments)[0].byteSize;
-      if (compiler.options.isWasm64) {
-        // implicitly wrap if contextual type is a 32-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
-          compiler.currentType = Type.u32;
-          ret = module.createI32(byteSize);
-        } else {
-          ret = module.createI64(byteSize, 0);
-        }
-      } else {
-        // implicitly extend if contextual type is a 64-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
-          compiler.currentType = Type.u64;
-          ret = module.createI64(byteSize, 0);
-        } else {
-          ret = module.createI32(byteSize);
-        }
-      }
-      return ret;
-    }
-    case BuiltinSymbols.alignof: { // alignof<T!>() -> usize
-      compiler.currentType = compiler.options.usizeType;
-      if (operands.length != 0) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "0", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        return module.createUnreachable();
-      }
-      let byteSize = (<Type[]>typeArguments)[0].byteSize;
-      let alignLog2: i32;
-      switch (byteSize) {
-        case 1: { alignLog2 = 0; break; }
-        case 2: { alignLog2 = 1; break; }
-        case 4: { alignLog2 = 2; break; }
-        case 8: { alignLog2 = 3; break; }
-        default: { assert(false, "unexected byte size"); return module.createUnreachable(); }
-      }
-      if (compiler.options.isWasm64) {
-        // implicitly wrap if contextual type is a 32-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
-          compiler.currentType = Type.u32;
-          ret = module.createI32(alignLog2);
-        } else {
-          ret = module.createI64(alignLog2, 0);
-        }
-      } else {
-        // implicitly extend if contextual type is a 64-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
-          compiler.currentType = Type.u64;
-          ret = module.createI64(alignLog2, 0);
-        } else {
-          ret = module.createI32(alignLog2);
-        }
-      }
-      return ret;
-    }
-    case BuiltinSymbols.offsetof: { // offsetof<T!>(fieldName?: string) -> usize
-      compiler.currentType = compiler.options.usizeType;
-      if (operands.length > 1) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        return module.createUnreachable();
-      }
-      let classType = typeArguments[0].classReference;
-      if (!classType) {
-        compiler.error( // TODO: better error
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let offset: i32;
-      if (operands.length) {
-        if (
-          operands[0].kind != NodeKind.LITERAL ||
-          (<LiteralExpression>operands[0]).literalKind != LiteralKind.STRING
-        ) {
-          compiler.error(
-            DiagnosticCode.String_literal_expected,
-            operands[0].range
-          );
-          return module.createUnreachable();
-        }
-        let fieldName = (<StringLiteralExpression>operands[0]).value;
-        let field = classType.members ? classType.members.get(fieldName) : null;
-        if (!(field && field.kind == ElementKind.FIELD)) {
-          compiler.error(
-            DiagnosticCode.Type_0_has_no_property_1,
-            operands[0].range, classType.internalName, fieldName
-          );
-          return module.createUnreachable();
-        }
-        offset = (<Field>field).memoryOffset;
-      } else {
-        offset = classType.currentMemoryOffset;
-      }
-      if (compiler.options.isWasm64) {
-        // implicitly wrap if contextual type is a 32-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
-          compiler.currentType = Type.u32;
-          return module.createI32(offset);
-        } else {
-          return module.createI64(offset);
-        }
-      } else {
-        // implicitly extend if contextual type is a 64-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
-          compiler.currentType = Type.u64;
-          return module.createI64(offset);
-        } else {
-          return module.createI32(offset);
-        }
-      }
-    }
 
-    // control flow
+    // === Control flow ===========================================================================
 
     case BuiltinSymbols.select: { // select<T?>(ifTrue: T, ifFalse: T, condition: bool) -> T
       if (operands.length != 3) {
@@ -2773,7 +2776,7 @@ export function compileCall(
       return module.createUnreachable();
     }
 
-    // host operations
+    // === Memory =================================================================================
 
     case BuiltinSymbols.memory_size: { // memory.size() -> i32
       compiler.currentType = Type.i32;
@@ -2898,7 +2901,7 @@ export function compileCall(
       return module.createMemoryFill(arg0, arg1, arg2);
     }
 
-    // other
+    // === Helpers ================================================================================
 
     case BuiltinSymbols.changetype: { // changetype<T!>(value: *) -> T
       if (!(typeArguments && typeArguments.length == 1)) {
@@ -3245,7 +3248,7 @@ export function compileCall(
       return compiler.compileInstantiate(classInstance, operands, reportNode);
     }
 
-    // user-defined diagnostic macros
+    // === User-defined diagnostics ===============================================================
 
     case BuiltinSymbols.ERROR: {
       compiler.error(
@@ -3269,7 +3272,7 @@ export function compileCall(
       return module.createNop();
     }
 
-    // conversions
+    // === Type conversions =======================================================================
 
     case BuiltinSymbols.i8: {
       if (typeArguments) {
@@ -3563,8 +3566,6 @@ export function compileCall(
     }
 
     // === SIMD ===================================================================================
-
-    // const
 
     case BuiltinSymbols.v128: // alias for now
     case BuiltinSymbols.i8x16: {
@@ -5907,10 +5908,12 @@ export function compileAbort(
   ]);
 }
 
-/** Compiles the iterateRoots function if requires. */
+/** Compiles the iterateRoots function if required. */
 export function compileIterateRoots(compiler: Compiler): void {
   var module = compiler.module;
   var exprs = new Array<ExpressionRef>();
+  var typeName = Signature.makeSignatureString([ Type.i32 ], Type.void);
+  var typeRef = compiler.ensureFunctionType([ Type.i32 ], Type.void);
 
   for (let element of compiler.program.elementsByName.values()) {
     if (element.kind != ElementKind.GLOBAL) continue;
@@ -5931,7 +5934,7 @@ export function compileIterateRoots(compiler: Compiler): void {
                 ? module.createI64(i64_low(value), i64_high(value))
                 : module.createI32(i64_low(value))
             ],
-            "FUNCSIG$vi"
+            typeName
           )
         );
       } else {
@@ -5944,13 +5947,12 @@ export function compileIterateRoots(compiler: Compiler): void {
                 compiler.options.nativeSizeType
               )
             ],
-            "FUNCSIG$vi"
+            typeName
           )
         );
       }
     }
   }
-  var typeRef = compiler.ensureFunctionType([ Type.i32 ], Type.void);
   module.addFunction("~iterateRoots", typeRef, [],
     exprs.length
       ? module.createBlock(null, exprs)
