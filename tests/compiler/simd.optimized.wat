@@ -1,5 +1,7 @@
 (module
  (type $FUNCSIG$v (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\07\00\00\00s\00i\00m\00d\00.\00t\00s")
  (table $0 1 funcref)
@@ -9,13 +11,9 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:simd (; 0 ;) (type $FUNCSIG$v)
+ (func $simd/test_v128 (; 1 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
-  i32.const 32
-  global.set $~lib/allocator/arena/startOffset
-  global.get $~lib/allocator/arena/startOffset
-  global.set $~lib/allocator/arena/offset
   v128.const i32 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0 0x1 0x0
   local.tee $0
   v128.const i32 0x0 0x2 0x0 0x2 0x0 0x2 0x0 0x2 0x0 0x2 0x0 0x2 0x0 0x2 0x0 0x2
@@ -34,11 +32,21 @@
   i8x16.lt_s
   v128.bitselect
   drop
+  i32.const 0
+  i32.const 8
+  i32.const 78
+  i32.const 2
+  call $~lib/env/abort
+  unreachable
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
-  call $start:simd
+ (func $start (; 2 ;) (type $FUNCSIG$v)
+  i32.const 32
+  global.set $~lib/allocator/arena/startOffset
+  global.get $~lib/allocator/arena/startOffset
+  global.set $~lib/allocator/arena/offset
+  call $simd/test_v128
  )
- (func $null (; 2 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
   nop
  )
 )
