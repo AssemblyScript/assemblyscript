@@ -401,7 +401,10 @@ export class String {
     assert(this !== null && search !== null && replacement !== null);
     var len = this.length;
     var slen = search.length;
-    if (len < slen) return this;
+    if (len <= slen) {
+      if (len < slen) return this;
+      return select<String>(replacement, this, search == this);
+    }
     var index = this.indexOf(search);
     if (~index) {
       let rlen = replacement.length;
@@ -426,8 +429,10 @@ export class String {
     assert(this !== null && search !== null && replacement !== null);
     var len = this.length;
     var slen = search.length;
-    if (len < slen) return this;
-    if (len == slen) return select<String>(replacement, this, search == this);
+    if (len <= slen) {
+      if (len < slen) return this;
+      return select<String>(replacement, this, search == this);
+    }
     var rlen = replacement.length;
     if (!slen) {
       // Handle special case when we should insert replacement between each char

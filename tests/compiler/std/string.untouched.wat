@@ -3312,7 +3312,7 @@
             if
              i32.const 0
              i32.const 80
-             i32.const 701
+             i32.const 706
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -3715,9 +3715,21 @@
   local.set $5
   local.get $4
   local.get $5
-  i32.lt_s
+  i32.le_s
   if
+   local.get $4
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    return
+   end
+   local.get $2
    local.get $0
+   local.get $1
+   local.get $0
+   call $~lib/string/String.__eq
+   select
    return
   end
   local.get $0
@@ -3919,7 +3931,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 426
+   i32.const 429
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3932,15 +3944,15 @@
   local.set $5
   local.get $4
   local.get $5
-  i32.lt_s
+  i32.le_s
   if
-   local.get $0
-   return
-  end
-  local.get $4
-  local.get $5
-  i32.eq
-  if
+   local.get $4
+   local.get $5
+   i32.lt_s
+   if
+    local.get $0
+    return
+   end
    local.get $2
    local.get $0
    local.get $1
@@ -4127,7 +4139,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 472
+   i32.const 477
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4837,7 +4849,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 484
+   i32.const 489
    i32.const 4
    call $~lib/env/abort
    unreachable
