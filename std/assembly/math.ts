@@ -1267,7 +1267,7 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 
 @inline /** @internal */
 function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
-  const pi_2_65 = reinterpret<f64>(0x3BF921FB54442D18); // 8.51530395021638647334e-20
+  const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
   const bits = PIO2_TABLE;
 
   var offset = (u >> 23) - 152;
@@ -1291,7 +1291,7 @@ function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/maste
   var product: u64 = mantissa * hi + ((mantissa * lo) >> 32);
   var r: i64 = product << 2;
   var q: i32 = <i32>((product >> 62) + (r >>> 63));
-  rempio2f_y = copysign<f64>(pi_2_65, x) * <f64>r;
+  rempio2f_y = copysign<f64>(coeff, x) * <f64>r;
   return q;
 }
 
