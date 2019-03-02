@@ -159,13 +159,18 @@ assert("abc".replaceAll("-", "+") == "abc");
 assert("abcabc".replaceAll("abc", "+") == "++");
 assert("abcabcabc".replaceAll("abc", "+") == "+++");
 assert("abcabc".replaceAll("ab", "ab") == "abcabc");
+assert("abcabc".replaceAll("ab", "++") == "++c++c");
+assert("cccc".replaceAll("cc", "++") == "++++");
 assert("abc".replaceAll("abcd", "+") == "abc");
 assert("a-b-c".replaceAll("-", "+") == "a+b+c");
 // cpecial cases
+assert("".replaceAll("", "") == "");
+assert("abc".replaceAll("abc", "-") == "-");
+assert("abc".replaceAll("abd", "-") == "abc");
 assert("abc".replaceAll("", "+") == "+a+b+c+");
+assert("abc".replaceAll("", "") == "abc");
 assert("".replaceAll("", "+") == "+");
 assert("+".replaceAll("", "") == "+");
-assert("".replaceAll("", "") == "");
 
 // test cases for slice method
 str = "abcdefghijklmn";
