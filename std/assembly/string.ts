@@ -452,7 +452,6 @@ export class String {
       return result;
     }
     var prev = 0, next = 0;
-    var result = changetype<String>("");
     if (ASC_SHRINK_LEVEL < 1) {
       if (slen === rlen) {
         // Fast path when search and replacement have same length so we could use preallocation
@@ -465,6 +464,7 @@ export class String {
         return result;
       }
     }
+    var result = changetype<String>("");
     while (~(next = this.indexOf(search, prev))) {
       result = result.concat(this.substring(prev, next).concat(replacement));
       prev = next + slen;
@@ -657,6 +657,7 @@ export class String {
   }
 }
 
+// @ts-ignore
 export type string = String;
 
 export function parseInt(str: String, radix: i32 = 0): f64 {
