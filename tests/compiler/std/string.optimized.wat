@@ -2610,7 +2610,7 @@
          if
           i32.const 0
           i32.const 80
-          i32.const 706
+          i32.const 707
           i32.const 10
           call $~lib/env/abort
           unreachable
@@ -3240,8 +3240,6 @@
   end
   i32.const 0
   local.set $3
-  i32.const 256
-  local.set $4
   local.get $6
   local.get $7
   i32.eq
@@ -3279,6 +3277,8 @@
    local.get $4
    return
   end
+  i32.const 256
+  local.set $4
   loop $continue|2
    local.get $0
    local.get $1
