@@ -1258,7 +1258,7 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 }
 
 @inline function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
-  const                        // see: musl/src/math/__expo2f.c
+  const                                // see: musl/src/math/__expo2f.c
     k    = <u32>235,
     kln2 = reinterpret<f32>(0x4322E3BC); // 0x1.45c778p+7f
   var scale = reinterpret<f32>(<u32>(0x7F + (k >> 1)) << 23);
@@ -1266,7 +1266,7 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 }
 
 @inline /** @internal */
-function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
+function pio2_large_quot(x: f32, u: i32): i32 {       // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
   const bits = PIO2_TABLE;
 
@@ -1296,7 +1296,7 @@ function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/maste
 }
 
 @inline /** @internal */
-function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
+function rempio2f(x: f32, u: u32, sign: i32): i32 {   // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const pi2hi = reinterpret<f64>(0x3FF921FB50000000); // 1.57079631090164184570
   const pi2lo = reinterpret<f64>(0x3E5110B4611A6263); // 1.58932547735281966916e-8
   const _2_pi = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
@@ -1631,8 +1631,8 @@ export namespace NativeMathf {
     var sign = ix >> 31;
     ix &= 0x7FFFFFFF;
 
-    if (ix <= 0x3f490fda) {  /* |x| ~<= pi/4 */
-      if (ix < 0x39800000) {  /* |x| < 2**-12 */
+    if (ix <= 0x3f490fda) {  /* |x| ~<= π/4 */
+      if (ix < 0x39800000) { /* |x| < 2**-12 */
         /* raise inexact if x != 0 */
         return 1;
       }
@@ -1640,15 +1640,15 @@ export namespace NativeMathf {
     }
 
     if (ASC_SHRINK_LEVEL < 1) {
-      if (ix <= 0x407b53d1) {  /* |x| ~<= 5*pi/4 */
-        if (ix > 0x4016cbe3) { /* |x|  ~> 3*pi/4 */
+      if (ix <= 0x407b53d1) {  /* |x| ~<= 5π/4 */
+        if (ix > 0x4016cbe3) { /* |x|  ~> 3π/4 */
           return -cos_kernf(sign ? x + c2pio2 : x - c2pio2);
         } else {
           return sign ? sin_kernf(x + c1pio2) : sin_kernf(c1pio2 - x);
         }
       }
-      if (ix <= 0x40e231d5) {  /* |x| ~<= 9*pi/4 */
-        if (ix > 0x40afeddf)  {/* |x| ~> 7*pi/4 */
+      if (ix <= 0x40e231d5) {  /* |x| ~<= 9π/4 */
+        if (ix > 0x40afeddf) { /* |x|  ~> 7π/4 */
           return cos_kernf(sign ? x + c4pio2 : x - c4pio2);
         } else {
           return sign ? sin_kernf(-x - c3pio2) : sin_kernf(x - c3pio2);
@@ -2258,23 +2258,23 @@ export namespace NativeMathf {
     var sign = ix >> 31;
     ix &= 0x7FFFFFFF;
 
-    if (ix <= 0x3f490fda) { /* |x| ~<= pi/4 */
-      if (ix < 0x39800000) {  /* |x| < 2**-12 */
+    if (ix <= 0x3f490fda) {  /* |x| ~<= π/4 */
+      if (ix < 0x39800000) { /* |x| < 2**-12 */
         return x;
       }
       return sin_kernf(x);
     }
 
     if (ASC_SHRINK_LEVEL < 1) {
-      if (ix <= 0x407b53d1) {  /* |x| ~<= 5*pi/4 */
-        if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
+      if (ix <= 0x407b53d1) {   /* |x| ~<= 5π/4 */
+        if (ix <= 0x4016cbe3) { /* |x| ~<= 3π/4 */
           return sign ? -cos_kernf(x + s1pio2) : cos_kernf(x - s1pio2);
         }
         return sin_kernf(-(sign ? x + s2pio2 : x - s2pio2));
       }
 
-      if (ix <= 0x40e231d5) {  /* |x| ~<= 9*pi/4 */
-        if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
+      if (ix <= 0x40e231d5) {   /* |x| ~<= 9π/4 */
+        if (ix <= 0x40afeddf) { /* |x| ~<= 7π/4 */
           return sign ? cos_kernf(x + s3pio2) : -cos_kernf(x - s3pio2);
         }
         return sin_kernf(sign ? x + s4pio2 : x - s4pio2);
@@ -2323,21 +2323,21 @@ export namespace NativeMathf {
     var sign = ix >> 31;
     ix &= 0x7FFFFFFF;
 
-    if (ix <= 0x3f490fda) {  /* |x| ~<= pi/4 */
-      if (ix < 0x39800000) {  /* |x| < 2**-12 */
+    if (ix <= 0x3f490fda) {  /* |x| ~<= π/4 */
+      if (ix < 0x39800000) { /* |x| < 2**-12 */
         return x;
       }
       return tan_kernf(x, 0);
     }
-    if (ix <= 0x407b53d1) {  /* |x| ~<= 5*pi/4 */
-      if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
+    if (ix <= 0x407b53d1) {   /* |x| ~<= 5π/4 */
+      if (ix <= 0x4016cbe3) { /* |x| ~<= 3π/4 */
         return tan_kernf((sign ? x + t1pio2 : x - t1pio2), 1);
       } else {
         return tan_kernf((sign ? x + t2pio2 : x - t2pio2), 0);
       }
     }
-    if (ix <= 0x40e231d5) {  /* |x| ~<= 9*pi/4 */
-      if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
+    if (ix <= 0x40e231d5) {   /* |x| ~<= 9π/4 */
+      if (ix <= 0x40afeddf) { /* |x| ~<= 7π/4 */
         return tan_kernf((sign ? x + t3pio2 : x - t3pio2), 1);
       } else {
         return tan_kernf((sign ? x + t4pio2 : x - t4pio2), 0);
@@ -2536,8 +2536,7 @@ export namespace NativeMathf {
     var sign = ix >> 31;
     ix &= 0x7fffffff;
 
-    /* |x| ~<= pi/4 */
-    if (ix <= 0x3f490fda) {
+    if (ix <= 0x3f490fda) {  /* |x| ~<= π/4 */
       if (ix < 0x39800000) { /* |x| < 2**-12 */
         sincos_s32 = x;
         sincos_c32 = 1;
@@ -2549,9 +2548,8 @@ export namespace NativeMathf {
     }
 
     if (ASC_SHRINK_LEVEL < 1) {
-      /* |x| ~<= 5*pi/4 */
-      if (ix <= 0x407b53d1) {
-        if (ix <= 0x4016cbe3) {  /* |x| ~<= 3pi/4 */
+      if (ix <= 0x407b53d1) {   /* |x| ~<= 5π/4 */
+        if (ix <= 0x4016cbe3) { /* |x| ~<= 3π/4 */
           if (sign) {
             sincos_s32 = -cos_kernf(x + s1pio2);
             sincos_c32 =  sin_kernf(x + s1pio2);
@@ -2567,9 +2565,8 @@ export namespace NativeMathf {
         return;
       }
 
-      /* |x| ~<= 9*pi/4 */
-      if (ix <= 0x40e231d5) {
-        if (ix <= 0x40afeddf) {  /* |x| ~<= 7*pi/4 */
+      if (ix <= 0x40e231d5) {   /* |x| ~<= 9π/4 */
+        if (ix <= 0x40afeddf) { /* |x| ~<= 7π/4 */
           if (sign) {
             sincos_s32 =  cos_kernf(x + s3pio2);
             sincos_c32 = -sin_kernf(x + s3pio2);
