@@ -513,7 +513,7 @@ export class String {
     }
     var result = new Array<String>();
     var end = 0, start = 0, i = 0;
-    while ((end = this.indexOf(separator!, start)) != -1) {
+    while (~(end = this.indexOf(separator!, start))) {
       let len = end - start;
       if (len > 0) {
         let out = allocateUnsafe(len);

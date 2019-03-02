@@ -5001,7 +5001,7 @@
     call $~lib/string/String#indexOf
     local.tee $14
     i32.const -1
-    i32.ne
+    i32.xor
     if
      block
       local.get $14
