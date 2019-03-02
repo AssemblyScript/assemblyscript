@@ -1288,7 +1288,7 @@ function pio2_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/maste
 
   var hi = (b1 >> (64 - shift)) | (b0 << shift);
   var mantissa: u64 = (u & 0x007FFFFF) | 0x00800000;
-  var product: u64 = mantissa * hi + ((mantissa * lo) >> 32);
+  var product: u64 = mantissa * hi + (mantissa * lo >> 32);
   var r: i64 = product << 2;
   var q: i32 = <i32>((product >> 62) + (r >>> 63));
   rempio2f_y = copysign<f64>(coeff, x) * <f64>r;
@@ -1301,7 +1301,7 @@ function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/m
   const pi2lo = reinterpret<f64>(0x3E5110B4611A6263); // 1.58932547735281966916e-8
   const _2_pi = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
 
-  if (u < 0x4DC90FDB) {
+  if (u < 0x4DC90FDB) { /* π * 0x1p28 */
     let q = nearest(x * _2_pi);
     rempio2f_y = x - q * pi2hi - q * pi2lo;
     return <i32>q;
