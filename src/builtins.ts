@@ -340,6 +340,8 @@ export namespace BuiltinSymbols {
   export const i8x16_shr_u = "~lib/builtins/i8x16.shr_u";
   export const i8x16_any_true = "~lib/builtins/i8x16.any_true";
   export const i8x16_all_true = "~lib/builtins/i8x16.all_true";
+  export const i8x16_min = "~lib/builtins/i8x16.min";
+  export const i8x16_max = "~lib/builtins/i8x16.max";
   export const i8x16_eq = "~lib/builtins/i8x16.eq";
   export const i8x16_ne = "~lib/builtins/i8x16.ne";
   export const i8x16_lt_s = "~lib/builtins/i8x16.lt_s";
@@ -368,6 +370,8 @@ export namespace BuiltinSymbols {
   export const i16x8_shr_u = "~lib/builtins/i16x8.shr_u";
   export const i16x8_any_true = "~lib/builtins/i16x8.any_true";
   export const i16x8_all_true = "~lib/builtins/i16x8.all_true";
+  export const i16x8_min = "~lib/builtins/i16x8.min";
+  export const i16x8_max = "~lib/builtins/i16x8.max";
   export const i16x8_eq = "~lib/builtins/i16x8.eq";
   export const i16x8_ne = "~lib/builtins/i16x8.ne";
   export const i16x8_lt_s = "~lib/builtins/i16x8.lt_s";
@@ -391,6 +395,8 @@ export namespace BuiltinSymbols {
   export const i32x4_shr_u = "~lib/builtins/i32x4.shr_u";
   export const i32x4_any_true = "~lib/builtins/i32x4.any_true";
   export const i32x4_all_true = "~lib/builtins/i32x4.all_true";
+  export const i32x4_min = "~lib/builtins/i32x4.min";
+  export const i32x4_max = "~lib/builtins/i32x4.max";
   export const i32x4_eq = "~lib/builtins/i32x4.eq";
   export const i32x4_ne = "~lib/builtins/i32x4.ne";
   export const i32x4_lt_s = "~lib/builtins/i32x4.lt_s";
@@ -415,6 +421,8 @@ export namespace BuiltinSymbols {
   export const i64x2_shr_u = "~lib/builtins/i64x2.shr_u";
   export const i64x2_any_true = "~lib/builtins/i64x2.any_true";
   export const i64x2_all_true = "~lib/builtins/i64x2.all_true"; // i64x2 has no .eq etc.
+  export const i64x2_min = "~lib/builtins/i64x2.min";
+  export const i64x2_max = "~lib/builtins/i64x2.max";
   export const i64x2_trunc_s_f64x2_sat = "~lib/builtins/i64x2.trunc_s_f64x2_sat";
   export const i64x2_trunc_u_f64x2_sat = "~lib/builtins/i64x2.trunc_u_f64x2_sat";
 
@@ -4840,6 +4848,42 @@ export function compileCall(
       }
       let op: BinaryOp;
       switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8:
+        case TypeKind.I16:
+        case TypeKind.U16:
+        case TypeKind.I32:
+        case TypeKind.U32: {
+        // case TypeKind.I64:
+        // case TypeKind.U64: {
+          let flow = compiler.currentFlow;
+          arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+          arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+          let tempLocal0 = flow.getTempLocal(Type.v128);
+          let tempLocal1 = flow.getTempLocal(Type.v128);
+          flow.freeTempLocal(tempLocal0);
+          op = BinaryOp.LtSVecI8x16;
+          switch (type.kind) {
+            case TypeKind.I8:  { op = BinaryOp.LtSVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.LtUVecI8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.LtSVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.LtUVecI16x8; break; }
+            case TypeKind.I32: { op = BinaryOp.LtSVecI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.LtUVecI32x4; break; }
+            // case TypeKind.I64: { op = BinaryOp.LtSVecI64x2; break; }
+            // case TypeKind.U64: { op = BinaryOp.LtUVecI64x2; break; }
+            default: break;
+          }
+
+          return module.createSIMDBitselect(
+            module.createTeeLocal(tempLocal0.index, arg0),
+            module.createTeeLocal(tempLocal1.index, arg1),
+            module.createBinary(op,
+              module.createGetLocal(tempLocal0.index, NativeType.V128),
+              module.createGetLocal(tempLocal1.index, NativeType.V128)
+            )
+          );
+        }
         case TypeKind.F32: { op = BinaryOp.MinVecF32x4; break; }
         case TypeKind.F64: { op = BinaryOp.MinVecF64x2; break; }
         default: {
@@ -4882,6 +4926,42 @@ export function compileCall(
       }
       let op: BinaryOp;
       switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.U8:
+        case TypeKind.I16:
+        case TypeKind.U16:
+        case TypeKind.I32:
+        case TypeKind.U32: {
+        // case TypeKind.I64:
+        // case TypeKind.U64: {
+          let flow = compiler.currentFlow;
+          arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+          arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+          let tempLocal0 = flow.getTempLocal(Type.v128);
+          let tempLocal1 = flow.getTempLocal(Type.v128);
+          flow.freeTempLocal(tempLocal0);
+          op = BinaryOp.GtSVecI8x16;
+          switch (type.kind) {
+            case TypeKind.I8:  { op = BinaryOp.GtSVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.GtUVecI8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.GtSVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.GtUVecI16x8; break; }
+            case TypeKind.I32: { op = BinaryOp.GtSVecI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.GtUVecI32x4; break; }
+            // case TypeKind.I64: { op = BinaryOp.GtSVecI64x2; break; }
+            // case TypeKind.U64: { op = BinaryOp.GtUVecI64x2; break; }
+            default: break;
+          }
+
+          return module.createSIMDBitselect(
+            module.createTeeLocal(tempLocal0.index, arg0),
+            module.createTeeLocal(tempLocal1.index, arg1),
+            module.createBinary(op,
+              module.createGetLocal(tempLocal0.index, NativeType.V128),
+              module.createGetLocal(tempLocal1.index, NativeType.V128)
+            )
+          );
+        }
         case TypeKind.F32: { op = BinaryOp.MaxVecF32x4; break; }
         case TypeKind.F64: { op = BinaryOp.MaxVecF64x2; break; }
         default: {
