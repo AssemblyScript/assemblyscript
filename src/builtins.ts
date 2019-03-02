@@ -227,54 +227,54 @@ export namespace BuiltinSymbols {
   export const i64_atomic_store16 = "~lib/builtins/i64.atomic.store16";
   export const i64_atomic_store32 = "~lib/builtins/i64.atomic.store32";
   export const i64_atomic_store = "~lib/builtins/i64.atomic.store";
-  export const i32_atomic_rmw8_u_add = "~lib/builtins/i32.atomic.rmw8_u.add";
-  export const i32_atomic_rmw16_u_add = "~lib/builtins/i32.atomic.rmw16_u.add";
+  export const i32_atomic_rmw8_add_u = "~lib/builtins/i32.atomic.rmw8.add_u";
+  export const i32_atomic_rmw16_add_u = "~lib/builtins/i32.atomic.rmw16.add_u";
   export const i32_atomic_rmw_add = "~lib/builtins/i32.atomic.rmw.add";
-  export const i64_atomic_rmw8_u_add = "~lib/builtins/i64.atomic.rmw8_u.add";
-  export const i64_atomic_rmw16_u_add = "~lib/builtins/i64.atomic.rmw16_u.add";
-  export const i64_atomic_rmw32_u_add = "~lib/builtins/i64.atomic.rmw32_u.add";
+  export const i64_atomic_rmw8_add_u = "~lib/builtins/i64.atomic.rmw8.add_u";
+  export const i64_atomic_rmw16_add_u = "~lib/builtins/i64.atomic.rmw16.add_u";
+  export const i64_atomic_rmw32_add_u = "~lib/builtins/i64.atomic.rmw32.add_u";
   export const i64_atomic_rmw_add = "~lib/builtins/i64.atomic.rmw.add";
-  export const i32_atomic_rmw8_u_sub = "~lib/builtins/i32.atomic.rmw8_u.sub";
-  export const i32_atomic_rmw16_u_sub = "~lib/builtins/i32.atomic.rmw16_u.sub";
+  export const i32_atomic_rmw8_sub_u = "~lib/builtins/i32.atomic.rmw8.sub_u";
+  export const i32_atomic_rmw16_sub_u = "~lib/builtins/i32.atomic.rmw16.sub_u";
   export const i32_atomic_rmw_sub = "~lib/builtins/i32.atomic.rmw.sub";
-  export const i64_atomic_rmw8_u_sub = "~lib/builtins/i64.atomic.rmw8_u.sub";
-  export const i64_atomic_rmw16_u_sub = "~lib/builtins/i64.atomic.rmw16_u.sub";
-  export const i64_atomic_rmw32_u_sub = "~lib/builtins/i64.atomic.rmw32_u.sub";
+  export const i64_atomic_rmw8_sub_u = "~lib/builtins/i64.atomic.rmw8.sub_u";
+  export const i64_atomic_rmw16_sub_u = "~lib/builtins/i64.atomic.rmw16.sub_u";
+  export const i64_atomic_rmw32_sub_u = "~lib/builtins/i64.atomic.rmw32.sub_u";
   export const i64_atomic_rmw_sub = "~lib/builtins/i64.atomic.rmw.sub";
-  export const i32_atomic_rmw8_u_and = "~lib/builtins/i32.atomic.rmw8_u.and";
-  export const i32_atomic_rmw16_u_and = "~lib/builtins/i32.atomic.rmw16_u.and";
+  export const i32_atomic_rmw8_and_u = "~lib/builtins/i32.atomic.rmw8.and_u";
+  export const i32_atomic_rmw16_and_u = "~lib/builtins/i32.atomic.rmw16.and_u";
   export const i32_atomic_rmw_and = "~lib/builtins/i32.atomic.rmw.and";
-  export const i64_atomic_rmw8_u_and = "~lib/builtins/i64.atomic.rmw8_u.and";
-  export const i64_atomic_rmw16_u_and = "~lib/builtins/i64.atomic.rmw16_u.and";
-  export const i64_atomic_rmw32_u_and = "~lib/builtins/i64.atomic.rmw32_u.and";
+  export const i64_atomic_rmw8_and_u = "~lib/builtins/i64.atomic.rmw8.and_u";
+  export const i64_atomic_rmw16_and_u = "~lib/builtins/i64.atomic.rmw16.and_u";
+  export const i64_atomic_rmw32_and_u = "~lib/builtins/i64.atomic.rmw32.and_u";
   export const i64_atomic_rmw_and = "~lib/builtins/i64.atomic.rmw.and";
-  export const i32_atomic_rmw8_u_or = "~lib/builtins/i32.atomic.rmw8_u.or";
-  export const i32_atomic_rmw16_u_or = "~lib/builtins/i32.atomic.rmw16_u.or";
+  export const i32_atomic_rmw8_or_u = "~lib/builtins/i32.atomic.rmw8.or_u";
+  export const i32_atomic_rmw16_or_u = "~lib/builtins/i32.atomic.rmw16.or_u";
   export const i32_atomic_rmw_or = "~lib/builtins/i32.atomic.rmw.or";
-  export const i64_atomic_rmw8_u_or = "~lib/builtins/i64.atomic.rmw8_u.or";
-  export const i64_atomic_rmw16_u_or = "~lib/builtins/i64.atomic.rmw16_u.or";
-  export const i64_atomic_rmw32_u_or = "~lib/builtins/i64.atomic.rmw32_u.or";
+  export const i64_atomic_rmw8_or_u = "~lib/builtins/i64.atomic.rmw8.or_u";
+  export const i64_atomic_rmw16_or_u = "~lib/builtins/i64.atomic.rmw16.or_u";
+  export const i64_atomic_rmw32_or_u = "~lib/builtins/i64.atomic.rmw32.or_u";
   export const i64_atomic_rmw_or = "~lib/builtins/i64.atomic.rmw.or";
-  export const i32_atomic_rmw8_u_xor = "~lib/builtins/i32.atomic.rmw8_u.xor";
-  export const i32_atomic_rmw16_u_xor = "~lib/builtins/i32.atomic.rmw16_u.xor";
+  export const i32_atomic_rmw8_u_xor = "~lib/builtins/i32.atomic.rmw8.xor_u";
+  export const i32_atomic_rmw16_u_xor = "~lib/builtins/i32.atomic.rmw16.xor_u";
   export const i32_atomic_rmw_xor = "~lib/builtins/i32.atomic.rmw.xor";
-  export const i64_atomic_rmw8_u_xor = "~lib/builtins/i64.atomic.rmw8_u.xor";
-  export const i64_atomic_rmw16_u_xor = "~lib/builtins/i64.atomic.rmw16_u.xor";
-  export const i64_atomic_rmw32_u_xor = "~lib/builtins/i64.atomic.rmw32_u.xor";
+  export const i64_atomic_rmw8_xor_u = "~lib/builtins/i64.atomic.rmw8.xor_u";
+  export const i64_atomic_rmw16_xor_u = "~lib/builtins/i64.atomic.rmw16.xor_u";
+  export const i64_atomic_rmw32_xor_u = "~lib/builtins/i64.atomic.rmw32.xor_u";
   export const i64_atomic_rmw_xor = "~lib/builtins/i64.atomic.rmw.xor";
-  export const i32_atomic_rmw8_u_xchg = "~lib/builtins/i32.atomic.rmw8_u.xchg";
-  export const i32_atomic_rmw16_u_xchg = "~lib/builtins/i32.atomic.rmw16_u.xchg";
+  export const i32_atomic_rmw8_xchg_u = "~lib/builtins/i32.atomic.rmw8.xchg_u";
+  export const i32_atomic_rmw16_xchg_u = "~lib/builtins/i32.atomic.rmw16.xchg_u";
   export const i32_atomic_rmw_xchg = "~lib/builtins/i32.atomic.rmw.xchg";
-  export const i64_atomic_rmw8_u_xchg = "~lib/builtins/i64.atomic.rmw8_u.xchg";
-  export const i64_atomic_rmw16_u_xchg = "~lib/builtins/i64.atomic.rmw16_u.xchg";
-  export const i64_atomic_rmw32_u_xchg = "~lib/builtins/i64.atomic.rmw32_u.xchg";
+  export const i64_atomic_rmw8_xchg_u = "~lib/builtins/i64.atomic.rmw8.xchg_u";
+  export const i64_atomic_rmw16_xchg_u = "~lib/builtins/i64.atomic.rmw16.xchg_u";
+  export const i64_atomic_rmw32_xchg_u = "~lib/builtins/i64.atomic.rmw32.xchg_u";
   export const i64_atomic_rmw_xchg = "~lib/builtins/i64.atomic.rmw.xchg";
-  export const i32_atomic_rmw8_u_cmpxchg = "~lib/builtins/i32.atomic.rmw8_u.cmpxchg";
-  export const i32_atomic_rmw16_u_cmpxchg = "~lib/builtins/i32.atomic.rmw16_u.cmpxchg";
+  export const i32_atomic_rmw8_cmpxchg_u = "~lib/builtins/i32.atomic.rmw8.cmpxchg_u";
+  export const i32_atomic_rmw16_cmpxchg_u = "~lib/builtins/i32.atomic.rmw16.cmpxchg_u";
   export const i32_atomic_rmw_cmpxchg = "~lib/builtins/i32.atomic.rmw.cmpxchg";
-  export const i64_atomic_rmw8_u_cmpxchg = "~lib/builtins/i64.atomic.rmw8_u.cmpxchg";
-  export const i64_atomic_rmw16_u_cmpxchg = "~lib/builtins/i64.atomic.rmw16_u.cmpxchg";
-  export const i64_atomic_rmw32_u_cmpxchg = "~lib/builtins/i64.atomic.rmw32_u.cmpxchg";
+  export const i64_atomic_rmw8_cmpxchg_u = "~lib/builtins/i64.atomic.rmw8.cmpxchg_u";
+  export const i64_atomic_rmw16_cmpxchg_u = "~lib/builtins/i64.atomic.rmw16.cmpxchg_u";
+  export const i64_atomic_rmw32_cmpxchg_u = "~lib/builtins/i64.atomic.rmw32.cmpxchg_u";
   export const i64_atomic_rmw_cmpxchg = "~lib/builtins/i64.atomic.rmw.cmpxchg";
   export const i32_wait = "~lib/builtins/i32.wait";
   export const i64_wait = "~lib/builtins/i64.wait";
@@ -483,7 +483,8 @@ export function compileCall(
   typeArguments: Type[] | null,
   operands: Expression[],
   contextualType: Type,
-  reportNode: CallExpression
+  reportNode: CallExpression,
+  isAsm: bool = false
 ): ExpressionRef {
   var module = compiler.module;
 
@@ -2151,33 +2152,35 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset, align);
     }
-    case BuiltinSymbols.atomic_load: {
+    case BuiltinSymbols.atomic_load: { // load<T!>(offset: usize, immOffset?) -> T
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      if (operands.length < 1 || operands.length > 2) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        if (operands.length < 1) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "1", operands.length.toString(10)
-          );
-        } else {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "2", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
-        if (typeArguments && typeArguments.length) compiler.currentType = typeArguments[0];
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        hasError = true;
+      }
+      if (operands.length < 1) {
+        compiler.error(
+          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+          reportNode.argumentsRange, "1", operands.length.toString(10)
+        );
+        hasError = true;
+      } else if (operands.length > 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "2", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let loadType = typeArguments![0];
+      if (!loadType.is(TypeFlags.INTEGER)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
@@ -2188,48 +2191,49 @@ export function compileCall(
         WrapMode.NONE
       );
       let offset = operands.length == 2 ? evaluateImmediateOffset(compiler, operands[1]) : 0; // reports
-      if (offset < 0) { // reported in evaluateImmediateOffset
-        return module.createUnreachable();
-      }
-      compiler.currentType = typeArguments[0];
+      if (offset < 0) return module.createUnreachable();
+      compiler.currentType = loadType;
       return module.createAtomicLoad(
-        typeArguments[0].byteSize,
+        loadType.byteSize,
         arg0,
-        typeArguments[0].is(TypeFlags.INTEGER) &&
+        loadType.is(TypeFlags.INTEGER) &&
         contextualType.is(TypeFlags.INTEGER) &&
-        contextualType.size > typeArguments[0].size
+        contextualType.size > loadType.size
           ? (compiler.currentType = contextualType).toNativeType()
-          : (compiler.currentType = typeArguments[0]).toNativeType(),
+          : (compiler.currentType = loadType).toNativeType(),
         offset
       );
     }
-    case BuiltinSymbols.atomic_store: { // store<T!>(offset: usize, value: *, immOffset?, immAlign?) -> void
+    case BuiltinSymbols.atomic_store: { // store<T!>(offset: usize, value: *, immOffset?) -> void
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.void;
-      if (operands.length < 2 || operands.length > 3) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        if (operands.length < 2) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "2", operands.length.toString(10)
-          );
-        } else {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "3", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        hasError = true;
+      }
+      if (operands.length < 2) {
+        compiler.error(
+          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+          reportNode.argumentsRange, "2", operands.length.toString(10)
+        );
+        hasError = true;
+      } else if (operands.length > 3) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "3", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let storeType = typeArguments![0];
+      if (!storeType.is(TypeFlags.INTEGER) || storeType.size < 8) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
@@ -2241,68 +2245,69 @@ export function compileCall(
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
+        storeType,
+        storeType.is(TypeFlags.INTEGER)
           ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      let type: Type;
+      let valueType = storeType;
       if (
-        typeArguments[0].is(TypeFlags.INTEGER) &&
+        storeType.is(TypeFlags.INTEGER) &&
         (
-          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
-          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+          !compiler.currentType.is(TypeFlags.INTEGER) || // float to int
+          compiler.currentType.size < storeType.size // int to larger int (clear garbage bits)
         )
       ) {
         arg1 = compiler.convertExpression(
           arg1,
-          compiler.currentType, typeArguments[0],
+          compiler.currentType, storeType,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
-        type = typeArguments[0];
       } else {
-        type = compiler.currentType;
+        valueType = compiler.currentType;
       }
       let offset = operands.length == 3 ? evaluateImmediateOffset(compiler, operands[2]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
       compiler.currentType = Type.void;
-      return module.createAtomicStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset);
+      return module.createAtomicStore(storeType.byteSize, arg0, arg1, valueType.toNativeType(), offset);
     }
     case BuiltinSymbols.atomic_add:  // add<T!>(ptr, value: T, immOffset?: usize): T;
     case BuiltinSymbols.atomic_sub:  // sub<T!>(ptr, value: T, immOffset?: usize): T;
     case BuiltinSymbols.atomic_and:  // and<T!>(ptr, value: T, immOffset?: usize): T;
     case BuiltinSymbols.atomic_or:   // or<T!>(ptr, value: T, immOffset?: usize): T;
     case BuiltinSymbols.atomic_xor:  // xor<T!>(ptr, value: T, immOffset?: usize): T;
-    case BuiltinSymbols.atomic_xchg: // xchg<T!>(ptr, value, immOffset?: usize): T;
-    {
+    case BuiltinSymbols.atomic_xchg: { // xchg<T!>(ptr, value, immOffset?: usize): T;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      if (operands.length < 2 || operands.length > 3) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        if (operands.length < 2) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "2", operands.length.toString(10)
-          );
-        } else {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "3", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        );
+        hasError = true;
+      }
+      if (operands.length < 2) {
+        compiler.error(
+          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+          reportNode.argumentsRange, "2", operands.length.toString(10)
+        );
+        hasError = true;
+      } else if (operands.length > 3) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "3", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let resultType = typeArguments![0];
+      if (!resultType.is(TypeFlags.INTEGER) || resultType.size < 8) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
@@ -2314,37 +2319,35 @@ export function compileCall(
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
+        resultType,
+        resultType.is(TypeFlags.INTEGER)
           ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-
-      let type: Type;
+      let valueType = resultType;
       if (
-        typeArguments[0].is(TypeFlags.INTEGER) &&
+        resultType.is(TypeFlags.INTEGER) &&
         (
-          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
-          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+          !compiler.currentType.is(TypeFlags.INTEGER) || // float to int
+          compiler.currentType.size < resultType.size // int to larger int (clear garbage bits)
         )
       ) {
         arg1 = compiler.convertExpression(
           arg1,
-          compiler.currentType, typeArguments[0],
+          compiler.currentType, resultType,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
-        type = typeArguments[0];
       } else {
-        type = compiler.currentType;
+        valueType = compiler.currentType;
       }
-
       let offset = operands.length == 3 ? evaluateImmediateOffset(compiler, operands[2]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
-      let RMWOp: AtomicRMWOp | null = null;
+      let RMWOp: AtomicRMWOp;
       switch (prototype.internalName) {
+        default: assert(false);
         case BuiltinSymbols.atomic_add: { RMWOp = AtomicRMWOp.Add; break; }
         case BuiltinSymbols.atomic_sub: { RMWOp = AtomicRMWOp.Sub; break; }
         case BuiltinSymbols.atomic_and: { RMWOp = AtomicRMWOp.And; break; }
@@ -2352,45 +2355,40 @@ export function compileCall(
         case BuiltinSymbols.atomic_xor: { RMWOp = AtomicRMWOp.Xor; break; }
         case BuiltinSymbols.atomic_xchg: { RMWOp = AtomicRMWOp.Xchg; break; }
       }
-      compiler.currentType = typeArguments[0];
-      if (RMWOp !== null) {
-        return module.createAtomicRMW(
-          RMWOp, typeArguments[0].byteSize, offset, arg0, arg1, type.toNativeType()
-        );
-      } else {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        return module.createUnreachable();
-      }
+      compiler.currentType = resultType;
+      return module.createAtomicRMW(
+        RMWOp, resultType.byteSize, offset, arg0, arg1, valueType.toNativeType()
+      );
     }
     case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected: T, replacement: T, cOff?: usize): T
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      if (operands.length < 3 || operands.length > 4) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        if (operands.length < 3) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "2", operands.length.toString(10)
-          );
-        } else {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "3", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
+        );
+        hasError = true;
+      }
+      if (operands.length < 3) {
+        compiler.error(
+          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+          reportNode.argumentsRange, "3", operands.length.toString()
+        );
+        hasError = true;
+      } else if (operands.length > 4) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "4", operands.length.toString()
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let resultType = typeArguments![0];
+      if (!resultType.is(TypeFlags.INTEGER) || resultType.size < 8) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
@@ -2402,77 +2400,76 @@ export function compileCall(
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
+        resultType,
+        resultType.is(TypeFlags.INTEGER)
           ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
           : ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       arg2 = compiler.compileExpression(
         operands[2],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
-          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
-          : ConversionKind.IMPLICIT,
+        compiler.currentType,
+        ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-
-      let type: Type;
+      let valueType = resultType;
       if (
-        typeArguments[0].is(TypeFlags.INTEGER) &&
+        resultType.is(TypeFlags.INTEGER) &&
         (
-          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
-          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
+          !compiler.currentType.is(TypeFlags.INTEGER) || // float to int
+          compiler.currentType.size < resultType.size // int to larger int (clear garbage bits)
         )
       ) {
         arg1 = compiler.convertExpression(
           arg1,
-          compiler.currentType, typeArguments[0],
+          compiler.currentType, resultType,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
         arg2 = compiler.convertExpression(
           arg2,
-          compiler.currentType, typeArguments[0],
+          compiler.currentType, resultType,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[2]
         );
-        type = typeArguments[0];
       } else {
-        type = compiler.currentType;
+        valueType = compiler.currentType;
       }
-
       let offset = operands.length == 4 ? evaluateImmediateOffset(compiler, operands[3]) : 0; // reports
       if (offset < 0) return module.createUnreachable();
-      compiler.currentType = typeArguments[0];
+      compiler.currentType = resultType;
       return module.createAtomicCmpxchg(
-        typeArguments[0].byteSize, offset, arg0, arg1, arg2, type.toNativeType()
+        resultType.byteSize, offset, arg0, arg1, arg2, valueType.toNativeType()
       );
     }
     case BuiltinSymbols.atomic_wait: { // wait<T!>(ptr: usize, expected:T, timeout: i64): i32;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      let hasError = typeArguments == null;
-      if (operands.length != 3) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "3", operands.length.toString(10)
-        );
-        hasError = true;
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
         );
         hasError = true;
       }
-
-      if (!typeArguments || hasError) {
+      if (operands.length != 3) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "3", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let valueType = typeArguments![0];
+      if (!valueType.is(TypeFlags.INTEGER) || valueType.size < 32) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
         return module.createUnreachable();
       }
-
       arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
@@ -2481,10 +2478,8 @@ export function compileCall(
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
-          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
-          : ConversionKind.IMPLICIT,
+        valueType,
+        ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       arg2 = compiler.compileExpression(
@@ -2493,57 +2488,35 @@ export function compileCall(
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-
-      let type: Type = typeArguments[0];
-      if (
-        typeArguments[0].is(TypeFlags.INTEGER) &&
-        (
-          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
-          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
-        )
-      ) {
-        arg1 = compiler.convertExpression(
-          arg1,
-          compiler.currentType, typeArguments[0],
-          ConversionKind.IMPLICIT,
-          WrapMode.NONE, // still clears garbage bits
-          operands[1]
-        );
-        arg2 = compiler.convertExpression(
-          arg2,
-          compiler.currentType, typeArguments[0],
-          ConversionKind.IMPLICIT,
-          WrapMode.NONE, // still clears garbage bits
-          operands[2]
-        );
-      }
-
-      return module.createAtomicWait(
-        arg0, arg1, arg2, type.toNativeType()
-      );
+      compiler.currentType = Type.i32;
+      return module.createAtomicWait(arg0, arg1, arg2, valueType.toNativeType());
     }
     case BuiltinSymbols.atomic_notify: { // notify<T!>(ptr: usize, count: u32): u32;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      let hasError = typeArguments == null;
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        hasError = true;
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
         );
         hasError = true;
       }
-
-      if (!typeArguments || hasError) {
+      if (operands.length != 2) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "2", operands.length.toString(10)
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let valueType = typeArguments![0];
+      if (!valueType.is(TypeFlags.INTEGER) || valueType.size < 32) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
         return module.createUnreachable();
       }
-
       arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
@@ -2552,14 +2525,12 @@ export function compileCall(
       );
       arg1 = compiler.compileExpression(
         operands[1],
-        Type.i32,
+        valueType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-
-      return module.createAtomicWake(
-        arg0, arg1
-      );
+      compiler.currentType = Type.i32;
+      return module.createAtomicWake(arg0, arg1);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
@@ -5539,16 +5510,16 @@ function tryDeferASM(
     case BuiltinSymbols.f32_trunc: return deferASM(BuiltinSymbols.trunc, compiler, Type.f32, operands, Type.f32, reportNode);
     case BuiltinSymbols.f64_trunc: return deferASM(BuiltinSymbols.trunc, compiler, Type.f64, operands, Type.f64, reportNode);
     case BuiltinSymbols.i32_load8_s: return deferASM(BuiltinSymbols.load, compiler, Type.i8, operands, Type.i32, reportNode);
-    case BuiltinSymbols.i32_load8_u: return deferASM(BuiltinSymbols.load, compiler, Type.u8, operands, Type.u32, reportNode);
+    case BuiltinSymbols.i32_load8_u: return deferASM(BuiltinSymbols.load, compiler, Type.u8, operands, Type.i32, reportNode);
     case BuiltinSymbols.i32_load16_s: return deferASM(BuiltinSymbols.load, compiler, Type.i16, operands, Type.i32, reportNode);
-    case BuiltinSymbols.i32_load16_u: return deferASM(BuiltinSymbols.load, compiler, Type.u16, operands, Type.u32, reportNode);
+    case BuiltinSymbols.i32_load16_u: return deferASM(BuiltinSymbols.load, compiler, Type.u16, operands, Type.i32, reportNode);
     case BuiltinSymbols.i32_load: return deferASM(BuiltinSymbols.load, compiler, Type.i32, operands, Type.i32, reportNode);
     case BuiltinSymbols.i64_load8_s: return deferASM(BuiltinSymbols.load, compiler, Type.i8, operands, Type.i64, reportNode);
-    case BuiltinSymbols.i64_load8_u: return deferASM(BuiltinSymbols.load, compiler, Type.u8, operands, Type.u64, reportNode);
+    case BuiltinSymbols.i64_load8_u: return deferASM(BuiltinSymbols.load, compiler, Type.u8, operands, Type.i64, reportNode);
     case BuiltinSymbols.i64_load16_s: return deferASM(BuiltinSymbols.load, compiler, Type.i16, operands, Type.i64, reportNode);
-    case BuiltinSymbols.i64_load16_u: return deferASM(BuiltinSymbols.load, compiler, Type.u16, operands, Type.u64, reportNode);
+    case BuiltinSymbols.i64_load16_u: return deferASM(BuiltinSymbols.load, compiler, Type.u16, operands, Type.i64, reportNode);
     case BuiltinSymbols.i64_load32_s: return deferASM(BuiltinSymbols.load, compiler, Type.i32, operands, Type.i64, reportNode);
-    case BuiltinSymbols.i64_load32_u: return deferASM(BuiltinSymbols.load, compiler, Type.u32, operands, Type.u64, reportNode);
+    case BuiltinSymbols.i64_load32_u: return deferASM(BuiltinSymbols.load, compiler, Type.u32, operands, Type.i64, reportNode);
     case BuiltinSymbols.i64_load: return deferASM(BuiltinSymbols.load, compiler, Type.i64, operands, Type.i64, reportNode);
     case BuiltinSymbols.f32_load: return deferASM(BuiltinSymbols.load, compiler, Type.f32, operands, Type.f32, reportNode);
     case BuiltinSymbols.f64_load: return deferASM(BuiltinSymbols.load, compiler, Type.f64, operands, Type.f64, reportNode);
@@ -5565,82 +5536,82 @@ function tryDeferASM(
   if (compiler.options.hasFeature(Feature.THREADS)) {
     switch (prototype.internalName) {
 
-      case BuiltinSymbols.i32_atomic_load8_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_load16_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u16, operands, Type.u32, reportNode);
+      case BuiltinSymbols.i32_atomic_load8_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_load16_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u16, operands, Type.i32, reportNode);
       case BuiltinSymbols.i32_atomic_load: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.i32, operands, Type.i32, reportNode);
-      case BuiltinSymbols.i64_atomic_load8_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u8, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_load16_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u16, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_load32_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u32, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i64_atomic_load8_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u8, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_load16_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u16, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_load32_u: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.u32, operands, Type.i64, reportNode);
       case BuiltinSymbols.i64_atomic_load: return deferASM(BuiltinSymbols.atomic_load, compiler, Type.i64, operands, Type.i64, reportNode);
 
-      case BuiltinSymbols.i32_atomic_store8: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i8, operands, Type.i32, reportNode);
-      case BuiltinSymbols.i32_atomic_store16: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_store8: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.u8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_store16: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.u16, operands, Type.i32, reportNode);
       case BuiltinSymbols.i32_atomic_store: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i32, operands, Type.i32, reportNode);
-      case BuiltinSymbols.i64_atomic_store8: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i8, operands, Type.i64, reportNode);
-      case BuiltinSymbols.i64_atomic_store16: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i16, operands, Type.i64, reportNode);
-      case BuiltinSymbols.i64_atomic_store32: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i32, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_store8: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.u8, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_store16: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.u16, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_store32: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.u32, operands, Type.i64, reportNode);
       case BuiltinSymbols.i64_atomic_store: return deferASM(BuiltinSymbols.atomic_store, compiler, Type.i64, operands, Type.i64, reportNode);
 
-      case BuiltinSymbols.i32_atomic_rmw8_u_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw16_u_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u16, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u32, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw8_u_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u8, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw16_u_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u16, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw32_u_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u32, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_add_u: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_add_u: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_add_u: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u8, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_add_u: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u16, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_add_u: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.u32, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_add: return deferASM(BuiltinSymbols.atomic_add, compiler, Type.i64, operands, Type.i64, reportNode);
 
-      case BuiltinSymbols.i32_atomic_rmw8_u_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw16_u_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u16, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u32, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw8_u_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u8, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw16_u_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u16, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw32_u_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u32, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_sub_u: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_sub_u: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_sub_u: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u8, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_sub_u: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u16, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_sub_u: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.u32, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_sub: return deferASM(BuiltinSymbols.atomic_sub, compiler, Type.i64, operands, Type.i64, reportNode);
 
-      case BuiltinSymbols.i32_atomic_rmw8_u_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw16_u_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u16, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u32, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw8_u_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u8, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw16_u_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u16, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw32_u_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u32, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_and_u: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_and_u: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_and_u: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u8, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_and_u: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u16, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_and_u: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.u32, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_and: return deferASM(BuiltinSymbols.atomic_and, compiler, Type.i64, operands, Type.i64, reportNode);
 
-      case BuiltinSymbols.i32_atomic_rmw8_u_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw16_u_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u16, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u32, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw8_u_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u8, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw16_u_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u16, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw32_u_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u32, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_or_u: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_or_u: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_or_u: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u8, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_or_u: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u16, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_or_u: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u32, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.i64, operands, Type.i64, reportNode);
 
-      case BuiltinSymbols.i32_atomic_rmw8_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw16_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw8_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw16_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u16, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw32_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u32, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_xor_u: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_xor_u: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u16, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_xor_u: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u32, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.i64, operands, Type.i64, reportNode);
 
-      case BuiltinSymbols.i32_atomic_rmw8_u_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw16_u_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw8_u_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw16_u_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u16, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw32_u_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u32, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_xchg_u: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_xchg_u: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_xchg_u: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u8, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_xchg_u: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u16, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_xchg_u: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.u32, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_xchg: return deferASM(BuiltinSymbols.atomic_xchg, compiler, Type.i64, operands, Type.i64, reportNode);
 
-      case BuiltinSymbols.i32_atomic_rmw8_u_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw16_u_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw8_u_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw16_u_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u16, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw32_u_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u32, operands, Type.u64, reportNode);
-      case BuiltinSymbols.i64_atomic_rmw_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u64, operands, Type.u64, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_cmpxchg_u: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_cmpxchg_u: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw8_cmpxchg_u: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u8, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw16_cmpxchg_u: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u16, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw32_cmpxchg_u: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.u32, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i64_atomic_rmw_cmpxchg: return deferASM(BuiltinSymbols.atomic_cmpxchg, compiler, Type.i64, operands, Type.i64, reportNode);
 
-      case BuiltinSymbols.i32_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i32, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i64_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i64, operands, Type.i64, reportNode);
-      case BuiltinSymbols.i32_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i32, operands, Type.u32, reportNode);
-      case BuiltinSymbols.i64_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i64, operands, Type.i64, reportNode);
+      case BuiltinSymbols.i32_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_wait: return deferASM(BuiltinSymbols.atomic_wait, compiler, Type.i64, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i32, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i64_notify: return deferASM(BuiltinSymbols.atomic_notify, compiler, Type.i64, operands, Type.i32, reportNode);
     }
   }
   if (compiler.options.hasFeature(Feature.SIMD)) {
@@ -5799,13 +5770,21 @@ function deferASM(
   compiler: Compiler,
   typeArgument: Type,
   operands: Expression[],
-  valueType: Type,
+  contextualType: Type,
   reportNode: CallExpression
 ): ExpressionRef {
   assert(compiler.program.elementsByName.has(name));
   var prototype = compiler.program.elementsByName.get(name)!;
   assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-  return compileCall(compiler, <FunctionPrototype>prototype, [ typeArgument ], operands, valueType, reportNode);
+  return compileCall(
+    compiler,
+    <FunctionPrototype>prototype,
+    [ typeArgument ],
+    operands,
+    contextualType,
+    reportNode,
+    /* isAsm */ true
+  );
 }
 
 /** Evaluates the constant type of a type argument *or* expression. */
