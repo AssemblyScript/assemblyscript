@@ -5,7 +5,6 @@ import {
   compareUnsafe,
   repeatUnsafe,
   copyUnsafe,
-  freeUnsafe,
   isWhiteSpaceOrLineTerminator,
   CharCode,
   parse
@@ -428,10 +427,7 @@ export class String {
     var len = this.length;
     var slen = search.length;
     if (len < slen) return this;
-    if (len == slen) {
-      if (search == replacement) return this;
-      return this.replace(search, replacement);
-    }
+    if (len == slen) return select<String>(replacement, this, search == this);
     var rlen = replacement.length;
     if (!slen) {
       // Handle special case when we should insert replacement between each char
