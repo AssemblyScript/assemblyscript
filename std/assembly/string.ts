@@ -478,12 +478,11 @@ export class String {
       let result = allocateUnsafe(len);
       let offset = 0, resLen = len;
       while (~(next = this.indexOf(search, prev))) {
-        resLen = result.length;
         if (offset > resLen) {
           // resize
           let newLength = resLen << 1;
           let newResult = allocateUnsafe(newLength);
-          copyUnsafe(newResult, 0, result, 0, resLen);
+          copyUnsafe(newResult, 0, result, 0, offset);
           freeUnsafe(result);
           result = newResult;
           resLen = newLength;
@@ -500,7 +499,7 @@ export class String {
           // resize
           let newLength = resLen << 1;
           let newResult = allocateUnsafe(newLength);
-          copyUnsafe(newResult, 0, result, 0, resLen);
+          copyUnsafe(newResult, 0, result, 0, offset);
           freeUnsafe(result);
           result = newResult;
           resLen = newLength;
