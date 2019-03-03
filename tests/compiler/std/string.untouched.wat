@@ -3312,7 +3312,7 @@
             if
              i32.const 0
              i32.const 80
-             i32.const 753
+             i32.const 754
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -4119,6 +4119,9 @@
     end
     local.get $9
     local.set $7
+    local.get $9
+    i32.load
+    local.set $8
    end
    local.get $4
    local.get $10
@@ -4137,8 +4140,7 @@
    local.get $9
    i32.add
    local.set $3
-   local.get $7
-   i32.load
+   local.get $8
    local.get $3
    i32.gt_s
    if
@@ -4216,7 +4218,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 523
+   i32.const 524
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4923,7 +4925,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 535
+   i32.const 536
    i32.const 4
    call $~lib/env/abort
    unreachable

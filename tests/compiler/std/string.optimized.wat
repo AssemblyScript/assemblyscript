@@ -2610,7 +2610,7 @@
          if
           i32.const 0
           i32.const 80
-          i32.const 753
+          i32.const 754
           i32.const 10
           call $~lib/env/abort
           unreachable
@@ -3284,7 +3284,9 @@
      i32.eqz
      br_if $folding-inner0
      local.get $8
-     local.set $3
+     local.tee $3
+     i32.load
+     local.set $5
     end
     local.get $7
     local.get $9
@@ -3298,8 +3300,7 @@
      local.get $8
      call $~lib/internal/string/copyUnsafe
     end
-    local.get $3
-    i32.load
+    local.get $5
     local.get $4
     local.get $8
     i32.add
@@ -3344,7 +3345,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 523
+   i32.const 524
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3869,7 +3870,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 535
+   i32.const 536
    i32.const 4
    call $~lib/env/abort
    unreachable

@@ -501,12 +501,13 @@ export class String {
           copyUnsafe(newResult, 0, result, 0, resLen);
           freeUnsafe(result);
           result = newResult;
+          resLen = newResult.length;
         }
         let rest = len - prev;
         if (rest) copyUnsafe(result, offset, this, prev, rest);
         // trim memory space
         offset += rest;
-        if (result.length > offset) {
+        if (resLen > offset) {
           let trimmed = allocateUnsafe(offset);
           copyUnsafe(trimmed, 0, result, 0, offset);
           freeUnsafe(result);
