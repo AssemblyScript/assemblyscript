@@ -437,6 +437,7 @@ export class String {
     if (!slen) {
       // Handle special case when we should insert replacement between each char
       // TODO handle surrogate pairs also
+      if (!rlen) return this;
       let result = allocateUnsafe(len + (len + 1) * rlen);
       copyUnsafe(result, 0, replacement, 0, rlen);
       let offset = rlen;
