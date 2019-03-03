@@ -156,6 +156,7 @@ assert("abc".replace("c", "++") == "ab++");
 
 assert("".replaceAll("", "abc") == "abc");
 assert("abc".replaceAll("-", "+") == "abc");
+
 assert("abcabc".replaceAll("abc", "+") == "++");
 assert("abcabcabc".replaceAll("abc", "+") == "+++");
 assert("abcabc".replaceAll("ab", "ab") == "abcabc");

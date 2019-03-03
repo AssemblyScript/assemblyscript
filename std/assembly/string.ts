@@ -5,6 +5,7 @@ import {
   compareUnsafe,
   repeatUnsafe,
   copyUnsafe,
+  freeUnsafe,
   isWhiteSpaceOrLineTerminator,
   CharCode,
   parse
@@ -465,13 +466,57 @@ export class String {
         return result;
       }
     }
-    var result = changetype<String>("");
-    while (~(next = this.indexOf(search, prev))) {
-      result = result.concat(this.substring(prev, next).concat(replacement));
-      prev = next + slen;
+    if (ASC_SHRINK_LEVEL >= 1) {
+      let result = changetype<String>("");
+      while (~(next = this.indexOf(search, prev))) {
+        result = result.concat(this.substring(prev, next).concat(replacement));
+        prev = next + slen;
+      }
+      if (prev) return result.concat(this.substring(prev, len));
+      return this;
+    } else {
+      let result = allocateUnsafe(len);
+      let offset = 0, resLen = len;
+      while (~(next = this.indexOf(search, prev))) {
+        resLen = result.length;
+        if (offset > resLen) {
+          // realloc
+          let newResult = allocateUnsafe(resLen << 1);
+          copyUnsafe(newResult, 0, result, 0, resLen);
+          freeUnsafe(result);
+          result = newResult;
+          resLen = newResult.length;
+        }
+        let chunk = next - prev;
+        copyUnsafe(result, offset, this, prev, chunk);
+        offset += chunk;
+        copyUnsafe(result, offset, replacement, 0, rlen);
+        offset += rlen;
+        prev = next + slen;
+      }
+      if (offset) {
+        if (offset > resLen) {
+          // realloc
+          let newResult = allocateUnsafe(resLen << 1);
+          copyUnsafe(newResult, 0, result, 0, resLen);
+          freeUnsafe(result);
+          result = newResult;
+        }
+        let rest = len - prev;
+        if (rest) copyUnsafe(result, offset, this, prev, rest);
+        // trim memory space
+        offset += rest;
+        if (result.length > offset) {
+          let trimmed = allocateUnsafe(offset);
+          copyUnsafe(trimmed, 0, result, 0, offset);
+          freeUnsafe(result);
+          return trimmed;
+        }
+        return result;
+      }
+      freeUnsafe(result);
+      return this;
     }
-    if (prev) return result.concat(this.substring(prev, len));
-    return this;
   }
 
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
