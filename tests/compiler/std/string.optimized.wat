@@ -2609,7 +2609,7 @@
          if
           i32.const 0
           i32.const 80
-          i32.const 754
+          i32.const 756
           i32.const 10
           call $~lib/env/abort
           unreachable
@@ -3036,6 +3036,7 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
   block (result i32)
    local.get $0
    i32.const 0
@@ -3070,11 +3071,11 @@
   local.tee $7
   local.get $1
   i32.load
-  local.tee $10
+  local.tee $11
   i32.le_s
   if
    local.get $7
-   local.get $10
+   local.get $11
    i32.lt_s
    if
     local.get $0
@@ -3091,7 +3092,7 @@
   local.get $2
   i32.load
   local.set $6
-  local.get $10
+  local.get $11
   i32.eqz
   if
    local.get $6
@@ -3157,7 +3158,7 @@
    return
   end
   local.get $6
-  local.get $10
+  local.get $11
   i32.eq
   if
    local.get $7
@@ -3173,18 +3174,18 @@
     local.get $1
     local.get $9
     call $~lib/string/String#indexOf
-    local.tee $11
+    local.tee $12
     i32.const -1
     i32.xor
     if
      local.get $3
-     local.get $11
+     local.get $12
      local.get $2
      i32.const 0
      local.get $6
      call $~lib/internal/string/copyUnsafe
-     local.get $10
      local.get $11
+     local.get $12
      i32.add
      local.set $9
      br $continue|1
@@ -3206,46 +3207,49 @@
     local.get $1
     local.get $9
     call $~lib/string/String#indexOf
-    local.tee $11
+    local.tee $12
     i32.const -1
     i32.xor
     if
-     local.get $4
-     local.get $3
-     i32.load
-     local.tee $5
-     i32.gt_s
-     if
-      local.get $5
-      i32.const 1
-      i32.shl
-      call $~lib/internal/string/allocateUnsafe
-      local.tee $8
-      i32.const 0
+     block (result i32)
+      local.get $4
       local.get $3
-      i32.const 0
-      local.get $5
-      call $~lib/internal/string/copyUnsafe
-      local.get $3
-      i32.eqz
-      br_if $folding-inner0
-      local.get $8
-      local.tee $3
       i32.load
-      local.set $5
+      local.tee $5
+      i32.gt_s
+      if
+       local.get $5
+       i32.const 1
+       i32.shl
+       local.tee $8
+       call $~lib/internal/string/allocateUnsafe
+       local.tee $10
+       i32.const 0
+       local.get $3
+       i32.const 0
+       local.get $5
+       call $~lib/internal/string/copyUnsafe
+       local.get $3
+       i32.eqz
+       br_if $folding-inner0
+       local.get $8
+       local.set $5
+       local.get $10
+       local.set $3
+      end
+      local.get $3
      end
-     local.get $3
      local.get $4
      local.get $0
      local.get $9
-     local.get $11
+     local.get $12
      local.get $9
      i32.sub
-     local.tee $8
+     local.tee $10
      call $~lib/internal/string/copyUnsafe
      local.get $3
      local.get $4
-     local.get $8
+     local.get $10
      i32.add
      local.tee $4
      local.get $2
@@ -3256,8 +3260,8 @@
      local.get $6
      i32.add
      local.set $4
-     local.get $10
      local.get $11
+     local.get $12
      i32.add
      local.set $9
      br $continue|2
@@ -3272,6 +3276,7 @@
      local.get $5
      i32.const 1
      i32.shl
+     local.tee $10
      call $~lib/internal/string/allocateUnsafe
      local.tee $8
      i32.const 0
@@ -3282,10 +3287,10 @@
      local.get $3
      i32.eqz
      br_if $folding-inner0
-     local.get $8
-     local.tee $3
-     i32.load
+     local.get $10
      local.set $5
+     local.get $8
+     local.set $3
     end
     local.get $7
     local.get $9
@@ -3303,21 +3308,21 @@
     local.get $4
     local.get $8
     i32.add
-    local.tee $4
+    local.tee $8
     i32.gt_s
     if
-     local.get $4
+     local.get $8
      call $~lib/internal/string/allocateUnsafe
-     local.tee $5
+     local.tee $10
      i32.const 0
      local.get $3
      i32.const 0
-     local.get $4
+     local.get $8
      call $~lib/internal/string/copyUnsafe
      local.get $3
      i32.eqz
      br_if $folding-inner0
-     local.get $5
+     local.get $10
      return
     end
     local.get $3
@@ -3344,7 +3349,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 524
+   i32.const 526
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3869,7 +3874,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 536
+   i32.const 538
    i32.const 4
    call $~lib/env/abort
    unreachable

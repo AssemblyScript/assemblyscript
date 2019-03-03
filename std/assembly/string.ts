@@ -480,12 +480,13 @@ export class String {
       while (~(next = this.indexOf(search, prev))) {
         resLen = result.length;
         if (offset > resLen) {
-          // realloc
-          let newResult = allocateUnsafe(resLen << 1);
+          // resize
+          let newLength = resLen << 1;
+          let newResult = allocateUnsafe(newLength);
           copyUnsafe(newResult, 0, result, 0, resLen);
           freeUnsafe(result);
           result = newResult;
-          resLen = newResult.length;
+          resLen = newLength;
         }
         let chunk = next - prev;
         copyUnsafe(result, offset, this, prev, chunk);
@@ -496,20 +497,21 @@ export class String {
       }
       if (offset) {
         if (offset > resLen) {
-          // realloc
-          let newResult = allocateUnsafe(resLen << 1);
+          // resize
+          let newLength = resLen << 1;
+          let newResult = allocateUnsafe(newLength);
           copyUnsafe(newResult, 0, result, 0, resLen);
           freeUnsafe(result);
           result = newResult;
-          resLen = newResult.length;
+          resLen = newLength;
         }
         let rest = len - prev;
         if (rest) copyUnsafe(result, offset, this, prev, rest);
         // trim memory space
-        offset += rest;
-        if (resLen > offset) {
-          let trimmed = allocateUnsafe(offset);
-          copyUnsafe(trimmed, 0, result, 0, offset);
+        rest += offset;
+        if (resLen > rest) {
+          let trimmed = allocateUnsafe(rest);
+          copyUnsafe(trimmed, 0, result, 0, rest);
           freeUnsafe(result);
           return trimmed;
         }
