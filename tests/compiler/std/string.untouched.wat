@@ -218,12 +218,11 @@
  (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
- (global $~lib/started (mut i32) (i32.const 0))
  (global $~lib/memory/HEAP_BASE i32 (i32.const 5636))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "getString" (func $std/string/getString))
- (export "main" (func $std/string/main))
+ (start $start)
  (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
@@ -11556,18 +11555,9 @@
  (func $std/string/getString (; 67 ;) (type $FUNCSIG$i) (result i32)
   global.get $std/string/str
  )
- (func $std/string/main (; 68 ;) (type $FUNCSIG$v)
-  global.get $~lib/started
-  i32.eqz
-  if
-   call $start
-   i32.const 1
-   global.set $~lib/started
-  end
- )
- (func $start (; 69 ;) (type $FUNCSIG$v)
+ (func $start (; 68 ;) (type $FUNCSIG$v)
   call $start:std/string
  )
- (func $null (; 70 ;) (type $FUNCSIG$v)
+ (func $null (; 69 ;) (type $FUNCSIG$v)
  )
 )

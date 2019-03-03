@@ -208,11 +208,10 @@
  (global $~lib/internal/number/_K (mut i32) (i32.const 0))
  (global $~lib/internal/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/internal/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "getString" (func $std/string/getString))
- (export "main" (func $std/string/main))
+ (start $start)
  (func $~lib/string/String#charCodeAt (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
@@ -9880,14 +9879,8 @@
  (func $std/string/getString (; 56 ;) (type $FUNCSIG$i) (result i32)
   global.get $std/string/str
  )
- (func $std/string/main (; 57 ;) (type $FUNCSIG$v)
-  global.get $~lib/started
-  i32.eqz
-  if
-   call $start:std/string
-   i32.const 1
-   global.set $~lib/started
-  end
+ (func $start (; 57 ;) (type $FUNCSIG$v)
+  call $start:std/string
  )
  (func $null (; 58 ;) (type $FUNCSIG$v)
   nop

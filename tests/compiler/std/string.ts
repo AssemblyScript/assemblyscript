@@ -329,5 +329,3 @@ assert(dtoa(0.000035689) == "0.000035689");
 
 // assert(dtoa(f32.MAX_VALUE) == "3.4028234663852886e+38"); // FIXME
 // assert(dtoa(f32.EPSILON) == "1.1920928955078125e-7"); // FIXME
-
-@start export function main(): void {}
