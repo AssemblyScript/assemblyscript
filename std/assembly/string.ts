@@ -402,21 +402,29 @@ export class String {
     assert(this !== null && search !== null && replacement !== null);
     var len = this.length;
     var slen = search.length;
-    if (len <= slen) {
-      if (len < slen) return this;
-      return select<String>(replacement, this, search == this);
+    if (ASC_SHRINK_LEVEL < 1) {
+      if (len <= slen) {
+        if (len < slen) return this;
+        return select<String>(replacement, this, search == this);
+      }
     }
     var index = this.indexOf(search);
     if (~index) {
-      let rlen = replacement.length;
-      len = len - slen;
-      let olen = len + rlen;
-      if (olen) {
-        let result = allocateUnsafe(olen);
-        copyUnsafe(result, 0, this, 0, index);
-        copyUnsafe(result, index, replacement, 0, rlen);
-        copyUnsafe(result, rlen + index, this, index + slen, len - index);
-        return result;
+      if (ASC_SHRINK_LEVEL >= 1) {
+        return this.substring(0, index)
+          .concat(replacement)
+          .concat(this.substring(index + slen, len));
+      } else {
+        let rlen = replacement.length;
+        len = len - slen;
+        let olen = len + rlen;
+        if (olen) {
+          let result = allocateUnsafe(olen);
+          copyUnsafe(result, 0, this, 0, index);
+          copyUnsafe(result, index, replacement, 0, rlen);
+          copyUnsafe(result, rlen + index, this, index + slen, len - index);
+          return result;
+        }
       }
     }
     return this;
@@ -430,9 +438,11 @@ export class String {
     assert(this !== null && search !== null && replacement !== null);
     var len = this.length;
     var slen = search.length;
-    if (len <= slen) {
-      if (len < slen) return this;
-      return select<String>(replacement, this, search == this);
+    if (ASC_SHRINK_LEVEL < 1) {
+      if (len <= slen) {
+        if (len < slen) return this;
+        return select<String>(replacement, this, search == this);
+      }
     }
     var rlen = replacement.length;
     if (!slen) {
@@ -454,7 +464,15 @@ export class String {
       return result;
     }
     var prev = 0, next = 0;
-    if (ASC_SHRINK_LEVEL < 1) {
+    if (ASC_SHRINK_LEVEL >= 1) {
+      let result = changetype<String>("");
+      while (~(next = this.indexOf(search, prev))) {
+        result = result.concat(this.substring(prev, next).concat(replacement));
+        prev = next + slen;
+      }
+      if (prev) return result.concat(this.substring(prev, len));
+      return this;
+    } else {
       if (slen === rlen) {
         // Fast path when search and replacement have same length so we could use preallocation
         let result = allocateUnsafe(len);
@@ -465,16 +483,6 @@ export class String {
         }
         return result;
       }
-    }
-    if (ASC_SHRINK_LEVEL >= 1) {
-      let result = changetype<String>("");
-      while (~(next = this.indexOf(search, prev))) {
-        result = result.concat(this.substring(prev, next).concat(replacement));
-        prev = next + slen;
-      }
-      if (prev) return result.concat(this.substring(prev, len));
-      return this;
-    } else {
       let result = allocateUnsafe(len);
       let offset = 0, resLen = len;
       while (~(next = this.indexOf(search, prev))) {
