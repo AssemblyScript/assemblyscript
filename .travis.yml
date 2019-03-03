@@ -26,6 +26,6 @@ jobs:
     script:
     - npm run clean && npm run test:compiler
     env:
-    - Runs experimental tests on node.js v8-canary
+    - Runs experimental tests on node.js v8-canary using
     - ASC_FEATURES="simd,threads"
     - NVM_NODEJS_ORG_MIRROR="https://nodejs.org/download/v8-canary/"

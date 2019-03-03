@@ -701,14 +701,8 @@ export function compileCall(
         return module.createUnreachable();
       }
       let byteSize = (<Type[]>typeArguments)[0].byteSize;
-      let alignLog2: i32;
-      switch (byteSize) {
-        case 1: { alignLog2 = 0; break; }
-        case 2: { alignLog2 = 1; break; }
-        case 4: { alignLog2 = 2; break; }
-        case 8: { alignLog2 = 3; break; }
-        default: { assert(false, "unexected byte size"); return module.createUnreachable(); }
-      }
+      assert(isPowerOf2(byteSize));
+      let alignLog2 = ctz<i32>(byteSize);
       if (compiler.options.isWasm64) {
         // implicitly wrap if contextual type is a 32-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {

@@ -1191,6 +1191,10 @@ export class Module {
           case NativeType.F64: {
             return this.createF64(_BinaryenConstGetValueF64(expr));
           }
+          case NativeType.V128: {
+            // TODO
+            return 0;
+          }
           default: {
             throw new Error("concrete type expected");
           }
@@ -1746,7 +1750,8 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
     case NativeType.I32:
     case NativeType.I64:
     case NativeType.F32:
-    case NativeType.F64: return false;
+    case NativeType.F64:
+    case NativeType.V128: return false;
   }
   switch (_BinaryenExpressionGetId(expr)) {
     case ExpressionId.Unreachable:
