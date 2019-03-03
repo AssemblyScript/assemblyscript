@@ -11276,7 +11276,258 @@
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/ipow64 (; 155 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/IntegerMath.sign<i16> (; 155 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_s
+  i32.const 0
+  i32.gt_s
+  local.get $0
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_s
+  i32.const 0
+  i32.lt_s
+  i32.sub
+  return
+ )
+ (func $~lib/math/IntegerMath.sign<u16> (; 156 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 65535
+  i32.and
+  i32.const 0
+  i32.ne
+  return
+ )
+ (func $~lib/math/IntegerMath.signbit<i16> (; 157 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_s
+  i32.const 0
+  i32.lt_s
+  return
+ )
+ (func $~lib/math/IntegerMath.signbit<u16> (; 158 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 0
+  return
+ )
+ (func $~lib/math/IntegerMath.log2<i16> (; 159 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_s
+  i32.const 0
+  i32.le_s
+  if
+   i32.const 0
+   i32.const 40
+   i32.const 2387
+   i32.const 20
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/math/ilog2_32|inlined.9 (result i32)
+   local.get $0
+   i32.const 16
+   i32.shl
+   i32.const 16
+   i32.shr_s
+   local.set $1
+   i32.const 31
+   local.get $1
+   i32.clz
+   i32.sub
+  end
+  return
+ )
+ (func $~lib/math/IntegerMath.log2<i32> (; 160 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 0
+  i32.le_s
+  if
+   i32.const 0
+   i32.const 40
+   i32.const 2387
+   i32.const 20
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/math/ilog2_32|inlined.10 (result i32)
+   local.get $0
+   local.set $1
+   i32.const 31
+   local.get $1
+   i32.clz
+   i32.sub
+  end
+  return
+ )
+ (func $~lib/math/IntegerMath.log2<u32> (; 161 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 40
+   i32.const 2389
+   i32.const 16
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/math/ilog2_32|inlined.11 (result i32)
+   local.get $0
+   local.set $1
+   i32.const 31
+   local.get $1
+   i32.clz
+   i32.sub
+  end
+  return
+ )
+ (func $~lib/math/IntegerMath.log2<i64> (; 162 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+  (local $1 i64)
+  local.get $0
+  i64.const 0
+  i64.le_s
+  if
+   i32.const 0
+   i32.const 40
+   i32.const 2387
+   i32.const 20
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/math/ilog2_64|inlined.6 (result i64)
+   local.get $0
+   local.set $1
+   i64.const 63
+   local.get $1
+   i64.clz
+   i64.sub
+  end
+  return
+ )
+ (func $~lib/math/IntegerMath.log2<u64> (; 163 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+  (local $1 i64)
+  local.get $0
+  i64.eqz
+  if
+   i32.const 0
+   i32.const 40
+   i32.const 2389
+   i32.const 16
+   call $~lib/env/abort
+   unreachable
+  end
+  block $~lib/math/ilog2_64|inlined.7 (result i64)
+   local.get $0
+   local.set $1
+   i64.const 63
+   local.get $1
+   i64.clz
+   i64.sub
+  end
+  return
+ )
+ (func $~lib/math/isqrt32 (; 164 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.const 2
+  i32.lt_u
+  if
+   local.get $0
+   return
+  end
+  i32.const 2
+  local.set $1
+  local.get $0
+  i32.const 2
+  i32.shr_u
+  local.set $2
+  block $break|0
+   loop $continue|0
+    local.get $2
+    if (result i32)
+     local.get $2
+     local.get $0
+     i32.ne
+    else     
+     local.get $2
+    end
+    if
+     block
+      local.get $1
+      i32.const 2
+      i32.add
+      local.set $1
+      local.get $0
+      local.get $1
+      i32.shr_u
+      local.set $2
+     end
+     br $continue|0
+    end
+   end
+  end
+  local.get $1
+  i32.const 2
+  i32.sub
+  local.set $1
+  local.get $0
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|1
+   loop $continue|1
+    local.get $1
+    i32.const 0
+    i32.ge_s
+    if
+     block
+      local.get $4
+      i32.const 1
+      i32.shl
+      local.set $4
+      local.get $4
+      i32.const 1
+      i32.add
+      local.set $5
+      local.get $5
+      local.get $5
+      i32.mul
+      local.get $3
+      local.get $1
+      i32.shr_u
+      i32.le_u
+      if
+       local.get $5
+       local.set $4
+      end
+      local.get $1
+      i32.const 2
+      i32.sub
+      local.set $1
+     end
+     br $continue|1
+    end
+   end
+  end
+  local.get $4
+ )
+ (func $~lib/math/isqrt64 (; 165 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+  (local $1 i32)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -11371,12 +11622,12 @@
   end
   local.get $4
  )
- (func $~lib/math/IntegerMath.sqrt<u64> (; 166 ;) (type $II) (param $0 i64) (result i64)
+ (func $~lib/math/IntegerMath.sqrt<u64> (; 166 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   local.get $0
   call $~lib/math/isqrt64
   return
  )
- (func $~lib/math/ipow64 (; 167 ;) (type $IiI) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 167 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -11608,7 +11859,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 156 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/ipow32f (; 168 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   (local $2 i32)
   (local $3 f32)
   local.get $1
@@ -11659,7 +11910,7 @@
    local.get $3
   end
  )
- (func $~lib/math/ipow64f (; 157 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/ipow64f (; 169 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 f64)
   local.get $1
@@ -11710,7 +11961,7 @@
    local.get $3
   end
  )
- (func $start:std/math (; 158 ;) (type $FUNCSIG$v)
+ (func $start:std/math (; 170 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f64)
   (local $2 i32)
@@ -45541,9 +45792,9 @@
    unreachable
   end
  )
- (func $start (; 159 ;) (type $FUNCSIG$v)
+ (func $start (; 171 ;) (type $FUNCSIG$v)
   call $start:std/math
  )
- (func $null (; 160 ;) (type $FUNCSIG$v)
+ (func $null (; 172 ;) (type $FUNCSIG$v)
  )
 )
