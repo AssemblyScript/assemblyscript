@@ -1,8 +1,8 @@
 (module
- (type $ii (func (param i32) (result i32)))
- (type $_ (func))
- (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iFFF (func (param i32 f64 f64) (result f64)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$didd (func (param i32 f64 f64) (result f64)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -14,13 +14,13 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $optional-typeparameters/testConcrete<i32,i32> (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/testConcrete<i32,i32> (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $optional-typeparameters/testDerived<i32,i32> (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/testDerived<i32,i32> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $start:~lib/allocator/arena (; 2 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 2 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -32,7 +32,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -111,12 +111,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -126,12 +126,12 @@
   end
   local.get $0
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (; 6 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (; 6 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   local.get $2
   i32.add
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#constructor (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/TestDerived<f64,f64>#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -141,12 +141,12 @@
   end
   local.get $0
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (; 8 ;) (type $iFFF) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
+ (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (; 8 ;) (type $FUNCSIG$didd) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
   local.get $1
   local.get $2
   f64.add
  )
- (func $start:optional-typeparameters (; 9 ;) (type $_)
+ (func $start:optional-typeparameters (; 9 ;) (type $FUNCSIG$v)
   i32.const 1
   call $optional-typeparameters/testConcrete<i32,i32>
   drop
@@ -171,9 +171,9 @@
   call $optional-typeparameters/TestDerived<f64,f64>#test<f64>
   drop
  )
- (func $start (; 10 ;) (type $_)
+ (func $start (; 10 ;) (type $FUNCSIG$v)
   call $start:optional-typeparameters
  )
- (func $null (; 11 ;) (type $_)
+ (func $null (; 11 ;) (type $FUNCSIG$v)
  )
 )

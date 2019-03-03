@@ -5,6 +5,7 @@ import {
   abs as builtin_abs,
   ceil as builtin_ceil,
   clz as builtin_clz,
+  ctz as builtin_ctz,
   copysign as builtin_copysign,
   floor as builtin_floor,
   max as builtin_max,
@@ -2433,12 +2434,12 @@ export namespace IntegerMath {
 
 @inline
 export function ilog2_32(x: u32): u32 {
-  return 31 - builtin_clz(x);
+  return builtin_ctz(x);
 }
 
 @inline
 export function ilog2_64(x: u64): u64 {
-  return 63 - builtin_clz(x);
+  return builtin_ctz(x);
 }
 
 // Complexity: O(log n)

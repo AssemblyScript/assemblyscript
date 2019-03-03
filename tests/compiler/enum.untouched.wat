@@ -1,6 +1,6 @@
 (module
- (type $i (func (result i32)))
- (type $_ (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$v (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -39,10 +39,10 @@
  (export "SelfReference.ZERO" (global $enum/SelfReference.ZERO))
  (export "SelfReference.ONE" (global $enum/SelfReference.ONE))
  (start $start)
- (func $enum/getZero (; 0 ;) (type $i) (result i32)
+ (func $enum/getZero (; 0 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
  )
- (func $start:enum (; 1 ;) (type $_)
+ (func $start:enum (; 1 ;) (type $FUNCSIG$v)
   call $enum/getZero
   global.set $enum/NonConstant.ZERO
   call $enum/getZero
@@ -54,9 +54,9 @@
   global.get $enum/NonConstant.ONE
   drop
  )
- (func $start (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:enum
  )
- (func $null (; 3 ;) (type $_)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
  )
 )

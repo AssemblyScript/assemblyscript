@@ -1,11 +1,11 @@
 (module
- (type $_ (func))
- (type $i_ (func (param i32)))
- (type $ii_ (func (param i32 i32)))
- (type $f_ (func (param f32)))
- (type $F_ (func (param f64)))
- (type $i (func (result i32)))
- (type $I (func (result i64)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$vf (func (param f32)))
+ (type $FUNCSIG$vd (func (param f64)))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$j (func (result i64)))
  (import "pson" "onNull" (func $assembly/pson/onNull))
  (import "pson" "onTrue" (func $assembly/pson/onTrue))
  (import "pson" "onFalse" (func $assembly/pson/onFalse))
@@ -42,7 +42,7 @@
  (export "onString" (func $assembly/pson/onString))
  (export "onBinary" (func $assembly/pson/onBinary))
  (export "decode" (func $assembly/pson/decode))
- (func $assembly/pson/readVarint32 (; 14 ;) (type $i) (result i32)
+ (func $assembly/pson/readVarint32 (; 14 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -90,7 +90,7 @@
   end
   local.get $0
  )
- (func $assembly/pson/readVarint64 (; 15 ;) (type $I) (result i64)
+ (func $assembly/pson/readVarint64 (; 15 ;) (type $FUNCSIG$j) (result i64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i32)
@@ -140,7 +140,7 @@
   end
   local.get $0
  )
- (func $assembly/pson/decodeValue (; 16 ;) (type $_)
+ (func $assembly/pson/decodeValue (; 16 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -464,7 +464,7 @@
    unreachable
   end
  )
- (func $assembly/pson/decode (; 17 ;) (type $i_) (param $0 i32)
+ (func $assembly/pson/decode (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 0
   global.set $assembly/pson/offset
   block $break|0
@@ -485,6 +485,6 @@
    unreachable
   end
  )
- (func $null (; 18 ;) (type $_)
+ (func $null (; 18 ;) (type $FUNCSIG$v)
  )
 )

@@ -1,12 +1,12 @@
 (module
- (type $_ (func))
- (type $iiiiiiFF (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $F (func (result f64)))
- (type $iIi (func (param i32 i64) (result i32)))
- (type $ii (func (param i32) (result i32)))
- (type $iI (func (param i32) (result i64)))
- (type $iII (func (param i32 i64) (result i64)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$diiiiiid (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$d (func (result f64)))
+ (type $FUNCSIG$iij (func (param i32 i64) (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$ji (func (param i32) (result i64)))
+ (type $FUNCSIG$jij (func (param i32 i64) (result i64)))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
@@ -22,7 +22,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 3 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 3 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -34,7 +34,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -113,12 +113,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 5 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/date/Date#constructor (; 6 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/date/Date#constructor (; 6 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   block (result i32)
    local.get $0
    i32.eqz
@@ -136,17 +136,17 @@
   i64.store
   local.get $0
  )
- (func $~lib/date/Date#getTime (; 7 ;) (type $iI) (param $0 i32) (result i64)
+ (func $~lib/date/Date#getTime (; 7 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
   local.get $0
   i64.load
  )
- (func $~lib/date/Date#setTime (; 8 ;) (type $iII) (param $0 i32) (param $1 i64) (result i64)
+ (func $~lib/date/Date#setTime (; 8 ;) (type $FUNCSIG$jij) (param $0 i32) (param $1 i64) (result i64)
   local.get $0
   local.get $1
   i64.store
   local.get $1
  )
- (func $start:std/date (; 9 ;) (type $_)
+ (func $start:std/date (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -322,9 +322,9 @@
    unreachable
   end
  )
- (func $start (; 10 ;) (type $_)
+ (func $start (; 10 ;) (type $FUNCSIG$v)
   call $start:std/date
  )
- (func $null (; 11 ;) (type $_)
+ (func $null (; 11 ;) (type $FUNCSIG$v)
  )
 )

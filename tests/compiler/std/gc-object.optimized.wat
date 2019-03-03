@@ -1,9 +1,9 @@
 (module
- (type $_ (func))
- (type $iii (func (param i32 i32) (result i32)))
- (type $ii (func (param i32) (result i32)))
- (type $i_ (func (param i32)))
- (type $ii_ (func (param i32 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (table $0 4 funcref)
@@ -21,7 +21,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (export "main" (func $std/gc-object/main))
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -83,7 +83,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/collector/itcm/ManagedObjectList#push (; 1 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/collector/itcm/ManagedObjectList#push (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load offset=4
@@ -111,7 +111,7 @@
   local.get $1
   i32.store offset=4
  )
- (func $~lib/collector/itcm/ManagedObject#makeGray (; 2 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/ManagedObject#makeGray (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/collector/itcm/iter
@@ -151,7 +151,7 @@
   i32.or
   i32.store
  )
- (func $~lib/collector/itcm/__gc_mark (; 3 ;) (type $i_) (param $0 i32)
+ (func $~lib/collector/itcm/__gc_mark (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   if
@@ -170,7 +170,7 @@
    end
   end
  )
- (func $~lib/collector/itcm/step (; 4 ;) (type $_)
+ (func $~lib/collector/itcm/step (; 4 ;) (type $FUNCSIG$v)
   (local $0 i32)
   block $break|0
    block $case3|0
@@ -217,7 +217,7 @@
      end
      global.get $std/gc-object/obj
      i32.const 1
-     call_indirect (type $i_)
+     call_indirect (type $FUNCSIG$vi)
      i32.const 2
      global.set $~lib/collector/itcm/state
      br $break|0
@@ -248,11 +248,11 @@
      i32.add
      local.get $0
      i32.load offset=8
-     call_indirect (type $i_)
+     call_indirect (type $FUNCSIG$vi)
     else     
      global.get $std/gc-object/obj
      i32.const 1
-     call_indirect (type $i_)
+     call_indirect (type $FUNCSIG$vi)
      global.get $~lib/collector/itcm/toSpace
      global.get $~lib/collector/itcm/iter
      i32.load
@@ -303,7 +303,7 @@
    end
   end
  )
- (func $~lib/collector/itcm/__gc_allocate (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/collector/itcm/__gc_allocate (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 1073741808
@@ -334,7 +334,7 @@
   i32.const 16
   i32.add
  )
- (func $std/gc-object/Base~gc (; 6 ;) (type $i_) (param $0 i32)
+ (func $std/gc-object/Base~gc (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -343,7 +343,7 @@
   local.get $0
   call $~lib/collector/itcm/__gc_mark
  )
- (func $std/gc-object/Custom~gc (; 7 ;) (type $i_) (param $0 i32)
+ (func $std/gc-object/Custom~gc (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.eqz
   if
@@ -351,7 +351,7 @@
   end
   local.get $0
   i32.const 2
-  call_indirect (type $i_)
+  call_indirect (type $FUNCSIG$vi)
   local.get $0
   i32.load
   call $~lib/collector/itcm/__gc_mark
@@ -380,7 +380,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $~lib/collector/itcm/__gc_collect (; 9 ;) (type $_)
+ (func $~lib/collector/itcm/__gc_collect (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
   block $break|0
    block $case1|0
@@ -406,7 +406,7 @@
    end
   end
  )
- (func $start:std/gc-object (; 10 ;) (type $_)
+ (func $start:std/gc-object (; 10 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 8
   global.set $~lib/allocator/arena/startOffset
@@ -424,7 +424,7 @@
   global.set $std/gc-object/obj
   call $~lib/collector/itcm/__gc_collect
  )
- (func $std/gc-object/main (; 11 ;) (type $_)
+ (func $std/gc-object/main (; 11 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   i32.eqz
   if
@@ -433,7 +433,7 @@
    global.set $~lib/started
   end
  )
- (func $null (; 12 ;) (type $_)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
   nop
  )
 )

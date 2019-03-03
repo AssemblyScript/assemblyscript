@@ -1,6 +1,6 @@
 (module
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00c\00o\00m\00m\00a\00.\00t\00s")
@@ -11,7 +11,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:comma (; 1 ;) (type $_)
+ (func $start:comma (; 1 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $comma/a
   local.tee $0
@@ -163,10 +163,10 @@
    unreachable
   end
  )
- (func $start (; 2 ;) (type $_)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:comma
  )
- (func $null (; 3 ;) (type $_)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
   nop
  )
 )

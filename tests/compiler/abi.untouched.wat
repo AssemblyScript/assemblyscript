@@ -1,7 +1,7 @@
 (module
- (type $i (func (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\06\00\00\00a\00b\00i\00.\00t\00s\00")
@@ -16,10 +16,10 @@
  (export "exportedExported" (func $abi/exportedExported))
  (export "exportedInternal" (func $abi/exportedInternal))
  (start $start)
- (func $abi/internal (; 1 ;) (type $i) (result i32)
+ (func $abi/internal (; 1 ;) (type $FUNCSIG$i) (result i32)
   i32.const 128
  )
- (func $start:abi (; 2 ;) (type $_)
+ (func $start:abi (; 2 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   call $abi/internal
@@ -194,26 +194,26 @@
    end
   end
  )
- (func $abi/exported (; 3 ;) (type $i) (result i32)
+ (func $abi/exported (; 3 ;) (type $FUNCSIG$i) (result i32)
   i32.const 128
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
  )
- (func $abi/exportedExported (; 4 ;) (type $i) (result i32)
+ (func $abi/exportedExported (; 4 ;) (type $FUNCSIG$i) (result i32)
   call $abi/exported
  )
- (func $abi/exportedInternal (; 5 ;) (type $i) (result i32)
+ (func $abi/exportedInternal (; 5 ;) (type $FUNCSIG$i) (result i32)
   call $abi/internal
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
  )
- (func $start (; 6 ;) (type $_)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $start:abi
  )
- (func $null (; 7 ;) (type $_)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
  )
 )

@@ -15,6 +15,10 @@ import {
   COMPARATOR
 } from "./internal/sort";
 
+function clampToByte(value: i32): i32 {
+  return ~(value >> 31) & (((255 - value) >> 31) | value); // & 255
+}
+
 export class Int8Array extends TypedArray<i8> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
@@ -112,12 +116,12 @@ export class Uint8ClampedArray extends Uint8Array {
 
   @inline @operator("[]=")
   protected __set(index: i32, value: i32): void {
-    super.__set(index, max(min(value, 255), 0));
+    super.__set(index, clampToByte(value));
   }
 
   @inline @operator("{}=")
   protected __unchecked_set(index: i32, value: i32): void {
-    super.__unchecked_set(index, max(min(value, 255), 0));
+    super.__unchecked_set(index, clampToByte(value));
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
@@ -130,6 +134,20 @@ export class Uint8ClampedArray extends Uint8Array {
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Uint8ClampedArray {
     return SUBARRAY<Uint8ClampedArray, u8>(this, begin, end);
+  }
+
+  reduce<T>(
+    callbackfn: (accumulator: T, value: u8, index: i32, array: Uint8ClampedArray) => T,
+    initialValue: T,
+  ): T {
+    return REDUCE<Uint8ClampedArray, u8, T>(this, callbackfn, initialValue);
+  }
+
+  reduceRight<T>(
+    callbackfn: (accumulator: T, value: u8, index: i32, array: Uint8ClampedArray) => T,
+    initialValue: T,
+  ): T {
+    return REDUCE_RIGHT<Uint8ClampedArray, u8, T>(this, callbackfn, initialValue);
   }
 
   map(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => u8): Uint8ClampedArray {
