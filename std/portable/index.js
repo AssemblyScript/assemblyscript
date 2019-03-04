@@ -201,11 +201,13 @@ String["fromCodePoints"] = function fromCodePoints(arr) {
 };
 
 if (!String.prototype.replaceAll) {
-  String.prototype.replaceAll = function replaceAll(search, replacment) {
-    var res = this.split(search).join(replacment);
-    if (!search.length) res = replacment + res + replacment;
-    return res;
-  };
+  Object.defineProperties(String.prototype, "replaceAll", {
+    value: function replaceAll(search, replacment) {
+      var res = this.split(search).join(replacment);
+      if (!search.length) res = replacment + res + replacment;
+      return res;
+    }
+  });
 }
 
 globalScope["isInteger"] = Number.isInteger;
