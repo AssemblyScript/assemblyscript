@@ -413,7 +413,7 @@ export class String {
       if (ASC_SHRINK_LEVEL >= 1) {
         return this.substring(0, index)
           .concat(replacement)
-          .concat(this.substring(index + slen, len));
+          .concat(this.substring(index + slen));
       } else {
         let rlen = replacement.length;
         len = len - slen;
@@ -470,7 +470,7 @@ export class String {
         result = result.concat(this.substring(prev, next).concat(replacement));
         prev = next + slen;
       }
-      if (prev) return result.concat(this.substring(prev, len));
+      if (prev) return result.concat(this.substring(prev));
       return this;
     } else {
       if (slen === rlen) {
