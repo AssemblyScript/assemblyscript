@@ -447,7 +447,7 @@ export class String {
     var rlen = replacement.length;
     if (!slen) {
       // Handle special case when we should insert replacement between each char
-      // TODO handle surrogate pairs also
+      // TODO handle surrogate pairs as well
       if (!rlen) return this;
       let result = allocateUnsafe(len + (len + 1) * rlen);
       copyUnsafe(result, 0, replacement, 0, rlen);
@@ -474,7 +474,7 @@ export class String {
       return this;
     } else {
       if (slen === rlen) {
-        // Fast path when search and replacement have same length so we could use preallocation
+        // Fast path when search and replacement have same length
         let result = allocateUnsafe(len);
         copyUnsafe(result, 0, this, 0, len);
         while (~(next = this.indexOf(search, prev))) {
