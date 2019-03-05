@@ -1203,12 +1203,11 @@ interface IMath<T> {
   trunc(x: T): T;
 }
 
-/** Contains 32-bit sin value produced by Mathf.sincos */
-declare var sincos_s32: f32;
-/** Contains 32-bit cos value produced by Mathf.sincos */
-declare var sincos_c32: f32;
-
 interface INativeMath<T> extends IMath<T> {
+  /** Contains sin value produced after Math/Mathf.sincos */
+  sincos_sin: T;
+  /** Contains cos value produced after Math/Mathf.sincos */
+  sincos_cos: T;
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
   /** Returns the floating-point remainder of `x / y` (rounded towards zero). */

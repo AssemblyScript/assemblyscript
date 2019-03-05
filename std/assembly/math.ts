@@ -1241,10 +1241,6 @@ export namespace NativeMath {
   0xFE5163ABDEBBC561
 ];
 
-/** @public Used as return values from Mathf.sincos */
-@global @lazy var sincos_s32: f32;
-@global @lazy var sincos_c32: f32;
-
 /** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   const                    // see: musl/src/math/asinf.c and SUN COPYRIGHT NOTICE above
@@ -1372,6 +1368,10 @@ export namespace NativeMathf {
   @lazy export const PI      = <f32>NativeMath.PI;
   @lazy export const SQRT1_2 = <f32>NativeMath.SQRT1_2;
   @lazy export const SQRT2   = <f32>NativeMath.SQRT2;
+
+  /** Used as return values from Mathf.sincos */
+  @lazy export var sincos_sin: f32 = 0;
+  @lazy export var sincos_cos: f32 = 0;
 
   @inline
   export function abs(x: f32): f32 {
