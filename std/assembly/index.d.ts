@@ -1401,12 +1401,18 @@ interface IMath<T> {
 }
 
 interface INativeMath<T> extends IMath<T> {
+  /** Contains sin value produced after Math/Mathf.sincos */
+  sincos_sin: T;
+  /** Contains cos value produced after Math/Mathf.sincos */
+  sincos_cos: T;
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
   /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
   mod(x: T, y: T): T;
   /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
   rem(x: T, y: T): T;
+  /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32/64` and `sincos_c32/64` globals */
+  sincos(x: T): void;
 }
 
 /** Double precision math imported from JavaScript. */
