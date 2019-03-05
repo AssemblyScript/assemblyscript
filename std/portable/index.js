@@ -201,7 +201,7 @@ String["fromCodePoints"] = function fromCodePoints(arr) {
 };
 
 if (!String.prototype.replaceAll) {
-  Object.defineProperties(String.prototype, "replaceAll", {
+  Object.defineProperty(String.prototype, "replaceAll", {
     value: function replaceAll(search, replacment) {
       var res = this.split(search).join(replacment);
       if (!search.length) res = replacment + res + replacment;
