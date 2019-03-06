@@ -10689,7 +10689,80 @@
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/ipow64 (; 153 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/isqrt32 (; 153 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  i32.const 2
+  i32.lt_u
+  if
+   local.get $0
+   return
+  end
+  i32.const 2
+  local.set $1
+  local.get $0
+  i32.const 2
+  i32.shr_u
+  local.set $2
+  loop $continue|0
+   local.get $2
+   if
+    local.get $0
+    local.get $2
+    i32.ne
+    local.set $2
+   end
+   local.get $2
+   if
+    local.get $0
+    local.get $1
+    i32.const 2
+    i32.add
+    local.tee $1
+    i32.shr_u
+    local.set $2
+    br $continue|0
+   end
+  end
+  local.get $1
+  i32.const 2
+  i32.sub
+  local.set $1
+  loop $continue|1
+   local.get $1
+   i32.const 0
+   i32.ge_s
+   if
+    local.get $3
+    i32.const 1
+    i32.shl
+    local.tee $3
+    i32.const 1
+    i32.add
+    local.tee $2
+    local.get $2
+    i32.mul
+    local.get $0
+    local.get $1
+    i32.shr_u
+    i32.le_u
+    if
+     local.get $2
+     local.set $3
+    end
+    local.get $1
+    i32.const 2
+    i32.sub
+    local.set $1
+    br $continue|1
+   end
+  end
+  local.get $3
+ )
+ (func $~lib/math/isqrt64 (; 154 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+  (local $1 i32)
   (local $2 i64)
   (local $3 i64)
   local.get $0
@@ -10767,7 +10840,7 @@
   end
   local.get $3
  )
- (func $~lib/math/ipow64 (; 149 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 155 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   i64.const 1
@@ -10963,7 +11036,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 154 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/ipow32f (; 156 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
   local.get $1
@@ -11009,7 +11082,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow64f (; 155 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/ipow64f (; 157 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   local.get $1
@@ -11055,7 +11128,7 @@
   end
   local.get $2
  )
- (func $start:std/math (; 156 ;) (type $FUNCSIG$v)
+ (func $start:std/math (; 158 ;) (type $FUNCSIG$v)
   (local $0 f64)
   (local $1 f32)
   (local $2 i32)
@@ -40303,7 +40376,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3369
+   i32.const 3522
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40313,7 +40386,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3370
+   i32.const 3523
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40323,7 +40396,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3371
+   i32.const 3524
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40335,7 +40408,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3372
+   i32.const 3525
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40347,7 +40420,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3373
+   i32.const 3526
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40361,7 +40434,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3374
+   i32.const 3527
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40373,7 +40446,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3375
+   i32.const 3528
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40385,7 +40458,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3376
+   i32.const 3529
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40397,7 +40470,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3377
+   i32.const 3530
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40409,7 +40482,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3378
+   i32.const 3531
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40423,7 +40496,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3379
+   i32.const 3532
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40435,7 +40508,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3380
+   i32.const 3533
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40447,7 +40520,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3381
+   i32.const 3534
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40459,7 +40532,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3382
+   i32.const 3535
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40471,7 +40544,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3383
+   i32.const 3536
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40485,7 +40558,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3384
+   i32.const 3537
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40497,7 +40570,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3385
+   i32.const 3538
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40509,7 +40582,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3386
+   i32.const 3539
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40521,7 +40594,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3387
+   i32.const 3540
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40533,7 +40606,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3388
+   i32.const 3541
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40547,7 +40620,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3389
+   i32.const 3542
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40559,7 +40632,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3390
+   i32.const 3543
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40571,7 +40644,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3391
+   i32.const 3544
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40583,7 +40656,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3392
+   i32.const 3545
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40595,7 +40668,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3393
+   i32.const 3546
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40609,7 +40682,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3394
+   i32.const 3547
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40623,7 +40696,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3395
+   i32.const 3548
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40635,7 +40708,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3396
+   i32.const 3549
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40647,7 +40720,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3397
+   i32.const 3550
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40661,7 +40734,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3398
+   i32.const 3551
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40673,7 +40746,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3399
+   i32.const 3552
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40685,7 +40758,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3400
+   i32.const 3553
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40697,7 +40770,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3401
+   i32.const 3554
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40709,7 +40782,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3402
+   i32.const 3555
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40721,7 +40794,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3403
+   i32.const 3556
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40733,7 +40806,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3404
+   i32.const 3557
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40746,7 +40819,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3461
+   i32.const 3569
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40759,7 +40832,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3462
+   i32.const 3570
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40772,7 +40845,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3463
+   i32.const 3571
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40785,7 +40858,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3464
+   i32.const 3572
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40798,7 +40871,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3466
+   i32.const 3574
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40811,7 +40884,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3467
+   i32.const 3575
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40824,7 +40897,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3468
+   i32.const 3576
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40837,7 +40910,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3469
+   i32.const 3577
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40850,7 +40923,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3471
+   i32.const 3579
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40863,7 +40936,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3472
+   i32.const 3580
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40876,7 +40949,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3473
+   i32.const 3581
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40889,7 +40962,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3474
+   i32.const 3582
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40902,7 +40975,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3476
+   i32.const 3584
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40915,7 +40988,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3477
+   i32.const 3585
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40928,7 +41001,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3478
+   i32.const 3586
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40941,7 +41014,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3479
+   i32.const 3587
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40954,7 +41027,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3481
+   i32.const 3589
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40967,7 +41040,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3482
+   i32.const 3590
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40980,7 +41053,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3483
+   i32.const 3591
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -40993,7 +41066,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3484
+   i32.const 3592
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41006,7 +41079,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3486
+   i32.const 3594
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41019,7 +41092,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3487
+   i32.const 3595
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41032,7 +41105,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3488
+   i32.const 3596
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41045,7 +41118,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3489
+   i32.const 3597
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41058,7 +41131,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3490
+   i32.const 3598
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41071,7 +41144,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3491
+   i32.const 3599
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41084,7 +41157,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3492
+   i32.const 3600
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41101,7 +41174,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3494
+   i32.const 3602
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41114,7 +41187,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3498
+   i32.const 3606
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41127,7 +41200,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3499
+   i32.const 3607
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41141,7 +41214,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3500
+   i32.const 3608
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41155,7 +41228,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3501
+   i32.const 3609
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41169,7 +41242,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3502
+   i32.const 3610
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41182,7 +41255,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3503
+   i32.const 3611
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41195,7 +41268,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3504
+   i32.const 3612
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41208,7 +41281,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3505
+   i32.const 3613
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41221,7 +41294,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3506
+   i32.const 3614
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41234,7 +41307,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3507
+   i32.const 3615
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41247,7 +41320,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3508
+   i32.const 3616
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41260,7 +41333,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3509
+   i32.const 3617
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41273,7 +41346,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3510
+   i32.const 3618
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41286,7 +41359,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3511
+   i32.const 3619
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41299,7 +41372,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3512
+   i32.const 3620
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41312,7 +41385,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3513
+   i32.const 3621
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41325,7 +41398,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3517
+   i32.const 3625
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41338,7 +41411,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3518
+   i32.const 3626
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41352,7 +41425,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3519
+   i32.const 3627
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41366,7 +41439,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3520
+   i32.const 3628
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41380,7 +41453,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3521
+   i32.const 3629
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41393,7 +41466,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3522
+   i32.const 3630
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41406,7 +41479,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3523
+   i32.const 3631
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41419,7 +41492,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3524
+   i32.const 3632
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41432,7 +41505,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3525
+   i32.const 3633
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41445,7 +41518,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3526
+   i32.const 3634
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41458,7 +41531,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3527
+   i32.const 3635
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41471,7 +41544,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3528
+   i32.const 3636
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41484,7 +41557,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3529
+   i32.const 3637
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41497,7 +41570,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3530
+   i32.const 3638
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41510,7 +41583,7 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3531
+   i32.const 3639
    i32.const 0
    call $~lib/env/abort
    unreachable
@@ -41523,16 +41596,16 @@
   if
    i32.const 0
    i32.const 8
-   i32.const 3532
+   i32.const 3640
    i32.const 0
    call $~lib/env/abort
    unreachable
   end
  )
- (func $start (; 157 ;) (type $FUNCSIG$v)
+ (func $start (; 159 ;) (type $FUNCSIG$v)
   call $start:std/math
  )
- (func $null (; 158 ;) (type $FUNCSIG$v)
+ (func $null (; 160 ;) (type $FUNCSIG$v)
   nop
  )
 )
