@@ -100,17 +100,17 @@ declare function isFinite<T = f32 | f64>(value: T): bool;
 declare function isInteger(value: any): value is number;
 /** Tests if the specified value is a valid float. Can't distinguish a float from an integer. */
 declare function isFloat(value: any): value is number;
-/** Tests if the specified value is a nullable. */
+/** Tests if the specified value is of a nullable reference type. */
 declare function isNullable(value: any): bool;
 /** Tests if the specified value is of a reference type. */
 declare function isReference(value: any): value is object | string;
-/** Tests if the specified value is a function */
+/** Tests if the specified value is of a function type */
 declare function isFunction(value: any): value is Function;
 /** Tests if the specified value can be used as a string. */
 declare function isString(value: any): value is string | String;
 /** Tests if the specified value can be used as an array. */
 declare function isArray(value: any): value is Array<any>;
-/** Tests if the specified type *or* expression can be used as an array like object. Compiles to a constant. */
+/** Tests if the specified type *or* expression can be used as an array like object. */
 declare function isArrayLike(value: any): value is ArrayLike<any>;
 /** Tests if the specified expression resolves to a defined element. */
 declare function isDefined(expression: any): bool;
