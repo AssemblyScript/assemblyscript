@@ -1136,7 +1136,9 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   /** The findIndex() method returns an index in the typed array, if an element in the typed array satisfies the provided testing function. Otherwise -1 is returned. See also the find() [not implemented] method, which returns the value of a found element in the typed array instead of its index. */
   findIndex(callbackfn: (value: T, index: i32, self: this) => bool): i32;
   /** The every() method tests whether all elements in the typed array pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.every(). */
-  every(callbackfn: (value: T, index: i32, self: this) => bool): i32;
+  every(callbackfn: (value: T, index: i32, self: this) => bool): bool;
+  /** The forEach() method executes a provided function once per array element. This method has the same algorithm as Array.prototype.forEach().*/
+  forEach(callbackfn: (value: T, index: i32, self: this) => void): void;
 }
 
 /** An array of twos-complement 8-bit signed integers. */
@@ -1434,12 +1436,18 @@ interface IIntegerMath {
 }
 
 interface INativeMath<T> extends IMath<T> {
+  /** Contains sin value produced after Math/Mathf.sincos */
+  sincos_sin: T;
+  /** Contains cos value produced after Math/Mathf.sincos */
+  sincos_cos: T;
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
   /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
   mod(x: T, y: T): T;
   /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
   rem(x: T, y: T): T;
+  /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32/64` and `sincos_c32/64` globals */
+  sincos(x: T): void;
 }
 
 /** Double precision math imported from JavaScript. */

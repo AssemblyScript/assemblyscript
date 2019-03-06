@@ -231,3 +231,16 @@ export function EVERY<TArray extends TypedArray<T>, T>(
   }
   return true;
 }
+
+@inline
+export function FOREACH<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => void,
+): void {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
+    callbackfn(LOAD<T>(buffer, i, byteOffset), i, array);
+  }
+}
