@@ -206,9 +206,17 @@ globalScope["isFloat"] = function isFloat(arg) {
   return typeof arg === "number";
 };
 
+globalScope["isNullable"] = function isNullable(arg) {
+  return arg == null;
+}
+
 globalScope["isReference"] = function isReference(arg) {
   return typeof arg === "object" || typeof arg === "string";
 };
+
+globalScope["isFunction"] = function isFunction(arg) {
+  return typeof arg === "function" || arg instanceof Function;
+}
 
 globalScope["isString"] = function isString(arg) {
   return typeof arg === "string" || arg instanceof String;

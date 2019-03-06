@@ -100,8 +100,12 @@ declare function isFinite<T = f32 | f64>(value: T): bool;
 declare function isInteger(value: any): value is number;
 /** Tests if the specified value is a valid float. Can't distinguish a float from an integer. */
 declare function isFloat(value: any): value is number;
+/** Tests if the specified value is a nullable. */
+declare function isNullable(value: any): bool;
 /** Tests if the specified value is of a reference type. */
 declare function isReference(value: any): value is object | string;
+/** Tests if the specified value is a function */
+declare function isFunction(value: any): value is Function;
 /** Tests if the specified value can be used as a string. */
 declare function isString(value: any): value is string | String;
 /** Tests if the specified value can be used as an array. */
