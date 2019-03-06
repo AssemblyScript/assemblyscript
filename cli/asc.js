@@ -777,24 +777,6 @@ exports.main = function main(argv, options, callback) {
   }
 }
 
-var argumentSubstitutions = {
-  "-O"  : [ "--optimize" ],
-  "-Os" : [ "--optimize", "--shrinkLevel", "1" ],
-  "-Oz" : [ "--optimize", "--shrinkLevel", "2" ],
-  "-O0" : [ "--optimizeLevel", "0", "--shrinkLevel", "0" ],
-  "-O0s": [ "--optimizeLevel", "0", "--shrinkLevel", "1" ],
-  "-O0z": [ "--optimizeLevel", "0", "--shrinkLevel", "2" ],
-  "-O1" : [ "--optimizeLevel", "1", "--shrinkLevel", "0" ],
-  "-O1s": [ "--optimizeLevel", "1", "--shrinkLevel", "1" ],
-  "-O1z": [ "--optimizeLevel", "1", "--shrinkLevel", "2" ],
-  "-O2" : [ "--optimizeLevel", "2", "--shrinkLevel", "0" ],
-  "-O2s": [ "--optimizeLevel", "2", "--shrinkLevel", "1" ],
-  "-O2z": [ "--optimizeLevel", "2", "--shrinkLevel", "2" ],
-  "-O3" : [ "--optimizeLevel", "3", "--shrinkLevel", "0" ],
-  "-O3s": [ "--optimizeLevel", "3", "--shrinkLevel", "1" ],
-  "-O3z": [ "--optimizeLevel", "3", "--shrinkLevel", "2" ],
-};
-
 /** Checks diagnostics emitted so far for errors. */
 function checkDiagnostics(emitter, stderr) {
   var diagnostic;

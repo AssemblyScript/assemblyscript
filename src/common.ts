@@ -51,33 +51,31 @@ export enum CommonFlags {
   INSTANCE = 1 << 17,
   /** Is a constructor. */
   CONSTRUCTOR = 1 << 18,
-  /** Is an arrow function. */
-  ARROW = 1 << 19,
   /** Is a module export. */
-  MODULE_EXPORT = 1 << 20,
+  MODULE_EXPORT = 1 << 19,
   /** Is a module import. */
-  MODULE_IMPORT = 1 << 21,
+  MODULE_IMPORT = 1 << 20,
 
   // Compilation states
 
   /** Is resolved. */
-  RESOLVED = 1 << 22,
+  RESOLVED = 1 << 21,
   /** Is compiled. */
-  COMPILED = 1 << 23,
+  COMPILED = 1 << 22,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 24,
+  INLINED = 1 << 23,
   /** Is scoped. */
-  SCOPED = 1 << 25,
+  SCOPED = 1 << 24,
   /** Is a trampoline. */
-  TRAMPOLINE = 1 << 26,
+  TRAMPOLINE = 1 << 25,
   /** Is a virtual method. */
-  VIRTUAL = 1 << 27,
+  VIRTUAL = 1 << 26,
   /** Is the main function. */
-  MAIN = 1 << 28,
+  MAIN = 1 << 27,
 
   // Other
 
-  QUOTED = 1 << 29
+  QUOTED = 1 << 28
 }
 
 /** Path delimiter inserted between file system levels. */
@@ -120,6 +118,16 @@ export namespace CommonSymbols {
   export const f32 = "f32";
   export const f64 = "f64";
   export const v128 = "v128";
+  export const i8x16 = "i8x16";
+  export const u8x16 = "u8x16";
+  export const i16x8 = "i16x8";
+  export const u16x8 = "u16x8";
+  export const i32x4 = "i32x4";
+  export const u32x4 = "u32x4";
+  export const i64x2 = "i64x2";
+  export const u64x2 = "u64x2";
+  export const f32x4 = "f32x4";
+  export const f64x2 = "f64x2";
   export const void_ = "void";
   export const number = "number";
   export const boolean = "boolean";
@@ -148,6 +156,7 @@ export namespace LibrarySymbols {
   export const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
   export const ASC_FEATURE_BULK_MEMORY = "ASC_FEATURE_BULK_MEMORY";
   export const ASC_FEATURE_SIMD = "ASC_FEATURE_SIMD";
+  export const ASC_FEATURE_THREADS = "ASC_FEATURE_THREADS";
   // classes
   export const I8 = "I8";
   export const I16 = "I16";

@@ -56,7 +56,8 @@ import {
   AssertionKind,
   BinaryExpression,
   ThisExpression,
-  SuperExpression
+  SuperExpression,
+  isTypeOmitted
 } from "./ast";
 
 import {
@@ -73,7 +74,8 @@ import {
 } from "./common";
 
 import {
-  makeMap
+  makeMap,
+  isPowerOf2
 } from "./util";
 
 import {
@@ -140,8 +142,8 @@ export class Resolver extends DiagnosticEmitter {
       let requiredParameters = 0;
       let hasRest = false;
       for (let i = 0; i < numParameters; ++i) {
-        let parameterTypeNode = parameterNodes[i];
-        switch (parameterTypeNode.parameterKind) {
+        let parameterNode = parameterNodes[i];
+        switch (parameterNode.parameterKind) {
           case ParameterKind.DEFAULT: {
             requiredParameters = i + 1;
             break;
@@ -152,17 +154,36 @@ export class Resolver extends DiagnosticEmitter {
             break;
           }
         }
+        let parameterTypeNode = parameterNode.type;
+        if (isTypeOmitted(parameterTypeNode)) {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Type_expected,
+              parameterTypeNode.range
+            );
+          }
+          return null;
+        }
         let parameterType = this.resolveType(
-          assert(parameterTypeNode.type),
+          parameterTypeNode,
           context,
           contextualTypeArguments,
           reportMode
         );
         if (!parameterType) return null;
         parameterTypes[i] = parameterType;
-        parameterNames[i] = parameterTypeNode.name.text;
+        parameterNames[i] = parameterNode.name.text;
       }
       let returnTypeNode = (<SignatureNode>node).returnType;
+      if (isTypeOmitted(returnTypeNode)) {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_expected,
+            returnTypeNode.range
+          );
+        }
+        return null;
+      }
       let returnType: Type | null;
       if (returnTypeNode) {
         returnType = this.resolveType(
@@ -1301,7 +1322,14 @@ export class Resolver extends DiagnosticEmitter {
       if (parameterDeclaration.parameterKind == ParameterKind.DEFAULT) {
         requiredParameters = i + 1;
       }
-      let typeNode = assert(parameterDeclaration.type);
+      let typeNode = parameterDeclaration.type;
+      if (isTypeOmitted(typeNode)) {
+        this.error(
+          DiagnosticCode.Type_expected,
+          typeNode.range
+        );
+        return null;
+      }
       let parameterType = this.resolveType(
         typeNode,
         prototype.parent, // relative to function
@@ -1320,7 +1348,14 @@ export class Resolver extends DiagnosticEmitter {
     } else if (prototype.is(CommonFlags.CONSTRUCTOR)) {
       returnType = assert(classInstance).type; // not annotated
     } else {
-      let typeNode = assert(signatureNode.returnType);
+      let typeNode = signatureNode.returnType;
+      if (isTypeOmitted(typeNode)) {
+        this.error(
+          DiagnosticCode.Type_expected,
+          typeNode.range
+        );
+        return null;
+      }
       let type = this.resolveType(
         typeNode,
         prototype.parent, // relative to function
@@ -1538,13 +1573,9 @@ export class Resolver extends DiagnosticEmitter {
             }
             if (!fieldType) break; // did report above
             let fieldInstance = new Field(<FieldPrototype>member, instance, fieldType);
-            switch (fieldType.byteSize) { // align
-              case 1: break;
-              case 2: { if (memoryOffset & 1) ++memoryOffset; break; }
-              case 4: { if (memoryOffset & 3) memoryOffset = (memoryOffset | 3) + 1; break; }
-              case 8: { if (memoryOffset & 7) memoryOffset = (memoryOffset | 7) + 1; break; }
-              default: assert(false);
-            }
+            assert(isPowerOf2(fieldType.byteSize));
+            let mask = fieldType.byteSize - 1;
+            if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
             fieldInstance.memoryOffset = memoryOffset;
             memoryOffset += fieldType.byteSize;
             instance.add(member.name, fieldInstance); // reports
