@@ -409,3 +409,35 @@ testArrayEvery<Int64Array, i64>();
 testArrayEvery<Uint64Array, u64>();
 testArrayEvery<Float32Array, f32>();
 testArrayEvery<Float64Array, f64>();
+
+var forEachCallCount: i32 = 0;
+var forEachSelf: usize;
+var forEachValues: i32[] = [10, 12, 14];
+function testArrayForEach<TArray extends TypedArray<T>, T extends number>(): void {
+  forEachCallCount = 0;
+  var array = instantiate<TArray>(3);
+  forEachSelf = changetype<usize>(array);
+  array[0] = <T>forEachValues[0];
+  array[1] = <T>forEachValues[1];
+  array[2] = <T>forEachValues[2];
+  array.forEach((value: T, index: i32, self: TArray): void => {
+    var matchedValue = forEachValues[index];
+    assert(value == <T>matchedValue, "forEach value mismatch");
+    assert(index == forEachCallCount, "forEach index mismatch");
+    assert(forEachSelf == changetype<usize>(self), "forEach self parameter mismatch");
+    forEachCallCount++;
+  });
+  assert(forEachCallCount == 3, "forEach call count mismatch");
+}
+
+testArrayForEach<Int8Array, i8>();
+testArrayForEach<Uint8Array, u8>();
+testArrayForEach<Uint8ClampedArray, u8>();
+testArrayForEach<Int16Array, i16>();
+testArrayForEach<Uint16Array, u16>();
+testArrayForEach<Int32Array, i32>();
+testArrayForEach<Uint32Array, u32>();
+testArrayForEach<Int64Array, i64>();
+testArrayForEach<Uint64Array, u64>();
+testArrayForEach<Float32Array, f32>();
+testArrayForEach<Float64Array, f64>();
