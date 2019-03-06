@@ -207,7 +207,7 @@ globalScope["isFloat"] = function isFloat(arg) {
 };
 
 globalScope["isNullable"] = function isNullable(arg) {
-  return arg == null;
+  return true;
 }
 
 globalScope["isReference"] = function isReference(arg) {
@@ -215,7 +215,7 @@ globalScope["isReference"] = function isReference(arg) {
 };
 
 globalScope["isFunction"] = function isFunction(arg) {
-  return typeof arg === "function" || arg instanceof Function;
+  return typeof arg === "function";
 }
 
 globalScope["isString"] = function isString(arg) {
