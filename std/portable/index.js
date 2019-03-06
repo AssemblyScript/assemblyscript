@@ -206,9 +206,17 @@ globalScope["isFloat"] = function isFloat(arg) {
   return typeof arg === "number";
 };
 
+globalScope["isNullable"] = function isNullable(arg) {
+  return true;
+}
+
 globalScope["isReference"] = function isReference(arg) {
   return typeof arg === "object" || typeof arg === "string";
 };
+
+globalScope["isFunction"] = function isFunction(arg) {
+  return typeof arg === "function";
+}
 
 globalScope["isString"] = function isString(arg) {
   return typeof arg === "string" || arg instanceof String;
@@ -244,9 +252,22 @@ globalScope["fmodf"] = function fmodf(x, y) {
 };
 
 globalScope["JSMath"] = Math;
-globalScope["JSMath"].signbit = function signbit(x) {
-  F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
-}
+
+Object.defineProperties(globalScope["JSMath"], {
+  sincos_sin: { value: 0.0, writable: true },
+  sincos_cos: { value: 0.0, writable: true },
+  signbit: {
+    value: function signbit(x) {
+      F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
+    }
+  },
+  sincos: {
+    value: function sincos(x) {
+      this.sincos_sin = Math.sin(x);
+      this.sincos_cos = Math.cos(x);
+    }
+  }
+});
 
 globalScope["memory"] = (() => {
   var HEAP = new Uint8Array(0);

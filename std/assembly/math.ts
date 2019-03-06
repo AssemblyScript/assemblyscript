@@ -2329,18 +2329,21 @@ export namespace NativeMathf {
       }
       return tan_kernf(x, 0);
     }
-    if (ix <= 0x407b53d1) {   /* |x| ~<= 5π/4 */
-      if (ix <= 0x4016cbe3) { /* |x| ~<= 3π/4 */
-        return tan_kernf((sign ? x + t1pio2 : x - t1pio2), 1);
-      } else {
-        return tan_kernf((sign ? x + t2pio2 : x - t2pio2), 0);
+
+    if (ASC_SHRINK_LEVEL < 1) {
+      if (ix <= 0x407b53d1) {   /* |x| ~<= 5π/4 */
+        if (ix <= 0x4016cbe3) { /* |x| ~<= 3π/4 */
+          return tan_kernf((sign ? x + t1pio2 : x - t1pio2), 1);
+        } else {
+          return tan_kernf((sign ? x + t2pio2 : x - t2pio2), 0);
+        }
       }
-    }
-    if (ix <= 0x40e231d5) {   /* |x| ~<= 9π/4 */
-      if (ix <= 0x40afeddf) { /* |x| ~<= 7π/4 */
-        return tan_kernf((sign ? x + t3pio2 : x - t3pio2), 1);
-      } else {
-        return tan_kernf((sign ? x + t4pio2 : x - t4pio2), 0);
+      if (ix <= 0x40e231d5) {   /* |x| ~<= 9π/4 */
+        if (ix <= 0x40afeddf) { /* |x| ~<= 7π/4 */
+          return tan_kernf((sign ? x + t3pio2 : x - t3pio2), 1);
+        } else {
+          return tan_kernf((sign ? x + t4pio2 : x - t4pio2), 0);
+        }
       }
     }
 
