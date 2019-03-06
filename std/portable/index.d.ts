@@ -567,6 +567,10 @@ interface IMath {
   readonly PI: f64;
   readonly SQRT1_2: f64;
   readonly SQRT2: f64;
+
+  sincos_sin: f64;
+  sincos_cos: f64;
+
   abs(x: f64): f64;
   acos(x: f64): f64;
   acosh(x: f64): f64;
@@ -598,6 +602,7 @@ interface IMath {
   sign(x: f64): f64;
   signbit(x: f64): bool;
   sin(x: f64): f64;
+  sincos(x: f64): f64;
   sinh(x: f64): f64;
   sqrt(x: f64): f64;
   tan(x: f64): f64;

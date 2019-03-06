@@ -244,8 +244,17 @@ globalScope["fmodf"] = function fmodf(x, y) {
 };
 
 globalScope["JSMath"] = Math;
+
+globalScope["JSMath"].sincos_sin = 0.0;
+globalScope["JSMath"].sincos_cos = 0.0;
+
 globalScope["JSMath"].signbit = function signbit(x) {
   F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
+}
+
+globalScope["JSMath"].sincos = function sincos(x) {
+  globalScope["JSMath"].sincos_sin = Math.sin(x);
+  globalScope["JSMath"].sincos_cos = Math.cos(x);
 }
 
 globalScope["memory"] = (() => {
