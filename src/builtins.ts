@@ -587,13 +587,13 @@ export function compileCall(
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
+          reportNode.typeArgumentsRange, prototype.internalName
         );
       }
       if (operands.length != 1) {
         compiler.error(
           DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          reportNode.argumentsRange, "1", operands.length.toString()
         );
         return module.createUnreachable();
       }
@@ -610,13 +610,13 @@ export function compileCall(
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
+          reportNode.typeArgumentsRange, prototype.internalName
         );
       }
       if (operands.length != 1) {
         compiler.error(
           DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          reportNode.argumentsRange, "1", operands.length.toString()
         );
         return module.createUnreachable();
       }
@@ -639,116 +639,95 @@ export function compileCall(
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
-      if (operands.length != 0) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "0", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-      }
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 0, reportNode, compiler)
+      ) return module.createUnreachable();
       let byteSize = (<Type[]>typeArguments)[0].byteSize;
+      let expr: ExpressionRef;
       if (compiler.options.isWasm64) {
         // implicitly wrap if contextual type is a 32-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
           compiler.currentType = Type.u32;
-          ret = module.createI32(byteSize);
+          expr = module.createI32(byteSize);
         } else {
-          ret = module.createI64(byteSize, 0);
+          expr = module.createI64(byteSize, 0);
         }
       } else {
         // implicitly extend if contextual type is a 64-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
           compiler.currentType = Type.u64;
-          ret = module.createI64(byteSize, 0);
+          expr = module.createI64(byteSize, 0);
         } else {
-          ret = module.createI32(byteSize);
+          expr = module.createI32(byteSize);
         }
       }
-      return ret;
+      return expr;
     }
     case BuiltinSymbols.alignof: { // alignof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
-      if (operands.length != 0) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "0", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
         );
-        return module.createUnreachable();
+        hasError = true;
       }
+      if (operands.length != 0) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "0", operands.length.toString()
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
       let byteSize = (<Type[]>typeArguments)[0].byteSize;
       assert(isPowerOf2(byteSize));
       let alignLog2 = ctz<i32>(byteSize);
+      let expr: ExpressionRef;
       if (compiler.options.isWasm64) {
         // implicitly wrap if contextual type is a 32-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
           compiler.currentType = Type.u32;
-          ret = module.createI32(alignLog2);
+          expr = module.createI32(alignLog2);
         } else {
-          ret = module.createI64(alignLog2, 0);
+          expr = module.createI64(alignLog2, 0);
         }
       } else {
         // implicitly extend if contextual type is a 64-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
           compiler.currentType = Type.u64;
-          ret = module.createI64(alignLog2, 0);
+          expr = module.createI64(alignLog2, 0);
         } else {
-          ret = module.createI32(alignLog2);
+          expr = module.createI32(alignLog2);
         }
       }
-      return ret;
+      return expr;
     }
     case BuiltinSymbols.offsetof: { // offsetof<T!>(fieldName?: string) -> usize
       compiler.currentType = compiler.options.usizeType;
-      if (operands.length > 1) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
+      let hasError = false;
       if (!(typeArguments && typeArguments.length == 1)) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
         );
-        return module.createUnreachable();
+        hasError = true;
       }
-      let classType = typeArguments[0].classReference;
+      if (operands.length > 1) {
+        compiler.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          reportNode.argumentsRange, "1", operands.length.toString()
+        );
+        hasError = true;
+      }
+      if (hasError) return module.createUnreachable();
+      let classType = typeArguments![0].classReference;
       if (!classType) {
-        compiler.error( // TODO: better error
+        compiler.error(
           DiagnosticCode.Operation_not_supported,
-          reportNode.range
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
@@ -799,35 +778,21 @@ export function compileCall(
     // === Math ===================================================================================
 
     case BuiltinSymbols.clz: { // clz<T?>(value: T) -> T
-      if (operands.length != 1) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
+        : compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
+      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
-      }
+      let expr: ExpressionRef;
       switch (compiler.currentType.kind) {
         case TypeKind.BOOL: // usually overflows
         case TypeKind.I8:
@@ -836,22 +801,12 @@ export function compileCall(
         case TypeKind.U16:
         case TypeKind.I32:
         case TypeKind.U32: {
-          ret = module.createUnary(UnaryOp.ClzI32, arg0);
+          expr = module.createUnary(UnaryOp.ClzI32, arg0);
           break;
         }
-        case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
-          // fall-through
-        }
+        case TypeKind.USIZE:
         case TypeKind.ISIZE: {
-          ret = module.createUnary(
+          expr = module.createUnary(
             compiler.options.isWasm64
               ? UnaryOp.ClzI64
               : UnaryOp.ClzI32,
@@ -861,50 +816,36 @@ export function compileCall(
         }
         case TypeKind.I64:
         case TypeKind.U64: {
-          ret = module.createUnary(UnaryOp.ClzI64, arg0);
+          expr = module.createUnary(UnaryOp.ClzI64, arg0);
           break;
         }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret;
+      return expr;
     }
     case BuiltinSymbols.ctz: { // ctz<T?>(value: T) -> T
-      if (operands.length != 1) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.NONE, WrapMode.WRAP)
+        : compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
+      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.NONE, WrapMode.WRAP);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
-      }
+      let expr: ExpressionRef;
       switch (compiler.currentType.kind) {
         case TypeKind.BOOL: // usually overflows
         case TypeKind.I8:
@@ -913,22 +854,12 @@ export function compileCall(
         case TypeKind.U16:
         case TypeKind.I32:
         case TypeKind.U32: {
-          ret = module.createUnary(UnaryOp.CtzI32, arg0);
+          expr = module.createUnary(UnaryOp.CtzI32, arg0);
           break;
         }
-        case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
-          // fall-through
-        }
+        case TypeKind.USIZE:
         case TypeKind.ISIZE: {
-          ret = module.createUnary(
+          expr = module.createUnary(
             compiler.options.isWasm64
               ? UnaryOp.CtzI64
               : UnaryOp.CtzI32,
@@ -938,50 +869,36 @@ export function compileCall(
         }
         case TypeKind.I64:
         case TypeKind.U64: {
-          ret = module.createUnary(UnaryOp.CtzI64, arg0);
+          expr = module.createUnary(UnaryOp.CtzI64, arg0);
           break;
         }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret;
+      return expr;
     }
     case BuiltinSymbols.popcnt: { // popcnt<T?>(value: T) -> T
-      if (operands.length != 1) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
+        : compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
+      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
-      }
+      let expr: ExpressionRef;
       switch (compiler.currentType.kind) {
         case TypeKind.BOOL: // usually overflows
         case TypeKind.I8:
@@ -990,22 +907,12 @@ export function compileCall(
         case TypeKind.U16:
         case TypeKind.I32:
         case TypeKind.U32: {
-          ret = module.createUnary(UnaryOp.PopcntI32, arg0);
+          expr = module.createUnary(UnaryOp.PopcntI32, arg0);
           break;
         }
-        case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
-          // fall-through
-        }
+        case TypeKind.USIZE:
         case TypeKind.ISIZE: {
-          ret = module.createUnary(
+          expr = module.createUnary(
             compiler.options.isWasm64
               ? UnaryOp.PopcntI64
               : UnaryOp.PopcntI32,
@@ -1015,58 +922,44 @@ export function compileCall(
         }
         case TypeKind.I64:
         case TypeKind.U64: {
-          ret = module.createUnary(UnaryOp.PopcntI64, arg0);
+          expr = module.createUnary(UnaryOp.PopcntI64, arg0);
           break;
         }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret;
+      return expr;
     }
     case BuiltinSymbols.rotl: { // rotl<T?>(value: T, shift: T) -> T
-      if (operands.length != 2) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
+        : compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
+      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
-      }
-      arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let expr: ExpressionRef;
       switch (compiler.currentType.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.BOOL: {
-          ret = compiler.ensureSmallIntegerWrap(
+          expr = compiler.ensureSmallIntegerWrap(
             module.createBinary(BinaryOp.RotlI32, arg0, arg1),
             compiler.currentType
           );
@@ -1074,84 +967,59 @@ export function compileCall(
         }
         case TypeKind.I32:
         case TypeKind.U32: {
-          ret = module.createBinary(BinaryOp.RotlI32, arg0, arg1);
+          expr = module.createBinary(BinaryOp.RotlI32, arg0, arg1);
           break;
         }
-        case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
-          // fall-through
-        }
+        case TypeKind.USIZE:
         case TypeKind.ISIZE: {
-          ret = module.createBinary(
+          expr = module.createBinary(
             compiler.options.isWasm64
               ? BinaryOp.RotlI64
               : BinaryOp.RotlI32,
-            arg0,
-            arg1
+            arg0, arg1
           );
           break;
         }
         case TypeKind.I64:
         case TypeKind.U64: {
-          ret = module.createBinary(BinaryOp.RotlI64, arg0, arg1);
+          expr = module.createBinary(BinaryOp.RotlI64, arg0, arg1);
           break;
         }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret; // possibly overflows
+      return expr; // possibly overflows
     }
     case BuiltinSymbols.rotr: { // rotr<T?>(value: T, shift: T) -> T
-      if (operands.length != 2) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
+        : compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
+      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
-      }
-      arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let expr: ExpressionRef;
       switch (compiler.currentType.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.BOOL: {
-          ret = compiler.ensureSmallIntegerWrap(
+          expr = compiler.ensureSmallIntegerWrap(
             module.createBinary(BinaryOp.RotrI32, arg0, arg1),
             compiler.currentType
           );
@@ -1159,76 +1027,51 @@ export function compileCall(
         }
         case TypeKind.I32:
         case TypeKind.U32: {
-          ret = module.createBinary(BinaryOp.RotrI32, arg0, arg1);
+          expr = module.createBinary(BinaryOp.RotrI32, arg0, arg1);
           break;
         }
-        case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
-          // fall-through
-        }
+        case TypeKind.USIZE:
         case TypeKind.ISIZE: {
-          ret = module.createBinary(
+          expr = module.createBinary(
             compiler.options.isWasm64
               ? BinaryOp.RotrI64
               : BinaryOp.RotrI32,
-            arg0,
-            arg1
+            arg0, arg1
           );
           break;
         }
         case TypeKind.I64:
         case TypeKind.U64: {
-          ret = module.createBinary(BinaryOp.RotrI64, arg0, arg1);
+          expr = module.createBinary(BinaryOp.RotrI64, arg0, arg1);
           break;
         }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret; // possibly overflowws
+      return expr; // possibly overflowws
     }
     case BuiltinSymbols.abs: { // abs<T?>(value: T) -> T
-      if (operands.length != 1) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
+        : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
+      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
-      }
+      let expr: ExpressionRef;
       switch (compiler.currentType.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
@@ -1241,7 +1084,7 @@ export function compileCall(
           let tempLocalIndex1 = tempLocal1.index;
 
           // (x + (x >> 31)) ^ (x >> 31)
-          ret = module.createBinary(BinaryOp.XorI32,
+          expr = module.createBinary(BinaryOp.XorI32,
             module.createBinary(BinaryOp.AddI32,
               module.createTeeLocal(
                 tempLocalIndex2,
@@ -1267,7 +1110,7 @@ export function compileCall(
           let tempLocalIndex2 = flow.getAndFreeTempLocal(options.usizeType, false).index;
           let tempLocalIndex1 = tempLocal1.index;
 
-          ret = module.createBinary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
+          expr = module.createBinary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
             module.createBinary(wasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32,
               module.createTeeLocal(
                 tempLocalIndex2,
@@ -1292,7 +1135,7 @@ export function compileCall(
           let tempLocalIndex1 = tempLocal1.index;
 
           // (x + (x >> 63)) ^ (x >> 63)
-          ret = module.createBinary(BinaryOp.XorI64,
+          expr = module.createBinary(BinaryOp.XorI64,
             module.createBinary(BinaryOp.AddI64,
               module.createTeeLocal(
                 tempLocalIndex2,
@@ -1309,79 +1152,51 @@ export function compileCall(
           flow.freeTempLocal(tempLocal1);
           break;
         }
-        case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
-          // fall-through
-        }
+        case TypeKind.USIZE:
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.U32:
         case TypeKind.U64:
         case TypeKind.BOOL: {
-          ret = arg0;
+          expr = arg0;
           break;
         }
         case TypeKind.F32: {
-          ret = module.createUnary(UnaryOp.AbsF32, arg0);
+          expr = module.createUnary(UnaryOp.AbsF32, arg0);
           break;
         }
         case TypeKind.F64: {
-          ret = module.createUnary(UnaryOp.AbsF64, arg0);
+          expr = module.createUnary(UnaryOp.AbsF64, arg0);
           break;
         }
-        case TypeKind.VOID: {
-          ret = module.createUnreachable();
-          break;
-        }
-        default: { // void
+        default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret;
+      return expr;
     }
     case BuiltinSymbols.max: { // max<T?>(left: T, right: T) -> T
-      if (operands.length != 2) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
+        : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
+      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
-      }
-      arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.WRAP);
+      let arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.WRAP);
+      let expr: ExpressionRef;
       switch (compiler.currentType.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
@@ -1396,7 +1211,7 @@ export function compileCall(
             !flow.canOverflow(arg1, compiler.currentType)
           );
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(BinaryOp.GtI32,
@@ -1420,7 +1235,7 @@ export function compileCall(
             !flow.canOverflow(arg1, compiler.currentType)
           );
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(BinaryOp.GtU32,
@@ -1435,7 +1250,7 @@ export function compileCall(
           let tempLocal0 = flow.getTempLocal(Type.i64, false);
           let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(BinaryOp.GtI64,
@@ -1450,7 +1265,7 @@ export function compileCall(
           let tempLocal0 = flow.getTempLocal(Type.i64, false);
           let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(BinaryOp.GtU64,
@@ -1465,7 +1280,7 @@ export function compileCall(
           let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
           let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(
@@ -1479,19 +1294,11 @@ export function compileCall(
           break;
         }
         case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
           let flow = compiler.currentFlow;
           let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
           let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(
@@ -1505,70 +1312,51 @@ export function compileCall(
           break;
         }
         case TypeKind.F32: {
-          ret = module.createBinary(BinaryOp.MaxF32, arg0, arg1);
+          expr = module.createBinary(BinaryOp.MaxF32, arg0, arg1);
           break;
         }
         case TypeKind.F64: {
-          ret = module.createBinary(BinaryOp.MaxF64, arg0, arg1);
+          expr = module.createBinary(BinaryOp.MaxF64, arg0, arg1);
           break;
         }
         default: { // void
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret;
+      return expr;
     }
     case BuiltinSymbols.min: { // min<T?>(left: T, right: T) -> T
-      if (operands.length != 2) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
+        : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
-      }
-      arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.WRAP);
-      switch (compiler.currentType.kind) {
+      let arg1 = compiler.compileExpression(operands[1], type, ConversionKind.IMPLICIT, WrapMode.WRAP);
+      let expr: ExpressionRef;
+      switch (type.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.I32: {
           let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(
-            compiler.currentType,
-            !flow.canOverflow(arg0, compiler.currentType)
-          );
-          let tempLocal1 = flow.getAndFreeTempLocal(
-            compiler.currentType,
-            !flow.canOverflow(arg1, compiler.currentType)
-          );
+          let tempLocal0 = flow.getTempLocal(type, !flow.canOverflow(arg0, type));
+          let tempLocal1 = flow.getAndFreeTempLocal(type, !flow.canOverflow(arg1, type));
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(BinaryOp.LtI32,
@@ -1583,16 +1371,10 @@ export function compileCall(
         case TypeKind.U32:
         case TypeKind.BOOL: {
           let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(
-            compiler.currentType,
-            !flow.canOverflow(arg0, compiler.currentType)
-          );
-          let tempLocal1 = flow.getAndFreeTempLocal(
-            compiler.currentType,
-            !flow.canOverflow(arg1, compiler.currentType)
-          );
+          let tempLocal0 = flow.getTempLocal(type, !flow.canOverflow(arg0, type));
+          let tempLocal1 = flow.getAndFreeTempLocal(type, !flow.canOverflow(arg1, type));
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(BinaryOp.LtU32,
@@ -1607,7 +1389,7 @@ export function compileCall(
           let tempLocal0 = flow.getTempLocal(Type.i64, false);
           let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(BinaryOp.LtI64,
@@ -1622,7 +1404,7 @@ export function compileCall(
           let tempLocal0 = flow.getTempLocal(Type.i64, false);
           let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(BinaryOp.LtU64,
@@ -1634,362 +1416,286 @@ export function compileCall(
         }
         case TypeKind.ISIZE: {
           let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
+          let usizeType = compiler.options.usizeType;
+          let nativeSizeType = compiler.options.nativeSizeType;
+          let tempLocal0 = flow.getTempLocal(usizeType, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(usizeType, false);
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(
-              compiler.options.isWasm64
+              nativeSizeType == NativeType.I64
                 ? BinaryOp.LtI64
                 : BinaryOp.LtI32,
-              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType),
-              module.createGetLocal(tempLocal1.index, compiler.options.nativeSizeType)
+              module.createGetLocal(tempLocal0.index, nativeSizeType),
+              module.createGetLocal(tempLocal1.index, nativeSizeType)
             )
           );
           break;
         }
         case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
           let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
+          let usizeType = compiler.options.usizeType;
+          let nativeSizeType = compiler.options.nativeSizeType;
+          let tempLocal0 = flow.getTempLocal(usizeType, false);
+          let tempLocal1 = flow.getAndFreeTempLocal(usizeType, false);
           flow.freeTempLocal(tempLocal0);
-          ret = module.createSelect(
+          expr = module.createSelect(
             module.createTeeLocal(tempLocal0.index, arg0),
             module.createTeeLocal(tempLocal1.index, arg1),
             module.createBinary(
-              compiler.options.isWasm64
+              nativeSizeType == NativeType.I64
                 ? BinaryOp.LtU64
                 : BinaryOp.LtU32,
-              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType),
-              module.createGetLocal(tempLocal1.index, compiler.options.nativeSizeType)
+              module.createGetLocal(tempLocal0.index, nativeSizeType),
+              module.createGetLocal(tempLocal1.index, nativeSizeType)
             )
           );
           break;
         }
         case TypeKind.F32: {
-          ret = module.createBinary(BinaryOp.MinF32, arg0, arg1);
+          expr = module.createBinary(BinaryOp.MinF32, arg0, arg1);
           break;
         }
         case TypeKind.F64: {
-          ret = module.createBinary(BinaryOp.MinF64, arg0, arg1);
+          expr = module.createBinary(BinaryOp.MinF64, arg0, arg1);
           break;
         }
         default: { // void
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret;
+      return expr;
     }
     case BuiltinSymbols.ceil: { // ceil<T?>(value: T) -> T
-      if (operands.length != 1) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE)
+        : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
-      }
-      switch (compiler.currentType.kind) {
-        case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
-          // fall-through
-        }
-        default: { // any integer
-          ret = arg0;
+      let expr: ExpressionRef;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.I32:
+        case TypeKind.I64:
+        case TypeKind.ISIZE:
+        case TypeKind.U8:
+        case TypeKind.U16:
+        case TypeKind.U32:
+        case TypeKind.U64:
+        case TypeKind.USIZE:
+        case TypeKind.BOOL: {
+          expr = arg0;
           break;
         }
         case TypeKind.F32: {
-          ret = module.createUnary(UnaryOp.CeilF32, arg0);
+          expr = module.createUnary(UnaryOp.CeilF32, arg0);
           break;
         }
         case TypeKind.F64: {
-          ret = module.createUnary(UnaryOp.CeilF64, arg0);
-          break;
-        }
-        case TypeKind.VOID: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          ret = module.createUnreachable();
-          break;
-        }
-      }
-      return ret;
-    }
-    case BuiltinSymbols.floor: { // floor<T?>(value: T) -> T
-      if (operands.length != 1) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
-      }
-      switch (compiler.currentType.kind) {
-        case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
-          // fall-through
-        }
-        default: { // any integer
-          ret = arg0;
-          break;
-        }
-        case TypeKind.F32: {
-          ret = module.createUnary(UnaryOp.FloorF32, arg0);
-          break;
-        }
-        case TypeKind.F64: {
-          ret = module.createUnary(UnaryOp.FloorF64, arg0);
-          break;
-        }
-        case TypeKind.VOID: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          ret = module.createUnreachable();
-          break;
-        }
-      }
-      return ret;
-    }
-    case BuiltinSymbols.copysign: { // copysign<T?>(left: T, right: T) -> T
-      if (operands.length != 2) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
-      }
-      arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.NONE);
-      switch (compiler.currentType.kind) { // TODO: does an integer version make sense?
-        case TypeKind.F32: {
-          ret = module.createBinary(BinaryOp.CopysignF32, arg0, arg1);
-          break;
-        }
-        case TypeKind.F64: {
-          ret = module.createBinary(BinaryOp.CopysignF64, arg0, arg1);
+          expr = module.createUnary(UnaryOp.CeilF64, arg0);
           break;
         }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret;
+      return expr;
     }
-    case BuiltinSymbols.nearest: { // nearest<T?>(value: T) -> T
-      if (operands.length != 1) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+    case BuiltinSymbols.floor: { // floor<T?>(value: T) -> T
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE)
+        : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
-      }
-      switch (compiler.currentType.kind) {
-        case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
-          // fall-through
-        }
-        default: { // any integer
-          ret = arg0;
+      let expr: ExpressionRef;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.I32:
+        case TypeKind.I64:
+        case TypeKind.ISIZE:
+        case TypeKind.U8:
+        case TypeKind.U16:
+        case TypeKind.U32:
+        case TypeKind.U64:
+        case TypeKind.USIZE:
+        case TypeKind.BOOL: {
+          expr = arg0;
           break;
         }
         case TypeKind.F32: {
-          ret = module.createUnary(UnaryOp.NearestF32, arg0);
+          expr = module.createUnary(UnaryOp.FloorF32, arg0);
           break;
         }
         case TypeKind.F64: {
-          ret = module.createUnary(UnaryOp.NearestF64, arg0);
+          expr = module.createUnary(UnaryOp.FloorF64, arg0);
           break;
         }
-        case TypeKind.VOID: {
+        default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret;
+      return expr;
     }
-    case BuiltinSymbols.reinterpret: { // reinterpret<T!>(value: *) -> T
-      if (operands.length != 1) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          if (typeArguments && typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
+    case BuiltinSymbols.copysign: { // copysign<T?>(left: T, right: T) -> T
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE)
+        : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        return module.createUnreachable();
+      }
+      let arg1 = compiler.compileExpression(operands[1], type, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let expr: ExpressionRef;
+      switch (type.kind) {
+        // TODO: does an integer version make sense?
+        case TypeKind.F32: {
+          expr = module.createBinary(BinaryOp.CopysignF32, arg0, arg1);
+          break;
         }
+        case TypeKind.F64: {
+          expr = module.createBinary(BinaryOp.CopysignF64, arg0, arg1);
+          break;
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.typeArgumentsRange
+          );
+          expr = module.createUnreachable();
+          break;
+        }
+      }
+      return expr;
+    }
+    case BuiltinSymbols.nearest: { // nearest<T?>(value: T) -> T
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE)
+        : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (!(typeArguments && typeArguments.length == 1)) {
-        if (typeArguments && typeArguments.length) compiler.currentType = typeArguments[0];
+      let expr: ExpressionRef;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.I32:
+        case TypeKind.I64:
+        case TypeKind.ISIZE:
+        case TypeKind.U8:
+        case TypeKind.U16:
+        case TypeKind.U32:
+        case TypeKind.U64:
+        case TypeKind.USIZE:
+        case TypeKind.BOOL: {
+          expr = arg0;
+          break;
+        }
+        case TypeKind.F32: {
+          expr = module.createUnary(UnaryOp.NearestF32, arg0);
+          break;
+        }
+        case TypeKind.F64: {
+          expr = module.createUnary(UnaryOp.NearestF64, arg0);
+          break;
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.typeArgumentsRange
+          );
+          expr = module.createUnreachable();
+          break;
+        }
+      }
+      return expr;
+    }
+    case BuiltinSymbols.reinterpret: { // reinterpret<TTo!>(value: *) -> T
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let type = typeArguments![0];
+      if (type.is(TypeFlags.REFERENCE)) {
+        compiler.currentType = type;
         compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      switch (typeArguments[0].kind) {
+      let expr: ExpressionRef;
+      switch (type.kind) {
         case TypeKind.I32:
         case TypeKind.U32: {
-          arg0 = compiler.compileExpression(operands[0], Type.f32, ConversionKind.IMPLICIT, WrapMode.NONE);
-          ret = module.createUnary(UnaryOp.ReinterpretF32, arg0);
+          let arg0 = compiler.compileExpression(operands[0], Type.f32, ConversionKind.IMPLICIT, WrapMode.NONE);
+          expr = module.createUnary(UnaryOp.ReinterpretF32, arg0);
           break;
         }
         case TypeKind.I64:
         case TypeKind.U64: {
-          arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.IMPLICIT, WrapMode.NONE);
-          ret = module.createUnary(UnaryOp.ReinterpretF64, arg0);
+          let arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.IMPLICIT, WrapMode.NONE);
+          expr = module.createUnary(UnaryOp.ReinterpretF64, arg0);
           break;
         }
+        case TypeKind.ISIZE:
         case TypeKind.USIZE: {
-          if (typeArguments[0].is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            compiler.currentType = typeArguments[0];
-            return module.createUnreachable();
-          }
-          // fall-through
-        }
-        case TypeKind.ISIZE: {
-          arg0 = compiler.compileExpression(
+          let arg0 = compiler.compileExpression(
             operands[0],
             compiler.options.isWasm64
               ? Type.f64
@@ -1997,7 +1703,7 @@ export function compileCall(
             ConversionKind.IMPLICIT,
             WrapMode.NONE
           );
-          ret = module.createUnary(
+          expr = module.createUnary(
             compiler.options.isWasm64
               ? UnaryOp.ReinterpretF64
               : UnaryOp.ReinterpretF32,
@@ -2006,506 +1712,425 @@ export function compileCall(
           break;
         }
         case TypeKind.F32: {
-          arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE);
-          ret = module.createUnary(UnaryOp.ReinterpretI32, arg0);
+          let arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE);
+          expr = module.createUnary(UnaryOp.ReinterpretI32, arg0);
           break;
         }
         case TypeKind.F64: {
-          arg0 = compiler.compileExpression(operands[0], Type.i64, ConversionKind.IMPLICIT, WrapMode.NONE);
-          ret = module.createUnary(UnaryOp.ReinterpretI64, arg0);
+          let arg0 = compiler.compileExpression(operands[0], Type.i64, ConversionKind.IMPLICIT, WrapMode.NONE);
+          expr = module.createUnary(UnaryOp.ReinterpretI64, arg0);
           break;
         }
-        default: { // small integers and void
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          ret = module.createUnreachable();
-          break;
-        }
-      }
-      compiler.currentType = typeArguments[0];
-      return ret;
-    }
-    case BuiltinSymbols.sqrt: { // sqrt<T?>(value: T) -> T
-      if (operands.length != 1) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
-      }
-      switch (compiler.currentType.kind) { // TODO: integer versions (that return f64 or convert)?
-        case TypeKind.F32: {
-          ret = module.createUnary(UnaryOp.SqrtF32, arg0);
-          break;
-        }
-        case TypeKind.F64: {
-          ret = module.createUnary(UnaryOp.SqrtF64, arg0);
-          break;
-        }
-        // case TypeKind.VOID:
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          ret = module.createUnreachable();
+          expr = module.createUnreachable();
           break;
         }
       }
-      return ret;
+      compiler.currentType = type;
+      return expr;
     }
-    case BuiltinSymbols.trunc: { // trunc<T?>(value: T) -> T
-      if (operands.length != 1) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      if (typeArguments && typeArguments.length) {
-        compiler.currentType = typeArguments[0];
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
-      }
-      switch (compiler.currentType.kind) {
-        case TypeKind.USIZE: {
-          if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-            compiler.error(
-              DiagnosticCode.Operation_not_supported,
-              reportNode.range
-            );
-            ret = module.createUnreachable();
-            break;
-          }
-          // fall-through
-        }
-        default: { // any integer
-          ret = arg0;
-          break;
-        }
-        // TODO: truncate to contextual type directly (if not void etc.)?
-        case TypeKind.F32: {
-          ret = module.createUnary(UnaryOp.TruncF32, arg0);
-          break;
-        }
-        case TypeKind.F64: {
-          ret = module.createUnary(UnaryOp.TruncF64, arg0);
-          break;
-        }
-        case TypeKind.VOID: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          ret = module.createUnreachable();
-          break;
-        }
-      }
-      return ret;
-    }
-
-    // === Memory access ==========================================================================
-
-    case BuiltinSymbols.load: { // load<T!>(offset: usize, offset?: usize, align?: usize) -> *
-      if (operands.length < 1 || operands.length > 3) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        if (operands.length < 1) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "1", operands.length.toString(10)
-          );
-        } else {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "3", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
-      if (!(typeArguments && typeArguments.length == 1)) {
-        if (typeArguments && typeArguments.length) compiler.currentType = typeArguments[0];
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(
-        operands[0],
-        compiler.options.usizeType,
-        ConversionKind.IMPLICIT,
-        WrapMode.NONE
-      );
-      let offset = operands.length >= 2 ? evaluateImmediateOffset(compiler, operands[1]) : 0; // reports
-      if (offset < 0) return module.createUnreachable();
-      let align: i32;
-      let naturalAlign = typeArguments[0].byteSize;
-      if (operands.length == 3) {
-        align = evaluateImmediateOffset(compiler, operands[2]);
-        if (align < 0) return module.createUnreachable();
-        if (align > naturalAlign) {
-          compiler.error(
-            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
-            operands[2].range, "Alignment", "0", naturalAlign.toString()
-          );
-          return module.createUnreachable();
-        }
-        if (!isPowerOf2(align)) {
-          compiler.error(
-            DiagnosticCode._0_must_be_a_power_of_two,
-            operands[2].range, "Alignment"
-          );
-          return module.createUnreachable();
-        }
-      } else {
-        align = naturalAlign;
-      }
-      compiler.currentType = typeArguments[0];
-      return module.createLoad(
-        typeArguments[0].byteSize,
-        typeArguments[0].is(TypeFlags.SIGNED | TypeFlags.INTEGER),
-        arg0,
-        typeArguments[0].is(TypeFlags.INTEGER) &&
-        contextualType.is(TypeFlags.INTEGER) &&
-        contextualType.size > typeArguments[0].size
-          ? (compiler.currentType = contextualType).toNativeType()
-          : (compiler.currentType = typeArguments[0]).toNativeType(),
-        offset,
-        align
-      );
-    }
-    case BuiltinSymbols.store: { // store<T!>(offset: usize, value: *, offset?: usize, align?: usize) -> void
-      compiler.currentType = Type.void;
-      if (operands.length < 2 || operands.length > 4) {
-        if (!(typeArguments && typeArguments.length == 1)) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-          );
-        }
-        if (operands.length < 2) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "2", operands.length.toString(10)
-          );
-        } else {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "4", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(
-        operands[0],
-        compiler.options.usizeType,
-        ConversionKind.IMPLICIT,
-        WrapMode.NONE
-      );
-      arg1 = compiler.compileExpression(
-        operands[1],
-        typeArguments[0],
-        typeArguments[0].is(TypeFlags.INTEGER)
-          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
-          : ConversionKind.IMPLICIT,
-        WrapMode.NONE
-      );
-      let type: Type;
+    case BuiltinSymbols.sqrt: { // sqrt<T?>(value: T) -> T
       if (
-        typeArguments[0].is(TypeFlags.INTEGER) &&
-        (
-          !compiler.currentType.is(TypeFlags.INTEGER) ||    // float to int
-          compiler.currentType.size < typeArguments[0].size // int to larger int (clear garbage bits)
-        )
-      ) {
-        arg1 = compiler.convertExpression(
-          arg1,
-          compiler.currentType, typeArguments[0],
-          ConversionKind.IMPLICIT,
-          WrapMode.NONE, // still clears garbage bits
-          operands[1]
-        );
-        type = typeArguments[0];
-      } else {
-        type = compiler.currentType;
-      }
-      let offset = operands.length >= 3 ? evaluateImmediateOffset(compiler, operands[2]) : 0; // reports
-      if (offset < 0) return module.createUnreachable();
-      let align: i32;
-      let naturalAlign = typeArguments[0].byteSize;
-      if (operands.length == 4) {
-        align = evaluateImmediateOffset(compiler, operands[3]);
-        if (align < 0) return module.createUnreachable();
-        if (align > naturalAlign) {
-          compiler.error(
-            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
-            operands[3].range, "Alignment", "0", naturalAlign.toString()
-          );
-          return module.createUnreachable();
-        }
-        if (!isPowerOf2(align)) {
-          compiler.error(
-            DiagnosticCode._0_must_be_a_power_of_two,
-            operands[3].range, "Alignment"
-          );
-          return module.createUnreachable();
-        }
-      } else {
-        align = naturalAlign;
-      }
-      compiler.currentType = Type.void;
-      return module.createStore(typeArguments[0].byteSize, arg0, arg1, type.toNativeType(), offset, align);
-    }
-
-    // === Atomics ================================================================================
-
-    case BuiltinSymbols.atomic_load: { // load<T!>(offset: usize, immOffset?) -> T
-      if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      let hasError = false;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        hasError = true;
-      }
-      if (operands.length < 1) {
-        compiler.error(
-          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-          reportNode.argumentsRange, "1", operands.length.toString(10)
-        );
-        hasError = true;
-      } else if (operands.length > 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.argumentsRange, "2", operands.length.toString(10)
-        );
-        hasError = true;
-      }
-      if (hasError) return module.createUnreachable();
-      let loadType = typeArguments![0];
-      if (!loadType.is(TypeFlags.INTEGER)) {
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE)
+        : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
+        compiler.currentType = type;
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(
+      let expr: ExpressionRef;
+      switch (type.kind) { // TODO: integer versions (that return f64 or convert)?
+        case TypeKind.F32: {
+          expr = module.createUnary(UnaryOp.SqrtF32, arg0);
+          break;
+        }
+        case TypeKind.F64: {
+          expr = module.createUnary(UnaryOp.SqrtF64, arg0);
+          break;
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.typeArgumentsRange
+          );
+          expr = module.createUnreachable();
+          break;
+        }
+      }
+      return expr;
+    }
+    case BuiltinSymbols.trunc: { // trunc<T?>(value: T) -> T
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE)
+        : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.range
+        );
+        return module.createUnreachable();
+      }
+      let expr: ExpressionRef;
+      switch (type.kind) {
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.I32:
+        case TypeKind.I64:
+        case TypeKind.ISIZE:
+        case TypeKind.U8:
+        case TypeKind.U16:
+        case TypeKind.U32:
+        case TypeKind.U64:
+        case TypeKind.USIZE:
+        case TypeKind.BOOL: {
+          expr = arg0;
+          break;
+        }
+        // TODO: truncate to contextual type directly (if not void etc.)?
+        case TypeKind.F32: {
+          expr = module.createUnary(UnaryOp.TruncF32, arg0);
+          break;
+        }
+        case TypeKind.F64: {
+          expr = module.createUnary(UnaryOp.TruncF64, arg0);
+          break;
+        }
+        default: {
+          compiler.error(
+            DiagnosticCode.Operation_not_supported,
+            reportNode.typeArgumentsRange
+          );
+          expr = module.createUnreachable();
+          break;
+        }
+      }
+      return expr;
+    }
+
+    // === Memory access ==========================================================================
+
+    case BuiltinSymbols.load: { // load<T!>(offset: usize, immOffset?: usize, immAlign?: usize) -> *
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler, true) |
+        checkArgsOptional(operands, 1, 3, reportNode, compiler)
+      ) return module.createUnreachable();
+      let type = typeArguments![0];
+      let outType = (
+        type.is(TypeFlags.INTEGER) &&
+        contextualType.is(TypeFlags.INTEGER) &&
+        contextualType.size > type.size
+      ) ? contextualType : type;
+      let arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      let offset = operands.length == 2 ? evaluateImmediateOffset(compiler, operands[1]) : 0; // reports
-      if (offset < 0) return module.createUnreachable();
-      compiler.currentType = loadType;
-      return module.createAtomicLoad(
-        loadType.byteSize,
+      let numOperands = operands.length;
+      let immOffset = numOperands >= 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
+      if (immOffset < 0) {
+        compiler.currentType = outType;
+        return module.createUnreachable();
+      }
+      let immAlign: i32;
+      let naturalAlign = type.byteSize;
+      if (numOperands == 3) {
+        immAlign = evaluateImmediateOffset(operands[2], compiler);
+        if (immAlign < 0) {
+          compiler.currentType = outType;
+          return module.createUnreachable();
+        }
+        if (immAlign > naturalAlign) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+            operands[2].range, "Alignment", "0", naturalAlign.toString()
+          );
+          compiler.currentType = outType;
+          return module.createUnreachable();
+        }
+        if (!isPowerOf2(immAlign)) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_power_of_two,
+            operands[2].range, "Alignment"
+          );
+          compiler.currentType = outType;
+          return module.createUnreachable();
+        }
+      } else {
+        immAlign = naturalAlign;
+      }
+      compiler.currentType = outType;
+      return module.createLoad(
+        type.byteSize,
+        type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
         arg0,
-        loadType.is(TypeFlags.INTEGER) &&
+        outType.toNativeType(),
+        immOffset,
+        immAlign
+      );
+    }
+    case BuiltinSymbols.store: { // store<T!>(offset: usize, value: *, offset?: usize, align?: usize) -> void
+      compiler.currentType = Type.void;
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsOptional(operands, 2, 4, reportNode, compiler)
+      ) return module.createUnreachable();
+      let type = typeArguments![0];
+      let arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      let arg1 = isAsm
+        ? compiler.compileExpression(
+            operands[1],
+            contextualType,
+            ConversionKind.IMPLICIT,
+            WrapMode.NONE
+          )
+        : compiler.compileExpression(
+            operands[1],
+            type,
+            type.is(TypeFlags.INTEGER)
+              ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+              : ConversionKind.IMPLICIT,
+            WrapMode.NONE
+          );
+      let inType = compiler.currentType;
+      if (
+        type.is(TypeFlags.INTEGER) &&
+        (
+          !inType.is(TypeFlags.INTEGER) || // float to int
+          inType.size < type.size          // int to larger int (clear garbage bits)
+        )
+      ) {
+        arg1 = compiler.convertExpression(
+          arg1,
+          inType, type,
+          ConversionKind.IMPLICIT,
+          WrapMode.NONE, // still clears garbage bits
+          operands[1]
+        );
+        inType = type;
+      }
+      let immOffset = operands.length >= 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
+      if (immOffset < 0) {
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
+      let immAlign: i32;
+      let naturalAlign = type.byteSize;
+      if (operands.length == 4) {
+        immAlign = evaluateImmediateOffset(operands[3], compiler);
+        if (immAlign < 0) {
+          compiler.currentType = Type.void;
+          return module.createUnreachable();
+        }
+        if (immAlign > naturalAlign) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+            operands[3].range, "Alignment", "0", naturalAlign.toString()
+          );
+          compiler.currentType = Type.void;
+          return module.createUnreachable();
+        }
+        if (!isPowerOf2(immAlign)) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_power_of_two,
+            operands[3].range, "Alignment"
+          );
+          compiler.currentType = Type.void;
+          return module.createUnreachable();
+        }
+      } else {
+        immAlign = naturalAlign;
+      }
+      compiler.currentType = Type.void;
+      return module.createStore(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset, immAlign);
+    }
+
+    // === Atomics ================================================================================
+
+    case BuiltinSymbols.atomic_load: { // load<T!>(offset: usize, immOffset?: usize) -> T
+      if (!compiler.options.hasFeature(Feature.THREADS)) break;
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler, true) |
+        checkArgsOptional(operands, 1, 2, reportNode, compiler)
+      ) return module.createUnreachable();
+      let type = typeArguments![0];
+      let outType = (
+        type.is(TypeFlags.INTEGER) &&
         contextualType.is(TypeFlags.INTEGER) &&
-        contextualType.size > loadType.size
-          ? (compiler.currentType = contextualType).toNativeType()
-          : (compiler.currentType = loadType).toNativeType(),
-        offset
+        contextualType.size > type.size
+      ) ? contextualType : type;
+      if (!type.is(TypeFlags.INTEGER)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        compiler.currentType = outType;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(
+        operands[0],
+        compiler.options.usizeType,
+        ConversionKind.IMPLICIT,
+        WrapMode.NONE
+      );
+      let immOffset = operands.length == 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
+      if (immOffset < 0) {
+        compiler.currentType = outType;
+        return module.createUnreachable();
+      }
+      compiler.currentType = outType;
+      return module.createAtomicLoad(
+        type.byteSize,
+        arg0,
+        outType.toNativeType(),
+        immOffset
       );
     }
     case BuiltinSymbols.atomic_store: { // store<T!>(offset: usize, value: *, immOffset?) -> void
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.void;
-      let hasError = false;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        hasError = true;
-      }
-      if (operands.length < 2) {
-        compiler.error(
-          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-          reportNode.argumentsRange, "2", operands.length.toString(10)
-        );
-        hasError = true;
-      } else if (operands.length > 3) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.argumentsRange, "3", operands.length.toString(10)
-        );
-        hasError = true;
-      }
-      if (hasError) return module.createUnreachable();
-      let storeType = typeArguments![0];
-      if (!storeType.is(TypeFlags.INTEGER) || storeType.size < 8) {
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsOptional(operands, 2, 3, reportNode, compiler)
+      ) return module.createUnreachable();
+      let type = typeArguments![0];
+      if (!type.is(TypeFlags.INTEGER) || type.size < 8) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(
+      let arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      arg1 = compiler.compileExpression(
-        operands[1],
-        storeType,
-        storeType.is(TypeFlags.INTEGER)
-          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
-          : ConversionKind.IMPLICIT,
-        WrapMode.NONE
-      );
-      let valueType = storeType;
+      let arg1 = isAsm
+        ? compiler.compileExpression(
+            operands[1],
+            contextualType,
+            ConversionKind.IMPLICIT,
+            WrapMode.NONE
+          )
+        : compiler.compileExpression(
+            operands[1],
+            type,
+            type.is(TypeFlags.INTEGER)
+              ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+              : ConversionKind.IMPLICIT,
+            WrapMode.NONE
+          );
+      let inType = compiler.currentType;
       if (
-        storeType.is(TypeFlags.INTEGER) &&
+        type.is(TypeFlags.INTEGER) &&
         (
-          !compiler.currentType.is(TypeFlags.INTEGER) || // float to int
-          compiler.currentType.size < storeType.size // int to larger int (clear garbage bits)
+          !inType.is(TypeFlags.INTEGER) || // float to int
+          inType.size < type.size          // int to larger int (clear garbage bits)
         )
       ) {
         arg1 = compiler.convertExpression(
           arg1,
-          compiler.currentType, storeType,
+          inType, type,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
-      } else {
-        valueType = compiler.currentType;
+        inType = type;
       }
-      let offset = operands.length == 3 ? evaluateImmediateOffset(compiler, operands[2]) : 0; // reports
-      if (offset < 0) return module.createUnreachable();
+      let immOffset = operands.length == 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
+      if (immOffset < 0) {
+        compiler.currentType = Type.void;
+        return module.createUnreachable();
+      }
       compiler.currentType = Type.void;
-      return module.createAtomicStore(storeType.byteSize, arg0, arg1, valueType.toNativeType(), offset);
+      return module.createAtomicStore(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset);
     }
-    case BuiltinSymbols.atomic_add:  // add<T!>(ptr, value: T, immOffset?: usize): T;
-    case BuiltinSymbols.atomic_sub:  // sub<T!>(ptr, value: T, immOffset?: usize): T;
-    case BuiltinSymbols.atomic_and:  // and<T!>(ptr, value: T, immOffset?: usize): T;
-    case BuiltinSymbols.atomic_or:   // or<T!>(ptr, value: T, immOffset?: usize): T;
-    case BuiltinSymbols.atomic_xor:  // xor<T!>(ptr, value: T, immOffset?: usize): T;
-    case BuiltinSymbols.atomic_xchg: { // xchg<T!>(ptr, value, immOffset?: usize): T;
+    case BuiltinSymbols.atomic_add:    // add<T!>(ptr, value: T, immOffset?: usize) -> T
+    case BuiltinSymbols.atomic_sub:    // sub<T!>(ptr, value: T, immOffset?: usize) -> T
+    case BuiltinSymbols.atomic_and:    // and<T!>(ptr, value: T, immOffset?: usize) -> T
+    case BuiltinSymbols.atomic_or:     // or<T!>(ptr, value: T, immOffset?: usize) -> T
+    case BuiltinSymbols.atomic_xor:    // xor<T!>(ptr, value: T, immOffset?: usize) -> T
+    case BuiltinSymbols.atomic_xchg: { // xchg<T!>(ptr, value: T, immOffset?: usize) -> T
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      let hasError = false;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        hasError = true;
-      }
-      if (operands.length < 2) {
-        compiler.error(
-          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-          reportNode.argumentsRange, "2", operands.length.toString(10)
-        );
-        hasError = true;
-      } else if (operands.length > 3) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.argumentsRange, "3", operands.length.toString(10)
-        );
-        hasError = true;
-      }
-      if (hasError) return module.createUnreachable();
-      let resultType = typeArguments![0];
-      if (!resultType.is(TypeFlags.INTEGER) || resultType.size < 8) {
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler, true) |
+        checkArgsOptional(operands, 2, 3, reportNode, compiler)
+      ) return module.createUnreachable();
+      let type = typeArguments![0];
+      if (!type.is(TypeFlags.INTEGER) || type.size < 8) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(
+      let arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      arg1 = compiler.compileExpression(
-        operands[1],
-        resultType,
-        resultType.is(TypeFlags.INTEGER)
-          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
-          : ConversionKind.IMPLICIT,
-        WrapMode.NONE
-      );
-      let valueType = resultType;
+      let arg1 = isAsm
+        ? compiler.compileExpression(
+            operands[1],
+            contextualType,
+            ConversionKind.IMPLICIT,
+            WrapMode.NONE
+          )
+        : compiler.compileExpression(
+            operands[1],
+            type,
+            type.is(TypeFlags.INTEGER)
+              ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+              : ConversionKind.IMPLICIT,
+            WrapMode.NONE
+          );
+      let inType = compiler.currentType;
       if (
-        resultType.is(TypeFlags.INTEGER) &&
+        type.is(TypeFlags.INTEGER) &&
         (
-          !compiler.currentType.is(TypeFlags.INTEGER) || // float to int
-          compiler.currentType.size < resultType.size // int to larger int (clear garbage bits)
+          !inType.is(TypeFlags.INTEGER) || // float to int
+          inType.size < type.size       // int to larger int (clear garbage bits)
         )
       ) {
         arg1 = compiler.convertExpression(
           arg1,
-          compiler.currentType, resultType,
+          inType, type,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
-      } else {
-        valueType = compiler.currentType;
+        inType = type;
       }
-      let offset = operands.length == 3 ? evaluateImmediateOffset(compiler, operands[2]) : 0; // reports
-      if (offset < 0) return module.createUnreachable();
+      let immOffset = operands.length == 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
+      if (immOffset < 0) {
+        compiler.currentType = inType;
+        return module.createUnreachable();
+      }
       let RMWOp: AtomicRMWOp;
       switch (prototype.internalName) {
         default: assert(false);
@@ -2516,177 +2141,146 @@ export function compileCall(
         case BuiltinSymbols.atomic_xor: { RMWOp = AtomicRMWOp.Xor; break; }
         case BuiltinSymbols.atomic_xchg: { RMWOp = AtomicRMWOp.Xchg; break; }
       }
-      compiler.currentType = resultType;
+      compiler.currentType = inType;
       return module.createAtomicRMW(
-        RMWOp, resultType.byteSize, offset, arg0, arg1, valueType.toNativeType()
+        RMWOp, type.byteSize, immOffset, arg0, arg1, inType.toNativeType()
       );
     }
-    case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected: T, replacement: T, cOff?: usize): T
+    case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected: T, replacement: T, off?: usize): T
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      let hasError = false;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        hasError = true;
-      }
-      if (operands.length < 3) {
-        compiler.error(
-          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-          reportNode.argumentsRange, "3", operands.length.toString()
-        );
-        hasError = true;
-      } else if (operands.length > 4) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.argumentsRange, "4", operands.length.toString()
-        );
-        hasError = true;
-      }
-      if (hasError) return module.createUnreachable();
-      let resultType = typeArguments![0];
-      if (!resultType.is(TypeFlags.INTEGER) || resultType.size < 8) {
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler, true) |
+        checkArgsOptional(operands, 3, 4, reportNode, compiler)
+      ) return module.createUnreachable();
+      let type = typeArguments![0];
+      if (!type.is(TypeFlags.INTEGER) || type.size < 8) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(
+      let arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      arg1 = compiler.compileExpression(
-        operands[1],
-        resultType,
-        resultType.is(TypeFlags.INTEGER)
-          ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
-          : ConversionKind.IMPLICIT,
-        WrapMode.NONE
-      );
-      arg2 = compiler.compileExpression(
+      let arg1 = isAsm
+        ? compiler.compileExpression(
+            operands[1],
+            contextualType,
+            ConversionKind.IMPLICIT,
+            WrapMode.NONE
+          )
+        : compiler.compileExpression(
+            operands[1],
+            type,
+            type.is(TypeFlags.INTEGER)
+              ? ConversionKind.NONE // no need to convert to small int (but now might result in a float)
+              : ConversionKind.IMPLICIT,
+            WrapMode.NONE
+          );
+      let inType = compiler.currentType;
+      let arg2 = compiler.compileExpression(
         operands[2],
-        compiler.currentType,
+        inType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      let valueType = resultType;
       if (
-        resultType.is(TypeFlags.INTEGER) &&
+        type.is(TypeFlags.INTEGER) &&
         (
-          !compiler.currentType.is(TypeFlags.INTEGER) || // float to int
-          compiler.currentType.size < resultType.size // int to larger int (clear garbage bits)
+          !inType.is(TypeFlags.INTEGER) || // float to int
+          inType.size < type.size       // int to larger int (clear garbage bits)
         )
       ) {
         arg1 = compiler.convertExpression(
           arg1,
-          compiler.currentType, resultType,
+          inType, type,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[1]
         );
         arg2 = compiler.convertExpression(
           arg2,
-          compiler.currentType, resultType,
+          inType, type,
           ConversionKind.IMPLICIT,
           WrapMode.NONE, // still clears garbage bits
           operands[2]
         );
-      } else {
-        valueType = compiler.currentType;
+        inType = type;
       }
-      let offset = operands.length == 4 ? evaluateImmediateOffset(compiler, operands[3]) : 0; // reports
-      if (offset < 0) return module.createUnreachable();
-      compiler.currentType = resultType;
+      let immOffset = operands.length == 4 ? evaluateImmediateOffset(operands[3], compiler) : 0; // reports
+      if (immOffset < 0) {
+        compiler.currentType = inType;
+        return module.createUnreachable();
+      }
+      compiler.currentType = inType;
       return module.createAtomicCmpxchg(
-        resultType.byteSize, offset, arg0, arg1, arg2, valueType.toNativeType()
+        type.byteSize, immOffset, arg0, arg1, arg2, inType.toNativeType()
       );
     }
-    case BuiltinSymbols.atomic_wait: { // wait<T!>(ptr: usize, expected:T, timeout: i64): i32;
+    case BuiltinSymbols.atomic_wait: { // wait<T!>(ptr: usize, expected: T, timeout: i64): i32;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      let hasError = false;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        hasError = true;
-      }
-      if (operands.length != 3) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.argumentsRange, "3", operands.length.toString(10)
-        );
-        hasError = true;
-      }
-      if (hasError) return module.createUnreachable();
-      let valueType = typeArguments![0];
-      if (!valueType.is(TypeFlags.INTEGER) || valueType.size < 32) {
+      compiler.currentType = Type.i32;
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 3, reportNode, compiler)
+      ) return module.createUnreachable();
+      let type = typeArguments![0];
+      if (!type.is(TypeFlags.INTEGER) || type.size < 32) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(
+      let arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      arg1 = compiler.compileExpression(
+      let arg1 = compiler.compileExpression(
         operands[1],
-        valueType,
+        type,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      arg2 = compiler.compileExpression(
+      let arg2 = compiler.compileExpression(
         operands[2],
         Type.i64,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
       compiler.currentType = Type.i32;
-      return module.createAtomicWait(arg0, arg1, arg2, valueType.toNativeType());
+      return module.createAtomicWait(arg0, arg1, arg2, type.toNativeType());
     }
-    case BuiltinSymbols.atomic_notify: { // notify<T!>(ptr: usize, count: u32): u32;
+    case BuiltinSymbols.atomic_notify: { // notify<T!>(ptr: usize, count: i32): i32;
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
-      let hasError = false;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        hasError = true;
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.argumentsRange, "2", operands.length.toString(10)
-        );
-        hasError = true;
-      }
-      if (hasError) return module.createUnreachable();
-      let valueType = typeArguments![0];
-      if (!valueType.is(TypeFlags.INTEGER) || valueType.size < 32) {
+      compiler.currentType = Type.i32;
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) return module.createUnreachable();
+      let type = typeArguments![0];
+      if (!type.is(TypeFlags.INTEGER) || type.size < 32) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      arg0 = compiler.compileExpression(
+      let arg0 = compiler.compileExpression(
         operands[0],
         compiler.options.usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      arg1 = compiler.compileExpression(
+      let arg1 = compiler.compileExpression(
         operands[1],
-        valueType,
+        type,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
@@ -2697,76 +2291,37 @@ export function compileCall(
     // === Control flow ===========================================================================
 
     case BuiltinSymbols.select: { // select<T?>(ifTrue: T, ifFalse: T, condition: bool) -> T
-      if (operands.length != 3) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
+        checkArgsRequired(operands, 3, reportNode, compiler)
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE)
+        : compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
+      let type = compiler.currentType;
+      if (!type.isAny(TypeFlags.VALUE | TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "3", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
-      } else {
-        arg0 = compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
-      }
-      let type = compiler.currentType;
-      arg1 = compiler.compileExpression(operands[1], type, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg2 = compiler.makeIsTrueish(
+      let arg1 = compiler.compileExpression(operands[1], type, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg2 = compiler.makeIsTrueish(
         compiler.compileExpressionRetainType(operands[2], Type.bool, WrapMode.NONE),
-        compiler.currentType
+        compiler.currentType // ^
       );
       compiler.currentType = type;
-      switch (compiler.currentType.kind) {
-        case TypeKind.I8:
-        case TypeKind.I16:
-        case TypeKind.U8:
-        case TypeKind.U16:
-        case TypeKind.BOOL:
-        default: {
-          ret = module.createSelect(arg0, arg1, arg2);
-          break;
-        }
-        case TypeKind.VOID: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          ret = module.createUnreachable();
-          break;
-        }
-      }
-      return ret;
+      return module.createSelect(arg0, arg1, arg2);
     }
     case BuiltinSymbols.unreachable: { // unreachable() -> *
-      if (operands.length != 0) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "0", operands.length.toString(10)
-        );
-      }
       if (typeArguments) {
         compiler.error(
           DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
+          reportNode.typeArgumentsRange, prototype.internalName
         );
       }
+      checkArgsRequired(operands, 0, reportNode, compiler);
       return module.createUnreachable();
     }
 
@@ -2774,75 +2329,48 @@ export function compileCall(
 
     case BuiltinSymbols.memory_size: { // memory.size() -> i32
       compiler.currentType = Type.i32;
-      if (operands.length != 0) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "0", operands.length.toString(10)
-        );
-      }
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 0, reportNode, compiler)
+      ) return module.createUnreachable();
       return module.createHost(HostOp.CurrentMemory);
     }
     case BuiltinSymbols.memory_grow: { // memory.grow(pages: i32) -> i32
       compiler.currentType = Type.i32;
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "0", operands.length.toString(10)
-        );
-        arg0 = module.createUnreachable();
-      } else {
-        arg0 = compiler.compileExpression(operands[0], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE);
-      }
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      return module.createHost(HostOp.GrowMemory, null, [ arg0 ]);
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      return module.createHost(HostOp.GrowMemory, null, [
+        compiler.compileExpression(operands[0], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE)
+      ]);
     }
-    // see: https://github.com/WebAssembly/bulk-memory-operations
     case BuiltinSymbols.memory_copy: { // memory.copy(dest: usize, src: usize: n: usize) -> void
+      compiler.currentType = Type.void;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 3, reportNode, compiler)
+      ) return module.createUnreachable();
       if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
         let instance = compiler.resolver.resolveFunction(prototype, null); // reports
         compiler.currentType = Type.void;
         if (!instance) return module.createUnreachable();
         return compiler.compileCallDirect(instance, operands, reportNode);
       }
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 3) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "3", operands.length.toString(10)
-        );
-        compiler.currentType = Type.void;
-        return module.createUnreachable();
-      }
       let usizeType = compiler.options.usizeType;
-      arg0 = compiler.compileExpression(
+      let arg0 = compiler.compileExpression(
         operands[0],
         usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      arg1 = compiler.compileExpression(
+      let arg1 = compiler.compileExpression(
         operands[1],
         usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      arg2 = compiler.compileExpression(
+      let arg2 = compiler.compileExpression(
         operands[2],
         usizeType,
         ConversionKind.IMPLICIT,
@@ -2852,40 +2380,31 @@ export function compileCall(
       return module.createMemoryCopy(arg0, arg1, arg2);
     }
     case BuiltinSymbols.memory_fill: { // memory.fill(dest: usize, value: u8, n: usize) -> void
+      compiler.currentType = Type.void;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 3, reportNode, compiler)
+      ) return module.createUnreachable();
       if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
         let instance = compiler.resolver.resolveFunction(prototype, null); // reports
         compiler.currentType = Type.void;
         if (!instance) return module.createUnreachable();
         return compiler.compileCallDirect(instance, operands, reportNode);
       }
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 3) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "3", operands.length.toString(10)
-        );
-        compiler.currentType = Type.void;
-        return module.createUnreachable();
-      }
       let usizeType = compiler.options.usizeType;
-      arg0 = compiler.compileExpression(
+      let arg0 = compiler.compileExpression(
         operands[0],
         usizeType,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      arg1 = compiler.compileExpression(
+      let arg1 = compiler.compileExpression(
         operands[1],
-        Type.u32,
+        Type.u8,
         ConversionKind.IMPLICIT,
         WrapMode.NONE
       );
-      arg2 = compiler.compileExpression(
+      let arg2 = compiler.compileExpression(
         operands[2],
         usizeType,
         ConversionKind.IMPLICIT,
@@ -2898,117 +2417,90 @@ export function compileCall(
     // === Helpers ================================================================================
 
     case BuiltinSymbols.changetype: { // changetype<T!>(value: *) -> T
-      if (!(typeArguments && typeArguments.length == 1)) {
-        if (typeArguments && typeArguments.length) compiler.currentType = typeArguments[0];
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        compiler.currentType = typeArguments[0];
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpressionRetainType(
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler, true) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
+      let toType = typeArguments![0];
+      let arg0 = compiler.compileExpressionRetainType(
         operands[0],
-        typeArguments[0],
+        toType,
         WrapMode.NONE
       );
-      compiler.currentType = typeArguments[0];
-      if (compiler.currentType.size != typeArguments[0].size) {
+      let fromType = compiler.currentType;
+      compiler.currentType = toType;
+      if (fromType.size != toType.size) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.range
         );
         return module.createUnreachable();
       }
-      // if (reportNode.range.source.sourceKind != SourceKind.STDLIB)
-      //  compiler.warning(DiagnosticCode.Operation_is_unsafe, reportNode.range);
-      return arg0; // any usize to any usize
+      return arg0;
     }
     case BuiltinSymbols.assert: { // assert<T?>(isTrueish: T, message?: string) -> T with T != null
-      if (operands.length < 1 || operands.length > 2) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0].nonNullableType;
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
-        if (operands.length < 1) {
-          compiler.error(
-            DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-            reportNode.range, "1", operands.length.toString(10)
-          );
-        } else if (operands.length > 2) {
-          compiler.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            reportNode.range, "2", operands.length.toString(10)
-          );
-        }
-        return module.createUnreachable();
-      }
+      let hasError = 0;
       if (typeArguments) {
-        if (typeArguments.length) compiler.currentType = typeArguments[0].nonNullableType;
-        if (typeArguments.length != 1) {
+        let numTypeArguments = typeArguments.length;
+        if (numTypeArguments) compiler.currentType = typeArguments[0].nonNullableType; // !
+        if (numTypeArguments != 1) {
           compiler.error(
             DiagnosticCode.Expected_0_type_arguments_but_got_1,
             reportNode.range, "1", typeArguments.length.toString(10)
           );
-          return module.createUnreachable();
+          hasError = 1;
         }
-        arg0 = compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP);
-      } else {
-        arg0 = compiler.compileExpressionRetainType(operands[0], Type.bool, WrapMode.WRAP);
       }
-
+      if (
+        checkArgsOptional(operands, 1, 2, reportNode, compiler) |
+        hasError
+      ) return module.createUnreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
+        : compiler.compileExpressionRetainType(operands[0], Type.bool, WrapMode.WRAP);
       let type = compiler.currentType;
       compiler.currentType = type.nonNullableType;
 
-      // just return ifTrueish if assertions are disabled, or simplify if dropped anyway
+      // return ifTrueish if assertions are disabled
       if (compiler.options.noAssert) {
-        if (contextualType == Type.void) {
+        if (contextualType == Type.void) { // simplify if dropped anyway
           compiler.currentType = Type.void;
           return module.createNop();
         }
         return arg0;
       }
 
+      // otherwise call abort if the assertion is false-ish
       let abort = compileAbort(compiler, operands.length == 2 ? operands[1] : null, reportNode);
-
       compiler.currentType = type.nonNullableType;
-
+      let expr: ExpressionRef;
       if (contextualType == Type.void) { // simplify if dropped anyway
-        switch (compiler.currentType.kind) {
-          default: { // any integer up to 32-bits incl. bool
-            ret = module.createIf(
-              module.createUnary(UnaryOp.EqzI32,
-                arg0
-              ),
+        compiler.currentType = Type.void;
+        switch (type.kind) {
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.BOOL: {
+            expr = module.createIf(
+              module.createUnary(UnaryOp.EqzI32, arg0),
               abort
             );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            ret = module.createIf(
-              module.createUnary(UnaryOp.EqzI64,
-                arg0
-              ),
+            expr = module.createIf(
+              module.createUnary(UnaryOp.EqzI64, arg0),
               abort
             );
             break;
           }
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
-            ret = module.createIf(
+            expr = module.createIf(
               module.createUnary(
                 compiler.options.isWasm64
                   ? UnaryOp.EqzI64
@@ -3021,7 +2513,7 @@ export function compileCall(
           }
           // TODO: also check for NaN in float assertions, as in `Boolean(NaN) -> false`?
           case TypeKind.F32: {
-            ret = module.createIf(
+            expr = module.createIf(
               module.createBinary(BinaryOp.EqF32,
                 arg0,
                 module.createF32(0)
@@ -3031,7 +2523,7 @@ export function compileCall(
             break;
           }
           case TypeKind.F64: {
-            ret = module.createIf(
+            expr = module.createIf(
               module.createBinary(BinaryOp.EqF64,
                 arg0,
                 module.createF64(0)
@@ -3040,40 +2532,27 @@ export function compileCall(
             );
             break;
           }
-          case TypeKind.VOID: {
+          default: {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
-              reportNode.range
+              reportNode.typeArgumentsRange
             );
-            ret = abort;
+            expr = abort;
             break;
           }
         }
-        compiler.currentType = Type.void;
       } else {
+        compiler.currentType = type.nonNullableType;
         switch (compiler.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
+          case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.BOOL: {
-            let flow = compiler.currentFlow;
-            let tempLocal = flow.getAndFreeTempLocal(
-              compiler.currentType,
-              !flow.canOverflow(arg0, compiler.currentType)
-            );
-            ret = module.createIf(
-              module.createTeeLocal(tempLocal.index, arg0),
-              module.createGetLocal(tempLocal.index, NativeType.I32),
-              abort
-            );
-            break;
-          }
-          case TypeKind.I32:
           case TypeKind.U32:
-          default: {
-            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.i32, false);
-            ret = module.createIf(
+          case TypeKind.BOOL: {
+            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(type, true /* arg0 is wrapped */);
+            expr = module.createIf(
               module.createTeeLocal(tempLocal.index, arg0),
               module.createGetLocal(tempLocal.index, NativeType.I32),
               abort
@@ -3083,7 +2562,7 @@ export function compileCall(
           case TypeKind.I64:
           case TypeKind.U64: {
             let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.i64, false);
-            ret = module.createIf(
+            expr = module.createIf(
               module.createUnary(UnaryOp.EqzI64,
                 module.createTeeLocal(tempLocal.index, arg0)
               ),
@@ -3095,7 +2574,7 @@ export function compileCall(
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
             let tempLocal = compiler.currentFlow.getAndFreeTempLocal(compiler.options.usizeType, false);
-            ret = module.createIf(
+            expr = module.createIf(
               module.createUnary(
                 compiler.options.isWasm64
                   ? UnaryOp.EqzI64
@@ -3109,7 +2588,7 @@ export function compileCall(
           }
           case TypeKind.F32: {
             let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f32, false);
-            ret = module.createIf(
+            expr = module.createIf(
               module.createBinary(BinaryOp.EqF32,
                 module.createTeeLocal(tempLocal.index, arg0),
                 module.createF32(0)
@@ -3121,7 +2600,7 @@ export function compileCall(
           }
           case TypeKind.F64: {
             let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f64, false);
-            ret = module.createIf(
+            expr = module.createIf(
               module.createBinary(BinaryOp.EqF64,
                 module.createTeeLocal(tempLocal.index, arg0),
                 module.createF64(0)
@@ -3131,32 +2610,23 @@ export function compileCall(
             );
             break;
           }
-          case TypeKind.VOID: {
+          default: {
             compiler.error(
               DiagnosticCode.Operation_not_supported,
-              reportNode.range
+              reportNode.typeArgumentsRange
             );
-            ret = abort;
+            expr = abort;
             break;
           }
         }
       }
-      return ret;
+      return expr;
     }
     case BuiltinSymbols.unchecked: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
       let flow = compiler.currentFlow;
       let alreadyUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
       flow.set(FlowFlags.UNCHECKED_CONTEXT);
@@ -3165,38 +2635,17 @@ export function compileCall(
       return ret;
     }
     case BuiltinSymbols.call_indirect: { // call_indirect<T?>(target: Function | u32, ...args: *[]) -> T
-      if (operands.length < 1) {
-        if (typeArguments) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          if (typeArguments.length != 1) {
-            compiler.error(
-              DiagnosticCode.Expected_0_type_arguments_but_got_1,
-              reportNode.range, "1", typeArguments.length.toString(10)
-            );
-          }
-        }
-        compiler.error(
-          DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let returnType: Type;
-      if (typeArguments) {
-        if (typeArguments.length != 1) {
-          if (typeArguments.length) compiler.currentType = typeArguments[0];
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return module.createUnreachable();
-        }
-        returnType = typeArguments[0];
-      } else {
-        returnType = contextualType;
-      }
-      arg0 = compiler.compileExpressionRetainType(operands[0], Type.u32, WrapMode.NONE);
-      if (compiler.currentType.kind != TypeKind.U32) {
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
+        checkArgsOptional(operands, 1, i32.MAX_VALUE, reportNode, compiler)
+      ) return module.createUnreachable();
+      let returnType = typeArguments ? typeArguments[0] : contextualType;
+      let arg0 = compiler.compileExpressionRetainType(operands[0], Type.u32, WrapMode.NONE);
+      let arg0Type = compiler.currentType;
+      if (!(
+        arg0Type == Type.u32 ||                                      // either plain index
+        arg0Type.kind == TypeKind.U32 && arg0Type.signatureReference // or function reference
+      )) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           operands[0].range
@@ -3222,29 +2671,26 @@ export function compileCall(
       // thus must be used with care. it exists because it *might* be useful in specific scenarios.
       return module.createCallIndirect(arg0, operandExprs, typeName);
     }
-    case BuiltinSymbols.instantiate: {
-      if (!(typeArguments && typeArguments.length == 1)) {
-        if (typeArguments && typeArguments.length) compiler.currentType = typeArguments[0];
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-        );
-        return module.createUnreachable();
-      }
-      let classInstance = typeArguments[0].classReference;
+    case BuiltinSymbols.instantiate: { // instantiate<T!>(...args: *[]) -> T
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler, true)
+      ) return module.createUnreachable();
+      let classInstance = typeArguments![0].classReference;
       if (!classInstance) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
-          reportNode.range
+          reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
+      compiler.currentType = classInstance.type;
       return compiler.compileInstantiate(classInstance, operands, reportNode);
     }
 
     // === User-defined diagnostics ===============================================================
 
     case BuiltinSymbols.ERROR: {
+      checkTypeAbsent(typeArguments, reportNode, prototype);
       compiler.error(
         DiagnosticCode.User_defined_0,
         reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
@@ -3252,6 +2698,7 @@ export function compileCall(
       return module.createUnreachable();
     }
     case BuiltinSymbols.WARNING: {
+      checkTypeAbsent(typeArguments, reportNode, prototype);
       compiler.warning(
         DiagnosticCode.User_defined_0,
         reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
@@ -3259,6 +2706,7 @@ export function compileCall(
       return module.createNop();
     }
     case BuiltinSymbols.INFO: {
+      checkTypeAbsent(typeArguments, reportNode, prototype);
       compiler.info(
         DiagnosticCode.User_defined_0,
         reportNode.range, (operands.length ? operands[0] : reportNode).range.toString()
@@ -3266,297 +2714,139 @@ export function compileCall(
       return module.createNop();
     }
 
-    // === Type conversions =======================================================================
+    // === Portable type conversions ==============================================================
 
     case BuiltinSymbols.i8: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.i8;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.i8,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.i8, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.i16: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.i16;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.i16,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.i16, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.i32: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.i32;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.i32,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.i32, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.i64: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.i64;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.i64,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.i64, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.isize: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        compiler.currentType = compiler.options.isWasm64
-          ? Type.isize64
-          : Type.isize32;
+      let isizeType = compiler.options.isizeType;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
+        compiler.currentType = isizeType;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        compiler.options.isWasm64
-          ? Type.isize64
-          : Type.isize32,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], isizeType, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.u8: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.u8;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.u8,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.u8, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.u16: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.u16;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.u16,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.u16, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.u32: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.u32;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.u32,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.u32, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.u64: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.u64;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.u64,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.u64, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.usize: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        compiler.currentType = compiler.options.usizeType;
+      let usizeType = compiler.options.usizeType;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
+        compiler.currentType = usizeType;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        compiler.options.usizeType,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], usizeType, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.bool: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.bool;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.bool,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.bool, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.f32: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.f32;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.f32,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.f32, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
     case BuiltinSymbols.f64: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.f64;
         return module.createUnreachable();
       }
-      return compiler.compileExpression(
-        operands[0],
-        Type.f64,
-        ConversionKind.EXPLICIT,
-        WrapMode.NONE
-      );
+      return compiler.compileExpression(operands[0], Type.f64, ConversionKind.EXPLICIT, WrapMode.NONE);
     }
 
     // === SIMD ===================================================================================
@@ -5782,90 +5072,6 @@ function deferASM(
   );
 }
 
-/** Evaluates the constant type of a type argument *or* expression. */
-function evaluateConstantType(
-  compiler: Compiler,
-  typeArguments: Type[] | null,
-  operands: Expression[],
-  reportNode: Node
-): Type | null {
-  if (operands.length == 0) { // requires type argument
-    if (!typeArguments || typeArguments.length != 1) {
-      compiler.error(
-        DiagnosticCode.Expected_0_type_arguments_but_got_1,
-        reportNode.range, "1", typeArguments ? typeArguments.length.toString(10) : "0"
-      );
-      return null;
-    }
-    return typeArguments[0];
-  }
-  if (operands.length == 1) { // optional type argument
-    if (typeArguments) {
-      if (typeArguments.length == 1) {
-        compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
-      } else {
-        if (typeArguments.length) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          return null;
-        }
-        compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
-      }
-    } else {
-      compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
-    }
-    return compiler.currentType;
-  }
-  if (typeArguments && typeArguments.length > 1) {
-    compiler.error(
-      DiagnosticCode.Expected_0_type_arguments_but_got_1,
-      reportNode.range, "1", typeArguments.length.toString(10)
-    );
-  }
-  compiler.error(
-    DiagnosticCode.Expected_0_arguments_but_got_1,
-    reportNode.range, "1", operands.length.toString(10)
-  );
-  return null;
-}
-
-/** Evaluates a compile-time constant immediate offset argument.*/
-function evaluateImmediateOffset(compiler: Compiler, expression: Expression): i32 {
-  var expr: ExpressionRef;
-  var value: i32;
-  if (compiler.options.isWasm64) {
-    expr = compiler.precomputeExpression(expression, Type.usize64, ConversionKind.IMPLICIT, WrapMode.NONE);
-    if (
-      getExpressionId(expr) != ExpressionId.Const ||
-      getExpressionType(expr) != NativeType.I64 ||
-      getConstValueI64High(expr) != 0 ||
-      (value = getConstValueI64Low(expr)) < 0
-    ) {
-      compiler.error(
-        DiagnosticCode.Expression_must_be_a_compile_time_constant,
-        expression.range
-      );
-      value = -1;
-    }
-  } else {
-    expr = compiler.precomputeExpression(expression, Type.usize32, ConversionKind.IMPLICIT, WrapMode.NONE);
-    if (
-      getExpressionId(expr) != ExpressionId.Const ||
-      getExpressionType(expr) != NativeType.I32 ||
-      (value = getConstValueI32(expr)) < 0
-    ) {
-      compiler.error(
-        DiagnosticCode.Expression_must_be_a_compile_time_constant,
-        expression.range
-      );
-      value = -1;
-    }
-  }
-  return value;
-}
-
 /** Compiles an abort wired to the conditionally imported 'abort' function. */
 export function compileAbort(
   compiler: Compiler,
@@ -6073,4 +5279,194 @@ export function ensureGCHook(
   );
   functionTable[gcHookIndex] = funcName;
   return gcHookIndex;
+}
+
+// Helpers
+
+/** Evaluates the constant type of a type argument *or* expression. */
+function evaluateConstantType(
+  compiler: Compiler,
+  typeArguments: Type[] | null,
+  operands: Expression[],
+  reportNode: CallExpression
+): Type | null {
+  if (operands.length == 0) { // requires type argument
+    if (!typeArguments || typeArguments.length != 1) {
+      compiler.error(
+        DiagnosticCode.Expected_0_type_arguments_but_got_1,
+        reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+      );
+      return null;
+    }
+    return typeArguments[0];
+  }
+  if (operands.length == 1) { // optional type argument
+    if (typeArguments) {
+      if (typeArguments.length == 1) {
+        compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE);
+      } else {
+        if (typeArguments.length) {
+          compiler.error(
+            DiagnosticCode.Expected_0_type_arguments_but_got_1,
+            reportNode.typeArgumentsRange, "1", typeArguments.length.toString(10)
+          );
+          return null;
+        }
+        compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
+      }
+    } else {
+      compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
+    }
+    return compiler.currentType;
+  }
+  if (typeArguments && typeArguments.length > 1) {
+    compiler.error(
+      DiagnosticCode.Expected_0_type_arguments_but_got_1,
+      reportNode.typeArgumentsRange, "1", typeArguments.length.toString(10)
+    );
+  }
+  compiler.error(
+    DiagnosticCode.Expected_0_arguments_but_got_1,
+    reportNode.argumentsRange, "1", operands.length.toString(10)
+  );
+  return null;
+}
+
+/** Evaluates a compile-time constant immediate offset argument.*/
+function evaluateImmediateOffset(expression: Expression, compiler: Compiler): i32 {
+  var expr: ExpressionRef;
+  var value: i32;
+  if (compiler.options.isWasm64) {
+    expr = compiler.precomputeExpression(expression, Type.usize64, ConversionKind.IMPLICIT, WrapMode.NONE);
+    if (
+      getExpressionId(expr) != ExpressionId.Const ||
+      getExpressionType(expr) != NativeType.I64 ||
+      getConstValueI64High(expr) != 0 ||
+      (value = getConstValueI64Low(expr)) < 0
+    ) {
+      compiler.error(
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
+        expression.range
+      );
+      value = -1;
+    }
+  } else {
+    expr = compiler.precomputeExpression(expression, Type.usize32, ConversionKind.IMPLICIT, WrapMode.NONE);
+    if (
+      getExpressionId(expr) != ExpressionId.Const ||
+      getExpressionType(expr) != NativeType.I32 ||
+      (value = getConstValueI32(expr)) < 0
+    ) {
+      compiler.error(
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
+        expression.range
+      );
+      value = -1;
+    }
+  }
+  return value;
+}
+
+/** Checks a call with a single required type argument. Returns `1` on error. */
+function checkTypeRequired(
+  typeArguments: Type[] | null,
+  reportNode: CallExpression,
+  compiler: Compiler,
+  setCurrentTypeOnError: bool = false
+): i32 {
+  if (typeArguments) {
+    let numTypeArguments = typeArguments.length;
+    if (numTypeArguments == 1) return 0;
+    assert(numTypeArguments); // invalid if 0, must not be set at all instead
+    if (setCurrentTypeOnError) compiler.currentType = typeArguments[0];
+    compiler.error(
+      DiagnosticCode.Expected_0_type_arguments_but_got_1,
+      reportNode.typeArgumentsRange, "1", numTypeArguments.toString()
+    );
+  } else {
+    compiler.error(
+      DiagnosticCode.Expected_0_type_arguments_but_got_1,
+      reportNode.range, "1", "0"
+    );
+  }
+  return 1;
+}
+
+/** Checks a call with a single optional type argument. Returns `1` on error. */
+function checkTypeOptional(
+  typeArguments: Type[] | null,
+  reportNode: CallExpression,
+  compiler: Compiler,
+  setCurrentTypeOnError: bool = false
+): i32 {
+  if (typeArguments) {
+    let numTypeArguments = typeArguments.length;
+    if (numTypeArguments == 1) return 0;
+    assert(numTypeArguments); // invalid if 0, must not be set at all instead
+    if (setCurrentTypeOnError) compiler.currentType = typeArguments[0];
+    compiler.error(
+      DiagnosticCode.Expected_0_type_arguments_but_got_1,
+      reportNode.typeArgumentsRange, "1", numTypeArguments.toString()
+    );
+    return 1;
+  }
+  return 0;
+}
+
+/** Checks a call that is not generic. Returns `1` on error. */
+function checkTypeAbsent(
+  typeArguments: Type[] | null,
+  reportNode: CallExpression,
+  prototype: FunctionPrototype
+): i32 {
+  if (typeArguments) {
+    prototype.program.error(
+      DiagnosticCode.Type_0_is_not_generic,
+      reportNode.typeArgumentsRange, prototype.internalName
+    );
+    return 1;
+  }
+  return 0;
+}
+
+/** Checks a call that requires a fixed number of arguments. Returns `1` on error. */
+function checkArgsRequired(
+  operands: Expression[],
+  expected: i32,
+  reportNode: CallExpression,
+  compiler: Compiler
+): i32 {
+  if (operands.length != expected) {
+    compiler.error(
+      DiagnosticCode.Expected_0_arguments_but_got_1,
+      reportNode.range, expected.toString(), operands.length.toString()
+    );
+    return 1;
+  }
+  return 0;
+}
+
+/** Checks a call that requires a variable number of arguments. Returns `1` on error. */
+function checkArgsOptional(
+  operands: Expression[],
+  expectedMinimum: i32,
+  expectedMaximum: i32,
+  reportNode: CallExpression,
+  compiler: Compiler
+): i32 {
+  var numOperands = operands.length;
+  if (numOperands < expectedMinimum) {
+    compiler.error(
+      DiagnosticCode.Expected_at_least_0_arguments_but_got_1,
+      reportNode.range, expectedMinimum.toString(), numOperands.toString()
+    );
+    return 1;
+  } else if (numOperands > expectedMaximum) {
+    compiler.error(
+      DiagnosticCode.Expected_0_arguments_but_got_1,
+      reportNode.range, expectedMaximum.toString(), numOperands.toString()
+    );
+    return 1;
+  }
+  return 0;
 }

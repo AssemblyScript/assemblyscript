@@ -57,7 +57,7 @@ export namespace atomic {
   @builtin export declare function xchg<T>(ptr: usize, value: T, immOffset?: usize): T;
   @builtin export declare function cmpxchg<T>(ptr: usize, expected: T, replacement: T, immOffset?: usize): T;
   @builtin export declare function wait<T>(ptr: usize, expected: T, timeout: i64): AtomicWaitResult;
-  @builtin export declare function notify<T>(ptr: usize, count: u32): u32;
+  @builtin export declare function notify<T>(ptr: usize, count: i32): i32;
 }
 
 @lazy export const enum AtomicWaitResult {

@@ -2357,14 +2357,14 @@
   i32.const 1
   i32.store
   i32.const 8
-  i32.const 1
-  i32.store8
+  i64.const 1
+  i64.store8
   i32.const 8
-  i32.const 1
-  i32.store16
+  i64.const 1
+  i64.store16
   i32.const 8
-  i32.const 1
-  i32.store
+  i64.const 1
+  i64.store32
   i32.const 8
   i64.const 1
   i64.store
