@@ -478,20 +478,22 @@ export namespace BuiltinSymbols {
 
 /** Compiles a call to a built-in function. */
 export function compileCall(
+  /* Compiler reference. */
   compiler: Compiler,
+  /** Respective function prototype. */
   prototype: FunctionPrototype,
+  /** Pre-resolved type arguments. */
   typeArguments: Type[] | null,
+  /** Operand expressions. */
   operands: Expression[],
+  /** Contextual type. */
   contextualType: Type,
+  /** Respective call expression. */
   reportNode: CallExpression,
+  /** Indicates that contextual type is ASM type. */
   isAsm: bool = false
 ): ExpressionRef {
   var module = compiler.module;
-
-  var arg0: ExpressionRef,
-      arg1: ExpressionRef,
-      arg2: ExpressionRef,
-      ret: ExpressionRef;
 
   // NOTE that some implementations below make use of the select expression where straight-forward.
   // whether worth or not should probably be tested once it's known if/how embedders handle it.
@@ -584,19 +586,10 @@ export function compileCall(
     }
     case BuiltinSymbols.isDefined: { // isDefined(expression) -> bool
       compiler.currentType = Type.bool;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.typeArgumentsRange, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.argumentsRange, "1", operands.length.toString()
-        );
-        return module.createUnreachable();
-      }
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
       let element = compiler.resolver.resolveExpression(
         operands[0],
         compiler.currentFlow,
@@ -607,19 +600,10 @@ export function compileCall(
     }
     case BuiltinSymbols.isConstant: { // isConstant(expression) -> bool
       compiler.currentType = Type.bool;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.typeArgumentsRange, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.argumentsRange, "1", operands.length.toString()
-        );
-        return module.createUnreachable();
-      }
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.createUnreachable();
       let expr = compiler.compileExpressionRetainType(operands[0], Type.i32, WrapMode.NONE);
       compiler.currentType = Type.bool;
       return module.createI32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
@@ -666,22 +650,10 @@ export function compileCall(
     }
     case BuiltinSymbols.alignof: { // alignof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
-      let hasError = false;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        hasError = true;
-      }
-      if (operands.length != 0) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.argumentsRange, "0", operands.length.toString()
-        );
-        hasError = true;
-      }
-      if (hasError) return module.createUnreachable();
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 0, reportNode, compiler)
+      ) return module.createUnreachable();
       let byteSize = (<Type[]>typeArguments)[0].byteSize;
       assert(isPowerOf2(byteSize));
       let alignLog2 = ctz<i32>(byteSize);
@@ -707,22 +679,10 @@ export function compileCall(
     }
     case BuiltinSymbols.offsetof: { // offsetof<T!>(fieldName?: string) -> usize
       compiler.currentType = compiler.options.usizeType;
-      let hasError = false;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        hasError = true;
-      }
-      if (operands.length > 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.argumentsRange, "1", operands.length.toString()
-        );
-        hasError = true;
-      }
-      if (hasError) return module.createUnreachable();
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsOptional(operands, 0, 1, reportNode, compiler)
+      ) return module.createUnreachable();
       let classType = typeArguments![0].classReference;
       if (!classType) {
         compiler.error(
@@ -777,183 +737,118 @@ export function compileCall(
 
     // === Math ===================================================================================
 
-    case BuiltinSymbols.clz: { // clz<T?>(value: T) -> T
+    case BuiltinSymbols.clz: // any_bitcount<T?>(value: T) -> T
+    case BuiltinSymbols.ctz:
+    case BuiltinSymbols.popcnt: {
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
         : compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
-      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      let expr: ExpressionRef;
-      switch (compiler.currentType.kind) {
-        case TypeKind.BOOL: // usually overflows
-        case TypeKind.I8:
-        case TypeKind.U8:
-        case TypeKind.I16:
-        case TypeKind.U16:
-        case TypeKind.I32:
-        case TypeKind.U32: {
-          expr = module.createUnary(UnaryOp.ClzI32, arg0);
+      let op: UnaryOp = -1;
+      switch (prototype.internalName) {
+        case BuiltinSymbols.clz: {
+          switch (type.kind) {
+            case TypeKind.BOOL:
+            case TypeKind.I8:
+            case TypeKind.U8:
+            case TypeKind.I16:
+            case TypeKind.U16:
+            case TypeKind.I32:
+            case TypeKind.U32: { op = UnaryOp.ClzI32; break; }
+            case TypeKind.USIZE:
+            case TypeKind.ISIZE: {
+              op = compiler.options.isWasm64
+                ? UnaryOp.ClzI64
+                : UnaryOp.ClzI32;
+              break;
+            }
+            case TypeKind.I64:
+            case TypeKind.U64: { op = UnaryOp.ClzI64; break; }
+          }
           break;
         }
-        case TypeKind.USIZE:
-        case TypeKind.ISIZE: {
-          expr = module.createUnary(
-            compiler.options.isWasm64
-              ? UnaryOp.ClzI64
-              : UnaryOp.ClzI32,
-            arg0
-          );
+        case BuiltinSymbols.ctz: {
+          switch (type.kind) {
+            case TypeKind.BOOL:
+            case TypeKind.I8:
+            case TypeKind.U8:
+            case TypeKind.I16:
+            case TypeKind.U16:
+            case TypeKind.I32:
+            case TypeKind.U32: { op = UnaryOp.CtzI32; break; }
+            case TypeKind.USIZE:
+            case TypeKind.ISIZE: {
+              op = compiler.options.isWasm64
+                ? UnaryOp.CtzI64
+                : UnaryOp.CtzI32;
+              break;
+            }
+            case TypeKind.I64:
+            case TypeKind.U64: { op = UnaryOp.CtzI64; break; }
+          }
           break;
         }
-        case TypeKind.I64:
-        case TypeKind.U64: {
-          expr = module.createUnary(UnaryOp.ClzI64, arg0);
-          break;
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.typeArgumentsRange
-          );
-          expr = module.createUnreachable();
+        case BuiltinSymbols.popcnt: {
+          switch (compiler.currentType.kind) {
+            case TypeKind.BOOL:
+            case TypeKind.I8:
+            case TypeKind.U8:
+            case TypeKind.I16:
+            case TypeKind.U16:
+            case TypeKind.I32:
+            case TypeKind.U32: { op = UnaryOp.PopcntI32; break; }
+            case TypeKind.USIZE:
+            case TypeKind.ISIZE: {
+              op = compiler.options.isWasm64
+                ? UnaryOp.PopcntI64
+                : UnaryOp.PopcntI32;
+              break;
+            }
+            case TypeKind.I64:
+            case TypeKind.U64: { op = UnaryOp.PopcntI64; break; }
+          }
           break;
         }
       }
-      return expr;
-    }
-    case BuiltinSymbols.ctz: { // ctz<T?>(value: T) -> T
-      if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
-        checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
-      let arg0 = typeArguments
-        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.NONE, WrapMode.WRAP)
-        : compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
-      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
+      if (op == -1) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      let expr: ExpressionRef;
-      switch (compiler.currentType.kind) {
-        case TypeKind.BOOL: // usually overflows
-        case TypeKind.I8:
-        case TypeKind.U8:
-        case TypeKind.I16:
-        case TypeKind.U16:
-        case TypeKind.I32:
-        case TypeKind.U32: {
-          expr = module.createUnary(UnaryOp.CtzI32, arg0);
-          break;
-        }
-        case TypeKind.USIZE:
-        case TypeKind.ISIZE: {
-          expr = module.createUnary(
-            compiler.options.isWasm64
-              ? UnaryOp.CtzI64
-              : UnaryOp.CtzI32,
-            arg0
-          );
-          break;
-        }
-        case TypeKind.I64:
-        case TypeKind.U64: {
-          expr = module.createUnary(UnaryOp.CtzI64, arg0);
-          break;
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.typeArgumentsRange
-          );
-          expr = module.createUnreachable();
-          break;
-        }
-      }
-      return expr;
-    }
-    case BuiltinSymbols.popcnt: { // popcnt<T?>(value: T) -> T
-      if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
-        checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
-      let arg0 = typeArguments
-        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
-        : compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
-      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.typeArgumentsRange
-        );
-        return module.createUnreachable();
-      }
-      let expr: ExpressionRef;
-      switch (compiler.currentType.kind) {
-        case TypeKind.BOOL: // usually overflows
-        case TypeKind.I8:
-        case TypeKind.U8:
-        case TypeKind.I16:
-        case TypeKind.U16:
-        case TypeKind.I32:
-        case TypeKind.U32: {
-          expr = module.createUnary(UnaryOp.PopcntI32, arg0);
-          break;
-        }
-        case TypeKind.USIZE:
-        case TypeKind.ISIZE: {
-          expr = module.createUnary(
-            compiler.options.isWasm64
-              ? UnaryOp.PopcntI64
-              : UnaryOp.PopcntI32,
-            arg0
-          );
-          break;
-        }
-        case TypeKind.I64:
-        case TypeKind.U64: {
-          expr = module.createUnary(UnaryOp.PopcntI64, arg0);
-          break;
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.typeArgumentsRange
-          );
-          expr = module.createUnreachable();
-          break;
-        }
-      }
-      return expr;
+      return module.createUnary(op, arg0);
     }
     case BuiltinSymbols.rotl: { // rotl<T?>(value: T, shift: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
         : compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
-      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      let arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], type, ConversionKind.IMPLICIT, WrapMode.NONE);
       let expr: ExpressionRef;
-      switch (compiler.currentType.kind) {
+      switch (type.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.U8:
@@ -961,7 +856,7 @@ export function compileCall(
         case TypeKind.BOOL: {
           expr = compiler.ensureSmallIntegerWrap(
             module.createBinary(BinaryOp.RotlI32, arg0, arg1),
-            compiler.currentType
+            type
           );
           // fall-through
         }
@@ -998,22 +893,23 @@ export function compileCall(
     }
     case BuiltinSymbols.rotr: { // rotr<T?>(value: T, shift: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
         : compiler.compileExpression(operands[0], Type.i32, ConversionKind.NONE, WrapMode.WRAP);
-      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      let arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], type, ConversionKind.IMPLICIT, WrapMode.NONE);
       let expr: ExpressionRef;
-      switch (compiler.currentType.kind) {
+      switch (type.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.U8:
@@ -1021,7 +917,7 @@ export function compileCall(
         case TypeKind.BOOL: {
           expr = compiler.ensureSmallIntegerWrap(
             module.createBinary(BinaryOp.RotrI32, arg0, arg1),
-            compiler.currentType
+            type
           );
           break;
         }
@@ -1058,13 +954,14 @@ export function compileCall(
     }
     case BuiltinSymbols.abs: { // abs<T?>(value: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
         : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
-      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
@@ -1072,7 +969,7 @@ export function compileCall(
         return module.createUnreachable();
       }
       let expr: ExpressionRef;
-      switch (compiler.currentType.kind) {
+      switch (type.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.I32: {
@@ -1182,157 +1079,76 @@ export function compileCall(
     }
     case BuiltinSymbols.max: { // max<T?>(left: T, right: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
         : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.WRAP);
-      if (compiler.currentType.is(TypeFlags.REFERENCE)) {
+      let type = compiler.currentType;
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.typeArgumentsRange
         );
         return module.createUnreachable();
       }
-      let arg1 = compiler.compileExpression(operands[1], compiler.currentType, ConversionKind.IMPLICIT, WrapMode.WRAP);
-      let expr: ExpressionRef;
-      switch (compiler.currentType.kind) {
+      let arg1 = compiler.compileExpression(operands[1], type, ConversionKind.IMPLICIT, WrapMode.WRAP);
+      let op: BinaryOp;
+      switch (type.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
-        case TypeKind.I32: {
-          let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(
-            compiler.currentType,
-            !flow.canOverflow(arg0, compiler.currentType)
-          );
-          let tempLocal1 = flow.getAndFreeTempLocal(
-            compiler.currentType,
-            !flow.canOverflow(arg1, compiler.currentType)
-          );
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(BinaryOp.GtI32,
-              module.createGetLocal(tempLocal0.index, NativeType.I32),
-              module.createGetLocal(tempLocal1.index, NativeType.I32)
-            )
-          );
-          break;
-        }
+        case TypeKind.I32: { op = BinaryOp.GtI32; break; }
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.U32:
-        case TypeKind.BOOL: {
-          let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(
-            compiler.currentType,
-            !flow.canOverflow(arg0, compiler.currentType)
-          );
-          let tempLocal1 = flow.getAndFreeTempLocal(
-            compiler.currentType,
-            !flow.canOverflow(arg1, compiler.currentType)
-          );
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(BinaryOp.GtU32,
-              module.createGetLocal(tempLocal0.index, NativeType.I32),
-              module.createGetLocal(tempLocal1.index, NativeType.I32)
-            )
-          );
-          break;
-        }
-        case TypeKind.I64: {
-          let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(Type.i64, false);
-          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(BinaryOp.GtI64,
-              module.createGetLocal(tempLocal0.index, NativeType.I64),
-              module.createGetLocal(tempLocal1.index, NativeType.I64)
-            )
-          );
-          break;
-        }
-        case TypeKind.U64: {
-          let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(Type.i64, false);
-          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(BinaryOp.GtU64,
-              module.createGetLocal(tempLocal0.index, NativeType.I64),
-              module.createGetLocal(tempLocal1.index, NativeType.I64)
-            )
-          );
-          break;
-        }
+        case TypeKind.BOOL: { op = BinaryOp.GtU32; break; }
+        case TypeKind.I64: { op = BinaryOp.GtI64; break; }
+        case TypeKind.U64: { op = BinaryOp.GtU64; break; }
         case TypeKind.ISIZE: {
-          let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(
-              compiler.options.isWasm64
-                ? BinaryOp.GtI64
-                : BinaryOp.GtI32,
-              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType),
-              module.createGetLocal(tempLocal1.index, compiler.options.nativeSizeType)
-            )
-          );
+          op = compiler.options.isWasm64
+            ? BinaryOp.GtI64
+            : BinaryOp.GtI32;
           break;
         }
         case TypeKind.USIZE: {
-          let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(compiler.options.usizeType, false);
-          let tempLocal1 = flow.getAndFreeTempLocal(compiler.options.usizeType, false);
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(
-              compiler.options.isWasm64
-                ? BinaryOp.GtU64
-                : BinaryOp.GtU32,
-              module.createGetLocal(tempLocal0.index, compiler.options.nativeSizeType),
-              module.createGetLocal(tempLocal1.index, compiler.options.nativeSizeType)
-            )
-          );
+          op = compiler.options.isWasm64
+            ? BinaryOp.GtU64
+            : BinaryOp.GtU32;
           break;
         }
         case TypeKind.F32: {
-          expr = module.createBinary(BinaryOp.MaxF32, arg0, arg1);
-          break;
+          return module.createBinary(BinaryOp.MaxF32, arg0, arg1);
         }
         case TypeKind.F64: {
-          expr = module.createBinary(BinaryOp.MaxF64, arg0, arg1);
-          break;
+          return module.createBinary(BinaryOp.MaxF64, arg0, arg1);
         }
-        default: { // void
+        default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
-          break;
+          return module.createUnreachable();
         }
       }
-      return expr;
+      let flow = compiler.currentFlow;
+      let nativeType = type.toNativeType();
+      let tempLocal0 = flow.getTempLocal(type, true);
+      let tempLocal1 = flow.getAndFreeTempLocal(type, true);
+      flow.freeTempLocal(tempLocal0);
+      return module.createSelect(
+        module.createTeeLocal(tempLocal0.index, arg0),
+        module.createTeeLocal(tempLocal1.index, arg1),
+        module.createBinary(
+          op,
+          module.createGetLocal(tempLocal0.index, nativeType),
+          module.createGetLocal(tempLocal1.index, nativeType)
+        )
+      );
     }
     case BuiltinSymbols.min: { // min<T?>(left: T, right: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
@@ -1475,7 +1291,7 @@ export function compileCall(
     }
     case BuiltinSymbols.ceil: { // ceil<T?>(value: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
@@ -1526,7 +1342,7 @@ export function compileCall(
     }
     case BuiltinSymbols.floor: { // floor<T?>(value: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
@@ -1577,7 +1393,7 @@ export function compileCall(
     }
     case BuiltinSymbols.copysign: { // copysign<T?>(left: T, right: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
@@ -1616,7 +1432,7 @@ export function compileCall(
     }
     case BuiltinSymbols.nearest: { // nearest<T?>(value: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
@@ -1665,9 +1481,9 @@ export function compileCall(
       }
       return expr;
     }
-    case BuiltinSymbols.reinterpret: { // reinterpret<TTo!>(value: *) -> T
+    case BuiltinSymbols.reinterpret: { // reinterpret<T!>(value: *) -> T
       if (
-        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkTypeRequired(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.createUnreachable();
       let type = typeArguments![0];
@@ -1735,7 +1551,7 @@ export function compileCall(
     }
     case BuiltinSymbols.sqrt: { // sqrt<T?>(value: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
@@ -1773,7 +1589,7 @@ export function compileCall(
     }
     case BuiltinSymbols.trunc: { // trunc<T?>(value: T) -> T
       if (
-        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.createUnreachable();
       let arg0 = typeArguments
@@ -2630,9 +2446,9 @@ export function compileCall(
       let flow = compiler.currentFlow;
       let alreadyUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
       flow.set(FlowFlags.UNCHECKED_CONTEXT);
-      ret = compiler.compileExpressionRetainType(operands[0], contextualType, WrapMode.NONE);
+      let expr = compiler.compileExpressionRetainType(operands[0], contextualType, WrapMode.NONE);
       if (!alreadyUnchecked) flow.unset(FlowFlags.UNCHECKED_CONTEXT);
-      return ret;
+      return expr;
     }
     case BuiltinSymbols.call_indirect: { // call_indirect<T?>(target: Function | u32, ...args: *[]) -> T
       if (
@@ -2854,17 +2670,10 @@ export function compileCall(
     case BuiltinSymbols.v128: // alias for now
     case BuiltinSymbols.i8x16: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 16) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "16", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 16, reportNode, compiler)
+      ) {
         compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
@@ -2892,17 +2701,10 @@ export function compileCall(
     }
     case BuiltinSymbols.i16x8: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 8) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "8", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 8, reportNode, compiler)
+      ) {
         compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
@@ -2930,17 +2732,10 @@ export function compileCall(
     }
     case BuiltinSymbols.i32x4: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 4) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "4", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 4, reportNode, compiler)
+      ) {
         compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
@@ -2968,17 +2763,10 @@ export function compileCall(
     }
     case BuiltinSymbols.i64x2: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
         compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
@@ -3008,17 +2796,10 @@ export function compileCall(
     }
     case BuiltinSymbols.f32x4: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 4) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "4", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 4, reportNode, compiler)
+      ) {
         compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
@@ -3046,17 +2827,10 @@ export function compileCall(
     }
     case BuiltinSymbols.f64x2: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
         compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
@@ -3082,32 +2856,22 @@ export function compileCall(
       compiler.currentType = Type.v128;
       return module.createV128(bytes);
     }
-
-    // v128.*
-
-    case BuiltinSymbols.v128_splat: {
+    case BuiltinSymbols.v128_splat: { // splat<T!>(x: T) -> v128
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
+      let type = typeArguments![0];
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
-          reportNode.range
+          reportNode.typeArgumentsRange
         );
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
       let op: UnaryOp;
@@ -3132,37 +2896,27 @@ export function compileCall(
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
           compiler.currentType = Type.v128;
           return module.createUnreachable();
         }
       }
-      arg0 = compiler.compileExpression(operands[0], type, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg0 = compiler.compileExpression(operands[0], type, ConversionKind.IMPLICIT, WrapMode.NONE);
       compiler.currentType = Type.v128;
       return module.createUnary(op, arg0);
     }
-    case BuiltinSymbols.v128_extract_lane: {
+    case BuiltinSymbols.v128_extract_lane: { // extract_lane<T!>(x: v128, idx: u8) -> T
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler, true) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) return module.createUnreachable();
+      let type = typeArguments![0];
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
-          reportNode.range
+          reportNode.typeArgumentsRange
         );
         compiler.currentType = type;
         return module.createUnreachable();
@@ -3189,14 +2943,14 @@ export function compileCall(
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
           compiler.currentType = type;
           return module.createUnreachable();
         }
       }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = module.precomputeExpression(
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = module.precomputeExpression(
         compiler.compileExpression(operands[1], Type.u8, ConversionKind.IMPLICIT, WrapMode.NONE)
       );
       compiler.currentType = type;
@@ -3219,29 +2973,22 @@ export function compileCall(
       }
       return module.createSIMDExtract(op, arg0, idx);
     }
-    case BuiltinSymbols.v128_replace_lane: {
+    case BuiltinSymbols.v128_replace_lane: { // replace_lane<T!>(x: v128, idx: u8, value: T) -> v128
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 3, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      if (operands.length != 3) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "3", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
+      let type = typeArguments![0];
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
-          reportNode.range
+          reportNode.typeArgumentsRange
         );
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
       let op: SIMDReplaceOp;
@@ -3266,13 +3013,14 @@ export function compileCall(
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
+          compiler.currentType = Type.v128;
           return module.createUnreachable();
         }
       }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = module.precomputeExpression(
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = module.precomputeExpression(
         compiler.compileExpression(operands[1], Type.u8, ConversionKind.IMPLICIT, WrapMode.NONE)
       );
       if (getExpressionId(arg1) != ExpressionId.Const) {
@@ -3293,71 +3041,68 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      arg2 = compiler.compileExpression(operands[2], type, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg2 = compiler.compileExpression(operands[2], type, ConversionKind.IMPLICIT, WrapMode.NONE);
       compiler.currentType = Type.v128;
       return module.createSIMDReplace(op, arg0, idx, arg2);
     }
-    case BuiltinSymbols.v128_shuffle: {
+    case BuiltinSymbols.v128_shuffle: { // shuffle<T!>(a: v128, b: v128, ...lanes: u8[]) -> v128
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
+      let type = typeArguments![0];
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
-          reportNode.range
+          reportNode.typeArgumentsRange
         );
-        compiler.currentType = type;
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let laneWidth = type.byteSize;
+      let laneCount = 16 / laneWidth;
+      assert(isInteger(laneCount) && isPowerOf2(laneCount));
+      if (
+        checkArgsRequired(operands, 2 + laneCount, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
       switch (type.kind) {
         case TypeKind.I8:
-        case TypeKind.U8:
         case TypeKind.I16:
-        case TypeKind.U16:
         case TypeKind.I32:
-        case TypeKind.U32:
         case TypeKind.I64:
-        case TypeKind.U64:
         case TypeKind.ISIZE:
+        case TypeKind.U8:
+        case TypeKind.U16:
+        case TypeKind.U32:
+        case TypeKind.U64:
         case TypeKind.USIZE:
         case TypeKind.F32:
         case TypeKind.F64: break;
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
-            reportNode.range
+            reportNode.typeArgumentsRange
           );
-          compiler.currentType = type;
+          compiler.currentType = Type.v128;
           return module.createUnreachable();
         }
       }
-      let laneWidth = type.byteSize;
-      let laneCount = 16 / laneWidth;
-      if (operands.length != 2 + laneCount) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, (2 + laneCount).toString(), operands.length.toString(10)
-        );
-        compiler.currentType = Type.v128;
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
       let mask = new Uint8Array(16);
       let maxIdx = (laneCount << 1) - 1;
       for (let i = 0; i < laneCount; ++i) {
         let operand = operands[2 + i];
-        arg2 = module.precomputeExpression(
+        let argN = module.precomputeExpression(
           compiler.compileExpression(operand, Type.u8, ConversionKind.IMPLICIT, WrapMode.NONE)
         );
-        if (getExpressionId(arg2) != ExpressionId.Const) {
+        if (getExpressionId(argN) != ExpressionId.Const) {
           compiler.error(
             DiagnosticCode.Expression_must_be_a_compile_time_constant,
             operand.range
@@ -3365,8 +3110,8 @@ export function compileCall(
           compiler.currentType = Type.v128;
           return module.createUnreachable();
         }
-        assert(getExpressionType(arg2) == NativeType.I32);
-        let idx = getConstValueI32(arg2);
+        assert(getExpressionType(argN) == NativeType.I32);
+        let idx = getConstValueI32(argN);
         if (idx < 0 || idx > maxIdx) {
           compiler.error(
             DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
@@ -3415,1301 +3160,585 @@ export function compileCall(
       compiler.currentType = Type.v128;
       return module.createSIMDShuffle(arg0, arg1, mask);
     }
-    case BuiltinSymbols.v128_add: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:
-        case TypeKind.U8:  { op = BinaryOp.AddVecI8x16; break; }
-        case TypeKind.I16:
-        case TypeKind.U16: { op = BinaryOp.AddVecI16x8; break; }
-        case TypeKind.I32:
-        case TypeKind.U32: { op = BinaryOp.AddVecI32x4; break; }
-        case TypeKind.I64:
-        case TypeKind.U64: { op = BinaryOp.AddVecI64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          op = compiler.options.isWasm64
-            ? BinaryOp.AddVecI64x2
-            : BinaryOp.AddVecI32x4;
-          break;
-        }
-        case TypeKind.F32: { op = BinaryOp.AddVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.AddVecF64x2; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_sub: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:
-        case TypeKind.U8:  { op = BinaryOp.SubVecI8x16; break; }
-        case TypeKind.I16:
-        case TypeKind.U16: { op = BinaryOp.SubVecI16x8; break; }
-        case TypeKind.I32:
-        case TypeKind.U32: { op = BinaryOp.SubVecI32x4; break; }
-        case TypeKind.I64:
-        case TypeKind.U64: { op = BinaryOp.SubVecI64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          op = compiler.options.isWasm64
-            ? BinaryOp.SubVecI64x2
-            : BinaryOp.SubVecI32x4;
-          break;
-        }
-        case TypeKind.F32: { op = BinaryOp.SubVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.SubVecF64x2; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_mul: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:
-        case TypeKind.U8:  { op = BinaryOp.MulVecI8x16; break; }
-        case TypeKind.I16:
-        case TypeKind.U16: { op = BinaryOp.MulVecI16x8; break; }
-        case TypeKind.I32:
-        case TypeKind.U32: { op = BinaryOp.MulVecI32x4; break; }
-        case TypeKind.F32: { op = BinaryOp.MulVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.MulVecF64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          if (!compiler.options.isWasm64) {
-            op = BinaryOp.MulVecI32x4;
-            break;
-          }
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_div: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.F32: { op = BinaryOp.DivVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.DivVecF64x2; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_neg: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: UnaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:
-        case TypeKind.U8:  { op = UnaryOp.NegVecI8x16; break; }
-        case TypeKind.I16:
-        case TypeKind.U16: { op = UnaryOp.NegVecI16x8; break; }
-        case TypeKind.I32:
-        case TypeKind.U32: { op = UnaryOp.NegVecI32x4; break; }
-        case TypeKind.I64:
-        case TypeKind.U64: { op = UnaryOp.NegVecI64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          op = compiler.options.isWasm64
-            ? UnaryOp.NegVecI64x2
-            : UnaryOp.NegVecI32x4;
-          break;
-        }
-        case TypeKind.F32: { op = UnaryOp.NegVecF32x4; break; }
-        case TypeKind.F64: { op = UnaryOp.NegVecF64x2; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createUnary(op, arg0);
-    }
-    case BuiltinSymbols.v128_add_saturate: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:  { op = BinaryOp.AddSatSVecI8x16; break; }
-        case TypeKind.U8:  { op = BinaryOp.AddSatUVecI8x16; break; }
-        case TypeKind.I16: { op = BinaryOp.AddSatSVecI16x8; break; }
-        case TypeKind.U16: { op = BinaryOp.AddSatUVecI16x8; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_sub_saturate: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:  { op = BinaryOp.SubSatSVecI8x16; break; }
-        case TypeKind.U8:  { op = BinaryOp.SubSatUVecI8x16; break; }
-        case TypeKind.I16: { op = BinaryOp.SubSatSVecI16x8; break; }
-        case TypeKind.U16: { op = BinaryOp.SubSatUVecI16x8; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_shl: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: SIMDShiftOp;
-      switch (type.kind) {
-        case TypeKind.I8:
-        case TypeKind.U8:  { op = SIMDShiftOp.ShlVecI8x16; break; }
-        case TypeKind.I16:
-        case TypeKind.U16: { op = SIMDShiftOp.ShlVecI16x8; break; }
-        case TypeKind.I32:
-        case TypeKind.U32: { op = SIMDShiftOp.ShlVecI32x4; break; }
-        case TypeKind.I64:
-        case TypeKind.U64: { op = SIMDShiftOp.ShlVecI64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          op = compiler.options.isWasm64
-            ? SIMDShiftOp.ShlVecI64x2
-            : SIMDShiftOp.ShlVecI32x4;
-          break;
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createSIMDShift(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_shr: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: SIMDShiftOp;
-      switch (type.kind) {
-        case TypeKind.I8:  { op = SIMDShiftOp.ShrSVecI8x16; break; }
-        case TypeKind.U8:  { op = SIMDShiftOp.ShrUVecI8x16; break; }
-        case TypeKind.I16: { op = SIMDShiftOp.ShrSVecI16x8; break; }
-        case TypeKind.U16: { op = SIMDShiftOp.ShrUVecI16x8; break; }
-        case TypeKind.I32: { op = SIMDShiftOp.ShrSVecI32x4; break; }
-        case TypeKind.U32: { op = SIMDShiftOp.ShrUVecI32x4; break; }
-        case TypeKind.I64: { op = SIMDShiftOp.ShrSVecI64x2; break; }
-        case TypeKind.U64: { op = SIMDShiftOp.ShrUVecI64x2; break; }
-        case TypeKind.ISIZE: {
-          op = compiler.options.isWasm64
-          ? SIMDShiftOp.ShrSVecI64x2
-          : SIMDShiftOp.ShrSVecI32x4;
-        break;
-        }
-        case TypeKind.USIZE: {
-          op = compiler.options.isWasm64
-            ? SIMDShiftOp.ShrUVecI64x2
-            : SIMDShiftOp.ShrUVecI32x4;
-          break;
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createSIMDShift(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_and: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(BinaryOp.AndVec128, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_or: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(BinaryOp.OrVec128, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_xor: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(BinaryOp.XorVec128, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_not: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createUnary(UnaryOp.NotVec128, arg0);
-    }
-    case BuiltinSymbols.v128_bitselect: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 3) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "3", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg2 = compiler.compileExpression(operands[2], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createSIMDBitselect(arg0, arg1, arg2);
-    }
-    case BuiltinSymbols.v128_any_true: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.bool;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: UnaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:
-        case TypeKind.U8:  { op = UnaryOp.AnyTrueVecI8x16; break; }
-        case TypeKind.I16:
-        case TypeKind.U16: { op = UnaryOp.AnyTrueVecI16x8; break; }
-        case TypeKind.I32:
-        case TypeKind.U32: { op = UnaryOp.AnyTrueVecI32x4; break; }
-        case TypeKind.I64:
-        case TypeKind.U64: { op = UnaryOp.AnyTrueVecI64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          op = compiler.options.isWasm64
-            ? UnaryOp.AnyTrueVecI64x2
-            : UnaryOp.AnyTrueVecI32x4;
-          break;
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.bool;
-      return module.createUnary(op, arg0);
-    }
-    case BuiltinSymbols.v128_all_true: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.bool;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: UnaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:
-        case TypeKind.U8:  { op = UnaryOp.AllTrueVecI8x16; break; }
-        case TypeKind.I16:
-        case TypeKind.U16: { op = UnaryOp.AllTrueVecI16x8; break; }
-        case TypeKind.I32:
-        case TypeKind.U32: { op = UnaryOp.AllTrueVecI32x4; break; }
-        case TypeKind.I64:
-        case TypeKind.U64: { op = UnaryOp.AllTrueVecI64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          op = compiler.options.isWasm64
-            ? UnaryOp.AllTrueVecI64x2
-            : UnaryOp.AllTrueVecI32x4;
-          break;
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.bool;
-      return module.createUnary(op, arg0);
-    }
-    case BuiltinSymbols.v128_min: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.F32: { op = BinaryOp.MinVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.MinVecF64x2; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_max: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.F32: { op = BinaryOp.MaxVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.MaxVecF64x2; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_abs: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: UnaryOp;
-      switch (type.kind) {
-        case TypeKind.F32: { op = UnaryOp.AbsVecF32x4; break; }
-        case TypeKind.F64: { op = UnaryOp.AbsVecF64x2; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createUnary(op, arg0);
-    }
-    case BuiltinSymbols.v128_sqrt: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: UnaryOp;
-      switch (type.kind) {
-        case TypeKind.F32: { op = UnaryOp.SqrtVecF32x4; break; }
-        case TypeKind.F64: { op = UnaryOp.SqrtVecF64x2; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createUnary(op, arg0);
-    }
-    case BuiltinSymbols.v128_eq: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:
-        case TypeKind.U8:  { op = BinaryOp.EqVecI8x16; break; }
-        case TypeKind.I16:
-        case TypeKind.U16: { op = BinaryOp.EqVecI16x8; break; }
-        case TypeKind.I32:
-        case TypeKind.U32: { op = BinaryOp.EqVecI32x4; break; }
-        case TypeKind.F32: { op = BinaryOp.EqVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.EqVecF64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          if (!compiler.options.isWasm64) {
-            op = BinaryOp.EqVecI32x4;
-            break;
-          }
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_ne: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:
-        case TypeKind.U8:  { op = BinaryOp.NeVecI8x16; break; }
-        case TypeKind.I16:
-        case TypeKind.U16: { op = BinaryOp.NeVecI16x8; break; }
-        case TypeKind.I32:
-        case TypeKind.U32: { op = BinaryOp.NeVecI32x4; break; }
-        case TypeKind.F32: { op = BinaryOp.NeVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.NeVecF64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          if (!compiler.options.isWasm64) {
-            op = BinaryOp.NeVecI32x4;
-            break;
-          }
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_lt: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:  { op = BinaryOp.LtSVecI8x16; break; }
-        case TypeKind.U8:  { op = BinaryOp.LtUVecI8x16; break; }
-        case TypeKind.I16: { op = BinaryOp.LtSVecI16x8; break; }
-        case TypeKind.U16: { op = BinaryOp.LtUVecI16x8; break; }
-        case TypeKind.I32: { op = BinaryOp.LtSVecI32x4; break; }
-        case TypeKind.U32: { op = BinaryOp.LtUVecI32x4; break; }
-        case TypeKind.F32: { op = BinaryOp.LtVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.LtVecF64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          if (!compiler.options.isWasm64) {
-            op = type.kind == TypeKind.ISIZE
-              ? BinaryOp.LtSVecI32x4
-              : BinaryOp.LtUVecI32x4;
-            break;
-          }
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_le: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:  { op = BinaryOp.LeSVecI8x16; break; }
-        case TypeKind.U8:  { op = BinaryOp.LeUVecI8x16; break; }
-        case TypeKind.I16: { op = BinaryOp.LeSVecI16x8; break; }
-        case TypeKind.U16: { op = BinaryOp.LeUVecI16x8; break; }
-        case TypeKind.I32: { op = BinaryOp.LeSVecI32x4; break; }
-        case TypeKind.U32: { op = BinaryOp.LeUVecI32x4; break; }
-        case TypeKind.F32: { op = BinaryOp.LeVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.LeVecF64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          if (!compiler.options.isWasm64) {
-            op = type.kind == TypeKind.ISIZE
-              ? BinaryOp.LeSVecI32x4
-              : BinaryOp.LeUVecI32x4;
-            break;
-          }
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
-    case BuiltinSymbols.v128_gt: {
-      if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
-        return module.createUnreachable();
-      }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.range
-        );
-        return module.createUnreachable();
-      }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:  { op = BinaryOp.GtSVecI8x16; break; }
-        case TypeKind.U8:  { op = BinaryOp.GtUVecI8x16; break; }
-        case TypeKind.I16: { op = BinaryOp.GtSVecI16x8; break; }
-        case TypeKind.U16: { op = BinaryOp.GtUVecI16x8; break; }
-        case TypeKind.I32: { op = BinaryOp.GtSVecI32x4; break; }
-        case TypeKind.U32: { op = BinaryOp.GtUVecI32x4; break; }
-        case TypeKind.F32: { op = BinaryOp.GtVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.GtVecF64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          if (!compiler.options.isWasm64) {
-            op = type.kind == TypeKind.ISIZE
-              ? BinaryOp.GtSVecI32x4
-              : BinaryOp.GtUVecI32x4;
-            break;
-          }
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
-        }
-      }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
-      return module.createBinary(op, arg0, arg1);
-    }
+    case BuiltinSymbols.v128_add: // any_binary<T!>(a: v128, b: v128) -> v128
+    case BuiltinSymbols.v128_sub:
+    case BuiltinSymbols.v128_mul:
+    case BuiltinSymbols.v128_div:
+    case BuiltinSymbols.v128_add_saturate:
+    case BuiltinSymbols.v128_sub_saturate:
+    case BuiltinSymbols.v128_min:
+    case BuiltinSymbols.v128_max:
+    case BuiltinSymbols.v128_eq:
+    case BuiltinSymbols.v128_ne:
+    case BuiltinSymbols.v128_lt:
+    case BuiltinSymbols.v128_le:
+    case BuiltinSymbols.v128_gt:
     case BuiltinSymbols.v128_ge: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      if (operands.length != 2) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "2", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let type = typeArguments[0];
-      if (!type.is(TypeFlags.VALUE)) {
+      let type = typeArguments![0];
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
-          reportNode.range
+          reportNode.typeArgumentsRange
         );
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      let op: BinaryOp;
-      switch (type.kind) {
-        case TypeKind.I8:  { op = BinaryOp.GeSVecI8x16; break; }
-        case TypeKind.U8:  { op = BinaryOp.GeUVecI8x16; break; }
-        case TypeKind.I16: { op = BinaryOp.GeSVecI16x8; break; }
-        case TypeKind.U16: { op = BinaryOp.GeUVecI16x8; break; }
-        case TypeKind.I32: { op = BinaryOp.GeSVecI32x4; break; }
-        case TypeKind.U32: { op = BinaryOp.GeUVecI32x4; break; }
-        case TypeKind.F32: { op = BinaryOp.GeVecF32x4; break; }
-        case TypeKind.F64: { op = BinaryOp.GeVecF64x2; break; }
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          if (!compiler.options.isWasm64) {
-            op = type.kind == TypeKind.ISIZE
-              ? BinaryOp.GeSVecI32x4
-              : BinaryOp.GeUVecI32x4;
-            break;
+      let op: BinaryOp = -1;
+      switch (prototype.internalName) {
+        case BuiltinSymbols.v128_add: {
+          switch (type.kind) {
+            case TypeKind.I8:
+            case TypeKind.U8:  { op = BinaryOp.AddVecI8x16; break; }
+            case TypeKind.I16:
+            case TypeKind.U16: { op = BinaryOp.AddVecI16x8; break; }
+            case TypeKind.I32:
+            case TypeKind.U32: { op = BinaryOp.AddVecI32x4; break; }
+            case TypeKind.I64:
+            case TypeKind.U64: { op = BinaryOp.AddVecI64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              op = compiler.options.isWasm64
+                ? BinaryOp.AddVecI64x2
+                : BinaryOp.AddVecI32x4;
+              break;
+            }
+            case TypeKind.F32: { op = BinaryOp.AddVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.AddVecF64x2; break; }
           }
+          break;
         }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
+        case BuiltinSymbols.v128_sub: {
+          switch (type.kind) {
+            case TypeKind.I8:
+            case TypeKind.U8:  { op = BinaryOp.SubVecI8x16; break; }
+            case TypeKind.I16:
+            case TypeKind.U16: { op = BinaryOp.SubVecI16x8; break; }
+            case TypeKind.I32:
+            case TypeKind.U32: { op = BinaryOp.SubVecI32x4; break; }
+            case TypeKind.I64:
+            case TypeKind.U64: { op = BinaryOp.SubVecI64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              op = compiler.options.isWasm64
+                ? BinaryOp.SubVecI64x2
+                : BinaryOp.SubVecI32x4;
+              break;
+            }
+            case TypeKind.F32: { op = BinaryOp.SubVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.SubVecF64x2; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_mul: {
+          switch (type.kind) {
+            case TypeKind.I8:
+            case TypeKind.U8:  { op = BinaryOp.MulVecI8x16; break; }
+            case TypeKind.I16:
+            case TypeKind.U16: { op = BinaryOp.MulVecI16x8; break; }
+            case TypeKind.I32:
+            case TypeKind.U32: { op = BinaryOp.MulVecI32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.MulVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.MulVecF64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              if (!compiler.options.isWasm64) op = BinaryOp.MulVecI32x4;
+              break;
+            }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_div: {
+          switch (type.kind) {
+            case TypeKind.F32: { op = BinaryOp.DivVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.DivVecF64x2; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_add_saturate: {
+          switch (type.kind) {
+            case TypeKind.I8:  { op = BinaryOp.AddSatSVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.AddSatUVecI8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.AddSatSVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.AddSatUVecI16x8; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_sub_saturate: {
+          switch (type.kind) {
+            case TypeKind.I8:  { op = BinaryOp.SubSatSVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.SubSatUVecI8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.SubSatSVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.SubSatUVecI16x8; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_min: {
+          switch (type.kind) {
+            case TypeKind.F32: { op = BinaryOp.MinVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.MinVecF64x2; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_max: {
+          switch (type.kind) {
+            case TypeKind.F32: { op = BinaryOp.MaxVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.MaxVecF64x2; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_eq: {
+          switch (type.kind) {
+            case TypeKind.I8:
+            case TypeKind.U8:  { op = BinaryOp.EqVecI8x16; break; }
+            case TypeKind.I16:
+            case TypeKind.U16: { op = BinaryOp.EqVecI16x8; break; }
+            case TypeKind.I32:
+            case TypeKind.U32: { op = BinaryOp.EqVecI32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.EqVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.EqVecF64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              if (!compiler.options.isWasm64) op = BinaryOp.EqVecI32x4;
+              break;
+            }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_ne: {
+          switch (type.kind) {
+            case TypeKind.I8:
+            case TypeKind.U8:  { op = BinaryOp.NeVecI8x16; break; }
+            case TypeKind.I16:
+            case TypeKind.U16: { op = BinaryOp.NeVecI16x8; break; }
+            case TypeKind.I32:
+            case TypeKind.U32: { op = BinaryOp.NeVecI32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.NeVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.NeVecF64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              if (!compiler.options.isWasm64) op = BinaryOp.NeVecI32x4;
+              break;
+            }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_lt: {
+          switch (type.kind) {
+            case TypeKind.I8:  { op = BinaryOp.LtSVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.LtUVecI8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.LtSVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.LtUVecI16x8; break; }
+            case TypeKind.I32: { op = BinaryOp.LtSVecI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.LtUVecI32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.LtVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.LtVecF64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              if (!compiler.options.isWasm64) {
+                op = type.kind == TypeKind.ISIZE
+                  ? BinaryOp.LtSVecI32x4
+                  : BinaryOp.LtUVecI32x4;
+              }
+              break;
+            }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_le: {
+          switch (type.kind) {
+            case TypeKind.I8:  { op = BinaryOp.LeSVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.LeUVecI8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.LeSVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.LeUVecI16x8; break; }
+            case TypeKind.I32: { op = BinaryOp.LeSVecI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.LeUVecI32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.LeVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.LeVecF64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              if (!compiler.options.isWasm64) {
+                op = type.kind == TypeKind.ISIZE
+                  ? BinaryOp.LeSVecI32x4
+                  : BinaryOp.LeUVecI32x4;
+              }
+              break;
+            }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_gt: {
+          switch (type.kind) {
+            case TypeKind.I8:  { op = BinaryOp.GtSVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.GtUVecI8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.GtSVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.GtUVecI16x8; break; }
+            case TypeKind.I32: { op = BinaryOp.GtSVecI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.GtUVecI32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.GtVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.GtVecF64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              if (!compiler.options.isWasm64) {
+                op = type.kind == TypeKind.ISIZE
+                  ? BinaryOp.GtSVecI32x4
+                  : BinaryOp.GtUVecI32x4;
+              }
+              break;
+            }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_ge: {
+          switch (type.kind) {
+            case TypeKind.I8:  { op = BinaryOp.GeSVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.GeUVecI8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.GeSVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.GeUVecI16x8; break; }
+            case TypeKind.I32: { op = BinaryOp.GeSVecI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.GeUVecI32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.GeVecF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.GeVecF64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              if (!compiler.options.isWasm64) {
+                op = type.kind == TypeKind.ISIZE
+                  ? BinaryOp.GeSVecI32x4
+                  : BinaryOp.GeUVecI32x4;
+              }
+              break;
+            }
+          }
+          break;
         }
       }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      if (op == -1) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
       compiler.currentType = Type.v128;
       return module.createBinary(op, arg0, arg1);
     }
-    case BuiltinSymbols.v128_convert: {
+    case BuiltinSymbols.v128_neg: // any_unary<T!>(a: v128) -> v128
+    case BuiltinSymbols.v128_abs:
+    case BuiltinSymbols.v128_sqrt:
+    case BuiltinSymbols.v128_convert:
+    case BuiltinSymbols.v128_trunc: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
-        return module.createUnreachable();
-      }
-      let fromType = typeArguments[0];
-      if (!fromType.is(TypeFlags.VALUE)) {
+      let type = typeArguments![0];
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.range
         );
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      let op: UnaryOp;
-      switch (fromType.kind) {
-        case TypeKind.I32: { op = UnaryOp.ConvertSVecI32x4ToVecF32x4; break; }
-        case TypeKind.U32: { op = UnaryOp.ConvertUVecI32x4ToVecF32x4; break; }
-        case TypeKind.I64: { op = UnaryOp.ConvertSVecI64x2ToVecF64x2; break; }
-        case TypeKind.U64: { op = UnaryOp.ConvertUVecI64x2ToVecF64x2; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
+      let op: UnaryOp = -1;
+      switch (prototype.internalName) {
+        case BuiltinSymbols.v128_neg: {
+          switch (type.kind) {
+            case TypeKind.I8:
+            case TypeKind.U8:  { op = UnaryOp.NegVecI8x16; break; }
+            case TypeKind.I16:
+            case TypeKind.U16: { op = UnaryOp.NegVecI16x8; break; }
+            case TypeKind.I32:
+            case TypeKind.U32: { op = UnaryOp.NegVecI32x4; break; }
+            case TypeKind.I64:
+            case TypeKind.U64: { op = UnaryOp.NegVecI64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              op = compiler.options.isWasm64
+                ? UnaryOp.NegVecI64x2
+                : UnaryOp.NegVecI32x4;
+              break;
+            }
+            case TypeKind.F32: { op = UnaryOp.NegVecF32x4; break; }
+            case TypeKind.F64: { op = UnaryOp.NegVecF64x2; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_abs: {
+          switch (type.kind) {
+            case TypeKind.F32: { op = UnaryOp.AbsVecF32x4; break; }
+            case TypeKind.F64: { op = UnaryOp.AbsVecF64x2; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_sqrt: {
+          switch (type.kind) {
+            case TypeKind.F32: { op = UnaryOp.SqrtVecF32x4; break; }
+            case TypeKind.F64: { op = UnaryOp.SqrtVecF64x2; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_convert: {
+          switch (type.kind) {
+            case TypeKind.I32: { op = UnaryOp.ConvertSVecI32x4ToVecF32x4; break; }
+            case TypeKind.U32: { op = UnaryOp.ConvertUVecI32x4ToVecF32x4; break; }
+            case TypeKind.I64: { op = UnaryOp.ConvertSVecI64x2ToVecF64x2; break; }
+            case TypeKind.U64: { op = UnaryOp.ConvertUVecI64x2ToVecF64x2; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_trunc: {
+          switch (type.kind) {
+            case TypeKind.I32: { op = UnaryOp.TruncSatSVecF32x4ToVecI32x4; break; }
+            case TypeKind.U32: { op = UnaryOp.TruncSatUVecF32x4ToVecI32x4; break; }
+            case TypeKind.I64: { op = UnaryOp.TruncSatSVecF64x2ToVecI64x2; break; }
+            case TypeKind.U64: { op = UnaryOp.TruncSatUVecF64x2ToVecI64x2; break; }
+          }
+          break;
         }
       }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      if (op == -1) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
       compiler.currentType = Type.v128;
       return module.createUnary(op, arg0);
     }
-    case BuiltinSymbols.v128_trunc: {
+    case BuiltinSymbols.v128_shl: // any_shift<T!>(a: v128, b: i32) -> v128
+    case BuiltinSymbols.v128_shr: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
-      compiler.currentType = Type.v128;
-      if (!(typeArguments && typeArguments.length == 1)) {
-        compiler.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.range, "1", typeArguments ? typeArguments.length.toString() : "0"
-        );
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      if (operands.length != 1) {
+      let type = typeArguments![0];
+      if (type.is(TypeFlags.REFERENCE)) {
         compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
         );
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      let toType = typeArguments[0];
-      if (!toType.is(TypeFlags.VALUE)) {
+      let op: SIMDShiftOp = -1;
+      switch (prototype.internalName) {
+        case BuiltinSymbols.v128_shl: {
+          switch (type.kind) {
+            case TypeKind.I8:
+            case TypeKind.U8:  { op = SIMDShiftOp.ShlVecI8x16; break; }
+            case TypeKind.I16:
+            case TypeKind.U16: { op = SIMDShiftOp.ShlVecI16x8; break; }
+            case TypeKind.I32:
+            case TypeKind.U32: { op = SIMDShiftOp.ShlVecI32x4; break; }
+            case TypeKind.I64:
+            case TypeKind.U64: { op = SIMDShiftOp.ShlVecI64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              op = compiler.options.isWasm64
+                ? SIMDShiftOp.ShlVecI64x2
+                : SIMDShiftOp.ShlVecI32x4;
+              break;
+            }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_shr: {
+          switch (type.kind) {
+            case TypeKind.I8:  { op = SIMDShiftOp.ShrSVecI8x16; break; }
+            case TypeKind.U8:  { op = SIMDShiftOp.ShrUVecI8x16; break; }
+            case TypeKind.I16: { op = SIMDShiftOp.ShrSVecI16x8; break; }
+            case TypeKind.U16: { op = SIMDShiftOp.ShrUVecI16x8; break; }
+            case TypeKind.I32: { op = SIMDShiftOp.ShrSVecI32x4; break; }
+            case TypeKind.U32: { op = SIMDShiftOp.ShrUVecI32x4; break; }
+            case TypeKind.I64: { op = SIMDShiftOp.ShrSVecI64x2; break; }
+            case TypeKind.U64: { op = SIMDShiftOp.ShrUVecI64x2; break; }
+            case TypeKind.ISIZE: {
+              op = compiler.options.isWasm64
+                ? SIMDShiftOp.ShrSVecI64x2
+                : SIMDShiftOp.ShrSVecI32x4;
+              break;
+            }
+            case TypeKind.USIZE: {
+              op = compiler.options.isWasm64
+                ? SIMDShiftOp.ShrUVecI64x2
+                : SIMDShiftOp.ShrUVecI32x4;
+              break;
+            }
+          }
+          break;
+        }
+      }
+      if (op == -1) {
         compiler.error(
           DiagnosticCode.Operation_not_supported,
           reportNode.range
         );
+        compiler.currentType = Type.v128;
         return module.createUnreachable();
       }
-      let op: UnaryOp;
-      switch (toType.kind) {
-        case TypeKind.I32: { op = UnaryOp.TruncSatSVecF32x4ToVecI32x4; break; }
-        case TypeKind.U32: { op = UnaryOp.TruncSatUVecF32x4ToVecI32x4; break; }
-        case TypeKind.I64: { op = UnaryOp.TruncSatSVecF64x2ToVecI64x2; break; }
-        case TypeKind.U64: { op = UnaryOp.TruncSatUVecF64x2ToVecI64x2; break; }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.range
-          );
-          return module.createUnreachable();
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], Type.i32, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.v128;
+      return module.createSIMDShift(op, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_and: // any_bitwise_binary(a: v128, b: v128) -> v128
+    case BuiltinSymbols.v128_or:
+    case BuiltinSymbols.v128_xor: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let op: BinaryOp = -1;
+      switch (prototype.internalName) {
+        default: assert(false);
+        case BuiltinSymbols.v128_and: { op = BinaryOp.AndVec128; break; }
+        case BuiltinSymbols.v128_or:  { op = BinaryOp.OrVec128; break; }
+        case BuiltinSymbols.v128_xor: { op = BinaryOp.XorVec128; break; }
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      return module.createBinary(op, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_not: { // any_bitwise_unary(a: v128) -> v128
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      return module.createUnary(UnaryOp.NotVec128, arg0);
+    }
+    case BuiltinSymbols.v128_bitselect: { // bitselect(v1: v128, v2: v128, c: v128) -> v128
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 3, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      let arg2 = compiler.compileExpression(operands[2], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      return module.createSIMDBitselect(arg0, arg1, arg2);
+    }
+    case BuiltinSymbols.v128_any_true: // any_test<T!>(a: v128) -> bool
+    case BuiltinSymbols.v128_all_true: {
+      if (!compiler.options.hasFeature(Feature.SIMD)) break;
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.bool;
+        return module.createUnreachable();
+      }
+      let type = typeArguments![0];
+      if (type.is(TypeFlags.REFERENCE)) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        return module.createUnreachable();
+      }
+      let op: UnaryOp = -1;
+      switch (prototype.internalName) {
+        default: assert(false);
+        case BuiltinSymbols.v128_any_true: {
+          switch (type.kind) {
+            case TypeKind.I8:
+            case TypeKind.U8:  { op = UnaryOp.AnyTrueVecI8x16; break; }
+            case TypeKind.I16:
+            case TypeKind.U16: { op = UnaryOp.AnyTrueVecI16x8; break; }
+            case TypeKind.I32:
+            case TypeKind.U32: { op = UnaryOp.AnyTrueVecI32x4; break; }
+            case TypeKind.I64:
+            case TypeKind.U64: { op = UnaryOp.AnyTrueVecI64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              op = compiler.options.isWasm64
+                ? UnaryOp.AnyTrueVecI64x2
+                : UnaryOp.AnyTrueVecI32x4;
+              break;
+            }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_all_true: {
+          switch (type.kind) {
+            case TypeKind.I8:
+            case TypeKind.U8:  { op = UnaryOp.AllTrueVecI8x16; break; }
+            case TypeKind.I16:
+            case TypeKind.U16: { op = UnaryOp.AllTrueVecI16x8; break; }
+            case TypeKind.I32:
+            case TypeKind.U32: { op = UnaryOp.AllTrueVecI32x4; break; }
+            case TypeKind.I64:
+            case TypeKind.U64: { op = UnaryOp.AllTrueVecI64x2; break; }
+            case TypeKind.ISIZE:
+            case TypeKind.USIZE: {
+              op = compiler.options.isWasm64
+                ? UnaryOp.AllTrueVecI64x2
+                : UnaryOp.AllTrueVecI32x4;
+              break;
+            }
+          }
+          break;
         }
       }
-      arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
-      compiler.currentType = Type.v128;
+      if (op == -1) {
+        compiler.error(
+          DiagnosticCode.Operation_not_supported,
+          reportNode.typeArgumentsRange
+        );
+        compiler.currentType = Type.bool;
+        return module.createUnreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, ConversionKind.IMPLICIT, WrapMode.NONE);
+      compiler.currentType = Type.bool;
       return module.createUnary(op, arg0);
     }
 
     // === GC integration =========================================================================
 
     case BuiltinSymbols.iterateRoots: {
-      if (typeArguments) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          reportNode.range, prototype.internalName
-        );
-      }
-      if (operands.length != 1) {
-        compiler.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          reportNode.range, "1", operands.length.toString(10)
-        );
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
         compiler.currentType = Type.void;
         return module.createUnreachable();
       }
       let expr = compiler.compileExpressionRetainType(operands[0], Type.u32, WrapMode.NONE);
       let type = compiler.currentType;
       let signatureReference = type.signatureReference;
-      compiler.currentType = Type.void;
       if (
         !type.is(TypeFlags.REFERENCE) ||
         !signatureReference ||
@@ -4720,25 +3749,28 @@ export function compileCall(
           DiagnosticCode.Type_0_is_not_assignable_to_type_1,
           reportNode.range, type.toString(), "(ref: usize) => void"
         );
+        compiler.currentType = Type.void;
         return module.createUnreachable();
       }
-      compiler.currentType = Type.void;
       // just emit a call even if the function doesn't yet exist
       compiler.needsIterateRoots = true;
+      compiler.currentType = Type.void;
       return module.createCall("~iterateRoots", [ expr ], NativeType.None);
     }
   }
 
   // try to defer inline asm to a concrete built-in
-  var expr = tryDeferASM(compiler, prototype, operands, reportNode);
-  if (expr) {
-    if (typeArguments) {
-      compiler.error(
-        DiagnosticCode.Type_0_is_not_generic,
-        reportNode.range, prototype.internalName
-      );
+  {
+    let expr = tryDeferASM(compiler, prototype, operands, reportNode);
+    if (expr) {
+      if (typeArguments) {
+        compiler.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.typeArgumentsRange, prototype.internalName
+        );
+      }
+      return expr;
     }
-    return expr;
   }
   compiler.error(
     DiagnosticCode.Cannot_find_name_0,
