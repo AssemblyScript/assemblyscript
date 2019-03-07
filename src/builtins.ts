@@ -499,6 +499,10 @@ export function compileCall(
   // whether worth or not should probably be tested once it's known if/how embedders handle it.
   // search: createSelect
 
+  // NOTE that consolidation of individual instructions into a single case isn't exactly scientific
+  // below, but rather done to make this file easier to work with. If there was a general rule it'd
+  // most likely be "three or more instructions that only differ in their actual opcode".
+
   switch (prototype.internalName) {
 
     // === Static type evaluation =================================================================
@@ -1139,8 +1143,7 @@ export function compileCall(
       return module.createSelect(
         module.createTeeLocal(tempLocal0.index, arg0),
         module.createTeeLocal(tempLocal1.index, arg1),
-        module.createBinary(
-          op,
+        module.createBinary(op,
           module.createGetLocal(tempLocal0.index, nativeType),
           module.createGetLocal(tempLocal1.index, nativeType)
         )
@@ -1163,133 +1166,59 @@ export function compileCall(
         return module.createUnreachable();
       }
       let arg1 = compiler.compileExpression(operands[1], type, ConversionKind.IMPLICIT, WrapMode.WRAP);
-      let expr: ExpressionRef;
+      let op: BinaryOp;
       switch (type.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
-        case TypeKind.I32: {
-          let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(type, !flow.canOverflow(arg0, type));
-          let tempLocal1 = flow.getAndFreeTempLocal(type, !flow.canOverflow(arg1, type));
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(BinaryOp.LtI32,
-              module.createGetLocal(tempLocal0.index, NativeType.I32),
-              module.createGetLocal(tempLocal1.index, NativeType.I32)
-            )
-          );
-          break;
-        }
+        case TypeKind.I32: { op = BinaryOp.LtI32; break; }
         case TypeKind.U8:
         case TypeKind.U16:
         case TypeKind.U32:
-        case TypeKind.BOOL: {
-          let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(type, !flow.canOverflow(arg0, type));
-          let tempLocal1 = flow.getAndFreeTempLocal(type, !flow.canOverflow(arg1, type));
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(BinaryOp.LtU32,
-              module.createGetLocal(tempLocal0.index, NativeType.I32),
-              module.createGetLocal(tempLocal1.index, NativeType.I32)
-            )
-          );
-          break;
-        }
-        case TypeKind.I64: {
-          let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(Type.i64, false);
-          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(BinaryOp.LtI64,
-              module.createGetLocal(tempLocal0.index, NativeType.I64),
-              module.createGetLocal(tempLocal1.index, NativeType.I64)
-            )
-          );
-          break;
-        }
-        case TypeKind.U64: {
-          let flow = compiler.currentFlow;
-          let tempLocal0 = flow.getTempLocal(Type.i64, false);
-          let tempLocal1 = flow.getAndFreeTempLocal(Type.i64, false);
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(BinaryOp.LtU64,
-              module.createGetLocal(tempLocal0.index, NativeType.I64),
-              module.createGetLocal(tempLocal1.index, NativeType.I64)
-            )
-          );
-          break;
-        }
+        case TypeKind.BOOL: { op = BinaryOp.LtU32; break; }
+        case TypeKind.I64:  { op = BinaryOp.LtI64; break; }
+        case TypeKind.U64:  { op = BinaryOp.LtU64; break; }
         case TypeKind.ISIZE: {
-          let flow = compiler.currentFlow;
-          let usizeType = compiler.options.usizeType;
-          let nativeSizeType = compiler.options.nativeSizeType;
-          let tempLocal0 = flow.getTempLocal(usizeType, false);
-          let tempLocal1 = flow.getAndFreeTempLocal(usizeType, false);
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(
-              nativeSizeType == NativeType.I64
-                ? BinaryOp.LtI64
-                : BinaryOp.LtI32,
-              module.createGetLocal(tempLocal0.index, nativeSizeType),
-              module.createGetLocal(tempLocal1.index, nativeSizeType)
-            )
-          );
+          op = compiler.options.isWasm64
+            ? BinaryOp.LtI64
+            : BinaryOp.LtI32;
           break;
         }
         case TypeKind.USIZE: {
-          let flow = compiler.currentFlow;
-          let usizeType = compiler.options.usizeType;
-          let nativeSizeType = compiler.options.nativeSizeType;
-          let tempLocal0 = flow.getTempLocal(usizeType, false);
-          let tempLocal1 = flow.getAndFreeTempLocal(usizeType, false);
-          flow.freeTempLocal(tempLocal0);
-          expr = module.createSelect(
-            module.createTeeLocal(tempLocal0.index, arg0),
-            module.createTeeLocal(tempLocal1.index, arg1),
-            module.createBinary(
-              nativeSizeType == NativeType.I64
-                ? BinaryOp.LtU64
-                : BinaryOp.LtU32,
-              module.createGetLocal(tempLocal0.index, nativeSizeType),
-              module.createGetLocal(tempLocal1.index, nativeSizeType)
-            )
-          );
+          op = compiler.options.isWasm64
+            ? BinaryOp.LtU64
+            : BinaryOp.LtU32;
           break;
         }
         case TypeKind.F32: {
-          expr = module.createBinary(BinaryOp.MinF32, arg0, arg1);
-          break;
+          return module.createBinary(BinaryOp.MinF32, arg0, arg1);
         }
         case TypeKind.F64: {
-          expr = module.createBinary(BinaryOp.MinF64, arg0, arg1);
-          break;
+          return module.createBinary(BinaryOp.MinF64, arg0, arg1);
         }
-        default: { // void
+        default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
-          break;
+          return module.createUnreachable();
         }
       }
-      return expr;
+      let flow = compiler.currentFlow;
+      let nativeType = type.toNativeType();
+      let tempLocal0 = flow.getTempLocal(type, true);
+      let tempLocal1 = flow.getAndFreeTempLocal(type, true);
+      flow.freeTempLocal(tempLocal0);
+      return module.createSelect(
+        module.createTeeLocal(tempLocal0.index, arg0),
+        module.createTeeLocal(tempLocal1.index, arg1),
+        module.createBinary(op,
+          module.createGetLocal(tempLocal0.index, nativeType),
+          module.createGetLocal(tempLocal1.index, nativeType)
+        )
+      );
     }
-    case BuiltinSymbols.ceil: { // ceil<T?>(value: T) -> T
+    case BuiltinSymbols.ceil: // any_rounding<T?>(value: T) -> T
+    case BuiltinSymbols.floor: {
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
@@ -1305,7 +1234,7 @@ export function compileCall(
         );
         return module.createUnreachable();
       }
-      let expr: ExpressionRef;
+      let op: UnaryOp;
       switch (type.kind) {
         case TypeKind.I8:
         case TypeKind.I16:
@@ -1317,16 +1246,17 @@ export function compileCall(
         case TypeKind.U32:
         case TypeKind.U64:
         case TypeKind.USIZE:
-        case TypeKind.BOOL: {
-          expr = arg0;
-          break;
-        }
+        case TypeKind.BOOL: return arg0; // considered rounded
         case TypeKind.F32: {
-          expr = module.createUnary(UnaryOp.CeilF32, arg0);
+          op = prototype.internalName == BuiltinSymbols.ceil
+            ? UnaryOp.CeilF32
+            : UnaryOp.FloorF32;
           break;
         }
         case TypeKind.F64: {
-          expr = module.createUnary(UnaryOp.CeilF64, arg0);
+          op = prototype.internalName == BuiltinSymbols.ceil
+            ? UnaryOp.CeilF64
+            : UnaryOp.FloorF64;
           break;
         }
         default: {
@@ -1334,62 +1264,10 @@ export function compileCall(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
-          break;
+          return module.createUnreachable();
         }
       }
-      return expr;
-    }
-    case BuiltinSymbols.floor: { // floor<T?>(value: T) -> T
-      if (
-        checkTypeOptional(typeArguments, reportNode, compiler, true) |
-        checkArgsRequired(operands, 1, reportNode, compiler)
-      ) return module.createUnreachable();
-      let arg0 = typeArguments
-        ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.NONE)
-        : compiler.compileExpression(operands[0], Type.f64, ConversionKind.NONE, WrapMode.NONE);
-      let type = compiler.currentType;
-      if (type.is(TypeFlags.REFERENCE)) {
-        compiler.error(
-          DiagnosticCode.Operation_not_supported,
-          reportNode.typeArgumentsRange
-        );
-        return module.createUnreachable();
-      }
-      let expr: ExpressionRef;
-      switch (type.kind) {
-        case TypeKind.I8:
-        case TypeKind.I16:
-        case TypeKind.I32:
-        case TypeKind.I64:
-        case TypeKind.ISIZE:
-        case TypeKind.U8:
-        case TypeKind.U16:
-        case TypeKind.U32:
-        case TypeKind.U64:
-        case TypeKind.USIZE:
-        case TypeKind.BOOL: {
-          expr = arg0;
-          break;
-        }
-        case TypeKind.F32: {
-          expr = module.createUnary(UnaryOp.FloorF32, arg0);
-          break;
-        }
-        case TypeKind.F64: {
-          expr = module.createUnary(UnaryOp.FloorF64, arg0);
-          break;
-        }
-        default: {
-          compiler.error(
-            DiagnosticCode.Operation_not_supported,
-            reportNode.typeArgumentsRange
-          );
-          expr = module.createUnreachable();
-          break;
-        }
-      }
-      return expr;
+      return module.createUnary(op, arg0);
     }
     case BuiltinSymbols.copysign: { // copysign<T?>(left: T, right: T) -> T
       if (
@@ -1408,27 +1286,20 @@ export function compileCall(
         return module.createUnreachable();
       }
       let arg1 = compiler.compileExpression(operands[1], type, ConversionKind.IMPLICIT, WrapMode.NONE);
-      let expr: ExpressionRef;
+      let op: BinaryOp;
       switch (type.kind) {
         // TODO: does an integer version make sense?
-        case TypeKind.F32: {
-          expr = module.createBinary(BinaryOp.CopysignF32, arg0, arg1);
-          break;
-        }
-        case TypeKind.F64: {
-          expr = module.createBinary(BinaryOp.CopysignF64, arg0, arg1);
-          break;
-        }
+        case TypeKind.F32: { op = BinaryOp.CopysignF32; break; }
+        case TypeKind.F64: { op = BinaryOp.CopysignF64; break; }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
             reportNode.typeArgumentsRange
           );
-          expr = module.createUnreachable();
-          break;
+          return module.createUnreachable();
         }
       }
-      return expr;
+      return module.createBinary(op, arg0, arg1);
     }
     case BuiltinSymbols.nearest: { // nearest<T?>(value: T) -> T
       if (
@@ -1642,7 +1513,7 @@ export function compileCall(
 
     // === Memory access ==========================================================================
 
-    case BuiltinSymbols.load: { // load<T!>(offset: usize, immOffset?: usize, immAlign?: usize) -> *
+    case BuiltinSymbols.load: { // load<T!>(offset: usize, immOffset?: usize, immAlign?: usize) -> T*
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
         checkArgsOptional(operands, 1, 3, reportNode, compiler)
@@ -1702,7 +1573,7 @@ export function compileCall(
         immAlign
       );
     }
-    case BuiltinSymbols.store: { // store<T!>(offset: usize, value: *, offset?: usize, align?: usize) -> void
+    case BuiltinSymbols.store: { // store<T!>(offset: usize, value: T*, offset?: usize, align?: usize) -> void
       compiler.currentType = Type.void;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
@@ -1785,7 +1656,7 @@ export function compileCall(
 
     // === Atomics ================================================================================
 
-    case BuiltinSymbols.atomic_load: { // load<T!>(offset: usize, immOffset?: usize) -> T
+    case BuiltinSymbols.atomic_load: { // load<T!>(offset: usize, immOffset?: usize) -> T*
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
@@ -1824,7 +1695,7 @@ export function compileCall(
         immOffset
       );
     }
-    case BuiltinSymbols.atomic_store: { // store<T!>(offset: usize, value: *, immOffset?) -> void
+    case BuiltinSymbols.atomic_store: { // store<T!>(offset: usize, value: T*, immOffset?: usize) -> void
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       compiler.currentType = Type.void;
       if (
@@ -1885,12 +1756,12 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.createAtomicStore(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset);
     }
-    case BuiltinSymbols.atomic_add:    // add<T!>(ptr, value: T, immOffset?: usize) -> T
-    case BuiltinSymbols.atomic_sub:    // sub<T!>(ptr, value: T, immOffset?: usize) -> T
-    case BuiltinSymbols.atomic_and:    // and<T!>(ptr, value: T, immOffset?: usize) -> T
-    case BuiltinSymbols.atomic_or:     // or<T!>(ptr, value: T, immOffset?: usize) -> T
-    case BuiltinSymbols.atomic_xor:    // xor<T!>(ptr, value: T, immOffset?: usize) -> T
-    case BuiltinSymbols.atomic_xchg: { // xchg<T!>(ptr, value: T, immOffset?: usize) -> T
+    case BuiltinSymbols.atomic_add: // any_atomic_binary<T!>(ptr, value: T, immOffset?: usize) -> T
+    case BuiltinSymbols.atomic_sub:
+    case BuiltinSymbols.atomic_and:
+    case BuiltinSymbols.atomic_or:
+    case BuiltinSymbols.atomic_xor:
+    case BuiltinSymbols.atomic_xchg: {
       if (!compiler.options.hasFeature(Feature.THREADS)) break;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler, true) |
@@ -1947,19 +1818,19 @@ export function compileCall(
         compiler.currentType = inType;
         return module.createUnreachable();
       }
-      let RMWOp: AtomicRMWOp;
+      let op: AtomicRMWOp;
       switch (prototype.internalName) {
         default: assert(false);
-        case BuiltinSymbols.atomic_add: { RMWOp = AtomicRMWOp.Add; break; }
-        case BuiltinSymbols.atomic_sub: { RMWOp = AtomicRMWOp.Sub; break; }
-        case BuiltinSymbols.atomic_and: { RMWOp = AtomicRMWOp.And; break; }
-        case BuiltinSymbols.atomic_or: { RMWOp = AtomicRMWOp.Or; break; }
-        case BuiltinSymbols.atomic_xor: { RMWOp = AtomicRMWOp.Xor; break; }
-        case BuiltinSymbols.atomic_xchg: { RMWOp = AtomicRMWOp.Xchg; break; }
+        case BuiltinSymbols.atomic_add:  { op = AtomicRMWOp.Add;  break; }
+        case BuiltinSymbols.atomic_sub:  { op = AtomicRMWOp.Sub;  break; }
+        case BuiltinSymbols.atomic_and:  { op = AtomicRMWOp.And;  break; }
+        case BuiltinSymbols.atomic_or:   { op = AtomicRMWOp.Or;   break; }
+        case BuiltinSymbols.atomic_xor:  { op = AtomicRMWOp.Xor;  break; }
+        case BuiltinSymbols.atomic_xchg: { op = AtomicRMWOp.Xchg; break; }
       }
       compiler.currentType = inType;
       return module.createAtomicRMW(
-        RMWOp, type.byteSize, immOffset, arg0, arg1, inType.toNativeType()
+        op, type.byteSize, immOffset, arg0, arg1, inType.toNativeType()
       );
     }
     case BuiltinSymbols.atomic_cmpxchg: { // cmpxchg<T!>(ptr: usize, expected: T, replacement: T, off?: usize): T
@@ -2254,23 +2125,17 @@ export function compileCall(
       }
       return arg0;
     }
-    case BuiltinSymbols.assert: { // assert<T?>(isTrueish: T, message?: string) -> T with T != null
-      let hasError = 0;
-      if (typeArguments) {
-        let numTypeArguments = typeArguments.length;
-        if (numTypeArguments) compiler.currentType = typeArguments[0].nonNullableType; // !
-        if (numTypeArguments != 1) {
-          compiler.error(
-            DiagnosticCode.Expected_0_type_arguments_but_got_1,
-            reportNode.range, "1", typeArguments.length.toString(10)
-          );
-          hasError = 1;
-        }
-      }
+    case BuiltinSymbols.assert: { // assert<T?>(isTrueish: T, message?: string) -> T{!= null}
       if (
-        checkArgsOptional(operands, 1, 2, reportNode, compiler) |
-        hasError
-      ) return module.createUnreachable();
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsOptional(operands, 1, 2, reportNode, compiler)
+      ) {
+        if (typeArguments) {
+          assert(typeArguments.length); // otherwise invalid, should not been set at all
+          compiler.currentType = typeArguments[0].nonNullableType;
+        }
+        return module.createUnreachable();
+      }
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], ConversionKind.IMPLICIT, WrapMode.WRAP)
         : compiler.compileExpressionRetainType(operands[0], Type.bool, WrapMode.WRAP);
@@ -2438,7 +2303,7 @@ export function compileCall(
       }
       return expr;
     }
-    case BuiltinSymbols.unchecked: {
+    case BuiltinSymbols.unchecked: { // unchecked(expr: *) -> *
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)
