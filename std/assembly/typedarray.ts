@@ -70,7 +70,7 @@ export class Int8Array extends TypedArray<i8> {
     FOREACH<Int8Array, i8>(this, callbackfn);
   }
 
-  reverse(): Int8Array {
+  reverse(): this {
     return REVERSE<Int8Array, i8>(this);
   }
 }
@@ -124,7 +124,7 @@ export class Uint8Array extends TypedArray<u8> {
     FOREACH<Uint8Array, u8>(this, callbackfn);
   }
 
-  reverse(): Uint8Array {
+  reverse(): this {
     return REVERSE<Uint8Array, u8>(this);
   }
 }
@@ -188,7 +188,7 @@ export class Uint8ClampedArray extends Uint8Array {
     FOREACH<Uint8ClampedArray, u8>(this, callbackfn);
   }
 
-  reverse(): Uint8ClampedArray {
+  reverse(): this {
     return REVERSE<Uint8ClampedArray, u8>(this);
   }
 }
@@ -242,7 +242,7 @@ export class Int16Array extends TypedArray<i16> {
     FOREACH<Int16Array, i16>(this, callbackfn);
   }
 
-  reverse(): Int16Array {
+  reverse(): this {
     return REVERSE<Int16Array, i16>(this);
   }
 }
@@ -296,7 +296,7 @@ export class Uint16Array extends TypedArray<u16> {
     FOREACH<Uint16Array, u16>(this, callbackfn);
   }
 
-  reverse(): Uint16Array {
+  reverse(): this {
     return REVERSE<Uint16Array, u16>(this);
   }
 }
@@ -350,7 +350,7 @@ export class Int32Array extends TypedArray<i32> {
     FOREACH<Int32Array, i32>(this, callbackfn);
   }
 
-  reverse(): Int32Array {
+  reverse(): this {
     return REVERSE<Int32Array, i32>(this);
   }
 }
@@ -404,7 +404,7 @@ export class Uint32Array extends TypedArray<u32> {
     FOREACH<Uint32Array, u32>(this, callbackfn);
   }
 
-  reverse(): Uint32Array {
+  reverse(): this {
     return REVERSE<Uint32Array, u32>(this);
   }
 }
@@ -458,7 +458,7 @@ export class Int64Array extends TypedArray<i64> {
     FOREACH<Int64Array, i64>(this, callbackfn);
   }
 
-  reverse(): Int64Array {
+  reverse(): this {
     return REVERSE<Int64Array, i64>(this);
   }
 }
@@ -512,7 +512,7 @@ export class Uint64Array extends TypedArray<u64> {
     FOREACH<Uint64Array, u64>(this, callbackfn);
   }
 
-  reverse(): Uint64Array {
+  reverse(): this {
     return REVERSE<Uint64Array, u64>(this);
   }
 }
@@ -566,7 +566,7 @@ export class Float32Array extends TypedArray<f32> {
     FOREACH<Float32Array, f32>(this, callbackfn);
   }
 
-  reverse(): Float32Array {
+  reverse(): this {
     return REVERSE<Float32Array, f32>(this);
   }
 }
@@ -620,7 +620,7 @@ export class Float64Array extends TypedArray<f64> {
     FOREACH<Float64Array, f64>(this, callbackfn);
   }
 
-  reverse(): Float64Array {
+  reverse(): this {
     return REVERSE<Float64Array, f64>(this);
   }
 }
