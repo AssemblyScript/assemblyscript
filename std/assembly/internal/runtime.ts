@@ -14,7 +14,7 @@ export class HEADER {
 }
 
 /** Size of the common runtime header. */
-@inline export const HEADER_SIZE: usize = (offsetof<ArrayBuffer>() + AL_MASK) & ~AL_MASK;
+@inline export const HEADER_SIZE: usize = (offsetof<HEADER>() + AL_MASK) & ~AL_MASK;
 /** Magic value used to validate common headers. */
 @inline export const HEADER_MAGIC: usize = <usize>0xA55E4B17;
 
@@ -131,7 +131,7 @@ export function REGISTER<T>(ref: usize): void {
 // === String =====================================================================================
 
 /** Size of a string header, excl. common runtime header. */
-@inline export const STRING_HEADER_SIZE: usize = (offsetof<String>() + AL_MASK) & ~AL_MASK;
+@inline export const STRING_HEADER_SIZE: usize = (offsetof<String>() + 1) & ~1; // 2 byte aligned
 
 /** Allocates a new String and returns a pointer to it. */
 @inline export function ALLOC_STRING(length: u32): String {
@@ -142,3 +142,5 @@ export function REGISTER<T>(ref: usize): void {
 @inline export function REALLOC_STRING(ref: usize, length: u32): String {
   return changetype<String>(REALLOC(ref, STRING_HEADER_SIZE + (length << 1)));
 }
+
+// ...
