@@ -14,7 +14,7 @@ export class HEADER {
 }
 
 /** Whether a GC is present or not. */
-@inline export const GC = true;
+@inline export const GC = isDefined(__REGISTER_IMPL);
 
 /** Size of the common runtime header. */
 @inline export const HEADER_SIZE: usize = GC
@@ -96,11 +96,15 @@ export function FREE(ref: usize): void {
   memory.free(changetype<usize>(header));
 }
 
-/** Registers a managed object with GC. */
+function CLASSID<T>(): u32 {
+  return 1;
+}
+
+/** Registers a managed object with GC. Cannot be changed anymore afterwards. */
 export function REGISTER<T>(ref: usize, parentRef: usize): void {
   var header = UNREF(ref);
-  header.classId = /* TODO: CLASSID<T>() */ 1; 
-  // TODO
+  header.classId = CLASSID<T>();
+  if (GC) __REGISTER_IMPL(ref, parentRef);
 }
 
 /** ArrayBuffer base class.  */
