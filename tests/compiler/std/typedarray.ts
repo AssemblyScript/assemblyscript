@@ -362,10 +362,10 @@ function testArrayFindIndex<ArrayType extends TypedArray<T>, T extends number>()
     // testIndex++;
     return value == <T>2;
   });
-  assert(result == 1);
+  assert(result == 1, "result mismatch");
   var failResult = source.findIndex((value: T, index: i32, self: ArrayType): bool => value == <T>4);
 
-  assert(failResult == -1);
+  assert(failResult == -1, "fail result mismatch");
 }
 
 testArrayFindIndex<Int8Array, i8>();
@@ -441,3 +441,42 @@ testArrayForEach<Int64Array, i64>();
 testArrayForEach<Uint64Array, u64>();
 testArrayForEach<Float32Array, f32>();
 testArrayForEach<Float64Array, f64>();
+
+
+var testArrayReverseValues: i32[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+function testArrayReverse<TArray extends TypedArray<T>, T extends number>(): void {
+  var values = testArrayReverseValues;
+  var array = instantiate<TArray>(9);
+  var arrayWithOffset = instantiate<TArray>(9);
+  var i: i32 = 0;
+
+  for (i = 0; i < 9; i++) {
+    array[i] = <T>values[i];
+    arrayWithOffset[i] = <T>values[i];
+  }
+
+  array.reverse();
+
+  for (i = 0; i < 9; i++) {
+    assert(array[i] == <T>values[8 - i], "TypedArray reverse value mismatch");
+  }
+
+  var reversedSlice = arrayWithOffset.subarray(4, 8).reverse();
+
+  assert(reversedSlice[0] == <T>8, "TypedArray reverse with byteOffset mismatch");
+  assert(reversedSlice[1] == <T>7, "TypedArray reverse with byteOffset mismatch");
+  assert(reversedSlice[2] == <T>6, "TypedArray reverse with byteOffset mismatch");
+  assert(reversedSlice[3] == <T>5, "TypedArray reverse with byteOffset mismatch");
+}
+
+testArrayReverse<Int8Array, i8>();
+testArrayReverse<Uint8Array, u8>();
+testArrayReverse<Uint8ClampedArray, u8>();
+testArrayReverse<Int16Array, i16>();
+testArrayReverse<Uint16Array, u16>();
+testArrayReverse<Int32Array, i32>();
+testArrayReverse<Uint32Array, u32>();
+testArrayReverse<Int64Array, i64>();
+testArrayReverse<Uint64Array, u64>();
+testArrayReverse<Float32Array, f32>();
+testArrayReverse<Float64Array, f64>();
