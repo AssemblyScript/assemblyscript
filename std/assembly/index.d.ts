@@ -1113,33 +1113,33 @@ declare abstract class TypedArray<T> implements ArrayBufferView<T> {
   readonly byteLength: i32;
   /** The length (in elements). */
   readonly length: i32;
-  /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
+  /** The includes() method determines whether a typed array includes a certain element, returning true or false as appropriate. */
+  includes(searchElement: T, fromIndex?: i32): bool;
+  /** The indexOf() method returns the first index at which a given element can be found in the typed array, or -1 if it is not present. */
+  indexOf(searchElement: T, fromIndex?: i32): i32;
+  /** The lastIndexOf() method returns the last index at which a given element can be found in the typed array, or -1 if it is not present. The typed array is searched backwards, starting at fromIndex. */
+  lastIndexOf(searchElement: T, fromIndex?: i32): i32;
+  /** The subarray() method returns a new TypedArray on the same ArrayBuffer store and with the same element types as for this TypedArray object. */
   subarray(begin?: i32, end?: i32): this;
-  /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
-  reduce<W>(
-    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
-    initialValue: W,
-  ): W;
-  /**  The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. This method has the same algorithm as Array.prototype.reduceRight(). */
-  reduceRight<W>(
-    callbackfn: (accumulator: W, value: T, index: i32, self: this) => W,
-    initialValue: W,
-  ): W;
-  /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some().*/
+  /** The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. */
+  reduce<W>(callbackfn: (accumulator: W, value: T, index: i32, self: this) => W, initialValue: W): W;
+  /** The reduceRight() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value, starting from the end of the array. */
+  reduceRight<W>(callbackfn: (accumulator: W, value: T, index: i32, self: this) => W, initialValue: W): W;
+  /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. */
   some(callbackfn: (value: T, index: i32, self: this) => bool): bool;
-  /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. This method has the same algorithm as Array.prototype.map().*/
+  /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. */
   map(callbackfn: (value: T, index: i32, self: this) => T): this;
   /** The sort() method sorts the elements of a typed array numerically in place and returns the typed array. This method has the same algorithm as Array.prototype.sort(), except that sorts the values numerically instead of as strings. TypedArray is one of the typed array types here. */
   sort(callback?: (a: T, b: T) => i32): this;
-  /** The fill() method fills all the elements of a typed array from a start index to an end index with a static value. This method has the same algorithm as Array.prototype.fill(). */
+  /** The fill() method fills all the elements of a typed array from a start index to an end index with a static value. */
   fill(value: T, start?: i32, end?: i32): this;
   /** The findIndex() method returns an index in the typed array, if an element in the typed array satisfies the provided testing function. Otherwise -1 is returned. See also the find() [not implemented] method, which returns the value of a found element in the typed array instead of its index. */
   findIndex(callbackfn: (value: T, index: i32, self: this) => bool): i32;
-  /** The every() method tests whether all elements in the typed array pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.every(). */
+  /** The every() method tests whether all elements in the typed array pass the test implemented by the provided function. */
   every(callbackfn: (value: T, index: i32, self: this) => bool): bool;
-  /** The forEach() method executes a provided function once per array element. This method has the same algorithm as Array.prototype.forEach().*/
+  /** The forEach() method executes a provided function once per array element.*/
   forEach(callbackfn: (value: T, index: i32, self: this) => void): void;
-  /** The reverse() method reverses a typed array in place. The first typed array element becomes the last and the last becomes the first. This method has the same algorithm as Array.prototype.reverse(). */
+  /** The reverse() method reverses a typed array in place. The first typed array element becomes the last and the last becomes the first. */
   reverse(): this;
 }
 
