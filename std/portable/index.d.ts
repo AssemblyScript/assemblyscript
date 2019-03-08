@@ -142,7 +142,7 @@ declare namespace i8 {
   export function parseInt(string: string, radix?: i32): i8;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
-declare function i16(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
+declare function i16(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i16;
 declare namespace i16 {
   /** Smallest representable value. */
   export const MIN_VALUE: i16;
@@ -178,7 +178,7 @@ declare namespace isize {
   export function parseInt(string: string, radix?: i32): isize;
 }
 /** Converts any other numeric value to an 8-bit unsigned integer. */
-declare function u8(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
+declare function u8(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): u8;
 declare namespace u8 {
   /** Smallest representable value. */
   export const MIN_VALUE: u8;
@@ -190,7 +190,7 @@ declare namespace u8 {
   export function parseInt(string: string, radix?: i32): u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
-declare function u16(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i8;
+declare function u16(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): u16;
 declare namespace u16 {
   /** Smallest representable value. */
   export const MIN_VALUE: u16;
@@ -202,7 +202,7 @@ declare namespace u16 {
   export function parseInt(string: string, radix?: i32): u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
-declare function u32(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): i32;
+declare function u32(value: i8 | i16 | i32 | isize | u8 | u16 | u32 | usize | bool | f32 | f64): u32;
 declare namespace u32 {
   /** Smallest representable value. */
   export const MIN_VALUE: u32;

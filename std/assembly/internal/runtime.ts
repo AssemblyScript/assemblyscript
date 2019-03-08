@@ -25,7 +25,7 @@ export class HEADER {
 @inline export const HEADER_MAGIC: u32 = 0xA55E4B17;
 
 /** Aligns an allocation to actual block size. */
-function ALIGN(payloadSize: usize): usize {
+export function ALIGN(payloadSize: usize): usize {
   // round up to power of 2, e.g. with HEADER_SIZE=8:
   // 0            -> 2^3  = 8
   // 1..8         -> 2^4  = 16
@@ -36,7 +36,7 @@ function ALIGN(payloadSize: usize): usize {
 }
 
 /** Gets to the common runtime header of the specified reference. */
-function UNREF(ref: usize): HEADER {
+export function UNREF(ref: usize): HEADER {
   assert(ref >= HEAP_BASE + HEADER_SIZE); // must be a heap object
   var header = changetype<HEADER>(ref - HEADER_SIZE);
   assert(header.classId == HEADER_MAGIC); // must be unregistered
@@ -96,14 +96,10 @@ export function FREE(ref: usize): void {
   memory.free(changetype<usize>(header));
 }
 
-function CLASSID<T>(): u32 {
-  return 1;
-}
-
 /** Registers a managed object with GC. Cannot be changed anymore afterwards. */
 export function REGISTER<T>(ref: usize, parentRef: usize): void {
   var header = UNREF(ref);
-  header.classId = CLASSID<T>();
+  header.classId = __rt_classid<T>();
   if (GC) __REGISTER_IMPL(ref, parentRef);
 }
 

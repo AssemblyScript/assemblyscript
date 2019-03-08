@@ -501,3 +501,6 @@ export namespace v8x16 {
 }
 
 @builtin export declare function start(): void;
+
+@builtin export declare function __rt_classid<T>(): u32;
+@builtin export declare function __rt_iterateroots(fn: (ref: usize) => void): void;

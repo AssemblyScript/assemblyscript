@@ -12,7 +12,6 @@
 @inline export const HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
 
 import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
-import { iterateRoots } from "../gc";
 
 /** Collector states. */
 const enum State {
@@ -142,7 +141,7 @@ function step(): void {
     }
     case State.IDLE: {
       if (TRACE) trace("gc~step/IDLE");
-      iterateRoots(__gc_mark);
+      __rt_iterateroots(__gc_mark);
       state = State.MARK;
       if (TRACE) trace("gc~state = MARK");
       break;
@@ -163,7 +162,7 @@ function step(): void {
         obj.hookFn(objToRef(obj));
       } else {
         if (TRACE) trace("gc~step/MARK finish");
-        iterateRoots(__gc_mark);
+        __rt_iterateroots(__gc_mark);
         obj = iter.next;
         if (obj === toSpace) {
           let from = fromSpace;

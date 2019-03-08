@@ -1,7 +1,5 @@
 /* tslint:disable */
 
-@builtin export declare function iterateRoots(fn: (ref: usize) => void): void;
-
 export namespace gc {
 
   export function collect(): void {

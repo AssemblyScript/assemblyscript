@@ -474,6 +474,9 @@ export namespace BuiltinSymbols {
   export const memory_fill = "~lib/memory/memory.fill";
   // std/gc.ts
   export const iterateRoots = "~lib/gc/iterateRoots";
+  // internals
+  export const rt_classid = "~lib/builtins/__rt_classid";
+  export const rt_iterateroots = "~lib/builtins/__rt_iterateroots";
 }
 
 /** Compiles a call to a built-in function. */
@@ -3591,9 +3594,17 @@ export function compileCall(
       return module.createUnary(op, arg0);
     }
 
-    // === GC integration =========================================================================
+    // === Internal runtime =======================================================================
 
-    case BuiltinSymbols.iterateRoots: {
+    case BuiltinSymbols.rt_classid: {
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.u32;
+      if (!type) return module.createUnreachable();
+      let classReference = type.classReference;
+      if (!classReference) return module.createUnreachable();
+      return module.createI32(classReference.prototype.classId);
+    }
+    case BuiltinSymbols.rt_iterateroots: {
       if (
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 1, reportNode, compiler)

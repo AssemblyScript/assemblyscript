@@ -344,6 +344,9 @@ export class Program extends DiagnosticEmitter {
   /** Memory allocation function. */
   memoryAllocateInstance: Function | null = null;
 
+  /** Next class id. */
+  nextClassId: u32 = 1;
+
   // gc integration
 
   /** Whether a garbage collector is present or not. */
@@ -2355,7 +2358,7 @@ export class FunctionPrototype extends DeclaredElement {
 
   /** Constructs a new function prototype. */
   constructor(
-    /** Simple na,e */
+    /** Simple name */
     name: string,
     /** Parent element, usually a file, namespace or class (if a method). */
     parent: Element,
@@ -2792,6 +2795,8 @@ export class ClassPrototype extends DeclaredElement {
   overloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
+  /** Unique class id. */
+  classId: u32 = 0;
 
   constructor(
     /** Simple name. */
@@ -2813,6 +2818,8 @@ export class ClassPrototype extends DeclaredElement {
       declaration
     );
     this.decoratorFlags = decoratorFlags;
+    this.classId = u32(this.program.nextClassId++);
+    assert(this.classId); // must not wrap around to 0
   }
 
   /** Gets the associated type parameter nodes. */
