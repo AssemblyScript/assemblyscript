@@ -89,7 +89,7 @@ export function FREE(ref: usize): void {
 }
 
 /** Registers a managed object with GC. */
-export function REGISTER<T>(ref: usize): void {
+export function REGISTER<T>(ref: usize, parentRef: usize): void {
   var header = UNREF(ref);
   header.classId = /* TODO: CLASSID<T>() */ 1;
   header.reserved2 = 0;
@@ -98,49 +98,18 @@ export function REGISTER<T>(ref: usize): void {
 
 // === ArrayBuffer ================================================================================
 
-/** Size of a buffer header, excl. common runtime header. */
-@inline export const BUFFER_HEADER_SIZE: usize = (offsetof<ArrayBuffer>() + AL_MASK) & ~AL_MASK;
-
-/** Allocates a new ArrayBuffer and returns a pointer to it. */
-@inline export function ALLOC_BUFFER(byteLength: u32): ArrayBuffer {
-  return changetype<ArrayBuffer>(ALLOC(BUFFER_HEADER_SIZE + byteLength));
-}
-
-/** Reallocates an ArrayBuffer if necessary. Returns a pointer to it. */
-@inline export function REALLOC_BUFFER(ref: usize, byteLength: u32): ArrayBuffer {
-  return changetype<ArrayBuffer>(REALLOC(ref, BUFFER_HEADER_SIZE + byteLength));
-}
-
-/** Loads a value from a backing ArrayBuffer. */
-@inline export function LOAD_BUFFER<T,TOut = T>(buffer: ArrayBuffer, index: i32, byteOffset: i32 = 0): TOut {
-  return <TOut>load<T>(
-    changetype<usize>(buffer) + (<usize>index << alignof<T>()) + <usize>byteOffset,
-    BUFFER_HEADER_SIZE
-  );
-}
-
-/** Stores a value to a backing ArrayBuffer. */
-@inline export function STORE_BUFFER<T,TIn = T>(buffer: ArrayBuffer, index: i32, value: TIn, byteOffset: i32 = 0): void {
-  store<T>(
-    changetype<usize>(buffer) + (<usize>index << alignof<T>()) + <usize>byteOffset,
-    value,
-    BUFFER_HEADER_SIZE
-  );
+export abstract class ArrayBufferBase {
+  get byteLength(): i32 {
+    var header = changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE);
+    return header.payloadSize;
+  }
 }
 
 // === String =====================================================================================
 
-/** Size of a string header, excl. common runtime header. */
-@inline export const STRING_HEADER_SIZE: usize = (offsetof<String>() + 1) & ~1; // 2 byte aligned
-
-/** Allocates a new String and returns a pointer to it. */
-@inline export function ALLOC_STRING(length: u32): String {
-  return changetype<String>(ALLOC(STRING_HEADER_SIZE + (length << 1)));
+export abstract class StringBase {
+  get length(): i32 {
+    var header = changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE);
+    return header.payloadSize >>> 1;
+  }
 }
-
-/** Reallocates a String if necessary. Returns a pointer to it. */
-@inline export function REALLOC_STRING(ref: usize, length: u32): String {
-  return changetype<String>(REALLOC(ref, STRING_HEADER_SIZE + (length << 1)));
-}
-
-// ...
