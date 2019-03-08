@@ -467,12 +467,13 @@
  )
  (func $~lib/typedarray/Int8Array#constructor (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  if (result i32)
-   local.get $0
-  else   
+  i32.eqz
+  if
    i32.const 12
    call $~lib/allocator/arena/__memory_allocate
+   local.set $0
   end
+  local.get $0
   local.get $1
   call $~lib/internal/typedarray/TypedArray<i8>#constructor
  )
@@ -8842,11 +8843,11 @@
   end
  )
  (func $std/typedarray/testArrayForEach<Int32Array,i32>~anonymous|0 (; 204 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
+  local.get $0
   local.get $1
   global.get $std/typedarray/forEachValues
   i32.load
-  local.tee $3
+  local.tee $0
   i32.load
   i32.const 2
   i32.shr_u
@@ -8855,13 +8856,12 @@
    local.get $1
    i32.const 2
    i32.shl
-   local.get $3
+   local.get $0
    i32.add
    i32.load offset=8
   else   
    unreachable
   end
-  local.get $0
   i32.ne
   if
    i32.const 664

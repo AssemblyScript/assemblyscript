@@ -11,7 +11,6 @@
  (export "table" (table $0))
  (start $start)
  (func $switch/doSwitch (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block $case4|0
    block $case2|0
     local.get $0
@@ -19,14 +18,13 @@
     i32.ne
     if
      local.get $0
-     local.tee $1
      i32.eqz
      br_if $case2|0
-     local.get $1
+     local.get $0
      i32.const 2
      i32.eq
      br_if $case4|0
-     local.get $1
+     local.get $0
      i32.const 3
      i32.eq
      br_if $case4|0
@@ -41,7 +39,6 @@
   i32.const 23
  )
  (func $switch/doSwitchDefaultOmitted (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   block $break|0
    block $case2|0
     local.get $0
@@ -49,11 +46,10 @@
     i32.ne
     if
      local.get $0
-     local.tee $1
      i32.const 2
      i32.eq
      br_if $case2|0
-     local.get $1
+     local.get $0
      i32.const 3
      i32.eq
      br_if $case2|0
