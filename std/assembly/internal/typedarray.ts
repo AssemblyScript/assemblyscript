@@ -248,10 +248,12 @@ export function FOREACH<TArray extends TypedArray<T>, T>(
 @inline
 export function REVERSE<TArray extends TypedArray<T>, T>(array: TArray): TArray {
   var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+
   for (let front = 0, back = array.length - 1; front < back; ++front, --back) {
-    let temp = LOAD<T>(buffer, front);
-    STORE<T>(buffer, front, LOAD<T>(buffer, back));
-    STORE<T>(buffer, back, temp);
+    let temp = LOAD<T>(buffer, front, byteOffset);
+    STORE<T>(buffer, front, LOAD<T>(buffer, back, byteOffset), byteOffset);
+    STORE<T>(buffer, back, temp, byteOffset);
   }
   return array;
 }
