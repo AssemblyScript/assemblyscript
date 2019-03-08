@@ -158,20 +158,19 @@
   i32.store
  )
  (func $~lib/collector/itcm/__gc_mark (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
   local.get $0
   if
    global.get $~lib/collector/itcm/white
    local.get $0
    i32.const 16
    i32.sub
-   local.tee $1
+   local.tee $0
    i32.load
    i32.const 3
    i32.and
    i32.eq
    if
-    local.get $1
+    local.get $0
     call $~lib/collector/itcm/ManagedObject#makeGray
    end
   end

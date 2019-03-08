@@ -52,9 +52,10 @@ if (args.help) {
 const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
 const featuresConfig = require("./features.json");
 
-var successes = 0;
 var failedTests = [];
-var failedInstantiates = new Map();
+var failedMessages = new Map();
+var skippedTests = [];
+var skippedMessages = new Map();
 
 const basedir = path.join(__dirname, "compiler");
 
@@ -123,8 +124,15 @@ tests.forEach(filename => {
     });
     if (missing_features.length) {
       console.log("- " + colorsUtil.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
+      skippedTests.push(basename);
+      skippedMessages.set(basename, "feature not enabled");
       return;
     }
+  }
+  if (config.asc_flags) {
+    config.asc_flags.forEach(flag => {
+      Array.prototype.push.apply(asc_flags, flag.split(" "));
+    });
   }
 
   var failed = false;
@@ -162,7 +170,6 @@ tests.forEach(filename => {
         }
       }
       console.log("- " + colorsUtil.green("error check OK"));
-      ++successes;
       console.log();
       return;
     }
@@ -295,23 +302,33 @@ tests.forEach(filename => {
       } catch (e) {
         console.log("- " + colorsUtil.red("instantiate ERROR: ") + e.stack);
         failed = true;
-        failedInstantiates.set(basename, e.message);
+        failedMessages.set(basename, e.message);
       }
 
       if (failed) failedTests.push(basename);
-      else ++successes;
       console.log();
     });
   });
   if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
 });
 
-if (failedTests.length) {
-  process.exitCode = 1;
-  console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.length + " compiler tests failed:"));
-  failedTests.forEach(name => {
-    var message = failedInstantiates.has(name) ? colorsUtil.gray("[" + failedInstantiates.get(name) + "]") : "";
+if (skippedTests.length) {
+  console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.length + " compiler tests have been skipped:\n"));
+  skippedTests.forEach(name => {
+    var message = skippedMessages.has(name) ? colorsUtil.gray("[" + skippedMessages.get(name) + "]") : "";
     console.log("  " + name + " " + message);
   });
-} else
-  console.log("[ " + colorsUtil.white("SUCCESS") + " ]");
+  console.log();
+}
+if (failedTests.length) {
+  process.exitCode = 1;
+  console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.length + " compiler tests had failures:\n"));
+  failedTests.forEach(name => {
+    var message = failedMessages.has(name) ? colorsUtil.gray("[" + failedMessages.get(name) + "]") : "";
+    console.log("  " + name + " " + message);
+  });
+  console.log();
+}
+if (!process.exitCode) {
+  console.log("[ " + colorsUtil.white("OK") + " ]");
+}
