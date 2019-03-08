@@ -1,22 +1,28 @@
 import { AL_MASK } from "./allocator";
 
-/** Common runtime header used by all objects. */
+/** Common runtime header of all objects. */
 @unmanaged
 export class HEADER {
-  /** Unique id of the respective class. Not yet registered with GC if zero.*/
+  /** Unique id of the respective class or a magic value if not yet registered.*/
   classId: u32;
   /** Size of the allocated payload. */
   payloadSize: u32;
-  /** Reserved field for use by GC. */
+  /** Reserved field for use by GC. Only present if GC is. */
   reserved1: usize; // itcm: tagged next
-  /** Reserved field for use by GC. */
+  /** Reserved field for use by GC. Only present if GC is. */
   reserved2: usize; // itcm: prev
 }
 
+/** Whether a GC is present or not. */
+@inline export const GC = true;
+
 /** Size of the common runtime header. */
-@inline export const HEADER_SIZE: usize = (offsetof<HEADER>() + AL_MASK) & ~AL_MASK;
-/** Magic value used to validate common headers. */
-@inline export const HEADER_MAGIC: usize = <usize>0xA55E4B17;
+@inline export const HEADER_SIZE: usize = GC
+  ? (offsetof<HEADER>(           ) + AL_MASK) & ~AL_MASK  // full header if GC is present
+  : (offsetof<HEADER>("reserved1") + AL_MASK) & ~AL_MASK; // half header if GC is absent
+
+/** Magic value used to validate common runtime headers. */
+@inline export const HEADER_MAGIC: u32 = 0xA55E4B17;
 
 /** Aligns an allocation to actual block size. */
 function ALIGN(payloadSize: usize): usize {
@@ -33,19 +39,19 @@ function ALIGN(payloadSize: usize): usize {
 function UNREF(ref: usize): HEADER {
   assert(ref >= HEAP_BASE + HEADER_SIZE); // must be a heap object
   var header = changetype<HEADER>(ref - HEADER_SIZE);
-  assert(!header.classId && header.reserved2 == HEADER_MAGIC); // must be unregistered
+  assert(header.classId == HEADER_MAGIC); // must be unregistered
   return header;
 }
-
-// === General allocation/deallocation ============================================================
 
 /** Allocates a new object and returns a pointer to its payload. */
 export function ALLOC(payloadSize: u32): usize {
   var header = changetype<HEADER>(memory.allocate(ALIGN(payloadSize)));
-  header.classId = 0;
+  header.classId = HEADER_MAGIC;
   header.payloadSize = payloadSize;
-  header.reserved1 = 0;
-  header.reserved2 = HEADER_MAGIC;
+  if (GC) {
+    header.reserved1 = 0;
+    header.reserved2 = 0;
+  }
   var ref = changetype<usize>(header) + HEADER_SIZE;
   memory.fill(ref, 0, payloadSize);
   return ref;
@@ -60,9 +66,11 @@ export function REALLOC(ref: usize, newPayloadSize: u32): usize {
     if (ALIGN(payloadSize) < newAlignedSize) {
       // move if the allocation isn't large enough to hold the new payload
       let newHeader = changetype<HEADER>(memory.allocate(newAlignedSize));
-      newHeader.classId = 0;
-      newHeader.reserved1 = 0;
-      newHeader.reserved2 = HEADER_MAGIC;
+      newHeader.classId = HEADER_MAGIC;
+      if (GC) {
+        newHeader.reserved1 = 0;
+        newHeader.reserved2 = 0;
+      }
       let newRef = changetype<usize>(newHeader) + HEADER_SIZE;
       memory.copy(newRef, ref, payloadSize);
       memory.fill(newRef + payloadSize, 0, newPayloadSize - payloadSize);
@@ -91,13 +99,11 @@ export function FREE(ref: usize): void {
 /** Registers a managed object with GC. */
 export function REGISTER<T>(ref: usize, parentRef: usize): void {
   var header = UNREF(ref);
-  header.classId = /* TODO: CLASSID<T>() */ 1;
-  header.reserved2 = 0;
+  header.classId = /* TODO: CLASSID<T>() */ 1; 
   // TODO
 }
 
-// === ArrayBuffer ================================================================================
-
+/** ArrayBuffer base class.  */
 export abstract class ArrayBufferBase {
   get byteLength(): i32 {
     var header = changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE);
@@ -105,8 +111,7 @@ export abstract class ArrayBufferBase {
   }
 }
 
-// === String =====================================================================================
-
+/** String base class. */
 export abstract class StringBase {
   get length(): i32 {
     var header = changetype<HEADER>(changetype<usize>(this) - HEADER_SIZE);
