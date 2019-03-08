@@ -115,11 +115,10 @@ export function SUBARRAY<TArray extends TypedArray<T>, T>(
   begin: i32,
   end: i32
 ): TArray {
-  var length = <i32>array.length;
-  if (begin < 0) begin = max(length + begin, 0);
-  else begin = min(begin, length);
-  if (end < 0) end = max(length + end, begin);
-  else end = max(min(end, length), begin);
+  var len = <i32>array.length;
+  begin = begin < 0 ? max(len + begin, 0) : min(begin, len);
+  end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+  end   = max(end, begin);
   var slice = memory.allocate(offsetof<TArray>());
   store<usize>(slice, array.buffer, offsetof<TArray>("buffer"));
   store<i32>(slice, <i32>array.byteOffset + (begin << alignof<T>()), offsetof<TArray>("byteOffset"));

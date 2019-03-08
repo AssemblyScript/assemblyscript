@@ -2000,7 +2000,7 @@
   local.get $4
   i32.const 0
   i32.lt_s
-  if
+  if (result i32)
    local.get $6
    local.get $4
    i32.add
@@ -2011,7 +2011,6 @@
    local.get $8
    i32.gt_s
    select
-   local.set $4
   else   
    local.get $4
    local.tee $7
@@ -2021,23 +2020,22 @@
    local.get $8
    i32.lt_s
    select
-   local.set $4
   end
+  local.set $4
   local.get $5
   i32.const 0
   i32.lt_s
-  if
+  if (result i32)
    local.get $6
    local.get $5
    i32.add
    local.tee $7
-   local.get $4
+   i32.const 0
    local.tee $8
    local.get $7
    local.get $8
    i32.gt_s
    select
-   local.set $5
   else   
    local.get $5
    local.tee $7
@@ -2047,15 +2045,17 @@
    local.get $8
    i32.lt_s
    select
-   local.tee $7
-   local.get $4
-   local.tee $8
-   local.get $7
-   local.get $8
-   i32.gt_s
-   select
-   local.set $5
   end
+  local.set $5
+  local.get $5
+  local.tee $7
+  local.get $4
+  local.tee $8
+  local.get $7
+  local.get $8
+  i32.gt_s
+  select
+  local.set $5
   block $~lib/memory/memory.allocate|inlined.1 (result i32)
    i32.const 12
    local.set $7
@@ -2151,7 +2151,7 @@
   local.get $4
   i32.const 0
   i32.lt_s
-  if
+  if (result i32)
    local.get $6
    local.get $4
    i32.add
@@ -2162,7 +2162,6 @@
    local.get $8
    i32.gt_s
    select
-   local.set $4
   else   
    local.get $4
    local.tee $7
@@ -2172,23 +2171,22 @@
    local.get $8
    i32.lt_s
    select
-   local.set $4
   end
+  local.set $4
   local.get $5
   i32.const 0
   i32.lt_s
-  if
+  if (result i32)
    local.get $6
    local.get $5
    i32.add
    local.tee $7
-   local.get $4
+   i32.const 0
    local.tee $8
    local.get $7
    local.get $8
    i32.gt_s
    select
-   local.set $5
   else   
    local.get $5
    local.tee $7
@@ -2198,15 +2196,17 @@
    local.get $8
    i32.lt_s
    select
-   local.tee $7
-   local.get $4
-   local.tee $8
-   local.get $7
-   local.get $8
-   i32.gt_s
-   select
-   local.set $5
   end
+  local.set $5
+  local.get $5
+  local.tee $7
+  local.get $4
+  local.tee $8
+  local.get $7
+  local.get $8
+  i32.gt_s
+  select
+  local.set $5
   block $~lib/memory/memory.allocate|inlined.2 (result i32)
    i32.const 12
    local.set $7
@@ -3600,7 +3600,7 @@
   local.get $4
   i32.const 0
   i32.lt_s
-  if
+  if (result i32)
    local.get $6
    local.get $4
    i32.add
@@ -3611,7 +3611,6 @@
    local.get $8
    i32.gt_s
    select
-   local.set $4
   else   
    local.get $4
    local.tee $7
@@ -3621,23 +3620,22 @@
    local.get $8
    i32.lt_s
    select
-   local.set $4
   end
+  local.set $4
   local.get $5
   i32.const 0
   i32.lt_s
-  if
+  if (result i32)
    local.get $6
    local.get $5
    i32.add
    local.tee $7
-   local.get $4
+   i32.const 0
    local.tee $8
    local.get $7
    local.get $8
    i32.gt_s
    select
-   local.set $5
   else   
    local.get $5
    local.tee $7
@@ -3647,15 +3645,17 @@
    local.get $8
    i32.lt_s
    select
-   local.tee $7
-   local.get $4
-   local.tee $8
-   local.get $7
-   local.get $8
-   i32.gt_s
-   select
-   local.set $5
   end
+  local.set $5
+  local.get $5
+  local.tee $7
+  local.get $4
+  local.tee $8
+  local.get $7
+  local.get $8
+  i32.gt_s
+  select
+  local.set $5
   block $~lib/memory/memory.allocate|inlined.4 (result i32)
    i32.const 12
    local.set $7
