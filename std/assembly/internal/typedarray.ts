@@ -200,6 +200,52 @@ export function FIND_INDEX<TArray extends TypedArray<T>, T>(
 }
 
 @inline
+export function INCLUDES<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  searchElement: T,
+  fromIndex: i32,
+): bool {
+  return INDEX_OF<TArray, T>(array, searchElement, fromIndex) >= 0;
+}
+
+@inline
+export function INDEX_OF<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  searchElement: T,
+  fromIndex: i32,
+): i32 {
+  var length = array.length;
+  if (length == 0 || fromIndex >= length) return -1;
+  if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  while (fromIndex < length) {
+    if (LOAD<T>(buffer, fromIndex, byteOffset) == searchElement) return fromIndex;
+    ++fromIndex;
+  }
+  return -1;
+}
+
+@inline
+export function LAST_INDEX_OF<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  searchElement: T,
+  fromIndex: i32,
+): i32 {
+  var length = array.length;
+  if (length == 0) return -1;
+  if (fromIndex < 0) fromIndex = length + fromIndex; // no need to clamp
+  else if (fromIndex >= length) fromIndex = length - 1;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  while (fromIndex >= 0) {                           // ^
+    if (LOAD<T>(buffer, fromIndex, byteOffset) == searchElement) return fromIndex;
+    --fromIndex;
+  }
+  return -1;
+}
+
+@inline
 export function SOME<TArray extends TypedArray<T>, T>(
   array: TArray,
   callbackfn: (value: T, index: i32, array: TArray) => bool,

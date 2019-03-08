@@ -6,6 +6,9 @@ import {
   REDUCE,
   REDUCE_RIGHT,
   MAP,
+  INCLUDES,
+  INDEX_OF,
+  LAST_INDEX_OF,
   FIND_INDEX,
   SOME,
   EVERY,
@@ -24,12 +27,24 @@ function clampToByte(value: i32): i32 {
 export class Int8Array extends TypedArray<i8> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
+  includes(searchElement: i8, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int8Array, i8>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i8, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int8Array, i8>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i8, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int8Array, i8>(this, searchElement, fromIndex);
+  }
+
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
     return FILL<Int8Array, i8>(this, value, start, end);
   }
 
-  sort(comparator: (a: i8, b: i8) => i32 = COMPARATOR<i8>()): Int8Array {
-    return SORT<Int8Array, i8>(this, comparator);
+  sort(comparator: (a: i8, b: i8) => i32 = COMPARATOR<i8>()): this {
+    return SORT<this, i8>(this, comparator);
   }
 
   subarray(begin: i32 = 0, end: i32 = 0x7fffffff): Int8Array {
@@ -77,6 +92,18 @@ export class Int8Array extends TypedArray<i8> {
 
 export class Uint8Array extends TypedArray<u8> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
+
+  includes(searchElement: u8, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint8Array, u8>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u8, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint8Array, u8>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u8, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint8Array, u8>(this, searchElement, fromIndex);
+  }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
     return FILL<Uint8Array, u8>(this, value, start, end);
@@ -142,6 +169,18 @@ export class Uint8ClampedArray extends Uint8Array {
     super.__unchecked_set(index, clampToByte(value));
   }
 
+  includes(searchElement: u8, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u8, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u8, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
+  }
+
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
     return changetype<Uint8ClampedArray>(super.fill(value, start, end)); // safe because '.fill' reuses 'this'
   }
@@ -195,6 +234,18 @@ export class Uint8ClampedArray extends Uint8Array {
 
 export class Int16Array extends TypedArray<i16> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
+
+  includes(searchElement: i16, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int16Array, i16>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i16, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int16Array, i16>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i16, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int16Array, i16>(this, searchElement, fromIndex);
+  }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
     return FILL<Int16Array, i16>(this, value, start, end);
@@ -250,6 +301,18 @@ export class Int16Array extends TypedArray<i16> {
 export class Uint16Array extends TypedArray<u16> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
 
+  includes(searchElement: u16, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint16Array, u16>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u16, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint16Array, u16>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u16, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint16Array, u16>(this, searchElement, fromIndex);
+  }
+
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
     return FILL<Uint16Array, u16>(this, value, start, end);
   }
@@ -303,6 +366,18 @@ export class Uint16Array extends TypedArray<u16> {
 
 export class Int32Array extends TypedArray<i32> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i32>();
+
+  includes(searchElement: i32, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int32Array, i32>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i32, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int32Array, i32>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i32, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int32Array, i32>(this, searchElement, fromIndex);
+  }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
     return FILL<Int32Array, i32>(this, value, start, end);
@@ -358,6 +433,18 @@ export class Int32Array extends TypedArray<i32> {
 export class Uint32Array extends TypedArray<u32> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u32>();
 
+  includes(searchElement: u32, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint32Array, u32>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u32, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint32Array, u32>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u32, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint32Array, u32>(this, searchElement, fromIndex);
+  }
+
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
     return FILL<Uint32Array, u32>(this, value, start, end);
   }
@@ -411,6 +498,18 @@ export class Uint32Array extends TypedArray<u32> {
 
 export class Int64Array extends TypedArray<i64> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
+
+  includes(searchElement: i64, fromIndex: i32 = 0): bool {
+    return INCLUDES<Int64Array, i64>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: i64, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Int64Array, i64>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: i64, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Int64Array, i64>(this, searchElement, fromIndex);
+  }
 
   fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
     return FILL<Int64Array, i64>(this, value, start, end);
@@ -466,6 +565,18 @@ export class Int64Array extends TypedArray<i64> {
 export class Uint64Array extends TypedArray<u64> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
 
+  includes(searchElement: u64, fromIndex: i32 = 0): bool {
+    return INCLUDES<Uint64Array, u64>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: u64, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Uint64Array, u64>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: u64, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Uint64Array, u64>(this, searchElement, fromIndex);
+  }
+
   fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
     return FILL<Uint64Array, u64>(this, value, start, end);
   }
@@ -520,6 +631,18 @@ export class Uint64Array extends TypedArray<u64> {
 export class Float32Array extends TypedArray<f32> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f32>();
 
+  includes(searchElement: f32, fromIndex: i32 = 0): bool {
+    return INCLUDES<Float32Array, f32>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: f32, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Float32Array, f32>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: f32, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Float32Array, f32>(this, searchElement, fromIndex);
+  }
+
   fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
     return FILL<Float32Array, f32>(this, value, start, end);
   }
@@ -573,6 +696,18 @@ export class Float32Array extends TypedArray<f32> {
 
 export class Float64Array extends TypedArray<f64> {
   @lazy static readonly BYTES_PER_ELEMENT: usize = sizeof<f64>();
+
+  includes(searchElement: f64, fromIndex: i32 = 0): bool {
+    return INCLUDES<Float64Array, f64>(this, searchElement, fromIndex);
+  }
+
+  indexOf(searchElement: f64, fromIndex: i32 = 0): i32 {
+    return INDEX_OF<Float64Array, f64>(this, searchElement, fromIndex);
+  }
+
+  lastIndexOf(searchElement: f64, fromIndex: i32 = this.length): i32 {
+    return LAST_INDEX_OF<Float64Array, f64>(this, searchElement, fromIndex);
+  }
 
   fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
     return FILL<Float64Array, f64>(this, value, start, end);
