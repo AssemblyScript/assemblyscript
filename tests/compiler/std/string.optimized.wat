@@ -4599,7 +4599,7 @@
   local.tee $7
   call $~lib/internal/number/decimalCount32
   local.set $8
-  i32.const 4104
+  i32.const 4456
   i32.load
   local.set $12
   loop $continue|0
@@ -5379,7 +5379,7 @@
   i32.const 4384
   i32.load
   local.set $7
-  i32.const 3768
+  i32.const 4120
   i32.load
   local.get $14
   i32.add
