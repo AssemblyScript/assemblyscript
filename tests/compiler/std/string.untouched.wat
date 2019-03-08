@@ -3315,7 +3315,7 @@
             if
              i32.const 0
              i32.const 80
-             i32.const 763
+             i32.const 747
              i32.const 10
              call $~lib/env/abort
              unreachable
@@ -3829,7 +3829,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 438
+   i32.const 432
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -3988,11 +3988,11 @@
   end
   local.get $4
   call $~lib/internal/string/allocateUnsafe
-  local.set $7
+  local.set $12
   i32.const 0
-  local.set $3
+  local.set $13
   local.get $4
-  local.set $8
+  local.set $14
   block $break|2
    loop $continue|2
     local.get $0
@@ -4004,27 +4004,27 @@
     i32.xor
     if
      block
-      local.get $3
-      local.get $8
+      local.get $13
+      local.get $14
       i32.gt_s
       if
-       local.get $8
+       local.get $14
        i32.const 1
        i32.shl
-       local.set $9
-       local.get $9
+       local.set $7
+       local.get $7
        call $~lib/internal/string/allocateUnsafe
-       local.set $12
+       local.set $3
+       local.get $3
+       i32.const 0
        local.get $12
        i32.const 0
-       local.get $7
-       i32.const 0
-       local.get $3
+       local.get $13
        call $~lib/internal/string/copyUnsafe
        block $~lib/internal/string/freeUnsafe|inlined.0
-        local.get $7
-        local.set $13
-        local.get $13
+        local.get $12
+        local.set $8
+        local.get $8
         i32.eqz
         if
          i32.const 0
@@ -4035,42 +4035,42 @@
          unreachable
         end
         block $~lib/memory/memory.free|inlined.0
-         local.get $13
-         local.set $14
-         local.get $14
+         local.get $8
+         local.set $9
+         local.get $9
          call $~lib/allocator/arena/__memory_free
          br $~lib/memory/memory.free|inlined.0
         end
        end
-       local.get $12
-       local.set $7
-       local.get $9
-       local.set $8
+       local.get $3
+       local.set $12
+       local.get $7
+       local.set $14
       end
       local.get $11
       local.get $10
       i32.sub
-      local.set $12
-      local.get $7
-      local.get $3
+      local.set $3
+      local.get $12
+      local.get $13
       local.get $0
       local.get $10
-      local.get $12
+      local.get $3
       call $~lib/internal/string/copyUnsafe
+      local.get $13
       local.get $3
-      local.get $12
       i32.add
-      local.set $3
-      local.get $7
-      local.get $3
+      local.set $13
+      local.get $12
+      local.get $13
       local.get $2
       i32.const 0
       local.get $6
       call $~lib/internal/string/copyUnsafe
-      local.get $3
+      local.get $13
       local.get $6
       i32.add
-      local.set $3
+      local.set $13
       local.get $11
       local.get $5
       i32.add
@@ -4080,29 +4080,29 @@
     end
    end
   end
-  local.get $3
+  local.get $13
   if
-   local.get $3
-   local.get $8
+   local.get $13
+   local.get $14
    i32.gt_s
    if
-    local.get $8
+    local.get $14
     i32.const 1
     i32.shl
-    local.set $12
-    local.get $12
+    local.set $3
+    local.get $3
     call $~lib/internal/string/allocateUnsafe
-    local.set $9
-    local.get $9
-    i32.const 0
+    local.set $7
     local.get $7
     i32.const 0
-    local.get $3
+    local.get $12
+    i32.const 0
+    local.get $13
     call $~lib/internal/string/copyUnsafe
     block $~lib/internal/string/freeUnsafe|inlined.1
-     local.get $7
-     local.set $13
-     local.get $13
+     local.get $12
+     local.set $8
+     local.get $8
      i32.eqz
      if
       i32.const 0
@@ -4113,52 +4113,52 @@
       unreachable
      end
      block $~lib/memory/memory.free|inlined.1
-      local.get $13
-      local.set $14
-      local.get $14
+      local.get $8
+      local.set $9
+      local.get $9
       call $~lib/allocator/arena/__memory_free
       br $~lib/memory/memory.free|inlined.1
      end
     end
-    local.get $9
-    local.set $7
-    local.get $12
-    local.set $8
+    local.get $7
+    local.set $12
+    local.get $3
+    local.set $14
    end
    local.get $4
    local.get $10
    i32.sub
-   local.set $9
-   local.get $9
+   local.set $7
+   local.get $7
    if
-    local.get $7
-    local.get $3
+    local.get $12
+    local.get $13
     local.get $0
     local.get $10
-    local.get $9
+    local.get $7
     call $~lib/internal/string/copyUnsafe
    end
-   local.get $9
-   local.get $3
+   local.get $7
+   local.get $13
    i32.add
-   local.set $9
-   local.get $8
-   local.get $9
+   local.set $7
+   local.get $14
+   local.get $7
    i32.gt_s
    if
-    local.get $9
+    local.get $7
     call $~lib/internal/string/allocateUnsafe
-    local.set $12
+    local.set $3
+    local.get $3
+    i32.const 0
     local.get $12
     i32.const 0
     local.get $7
-    i32.const 0
-    local.get $9
     call $~lib/internal/string/copyUnsafe
     block $~lib/internal/string/freeUnsafe|inlined.2
-     local.get $7
-     local.set $13
-     local.get $13
+     local.get $12
+     local.set $8
+     local.get $8
      i32.eqz
      if
       i32.const 0
@@ -4169,23 +4169,23 @@
       unreachable
      end
      block $~lib/memory/memory.free|inlined.2
-      local.get $13
-      local.set $14
-      local.get $14
+      local.get $8
+      local.set $9
+      local.get $9
       call $~lib/allocator/arena/__memory_free
       br $~lib/memory/memory.free|inlined.2
      end
     end
-    local.get $12
+    local.get $3
     return
    end
-   local.get $7
+   local.get $12
    return
   end
   block $~lib/internal/string/freeUnsafe|inlined.3
+   local.get $12
+   local.set $7
    local.get $7
-   local.set $9
-   local.get $9
    i32.eqz
    if
     i32.const 0
@@ -4196,15 +4196,14 @@
     unreachable
    end
    block $~lib/memory/memory.free|inlined.3
-    local.get $9
-    local.set $12
-    local.get $12
+    local.get $7
+    local.set $3
+    local.get $3
     call $~lib/allocator/arena/__memory_free
     br $~lib/memory/memory.free|inlined.3
    end
   end
   local.get $0
-  return
  )
  (func $~lib/string/String#slice (; 37 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -4220,7 +4219,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 533
+   i32.const 517
    i32.const 4
    call $~lib/env/abort
    unreachable
@@ -4927,7 +4926,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 545
+   i32.const 529
    i32.const 4
    call $~lib/env/abort
    unreachable

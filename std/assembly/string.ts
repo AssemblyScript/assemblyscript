@@ -410,21 +410,15 @@ export class String {
     }
     var index = this.indexOf(search);
     if (~index) {
-      if (ASC_SHRINK_LEVEL >= 1) {
-        return this.substring(0, index)
-          .concat(replacement)
-          .concat(this.substring(index + slen));
-      } else {
-        let rlen = replacement.length;
-        len = len - slen;
-        let olen = len + rlen;
-        if (olen) {
-          let result = allocateUnsafe(olen);
-          copyUnsafe(result, 0, this, 0, index);
-          copyUnsafe(result, index, replacement, 0, rlen);
-          copyUnsafe(result, rlen + index, this, index + slen, len - index);
-          return result;
-        }
+      let rlen = replacement.length;
+      len = len - slen;
+      let olen = len + rlen;
+      if (olen) {
+        let result = allocateUnsafe(olen);
+        copyUnsafe(result, 0, this, 0, index);
+        copyUnsafe(result, index, replacement, 0, rlen);
+        copyUnsafe(result, rlen + index, this, index + slen, len - index);
+        return result;
       }
     }
     return this;
@@ -464,69 +458,59 @@ export class String {
       return result;
     }
     var prev = 0, next = 0;
-    if (ASC_SHRINK_LEVEL >= 1) {
-      let result = changetype<String>("");
-      while (~(next = this.indexOf(search, prev))) {
-        result = result.concat(this.substring(prev, next).concat(replacement));
-        prev = next + slen;
-      }
-      if (prev) return result.concat(this.substring(prev));
-      return this;
-    } else {
-      if (slen === rlen) {
-        // Fast path when search and replacement have same length
-        let result = allocateUnsafe(len);
-        copyUnsafe(result, 0, this, 0, len);
-        while (~(next = this.indexOf(search, prev))) {
-          copyUnsafe(result, next, replacement, 0, rlen);
-          prev = next + slen;
-        }
-        return result;
-      }
+    if (slen === rlen) {
+      // Fast path when search and replacement have same length
       let result = allocateUnsafe(len);
-      let offset = 0, resLen = len;
+      copyUnsafe(result, 0, this, 0, len);
       while (~(next = this.indexOf(search, prev))) {
-        if (offset > resLen) {
-          // resize
-          let newLength = resLen << 1;
-          let newResult = allocateUnsafe(newLength);
-          copyUnsafe(newResult, 0, result, 0, offset);
-          freeUnsafe(result);
-          result = newResult;
-          resLen = newLength;
-        }
-        let chunk = next - prev;
-        copyUnsafe(result, offset, this, prev, chunk);
-        offset += chunk;
-        copyUnsafe(result, offset, replacement, 0, rlen);
-        offset += rlen;
+        copyUnsafe(result, next, replacement, 0, rlen);
         prev = next + slen;
       }
-      if (offset) {
-        if (offset > resLen) {
-          // resize
-          let newLength = resLen << 1;
-          let newResult = allocateUnsafe(newLength);
-          copyUnsafe(newResult, 0, result, 0, offset);
-          freeUnsafe(result);
-          result = newResult;
-          resLen = newLength;
-        }
-        let rest = len - prev;
-        if (rest) copyUnsafe(result, offset, this, prev, rest);
-        // trim memory space
-        rest += offset;
-        if (resLen > rest) {
-          let trimmed = allocateUnsafe(rest);
-          copyUnsafe(trimmed, 0, result, 0, rest);
-          freeUnsafe(result);
-          return trimmed;
-        }
-        return result;
-      }
-      freeUnsafe(result);
-      return this;
+      return result;
     }
+    var result = allocateUnsafe(len);
+    var offset = 0, resLen = len;
+    while (~(next = this.indexOf(search, prev))) {
+      if (offset > resLen) {
+        // resize
+        let newLength = resLen << 1;
+        let newResult = allocateUnsafe(newLength);
+        copyUnsafe(newResult, 0, result, 0, offset);
+        freeUnsafe(result);
+        result = newResult;
+        resLen = newLength;
+      }
+      let chunk = next - prev;
+      copyUnsafe(result, offset, this, prev, chunk);
+      offset += chunk;
+      copyUnsafe(result, offset, replacement, 0, rlen);
+      offset += rlen;
+      prev = next + slen;
+    }
+    if (offset) {
+      if (offset > resLen) {
+        // resize
+        let newLength = resLen << 1;
+        let newResult = allocateUnsafe(newLength);
+        copyUnsafe(newResult, 0, result, 0, offset);
+        freeUnsafe(result);
+        result = newResult;
+        resLen = newLength;
+      }
+      let rest = len - prev;
+      if (rest) copyUnsafe(result, offset, this, prev, rest);
+      // trim memory space
+      rest += offset;
+      if (resLen > rest) {
+        let trimmed = allocateUnsafe(rest);
+        copyUnsafe(trimmed, 0, result, 0, rest);
+        freeUnsafe(result);
+        return trimmed;
+      }
+      return result;
+    }
+    freeUnsafe(result);
+    return this;
   }
 
   slice(beginIndex: i32, endIndex: i32 = i32.MAX_VALUE): String {
