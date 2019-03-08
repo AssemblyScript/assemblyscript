@@ -186,7 +186,7 @@ declare namespace atomic {
   /** Performs a wait operation on an integer value in memory suspending this agent if the condition is met. */
   export function wait<T>(ptr: usize, expected: T, timeout: i64): AtomicWaitResult;
   /** Performs a notify operation on an integer value in memory waking up suspended agents. */
-  export function notify<T>(ptr: usize, count: u32): i32;
+  export function notify<T>(ptr: usize, count: i32): i32;
 }
 
 /** Describes the result of an atomic wait operation. */

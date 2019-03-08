@@ -15,7 +15,8 @@
     "binaryen": "69.0.0-nightly.20190228",
     "glob": "^7.1.3",
     "long": "^4.0.0",
-    "source-map-support": "^0.5.10"
+    "source-map-support": "^0.5.10",
+    "opencollective-postinstall": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^11.9.5",
@@ -51,7 +52,8 @@
     "test:compiler": "node tests/compiler",
     "make": "npm run clean && npm test && npm run build && npm test",
     "all": "npm run check && npm run make",
-    "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md"
+    "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
+    "postinstall": "opencollective-postinstall"
   },
   "files": [
     "lib/loader/index.d.ts",
@@ -70,5 +72,9 @@
     "src/",
     "std/",
     "tsconfig-base.json"
-  ]
+  ],
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/assemblyscript"
+  }
 }
