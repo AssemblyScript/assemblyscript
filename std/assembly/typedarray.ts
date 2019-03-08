@@ -71,7 +71,7 @@ export class Int8Array extends TypedArray<i8> {
   }
 
   reverse(): this {
-    return REVERSE<Int8Array, i8>(this);
+    return REVERSE<this, i8>(this);
   }
 }
 
@@ -125,7 +125,7 @@ export class Uint8Array extends TypedArray<u8> {
   }
 
   reverse(): this {
-    return REVERSE<Uint8Array, u8>(this);
+    return REVERSE<this, u8>(this);
   }
 }
 
@@ -189,7 +189,7 @@ export class Uint8ClampedArray extends Uint8Array {
   }
 
   reverse(): this {
-    return REVERSE<Uint8ClampedArray, u8>(this);
+    return REVERSE<this, u8>(this);
   }
 }
 
@@ -243,7 +243,7 @@ export class Int16Array extends TypedArray<i16> {
   }
 
   reverse(): this {
-    return REVERSE<Int16Array, i16>(this);
+    return REVERSE<this, i16>(this);
   }
 }
 
@@ -297,7 +297,7 @@ export class Uint16Array extends TypedArray<u16> {
   }
 
   reverse(): this {
-    return REVERSE<Uint16Array, u16>(this);
+    return REVERSE<this, u16>(this);
   }
 }
 
@@ -351,7 +351,7 @@ export class Int32Array extends TypedArray<i32> {
   }
 
   reverse(): this {
-    return REVERSE<Int32Array, i32>(this);
+    return REVERSE<this, i32>(this);
   }
 }
 
@@ -405,7 +405,7 @@ export class Uint32Array extends TypedArray<u32> {
   }
 
   reverse(): this {
-    return REVERSE<Uint32Array, u32>(this);
+    return REVERSE<this, u32>(this);
   }
 }
 
@@ -459,7 +459,7 @@ export class Int64Array extends TypedArray<i64> {
   }
 
   reverse(): this {
-    return REVERSE<Int64Array, i64>(this);
+    return REVERSE<this, i64>(this);
   }
 }
 
@@ -513,7 +513,7 @@ export class Uint64Array extends TypedArray<u64> {
   }
 
   reverse(): this {
-    return REVERSE<Uint64Array, u64>(this);
+    return REVERSE<this, u64>(this);
   }
 }
 
@@ -567,7 +567,7 @@ export class Float32Array extends TypedArray<f32> {
   }
 
   reverse(): this {
-    return REVERSE<Float32Array, f32>(this);
+    return REVERSE<this, f32>(this);
   }
 }
 
@@ -621,6 +621,6 @@ export class Float64Array extends TypedArray<f64> {
   }
 
   reverse(): this {
-    return REVERSE<Float64Array, f64>(this);
+    return REVERSE<this, f64>(this);
   }
 }
