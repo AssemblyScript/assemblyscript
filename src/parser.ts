@@ -38,6 +38,7 @@ import {
   CommonTypeNode,
   TypeNode,
   SignatureNode,
+  ArrowKind,
 
   Expression,
   AssertionKind,
@@ -66,6 +67,7 @@ import {
   IfStatement,
   ImportDeclaration,
   ImportStatement,
+  IndexSignatureDeclaration,
   NamespaceDeclaration,
   ParameterNode,
   ParameterKind,
@@ -83,8 +85,7 @@ import {
 
   mangleInternalPath,
   nodeIsCallable,
-  nodeIsGenericCallable,
-  IndexSignatureDeclaration
+  nodeIsGenericCallable
 } from "./ast";
 
 /** Parser interface. */
@@ -1349,6 +1350,7 @@ export class Parser extends DiagnosticEmitter {
       body,
       decorators,
       flags,
+      ArrowKind.NONE,
       tn.range(startPos, tn.pos)
     );
     tn.skip(Token.SEMICOLON);
@@ -1358,7 +1360,7 @@ export class Parser extends DiagnosticEmitter {
   parseFunctionExpression(tn: Tokenizer): FunctionExpression | null {
     var startPos = tn.tokenPos;
     var name: IdentifierExpression;
-    var isArrow = false;
+    var arrowKind = ArrowKind.NONE;
 
     // either at 'function':
     //  Identifier?
@@ -1384,7 +1386,7 @@ export class Parser extends DiagnosticEmitter {
     //  Statement
 
     } else {
-      isArrow = true;
+      arrowKind = ArrowKind.ARROW_PARENTHESIZED;
       assert(tn.token == Token.OPENPAREN);
       name = Node.createEmptyIdentifierExpression(tn.range(tn.tokenPos));
     }
@@ -1395,14 +1397,14 @@ export class Parser extends DiagnosticEmitter {
     var parameters = this.parseParameters(tn);
     if (!parameters) return null;
 
-    return this.parseFunctionExpressionCommon(tn, name, parameters, isArrow, startPos, signatureStart);
+    return this.parseFunctionExpressionCommon(tn, name, parameters, arrowKind, startPos, signatureStart);
   }
 
   private parseFunctionExpressionCommon(
     tn: Tokenizer,
     name: IdentifierExpression,
     parameters: ParameterNode[],
-    isArrow: bool,
+    arrowKind: ArrowKind,
     startPos: i32 = -1,
     signatureStart: i32 = -1
   ): FunctionExpression | null {
@@ -1410,18 +1412,14 @@ export class Parser extends DiagnosticEmitter {
     if (signatureStart < 0) signatureStart = startPos;
 
     var returnType: CommonTypeNode | null = null;
-    if (tn.skip(Token.COLON)) {
+    if (arrowKind != ArrowKind.ARROW_SINGLE && tn.skip(Token.COLON)) {
       returnType = this.parseType(tn);
       if (!returnType) return null;
     } else {
       returnType = Node.createOmittedType(tn.range(tn.pos));
-      this.error(
-        DiagnosticCode.Type_expected,
-        returnType.range
-      ); // recoverable
     }
 
-    if (isArrow) {
+    if (arrowKind) {
       if (!tn.skip(Token.EQUALS_GREATERTHAN)) {
         this.error(
           DiagnosticCode._0_expected,
@@ -1440,7 +1438,7 @@ export class Parser extends DiagnosticEmitter {
     );
 
     var body: Statement | null;
-    if (isArrow) {
+    if (arrowKind) {
       body = this.parseStatement(tn, false);
     } else {
       if (!tn.skip(Token.OPENBRACE)) {
@@ -1460,7 +1458,8 @@ export class Parser extends DiagnosticEmitter {
       signature,
       body,
       null,
-      isArrow ? CommonFlags.ARROW : CommonFlags.NONE,
+      CommonFlags.NONE,
+      arrowKind,
       tn.range(startPos, tn.pos)
     );
     return Node.createFunctionExpression(declaration);
@@ -3140,7 +3139,7 @@ export class Parser extends DiagnosticEmitter {
             tn,
             Node.createEmptyIdentifierExpression(tn.range(startPos)),
             [],
-            true
+            ArrowKind.ARROW_PARENTHESIZED
           );
         }
         let state = tn.mark();
@@ -3314,7 +3313,25 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       case Token.IDENTIFIER: {
-        return Node.createIdentifierExpression(tn.readIdentifier(), tn.range(startPos, tn.pos));
+        let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range(startPos, tn.pos));
+        if (tn.peek(true) == Token.EQUALS_GREATERTHAN && !tn.nextTokenOnNewLine) {
+          return this.parseFunctionExpressionCommon(
+            tn,
+            Node.createEmptyIdentifierExpression(tn.range(startPos)),
+            [
+              Node.createParameter(
+                identifier,
+                Node.createOmittedType(identifier.range.atEnd),
+                null,
+                ParameterKind.DEFAULT,
+                identifier.range
+              )
+            ],
+            ArrowKind.ARROW_SINGLE,
+            startPos
+          );
+        }
+        return identifier;
       }
       case Token.THIS: {
         return Node.createThisExpression(tn.range(startPos, tn.pos));

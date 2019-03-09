@@ -100,12 +100,18 @@ declare function isFinite<T = f32 | f64>(value: T): bool;
 declare function isInteger(value: any): value is number;
 /** Tests if the specified value is a valid float. Can't distinguish a float from an integer. */
 declare function isFloat(value: any): value is number;
+/** Tests if the specified value is of a nullable reference type. */
+declare function isNullable(value: any): bool;
 /** Tests if the specified value is of a reference type. */
 declare function isReference(value: any): value is object | string;
+/** Tests if the specified value is of a function type */
+declare function isFunction(value: any): value is Function;
 /** Tests if the specified value can be used as a string. */
 declare function isString(value: any): value is string | String;
 /** Tests if the specified value can be used as an array. */
 declare function isArray(value: any): value is Array<any>;
+/** Tests if the specified type *or* expression can be used as an array like object. */
+declare function isArrayLike(value: any): value is ArrayLike<any>;
 /** Tests if the specified expression resolves to a defined element. */
 declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. */
@@ -411,6 +417,11 @@ declare class Int32Array extends Array<i32> {}
 declare class Float32Array extends Array<f32> {}
 declare class Float64Array extends Array<f64> {}
 
+interface ArrayLike<T> {
+  length: i32;
+  [key: number]: T;
+}
+
 /** Interface for a typed view on an array buffer. */
 interface ArrayBufferView<T> {
   [key: number]: T;
@@ -560,6 +571,10 @@ interface IMath {
   readonly PI: f64;
   readonly SQRT1_2: f64;
   readonly SQRT2: f64;
+
+  sincos_sin: f64;
+  sincos_cos: f64;
+
   abs(x: f64): f64;
   acos(x: f64): f64;
   acosh(x: f64): f64;
@@ -591,6 +606,7 @@ interface IMath {
   sign(x: f64): f64;
   signbit(x: f64): bool;
   sin(x: f64): f64;
+  sincos(x: f64): f64;
   sinh(x: f64): f64;
   sqrt(x: f64): f64;
   tan(x: f64): f64;

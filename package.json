@@ -12,21 +12,23 @@
   },
   "dependencies": {
     "@protobufjs/utf8": "^1.1.0",
-    "binaryen": "68.0.0-nightly.20190220",
+    "binaryen": "72.0.0-nightly.20190308",
     "glob": "^7.1.3",
-    "long": "^4.0.0"
+    "long": "^4.0.0",
+    "opencollective-postinstall": "^2.0.0",
+    "source-map-support": "^0.5.10"
   },
   "devDependencies": {
-    "@types/node": "^11.9.4",
+    "@types/node": "^11.10.5",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
     "ts-loader": "^5.3.3",
     "ts-node": "^6.2.0",
-    "tslint": "^5.12.1",
+    "tslint": "^5.13.1",
     "typedoc": "^0.14.0",
     "typedoc-plugin-external-module-name": "^2.0.0",
-    "typescript": "^3.3.3",
-    "webpack": "^4.29.5",
+    "typescript": "^3.3.3333",
+    "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3"
   },
   "main": "index.js",
@@ -50,7 +52,8 @@
     "test:compiler": "node tests/compiler",
     "make": "npm run clean && npm test && npm run build && npm test",
     "all": "npm run check && npm run make",
-    "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md"
+    "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
+    "postinstall": "opencollective-postinstall"
   },
   "files": [
     "lib/loader/index.d.ts",
@@ -69,5 +72,9 @@
     "src/",
     "std/",
     "tsconfig-base.json"
-  ]
+  ],
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/assemblyscript"
+  }
 }

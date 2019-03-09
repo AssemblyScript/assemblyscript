@@ -1,25 +1,26 @@
 (module
- (type $_ (func))
- (type $ii (func (param i32) (result i32)))
- (type $i_ (func (param i32)))
- (type $iiii (func (param i32 i32 i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $iii_ (func (param i32 i32 i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $ii_ (func (param i32 i32)))
- (type $iIi (func (param i32 i64) (result i32)))
- (type $Ii (func (param i64) (result i32)))
- (type $iIii (func (param i32 i64 i32) (result i32)))
- (type $iIi_ (func (param i32 i64 i32)))
- (type $ifi (func (param i32 f32) (result i32)))
- (type $ifii (func (param i32 f32 i32) (result i32)))
- (type $ifi_ (func (param i32 f32 i32)))
- (type $iFi (func (param i32 f64) (result i32)))
- (type $iFii (func (param i32 f64 i32) (result i32)))
- (type $iFi_ (func (param i32 f64 i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$iij (func (param i32 i64) (result i32)))
+ (type $FUNCSIG$ij (func (param i64) (result i32)))
+ (type $FUNCSIG$iiji (func (param i32 i64 i32) (result i32)))
+ (type $FUNCSIG$viji (func (param i32 i64 i32)))
+ (type $FUNCSIG$iif (func (param i32 f32) (result i32)))
+ (type $FUNCSIG$iifi (func (param i32 f32 i32) (result i32)))
+ (type $FUNCSIG$vifi (func (param i32 f32 i32)))
+ (type $FUNCSIG$iid (func (param i32 f64) (result i32)))
+ (type $FUNCSIG$iidi (func (param i32 f64 i32) (result i32)))
+ (type $FUNCSIG$vidi (func (param i32 f64 i32)))
  (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$vij (func (param i32 i64)))
+ (type $FUNCSIG$vif (func (param i32 f32)))
+ (type $FUNCSIG$vid (func (param i32 f64)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\13\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
@@ -32,7 +33,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -94,7 +95,7 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741816
@@ -367,7 +368,7 @@
   end
   local.get $2
  )
- (func $~lib/map/Map<i8,i32>#clear (; 5 ;) (type $i_) (param $0 i32)
+ (func $~lib/map/Map<i8,i32>#clear (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 16
   i32.const 0
@@ -417,7 +418,7 @@
   call $~lib/map/Map<i8,i32>#clear
   local.get $0
  )
- (func $~lib/map/Map<i8,i32>#find (; 7 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#find (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -462,7 +463,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i8,i32>#has (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#has (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -478,7 +479,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i8,i32>#rehash (; 9 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>#rehash (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -588,7 +589,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<i8,i32>#set (; 10 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i8,i32>#set (; 10 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -689,7 +690,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/map/Map<i8,i32>#get (; 11 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#get (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -710,7 +711,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<i8,i32>#delete (; 12 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#delete (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -727,7 +728,6 @@
   local.tee $1
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $1
@@ -759,7 +759,7 @@
   select
   i32.ge_u
   local.tee $1
-  if (result i32)
+  if
    local.get $0
    i32.load offset=20
    local.get $0
@@ -769,17 +769,16 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
-   local.get $1
+   local.set $1
   end
+  local.get $1
   if
    local.get $0
    local.get $2
    call $~lib/map/Map<i8,i32>#rehash
   end
-  i32.const 1
  )
- (func $std/map/test<i8,i32> (; 13 ;) (type $_)
+ (func $std/map/test<i8,i32> (; 13 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -1003,7 +1002,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i8,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i8,i32>#has
@@ -1079,7 +1077,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i8,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i8,i32>#has
@@ -1125,7 +1122,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<u8,i32>#has (; 14 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#has (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -1139,7 +1136,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<u8,i32>#rehash (; 15 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#rehash (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1249,7 +1246,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<u8,i32>#set (; 16 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u8,i32>#set (; 16 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1348,7 +1345,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/map/Map<u8,i32>#get (; 17 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#get (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -1367,7 +1364,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<u8,i32>#delete (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#delete (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -1382,7 +1379,6 @@
   local.tee $1
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $1
@@ -1414,7 +1410,7 @@
   select
   i32.ge_u
   local.tee $1
-  if (result i32)
+  if
    local.get $0
    i32.load offset=20
    local.get $0
@@ -1424,17 +1420,16 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
-   local.get $1
+   local.set $1
   end
+  local.get $1
   if
    local.get $0
    local.get $2
    call $~lib/map/Map<u8,i32>#rehash
   end
-  i32.const 1
  )
- (func $std/map/test<u8,i32> (; 19 ;) (type $_)
+ (func $std/map/test<u8,i32> (; 19 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -1646,7 +1641,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<u8,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<u8,i32>#has
@@ -1720,7 +1714,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<u8,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<u8,i32>#has
@@ -1766,7 +1759,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<i16,i32>#find (; 20 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#find (; 20 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -1811,8 +1804,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i16,i32>#has (; 21 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/map/Map<i16,i32>#has (; 21 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -1820,14 +1812,14 @@
   i32.shl
   i32.const 16
   i32.shr_s
-  local.tee $2
+  local.tee $0
   i32.const 255
   i32.and
   i32.const -2128831035
   i32.xor
   i32.const 16777619
   i32.mul
-  local.get $2
+  local.get $0
   i32.const 8
   i32.shr_u
   i32.xor
@@ -1837,7 +1829,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i16,i32>#rehash (; 22 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#rehash (; 22 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1956,7 +1948,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<i16,i32>#set (; 23 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i16,i32>#set (; 23 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2066,7 +2058,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/map/Map<i16,i32>#get (; 24 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#get (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -2096,7 +2088,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<i16,i32>#delete (; 25 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#delete (; 25 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -2122,7 +2114,6 @@
   local.tee $1
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $1
@@ -2154,7 +2145,7 @@
   select
   i32.ge_u
   local.tee $1
-  if (result i32)
+  if
    local.get $0
    i32.load offset=20
    local.get $0
@@ -2164,17 +2155,16 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
-   local.get $1
+   local.set $1
   end
+  local.get $1
   if
    local.get $0
    local.get $2
    call $~lib/map/Map<i16,i32>#rehash
   end
-  i32.const 1
  )
- (func $std/map/test<i16,i32> (; 26 ;) (type $_)
+ (func $std/map/test<i16,i32> (; 26 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -2398,7 +2388,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i16,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i16,i32>#has
@@ -2474,7 +2463,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i16,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i16,i32>#has
@@ -2520,21 +2508,20 @@
    unreachable
   end
  )
- (func $~lib/map/Map<u16,i32>#has (; 27 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/map/Map<u16,i32>#has (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
   i32.const 65535
   i32.and
-  local.tee $2
+  local.tee $0
   i32.const 255
   i32.and
   i32.const -2128831035
   i32.xor
   i32.const 16777619
   i32.mul
-  local.get $2
+  local.get $0
   i32.const 8
   i32.shr_u
   i32.xor
@@ -2544,7 +2531,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<u16,i32>#rehash (; 28 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#rehash (; 28 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2663,7 +2650,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<u16,i32>#set (; 29 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u16,i32>#set (; 29 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2771,7 +2758,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/map/Map<u16,i32>#get (; 30 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#get (; 30 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -2799,7 +2786,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<u16,i32>#delete (; 31 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#delete (; 31 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -2823,7 +2810,6 @@
   local.tee $1
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $1
@@ -2855,7 +2841,7 @@
   select
   i32.ge_u
   local.tee $1
-  if (result i32)
+  if
    local.get $0
    i32.load offset=20
    local.get $0
@@ -2865,17 +2851,16 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-  else   
-   local.get $1
+   local.set $1
   end
+  local.get $1
   if
    local.get $0
    local.get $2
    call $~lib/map/Map<u16,i32>#rehash
   end
-  i32.const 1
  )
- (func $std/map/test<u16,i32> (; 32 ;) (type $_)
+ (func $std/map/test<u16,i32> (; 32 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -3087,7 +3072,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<u16,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<u16,i32>#has
@@ -3161,7 +3145,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<u16,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<u16,i32>#has
@@ -3207,7 +3190,7 @@
    unreachable
   end
  )
- (func $~lib/internal/hash/hash32 (; 33 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/hash/hash32 (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
@@ -3238,7 +3221,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<i32,i32>#find (; 34 ;) (type $iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#find (; 34 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -3281,7 +3264,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i32,i32>#has (; 35 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#has (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -3290,7 +3273,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i32,i32>#rehash (; 36 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i32,i32>#rehash (; 36 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3397,7 +3380,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<i32,i32>#set (; 37 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i32,i32>#set (; 37 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3489,7 +3472,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/map/Map<i32,i32>#get (; 38 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#get (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -3503,7 +3486,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<i32,i32>#delete (; 39 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#delete (; 39 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -3513,7 +3496,6 @@
   local.tee $1
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $1
@@ -3545,7 +3527,7 @@
   select
   i32.ge_u
   local.tee $1
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -3555,17 +3537,16 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $1
+  else   
+   local.get $1
   end
-  local.get $1
   if
    local.get $0
    local.get $2
    call $~lib/map/Map<i32,i32>#rehash
   end
-  i32.const 1
  )
- (func $std/map/test<i32,i32> (; 40 ;) (type $_)
+ (func $std/map/test<i32,i32> (; 40 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -3765,7 +3746,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i32,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i32,i32>#has
@@ -3837,7 +3817,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i32,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i32,i32>#has
@@ -3883,7 +3862,7 @@
    unreachable
   end
  )
- (func $std/map/test<u32,i32> (; 41 ;) (type $_)
+ (func $std/map/test<u32,i32> (; 41 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -4083,7 +4062,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i32,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i32,i32>#has
@@ -4155,7 +4133,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i32,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i32,i32>#has
@@ -4201,7 +4178,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<i64,i32>#clear (; 42 ;) (type $i_) (param $0 i32)
+ (func $~lib/map/Map<i64,i32>#clear (; 42 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.const 16
   i32.const 0
@@ -4251,7 +4228,7 @@
   call $~lib/map/Map<i64,i32>#clear
   local.get $0
  )
- (func $~lib/internal/hash/hash64 (; 44 ;) (type $Ii) (param $0 i64) (result i32)
+ (func $~lib/internal/hash/hash64 (; 44 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   local.get $0
   i32.wrap_i64
@@ -4317,7 +4294,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<i64,i32>#find (; 45 ;) (type $iIii) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#find (; 45 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -4360,7 +4337,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i64,i32>#has (; 46 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#has (; 46 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -4369,7 +4346,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i64,i32>#rehash (; 47 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i32>#rehash (; 47 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4476,7 +4453,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<i64,i32>#set (; 48 ;) (type $iIi_) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/map/Map<i64,i32>#set (; 48 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4568,7 +4545,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/map/Map<i64,i32>#get (; 49 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#get (; 49 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -4582,7 +4559,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<i64,i32>#delete (; 50 ;) (type $iIi) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#delete (; 50 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -4593,7 +4570,6 @@
   local.tee $2
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $2
@@ -4625,7 +4601,7 @@
   select
   i32.ge_u
   local.tee $2
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -4635,17 +4611,16 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $2
+  else   
+   local.get $2
   end
-  local.get $2
   if
    local.get $0
    local.get $3
    call $~lib/map/Map<i64,i32>#rehash
   end
-  i32.const 1
  )
- (func $std/map/test<i64,i32> (; 51 ;) (type $_)
+ (func $std/map/test<i64,i32> (; 51 ;) (type $FUNCSIG$v)
   (local $0 i64)
   (local $1 i32)
   call $~lib/map/Map<i64,i32>#constructor
@@ -4851,7 +4826,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i64,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i64,i32>#has
@@ -4924,7 +4898,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i64,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i64,i32>#has
@@ -4970,7 +4943,7 @@
    unreachable
   end
  )
- (func $std/map/test<u64,i32> (; 52 ;) (type $_)
+ (func $std/map/test<u64,i32> (; 52 ;) (type $FUNCSIG$v)
   (local $0 i64)
   (local $1 i32)
   call $~lib/map/Map<i64,i32>#constructor
@@ -5176,7 +5149,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i64,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i64,i32>#has
@@ -5249,7 +5221,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<i64,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<i64,i32>#has
@@ -5295,7 +5266,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<f32,i32>#find (; 53 ;) (type $ifii) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#find (; 53 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -5338,7 +5309,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<f32,i32>#has (; 54 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#has (; 54 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -5348,7 +5319,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<f32,i32>#rehash (; 55 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f32,i32>#rehash (; 55 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5456,7 +5427,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<f32,i32>#set (; 56 ;) (type $ifi_) (param $0 i32) (param $1 f32) (param $2 i32)
+ (func $~lib/map/Map<f32,i32>#set (; 56 ;) (type $FUNCSIG$vifi) (param $0 i32) (param $1 f32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5549,7 +5520,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/map/Map<f32,i32>#get (; 57 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#get (; 57 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -5564,7 +5535,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<f32,i32>#delete (; 58 ;) (type $ifi) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#delete (; 58 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -5576,7 +5547,6 @@
   local.tee $2
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $2
@@ -5608,7 +5578,7 @@
   select
   i32.ge_u
   local.tee $2
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -5618,17 +5588,16 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $2
+  else   
+   local.get $2
   end
-  local.get $2
   if
    local.get $0
    local.get $3
    call $~lib/map/Map<f32,i32>#rehash
   end
-  i32.const 1
  )
- (func $std/map/test<f32,i32> (; 59 ;) (type $_)
+ (func $std/map/test<f32,i32> (; 59 ;) (type $FUNCSIG$v)
   (local $0 f32)
   (local $1 i32)
   call $~lib/map/Map<i8,i32>#constructor
@@ -5834,7 +5803,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<f32,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<f32,i32>#has
@@ -5907,7 +5875,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<f32,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<f32,i32>#has
@@ -5953,7 +5920,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<f64,i32>#find (; 60 ;) (type $iFii) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#find (; 60 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $0
@@ -5996,7 +5963,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<f64,i32>#has (; 61 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#has (; 61 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -6006,7 +5973,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<f64,i32>#rehash (; 62 ;) (type $ii_) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f64,i32>#rehash (; 62 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6114,7 +6081,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<f64,i32>#set (; 63 ;) (type $iFi_) (param $0 i32) (param $1 f64) (param $2 i32)
+ (func $~lib/map/Map<f64,i32>#set (; 63 ;) (type $FUNCSIG$vidi) (param $0 i32) (param $1 f64) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6207,7 +6174,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/map/Map<f64,i32>#get (; 64 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#get (; 64 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -6222,7 +6189,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<f64,i32>#delete (; 65 ;) (type $iFi) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#delete (; 65 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -6234,7 +6201,6 @@
   local.tee $2
   i32.eqz
   if
-   i32.const 0
    return
   end
   local.get $2
@@ -6266,7 +6232,7 @@
   select
   i32.ge_u
   local.tee $2
-  if
+  if (result i32)
    local.get $0
    i32.load offset=20
    local.get $0
@@ -6276,17 +6242,16 @@
    f64.mul
    i32.trunc_f64_s
    i32.lt_s
-   local.set $2
+  else   
+   local.get $2
   end
-  local.get $2
   if
    local.get $0
    local.get $3
    call $~lib/map/Map<f64,i32>#rehash
   end
-  i32.const 1
  )
- (func $std/map/test<f64,i32> (; 66 ;) (type $_)
+ (func $std/map/test<f64,i32> (; 66 ;) (type $FUNCSIG$v)
   (local $0 f64)
   (local $1 i32)
   call $~lib/map/Map<i64,i32>#constructor
@@ -6492,7 +6457,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<f64,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<f64,i32>#has
@@ -6565,7 +6529,6 @@
     local.get $1
     local.get $0
     call $~lib/map/Map<f64,i32>#delete
-    drop
     local.get $1
     local.get $0
     call $~lib/map/Map<f64,i32>#has
@@ -6611,7 +6574,7 @@
    unreachable
   end
  )
- (func $start (; 67 ;) (type $_)
+ (func $start (; 67 ;) (type $FUNCSIG$v)
   i32.const 144
   global.set $~lib/allocator/arena/startOffset
   global.get $~lib/allocator/arena/startOffset
@@ -6627,7 +6590,7 @@
   call $std/map/test<f32,i32>
   call $std/map/test<f64,i32>
  )
- (func $null (; 68 ;) (type $_)
+ (func $null (; 68 ;) (type $FUNCSIG$v)
   nop
  )
 )

@@ -47,6 +47,7 @@ import {
   TypeParameterNode,
   CommonTypeNode,
   TypeNode,
+  ArrowKind,
 
   Expression,
   IdentifierExpression,
@@ -424,7 +425,7 @@ export class Program extends DiagnosticEmitter {
         ),
         null, false, range)
       ),
-      null, null, flags, range
+      null, null, flags, ArrowKind.NONE, range
     );
   }
 
@@ -522,6 +523,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.BULK_MEMORY) ? 1 : 0, 0));
     this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_SIMD, Type.bool,
       i64_new(options.hasFeature(Feature.SIMD) ? 1 : 0, 0));
+    this.registerConstantInteger(LibrarySymbols.ASC_FEATURE_THREADS, Type.bool,
+      i64_new(options.hasFeature(Feature.THREADS) ? 1 : 0, 0));
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
@@ -2387,6 +2390,11 @@ export class FunctionPrototype extends DeclaredElement {
     return (<FunctionDeclaration>this.declaration).body;
   }
 
+  /** Gets the arrow function kind. */
+  get arrowKind(): ArrowKind {
+    return (<FunctionDeclaration>this.declaration).arrowKind;
+  }
+
   /** Tests if this prototype is bound to a class. */
   get isBound(): bool {
     var parent = this.parent;
@@ -2464,6 +2472,8 @@ export class Function extends TypedElement {
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
+  /** Counting id of anonymous inner functions. */
+  nextAnonymousId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(
@@ -2556,6 +2566,7 @@ export class Function extends TypedElement {
   tempI64s: Local[] | null = null;
   tempF32s: Local[] | null = null;
   tempF64s: Local[] | null = null;
+  tempV128s: Local[] | null = null;
 
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;

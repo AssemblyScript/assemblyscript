@@ -1,5 +1,5 @@
 (module
- (type $_ (func))
+ (type $FUNCSIG$v (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -17,55 +17,55 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $merge/namespaceType.test (; 0 ;) (type $_)
+ (func $merge/namespaceType.test (; 0 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/typeNamespace.test (; 1 ;) (type $_)
+ (func $merge/typeNamespace.test (; 1 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/functionType (; 2 ;) (type $_)
+ (func $merge/functionType (; 2 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/typeFunction (; 3 ;) (type $_)
+ (func $merge/typeFunction (; 3 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/classNamespace.test1 (; 4 ;) (type $_)
+ (func $merge/classNamespace.test1 (; 4 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/classNamespace.test2 (; 5 ;) (type $_)
+ (func $merge/classNamespace.test2 (; 5 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/namespaceClass.test1 (; 6 ;) (type $_)
+ (func $merge/namespaceClass.test1 (; 6 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/namespaceClass.test2 (; 7 ;) (type $_)
+ (func $merge/namespaceClass.test2 (; 7 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/functionNamespace (; 8 ;) (type $_)
+ (func $merge/functionNamespace (; 8 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/functionNamespace.test (; 9 ;) (type $_)
+ (func $merge/functionNamespace.test (; 9 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/namespaceFunction.test (; 10 ;) (type $_)
+ (func $merge/namespaceFunction.test (; 10 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/namespaceFunction (; 11 ;) (type $_)
+ (func $merge/namespaceFunction (; 11 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/enumNamespace.test (; 12 ;) (type $_)
+ (func $merge/enumNamespace.test (; 12 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/namespaceEnum.test (; 13 ;) (type $_)
+ (func $merge/namespaceEnum.test (; 13 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/namespaceNamespace.test1 (; 14 ;) (type $_)
+ (func $merge/namespaceNamespace.test1 (; 14 ;) (type $FUNCSIG$v)
   nop
  )
- (func $merge/namespaceNamespace.test2 (; 15 ;) (type $_)
+ (func $merge/namespaceNamespace.test2 (; 15 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start:merge (; 16 ;) (type $_)
+ (func $start:merge (; 16 ;) (type $FUNCSIG$v)
   global.get $merge/globalType
   drop
   global.get $merge/typeGlobal
@@ -91,9 +91,9 @@
   call $merge/namespaceNamespace.test1
   call $merge/namespaceNamespace.test2
  )
- (func $start (; 17 ;) (type $_)
+ (func $start (; 17 ;) (type $FUNCSIG$v)
   call $start:merge
  )
- (func $null (; 18 ;) (type $_)
+ (func $null (; 18 ;) (type $FUNCSIG$v)
  )
 )

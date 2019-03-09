@@ -231,3 +231,29 @@ export function EVERY<TArray extends TypedArray<T>, T>(
   }
   return true;
 }
+
+@inline
+export function FOREACH<TArray extends TypedArray<T>, T>(
+  array: TArray,
+  callbackfn: (value: T, index: i32, array: TArray) => void,
+): void {
+  var length = array.length;
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+  for (let i = 0; i < length; i++) {
+    callbackfn(LOAD<T>(buffer, i, byteOffset), i, array);
+  }
+}
+
+@inline
+export function REVERSE<TArray extends TypedArray<T>, T>(array: TArray): TArray {
+  var buffer = array.buffer;
+  var byteOffset = array.byteOffset;
+
+  for (let front = 0, back = array.length - 1; front < back; ++front, --back) {
+    let temp = LOAD<T>(buffer, front, byteOffset);
+    STORE<T>(buffer, front, LOAD<T>(buffer, back, byteOffset), byteOffset);
+    STORE<T>(buffer, back, temp, byteOffset);
+  }
+  return array;
+}

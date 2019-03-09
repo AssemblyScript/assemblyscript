@@ -1,16 +1,16 @@
 (module
- (type $_ (func))
- (type $iii (func (param i32 i32) (result i32)))
- (type $iFFFi (func (param i32 f64 f64 f64) (result i32)))
- (type $ii (func (param i32) (result i32)))
- (type $i (func (result i32)))
- (type $iFFFFFFFi (func (param i32 f64 f64 f64 f64 f64 f64 f64) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $iii_ (func (param i32 i32 i32)))
- (type $F (func (result f64)))
- (type $iF_ (func (param i32 f64)))
- (type $iF (func (param i32) (result f64)))
- (type $i_ (func (param i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$iiddd (func (param i32 f64 f64 f64) (result i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$iiddddddd (func (param i32 f64 f64 f64 f64 f64 f64 f64) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
+ (type $FUNCSIG$d (func (result f64)))
+ (type $FUNCSIG$vid (func (param i32 f64)))
+ (type $FUNCSIG$di (func (param i32) (result f64)))
+ (type $FUNCSIG$vi (func (param i32)))
  (import "env" "memory" (memory $0 1))
  (data (i32.const 8) "\0d\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 40) "\1c\00\00\00~\00l\00i\00b\00/\00i\00n\00t\00e\00r\00n\00a\00l\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
@@ -31,7 +31,7 @@
  (export "bench" (func $assembly/index/bench))
  (export "getBody" (func $assembly/index/getBody))
  (start $start)
- (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -43,10 +43,10 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $start:assembly/index (; 2 ;) (type $_)
+ (func $start:assembly/index (; 2 ;) (type $FUNCSIG$v)
   call $start:~lib/allocator/arena
  )
- (func $~lib/array/Array<Body>#__unchecked_get (; 3 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Body>#__unchecked_get (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -66,7 +66,7 @@
   i32.add
   i32.load offset=8
  )
- (func $~lib/array/Array<Body>#__get (; 4 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Body>#__get (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -99,7 +99,7 @@
    unreachable
   end
  )
- (func $assembly/index/Body#offsetMomentum (; 5 ;) (type $iFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
+ (func $assembly/index/Body#offsetMomentum (; 5 ;) (type $FUNCSIG$iiddd) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
   local.get $0
   local.get $1
   f64.neg
@@ -120,7 +120,7 @@
   f64.store offset=40
   local.get $0
  )
- (func $~lib/allocator/arena/__memory_allocate (; 6 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -199,12 +199,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 7 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $assembly/index/NBodySystem#constructor (; 8 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/index/NBodySystem#constructor (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 f64)
   (local $3 f64)
   (local $4 f64)
@@ -293,7 +293,7 @@
   i32.store
   local.get $0
  )
- (func $assembly/index/Body#constructor (; 9 ;) (type $iFFFFFFFi) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
+ (func $assembly/index/Body#constructor (; 9 ;) (type $FUNCSIG$iiddddddd) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
   local.get $0
   i32.eqz
   if
@@ -324,7 +324,7 @@
   f64.store offset=48
   local.get $0
  )
- (func $assembly/index/Sun (; 10 ;) (type $i) (result i32)
+ (func $assembly/index/Sun (; 10 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   f64.const 0
   f64.const 0
@@ -335,7 +335,7 @@
   global.get $assembly/index/SOLAR_MASS
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Jupiter (; 11 ;) (type $i) (result i32)
+ (func $assembly/index/Jupiter (; 11 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   f64.const 4.841431442464721
   f64.const -1.1603200440274284
@@ -354,7 +354,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Saturn (; 12 ;) (type $i) (result i32)
+ (func $assembly/index/Saturn (; 12 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   f64.const 8.34336671824458
   f64.const 4.124798564124305
@@ -373,7 +373,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Uranus (; 13 ;) (type $i) (result i32)
+ (func $assembly/index/Uranus (; 13 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   f64.const 12.894369562139131
   f64.const -15.111151401698631
@@ -392,7 +392,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Neptune (; 14 ;) (type $i) (result i32)
+ (func $assembly/index/Neptune (; 14 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   f64.const 15.379697114850917
   f64.const -25.919314609987964
@@ -411,7 +411,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $~lib/internal/arraybuffer/computeSize (; 15 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/computeSize (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
   i32.const 32
   local.get $0
@@ -423,7 +423,7 @@
   i32.sub
   i32.shl
  )
- (func $~lib/internal/arraybuffer/allocateUnsafe (; 16 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/internal/arraybuffer/allocateUnsafe (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -452,7 +452,7 @@
   i32.store
   local.get $1
  )
- (func $~lib/internal/memory/memset (; 17 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/internal/memory/memset (; 17 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
@@ -706,7 +706,7 @@
    end
   end
  )
- (func $~lib/array/Array<Body>#constructor (; 18 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Body>#constructor (; 18 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -767,7 +767,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<Body>#__unchecked_set (; 19 ;) (type $iii_) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Body>#__unchecked_set (; 19 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -791,7 +791,7 @@
   local.get $5
   i32.store offset=8
  )
- (func $assembly/index/init (; 20 ;) (type $_)
+ (func $assembly/index/init (; 20 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 0
   block (result i32)
@@ -824,7 +824,7 @@
   call $assembly/index/NBodySystem#constructor
   global.set $assembly/index/system
  )
- (func $assembly/index/NBodySystem#advance (; 21 ;) (type $iF_) (param $0 i32) (param $1 f64)
+ (func $assembly/index/NBodySystem#advance (; 21 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1059,7 +1059,7 @@
    unreachable
   end
  )
- (func $assembly/index/NBodySystem#energy (; 22 ;) (type $iF) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 22 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -1224,14 +1224,14 @@
   end
   local.get $1
  )
- (func $assembly/index/step (; 23 ;) (type $F) (result f64)
+ (func $assembly/index/step (; 23 ;) (type $FUNCSIG$d) (result f64)
   global.get $assembly/index/system
   f64.const 0.01
   call $assembly/index/NBodySystem#advance
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 24 ;) (type $i_) (param $0 i32)
+ (func $assembly/index/bench (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $assembly/index/system
@@ -1260,7 +1260,7 @@
    unreachable
   end
  )
- (func $assembly/index/getBody (; 25 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   global.get $assembly/index/system
@@ -1282,9 +1282,9 @@
    i32.const 0
   end
  )
- (func $start (; 26 ;) (type $_)
+ (func $start (; 26 ;) (type $FUNCSIG$v)
   call $start:assembly/index
  )
- (func $null (; 27 ;) (type $_)
+ (func $null (; 27 ;) (type $FUNCSIG$v)
  )
 )

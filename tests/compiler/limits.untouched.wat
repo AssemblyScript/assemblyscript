@@ -1,5 +1,5 @@
 (module
- (type $_ (func))
+ (type $FUNCSIG$v (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -33,7 +33,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:limits (; 0 ;) (type $_)
+ (func $start:limits (; 0 ;) (type $FUNCSIG$v)
   global.get $~lib/builtins/i8.MIN_VALUE
   drop
   global.get $~lib/builtins/i8.MAX_VALUE
@@ -87,9 +87,9 @@
   global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   drop
  )
- (func $start (; 1 ;) (type $_)
+ (func $start (; 1 ;) (type $FUNCSIG$v)
   call $start:limits
  )
- (func $null (; 2 ;) (type $_)
+ (func $null (; 2 ;) (type $FUNCSIG$v)
  )
 )

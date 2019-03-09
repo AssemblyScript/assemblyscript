@@ -1,10 +1,10 @@
 (module
- (type $_ (func))
- (type $ii (func (param i32) (result i32)))
- (type $i_ (func (param i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $iii (func (param i32 i32) (result i32)))
- (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0b\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d\00")
@@ -17,7 +17,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $start:~lib/allocator/arena (; 1 ;) (type $_)
+ (func $start:~lib/allocator/arena (; 1 ;) (type $FUNCSIG$v)
   global.get $~lib/memory/HEAP_BASE
   i32.const 7
   i32.add
@@ -29,7 +29,7 @@
   global.get $~lib/allocator/arena/startOffset
   global.set $~lib/allocator/arena/offset
  )
- (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/allocator/arena/__memory_allocate (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -108,12 +108,12 @@
   global.set $~lib/allocator/arena/offset
   local.get $1
  )
- (func $~lib/memory/memory.allocate (; 3 ;) (type $ii) (param $0 i32) (result i32)
+ (func $~lib/memory/memory.allocate (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/allocator/arena/__memory_allocate
   return
  )
- (func $~lib/internal/string/compareUnsafe (; 4 ;) (type $iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/internal/string/compareUnsafe (; 4 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -166,7 +166,7 @@
   end
   local.get $5
  )
- (func $~lib/string/String.__eq (; 5 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -210,7 +210,7 @@
   call $~lib/internal/string/compareUnsafe
   i32.eqz
  )
- (func $object-literal/bar (; 6 ;) (type $i_) (param $0 i32)
+ (func $object-literal/bar (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 1
@@ -238,7 +238,7 @@
    unreachable
   end
  )
- (func $object-literal/bar2 (; 7 ;) (type $i_) (param $0 i32)
+ (func $object-literal/bar2 (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 2
@@ -253,7 +253,7 @@
    unreachable
   end
  )
- (func $object-literal/Foo2#test (; 8 ;) (type $i_) (param $0 i32)
+ (func $object-literal/Foo2#test (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   i32.load
   i32.const 3
@@ -268,7 +268,7 @@
    unreachable
   end
  )
- (func $start:object-literal (; 9 ;) (type $_)
+ (func $start:object-literal (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -307,9 +307,9 @@
   end
   call $object-literal/Foo2#test
  )
- (func $start (; 10 ;) (type $_)
+ (func $start (; 10 ;) (type $FUNCSIG$v)
   call $start:object-literal
  )
- (func $null (; 11 ;) (type $_)
+ (func $null (; 11 ;) (type $FUNCSIG$v)
  )
 )

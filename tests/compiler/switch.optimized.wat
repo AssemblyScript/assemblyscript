@@ -1,7 +1,7 @@
 (module
- (type $ii (func (param i32) (result i32)))
- (type $iiii_ (func (param i32 i32 i32 i32)))
- (type $_ (func))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\t\00\00\00s\00w\00i\00t\00c\00h\00.\00t\00s")
@@ -10,8 +10,7 @@
  (export "memory" (memory $0))
  (export "table" (table $0))
  (start $start)
- (func $switch/doSwitch (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $switch/doSwitch (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block $case4|0
    block $case2|0
     local.get $0
@@ -19,14 +18,13 @@
     i32.ne
     if
      local.get $0
-     local.tee $1
      i32.eqz
      br_if $case2|0
-     local.get $1
+     local.get $0
      i32.const 2
      i32.eq
      br_if $case4|0
-     local.get $1
+     local.get $0
      i32.const 3
      i32.eq
      br_if $case4|0
@@ -40,8 +38,7 @@
   end
   i32.const 23
  )
- (func $switch/doSwitchDefaultOmitted (; 2 ;) (type $ii) (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $switch/doSwitchDefaultOmitted (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block $break|0
    block $case2|0
     local.get $0
@@ -49,11 +46,10 @@
     i32.ne
     if
      local.get $0
-     local.tee $1
      i32.const 2
      i32.eq
      br_if $case2|0
-     local.get $1
+     local.get $0
      i32.const 3
      i32.eq
      br_if $case2|0
@@ -67,7 +63,7 @@
   end
   i32.const 0
  )
- (func $start:switch (; 3 ;) (type $_)
+ (func $start:switch (; 3 ;) (type $FUNCSIG$v)
   i32.const 0
   call $switch/doSwitch
   if
@@ -237,10 +233,10 @@
    unreachable
   end
  )
- (func $start (; 4 ;) (type $_)
+ (func $start (; 4 ;) (type $FUNCSIG$v)
   call $start:switch
  )
- (func $null (; 5 ;) (type $_)
+ (func $null (; 5 ;) (type $FUNCSIG$v)
   nop
  )
 )
