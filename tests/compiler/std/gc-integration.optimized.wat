@@ -28,7 +28,7 @@
    i32.const 0
    i32.const 8
    i32.const 18
-   i32.const 37
+   i32.const 42
    call $~lib/env/abort
    unreachable
   end

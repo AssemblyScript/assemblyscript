@@ -12,6 +12,7 @@
 @inline export const HEADER_SIZE: usize = (offsetof<ManagedObject>() + AL_MASK) & ~AL_MASK;
 
 import { AL_MASK, MAX_SIZE_32 } from "../internal/allocator";
+import { __rt_iterateroots } from "../builtins";
 
 /** Collector states. */
 const enum State {

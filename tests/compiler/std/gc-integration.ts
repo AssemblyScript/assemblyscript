@@ -15,5 +15,7 @@ var a_ref: A | null = changetype<A>(24);    // global root, nullable
 var b_ref: B = changetype<B>(32);           // global root, non-nullable
 
 var i: i32 = 0;
-iterateRoots((ref: usize): void => { assert(<u32>ref == ++i << 3); });
+__rt_iterateroots((ref: usize): void => { assert(<u32>ref == ++i << 3); });
 assert(i == 4);
+
+assert(__rt_classid<A>() != __rt_classid<B>());

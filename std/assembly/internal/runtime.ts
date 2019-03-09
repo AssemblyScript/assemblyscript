@@ -1,4 +1,5 @@
 import { AL_MASK } from "./allocator";
+import { __rt_classid } from "../builtins";
 
 /** Common runtime header of all objects. */
 @unmanaged
@@ -100,7 +101,7 @@ export function FREE(ref: usize): void {
 export function REGISTER<T>(ref: usize, parentRef: usize): void {
   var header = UNREF(ref);
   header.classId = __rt_classid<T>();
-  if (GC) __REGISTER_IMPL(ref, parentRef);
+  if (GC) __REGISTER_IMPL(ref, parentRef); // tslint:disable-line
 }
 
 /** ArrayBuffer base class.  */
